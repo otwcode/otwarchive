@@ -369,6 +369,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -638,7 +640,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@series</span> = <span class="ruby-constant">Series</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:series</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@series</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Series was successfully created.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Series was successfully created.'</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@series</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span>
@@ -673,10 +675,10 @@
             <pre><span class="ruby-comment"># File app/controllers/series_controller.rb, line 154</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@series</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Series was successfully deleted.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Series was successfully deleted.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't delete the series. Please try again.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't delete the series. Please try again.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@series</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -720,10 +722,10 @@
     <span class="ruby-keyword">else</span>
       <span class="ruby-keyword">begin</span>
         <span class="ruby-ivar">@series</span>.<span class="ruby-identifier">remove_author</span>(<span class="ruby-identifier">current_user</span>)
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You have been removed as an author from the series and its works.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You have been removed as an author from the series and its works.&quot;</span>)
         <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@series</span>
       <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">error</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">error</span>.<span class="ruby-identifier">message</span>
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">error</span>.<span class="ruby-identifier">message</span>
         <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@series</span>        
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
@@ -945,7 +947,7 @@
             <pre><span class="ruby-comment"># File app/controllers/series_controller.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:series</span>][<span class="ruby-value">:author_attributes</span>][<span class="ruby-value">:ids</span>]
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you cannot remove yourself entirely as an author of a series right now.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you cannot remove yourself entirely as an author of a series right now.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_series_path</span>(<span class="ruby-ivar">@series</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   
@@ -958,7 +960,7 @@
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@series</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:series</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Series was successfully updated.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Series was successfully updated.'</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@series</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
@@ -999,7 +1001,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:serial_works</span>]
     <span class="ruby-ivar">@series</span> = <span class="ruby-constant">Series</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
     <span class="ruby-ivar">@series</span>.<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:serial_works</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Series order has been successfully updated.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Series order has been successfully updated.&quot;</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:serial</span>]
     <span class="ruby-identifier">params</span>[<span class="ruby-value">:serial</span>].<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">position</span><span class="ruby-operator">|</span>
       <span class="ruby-constant">SerialWork</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">id</span>, <span class="ruby-value">:position</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)

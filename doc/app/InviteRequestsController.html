@@ -361,6 +361,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -630,7 +632,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:invite_request</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invite_request</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;You've been added to our queue! Yay!&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;You've been added to our queue! Yay!&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@invite_request</span> 
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:index</span>
@@ -666,9 +668,9 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invite_request</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Request was removed from the queue.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Request was removed from the queue.&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Request could not be removed. Please try again.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Request could not be removed. Please try again.&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">manage_invite_requests_url</span>
 <span class="ruby-keyword">end</span></pre>
@@ -761,9 +763,9 @@
             <pre><span class="ruby-comment"># File app/controllers/invite_requests_controller.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reorder</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">reset_order</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;The queue has been successfully updated.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;The queue has been successfully updated.&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Something went wrong. Please try that again.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Something went wrong. Please try that again.&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">manage_invite_requests_url</span>
 <span class="ruby-keyword">end</span></pre>
@@ -798,7 +800,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>]
     <span class="ruby-ivar">@invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>])
     <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">request</span>.<span class="ruby-identifier">xml_http_request?</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@invite_request</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help.&quot;</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help.&quot;</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">invite_requests_url</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>    
   <span class="ruby-keyword">else</span>

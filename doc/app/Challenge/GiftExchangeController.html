@@ -363,6 +363,8 @@
   
     <li><a href="../KudosController.html">KudosController</a>
   
+    <li><a href="../KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="../Language.html">Language</a>
   
     <li><a href="../LanguagesController.html">LanguagesController</a>
@@ -634,7 +636,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">save</span>
     <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span> = <span class="ruby-ivar">@challenge</span>
     <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Challenge was successfully created.'</span>)      
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Challenge was successfully created.'</span>)      
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_profile_path</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:new</span>
@@ -669,7 +671,7 @@
             <pre><span class="ruby-comment"># File app/controllers/challenge/gift_exchange_controller.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Challenge settings were deleted.'</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Challenge settings were deleted.'</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
@@ -730,7 +732,7 @@
             <pre><span class="ruby-comment"># File app/controllers/challenge/gift_exchange_controller.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-keyword">if</span> (<span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There is already a challenge set up for this collection.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There is already a challenge set up for this collection.&quot;</span>)
     <span class="ruby-comment"># TODO this will break if the challenge isn't a gift exchange</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_collection_gift_exchange_path</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-keyword">else</span>
@@ -829,7 +831,7 @@
             <pre><span class="ruby-comment"># File app/controllers/challenge/gift_exchange_controller.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:gift_exchange</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Challenge was successfully updated.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Challenge was successfully updated.'</span>)
     
     <span class="ruby-comment"># expire the cache on the signup form</span>
     <span class="ruby-identifier">expire_fragment</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'challenge_signups'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>)

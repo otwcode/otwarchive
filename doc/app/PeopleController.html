@@ -355,6 +355,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -672,9 +674,9 @@
     <span class="ruby-keyword">begin</span>
       <span class="ruby-identifier">page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>
       <span class="ruby-identifier">errors</span>, <span class="ruby-ivar">@people</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">search_with_sphinx</span>(<span class="ruby-constant">Pseud</span>, <span class="ruby-ivar">@query</span>, <span class="ruby-identifier">page</span>)
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Riddle</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionError</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
     <span class="ruby-keyword">end</span>
     <span class="ruby-comment"># @people could contain nils from sphinx</span>
     <span class="ruby-ivar">@rec_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">rec_counts_for_pseuds</span>(<span class="ruby-ivar">@people</span>.<span class="ruby-identifier">compact</span>)

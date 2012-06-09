@@ -379,6 +379,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -678,7 +680,7 @@
   <span class="ruby-ivar">@tag_set</span> = <span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:owned_tag_set</span>])
   <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">add_owner</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_pseud</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Tag set was successfully created.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Tag set was successfully created.'</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>)
   <span class="ruby-keyword">else</span> 
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span>
@@ -713,7 +715,7 @@
             <pre><span class="ruby-comment"># File app/controllers/owned_tag_sets_controller.rb, line 167</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag set was successfully deleted.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag set was successfully deleted.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
@@ -747,15 +749,15 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:batch_associations</span>]
     <span class="ruby-identifier">failed</span> = <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">load_batch_associations!</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:batch_associations</span>], <span class="ruby-value">:do_relationships</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">params</span>[<span class="ruby-value">:batch_do_relationship</span>] <span class="ruby-operator">?</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">false</span>))
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">failed</span>.<span class="ruby-identifier">empty?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tags and associations loaded!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tags and associations loaded!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>      
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!&quot;</span>)
       <span class="ruby-ivar">@failed_batch_associations</span> = <span class="ruby-identifier">failed</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
       <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:batch_load</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to load?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to load?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:batch_load</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -867,7 +869,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_tag_set</span>
   <span class="ruby-ivar">@tag_set</span> = <span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What tag set did you want to look at?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What tag set did you want to look at?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1120,7 +1122,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_options</span>
   <span class="ruby-ivar">@restriction</span> = <span class="ruby-constant">PromptRestriction</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:restriction</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@restriction</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Which tag set did you want to look at?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Which tag set did you want to look at?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@tag_sets</span> = <span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">in_prompt_restriction</span>(<span class="ruby-ivar">@restriction</span>)
@@ -1157,7 +1159,7 @@
             <pre><span class="ruby-comment"># File app/controllers/owned_tag_sets_controller.rb, line 157</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:owned_tag_set</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag set was successfully updated.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag set was successfully updated.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">get_parent_child_tags</span>

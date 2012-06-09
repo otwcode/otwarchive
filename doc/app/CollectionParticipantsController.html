@@ -371,6 +371,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -654,9 +656,9 @@
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@participants_invited</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@participants_added</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't find anyone new by that name to add.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't find anyone new by that name to add.&quot;</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@participants_invited</span>.<span class="ruby-identifier">empty?</span>
@@ -760,7 +762,7 @@
             <pre><span class="ruby-comment"># File app/controllers/collection_participants_controller.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>    
   <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.destroy'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Removed %{participant} from collection.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.destroy'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Removed %{participant} from collection.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
@@ -852,7 +854,7 @@
             <pre><span class="ruby-comment"># File app/controllers/collection_participants_controller.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">join</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@collection</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_collection'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Which collection did you want to join?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_collection'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Which collection did you want to join?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">participants</span> = <span class="ruby-constant">CollectionParticipant</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">for_user</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
@@ -860,17 +862,17 @@
     <span class="ruby-ivar">@participant</span> = <span class="ruby-constant">CollectionParticipant</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>, <span class="ruby-value">:pseud</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_pseud</span>, 
                       <span class="ruby-value">:participant_role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">CollectionParticipant</span><span class="ruby-operator">::</span><span class="ruby-constant">NONE</span>)
     <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'applied_to_join_collection'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have applied to join %{collection}.&quot;</span>, <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'applied_to_join_collection'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have applied to join %{collection}.&quot;</span>, <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">participants</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">participant</span><span class="ruby-operator">|</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">participant</span>.<span class="ruby-identifier">is_invited?</span>
         <span class="ruby-identifier">participant</span> <span class="ruby-identifier">approve_membership!</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.accepted_invite'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You are now a member of %{collection}.&quot;</span>, <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.accepted_invite'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You are now a member of %{collection}.&quot;</span>, <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>)
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
     
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.no_invitation'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have already joined (or applied to) this collection.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.no_invitation'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have already joined (or applied to) this collection.&quot;</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
@@ -940,7 +942,7 @@
           <div class="method-source-code" id="no_participant-source">
             <pre><span class="ruby-comment"># File app/controllers/collection_participants_controller.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_participant</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_participant'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Which participant did you want to work with?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_participant'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Which participant did you want to work with?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- no_participant-source -->
@@ -971,7 +973,7 @@
           <div class="method-source-code" id="owners_required-source">
             <pre><span class="ruby-comment"># File app/controllers/collection_participants_controller.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">owners_required</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.owners_required'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You can't remove the only owner!&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.owners_required'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You can't remove the only owner!&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_participants_path</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1004,9 +1006,9 @@
             <pre><span class="ruby-comment"># File app/controllers/collection_participants_controller.rb, line 80</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_participant</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.update_success'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Updated %{participant}.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.update_success'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Updated %{participant}.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.update_failure'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Couldn't update %{participant}.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_participants.update_failure'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Couldn't update %{participant}.&quot;</span>, <span class="ruby-value">:participant</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@participant</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_participants_path</span>(<span class="ruby-ivar">@collection</span>)
 <span class="ruby-keyword">end</span></pre>

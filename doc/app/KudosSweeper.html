@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class Language - RDoc Documentation</title>
+<title>class KudosSweeper - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -47,7 +47,7 @@
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
   <ul>
-    <li>app/models/language.rb
+    <li>app/sweepers/kudos_sweeper.rb
   </ul>
 </nav>
 
@@ -59,7 +59,7 @@
     <nav id="parent-class-section" class="section">
   <h3 class="section-header">Parent</h3>
   
-  <p class="link">ActiveRecord::Base
+  <p class="link">ActionController::Caching::Sweeper
   
 </nav>
 
@@ -70,13 +70,7 @@
 
   <ul class="link-list">
     
-    <li><a href="#method-c-default">::default</a>
-    
-    <li><a href="#method-i-fandom_count">#fandom_count</a>
-    
-    <li><a href="#method-i-to_param">#to_param</a>
-    
-    <li><a href="#method-i-work_count">#work_count</a>
+    <li><a href="#method-i-after_create">#after_create</a>
     
   </ul>
 </nav>
@@ -584,7 +578,7 @@
 </nav>
 
 <div id="documentation">
-  <h1 class="class">class Language</h1>
+  <h1 class="class">class KudosSweeper</h1>
 
   <div id="description" class="description">
     
@@ -604,51 +598,15 @@
 
     <!-- Methods -->
     
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
-
-    
-      <div id="method-c-default" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">default</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="default-source">
-            <pre><span class="ruby-comment"># File app/models/language.rb, line 16</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">default</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create_by_short_and_name</span>(<span class="ruby-value">:short</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DEFAULT_LANGUAGE_SHORT</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DEFAULT_LANGUAGE_NAME</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- default-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- default-method -->
-
-    
-    </section><!-- public-class-method-details -->
-  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-fandom_count" class="method-detail ">
+      <div id="method-i-after_create" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">fandom_count</span><span
-            class="method-args">()</span>
+          <span class="method-name">after_create</span><span
+            class="method-args">(kudo)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -659,79 +617,19 @@
           
 
           
-          <div class="method-source-code" id="fandom_count-source">
-            <pre><span class="ruby-comment"># File app/models/language.rb, line 24</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">fandom_count</span>
-  <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:joins</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:works</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:works</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>)}}, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'tags.id'</span>)
+          <div class="method-source-code" id="after_create-source">
+            <pre><span class="ruby-comment"># File app/sweepers/kudos_sweeper.rb, line 4</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_create</span>(<span class="ruby-identifier">kudo</span>)
+  <span class="ruby-identifier">expire_fragment</span> <span class="ruby-node">&quot;#{kudo.commentable.cache_key}/kudos&quot;</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- fandom_count-source -->
+          </div><!-- after_create-source -->
           
         </div>
 
         
 
         
-      </div><!-- fandom_count-method -->
-
-    
-      <div id="method-i-to_param" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">to_param</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="to_param-source">
-            <pre><span class="ruby-comment"># File app/models/language.rb, line 12</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
-  <span class="ruby-identifier">short</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- to_param-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- to_param-method -->
-
-    
-      <div id="method-i-work_count" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">work_count</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="work_count-source">
-            <pre><span class="ruby-comment"># File app/models/language.rb, line 20</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">work_count</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- work_count-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- work_count-method -->
+      </div><!-- after_create-method -->
 
     
     </section><!-- public-instance-method-details -->

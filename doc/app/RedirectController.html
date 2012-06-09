@@ -355,6 +355,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -623,17 +625,17 @@
             <pre><span class="ruby-comment"># File app/controllers/redirect_controller.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">do_redirect</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@original_url</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What url did you want to look up?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What url did you want to look up?&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">urls</span> = [<span class="ruby-ivar">@original_url</span>, <span class="ruby-ivar">@minimal_url</span>, <span class="ruby-ivar">@encoded_url</span>, <span class="ruby-ivar">@decoded_url</span>]
     <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:imported_from_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@original_url</span>).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> 
             <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:imported_from_url</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-ivar">@minimal_url</span>, <span class="ruby-ivar">@encoded_url</span>, <span class="ruby-ivar">@decoded_url</span>]).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span>
             <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;imported_from_url LIKE ? OR imported_from_url LIKE ?&quot;</span>, <span class="ruby-node">&quot;%#{@encoded_url}%&quot;</span>, <span class="ruby-node">&quot;%#{@decoded_url}%&quot;</span>).<span class="ruby-identifier">first</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;You have been redirected here from #{@original_url}. Please update the original link if possible!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;You have been redirected here from #{@original_url}. Please update the original link if possible!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span> 
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?&quot;</span>)
       <span class="ruby-keyword">unless</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">production?</span>
         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; We checked all of the following URLs: #{urls.to_sentence}&quot;</span> 
       <span class="ruby-keyword">end</span>

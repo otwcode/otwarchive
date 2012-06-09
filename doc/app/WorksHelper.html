@@ -381,6 +381,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -1256,8 +1258,8 @@ display</p>
     <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comments:'</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>]])
   <span class="ruby-keyword">end</span>
 
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Kudos:'</span>), (<span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">by_guest</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:ip_address</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">with_pseud</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:pseud_id</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)).<span class="ruby-identifier">to_s</span>]])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">all_kudos_count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Kudos:'</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">all_kudos_count</span>.<span class="ruby-identifier">to_s</span>]])
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> (<span class="ruby-identifier">bookmark_count</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">is_public</span>.<span class="ruby-identifier">count</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
