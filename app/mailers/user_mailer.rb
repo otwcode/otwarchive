@@ -71,7 +71,7 @@ class UserMailer < BulletproofMailer::Base
     # look up all the creations that have generated updates for this subscription
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
-      creation = creation_type.constantize.find(creation_id)
+      creation = creation_type.constantize.where(:id => creation_id).first
       next unless creation && creation.try(:posted)
       @creations << creation
     end
