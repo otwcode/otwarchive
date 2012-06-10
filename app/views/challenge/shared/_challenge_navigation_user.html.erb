@@ -10,7 +10,7 @@
           :confirm => ts("Are you sure you want to cancel your signup? All signup information will be lost."), 
           :method => :delete %>
       </li>
-    <% elsif (!collection.moderated? || collection.user_is_posting_participant?(current_user)) %>
+    <% else %>
       <li><%= link_to ts("Sign Up"), new_collection_signup_path(collection) %></li>
     <% end %>
   <% end %>
