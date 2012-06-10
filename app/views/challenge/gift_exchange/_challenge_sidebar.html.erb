@@ -7,7 +7,7 @@
   <!-- signup form or link -->
   <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
     <li><%= span_if_current ts("Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
-  <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || !@collection.moderated? || @collection.user_is_posting_participant?(current_user) %>
+  <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || @collection.user_is_posting_participant?(current_user) %>
     <li><%= span_if_current ts("Signup Form"), new_collection_signup_path(@collection) %></li>
   <% end %>
 
