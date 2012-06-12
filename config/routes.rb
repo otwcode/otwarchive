@@ -152,7 +152,7 @@ Otwarchive::Application.routes.draw do
 
   #### USERS ####
 
-  resources :people, :only => [:index, :show] do
+  resources :people, :only => [:index] do
     collection do
       get :search
     end
