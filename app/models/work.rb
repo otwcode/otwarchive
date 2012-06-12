@@ -909,6 +909,12 @@ class Work < ActiveRecord::Base
   def self.visible(user=User.current_user)
     visible_to_user(user)
   end
+  
+  scope :with_filter, lambda { |tag| 
+    select("DISTINCT works.*").
+    joins(:filter_taggings).
+    where({:filter_taggings => {:filter_id => tag.id}})
+  }
 
   # Note: this version will work only on canonical tags (filters)
   scope :with_all_filter_ids, lambda {|tag_ids_to_find|
@@ -956,8 +962,7 @@ class Work < ActiveRecord::Base
   scope :written_by_id, lambda {|pseud_ids|
     select("DISTINCT works.*").
     joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id")
+    where('pseuds.id IN (?)', pseud_ids)
   }
   scope :written_by_id_having, lambda {|pseud_ids|
     select("DISTINCT works.*").
@@ -1005,24 +1010,16 @@ class Work < ActiveRecord::Base
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
 
-    @pseuds = []
-    @filters = []
     @works = Work
 
+    if options[:tag].present?
+      @works = @works.with_filter(options[:tag])
+    end
     if !options[:user].nil? && !options[:selected_pseuds].empty?
       @works = @works.written_by_id(options[:selected_pseuds])
     elsif !options[:user].nil?
       @works = @works.owned_by(options[:user])
     end
-
-    if !options[:selected_tags].blank? || !options[:tag].blank?
-      if options[:boolean_type] == 'or'
-        @works = @works.with_any_filter_ids(options[:selected_tags])
-      else
-        @works = @works.with_all_filter_ids(options[:selected_tags])
-      end
-    end
-
     if options[:language_id]
       @works = @works.by_language(options[:language_id])
     end
@@ -1031,45 +1028,16 @@ class Work < ActiveRecord::Base
     end
     if options[:collection]
       @works = @works.in_collection(options[:collection])
-    else
-      @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
-
     if User.current_user.nil? || User.current_user == :false
       @works = @works.unrestricted
     end
-
     if options[:sort_column] == "hit_count"
       @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
     end
 
     @works = @works.order(sort_by).posted.unhidden
-    # for now, trigger the lazy loading so we don't get an error on @works.size
-    @works.compact
-
-    if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
-      @works = @works.delete_if {|w| w.unrevealed?}
-    end
-
-    @filters = build_filters(@works) unless @works.empty?
-
-    return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
-  end
-
-  # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
-  # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
-  def self.build_filters(works)
-    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
-  end
-
-  def self.build_filters_from_tags(tags)
-    filters = {}
-    tags.each do |tag|
-      count = tag.respond_to?(:count) ? tag.count : "0"
-      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
-    end
-    filters
+    return @works.paginate(page_args.merge(:total_entries => @works.size))
   end
 
   ########################################################################

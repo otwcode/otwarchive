@@ -36,6 +36,10 @@ module WorksHelper
     all_authors_want_public_hits = work.users.select {|u| u.preference.try(:hide_public_hit_count)}.empty?
     author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
   end
+  
+  def show_hit_count_to_public?(work)
+    !Preference.where(:user_id => work.pseuds.value_of(:user_id), :hide_public_hit_count => true).exists?
+  end
 
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
