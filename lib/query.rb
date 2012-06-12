@@ -4,7 +4,7 @@ module Query
 
   WORK_FIELDS = %w{author title language tag}
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
-  PEOPLE_FIELDS = %w{name icon_alt_text description}
+  PEOPLE_FIELDS = %w{id name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
   ALL_INDEXES = ALL_FIELDS + %w{words hits kudos date rec canonical recced bookmarked}
 
