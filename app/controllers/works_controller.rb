@@ -38,16 +38,6 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    # what we're getting for the view
-    @works = []
-    @filters = {}
-    @pseuds = []
-
-    # default values for our inputs
-    @user = nil
-    @tag = nil
-    @selected_tags = []
-    @selected_pseuds = []
     @sort_column = case params[:sort_column]
       when 'author'
         'authors_to_sort_on'
@@ -75,14 +65,6 @@ class WorksController < ApplicationController
       end
     end
 
-    # if the user is filtering with tags, let's see what they're giving us
-    unless params[:selected_tags].blank?
-      if params[:selected_tags].respond_to?(:values)
-        params[:selected_tags] = params[:selected_tags].values.flatten
-      end
-      @selected_tags = params[:selected_tags]
-    end
-
     # if we're browsing by a particular tag, just add that
     # tag to the selected_tags list.
     unless params[:tag_id].blank?
@@ -91,12 +73,14 @@ class WorksController < ApplicationController
         @page_subtitle = @tag.name
         @tag = @tag.merger if @tag.merger
         redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
-        @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       else
         setflash; flash[:error] = ts("Sorry, there's no tag by that name in our system.")
         redirect_to works_path
         return
       end
+    end
+    if params[:fandom_id].present?
+      @fandom = Fandom.find_by_id(params[:fandom_id])
     end
     
     if @collection
@@ -104,17 +88,17 @@ class WorksController < ApplicationController
     end
 
     # if we're browsing by a particular user get works by that user
+    @selected_pseuds = []
     unless params[:user_id].blank?
       @user = User.find_by_login(params[:user_id])
       if @user
-        @page_subtitle = ts("by ") + @user.login
         unless params[:pseud_id].blank?
           @author = @user.pseuds.find_by_name(params[:pseud_id])
           if @author
-            @page_subtitle = ts("by ") + @author.byline
             @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
           end
         end
+        @page_subtitle = ts("by %{name}", :name => (@author ? @author.byline : @user.login))
       else
         setflash; flash[:error] = ts("Sorry, there's no user by that name in our system.")
         redirect_to works_path
@@ -123,60 +107,37 @@ class WorksController < ApplicationController
     end
 
     @language = Language.find_by_short(params[:language_id]) if params[:language_id]
-    # Workaround for the getting-all-English-works problem
-    # TODO: better limits
-    if @language && @language == Language.default
-      @most_recent_works = true
-    end
-
     
     # Now let's build the query
     options = {
       :user => @user, 
       :author => @author, 
       :selected_pseuds => @selected_pseuds,
-      :tag => @tag, 
-      :selected_tags => @selected_tags,
+      :tag => @tag || @fandom, 
       :collection => @collection,
       :language_id => @language,
       :sort_column => @sort_column, 
       :sort_direction => @sort_direction,
       :page => params[:page], 
       :per_page => params[:per_page],
-      :boolean_type => params[:boolean_type],
       :complete => params[:complete]
     }
     # Add caching for tag pages
-    if @tag.present? && params[:sort_column].blank? && params[:selected_pseuds].blank? && params[:selected_tags].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
+    if @tag.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
       status = logged_in? ? "u" : "v"
       page = params[:page] || 1
       # This has views/ in it because that's what expire_fragment is looking for
-      @works, @filters, @pseuds = Rails.cache.fetch "views/works/tag/#{@tag.id}/#{status}/p/#{page}" do
-        results = Work.find_with_options(options)
-        [results.first.compact, results[1], results.last]
+      @works = Rails.cache.fetch "views/works/tag/#{@tag.id}/#{status}/p/#{page}" do
+        Work.find_with_options(options).compact
       end
     else
-      @works, @filters, @pseuds = Work.find_with_options(options)
-    end
-
-    # Limit the number of works returned and let users know that it's happening
-    if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
-      setflash; flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
-      we found using the current sort and filters are shown."
+      @works = Work.find_with_options(options)
     end
 
     # we now have @works found
-    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-
-    if @works.empty? && !@selected_tags.empty?
-      begin
-        # build filters so we can go back
-        setflash; flash.now[:notice] = ts("We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
-        @filters = Work.build_filters_from_tags(Tag.find(@selected_tags))
-      rescue
-        # do we need more than the regular flash notice?
-      end
-    end
+    # only need to check this if the filters expose info about the works
+#    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
+    @over_anon_threshold = true
   end
 
   def drafts
