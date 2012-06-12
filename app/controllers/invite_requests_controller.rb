@@ -10,14 +10,10 @@ class InviteRequestsController < ApplicationController
   # GET /invite_requests/1
   # GET /invite_requests/1.xml
   def show
-    if params[:email]
-      @invite_request = InviteRequest.find_by_email(params[:email])
-      unless (request.xml_http_request?) || @invite_request
-        setflash; flash[:error] = "Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help."
-        redirect_to invite_requests_url and return
-      end    
-    else
-      @invite_request = InviteRequest.find(params[:id])
+    @invite_request = InviteRequest.find_by_email(params[:email])
+    unless (request.xml_http_request?) || @invite_request
+      setflash; flash[:error] = "Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help."
+      redirect_to invite_requests_url and return
     end
     respond_to do |format|
       format.html
@@ -30,8 +26,8 @@ class InviteRequestsController < ApplicationController
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
-      setflash; flash[:notice] = "You've been added to our queue! Yay!"
-      redirect_to @invite_request 
+      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}."
+      redirect_to invite_requests_path
     else
       render :action => :index
     end
