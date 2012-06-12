@@ -10,31 +10,35 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests/new
   # GET /user_invite_requests/new.xml
   def new
-    if logged_in? 
-      @user = current_user
-      @user_invite_request = @user.user_invite_requests.build
-    else
-      setflash; flash[:error] = "Please log in."
-      redirect_to login_path
-    end
+    setflash; flash[:error] = "Sorry, new invitations are not currently available. If you're a challenge mod or are looking to preserve works from another site, please contact Support."
+    redirect_to root_path
+    # if logged_in? 
+    #   @user = current_user
+    #   @user_invite_request = @user.user_invite_requests.build
+    # else
+    #   setflash; flash[:error] = "Please log in."
+    #   redirect_to login_path
+    # end
   end
 
   # POST /user_invite_requests
   # POST /user_invite_requests.xml
   def create
-    if logged_in? 
-      @user = current_user
-      @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
-    else
-      setflash; flash[:error] = "Please log in."
-      redirect_to login_path
-    end
-    if @user_invite_request.save
-      setflash; flash[:notice] = 'Request was successfully created.'
-      redirect_to(@user)
-    else
-      render :action => "new"
-    end
+    setflash; flash[:error] = "Sorry, new invitations are not currently available. If you're a challenge mod or are looking to preserve works from another site, please contact Support."
+    redirect_to root_path
+    # if logged_in? 
+    #   @user = current_user
+    #   @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
+    # else
+    #   setflash; flash[:error] = "Please log in."
+    #   redirect_to login_path
+    # end
+    # if @user_invite_request.save
+    #   setflash; flash[:notice] = 'Request was successfully created.'
+    #   redirect_to(@user)
+    # else
+    #   render :action => "new"
+    # end
   end
 
   # PUT /user_invite_requests/1
