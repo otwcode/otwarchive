@@ -16,7 +16,7 @@
       <li><%= span_if_current ts("Subcollections (%{count})", :count => @collection.children.count), collection_collections_path(@collection) %></li>
     <% end %>
 
-    <li><%= link_to ts("Static Version"), static_collection_path(@collection) %></li>
+    <li><%= link_to ts("Static List"), static_collection_path(@collection) %></li>
   </ul>
 
   <!-- challenge section of dash -->
