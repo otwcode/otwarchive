@@ -1108,14 +1108,5 @@ class Work < ActiveRecord::Base
                                      :summary => 5, :notes => 5,
                                     }
   end
-  
-  # This is to allow works to be serialized for caching
-  def marshal_dump
-    @attributes
-  end
-
-  def marshal_load(attributes)
-    @attributes = attributes
-  end
 
 end
