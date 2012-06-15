@@ -72,24 +72,23 @@
     </li>
   <% end %>
 
-  <li class="share">
-    <%= link_to_ibox ts("Share"), :for => "#share" %>
-    <div id="share" style="display: none;">
-      <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
-      <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
-      <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
-        <p><%= ts("The author has chosen to disable share buttons.") %></p>
-      <% else %>
-        <!-- twitter, tumblr buttons go here -->
-        <p>
-          <a href="http://twitter.com/share" class="twitter" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
-          <% content_for :footer_js do %>
-            <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-          <% end %>
-        </p>
-      <% end %>
-    </div>
-  </li>
+  <!-- If user has disabled sharing in preferences the share button will not display -->
+  <% if Preference.show_share_link? %>
+    <li class="share">
+      <%= link_to_ibox ts("Share"), :for => "#share" %>
+      <div id="share" style="display: none;">
+        <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
+        <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
+          <!-- twitter, tumblr buttons go here -->
+          <p>
+            <a href="http://twitter.com/share" class="twitter" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
+            <% content_for :footer_js do %>
+              <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            <% end %>
+          </p>
+      </div>
+    </li>
+  <% end %>
   
   <% if current_user && @subscription %>
     <li class="subscribe">
