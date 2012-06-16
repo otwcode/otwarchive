@@ -127,7 +127,7 @@ class WorksController < ApplicationController
       status = logged_in? ? "u" : "v"
       page = params[:page] || 1
       # This has views/ in it because that's what expire_fragment is looking for
-      @works = Rails.cache.fetch "views/works/tag/#{@tag.id}/#{status}/p/#{page}" do
+      @works = Rails.cache.fetch "views/works/t/#{@tag.id}/#{status}/p/#{page}" do
         Work.find_with_options(options).compact
       end
     else
