@@ -638,7 +638,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 109</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 107</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
       <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">wip_length</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:chapter</span>][<span class="ruby-value">:wip_length</span>]
   <span class="ruby-identifier">load_pseuds</span>
@@ -699,7 +699,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 226</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 224</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@chapter</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@chapter</span>.<span class="ruby-identifier">is_only_chapter?</span>
@@ -743,7 +743,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 98</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 96</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;remove&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;me&quot;</span>
     <span class="ruby-ivar">@chapter</span>.<span class="ruby-identifier">pseuds</span> = <span class="ruby-ivar">@chapter</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
@@ -839,7 +839,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 94</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 92</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->
@@ -868,7 +868,7 @@
 
           
           <div class="method-source-code" id="post-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 208</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:cancel_button</span>]
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@work</span>
@@ -910,7 +910,7 @@
 
           
           <div class="method-source-code" id="preview-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 203</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 201</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">preview</span>
   <span class="ruby-ivar">@preview_mode</span> = <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
@@ -944,9 +944,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view_adult</span>]
     <span class="ruby-identifier">session</span>[<span class="ruby-value">:adult</span>] = <span class="ruby-keyword">true</span>
-    <span class="ruby-identifier">cookies</span>[<span class="ruby-value">:adult</span>] = <span class="ruby-value">1</span>
-  <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>) <span class="ruby-operator">||</span> (<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">adult?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">see_adult?</span>)
-    <span class="ruby-comment"># squid caching: guests see the adult page unless they are using params[:view_adult]</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">adult?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">see_adult?</span>
     <span class="ruby-identifier">render</span> <span class="ruby-string">&quot;works/_adult&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
@@ -1030,7 +1028,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 146</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 144</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@chapter</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:chapter</span>]
   <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">wip_length</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:chapter</span>][<span class="ruby-value">:wip_length</span>]
@@ -1095,7 +1093,7 @@
 
           
           <div class="method-source-code" id="update_positions-source">
-            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 185</span>
+            <pre><span class="ruby-comment"># File app/controllers/chapters_controller.rb, line 183</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_positions</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:chapters</span>]
     <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>])
