@@ -31,9 +31,6 @@ class Preference < ActiveRecord::Base
     self.try(:hide_all_hit_counts) || self.try(:hide_private_hit_count)
   end
 
-  #Hides the Share button based on a users Preferences
-  def show_share_link?
-    users.any? {|u| u.preference.disable_share_links? == false}
-  end
+
 
 end

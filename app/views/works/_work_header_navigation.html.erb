@@ -73,7 +73,7 @@
   <% end %>
 
   <!-- If user has disabled sharing in preferences the share button will not display -->
-  <% if Preference.show_share_link? %>
+  <% if @work.show_share_link? %>
     <li class="share">
       <%= link_to_ibox ts("Share"), :for => "#share" %>
       <div id="share" style="display: none;">

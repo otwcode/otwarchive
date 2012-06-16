@@ -89,6 +89,11 @@ class Work < ActiveRecord::Base
     counter.save
   end
   
+  #Hides the Share button based on a users Preferences
+  def show_share_link?
+    #Will return false if any users :disable_share_links is set to true and not display the link
+    !Preference.where(:disable_share_links => true, :user_id => users.value_of(:id)).exists? 
+  end
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
