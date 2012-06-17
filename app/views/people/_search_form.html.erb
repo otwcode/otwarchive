@@ -4,14 +4,14 @@
   <dl>
   <dt>
     <label for="people_search"><%= ts('Name:') %></label>
- 	<%= link_to_help "people-search-people-help" %>
+    <%= link_to_help "people-search-people-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[name]", @query[:name], :id => 'people_search'  %>
   </dd>
   <dt>
     <label for="refine_bookmark_count"><%= ts('Number of Bookmarks:') %></label>
-	 <%= link_to_help "people-search-numerical-help" %>
+    <%= link_to_help "people-search-numerical-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[bookmarks]", @query[:bookmarks], :id => 'refine_bookmark_count' %>
