@@ -64,6 +64,7 @@ a, a:link, #header ul ul li a:link {
 }
 
 #header ul ul li a {
+  color: #700;
   padding: 0.5em;
   border: 1px solid #555;
   display: block;
