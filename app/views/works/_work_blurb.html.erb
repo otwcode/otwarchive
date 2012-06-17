@@ -33,7 +33,7 @@
         <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
       </h4>
 
-  	  <h5 class="fandom heading" title="fandoms">
+  	  <h5 class="fandoms heading" title="fandom">
         <% fandoms = tag_groups['Fandom'] %>
         <%= fandoms.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if fandoms %>
   		  &nbsp;
