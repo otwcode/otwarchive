@@ -415,6 +415,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -680,7 +682,7 @@
 
           
           <div class="method-source-code" id="confirm_delete-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 504</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 481</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">confirm_delete</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- confirm_delete-source -->
@@ -709,7 +711,7 @@
 
           
           <div class="method-source-code" id="confirm_delete_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 709</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 686</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">confirm_delete_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;distinct works.*&quot;</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
@@ -740,7 +742,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 267</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 244</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">load_pseuds</span>
   <span class="ruby-ivar">@series</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">uniq</span>
@@ -748,7 +750,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:edit_button</span>]
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:cancel_button</span>]
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;New work posting canceled.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;New work posting canceled.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span>
   <span class="ruby-keyword">else</span> <span class="ruby-comment"># now also treating the cancel_coauthor_button case, bc it should function like a preview, really</span>
     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:preview_button</span>]
@@ -807,7 +809,7 @@
 
           
           <div class="method-source-code" id="delete_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 714</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 691</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>)
@@ -816,7 +818,7 @@
   <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">work</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your works %{titles} were deleted.&quot;</span>, <span class="ruby-value">:titles</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">titles</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your works %{titles} were deleted.&quot;</span>, <span class="ruby-value">:titles</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">titles</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">show_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- delete_multiple-source -->
@@ -845,16 +847,16 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 508</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 485</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">begin</span>
     <span class="ruby-identifier">was_draft</span> = <span class="ruby-operator">!</span><span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted?</span>
     <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>
     <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your work %{title} was deleted.&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">title</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your work %{title} was deleted.&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">title</span>)
   <span class="ruby-keyword">rescue</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">was_draft</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">drafts_user_works_path</span>(<span class="ruby-identifier">current_user</span>)
@@ -888,15 +890,15 @@
 
           
           <div class="method-source-code" id="drafts-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 166</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">drafts</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Whose drafts did you want to look at?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Whose drafts did you want to look at?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:users</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:index</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@user</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only see your own drafts, sorry!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only see your own drafts, sorry!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
@@ -934,7 +936,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 309</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 286</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@chapters</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">chapters_in_order</span>(<span class="ruby-keyword">false</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">number_of_chapters</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
@@ -946,7 +948,7 @@
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'orphans'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>, <span class="ruby-value">:work_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">id</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">remove_author</span>(<span class="ruby-identifier">current_user</span>)
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You have been removed as an author from the work&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You have been removed as an author from the work&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -977,7 +979,7 @@
 
           
           <div class="method-source-code" id="edit_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 698</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 675</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_multiple</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:commit</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Orphan&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_orphan_path</span>(<span class="ruby-value">:work_ids</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -1014,7 +1016,7 @@
 
           
           <div class="method-source-code" id="edit_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 327</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 304</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_tags</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit_tags-source -->
@@ -1043,27 +1045,27 @@
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 526</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 503</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import</span>
   <span class="ruby-comment"># check to make sure we have some urls to work with</span>
   <span class="ruby-ivar">@urls</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:urls</span>].<span class="ruby-identifier">split</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@urls</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Did you want to enter a URL?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Did you want to enter a URL?&quot;</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-comment"># is this an archivist importing?</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:importing_for_others</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">archivist</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You may not import stories by other users unless you are an approved archivist.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You may not import stories by other users unless you are an approved archivist.&quot;</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-comment"># make sure we're not importing too many at once</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:import_multiple</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;works&quot;</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">archivist</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@urls</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@urls</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS_BY_ARCHIVIST</span>)
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot import more than %{max} works at a time.&quot;</span>, <span class="ruby-value">:max</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">archivist</span> <span class="ruby-operator">?</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS_BY_ARCHIVIST</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot import more than %{max} works at a time.&quot;</span>, <span class="ruby-value">:max</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">archivist</span> <span class="ruby-operator">?</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS_BY_ARCHIVIST</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_WORKS</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:import_multiple</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;chapters&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@urls</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_CHAPTERS</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot import more than %{max} chapters at a time.&quot;</span>, <span class="ruby-value">:max</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_CHAPTERS</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot import more than %{max} chapters at a time.&quot;</span>, <span class="ruby-value">:max</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">IMPORT_MAX_CHAPTERS</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
@@ -1120,134 +1122,109 @@
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 38</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-comment"># what we're getting for the view</span>
-  <span class="ruby-ivar">@works</span> = []
-  <span class="ruby-ivar">@filters</span> = {}
-  <span class="ruby-ivar">@pseuds</span> = []
-
-  <span class="ruby-comment"># default values for our inputs</span>
-  <span class="ruby-ivar">@user</span> = <span class="ruby-keyword">nil</span>
-  <span class="ruby-ivar">@tag</span> = <span class="ruby-keyword">nil</span>
-  <span class="ruby-ivar">@selected_tags</span> = []
-  <span class="ruby-ivar">@selected_pseuds</span> = []
-  <span class="ruby-ivar">@sort_column</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>]
-    <span class="ruby-keyword">when</span> <span class="ruby-string">'author'</span>
-      <span class="ruby-string">'authors_to_sort_on'</span>
-    <span class="ruby-keyword">when</span> <span class="ruby-string">'title'</span>
-      <span class="ruby-string">'title_to_sort_on'</span> 
-    <span class="ruby-keyword">when</span> <span class="ruby-string">'word_count'</span>
-      <span class="ruby-string">'word_count'</span>
-    <span class="ruby-keyword">when</span> <span class="ruby-string">'hit_count'</span>
-      <span class="ruby-string">'hit_count'</span>
-    <span class="ruby-keyword">when</span> <span class="ruby-string">'created_at'</span>
-      <span class="ruby-string">'created_at'</span>
-    <span class="ruby-keyword">else</span>
-      <span class="ruby-string">'revised_at'</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 39</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+    <span class="ruby-ivar">@sort_column</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>]
+      <span class="ruby-keyword">when</span> <span class="ruby-string">'author'</span>
+        <span class="ruby-string">'authors_to_sort_on'</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-string">'title'</span>
+        <span class="ruby-string">'title_to_sort_on'</span> 
+      <span class="ruby-keyword">when</span> <span class="ruby-string">'word_count'</span>
+        <span class="ruby-string">'word_count'</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-string">'hit_count'</span>
+        <span class="ruby-string">'hit_count'</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-string">'created_at'</span>
+        <span class="ruby-string">'created_at'</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-string">'revised_at'</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@sort_direction</span> = (<span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] <span class="ruby-operator">:</span> <span class="ruby-string">'DESC'</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>])
+      <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] = <span class="ruby-string">'DESC'</span>
     <span class="ruby-keyword">end</span>
-  <span class="ruby-ivar">@sort_direction</span> = (<span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] <span class="ruby-operator">:</span> <span class="ruby-string">'DESC'</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>])
-    <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] = <span class="ruby-string">'DESC'</span>
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-comment"># numerical ids for now</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_pseuds</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-keyword">begin</span>
-      <span class="ruby-ivar">@selected_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_pseuds</span>]).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>).<span class="ruby-identifier">uniq</span>
-    <span class="ruby-keyword">rescue</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find one or more of the authors you selected. Please try again.&quot;</span>)
+    <span class="ruby-comment"># numerical ids for now</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_pseuds</span>].<span class="ruby-identifier">blank?</span>
+      <span class="ruby-keyword">begin</span>
+        <span class="ruby-ivar">@selected_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_pseuds</span>]).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>).<span class="ruby-identifier">uniq</span>
+      <span class="ruby-keyword">rescue</span>
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find one or more of the authors you selected. Please try again.&quot;</span>)
+      <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
 
-  <span class="ruby-comment"># if the user is filtering with tags, let's see what they're giving us</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>].<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:values</span>)
-      <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>].<span class="ruby-identifier">values</span>.<span class="ruby-identifier">flatten</span>
+    <span class="ruby-comment"># if we're browsing by a particular tag, just add that</span>
+    <span class="ruby-comment"># tag to the selected_tags list.</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>].<span class="ruby-identifier">blank?</span>
+      <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>])
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>
+        <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
+        <span class="ruby-ivar">@tag</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">merger</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">merger</span>
+        <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">url_for</span>({<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:tags</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@tag</span>}) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">canonical</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, there's no tag by that name in our system.&quot;</span>)
+        <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">works_path</span>
+        <span class="ruby-keyword">return</span>
+      <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
-    <span class="ruby-ivar">@selected_tags</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>]
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-comment"># if we're browsing by a particular tag, just add that</span>
-  <span class="ruby-comment"># tag to the selected_tags list.</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>])
-    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>
-      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
-      <span class="ruby-ivar">@tag</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">merger</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">merger</span>
-      <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">url_for</span>({<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:tags</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@tag</span>}) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">canonical</span>
-      <span class="ruby-ivar">@selected_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@selected_tags</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)
-    <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, there's no tag by that name in our system.&quot;</span>)
-      <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">works_path</span>
-      <span class="ruby-keyword">return</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom_id</span>].<span class="ruby-identifier">present?</span>
+      <span class="ruby-ivar">@fandom</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom_id</span>])
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-  
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>
-    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
-  <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>
+      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
+    <span class="ruby-keyword">end</span>
 
-  <span class="ruby-comment"># if we're browsing by a particular user get works by that user</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
-    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>
-      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
-      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>].<span class="ruby-identifier">blank?</span>
-        <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
-        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@author</span>
-          <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">byline</span>
-          <span class="ruby-ivar">@selected_pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">id</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@selected_pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@author</span>.<span class="ruby-identifier">id</span>)
+    <span class="ruby-comment"># if we're browsing by a particular user get works by that user</span>
+    <span class="ruby-ivar">@selected_pseuds</span> = []
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>].<span class="ruby-identifier">blank?</span>
+      <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>
+        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>].<span class="ruby-identifier">blank?</span>
+          <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
+          <span class="ruby-keyword">if</span> <span class="ruby-ivar">@author</span>
+            <span class="ruby-ivar">@selected_pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">id</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@selected_pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@author</span>.<span class="ruby-identifier">id</span>)
+          <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
+        <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by %{name}&quot;</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-ivar">@author</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">byline</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>))
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, there's no user by that name in our system.&quot;</span>)
+        <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">works_path</span>
+        <span class="ruby-keyword">return</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-ivar">@language</span> = <span class="ruby-constant">Language</span>.<span class="ruby-identifier">find_by_short</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:language_id</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:language_id</span>]
+    
+    <span class="ruby-comment"># Now let's build the query</span>
+    <span class="ruby-identifier">options</span> = {
+      <span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>, 
+      <span class="ruby-value">:author</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@author</span>, 
+      <span class="ruby-value">:selected_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@selected_pseuds</span>,
+      <span class="ruby-value">:tag</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@tag</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@fandom</span>, 
+      <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>,
+      <span class="ruby-value">:language_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@language</span>,
+      <span class="ruby-value">:sort_column</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@sort_column</span>, 
+      <span class="ruby-value">:sort_direction</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@sort_direction</span>,
+      <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], 
+      <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>],
+      <span class="ruby-value">:complete</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:complete</span>]
+    }
+    <span class="ruby-comment"># Add caching for tag pages</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:language_id</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:complete</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">6</span>)
+      <span class="ruby-identifier">status</span> = <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;u&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;v&quot;</span>
+      <span class="ruby-identifier">page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>
+      <span class="ruby-comment"># This has views/ in it because that's what expire_fragment is looking for</span>
+      <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span> <span class="ruby-node">&quot;views/works/tag/#{@tag.id}/#{status}/p/#{page}&quot;</span> <span class="ruby-keyword">do</span>
+        <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_with_options</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">compact</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, there's no user by that name in our system.&quot;</span>)
-      <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">works_path</span>
-      <span class="ruby-keyword">return</span>
+      <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_with_options</span>(<span class="ruby-identifier">options</span>)
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
 
-  <span class="ruby-ivar">@language</span> = <span class="ruby-constant">Language</span>.<span class="ruby-identifier">find_by_short</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:language_id</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:language_id</span>]
-  <span class="ruby-comment"># Workaround for the getting-all-English-works problem</span>
-  <span class="ruby-comment"># TODO: better limits</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@language</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@language</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Language</span>.<span class="ruby-identifier">default</span>
-    <span class="ruby-ivar">@most_recent_works</span> = <span class="ruby-keyword">true</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-comment"># Now let's build the query</span>
-  <span class="ruby-ivar">@works</span>, <span class="ruby-ivar">@filters</span>, <span class="ruby-ivar">@pseuds</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_with_options</span>(<span class="ruby-value">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>, 
-                                                  <span class="ruby-value">:author</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@author</span>, 
-                                                  <span class="ruby-value">:selected_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@selected_pseuds</span>,
-                                                  <span class="ruby-value">:tag</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@tag</span>, 
-                                                  <span class="ruby-value">:selected_tags</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@selected_tags</span>,
-                                                  <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@collection</span>,
-                                                  <span class="ruby-value">:language_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@language</span>,
-                                                  <span class="ruby-value">:sort_column</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@sort_column</span>, 
-                                                  <span class="ruby-value">:sort_direction</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@sort_direction</span>,
-                                                  <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], 
-                                                  <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:per_page</span>],
-                                                  <span class="ruby-value">:boolean_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:boolean_type</span>],
-                                                  <span class="ruby-value">:complete</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:complete</span>])
-
-
-  <span class="ruby-comment"># Limit the number of works returned and let users know that it's happening</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">total_entries</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">SEARCH_RESULTS_MAX</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
-    we found using the current sort and filters are shown.&quot;</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-comment"># we now have @works found</span>
-  <span class="ruby-ivar">@over_anon_threshold</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:authors_to_sort_on</span>).<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ANONYMOUS_THRESHOLD_COUNT</span>
-
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@selected_tags</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-keyword">begin</span>
-      <span class="ruby-comment"># build filters so we can go back</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.&quot;</span>)
-      <span class="ruby-ivar">@filters</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">build_filters_from_tags</span>(<span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-ivar">@selected_tags</span>))
-    <span class="ruby-keyword">rescue</span>
-      <span class="ruby-comment"># do we need more than the regular flash notice?</span>
-    <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
+    <span class="ruby-comment"># we now have @works found</span>
+    <span class="ruby-comment"># only need to check this if the filters expose info about the works</span>
+<span class="ruby-comment">#    @over_anon_threshold = @works.collect(&amp;:authors_to_sort_on).uniq.count &gt; ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT</span>
+    <span class="ruby-ivar">@over_anon_threshold</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
           
         </div>
@@ -1274,11 +1251,11 @@
 
           
           <div class="method-source-code" id="marktoread-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 748</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 725</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">marktoread</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-constant">Reading</span>.<span class="ruby-identifier">mark_to_read_later</span>(<span class="ruby-ivar">@work</span>, <span class="ruby-identifier">current_user</span>)
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your history was updated. It may take a short while to show up.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your history was updated. It may take a short while to show up.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- marktoread-source -->
@@ -1307,7 +1284,7 @@
 
           
           <div class="method-source-code" id="navigate-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 231</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 208</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">navigate</span>
   <span class="ruby-ivar">@chapters</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">chapters_in_order</span>(<span class="ruby-keyword">false</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1337,7 +1314,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 236</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 213</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-identifier">load_pseuds</span>
@@ -1393,17 +1370,17 @@
 
           
           <div class="method-source-code" id="post_draft-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 656</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 633</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_draft</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-ivar">@work</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only post your own works.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only post your own works.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That work is already posted. Do you want to edit it instead?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That work is already posted. Do you want to edit it instead?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_user_work_path</span>(<span class="ruby-ivar">@user</span>, <span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
@@ -1411,11 +1388,11 @@
   <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">minor_version</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">minor_version</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
   <span class="ruby-comment"># @work.update_minor_version</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">valid?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems posting your work.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems posting your work.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_user_work_path</span>(<span class="ruby-ivar">@user</span>, <span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your work was successfully posted.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your work was successfully posted.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@work</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- post_draft-source -->
@@ -1444,7 +1421,7 @@
 
           
           <div class="method-source-code" id="preview-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 495</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 472</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">preview</span>
   <span class="ruby-ivar">@preview_mode</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-identifier">load_pseuds</span>
@@ -1475,7 +1452,7 @@
 
           
           <div class="method-source-code" id="preview_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 500</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 477</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">preview_tags</span>
   <span class="ruby-ivar">@preview_mode</span> = <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1505,7 +1482,7 @@
 
           
           <div class="method-source-code" id="search-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 21</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">search</span>
   <span class="ruby-ivar">@languages</span> = <span class="ruby-constant">Language</span>.<span class="ruby-identifier">default_order</span>
   <span class="ruby-ivar">@query</span> = {}
@@ -1515,9 +1492,9 @@
     <span class="ruby-keyword">begin</span>
       <span class="ruby-identifier">page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>
       <span class="ruby-identifier">errors</span>, <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">search_with_sphinx</span>(<span class="ruby-constant">Work</span>, <span class="ruby-ivar">@query</span>, <span class="ruby-identifier">page</span>)
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Riddle</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionError</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1547,7 +1524,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 188</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 164</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-comment"># Users must explicitly okay viewing of adult content</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view_adult</span>]
@@ -1567,6 +1544,7 @@
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@tag_categories_limited</span> = <span class="ruby-constant">Tag</span><span class="ruby-operator">::</span><span class="ruby-constant">VISIBLE</span> <span class="ruby-operator">-</span> [<span class="ruby-string">&quot;Warning&quot;</span>]
+  <span class="ruby-ivar">@kudos</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">with_pseud</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pseud</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;created_at DESC&quot;</span>)
   
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:subscriptions</span>)
     <span class="ruby-ivar">@subscription</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:subscribable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">id</span>,
@@ -1616,7 +1594,7 @@
 
           
           <div class="method-source-code" id="show_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 683</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 660</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
@@ -1657,7 +1635,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 331</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 308</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-comment"># Need to get @pseuds and @series values before rendering edit</span>
   <span class="ruby-identifier">load_pseuds</span>
@@ -1741,13 +1719,13 @@
     <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">saved</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:post_button</span>]
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully posted.'</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully posted.'</span>)
       <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:update_button</span>]
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully updated.'</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully updated.'</span>)
       <span class="ruby-keyword">end</span>
 
       <span class="ruby-comment">#bleep += &quot;  AFTER SAVE: author attr: &quot; + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + &quot;  @work.authors: &quot; + @work.authors.collect {|au| au.id}.inspect + &quot;  @work.pseuds: &quot; + @work.pseuds.collect {|ps| ps.id}.inspect</span>
-      <span class="ruby-comment">#flash[:notice] = &quot;DEBUG: in UPDATE save:  &quot; + bleep</span>
+      <span class="ruby-comment">#setflash; flash[:notice] = &quot;DEBUG: in UPDATE save:  &quot; + bleep</span>
 
       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@work</span>)
     <span class="ruby-keyword">else</span>
@@ -1791,7 +1769,7 @@
 
           
           <div class="method-source-code" id="update_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 726</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 703</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>)
@@ -1805,10 +1783,10 @@
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems editing some works: %{errors}&quot;</span>, <span class="ruby-value">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems editing some works: %{errors}&quot;</span>, <span class="ruby-value">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your edits were put through! Please check over the works to make sure everything is right.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your edits were put through! Please check over the works to make sure everything is right.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">show_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>, <span class="ruby-value">:work_ids</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1838,7 +1816,7 @@
 
           
           <div class="method-source-code" id="update_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 439</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 416</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_tags</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:edit_tags</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -1875,7 +1853,7 @@
       <span class="ruby-comment"># @work.update_minor_version</span>
     <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">saved</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully updated.'</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Work was successfully updated.'</span>)
       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@work</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@work</span>.<span class="ruby-identifier">invalid_tags</span>.<span class="ruby-identifier">blank?</span>
@@ -1924,13 +1902,13 @@
 
           
           <div class="method-source-code" id="cancel_posting_and_redirect-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 858</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 835</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_posting_and_redirect</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span> <span class="ruby-keyword">and</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work was not updated.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work was not updated.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_works_path</span>(<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work was not posted. It will be saved here in your drafts for one week, then cleaned up.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work was not posted. It will be saved here in your drafts for one week, then cleaned up.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">drafts_user_works_path</span>(<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1960,7 +1938,7 @@
 
           
           <div class="method-source-code" id="import_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 616</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 593</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import_multiple</span>(<span class="ruby-identifier">urls</span>, <span class="ruby-identifier">options</span>)
   <span class="ruby-comment"># try a multiple import</span>
   <span class="ruby-identifier">storyparser</span> = <span class="ruby-constant">StoryParser</span>.<span class="ruby-identifier">new</span>
@@ -1969,7 +1947,7 @@
   <span class="ruby-comment"># collect the errors neatly, matching each error to the failed url</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">failed_urls</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-identifier">error_msgs</span> = <span class="ruby-value">0</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">failed_urls</span>.<span class="ruby-identifier">length</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">index</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;dt&gt;#{failed_urls[index]}&lt;/dt&gt;&lt;dd&gt;#{errors[index]}&lt;/dd&gt;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;&lt;h3&gt;#{ts('Failed Imports')}&lt;/h3&gt;&lt;dl&gt;#{error_msgs}&lt;/dl&gt;&quot;</span>.<span class="ruby-identifier">html_safe</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;&lt;h3&gt;#{ts('Failed Imports')}&lt;/h3&gt;&lt;dl&gt;#{error_msgs}&lt;/dl&gt;&quot;</span>.<span class="ruby-identifier">html_safe</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-comment"># if EVERYTHING failed, boo. :( Go back to the import form.</span>
@@ -1978,7 +1956,7 @@
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-comment"># if we got here, we have at least some successfully imported works</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Importing completed successfully for the following works! (But please check the results over carefully!)&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Importing completed successfully for the following works! (But please check the results over carefully!)&quot;</span>)
   <span class="ruby-identifier">send_external_invites</span>(<span class="ruby-ivar">@works</span>)
 
   <span class="ruby-comment"># fall through to import template</span>
@@ -2009,7 +1987,7 @@
 
           
           <div class="method-source-code" id="import_single-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 580</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 557</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import_single</span>(<span class="ruby-identifier">urls</span>, <span class="ruby-identifier">options</span>)
   <span class="ruby-comment"># try the import</span>
   <span class="ruby-identifier">storyparser</span> = <span class="ruby-constant">StoryParser</span>.<span class="ruby-identifier">new</span>
@@ -2020,15 +1998,15 @@
       <span class="ruby-ivar">@work</span> = <span class="ruby-identifier">storyparser</span>.<span class="ruby-identifier">download_and_parse_chapters_into_story</span>(<span class="ruby-identifier">urls</span>, <span class="ruby-identifier">options</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.&quot;</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">StoryParser</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't successfully import that work, sorry: %{message}&quot;</span>, <span class="ruby-value">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't successfully import that work, sorry: %{message}&quot;</span>, <span class="ruby-value">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:new_import</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@work</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We were only partially able to import this work and couldn't save it. Please review below!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We were only partially able to import this work and couldn't save it. Please review below!&quot;</span>)
     <span class="ruby-ivar">@chapter</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>
     <span class="ruby-identifier">load_pseuds</span>
     <span class="ruby-ivar">@series</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">uniq</span>
@@ -2070,7 +2048,7 @@
 
           
           <div class="method-source-code" id="load_pseuds-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 757</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 734</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_pseuds</span>
   <span class="ruby-ivar">@allpseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">authors</span> <span class="ruby-operator">||=</span> []) <span class="ruby-operator">+</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">pseuds</span>).<span class="ruby-identifier">uniq</span>
   <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
@@ -2104,11 +2082,11 @@
 
           
           <div class="method-source-code" id="load_work-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 765</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 742</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_work</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find the work you were looking for.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find the work you were looking for.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@work</span>.<span class="ruby-identifier">collections</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@collection</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@work</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -2142,7 +2120,7 @@
 
           
           <div class="method-source-code" id="send_external_invites-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 640</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 617</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_external_invites</span>(<span class="ruby-identifier">works</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:importing_for_others</span>]
     <span class="ruby-ivar">@external_authors</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:external_authors</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>
@@ -2151,7 +2129,7 @@
         <span class="ruby-identifier">external_author</span>.<span class="ruby-identifier">find_or_invite</span>(<span class="ruby-identifier">current_user</span>)
       <span class="ruby-keyword">end</span>
       <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.&quot;</span>)
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">message</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">message</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">message</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">message</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2181,17 +2159,17 @@
 
           
           <div class="method-source-code" id="set_author_attributes-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 814</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 791</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_author_attributes</span>
   <span class="ruby-comment"># if we don't have author_attributes[:ids], which shouldn't be allowed to happen</span>
   <span class="ruby-comment"># (this can happen if a user with multiple pseuds decides to unselect *all* of them)</span>
   <span class="ruby-identifier">sorry</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.&quot;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:author_attributes</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:author_attributes</span>][<span class="ruby-value">:ids</span>]
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">sorry</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">sorry</span>
     <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:author_attributes</span>][<span class="ruby-value">:ids</span>] = [<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_pseud</span>]
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:author_attributes</span>]
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">sorry</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">sorry</span>
     <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:author_attributes</span>] = {<span class="ruby-value">:ids</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_pseud</span>]}
   <span class="ruby-keyword">end</span>
 
@@ -2233,7 +2211,7 @@
 
           
           <div class="method-source-code" id="set_instance_variables-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 779</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 756</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_instance_variables</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>] <span class="ruby-comment"># edit, update, preview, manage_chapters</span>
     <span class="ruby-ivar">@work</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -2293,7 +2271,7 @@
 
           
           <div class="method-source-code" id="set_instance_variables_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 840</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 817</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_instance_variables_tags</span>
   <span class="ruby-keyword">begin</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>] <span class="ruby-comment"># edit_tags, update_tags, preview_tags</span>
@@ -2338,7 +2316,7 @@ markup</p>
 
           
           <div class="method-source-code" id="tag_list-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 869</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 846</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_list</span>(<span class="ruby-identifier">tags</span>)
   <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">compact</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tags</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:collect</span>)

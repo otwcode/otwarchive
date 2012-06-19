@@ -49,31 +49,25 @@ class RedisMailQueue
   # we create a separate list in redis for each subscriber and subscription to be notified on
   # and store the creation type and id in that set
   def self.queue_subscription(subscription, creation)
-    key = "subscription_#{subscription.user_id}_#{subscription.id}"
+    key = "subscription_#{subscription.id}"
     entry = "#{creation.class.name}_#{creation.id}"
-    $redis.sadd(key, entry)
-    $redis.sadd("notification_subscription", subscription.user_id)
+    $redis.rpush(key, entry)
+    $redis.sadd("notification_subscription", subscription.id)
   end
 
   # batch and deliver all the outstanding subscription notifications
   # this should be called from schedule.rb at some regular interval
   def self.deliver_subscriptions
-    subscriber_list = to_notify("subscription")
-
-    subscriber_list.each do |subscriber_id|
-      subscriptions = {}
-      keys = $redis.keys("subscription_#{subscriber_id}_*")
-      keys.each do |key|
-        prefix, subscriber, subscription_id = key.split("_")
-        sub, resp = $redis.multi do
-          $redis.smembers(key)
-          $redis.del(key)
-        end
-        subscriptions[subscription_id] = sub
+    subscription_list = to_notify("subscription")
+    subscription_list.each do |subscription_id|
+      key = "subscription_#{subscription_id}"
+      entries, resp = $redis.multi do
+        $redis.lrange(key, 0, -1)
+        $redis.del(key)
       end
       begin
-        # don't die if we hit one deleted user
-        UserMailer.batch_subscription_notification(subscriber_id, subscriptions.to_json).deliver
+        # don't die if we hit one deleted subscription
+        UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver
       rescue
       end
     end

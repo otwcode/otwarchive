@@ -13,9 +13,9 @@
         <% end %>
         <li>
           <% if fandom.merger %>
-            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%= fandom.work_count %>)
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
           <% else %>
-            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%= fandom.work_count %>)
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :fandom_id => fandom.id} %> (<%= fandom.work_count %>)
           <% end %>
         </li>
      <% end %>

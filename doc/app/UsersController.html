@@ -387,6 +387,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -655,18 +657,18 @@
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 246</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">activate</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your activation key is missing.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your activation key is missing.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">''</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_activation_code</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>
       <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">active?</span>
-        <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your account has already been activated.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your account has already been activated.&quot;</span>)
         <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@user</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">end</span>
       <span class="ruby-comment"># this is just a confirmation and it's ok if it gets delayed</span>
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activate</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">activation</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup complete! Please log in.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup complete! Please log in.&quot;</span>)
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_ACTIVATE</span>})
       <span class="ruby-comment"># assign over any external authors that belong to this user</span>
       <span class="ruby-identifier">external_authors</span> = []
@@ -686,7 +688,7 @@
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">login_path</span>)
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.&quot;</span>).<span class="ruby-identifier">html_safe</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.&quot;</span>).<span class="ruby-identifier">html_safe</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">''</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -767,7 +769,7 @@
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:new_email</span>]
       <span class="ruby-ivar">@new_email</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:new_email</span>]
       <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your email has been successfully updated&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your email has been successfully updated&quot;</span>)
         <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">change_email</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-ivar">@old_email</span>, <span class="ruby-ivar">@new_email</span>).<span class="ruby-identifier">deliver</span>
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_NEW_EMAIL</span>})
       <span class="ruby-keyword">else</span>
@@ -815,7 +817,7 @@
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">identity_url</span> = <span class="ruby-ivar">@openid_url</span>
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">recently_reset</span> = <span class="ruby-keyword">false</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Your OpenID URL has been successfully updated.'</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Your OpenID URL has been successfully updated.'</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_profile_path</span>(<span class="ruby-ivar">@user</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">render</span> <span class="ruby-value">:change_password</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -858,7 +860,7 @@
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">password_confirmation</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:password_confirmation</span>]
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">recently_reset</span> = <span class="ruby-keyword">false</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your password has been changed&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your password has been changed&quot;</span>)
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_PASSWORD_RESET</span>})
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_profile_path</span>(<span class="ruby-ivar">@user</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span>
@@ -898,16 +900,16 @@
     <span class="ruby-ivar">@new_login</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:new_login</span>]
     <span class="ruby-identifier">session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:login</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>, <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">session</span>.<span class="ruby-identifier">valid?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your password was incorrect&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your password was incorrect&quot;</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-ivar">@new_login</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">user</span> <span class="ruby-operator">!=</span> <span class="ruby-ivar">@user</span>)
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User name already taken.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User name already taken.&quot;</span>)
       <span class="ruby-keyword">else</span>
         <span class="ruby-identifier">old_login</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span> = <span class="ruby-ivar">@new_login</span>
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your user name was changed&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your user name was changed&quot;</span>)
 
           <span class="ruby-identifier">new_pseud</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@new_login</span>, <span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">first</span>
           <span class="ruby-identifier">old_pseud</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">old_login</span>, <span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">first</span>
@@ -925,7 +927,7 @@
         <span class="ruby-keyword">else</span>
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">clear</span>
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">reload</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User name must begin and end with a letter or number; it may also contain underscores but no other characters.&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User name must begin and end with a letter or number; it may also contain underscores but no other characters.&quot;</span>)
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
@@ -960,22 +962,22 @@
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_account_creation_status</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_registered_user?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You are already logged in!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You are already logged in!&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">token</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:invitation_token</span>]
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">token</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">account_creation_enabled?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You need an invitation to sign up.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You need an invitation to sign up.&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">invite_requests_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find_by_token</span>(<span class="ruby-identifier">token</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">invitation</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There was an error with your invitation token, please contact support&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There was an error with your invitation token, please contact support&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_feedback_report_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">redeemed_at</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">invitee</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;This invitation has already been used to create an account, sorry!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;This invitation has already been used to create an account, sorry!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -1028,7 +1030,7 @@
       <span class="ruby-identifier">openid_url</span> = <span class="ruby-node">&quot;http://#{openid_url}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">openid_url</span>.<span class="ruby-identifier">match</span>(<span class="ruby-string">&quot;http://&quot;</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_identity_url</span>(<span class="ruby-identifier">openid_url</span>)
         <span class="ruby-identifier">params</span>[<span class="ruby-value">:use_openid</span>] = <span class="ruby-keyword">true</span>
-        <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;OpenID url is already being used&quot;</span>
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;OpenID url is already being used&quot;</span>
         <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">else</span>
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">identity_url</span> = <span class="ruby-constant">OpenID</span>.<span class="ruby-identifier">normalize_url</span>(<span class="ruby-identifier">openid_url</span>)
@@ -1107,7 +1109,7 @@
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">wipeout_unposted_works</span>
     <span class="ruby-keyword">end</span>
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You have successfully deleted your account.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You have successfully deleted your account.'</span>)
    <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">delete_confirmation_path</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:coauthor</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sole_author</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-ivar">@sole_authored_works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">sole_authored_works</span>
@@ -1117,7 +1119,7 @@
     <span class="ruby-ivar">@sole_authored_works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">sole_authored_works</span>
     <span class="ruby-ivar">@coauthored_works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">coauthored_works</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:cancel_button</span>]
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Account deletion canceled.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Account deletion canceled.&quot;</span>)
      <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_profile_path</span>(<span class="ruby-ivar">@user</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-comment"># Orphans co-authored works, keeps the user's pseud on the orphan account</span>
@@ -1175,10 +1177,10 @@
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">wipeout_unposted_works</span>
         <span class="ruby-keyword">end</span>
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">destroy</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You have successfully deleted your account.'</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You have successfully deleted your account.'</span>)
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">delete_confirmation_path</span>)
       <span class="ruby-keyword">else</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, something went wrong! Please try again.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, something went wrong! Please try again.&quot;</span>)
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@user</span>)
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
@@ -1409,7 +1411,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_and_show_confirmation_screen</span>
   <span class="ruby-comment"># deliver synchronously to avoid getting caught in backed-up mail queue</span>
   <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver!</span> 
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;During testing you can activate via &lt;a href='%{activation_url}'&gt;your activation url&lt;/a&gt;.&quot;</span>,
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;During testing you can activate via &lt;a href='%{activation_url}'&gt;your activation url&lt;/a&gt;.&quot;</span>,
                       <span class="ruby-value">:activation_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">activate_path</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activation_code</span>)).<span class="ruby-identifier">html_safe</span> <span class="ruby-keyword">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">development?</span>
   <span class="ruby-identifier">render</span> <span class="ruby-string">&quot;confirmation&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1442,7 +1444,7 @@
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this user.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this user.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">people_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
@@ -1516,7 +1518,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">profile</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:profile_attributes</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">profile</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your profile has been successfully updated&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your profile has been successfully updated&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_user_path</span>(<span class="ruby-ivar">@user</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:edit</span>

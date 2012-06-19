@@ -373,6 +373,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -673,9 +675,9 @@
   <span class="ruby-comment"># create a new claim</span>
   <span class="ruby-identifier">claim</span> = <span class="ruby-constant">ChallengeClaim</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:challenge_claim</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">claim</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;New claim made.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;New claim made.&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;We couldn't save the new claim.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;We couldn't save the new claim.&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_claims_path</span>(<span class="ruby-ivar">@collection</span>, <span class="ruby-value">:for_user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -715,12 +717,12 @@
     <span class="ruby-keyword">end</span>
     <span class="ruby-ivar">@claim</span>.<span class="ruby-identifier">destroy</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@usernotmod</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;true&quot;</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your claim was deleted.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your claim was deleted.&quot;</span>)
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The claim was deleted.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The claim was deleted.&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">rescue</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_claims_path</span>(<span class="ruby-ivar">@collection</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -778,7 +780,7 @@
         <span class="ruby-ivar">@claims</span> = <span class="ruby-ivar">@claims</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>)         
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You aren't allowed to see that user's claims.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You aren't allowed to see that user's claims.&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -909,7 +911,7 @@
           <div class="method-source-code" id="no_challenge-source">
             <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_challenge</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What challenge did you want to work with?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What challenge did you want to work with?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -941,7 +943,7 @@
           <div class="method-source-code" id="no_claim-source">
             <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_claim</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What claim did you want to work on?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What claim did you want to work on?&quot;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">else</span>
@@ -977,7 +979,7 @@
           <div class="method-source-code" id="no_user-source">
             <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_user</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What user were you trying to work with?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What user were you trying to work with?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">&quot;/&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1010,7 +1012,7 @@
             <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">owner_only</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@challenge_claim</span>.<span class="ruby-identifier">claiming_user</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You aren't the claimer of that prompt.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You aren't the claimer of that prompt.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">&quot;/&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

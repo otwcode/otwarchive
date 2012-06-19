@@ -7,17 +7,17 @@
   <dl>
     <dt><%= f.label :signup_instructions_general, ts("General Signup Instructions: ") %></dt>
     <dd>
-      <%= f.text_area :signup_instructions_general, :id => "signup_instructions_general", :rows => 6, :cols => 60, :class => "observe_textlength" %>
-      <%= live_validation_for_field('signup_instructions_general', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-      <%= generate_countdown_html("signup_instructions_general", ArchiveConfig.INFO_MAX) -%>        
+      <%= f.text_area :signup_instructions_general, :id => field_id(f, "signup_instructions_general").to_sym, :rows => 6, :cols => 60, :class => "observe_textlength" %>
+      <%= live_validation_for_field(field_id(f, "signup_instructions_general").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+      <%= generate_countdown_html(field_id(f, "signup_instructions_general").to_sym, ArchiveConfig.INFO_MAX) -%>        
     </dd>
 
     <% f.object.class::PROMPT_TYPES.each do |prompt_type| %>
       <dt><%= f.label "signup_instructions_#{prompt_type}".to_sym, ts("#{prompt_type.singularize.capitalize} Instructions: ") %></dt>
       <dd>
-        <%= f.text_area "signup_instructions_#{prompt_type}".to_sym, :id => "signup_instructions_#{prompt_type}", :rows => 6, :cols => 60, :class => "observe_textlength" %>
-        <%= live_validation_for_field('signup_instructions_#{prompt_type}', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-        <%= generate_countdown_html("signup_instructions_#{prompt_type}", ArchiveConfig.INFO_MAX) -%>        
+        <%= f.text_area "signup_instructions_#{prompt_type}".to_sym, :id => field_id(f, "signup_instructions_#{prompt_type}").to_sym, :rows => 6, :cols => 60, :class => "observe_textlength" %>
+        <%= live_validation_for_field(field_id(f, "signup_instructions_#{prompt_type}").to_sym, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+        <%= generate_countdown_html(field_id(f, "signup_instructions_#{prompt_type}").to_sym, ArchiveConfig.INFO_MAX) -%>        
       </dd>
     <% end %>
   </dl>

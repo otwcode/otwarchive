@@ -435,6 +435,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -1359,11 +1361,11 @@ wherever</p>
 
 <p>is placed in the views. That is, if a controller or model sets</p>
 
-<pre>flash[:error] = &quot;OMG ERRORZ AIE&quot;</pre>
+<pre>setflash; flash[:error] = &quot;OMG ERRORZ AIE&quot;</pre>
 
 <p>or</p>
 
-<pre>flash.now[:error] = &quot;OMG ERRORZ AIE&quot;</pre>
+<pre>setflash; flash.now[:error] = &quot;OMG ERRORZ AIE&quot;</pre>
 
 <p>then that error will appear in the view where you have</p>
 
@@ -1427,8 +1429,8 @@ href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow">www.w3.
             <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 265</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_countdown_html</span>(<span class="ruby-identifier">field_id</span>, <span class="ruby-identifier">max</span>) 
   <span class="ruby-identifier">max</span> = <span class="ruby-identifier">max</span>.<span class="ruby-identifier">to_s</span>
-  <span class="ruby-identifier">span</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">max</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{field_id}_counter&quot;</span>, <span class="ruby-string">&quot;data-maxlength&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-live&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;polite&quot;</span>, <span class="ruby-string">&quot;aria-valuemax&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-valuenow&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>)
-  <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, <span class="ruby-identifier">span</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">h</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">' characters left'</span>)), <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;character_counter&quot;</span>)
+  <span class="ruby-identifier">span</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">max</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{field_id}_counter&quot;</span>, <span class="ruby-string">&quot;data-maxlength&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-live&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;polite&quot;</span>, <span class="ruby-string">&quot;aria-valuemax&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-valuenow&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">field_id</span>)
+  <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, <span class="ruby-identifier">span</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">' characters left'</span>), <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;character_counter&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- generate_countdown_html-source -->
           
@@ -1666,7 +1668,7 @@ dynamic?</p>
           <div class="method-source-code" id="mailto_link-source">
             <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 341</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mailto_link</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">options</span>={})
-  <span class="ruby-node">&quot;&lt;a href=\&quot;mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\&quot; class=\&quot;mailto\&quot;&gt;
+  <span class="ruby-node">&quot;&lt;a href=\&quot;mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\&quot; class=\&quot;mailto\&quot;&gt;
     &lt;img src=\&quot;/images/envelope_icon.gif\&quot; alt=\&quot;email #{h(user.login)}\&quot;&gt;
   &lt;/a&gt;&quot;</span>.<span class="ruby-identifier">html_safe</span>
 <span class="ruby-keyword">end</span></pre>

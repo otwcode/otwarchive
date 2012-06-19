@@ -373,6 +373,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -645,16 +647,16 @@
     <span class="ruby-identifier">model</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
     <span class="ruby-ivar">@tag</span> = <span class="ruby-identifier">model</span>.<span class="ruby-identifier">find_or_create_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:name</span>])  <span class="ruby-keyword">if</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Class</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please provide a category.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please provide a category.&quot;</span>)
     <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:name</span>])
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">valid?</span>
     <span class="ruby-keyword">if</span> (<span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:name</span>]) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:name</span>].<span class="ruby-identifier">downcase</span>) <span class="ruby-comment"># only capitalization different</span>
       <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:name</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:name</span>])  <span class="ruby-comment"># use the new capitalization</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag was successfully modified.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag was successfully modified.&quot;</span>)
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag was successfully created.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag was successfully created.&quot;</span>)
     <span class="ruby-keyword">end</span>
     <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:canonical</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:canonical</span>])
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;tags&quot;</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;edit&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@tag</span>)
@@ -692,7 +694,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Banned</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please log in as admin&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please log in as admin&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@counts</span> = {}
@@ -746,7 +748,7 @@
   <span class="ruby-keyword">begin</span>
     <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag not found!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tag not found!&quot;</span>)
     <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">tags_path</span>)
     <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
@@ -902,8 +904,8 @@
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The following tags were successfully updated: %{tags_saved}&quot;</span>, <span class="ruby-value">:tags_saved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">saved</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">saved</span>.<span class="ruby-identifier">empty?</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The following tags weren't saved: %{tags_not_saved}&quot;</span>, <span class="ruby-value">:tags_not_saved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">not_saved</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">not_saved</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The following tags were successfully updated: %{tags_saved}&quot;</span>, <span class="ruby-value">:tags_saved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">saved</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">saved</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The following tags weren't saved: %{tags_not_saved}&quot;</span>, <span class="ruby-value">:tags_not_saved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">not_saved</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">not_saved</span>.<span class="ruby-identifier">empty?</span>
 
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:tags</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:wrangle</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>], <span class="ruby-value">:show</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show</span>], <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:sort_column</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>], <span class="ruby-value">:sort_direction</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>], <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:status</span>])
 <span class="ruby-keyword">end</span></pre>
@@ -975,9 +977,9 @@
     <span class="ruby-keyword">begin</span>
       <span class="ruby-identifier">page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>
       <span class="ruby-identifier">errors</span>, <span class="ruby-ivar">@tags</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">search_with_sphinx</span>(<span class="ruby-constant">Tag</span>, <span class="ruby-ivar">@query</span>, <span class="ruby-identifier">page</span>)
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Riddle</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionError</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The search engine seems to be down at the moment, sorry!&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1017,7 +1019,7 @@ regular user, show them</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Banned</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please log in as admin&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please log in as admin&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-comment"># if tag is NOT wrangled, prepare to show works and bookmarks that are using it</span>
@@ -1088,7 +1090,7 @@ regular user, show them</p>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
       <span class="ruby-comment"># This is just a quick fix to avoid script barf if JavaScript is disabled</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you need to have JavaScript enabled for this.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you need to have JavaScript enabled for this.&quot;</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>]
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
       <span class="ruby-keyword">else</span>
@@ -1133,7 +1135,7 @@ regular user, show them</p>
   <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>]
   <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">syn_string</span> = <span class="ruby-identifier">syn_string</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">save</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Tag was updated.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Tag was updated.'</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:commit</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Wrangle&quot;</span>
       <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] = <span class="ruby-string">'1'</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>].<span class="ruby-identifier">blank?</span>
       <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] = <span class="ruby-string">'name'</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>], <span class="ruby-string">&quot;tag&quot;</span>)

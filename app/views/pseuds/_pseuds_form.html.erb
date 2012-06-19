@@ -25,8 +25,9 @@
     <% unless @pseud.new_record? %>
       <li><%= icon_display(@user, @pseud) %> <%= ts("This is your icon.") %></li>
     <% end %>
-    <li><%= ts("You can have one icon for each pseud.") %></li>
-    <li><%= ts("Icons can be in png, jpeg or gif format, and should be sized 100x100 pixels for best results.") %></li>
+    <li><%= ts("You can have one icon for each pseud") %></li>
+    <li><%= ts("Icons can be in png, jpeg or gif form") %></li> 
+    <li><%= ts("Icons should be sized 100x100 pixels for best results") %></li> 
   </ul>
   <% if @pseud.icon_file_name %>
     <%= f.check_box :delete_icon, {:checked => false} %>

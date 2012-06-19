@@ -377,6 +377,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -645,7 +647,7 @@
             <pre><span class="ruby-comment"># File app/controllers/skins_controller.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_editability</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">editable?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you don't have permission to edit this skin&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you don't have permission to edit this skin&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@skin</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> 
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -678,7 +680,7 @@
             <pre><span class="ruby-comment"># File app/controllers/skins_controller.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_title</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:skin</span>][<span class="ruby-value">:title</span>].<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rarchive/</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)&quot;</span>)
     <span class="ruby-identifier">render</span> (<span class="ruby-ivar">@skin</span> <span class="ruby-operator">?</span> <span class="ruby-value">:edit</span> <span class="ruby-operator">:</span> <span class="ruby-value">:new</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -714,7 +716,7 @@
   <span class="ruby-ivar">@skin</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:skin_type</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:skin_type</span>].<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:skin</span>]) <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:skin</span>])
   <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">author</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] =  <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Skin was successfully created.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] =  <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Skin was successfully created.&quot;</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">loaded</span>
       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot; We've added all the archive skin components as parents. You probably want to remove some of them now!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_skin_path</span>(<span class="ruby-ivar">@skin</span>)
@@ -760,9 +762,9 @@
   <span class="ruby-ivar">@skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">begin</span>
     <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The skin was deleted.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The skin was deleted.&quot;</span>)
   <span class="ruby-keyword">rescue</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that right now, sorry! Please try again later.&quot;</span>)
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">skin_id</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">id</span>
@@ -833,7 +835,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_user_session_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>
     <span class="ruby-keyword">if</span> (<span class="ruby-ivar">@user</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">current_user</span>)
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;You can only browse your own skins and approved public skins.&quot;</span> 
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;You can only browse your own skins and approved public skins.&quot;</span> 
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">skins_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_skins</span>]
@@ -893,7 +895,7 @@ params</p>
     <span class="ruby-identifier">skin_parents</span> = <span class="ruby-identifier">skin_parent_titles</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> [] <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">skin_parent_titles</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:id</span>) 
     <span class="ruby-identifier">skin_parents</span> <span class="ruby-operator">+=</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">get_all_parents</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@skin</span>
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">skin_parents</span>.<span class="ruby-identifier">uniq</span> &amp; <span class="ruby-identifier">archive_parents</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>)).<span class="ruby-identifier">empty?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!&quot;</span>)
       <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
     <span class="ruby-keyword">end</span>
     <span class="ruby-identifier">last_position</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:skin</span>][<span class="ruby-value">:skin_parents_attributes</span>].<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_i</span>}.<span class="ruby-identifier">max</span> <span class="ruby-keyword">rescue</span> <span class="ruby-value">0</span>      
@@ -937,7 +939,7 @@ params</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_skin</span>
   <span class="ruby-ivar">@skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@skin</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Skin not found&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Skin not found&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">skins_url</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@check_ownership_of</span> = <span class="ruby-ivar">@skin</span>
@@ -1006,7 +1008,7 @@ params</p>
           <div class="method-source-code" id="preview-source">
             <pre><span class="ruby-comment"># File app/controllers/skins_controller.rb, line 149</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">preview</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = []
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = []
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You are previewing the skin %{title}. This is a randomly chosen page.&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">title</span>)
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Go back or click any link to remove the skin.&quot;</span>)
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.&quot;</span>)
@@ -1043,10 +1045,10 @@ params</p>
             <pre><span class="ruby-comment"># File app/controllers/skins_controller.rb, line 159</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">cached?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The skin %{title} has been set. This will last for your current session.&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">title</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The skin %{title} has been set. This will last for your current session.&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">title</span>)
     <span class="ruby-identifier">session</span>[<span class="ruby-value">:site_skin</span>] = <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">id</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">title</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">title</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-ivar">@skin</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1112,7 +1114,7 @@ params</p>
     <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>
     <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">save</span>
   <span class="ruby-keyword">end</span>    
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You are now using the default Archive skin again!&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You are now using the default Archive skin again!&quot;</span>)
   <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-string">&quot;/&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- unset-source -->
@@ -1146,10 +1148,10 @@ params</p>
   <span class="ruby-identifier">loaded</span> = <span class="ruby-identifier">load_archive_parents</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:skin</span>])      
     <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">cache!</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">cached?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Skin was successfully updated.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Skin was successfully updated.&quot;</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">loaded</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>].<span class="ruby-identifier">present?</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Any other edits were saved.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Any other edits were saved.&quot;</span>)
       <span class="ruby-keyword">else</span>
         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot; We've added all the archive skin components as parents. You probably want to remove some of them now!&quot;</span>)
       <span class="ruby-keyword">end</span>

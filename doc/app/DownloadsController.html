@@ -385,6 +385,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -658,7 +660,7 @@ the other two are derived and are there for nginx’s benefit GET
   <span class="ruby-ivar">@check_visibility_of</span> = <span class="ruby-ivar">@work</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">unrevealed?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you can't download an unrevealed work&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you can't download an unrevealed work&quot;</span>)
     <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">works_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
@@ -913,7 +915,7 @@ the other two are derived and are there for nginx’s benefit GET
 
   <span class="ruby-comment"># send as epub, if file exists, or flash error and redirect</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;epub&quot;</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
     <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.epub&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/epub&quot;</span>)
@@ -1008,7 +1010,7 @@ the other two are derived and are there for nginx’s benefit GET
   
   <span class="ruby-comment"># send as mobi, if file exists, or flash error and redirect</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;mobi&quot;</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
     <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.mobi&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/mobi&quot;</span>)
@@ -1052,7 +1054,7 @@ the other two are derived and are there for nginx’s benefit GET
 
   <span class="ruby-comment"># send as PDF, if file exists, or flash error and redirect</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;pdf&quot;</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'We were not able to render this work. Please try another format'</span>)
     <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.pdf&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/pdf&quot;</span>)

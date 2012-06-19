@@ -33,9 +33,9 @@ class BookmarksController < ApplicationController
       begin
         page = params[:page] || 1
         errors, @bookmarks = Query.search_with_sphinx(Bookmark, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
+        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end  
@@ -89,10 +89,6 @@ class BookmarksController < ApplicationController
         @bookmarks= owner.bookmarks
       end
 
-      if params[:recs_only]
-        @bookmarks = @bookmarks.recs
-      end
-
       if @user && @user == current_user
         # can see all own bookmarks
       elsif logged_in_as_admin?
@@ -103,52 +99,31 @@ class BookmarksController < ApplicationController
         @bookmarks = @bookmarks.visible_to_all
       end
     else 
-      # Aggregate on main bookmarks page and tags bookmarks page
+      setflash; flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
       if params[:tag_id]  # tag page
         unless owner
           raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-        end        
-        bookmarks_on_synonyms = []
-        if params[:recs_only]
-          bookmarks_primary = owner.bookmarks.recs
-          owner.synonyms.each do |synonym|
-            bookmarks_on_synonyms << synonym.bookmarks.recs
-            bookmarks_on_synonyms << synonym.indirect_bookmarks(true)
-          end rescue NoMethodError
-          bookmarks_indirect = owner.indirect_bookmarks(true)
-        else
-          bookmarks_primary = owner.bookmarks
-          owner.synonyms.each do |synonym|
-            bookmarks_on_synonyms << synonym.bookmarks
-            bookmarks_on_synonyms << synonym.indirect_bookmarks
-          end rescue NoMethodError
-          bookmarks_indirect = owner.indirect_bookmarks
         end
-        all_bookmarks = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact
-        bookmarks_grouped = all_bookmarks.reject{|b| !b.visible?(current_user) || (b.bookmarkable && !b.bookmarkable.visible?(current_user))}.group_by(&:bookmarkable)
+        @bookmarks = owner.bookmarks
       else # main page
         @most_recent_bookmarks = true
+        @bookmarks = Bookmark.recent.visible_to_user(current_user)
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.visible_to_user(current_user).group_by(&:bookmarkable)
           @page_subtitle = ts("recs")
-        else
-          bookmarks_grouped = Bookmark.recent.visible_to_user(current_user).group_by(&:bookmarkable)
         end
       end
-      @bookmarks = []
-      bookmarks_grouped.values.each do |bookmarks|
-        if bookmarks.size == 1 || bookmarks.map(&:bookmarkable_type).uniq.size == 1
-           @bookmarks << bookmarks.first
-        else
-           bookmarkables = bookmarks.map(&:bookmarkable).uniq.compact
-           bookmarkables.each do |bookmarkable|
-             @bookmarks << bookmarkable.bookmarks.is_public.first
-           end
-        end
+      if logged_in_as_admin?
+        @bookmarks = @bookmarks.visible_to_admin
+      elsif logged_in?
+        @bookmarks = @bookmarks.visible_to_registered_user
+      else
+        @bookmarks = @bookmarks.visible_to_all
       end
-      @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    @bookmarks = @bookmarks.compact.paginate(:page => params[:page])
+    if params[:recs_only]
+      @bookmarks = @bookmarks.recs
+    end
+    @bookmarks = @bookmarks.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id
@@ -195,7 +170,7 @@ class BookmarksController < ApplicationController
        render :new and return
     end
     if @bookmarkable.save && @bookmark.save
-      flash[:notice] = ts('Bookmark was successfully created.')
+      setflash; flash[:notice] = ts('Bookmark was successfully created.')
       redirect_to(@bookmark) and return
     end 
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
@@ -206,7 +181,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     if @bookmark.update_attributes(params[:bookmark])
-      flash[:notice] = ts("Bookmark was successfully updated.")
+      setflash; flash[:notice] = ts("Bookmark was successfully updated.")
       redirect_to(@bookmark) 
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -218,7 +193,7 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1.xml
   def destroy
     @bookmark.destroy
-    flash[:notice] = ts("Bookmark was successfully deleted.")
+    setflash; flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
   end
 

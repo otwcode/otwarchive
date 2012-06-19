@@ -50,13 +50,18 @@ module WorkStats
     # skip if this is the same visitor as before or if the current user is the author of this work
     unless self.last_visitor == visitor || (User.current_user.is_a?(User) && User.current_user.is_author_of?(self))
       set_last_visitor(visitor)
-      key = redis_stat_key(:hit_count)
-      $redis.set(key, self.hits) unless $redis.exists(key)
-      $redis.incr(key)
+      add_to_hit_count(1)
       $redis.sadd(WORKS_TO_UPDATE_KEY, get_work_id)
     end
-    $redis.get(key)
+    $redis.get(redis_stat_key(:hit_count))
   end  
+
+  # add the given amount to the hit count in redis
+  def add_to_hit_count(amount)
+    key = redis_stat_key(:hit_count)
+    $redis.set(key, self.hits) unless $redis.exists(key)
+    $redis.incrby(key, amount)
+  end
 
   protected 
 

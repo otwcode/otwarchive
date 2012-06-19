@@ -365,6 +365,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -645,7 +647,7 @@
     <span class="ruby-keyword">when</span> <span class="ruby-value">:success</span>
       <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:identity_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid</span>.<span class="ruby-identifier">display_identifier</span>).<span class="ruby-identifier">first</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged in.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged in.&quot;</span>)
         <span class="ruby-ivar">@current_user</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:remember_me</span>]).<span class="ruby-identifier">record</span>
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@current_user</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">else</span>
@@ -654,7 +656,7 @@
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Sorry, the OpenID verification process failed&quot;</span>
     <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
     <span class="ruby-identifier">params</span>[<span class="ruby-value">:use_openid</span>] = <span class="ruby-keyword">true</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:openid_url</span>]
@@ -674,12 +676,12 @@
         <span class="ruby-identifier">head</span> <span class="ruby-value">401</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_session</span>]
     <span class="ruby-ivar">@user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_session</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user_session</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged in.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged in.&quot;</span>)
       <span class="ruby-ivar">@current_user</span> = <span class="ruby-ivar">@user_session</span>.<span class="ruby-identifier">record</span>
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-ivar">@current_user</span>)
     <span class="ruby-keyword">else</span>
@@ -708,7 +710,7 @@
       <span class="ruby-keyword">else</span>
         <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.&quot;</span>)
       <span class="ruby-keyword">end</span>
-      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
       <span class="ruby-ivar">@user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_session</span>])
       <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>
     <span class="ruby-keyword">end</span>
@@ -745,7 +747,7 @@
   <span class="ruby-ivar">@user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">find</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user_session</span>
     <span class="ruby-ivar">@user_session</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged out.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Successfully logged out.&quot;</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">root_url</span>
 <span class="ruby-keyword">end</span></pre>

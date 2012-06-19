@@ -21,11 +21,11 @@ class CollectionsController < ApplicationController
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
-        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
+        setflash; flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
       elsif params[:collection_id]
-        flash.now[:error] = ts("We couldn't find a collection by that name.")
+        setflash; flash.now[:error] = ts("We couldn't find a collection by that name.")
       elsif params[:work_id]
-        flash.now[:error] = ts("We couldn't find that work.")
+        setflash; flash.now[:error] = ts("We couldn't find that work.")
       end
       @sort_and_filter = true
       params[:collection_filters] ||= {}
@@ -44,7 +44,7 @@ class CollectionsController < ApplicationController
 
   def show
     unless @collection
-  	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
+  	  setflash; flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
     @page_subtitle = @collection.title
@@ -88,7 +88,7 @@ class CollectionsController < ApplicationController
     @collection.collection_participants.build(owner_attributes)
     
     if @collection.save
-      flash[:notice] = 'Collection was successfully created.'
+      setflash; flash[:notice] = 'Collection was successfully created.'
       unless params[:challenge_type].blank?
         # This is a challenge collection
         redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
@@ -103,16 +103,16 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update_attributes(params[:collection])
-      flash[:notice] = 'Collection was successfully updated.'
+      setflash; flash[:notice] = 'Collection was successfully updated.'
       if params[:challenge_type].blank?
         if @collection.challenge
           # trying to destroy an existing challenge
-          flash[:error] = "Note: if you want to delete an existing challenge, please do so on the challenge page."
+          setflash; flash[:error] = "Note: if you want to delete an existing challenge, please do so on the challenge page."
         end
       else
         if @collection.challenge
           if @collection.challenge.class.name != params[:challenge_type]
-            flash[:error] = "Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page."
+            setflash; flash[:error] = "Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page."
           else
             # editing existing challenge
             redirect_to eval("edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return

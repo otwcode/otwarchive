@@ -54,16 +54,30 @@
           <dd class="instructions comment_form"><%=ts("All fields are required. Your email address will not be published.") %></dd>
           <dt><%= f.label "name_for_#{commentable.id}", ts("Name: ") %></dt>
           <dd>
-            <%= f.text_field :name, :value => session[:comment_name], :id => "comment_name_for_#{commentable.id}" %>
+            <%= f.text_field :name, :id => "comment_name_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_name_for_#{commentable.id}", :failureMessage => ts('Please enter your name.')) %>
           </dd>
           <dt><%= f.label "email_for_#{commentable.id}", ts("Email: ") %></dt>
           <dd>
-            <%= f.text_field :email, :value => session[:comment_email], :id => "comment_email_for_#{commentable.id}" %>
+            <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
             <%= f.hidden_field :ip_address, :value => "#{request.remote_ip}", :id => "comment_ip_address_for_#{commentable.id}" %>
           </dd>
         </dl>
+
+        <%= content_for :footer_js do %>
+          <%= javascript_tag do %>
+            var name_id = "#comment_name_for_<%= commentable.id %>";
+            var email_id = "#comment_email_for_<%= commentable.id %>";
+            if (!$j(name_id).val()) {
+              $j(name_id).val($j.cookie('comment_name'));
+            }
+            if (!$j(email_id).val()) {
+              $j(email_id).val($j.cookie('comment_email'));              
+            }
+          <% end %>
+        <% end %>
+        
       <% end %>
 
       <p>
