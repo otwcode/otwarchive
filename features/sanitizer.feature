@@ -49,3 +49,14 @@ Feature: Sanitizing HTML
     And I should not find "XSS"
     And I should see "behavior: url(xss.htc);"
 
+  Scenario: Sanitizer should not add extraneous new paragraphs
+
+    When I am logged in as "newbie" with password "password"
+    And I set up the draft "My Awesome Story"
+    And I fill in "content" with "<a>quack</a> quack"
+    And I press "Preview"
+    Then I should see "Preview"
+    And I should not see the text with tags '<p><a>quack</a></p>'
+    And I should see the text with tags '<p><a>quack</a> quack</p>'
+
+
