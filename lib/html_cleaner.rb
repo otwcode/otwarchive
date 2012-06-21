@@ -284,6 +284,11 @@ module HtmlCleaner
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
       out_html += open_tag(node)
 
+      # If we are the root node, pre-emptively open a paragraph
+      if node.name == "myroot"
+        out_html += stack.add_p
+      end
+
     else
       text = node.to_s
 
