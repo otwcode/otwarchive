@@ -1,5 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Request more invites") %></h2>
+<p>We don't normally grant more than 5 invitations at a time for personal use, and the maximum you can request through this form is 25. 
+  If you need more than this for a challenge, please <%= link_to 'contact Support', new_feedback_report_path %></p>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -9,9 +11,9 @@
 <%= form_for(@user_invite_request) do |f| %>
   <%= error_messages_for @user_invite_request %>
   <dl>
-    <dt><%= f.label "How many invites would you like?" %></dt> 
+    <dt class="required"><%= f.label ts("How many invites would you like? (max 25)") %></dt>
     <dd><%= f.text_field :quantity, :size => '2', :class => 'number' %></dd>
-    <dt><%= f.label "Any special reason you'd like them?" %></dt>
+    <dt class="required"><%= f.label ts("Please specify why you'd like them:") %></dt>
     <dd><%= f.text_area :reason, :size => '50x5' %></dd>
     <dt class="landmark">Submit</dt>
     <dd class="submit actions"><%= f.submit 'Send Request' %></dd>
