@@ -32,11 +32,11 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-decoration: none;
   border: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
-    background: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
     border-radius: 0.25em;
     box-shadow: none;
 }
