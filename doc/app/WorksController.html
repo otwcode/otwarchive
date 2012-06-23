@@ -1213,7 +1213,7 @@
       <span class="ruby-identifier">status</span> = <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;u&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;v&quot;</span>
       <span class="ruby-identifier">page</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>
       <span class="ruby-comment"># This has views/ in it because that's what expire_fragment is looking for</span>
-      <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span> <span class="ruby-node">&quot;views/works/tag/#{@tag.id}/#{status}/p/#{page}&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span> <span class="ruby-node">&quot;views/works/t/#{@tag.id}/#{status}/p/#{page}&quot;</span> <span class="ruby-keyword">do</span>
         <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_with_options</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">compact</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span>
