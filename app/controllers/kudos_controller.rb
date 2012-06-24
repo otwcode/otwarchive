@@ -21,7 +21,12 @@ class KudosController < ApplicationController
         setflash; flash[:comment_error] = @kudo ? @kudo.errors.full_messages.map {|msg| msg.gsub(/^(.+)\^/, '')}.join(", ") : ts("We couldn't save your kudos, sorry!")
       end
     end
-        
+
+    if  request.referer.match(/new/)
+      # came here from the comments/new page
+      redirect_to :controller => @commentable.class.to_s.underscore.pluralize, :action => :show, :id => @commentable.id, :anchor => "comments" and return
+    end
+
     if request.referer.match(/static/)
       # came here from a static page
       # so go to the kudos page if you can, instead of reloading the full work

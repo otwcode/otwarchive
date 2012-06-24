@@ -1,0 +1,82 @@
+<!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
+<div id="feedback" class="feedback" role="complementary">
+   <% @work = @commentable %>
+  <h3 class="landmark heading"><%= ts("Actions") %></h3>
+  <ul class="navigation actions" role="navigation">
+    <% if @work && !is_author_of?(@work) %>
+      <li>
+        <%= form_for Kudo.new do |kudo_form| %>
+          <%= kudo_form.hidden_field :kudosable_id, :value => @commentable.id %>
+          <%= kudo_form.hidden_field :kudosable_type, :value => 'Work' %>
+            <% # here come the hacks: need to know whether to redirect to [full] work or chapter %>
+            <% # commentable is whatever the user is reading - chapter or work; kudosable is the object that can have kudos - the work %>
+            <%= hidden_field_tag :commentable_controller, controller.controller_name %>
+            <%= hidden_field_tag :commentable_id, @commentable.id %>
+            <%= hidden_field_tag :view_full_work, params[:view_full_work] if params[:view_full_work] %>
+            <%= hidden_field_tag :page, params[:page] %>
+          <%= kudo_form.submit ts("Kudos ♥") %>
+        <% end %>
+      </li>
+    <% end %>
+    <% if @work && is_author_of?(@work) %>
+      <li>
+        <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
+      </li>
+    <% end %>
+    <% if logged_in? && @work %>
+      <li>
+        <% @bookmark ||= bookmark_if_exists(commentable) %>
+        <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+      </li>
+    <% end %>
+    <% if logged_in? && @work && marked_for_later?(@work) %>
+      <li>
+        <%= markasread_link(@work) %>
+      </li>
+    <% end %>
+    <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
+        <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
+    <% end %>
+  </ul>
+
+  <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
+
+  <%= flash_div :comment_error, :comment_notice %>
+  <div id="add_comment_placeholder" title="top level comment">
+    <div id="add_comment">
+      <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => @commentable, :button_name => ts('Comment')} %>
+    </div>
+  </div>
+
+  <!-- If we have javascript, here is where the comments will be spiffily inserted -->
+  <!-- If not, and show_comments is true, here is where the comments will be rendered -->
+  <div id="comments_placeholder">
+    <% if params[:show_comments] || params[:tag_id] %>
+      <% @comments = commentable.comments.paginate(:page => params[:page]) %>
+      <%= will_paginate @comments %>
+      <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
+      </ol><!-- need to tack this on to close thread -->
+      <%= will_paginate @comments %>
+    <% end %>
+  </div>
+
+  <% if logged_in? && @work %>
+    <% if is_author_of?(@work) %>
+      <div id="collection_item_form_placement" class="wrapper toggled">
+        <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
+      </div>
+    <% end %>
+
+    <div id="bookmark_form_placement" class="wrapper toggled">
+      <% @bookmark ||= bookmark_if_exists(commentable) %>
+      <% bookmarkable = (commentable.respond_to?(:work) ? commentable.work : commentable) %>
+      <% if @bookmark %>
+        <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>
+      <% else %>
+        <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => Bookmark.new, :button_name => ts("Create"), :action => :create, :in_page => true %>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>
+<!-- END comments -->
