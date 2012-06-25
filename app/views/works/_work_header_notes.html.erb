@@ -41,7 +41,11 @@
     <% if related_work.translation %>
       <h4 class="heading">
         <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
+        <% if related_work.work.restricted? && !logged_in? %>
+            [Restricted Work] by <%= byline(related_work.work) %>. Log in to view.
+            <% else %>
         <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+        <% end %>
       </h4>
     <% elsif @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
       <h4 class="heading"><%= ts("See the end of the work for other works inspired by this one.") %></h4>
