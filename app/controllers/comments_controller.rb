@@ -87,7 +87,9 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-    if @commentable.nil?
+    if @commentable.is_a(Work) && @commentable.restricted
+      redirect_to login_path(:restricted => true)
+    elsif @commentable.nil?
       setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
