@@ -21,7 +21,10 @@
   <% unless (@work.pseuds - current_user.pseuds).empty? %>
     <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?' %></li>
   <% end %>
-	<li><%= link_to t('.orphan_work', :default => 'Orphan Work'), {:controller => 'orphans', :action => 'new', :work_id => @work.id} %></li>
+  <% if @work.posted? %>
+    <li><%= link_to t('.orphan_work', :default => 'Orphan Work'), {:controller => 'orphans', :action => 'new', :work_id => @work.id} %></li>
+      <% else %>
+  <% end %>
 	<li><%= link_to t('.delete_work', :default => 'Delete Work'), @work, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
 </ul>					
 <!--/subnav-->
