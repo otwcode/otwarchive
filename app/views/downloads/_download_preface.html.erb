@@ -14,7 +14,7 @@ hide_freeform?(@work)) %>
     <% unless @work.serial_works.blank? %>
       <dt><%= ts("Series") %>:</dt>
       <dd><%= @work.serial_works.map {|s| "#{ts('Part')} #{s.position} #{ts('of')} 
-#{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
+#{link_to(s.series.title.html_safe, series_url(s.series))}"}.join(", ").html_safe %></dd>
     <% end %>
     <% unless @work.approved_collections.empty? %>
       <dt><%= ts('Collections') %>:</dt>

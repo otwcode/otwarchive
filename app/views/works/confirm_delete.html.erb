@@ -3,7 +3,7 @@
 
 <!--main content-->
 <%= form_for(@work, :html => {:method => :delete}) do |f| %>
-  <p><%= ts("Are you sure you want to delete the work %{work_title} PERMANENTLY? This CANNOT BE UNDONE and all bookmarks, comments, and kudos will be lost. If you just want to remove your association with the work, you could Orphan it instead.", :work_title => @work.title).html_safe %></p>
+  <p><%= ts("Are you sure you want to delete the work %{work_title} PERMANENTLY? This CANNOT BE UNDONE and all bookmarks, comments, and kudos will be lost. If you just want to remove your association with the work, you could Orphan it instead.", :work_title => @work.title.html_safe).html_safe %></p>
   <p>
       <%= f.submit ts("Yes, Delete Work") %>
       <%= link_to ts("Orphan Work Instead"), new_orphan_path(:work_id => @work.id) %>

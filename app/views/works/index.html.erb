@@ -2,7 +2,7 @@
 <!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
 <h2 class="heading"><%= search_header @works, @query, "Work" %>
   <% if @collection %>
-   <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
+   <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title.html_safe, @collection)).html_safe %>
   <% elsif @user %>
     <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
