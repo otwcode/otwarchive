@@ -3,20 +3,42 @@
   <% if kudos.length > 0 || guest_kudos_count > 0 %>
     <% cache "#{commentable.cache_key}/kudos" do %>
       <p class="kudos">
-        <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+        <% if kudos.length <= ArchiveConfig.MAX_KUDOS_TO_SHOW %>
+          <%= kudos[0,ArchiveConfig.MAX_KUDOS_TO_SHOW].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+              to_sentence.
+              html_safe %>
+        <% else %>
+          <%= kudos[0,ArchiveConfig.MAX_KUDOS_TO_SHOW].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+              to_sentence(:last_word_connector => ', ').
+              html_safe %>
+        <span id="kudos_summary" class="open toggled<%= params[:expand_kudos] ? ' hidden' : '' %>">
+            <%= ts(" and %{collapsed_count} more users", :collapsed_count => kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW) %>
+        </span>
+        <span id="kudos_full_list" class="toggled<%= params[:expand_kudos] ? '' : ' hidden' %>">
+          <%= kudos[ArchiveConfig.MAX_KUDOS_TO_SHOW..-1].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
               to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(" and ")).
               html_safe %>
-
+        </span>
+        <span class="actions">
+          <noscript>
+            <% if params[:expand_kudos] %>
+              <%= link_to ts("Hide full list"), [@user, @author] %>
+            <% else %>
+              <%= link_to ts("Expand full list"), url_for(:expand_kudos => true) %>
+            <% end %>
+          </noscript>
+          <a class="kudos_full_list_open kudos_summary_close hidden"><%= ts("See all kudos") %></a>
+          <a class="kudos_full_list_close kudos_summary_open hidden"><%= ts("Collapse kudos") %></a>
+        </span>
+        <% end %>
         <% if kudos.length > 0 && guest_kudos_count > 0 %>
           <%= ts(" as well as ") %>
         <% end %>
-
         <% if guest_kudos_count > 1 %>
           <%= ts("%{count} guests", :count => guest_kudos_count) %>
         <% elsif guest_kudos_count == 1 %>
           <%= ts("a guest") %>
         <% end %>
-
         <%= ts(" left kudos on this work!") %>
       </p>
     <% end %>
