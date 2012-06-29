@@ -8,7 +8,7 @@
 <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
 </select>
 
-<%= form.hidden_field :title, :value => "#{@chapter.title}" %>
+<%= form.hidden_field :title, :value => "#{@chapter.title.html_safe}" %>
 <%= form.hidden_field :summary, :value => "#{@chapter.summary}" %>
 <%= form.hidden_field :notes, :value => "#{@chapter.notes}" %>
 <%= form.hidden_field :endnotes, :value => "#{@chapter.endnotes}" %>

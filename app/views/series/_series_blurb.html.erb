@@ -2,7 +2,7 @@
 <!--title etc-->
 	<div class="header module">
 		<h4 class="heading" title="Series Title">
-			<%= link_to series.title, series %>
+			<%= link_to series.title.html_safe, series %>
 			<%=h 'by' %>
 			<%= byline(series) %>
 			<% if series.restricted %>

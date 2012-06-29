@@ -1,6 +1,6 @@
 <div class="collection home">
 
-  <h2 class="heading">Claims for <%= @collection.title %></h2>
+  <h2 class="heading">Claims for <%= @collection.title.html_safe %></h2>
 
   <% if logged_in? %>
     <ul class="navigation actions" role="navigation">

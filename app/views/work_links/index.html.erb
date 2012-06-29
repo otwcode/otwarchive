@@ -1,4 +1,4 @@
-<h2><%= ts("Links To") %> <%= link_to(@work.title, @work) %></h2>
+<h2><%= ts("Links To") %> <%= link_to(@work.title.html_safe, @work) %></h2>
 
 <%= render "stats/navigation" %>
 

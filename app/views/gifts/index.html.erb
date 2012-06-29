@@ -1,7 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <%= ts("Gifts for %{recipient}", :recipient => @user ? @user.login : h(@recipient_name)) %>
-  <%= @collection ? ts("in %{collection}", :collection => h(@collection.title)) : "" %>
+  <%= @collection ? ts("in %{collection}", :collection => h(@collection.title.html_safe)) : "" %>
 </h2>
 <!--/descriptions-->
 

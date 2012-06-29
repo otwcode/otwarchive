@@ -1,5 +1,5 @@
 <!--SUSPECT THIS OF BEING COLLECTION HOME ZONE-->
-<h2 class="heading">Assignments for <%= @collection.title %> <%= link_to_help 'challenge-assignments' %></h2>
+<h2 class="heading">Assignments for <%= @collection.title.html_safe %> <%= link_to_help 'challenge-assignments' %></h2>
 
 <ul class="navigation actions" role="navigation">
   <li><%= span_if_current ts("Defaulted"), collection_assignments_path(@collection), !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %></li>

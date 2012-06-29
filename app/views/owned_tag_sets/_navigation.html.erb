@@ -22,7 +22,7 @@
         :method => :delete %></li>
     <% end %>
     <% unless current_page?(tag_set_path(@tag_set)) %>
-      <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>  
+      <li><%= link_to ts("Back To %{title}", :title => @tag_set.title.html_safe), tag_set_path(@tag_set) %></li>  
     <% end %>
     <li><%= link_to ts("All Tag Sets"), tag_sets_path %></li>
   </ul>

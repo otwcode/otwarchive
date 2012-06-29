@@ -1,5 +1,5 @@
 <!--SUSPECT USER HOME/ COLLECTION HOME and h2-->
-<h3 class="heading">Your Assignments<%= @collection ? " In #{link_to(@collection.title, @collection)}" : "" %></h3>
+<h3 class="heading">Your Assignments<%= @collection ? " In #{link_to(@collection.title.html_safe, @collection)}" : "" %></h3>
 
 <% unless @collection %>
 <p><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>

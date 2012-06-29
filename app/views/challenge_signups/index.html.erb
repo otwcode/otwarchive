@@ -11,7 +11,7 @@
 
   <dl class="signup index group">
     <% @challenge_signups.each do |challenge_signup| %>
-      <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %><dt>
+      <dt><%= link_to challenge_signup.collection.title.html_safe, challenge_signup.collection %><dt>
       <dd>
         As 
         <%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup), :class => "byline" %>

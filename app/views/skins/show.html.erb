@@ -3,7 +3,7 @@
   
   <div class="primary header module">
     <h2 class="heading">
-      <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
+      <%= @skin.title.html_safe %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
     </h2>
     <blockquote class="userstuff">
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>
@@ -35,7 +35,7 @@
       <h3 class="heading">Parent Skins</h3>
       <ul class="index group">
       <% @skin.parent_skins.each do |parent| %>
-        <li><%= link_to parent.title, skin_path(parent) %></li>
+        <li><%= link_to parent.title.html_safe, skin_path(parent) %></li>
       <% end %>
       </ul>
     </div>

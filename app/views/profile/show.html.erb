@@ -1,7 +1,7 @@
 <div class="user home profile">
   <%= render 'users/header' %>
 
-<h3 class="heading"><%=h @user.profile.title %></h3>
+<h3 class="heading"><%=h @user.profile.title.html_safe %></h3>
 
 <div class="wrapper">
   <dl class="meta">

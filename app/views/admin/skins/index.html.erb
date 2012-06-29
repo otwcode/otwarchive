@@ -36,7 +36,7 @@
         <tr>
           <th scope="row">
             <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
-            <%= label_tag "make_official_#{skin_name}", (link_to skin.title, skin_path(skin)) %>
+            <%= label_tag "make_official_#{skin_name}", (link_to skin.title.html_safe, skin_path(skin)) %>
           </th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>

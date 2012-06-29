@@ -2,7 +2,7 @@
 <% if @user %>
   <h2 class="heading"><%= ts("%{user_name}'s Collections", :user_name => @user.login) %></h2>
 <% elsif @collection %>
-  <h2 class="heading"><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
+  <h2 class="heading"><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title.html_safe) %></h2>
 <% elsif @work %>
   <h2 class="heading"><%= ts("Collections including ") + @work.title.html_safe %></h2>
 <% else %>
@@ -36,7 +36,7 @@
   <% if @sort_and_filter %> 
   <!--sorting subnav-->
     <ul class="sorting actions" role="menu">
-      <li><%= sort_link ts('Title'), "collections.title" %></li>
+      <li><%= sort_link ts('Title'), "collections.title.html_safe" %></li>
       <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
       <li><%= sort_link ts('Size'), "item_count", {:desc_default => true} %></li>
     </ul>

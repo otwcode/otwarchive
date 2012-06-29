@@ -1,5 +1,5 @@
 <!--SUSPECT COLLECTION HOME ZONE-->
-<h2 class="heading"><%= ts("Prompts for %{collection}", :collection => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Prompts for %{collection}", :collection => @collection.title.html_safe) %></h2>
 
 <ul class="navigation actions" role="navigation">
   <li><%= ts("Sort By") %></li>

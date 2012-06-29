@@ -24,7 +24,7 @@
     <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
       <div class="header module">
         <h4 class="heading" title="title">
-          <%= link_to h(skin.title), skin %>
+          <%= link_to h(skin.title.html_safe), skin %>
           <span class="byline">
             by <%= skin.byline %>
           </span>

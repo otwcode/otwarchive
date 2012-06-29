@@ -4,7 +4,7 @@
     <%= ts("From") %>:</h2>
     <ul class="commas">
       <% @tag_sets.each do |ts| %>
-        <li><%= link_to ts.title, tag_set_path(ts) %></li>
+        <li><%= link_to ts.title.html_safe, tag_set_path(ts) %></li>
       <% end %>
     </ul>
  

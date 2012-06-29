@@ -1,6 +1,6 @@
 <div class="tagset home">
 <!--descriptive page name and messages-->
-<h2 class="heading"><%= ts("About %{name}", :name => @tag_set.title) %></h2>
+<h2 class="heading"><%= ts("About %{name}", :name => @tag_set.title.html_safe) %></h2>
 <!--navigation, sorting and actions-->
   <%= render "navigation" %>
 

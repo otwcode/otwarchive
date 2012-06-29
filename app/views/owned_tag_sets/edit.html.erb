@@ -1,6 +1,6 @@
 <!--TAG ZONE: tagsets POST/CREATE-->
 <div class="tag tagset">
-  <h2 class="heading"><%= ts("Edit %{title}", :title => @tag_set.title) %></h2>
+  <h2 class="heading"><%= ts("Edit %{title}", :title => @tag_set.title.html_safe) %></h2>
 
 <%= render "tag_set_form" %>
 

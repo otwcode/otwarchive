@@ -8,7 +8,7 @@
     <p>
       <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted 
       <%= link_to @subscription.chapter_name(creation), work_chapter_url(this_work, creation) %> of 
-      <%= link_to this_work.title, work_url(this_work) %> at 
+      <%= link_to this_work.title.html_safe, work_url(this_work) %> at 
       <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>.
     </p>
     

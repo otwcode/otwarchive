@@ -1,7 +1,7 @@
 
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
-	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
+	<h2 class="heading"><%= link_to_unless_current(@collection.title.html_safe, @collection) %></h2>
 	<div class="icon">
 	  <%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => collection.icon_alt_text) %>
   </div>

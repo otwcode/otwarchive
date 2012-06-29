@@ -16,7 +16,7 @@
       <h3 id="categories">Available Categories</h3>
       <ol role="navigation">
         <% for faq in @archive_faqs %>
-        <li><%= link_to faq.title, faq %></li>
+        <li><%= link_to faq.title.html_safe, faq %></li>
         <% end %>
       </ol>
     <% end %>

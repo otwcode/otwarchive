@@ -29,7 +29,7 @@
     <tbody>
       <% @approved_skins.each_with_index do |skin, i| %>
         <tr>
-          <th scope="row"><%= link_to skin.title, skin_path(skin) %></th>
+          <th scope="row"><%= link_to skin.title.html_safe, skin_path(skin) %></th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%= skin.preferences.count %></td>

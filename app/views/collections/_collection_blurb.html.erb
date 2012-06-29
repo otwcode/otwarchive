@@ -3,7 +3,7 @@
   <% cache("collection-blurb-#{collection.id}") do %>
  		<div class="header module group">
 			<h4 class="heading" title="name">
-			<%= link_to collection.title, collection_path(collection) %>
+			<%= link_to collection.title.html_safe, collection_path(collection) %>
 				<span>(<%= collection.name %>)</span>
 					<%= ts('by') %>
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ").html_safe %>

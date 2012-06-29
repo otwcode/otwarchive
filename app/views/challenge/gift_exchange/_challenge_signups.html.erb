@@ -1,4 +1,4 @@
-<h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title.html_safe) %></h2>
   
 <ul class="navigation" role="menu">
   <li class="action">
@@ -16,7 +16,7 @@
     <% @challenge_signups.each do |signup| %>
       <dt class="participant" title="user name">
         <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
-        <%= mailto_link signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
+        <%= mailto_link signup.pseud.user, :subject => "[#{h(@collection.title.html_safe)}] Message from Collection Maintainer" %>
       </dt>
       <dd>
         <%= render "challenge_signups/signup_controls", :challenge_signup => signup %>

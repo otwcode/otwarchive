@@ -3,7 +3,7 @@
   <% request_signup = assignment.request_signup %>
   <tr>
     <th scope="row">
-      <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
+      <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title.html_safe)}] Message from Collection Maintainer" %>
       <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) %>
     </th>
 

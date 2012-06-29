@@ -5,7 +5,7 @@
 <h2 class="heading">
   <% if @random %><%= ts("A Random Selection of ") %><% end %>
   <% if @collection %>
-    <%= ts("Participants in %{collection}", :collection => @collection.title) %>
+    <%= ts("Participants in %{collection}", :collection => @collection.title.html_safe) %>
   <% else %>
     <%= ts("People in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
   <% end %>

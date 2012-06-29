@@ -2,7 +2,7 @@
 
 <p>
   <%= ts("You have received a message about your collection ") %>
-  <%= link_to(@collection.title, collection_url(@collection)) %>:
+  <%= link_to(@collection.title.html_safe, collection_url(@collection)) %>:
 </p>
 
 <%=raw @message %>

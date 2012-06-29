@@ -1,6 +1,6 @@
 <p>
 <%= ts("A response to your prompt has been posted") %>
-<%= @collection ? " in the #{@collection.title} collection" : "" %> at the Archive of Our Own!
+<%= @collection ? " in the #{@collection.title.html_safe} collection" : "" %> at the Archive of Our Own!
 </p>
 
 <p>

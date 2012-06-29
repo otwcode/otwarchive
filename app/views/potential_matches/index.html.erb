@@ -1,4 +1,4 @@
-<h2 class="heading">Matching for <%= @collection.title %></h2>
+<h2 class="heading">Matching for <%= @collection.title.html_safe %></h2>
 <% if @challenge.signup_open %>
   <p class="note">
     You can't generate matches while signup is still open. After you have closed signup (in Challenge Settings),
@@ -54,7 +54,7 @@
         <dt class="byline" title="pseud"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
         <dd>
           <ul class="actions" role="menu">
-          <li title="email"><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></li>
+          <li title="email"><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title.html_safe)}] Message from Collection Maintainer" %></li>
           <li><%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %></li>
           <li role="button"><%= link_to ts("Delete"), 
                   collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %></li></ul>
