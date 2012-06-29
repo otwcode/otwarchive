@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in_as_admin?
 
   # clear out the flash-being-set
-  before_filter :clear_flash_cookie 
+  before_filter :clear_flash_cookie
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
