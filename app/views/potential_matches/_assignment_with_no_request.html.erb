@@ -1,5 +1,5 @@
 <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
-<dt><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
+<dt><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title.html_safe)}] Message from Collection Maintainer" %>
       <%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %>
 </dt>
     <dd>

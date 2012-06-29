@@ -4,7 +4,7 @@
   <div class="header module">
 
     <h4 class="heading" title="title">
-      <%= link_to external_work.title, external_work.url %>
+      <%= link_to external_work.title.html_safe, external_work.url %>
       <%= ts("by") %>
       <%= byline(external_work) %>
     </h4>

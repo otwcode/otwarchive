@@ -117,12 +117,12 @@
             <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
               <%= ts("A work in an unrevealed or anonymous challenge") %>
             <% else %>
-              <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
+              <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>
             <% end %>
           </dt>
  		      <dd class="child">
  		        <%= ts("inspired") %>
-            <%= link_to related_work.work.title, related_work.work %>
+            <%= link_to related_work.work.title.html_safe, related_work.work %>
             <% if current_user == @user %>
             <span class="actions" role="button"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
             <% end %>

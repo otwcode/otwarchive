@@ -26,7 +26,7 @@
     <tbody>
       <% @rejected_skins.each_with_index do |skin, i| %>
         <tr>
-          <th scope="row"><%= link_to skin.title, skin_path(skin) %></td>
+          <th scope="row"><%= link_to skin.title.html_safe, skin_path(skin) %></td>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>

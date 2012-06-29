@@ -1,7 +1,7 @@
 <li class="<% if tag_set.user_is_owner?(current_user) %>own<% end %> tagset picture blurb group" role="article">
  	<div class="header module">
 		<h4 class="heading" title="name">
-		  <%= link_to tag_set.title, tag_set_path(tag_set) %></h4>
+		  <%= link_to tag_set.title.html_safe, tag_set_path(tag_set) %></h4>
 		<p class="datetime"><%= l(tag_set.updated_at.to_date) %></p>
 		<h6 class="landmark heading">Owners and Mods</h6>
 	  <ul title="owned by" class="mods commas">

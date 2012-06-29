@@ -2,7 +2,7 @@
 <% if @user %>
   <h2 class="heading"><%= ts("Items by %{login} in Collections", :login => @user.login) %></h2>
   <% else %>
-  <h2 class="heading"><%= h(ts("Items in ")) + link_to(@collection.title, @collection) %></h2>
+  <h2 class="heading"><%= h(ts("Items in ")) + link_to(@collection.title.html_safe, @collection) %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <!--/subnav-->

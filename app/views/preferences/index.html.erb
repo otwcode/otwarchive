@@ -75,7 +75,7 @@
       <dl>
       <dt><%= f.label :skin_id, ts("Your site skin")%>:</dt> 
       <dd><span class="navigation actions"><%= link_to ts('Public skins'), skins_path %></span>
-      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %></dd>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title.html_safe, s.id]} %></dd>
 
       <dt><%= f.label :time_zone, ts("Your time zone: ")%></dt>
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>

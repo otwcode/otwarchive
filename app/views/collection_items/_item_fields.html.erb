@@ -35,7 +35,7 @@
       <% else %>
 <!-- user version -->
       <h5 class="heading">
-        in <span class="collection"><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></span>
+        in <span class="collection"><%= link_to collection_item.collection.title.html_safe, collection_path(collection_item.collection) %></span>
         <% if collection_item.collection.user_is_posting_participant?(@user) %>
           <%= ts("(Member)") %>
         <% end %>

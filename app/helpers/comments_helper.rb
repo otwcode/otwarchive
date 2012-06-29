@@ -30,11 +30,11 @@ module CommentsHelper
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s
       when 'Work' then
-        link_to ultimate.title, ultimate
+        link_to ultimate.title.html_safe, ultimate
       when 'Pseud' then
         link_to ultimate.name, ultimate
       when 'AdminPost' then
-          link_to ultimate.title, ultimate
+          link_to ultimate.title.html_safe, ultimate
       else
         if ultimate.is_a?(Tag)
           link_to_tag(ultimate)

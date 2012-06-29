@@ -21,7 +21,7 @@
   <div class="module group" role="article">
     <div class="header">
       <h3 class="heading">
-        <%= link_to admin_post.title, admin_post %>
+        <%= link_to admin_post.title.html_safe, admin_post %>
       </h3>
       <h4 class="heading">
         <%= ts('Published:') %> <span class="datetime"><%= admin_post.created_at %></span> 

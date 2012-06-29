@@ -14,11 +14,11 @@ hide_freeform?(@work)) %>
     <% unless @work.serial_works.blank? %>
       <dt><%= ts("Series") %>:</dt>
       <dd><%= @work.serial_works.map {|s| "#{ts('Part')} #{s.position} #{ts('of')} 
-#{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
+#{link_to(s.series.title.html_safe, series_url(s.series))}"}.join(", ").html_safe %></dd>
     <% end %>
     <% unless @work.approved_collections.empty? %>
       <dt><%= ts('Collections') %>:</dt>
-      <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(", 
+      <dd><%= @work.approved_collections.map {|c| link_to c.title.html_safe, collection_url(c)}.join(", 
 ").html_safe %></dd>
     <% end %>
     <dt><%= ts("Stats") %>:</dt>
@@ -57,7 +57,7 @@ hide_freeform?(@work)) %>
     <dl>
       <dt><%= ts('This work was inspired by') %></dt>
       <dd>
-        <%= @work.parent_work_relationships.map{|rw| "#{link_to(rw.parent.title, 
+        <%= @work.parent_work_relationships.map{|rw| "#{link_to(rw.parent.title.html_safe, 
 url_for(:action => :show, :controller => rw.parent_type.underscore.pluralize, :id => rw.parent_id, 
 :only_path => false))} #{ts('by')} 
 #{byline(rw.parent)}"}.join(", ").html_safe %>

@@ -3,7 +3,7 @@
 
   <h3 class="heading">
     <%= ts("About") %>
-    <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
+    <span class="byline"><%= @collection.title + ((@collection.title.html_safe != @collection.name) ? " (#{@collection.name})" : "") %></span>
   </h3>
   <div class="wrapper">
     <dl class="meta group">

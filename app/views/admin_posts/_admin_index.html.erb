@@ -10,7 +10,7 @@
 <h3 class="heading">Manage News Postings</h3>
 <dl class="news index group">
   <% @admin_posts.each do |admin_post| %>
-  <dt><%= link_to admin_post.title, admin_post %></dt>
+  <dt><%= link_to admin_post.title.html_safe, admin_post %></dt>
     <dd>
       <p class="datetime">Created at <%= admin_post.created_at %> and updated at <%= admin_post.updated_at %></p>
       <ul class="navigation actions">

@@ -17,7 +17,7 @@
       <% if bookmarkable.respond_to?(:hidden_by_admin) && bookmarkable.hidden_by_admin %>
         <%= image_tag("lockred.png", :size => "15x15", :alt => ts("(Hidden by Admin)"), :title => "Hidden by Administrator") %>
       <% end %>
-      <%= link_to bookmarkable.title, bookmarkable %>
+      <%= link_to bookmarkable.title.html_safe, bookmarkable %>
       <%= ts('by') %>
       <%= byline(bookmarkable) %>
     </h4>

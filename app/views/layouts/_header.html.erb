@@ -57,7 +57,7 @@
   <% if @collection %>
     <h2 class="collections">
       <% unless @collection.header_image_url.present? %>
-        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %>
+        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title.html_safe : ts("New Collection")) %>
       <% end %>
     </h2>
   <% end %>

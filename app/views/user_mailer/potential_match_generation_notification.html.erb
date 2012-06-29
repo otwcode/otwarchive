@@ -2,7 +2,7 @@
 
 <p>
   <%= ts("We have finished generating potential assignments for your challenge collection,") %>
-  <%= link_to(@collection.title, collection_url(@collection)) %>.
+  <%= link_to(@collection.title.html_safe, collection_url(@collection)) %>.
 </p>
 
 <p>

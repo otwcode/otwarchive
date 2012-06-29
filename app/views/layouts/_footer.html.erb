@@ -14,7 +14,7 @@
         <ul id="skin_chooser" class="toggled secondary">
           <li><%= link_to ts("Default"), unset_skins_path %></li>
           <% Skin.in_chooser.order(:title).each do |s| %>
-            <li><%= link_to s.title, set_skin_path(s) %></li>
+            <li><%= link_to s.title.html_safe, set_skin_path(s) %></li>
           <% end %>
         </ul>
         &#8212; 

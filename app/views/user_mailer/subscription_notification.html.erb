@@ -2,7 +2,7 @@
 <% if @creation.is_a?(Chapter) %>
   <p>
     <%= @creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted a new chapter of 
-    <%= link_to @work.title, work_url(@work) %> at 
+    <%= link_to @work.title.html_safe, work_url(@work) %> at 
     <%= link_to work_chapter_url(@work, @creation), work_chapter_url(@work, @creation) %>:
   </p>
 <% elsif @creation.is_a?(Work) %>

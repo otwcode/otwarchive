@@ -1,5 +1,5 @@
 <div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
-	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
+	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title.html_safe) %></h2>
 
   <%= render "owned_tag_sets/navigation" %>
 

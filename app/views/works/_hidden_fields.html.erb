@@ -20,7 +20,7 @@
 <%= form.hidden_field :character_string, :value => "#{@work.character_string}" %>
 <%= form.hidden_field :freeform_string, :value => "#{@work.freeform_string}" %>
 
-<%= form.hidden_field :title, :value => "#{@work.title}" %>
+<%= form.hidden_field :title, :value => "#{@work.title.html_safe}" %>
 <%= form.hidden_field :summary, :value => "#{@work.summary}" %>
 <%= form.hidden_field :collection_names, :value => "#{@work.collection_names}" %>
 <%= form.hidden_field :recipients, :value => "#{@work.recipients}" %>
@@ -28,7 +28,7 @@
 <%= form.hidden_field :endnotes, :value => "#{@work.endnotes}" %>
 <%= fields_for "work[chapter_attributes]", @chapter do |c| %>
   <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
-  <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
+  <%= c.hidden_field :title, :value => "#{@chapter.title.html_safe}" %>
   <%= c.hidden_field :published_at, :value => "#{@chapter.published_at}" %>
 <% end %>
 <%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>

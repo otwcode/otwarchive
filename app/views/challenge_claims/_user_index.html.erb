@@ -1,5 +1,5 @@
 <div class="user home">
-  <h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h2>
+  <h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title.html_safe, @collection) %><% end %></h2>
 
 	<% unless params[:for_user] %>
 		<ul class="navigation actions" role="navigation">

@@ -1,6 +1,6 @@
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <% if @collection %>
-  <h2 class="heading"><%= link_to(@collection.title, @collection) %> > <%= ts("Fandoms") %></h2>
+  <h2 class="heading"><%= link_to(@collection.title.html_safe, @collection) %> > <%= ts("Fandoms") %></h2>
 <% elsif @medium %>
   <h2 class="heading"><%= link_to ts('Fandoms'), media_path %> > <%= @medium.name %></h2>
 <% else %>

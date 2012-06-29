@@ -5,9 +5,9 @@ module InboxHelper
     if commentable.is_a?(Tag)
       link_to commentable.name, tag_comment_path(commentable, comment)
     elsif commentable.is_a?(AdminPost)
-      link_to commentable.title, admin_post_comment_path(commentable, comment)
+      link_to commentable.title.html_safe, admin_post_comment_path(commentable, comment)
     else
-      link_to commentable.title, work_comment_path(commentable, comment)
+      link_to commentable.title.html_safe, work_comment_path(commentable, comment)
     end
   end
   

@@ -8,7 +8,7 @@
 <!--main content-->
 <div class="admin userstuff" role="article">
   <h3 class="heading">
-    <%= @known_issue.title %>
+    <%= @known_issue.title.html_safe %>
   </h3>
   <h4 class="heading"><%= ts("Updated:") %> <%= @known_issue.updated_at %>
     <% if logged_in_as_admin? %>

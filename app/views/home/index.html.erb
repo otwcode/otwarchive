@@ -43,7 +43,7 @@
     <% if @admin_post %>
       <div class="news module">
         <h3 class="heading">News</h3>
-        <p><%= link_to @admin_post.title, @admin_post %></p>
+        <p><%= link_to @admin_post.title.html_safe, @admin_post %></p>
         <% if @admin_post_show_more %>
           <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
         <% end %>

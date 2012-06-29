@@ -30,6 +30,6 @@
 <h4 class="heading">Imported Works:</h4>
 <ul class="work commas">
   <% external_author.external_creatorships.each do |ext_creatorship| %>
-    <li><%= link_to(ext_creatorship.creation.title, work_path(ext_creatorship.creation)) %></li>
+    <li><%= link_to(ext_creatorship.creation.title.html_safe, work_path(ext_creatorship.creation)) %></li>
   <% end %>
 </ul>

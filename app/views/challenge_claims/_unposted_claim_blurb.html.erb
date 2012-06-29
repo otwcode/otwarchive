@@ -6,7 +6,7 @@
 <li class="collection claim picture blurb group">
   <div class="header module">
     <h4 class="heading" title="prompt title">  
-      <%= prompt.title || ts("Request") %>
+      <%= prompt.title.html_safe || ts("Request") %>
     </h4>
 
     <!--collection title and recipient forline-->

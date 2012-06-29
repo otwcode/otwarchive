@@ -35,7 +35,7 @@
   <div id="header">
     <h1>
       <%= link_to "Archive of Our Own", root_path %> </h1> 
-      <h2 class="heading"><%= link_to @collection.title, static_collection_path(@collection) %>
+      <h2 class="heading"><%= link_to @collection.title.html_safe, static_collection_path(@collection) %>
     </h2>
     <ul class="main navigation actions" role="navigation">
 		<li><%= link_to "Fandoms &raquo;".html_safe, static_collection_fandoms_path(@collection) %>

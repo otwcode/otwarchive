@@ -5,7 +5,7 @@
       <li id="archive_faq_<%= archive_faq.id %>" class="archive_faq-position-list">
         <%= text_field_tag "archive_faqs[]", nil, :size => 3, :maxlength => 3, :id => "archive_faqs_#{archive_faq.id}", :class => "number" %>
         <span id='position-for-<%= archive_faq.id %>'><%= archive_faq.position %></span>. 
-        <h3 class="heading"><%=h archive_faq.title %></h3>
+        <h3 class="heading"><%=h archive_faq.title.html_safe %></h3>
       </li>
     <% end %>    
   </ul>

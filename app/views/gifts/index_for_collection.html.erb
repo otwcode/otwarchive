@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t('.gifts.gifts_in_collection', :default => "Gifts in %{collection}", :collection => h(@collection.title)) %></h2>
+<h2 class="heading"><%= t('.gifts.gifts_in_collection', :default => "Gifts in %{collection}", :collection => h(@collection.title.html_safe)) %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->

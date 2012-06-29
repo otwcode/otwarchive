@@ -6,7 +6,7 @@
     <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
   <% else %>
     <% # we're listing assignments for a user by the recipient %>
-    <%= link_to assignment.collection.title, collection_assignment_path(assignment.collection, assignment) %>
+    <%= link_to assignment.collection.title.html_safe, collection_assignment_path(assignment.collection, assignment) %>
     For <%= link_to assignment.request_byline, collection_assignment_path(assignment.collection, assignment) %>
   <% end %>
 </dt>    
