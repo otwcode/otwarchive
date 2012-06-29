@@ -245,7 +245,7 @@ class WorksController < ApplicationController
   def create
     load_pseuds
     @series = current_user.series.uniq
-
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
