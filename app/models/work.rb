@@ -1096,9 +1096,6 @@ class Work < ActiveRecord::Base
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
 
-    has kudos(:id), :as => :kudos_id
-    has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
-
     # properties
 #    set_property :delta => :delayed
     set_property :field_weights => {

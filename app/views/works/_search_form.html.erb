@@ -42,12 +42,6 @@
 
   </dd>
   <dt>
-    <label for="refine_kudo_count"><%= ts('Kudos') %>:</label>
-    </dt><dd>
-    <%= text_field_tag "query[kudos]", @query[:kudos], :id => 'refine_kudo_count' %>
-
-  </dd>
-  <dt>
     <label for="refine_revised_at"><%= ts('Date') %>:</label>    <%= link_to_help "work-search-date-help" %>
     </dt><dd>
     <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>

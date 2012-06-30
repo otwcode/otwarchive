@@ -17,7 +17,6 @@
       <%= hidden_field_tag "query[author]", @query[:author] %>
       <%= hidden_field_tag "query[words]", @query[:words] %>
       <%= hidden_field_tag "query[hits]", @query[:hits] %>
-      <%= hidden_field_tag "query[kudos]", @query[:kudos] %>
       <%= hidden_field_tag "query[date]", @query[:date] %>
       <%= hidden_field_tag "query[language]", @query[:language] %>
       <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
@@ -48,7 +47,6 @@
   <% unless @query[:author].blank? %><%= ts('Author') %>: <%= @query[:author] %> <% end %>
   <% unless @query[:words].blank? %><%= ts('Words') %>: <%= @query[:words] %> <% end %>
   <% unless @query[:hits].blank? %><%= ts('Hits') %>: <%= @query[:hits] %> <% end %>
-  <% unless @query[:kudos].blank? %><%= ts('Kudos') %>: <%= @query[:kudos] %> <% end %>
   <% unless @query[:date].blank? %><%= ts('Date') %>: <%= @query[:date] %> <% end %>
   <% unless @query[:language].blank? %><%= ts('Language') %>: <%= @query[:language] %> <% end %>
   <% unless @query[:bookmarked].blank? %><%= ts('Bookmarked') %><% end %>
