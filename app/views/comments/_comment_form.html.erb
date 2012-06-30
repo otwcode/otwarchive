@@ -24,6 +24,9 @@
       <% end %>
 
       <% if logged_in? %>
+          <% if current_user.is_author_of?(commentable) && commentable.anonymous? %>
+            <p class="notice">Your comment will be obscured until the collection is set to be non-anonymous.</p>
+          <% end %>
         <% if current_user.pseuds.count > 1 %>
           <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>

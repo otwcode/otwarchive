@@ -17,7 +17,15 @@
       <% cache single_comment do %>
         <% # FRONT END, update this if a.user comes in %>
         <h4 class="heading byline">
-          <%= get_commenter_pseud_or_name(single_comment) %>
+          <% if !single_comment.pseud.nil? %>
+              <% if single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent) && single_comment.ultimate_parent.anonymous? %>
+                <%= "Anon-Creator" %>
+                  <% else %>
+                    <%= get_commenter_pseud_or_name(single_comment) %>
+              <% end %>
+            <% else %>
+              <%= get_commenter_pseud_or_name(single_comment) %>
+          <% end %>
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
             <span class='parent'>
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
@@ -26,7 +34,11 @@
         </h4>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
-            <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
+              <% if single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent) && single_comment.ultimate_parent.anonymous? %>
+                  <span class="visitor"><!-- visitor icon holder --></span>
+              <% else %>
+                  <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
+              <% end %>
           <% else %>
             <span class="visitor"><!-- visitor icon holder --></span>
           <% end %>
