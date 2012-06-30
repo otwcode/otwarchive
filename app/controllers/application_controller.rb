@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
+
+
+  # So if there is not a user_credentials cookie and the user appears to be logged in then 
+  # redirect to the logout page
+  before_filter :logout_if_not_user_credentials
+  def logout_if_not_user_credentials
+    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
+      logger.error "Forcing logout"
+      # You can only have one flash message, so you can't set a helpful error  message here.
+      redirect_to '/logout' and return
+    end
+  end
+
   
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
