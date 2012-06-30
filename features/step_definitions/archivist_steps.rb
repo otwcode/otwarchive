@@ -50,7 +50,7 @@ end
 Then /^the email should contain invitation warnings from "([^\"]*)" for work "([^\"]*)" in fandom "([^\"]*)"$/ do |name, work, fandom|
   Then %{the email should contain "Hello from the Archive of Our Own!"}
   Then %{the email should contain "A fanfic archive including your works has been backed up to the AO3 by #{name}"}
-  Then %{the email should contain "your works will not appear in Google searches"}
+  Then %{the email should contain "your works will not be publicly readable"}
   Then %{the email should contain "Claim or remove your works"}
   Then %{the email should contain "#{work}"}
   Then %{the email should contain "#{fandom}"}

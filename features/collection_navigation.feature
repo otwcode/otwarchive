@@ -42,7 +42,7 @@ Feature: Basic collection navigation
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People"
-    Then I should see "1 Person in 'M' in My Collection"
+    Then I should see "A Random Selection of Participants in My Collection"
     And I should see "mod"
   When I follow "Tags"
     Then I should see "Free"

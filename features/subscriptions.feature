@@ -32,7 +32,8 @@
   Then 0 emails should be delivered
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
-    And the email should contain "posted a new chapter"
+    And the email should contain "first_user posted"
+    And the email should contain "Chapter 2"
   
   Scenario: unsubscribe from an author
   
@@ -77,7 +78,8 @@
   Then 0 emails should be delivered
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
-    And the email should contain "posted a new chapter"
+    And the email should contain "wip_author posted"
+    And the email should contain "Chapter 2"
     
   Scenario: subscribe to series
   

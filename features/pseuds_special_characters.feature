@@ -3,7 +3,7 @@ Feature: Pseuds
 
 Scenario: creating pseud with unicode characters
 
-  Given I am logged in as "myself" with password "password"
+  Given I am logged in as "myself"
     And I go to myself's user page
     And I follow "Profile" within ".navigation"
     And I follow "Manage My Pseuds" within ".navigation"
@@ -18,14 +18,8 @@ Scenario: creating pseud with unicode characters
     And I should not see "Alice"
   When I follow "Back To Pseuds"
     And I follow "people" within ".navigation"
-  Then I should see "A" within ".pagination"
-    And I should not see "À" within ".pagination"
-  When I follow "A"
   Then I should see "Àlice and Bôb"
     And I should see "special character name"
-    And I should not see "Alice"
-  When I follow "B"
-  Then I should not see "Àlice and Bôb"
     And I should not see "Alice"
 
 Scenario: creating pseud with chinese characters
