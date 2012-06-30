@@ -29,7 +29,7 @@
         <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>
               <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
-                <h4 class="heading byline"><%= "Anon-Creator" %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+                <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
               <% else %>
                 <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
               <% end %>
