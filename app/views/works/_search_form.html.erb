@@ -12,7 +12,7 @@
 
   </dd> 
   <dt>
-    <label for="refine_tag"><%= ts('Tag') %>:</label>
+    <label for="refine_tag"><%= ts('Tag') %>:</label> <%= link_to_help "work-search-tags-help" %>
     </dt><dd>
     <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
    
