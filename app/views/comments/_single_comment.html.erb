@@ -19,7 +19,7 @@
         <h4 class="heading byline">
           <% if !single_comment.pseud.nil? %>
               <% if single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent) && single_comment.ultimate_parent.anonymous? %>
-                <%= "Anon-Creator" %>
+                <%= "Anonymous Creator" %>
                   <% else %>
                     <%= get_commenter_pseud_or_name(single_comment) %>
               <% end %>
