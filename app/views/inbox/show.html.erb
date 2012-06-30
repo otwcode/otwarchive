@@ -25,6 +25,9 @@
     <legend><%= ts("List of Comments") %></legend>
     <ol class="comment index group">
       <% for inbox_comment in @inbox_comments %>
+        <% if current_user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
+          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+        <% end %>
         <!-- START of single comment -->
         <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>
