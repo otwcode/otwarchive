@@ -15,6 +15,7 @@ Feature: Invite requests
     Then I should see "Invite a friend"
       And I should see "Sorry, you have no unsent invitations right now."
 
+@wip
   Scenario: Request an invite for a friend
 
     Given I have invitations set up
@@ -25,6 +26,7 @@ Feature: Invite requests
       And I press "Send Request"
     Then I should see a create confirmation message
 
+@wip
   Scenario: Requests are not instantly granted
 
     Given I have invitations set up
@@ -32,6 +34,7 @@ Feature: Invite requests
     When I follow "Invitations"
     Then I should see "Sorry, you have no unsent invitations right now."
 
+@wip
   Scenario: Admin sees the request
 
     Given I have invitations set up
@@ -41,6 +44,7 @@ Feature: Invite requests
       And the "requests[user1]" field should contain "3"
       And I should see "I want them for a friend"
 
+@wip
   Scenario: Admin can refuse request
 
     Given I have invitations set up
@@ -51,6 +55,7 @@ Feature: Invite requests
     Then I should see "Requests were successfully updated."
       And I should not see "user1"
 
+@wip
   Scenario: Admin can grant request
 
     Given I have invitations set up
@@ -60,6 +65,7 @@ Feature: Invite requests
       And I press "Update"
     Then I should see "Requests were successfully updated."
 
+@wip
   Scenario: User is granted invites
 
     Given I have invitations set up
@@ -70,6 +76,7 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
+@wip
   Scenario: User can send out invites they have been granted
 
     Given I have invitations set up
