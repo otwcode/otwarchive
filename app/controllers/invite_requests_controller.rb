@@ -12,7 +12,7 @@ class InviteRequestsController < ApplicationController
   def show
     @invite_request = InviteRequest.find_by_email(params[:email])
     unless (request.xml_http_request?) || @invite_request
-      setflash; flash[:error] = "Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help."
+      setflash; flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters maybe have placed it there."
       redirect_to invite_requests_url and return
     end
     respond_to do |format|
