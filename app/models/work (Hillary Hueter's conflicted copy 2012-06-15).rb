@@ -89,11 +89,6 @@ class Work < ActiveRecord::Base
     counter.save
   end
   
-  #Hides the Share button based on a users Preferences
-  def show_share_link?
-    #Will return false if any users :disable_share_links is set to true and not display the link
-    !Preference.where(:disable_share_links => true, :user_id => users.value_of(:id)).exists? 
-  end
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -1101,6 +1096,9 @@ class Work < ActiveRecord::Base
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
 
+    has kudos(:id), :as => :kudos_id
+    has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
+
     # properties
 #    set_property :delta => :delayed
     set_property :field_weights => {
@@ -1109,15 +1107,6 @@ class Work < ActiveRecord::Base
                                      :language => 10,
                                      :summary => 5, :notes => 5,
                                     }
-  end
-  
-  # This is to allow works to be serialized for caching
-  def marshal_dump
-    @attributes
-  end
-
-  def marshal_load(attributes)
-    @attributes = attributes
   end
 
 end

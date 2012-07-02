@@ -30,4 +30,7 @@ class Preference < ActiveRecord::Base
   def hide_hit_counts
     self.try(:hide_all_hit_counts) || self.try(:hide_private_hit_count)
   end
+
+
+
 end
