@@ -62,14 +62,14 @@
       <fieldset>
         <legend><%= ts("Write Comments") %></legend>
         <dl>
-          <dt class="landmark"><%= f.label :notes, ts("Notes") %></dt>
+          <dt><%= f.label :notes, ts("Notes") %></dt>
           <dd>
             <%= allowed_html_instructions %>
             <%= f.text_area :notes, :rows => 4, :class => "observe_textlength" %>
             <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
           </dd>
 
-          <dt class="landmark"><%= f.label :tag_string, ts("Your Tags") %></dt>
+          <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
           <dd title="your tags">
             <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (in_page ? 60 : 80)) %>
             <p class="character_counter">
