@@ -11,6 +11,8 @@
   <ul class="navigation actions" role="menu">
     <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
 
+    <li><%= link_to ts("Static List"), static_collection_fandoms_path(@collection) %></li>
+
     <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
       <li><%= link_to ts("Post To Collection"), new_collection_work_path(@collection) %></li>
     <% end %>
