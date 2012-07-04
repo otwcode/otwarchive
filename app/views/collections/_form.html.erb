@@ -35,13 +35,26 @@
       <dt><%= collection_form.label :email, ts("Collection Email (optional)") %>:</dt>
       <dd><%= collection_form.text_field :email, :size => 40 %></dd>
 
-      <dt><%= collection_form.label :icon %>:</dt>
-      <dd><%= collection_form.file_field :icon %></dd>
-
       <dt><%= collection_form.label :header_image_url, ts("Custom Header URL") %>:</dt>
       <dd>
         <%= collection_form.text_field :header_image_url %>
     	  <p class="footnote">JPG, GIF, PNG</p>
+      </dd>
+      
+      <dt><%= ts("Icon") %></dt>
+      <dd>
+        <ul class="notes">
+          <% unless @collection.new_record? %>
+            <li><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => @collection.icon_alt_text) %> <%= ts("This is the collection's icon.") %></li>
+          <% end %>
+          <li><%= ts("Each collection can have one icon") %></li> 
+          <li><%= ts("Icons can be in png, jpeg or gif form") %></li> 
+          <li><%= ts("Icons should be sized 100x100 pixels for best results") %></li> 
+        </ul>
+      </dd>
+      <dt><%= collection_form.label :icon, ts("Upload a new icon:") %></dt>
+      <dd>
+        <%= collection_form.file_field :icon %>
       </dd>
       
     <dt><%= collection_form.label :icon_alt_text, ts("Icon alt text:") %> <%= link_to_help "icon-alt-text" %></dt>
