@@ -210,7 +210,6 @@ form li ul.autocomplete li.input {
 
 .autocomplete li.added, .post .meta dd ul li.added {
   display: inline-block;
-  white-space: nowrap;
 }
 
 /* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
