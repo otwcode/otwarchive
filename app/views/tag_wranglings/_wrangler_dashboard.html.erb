@@ -17,6 +17,8 @@
         <% for key in @uses %>
           <% if key == 'Works' || key == 'Bookmarks' %>
           <li><%= span_if_current "#{key} (#{@counts[key]})", {:controller => key.downcase.to_sym, :action => :index, :tag_id => @tag} %></li>
+          <% elsif key == 'External Works' %>
+          <li><%= span_if_current "#{key} (#{@counts[key]})", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
           <% else %>
           <li><span><%= "#{key} (#{@counts[key]})" %></span></li>
           <% end %>
