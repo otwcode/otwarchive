@@ -20,13 +20,11 @@
   <% if current_user.is_a?(User) %>
     <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
   <% end %>
-  <!--BACK END pls regularise this with other navigation to show both options at all times and span_if_current-->
   <li>
-    <% if params[:recs_only] %>
-      <%= link_to ts("View All Bookmarks"), url_for(params.merge :recs_only => false) %>
-    <% else %>
-      <%= link_to ts("View Recs Only"), url_for(params.merge :recs_only => true) %>
-    <% end %>
+    <%= span_if_current(ts("View All Bookmarks"), url_for(params.merge :recs_only => false), params[:recs_only].blank?) %>
+  </li>
+  <li>
+    <%= span_if_current ts("View Recs Only"), url_for(params.merge :recs_only => true) %>
   </li>
 <% if params[:tag_id] %>
   <%= taggable_list(params[:tag_id], "bookmarks") %>
