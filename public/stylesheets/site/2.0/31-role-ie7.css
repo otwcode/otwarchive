@@ -20,6 +20,12 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
   margin-bottom: 0.643em;
 }
 
+/* scrolling listbox list item containment */
+
+.listbox .many ul {
+  position: relative;
+}
+
 /*font fallbacks for icons*/
 
 span.replied. span.unreviewed, .actions a, .action, .symbol {
