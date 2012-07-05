@@ -28,7 +28,7 @@
           <% if !single_comment.pseud.nil? %>
             <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
           <% else %>
-            <span class="visitor"><!-- visitor icon holder --></span>
+            <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
         </div>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>

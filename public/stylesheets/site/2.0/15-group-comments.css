@@ -32,6 +32,11 @@ div.comment, li.comment {
   border-bottom: 5px solid #ddd;
 }
 
+.comment .icon .visitor {
+  background: url("/images/imageset.png") no-repeat 0px -75px;
+  display: block;
+}
+
 .comment h4.byline {
   background: #ddd;
   padding: 0.25em 0.25em 0.25em 108px;
