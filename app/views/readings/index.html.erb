@@ -6,11 +6,10 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <% if params[:show] == 'to-read' %>
-      <%= link_to ts("Show Full History"), user_readings_path(@user) %>
-    <% else %>
-      <%= link_to ts("Show Works You Saved to Read Later"), user_readings_path(@user, :show => 'to-read') %>
-    <% end %>
+    <%= span_if_current ts("Full History"), user_readings_path(@user), params[:show].blank? %>
+  </li>
+  <li>
+    <%= span_if_current ts("Marked for Later"), user_readings_path(@user, :show => 'to-read') %>
   </li>
   <li>
   <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure?'), :method => :post %>
