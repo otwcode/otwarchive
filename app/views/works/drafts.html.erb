@@ -1,8 +1,8 @@
-<h2 class="heading"><%=h t('.unposted_drafts', :default => "Unposted Drafts") %></h2>
+<h2 class="heading"><%= ts("Unposted Drafts") %></h2>
 
 <p>
-  <strong><%=h t('.note', :default => "Please note") %></strong>:
-  <%=h t('.saved_one_week', :default => "Unposted drafts are only saved for a month from the day they are first created, and then deleted from the Archive.") %>
+  <strong><%= ts("Please note") %></strong>:
+  <%= ts("Unposted drafts are only saved for a month from the day they are first created, and then deleted from the Archive.") %>
 </p>
 
 <!--BACK END, can we just remove this laquo etc-->
@@ -10,7 +10,7 @@
 
     <ul class="work index group">
       <% for work in @works %>
-          <%= render :partial => 'work_blurb', :locals => {:work => work} %>
+          <%= render 'work_blurb', :work => work %>
       <% end %>
     </ul>
 <% end %>
