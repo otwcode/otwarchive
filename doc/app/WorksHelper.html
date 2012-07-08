@@ -96,6 +96,8 @@
     
     <li><a href="#method-i-show_hit_count-3F">#show_hit_count?</a>
     
+    <li><a href="#method-i-show_hit_count_to_public-3F">#show_hit_count_to_public?</a>
+    
     <li><a href="#method-i-show_work_notes-3F">#show_work_notes?</a>
     
     <li><a href="#method-i-work_meta_list">#work_meta_list</a>
@@ -381,6 +383,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -646,7 +650,7 @@
 
           
           <div class="method-source-code" id="can_see_work-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 97</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 101</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">can_see_work</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">user</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">collections</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-keyword">for</span> <span class="ruby-identifier">collection</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">collections</span>
@@ -682,7 +686,7 @@ show on the work form</p>
 
           
           <div class="method-source-code" id="check_backdate_box-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 77</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_backdate_box</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">chapter</span>)
 
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">backdate</span>
@@ -724,7 +728,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="check_parent_box-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 60</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_parent_box</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span>
   (<span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">work_parent_value</span>(<span class="ruby-value">:url</span>).<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">work_parent_value</span>(<span class="ruby-value">:title</span>).<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">work_parent_value</span>(<span class="ruby-value">:author</span>).<span class="ruby-identifier">blank?</span>))
@@ -755,7 +759,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="check_warning-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 46</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_warning</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">warning</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">warning_strings</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-identifier">warning</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">WARNING_DEFAULT_TAG_NAME</span>
@@ -789,7 +793,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="download_url_for_work-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 170</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 174</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_url_for_work</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">format</span>)
   <span class="ruby-identifier">url_for</span> (<span class="ruby-node">&quot;/#{work.download_folder}/#{work.download_title}.#{format}&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">' '</span>, <span class="ruby-string">'%20'</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -819,7 +823,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="feed_summary-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 175</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 179</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">feed_summary</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">group_by</span>(&amp;<span class="ruby-value">:type</span>)
   <span class="ruby-identifier">text</span> = <span class="ruby-node">&quot;&lt;p&gt;by #{byline(work, :visibility =&gt; 'public')}&lt;/p&gt;&quot;</span>
@@ -872,7 +876,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="get_bookmark_embed_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 154</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_bookmark_embed_link</span>(<span class="ruby-identifier">bookmark</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">bookmark</span>.<span class="ruby-identifier">bookmarkable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>)
     <span class="ruby-identifier">work_embed</span> = <span class="ruby-identifier">get_embed_link</span>(<span class="ruby-identifier">bookmark</span>.<span class="ruby-identifier">bookmarkable</span>)
@@ -908,7 +912,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="get_embed_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 131</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 135</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_embed_link</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">title_link</span> = <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:strong</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">html_safe</span>), <span class="ruby-identifier">work_url</span>(<span class="ruby-identifier">work</span>)) <span class="ruby-operator">+</span> <span class="ruby-node">&quot; (#{work.word_count} #{ts('words')})&quot;</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">anonymous?</span>
@@ -956,7 +960,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="get_endnotes_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 163</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 167</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_endnotes_link</span>
   <span class="ruby-identifier">current_page?</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'chapters'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'show'</span>) <span class="ruby-operator">?</span>
     <span class="ruby-identifier">chapter_path</span>(<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">last_chapter</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'work_endnotes'</span>) <span class="ruby-operator">:</span>
@@ -988,7 +992,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="language_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 89</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 93</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">language_link</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:language</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">language</span>
     <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">language</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">language</span>
@@ -1022,7 +1026,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="markasread_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 116</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">markasread_link</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Mark as read&quot;</span>), <span class="ruby-identifier">marktoread_work_path</span>(<span class="ruby-identifier">work</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1052,7 +1056,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="marked_for_later-3F-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 106</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">marked_for_later?</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>
   <span class="ruby-identifier">reading</span> = <span class="ruby-constant">Reading</span>.<span class="ruby-identifier">find_by_work_id_and_user_id</span>(<span class="ruby-identifier">work</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>)
@@ -1084,7 +1088,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="marktoread_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 112</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 116</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">marktoread_link</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Mark for later&quot;</span>), <span class="ruby-identifier">marktoread_work_path</span>(<span class="ruby-identifier">work</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1114,7 +1118,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="rating_selected-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 55</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 59</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">rating_selected</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">rating_string</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">RATING_DEFAULT_TAG_NAME</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">rating_string</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1144,7 +1148,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="recipients_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 40</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">recipients_link</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-comment"># join doesn't maintain html_safe, so mark the join safe</span>
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">gifts</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">gift</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">h</span>(<span class="ruby-identifier">gift</span>.<span class="ruby-identifier">recipient</span>), <span class="ruby-identifier">gift</span>.<span class="ruby-identifier">pseud</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">user_gifts_path</span>(<span class="ruby-identifier">gift</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">gifts_path</span>(<span class="ruby-value">:recipient</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">gift</span>.<span class="ruby-identifier">recipient_name</span>))}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>).<span class="ruby-identifier">html_safe</span>
@@ -1192,6 +1196,36 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
       </div><!-- show_hit_count-3F-method -->
 
     
+      <div id="method-i-show_hit_count_to_public-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show_hit_count_to_public?</span><span
+            class="method-args">(work)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="show_hit_count_to_public-3F-source">
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show_hit_count_to_public?</span>(<span class="ruby-identifier">work</span>)
+  <span class="ruby-operator">!</span><span class="ruby-constant">Preference</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:user_id</span>), <span class="ruby-value">:hide_public_hit_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">exists?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- show_hit_count_to_public-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- show_hit_count_to_public-3F-method -->
+
+    
       <div id="method-i-show_work_notes-3F" class="method-detail ">
         
         <div class="method-heading">
@@ -1209,7 +1243,7 @@ display</p>
 
           
           <div class="method-source-code" id="show_work_notes-3F-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 203</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 207</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_work_notes?</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">notes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">endnotes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
@@ -1256,8 +1290,8 @@ display</p>
     <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comments:'</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>]])
   <span class="ruby-keyword">end</span>
 
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Kudos:'</span>), (<span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">by_guest</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:ip_address</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">with_pseud</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:pseud_id</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)).<span class="ruby-identifier">to_s</span>]])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">all_kudos_count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">list</span>.<span class="ruby-identifier">concat</span>([[<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Kudos:'</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">all_kudos_count</span>.<span class="ruby-identifier">to_s</span>]])
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> (<span class="ruby-identifier">bookmark_count</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">is_public</span>.<span class="ruby-identifier">count</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
@@ -1300,7 +1334,7 @@ on posting</p>
 
           
           <div class="method-source-code" id="work_parent_value-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 66</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">work_parent_value</span>(<span class="ruby-identifier">field</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:parent_attributes</span>]
     <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>][<span class="ruby-value">:parent_attributes</span>][<span class="ruby-identifier">field</span>]

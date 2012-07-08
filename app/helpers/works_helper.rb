@@ -12,8 +12,8 @@ module WorksHelper
       list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
     end
 
-    if work.kudos.count > 0
-      list.concat([[ts('Kudos:'), (work.kudos.by_guest.count(:ip_address, :distinct => true) + work.kudos.with_pseud.count(:pseud_id, :distinct => true)).to_s]])
+    if work.all_kudos_count > 0
+      list.concat([[ts('Kudos:'), work.all_kudos_count.to_s]])
     end
 
     if (bookmark_count = work.bookmarks.is_public.count) > 0
@@ -35,6 +35,10 @@ module WorksHelper
     author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
     all_authors_want_public_hits = work.users.select {|u| u.preference.try(:hide_public_hit_count)}.empty?
     author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
+  end
+  
+  def show_hit_count_to_public?(work)
+    !Preference.where(:user_id => work.pseuds.value_of(:user_id), :hide_public_hit_count => true).exists?
   end
 
   def recipients_link(work)

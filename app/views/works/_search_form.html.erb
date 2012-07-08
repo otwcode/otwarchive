@@ -12,7 +12,7 @@
 
   </dd> 
   <dt>
-    <label for="refine_tag"><%= ts('Tag') %>:</label>
+    <label for="refine_tag"><%= ts('Tag') %>:</label> <%= link_to_help "work-search-tags-help" %>
     </dt><dd>
     <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
    
@@ -39,12 +39,6 @@
     <label for="refine_hit_count"><%= ts('Hits') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
-
-  </dd>
-  <dt>
-    <label for="refine_kudo_count"><%= ts('Kudos') %>:</label>
-    </dt><dd>
-    <%= text_field_tag "query[kudos]", @query[:kudos], :id => 'refine_kudo_count' %>
 
   </dd>
   <dt>

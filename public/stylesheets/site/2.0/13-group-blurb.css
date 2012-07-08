@@ -82,13 +82,35 @@ li.blurb:after {
   margin: 0;
 }
 
-.blurb ul.required-tags li, .blurb ul.required-tags li a {
-  position: static;
-  display: inline;
-  padding-left: 0;
-  height: 25px;
+.blurb ul.required-tags li, .blurb ul.required-tags li a, .blurb ul.required-tags li span {
+  display: block;
   width: 25px;
-  border: none;
+  height: 25px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.blurb ul.required-tags li {
+  margin-bottom: 3px;
+}
+
+.blurb ul.required-tags li+li+li, .blurb ul.required-tags li+li+li+li {
+  position: absolute;
+  left: 28px;
+}
+
+.blurb ul.required-tags li+li+li {
+  top: 0;
+}
+
+.blurb ul.required-tags li+li+li+li {
+  top: 28px;
+}
+
+/* keeps the outline to the proper size in Firefox and Opera */
+.blurb ul.required-tags li a:focus {
+  overflow: hidden;
 }
 
 .blurb span.text {
@@ -100,26 +122,6 @@ li.blurb:after {
 
 .blurb ul.required-tags li span {
   background-repeat: no-repeat;
-  height: 25px;
-  width: 25px;
-  display: block;
-}
-
-.blurb .required-tags .category, .blurb .iswip, .blurb .external-work {
-  position: absolute;
-  left: 28px;
-}
-
-.blurb .category {
-  top: 0;
-}
-
-.blurb .iswip, .blurb .external-work {
-  top: 28px;
-}
-
-.blurb .rating, .blurb .required-tags .warnings {
-  margin: 0 0 3px;
 }
 
 /*icon image replacement*/
@@ -204,7 +206,7 @@ li.blurb:after {
   background: url("/images/imageset.png") -100px -50px;
 }
 
-/*END icon block rules==*/
+/*==END icon block rules==*/
 
 .blurb .datetime {
   position: absolute;
@@ -236,16 +238,8 @@ eg collections, users, skins, instead of the 4-icon list
   border-bottom: 1px solid #ccc;
 }
 
-.index .collection .icon {
-  background: url("/images/imageset.png") -55px -525px;
-}
-
 .index .skins .icon {
   background: url("/images/imageset.png") 0px -580px;
-}
-
-.index .pseud .icon {
-  background: url("/images/imageset.png") 0px -525px;
 }
 
 .index .mystery .icon {
@@ -271,29 +265,39 @@ eg collections, users, skins, instead of the 4-icon list
   min-width: 65px;
 }
 
-/* mod: BOOKMARK*/
+/* mod: BOOKMARK */
 
 .bookmark .status {
-  right: 0.5em;
   position: absolute;
-  z-index: 50;
+  right: 0.5em;
   width: 60px;
+  z-index: 50;
+}
+
+.bookmark .status span, .bookmark .status a {
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.bookmark .status a:focus {
+  overflow: hidden;
+}
+
+.bookmark span.count {
+  line-height: 1.875em;
+  position: absolute;
+  top: 0;
+  left: 28px;
+  text-align: center;
 }
 
 .bookmark .status.icon {
   left: -50px;
   top: 0;
-}
-
-.bookmark .status span {
-  border: 1px solid #eee;
-  display: block;
-  float: left;
-  height: 25px;
-  line-height: 1.875;
-  margin: 0 2.5px 0 0;
-  text-align: center;
-  width: 25px;
 }
 
 .bookmark .user {

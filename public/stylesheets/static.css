@@ -6,7 +6,7 @@ ul#skiplinks, .landmark, .landmark a {
   margin: 0;
   clear: both;
   color: transparent;
-    opacity: 0;
+  opacity: 0;
 }
 
 .clear {
@@ -20,7 +20,7 @@ body {
 }
 
 a {
-  color: #900;
+  color: #700;
 }
 
 a:visited {
@@ -48,7 +48,7 @@ a:hover {
 }
 
 a, a:link, #header ul ul li a:link {
-  color: #900;
+  color: #700;
 }
 
 #header ul.navigation ul {
@@ -64,7 +64,7 @@ a, a:link, #header ul ul li a:link {
 }
 
 #header ul ul li a {
-  color: #900;
+  color: #700;
   padding: 0.5em;
   border: 1px solid #555;
   display: block;

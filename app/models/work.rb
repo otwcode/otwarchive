@@ -134,13 +134,13 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank?
       if self.pseuds.blank?
-        errors.add(:base, t('must_have_author', :default => "Work must have at least one author."))
+        errors.add(:base, ts("Work must have at least one author."))
         return false
       else
         self.authors_to_sort_on = self.sorted_pseuds
       end
     elsif !self.invalid_pseuds.blank?
-      errors.add(:base, t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
+      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     else
       self.authors_to_sort_on = self.sorted_authors
     end
@@ -164,7 +164,7 @@ class Work < ActiveRecord::Base
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
-      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, ts("Publication date can't be in the future."))
       return false
     end
   end
@@ -173,7 +173,7 @@ class Work < ActiveRecord::Base
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
     if self.errors[:chapters].any?
-      self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
+      self.errors.add(:base, ts("Please enter your story in the text field below."))
       self.errors.delete(:chapters)
     end
   end
@@ -187,11 +187,10 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
 
-  # before_save :validate_tags # Enigel's feeble attempt
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
@@ -467,6 +466,7 @@ class Work < ActiveRecord::Base
   def post_first_chapter
     if self.posted_changed?
       self.chapters.first.posted = self.posted
+      self.chapters.first.save
     end
   end
 
@@ -742,6 +742,18 @@ class Work < ActiveRecord::Base
       :commentable_id => self.chapters.value_of(:id)
     )
   end
+  
+  def guest_kudos_count
+    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+      kudos.by_guest.count
+    end
+  end
+  
+  def all_kudos_count
+    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+      kudos.count
+    end
+  end
 
   ########################################################################
   # RELATED WORKS
@@ -897,6 +909,12 @@ class Work < ActiveRecord::Base
   def self.visible(user=User.current_user)
     visible_to_user(user)
   end
+  
+  scope :with_filter, lambda { |tag| 
+    select("DISTINCT works.*").
+    joins(:filter_taggings).
+    where({:filter_taggings => {:filter_id => tag.id}})
+  }
 
   # Note: this version will work only on canonical tags (filters)
   scope :with_all_filter_ids, lambda {|tag_ids_to_find|
@@ -944,8 +962,7 @@ class Work < ActiveRecord::Base
   scope :written_by_id, lambda {|pseud_ids|
     select("DISTINCT works.*").
     joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id")
+    where('pseuds.id IN (?)', pseud_ids)
   }
   scope :written_by_id_having, lambda {|pseud_ids|
     select("DISTINCT works.*").
@@ -993,24 +1010,16 @@ class Work < ActiveRecord::Base
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
 
-    @pseuds = []
-    @filters = []
     @works = Work
 
+    if options[:tag].present?
+      @works = @works.with_filter(options[:tag])
+    end
     if !options[:user].nil? && !options[:selected_pseuds].empty?
       @works = @works.written_by_id(options[:selected_pseuds])
     elsif !options[:user].nil?
       @works = @works.owned_by(options[:user])
     end
-
-    if !options[:selected_tags].blank? || !options[:tag].blank?
-      if options[:boolean_type] == 'or'
-        @works = @works.with_any_filter_ids(options[:selected_tags])
-      else
-        @works = @works.with_all_filter_ids(options[:selected_tags])
-      end
-    end
-
     if options[:language_id]
       @works = @works.by_language(options[:language_id])
     end
@@ -1019,45 +1028,16 @@ class Work < ActiveRecord::Base
     end
     if options[:collection]
       @works = @works.in_collection(options[:collection])
-    else
-      @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
-
     if User.current_user.nil? || User.current_user == :false
       @works = @works.unrestricted
     end
-
     if options[:sort_column] == "hit_count"
       @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
     end
 
     @works = @works.order(sort_by).posted.unhidden
-    # for now, trigger the lazy loading so we don't get an error on @works.size
-    @works.compact
-
-    if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
-      @works = @works.delete_if {|w| w.unrevealed?}
-    end
-
-    @filters = build_filters(@works) unless @works.empty?
-
-    return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
-  end
-
-  # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
-  # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
-  def self.build_filters(works)
-    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
-  end
-
-  def self.build_filters_from_tags(tags)
-    filters = {}
-    tags.each do |tag|
-      count = tag.respond_to?(:count) ? tag.count : "0"
-      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
-    end
-    filters
+    return @works.paginate(page_args.merge(:total_entries => @works.size))
   end
 
   ########################################################################
@@ -1115,9 +1095,6 @@ class Work < ActiveRecord::Base
     has complete
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
-
-    has kudos(:id), :as => :kudos_id
-    has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
 
     # properties
 #    set_property :delta => :delayed

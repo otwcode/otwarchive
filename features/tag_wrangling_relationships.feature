@@ -206,7 +206,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   
   When I go to Enigel's works page
   Then I should see "Testypants/Testyskirt"
-    And I should see "Testing McTestypants/Testing McTestySkirt"
+    # line below commented out because of filter removal
+    # And I should see "Testing McTestypants/Testing McTestySkirt"
   When I view the tag "Testing"
   Then I should see "Testing McTestypants/Testing McTestySkirt"
     And I should see "Testypants/Testyskirt"

@@ -88,11 +88,13 @@ class Series < ActiveRecord::Base
   
   def visible_word_count
     if User.current_user.nil?
-      works = self.works.posted.unrestricted.find(:all, :select => "works.word_count")
+      # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
+      visible_works_wordcount = self.works.posted.unrestricted.value_of(:word_count).compact.sum
     else
-      works = self.works.posted.find(:all, :select => "works.word_count")
+      # visible_works_wordcount = self.works.posted.sum(:word_count)
+      visible_works_wordcount = self.works.posted.value_of(:word_count).compact.sum
     end
-    works.collect(&:word_count).sum
+    visible_works_wordcount
   end
   
   def anonymous?

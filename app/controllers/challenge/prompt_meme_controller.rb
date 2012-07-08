@@ -24,7 +24,7 @@ class Challenge::PromptMemeController < ChallengesController
   # The new form for prompt memes is actually the challenge settings page because challenges are always created in the context of a collection.
   def new
     if (@collection.challenge)
-      flash[:notice] = ts("There is already a challenge set up for this collection.")
+      setflash; flash[:notice] = ts("There is already a challenge set up for this collection.")
       redirect_to edit_collection_prompt_meme_path(@collection)
     else
       @challenge = PromptMeme.new
@@ -39,7 +39,7 @@ class Challenge::PromptMemeController < ChallengesController
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = ts('Challenge was successfully created.')
+      setflash; flash[:notice] = ts('Challenge was successfully created.')
       
       # see if we initialized the tag set
       if initializing_tag_sets?
@@ -53,7 +53,7 @@ class Challenge::PromptMemeController < ChallengesController
 
   def update
     if @challenge.update_attributes(params[:prompt_meme])
-      flash[:notice] = 'Challenge was successfully updated.'
+      setflash; flash[:notice] = 'Challenge was successfully updated.'
       
       # expire the cache on the signup form
       expire_fragment(:controller => 'challenge_signups', :action => 'new')
@@ -71,7 +71,7 @@ class Challenge::PromptMemeController < ChallengesController
 
   def destroy
     @challenge.destroy
-    flash[:notice] = 'Challenge settings were deleted.'
+    setflash; flash[:notice] = 'Challenge settings were deleted.'
     redirect_to @collection
   end
   

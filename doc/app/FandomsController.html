@@ -355,6 +355,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -678,7 +680,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@fandom</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@fandom</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Could not find fandom named %{fandom_name}&quot;</span>, <span class="ruby-value">:fandom_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Could not find fandom named %{fandom_name}&quot;</span>, <span class="ruby-value">:fandom_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">media_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@characters</span> = <span class="ruby-ivar">@fandom</span>.<span class="ruby-identifier">characters</span>.<span class="ruby-identifier">canonical</span>.<span class="ruby-identifier">by_name</span>

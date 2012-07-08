@@ -74,6 +74,8 @@
     
     <li><a href="#method-i-fix_time_zone">#fix_time_zone</a>
     
+    <li><a href="#method-i-hide_hit_counts">#hide_hit_counts</a>
+    
     <li><a href="#method-i-set_default_skin">#set_default_skin</a>
     
   </ul>
@@ -354,6 +356,8 @@
     <li><a href="./KudoObserver.html">KudoObserver</a>
   
     <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
   
     <li><a href="./Language.html">Language</a>
   
@@ -674,6 +678,36 @@
 
         
       </div><!-- fix_time_zone-method -->
+
+    
+      <div id="method-i-hide_hit_counts" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hide_hit_counts</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hide_hit_counts-source">
+            <pre><span class="ruby-comment"># File app/models/preference.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_hit_counts</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:hide_all_hit_counts</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:hide_private_hit_count</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hide_hit_counts-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hide_hit_counts-method -->
 
     
       <div id="method-i-set_default_skin" class="method-detail ">

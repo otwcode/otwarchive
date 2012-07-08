@@ -10,7 +10,7 @@ class CommentMailer < ActionMailer::Base
     @comment = Comment.find(comment_id)
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 
@@ -20,7 +20,7 @@ class CommentMailer < ActionMailer::Base
     @comment = Comment.find(comment_id)
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 
@@ -31,7 +31,7 @@ class CommentMailer < ActionMailer::Base
     @comment = Comment.find(comment_id)
     mail(
       :to => @your_comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 
@@ -42,7 +42,7 @@ class CommentMailer < ActionMailer::Base
     @comment = Comment.find(edited_comment_id)
     mail(
       :to => @your_comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 
@@ -52,7 +52,7 @@ class CommentMailer < ActionMailer::Base
     @noreply = true # don't give reply link to your own comment
     mail(
       :to => @comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 

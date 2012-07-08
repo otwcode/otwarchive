@@ -33,10 +33,6 @@ user home, collections and challenges home, tag home, admin comms home
   top: 0;
 }
 
-.collection .primary .icon {
-  background: url("/images/imageset.png") 100px -175px;
-}
-
 .skins .primary .icon {
   background: url("/images/imageset.png") 0px -175px;
 }

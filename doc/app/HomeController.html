@@ -365,6 +365,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -693,7 +695,7 @@
             <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@user_count</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">count</span>
-  <span class="ruby-ivar">@work_count</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">size</span>
+  <span class="ruby-ivar">@work_count</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">count</span>
   <span class="ruby-ivar">@fandom_count</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">canonical</span>.<span class="ruby-identifier">count</span>
   <span class="ruby-ivar">@admin_post</span> = <span class="ruby-constant">AdminPost</span>.<span class="ruby-identifier">non_translated</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;created_at DESC&quot;</span>).<span class="ruby-identifier">first</span>
   <span class="ruby-ivar">@admin_post_show_more</span> = <span class="ruby-constant">AdminPost</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>

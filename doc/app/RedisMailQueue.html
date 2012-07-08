@@ -361,6 +361,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -626,7 +628,7 @@
 
           
           <div class="method-source-code" id="clear_queue-source">
-            <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 82</span>
+            <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">clear_queue</span>(<span class="ruby-identifier">notification_type</span>)
   <span class="ruby-identifier">keys</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">keys</span>(<span class="ruby-node">&quot;#{notification_type}_*&quot;</span>)
   <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span>(*<span class="ruby-identifier">keys</span>)
@@ -722,22 +724,16 @@ should be called from schedule.rb at some regular interval</p>
           <div class="method-source-code" id="deliver_subscriptions-source">
             <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">deliver_subscriptions</span>
-  <span class="ruby-identifier">subscriber_list</span> = <span class="ruby-identifier">to_notify</span>(<span class="ruby-string">&quot;subscription&quot;</span>)
-
-  <span class="ruby-identifier">subscriber_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subscriber_id</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">subscriptions</span> = {}
-    <span class="ruby-identifier">keys</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">keys</span>(<span class="ruby-node">&quot;subscription_#{subscriber_id}_*&quot;</span>)
-    <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span>
-      <span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">subscriber</span>, <span class="ruby-identifier">subscription_id</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;_&quot;</span>)
-      <span class="ruby-identifier">sub</span>, <span class="ruby-identifier">resp</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">multi</span> <span class="ruby-keyword">do</span>
-        <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-identifier">key</span>)
-        <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span>(<span class="ruby-identifier">key</span>)
-      <span class="ruby-keyword">end</span>
-      <span class="ruby-identifier">subscriptions</span>[<span class="ruby-identifier">subscription_id</span>] = <span class="ruby-identifier">sub</span>
+  <span class="ruby-identifier">subscription_list</span> = <span class="ruby-identifier">to_notify</span>(<span class="ruby-string">&quot;subscription&quot;</span>)
+  <span class="ruby-identifier">subscription_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subscription_id</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">key</span> = <span class="ruby-node">&quot;subscription_#{subscription_id}&quot;</span>
+    <span class="ruby-identifier">entries</span>, <span class="ruby-identifier">resp</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">multi</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">lrange</span>(<span class="ruby-identifier">key</span>, <span class="ruby-value">0</span>, <span class="ruby-value">-1</span>)
+      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span>(<span class="ruby-identifier">key</span>)
     <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">begin</span>
-      <span class="ruby-comment"># don't die if we hit one deleted user</span>
-      <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">batch_subscription_notification</span>(<span class="ruby-identifier">subscriber_id</span>, <span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">to_json</span>).<span class="ruby-identifier">deliver</span>
+      <span class="ruby-comment"># don't die if we hit one deleted subscription</span>
+      <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">batch_subscription_notification</span>(<span class="ruby-identifier">subscription_id</span>, <span class="ruby-identifier">entries</span>.<span class="ruby-identifier">to_json</span>).<span class="ruby-identifier">deliver</span>
     <span class="ruby-keyword">rescue</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -806,10 +802,10 @@ creation type and id in that set</p>
           <div class="method-source-code" id="queue_subscription-source">
             <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">queue_subscription</span>(<span class="ruby-identifier">subscription</span>, <span class="ruby-identifier">creation</span>)
-  <span class="ruby-identifier">key</span> = <span class="ruby-node">&quot;subscription_#{subscription.user_id}_#{subscription.id}&quot;</span>
+  <span class="ruby-identifier">key</span> = <span class="ruby-node">&quot;subscription_#{subscription.id}&quot;</span>
   <span class="ruby-identifier">entry</span> = <span class="ruby-node">&quot;#{creation.class.name}_#{creation.id}&quot;</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">entry</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;notification_subscription&quot;</span>, <span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">user_id</span>)
+  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">rpush</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">entry</span>)
+  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;notification_subscription&quot;</span>, <span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">id</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- queue_subscription-source -->
           
@@ -838,7 +834,7 @@ notification</p>
 
           
           <div class="method-source-code" id="to_notify-source">
-            <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 89</span>
+            <pre><span class="ruby-comment"># File app/models/redis_mail_queue.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_notify</span>(<span class="ruby-identifier">notification_type</span>)
   <span class="ruby-comment"># atomically get all the users to notify and then delete the list</span>
   <span class="ruby-identifier">list</span>, <span class="ruby-identifier">response</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">multi</span> <span class="ruby-keyword">do</span> 
