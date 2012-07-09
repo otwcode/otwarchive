@@ -104,4 +104,18 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
 
 /*5. ZONE: SYSTEM: SUPPORT*/
 
+
+.feedbacks h3 {
+  clear: right;
+  padding-top: 1.929em;
+}
+
+.feedbacks form {
+  margin-top: 1.929em;
+}
+
+.feedbacks form .notice {
+  margin: 0.643em;
+}
+
 /*END== */
