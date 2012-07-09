@@ -4,32 +4,22 @@
   <dl>
   <dt>
     <label for="people_search"><%= ts('Name:') %></label>
- 	<%= link_to_help "people-search-text-help" %>
+    <%= link_to_help "people-search-name-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[name]", @query[:name], :id => 'people_search'  %>
   </dd>
   <dt>
-    <label for="refine_bookmark_count"><%= ts('Bookmarks:') %></label>
-	 <%= link_to_help "people-search-numerical-help" %>
+    <label for="refine_bookmark_count"><%= ts('Number of Bookmarks:') %></label>
+    <%= link_to_help "people-search-bookmark-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[bookmarks]", @query[:bookmarks], :id => 'refine_bookmark_count' %>
   </dd>
-  <dt>
-    <label for="refine_description"><%= ts('Description:') %></label>
-  </dt>
-  <dd>
-    <%= text_field_tag "query[description]", @query[:description], :id => 'refine_description' %>
-  </dd>
-  <dt>
-    <label for="refine_icon_alt_text"><%= ts('Icon alt text:') %></label>
-  </dt>
-  <dd>
-    <%= text_field_tag "query[icon_alt_text]", @query[:icon_alt_text], :id => 'refine_icon_alt_text' %>
-  </dd>
+
   <dt>
     <label for="text"><%= ts('All fields:') %></label>
+    <%= link_to_help "people-search-text-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[text]", @query[:text], :id => 'text' %>
