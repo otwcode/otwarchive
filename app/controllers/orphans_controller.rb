@@ -30,7 +30,7 @@ class OrphansController < ApplicationController
     end
     
     if @pseuds.empty?
-      flash[:error] = ts("You don't have permission to orphan that!")
+      setflash; flash[:error] = ts("You don't have permission to orphan that!")
       redirect_to root_path and return
       false
     end
@@ -44,10 +44,10 @@ class OrphansController < ApplicationController
     new_orphans = {}
     use_default = params[:use_default] == "true"
     if !@pseuds.blank? && Creatorship.orphan(@pseuds, @orphans, use_default)
-      flash[:notice] = ts('Orphaning was successful.')
+      setflash; flash[:notice] = ts('Orphaning was successful.')
       redirect_to(current_user)
     else
-      flash[:error] = ts("You don't seem to have permission to orphan this.")
+      setflash; flash[:error] = ts("You don't seem to have permission to orphan this.")
       redirect_to root_path
     end 
   end

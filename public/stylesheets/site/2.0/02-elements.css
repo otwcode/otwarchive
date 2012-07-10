@@ -129,7 +129,7 @@ blockquote p:last-child {
 }
 
 kbd, tt, code, var, pre {
-  font: normal 0.75em 'Monaco', 'Consolas', Courier, monospace;
+  font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
   margin: auto;
 }
 

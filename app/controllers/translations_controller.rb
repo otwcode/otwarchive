@@ -69,7 +69,7 @@ class TranslationsController < ApplicationController
 
     respond_to do |format|
       if @translation.save
-        flash[:notice] = 'Translation was successfully created.'
+        setflash; flash[:notice] = 'Translation was successfully created.'
         format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) }
       else
         format.html { render :action => "new" }
@@ -89,7 +89,7 @@ class TranslationsController < ApplicationController
 
     respond_to do |format|
       if @translation.update_attributes(params[:translation])
-        flash[:notice] = 'Translation was successfully updated.'
+        setflash; flash[:notice] = 'Translation was successfully updated.'
         format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) }
         format.js
       else
@@ -106,9 +106,9 @@ class TranslationsController < ApplicationController
       to_update = 'beta_id = ' + params[:beta][:id]
     end
     if @locale.translations.update_all(to_update, ['namespace = ?', params[:namespace]])
-      flash[:notice] = "Translations were assigned"
+      setflash; flash[:notice] = "Translations were assigned"
     else
-      flash[:error] = "Translations could not be assigned. Please try again."
+      setflash; flash[:error] = "Translations could not be assigned. Please try again."
     end
     redirect_to translations_path
   end

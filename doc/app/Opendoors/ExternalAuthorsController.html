@@ -361,6 +361,8 @@
   
     <li><a href="../KudosController.html">KudosController</a>
   
+    <li><a href="../KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="../Language.html">Language</a>
   
     <li><a href="../LanguagesController.html">LanguagesController</a>
@@ -630,9 +632,9 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@external_author</span> = <span class="ruby-constant">ExternalAuthor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:external_author</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@external_author</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save that address.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save that address.&quot;</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;We have saved and blocked the email address #{@external_author.email}&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;We have saved and blocked the email address #{@external_author.email}&quot;</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">opendoors_tools_path</span>
@@ -666,7 +668,7 @@
             <pre><span class="ruby-comment"># File app/controllers/opendoors/external_authors_controller.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">forward</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@external_author</span>.<span class="ruby-identifier">is_claimed</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;This external author has already been claimed!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;This external author has already been claimed!&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">opendoors_external_author_path</span>(<span class="ruby-ivar">@external_author</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
@@ -683,9 +685,9 @@
   <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span> = <span class="ruby-ivar">@email</span>
   <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">creator</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-string">&quot;open_doors&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!&quot;</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;We couldn't forward the claim for #{@external_author.email} to that email address.&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;We couldn't forward the claim for #{@external_author.email} to that email address.&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-comment"># redirect to external author listing for that user</span>

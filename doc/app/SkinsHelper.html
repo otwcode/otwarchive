@@ -353,6 +353,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -665,7 +667,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:site_skin</span>]
     <span class="ruby-ivar">@site_skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">approved_or_owned_by</span>.<span class="ruby-identifier">usable</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:site_skin</span>]).<span class="ruby-identifier">first</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:site_skin</span>]
+  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:site_skin</span>]
     <span class="ruby-ivar">@site_skin</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">approved_or_owned_by</span>.<span class="ruby-identifier">usable</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:site_skin</span>]).<span class="ruby-identifier">first</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>

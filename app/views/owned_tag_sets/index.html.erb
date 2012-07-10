@@ -31,7 +31,7 @@
 </ul>
 
 <% if @tag_sets.empty? %>
-  <%= ts("No tag sets found.") %>
+  <p><%= ts("No tag sets found.") %></p>
 <% else %>
   <%= will_paginate @tag_sets %>
 

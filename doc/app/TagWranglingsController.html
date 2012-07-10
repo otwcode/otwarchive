@@ -355,6 +355,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -670,7 +672,7 @@
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@fandom</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@fandom</span>.<span class="ruby-identifier">canonical?</span>
           <span class="ruby-ivar">@tags</span> = <span class="ruby-ivar">@fandom</span>.<span class="ruby-identifier">children</span>.<span class="ruby-identifier">by_type</span>(<span class="ruby-string">&quot;Relationship&quot;</span>).<span class="ruby-identifier">canonical</span>.<span class="ruby-identifier">order</span>(<span class="ruby-identifier">sort</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ITEMS_PER_PAGE</span>)
         <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:fandom_string]} is not a canonical fandom.&quot;</span>
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:fandom_string]} is not a canonical fandom.&quot;</span>
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span> <span class="ruby-comment"># by fandom</span>
@@ -728,10 +730,10 @@
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@character</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@character</span>.<span class="ruby-identifier">canonical?</span>
       <span class="ruby-ivar">@tags</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>])
       <span class="ruby-ivar">@tags</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">add_association</span>(<span class="ruby-ivar">@character</span>) }
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;#{@tags.length} relationships were wrangled to #{params[:character_string]}.&quot;</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;#{@tags.length} relationships were wrangled to #{params[:character_string]}.&quot;</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span>(<span class="ruby-identifier">options</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>        
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:character_string]} is not a canonical character.&quot;</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:character_string]} is not a canonical character.&quot;</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span>(<span class="ruby-identifier">options</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>     
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom_string</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>].<span class="ruby-identifier">blank?</span>
@@ -741,11 +743,11 @@
       <span class="ruby-ivar">@tags</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:selected_tags</span>])
       <span class="ruby-ivar">@tags</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">add_association</span>(<span class="ruby-ivar">@fandom</span>) }
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:fandom_string]} is not a canonical fandom.&quot;</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;#{params[:fandom_string]} is not a canonical fandom.&quot;</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span>(<span class="ruby-identifier">options</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>     
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Tags were successfully wrangled!&quot;</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Tags were successfully wrangled!&quot;</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_wranglings_path</span>(<span class="ruby-identifier">options</span>)            
 <span class="ruby-keyword">end</span></pre>
           </div><!-- wrangle-source -->

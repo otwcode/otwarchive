@@ -3,9 +3,9 @@
 <!--/descriptions-->
 <!-- BACK END PLS span_if_current-->
 <ul class="navigation actions" role="navigation" title="show only">
-  <li><%= link_to t('.people.All', :default => "All"), person_path(@character, :show => "all") %></li>
-  <li><%= link_to t('.people.Authors', :default => "Authors"), person_path(@character, :show => "authors") %></li>  
-  <li><%= link_to t('.people.Reccers', :default => "Reccers"), person_path(@character, :show => "reccers") %></li>
+  <li><%= link_to ts("All"), person_path(@character, :show => "all") %></li>
+  <li><%= link_to ts("Authors"), person_path(@character, :show => "authors") %></li>  
+  <li><%= link_to ts("Reccers"), person_path(@character, :show => "reccers") %></li>
 </ul>
 
 <div class="alphabetical pagination actions">

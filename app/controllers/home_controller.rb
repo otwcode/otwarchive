@@ -2,6 +2,7 @@ class HomeController < ApplicationController
 
   before_filter :users_only, :only => [:site_pages]
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
+  skip_before_filter :store_location, :only => [:first_login_help]
   
   # terms of service
   def tos
@@ -30,7 +31,7 @@ class HomeController < ApplicationController
   # home page itself
   def index
     @user_count = User.count
-    @work_count = Work.visible.size
+    @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
     @admin_post = AdminPost.non_translated.order("created_at DESC").first
     @admin_post_show_more = AdminPost.count > 1

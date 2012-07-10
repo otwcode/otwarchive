@@ -365,6 +365,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -668,7 +670,7 @@
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">invitations</span>.<span class="ruby-identifier">create</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Invitations were successfully created.&quot;</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Invitations were successfully created.&quot;</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_invitations_url</span>(<span class="ruby-ivar">@user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- create-source -->
@@ -702,9 +704,9 @@
   <span class="ruby-ivar">@invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@user</span> = <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">creator</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Invitation successfully destroyed&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Invitation successfully destroyed&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Invitation was not destroyed.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Invitation was not destroyed.&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_invitations_url</span>(<span class="ruby-ivar">@user</span>)
@@ -774,13 +776,13 @@
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:invitee_email</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:invitee_email</span>]
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Invitation was successfully sent.'</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Invitation was successfully sent.'</span>
       <span class="ruby-identifier">redirect_to</span>([<span class="ruby-ivar">@user</span>, <span class="ruby-ivar">@invitation</span>]) 
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Please enter an email address.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Please enter an email address.&quot;</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span> 
   <span class="ruby-keyword">end</span>    
 <span class="ruby-keyword">end</span></pre>
@@ -879,14 +881,14 @@
   <span class="ruby-ivar">@invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:invitation</span>]
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email_changed?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:invitation</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Invitation was successfully sent.'</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Invitation was successfully sent.'</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">find_admin_invitations_url</span>(<span class="ruby-value">:token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">token</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">redirect_to</span>([<span class="ruby-ivar">@user</span>, <span class="ruby-ivar">@invitation</span>])        
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Please enter an email address.&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Please enter an email address.&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

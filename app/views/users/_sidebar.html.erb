@@ -2,15 +2,16 @@
 <h4 class="landmark heading"><%= ts("Choices")%></h4>
 <ul class="navigation actions">
   <li><%= span_if_current ts("Dashboard"), @user %></li>
+  <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
       <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login)) + ' &#8595;').html_safe %>
-      <a class="pseud_switcher_open open" title="Pseuds"><%= pseud_link_text %></a>
-      <a class="pseud_switcher_close close" title="Pseuds"><%= pseud_link_text %></a>
+      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= pseud_link_text %></a>
+      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= pseud_link_text %></a>
       <ul id="pseud_switcher" class="toggled secondary">
           <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
-        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher">X</a></li>
+        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher" href="#">X</a></li>
       </ul>
     </li>
 	<% end %>

@@ -353,6 +353,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -633,8 +635,16 @@
   
   <span class="ruby-comment"># NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is </span>
   <span class="ruby-comment"># checked against the whitelist of valid options</span>
-  <span class="ruby-identifier">sort_options</span> = <span class="ruby-node">%w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)</span>
-  <span class="ruby-ivar">@sort</span> = <span class="ruby-identifier">sort_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&quot;hits&quot;</span>
+  <span class="ruby-identifier">sort_options</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-ivar">@sort</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">hide_hit_counts</span>
+    <span class="ruby-identifier">sort_options</span> = <span class="ruby-node">%w(kudos.count comments.count bookmarks.count subscriptions.count word_count)</span>
+    <span class="ruby-ivar">@sort</span> = <span class="ruby-identifier">sort_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&quot;kudos.count&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">sort_options</span> = <span class="ruby-node">%w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)</span>
+    <span class="ruby-ivar">@sort</span> = <span class="ruby-identifier">sort_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&quot;hits&quot;</span>
+  <span class="ruby-keyword">end</span>
+  
   <span class="ruby-ivar">@dir</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ASC&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;ASC&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;DESC&quot;</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] = <span class="ruby-ivar">@sort</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] = <span class="ruby-ivar">@dir</span>
@@ -652,6 +662,11 @@
   <span class="ruby-comment"># @sort above, so this should never contain potentially dangerous user input)</span>
   <span class="ruby-identifier">works</span> = <span class="ruby-identifier">work_query</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">sort_by</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@dir</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;ASC&quot;</span> <span class="ruby-operator">?</span> (<span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;w.#{@sort}&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span>) <span class="ruby-operator">:</span> (<span class="ruby-value">0</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;w.#{@sort}&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span>).<span class="ruby-identifier">to_i</span>)}    
 
+  <span class="ruby-comment"># on the off-chance a new user decides to look at their stats and have no works</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">works</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-string">&quot;no_stats&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
   <span class="ruby-comment"># group by fandom or flat view</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:flat_view</span>]
     <span class="ruby-ivar">@works</span> = {<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All Fandoms&quot;</span>) =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">works</span>}
