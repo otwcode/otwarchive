@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t('.orphan_series', :default => 'Orphan Series') %></h2>
+<h2 class="heading"><%= ts("Orphan Series") %></h2>
 
 <p class="caution">
-<%= t('.orphan_series_are_you_sure', :default => 'Are you sure you want to <strong>permanently</strong> remove all 
-identifying data from your series "%{title}", its works and chapters, and any feedback replies you may have left on them?', 
-:title => series.title) %>
+<%= ts('Are you sure you want to <strong>permanently</strong> remove all
+identifying data from your series "%{title}", its works and chapters, and any feedback replies you may have left on them?',
+:title => series.title).html_safe%>
 </p>
 <!--/descriptions-->
 
@@ -14,10 +14,10 @@ identifying data from your series "%{title}", its works and chapters, and any fe
 <!--main content-->
 <%= form_tag orphans_path do %>
   
-  <%= render :partial => 'orphans/choose_pseud' %>
+  <%= render 'orphans/choose_pseud' %>
   
   <p><%= hidden_field_tag 'series_id', series.id %></p>
-  <p class="submit actions"><%= submit_tag t('.orphan_series_yes', :default => "Yes, I'm sure") %></p>
+  <p class="submit actions"><%= submit_tag ts("Yes, I'm sure") %></p>
 <% end %>
 <!--/content-->
 
