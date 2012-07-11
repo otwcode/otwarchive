@@ -383,6 +383,10 @@ div.dynamic {
     box-shadow: none;
 }
 
+.toggled .bookmark form p.footnote {
+  padding-bottom: 0.643em;
+}
+
 /*INTERACTION: LOGIN SIGNUP*/
 
 /*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
