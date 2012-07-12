@@ -45,14 +45,6 @@ class CommentObserver < ActiveRecord::Observer
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
     if comment.ultimate_parent.is_a?(AdminPost)
-      # admins = comment.ultimate_parent.commentable_owners
-      # admins.each do |admin|
-      #   # TODO: comments should be able to belong to an admin officially
-      #   # right now comment.comment_owner is nil for an admin, and going by email is not reliable
-      #   # unless admin == comment.comment_owner
-      #     AdminMailer.comment_notification(admin.id, comment.id).deliver
-      #   # end
-      # end
       AdminMailer.comment_notification(comment.id).deliver
     else
       # at this point, users contains those who've already been notified
@@ -116,12 +108,6 @@ class CommentObserver < ActiveRecord::Observer
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
       if comment.ultimate_parent.is_a?(AdminPost)
-        # admins = comment.ultimate_parent.commentable_owners
-        # admins.each do |admin|
-        #   # TODO: comments should be able to belong to an admin officially
-        #   # unless admin == comment.comment_owner
-        #   AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
-        # end
         AdminMailer.edited_comment_notification(comment.id).deliver
       else
         # at this point, users contains those who've already been notified
