@@ -306,4 +306,14 @@ eg collections, users, skins, instead of the 4-icon list
   overflow: hidden;
 }
 
+/* mod: READING */
+
+.reading h4.viewed {
+  background: #ddd;
+}
+
+.reading .deleted h4.viewed {
+  background: transparent;
+}
+
 /*END== */
