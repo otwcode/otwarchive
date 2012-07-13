@@ -1,6 +1,8 @@
 class Bookmark < ActiveRecord::Base
 
   include Collectible
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
