@@ -35,13 +35,10 @@ class TagsController < ApplicationController
   end
 
   def search
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      page = params[:page] || 1
-      errors, @tags = Query.search(Tag, @query, page)
-      setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-    end
+    options = params[:query].dup || {}
+    options.merge!(:page => params[:page] || 1)
+    @query = Query.standardize(params[:query])
+    @tags = Tag.search(options)
   end
 
   # if user is Admin or Tag Wrangler, show them details about the tag
