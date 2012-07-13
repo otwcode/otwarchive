@@ -56,7 +56,7 @@ class StoryParser
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
   SOURCE_DW = 'dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
-  SOURCE_FFNET = 'fanfiction\.net'
+  SOURCE_FFNET = '(^|\.)fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
