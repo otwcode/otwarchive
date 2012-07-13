@@ -129,28 +129,5 @@ class Bookmark < ActiveRecord::Base
     return self.tags
   end
 
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes bookmarkable_type, :as => 'type'
-    indexes notes
-
-    # associations
-    indexes pseud(:name), :as => 'bookmarker'
-    indexes tags(:name), :as => 'tag'
-# TODO polymorphic associations can’t currently be used in field or attribute definitions. This will be fixed at some point.
-#    indexes bookmarkable.tags(:name), :as => 'indirect'
-
-    # attributes
-    has rec, updated_at, bookmarkable_id
-
-    # Don't index private and hidden bookmarks
-    where "private = 0 AND hidden_by_admin = 0"
-
-    # properties
-#    set_property :delta => :delayed
-  end
-
 
 end

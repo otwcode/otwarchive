@@ -26,13 +26,9 @@ class WorksController < ApplicationController
     # to understand this, the code you are looking for is in lib/query.rb
     if params[:query]
       @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @works = Query.search_with_sphinx(Work, @query, page)
-        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
-      end
+      page = params[:page] || 1
+      errors, @works = Query.search(Work, @query, page)
+      setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
     end
   end
 

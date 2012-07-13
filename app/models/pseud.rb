@@ -374,28 +374,4 @@ class Pseud < ActiveRecord::Base
     self.icon = nil if delete_icon? && !icon.dirty?
   end
 
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes :name
-    indexes :description
-    indexes :icon_alt_text
-
-    # associations
-    indexes user(:login), :as => 'user'
-#    indexes works(:id), :as => 'work_id'
-#    indexes tags(:name), :as => 'tag'
-
-    # attributes
-    has bookmarks(:id), :as => :bookmarks_ids
-    has "COUNT(bookmarks.id)", :as => 'bookmark_count', :type => :integer
-
-#    has creatorship.creation(:id), :as => :creation_ids
-#    has "COUNT(works.id)", :as => 'work_count', :type => :integer
-
-    # properties
-#    set_property :delta => :delayed
-  end
-
 end

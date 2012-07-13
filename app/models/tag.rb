@@ -884,16 +884,4 @@ class Tag < ActiveRecord::Base
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
 
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes :name, :sortable => true
-    indexes :type, :sortable => true
-    has canonical
-
-    # properties
-#    set_property :delta => :delayed
-  end
-
 end
