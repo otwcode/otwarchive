@@ -886,5 +886,32 @@ class Tag < ActiveRecord::Base
     series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
+  
+  #################################
+  ## SEARCH #######################
+  #################################
+  
+  # Tire runs into some odd issues with STI, so let's just make the tag type
+  # info easier to index without running into conflicts
+  def tag_type
+    self.type.to_s
+  end
+  
+  self.include_root_in_json = false
+  def to_indexed_json
+    to_json(methods: [:tag_type])
+  end
+  
+  def self.search(options={})
+    tire.search(page: options[:page], per_page: 50, type: nil) do
+      query do
+        boolean do
+          must { string options[:name], default_operator: "AND" } if options[:name].present?
+          must { term :tag_type, options[:type].downcase } if options[:type].present?
+          must { term :canonical, 'T' } if options[:canonical].present?
+        end
+      end
+    end
+  end
 
 end
