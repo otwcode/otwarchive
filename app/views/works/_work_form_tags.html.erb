@@ -78,7 +78,7 @@
     <dt class="freeform">
       <label for="work_freeform"><%= Freeform::NAME %> <%=	 link_to_help "additional-tags-help" %></label>
     </dt>
-    <dd class="freeform" title="freeform">
+    <dd class="freeform" title="additional tags">
       <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform', :id => "work_freeform", :title => "freeform") %>
     </dd>
 
