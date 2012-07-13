@@ -1076,43 +1076,9 @@ class Work < ActiveRecord::Base
   #############################################################################
   #
   # SEARCH
-  # settings and methods used with the ThinkingSphinx plugin
-  # that connects us to the Sphinx search engine.
   #
   #############################################################################
 
-  # Index for Thinking Sphinx
-  define_index do
 
-    # fields
-    indexes authors_to_sort_on, :as => 'author', :sortable => true
-    indexes title_to_sort_on, :as => 'title', :sortable => true
-    indexes summary
-    indexes notes
-
-    # field associations
-    indexes tags(:name), :as => 'tag'
-    indexes language(:name), :as => 'language'
-
-#    forced to remove for performance reasons
-#    indexes chapters.content, :as => 'content'
-
-    # attributes
-    has hit_counter.hit_count, :as => 'hit_count'
-    has word_count, revised_at
-    has posted, restricted, hidden_by_admin
-    has complete
-    has bookmarks.rec, :as => 'recced'
-    has bookmarks.pseud_id, :as => 'bookmarker'
-
-    # properties
-#    set_property :delta => :delayed
-    set_property :field_weights => {
-                                     :title => 20, :author => 20,
-                                     :tag => 15, :filter => 15,
-                                     :language => 10,
-                                     :summary => 5, :notes => 5,
-                                    }
-  end
 
 end

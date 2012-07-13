@@ -8,15 +8,6 @@ GIT
       ya2yaml (~> 0.26)
 
 GIT
-  remote: git://github.com/freelancing-god/thinking-sphinx.git
-  revision: 506db5cb1b11d4c09d3d6fcccb87a40b1b839ba0
-  branch: rails3
-  specs:
-    thinking-sphinx (2.0.0)
-      activerecord (>= 3.0.2)
-      riddle (>= 1.2.1)
-
-GIT
   remote: git://github.com/odorcicd/authlogic.git
   revision: a087ad0cba3c165ba22fcf176c28b6f7517931e8
   branch: rails3
@@ -194,7 +185,6 @@ GEM
     resque_mailer (1.0.1)
     rest-client (1.6.1)
       mime-types (>= 1.16)
-    riddle (1.2.1)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -297,7 +287,6 @@ DEPENDENCIES
   ruby-debug19
   sanitize
   shoulda
-  thinking-sphinx!
   timeliness
   tolk!
   unicorn

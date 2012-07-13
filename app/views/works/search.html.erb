@@ -58,7 +58,6 @@
 
 
 <% if @works %>
-<% begin %>
   <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
 
   <h3 class="landmark heading">Works List</h3>
@@ -72,7 +71,4 @@
   </ol>
  
  <%= will_paginate @works %>
-<% rescue Riddle::ConnectionError %>
-   <%= ts("The search engine seems to be down at the moment, try back later!")%>
-  <% end %>
 <% end %>
