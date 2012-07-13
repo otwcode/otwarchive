@@ -1,4 +1,7 @@
 class Tag < ActiveRecord::Base
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   NAME = "Tag"
 

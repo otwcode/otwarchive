@@ -4,6 +4,8 @@ class Work < ActiveRecord::Base
   include Collectible
   include Pseudable
   include WorkStats
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS

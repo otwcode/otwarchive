@@ -1,4 +1,7 @@
 class Pseud < ActiveRecord::Base
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   attr_protected :description_sanitizer_version
 
