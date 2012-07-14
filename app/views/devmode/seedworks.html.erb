@@ -1,5 +1,5 @@
-<?= link_to "Devmode top", devmode_path ?>
-<h1><%= t('.seed_works', :default => "Seed works") %></h1>
+<?= link_to ts("Devmode top"), devmode_path ?>
+<h1><%= ts("Seed Works") %></h1>
     <% if @errors %>
       <div class="error" style="color: red">
         <%= @errors %>
@@ -11,12 +11,14 @@
 </p>
 <div class="form">
     <form name="seedusers" method="post" action="">
-      <table>
+      <table summary="<%= ts('') %>">
+        <caption><%= ts('') %></caption>
         <% for name, l in @params %>
           <% if l.nil? %>
             </table>
             <h3 class="heading"><%=h name %></h3>
-            <table>
+            <table summary="<%= ts('') %>">
+            <caption><%= ts('') %></caption>
           <% else %>
             <% display_name = name %>
             <% input_type, default = l[0], l[1] %>
