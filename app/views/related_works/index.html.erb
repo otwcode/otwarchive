@@ -20,7 +20,7 @@
     # this should be four listboxes
   %>
   <table summary="<%= ts("Translations of %{user_login}'s works, including links to the translation and the original. The languages of both works are listed.", :user_login => @user.login) %><% if current_user == @user %><%= ' ' + ts("Also includes management options.") %><% end %>" id="translationsofme">
-    <caption><%= ts("Translations of %{user_login}'s works", :user_login => @user.login) %></caption>
+    <caption><%= ts("Translations of %{user_login}'s Works", :user_login => @user.login) %></caption>
     <thead>
       <tr>
         <th scope="col"><%= ts("Translation") %></th>
@@ -63,7 +63,7 @@
 <% unless @translations_by_user.blank? %>  
   <h3 class="heading"><%= ts("Works translated by %{user_login}", :user_login => @user.login) %></h3>
   <table summary="<%= ts("Works %{user_login} has translated, including links to the original and the translation. The languages of both works are listed.", :user_login => @user.login) %><% if current_user == @user %><%= ' ' + ts("Also includes management options.") %><% end %>" id="translationsbyme">
-    <caption><%= ts("Works translated by %{user_login}", :user_login => @user.login) %></caption>
+    <caption><%= ts("Works Translated by %{user_login}", :user_login => @user.login) %></caption>
     <thead>
       <tr>
         <th scope="col"><%= ts("Original") %></th>
