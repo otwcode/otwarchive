@@ -45,6 +45,10 @@ user home, collections and challenges home, tag home, admin comms home
   background: url("/images/imageset.png") 0px -275px;
 }
 
+.wrangler .primary .icon {
+  background: none;
+}
+
 /*contexts*/
 
 .profile .primary {
