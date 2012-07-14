@@ -32,14 +32,14 @@
     <h3 class="heading"><%= ts("Or Select Users To Notify") %></h3>
   <%= alpha_paginated_section %>
   <div class="wrapper">
-      <table id="admin_users_table">
+      <table id="admin_users_table" summary="<%= ts("List of users with the option to select all, none, or specific individuals who should receive the notification.") %>">
       <caption><%= ts("Select Users To Notify") %></caption>
       <thead>
         <tr>
           <th scope="row"><%= ts("Select") %></th>
           <td class="action">
-            <a href="#" class="check_all">All</a>
-            <a href="#" class="check_none">None</a>
+            <a href="#" class="check_all"><%= ts("All") %></a>
+            <a href="#" class="check_none"><%= ts("None") %></a>
           </td>
         </tr>
         <tr>

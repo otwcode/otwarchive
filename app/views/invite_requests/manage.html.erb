@@ -1,20 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading">Manage the invite queue</h2>
+<h2 class="heading"><%= ts("Manage the Invite Queue") %></h2>
 <!--/descriptions-->
 
 
 <!--main content-->
   <%= form_tag reorder_invite_requests_url do %>
-    <p><%= submit_tag ts('Fix the order of the queue')  %></p>
+    <p><%= submit_tag ts('Fix the order of the queue') %></p>
   <% end %>
 
-<table summary="Lists each request/email and its current place in the queue. You can also delete each request">
-<caption>Manage the Invite Queue</caption>
+<table summary="<%= ts('Lists each request/email and its current place in the queue. You can also delete each request.') %>">
+<caption><%= ts('Manage the Invite Queue') %></caption>
 <thead>
 	<tr>
-	<th scope="col">Queue Position</th>
-	<th scope="col">Email Address</th>
-	<th scope="col">Action</th>
+	<th scope="col"><%= ts('Queue Position') %></th>
+	<th scope="col"><%= ts('Email Address') %></th>
+	<th scope="col"><%= ts('Action') %></th>
 	</tr>
 <% @invite_requests.each do |request| %>
 <tr>

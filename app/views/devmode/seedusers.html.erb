@@ -1,5 +1,5 @@
-<%= link_to "Devmode top", devmode_path %>
-<h1><%= t('.seed_users', :default => "Seed users") %></h1>
+<%= link_to ts("Devmode top"), devmode_path %>
+<h1><%= ts("Seed Users") %></h1>
     <% if @errors %>
       <div class="error" style="color: red">
         <%= @errors %>
@@ -16,7 +16,8 @@
           <li style="list-style-type: square">If you select the {prevalidate} option, then users will be activated automatically, and e-mail addresses can be falsified.
         </ul>
       </p>
-      <table>
+      <table summary="<%= ts('') %>">
+        <caption><%= ts('') %></caption>
         <% for name, (type_name, default) in @params %>
           <tr><td> <%= name %> </td><td><%= "<input name=\"#{name}\" type=\"#{type_name}\" value=\"#{default}\"/>"%></td></tr>
         <% end %>

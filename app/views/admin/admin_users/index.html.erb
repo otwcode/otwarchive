@@ -27,8 +27,8 @@
   <h3 class="heading"><%= ts("#{pluralize(@users.total_entries, 'user')} found") %></h3>
   <% if @users.size > 0 %>
     <div class="wrapper">
-      <table id="admin_users_table">
-        <caption><%= ts("List of users") %></caption>
+      <table id="admin_users_table" summary="<%= ts("Name and email address for users matching the search criteria, as well as options for updating the user's roles and viewing the user's details.") %>">
+        <caption><%= ts("List of Users") %></caption>
         <colgroup>
           <col class="name"/>
           <col span="6" />
