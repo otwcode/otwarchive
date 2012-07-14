@@ -268,7 +268,7 @@ class WorksController < ApplicationController
           if !@collection.nil? && @collection.moderated?
             redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
           else
-            redirect_to work_path(@work), :notice => ts('Work was successfully posted.2')
+            redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
           end
         end
       else
