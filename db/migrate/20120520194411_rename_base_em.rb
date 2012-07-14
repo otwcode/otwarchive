@@ -4,5 +4,6 @@ class RenameBaseEm < ActiveRecord::Migration
   end
 
   def self.down
+    rename_column :skins, :font_size, :base_em
   end
 end
