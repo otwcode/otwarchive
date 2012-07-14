@@ -11,7 +11,7 @@
 <%= render :partial => 'people/search_form' %>
 
 <% if @people %>
-  <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
+  <p><strong><%= @people.total_entries %> Found</strong></p>
   <h3 class="landmark heading">People List</h3>
   <ol class="pseud index group">
     <% for person in @people %>

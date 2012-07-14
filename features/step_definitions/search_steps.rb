@@ -1,4 +1,5 @@
 Given /^the (\w+) indexes are updated$/ do |model|
+  model.classify.constantize.import
 end
 
 Given /^remote sphinx is stopped$/ do
