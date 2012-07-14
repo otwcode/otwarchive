@@ -1,14 +1,14 @@
 <% unless invitations.blank? %>
 <!--FRONT END: TABLEWATCH!!-->
-<table summary="">
-  <caption><!-- --></caption>
+<table summary="<%= ts('List of your invitation tokens and information regarding who you shared them with, along with the option to share unused tokens.') %>">
+  <caption><%= ts('Invitation Information') %></caption>
 	<thead>
 	<tr>
-  <th scope="col">Token</th>
-  <th scope="col">Sent To</th>
-  <th scope="col">User Name</th>
-  <th scope="col">External Author</th>
-  <th scope="col">Copy Link</th>
+  <th scope="col"><%= ts('Token') %></th>
+  <th scope="col"><%= ts('Sent To') %></th>
+  <th scope="col"><%= ts('User Name') %></th>
+  <th scope="col"><%= ts('External Author') %></th>
+  <th scope="col"><%= ts('Copy Link') %></th>
   </tr>
 	</thead>
 	<tbody>
@@ -21,9 +21,9 @@
   <td>
     <% unless invitation.redeemed_at %>
       <% if invitation.external_author %>
-      <%= link_to "copy and use", claim_path(:invitation_token => invitation.token) %>
+      <%= link_to ts("copy and use"), claim_path(:invitation_token => invitation.token) %>
       <% else %>
-      <%= link_to "copy and use", signup_path(:invitation_token => invitation.token) %><% end %>
+      <%= link_to ts("copy and use"), signup_path(:invitation_token => invitation.token) %><% end %>
     <% end %>
   </td>
   <% if logged_in_as_admin? && invitation.redeemed_at.blank? %>

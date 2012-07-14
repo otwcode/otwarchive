@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%= ts("Abuse Report") %> <%= @abuse_report.id %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -11,8 +11,8 @@
 <!--FRONT END, should this be a table or should it be an inbox?
 need to see some realdata to know, suspect inbox-->
 <div class="wrapper">
-	<table id="abuse_report_table" summary="">
-		<caption><%=ts("Detailed abuse report") %></caption>
+	<table id="abuse_report_table" summary="<%= ts("The full abuse report including sender, URL of reported page, date reported, and detailed statement.") %>">
+		<caption><%=ts("Detailed Abuse Report") %></caption>
 		<tr>
 			<th scope="row"><%=ts("From") %></th>
 			<td><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %></td>
