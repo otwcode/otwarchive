@@ -35,6 +35,18 @@ div.admin + h3.landmark {
   border-bottom: 3px solid #066;
 }
 
+.admin .abuse.comment {
+  clear: both;
+}
+
+.admin .abuse.comment h4.byline {
+  padding-left: 0.25em;
+}
+
+.admin .abuse.comment .userstuff {
+  margin: 0.643em;
+}
+
 /* TABLES AND LISTS */
 
 table, thead td {
