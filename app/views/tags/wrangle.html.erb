@@ -42,15 +42,16 @@
   </fieldset>
 <% end %>
 
+<% # BACK END: Can we make these span_if_current? Front End suspects it would help the wranglers know what they're looking at %>
 <% if params[:show] %>
   <ul class="navigation actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
     <li><%= link_to ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
     <li><%= link_to ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
-    <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => "non-canonical tags without synonyms" %></li>
-    <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => "tags which were used on the same works but haven't been wrangled yet" %></li>
-    <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => "tags marked unwrangleable" %>
+    <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
+    <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
+    <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>
   </ul>
 <% end %>
 
@@ -64,8 +65,8 @@
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
     <!--TEST NOTE: titled these cells as on other wrangle tables, to expose to screenreaders that don't support scope
     need feedback from realuser on whether this is useful or annoying-->
-    <table summary="<%= ts('') %>">
-      <caption><%= ts('') %></caption>
+    <table summary="<%= ts('Information and management options for tags.') %>">
+      <caption><%= ts('Tags to Wrangle') %></caption>
       <thead>
         <tr>
         <th scope="col">
