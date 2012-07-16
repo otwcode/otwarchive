@@ -1,13 +1,13 @@
-<?= link_to ts("Devmode top"), devmode_path ?>
+<%= link_to ts("Devmode top"), devmode_path %>
 <h1><%= ts("Controller Info") %></h1>
     <% if @errors %>
-      <div class="error" style="color: red">
+      <div class="error">
         <%= @errors %>
       </div>
     <% end %>
 <div class="form">
-  <table summary="<%= ts('') %>">
-    <caption><%= ts('') %></caption>
+  <table summary="<%= ts('A dynamic list of active controllers.') %>">
+    <caption><%= ts('Active Controllers') %></caption>
     <tr>
       <th scope="col"><%= ts('Controller name') %></th>
       <th scope="col"><%= ts('View methods') %></th>
