@@ -213,7 +213,6 @@ module WorksHelper
     work.approved_related_works.present?
   end
     
- 
   
 end
 
