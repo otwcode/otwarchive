@@ -61,7 +61,7 @@
       <dd title="<%= ts("wrangle to character") %>"><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
     <% else %>
       <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
-      <dd title="wrangle to fandom"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+      <dd title="<%= ts("wrangle to fandom") %>"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
     <% end %>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit"><%= submit_tag ts("Wrangle") %></dd>
@@ -133,7 +133,7 @@
           <% end %>
           <td title="<%= ts("canonical?") %>">
             <% if tag.canonical? %>
-              Yes
+              <%= ts("Yes") %>
             <% else %>
               <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
             <% end %>
