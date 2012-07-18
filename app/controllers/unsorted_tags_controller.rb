@@ -4,7 +4,11 @@ class UnsortedTagsController < ApplicationController
   before_filter :check_permission_to_wrangle
 
   def index
-    @tags = UnsortedTag.paginate(:page => params[:page])
+    @tags = UnsortedTag.page(params[:page])
+    @counts = {}
+    [Fandom, Character, Relationship, Freeform].each do |klass|
+      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
+    end
   end
   
   def mass_update
@@ -16,7 +20,7 @@ class UnsortedTagsController < ApplicationController
         if %w(Fandom Character Relationship Freeform).include?(new_type)
           tag.update_attribute(:type, new_type)
         else
-          raise "#{new_type} is not a valid tag type"
+          raise ts("#{new_type} is not a valid tag type")
         end
       end
       flash[:notice] = ts("Tags were successfully sorted.")
