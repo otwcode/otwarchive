@@ -478,6 +478,11 @@ class Tag < ActiveRecord::Base
     name.downcase <=> another_tag.name.downcase
   end
 
+  # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
+  def can_change_type?
+    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+  end
+
   #### FILTERING ####
 
   # Add any filter taggings that should exist but don't

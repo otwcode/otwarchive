@@ -207,7 +207,7 @@ class TagsController < ApplicationController
     syn_string = params[:tag].delete(:syn_string)
     @tag.attributes = params[:tag]
     # Limiting the conditions under which you can update the tag type
-    if !@tag.canonical? && %w(Fandom Character Relationship UnsortedTag).include?(params[:tag][:type])
+    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(params[:tag][:type])
       @tag.type = params[:tag][:type]
     end
     @tag.syn_string = syn_string if @tag.save
