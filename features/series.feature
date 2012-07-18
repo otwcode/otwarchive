@@ -23,7 +23,7 @@ Feature: Create and Edit Series
       And I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted"
-      And I should see "Part 1 of the Ponies series" within "p"
+      And I should see "Part 1 of the Ponies series" within "li"
       And I should see "Part 1 of the Ponies series" within "dd"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
@@ -87,8 +87,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "p.series"
-      And I should see "Part 3 of the Many a Pony series" within "p.series"
+      And I should see "Part 1 of the Black Beauty series" within "li"
+      And I should see "Part 3 of the Many a Pony series" within "li"
     
   Scenario: Three ways to add a work to a series: a user with more than one pseud
     Given the following activated user exists
@@ -112,7 +112,7 @@ Feature: Create and Edit Series
     When I press "Post"
     Then I should see "Work was successfully posted"
       And I should see "Pointless Pseud"
-      And I should see "Part 1 of the Ponies series" within "p"
+      And I should see "Part 1 of the Ponies series" within "li"
       And I should see "Part 1 of the Ponies series" within "dd"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
@@ -176,8 +176,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "p.series"
-      And I should see "Part 3 of the Many a Pony series" within "p.series"
+      And I should see "Part 1 of the Black Beauty series" within "li"
+      And I should see "Part 3 of the Many a Pony series" within "li"
 
 Scenario: Post without preview
   Given I am logged in as "whoever" with password "whatever"

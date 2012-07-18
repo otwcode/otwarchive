@@ -60,6 +60,10 @@ span.offered.requested {
   content: ", ";
 }
 
+.commas li {
+  display: inline;
+}
+
 .commas li:last-child:after, .commas li:only-child:after {
   content: none;
 }

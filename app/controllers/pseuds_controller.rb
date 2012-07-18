@@ -17,6 +17,7 @@ class PseudsController < ApplicationController
       @pseuds = @user.pseuds.find(:all)
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+      @page_subtitle = @user.login
     else
       redirect_to people_path
     end
@@ -25,14 +26,15 @@ class PseudsController < ApplicationController
   # GET /users/:user_id/pseuds/:id
   def show
     if @user.blank?
-      flash[:error] = ts("Sorry, could not find this user.")
+      setflash; flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
     @author = @user.pseuds.find_by_name(params[:id])
     unless @author
-      flash[:error] = ts("Sorry, could not find this pseud.")
+      setflash; flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
     end
+    @page_subtitle = @author.name
 
     # very similar to show under users - if you change something here, change it there too
     if current_user.nil?
@@ -67,26 +69,7 @@ class PseudsController < ApplicationController
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @user.id, 
                                                        :subscribable_type => 'User').first || 
-                      current_user.subscriptions.build
-    end
-  end
-
-  # For use with work/chapter forms
-  def choose_coauthors
-    byline = params[:search].strip
-    if byline.include? "["
-      split = byline.split('[', 2)
-      pseud_name = split.first.strip
-      user_login = split.last.chop
-      @pseuds = where('LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%')
-    else
-      @pseuds = where('LOWER(name) LIKE ?', '%' + byline + '%')
-    end
-    # UGH MAGIC NUMBER WHY 10
-    @pseuds = @pseuds.includes(:user).limit(10)
-    respond_to do |format|
-      format.html
-      format.js
+                      current_user.subscriptions.build(:subscribable => @user)
     end
   end
 
@@ -109,7 +92,7 @@ class PseudsController < ApplicationController
       @pseud.user_id = @user.id
       old_default = @user.default_pseud
       if @pseud.save
-        flash[:notice] = ts('Pseud was successfully created.')
+        setflash; flash[:notice] = ts('Pseud was successfully created.')
         if @pseud.is_default
           # if setting this one as default, unset the attribute of the current default pseud
           old_default.update_attribute(:is_default, false)
@@ -120,7 +103,7 @@ class PseudsController < ApplicationController
       end
     else
       # user tried to add pseud he already has
-      flash[:error] = ts('You already have a pseud with that name.')
+      setflash; flash[:error] = ts('You already have a pseud with that name.')
       render :action => "new"
     end
   end
@@ -136,7 +119,7 @@ class PseudsController < ApplicationController
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
       end
-      flash[:notice] = t('successfully_updated', :default => 'Pseud was successfully updated.')
+      setflash; flash[:notice] = ts('Pseud was successfully updated.')
      redirect_to([@user, @pseud])
     else
       render :action => "edit"
@@ -149,16 +132,16 @@ class PseudsController < ApplicationController
     @hide_dashboard = true
     @pseud = @user.pseuds.find_by_name(params[:id])
     if @pseud.is_default
-      flash[:error] = t('delete_default', :default => "You cannot delete your default pseudonym, sorry!")
+      setflash; flash[:error] = ts("You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
-      flash[:error] = t('delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
+      setflash; flash[:error] = ts("You cannot delete the pseud matching your user name, sorry!")
    elsif params[:bookmarks_action] == 'transfer_bookmarks'
      @pseud.change_bookmarks_ownership
      @pseud.replace_me_with_default
-     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+     setflash; flash[:notice] = ts("The pseud was successfully deleted.")
    elsif params[:bookmarks_action] == 'delete_bookmarks' || @pseud.bookmarks.empty?
      @pseud.replace_me_with_default
-     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+     setflash; flash[:notice] = ts("The pseud was successfully deleted.")
    else
       render 'delete_preview' and return
    end

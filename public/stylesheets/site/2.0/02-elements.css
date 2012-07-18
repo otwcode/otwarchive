@@ -26,7 +26,7 @@ a, a:link, a:visited:hover {
   color: #111;
   text-decoration: none;
   border-bottom: 1px solid;
-  cursor: hand;
+  cursor: pointer;
 }
 
 a:visited {
@@ -129,7 +129,7 @@ blockquote p:last-child {
 }
 
 kbd, tt, code, var, pre {
-  font: normal 0.75em 'Monaco', 'Consolas', Courier, monospace;
+  font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
   margin: auto;
 }
 
@@ -158,7 +158,6 @@ del, strike {
 }
 
 dfn, abbr, acronym {
-  font-variant: small-caps;
   cursor: help;
 }
 

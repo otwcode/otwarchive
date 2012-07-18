@@ -74,6 +74,8 @@
     
     <li><a href="#method-i-fix_time_zone">#fix_time_zone</a>
     
+    <li><a href="#method-i-hide_hit_counts">#hide_hit_counts</a>
+    
     <li><a href="#method-i-set_default_skin">#set_default_skin</a>
     
   </ul>
@@ -99,6 +101,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -113,23 +129,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -347,6 +357,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -424,6 +436,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -547,6 +561,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -660,6 +678,36 @@
 
         
       </div><!-- fix_time_zone-method -->
+
+    
+      <div id="method-i-hide_hit_counts" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hide_hit_counts</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hide_hit_counts-source">
+            <pre><span class="ruby-comment"># File app/models/preference.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_hit_counts</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:hide_all_hit_counts</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:hide_private_hit_count</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hide_hit_counts-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hide_hit_counts-method -->
 
     
       <div id="method-i-set_default_skin" class="method-detail ">

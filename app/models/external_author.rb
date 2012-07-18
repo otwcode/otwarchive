@@ -20,6 +20,14 @@ class ExternalAuthor < ActiveRecord::Base
     :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
+  
+  def self.claimed
+    where(:is_claimed => true)
+  end
+  
+  def self.unclaimed
+    where(:is_claimed => false)
+  end
 
   after_create :create_default_name
 
@@ -30,6 +38,7 @@ class ExternalAuthor < ActiveRecord::Base
   def create_default_name
     @default_name = self.external_author_names.build
     @default_name.name = self.email.to_s
+    self.save
   end
 
   def default_name
@@ -54,11 +63,11 @@ class ExternalAuthor < ActiveRecord::Base
         work = external_creatorship.creation
         # if previously claimed, don't do it again
         unless work.users.include?(claiming_user)
-          # remove archivist as owner, add user as owner
+          # remove archivist as owner if still on the work -- might not be if another coauthor already claimed, add user as owner
           archivist = external_creatorship.archivist
           pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
           work.change_ownership(archivist, claiming_user, pseud_to_add)
-          claimed_works << work
+          claimed_works << work.id
         end
       end
     end
@@ -109,9 +118,9 @@ class ExternalAuthor < ActiveRecord::Base
     save
   end
 
-  def notify_user_of_claim(claimed_works)
+  def notify_user_of_claim(claimed_work_ids)
     # send announcement to user of the stories they have been given
-    UserMailer.claim_notification(self.id, claimed_works).deliver
+    UserMailer.claim_notification(self.id, claimed_work_ids).deliver
   end
 
   def find_or_invite(archivist = nil)

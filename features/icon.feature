@@ -12,7 +12,7 @@ Feature: User icons
   Scenario: Users can change alt text
 
   Given I have an icon uploaded
-  When I follow "Edit"
+  When I follow "Edit Pseud"
     And I fill in "pseud_icon_alt_text" with "Some test description"
     And I press "Update"
   Then I should see the "alt" text "Some test description"

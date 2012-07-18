@@ -7,23 +7,34 @@ class RedirectController < ApplicationController
     # strip it down to the most basic URL
     @minimal_url.gsub!(/\?.*$/, "")
     @minimal_url.gsub!(/\#.*$/, "")
+    
+    # get encoded and unencoded versions
+    @encoded_url = URI.encode(@minimal_url)
+    @decoded_url = URI.decode(@minimal_url)
   end
   
   def do_redirect
     if @original_url.blank?
-      flash[:error] = t('redirect.none', :default => "What url did you want to look up?")
+      setflash; flash[:error] = ts("What url did you want to look up?")
     else
-      @work = Work.find_by_imported_from_url(@original_url) || Work.find(:first, :conditions => ["imported_from_url LIKE :url", {:url => "%#{@minimal_url}%"}])
+      urls = [@original_url, @minimal_url, @encoded_url, @decoded_url]
+      @work = Work.where(:imported_from_url => @original_url).first || 
+              Work.where(:imported_from_url => [@minimal_url, @encoded_url, @decoded_url]).first ||
+              Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{@encoded_url}%", "%#{@decoded_url}%").first
       if @work
+        setflash; flash[:notice] = ts("You have been redirected here from #{@original_url}. Please update the original link if possible!")
         redirect_to work_path(@work) and return
       else 
-        flash[:error] = t('redirect.failed', :default => "We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
+        setflash; flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
+        unless Rails.env.production?
+          flash[:error] += " We checked all of the following URLs: #{urls.to_sentence}" 
+        end
       end
     end
-    redirect_to :action => :index
+    redirect_to redirect_path
   end 
   
-  def index
+  def show
     if !@original_url.blank?
       redirect_to :action => :do_redirect, :original_url => @original_url and return
     end

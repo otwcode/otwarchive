@@ -16,21 +16,25 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 SEEDS = [
-          "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
-          "Cesy", "cesytest", "Celandine", "Chandri", "eel",
-          "elz", "erda", "Enigel", "Hope", "Jaetion", "jennyst", "justira", 
-          "jetta_e_rus", "lim", "Lisztful", "melange", "mumble", "Rebecca", 
-          "RKlyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy", 
-          "Tel", "tomatopudding", "velocitygrass", "xparrot", "zelempa", 
-          "zoemathemata", "Zooey_Glass", "zlabya",
+          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
+          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
+          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
+          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
+          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
+          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
+          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
+          "Zooey_Glass", "zlabya", "zz9pzza",
 ]
 
 # seeds who want their email address preserved for testing
-EMAIL = [ "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
+EMAIL = [ 
+          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
           "admin-kielix", "admin-shalott", "admin-sidra",
-          "astolat", "aworldinside", "bingeling", "cesy", "cesytest", "elz",
-          "Enigel", "mumble", "Sidra", "testy", "velocitygrass", "xparrot", 
-          "Zooey_Glass" ]
+          "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
+          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
+          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" , 
+          "zz9pzza",
+]
 
 # a bunch of bigger collections (>250 works)
 # probably would be scooped up anyway, but just in case
@@ -43,7 +47,7 @@ COLLECTION_SEEDS = [
 ]
 
 # N determines how many users, works, bookmarks, etc. are dumped if they aren't all dumped
-N = 15
+N = 10
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
@@ -355,7 +359,7 @@ def collection_associations(items)
         item = items.sample
         write_model(item)
         work = item.work
-        WORKS[work.id] = work
+        WORKS[work.id] = work if work
       end
     else
       # dunno if you should really get all the works in your collection, but we don't use the

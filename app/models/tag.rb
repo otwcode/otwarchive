@@ -85,6 +85,13 @@ class Tag < ActiveRecord::Base
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    
+  validate :unwrangleable_status
+  def unwrangleable_status
+    if unwrangleable? && (canonical? || merger_id.present?)
+      self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
+    end
+  end
 
   before_validation :check_synonym
   def check_synonym
@@ -141,11 +148,12 @@ class Tag < ActiveRecord::Base
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
-  scope :unfilterable, nonsynonymous
+  scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
+  scope :unwrangleable, where(:unwrangleable => true)
 
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
-  scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("common_taggings.id IS NULL")
+  scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL")
   scope :in_use, where("canonical = 1 OR taggings_count > 0")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
 
@@ -481,7 +489,7 @@ class Tag < ActiveRecord::Base
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
   def unwrangled?
-    !self.canonical && !self.merger_id && self.mergers.empty?
+    !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
   # sort tags by name

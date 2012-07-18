@@ -4,6 +4,7 @@ class FandomsController < ApplicationController
   def index
     if @collection
       @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+      @page_subtitle = @collection.title
       if params[:medium_id]
         @medium = Media.find_by_name(params[:medium_id])
         @fandoms = @medium.fandoms.canonical if @medium
@@ -12,6 +13,7 @@ class FandomsController < ApplicationController
                   for_collections_with_count([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
+         @page_subtitle = @medium.name
         if @medium == Media.uncategorized
           @fandoms = @medium.fandoms.in_use.by_name
         else
@@ -29,6 +31,10 @@ class FandomsController < ApplicationController
   
   def show
     @fandom = Fandom.find_by_name(params[:id])
+    if @fandom.nil?
+      setflash; flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
+      redirect_to media_path and return
+    end
     @characters = @fandom.characters.canonical.by_name
   end
   

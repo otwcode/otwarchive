@@ -1,13 +1,11 @@
-<h2 class="heading">Work Search: Beta</h2>
+<h2 class="heading"><%= ts("Work Search: Beta") %></h2>
+
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("Work Search"), search_index_path %></li>
+  <li><%= span_if_current ts("Tag Search"), search_tags_path %></li>
+  <li><%= span_if_current ts("Bookmark Search"), search_bookmarks_path %></li>
+  <li><%= span_if_current ts("People Search"), search_people_path %></li>
+</ul>
 
   <%= render :partial => 'works/search_form' %> 
 
-<h2 class="heading"><%= link_to t("tag_search", :default => "Tag Search: Beta"), search_tags_path %></h2>
-
-
-
-<h2 class="heading"><%= link_to t("bookmark_search", :default => "Bookmark Search: Beta"), search_bookmarks_path %></h2>
-
-
-
-<h2 class="heading"><%= link_to t("people_search", :default => "People Search: Alpha"), search_people_path %></h2>

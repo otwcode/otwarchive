@@ -31,6 +31,8 @@ class Series < ActiveRecord::Base
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
     :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    
+  after_save :adjust_restricted
 
   attr_accessor :authors
   attr_accessor :authors_to_remove
@@ -86,11 +88,13 @@ class Series < ActiveRecord::Base
   
   def visible_word_count
     if User.current_user.nil?
-      works = self.works.posted.unrestricted.find(:all, :select => "works.word_count")
+      # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
+      visible_works_wordcount = self.works.posted.unrestricted.value_of(:word_count).compact.sum
     else
-      works = self.works.posted.find(:all, :select => "works.word_count")
+      # visible_works_wordcount = self.works.posted.sum(:word_count)
+      visible_works_wordcount = self.works.posted.value_of(:word_count).compact.sum
     end
-    works.collect(&:word_count).sum
+    visible_works_wordcount
   end
   
   def anonymous?
@@ -104,8 +108,9 @@ class Series < ActiveRecord::Base
 	# if the series includes an unrestricted work, restricted should be false
 	# if the series includes no unrestricted works, restricted should be true
 	def adjust_restricted
-		unless self.restricted == !self.works.collect(&:restricted).include?(false)
-		  self.toggle!(:restricted)
+		unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
+		  self.restricted = !(self.works.where(:restricted => false).count > 0)
+		  self.save(:validate => false)
 		end
 	end
 	

@@ -195,8 +195,6 @@ class StoryParser
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
     chapter_contents.each do |content|
-      # @doc = Nokogiri.parse(content, encoding=options[:encoding])
-
       work_params = parse_common(content, location, options[:encoding])
       if work.nil?
         # create the new work
@@ -263,14 +261,18 @@ class StoryParser
       end
 
       # handle importing works for others
+      # build an external creatorship for each author
       if options[:importing_for_others]
-        external_author_name = options[:external_author_name] || parse_author(location)
-        if external_author_name
-          if external_author_name.external_author.do_not_import
-            # we're not allowed to import works from this address
-            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+        external_author_names = options[:external_author_names] || parse_author(location)
+        external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+        external_author_names.each do |external_author_name|
+          if external_author_name && external_author_name.external_author
+            if external_author_name.external_author.do_not_import
+              # we're not allowed to import works from this address
+              raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+            end
+            ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
           end
-          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
         end
       end
 
@@ -291,6 +293,11 @@ class StoryParser
 
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
+        if chapter.content.length > ArchiveConfig.CONTENT_MAX
+          # TODO: eventually: insert a new chapter
+          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+        end
+        
         chapter.posted = true
         # ack! causing the chapters to exist even if work doesn't get created!
         # chapter.save
@@ -442,26 +449,27 @@ class StoryParser
 
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
-      raise Error, "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
-      raise Error, "The url #{location} is locked." if location.match(/secure/)
-      @chapter_contents = []
-      if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
-        urlstart = $1
-        urlend = $3
-        chapnum = 1
-        Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
-          loop do
-            url = "#{urlstart}#{chapnum.to_s}#{urlend}"
-            body = download_with_timeout(url)
-            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/FanFiction\.Net Message/)
-              break
-            end
-            @chapter_contents << body
-            chapnum = chapnum + 1
-          end
-        }
-      end
-      return @chapter_contents
+      raise Error, "Imports from fanfiction.net are no longer available due to a block on their end. :("
+      # raise Error, "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
+      # raise Error, "The url #{location} is locked." if location.match(/secure/)
+      # @chapter_contents = []
+      # if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
+      #   urlstart = $1
+      #   urlend = $3
+      #   chapnum = 1
+      #   Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+      #     loop do
+      #       url = "#{urlstart}#{chapnum.to_s}#{urlend}"
+      #       body = download_with_timeout(url)
+      #       if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/FanFiction\.Net Message/)
+      #         break
+      #       end
+      #       @chapter_contents << body
+      #       chapnum = chapnum + 1
+      #     end
+      #   }
+      # end
+      # return @chapter_contents
     end
 
 
@@ -617,7 +625,7 @@ class StoryParser
       notes = ""
       
       body = @doc.css("body")
-      title = @doc.css("title").inner_html.gsub /on DeviantART$/, ""
+      title = @doc.css("title").inner_html.gsub /\s*on deviantart$/i, ""
 
       # Find the image (original size) if it's art
       image_full = body.css("img#gmi-ResViewSizer_fullimg")
@@ -625,16 +633,17 @@ class StoryParser
         storytext = "<center><img src=\"#{image_full[0]["src"]}\"></center>"
       end
 
-      # Find the fic text if it's fic
-      text_table = body.css("table.f td.f div.text")[0]
+      # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
+      text_table = body.css("#gmi-ResViewContainer table.f td.f div.text")[0]
       unless text_table.nil?
-        # Try to remove the title:
-        unless text_table.css("h1")[0].nil? && text_table.css("h1")[0].match(title)
+        # Try to remove some metadata (title and author) from the work's text, if possible
+        # Try to remove the title: if it exists, and if it's the same as the browser title
+        if text_table.css("h1")[0].present? && title && title.match(text_table.css("h1")[0].text)
           text_table.css("h1")[0].remove
         end
 
-        # Try to remove the author:
-        unless text_table.css("small")[0].nil? && text_table.css("small")[0].match(/by ~.*?<a class="u" href=/m)
+        # Try to remove the author: if it exists, and if it follows a certain pattern
+        if text_table.css("small")[0].present? && text_table.css("small")[0].inner_html.match(/by ~.*?<a class="u" href=/m)
           text_table.css("small")[0].remove
         end
         storytext = text_table.inner_html

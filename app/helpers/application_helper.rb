@@ -9,6 +9,15 @@ module ApplicationHelper
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
+      if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
+        class_names = "system support " + controller.controller_name + ' ' + controller.action_name
+      end
+      if controller.controller_name == "archive_faqs"
+        class_names = "system support faq " + controller.action_name
+      end
+      if controller.controller_name == "home"
+        class_names = "system docs " + controller.action_name
+      end
     class_names
   end
 
@@ -168,9 +177,9 @@ module ApplicationHelper
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
-  #       flash[:error] = "OMG ERRORZ AIE"
+  #       setflash; flash[:error] = "OMG ERRORZ AIE"
   # or
-  #       flash.now[:error] = "OMG ERRORZ AIE"
+  #       setflash; flash.now[:error] = "OMG ERRORZ AIE"
   #
   # then that error will appear in the view where you have
   #       <%= flash_div :error %>
@@ -255,8 +264,8 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => max)
-    content_tag(:p, span + h(ts(' characters left')), :class => "character_counter")
+    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
   
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc) 
@@ -330,7 +339,7 @@ module ApplicationHelper
   end
   
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
       <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
     </a>".html_safe
   end

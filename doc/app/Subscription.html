@@ -70,7 +70,13 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-i-chapter_name">#chapter_name</a>
+    
+    <li><a href="#method-i-creation_name">#creation_name</a>
+    
     <li><a href="#method-i-name">#name</a>
+    
+    <li><a href="#method-i-subject_text">#subject_text</a>
     
   </ul>
 </nav>
@@ -95,6 +101,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -109,23 +129,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -343,6 +357,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -420,6 +436,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -543,6 +561,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -586,6 +608,73 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-chapter_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">chapter_name</span><span
+            class="method-args">(creation)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="chapter_name-source">
+            <pre><span class="ruby-comment"># File app/models/subscription.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">chapter_name</span>(<span class="ruby-identifier">creation</span>)
+  <span class="ruby-identifier">title</span> = <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">chapter_title</span>
+  <span class="ruby-identifier">title</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^Chapter /</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">title</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;Chapter #{title}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- chapter_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- chapter_name-method -->
+
+    
+      <div id="method-i-creation_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">creation_name</span><span
+            class="method-args">(creation)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="creation_name-source">
+            <pre><span class="ruby-comment"># File app/models/subscription.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">creation_name</span>(<span class="ruby-identifier">creation</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Chapter</span>)
+    <span class="ruby-node">&quot;#{chapter_name(creation)} of #{creation.work.title}&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">subscribable_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">'User'</span>
+    <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">title</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">subscribable_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">'Series'</span>
+    <span class="ruby-node">&quot;#{creation.title} in #{self.name} series&quot;</span>
+  <span class="ruby-keyword">end</span>      
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- creation_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- creation_name-method -->
+
+    
       <div id="method-i-name" class="method-detail ">
         
         <div class="method-heading">
@@ -602,7 +691,7 @@
 
           
           <div class="method-source-code" id="name-source">
-            <pre><span class="ruby-comment"># File app/models/subscription.rb, line 18</span>
+            <pre><span class="ruby-comment"># File app/models/subscription.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">name</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">subscribable</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:login</span>)
     <span class="ruby-identifier">subscribable</span>.<span class="ruby-identifier">login</span>
@@ -620,6 +709,37 @@
 
         
       </div><!-- name-method -->
+
+    
+      <div id="method-i-subject_text" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">subject_text</span><span
+            class="method-args">(creation)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="subject_text-source">
+            <pre><span class="ruby-comment"># File app/models/subscription.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">subject_text</span>(<span class="ruby-identifier">creation</span>)
+  <span class="ruby-identifier">authors</span> = <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">byline</span> }.<span class="ruby-identifier">to_sentence</span>
+  <span class="ruby-node">&quot;#{authors} posted #{creation_name(creation)}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- subject_text-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- subject_text-method -->
 
     
     </section><!-- public-instance-method-details -->

@@ -32,11 +32,6 @@ class TagsController < ApplicationController
         @tags = @tags.popular.canonical.sort
       end
     end
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.js
-    end
   end
 
   def search
@@ -46,9 +41,9 @@ class TagsController < ApplicationController
       begin
         page = params[:page] || 1
         errors, @tags = Query.search_with_sphinx(Tag, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
+        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end
@@ -59,8 +54,9 @@ class TagsController < ApplicationController
   #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
   #       to the works controller)
   def show
+    @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      setflash; flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
@@ -85,19 +81,25 @@ class TagsController < ApplicationController
   end
 
   def feed
-    @tag = Tag.find(params[:id])
+    begin
+      @tag = Tag.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      setflash; flash[:error] = ts("Tag not found!")
+      redirect_back_or_default(tags_path)
+      return
+    end
     if !@tag.canonical? && @tag.merger
       @tag = @tag.merger
     end
     # Temp for testing
-    if @tag.is_a?(Fandom) || @tag.name == "F/F"
+    if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F"
       if @tag.canonical?
         @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
       else
         @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
       end
     else
-      redirect_to tag_works_path(:tag_id => @tag.to_param)
+      redirect_to tag_works_path(:tag_id => @tag.to_param) and return
     end
 
     respond_to do |format|
@@ -127,7 +129,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
-        flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
+        setflash; flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
         if request.env["HTTP_REFERER"]
           redirect_to(request.env["HTTP_REFERER"] || root_path)
         else
@@ -157,16 +159,16 @@ class TagsController < ApplicationController
       model = type.classify.constantize rescue nil
       @tag = model.find_or_create_by_name(params[:tag][:name])  if model.is_a? Class
     else
-      flash[:error] = t('please_provide_category', :default => "Please provide a category.")
+      setflash; flash[:error] = ts("Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
       render :action => "new" and return
     end
     if @tag && @tag.valid?
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
-        flash[:notice] = t('successfully_modified', :default => 'Tag was successfully modified.')
+        setflash; flash[:notice] = ts("Tag was successfully modified.")
       else
-        flash[:notice] = t('successfully_created', :default => 'Tag was successfully created.')
+        setflash; flash[:notice] = ts("Tag was successfully created.")
       end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
       redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
@@ -176,8 +178,9 @@ class TagsController < ApplicationController
   end
 
   def edit
+    @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = ts("Please log in as admin")
+      setflash; flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
     @counts = {}
@@ -212,7 +215,7 @@ class TagsController < ApplicationController
     end
     @tag.syn_string = syn_string if @tag.save
     if @tag.errors.empty? && @tag.save
-      flash[:notice] = ts('Tag was updated.')
+      setflash; flash[:notice] = ts('Tag was updated.')
       if params[:commit] == "Wrangle"
         params[:page] = '1' if params[:page].blank?
         params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], "tag")
@@ -232,6 +235,7 @@ class TagsController < ApplicationController
   end
 
   def wrangle
+    @page_subtitle = @tag.name
     @counts = {}
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count
@@ -245,7 +249,7 @@ class TagsController < ApplicationController
         sort = sort + ", name ASC"
       end
       # this makes sure params[:status] is safe
-      if %w(unfilterable canonical noncanonical).include?(params[:status])
+      if %w(unfilterable canonical noncanonical unwrangleable).include?(params[:status])
         @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
@@ -286,8 +290,8 @@ class TagsController < ApplicationController
       end
     end
 
-    flash[:notice] = "The following tags were successfully updated: #{saved.collect(&:name).join(', ')}" if !saved.empty?
-    flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}" if !not_saved.empty?
+    setflash; flash[:notice] = ts("The following tags were successfully updated: %{tags_saved}", :tags_saved => saved.collect(&:name).join(', ')) if !saved.empty?
+    setflash; flash[:error] = ts("The following tags weren't saved: %{tags_not_saved}", :tags_not_saved => not_saved.collect(&:name).join(', ')) if !not_saved.empty?
 
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end

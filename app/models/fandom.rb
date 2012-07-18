@@ -16,7 +16,7 @@ class Fandom < Tag
 
   def self.unwrangled
     joins(:common_taggings).
-    where("common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.try(:id))
+    where("unwrangleable = 0 AND common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.try(:id))
   end
     
   # An association callback to add the default media if all others have been removed

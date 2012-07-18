@@ -70,8 +70,6 @@
 
   <ul class="link-list">
     
-    <li><a href="#method-i-choose_coauthors">#choose_coauthors</a>
-    
     <li><a href="#method-i-create">#create</a>
     
     <li><a href="#method-i-destroy">#destroy</a>
@@ -111,6 +109,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -125,23 +137,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -359,6 +365,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -436,6 +444,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -559,6 +569,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -602,50 +616,6 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-choose_coauthors" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">choose_coauthors</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>For use with work/chapter forms</p>
-          
-
-          
-          <div class="method-source-code" id="choose_coauthors-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 75</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">choose_coauthors</span>
-  <span class="ruby-identifier">byline</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:search</span>].<span class="ruby-identifier">strip</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">include?</span> <span class="ruby-string">&quot;[&quot;</span>
-    <span class="ruby-identifier">split</span> = <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">'['</span>, <span class="ruby-value">2</span>)
-    <span class="ruby-identifier">pseud_name</span> = <span class="ruby-identifier">split</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">strip</span>
-    <span class="ruby-identifier">user_login</span> = <span class="ruby-identifier">split</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">chop</span>
-    <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">where</span>(<span class="ruby-string">'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?'</span>,<span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">user_login</span> <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>,  <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">pseud_name</span> <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>)
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">where</span>(<span class="ruby-string">'LOWER(name) LIKE ?'</span>, <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">byline</span> <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>)
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-comment"># UGH MAGIC NUMBER WHY 10</span>
-  <span class="ruby-ivar">@pseuds</span> = <span class="ruby-ivar">@pseuds</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>)
-  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span>
-    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- choose_coauthors-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- choose_coauthors-method -->
-
-    
       <div id="method-i-create" class="method-detail ">
         
         <div class="method-heading">
@@ -662,14 +632,14 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 106</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@pseud</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">name</span>).<span class="ruby-identifier">blank?</span>
     <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">user_id</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>
     <span class="ruby-identifier">old_default</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">default_pseud</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Pseud was successfully created.'</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Pseud was successfully created.'</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">is_default</span>
         <span class="ruby-comment"># if setting this one as default, unset the attribute of the current default pseud</span>
         <span class="ruby-identifier">old_default</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:is_default</span>, <span class="ruby-keyword">false</span>)
@@ -680,7 +650,7 @@
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment"># user tried to add pseud he already has</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You already have a pseud with that name.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'You already have a pseud with that name.'</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -710,21 +680,21 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 148</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@pseud</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">is_default</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'delete_default'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You cannot delete your default pseudonym, sorry!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete your default pseudonym, sorry!&quot;</span>)
  <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'delete_user_name'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You cannot delete the pseud matching your user name, sorry!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete the pseud matching your user name, sorry!&quot;</span>)
  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmarks_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'transfer_bookmarks'</span>
    <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">change_bookmarks_ownership</span>
    <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">replace_me_with_default</span>
-   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'successfully_deleted'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;The pseud was successfully deleted.&quot;</span>)
+   <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The pseud was successfully deleted.&quot;</span>)
  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmarks_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'delete_bookmarks'</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">empty?</span>
    <span class="ruby-ivar">@pseud</span>.<span class="ruby-identifier">replace_me_with_default</span>
-   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'successfully_deleted'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;The pseud was successfully deleted.&quot;</span>)
+   <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The pseud was successfully deleted.&quot;</span>)
  <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-string">'delete_preview'</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
  <span class="ruby-keyword">end</span>
@@ -757,7 +727,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 100</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@pseud</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
 <span class="ruby-keyword">end</span></pre>
@@ -793,6 +763,7 @@
     <span class="ruby-ivar">@pseuds</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>)
     <span class="ruby-ivar">@rec_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">rec_counts_for_pseuds</span>(<span class="ruby-ivar">@pseuds</span>)
     <span class="ruby-ivar">@work_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">work_counts_for_pseuds</span>(<span class="ruby-ivar">@pseuds</span>)
+    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">people_path</span>
   <span class="ruby-keyword">end</span>
@@ -854,7 +825,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 95</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 78</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@pseud</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">build</span>
 <span class="ruby-keyword">end</span></pre>
@@ -884,17 +855,18 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 26</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this user.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this user.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">people_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@author</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this pseud.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, could not find this pseud.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">people_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">name</span>
 
   <span class="ruby-comment"># very similar to show under users - if you change something here, change it there too</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
@@ -929,7 +901,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:subscriptions</span>)
     <span class="ruby-ivar">@subscription</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:subscribable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>, 
                                                      <span class="ruby-value">:subscribable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'User'</span>).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> 
-                    <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">build</span>
+                    <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:subscribable</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
@@ -958,7 +930,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 130</span>
+            <pre><span class="ruby-comment"># File app/controllers/pseuds_controller.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@pseud</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">default</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">default_pseud</span>
@@ -968,7 +940,7 @@
       <span class="ruby-comment"># if setting this one as default, unset the attribute of the current active pseud</span>
       <span class="ruby-identifier">default</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:is_default</span>, <span class="ruby-keyword">false</span>)
     <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'successfully_updated'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Pseud was successfully updated.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Pseud was successfully updated.'</span>)
    <span class="ruby-identifier">redirect_to</span>([<span class="ruby-ivar">@user</span>, <span class="ruby-ivar">@pseud</span>])
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;edit&quot;</span>

@@ -127,6 +127,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -141,23 +155,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -375,6 +383,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -452,6 +462,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -574,6 +586,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -711,7 +727,7 @@ we open the form</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@tag_set_nomination</span> = <span class="ruby-constant">TagSetNomination</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_nomination</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set_nomination</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Your nominations were successfully submitted.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Your nominations were successfully submitted.'</span>)
     <span class="ruby-identifier">request_noncanonical_info</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_nomination_path</span>(<span class="ruby-ivar">@tag_set</span>, <span class="ruby-ivar">@tag_set_nomination</span>)
   <span class="ruby-keyword">else</span>
@@ -748,11 +764,11 @@ we open the form</p>
             <pre><span class="ruby-comment"># File app/controllers/tag_set_nominations_controller.rb, line 123</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set_nomination</span>.<span class="ruby-identifier">unreviewed?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-identifier">current_user</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete nominations after some of them have been reviewed, sorry!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete nominations after some of them have been reviewed, sorry!&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_nomination_path</span>(<span class="ruby-ivar">@tag_set</span>, <span class="ruby-ivar">@tag_set_nomination</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@tag_set_nomination</span>.<span class="ruby-identifier">destroy</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your nominations were deleted.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your nominations were deleted.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -785,12 +801,12 @@ we open the form</p>
             <pre><span class="ruby-comment"># File app/controllers/tag_set_nominations_controller.rb, line 186</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy_multiple</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't have permission to do that.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't have permission to do that.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">clear_nominations!</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All nominations for this tag set have been cleared.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All nominations for this tag set have been cleared.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy_multiple-source -->
@@ -855,7 +871,7 @@ we open the form</p>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">current_user</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only view your own nominations, sorry.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only view your own nominations, sorry.&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@tag_set_nominations</span> = <span class="ruby-constant">TagSetNomination</span>.<span class="ruby-identifier">owned_by</span>(<span class="ruby-ivar">@user</span>)
@@ -865,11 +881,11 @@ we open the form</p>
       <span class="ruby-comment"># reviewing nominations</span>
       <span class="ruby-identifier">setup_for_review</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't see those nominations, sorry.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't see those nominations, sorry.&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What nominations did you want to work with?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What nominations did you want to work with?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -903,11 +919,11 @@ we open the form</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_nomination</span>
   <span class="ruby-ivar">@tag_set_nomination</span> = <span class="ruby-constant">TagSetNomination</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set_nomination</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Which nominations did you want to work with?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Which nominations did you want to work with?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_tag_set_nominations_path</span>(<span class="ruby-ivar">@user</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-ivar">@tag_set_nomination</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-identifier">current_user</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only see your own nominations or nominations for a set you moderate.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can only see your own nominations or nominations for a set you moderate.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -941,7 +957,7 @@ we open the form</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_tag_set</span>
   <span class="ruby-ivar">@tag_set</span> = <span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What tag set did you want to nominate for?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What tag set did you want to nominate for?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_sets_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1113,11 +1129,11 @@ we open the form</p>
   <span class="ruby-ivar">@nominations</span>[<span class="ruby-value">:freeform</span>] = (<span class="ruby-identifier">more_noms</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">base_nom_query</span>(<span class="ruby-string">&quot;freeform&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;RAND()&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">base_nom_query</span>(<span class="ruby-string">&quot;freeform&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:tagname</span>)) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@limit</span>[<span class="ruby-value">:freeform</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">more_noms</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.&quot;</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">tag_nominations</span>.<span class="ruby-identifier">unreviewed</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;No nominations to review!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;No nominations to review!&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- setup_for_review-source -->
@@ -1178,7 +1194,7 @@ we open the form</p>
             <pre><span class="ruby-comment"># File app/controllers/tag_set_nominations_controller.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set_nomination</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_nomination</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your nominations were successfully updated.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your nominations were successfully updated.&quot;</span>)
     <span class="ruby-identifier">request_noncanonical_info</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_nomination_path</span>(<span class="ruby-ivar">@tag_set</span>, <span class="ruby-ivar">@tag_set_nomination</span>)
   <span class="ruby-keyword">else</span>
@@ -1218,7 +1234,7 @@ gets called from the index/review form.  we expect params like
             <pre><span class="ruby-comment"># File app/controllers/tag_set_nominations_controller.rb, line 199</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_multiple</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-identifier">current_user</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't have permission to do that.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't have permission to do that.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">setup_for_review</span>    
@@ -1248,7 +1264,7 @@ gets called from the index/review form.  we expect params like
     <span class="ruby-identifier">tagnames_to_change</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oldname</span><span class="ruby-operator">|</span>
       <span class="ruby-identifier">synonym</span> = <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-ivar">@tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{tag_type.classify}Nomination&quot;</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">oldname</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:synonym</span>).<span class="ruby-identifier">first</span>
       <span class="ruby-keyword">unless</span> <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">change_tagname!</span>(<span class="ruby-ivar">@tag_set</span>, <span class="ruby-identifier">oldname</span>, <span class="ruby-identifier">synonym</span>)
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!&quot;</span>,
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!&quot;</span>,
           <span class="ruby-value">:oldname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">oldname</span>, <span class="ruby-value">:newname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">synonym</span>)
         <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>           
       <span class="ruby-keyword">end</span>
@@ -1260,7 +1276,7 @@ gets called from the index/review form.  we expect params like
         <span class="ruby-ivar">@tagnames_to_add</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">newname</span>
       <span class="ruby-keyword">else</span>
         <span class="ruby-comment"># ughhhh</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!&quot;</span>,
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!&quot;</span>,
           <span class="ruby-value">:oldname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">oldname</span>, <span class="ruby-value">:newname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">newname</span>)
         <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>           
       <span class="ruby-keyword">end</span>
@@ -1269,7 +1285,7 @@ gets called from the index/review form.  we expect params like
     <span class="ruby-comment"># update the tag set</span>
     <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">add_tagnames</span>(<span class="ruby-identifier">tag_type</span>, <span class="ruby-ivar">@tagnames_to_add</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">remove_tagnames</span>(<span class="ruby-identifier">tag_type</span>, <span class="ruby-ivar">@tagnames_to_remove</span>)     
       <span class="ruby-ivar">@errors</span> = <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!&quot;</span>)
       <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
     
@@ -1279,7 +1295,7 @@ gets called from the index/review form.  we expect params like
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-comment"># If we got here we made it through, YAY</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-ivar">@notice</span>
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-ivar">@notice</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag_set</span>.<span class="ruby-identifier">tag_nominations</span>.<span class="ruby-identifier">unreviewed</span>.<span class="ruby-identifier">empty?</span> 
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All nominations reviewed, yay!&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">tag_set_path</span>(<span class="ruby-ivar">@tag_set</span>)

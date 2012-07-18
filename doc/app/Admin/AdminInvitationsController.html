@@ -105,6 +105,20 @@
 
   <ul class="link-list">
   
+    <li><a href="../Admin.html">Admin</a>
+  
+    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="../Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="../Static.html">Static</a>
   
     <li><a href="../Static/BaseController.html">Static::BaseController</a>
@@ -119,23 +133,17 @@
   
     <li><a href="../Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="../Admin.html">Admin</a>
-  
-    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="../Challenge.html">Challenge</a>
   
     <li><a href="../Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="../Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="../Opendoors.html">Opendoors</a>
+  
+    <li><a href="../Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="../Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="../StoryParser.html">StoryParser</a>
   
@@ -353,6 +361,8 @@
   
     <li><a href="../KudosController.html">KudosController</a>
   
+    <li><a href="../KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="../Language.html">Language</a>
   
     <li><a href="../LanguagesController.html">LanguagesController</a>
@@ -430,6 +440,8 @@
     <li><a href="../ReadingsController.html">ReadingsController</a>
   
     <li><a href="../RedirectController.html">RedirectController</a>
+  
+    <li><a href="../RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="../RelatedWork.html">RelatedWork</a>
   
@@ -553,6 +565,10 @@
   
     <li><a href="../Work.html">Work</a>
   
+    <li><a href="../WorkLink.html">WorkLink</a>
+  
+    <li><a href="../WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="../WorkObserver.html">WorkObserver</a>
   
     <li><a href="../WorkSkin.html">WorkSkin</a>
@@ -616,10 +632,10 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@invitation</span> = <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">invitations</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:invitation</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_email'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Please enter an email address.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_email'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Please enter an email address.&quot;</span>)
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'index'</span>      
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;An invitation was sent to %{email_address}&quot;</span>, <span class="ruby-value">:email_address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;An invitation was sent to %{email_address}&quot;</span>, <span class="ruby-value">:email_address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">invitee_email</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">admin_invitations_url</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'index'</span>
@@ -665,7 +681,7 @@
     <span class="ruby-ivar">@invitation</span> = <span class="ruby-ivar">@invitations</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@invitations</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@invitation</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@invitations</span>
-    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'user_not_found'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;No results were found. Try another search.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'user_not_found'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;No results were found. Try another search.&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- find-source -->
@@ -701,7 +717,7 @@
   <span class="ruby-keyword">else</span>
     <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">grant_empty</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:number_of_invites</span>].<span class="ruby-identifier">to_i</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'invites_created'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Invitations successfully created.'</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'invites_created'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Invitations successfully created.'</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">admin_invitations_url</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- grant_invites_to_users-source -->
@@ -765,7 +781,7 @@
     <span class="ruby-identifier">request</span>.<span class="ruby-identifier">invite_and_remove</span>(<span class="ruby-identifier">current_admin</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">reset_order</span>  
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'invited_from_queue'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;%{count} people from the invite queue were invited.&quot;</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:invite_from_queue</span>].<span class="ruby-identifier">to_i</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'invited_from_queue'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;%{count} people from the invite queue were invited.&quot;</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:invite_from_queue</span>].<span class="ruby-identifier">to_i</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">admin_invitations_url</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- invite_from_queue-source -->

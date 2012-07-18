@@ -97,6 +97,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -111,23 +125,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -345,6 +353,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -422,6 +432,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -545,6 +557,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -604,23 +620,26 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/kudos_controller.rb, line 4</span>
+            <pre><span class="ruby-comment"># File app/controllers/kudos_controller.rb, line 6</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@commentable</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:kudo</span>][<span class="ruby-value">:kudosable_type</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'Work'</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:kudo</span>][<span class="ruby-value">:kudosable_id</span>]) <span class="ruby-operator">:</span> <span class="ruby-constant">Chapter</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:kudo</span>][<span class="ruby-value">:kudosable_id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@commentable</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to leave kudos on?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to leave kudos on?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-identifier">pseud</span> = <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_pseud</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-ivar">@commentable</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't leave kudos for yourself. :)&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't leave kudos for yourself. :)&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">ip_address</span> = <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">remote_ip</span>
-    <span class="ruby-keyword">unless</span> (<span class="ruby-ivar">@kudo</span> = <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:commentable</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@commentable</span>, <span class="ruby-value">:pseud</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">pseud</span>, <span class="ruby-value">:ip_address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip_address</span>)) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@kudo</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-ivar">@kudo</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@kudo</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">msg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.+)\^/</span>, <span class="ruby-string">''</span>)}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save your kudos, sorry!&quot;</span>)
+    <span class="ruby-keyword">if</span> (<span class="ruby-ivar">@kudo</span> = <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:commentable</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@commentable</span>, <span class="ruby-value">:pseud</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">pseud</span>, <span class="ruby-value">:ip_address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip_address</span>)) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@kudo</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Thank you for leaving kudos!&quot;</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-ivar">@kudo</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@kudo</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">msg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.+)\^/</span>, <span class="ruby-string">''</span>)}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save your kudos, sorry!&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
+      
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rstatic/</span>)
     <span class="ruby-comment"># came here from a static page</span>
     <span class="ruby-comment"># so go to the kudos page if you can, instead of reloading the full work</span>
@@ -660,7 +679,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/kudos_controller.rb, line 34</span>
+            <pre><span class="ruby-comment"># File app/controllers/kudos_controller.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@kudo</span> = <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@referrer</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-ivar">@kudo</span>.<span class="ruby-identifier">commentable</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:url</span>]

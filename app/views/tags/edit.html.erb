@@ -18,7 +18,7 @@
         <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
           <%= f.text_field :name, :size => (@tag.name.length + 5) %>
           <% unless logged_in_as_admin? %>
-            <p><%= ts("Only changes to capitalization are permitted.") %></p>
+            <p><%= ts("Only changes to capitalization and diacritic marks are permitted.") %></p>
           <% end %>
         <% else %>
           <strong><%= @tag.name %></strong>
@@ -35,29 +35,35 @@
       </dd>
 
       <% if @wranglers %>
-      <dt><%= ts('Wranglers') %></dt>
-      <dd><%= wrangler_list(@wranglers, @tag) %></dd>
+        <dt><%= ts('Wranglers') %></dt>
+        <dd><%= wrangler_list(@wranglers, @tag) %></dd>
       <% end %>
 
       <dt><%= f.label :canonical, ts('Canonical') %></dt>
       <dd>
         <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
-        <%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %>
+        <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
         <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
           <p class="navigation actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
         <% end %>
       </dd>
 
       <% if @tag.is_a?(Rating)%>
-      <dt><%= f.label :adult, ts('Adult') %></dt>
-      <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
+        <dt><%= f.label :adult, ts('Adult') %></dt>
+        <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
       <% end %>
+    
+      <dt><%= f.label :unwrangleable %></dt>
+      <dd>
+        <%= f.check_box :unwrangleable %>&nbsp;
+        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
+      </dd>
 
       <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
       <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
       <dd>
         <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
-        <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.") %></p>
+        <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
         <% if @tag.merger %>
           <p class="navigation actions" role="navigation"><%= ts("Edit") %> <%= link_to_edit_tag(@tag.merger) %></p>
         <% elsif @tag.canonical? %>

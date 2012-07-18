@@ -3,12 +3,14 @@ class Work < ActiveRecord::Base
   include Taggable
   include Collectible
   include Pseudable
+  include WorkStats
 
   ########################################################################
   # ASSOCIATIONS
   ########################################################################
 
-  has_one :hit_counter, :dependent => :destroy
+  # creatorships can't have dependent => destroy because we email the
+  # user in a before_destroy callback
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
@@ -18,7 +20,7 @@ class Work < ActiveRecord::Base
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters
+  has_many :chapters # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
@@ -35,6 +37,8 @@ class Work < ActiveRecord::Base
 
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
+  
+  has_many :subscriptions, :as => :subscribable, :dependent => :destroy
 
   has_many :challenge_assignments, :as => :creation
   has_many :challenge_claims, :as => :creation
@@ -75,6 +79,16 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
+  
+  # statistics
+  has_many :work_links, :dependent => :destroy      
+  has_one :hit_counter, :dependent => :destroy
+  after_create :create_hit_counter
+  def create_hit_counter
+    counter = self.build_hit_counter
+    counter.save
+  end
+  
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -120,13 +134,13 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank?
       if self.pseuds.blank?
-        errors.add(:base, t('must_have_author', :default => "Work must have at least one author."))
+        errors.add(:base, ts("Work must have at least one author."))
         return false
       else
         self.authors_to_sort_on = self.sorted_pseuds
       end
     elsif !self.invalid_pseuds.blank?
-      errors.add(:base, t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
+      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     else
       self.authors_to_sort_on = self.sorted_authors
     end
@@ -150,7 +164,7 @@ class Work < ActiveRecord::Base
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
-      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, ts("Publication date can't be in the future."))
       return false
     end
   end
@@ -159,7 +173,7 @@ class Work < ActiveRecord::Base
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
     if self.errors[:chapters].any?
-      self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
+      self.errors.add(:base, ts("Please enter your story in the text field below."))
       self.errors.delete(:chapters)
     end
   end
@@ -173,11 +187,10 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
 
-  # before_save :validate_tags # Enigel's feeble attempt
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
@@ -185,6 +198,11 @@ class Work < ActiveRecord::Base
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
+  end
+  
+  after_destroy :clean_up_creatorships
+  def clean_up_creatorships
+    self.creatorships.each{ |c| c.destroy }
   end
 
   def self.purge_old_drafts
@@ -229,35 +247,6 @@ class Work < ActiveRecord::Base
   ########################################################################
   # AUTHORSHIP
   ########################################################################
-
-  # NOTE:
-  # pseuds_to_add/remove can only be used after a work exists 
-  def pseuds_to_add=(pseud_names)
-    pseud_names.split(',').reject {|name| name.blank?}.map {|name| name.strip}.each do |name|
-      possible_pseuds = Pseud.parse_byline(name)
-      if possible_pseuds.size > 1
-        possible_pseuds = Pseud.parse_byline(name, :assume_matching_login => true)
-      end
-      p = possible_pseuds.first
-      errors.add(:base, ts("We couldn't find the pseud {{name}}.", :name => name)) and return if p.nil?
-      self.pseuds << p unless self.pseuds.include?(p)
-    end
-  end
-  
-  def pseuds_to_remove=(pseud_ids)
-    pseud_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
-      p = Pseud.find(id)
-      if p && self.pseuds.include?(p)
-        # don't remove all authors from a work
-        if (self.pseuds - [p]).size > 0
-          self.pseuds -= [p]
-        end
-      end
-    end
-  end
-  
-  def pseuds_to_add; nil; end
-  def pseuds_to_remove; nil; end
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
@@ -413,7 +402,7 @@ class Work < ActiveRecord::Base
       # do is update with current time
       if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
-      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
         self.revised_at = Time.now
       else
         self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
@@ -477,6 +466,7 @@ class Work < ActiveRecord::Base
   def post_first_chapter
     if self.posted_changed?
       self.chapters.first.posted = self.posted
+      self.chapters.first.save
     end
   end
 
@@ -532,12 +522,17 @@ class Work < ActiveRecord::Base
 
   # Gets the current first chapter
   def first_chapter
-    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
+    self.chapters.order('position ASC').first || self.chapters.first
   end
 
   # Gets the current last chapter
   def last_chapter
-    self.chapters.find(:first, :order => 'position DESC')
+    self.chapters.order('position DESC').first
+  end
+  
+  # Gets the current last posted chapter
+  def last_posted_chapter
+    self.chapters.posted.order('position DESC').first
   end
 
   # Returns true if a work has or will have more than one chapter
@@ -579,53 +574,26 @@ class Work < ActiveRecord::Base
     if self.new_record?
       self.word_count = self.chapters.first.set_word_count
     else
-      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id).first.work_word_count
+      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id, :posted => true).first.work_word_count
     end
   end
-
-  after_create :create_hit_counter
-  def create_hit_counter
-    counter = self.build_hit_counter
-    counter.save
-    $redis.set(self.redis_key(:hit_count), 0)
-  end
-
-  # save hits
-  def increment_hit_count(visitor)
-    if self.last_visitor != visitor
-      unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-        $redis.set(self.redis_key(:hit_count), self.database_hits) unless $redis.get(self.redis_key(:hit_count))
-        $redis.incr(self.redis_key(:hit_count))
-        $redis.set(self.redis_key(:last_visitor), visitor)
-        $redis.sadd("Work:new_hits", self.id)
-      end
-    end
-    return self.hits
-  end
-
-  # the last visitor is just used to decide whether or not to increment the hit count
-  # so persisting it in the database is not critical
-  def last_visitor
-    $redis.get(self.redis_key(:last_visitor))
-  end
-
-  # save downloads
-  # there's no point in this any more. it will never be more than
-  # 4*number of revisions.. all other times will be served by nginx
-#  def increment_download_count
-#    counter = self.hit_counter
-#    unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-#      counter.download_count = counter.download_count + 1
-#    end
-#  end
 
   after_update :remove_outdated_downloads
   def remove_outdated_downloads
     FileUtils.rm_rf(self.download_dir)
   end
+  
+  # spread downloads out by first two letters of authorname
   def download_dir
-    "#{Rails.public_path}/downloads/#{self.download_authors}/#{self.id}"
+    "#{Rails.public_path}/#{self.download_folder}"
   end
+
+  # split out so we can use this in works_helper
+  def download_folder
+    dl_authors = self.download_authors    
+    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
+  end
+  
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
     string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
@@ -650,24 +618,6 @@ class Work < ActiveRecord::Base
   def download_basename
     "#{self.download_dir}/#{self.download_title}"
   end
-
-  def hits
-    redis_hits = $redis.get(self.redis_key(:hit_count))
-    return self.database_hits unless redis_hits
-    return redis_hits.to_i
-  end
-
-  def database_hits
-    db_hits = self.hit_counter ? self.hit_counter.hit_count : 0
-    return db_hits
-  end
-
-  # helper method to generate redis keys
-  # examples: "work:2:hit_count", "work:776:last_visitor"
-  def redis_key(sym)
-    "work:#{self.id}:#{sym}"
-  end
-
 
   #######################################################################
   # TAGGING
@@ -771,21 +721,39 @@ class Work < ActiveRecord::Base
 
   # Gets all comments for all chapters in the work
   def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten
+    Comment.where(
+      :parent_type => 'Chapter', 
+      :parent_id => self.chapters.value_of(:id)
+    )
   end
 
   # Returns number of comments
-  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to
+  # Hidden and deleted comments are referenced in the view because of 
+  # the threading system - we don't necessarily need to
   # hide their existence from other users
   def count_all_comments
-    self.chapters.collect { |c| c.count_all_comments }.sum
+    find_all_comments.count
   end
 
   # returns the top-level comments for all chapters in the work
   def comments
-    self.chapters.collect { |c| c.comments }.flatten
+    Comment.where(
+      :commentable_type => 'Chapter', 
+      :commentable_id => self.chapters.value_of(:id)
+    )
   end
-
+  
+  def guest_kudos_count
+    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+      kudos.by_guest.count
+    end
+  end
+  
+  def all_kudos_count
+    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+      kudos.count
+    end
+  end
 
   ########################################################################
   # RELATED WORKS
@@ -941,6 +909,12 @@ class Work < ActiveRecord::Base
   def self.visible(user=User.current_user)
     visible_to_user(user)
   end
+  
+  scope :with_filter, lambda { |tag| 
+    select("DISTINCT works.*").
+    joins(:filter_taggings).
+    where({:filter_taggings => {:filter_id => tag.id}})
+  }
 
   # Note: this version will work only on canonical tags (filters)
   scope :with_all_filter_ids, lambda {|tag_ids_to_find|
@@ -988,8 +962,7 @@ class Work < ActiveRecord::Base
   scope :written_by_id, lambda {|pseud_ids|
     select("DISTINCT works.*").
     joins(:pseuds).
-    where('pseuds.id IN (?)', pseud_ids).
-    group("works.id")
+    where('pseuds.id IN (?)', pseud_ids)
   }
   scope :written_by_id_having, lambda {|pseud_ids|
     select("DISTINCT works.*").
@@ -1037,24 +1010,16 @@ class Work < ActiveRecord::Base
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
 
-    @pseuds = []
-    @filters = []
     @works = Work
 
+    if options[:tag].present?
+      @works = @works.with_filter(options[:tag])
+    end
     if !options[:user].nil? && !options[:selected_pseuds].empty?
       @works = @works.written_by_id(options[:selected_pseuds])
     elsif !options[:user].nil?
       @works = @works.owned_by(options[:user])
     end
-
-    if !options[:selected_tags].blank? || !options[:tag].blank?
-      if options[:boolean_type] == 'or'
-        @works = @works.with_any_filter_ids(options[:selected_tags])
-      else
-        @works = @works.with_all_filter_ids(options[:selected_tags])
-      end
-    end
-
     if options[:language_id]
       @works = @works.by_language(options[:language_id])
     end
@@ -1063,45 +1028,16 @@ class Work < ActiveRecord::Base
     end
     if options[:collection]
       @works = @works.in_collection(options[:collection])
-    else
-      @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
-
     if User.current_user.nil? || User.current_user == :false
       @works = @works.unrestricted
     end
-
     if options[:sort_column] == "hit_count"
       @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
     end
 
     @works = @works.order(sort_by).posted.unhidden
-    # for now, trigger the lazy loading so we don't get an error on @works.size
-    @works.compact
-
-    if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
-      @works = @works.delete_if {|w| w.unrevealed?}
-    end
-
-    @filters = build_filters(@works) unless @works.empty?
-
-    return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
-  end
-
-  # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
-  # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
-  def self.build_filters(works)
-    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
-  end
-
-  def self.build_filters_from_tags(tags)
-    filters = {}
-    tags.each do |tag|
-      count = tag.respond_to?(:count) ? tag.count : "0"
-      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
-    end
-    filters
+    return @works.paginate(page_args.merge(:total_entries => @works.size))
   end
 
   ########################################################################
@@ -1159,9 +1095,6 @@ class Work < ActiveRecord::Base
     has complete
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
-
-    has kudos(:id), :as => :kudos_id
-    has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
 
     # properties
 #    set_property :delta => :delayed

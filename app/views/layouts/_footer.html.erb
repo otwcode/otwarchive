@@ -7,7 +7,7 @@
   <%= yield :footer_js %>
 
   <ul class="navigation actions" role="navigation">
-    <% unless Skin.in_chooser.empty?%>
+    <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
       <li>
         <a href="#" class="skin_chooser_open"><%= ts("Choose Skin") %> &#8595;</a>
         <a href="#" class="skin_chooser_close"><%= ts("Close") %> &#8593;</a>
@@ -30,6 +30,9 @@
     <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
     <% end %>
+    <% if logged_in? && permit?("opendoors") %>
+      <li>&#8212; <%= link_to 'Open Doors', opendoors_tools_path %></li>
+    <% end %>    
     <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
       <li>&#8212; <%= link_to 'Devmode', devmode_path %></li>
     <% end %>

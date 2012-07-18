@@ -119,6 +119,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -133,23 +147,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -367,6 +375,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -444,6 +454,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -567,6 +579,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -628,7 +644,7 @@
           <div class="method-source-code" id="assignments_sent-source">
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">assignments_sent</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'challenge_assignments.assignments_sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Assignments have already been sent! If necessary, you can purge them.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'challenge_assignments.assignments_sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Assignments have already been sent! If necessary, you can purge them.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_assignments_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -661,12 +677,12 @@
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 96</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_generate</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">in_progress?</span>(<span class="ruby-ivar">@collection</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential matches are not currently being generated for this challenge.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential matches are not currently being generated for this challenge.&quot;</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">canceled?</span>(<span class="ruby-ivar">@collection</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential match generation has already been canceled, please refresh again shortly.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential match generation has already been canceled, please refresh again shortly.&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">cancel_generation</span>(<span class="ruby-ivar">@collection</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential match generation cancellation requested. This may take a while, please refresh shortly.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential match generation cancellation requested. This may take a while, please refresh shortly.&quot;</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_potential_matches_path</span>(<span class="ruby-ivar">@collection</span>)
@@ -760,13 +776,13 @@
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">in_progress?</span>(<span class="ruby-ivar">@collection</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential matches are already being generated for this collection!&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Potential matches are already being generated for this collection!&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment"># delete all existing assignments and potential matches for this collection</span>
     <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">clear!</span>(<span class="ruby-ivar">@collection</span>)
     <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">clear!</span>(<span class="ruby-ivar">@collection</span>)
     
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Beginning generation of potential matches. This may take some time, especially if your challenge is large.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Beginning generation of potential matches. This may take some time, especially if your challenge is large.&quot;</span>)
     <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">set_up_generating</span>(<span class="ruby-ivar">@collection</span>)
     <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">generate</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-keyword">end</span>
@@ -947,7 +963,7 @@
           <div class="method-source-code" id="no_assignment-source">
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_assignment</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'potential_match.no_match'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;What potential match did you want to work on?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'potential_match.no_match'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;What potential match did you want to work on?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -979,7 +995,7 @@
           <div class="method-source-code" id="no_challenge-source">
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_challenge</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'challenges.no_challenge'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;What challenge did you want to sign up for?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'challenges.no_challenge'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;What challenge did you want to sign up for?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1040,7 +1056,7 @@
           <div class="method-source-code" id="signup_open-source">
             <pre><span class="ruby-comment"># File app/controllers/potential_matches_controller.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">signup_open</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'potential_match.signup_open'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Signup is still open, you cannot determine potential matches now.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'potential_match.signup_open'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Signup is still open, you cannot determine potential matches now.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span> <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>

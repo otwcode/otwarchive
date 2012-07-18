@@ -10,6 +10,7 @@ class WorksController < ApplicationController
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
+  # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
@@ -28,25 +29,15 @@ class WorksController < ApplicationController
       begin
         page = params[:page] || 1
         errors, @works = Query.search_with_sphinx(Work, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
+        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end
 
   # GET /works
   def index
-    # what we're getting for the view
-    @works = []
-    @filters = {}
-    @pseuds = []
-
-    # default values for our inputs
-    @user = nil
-    @tag = nil
-    @selected_tags = []
-    @selected_pseuds = []
     @sort_column = case params[:sort_column]
       when 'author'
         'authors_to_sort_on'
@@ -70,16 +61,8 @@ class WorksController < ApplicationController
       begin
         @selected_pseuds = Pseud.find(params[:selected_pseuds]).collect(&:id).uniq
       rescue
-        flash[:error] = ts("Sorry, we couldn't find one or more of the authors you selected. Please try again.")
+        setflash; flash[:error] = ts("Sorry, we couldn't find one or more of the authors you selected. Please try again.")
       end
-    end
-
-    # if the user is filtering with tags, let's see what they're giving us
-    unless params[:selected_tags].blank?
-      if params[:selected_tags].respond_to?(:values)
-        params[:selected_tags] = params[:selected_tags].values.flatten
-      end
-      @selected_tags = params[:selected_tags]
     end
 
     # if we're browsing by a particular tag, just add that
@@ -87,17 +70,25 @@ class WorksController < ApplicationController
     unless params[:tag_id].blank?
       @tag = Tag.find_by_name(params[:tag_id])
       if @tag
+        @page_subtitle = @tag.name
         @tag = @tag.merger if @tag.merger
         redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
-        @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       else
-        flash[:error] = ts("Sorry, there's no tag by that name in our system.")
+        setflash; flash[:error] = ts("Sorry, there's no tag by that name in our system.")
         redirect_to works_path
         return
       end
     end
+    if params[:fandom_id].present?
+      @fandom = Fandom.find_by_id(params[:fandom_id])
+    end
+    
+    if @collection
+      @page_subtitle = @collection.title
+    end
 
     # if we're browsing by a particular user get works by that user
+    @selected_pseuds = []
     unless params[:user_id].blank?
       @user = User.find_by_login(params[:user_id])
       if @user
@@ -107,64 +98,56 @@ class WorksController < ApplicationController
             @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
           end
         end
+        @page_subtitle = ts("by %{name}", :name => (@author ? @author.byline : @user.login))
       else
-        flash[:error] = ts("Sorry, there's no user by that name in our system.")
+        setflash; flash[:error] = ts("Sorry, there's no user by that name in our system.")
         redirect_to works_path
         return
       end
     end
 
     @language = Language.find_by_short(params[:language_id]) if params[:language_id]
-    # Workaround for the getting-all-English-works problem
-    # TODO: better limits
-    if @language && @language == Language.default
-      @most_recent_works = true
-    end
-
+    
     # Now let's build the query
-    @works, @filters, @pseuds = Work.find_with_options(:user => @user, 
-                                                    :author => @author, 
-                                                    :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, 
-                                                    :selected_tags => @selected_tags,
-                                                    :collection => @collection,
-                                                    :language_id => @language,
-                                                    :sort_column => @sort_column, 
-                                                    :sort_direction => @sort_direction,
-                                                    :page => params[:page], 
-                                                    :per_page => params[:per_page],
-                                                    :boolean_type => params[:boolean_type],
-                                                    :complete => params[:complete])
-
-
-    # Limit the number of works returned and let users know that it's happening
-    if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
-      flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
-      we found using the current sort and filters are shown."
+    options = {
+      :user => @user, 
+      :author => @author, 
+      :selected_pseuds => @selected_pseuds,
+      :tag => @tag || @fandom, 
+      :collection => @collection,
+      :language_id => @language,
+      :sort_column => @sort_column, 
+      :sort_direction => @sort_direction,
+      :page => params[:page], 
+      :per_page => params[:per_page],
+      :complete => params[:complete]
+    }
+    # Add caching for tag pages
+    if @tag.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
+      status = logged_in? ? "u" : "v"
+      page = params[:page] || 1
+      # This has views/ in it because that's what expire_fragment is looking for
+      @works = Rails.cache.fetch "views/works/t/#{@tag.id}/#{status}/p/#{page}" do
+        Work.find_with_options(options).compact
+      end
+    else
+      @works = Work.find_with_options(options)
     end
 
     # we now have @works found
-    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-
-    if @works.empty? && !@selected_tags.empty?
-      begin
-        # build filters so we can go back
-        flash.now[:notice] = ts("We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
-        @filters = Work.build_filters_from_tags(Tag.find(@selected_tags))
-      rescue
-        # do we need more than the regular flash notice?
-      end
-    end
+    # only need to check this if the filters expose info about the works
+#    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
+    @over_anon_threshold = true
   end
 
   def drafts
     unless params[:user_id]
-      flash[:error] = ts("Whose drafts did you want to look at?")
+      setflash; flash[:error] = ts("Whose drafts did you want to look at?")
       redirect_to :controller => :users, :action => :index
     else
       @user = User.find_by_login(params[:user_id])
       unless current_user == @user
-        flash[:error] = ts("You can only see your own drafts, sorry!")
+        setflash; flash[:error] = ts("You can only see your own drafts, sorry!")
         redirect_to current_user
       else
         if params[:pseud_id]
@@ -198,11 +181,12 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
+    @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
     
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
                                                        :subscribable_type => 'Work').first ||
-                      current_user.subscriptions.build
+                      current_user.subscriptions.build(:subscribable => @work)
     end
 
     @page_title = @work.unrevealed? ? ts("Mystery Work") :
@@ -218,7 +202,6 @@ class WorksController < ApplicationController
         @tweet_text = @tweet_text.truncate(95)
       end
     render :show
-    Rails.logger.debug "Work remote addr: #{request.remote_ip}"
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
   end
@@ -248,6 +231,7 @@ class WorksController < ApplicationController
       @work.collection_names = @collection.name if @collection
     end
     if params[:import]
+      @page_subtitle = ts("import")
       render :new_import and return
     elsif params[:load_unposted]
       @work = @unposted
@@ -265,7 +249,7 @@ class WorksController < ApplicationController
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
-      flash[:notice] = ts("New work posting canceled.")
+      setflash; flash[:notice] = ts("New work posting canceled.")
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       unless params[:preview_button]
@@ -311,7 +295,7 @@ class WorksController < ApplicationController
         redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
       else
         @work.remove_author(current_user)
-        flash[:notice] = ts("You have been removed as an author from the work")
+        setflash; flash[:notice] = ts("You have been removed as an author from the work")
         redirect_to current_user
       end
     end
@@ -398,20 +382,20 @@ class WorksController < ApplicationController
             @included = 0
           end
         end
-        @work.posted = true
+        @work.posted = true if params[:post_button]
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
       end
       if saved
         if params[:post_button]
-          flash[:notice] = ts('Work was successfully posted.')
+          setflash; flash[:notice] = ts('Work was successfully posted.')
         elsif params[:update_button]
-          flash[:notice] = ts('Work was successfully updated.')
+          setflash; flash[:notice] = ts('Work was successfully updated.')
         end
 
         #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-        #flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
+        #setflash; flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
 
         redirect_to(@work)
       else
@@ -466,7 +450,7 @@ class WorksController < ApplicationController
         # @work.update_minor_version
       end
       if saved
-        flash[:notice] = ts('Work was successfully updated.')
+        setflash; flash[:notice] = ts('Work was successfully updated.')
         redirect_to(@work)
       else
         if !@work.invalid_tags.blank?
@@ -505,9 +489,9 @@ class WorksController < ApplicationController
       was_draft = !@work.posted?
       title = @work.title
       @work.destroy
-      flash[:notice] = ts("Your work %{title} was deleted.", :title => title)
+      setflash; flash[:notice] = ts("Your work %{title} was deleted.", :title => title)
     rescue
-      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
+      setflash; flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
     if was_draft
       redirect_to drafts_user_works_path(current_user)
@@ -521,22 +505,22 @@ class WorksController < ApplicationController
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0
-      flash.now[:error] = ts("Did you want to enter a URL?")
+      setflash; flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
 
     # is this an archivist importing?
     if params[:importing_for_others] && !current_user.archivist
-      flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
+      setflash; flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
       render :new_import and return
     end
 
     # make sure we're not importing too many at once
     if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
-      flash.now[:error] = ts("You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+      setflash; flash.now[:error] = ts("You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
       render :new_import and return
     elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = ts("You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
+      setflash; flash.now[:error] = ts("You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
       render :new_import and return
     end
 
@@ -581,15 +565,15 @@ protected
         @work = storyparser.download_and_parse_chapters_into_story(urls, options)
       end
     rescue Timeout::Error
-      flash.now[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
+      setflash; flash.now[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
       render :new_import and return
     rescue StoryParser::Error => exception
-      flash.now[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
+      setflash; flash.now[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
       render :new_import and return
     end
 
     unless @work && @work.save
-      flash[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
+      setflash; flash[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
       @series = current_user.series.uniq
@@ -615,7 +599,7 @@ protected
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
-      flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+      setflash; flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
     end
 
     # if EVERYTHING failed, boo. :( Go back to the import form.
@@ -624,7 +608,7 @@ protected
     end
 
     # if we got here, we have at least some successfully imported works
-    flash[:notice] = ts("Importing completed successfully for the following works! (But please check the results over carefully!)")
+    setflash; flash[:notice] = ts("Importing completed successfully for the following works! (But please check the results over carefully!)")
     send_external_invites(@works)
 
     # fall through to import template
@@ -639,7 +623,7 @@ protected
           external_author.find_or_invite(current_user)
         end
         message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
-        flash[:notice] ? flash[:notice] += message : flash[:notice] = message
+        setflash; flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
     end
   end
@@ -651,12 +635,12 @@ public
     @user = current_user
     @work = Work.find(params[:id])
     unless @user.is_author_of?(@work)
-      flash[:error] = ts("You can only post your own works.")
+      setflash; flash[:error] = ts("You can only post your own works.")
       redirect_to current_user and return
     end
 
     if @work.posted
-      flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
+      setflash; flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work) and return
     end
 
@@ -664,11 +648,11 @@ public
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
     unless @work.valid? && @work.save
-      flash[:error] = ts("There were problems posting your work.")
+      setflash; flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work) and return
     end
 
-    flash[:notice] = ts("Your work was successfully posted.")
+    setflash; flash[:notice] = ts("Your work was successfully posted.")
     redirect_to @work
   end
 
@@ -713,7 +697,7 @@ public
     @works.each do |work|
       work.destroy
     end
-    flash[:notice] = ts("Your works %{titles} were deleted.", :titles => titles.join(", "))
+    setflash; flash[:notice] = ts("Your works %{titles} were deleted.", :titles => titles.join(", "))
     redirect_to show_multiple_user_works_path(@user)
   end
 
@@ -730,10 +714,10 @@ public
       end
     end
     unless @errors.empty?
-      flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
+      setflash; flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
       redirect_to edit_multiple_user_works_path(@user)
     else
-      flash[:notice] = ts("Your edits were put through! Please check over the works to make sure everything is right.")
+      setflash; flash[:notice] = ts("Your edits were put through! Please check over the works to make sure everything is right.")
       redirect_to show_multiple_user_works_path(@user, :work_ids => @works.collect(&:id))
     end
   end
@@ -742,7 +726,7 @@ public
   def marktoread
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
-    flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    setflash; flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -759,7 +743,7 @@ public
   def load_work
     @work = Work.find_by_id(params[:id])
     if @work.nil?
-      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
+      setflash; flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
@@ -810,11 +794,11 @@ public
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
     sorry = ts("You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.")
     if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = sorry
+      setflash; flash.now[:notice] = sorry
       params[:work][:author_attributes][:ids] = [current_user.default_pseud]
     end
     if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = sorry
+      setflash; flash.now[:notice] = sorry
       params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
 
@@ -851,10 +835,10 @@ public
 
   def cancel_posting_and_redirect
     if @work and @work.posted
-      flash[:notice] = ts("The work was not updated.")
+      setflash; flash[:notice] = ts("The work was not updated.")
       redirect_to user_works_path(current_user)
     else
-      flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
+      setflash; flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
       redirect_to drafts_user_works_path(current_user)
     end
   end

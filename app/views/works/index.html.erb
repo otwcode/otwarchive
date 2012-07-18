@@ -4,13 +4,13 @@
   <% if @collection %>
    <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
   <% elsif @user %>
-    <%= ts("by %{user_name}", :user_name => @user.login) %>
+    <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
     <%= ts("in %{tag_name}", :tag_name => @tag.name) %>
 <% end %>
 </h2>
 
-<% if @tag && (@tag.is_a?(Fandom) || @tag.name == "F/F") %>
+<% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
 <p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
 <% end %>
 
@@ -18,6 +18,8 @@
   <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <% end %>
 <!-- /end descriptions-->
+
+<%= will_paginate @works %>
 
 <div class="navigation actions module">
 

@@ -5,17 +5,17 @@ class ChallengeRequestsController < ApplicationController
 
   def check_visibility
     unless @collection
-      flash.now[:notice] = ts("Collection could not be found")
+      setflash; flash.now[:notice] = ts("Collection could not be found")
       redirect_to '/' and return
     end
     unless @collection.challenge_type == "PromptMeme" || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
-      flash.now[:notice] = ts("You are not allowed to view the requests summary!")
+      setflash; flash.now[:notice] = ts("You are not allowed to view the requests summary!")
       redirect_to collection_path(@collection) and return
     end
   end
 
   def index
-    @show_request_fandom_tags = (@collection.challenge.request_restriction.allowed("fandom") > 0 || @collection.challenge.prompt_restriction.allowed("fandom") > 0)
+    @show_request_fandom_tags = (@collection.challenge.request_restriction.allowed("fandom") > 0 || (!@collection.challenge.prompt_restriction.nil? && @collection.challenge.prompt_restriction.allowed("fandom") > 0))
     
     # sorting
     set_sort_order

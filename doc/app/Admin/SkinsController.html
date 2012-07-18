@@ -101,6 +101,20 @@
 
   <ul class="link-list">
   
+    <li><a href="../Admin.html">Admin</a>
+  
+    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="../Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="../Static.html">Static</a>
   
     <li><a href="../Static/BaseController.html">Static::BaseController</a>
@@ -115,23 +129,17 @@
   
     <li><a href="../Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="../Admin.html">Admin</a>
-  
-    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="../Challenge.html">Challenge</a>
   
     <li><a href="../Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="../Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="../Opendoors.html">Opendoors</a>
+  
+    <li><a href="../Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="../Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="../StoryParser.html">StoryParser</a>
   
@@ -349,6 +357,8 @@
   
     <li><a href="../KudosController.html">KudosController</a>
   
+    <li><a href="../KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="../Language.html">Language</a>
   
     <li><a href="../LanguagesController.html">LanguagesController</a>
@@ -426,6 +436,8 @@
     <li><a href="../ReadingsController.html">ReadingsController</a>
   
     <li><a href="../RedirectController.html">RedirectController</a>
+  
+    <li><a href="../RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="../RelatedWork.html">RelatedWork</a>
   
@@ -548,6 +560,10 @@
     <li><a href="../WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="../Work.html">Work</a>
+  
+    <li><a href="../WorkLink.html">WorkLink</a>
+  
+    <li><a href="../WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="../WorkObserver.html">WorkObserver</a>
   
@@ -700,7 +716,7 @@
           <div class="method-source-code" id="update-source">
             <pre><span class="ruby-comment"># File app/controllers/admin/skins_controller.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>    
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = []
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = []
   <span class="ruby-identifier">modified_skin_titles</span> = []
   <span class="ruby-node">%w(official rejected cached featured in_chooser)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">skins_to_set</span> = <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;make_#{action}&quot;</span>] <span class="ruby-operator">?</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;make_#{action}&quot;</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>}) <span class="ruby-operator">:</span> []
@@ -759,7 +775,7 @@
       <span class="ruby-ivar">@admin_setting</span>.<span class="ruby-identifier">default_skin</span> = <span class="ruby-identifier">skin</span>
       <span class="ruby-ivar">@admin_setting</span>.<span class="ruby-identifier">last_updated_by</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:last_updated_by</span>]
       <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@admin_setting</span>.<span class="ruby-identifier">save</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save the default skin change.&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't save the default skin change.&quot;</span>)
       <span class="ruby-keyword">else</span>
         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Default skin changed to %{title}&quot;</span>, <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">title</span>)
       <span class="ruby-keyword">end</span>

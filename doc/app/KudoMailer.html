@@ -82,6 +82,8 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-i-batch_kudo_notification">#batch_kudo_notification</a>
+    
     <li><a href="#method-i-kudo_notification">#kudo_notification</a>
     
   </ul>
@@ -107,6 +109,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -121,23 +137,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -355,6 +365,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -432,6 +444,8 @@
     <li><a href="./ReadingsController.html">ReadingsController</a>
   
     <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
   
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
@@ -555,6 +569,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -598,6 +616,57 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-batch_kudo_notification" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">batch_kudo_notification</span><span
+            class="method-args">(user_id, user_kudos)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>send a batched-up notification  user_kudos is a hash of arrays converted to
+JSON string format</p>
+<dl class="rdoc-list label-list"><dt>commentable_type]_[commentable_id
+<dd>
+<h1 id="method-i-batch_kudo_notification-label-%3E+%5Barray+of+users+who+left+kudos+with+the+last+entry+being+%22%23+guests%22+if+any%5D">&gt; [array of users who left kudos with the last entry being "# guests" if any]</h1>
+</dd></dl>
+          
+
+          
+          <div class="method-source-code" id="batch_kudo_notification-source">
+            <pre><span class="ruby-comment"># File app/mailers/kudo_mailer.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">batch_kudo_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">user_kudos</span>)
+  <span class="ruby-ivar">@commentables</span> = []
+  <span class="ruby-ivar">@kudos</span> = {}
+  <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
+  <span class="ruby-identifier">kudos_hash</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">user_kudos</span>)
+  <span class="ruby-identifier">kudos_hash</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">commentable_info</span>, <span class="ruby-identifier">kudo_givers</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">commentable_type</span>, <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable_info</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;_&quot;</span>)
+    <span class="ruby-identifier">commentable</span> = <span class="ruby-identifier">commentable_type</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">commentable_id</span>)
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">commentable</span>
+    <span class="ruby-ivar">@commentables</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">commentable</span>
+    <span class="ruby-identifier">kudos_sentence</span> = <span class="ruby-identifier">kudo_givers</span>.<span class="ruby-identifier">to_sentence</span>
+    <span class="ruby-identifier">kudos_sentence</span>.<span class="ruby-identifier">capitalize!</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">kudos_sentence</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;a guest&quot;</span>
+    <span class="ruby-ivar">@kudos</span>[<span class="ruby-identifier">commentable_info</span>] = <span class="ruby-identifier">kudos_sentence</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">mail</span>(
+    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span>,
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!&quot;</span>
+  )
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- batch_kudo_notification-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- batch_kudo_notification-method -->
+
+    
       <div id="method-i-kudo_notification" class="method-detail ">
         
         <div class="method-heading">
@@ -622,7 +691,7 @@
   <span class="ruby-ivar">@commentable</span> = <span class="ruby-identifier">kudo</span>.<span class="ruby-identifier">commentable</span>
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_NAME}] Kudos on &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">commentable_name</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&amp;gt;&quot;</span>, <span class="ruby-string">&quot;&gt;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&amp;lt;&quot;</span>, <span class="ruby-string">&quot;&lt;&quot;</span>)
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">commentable_name</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&amp;gt;&quot;</span>, <span class="ruby-string">&quot;&gt;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&amp;lt;&quot;</span>, <span class="ruby-string">&quot;&lt;&quot;</span>)
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- kudo_notification-source -->

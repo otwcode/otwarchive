@@ -216,10 +216,10 @@ module TagsHelper
         elsif class_name == "warnings"
           open_tags = "<li class='#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          link_array = tags.collect{|tag| link_to_tag(tag)}
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
           tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
         else
-          link_array = tags.collect{|tag| link_to_tag(tag)}
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
           tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
         end
       end

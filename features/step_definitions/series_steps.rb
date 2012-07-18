@@ -12,8 +12,13 @@ When /^I add the work "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_t
   click_button("Post")
   Then "I should see \"Work was successfully posted.\""
   When "I edit the work \"#{work_title}\""
-  check("series-options-show")
-  fill_in("work_series_attributes_title", :with => series_title)
+
+  check("series-options-show")  
+  if Series.find_by_title(series_title)
+    And %{I select "#{series_title}" from "work_series_attributes_id"}
+  else
+    fill_in("work_series_attributes_title", :with => series_title)
+  end
   click_button("Post without preview")
 end
 

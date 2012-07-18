@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111123011929) do
+ActiveRecord::Schema.define(:version => 20120415134615) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.text     "banner_text"
     t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
     t.integer  "default_skin_id"
+    t.datetime "stats_updated_at"
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -170,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.boolean  "assigned_as_offer",   :default => false
   end
 
+  add_index "challenge_signups", ["collection_id"], :name => "index_challenge_signups_on_collection_id"
   add_index "challenge_signups", ["pseud_id"], :name => "signups_on_pseud_id"
 
   create_table "chapters", :force => true do |t|
@@ -271,7 +273,9 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.integer  "description_sanitizer_version", :limit => 2, :default => 0,  :null => false
+    t.string   "icon_alt_text",                              :default => ""
+    t.string   "icon_comment_text",                          :default => ""
   end
 
   add_index "collections", ["name"], :name => "index_collections_on_name"
@@ -429,6 +433,8 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.datetime "updated_at"
     t.boolean  "inherited",                      :default => false, :null => false
   end
+ 
+  execute 'ALTER TABLE filter_taggings DROP PRIMARY KEY, ADD PRIMARY KEY (id,filter_id);'
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
@@ -548,6 +554,7 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.string   "ip_address"
   end
 
+  add_index "kudos", ["commentable_id", "commentable_type", "pseud_id"], :name => "index_kudos_on_commentable_id_and_commentable_type_and_pseud_id"
   add_index "kudos", ["commentable_id", "commentable_type"], :name => "index_kudos_on_commentable_id_and_commentable_type"
   add_index "kudos", ["ip_address"], :name => "index_kudos_on_ip_address"
   add_index "kudos", ["pseud_id"], :name => "index_kudos_on_pseud_id"
@@ -826,7 +833,9 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.boolean  "anonymous",                                  :default => false, :null => false
   end
 
+  add_index "prompts", ["challenge_signup_id"], :name => "index_prompts_on_challenge_signup_id"
   add_index "prompts", ["collection_id"], :name => "index_prompts_on_collection_id"
+  add_index "prompts", ["optional_tag_set_id"], :name => "index_prompts_on_optional_tag_set_id"
   add_index "prompts", ["tag_set_id"], :name => "index_prompts_on_tag_set_id"
   add_index "prompts", ["type"], :name => "index_prompts_on_type"
 
@@ -1065,6 +1074,7 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.boolean  "delta",                             :default => false
     t.integer  "last_wrangler_id"
     t.string   "last_wrangler_type"
+    t.boolean  "unwrangleable",                     :default => false, :null => false
   end
 
   add_index "tags", ["canonical"], :name => "index_tags_on_canonical"
@@ -1166,6 +1176,16 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
+
+  create_table "work_links", :force => true do |t|
+    t.integer  "work_id"
+    t.string   "url"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "work_links", ["work_id", "url"], :name => "work_links_work_id_url", :unique => true
 
   create_table "works", :force => true do |t|
     t.integer  "expected_number_of_chapters",              :default => 1

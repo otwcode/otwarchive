@@ -1,13 +1,13 @@
 <%= render :partial => 'layouts/header' %>
 <div id="inner" class="wrapper">
   
-  <div id="main" class="system">
+  <div id="main" class="system region" role="main">
   <%= flash_div :error, :caution, :notice %>
   
   <div class="intro module">
   <h2 class="heading"><%= ts('hi!') %></h2>
   <p><%= ts('Welcome to the Archive of Our Own!') %></p>
-  <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, and fanvids.") %></p>
+  <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fanvids, and podfic.") %></p>
   <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
     <% if logged_in? %>
       <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Invite a friend'), user_invitations_path(current_user) %></p> 

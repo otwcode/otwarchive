@@ -126,6 +126,11 @@ form dd {
   width: 72.5%;
 }
 
+form dd + dd {
+  width: 97.5%;
+  margin-left: 0.5625em;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
@@ -205,7 +210,6 @@ form li ul.autocomplete li.input {
 
 .autocomplete li.added, .post .meta dd ul li.added {
   display: inline-block;
-  white-space: nowrap;
 }
 
 /* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
@@ -371,12 +375,16 @@ div.dynamic {
     box-shadow: 1px 2px 5px;
 }
 
-.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form {
+.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form, .secondary form {
   border: none;
   background: transparent;
   margin: 0;
   padding: 0;
     box-shadow: none;
+}
+
+.toggled .bookmark form p.footnote {
+  padding-bottom: 0.643em;
 }
 
 /*INTERACTION: LOGIN SIGNUP*/

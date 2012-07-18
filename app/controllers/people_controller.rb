@@ -1,60 +1,53 @@
 class PeopleController < ApplicationController
 
   before_filter :load_collection
+  
+  def do_search
+    if @collection
+      # constrain by ids of the participants
+      @query[:id] = @collection.participants.value_of(:pseud_id).join(',')
+    end
+    begin
+      page = params[:page] || 1
+      errors, @people = Query.search_with_sphinx(Pseud, @query, page)
+      setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
+    rescue Riddle::ConnectionError
+      setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+    end
+    # @people could contain nils from sphinx
+    @rec_counts = Pseud.rec_counts_for_pseuds(@people.compact)
+    @work_counts = Pseud.work_counts_for_pseuds(@people.compact)
+  end
 
   def search
     @query = {}
     if params[:query]
       @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @people = Query.search_with_sphinx(Pseud, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
-      end
-      # @people could contain nils from sphinx
-      @rec_counts = Pseud.rec_counts_for_pseuds(@people.compact)
-      @work_counts = Pseud.work_counts_for_pseuds(@people.compact)
+      do_search
     end
   end
-
 
   def index
-    if @collection
-      @pseuds_alphabet = @collection.participants.find(:all, :select => 'name')
-      @pseuds_alphabet = @pseuds_alphabet.collect {|pseud| pseud.name.scan(/./mu)[0].upcase}.uniq.sort
-      if params[:letter] && params[:letter].is_a?(String)
-        letter = params[:letter][0,1]
+    @people = []
+    if params[:query] 
+      if params[:query].length < 3
+        setflash; flash[:error] = ts("Your search needs to be at least 3 characters long for performance reasons, sorry!")
       else
-  letter = @pseuds_alphabet[0]
+        # wildcard the search by default 
+        @query = {}
+        @query[:text] = "*#{params[:query]}*".gsub("**", '*')
+        do_search
+        @query = params[:query]
       end
-      @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-      @rec_counts = Pseud.rec_counts_for_pseuds(@authors)
-      @work_counts = Pseud.work_counts_for_pseuds(@authors)
     else
-      @navigation = People.all
-    end
-
-  end
-
-  def show
-    @navigation = People.all
-    @character = People.find(params[:id])
-    case params[:show]
-      when "authors"
-        @people = @character.authors.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-        @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-        @what = "Authors"
-      when "reccers"
-        @people = @character.reccers.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-        @work_counts = Pseud.work_counts_for_pseuds(@people)
-        @what = "Reccers"
+      @random = true
+      if @collection
+        @people = @collection.participants.order("RAND()").limit(10)
       else
-        @people = @character.pseuds.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-        @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-        @work_counts = Pseud.work_counts_for_pseuds(@people)
-        @what = "People"
+        @people = Pseud.order("RAND()").limit(10)
+      end
+      @rec_counts = Pseud.rec_counts_for_pseuds(@people)
+      @work_counts = Pseud.work_counts_for_pseuds(@people)      
     end
   end
 

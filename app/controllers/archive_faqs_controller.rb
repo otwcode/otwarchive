@@ -52,7 +52,7 @@ class ArchiveFaqsController < ApplicationController
 
     respond_to do |format|
       if @archive_faq.save
-        flash[:notice] = 'ArchiveFaq was successfully created.'
+        setflash; flash[:notice] = 'ArchiveFaq was successfully created.'
         format.html { redirect_to(@archive_faq) }
         format.xml  { render :xml => @archive_faq, :status => :created, :location => @archive_faq }
       else
@@ -69,7 +69,7 @@ class ArchiveFaqsController < ApplicationController
 
     respond_to do |format|
       if @archive_faq.update_attributes(params[:archive_faq])
-        flash[:notice] = 'ArchiveFaq was successfully updated.'
+        setflash; flash[:notice] = 'ArchiveFaq was successfully updated.'
         format.html { redirect_to(@archive_faq) }
         format.xml  { head :ok }
       else
@@ -83,7 +83,7 @@ class ArchiveFaqsController < ApplicationController
   def update_positions
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])       
-      flash[:notice] = ts("Archive FAQs order was successfully updated.")
+      setflash; flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
         ArchiveFaq.update(id, :position => position + 1)

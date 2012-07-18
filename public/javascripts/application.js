@@ -1,5 +1,5 @@
 // Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults 
+// This file is automatically included by javascript_include_tag :defaults
 
 //things to do when the page loads
 $j(document).ready(function() {
@@ -16,9 +16,9 @@ $j(document).ready(function() {
           expandList();
           return false;
       });
-    $j('#hide-notice-banner').click(function (e) { 
+    $j('#hide-notice-banner').click(function (e) {
       $j('#notice-banner').hide();
-      e.preventDefault(); 
+      e.preventDefault();
     });
     setupTooltips();
 
@@ -27,6 +27,7 @@ $j(document).ready(function() {
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
+    $j('.commas li:last-child').addClass('last');
 });
 
 function visualizeTables() {
@@ -92,21 +93,21 @@ jQuery(function($){
       $(this).nextAll(".shuffle").show();
       $(this).next(".contract").show();
     }
-    
-    // set up click event to expand the list 
+
+    // set up click event to expand the list
     $(this).click(function(event){
       list = $($(this).attr('action_target'));
       list.show();
-      
+
       // show the contract & shuffle buttons and hide us
       $(this).next(".contract").show();
       $(this).nextAll(".shuffle").show();
       $(this).hide();
-      
+
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.contract').each(function(){
     $(this).click(function(event){
       // hide the list when clicked
@@ -117,11 +118,11 @@ jQuery(function($){
       $(this).prev(".expand").show();
       $(this).nextAll(".shuffle").hide();
       $(this).hide();
-      
+
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.shuffle').each(function(){
     // shuffle the list's children when clicked
     $(this).click(function(event){
@@ -130,28 +131,28 @@ jQuery(function($){
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.expand_all').each(function(){
       target = "." + $(this).attr('target_class');
      $(this).click(function(event) {
         $(this).closest(target).find(".expand").click();
         event.preventDefault();
-     }); 
+     });
   });
-  
+
   $('.contract_all').each(function(){
      target = "." + $(this).attr('target_class');
      $(this).click(function(event) {
         $(this).closest(target).find(".contract").click();
         event.preventDefault();
-     }); 
+     });
   });
-  
+
 });
 
 // check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
 // stored in the "checkbox_name_filter" attribute on the all/none links.
-// allow for some flexibility by checking the next fieldset if the checkboxes aren't in this one
+// allow for some flexibility by checking the next and previous fieldset if the checkboxes aren't in this one
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
@@ -161,13 +162,18 @@ jQuery(function($){
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
-        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+        if (checkboxes.length == 0) {
+          checkboxes = $(this).closest("fieldset").next().find(':checkbox');
+          if (checkboxes.length == 0) {
+            checkboxes = $(this).closest("fieldset").prev().find(':checkbox');
+          }
+        }
       }
       checkboxes.attr('checked', true);
       event.preventDefault();
     });
   });
-  
+
   $('.check_none').each(function(){
     $(this).click(function(event){
       var filter = $(this).attr('checkbox_name_filter');
@@ -176,7 +182,12 @@ jQuery(function($){
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
-        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+        if (checkboxes.length == 0) {
+          checkboxes = $(this).closest("fieldset").next().find(':checkbox');
+          if (checkboxes.length == 0) {
+            checkboxes = $(this).closest("fieldset").prev().find(':checkbox');
+          }
+        }
       }
       checkboxes.attr('checked', false);
       event.preventDefault();
@@ -203,7 +214,7 @@ jQuery(function($) {
 //   foo!
 //   <a class="foo_close hidden">Close</a>
 // </div>
-// 
+//
 // Notes:
 // - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
 // - You can have multiple open and close buttons for the same div since those are labeled with classes
@@ -215,7 +226,7 @@ function setupToggled(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
-    
+
     if (!node.hasClass('open')) {node.hide();}
     close_toggles.each(function(){$j(this).hide();});
     open_toggles.each(function(){$j(this).show();});
@@ -228,7 +239,7 @@ function setupToggled(){
         close_toggles.each(function(){$j(this).show();});
       });
     });
-    
+
     close_toggles.each(function(){
       $j(this).click(function(e){
         if ($j(this).attr('href') == '#') {e.preventDefault();}
@@ -237,7 +248,7 @@ function setupToggled(){
         open_toggles.each(function(){$j(this).show();});
       });
     });
-  });  
+  });
 }
 
 
@@ -260,10 +271,10 @@ function handlePopUps() {
       if (event.stopped) return;
       window.open($j(element).attr('href'));
       event.stop();
-    });    
+    });
 }
 
-// used in nested form fields for deleting a nested resource 
+// used in nested form fields for deleting a nested resource
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {
     $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
@@ -273,7 +284,7 @@ function remove_section(link, class_of_section_to_remove) {
 // used with nested form fields for dynamically stuffing in an extra partial
 // see challenge signup form and prompt form for an example
 function add_section(link, nested_model_name, content) {
-    // get the right new_id which should be in a div with class "last_id" at the bottom of 
+    // get the right new_id which should be in a div with class "last_id" at the bottom of
     // the nearest section
     var last_id = parseInt($j(link).parent().siblings('.last_id').last().html());
     var new_id = last_id + 1;
@@ -287,10 +298,10 @@ function add_section(link, nested_model_name, content) {
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
     var ticky = $j('#' + element_id + '-show');
-    if (ticky.is(':checked')) { 
-      $j('#' + element_id).removeClass('hidden'); 
+    if (ticky.is(':checked')) {
+      $j('#' + element_id).removeClass('hidden');
     }
-    else { 
+    else {
         $j('#' + element_id).addClass('hidden');
         if (element_id != 'chapters-options') {
             $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
@@ -337,7 +348,7 @@ function updateCharacterCounter(counter) {
     var input_id = '#' + $j(counter).attr('id');
     var maxlength = $j(input_id + '_counter').attr('data-maxlength');
     var input_value = $j(input_id).val();
-    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
+    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n');
     var remaining_characters = maxlength - input_value.length;
     $j(input_id + '_counter').html(remaining_characters);
     $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);

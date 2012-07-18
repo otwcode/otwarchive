@@ -19,10 +19,8 @@
   <li class="search" role="search">
     <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
       <fieldset>
-	      <!--BACK END pls :title => "search" the following text field instead of this p-->
-	      <p title="search">
-	      <%= text_field_tag "query", @query %>
-        <%= submit_tag "Search" %></p>
+	      <%= text_field_tag "query", @query, :title => "search" %>
+        <%= submit_tag "Search" %>
       </fieldset>
     <% end %>
   </li>
@@ -33,7 +31,7 @@
 </ul>
 
 <% if @tag_sets.empty? %>
-  <%= ts("No tag sets found.") %>
+  <p><%= ts("No tag sets found.") %></p>
 <% else %>
   <%= will_paginate @tag_sets %>
 

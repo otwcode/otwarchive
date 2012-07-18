@@ -5,7 +5,6 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks/new.xml
   def new
     @feedback = Feedback.new
-    @page_title = "Support and Feedback"
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
@@ -30,10 +29,10 @@ class FeedbacksController < ApplicationController
         if !@feedback.email.blank?
           UserMailer.feedback(@feedback.id).deliver
         end
-        flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
+        setflash; flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_back_or_default(root_path) }
       else
-        flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
+        setflash; flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
         format.html { render :action => "new" }
       end
     end

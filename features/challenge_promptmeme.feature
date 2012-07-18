@@ -336,21 +336,30 @@ Feature: Prompt Meme Challenge
   When I start to delete the signup by "myname1"
   Then I should see "myname1"
     And I should not see a link "myname1"
+
+	Scenario: Mod can't delete prompt if they don't have enough
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I am logged in as "mod1"
+	When I view prompts for "Battle 12"
+	Then I should not see "Delete"
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
+	When I add a new prompt to my signup for a prompt meme
   When I am logged in as "mod1"
-  # TODO: mods can't delete prompts anymore?
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
     And I should see "Prompts for Battle 12"
     And I should not see "Signups for Battle 12"
-  #  And "myname1" should be emailed
+  #  TODO: And "myname1" should be emailed
   
-  Scenario: Mod cannot edit someone else's prompt TODO: hinkiness going on
+  Scenario: Mod cannot edit someone else's prompt
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -358,16 +367,16 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I edit the first prompt
   Then I should not see "Submit a Prompt for Battle 12"
-    # And show me the main content
-    And I should see "You can't edit someone else's prompt"
+		And I should not see "Sign Up For Battle 12"
+    And I should see "You can't edit someone else's signup"
 
   Scenario: User can't delete prompt if they don't have enough
 
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
-  When I delete the prompt by "myname1"
-  Then I should see "That would make your signup invalid, sorry! Please edit instead."
+  When I view prompts for "Battle 12"
+	Then I should not see "Delete"
   
   Scenario: User deletes one prompt
   
@@ -430,6 +439,7 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
     And I follow "Claims"
+		And I follow "See previously posted claims instead"
   Then I should see "Fulfilled Story"
    # TODO: should I? It's not there at all
     And I should not see "Not yet posted"
@@ -444,7 +454,10 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
   # Then show me the sidebar # TODO: it has Claims (0) but why?
-  Then I should see "Claims (1)"
+  Then I should see "Claims (0)"
+  When I follow "Claims"
+    And I follow "See previously posted claims instead"
+  Then I should see "Fulfilled Story"
   
   Scenario: Claim shows as fulfilled to another user
   

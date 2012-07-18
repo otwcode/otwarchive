@@ -12,8 +12,8 @@ module WorksHelper
       list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
     end
 
-    if work.kudos.count > 0
-      list.concat([[ts('Kudos:'), (work.kudos.by_guest.count(:ip_address, :distinct => true) + work.kudos.with_pseud.count(:pseud_id, :distinct => true)).to_s]])
+    if work.all_kudos_count > 0
+      list.concat([[ts('Kudos:'), work.all_kudos_count.to_s]])
     end
 
     if (bookmark_count = work.bookmarks.is_public.count) > 0
@@ -35,6 +35,10 @@ module WorksHelper
     author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
     all_authors_want_public_hits = work.users.select {|u| u.preference.try(:hide_public_hit_count)}.empty?
     author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
+  end
+  
+  def show_hit_count_to_public?(work)
+    !Preference.where(:user_id => work.pseuds.value_of(:user_id), :hide_public_hit_count => true).exists?
   end
 
   def recipients_link(work)
@@ -103,15 +107,18 @@ module WorksHelper
     false
   end
 
+  def marked_for_later?(work)
+    return unless current_user
+    reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+    reading && reading.toread?
+  end
+  
   def marktoread_link(work)
-    if current_user
-      reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
-      if reading && reading.toread?
-        link_to "Mark as read", marktoread_work_path(work)
-      else
-        link_to "Mark for later", marktoread_work_path(work)
-      end
-    end
+    link_to ts("Mark for later"), marktoread_work_path(work)
+  end
+  
+  def markasread_link(work)
+    link_to ts("Mark as read"), marktoread_work_path(work)
   end
 
   private
@@ -165,14 +172,14 @@ module WorksHelper
     
 
   def download_url_for_work(work, format)
-    url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
+    url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')
   end
   
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
     text = "<p>by #{byline(work, :visibility => 'public')}</p>"
-    text << work.summary
+    text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
       text << "<p>Series: #{series_list_for_feeds(work)}</p>"

@@ -76,6 +76,10 @@ form.filters dl {
   padding: 0;
 }
 
+form.filters dt span {
+  cursor: pointer;
+}
+
 .filters dd {
   width: 100%;
 }

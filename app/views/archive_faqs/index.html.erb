@@ -2,7 +2,7 @@
 <% if logged_in_as_admin? %>
   <%= render :partial => "admin_index" %>
 <% else %>
-  <h2 class="heading"><%= t("archive_faq", :default => "Archive FAQ") %></h2>
+  <h2 class="heading"><%= ts("Archive FAQ") %></h2>
   <!--/descriptions-->
 
   <!--main content-->
@@ -12,13 +12,13 @@
     You may also like to check out our <%= link_to "Known Issues", known_issues_path %>. 
     If you need more help, please submit a <%= link_to "support request", feedbacks_path %>.</p>
 
-  <% unless @archive_faqs.blank?  %>
-    <h3 id="categories">Available Categories</h3>
-    <ol role="navigation">
-      <% for faq in @archive_faqs %>
-      <li><%= link_to faq.title, faq %></li>
-      <% end %>
-    </ol>
-  <% end %>
-  </div> 
+    <% unless @archive_faqs.blank?  %>
+      <h3 id="categories">Available Categories</h3>
+      <ol role="navigation">
+        <% for faq in @archive_faqs %>
+        <li><%= link_to faq.title, faq %></li>
+        <% end %>
+      </ol>
+    <% end %>
+  </div>
 <% end %>

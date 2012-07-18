@@ -35,7 +35,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
-      flash[:error] = ts('Comments with replies cannot be edited')
+      setflash; flash[:error] = ts('Comments with replies cannot be edited')
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
   end
@@ -60,6 +60,7 @@ class CommentsController < ApplicationController
       @commentable = AdminPost.find(params[:admin_post_id])
     elsif params[:tag_id]
       @commentable = Tag.find_by_name(params[:tag_id])
+      @page_subtitle = @commentable.name
     end
   end
 
@@ -87,7 +88,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new
@@ -122,7 +123,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(params[:comment])
@@ -133,12 +134,12 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save
         if @comment.approved?
-          # save user's name/email if not logged in
+          # save user's name/email if not logged in, truncated in case of something really long and wacky
           if @comment.pseud.nil?
-            session[:comment_name] = @comment.name
-            session[:comment_email] = @comment.email
+            cookies[:comment_name] = @comment.name[0..100]
+            cookies[:comment_email] = @comment.email[0..100]
           end
-          flash[:comment_notice] = ts('Comment created!')
+          setflash; flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
@@ -158,15 +159,11 @@ class CommentsController < ApplicationController
           end
         else
           # this shouldn't come up any more
-          flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
+          setflash; flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
           redirect_back_or_default(root_path)
         end
       else
-        flash[:comment_error] = ts("There was a problem saving your comment:")
-        msg = @comment.errors.full_messages.map {|msg| "#{msg}"}.join
-        unless msg.blank?
-          flash[:comment_error] += "#{msg}"
-        end
+        setflash
         render :action => "new"
       end
     end
@@ -177,7 +174,7 @@ class CommentsController < ApplicationController
   def update
     params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
-      flash[:comment_notice] = ts('Comment was successfully updated.')
+      setflash; flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html { redirect_to_comment(@comment) }
         format.js # updating the comment in place
@@ -195,13 +192,13 @@ class CommentsController < ApplicationController
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
-      flash[:comment_error] = ts("We couldn't delete that comment.")
+      setflash; flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
     elsif parent_comment
-      flash[:comment_notice] = ts("Comment deleted.")
+      setflash; flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
-      flash[:comment_notice] = ts("Comment deleted.")
+      setflash; flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {:show_comments => true})
     end
   end

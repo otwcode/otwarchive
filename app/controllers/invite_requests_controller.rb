@@ -10,14 +10,10 @@ class InviteRequestsController < ApplicationController
   # GET /invite_requests/1
   # GET /invite_requests/1.xml
   def show
-    if params[:email]
-      @invite_request = InviteRequest.find_by_email(params[:email])
-      unless (request.xml_http_request?) || @invite_request
-        flash[:error] = "Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help."
-        redirect_to invite_requests_url and return
-      end    
-    else
-      @invite_request = InviteRequest.find(params[:id])
+    @invite_request = InviteRequest.find_by_email(params[:email])
+    unless (request.xml_http_request?) || @invite_request
+      setflash; flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+      redirect_to invite_requests_url and return
     end
     respond_to do |format|
       format.html
@@ -30,8 +26,8 @@ class InviteRequestsController < ApplicationController
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
-      flash[:notice] = "You've been added to our queue! Yay!"
-      redirect_to @invite_request 
+      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}."
+      redirect_to invite_requests_path
     else
       render :action => :index
     end
@@ -43,9 +39,9 @@ class InviteRequestsController < ApplicationController
   
   def reorder
     if InviteRequest.reset_order
-      flash[:notice] = "The queue has been successfully updated."
+      setflash; flash[:notice] = "The queue has been successfully updated."
     else
-      flash[:error] = "Something went wrong. Please try that again."
+      setflash; flash[:error] = "Something went wrong. Please try that again."
     end
     redirect_to manage_invite_requests_url
   end
@@ -53,9 +49,9 @@ class InviteRequestsController < ApplicationController
   def destroy
     @invite_request = InviteRequest.find(params[:id])
     if @invite_request.destroy
-      flash[:notice] = "Request was removed from the queue."
+      setflash; flash[:notice] = "Request was removed from the queue."
     else
-      flash[:error] = "Request could not be removed. Please try again."
+      setflash; flash[:error] = "Request could not be removed. Please try again."
     end
     redirect_to manage_invite_requests_url
   end

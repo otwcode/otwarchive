@@ -22,7 +22,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = ts("What challenge did you want to work with?")
+    setflash; flash[:error] = ts("What challenge did you want to work with?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -33,7 +33,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def no_claim
-    flash[:error] = ts("What claim did you want to work on?")
+    setflash; flash[:error] = ts("What claim did you want to work on?")
     if @collection
       redirect_to collection_path(@collection) rescue redirect_to '/'
     else
@@ -48,14 +48,14 @@ class ChallengeClaimsController < ApplicationController
   end
   
   def no_user
-    flash[:error] = ts("What user were you trying to work with?")
+    setflash; flash[:error] = ts("What user were you trying to work with?")
     redirect_to "/" and return
     false
   end
   
   def owner_only
     unless @user == @challenge_claim.claiming_user
-      flash[:error] = ts("You aren't the claimer of that prompt.")
+      setflash; flash[:error] = ts("You aren't the claimer of that prompt.")
       redirect_to "/" and return false
     end
   end      
@@ -87,11 +87,14 @@ class ChallengeClaimsController < ApplicationController
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
+				if params[:posted]
+					@claims = @user.request_claims.order_by_date.posted
+				end
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
           @claims = @claims.in_collection(@collection)         
         end
       else
-        flash[:error] = ts("You aren't allowed to see that user's claims.")
+        setflash; flash[:error] = ts("You aren't allowed to see that user's claims.")
         redirect_to '/' and return
       end
     end
@@ -107,9 +110,9 @@ class ChallengeClaimsController < ApplicationController
     # create a new claim
     claim = ChallengeClaim.new(params[:challenge_claim])
     if claim.save
-      flash[:notice] = "New claim made."
+      setflash; flash[:notice] = "New claim made."
     else
-      flash[:error] = "We couldn't save the new claim."
+      setflash; flash[:error] = "We couldn't save the new claim."
     end
     redirect_to collection_claims_path(@collection, :for_user => true)
   end
@@ -123,12 +126,12 @@ class ChallengeClaimsController < ApplicationController
       end
       @claim.destroy
       if @usernotmod == "true"
-        flash[:notice] = ts("Your claim was deleted.")
+        setflash; flash[:notice] = ts("Your claim was deleted.")
       else
-        flash[:notice] = ts("The claim was deleted.")
+        setflash; flash[:notice] = ts("The claim was deleted.")
       end
     rescue
-      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
+      setflash; flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
     redirect_to collection_claims_path(@collection)
   end

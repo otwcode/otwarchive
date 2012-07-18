@@ -2,7 +2,7 @@ Otwarchive::Application.routes.draw do
 
   #### DOWNLOADS ####
 
-  match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
+  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
   #### STATIC CACHED COLLECTIONS ####
 
@@ -12,6 +12,21 @@ Otwarchive::Application.routes.draw do
       resources :fandoms, :only => [:index, :show]
       resources :works, :only => [:show]
       resources :restricted_works, :only => [:index, :show]
+    end
+  end
+  
+  
+  #### OPEN DOORS ####
+  namespace :opendoors do
+    resources :tools, :only => [:index] do
+      collection do 
+        post :url_update
+      end
+    end
+    resources :external_authors do
+      member do
+        post :forward
+      end
     end
   end
 
@@ -117,6 +132,7 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
         get :hide
@@ -141,7 +157,7 @@ Otwarchive::Application.routes.draw do
 
   #### USERS ####
 
-  resources :people, :only => [:index, :show] do
+  resources :people, :only => [:index] do
     collection do
       get :search
     end
@@ -226,6 +242,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
+    resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
     resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
     resources :works do
@@ -278,6 +295,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resources :links, :controller => "work_links", :only => [:index]          
   end
 
   resources :chapters do
@@ -297,6 +315,7 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :related_works
   end
+  
   resources :related_works
   resources :serial_works
   resources :series do
@@ -467,8 +486,8 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects, :only => [:index] do
-    collection do
+  resource :redirect, :controller => "redirect", :only => [:show] do
+    member do
       get :do_redirect
     end
   end

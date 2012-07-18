@@ -32,11 +32,11 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-decoration: none;
   border: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
-    background: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
     border-radius: 0.25em;
     box-shadow: none;
 }
@@ -60,7 +60,7 @@ p.submit, input.submit, dd.submit {
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 
-ol.pagination, div.pagination {
+ol.pagination, div.pagination, ol.year {
   text-align: center;
   clear: right;
   margin: 0.643em auto;
@@ -141,8 +141,8 @@ dl.stats + h6 + .actions, li.news .actions {
   float: none;
 }
 
-.chapter .secondary {
-  top: 2.5em;
+.chapter .secondary, .download .secondary {
+  top: 3.5em;
 }
 
 .dashboard .landmark {

@@ -50,6 +50,7 @@
     <li><%= link_to 'non-canonical', url_for(:show => params[:show], :status => 'noncanonical') %></li>
     <li><%= link_to 'unfilterable', url_for(:show => params[:show], :status => 'unfilterable'), :title => "non-canonical tags without synonyms" %></li>
     <li><%= link_to 'unwrangled', url_for(:show => params[:show], :status => 'unwrangled'), :title => "tags which were used on the same works but haven't been wrangled yet" %></li>
+    <li><%= link_to 'unwrangleable', url_for(:show => params[:show], :status => 'unwrangleable'), :title => "tags marked unwrangleable" %>
   </ul>
 <% end %>
 
@@ -104,9 +105,11 @@
         <% end %>
         <td title="canonical?">
           <% if tag.canonical? %>
-          Yes
+            Yes
+          <% elsif tag.unwrangleable? %>
+            Unwrangleable
           <% else %>
-          <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
+            <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
           <% end %>
         </td>
         <td title="metatag or synonym">
@@ -128,9 +131,9 @@
                 </label>
               </li>
             <% end %>
-            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag}, :target => "_blank" %></li>
-            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag}, :target => "_blank" %></li>
-            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
+            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
           </ul>
         </td>
       </tr>
