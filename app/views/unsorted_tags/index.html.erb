@@ -1,21 +1,25 @@
-<h1>Unsorted Tags</h1>
+<h1><%= ts("Unsorted Tags") %></h1>
 
-<% form_tag mass_update_unsorted_tags_path do %>
+<% if @tags %>
 
-<p><%= submit_tag "Update" %></p>
+  <% form_tag mass_update_unsorted_tags_path do %>
 
-<table>
-  <% for tag in @tags %>
-    <% cache("unsorted-#{tag.cache_key}") do %>
-    <tr>
-      <td><%= link_to tag.name, edit_tag_path(tag) %></td>
-      <td><%= link_to ts("Bookmarks (%{count})", :count => tag.bookmarks.count), tag_bookmarks_path(tag) %></td>
-      <td><%= select_tag "tags[#{tag.id}]", options_for_select(["", "Fandom", "Character", "Relationship", "Freeform"]) %></td>
-    </tr>
+  <p><%= submit_tag ts("Update") %></p>
+
+  <table>
+    <% @tags.each do |tag| %>
+      <% cache("unsorted-#{tag.cache_key}") do %>
+      <tr>
+        <td><%= link_to tag.name, edit_tag_path(tag) %></td>
+        <td><%= link_to ts("Bookmarks (%{count})", :count => tag.bookmarks.count), tag_bookmarks_path(tag) %></td>
+        <td><%= select_tag "tags[#{tag.id}]", options_for_select(["", ts("Fandom"), ts("Character"), ts("Relationship"), ts("Freeform")]) %></td>
+      </tr>
+      <% end %>
     <% end %>
-  <% end %>
-</table>
+  </table>
 
-<p><%= submit_tag "Update" %></p>
+  <p><%= submit_tag ts("Update") %></p>
+
+  <% end %>
 
 <% end %>
