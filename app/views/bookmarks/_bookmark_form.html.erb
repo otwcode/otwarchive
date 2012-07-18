@@ -58,7 +58,7 @@
           <dt><%= f.label :notes, ts("Notes") %></dt>
           <dd>
             <p class="footnote">
-              <% if bookmarkable.class != ExternalWork %><%= ts("The author's summary and tags are added automatically.") %><% end %>
+              <% if bookmarkable.class != ExternalWork %><%= ts("The author's summary is added automatically.") %><% end %>
               <%= allowed_html_instructions(show_list=false) %>
             </p>
             <%= f.text_area :notes, :rows => 4, :class => "observe_textlength" %>
@@ -67,6 +67,10 @@
 
           <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
           <dd title="your tags">
+            <p class="footnote">
+              <% if bookmarkable.class != ExternalWork %><%= ts("The author's tags are added automatically.") %><% end %>
+              <%= allowed_html_instructions(show_list=false) %>
+            </p>
             <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (in_page ? 60 : 80)) %>
             <p class="character_counter">
               <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
