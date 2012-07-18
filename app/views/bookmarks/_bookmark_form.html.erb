@@ -69,7 +69,6 @@
           <dd title="your tags">
             <p class="footnote">
               <% if bookmarkable.class != ExternalWork %><%= ts("The author's tags are added automatically.") %><% end %>
-              <%= allowed_html_instructions(show_list=false) %>
             </p>
             <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (in_page ? 60 : 80)) %>
             <p class="character_counter">
