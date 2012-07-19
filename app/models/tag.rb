@@ -458,7 +458,8 @@ class Tag < ActiveRecord::Base
     if new_name && new_name.is_a?(String)
       new_name.squish!
       tag = Tag.find_by_name(new_name)
-      if tag && tag.class == self
+      # if the tag exists and has the proper class, or it is an unsorted tag and it can be sorted to the self class
+      if tag && (tag.class == self || tag.class == UnsortedTag && tag = tag.recategorize(self.to_s))
         tag
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
