@@ -147,7 +147,7 @@ class Collection < ActiveRecord::Base
     errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
       title.match(/\,\,/)
 
-    errors.add(:title, ts("The ',' character cannot be in a Display Title.")) if
+    errors.add(:title, ts("The ',' character cannot be in a collection Display Title.")) if
       title.match(/\,/)
   end
 
