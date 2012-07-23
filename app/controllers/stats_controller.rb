@@ -76,8 +76,8 @@ class StatsController < ApplicationController
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new    
     @chart_data.new_column('string', 'Title')
-    chart_col = @sort == "date" ? "hits" : @sort 
-    chart_col_title = chart_col.split(".")[0].titleize
+    chart_col = @sort == "date" ? "hits" : @sort
+    chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
     chart_title = @sort == "date" ? ts("Most Recent") : ts("Top Five By #{chart_col_title}")
     @chart_data.new_column('number', chart_col_title)
       
