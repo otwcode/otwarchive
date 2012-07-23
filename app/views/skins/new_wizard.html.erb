@@ -3,9 +3,13 @@
 
 <%= error_messages_for :skin %>
 
+<p class="note"><%= ts("This wizard only creates site-wide skins. To create a work skin, click on the 'Work Skin' button.") %></p>
+
 <%= render :partial => "skin_top_navigation" %>
 
 <h3 class="landmark heading">New Archive Skin Wizard</h3>
+
+
 
 <%= form_for @skin do |f| %>
   <%= render 'wizard_form', :f => f %>
