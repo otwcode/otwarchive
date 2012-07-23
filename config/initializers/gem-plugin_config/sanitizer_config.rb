@@ -100,6 +100,8 @@ class Sanitize
         then "criticalcommons"
       when /^http:\/\/(?:www\.)?google\.com\//
         then "google"
+      when /^http:\/\/(?:www\.)?archiveofourown\.org\//
+        then "archiveofourown"
       else
         nil
       end
