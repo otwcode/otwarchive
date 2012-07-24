@@ -2,27 +2,35 @@
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
 	<li>
+	  
     <% if params[:work_skins] %>
-      <%= link_to ts("Site Skins"), url_for(:work_skins => false) %>
+      <% skins_label = current_page?(skins_path) ? ts("Site Skins") : ts("My Site Skins") %>
+      <%= link_to skins_label, url_for(:work_skins => false) %>
     <% else %>
-      <%= link_to ts("Work Skins"), url_for(:work_skins => true) %>
+      <% skins_label = current_page?(skins_path) ? ts("Work Skins") : ts("My Work Skins") %>
+      <%= link_to skins_label, url_for(:work_skins => true) %>
     <% end %>
   </li>
-  <li><%= span_if_current ts('Public Skins'), skins_path %></li>
+  <li>
+    <% if current_page?(skins_path) %>
+      <%= link_to ts('My Skins'), user_skins_path(current_user) %>
+    <% else %>
+      <%= link_to ts('Public Skins'), skins_path %>
+    <% end %>
+  </li>
   <% if session[:site_skin] %>
-    <li><%= link_to ts("Remove Skin"), unset_skins_path %></li>
+    <li><%= link_to ts("Revert to Default Skin"), unset_skins_path %></li>
   <% end %>
 	<% if logged_in? %>
 	  <% if current_user.preference.skin_id && session[:site_skin].blank? %>
 	    <li>
     	  <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
           <%= f.hidden_field :skin_id, :value => Skin.default.id %>
-          <%= f.submit ts("Remove Skin") %>
+          <%= f.submit ts("Revert to Default Skin") %>
         <% end %>
       </li>
     <% end %>
 	
-    <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
       <li><%= link_to ts('Create Skin'), new_skin_path %></li>
     <% end %>
