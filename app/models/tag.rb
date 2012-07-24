@@ -134,12 +134,12 @@ class Tag < ActiveRecord::Base
 
   before_save :check_type_changes, :if => :type_changed?
   def check_type_changes
-    # if the tag was categorised as a Fandom, it had the Uncategorized medium added to it as a parent, and we have to remove it manually
-    if self.type_was == "Fandom" && self.respond_to?(:medias)
-      self.parents = self.parents - self.medias
-    # otherwise, if it has now become a Fandom, it needs the Uncategorized medium added to it manually (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
-    elsif self.type == "Fandom" && self.parents.empty?
-      self.parents << Media.uncategorized
+    # if the tag used to be a Fandom, and is now something else, no parent type will fit, remove all
+    if self.type_was == "Fandom"
+      self.parents = []
+    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
+    elsif self.type == "Fandom"
+      self.parents = [Media.uncategorized]
     end
   end
 

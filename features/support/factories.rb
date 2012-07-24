@@ -29,6 +29,10 @@ Factory.define :tag do |f|
   f.sequence(:name) { |n| "The #{n} Tag" }
 end
 
+Factory.define :unsorted_tag do |ut|
+  ut.sequence(:name) { |n| "Unsorted Tag #{n}"}
+end
+
 Factory.define :fandom do |f|
   f.canonical true
   f.sequence(:name) { |n| "The #{n} Fandom" }
