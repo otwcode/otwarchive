@@ -1,26 +1,30 @@
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
-	<li>
-	  
-    <% if params[:work_skins] %>
-      <% skins_label = current_page?(skins_path) ? ts("Public Site Skins") : ts("My Site Skins") %>
-      <%= link_to skins_label, url_for(:work_skins => false) %>
-    <% else %>
-      <% skins_label = current_page?(skins_path) ? ts("Public Work Skins") : ts("My Work Skins") %>
-      <%= link_to skins_label, url_for(:work_skins => true) %>
-    <% end %>
-  </li>
+
     
   <% if logged_in? %>
     <li>
-      <% if current_page?(skins_path) %>
-        <%= link_to ts('My Skins'), user_skins_path(current_user) %>
-      <% else %>
-        <%= link_to ts('Public Skins'), skins_path %>
-      <% end %>
+      <%= span_if_current ts("Site Skins"), url_for(:work_skins => false) %>
+    </li>
+    <li>
+      <%= span_if_current ts("Work Skins"), url_for(:work_skins => true) %>
+    </li>
+    <li>
+      <%= span_if_current ts('My Skins'), user_skins_path(current_user) %>
+    </li>
+    <li>
+      <%= span_if_current ts('Public Skins'), skins_path %>
+    </li>
+  <% else %>
+    <li>
+      <%= span_if_current ts("Public Site Skins"), url_for(:work_skins => false) %>
+    </li>
+    <li>
+      <%= span_if_current ts("Public Work Skins"), url_for(:work_skins => true) %>
     </li>
   <% end %>
+
   
   <% if session[:site_skin] %>
     <li><%= link_to ts("Revert to Default Skin"), unset_skins_path %></li>
