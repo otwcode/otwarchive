@@ -123,7 +123,7 @@ class WorksController < ApplicationController
       :complete => params[:complete]
     }
     # Add caching for tag pages
-    if @tag.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
+    if @tag.present? && !@collection.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
       status = logged_in? ? "u" : "v"
       page = params[:page] || 1
       # This has views/ in it because that's what expire_fragment is looking for
