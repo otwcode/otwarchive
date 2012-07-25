@@ -19,7 +19,8 @@ Feature: Admin posts
   When I follow "Comment"
     And I fill in "Comment" with "Excellent, my dear!"
     And I press "Comment"
-  Then 1 email should be delivered to "testadmin@example.org"
+  # notification to the admin list for admin post
+  Then 1 email should be delivered to "admin@example.org"
     And the email should contain "Excellent"
 
   # admin replies to comment of regular user
@@ -33,9 +34,10 @@ Feature: Admin posts
     And I fill in "Comment" with "Thank you very much!" within ".odd"
     And I press "Comment" within ".odd"
   Then I should see "Comment created"
-  # admin gets notified of their own comment, this is not a bug unless:
   # TODO: comments should be able to belong to an admin officially, otherwise someone can spoof being an admin by using the admin name and email
-    And 1 email should be delivered to "testadmin@example.org"
+  # notification to the admin list for admin post
+    And 1 email should be delivered to "admin@example.org"
+  # reply to the user
     And 1 email should be delivered to "happyuser"
   
   # regular user replies to comment of admin
@@ -47,14 +49,19 @@ Feature: Admin posts
     And I follow "Reply" within ".even"
     And I fill in "Comment" with "Oh, don't grow too big a head, you." within ".even"
     And I press "Comment" within ".even"
-  # admin gets the user's reply twice, this is not a bug unless TODO above is fixed
-  Then 2 emails should be delivered to "testadmin@example.org"
+  # reply to the admin as a regular user
+  Then 1 email should be delivered to "testadmin@example.org"
+  # notification to the admin list for admin post
+    And 1 email should be delivered to "admin@example.org"
   
   # regular user edits their comment
   Given all emails have been delivered    
   When I follow "Edit"
     And I press "Update"
-  Then 2 emails should be delivered to "testadmin@example.org"
+  # reply to the admin as a regular user
+  Then 1 email should be delivered to "testadmin@example.org"
+  # notification to the admin list for admin post
+    And 1 email should be delivered to "admin@example.org"
   
   Scenario: User views RSS of admin posts
   
