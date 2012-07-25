@@ -3,12 +3,14 @@
   <div class="primary header module">
     <h2 class="heading"><%= @tag.name %></h2>
     <div class="icon"></div>
-	<% if can_wrangle? %>
     <ul class="navigation actions" role="navigation">
-      <li><%= link_to 'Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
-      <li><%= tag_comment_link(@tag) %></li>  
+      <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
+      <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+    	<% if can_wrangle? %>
+      	<li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
+      	<li><%= tag_comment_link(@tag) %></li>
+      <% end %>
     </ul>
-  <% end %>
 </div>
 
   <%= error_messages_for :tag %>
@@ -18,8 +20,8 @@
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
     <%= ts("It's a common tag. You can use it to ") %> 
-    <%= link_to 'filter works', {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
-    <%= link_to "filter bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
+    <%= link_to ts('filter works'), {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
+    <%= link_to ts('filter bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
   <% end %>
   </p>
   
