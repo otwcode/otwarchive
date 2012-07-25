@@ -49,11 +49,8 @@
 </ul>
 
 <ul class="view actions" role="menu">
-  <% if params[:flat_view] %>
-    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => false) %></li>
-  <% else %>
-    <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
-  <% end %>
+  <li><%= link_to ts("Fandoms View"), url_for(params.merge :flat_view => false) %></li>
+  <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
 </ul>
 
 <h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
