@@ -4,23 +4,28 @@
 	<li>
 	  
     <% if params[:work_skins] %>
-      <% skins_label = current_page?(skins_path) ? ts("Site Skins") : ts("My Site Skins") %>
+      <% skins_label = current_page?(skins_path) ? ts("Public Site Skins") : ts("My Site Skins") %>
       <%= link_to skins_label, url_for(:work_skins => false) %>
     <% else %>
-      <% skins_label = current_page?(skins_path) ? ts("Work Skins") : ts("My Work Skins") %>
+      <% skins_label = current_page?(skins_path) ? ts("Public Work Skins") : ts("My Work Skins") %>
       <%= link_to skins_label, url_for(:work_skins => true) %>
     <% end %>
   </li>
-  <li>
-    <% if current_page?(skins_path) %>
-      <%= link_to ts('My Skins'), user_skins_path(current_user) %>
-    <% else %>
-      <%= link_to ts('Public Skins'), skins_path %>
-    <% end %>
-  </li>
+    
+  <% if logged_in? %>
+    <li>
+      <% if current_page?(skins_path) %>
+        <%= link_to ts('My Skins'), user_skins_path(current_user) %>
+      <% else %>
+        <%= link_to ts('Public Skins'), skins_path %>
+      <% end %>
+    </li>
+  <% end %>
+  
   <% if session[:site_skin] %>
     <li><%= link_to ts("Revert to Default Skin"), unset_skins_path %></li>
   <% end %>
+  
 	<% if logged_in? %>
 	  <% if current_user.preference.skin_id && session[:site_skin].blank? %>
 	    <li>
