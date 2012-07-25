@@ -8,14 +8,14 @@
       <li><%= link_to 'Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       <li><%= tag_comment_link(@tag) %></li>  
     </ul>
-    <% end %>
-  </div>
+  <% end %>
+</div>
 
   <%= error_messages_for :tag %>
   <!--/descriptions-->
 
   <!--main content-->
-  <p><%= ts("This tag belongs to the") %> <%= @tag.class::NAME %> <%=h "Category" %>.
+  <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
     <%= ts("It's a common tag. You can use it to ") %> 
     <%= link_to 'filter works', {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
