@@ -64,19 +64,11 @@ class TagsController < ApplicationController
       if logged_in? #current_user.is_a?User
         @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
       elsif logged_in_as_admin?
-        @works= @tag.works.visible_to_owner.paginate(:page => params[:page])
+        @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
       else
         @works = @tag.works.visible_to_all.paginate(:page => params[:page])
       end
       @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
-    end
-    # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
-    if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
-      if @tag.canonical # show works with that tag
-        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag) and return
-      elsif @tag.merger # show works with the canonical merger (synonym) of that tag
-        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag.merger) and return
-      end
     end
   end
 
