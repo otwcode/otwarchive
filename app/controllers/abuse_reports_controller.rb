@@ -35,14 +35,13 @@ class AbuseReportsController < ApplicationController
           if !@abuse_report.email.blank?
             UserMailer.abuse_report(@abuse_report.id).deliver
           else
-            setflash; flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
+            setflash; flash[:error] = ts("Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
             format.html { render :action => "new" }
           end
         end
-        setflash; flash[:notice] = t('successfully_sent', :default => 'Your abuse report was sent to the Abuse team.')
+        setflash; flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
         format.html { redirect_to '' }
       else
-        setflash; flash[:error] = t('failure_send', :default => 'Sorry, your abuse report could not be sent - please try again!')
         format.html { render :action => "new" }
       end
     end
