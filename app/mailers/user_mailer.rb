@@ -297,7 +297,7 @@ class UserMailer < BulletproofMailer::Base
 
   def abuse_report(report_id)
     report = AbuseReport.find(report_id)
-    setup_email_without_name(report.email)
+   # setup_email_without_name(report.email)  Not sure why this was here. Leaving it just in case
     @url = report.url
     @comment = report.comment
     mail(
