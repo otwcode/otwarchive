@@ -98,12 +98,24 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Emails a user to say they have been given more invitations for their friends
-  def invite_increase_notification(user_id, total)
+  def invite_increase_notification(user_id, total, reason)
     @user = User.find(user_id)
     @total = total
+    @reason = reason
     mail(
       :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+    )
+  end
+
+  # Emails a user to say that their request for invitation codes has been declined
+  def invitecode_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
     )
   end
 
