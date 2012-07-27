@@ -98,10 +98,9 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Emails a user to say they have been given more invitations for their friends
-  def invite_increase_notification(user_id, total, reason)
+  def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    @reason = reason
     mail(
       :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
