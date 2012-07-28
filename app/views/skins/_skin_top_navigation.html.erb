@@ -1,31 +1,7 @@
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
-<ul class="navigation actions" role="navigation">
 
-    
-  <% if logged_in? %>
-    <li>
-      <%= span_if_current ts("Site Skins"), url_for(:work_skins => false) %>
-    </li>
-    <li>
-      <%= span_if_current ts("Work Skins"), url_for(:work_skins => true) %>
-    </li>
-    <li>
-      <%= span_if_current ts('My Skins'), user_skins_path(current_user) %>
-    </li>
-    <li>
-      <%= span_if_current ts('Public Skins'), skins_path %>
-    </li>
-  <% else %>
-    <li>
-      <%= span_if_current ts("Public Site Skins"), url_for(:work_skins => false) %>
-    </li>
-    <li>
-      <%= span_if_current ts("Public Work Skins"), url_for(:work_skins => true) %>
-    </li>
-  <% end %>
-
-  
+  <ul class="navigation actions" role="navigation">
   <% if session[:site_skin] %>
     <li><%= link_to ts("Revert to Default Skin"), unset_skins_path %></li>
   <% end %>
