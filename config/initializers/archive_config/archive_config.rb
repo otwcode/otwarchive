@@ -2,6 +2,7 @@
 # Site configuration (needed before Initializer)
 require 'ostruct'
 require 'yaml'
+YAML::ENGINE.yamler= 'syck'
 hash = YAML.load_file("#{Rails.root}/config/config.yml")
 if !Rails.env.test?
   hash.merge! YAML.load_file("#{Rails.root}/config/local.yml")
