@@ -30,7 +30,7 @@ describe Tag do
 
     context "when logged in as a regular user" do
 
-      before do
+      before(:each) do
         User.current_user = Factory.create(:user)
       end
 
@@ -128,6 +128,15 @@ describe Tag do
       tag_syn.save
       tag.unwrangled?.should be_false
     end
+
+    it "should be true for a tag with a Fandom parent" do
+      tag_character = Factory.create(:character, :canonical => false)
+      tag_fandom = Factory.create(:fandom, :canonical => true)
+      tag_character.parents = [tag_fandom]
+      tag_character.save
+
+      tag_character.unwrangled?.should be_true
+    end
   end
 
   describe "can_change_type?" do
@@ -155,6 +164,34 @@ describe Tag do
     end
 
     it "should be false for a tag used in a tag set"
+
+    it "should be true for a tag used on a bookmark" do
+      tag = Factory.create(:unsorted_tag)
+      tag.can_change_type?.should be_true
+      
+      # TODO: use factories when they stop giving validation errors and stack too deep errors
+      creator = User.new(:terms_of_service => '1', :age_over_13 => '1')
+      creator.login = "Creator"; creator.email = "creator@muse.net"
+      creator.save
+      bookmarker = User.new(:terms_of_service => '1', :age_over_13 => '1')
+      bookmarker.login = "Bookmarker"; bookmarker.email = "bookmarker@avidfan.net"
+      bookmarker.save
+      chapter = Chapter.new(:content => "Whatever 10 characters", :authors => [creator.pseuds.first])
+      work = Work.new(:title => "Work", :fandom_string => "Whatever", :authors => [creator.pseuds.first], :chapters => [chapter])
+      work.posted = true
+      work.save
+
+      bookmark = Bookmark.create(:bookmarkable_type => "Work", :bookmarkable_id => work.id, :pseud_id => bookmarker.pseuds.first.id, :tag_string => tag.name)
+      bookmark.tags.should include(tag)
+      tag.can_change_type?.should be_true
+    end
+
+    it "should be true for a tag used on an external work" do
+      external_work = Factory.create(:external_work, :character_string => "Jane Smith")
+      tag = Tag.find_by_name("Jane Smith")
+
+      tag.can_change_type?.should be_true
+    end
   end
 
   describe "type changes" do
@@ -260,6 +297,51 @@ describe Tag do
       it "should have the Uncategorized Fandoms Media as a parent" do
         @fandom_tag.parents.should eq([Media.uncategorized])
       end
+    end
+
+    context "when the Character had a Fandom attached" do
+      before do
+        @unsorted_tag = Factory.create(:character, :canonical => false)
+        fandom_tag = Factory.create(:fandom, :canonical => true)
+        @unsorted_tag.parents = [fandom_tag]
+        @unsorted_tag.save
+      end
+
+      it "should drop the Fandom when changed to UnsortedTag" do
+        @unsorted_tag.type = "UnsortedTag"
+        @unsorted_tag.save
+        @unsorted_tag = Tag.find(@unsorted_tag.id)
+
+        @unsorted_tag.should be_a(UnsortedTag)
+        @unsorted_tag.parents.should be_empty
+      end
+
+      it "should drop the Fandom and add to Uncategorized when changed to Fandom" do
+        @unsorted_tag.type = "Fandom"
+        @unsorted_tag.save
+        @unsorted_tag = Tag.find(@unsorted_tag.id)
+
+        @unsorted_tag.should be_a(Fandom)
+        @unsorted_tag.parents.should eq([Media.uncategorized])
+      end
+    end
+  end
+
+  describe "find_or_create_by_name" do
+    it "should sort unsorted tags that get used on works" do
+      tag = Factory.create(:unsorted_tag)
+      work = Factory.create(:work, :character_string => tag.name)
+
+      tag = Tag.find(tag.id)
+      tag.should be_a(Character)
+    end
+
+    it "should sort unsorted tags that get used on external works" do
+      tag = Factory.create(:unsorted_tag)
+      external_work = Factory.create(:external_work, :character_string => tag.name)
+
+      tag = Tag.find(tag.id)
+      tag.should be_a(Character)
     end
   end
 end

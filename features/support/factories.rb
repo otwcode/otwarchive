@@ -1,22 +1,22 @@
-Factory.define :user do |f|  
-  f.sequence(:login) { |n| "testuser#{n}" }   
+Factory.define :user do |f|
+  f.sequence(:login) { |n| "testuser#{n}" }
   f.password "password"
   f.age_over_13 '1'
-  f.terms_of_service '1' 
-  f.password_confirmation { |u| u.password }  
-  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }  
+  f.terms_of_service '1'
+  f.password_confirmation { |u| u.password }
+  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
 end
 
-Factory.define :pseud do |f|  
-  f.name "my test pseud"  
-  f.association :user  
+Factory.define :pseud do |f|
+  f.sequence(:name) { |n| "test pseud #{n}" }
+  f.association :user
 end
 
-Factory.define :admin do |f|  
-  f.sequence(:login) { |n| "testadmin#{n}" }   
-  f.password "password"  
-  f.password_confirmation { |u| u.password }  
-  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }  
+Factory.define :admin do |f|
+  f.sequence(:login) { |n| "testadmin#{n}" }
+  f.password "password"
+  f.password_confirmation { |u| u.password }
+  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
 end
 
 Factory.define :archive_faq do |f|
@@ -29,8 +29,8 @@ Factory.define :tag do |f|
   f.sequence(:name) { |n| "The #{n} Tag" }
 end
 
-Factory.define :unsorted_tag do |ut|
-  ut.sequence(:name) { |n| "Unsorted Tag #{n}"}
+Factory.define :unsorted_tag do |f|
+  f.sequence(:name) { |n| "Unsorted Tag #{n}"}
 end
 
 Factory.define :fandom do |f|
@@ -60,6 +60,14 @@ Factory.define :chapter do |f|
   f.association :work
 end
 
+# Factory.define :chapter do |f|
+#   f.content "Content of a chapter"
+#   # f.authors [ Factory.create(:pseud) ]
+#   f.after_build do |chapter|
+#     chapter.authors = [ Factory.build(:pseud) ] if chapter.authors.blank?
+#   end
+# end
+
 Factory.define :work do |f|
   f.title "My title"
 
@@ -75,6 +83,22 @@ end
 
 Factory.define :series do |f|
   f.sequence(:title) { |n| "Awesome Series #{n}" }
+end
+
+Factory.define :bookmark do |f|
+  f.bookmarkable_type "Work"
+  f.bookmarkable_id { Factory.create(:work).id }
+  f.pseud_id { Factory.create(:pseud).id }
+end
+
+Factory.define :external_work do |f|
+  f.title "An External Work"
+  f.author "An Author"
+  f.url "http://www.example.org"
+
+  f.after_build do |work|
+    work.fandoms = [Factory.build(:fandom)] if work.fandoms.blank?
+  end
 end
 
 # Factory.define :collection_participant do |f|
