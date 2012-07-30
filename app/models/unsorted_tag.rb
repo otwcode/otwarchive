@@ -11,4 +11,3 @@ class UnsortedTag < Tag
   end
 
 end
-

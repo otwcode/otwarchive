@@ -51,7 +51,7 @@ class Tag < ActiveRecord::Base
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
@@ -134,11 +134,12 @@ class Tag < ActiveRecord::Base
 
   before_save :check_type_changes, :if => :type_changed?
   def check_type_changes
-    # if the tag used to be a Fandom, and is now something else, no parent type will fit, remove all
-    if self.type_was == "Fandom"
+    # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
+    # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
+    if self.type_was == "Fandom" || self.type == "UnsortedTag" && !self.type_was.nil?
       self.parents = []
     # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
-    elsif self.type == "Fandom"
+    elsif self.type == "Fandom" && !self.type_was.nil?
       self.parents = [Media.uncategorized]
     end
   end
