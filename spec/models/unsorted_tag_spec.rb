@@ -1,10 +1,24 @@
 require 'spec_helper'
 
 describe UnsortedTag do
+  before do
+    @creator = User.new(:terms_of_service => '1', :age_over_13 => '1')
+    @creator.login = "Creator"; @creator.email = "creator@muse.net"
+    @creator.save
+
+    @bookmarker = User.new(:terms_of_service => '1', :age_over_13 => '1')
+    @bookmarker.login = "Bookmarker"; @bookmarker.email = "bookmarker@avidfan.net"
+    @bookmarker.save
+
+    @chapter = Chapter.new(:content => "Whatever 10 characters", :authors => [@creator.pseuds.first])
+    @work = Work.new(:title => "Work", :fandom_string => "Whatever", :authors => [@creator.pseuds.first], :chapters => [@chapter])
+    @work.save
+    @work.posted = true
+    @work.save
+  end
 
   it "should be created from a bookmark" do
-    # Factory.create(:bookmark, :tag_string => "bookmark tag")
-    Bookmark.create(:bookmarkable_type => "Work", :bookmarkable_id => Factory.create(:work, :posted => true).id, :pseud_id => Factory.create(:pseud).id, :tag_string => "bookmark tag")
+    Bookmark.create(:bookmarkable_type => "Work", :bookmarkable_id => @work.id, :pseud_id => @bookmarker.pseuds.first.id, :tag_string => "bookmark tag")
     tag = Tag.find_by_name("bookmark tag")
     tag.should be_a(UnsortedTag)
   end
