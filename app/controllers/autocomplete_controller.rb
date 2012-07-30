@@ -171,6 +171,14 @@ class AutocompleteController < ApplicationController
     end
   end
   
+  def admin_post_tags
+    if params[:term].present?
+      search_param = '%' + params[:term].strip + '%'
+      query = AdminPostTag.where("name LIKE ?", search_param).limit(ArchiveConfig.MAX_RECENT)
+      render_output(query.value_of(:name))
+    end
+  end
+
 private
 
   def render_output(result_strings)
@@ -181,6 +189,4 @@ private
     end
   end
   
-
 end
-
