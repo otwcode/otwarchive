@@ -1,3 +1,4 @@
+<div class="removeme">
 <p></p>
 <div class="fields">
   <dt><%= form.label :question, ts("Question") %></dt>
@@ -30,7 +31,8 @@
   </dd>
   <p class="actions" role="button">
     <% linktext = ts("Remove This Question") %>
-    <%= link_to_remove_fields(linktext, form )%>
+    <%= link_to_remove_section(linktext, form)%>
   </p>
   </dd>
+</div>
 </div>
