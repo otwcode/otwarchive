@@ -1,0 +1,36 @@
+<p></p>
+<div class="fields">
+  <dt><%= form.label :question, ts("Question") %></dt>
+  <dd><%= form.text_field :question, :id => "question" %>
+    <%= live_validation_for_field('question', :failureMessage => ts("Please enter a Question")) %>
+  </dd>
+  <dt><%= form.label :anchor, ts("Anchor name") %></dt>
+  <dd><%= form.text_field :anchor, :id => "anchor" %>
+    <%= live_validation_for_field('anchor', :failureMessage => ts("Please enter an Anchor name.")) %>
+  </dd>
+  <!-- The Answer -->
+  <dt><%= form.label :content, ts("Answer") %></dt>
+  <dd>
+    <p id="toggleText">
+      <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+    </p>
+    <!-- %< use_tinymce %> -->
+
+    <%= form.text_area :content, :id => "content" %>
+    <%= live_validation_for_field('content',
+                                  :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
+                                  :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} letters long.", :max => ArchiveConfig.CONTENT_MAX.to_s),
+                                  :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} letters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
+                                  :failureMessage => ts("You need to post some content here."))
+    %>
+    <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
+
+  <dt><%= form.label :screencast, ts("Screencast? Enter text link") %></dt>
+  <dd><%= form.text_field :screencast, :id => "screencast" %>
+  </dd>
+  <p class="actions" role="button">
+    <% linktext = ts("Remove This Question") %>
+    <%= link_to_remove_fields(linktext, form )%>
+  </p>
+  </dd>
+</div>
