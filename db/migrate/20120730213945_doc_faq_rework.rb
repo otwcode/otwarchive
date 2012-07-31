@@ -1,8 +1,7 @@
 class DocFaqRework < ActiveRecord::Migration
   def self.up
     # Add two new variable to existing archive_faqs table
-    add_column :archive_faqs, :question, :string
-    add_column :archive_faqs, :anchor,   :string
+    #add_column :archive_faqs, :question, :string
     # Create new questions table and add the variables
     create_table :questions do |t|
       t.integer :archive_faq_id
