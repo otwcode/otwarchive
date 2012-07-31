@@ -2,6 +2,7 @@
   <%= form_for(@archive_faq) do |form| %>
       <%= error_messages_for @archive_faq %>
 
+      <fieldset>
         <dl class="text">
           <dt><%= form.label :title, ts("Category Name") %></dt>
           <dd><%= form.text_field :title, :id => "title" %>
@@ -16,6 +17,7 @@
 
           </p>
 
+      </fieldset>
       <dt class="landmark heading">("Post") %></dt>
       <dd class="submit actions">
         <%= submit_tag ts('Post'), :name => 'post_button' %>
