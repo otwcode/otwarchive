@@ -19,6 +19,5 @@ class DocFaqRework < ActiveRecord::Migration
     drop_table :questions
     remove_column :archive_faqs, :anchor
     remove_column :archive_faqs, :questions
->>>>>>> Created migration file
   end
 end

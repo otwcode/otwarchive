@@ -14,5 +14,8 @@ class Question < ActiveRecord::Base
 
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
                       :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+<<<<<<< HEAD
 
+=======
+>>>>>>> Brought code inline with DRY. Fixed livevalidation on dynamically added fields
 end

@@ -1,7 +1,6 @@
 <div id="work-form" class="post create faq">
   <%= form_for(@archive_faq) do |form| %>
       <%= error_messages_for @archive_faq %>
-
       <fieldset>
         <dl class="text">
           <dt><%= form.label :title, ts("Category Name") %></dt>
@@ -14,9 +13,7 @@
           <p class="actions" role="button">
             <% linktext = ts("Add another Question?") %>
             <%= link_to_add_section(linktext, form, :questions, "question_answer_fields", :required => false) %>
-
           </p>
-
       </fieldset>
       <dt class="landmark heading">("Post") %></dt>
       <dd class="submit actions">
