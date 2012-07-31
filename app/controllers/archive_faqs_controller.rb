@@ -1,7 +1,7 @@
 class ArchiveFaqsController < ApplicationController
-  
+
   before_filter :admin_only, :except => [:index, :show]
-  
+
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index
@@ -28,7 +28,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/new.xml
   def new
     @archive_faq = ArchiveFaq.new
-
+    1.times { @archive_faq.questions.build}
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @archive_faq }
@@ -39,10 +39,10 @@ class ArchiveFaqsController < ApplicationController
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
   end
-  
+
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = ArchiveFaq.order('position ASC')    
+    @archive_faqs = ArchiveFaq.order('position ASC')
   end
 
   # POST /archive_faqs
@@ -78,7 +78,7 @@ class ArchiveFaqsController < ApplicationController
       end
     end
   end
-  
+
   # reorder FAQs
   def update_positions
     if params[:archive_faqs]
