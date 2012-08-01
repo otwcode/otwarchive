@@ -18,5 +18,7 @@ class DocFaqRework < ActiveRecord::Migration
 
   def self.down
     drop_table :questions
+    remove_column :archive_faqs, :content
+    remove_column :archive_faqs, :content_sanitizer_version
   end
 end
