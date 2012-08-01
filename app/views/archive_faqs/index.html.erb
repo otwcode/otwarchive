@@ -20,8 +20,8 @@
                 <ul>
                   <% for q in faq.questions %>
                       <li><%= link_to  q.question, archive_faq_path(faq, :anchor => q.anchor) %></li>
-                      <% unless q.screencast.to_s.empty? %>  <%= raw sanit %>
-                          <li><%= ts("Screencast: ") %><%= raw sanitize_field(q, :screencast) %></li>
+                      <% unless q.screencast.to_s.empty? %>
+                          <dd><%= ts("Screencast: ") %><%= raw sanitize_field(q, :screencast) %></dd>
                       <% end %>
                   <% end %>
                 </ul>
