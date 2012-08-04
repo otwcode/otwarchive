@@ -68,10 +68,10 @@
        
       <!-- Add collection -->
       <dt class="collection">
-        <%= f.label :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-work-to-collection" %>
+        <%= f.label :collections_to_add, ts("Post to Collections / Challenges") %> <%= link_to_help "add-work-to-collection" %>
       </dt>
       <dd class="collection" title="post to collection">
-        <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
+        <%= f.text_field :collections_to_add, autocomplete_options("open_collection_names") %>
       </dd>
  
       <dt class="recipient">
