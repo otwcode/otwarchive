@@ -85,6 +85,8 @@ class Collection < ActiveRecord::Base
                              [ts("Prompt Meme"), "PromptMeme"],
                            ]
 
+  before_validation :clear_icon
+
   validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
@@ -418,6 +420,20 @@ class Collection < ActiveRecord::Base
     else
       query.paginate(pagination_args)
     end
+  end
+  
+  # Delete current icon (thus reverting to archive default icon)
+  def delete_icon=(value)
+    @delete_icon = !value.to_i.zero?
+  end
+
+  def delete_icon
+    !!@delete_icon
+  end
+  alias_method :delete_icon?, :delete_icon
+
+  def clear_icon
+    self.icon = nil if delete_icon? && !icon.dirty?
   end
 
 end
