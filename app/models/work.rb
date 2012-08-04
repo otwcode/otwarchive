@@ -1081,6 +1081,86 @@ class Work < ActiveRecord::Base
   #
   #############################################################################
 
-
+  self.include_root_in_json = false
+  def self.search(params)
+    tire.search(page: params[:page], per_page: 20) do
+      query do
+        boolean do
+          must { string (params[:query] || "*"), default_operator: "AND" } #if params[:query].present?
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :pseud_ids, :collection_ids].each do |id_list|
+            if options[id_list].present?
+              options[id_list].each do |id|
+                must { term id_list }
+              end
+            end
+          end
+        end
+      end
+      sort { by :created_at, "desc" } if params[:query].blank?
+      facet "rating" do
+        terms :rating_ids
+      end
+      facet "warning" do
+        terms :warning_ids
+      end
+      facet "category" do
+        terms :category_ids
+      end
+      facet "fandom" do
+        terms :fandom_ids
+      end
+      facet "character" do
+        terms :character_ids
+      end
+      facet "relationship" do
+        terms :relationship_ids
+      end
+      facet "freeform" do
+        terms :freeform_ids
+      end
+      facet "pseud" do
+        terms :pseud_ids
+      end
+      facet "collection" do
+        terms :collection_ids
+      end
+      # raise to_curl
+    end
+  end
+  
+  def to_indexed_json
+    to_json(methods: [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :tag_names, :pseud_ids, :collection_ids])
+  end
+  
+  def rating_ids
+    ratings.value_of :id
+  end
+  def warning_ids
+    warnings.value_of :id
+  end
+  def category_ids
+    categories.value_of :id
+  end
+  def fandom_ids
+    filters.by_type("Fandom").value_of :id
+  end
+  def character_ids
+    filters.by_type("Character").value_of :id
+  end
+  def relationship_ids
+    filters.by_type("Relationship").value_of :id
+  end
+  def freeform_ids
+    filters.by_type("Freeform").value_of :id
+  end
+  def tag_names
+    (tags + filters).uniq.map{ |t| t.name }
+  end
+  def pseud_ids
+    creatorships.value_of :pseud_id
+  end
+  def collection_ids
+    collections.value_of :id
+  end
 
 end
