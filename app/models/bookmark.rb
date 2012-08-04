@@ -141,6 +141,15 @@ class Bookmark < ActiveRecord::Base
   end
   
   def self.search(options={})
+    if options[:other_tag_names].present?
+      names = options[:other_tag_names].split(",")
+      tags = Tag.where(:name => names)
+      tags.each do |tag|
+        facet_key = "#{tag.type.to_s.downcase}_ids".to_sym
+        options[facet_key] ||= []
+        options[facet_key] << tag.id
+      end
+    end
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       query do
         boolean do
