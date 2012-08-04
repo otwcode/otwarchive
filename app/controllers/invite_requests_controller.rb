@@ -34,7 +34,7 @@ class InviteRequestsController < ApplicationController
   end
   
   def manage
-    @invite_requests = InviteRequest.find(:all, :order => :position)
+    @invite_requests = InviteRequest.order(:position).page(params[:page])
   end
   
   def reorder
