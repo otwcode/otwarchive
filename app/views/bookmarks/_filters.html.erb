@@ -37,9 +37,9 @@
           </ul>
         </dd>
       <% end %>
-      <dt><%= ts("Search") %></dt>
+      <dt><%= label_tag :query, ts("Search") %></dt>
       <dd><%= text_field_tag :query, params[:query] %></dd>
-      <dt><%= label_tag 'other_tag_names', "Other Tags" %></dt>
+      <dt><%= label_tag 'other_tag_names', ts("Other Tags") %></dt>
       <dd>
         <%= text_field_tag 'other_tag_names', params[:other_tag_names], autocomplete_options("tag") %>
       </dd>
