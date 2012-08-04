@@ -150,7 +150,8 @@ class ChaptersController < ApplicationController
       @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-      render :preview_edit
+      flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+      render :preview
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')
