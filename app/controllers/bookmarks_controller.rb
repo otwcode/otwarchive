@@ -48,78 +48,45 @@ class BookmarksController < ApplicationController
   # GET    /works/:work_id/bookmarks
   # GET    /external_works/:external_work_id/bookmarks
   # GET    /series/:series/bookmarks
-  # TODO needs a complete overhaul. using reject is a performance killer
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
     end
-    if params[:user_id]
-      # @user is needed in the sidebar
-      owner = @user = User.find_by_login(params[:user_id])
-      @page_subtitle = ts("by ") + @user.login if @user
-      if params[:pseud_id] && @user
-        # @author is needed in the sidebar
-        owner = @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @page_subtitle = ts("by ") + @author.byline if @author
+    options = params.dup
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      options[:pseud_ids] = @user.pseuds.value_of(:id)
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+        options[:pseud_ids] = [@author.id]
       end
-    elsif params[:tag_id]
-      owner ||= Tag.find_by_name(params[:tag_id])
-      @page_subtitle = owner.name if owner
-    elsif @collection
-      @page_subtitle = @collection.title
-      owner ||= @collection # insufficient to filter out unapproved bookmarks, see below
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      if @tag.present?
+        facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
+        options[facet_key] ||= []
+        options[facet_key] << @tag.id
+        params[facet_key] = options[facet_key]
+      else
+        
+      end
+    end
+    if @collection.present?
+      if params[:work_collections].present?
+        options[:work_collection_ids] ||= []
+        options[:work_collection_ids] << @collection.id
+      else
+        options[:collection_ids] ||= []
+        options[:collection_ids] << @collection.id
+      end
+    end
+    if @user.present? && @user == current_user
+      options[:private] = true
     else
-      owner ||= @bookmarkable
+      options[:private] = false
     end
-    if params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || params[:collection_id]
-      unless owner
-        # we have to manually trigger a 404 when we're using find_by_name
-        # otherwise the user gets a 500 error
-        raise ActiveRecord::RecordNotFound
-      end
-
-      # Do not aggregate bookmarks on these pages
-      if params[:collection_id] && @collection
-        @bookmarks = Bookmark.in_collection(@collection)
-      else
-        @bookmarks= owner.bookmarks
-      end
-
-      if @user && @user == current_user
-        # can see all own bookmarks
-      elsif logged_in_as_admin?
-        @bookmarks = @bookmarks.visible_to_admin
-      elsif logged_in?
-        @bookmarks = @bookmarks.visible_to_registered_user
-      else
-        @bookmarks = @bookmarks.visible_to_all
-      end
-    else 
-      setflash; flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
-      if params[:tag_id]  # tag page
-        unless owner
-          raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-        end
-        @bookmarks = owner.bookmarks
-      else # main page
-        @most_recent_bookmarks = true
-        @bookmarks = Bookmark.recent.visible_to_user(current_user)
-        if params[:recs_only]
-          @page_subtitle = ts("recs")
-        end
-      end
-      if logged_in_as_admin?
-        @bookmarks = @bookmarks.visible_to_admin
-      elsif logged_in?
-        @bookmarks = @bookmarks.visible_to_registered_user
-      else
-        @bookmarks = @bookmarks.visible_to_all
-      end
-    end
-    if params[:recs_only]
-      @bookmarks = @bookmarks.recs
-    end
-    @bookmarks = @bookmarks.paginate(:page => params[:page])
+    @bookmarks = Bookmark.search(options)
   end
   
   # GET    /:locale/bookmark/:id

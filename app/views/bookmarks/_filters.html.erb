@@ -1,0 +1,51 @@
+<%= form_tag( @collection ? collection_bookmarks_path(@collection) : bookmarks_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
+  <h3 class="landmark heading"><%= ts("Filters") %></h3>
+  <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
+    <dl class="filters" role="menu">
+      <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
+        <dt>
+          <noscript><%= tag_type.capitalize %></noscript>
+          <span class="tag_category_<%= tag_type %>_open hidden">
+            <%= image_tag 'arrow-right.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+          <span class="tag_category_<%= tag_type %>_close hidden">
+            <%= image_tag 'arrow-down.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+        </dt>
+        <dd id="tag_category_<%= tag_type %>" class="tags toggled">
+          <ul>              
+            <% @bookmarks.facets[tag_type]['terms'].each do |facet| %>
+              <li>
+                <% tag = Tag.find(facet['term']) %>
+                <% if (tag_type == "rating") && @bookmarks.facets[tag_type]['terms'].length > 1 %>
+                  <%= radio_button_tag "#{tag_type}_ids[]", 
+                    tag.id, 
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id), 
+                    :id => "#{tag_type}_ids_#{tag.id}" %> 
+                <% else %>
+                  <%= check_box_tag "#{tag_type}_ids[]", 
+                    tag.id,
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id), 
+                    :id => "#{tag_type}_ids_#{tag.id}" %>
+                <% end %>
+                <%= label_tag "#{tag_type}_ids_#{tag.id}", 
+                  "#{tag.name} (#{facet['count']})" %>
+              </li>
+            <% end %>
+          </ul>
+        </dd>
+      <% end %>
+      <dt class="landmark"><%= ts("Submit") %></dt>
+      <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
+    </dl>
+    <div>
+      <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
+      <%= hidden_field_tag("query", @query) if @query %>
+      <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
+      <%= hidden_field_tag("pseud_id", @author.name) if @author %>
+      <%= hidden_field_tag("user_id", @user.login) if @user %>
+    </div>
+  <% end %>
+<% end %>

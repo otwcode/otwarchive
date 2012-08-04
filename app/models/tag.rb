@@ -903,7 +903,7 @@ class Tag < ActiveRecord::Base
   end
   
   def self.search(options={})
-    tire.search(page: options[:page], per_page: 50, type: nil) do
+    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
       query do
         boolean do
           must { string options[:name], default_operator: "AND" } if options[:name].present?
