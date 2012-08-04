@@ -37,6 +37,12 @@
           </ul>
         </dd>
       <% end %>
+      <dt><%= ts("Search") %></dt>
+      <dd><%= text_field_tag :query, params[:query] %></dd>
+      <dt><%= label_tag 'other_tag_ids', "Other Tags" %></dt>
+      <dd>
+        <%= text_field_tag 'other_tag_names', params[:other_tag_names], autocomplete_options("tag") %>
+      </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
     </dl>
