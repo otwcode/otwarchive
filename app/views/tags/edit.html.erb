@@ -67,8 +67,7 @@
         <% if @tag.merger %>
           <p class="navigation actions" role="navigation"><%= ts("Edit") %> <%= link_to_edit_tag(@tag.merger) %></p>
         <% elsif @tag.canonical? %>
-          <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. Attention SYSTEM MESSAGES wrangler-->
-          <p class="important warning"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
+          <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
         <% end %>
       </dd>
       <% end %>
