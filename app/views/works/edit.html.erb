@@ -16,7 +16,6 @@
             <%= link_to h(chapter.position) + ts(" (Draft)"), [:edit, @work, chapter] %>
 	<% end %>
       <% end %></li>
-      link_to ts('Orphan Work'), {:controller => 'orphans', :action => 'new', :work_id => @work.id}
     <li><%= link_to ts('Manage Chapters'), manage_work_chapters_path(@work) %></li>
   <% end %>
   <% unless (@work.pseuds - current_user.pseuds).empty? %>
@@ -24,7 +23,6 @@
   <% end %>
   <% if @work.posted? %>
     <li><%= link_to ts('Orphan Work'), {:controller => 'orphans', :action => 'new', :work_id => @work.id} %></li>
-      <% else %>
   <% end %>
 	<li><%= link_to ts('Delete Work'), @work, :confirm => ts('Are you sure?'), :method => :delete %></li>
 </ul>					
