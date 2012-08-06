@@ -54,7 +54,7 @@ html body #header form #small_login {
   position: static;
 }
 
-#footer a:hover {
+#footer a:hover, #footer a:focus {
   background: transparent;
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000,endColorstr=#4C000000)";
   zoom: 1;
