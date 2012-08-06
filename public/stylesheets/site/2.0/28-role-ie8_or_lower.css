@@ -54,6 +54,12 @@ html body #header form #small_login {
   position: static;
 }
 
+#footer a:hover {
+  background: transparent;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000,endColorstr=#4C000000)";
+  zoom: 1;
+}
+
 /*float/clear */
 
 #header #search .submit, .stats dd, .stats dt {
