@@ -15,6 +15,11 @@ Otwarchive::Application.routes.draw do
     end
   end
   
+  #### Fragment space for caching ####
+
+  namespace :frak do
+    resources :login
+  end
   
   #### OPEN DOORS ####
   namespace :opendoors do
