@@ -8,7 +8,7 @@
     <%= live_validation_for_field('user_login', 
         :maximum_length => User::LOGIN_LENGTH_MAX, :minimum_length => User::LOGIN_LENGTH_MIN, 
         :failureMessage => 'You need a login name! (At least ' + User::LOGIN_LENGTH_MIN.to_s + ' letters long, please.)')%>
-    <p class="footnote"><%= ts("3 to 40 characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number")%></p>
+    <p class="footnote"><%= ts("%d to %d characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number") % [User::LOGIN_LENGTH_MIN, User::LOGIN_LENGTH_MAX] %></p>
   </dd>
   <!-- Password -->
   <dt>
@@ -29,7 +29,7 @@
           :maximum_length => User::PASSWORD_LENGTH_MAX, 
           :minimum_length => User::PASSWORD_LENGTH_MIN,
           :failureMessage => 'Please enter the same password in both fields.') %>
-    <p class="footnote"><%= ts("6 to 40 characters")%></p>
+    <p class="footnote"><%= ts("%d to %d characters") % [User::PASSWORD_LENGTH_MIN, User::PASSWORD_LENGTH_MAX] %></p>
   </dd>
   <!-- Email -->
   <dt>

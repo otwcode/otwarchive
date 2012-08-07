@@ -20,14 +20,21 @@
 <%= form_tag change_username_user_path(@user) do %>  
   <dl>
     <dt><%= ts("Current User Name") %></dt>
-      <dd><strong><%= @user.login %></strong></dd>
-      <dt><%= label_tag :new_login, ts("New User Name") %></dt>
-      <dd><%= text_field_tag :new_login, @new_login %></dd>
-      <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
-      <dd id="passwd"><%= password_field_tag :password %></dd>
-  <dt class="landmark"><%= ts("Submit") %></dt>
-	<dd class="submit actions"><%= submit_tag "Change" %></dd>
-</dl>
+    <dd><strong><%= @user.login %></strong></dd>
+    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+    <dd>
+      <%= text_field_tag :new_login, @new_login %>
+      <p class="footnote"><%= ts("%d to %d characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number") % [User::LOGIN_LENGTH_MIN, User::LOGIN_LENGTH_MAX] %></p>
+    </dd>
+    <%= live_validation_for_field('new_login', 
+	:exclusion => User.find(:all, :select => :login).map{|user| user.login}, 
+        :failureMessage => ts("username already taken"),
+        :validMessage => ts("username available")) %>
+    <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
+    <dd id="passwd"><%= password_field_tag :password %></dd>
+    <dt class="landmark"><%= ts("Submit") %></dt>
+    <dd class="submit actions"><%= submit_tag "Change" %></dd>
+  </dl>
 <% end %>
 <% if @wrong_password %>
   <div class="clear"></div>
