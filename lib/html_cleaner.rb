@@ -43,12 +43,12 @@ module HtmlCleaner
     end
 
     def open_paragraph_tags
-      return "" if !last.include?("p")
       result = ""
       each do |tags| 
         tags.each do |tag, attributes|
           next if result == "" && tag != "p"
           next if ignore_tag?(tag)
+          result = "" if tag == "p"
           result += open_tag(tag, attributes)
         end
       end
@@ -56,7 +56,7 @@ module HtmlCleaner
     end
     
     def close_paragraph_tags
-      return "" if !last.include?("p")
+      return "" if !inside_paragraph?
       result = ""
       reverse.each do |tags| 
         tags.reverse.each do |tag, attributes|
@@ -287,6 +287,10 @@ module HtmlCleaner
 
       # If we are the root node, pre-emptively open a paragraph
       if node.name == "myroot"
+        out_html += stack.add_p
+      end
+
+      if no_break_before_after_tag?(node.name) and !stack.last.include?("p")
         out_html += stack.add_p
       end
 
