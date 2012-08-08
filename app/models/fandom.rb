@@ -26,7 +26,7 @@ class Fandom < Tag
   
   after_save :add_media_for_uncategorized
   def add_media_for_uncategorized
-    if self.medias.empty?
+    if self.medias.empty? && self.type == "Fandom" # type could be something else if the tag is in the process of being re-categorised (re-sorted)
       self.parents << Media.uncategorized
     end
     true    
