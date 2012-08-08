@@ -163,8 +163,8 @@ module HtmlCleaner
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end   
-      value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(value)), 
-                             Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
+      value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value), 
+                             Sanitize::Config::ARCHIVE.merge(:transformers => transformers)))
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       value = doc.fragment(value).to_xhtml
@@ -357,7 +357,7 @@ module HtmlCleaner
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
     # Remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
-    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)/, "")
+    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)|(\A<myroot\/>\Z)/, "")
     out_html
   end
 
