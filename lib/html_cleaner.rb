@@ -43,6 +43,7 @@ module HtmlCleaner
     end
 
     def open_paragraph_tags
+      return "" if !last.include?("p")
       result = ""
       each do |tags| 
         tags.each do |tag, attributes|
@@ -55,7 +56,7 @@ module HtmlCleaner
     end
     
     def close_paragraph_tags
-      return "" if !inside_paragraph?
+      return "" if !last.include?("p")
       result = ""
       reverse.each do |tags| 
         tags.reverse.each do |tag, attributes|
