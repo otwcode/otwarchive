@@ -1,9 +1,9 @@
+<% if logged_in? %>
 <h4 class="landmark heading">Gift Exchange</h4>
   <ul class="navigation actions">
-<!-- added automatically to the collection sidebar for challenges. 
-      all items should be enclosed in <li> </li> and linked with span_if_current! 
-      @collection is defined, @challenge may not be. -->
-<% if logged_in? %>
+  <!-- added automatically to the collection sidebar for challenges. 
+        all items should be enclosed in <li> </li> and linked with span_if_current! 
+        @collection is defined, @challenge may not be. -->
   <!-- signup form or link -->
   <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
     <li><%= span_if_current ts("Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
@@ -42,6 +42,5 @@
       <li><%= span_if_current ts("Assignments"), collection_assignments_path(@collection) %></li>
     <% end %>
   <% end %>
-    
-<% end %>
 </ul>
+<% end %>
