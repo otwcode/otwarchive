@@ -148,10 +148,11 @@ module WorksHelper
     warning_text = add_label_for_embed(ts("Warning: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '))
     relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '))
     char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '))
+    series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work))
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
 
     # we deliberately don't html_safe this because we want it escaped
-    [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
+    [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, series_text, summary_text].compact.join("\n")
   end
 
   # convert a bookmark into a nicely formatted chunk of text
