@@ -84,10 +84,10 @@ class Work < ActiveRecord::Base
   
   # statistics
   has_many :work_links, :dependent => :destroy      
-  has_one :hit_counter, :dependent => :destroy
-  after_create :create_hit_counter
-  def create_hit_counter
-    counter = self.build_hit_counter
+  has_one :stat_counter, :dependent => :destroy
+  after_create :create_stat_counter
+  def create_stat_counter
+    counter = self.build_stat_counter
     counter.save
   end
   
@@ -370,12 +370,21 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    !self.approved_collection_items.unrevealed.empty?
+    #!self.approved_collection_items.unrevealed.empty?
+    in_unrevealed_collection?
   end
 
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    !self.approved_collection_items.anonymous.empty?
+    #!self.approved_collection_items.anonymous.empty?
+    in_anon_collection?
+  end
+  
+  before_save :check_anon_author_sorting
+  def check_anon_author_sorting
+    if anonymous?
+      authors_to_sort_on = "Anonymous"
+    end
   end
 
   ########################################################################
@@ -1035,7 +1044,7 @@ class Work < ActiveRecord::Base
       @works = @works.unrestricted
     end
     if options[:sort_column] == "hit_count"
-      @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
+      @works = @works.select("works.*, stat_counters.hit_count AS hit_count").joins(:stat_counter)
     end
 
     @works = @works.order(sort_by).posted.unhidden
@@ -1216,8 +1225,12 @@ class Work < ActiveRecord::Base
   end
   def byline
     names = ""
-    pseuds.each do |pseud|
-      names << "#{pseud.name} #{pseud.user_login} "
+    if anonymous?
+      names = "Anonymous"
+    else
+      pseuds.each do |pseud|
+        names << "#{pseud.name} #{pseud.user_login} "
+      end
     end
     names
   end
