@@ -19,7 +19,7 @@
 <div class="wrapper">
   <dl class="work meta group" role="complementary">
     <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <dt><%= stat.to_s.titleize %></dt>
+      <dt><%= (stat.to_s.titeize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize%></dt>
       <dd><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
@@ -42,7 +42,7 @@
     <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
   <% end %>
   <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
-  <li><%= sort_link ts('Comments'), "comments.count", {:desc_default => true} %></li>
+  <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
   <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
   <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
   <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
