@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
 <% if @locale %>
-  <%= t('.translators_for_locale', :default => 'Translators for %{current_locale}', :current_locale => @locale.name) %>
+  <%= ts('Translators for %{current_locale}', :current_locale => @locale.name) %>
 <% else %>  
-  <%= t('.translators_header', :default => 'Translators') %>
+  <%= ts('Translators') %>
 <% end %>
 </h2>
 <!--/descriptions-->
@@ -11,21 +11,21 @@
 <!--subnav-->
 <% if current_user.is_a?(User) && current_user.is_translation_admin? %>
 <ul class="navigation actions" role="navigation">
-<li><%= link_to t('.link_to_new', :default => 'Add new translators'), 
+<li><%= link_to ts('Add new translators'), 
         (@locale ? new_locale_translator_path(@locale) : new_translator_path) %></li>
 </ul>
 <% end %>
 <!--/subnav-->
-<!-- TABLEWATCH-->
+
 <!--main content-->
-<table id="translators_table" summary="">
-  <caption><%=h t('.list', :default => "List of active translators") %></caption>
+<table id="translators_table" summary="<%= ts('Name, email, and locale for active translators.') %>">
+  <caption><%= ts("Active Translators") %></caption>
   <thead>
 	<tr>
-  	<th scope="col"><%=h t('.name', :default => "Name") %></th>
-  	<th scope="col"><%=h t('.email', :default => "Email") %></th>
+  	<th scope="col"><%= ts("Name") %></th>
+  	<th scope="col"><%= ts("Email") %></th>
   	<% if @locale.blank? %>
-  	<th scope="col"><%=h t('.current_locale', :default => "Locale") %></th>
+  	  <th scope="col"><%= ts("Locale") %></th>
   	<% end %>
   </tr>
  </thead>
