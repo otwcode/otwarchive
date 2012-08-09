@@ -1,4 +1,4 @@
-class HitCounter < ActiveRecord::Base
+class StatCounter < ActiveRecord::Base
   include LogfileReader
   include WorkStats
   
@@ -20,21 +20,21 @@ class HitCounter < ActiveRecord::Base
     work_ids = $redis.smembers(WORKS_TO_UPDATE_KEY).map{|id| id.to_i}
     found_works = []
 
-    HitCounter.find_each(:conditions => ["work_id IN (?)", work_ids]) do |hit_counter|
-      redis_hits = get_stat(:hit_count, hit_counter.work_id)
-      if redis_hits > hit_counter.hit_count
-        hit_counter.update_attribute(:hit_count, redis_hits)
+    StatCounter.find_each(:conditions => ["work_id IN (?)", work_ids]) do |stat_counter|
+      redis_hits = get_stat(:hit_count, stat_counter.work_id)
+      if redis_hits > stat_counter.hit_count
+        stat_counter.update_attribute(:hit_count, redis_hits)
       else
-        Rails.logger.debug "The redis hit count for work id: #{hit_counter.work_id} was #{redis_hits}. redis has been updated with the database value of #{hit_counter.hit_count}"
-        set_stat(:hit_count, hit_counter.work_id, hit_counter.hit_count)
+        Rails.logger.debug "The redis hit count for work id: #{stat_counter.work_id} was #{redis_hits}. redis has been updated with the database value of #{stat_counter.hit_count}"
+        set_stat(:hit_count, stat_counter.work_id, stat_counter.hit_count)
       end
-      $redis.srem(WORKS_TO_UPDATE_KEY, hit_counter.work_id)
-      found_works << hit_counter.work_id
+      $redis.srem(WORKS_TO_UPDATE_KEY, stat_counter.work_id)
+      found_works << stat_counter.work_id
     end
     
     # Create hit counters for works that don't have them yet
     (work_ids - found_works).each do |work_id|
-      hit_counter = HitCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
+      stat_counter = StatCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
       $redis.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
   end
@@ -48,7 +48,7 @@ class HitCounter < ActiveRecord::Base
     stats = get_work_statistic_from_logs(:download_count, start_date)
     stats.each_pair do |work_id, new_count|
       # add the count to the hit counter
-      hc = HitCounter.find_or_initialize_by_work_id(:work_id => work_id)
+      hc = StatCounter.find_or_initialize_by_work_id(:work_id => work_id)
       hc.download_count += new_count || 0
       hc.save
       # update redis to current value
