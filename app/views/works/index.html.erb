@@ -41,22 +41,6 @@
       <% end %>
     </ul>
   <% end %>
-
-  <!--sorting subnav-->
-  <ul class="sorting actions" role="menu">
-    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-    <% unless @query.blank? %>
-      <li><%= sort_link ts('Relevance') %></li>
-    <% end %>
-    <li><%= sort_link ts('Author'), :author %></li>
-    <li><%= sort_link ts('Title'), :title %></li>
-    <li><%= sort_link ts('Date Updated'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
-    <li><%= sort_link ts('Date Added'), :created_at, {:desc_default => true} %></li>
-    <li><%= sort_link ts('Word Count'), :word_count, {:desc_default => true} %></li>
-    <% unless logged_in? && current_user.preference.try(:hide_all_hit_counts) %>
-      <li><%= sort_link ts('Hits'), :hit_count, {:desc_default => true} %></li>
-    <% end %>
-  </ul>
   
 </div>
 <!---/subnav-->

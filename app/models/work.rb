@@ -1066,6 +1066,38 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
+  
+  #############################################################################
+  #
+  # SORTING
+  #
+  #############################################################################
+  def self.sort_options
+    [
+      ['Author', 'author'],
+      ['Title', 'title'],
+      ['Date Posted', 'created_at'],
+      ['Date Updated', 'date'],
+      ['Word Count', 'word_count'],
+      ['Hits', 'hits'],
+      ['Kudos', 'kudos_count'],
+      ['Comments', 'comments_count'],
+      ['Bookmarks', 'bookmarks_count']
+    ]
+  end
+  
+  def self.sort_values
+    sort_options.map{ |option| option.last }
+  end
+  
+  def self.sort_direction(sort_column)
+    if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
+      'asc'
+    else
+      'desc'
+    end
+  end
+  
   #############################################################################
   #
   # SEARCH
@@ -1073,21 +1105,34 @@ class Work < ActiveRecord::Base
   #############################################################################
 
   self.include_root_in_json = false
-  def self.search(params)
-    tire.search(page: params[:page], per_page: 20) do
+  def self.search(options)
+    if options[:other_tag_names].present?
+      names = options[:other_tag_names].split(",")
+      tags = Tag.where(:name => names)
+      tags.each do |tag|
+        facet_key = "#{tag.type.to_s.downcase}_ids".to_sym
+        options[facet_key] ||= []
+        options[facet_key] << tag.id
+      end
+    end
+    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       query do
         boolean do
-          must { string (params[:query] || "*"), default_operator: "AND" } #if params[:query].present?
+          must { string options[:query], default_operator: "AND" } if options[:query].present?
+          must { term :restricted, 'F' } unless options[:show_restricted]
+          must { term :posted, 'T' } unless options[:show_drafts]
+          must { term :complete, 'T' } if options[:complete]
+          must { term :language_id, options[:language_id] } if options[:language_id]
           [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :pseud_ids, :collection_ids].each do |id_list|
             if options[id_list].present?
               options[id_list].each do |id|
-                must { term id_list }
+                must { term id_list, id }
               end
             end
           end
         end
       end
-      sort { by :created_at, "desc" } if params[:query].blank?
+      sort { by options[:sort_column], options[:sort_direction].downcase }
       facet "rating" do
         terms :rating_ids
       end
@@ -1119,8 +1164,13 @@ class Work < ActiveRecord::Base
     end
   end
   
+  mapping do
+    indexes :authors_to_sort_on,  :index    => :not_analyzed
+    indexes :title_to_sort_on,    :index    => :not_analyzed
+  end
+  
   def to_indexed_json
-    to_json(methods: [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :tag_names, :pseud_ids, :collection_ids])
+    to_json(methods: [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :tag_names, :pseud_ids, :collection_ids, :hits, :comments_count, :kudos_count, :bookmarks_count, :byline])
   end
   
   def rating_ids
@@ -1152,6 +1202,22 @@ class Work < ActiveRecord::Base
   end
   def collection_ids
     collections.value_of :id
+  end
+  def comments_count
+    self.total_comments.count
+  end
+  def kudos_count
+    self.kudos.count
+  end
+  def bookmarks_count
+    self.bookmarks.count
+  end
+  def byline
+    names = ""
+    pseuds.each do |pseud|
+      names << "#{pseud.name} #{pseud.user_login} "
+    end
+    names
   end
 
 end
