@@ -22,12 +22,12 @@
                 <% if (tag_type == "rating") && @bookmarks.facets[tag_type]['terms'].length > 1 %>
                   <%= radio_button_tag "#{tag_type}_ids[]", 
                     tag.id, 
-                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id), 
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id.to_s), 
                     :id => "#{tag_type}_ids_#{tag.id}" %> 
                 <% else %>
                   <%= check_box_tag "#{tag_type}_ids[]", 
                     tag.id,
-                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id), 
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id.to_s), 
                     :id => "#{tag_type}_ids_#{tag.id}" %>
                 <% end %>
                 <%= label_tag "#{tag_type}_ids_#{tag.id}", 
