@@ -4,6 +4,11 @@ namespace :statistics do
   task(:update_stat_counters => :environment) do
     StatCounter.hits_to_database
   end
+  
+  desc "update database hit counters from redis"
+  task(:update_stats => :environment) do
+    StatCounter.stats_to_database
+  end
 
   desc "update database statistics from nginx logfiles"
   task(:update_from_logfiles => :environment) do
