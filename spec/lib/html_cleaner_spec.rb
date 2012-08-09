@@ -502,7 +502,7 @@ describe HtmlCleaner do
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
         doc = Nokogiri::HTML.fragment(result)
-        doc.xpath(".//p").size.should == 3
+        doc.xpath(".//p").size.should == 4
         doc.xpath(".//br").should be_empty
       end
     end
