@@ -1131,6 +1131,8 @@ class Work < ActiveRecord::Base
           must { term :restricted, 'F' } unless options[:show_restricted]
           must { term :posted, 'T' } unless options[:show_drafts]
           must { term :complete, 'T' } if options[:complete]
+          must { term :in_unrevealed_collection, 'F' } unless options[:show_unrevealed]
+          must { term :in_anon_collection, 'F' } unless options[:show_anon]
           must { term :language_id, options[:language_id] } if options[:language_id]
           [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :pseud_ids, :collection_ids].each do |id_list|
             if options[id_list].present?
