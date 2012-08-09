@@ -42,6 +42,9 @@ class WorksController < ApplicationController
         @author = @user.pseuds.find_by_name(params[:pseud_id])
         options[:pseud_ids] = [@author.id]
       end
+      options[:show_anon] = false
+    else
+      options[:show_anon] = true
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
@@ -61,6 +64,9 @@ class WorksController < ApplicationController
     if @collection.present?
       options[:collection_ids] ||= []
       options[:collection_ids] << @collection.id
+      options[:show_unrevealed] = true
+    else
+      options[:show_unrevealed] = false
     end
     options[:show_drafts] = (@user.present? && @user == current_user)
     options[:show_restricted] = current_user.present?
