@@ -137,7 +137,7 @@ class Bookmark < ActiveRecord::Base
   
   self.include_root_in_json = false
   def to_indexed_json
-    to_json(methods: [:pseud_name, :work_pseud_names, :work_pseud_ids, :tag_names, :tag_ids, :filter_names, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :rating_ids, :warning_ids, :category_ids, :work_title, :work_posted, :work_restricted, :work_complete, :work_language_id, :work_bookmark_count, :collection_ids, :work_collection_ids])
+    to_json(methods: [:pseud_name, :work_pseud_names, :work_pseud_ids, :tag_names, :tag_ids, :filter_names, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :rating_ids, :warning_ids, :category_ids, :work_title, :work_posted, :work_restricted, :work_complete, :work_language_id, :collection_ids, :work_collection_ids])
   end
   
   def self.search(options={})
@@ -285,14 +285,6 @@ class Bookmark < ActiveRecord::Base
   
   def work_language_id
     bookmarkable.language_id if bookmarkable.respond_to?(:language_id)
-  end
-  
-  def work_bookmark_count
-    Bookmark.where(
-      :private => false, 
-      :bookmarkable_id => self.bookmarkable_id, 
-      :bookmarkable_type => self.bookmarkable_type
-    ).count
   end
 
 end
