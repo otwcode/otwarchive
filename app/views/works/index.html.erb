@@ -6,11 +6,7 @@
   <% elsif @user %>
     <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
-<<<<<<< HEAD
     <%= ts("in") %> <%= link_to_tag(@tag) %>
-=======
-    <%= ts("in %{tag_name}", :tag_name => link_to_tag(@tag)).html_safe %>
->>>>>>> 16c8e4dce2d54c65efa551175a7246c2d884d749
 <% end %>
 </h2>
 
