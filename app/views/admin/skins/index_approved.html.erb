@@ -1,3 +1,4 @@
+<div class="admin">
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Manage Approved Skins') %></h2>
 <!--/descriptions-->
@@ -14,14 +15,14 @@
     <legend><%= ts('Approved Skins') %></legend>
     <h3 class="heading"><%= ts('Approved Skins') %></h3>
 
-    <table id="approved" summary="">
-      <caption></caption>
+    <table id="approved_skins" summary="<%= ts('Details and number of users for approved skins, along with administrative notes and actions.') %>">
+      <caption><%= ts('Approved Skins') %></caption>
       <thead>
         <tr>
         <th scope="col"><%= ts('Skin') %></th>
         <th scope="col"><%= ts('Type') %></th>
         <th scope="col"><%= ts('Creator') %></th>
-        <th scope="col"><%= ts('Users')%></th>
+        <th scope="col"><%= ts('Users') %></th>
         <th scope="col"><%= ts('Admin Note') %></th>
         <th scope="col"><%= ts('Actions') %></th>
       </tr>
@@ -82,7 +83,7 @@
   <fieldset>
     <legend><%= ts("Set Default Archive Skin") %></legend>
     <h3 class="heading"><%= ts("Set Default Archive Skin") %></h3>
-    <p class="note">This will change the default skin FOR ALL USERS! Don't use unless you are REALLY SURE.</p>
+    <p class="note"><%= ts("This will change the default skin FOR ALL USERS! Don't use unless you are REALLY SURE.") %></p>
     <p>
       <%= label_tag "set_default", ts("Default Skin Title: ") %>
       <%= text_field_tag "set_default", AdminSetting.default_skin.try(:title), autocomplete_options("site_skins", :autocomplete_token_limit => 1) %>
@@ -90,6 +91,7 @@
     </p>
   </fieldset>
 
-  <p class="submit actions"><%= submit_tag "Update" %></p>
+  <p class="submit"><%= submit_tag ts("Update") %></p>
 
 <% end %>
+</div>

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t('.gifts.gifts_in_collection', :default => "Gifts in %{collection}", :collection => h(@collection.title)) %></h2>
+<h2 class="heading"><%= ts('Gifts in %{collection}', :collection => @collection.title) %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
@@ -8,14 +8,14 @@
 
 <!--main content-->
 <!--FRONT END: TABLEWATCH!!-->
-<table summary="Lists all the gifts in the collection, who gave and recieved each one, and what the giver received from the larger exchange">
-	<caption>Gifts and givers<caption>
+<table summary="<%= ts('Lists all the gifts in the collection, who gave and recieved each one, and what the giver received from the larger exchange.') %>">
+	<caption><%= ts('Gifts and Givers') %><caption>
   <thead>
 	<tr>
-    <th scope="col">Gift</th>
-    <th scope="col">Recipient</th>
-    <th scope="col">Author</th>
-    <th scope="col">Author Has Received?</th>
+    <th scope="col"><%= ts('Gift') %></th>
+    <th scope="col"><%= ts('Recipient') %></th>
+    <th scope="col"><%= ts('Author') %></th>
+    <th scope="col"><%= ts('Author Has Received?') %></th>
   </tr>
 	</thead>
   <tbody>
@@ -38,12 +38,12 @@
   <% end %>
 </tbody>
 </table>
-<h4 class="heading">Note</h4>
+<h4 class="heading"><%= ts('Note') %></h4>
 <p>
-  M* - Manual: This means that this creator has received a story in this collection, but under a different pseudonym. 
+  <%= ts("M* - Manual: This means that this creator has received a story in this collection, but under a different pseudonym. 
   That might happen if the creator used a different pseud to post their story than the one
   their author used as the recipient name, or it might be the case that the creator has also posted a story for 
   a different user (eg as a proxy for someone who doesn't have an archive account), and has not gotten a story
-  for herself. 
+  for herself.") %> 
 </p>
 <!--/content-->
