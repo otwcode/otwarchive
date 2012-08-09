@@ -1,8 +1,54 @@
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
-    <p>Tag filtering is undergoing maintenance and should return by the end of July. To narrow your results, consider using <%= link_to "advanced search", search_path %>.</p>
     <dl class="filters" role="menu">
+      <dt>
+        <%= label_tag :sort_column, ts("Sort by") %>
+      </dt>
+      <dd>
+        <%= select_tag :sort_column, options_for_select(Work.sort_options, params[:sort_column] || 'date') %>
+      </dd>
+      <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
+        <dt>
+          <noscript><%= tag_type.capitalize %></noscript>
+          <span class="tag_category_<%= tag_type %>_open hidden">
+            <%= image_tag 'arrow-right.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+          <span class="tag_category_<%= tag_type %>_close hidden">
+            <%= image_tag 'arrow-down.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+        </dt>
+        <dd id="tag_category_<%= tag_type %>" class="tags toggled">
+          <ul>              
+            <% @works.facets[tag_type]['terms'].each do |facet| %>
+              <li>
+                <% tag = Tag.find(facet['term']) %>
+                <% if (tag_type == "rating") && @works.facets[tag_type]['terms'].length > 1 %>
+                  <%= radio_button_tag "#{tag_type}_ids[]", 
+                    tag.id, 
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id.to_s), 
+                    :id => "#{tag_type}_ids_#{tag.id}" %> 
+                <% else %>
+                  <%= check_box_tag "#{tag_type}_ids[]", 
+                    tag.id,
+                    params["#{tag_type}_ids"] && params["#{tag_type}_ids"].include?(tag.id.to_s), 
+                    :id => "#{tag_type}_ids_#{tag.id}" %>
+                <% end %>
+                <%= label_tag "#{tag_type}_ids_#{tag.id}", 
+                  "#{tag.name} (#{facet['count']})" %>
+              </li>
+            <% end %>
+          </ul>
+        </dd>
+      <% end %>
+      <dt><%= label_tag 'other_tag_names', ts("Other tags") %></dt>
+      <dd>
+        <%= text_field_tag 'other_tag_names', params[:other_tag_names], autocomplete_options("tag") %>
+      </dd>
+      <dt><%= label_tag :query, ts("Search within results") %></dt>
+      <dd><%= text_field_tag :query, params[:query] %></dd>
       <dt><%= ts("Language") %></dt>
       <dd><%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %></dd>
       <dt><%= ts("Status") %></dt>

@@ -34,106 +34,51 @@ class WorksController < ApplicationController
 
   # GET /works
   def index
-    @sort_column = case params[:sort_column]
-      when 'author'
-        'authors_to_sort_on'
-      when 'title'
-        'title_to_sort_on' 
-      when 'word_count'
-        'word_count'
-      when 'hit_count'
-        'hit_count'
-      when 'created_at'
-        'created_at'
-      else
-        'revised_at'
-      end
-    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
-    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
-      params[:sort_direction] = 'DESC'
-    end
-    # numerical ids for now
-    unless params[:selected_pseuds].blank?
-      begin
-        @selected_pseuds = Pseud.find(params[:selected_pseuds]).collect(&:id).uniq
-      rescue
-        setflash; flash[:error] = ts("Sorry, we couldn't find one or more of the authors you selected. Please try again.")
-      end
-    end
-
-    # if we're browsing by a particular tag, just add that
-    # tag to the selected_tags list.
-    unless params[:tag_id].blank?
-      @tag = Tag.find_by_name(params[:tag_id])
-      if @tag
-        @page_subtitle = @tag.name
-        @tag = @tag.merger if @tag.merger
-        redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
-      else
-        setflash; flash[:error] = ts("Sorry, there's no tag by that name in our system.")
-        redirect_to works_path
-        return
-      end
-    end
-    if params[:fandom_id].present?
-      @fandom = Fandom.find_by_id(params[:fandom_id])
-    end
-    
-    if @collection
-      @page_subtitle = @collection.title
-    end
-
-    # if we're browsing by a particular user get works by that user
-    @selected_pseuds = []
-    unless params[:user_id].blank?
+    options = params.dup
+    if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
-      if @user
-        unless params[:pseud_id].blank?
-          @author = @user.pseuds.find_by_name(params[:pseud_id])
-          if @author
-            @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
-          end
-        end
-        @page_subtitle = ts("by %{name}", :name => (@author ? @author.byline : @user.login))
+      options[:pseud_ids] = @user.pseuds.value_of(:id)
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+        options[:pseud_ids] = [@author.id]
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      if @tag.present?
+        facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
+        options[facet_key] ||= []
+        options[facet_key] << @tag.id
+        params[facet_key] = options[facet_key]
       else
-        setflash; flash[:error] = ts("Sorry, there's no user by that name in our system.")
-        redirect_to works_path
-        return
+        
       end
     end
-
-    @language = Language.find_by_short(params[:language_id]) if params[:language_id]
+    if params[:language_id]
+      @language = Language.find_by_short(params[:language_id])
+      options[:language_id] = @language.id
+    end
+    if @collection.present?
+      options[:collection_ids] ||= []
+      options[:collection_ids] << @collection.id
+    end
+    options[:show_drafts] = (@user.present? && @user == current_user)
+    options[:show_restricted] = current_user.present?
     
-    # Now let's build the query
-    options = {
-      :user => @user, 
-      :author => @author, 
-      :selected_pseuds => @selected_pseuds,
-      :tag => @tag || @fandom, 
-      :collection => @collection,
-      :language_id => @language,
-      :sort_column => @sort_column, 
-      :sort_direction => @sort_direction,
-      :page => params[:page], 
-      :per_page => params[:per_page],
-      :complete => params[:complete]
-    }
-    # Add caching for tag pages
-    if @tag.present? && !@collection.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
-      status = logged_in? ? "u" : "v"
-      page = params[:page] || 1
-      # This has views/ in it because that's what expire_fragment is looking for
-      @works = Rails.cache.fetch "views/works/t/#{@tag.id}/#{status}/p/#{page}" do
-        Work.find_with_options(options).compact
-      end
-    else
-      @works = Work.find_with_options(options)
+    case params[:sort_column]
+    when 'author'
+      options[:sort_column] = 'authors_to_sort_on'
+    when 'title'
+      options[:sort_column] = 'title_to_sort_on'
+    when 'date'
+      options[:sort_column] = 'revised_at'
     end
-
-    # we now have @works found
-    # only need to check this if the filters expose info about the works
-#    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-    @over_anon_threshold = true
+    unless Work.sort_values.include?(options[:sort_column])
+      options[:sort_column] = 'revised_at'
+    end
+    options[:sort_direction] = Work.sort_direction(options[:sort_column])
+    
+    @works = Work.search(options)
   end
 
   def drafts
