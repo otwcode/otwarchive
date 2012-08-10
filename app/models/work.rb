@@ -1215,13 +1215,13 @@ class Work < ActiveRecord::Base
     collections.value_of :id
   end
   def comments_count
-    self.total_comments.count
+    self.stat_counter.comments_count
   end
   def kudos_count
-    self.kudos.count
+    self.stat_counter.kudos_count
   end
   def bookmarks_count
-    self.bookmarks.count
+    self.stat_counter.bookmarks_count
   end
   def byline
     names = ""
