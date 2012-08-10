@@ -16,13 +16,15 @@ class ResponseObserver < ActiveRecord::Observer
   end
   
   def get_work(response)
-    if response.respond_to?(:parent)
-      response.parent if response.is_a?(Work)
+    work = nil
+    if response.respond_to?(:ultimate_parent)
+      work = response.ultimate_parent
     elsif response.respond_to?(:commentable)
-      response.commentable if response.is_a?(Work)
+      work = response.commentable
     elsif response.respond_to?(:bookmarkable)
-      response.bookmarkable if response.is_a?(Work)
+      work = response.bookmarkable
     end
+    work.is_a?(Work) ? work : nil
   end
   
 end

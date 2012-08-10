@@ -57,9 +57,15 @@ class WorksController < ApplicationController
         
       end
     end
-    if params[:language_id]
+    if params[:language_id].present?
       @language = Language.find_by_short(params[:language_id])
-      options[:language_id] = @language.id
+      if @language.present?
+        options[:language_id] = @language.id
+      else
+        options.delete(:language_id)
+      end
+    elsif params[:language_id]
+      options.delete(:language_id)
     end
     if @collection.present?
       options[:collection_ids] ||= []

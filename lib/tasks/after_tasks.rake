@@ -334,6 +334,14 @@ namespace :After do
 
   #### Add your new tasks here
   
+  desc "Set stat counts for works"
+  task(:set_work_stats => :environment) do
+    Work.find_each do |work|
+      puts work.id
+      work.update_stat_counter
+    end
+  end
+  
 
 end # this is the end that you have to put new tasks above
 
