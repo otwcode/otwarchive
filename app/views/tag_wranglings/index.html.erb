@@ -117,8 +117,8 @@
         <% for tag in @tags %>
         <tr>
           <th scope="row" title="<%= ts("tag") %>">
-            <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
           	<%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %>
+          	<%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
           </th>
           <td title="<%= ts("created") %>"><%= l(tag.created_at.to_date) %></td>
           <% if params[:show] == 'character_relationships' %>
