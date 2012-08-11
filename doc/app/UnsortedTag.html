@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>module DateHelper - RDoc Documentation</title>
+<title>class UnsortedTag - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -20,7 +20,7 @@
 <script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
 
 
-<body id="top" class="module">
+<body id="top" class="class">
 <nav id="metadata">
   <nav id="home-section" class="section">
   <h3 class="section-header">
@@ -47,7 +47,7 @@
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
   <ul>
-    <li>app/helpers/date_helper.rb
+    <li>app/models/unsorted_tag.rb
   </ul>
 </nav>
 
@@ -56,7 +56,13 @@
 
   <div id="class-metadata">
     
-    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="Tag.html">Tag</a>
+  
+</nav>
+
     
     <!-- Method Quickref -->
 <nav id="method-list-section" class="section">
@@ -64,9 +70,7 @@
 
   <ul class="link-list">
     
-    <li><a href="#method-i-date_in_user_time_zone">#date_in_user_time_zone</a>
-    
-    <li><a href="#method-i-set_format_for_date">#set_format_for_date</a>
+    <li><a href="#method-i-recategorize">#recategorize</a>
     
   </ul>
 </nav>
@@ -578,7 +582,7 @@
 </nav>
 
 <div id="documentation">
-  <h1 class="module">module DateHelper</h1>
+  <h1 class="class">class UnsortedTag</h1>
 
   <div id="description" class="description">
     
@@ -593,6 +597,19 @@
     
 
     
+    <!-- Constants -->
+    <section id="constants-list" class="section">
+      <h3 class="section-header">Constants</h3>
+      <dl>
+      
+        <dt id="NAME">NAME
+        
+        <dd class="description">
+        
+      
+      </dl>
+    </section>
+    
 
     
 
@@ -602,78 +619,37 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-date_in_user_time_zone" class="method-detail ">
+      <div id="method-i-recategorize" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">date_in_user_time_zone</span><span
-            class="method-args">(datetime)</span>
+          <span class="method-name">recategorize</span><span
+            class="method-args">(new_type)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>unsorted tags can have their type changed but they need to be reloaded to
+be seen as an instance of the proper subclass</p>
           
 
           
-          <div class="method-source-code" id="date_in_user_time_zone-source">
-            <pre><span class="ruby-comment"># File app/helpers/date_helper.rb, line 13</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">date_in_user_time_zone</span>(<span class="ruby-identifier">datetime</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">time_zone</span>
-    <span class="ruby-identifier">zone</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">time_zone</span>
-    <span class="ruby-keyword">begin</span>
-      <span class="ruby-identifier">date_in_user_time_zone</span> = <span class="ruby-identifier">datetime</span>.<span class="ruby-identifier">in_time_zone</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">time_zone</span>)
-    <span class="ruby-keyword">rescue</span>
-      <span class="ruby-identifier">datetime</span>
-    <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">date_in_user_time_zone</span> = <span class="ruby-identifier">datetime</span>
-  <span class="ruby-keyword">end</span>
+          <div class="method-source-code" id="recategorize-source">
+            <pre><span class="ruby-comment"># File app/models/unsorted_tag.rb, line 7</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">recategorize</span>(<span class="ruby-identifier">new_type</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:type</span>, <span class="ruby-identifier">new_type</span>)
+  <span class="ruby-comment"># return a new instance of the tag, with the correct class</span>
+  <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>)
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- date_in_user_time_zone-source -->
+          </div><!-- recategorize-source -->
           
         </div>
 
         
 
         
-      </div><!-- date_in_user_time_zone-method -->
-
-    
-      <div id="method-i-set_format_for_date" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">set_format_for_date</span><span
-            class="method-args">(datetime)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Use time_ago_in_words if less than a month ago, otherwise display date</p>
-          
-
-          
-          <div class="method-source-code" id="set_format_for_date-source">
-            <pre><span class="ruby-comment"># File app/helpers/date_helper.rb, line 4</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_format_for_date</span>(<span class="ruby-identifier">datetime</span>)
-  <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">datetime</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Time</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">datetime</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">30</span>.<span class="ruby-identifier">days</span>.<span class="ruby-identifier">ago</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">enable_test_caching?</span>
-    <span class="ruby-identifier">time_ago_in_words</span>(<span class="ruby-identifier">datetime</span>)
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">date_in_user_time_zone</span>(<span class="ruby-identifier">datetime</span>).<span class="ruby-identifier">to_date</span>.<span class="ruby-identifier">to_formatted_s</span>(<span class="ruby-value">:rfc822</span>)
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- set_format_for_date-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- set_format_for_date-method -->
+      </div><!-- recategorize-method -->
 
     
     </section><!-- public-instance-method-details -->
