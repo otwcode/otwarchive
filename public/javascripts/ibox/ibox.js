@@ -132,8 +132,8 @@ showIbox = function(url,title,params) {
     // disable scrolling on background page and add a margin to prevent shifting layout
     if (typeof scrollBarW === "undefined") scrollBarW = getScrollBarWidth();
     document.body.style.marginRight = scrollBarW +"px";
-    document.body.style.overflowY = "none";
-    document.documentElement.style.overflowY = "none"; // IE7
+    document.body.style.overflowY = "hidden";
+    document.documentElement.style.overflowY = "hidden"; // IE7
     document.body.height = "100%";
     
     // set title here
@@ -454,7 +454,7 @@ function getScrollBarWidth() {
     outer.style.display = "none";
     outer.style.width = "200px";
     outer.style.height = "150px";
-    outer.style.overflow = "none";
+    outer.style.overflow = "hidden";
     outer.appendChild (inner);
 
     document.body.appendChild (outer);
