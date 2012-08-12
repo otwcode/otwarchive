@@ -7,7 +7,7 @@
   <% end %>
   
 	<% if logged_in? %>
-	  <% if current_user.preference.skin_id && session[:site_skin].blank? %>
+	  <% if (current_user.preference.skin_id != Skin.default.id) && session[:site_skin].blank? %>
 	    <li>
     	  <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
           <%= f.hidden_field :skin_id, :value => Skin.default.id %>
@@ -17,20 +17,20 @@
     <% end %>
 	
     <% unless controller.action_name == "new" %>
-      <li><%= link_to ts('Create Skin'), new_skin_path %></li>
+      <li><%= link_to ts("Create Skin"), new_skin_path %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->
     <% if controller.action_name == "new" ||  (controller.action_name == "edit" && !@skin.is_a?(WorkSkin)) %>
       <% if params[:wizard] %>
         <li id="form-link">
-           <%= link_to( ts('Write Custom CSS Instead?'),
+           <%= link_to( ts("Write Custom CSS Instead?"),
              {:url => {:controller => :skins, :action => controller.action_name, :wizard => false}},
              :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => false)) %>
         </li>
       <% else %>
         <li id="wizard-link">
-          <%= link_to( ts('Use Wizard Instead?'),
+          <%= link_to( ts("Use Wizard Instead?"),
             {:url => {:controller => :skins, :action => controller.action_name, :wizard => true}},
             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => true)) %>
         </li>
