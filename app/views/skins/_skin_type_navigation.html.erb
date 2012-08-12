@@ -1,9 +1,9 @@
 <!--subnav-->
-<h3 class="landmark heading">Skin Type Navigation</h3>
+<h3 class="landmark heading"><%= ts("Skin Type Navigation") %></h3>
 
   <ul class="navigation actions" role="navigation">
   <% if logged_in? %>
-    <li><h4 class="heading">My Skins:</h4></li>
+    <li><h4 class="heading"><%= ts("My Skins:") %></h4></li>
     <li>
       <%= span_if_current ts("Site Skins"), user_skins_path(current_user, :work_skins => nil), current_page?(user_skins_path(current_user)) && params[:work_skins].blank? %>
     </li>
@@ -11,7 +11,7 @@
       <%= span_if_current ts("Work Skins"), user_skins_path(current_user, :work_skins => true) %>
     </li>
   <% end %>
-    <li><h4 class="heading">Public Skins:</h4></li>
+    <li><h4 class="heading"><%= ts("Public Skins:") %></h4></li>
     <li>
       <%= span_if_current ts("Public Site Skins"), skins_path(:work_skins => nil), current_page?(skins_path) && params[:work_skins].blank? %>
     </li>
