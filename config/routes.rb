@@ -17,9 +17,8 @@ Otwarchive::Application.routes.draw do
   
   #### Fragment space for caching ####
 
-  namespace :frak do
-    resources :login
-  end
+  match '/frak/login', :to => 'frak#login'
+  match '/frak/skins', :to => 'frak#skins'
   
   #### OPEN DOORS ####
   namespace :opendoors do
