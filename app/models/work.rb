@@ -2,6 +2,7 @@ class Work < ActiveRecord::Base
 
   include Taggable
   include Collectible
+  include Bookmarkable
   include Pseudable
   include WorkStats
   include Tire::Model::Search
@@ -37,9 +38,6 @@ class Work < ActiveRecord::Base
   has_many :gifts, :dependent => :destroy
   accepts_nested_attributes_for :gifts, :allow_destroy => true
 
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
-  
   has_many :subscriptions, :as => :subscribable, :dependent => :destroy
 
   has_many :challenge_assignments, :as => :creation
