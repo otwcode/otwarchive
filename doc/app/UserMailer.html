@@ -595,6 +595,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -691,7 +695,6 @@
             <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 298</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">abuse_report</span>(<span class="ruby-identifier">report_id</span>)
   <span class="ruby-identifier">report</span> = <span class="ruby-constant">AbuseReport</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">report_id</span>)
-  <span class="ruby-identifier">setup_email_without_name</span>(<span class="ruby-identifier">report</span>.<span class="ruby-identifier">email</span>)
   <span class="ruby-ivar">@url</span> = <span class="ruby-identifier">report</span>.<span class="ruby-identifier">url</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-identifier">report</span>.<span class="ruby-identifier">comment</span>
   <span class="ruby-identifier">mail</span>(
@@ -1187,7 +1190,7 @@ make it asynchronous by passing the content in the method</p>
 
           
           <div class="method-source-code" id="generate_attachment_content_from_signup-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 330</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 329</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_attachment_content_from_signup</span>(<span class="ruby-identifier">signup</span>)
   <span class="ruby-identifier">attachment_string</span> =  <span class="ruby-string">&quot;Collection: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">signup</span>.<span class="ruby-identifier">collection</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&lt;br /&gt;\n&quot;</span>
   <span class="ruby-identifier">signup</span>.<span class="ruby-identifier">requests</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prompt</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
@@ -1276,7 +1279,7 @@ make it asynchronous by passing the content in the method</p>
 
           
           <div class="method-source-code" id="generate_attachment_content_from_work-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 309</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 308</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_attachment_content_from_work</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">attachment_string</span> =  <span class="ruby-string">&quot;Title: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&lt;br /&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;by &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&lt;br /&gt;\n&quot;</span>
   <span class="ruby-identifier">attachment_string</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;&lt;br/&gt;Tags: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&lt;br/&gt;\n&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">blank?</span>

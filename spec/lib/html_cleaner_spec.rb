@@ -473,6 +473,15 @@ describe HtmlCleaner do
   
   describe "add_paragraphs_to_text" do
 
+    %w(a abbr acronym address).each do |tag|
+      it "should not add extraneous paragraph breaks after #{tag} tags" do
+        result = add_paragraphs_to_text("<#{tag}>quack</#{tag}> quack")
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath(".//p").size.should == 1
+        doc.xpath(".//br").should be_empty
+      end
+    end
+
     it "should not convert linebreaks after p tags" do
       result = add_paragraphs_to_text("<p>A</p>\n<p>B</p>\n\n<p>C</p>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
@@ -493,7 +502,7 @@ describe HtmlCleaner do
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
         doc = Nokogiri::HTML.fragment(result)
-        doc.xpath(".//p").size.should == 3
+        doc.xpath(".//p").size.should == 4
         doc.xpath(".//br").should be_empty
       end
     end
