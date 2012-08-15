@@ -52,8 +52,7 @@ Feature: Edit Works
     When I follow "1"
       And I fill in "content" with "first chapter new content"
       And I press "Preview"
-    Then I should see "Revert To Saved"
-      And I should see "first chapter new content"
+    Then I should see "first chapter new content"
     When I press "Update"
     Then I should see "Chapter was successfully updated."
       And I should see "first chapter new content"
@@ -62,7 +61,7 @@ Feature: Edit Works
       And I follow "2"
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
-    And I follow "Revert To Saved"
+    And I press "Cancel"
       Then I should see "second chapter content"
     # Test changing pseuds on a work
     When I go to testuser's works page
