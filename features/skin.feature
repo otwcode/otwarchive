@@ -113,7 +113,7 @@ Feature: creating and editing skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to admin's skins page
-  Then I should see "public skin" within "table#unapproved"
+  Then I should see "public skin" within "table#unapproved_skins"
 
   Scenario: Admins should not be able to edit unapproved skins
   Given the unapproved public skin "public skin"
@@ -132,7 +132,7 @@ Feature: creating and editing skins
     And I submit
   Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
-  Then I should see "public skin" within "table#approved"
+  Then I should see "public skin" within "table#approved_skins"
 
   Scenario: Admins should be able to edit but not delete public approved skins
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
@@ -173,7 +173,7 @@ Feature: creating and editing skins
   Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I unapprove the skin "public skin"
   Then I should see "The following skins were updated: public skin"
-    And I should see "public skin" within "table#unapproved"
+    And I should see "public skin" within "table#unapproved_skins"
   When I am logged in as "skinuser"
     And I am on skinuser's preferences page
   Then "Default" should be selected within "preference_skin_id"

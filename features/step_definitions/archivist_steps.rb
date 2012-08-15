@@ -57,8 +57,5 @@ Then /^the email should contain invitation warnings from "([^\"]*)" for work "([
 end
 
 Then /^the email should contain claim information$/ do
-  Then %{the email should contain "We believe the following stories, which have been uploaded to the Archive by one or more archivists"}
-  Then %{the email should contain "either because the email matches the one you are using, or because you used an"}
-  Then %{the email should contain "invitation sent to the email address of these stories"}
-  Then %{the email should contain "We've assigned you as the author"}
+  Then %{the email should contain "automatically added to your AO3 account"}
 end

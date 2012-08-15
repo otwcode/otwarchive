@@ -1,5 +1,5 @@
 When /^I view the "([^\"]*)" works index$/ do |tag|
-  When %{I view the tag "#{tag}"}
+  visit works_path(:tag_id => tag.to_param)
 end
 
 When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type, name|
