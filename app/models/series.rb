@@ -1,4 +1,6 @@
 class Series < ActiveRecord::Base
+  include Bookmarkable
+
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
   has_many :work_tags, :through => :works, :uniq => true, :source => :tags
@@ -6,8 +8,6 @@ class Series < ActiveRecord::Base
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
 
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
