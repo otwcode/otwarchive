@@ -1062,7 +1062,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I close signups for "Battle 12"
   When I go to "Battle 12" collection's page
-    And I follow "Settings"
+    And I follow "Collection Settings"
     And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"

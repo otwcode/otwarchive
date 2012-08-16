@@ -664,7 +664,7 @@ end
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
-    And %{I follow "Settings"}
+    And %{I follow "Collection Settings"}
     And %{I uncheck "This collection is unrevealed"}
     And %{I press "Update"}
 end
@@ -672,7 +672,7 @@ end
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
-    And %{I follow "Settings"}
+    And %{I follow "Collection Settings"}
     And %{I uncheck "This collection is anonymous"}
     And %{I press "Update"}
 end
