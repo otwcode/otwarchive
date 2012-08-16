@@ -44,7 +44,9 @@ Feature: Invite queue management
       And I follow "Get an Invite"
     When I fill in "email" with "testttt@archiveofourown.org"
       And I press "Go"
-    Then I should see "Sorry, we couldn't find that address in our queue"
+    Then I should see "You can search for the email address you signed up with below."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+    # Then I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
     
     # check your place in the queue - correct address
@@ -93,7 +95,9 @@ Feature: Invite queue management
     When I am on the invite_requests page
       And I fill in "email" with "test@archiveofourown.org"
       And I press "Go"
-    Then I should see "Sorry, we couldn't find that address in our queue."
+    # Then I should see "Sorry, we can't find the email address you entered."
+    Then I should see "You can search for the email address you signed up with below."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
     
     # invite can be used
     When I go to the admin_login page
@@ -153,5 +157,6 @@ Feature: Invite queue management
       And I should see "Please log in"
     When I fill in "user_session_login" with "newuser"
       And I fill in "user_session_password" with "password1"
-      And I press "Log in"
-    Then I should see "Successfully logged in"
+    # TODO: separate into manageable tests to spec account creation
+    #   And I press "Log in"
+    # Then I should see "Successfully logged in"

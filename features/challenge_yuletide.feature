@@ -135,15 +135,14 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
     And I press "Submit"
   Then I should see a save error message
-  # TODO: We should probably make these error message more friendly
     # errors for the empty request
-    And I should see "Request must have exactly 1 fandom tags. You currently have none."
+    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
     # errors for the not-quite-filled offer
-    And I should see "Offer must have between 2 and 3 character tags. You currently have (1) -- Obscure person"
+    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 1 character tags in your current Offer"
     And I should see a not-in-fandom error message
     # errors for the empty offer
-    And I should see "Offer must have exactly 1 fandom tags. You currently have none."
-    And I should see "Offer must have between 2 and 3 character tags. You currently have none."
+    And I should see "Offer: your Offer must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Offer"
+    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 0 character tags in your current Offer"
   # Over-fill the remaining missing fields and duplicate fandoms
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
     And I check the 2nd checkbox with the value "Tiny fandom"
@@ -154,11 +153,11 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see a save error message
-    And I should see "Request must have between 0 and 2 character tags. You currently have (3) -- John Sheppard, Teyla Emmagan, Obscure person."
+    And I should see "Request: your Request must include between 0 and 2 character tags, but you have included 3 character tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person" in "Stargate Atlantis"
-    And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Starsky & Hutch, Tiny fandom."
+    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 2 fandom tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard" in "Care Bears"
-    And I should see "Offer must have between 2 and 3 character tags. You currently have (4) -- Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat."
+    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
   # now fill in correctly
@@ -595,7 +594,7 @@ Feature: Collection
     And 0 emails should be delivered
     And all emails have been delivered
     And I go to "Yuletide" collection's page
-    And I follow "Settings"
+    And I follow "Collection Settings"
     And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"
@@ -659,7 +658,7 @@ Feature: Collection
   When I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
-    And I follow "Settings"
+    And I follow "Collection Settings"
     And I uncheck "This collection is anonymous"
     And I press "Update"
   Then I should see "Collection was successfully updated"

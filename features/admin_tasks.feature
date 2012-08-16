@@ -56,7 +56,7 @@ Feature: Admin tasks
     When I follow "Admin Posts"
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
-    When I follow "Add a new section"
+    When I follow "New FAQ Section"
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
       And I fill in "title" with "New subsection"
     When I press "Post"

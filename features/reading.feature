@@ -5,7 +5,7 @@ Feature: Reading count
     Given the following activated user exists
     | login          | password   |
     | first_reader        | password   |
-  When I am logged in as "second_reader" with password "password"
+  When I am logged in as "second_reader"
     And I go to first_reader's reading page
     Then I should see "Sorry, you don't have permission"
     And I should not see "History"
@@ -19,10 +19,10 @@ Feature: Reading count
       increment the count whenever you reread a story
       also updates the date
 
-    Given I am logged in as "writer" with password "something"
+    Given I am logged in as "writer"
       And I post the work "some work"
       And I am logged out
-    When I am logged in as "fandomer" with password "password"
+    When I am logged in as "fandomer"
       And fandomer first read "some work" on "2010-05-25"
     When I go to fandomer's reading page
     Then I should see "some work"
@@ -56,7 +56,7 @@ Feature: Reading count
     clear your whole reading history.
 
     Given I have loaded the fixtures
-    When I am logged in as "fandomer" with password "password"
+    When I am logged in as "fandomer"
       And I am on testuser's works page
       And I follow "First work"
       And I am on testuser's works page
@@ -81,11 +81,11 @@ Feature: Reading count
 
   Scenario: Mark a story to read later
 
-  Given I am logged in as "writer" with password "something"
+  Given I am logged in as "writer"
   When I post the work "Testy"
   Then I should see "Work was successfully posted"
   When I am logged out
-    And I am logged in as "reader" with password "something_else"
+    And I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for later"
   When I follow "Mark for later"
@@ -93,7 +93,7 @@ Feature: Reading count
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
-    And I should see "Flagged to read later"
+    And I should see "(Marked for later.)"
   When I view the work "Testy"
   Then I should see "Mark as read"
   When I follow "Mark as read"
@@ -101,11 +101,11 @@ Feature: Reading count
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
-    And I should not see "Flagged to read later"
+    And I should not see "(Marked for later.)"
 
   Scenario: You can't mark a story to read later if you're not logged in or the author
 
-  Given I am logged in as "writer" with password "something"
+  Given I am logged in as "writer"
   When I post the work "Testy"
   Then I should see "Work was successfully posted"
   When I view the work "Testy"
@@ -118,7 +118,7 @@ Feature: Reading count
 
   Scenario: Read a multi-chapter work
 
-  Given I am logged in as "writer" with password "something"
+  Given I am logged in as "writer"
     And I post the work "some work"
   When I view the work "some work"
     And I follow "Add Chapter"
@@ -127,7 +127,7 @@ Feature: Reading count
     And I press "Post Chapter"
   Then I should see "some work"
   When I am logged out
-    And I am logged in as "fandomer" with password "password"
+    And I am logged in as "fandomer"
     And I go to the works page
     And I follow "some work"
   When the reading rake task is run
@@ -161,4 +161,4 @@ Feature: Reading count
     And I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Viewed 3 times"
-    And I should see "(Flagged to read later.)"
+    And I should see "(Marked for later.)"
