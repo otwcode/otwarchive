@@ -88,7 +88,7 @@ Feature: Delete Works
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
       And I fill in "pseud_byline" with "coauthor"
-      And I fill in "work_collections_to_add" with "collection1, collection2"
+      And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Preview"
     When I press "Post"

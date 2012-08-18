@@ -235,11 +235,11 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
     When I fill in "content" with "Text and some longer text"
-      And I fill in "work_collections_to_add" with "collection1, collection2"
+      And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
     Then I should see a save error message
       And I should see "We couldn't find the collection collection1"
-    When I fill in "work_collections_to_add" with ""
+    When I fill in "work_collection_names" with ""
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
     Then I should see "try using less than 100 characters or using commas to separate your tags"

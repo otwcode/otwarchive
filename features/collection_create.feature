@@ -28,7 +28,7 @@ Scenario: Create a collection, post a work to it
     And I go to first_user's user page
   Then I should see "collect-y work"
   When I edit the work "collect-y work"
-    And I fill in "work_collections_to_add" with "collection_thing"
+    And I fill in "work_collection_names" with "collection_thing"
     And I press "Preview"
     And I press "Update"
   Then I should see "collect-y work"
