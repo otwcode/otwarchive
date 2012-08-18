@@ -104,7 +104,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for "Battle 12" with missing prompts
-  Then I should see "Request must have exactly 1 fandom tags. You currently have none."
+  Then I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
   When I fill in the missing prompt
   Then I should see "Signup was successfully created"
   
