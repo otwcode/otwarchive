@@ -863,9 +863,10 @@ Feature: Prompt Meme Challenge
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
     And I press "Post without preview"
-  # TODO: so this *is* desired behaviour, that the user can't change their mind?
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
-    And I should see "Battle 12"
+  Then I should see "My Gift Exchange"
+    And I should not see "Battle 12"
+  # TODO: should it be unrevealed or not? It isn't unrevealed
+    And I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
 
   Scenario: As a co-moderator I can't delete whole signups
 
@@ -897,7 +898,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I delete my signup for "Battle 12"
   When I view prompts for "Battle 12"
-  Then I should not see "myname1"
+  Then I should not see "myname1" within "ul.index"
 
   Scenario: When user deletes signup, as a prompter the signup disappears from my dashboard
   
