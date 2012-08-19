@@ -61,13 +61,13 @@
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
     </dt>
-    <dd title="rating">
+    <dd>
       <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
     </dd>
     <dt>
       <%= ew.label :category_string, Category::NAME %> <%= link_to_help "categories-help" %>
     </dt>
-    <dd title="category">
+    <dd>
       <%= ew.collection_select(:category_string, Category.canonical.by_name, :name, :name, {:include_blank => true}) %>
     </dd>
     <dt>

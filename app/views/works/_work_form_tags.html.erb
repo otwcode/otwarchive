@@ -7,7 +7,7 @@
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME %>* <%= link_to_help "rating-help" %></label>
     </dt>
-    <dd class="rating required" title="rating">
+    <dd class="rating required">
       <select id="work_rating_string" name="work[rating_string]">
       <%= options_for_select((include_blank ? [""] : []) +  [ArchiveConfig.RATING_DEFAULT_TAG_NAME, ArchiveConfig.RATING_GENERAL_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_EXPLICIT_TAG_NAME], :selected => include_blank ? nil : rating_selected(@work) ) %>
       </select>
@@ -16,7 +16,7 @@
     <dt class="warning required">
       <label><%= Warning::NAME.pluralize %>* <%= link_to_help "warning-help" %></label>
     </dt>
-    <dd class="warning required" title="warning">
+    <dd class="warning required">
       	<fieldset class="warnings">
 			<!--<legend class="landmark">Warning</legend>-->
 			<ul>
@@ -42,7 +42,7 @@
     <dt class="category">
       <label><%= Category::NAME %>  <%= link_to_help "categories-help" %></label>
     </dt>
-    <dd class="category" title="category">
+    <dd class="category">
       <fieldset>
 		<!--<legend class="landmark">Category</legend>-->
 		<ul>
