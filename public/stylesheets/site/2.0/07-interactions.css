@@ -1,4 +1,5 @@
 /*==INTERACTIONS: global form rules
+http://otwcode.github.com/docs/front_end_coding/patterns/interactions.html
 (submit button styling is in actions.css with the other buttons)
 General rules for all form elements, and nearly ALL our forms use just these. 
 Forms are normally in definition lists <dt label: dd input>

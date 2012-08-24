@@ -1,7 +1,7 @@
 /* IE_CONDITION: IE8_or_lower
 Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE 8 or below. 
 
-http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html
+http://otwcode.github.com/docs/front_end_coding/debugging-ie.html
 test note: these files could certainly be reduced but I have no IE to test with*/
 
 /* emphasis */
