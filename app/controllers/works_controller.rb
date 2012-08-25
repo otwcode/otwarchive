@@ -22,14 +22,18 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    @query = {}
-    # to understand this, the code you are looking for is in lib/query.rb
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      page = params[:page] || 1
-      errors, @works = Query.search(Work, @query, page)
-      setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
+    @search = WorkSearch.new(params[:work_search])
+    if params[:work_search].present?
+      @works = Work.search(@search.options_for_search)
     end
+    # @query = {}
+    # # to understand this, the code you are looking for is in lib/query.rb
+    # if params[:query]
+    #   @query = Query.standardize(params[:query])
+    #   page = params[:page] || 1
+    #   errors, @works = Query.search(Work, @query, page)
+    #   setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
+    # end
   end
 
   # GET /works

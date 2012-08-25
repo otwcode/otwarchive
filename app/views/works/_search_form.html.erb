@@ -1,82 +1,21 @@
-<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
-<fieldset>
-  <legend>Search works</legend>
-  <% unless @query %>
-  <% @query ||= {} %>
-  <% end %>
-  <dl>
-  <dt>
-    <label for="refine_text"><%= ts('Any field') %>: </label> <%= link_to_help "work-search-text-help" %>
-    </dt><dd>
-    <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-
-  </dd> 
-  <dt>
-    <label for="refine_tag"><%= ts('Tag') %>:</label> <%= link_to_help "work-search-tags-help" %>
-    </dt><dd>
-    <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
-   
-  </dd>
-  <dt>
-    <label for="refine_title"><%= ts('Title') %>:</label>
-    </dt><dd>
-    <%= text_field_tag "query[title]", @query[:title], :id => 'refine_title' %>
-
-  </dd>
-  <dt>
-    <label for="refine_author"><%= ts('Author') %>:</label>
-    </dt><dd>
-    <%= text_field_tag "query[author]", @query[:author], :id => 'refine_author' %>
-
-  </dd>
-  <dt>
-    <label for="refine_word_count"><%= ts('Words') %>: </label> <%= link_to_help "work-search-numerical-help" %>
-    </dt><dd>
-    <%= text_field_tag "query[words]", @query[:words], :id => 'refine_word_count' %>
-   
-  </dd>
-  <dt>
-    <label for="refine_hit_count"><%= ts('Hits') %>:</label>
-    </dt><dd>
-    <%= text_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
-
-  </dd>
-  <dt>
-    <label for="refine_revised_at"><%= ts('Date') %>:</label>    <%= link_to_help "work-search-date-help" %>
-    </dt><dd>
-    <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
- 
-  </dd>
-  <dt>
-    <label for="refine_language"><%= ts('Language') %>:</label> <%= link_to_help "work-search-language-help" %>
-    </dt><dd>
-    <%= select_tag "query[language]", "<option></option>".html_safe + options_from_collection_for_select(@languages, 'name', 'name', @query[:language].blank? ? @query[:language] : @query[:language].capitalize), :id => 'refine_language' %>
-    
-  </dd>
-  <dt>
-    <label for="refine_bookmarked"><%= ts('Bookmarked') %>?</label> <%= link_to_help "work-search-bookmark-help" %>
-  </dt>
-  <dd>
-    <%= check_box_tag "query[bookmarked]", false, !@query[:bookmarked].blank?, :id => 'refine_bookmarked' %>
- 
-  </dd>
-  <dt>
-    <label for="refine_recced"><%= ts('Recced') %>?</label>
-  </dt>
-  <dd>
-    <%= check_box_tag "query[recced]", false, !@query[:recced].blank?, :id => 'refine_recced' %>
-
-  </dd>
-  <dt>
-    <label for="refine_complete"><%= ts('Complete') %>?</label>
-  </dt>
-  <dd>
-    <%= check_box_tag "query[complete]", false, !@query[:complete].blank?, :id => 'refine_complete' %>
-  </dd>
-  <dt class="landmark">Submit</dt>
-	<dd class="submit actions">
-    	<%= submit_tag ts('Search works'), :class => 'button', :name => nil %>
-  </dd>
-</dl>
-</fieldset>
+<%= form_for @search, :url => search_works_path, :html => {:method => :get, :class => 'search'} do |f| %>
+  <fieldset>
+    <legend>Work Info</legend>
+    <dl>
+      <dt><%= f.label :query, ts('Any field') %></dt>
+      <dd><%= f.text_field :query %></dd>
+      
+      <dt><%= f.label :title, ts('Title') %></dt>
+      <dd><%= f.text_field :title %></dd>
+      
+      <dt><%= f.label :byline, ts('Author') %></dt>
+      <dd><%= f.text_field :byline %>
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend>Search</legend>
+    <%= f.submit ts('Search') %>
+  </fieldset>
+  
 <% end %>
