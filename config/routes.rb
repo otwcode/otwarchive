@@ -1,4 +1,6 @@
 Otwarchive::Application.routes.draw do
+  
+  resources :work_searches
 
   #### DOWNLOADS ####
 
