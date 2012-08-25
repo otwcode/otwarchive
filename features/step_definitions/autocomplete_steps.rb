@@ -193,7 +193,7 @@ Given /^a set of collections for testing autocomplete$/ do
 end
 
 Then /^the collection item autocomplete field should list matching collections$/ do
-  fill_in("work_collections_to_add", :with => "gre")
+  fill_in("work_collection_names", :with => "gre")
   Then %{I should see "great" in the autocomplete}
   And %{I should see "really great" in the autocomplete}
   And %{I should not see "awesome" in the autocomplete}
