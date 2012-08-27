@@ -14,6 +14,7 @@ class UserMailer < BulletproofMailer::Base
   helper :works
   helper :users
   helper :date
+  helper :series
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
