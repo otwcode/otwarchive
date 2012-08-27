@@ -1132,6 +1132,7 @@ class Work < ActiveRecord::Base
       end
     end
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
+      
       query do
         boolean do
           must { string options[:query], default_operator: "AND" } if options[:query].present?
@@ -1148,6 +1149,11 @@ class Work < ActiveRecord::Base
               end
             end
           end
+        end
+      end
+      [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
+        if options[countable].present?
+          filter :range, countable => Search.range_to_search(options[countable])
         end
       end
       sort { by options[:sort_column], options[:sort_direction].downcase }
