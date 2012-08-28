@@ -1,7 +1,7 @@
-<li class="series blurb group <% if is_author_of?(series) %>own<% end %>" id="series_<%=h series.id %>_blurb" role="article">
-	<%= render 'series/series_module', :series => series %>
-	<% if is_author_of?(series) %>
-		<h6 class="landmark heading"><%= ts("Author Actions") %></h6>
-		<p class="navigation actions" role="navigation"><%= link_to ts('Edit'), edit_series_path(series) %></p>
-	<% end %>
+<li class="series blurb group <% if is_author_of?(series) %>own<% end %>" id="series_<%= series.id %>_blurb" role="article">
+  <%= render 'series/series_module', :series => series %>
+  <% if is_author_of?(series) %>
+    <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
+    <p class="navigation actions" role="navigation"><%= link_to ts('Edit'), edit_series_path(series) %></p>
+  <% end %>
 </li>

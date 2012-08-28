@@ -2,7 +2,7 @@
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb group" id="work_<%= work.id %>" role="article">
   <%= render 'works/work_module', :work => work %>
   <% if is_author_of?(work) %>
-    <h6 class="landmark heading">Author Actions</h6>
+    <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
   	<ul class="navigation actions" role="navigation">
       <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
   	  <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
