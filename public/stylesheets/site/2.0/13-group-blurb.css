@@ -324,7 +324,7 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 .bookmark .user .datetime {
-	top: 0;
+  top: 0;
 }
 
 .bookmark .short .status {

@@ -4,7 +4,7 @@
 
 	<% if bookmarkable.blank? %>
 		<p class="message"><%= ts("This has been deleted, sorry!") %></p>
-	<% else %>  
+  <% else %>  
   	<!--bookmark icons-->
     <% bookmark_count = bookmarkable.bookmarks.is_public.count %>
     <p class="status" title="<%= bookmark_count %> Bookmarks">
@@ -12,7 +12,7 @@
       <span class="count"><%=  (bookmark_count < 100) ? bookmark_count : '*' %></span>
 		</p>
   
-		<!--work module-->
+  	<!--work module-->
 		<% if bookmarkable.is_a?(ExternalWork) %>
 			<%= render 'external_works/work_module', :external_work => bookmarkable, :bookmarkable => bookmarkable %>
 		<% elsif bookmarkable.is_a?(Series) %>
@@ -23,10 +23,10 @@
 
     <!--navigation and actions-->
     <ul class="navigation actions" role="navigation">
-			<% if bookmark_count > 1 || bookmark_count == 0 %>
-				<li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Times', :count=>bookmark_count)) %></li>
+      <% if bookmark_count > 1 || bookmark_count == 0 %>
+        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Times', :count=>bookmark_count)) %></li>
       <% else %>
-				<li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Time', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Time', :count=>bookmark_count)) %></li>
       <% end %>
 
       <% # let the user reading this bookmark save a copy for themselves %>
@@ -43,18 +43,18 @@
       <% if bookmark_count > 1 %>
         <% if params[:tag_id] || @most_recent_bookmarks %>
           <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>" style="display: none;" class="showme">
-						<%= link_to ts("Show Most Recent Bookmarks"), 
+            <%= link_to ts("Show Most Recent Bookmarks"), 
               url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }), :class => "actions", :remote => true %>
           </li>
         <% end %>
       <% end %>
     </ul>
     
-		<% # bookmark form loaded here if requested %>
-		<div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
+    <% # bookmark form loaded here if requested %>
+    <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
   <% end %>
     
-  <div class="user module<% if is_author_of?(bookmark) %> own<% end %> group">
+  <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
     <!--bookmarker, time-->
     <h5 class="byline heading">
       <%= ts("Last bookmarked by ") %>
@@ -63,10 +63,10 @@
     <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
 
 		<% # information added by the bookmark owner %>
-		<!--meta-->
+    <!--meta-->
     <% unless bookmark.tag_string.blank? %>
-			<h6 class="meta heading"><%= ts("Bookmark Tags:") %></h6>
-			<ul class="meta tags commas">
+      <h6 class="meta heading"><%= ts("Bookmark Tags:") %></h6>
+      <ul class="meta tags commas">
         <% bookmark.tags.each do |tag| %>
           <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
         <% end %>
@@ -74,7 +74,7 @@
     <% end %>
     
     <% unless bookmark.collections.blank? %>
-			<h6 class="meta heading"><%= ts("Bookmark Collections:") %></h6>
+      <h6 class="meta heading"><%= ts("Bookmark Collections:") %></h6>
       <ul class="meta commas">
         <% bookmark.collections.each do |coll|%>
           <li><%= link_to coll.title, collection_path(coll) %></li>
@@ -82,15 +82,15 @@
       </ul>
     <% end %>
 
-		<!--notes-->
-		<% unless bookmark.notes.blank? %>
-			<h6 class="landmark heading"><%= ts("Bookmark Notes") %></h6>
-			<blockquote class="userstuff notes" title="notes">
-				<%=raw sanitize_field(bookmark, :notes) %>
-			</blockquote>
-		<% end %>
-		<% # end of information added by the bookmark owner %>	
-			
+    <!--notes-->
+    <% unless bookmark.notes.blank? %>
+      <h6 class="landmark heading"><%= ts("Bookmark Notes") %></h6>
+      <blockquote class="userstuff notes" title="notes">
+        <%=raw sanitize_field(bookmark, :notes) %>
+      </blockquote>
+    <% end %>
+    <% # end of information added by the bookmark owner %>	
+    			
     <!--navigation and actions-->
     <% if is_author_of?(bookmark) %>
 			<%= render 'bookmarks/bookmark_owner_navi', :bookmark => bookmark %>
@@ -100,10 +100,10 @@
   </div>
 
   <% # recent bookmarks will be loaded up here if requested %>
-	<div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
+  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
 
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>
-	<% end %>
+ <% end %>
 
 </li>
