@@ -323,7 +323,7 @@ eg collections, users, skins, instead of the 4-icon list
 	min-height: 30px;
 }
 
-.bookmark .user .datetime {
+.bookmark .user .datetime, .bookmark .work .datetime {
   top: 0;
 }
 
