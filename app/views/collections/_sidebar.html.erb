@@ -26,7 +26,7 @@
   <ul class="navigation actions">
         <li><%= span_if_current ts("Fandoms (%{count})", :count => @collection.all_fandoms_count), collection_fandoms_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Works (%{count})", :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
+    <li><%= span_if_current ts("Works (%{count})", :count => Work.in_collection(@collection).visible.count), collection_works_path(@collection) %></li>
 
     <li><%= span_if_current ts("Bookmarks (%{count})", :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li>
 
