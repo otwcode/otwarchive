@@ -748,6 +748,8 @@ class Tag < ActiveRecord::Base
         tag.parents.delete(self)
       end
     end
+    tag.touch
+    self.touch
   end
 
   # When a meta tagging relationship is removed, things filter-tagged with the meta tag
