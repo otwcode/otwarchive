@@ -377,12 +377,12 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    !self.approved_collection_items.unrevealed.empty?
+    !self.collection_items.unrevealed.empty?
   end
 
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    !self.approved_collection_items.anonymous.empty?
+    !self.collection_items.anonymous.empty?
   end
 
   ########################################################################
