@@ -86,7 +86,11 @@ class BookmarksController < ApplicationController
     else
       options[:private] = false
     end
-    @bookmarks = Bookmark.search(options)
+    if @bookmarkable.present? || @user.present? || @tag.present? || @collection.present?
+      @bookmarks = Bookmark.search(options)
+    else
+      @bookmarks = Bookmark.latest
+    end
   end
   
   # GET    /:locale/bookmark/:id

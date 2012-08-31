@@ -40,11 +40,15 @@
 <!-- /content-->
 
 <!--filters subnav-->
-<%= render :partial => 'filters' %>
+<% if @bookmarks.respond_to?(:facets) %>
+  <%= render :partial => 'filters' %>
+<% end %>
 <!---/subnav-->
 
 <div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-	  <%= will_paginate @bookmarks %>
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
+<% end %>
 <!-- /subnav-->
