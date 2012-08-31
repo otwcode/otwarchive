@@ -1,21 +1,10 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
-<h2 class="heading"><%= search_header @works, @query, "Work" %>
-  <% if @collection %>
-   <%= ts("in") %> <%= link_to(@collection.title, @collection) %>
-  <% elsif @user %>
-    <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
-  <% elsif @tag %>
-    <%= ts("in") %> <%= link_to_tag(@tag) %>
-<% end %>
+<h2 class="heading">
+  <%= search_header @works, @query, "Work", @owner %>
 </h2>
 
 <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
-<p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
-<% end %>
-
-<% if @too_many %>
-  <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
+  <p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
 <% end %>
 <!-- /end descriptions-->
 
@@ -43,7 +32,9 @@
 </div>
 <!---/subnav-->
 
-<%= will_paginate @works %>
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @works %>
+<% end %>
 
 <!--main content-->
 <h3 class="landmark heading">Listing Works</h3>
@@ -56,10 +47,14 @@
 <!--/content-->
 
 <!--filters subnav-->
-<%= render :partial => 'filters' %>
+<% if @works.respond_to?(:facets) %>
+  <%= render :partial => 'filters' %>
+<% end %>
 <!---/subnav-->
 
-<%= will_paginate @works %>
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @works %>
+<% end %>
 
 
 

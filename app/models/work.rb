@@ -894,14 +894,12 @@ class Work < ActiveRecord::Base
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
 
-  scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
-
-  # ugh, have to do a left join here
-  scope :revealed, joins("LEFT JOIN collection_items ON collection_items.item_id = works.id AND collection_items.item_type = 'Work'
-                          AND collection_items.user_approval_status = #{CollectionItem::APPROVED}
-                          AND collection_items.collection_approval_status = #{CollectionItem::APPROVED}
-                          AND collection_items.unrevealed = 1").
-                   where("collection_items.id IS NULL")
+  scope :unrevealed, where(:in_unrevealed_collection => true)
+  scope :revealed, where(:in_unrevealed_collection => false)
+  scope :latest, visible_to_all.
+                 revealed.
+                 order("revised_at DESC").
+                 limit(ArchiveConfig.ITEMS_PER_PAGE)
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -1243,6 +1241,9 @@ class Work < ActiveRecord::Base
     else
       pseuds.each do |pseud|
         names << "#{pseud.name} #{pseud.user_login} "
+      end
+      external_author_names.value_of(:name).each do |name|
+        names << "#{name} "
       end
     end
     names

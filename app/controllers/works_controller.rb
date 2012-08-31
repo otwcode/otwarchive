@@ -94,7 +94,24 @@ class WorksController < ApplicationController
     end
     options[:sort_direction] = Work.sort_direction(options[:sort_column])
     
-    @works = Work.search(options)
+    @owner = @pseud || @user || @collection || @tag
+    if @owner.present?
+      owner_name = case @owner.class
+                   when Pseud
+                     @owner.name
+                   when User
+                     @owner.login
+                   when Collection
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      @page_title = "#{owner_name} >> Works"
+      @works = Work.search(options)
+    else
+      @page_title = "Recent Works"
+      @works = Work.latest
+    end
   end
 
   def drafts
