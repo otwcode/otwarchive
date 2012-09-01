@@ -7,11 +7,7 @@
   <% else %>
     <%= ts("Listing") %>
 <% end %>
-<% if params[:recs_only] %>
-  <%= ts("Recs") %>
-<% else %>
-  <%= ts("Bookmarks") %>
-<% end %>
+<%= ts("Bookmarks") %>
 </h2>
 <!-- /descriptions-->
 
@@ -20,12 +16,6 @@
   <% if current_user.is_a?(User) %>
     <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
   <% end %>
-  <li>
-    <%= span_if_current(ts("View All Bookmarks"), url_for(params.merge :recs_only => false), params[:recs_only].blank?) %>
-  </li>
-  <li>
-    <%= span_if_current ts("View Recs Only"), url_for(params.merge :recs_only => true) %>
-  </li>
 <% if params[:tag_id] %>
   <%= taggable_list(params[:tag_id], "bookmarks") %>
 <% end %>

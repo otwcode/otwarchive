@@ -176,6 +176,7 @@ class Bookmark < ActiveRecord::Base
           end
           must { terms :pseud_id, options[:pseud_ids] } if options[:pseud_ids].present?
           must { term :private, 'F' } unless options[:private]
+          must { term :rec, 'T' } if options[:rec].present?
         end
       end
       sort { by :created_at, "desc" } if options[:query].blank?

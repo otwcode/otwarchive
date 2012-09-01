@@ -43,6 +43,8 @@
       <dd>
         <%= text_field_tag 'other_tag_names', params[:other_tag_names], autocomplete_options("tag") %>
       </dd>
+      <dt><%= ts("Bookmark type") %></dt>
+      <dd><%= check_box_tag :rec, '1', params[:rec] == '1' %><%= label_tag :rec, "Recs only" %></dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
     </dl>
