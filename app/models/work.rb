@@ -1141,9 +1141,7 @@ class Work < ActiveRecord::Base
           must { term :in_anon_collection, 'F' } unless options[:show_anon]
           must { term :language_id, options[:language_id] } if options[:language_id]
           if options[:pseud_ids].present?
-            options[:pseud_ids].each do |id|
-              should { term :pseud_ids, id }
-            end
+            must { terms :pseud_ids, options[:pseud_ids] }
           end
           [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
             if options[id_list].present?
