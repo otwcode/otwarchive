@@ -20,7 +20,7 @@
   <% if current_user.is_a?(User) %>
   	<% if @user == current_user || @most_recent_bookmarks || @collection %>
     	<li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
-    <% elsif params[:work_id] %>
+    <% elsif params[:work_id] || params[:series_id] %>
 			<li><%= link_to ts("Save"), get_new_bookmark_path(@bookmarkable), :id => "bookmark_form_trigger_for_#{@bookmarkable.id}", :remote => true %></li>
 		<% end %>
   <% end %>
@@ -36,7 +36,7 @@
 </ul>
 <!--/subnav-->
 
-<% if params[:work_id] %>
+<% if params[:work_id] || params[:series_id] %>
   <% # bookmark form loaded here if requested %>
   <div class="new dynamic" id="bookmark_form_placement_for_<%= @bookmarkable.id %>"></div>
 <% end %>

@@ -6,7 +6,7 @@
   <li>
     <%= link_to_ibox ts("Share"), :for => "#share_#{bookmark.id}" %>
     <div id="share_<%= bookmark.id %>" style="display: none;">
-			<p><%= ts("Copy and paste the following code to repost this bookmark elsewhere (") %><kbd><%= ts("ctrl A")%></kbd><%= ts(" / ") %><kbd><%= ts("cmd A")%></kbd><%= ts(" will select all).") %></p>
+			<p><%= ts("Copy and paste the following code to repost this bookmark elsewhere (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all).") %></p>
       <p><textarea rows="4" cols="50"><%= get_bookmark_embed_link(bookmark) %></textarea></p>
     </div>
   </li>
