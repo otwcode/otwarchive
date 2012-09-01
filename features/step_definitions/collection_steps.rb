@@ -117,3 +117,7 @@ Then /^My Gift Exchange collection exists$/ do
     And %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
 end
 
+Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
+  Then %{I should see /We couldn't find the collections? named(?:.+and)? #{collection_name}/}
+    And %{I should see "Make sure you are using the one-word name, and not the title"}
+end
