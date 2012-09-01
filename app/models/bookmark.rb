@@ -132,6 +132,18 @@ class Bookmark < ActiveRecord::Base
     return self.tags
   end
   
+  def self.list_without_filters(owner, options)
+    bookmarks = owner.bookmarks
+    user = nil
+    if %w(Pseud User).include?(owner.class.to_s)
+      user = owner.respond_to?(:user) ? owner.user : owner
+    end
+    unless User.current_user == user
+      bookmarks = bookmarks.is_public
+    end
+    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+  end
+  
   #################################
   ## SEARCH #######################
   #################################

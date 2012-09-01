@@ -35,9 +35,23 @@ class WorksController < ApplicationController
     #   setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
     # end
   end
+  
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+    end
+    @owner = @author || @user || @collection || @tag
+  end
 
   # GET /works
   def index
+    load_owner
     options = params.dup
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
@@ -94,7 +108,6 @@ class WorksController < ApplicationController
     end
     options[:sort_direction] = Work.sort_direction(options[:sort_column])
     
-    @owner = @pseud || @user || @collection || @tag
     if @owner.present?
       owner_name = case @owner.class.to_s
                    when 'Pseud'
@@ -106,8 +119,12 @@ class WorksController < ApplicationController
                    else
                      @owner.try(:name)
                    end
-      @page_title = "#{owner_name} >> Works"
-      @works = Work.search(options)
+      @page_title = "#{owner_name} &raquo; Works".html_safe
+      if @admin_settings.disable_filtering?
+        @works = Work.list_without_filters(@owner, options)
+      else
+        @works = Work.search(options)
+      end
     else
       @page_title = "Recent Works"
       @works = Work.latest

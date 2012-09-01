@@ -1,6 +1,6 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @works, @query, "Work", @owner %>
+  <%= search_header @works, @search, "Work", @owner %>
 </h2>
 
 <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
@@ -33,7 +33,7 @@
 <!---/subnav-->
 
 <% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
+  <!-- <%= will_paginate @works %> -->
 <% end %>
 
 <!--main content-->

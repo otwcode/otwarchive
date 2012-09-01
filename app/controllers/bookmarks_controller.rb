@@ -86,8 +86,13 @@ class BookmarksController < ApplicationController
     else
       options[:private] = false
     end
-    if @bookmarkable.present? || @user.present? || @tag.present? || @collection.present?
-      @bookmarks = Bookmark.search(options)
+    @owner = @bookmarkable || @pseud || @user || @collection || @tag
+    if @owner.present?
+      if @admin_settings.disable_filtering?
+        @bookmarks = Bookmark.list_without_filters(@owner, options)
+      else
+        @bookmarks = Bookmark.search(options)
+      end
     else
       @bookmarks = Bookmark.latest
     end

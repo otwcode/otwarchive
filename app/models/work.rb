@@ -1055,6 +1055,41 @@ class Work < ActiveRecord::Base
     @works = @works.order(sort_by).posted.unhidden
     return @works.paginate(page_args.merge(:total_entries => @works.size))
   end
+  
+  def self.list_without_filters(owner, options)
+    works = case owner.class.to_s
+            when 'Pseud'
+              works = Work.written_by_id([owner.id])
+            when 'User'
+              works = Work.owned_by(owner)
+            when 'Collection'
+              works = Work.in_collection(owner)
+            else
+              if owner.is_a?(Tag)
+                works = owner.filtered_works
+              end
+            end
+    if options[:fandom_id]
+      fandom = Fandom.find_by_id(options[:fandom_id])
+      if fandom.present?
+        works = works.with_filter(fandom)
+      end
+    end
+    
+    if %w(Pseud User).include?(owner.class.to_s)
+      works = works.where(:in_anon_collection => false)
+    end
+    unless owner.is_a?(Collection)
+      works = works.revealed
+    end
+    if User.current_user.nil? || User.current_user == :false
+      works = works.unrestricted
+    end
+
+    works = works.posted
+    works = works.order("#{options[:sort_column]} #{options[:sort_direction].upcase}")
+    works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+  end
 
   ########################################################################
   # SORTING
@@ -1128,6 +1163,10 @@ class Work < ActiveRecord::Base
         options[facet_key] ||= []
         options[facet_key] << tag.id
       end
+    end
+    if options[:fandom_id]
+      options[:fandom_ids] ||= []
+      options[:fandom_ids] << options[:fandom_id]
     end
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       
