@@ -342,6 +342,19 @@ namespace :After do
     end
   end
   
+  desc "Set anon/unrevealed status for works"
+  task(:set_anon_unrevealed => :environment) do
+    CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
+      puts collection_item.id
+      work = collection_item.item
+      if work.present?
+        work.update_attributes(
+          in_anon_collection: collection_item.anonymous, 
+          in_unrevealed_collection: collection_item.unrevealed
+        )
+      end
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 
