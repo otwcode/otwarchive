@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class FandomNomination - RDoc Documentation</title>
+<title>class CommonTaggingSweeper - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -47,7 +47,7 @@
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
   <ul>
-    <li>app/models/fandom_nomination.rb
+    <li>app/sweepers/common_tagging_sweeper.rb
   </ul>
 </nav>
 
@@ -59,7 +59,7 @@
     <nav id="parent-class-section" class="section">
   <h3 class="section-header">Parent</h3>
   
-  <p class="link"><a href="TagNomination.html">TagNomination</a>
+  <p class="link">ActionController::Caching::Sweeper
   
 </nav>
 
@@ -70,13 +70,9 @@
 
   <ul class="link-list">
     
-    <li><a href="#method-i-character_tagnames">#character_tagnames</a>
+    <li><a href="#method-i-after_create">#after_create</a>
     
-    <li><a href="#method-i-reject_children">#reject_children</a>
-    
-    <li><a href="#method-i-relationship_tagnames">#relationship_tagnames</a>
-    
-    <li><a href="#method-i-update_child_parent_tagnames">#update_child_parent_tagnames</a>
+    <li><a href="#method-i-before_destroy">#before_destroy</a>
     
   </ul>
 </nav>
@@ -590,7 +586,7 @@
 </nav>
 
 <div id="documentation">
-  <h1 class="class">class FandomNomination</h1>
+  <h1 class="class">class CommonTaggingSweeper</h1>
 
   <div id="description" class="description">
     
@@ -614,128 +610,66 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-character_tagnames" class="method-detail ">
+      <div id="method-i-after_create" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">character_tagnames</span><span
-            class="method-args">()</span>
+          <span class="method-name">after_create</span><span
+            class="method-args">(common_tagging)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>upon creation of a common_tagging, the filterable has gained a child, so
+expire its children cache</p>
           
 
           
-          <div class="method-source-code" id="character_tagnames-source">
-            <pre><span class="ruby-comment"># File app/models/fandom_nomination.rb, line 12</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">character_tagnames</span>
-  <span class="ruby-constant">CharacterNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">owned_tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:parent_tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">value_of</span> <span class="ruby-value">:tagname</span>
+          <div class="method-source-code" id="after_create-source">
+            <pre><span class="ruby-comment"># File app/sweepers/common_tagging_sweeper.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_create</span>(<span class="ruby-identifier">common_tagging</span>)
+  <span class="ruby-identifier">expire_fragment</span>(<span class="ruby-node">&quot;views/tags/#{common_tagging.filterable_id}/children&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- character_tagnames-source -->
+          </div><!-- after_create-source -->
           
         </div>
 
         
 
         
-      </div><!-- character_tagnames-method -->
+      </div><!-- after_create-method -->
 
     
-      <div id="method-i-reject_children" class="method-detail ">
+      <div id="method-i-before_destroy" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">reject_children</span><span
-            class="method-args">()</span>
+          <span class="method-name">before_destroy</span><span
+            class="method-args">(common_tagging)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>upon destruction of a common_tagging, the filterable has lost a child, so
+expire its children cache</p>
           
 
           
-          <div class="method-source-code" id="reject_children-source">
-            <pre><span class="ruby-comment"># File app/models/fandom_nomination.rb, line 21</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">reject_children</span>
-  <span class="ruby-identifier">character_nominations</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span> <span class="ruby-identifier">char</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-keyword">true</span>; <span class="ruby-identifier">char</span>.<span class="ruby-identifier">save</span>}
-  <span class="ruby-identifier">relationship_nominations</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-keyword">true</span>; <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">save</span>}
-  <span class="ruby-keyword">true</span>
+          <div class="method-source-code" id="before_destroy-source">
+            <pre><span class="ruby-comment"># File app/sweepers/common_tagging_sweeper.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">before_destroy</span>(<span class="ruby-identifier">common_tagging</span>)
+  <span class="ruby-identifier">expire_fragment</span>(<span class="ruby-node">&quot;views/tags/#{common_tagging.filterable_id}/children&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- reject_children-source -->
+          </div><!-- before_destroy-source -->
           
         </div>
 
         
 
         
-      </div><!-- reject_children-method -->
-
-    
-      <div id="method-i-relationship_tagnames" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">relationship_tagnames</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="relationship_tagnames-source">
-            <pre><span class="ruby-comment"># File app/models/fandom_nomination.rb, line 16</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship_tagnames</span>
-  <span class="ruby-constant">RelationshipNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">owned_tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:parent_tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">value_of</span> <span class="ruby-value">:tagname</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- relationship_tagnames-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- relationship_tagnames-method -->
-
-    
-      <div id="method-i-update_child_parent_tagnames" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">update_child_parent_tagnames</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="update_child_parent_tagnames-source">
-            <pre><span class="ruby-comment"># File app/models/fandom_nomination.rb, line 28</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_child_parent_tagnames</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">character_nominations</span>.<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span> <span class="ruby-identifier">char</span>.<span class="ruby-identifier">parent_tagname</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>; <span class="ruby-identifier">char</span>.<span class="ruby-identifier">save</span>}
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">relationship_nominations</span>.<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">parent_tagname</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>; <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">save</span>}
-  <span class="ruby-keyword">true</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- update_child_parent_tagnames-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- update_child_parent_tagnames-method -->
+      </div><!-- before_destroy-method -->
 
     
     </section><!-- public-instance-method-details -->
