@@ -28,17 +28,18 @@ class WorkSearch < Search
     :sort_column
     
   def options_for_search
-    if options[:title].present?
-      options[:title_to_sort_on] = options[:title]
-    end
     if options[:rating_ids].present?
       options[:rating_ids] = [options[:rating_ids]].flatten
     end
+    options[:tag_names] = ""
     [:fandom_names, :character_names, :relationship_names, :freeform_names].each do |tag_names|
       if options[tag_names].present?
         names = options[tag_names].split(",")
         tag_ids = tag_names.to_s.gsub("names", "ids").to_sym
-        options[tag_ids] = Tag.where(:name => names).value_of(:id)
+        tags = Tag.where(:name => names)
+        leftovers = names - tags.map{ |tag| tag.name }
+        options[:tag_names] << leftovers.join(" ") + " "
+        options[tag_ids] = tags.map{ |tag| tag.id }
       end
     end
     case options[:sort_column]

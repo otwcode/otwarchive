@@ -1163,16 +1163,25 @@ class Work < ActiveRecord::Base
         options[facet_key] ||= []
         options[facet_key] << tag.id
       end
+      leftovers = names - tags.map(&:name)
+      options[:tag_names] ||= ""
+      options[:tag_names] << leftovers.join(" ") + " "
     end
     if options[:fandom_id]
       options[:fandom_ids] ||= []
       options[:fandom_ids] << options[:fandom_id]
     end
+    
     tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
       
       query do
         boolean do
           must { string options[:query], default_operator: "AND" } if options[:query].present?
+          if options[:title].present?
+            must { terms :title, options[:title].split(" "), minimum_match: options[:title].split(" ").length }
+          end
+          must { terms :byline, options[:byline].split(" ") } if options[:byline].present?
+          must { terms :tag_names, options[:tag_names].split(" ") } if options[:tag_names].present?
           must { term :restricted, 'F' } unless options[:show_restricted]
           must { term :posted, 'T' } unless options[:show_drafts]
           must { term :complete, 'T' } if options[:complete]
