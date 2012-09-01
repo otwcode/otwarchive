@@ -70,8 +70,8 @@ class TagsController < ApplicationController
       end
       @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
     end
-    # cache the children, since it's a possibly massive query; expired in common_tagging_sweeper and tag_sweeper
-    @tag_children = Rails.cache.fetch "views/tags/#{@tag.id}/children" do
+    # cache the children, since it's a possibly massive query
+    @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       @tag.children.uniq.compact.sort.group_by(&:type)
     end
   end

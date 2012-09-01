@@ -77,15 +77,18 @@
   <% end %>
 
   <% unless @tag_children.blank? %>
-  <div class="child listbox group">
-    <h3 class="heading"><%= ts('Child tags (more specific)') %>:</h3>
-    <% @tag_children.each do |type, tags| %>
-      <div class="<%= type.to_s.pluralize.downcase %> listbox">
-        <h4 class="heading"><%= type.to_s.pluralize %>:</h4>
-        <ul class="tags commas index group"><%= tag_link_list(tags) %></ul>
+    <!-- caching -->
+    <% cache("tag-#{@tag.cache_key}-children") do %>
+      <div class="child listbox group">
+        <h3 class="heading"><%= ts('Child tags (more specific)') %>:</h3>
+        <% @tag_children.each do |type, tags| %>
+          <div class="<%= type.to_s.pluralize.downcase %> listbox">
+            <h4 class="heading"><%= type.to_s.pluralize %>:</h4>
+            <ul class="tags commas index group"><%= tag_link_list(tags) %></ul>
+          </div>
+        <% end %>
       </div>
     <% end %>
-  </div>
   <% end %>
 
   <% if @works %>
