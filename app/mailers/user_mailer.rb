@@ -14,6 +14,7 @@ class UserMailer < BulletproofMailer::Base
   helper :works
   helper :users
   helper :date
+  helper :series
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
@@ -297,7 +298,6 @@ class UserMailer < BulletproofMailer::Base
 
   def abuse_report(report_id)
     report = AbuseReport.find(report_id)
-    setup_email_without_name(report.email)
     @url = report.url
     @comment = report.comment
     mail(

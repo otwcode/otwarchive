@@ -18,8 +18,8 @@ module Collectible
   def collections_to_add=(collection_names)
     names = collection_names.split(',').reject {|name| name.blank?}.map { |name| name.strip }.each do |name|
       c = Collection.find_by_name(name)
-      errors.add(:base, ts("We couldn't find the collection {{name}}.", :name => name)) and return if c.nil?
-      errors.add(:base, ts("The collection {{name}} is not currently open.", :name => name)) and return if (c.closed? && !c.user_is_maintainer?(User.current_user))
+      errors.add(:base, ts("We couldn't find the collection %{name}.", :name => name)) and return if c.nil?
+      errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return if (c.closed? && !c.user_is_maintainer?(User.current_user))
       add_to_collection(c)
     end
   end
@@ -61,6 +61,7 @@ module Collectible
       self.collections.delete(c)
     end
     to_add.each do |c|
+      self.errors.add(:base, ts("The collection %{name} is not currently open.", :name => c.name)) and return if (c.closed? && !c.user_is_maintainer?(User.current_user))
       self.collections << c
     end
     unless missing.blank?
@@ -70,6 +71,7 @@ module Collectible
       error += ts("Make sure you are using the one-word name, and not the title?")
       self.errors.add(:base, error)
     end
+
   end
 
   # DEPRECATED -- please use collections_to_add/remove above instead

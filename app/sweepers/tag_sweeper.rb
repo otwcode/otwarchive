@@ -17,6 +17,13 @@ class TagSweeper < ActionController::Caching::Sweeper
         tag.remove_from_autocomplete
       end
     end
+    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
+    if tag.type_changed?
+      tag.parents.each do |parent_tag|
+        expire_fragment("views/tags/#{parent_tag.id}/children")
+      end
+    end
+
     update_tag_nominations(tag)
   end
 

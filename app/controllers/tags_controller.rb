@@ -57,19 +57,15 @@ class TagsController < ApplicationController
       if logged_in? #current_user.is_a?User
         @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
       elsif logged_in_as_admin?
-        @works= @tag.works.visible_to_owner.paginate(:page => params[:page])
+        @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
       else
         @works = @tag.works.visible_to_all.paginate(:page => params[:page])
       end
       @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
     end
-    # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
-    if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
-      if @tag.canonical # show works with that tag
-        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag) and return
-      elsif @tag.merger # show works with the canonical merger (synonym) of that tag
-        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag.merger) and return
-      end
+    # cache the children, since it's a possibly massive query; expired in common_tagging_sweeper and tag_sweeper
+    @tag_children = Rails.cache.fetch "views/tags/#{@tag.id}/children" do
+      @tag.children.uniq.compact.sort.group_by(&:type)
     end
   end
 
@@ -202,6 +198,10 @@ class TagsController < ApplicationController
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     @tag.attributes = params[:tag]
+    # Limiting the conditions under which you can update the tag type
+    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(params[:tag][:type])
+      @tag.type = params[:tag][:type]
+    end
     @tag.syn_string = syn_string if @tag.save
     if @tag.errors.empty? && @tag.save
       setflash; flash[:notice] = ts('Tag was updated.')

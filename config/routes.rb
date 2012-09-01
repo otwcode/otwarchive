@@ -66,6 +66,11 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :tag_wranglers
+  resources :unsorted_tags do
+    collection do
+      post :mass_update
+    end
+  end
   resources :tags do
     member do
       get :feed

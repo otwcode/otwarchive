@@ -94,7 +94,24 @@ class WorksController < ApplicationController
     end
     options[:sort_direction] = Work.sort_direction(options[:sort_column])
     
-    @works = Work.search(options)
+    @owner = @pseud || @user || @collection || @tag
+    if @owner.present?
+      owner_name = case @owner.class
+                   when Pseud
+                     @owner.name
+                   when User
+                     @owner.login
+                   when Collection
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      @page_title = "#{owner_name} >> Works"
+      @works = Work.search(options)
+    else
+      @page_title = "Recent Works"
+      @works = Work.latest
+    end
   end
 
   def drafts
@@ -209,7 +226,7 @@ class WorksController < ApplicationController
       setflash; flash[:notice] = ts("New work posting canceled.")
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
-      unless params[:preview_button]
+      unless params[:preview_button] || params[:cancel_coauthor_button]
         @work.posted = true
         @chapter.posted = true
       end
@@ -218,14 +235,14 @@ class WorksController < ApplicationController
       if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
-        if params[:preview_button]
+        if params[:preview_button] || params[:cancel_coauthor_button]
           redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
         else
           redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
-          render :partial => 'choose_coauthor', :layout => 'application'
+          render :_choose_coauthor
         else
           unless @work.has_required_tags?
             if @work.fandoms.blank?
@@ -350,9 +367,6 @@ class WorksController < ApplicationController
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
         end
-
-        #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-        #setflash; flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
 
         redirect_to(@work)
       else

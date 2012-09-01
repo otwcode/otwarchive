@@ -1,12 +1,15 @@
-<h2 class="heading">Fun With Graphs! (Extreme Beta)</h2>
-
-<div id="stats graphs">
-<%= stats_view(params[:model]) %>
-</div>
+<div class="admin">
+<h2 class="heading"><%= ts('Fun With Graphs! (Extreme Beta)') %></h2>
 
 <ul class="navigation actions" role="navigation">
-  <li><a href=stats?model=works>Works stats</a></li>
-  <li><a href=stats?model=users>Users stats</a></li>
-  <li><a href=stats?model=tags>Tag stats</a></li>
-  <li><a href=stats?model=invitations>Invitations stats</a></li>
+  <li><%= span_if_current ts('Works Stats'), admin_stats_path(:model => "works") %></li>
+  <li><%= span_if_current ts('Users Stats'), admin_stats_path(:model => "users") %></li>
+  <li><%= span_if_current ts('Tags Stats'), admin_stats_path(:model => "tags") %></li>
+  <li><%= span_if_current ts('Invitations Stats'), admin_stats_path(:model => "invitations") %></li>
 </ul>
+
+<div id="stats graphs">
+  <%= stats_view(params[:model]) %>
+</div>
+
+</div>

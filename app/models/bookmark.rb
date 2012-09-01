@@ -23,6 +23,7 @@ class Bookmark < ActiveRecord::Base
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recent, limit(ArchiveConfig.SEARCH_RESULTS_MAX)
   scope :recs, where(:rec => true)
+  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE)
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
@@ -124,7 +125,7 @@ class Bookmark < ActiveRecord::Base
         if tag
           self.tags << tag
         else
-          self.tags << Freeform.create(:name => string) 
+          self.tags << UnsortedTag.create(:name => string)
         end
       end
     end

@@ -51,6 +51,10 @@
           <li><%= ts("Icons can be in png, jpeg or gif form") %></li> 
           <li><%= ts("Icons should be sized 100x100 pixels for best results") %></li> 
         </ul>
+        <% if @collection.icon_file_name %>
+          <%= collection_form.check_box :delete_icon, {:checked => false} %>
+          <%= collection_form.label :delete_icon, ts("Delete collection icon and revert to our default") %></li>
+        <% end %>
       </dd>
       <dt><%= collection_form.label :icon, ts("Upload a new icon:") %></dt>
       <dd>
@@ -83,9 +87,9 @@
       <legend>Preferences</legend>
       <dl>
         <dt><%= preference_form.check_box :moderated %></dt>
-        <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "moderated-collection" %></dd>
+        <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "collection-moderated" %></dd>
         <dt><%= preference_form.check_box :closed %></dt>
-        <dd><%= preference_form.label :closed, ts("This collection is closed") %></dd>
+        <dd><%= preference_form.label :closed, ts("This collection is closed") %> <%= link_to_help "collection-closed" %></dd>
         <dt><%= preference_form.check_box :unrevealed %></dt>
         <dd>
           <%= preference_form.label :unrevealed, ts("This collection is unrevealed") %>
@@ -162,5 +166,6 @@
  </fieldset>
 
  <%= submit_fieldset collection_form %>
+  <%= render "collections/collection_form_delete" %>
 
 <% end %>

@@ -254,6 +254,14 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
+  #invalid URL should give a helpful message (issue 1786)
+  When I edit the work "Followup"
+    And I check "parent-options-show"
+    And I fill in "Url" with "this.is.an.invalid/url"
+    And I fill in "Title" with "Worldbuilding Two"
+    And I fill in "Author" with "BNF"
+    And I press "Preview"
+  Then I should see "Parent work info would not save."
     
 @work_external_language
 Scenario: External work language    

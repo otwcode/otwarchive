@@ -54,7 +54,7 @@ class Tag < ActiveRecord::Base
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
@@ -132,6 +132,18 @@ class Tag < ActiveRecord::Base
   def update_wrangler(tag)
     unless User.current_user.nil?
       self.update_attributes(:last_wrangler => User.current_user)
+    end
+  end
+
+  before_save :check_type_changes, :if => :type_changed?
+  def check_type_changes
+    # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
+    # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
+    if self.type_was == "Fandom" || self.type == "UnsortedTag" && !self.type_was.nil?
+      self.parents = []
+    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
+    elsif self.type == "Fandom" && !self.type_was.nil?
+      self.parents = [Media.uncategorized]
     end
   end
 
@@ -450,7 +462,8 @@ class Tag < ActiveRecord::Base
     if new_name && new_name.is_a?(String)
       new_name.squish!
       tag = Tag.find_by_name(new_name)
-      if tag && tag.class == self
+      # if the tag exists and has the proper class, or it is an unsorted tag and it can be sorted to the self class
+      if tag && (tag.class == self || tag.class == UnsortedTag && tag = tag.recategorize(self.to_s))
         tag
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
@@ -487,6 +500,11 @@ class Tag < ActiveRecord::Base
   # sort tags by name
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
+  end
+
+  # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
+  def can_change_type?
+    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
   #### FILTERING ####

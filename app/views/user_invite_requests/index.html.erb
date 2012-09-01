@@ -1,5 +1,6 @@
 <% # this page is for administrators only, they cannot navigate to individual user pages %>
-<h2 class="heading"><%= ts("User invite requests") %></h2>
+<div class="admin">
+<h2 class="heading"><%= ts("User Invite Requests") %></h2>
 <p><%= ts("Enter \"0\" under quantity to deny the request. Clear the box to delay your decision for now.") %></p>
 <p class="note"><%= ts("To give a user more invitations without a request, visit their individual invitations page.") %></p>
 <!--/descriptions-->
@@ -7,19 +8,19 @@
 
 <!--main content-->
 <%= form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do %>
-<table summary="This table shows requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity">
-  <caption>Allot invites to users</caption>
+<table summary="<%= ts('Requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity.') %>">
+  <caption><%= ts('Allot Invites to Users') %></caption>
   <thead>
     <tr>
-        <th scope="col">User</th>
-        <th scope="col">Reason</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Created at</th>
-        <th scope="col">Previous</th>
-      </tr>
+      <th scope="col"><%= ts('User') %></th>
+      <th scope="col"><%= ts('Reason') %></th>
+      <th scope="col"><%= ts('Quantity') %></th>
+      <th scope="col"><%= ts('Created at') %></th>
+      <th scope="col"><%= ts('Previous') %></th>
+    </tr>
   </thead>
-    <tbody>
-  <% @user_invite_requests.each do |request| %>
+  <tbody>
+    <% @user_invite_requests.each do |request| %>
       <tr>
         <td><%= link_to request.user.login, request.user %></td>
         <td><%= request.reason %></td>
@@ -27,14 +28,10 @@
         <td><%= request.created_at %>
         <td><%= link_to_previous_invite_requests(request) %></td>
       </tr>
-  <% end %>
+    <% end %>
   </tbody>
-  <tfoot>
-    <tr>
-      <th scope="row" colspan="4">Submit:</th>
-      <td class="submit actions"><%= submit_tag "Update" %></td>
-    </tr>
-  </tfoot>
 </table>
+<p class="submit"><%= submit_tag ts("Update") %></p>
 <% end %>
 <!--/content-->
+</div>

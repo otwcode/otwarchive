@@ -96,7 +96,3 @@ function convertWord (type, content) {
     }
     return content;
 }
-
-
-
-

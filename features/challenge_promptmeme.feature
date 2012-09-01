@@ -104,7 +104,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for "Battle 12" with missing prompts
-  Then I should see "Request must have exactly 1 fandom tags. You currently have none."
+  Then I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
   When I fill in the missing prompt
   Then I should see "Signup was successfully created"
   
@@ -863,9 +863,10 @@ Feature: Prompt Meme Challenge
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
     And I press "Post without preview"
-  # TODO: so this *is* desired behaviour, that the user can't change their mind?
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
-    And I should see "Battle 12"
+  Then I should see "My Gift Exchange"
+    And I should not see "Battle 12"
+  # TODO: should it be unrevealed or not? It isn't unrevealed
+    And I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
 
   Scenario: As a co-moderator I can't delete whole signups
 
@@ -897,7 +898,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I delete my signup for "Battle 12"
   When I view prompts for "Battle 12"
-  Then I should not see "myname1"
+  Then I should not see "myname1" within "ul.index"
 
   Scenario: When user deletes signup, as a prompter the signup disappears from my dashboard
   
@@ -1062,7 +1063,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I close signups for "Battle 12"
   When I go to "Battle 12" collection's page
-    And I follow "Settings"
+    And I follow "Collection Settings"
     And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"

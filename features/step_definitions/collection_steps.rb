@@ -96,7 +96,7 @@ end
 When /^I reveal works for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Settings"}
+  When %{I follow "Collection Settings"}
   uncheck "This collection is unrevealed"
   click_button "Update"
 end

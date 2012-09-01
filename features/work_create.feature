@@ -238,7 +238,7 @@ Feature: Create Works
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
     Then I should see a save error message
-      And I should see "We couldn't find the collections named collection1 and collection2"
+      And I should see "We couldn't find the collection collection1"
     When I fill in "work_collection_names" with ""
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"

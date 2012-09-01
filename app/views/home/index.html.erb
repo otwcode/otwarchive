@@ -26,16 +26,16 @@
       <h3 class="heading">Explore</h3>
       <ul class="meters">
         <li>
-	  <span><%= link_to ts('fandoms'), media_path %></span>: 
-	  <span><%= @fandom_count %></span><%= ' ' + ts(" to date") %>
-	</li>
-	<li>
-	  <span><%= link_to ts('works'), works_path %></span>: 
-	  <span><%= @work_count %></span><%= ' ' + ts(" to date") %>
-	</li>
+					<span><%= link_to ts('fandoms'), media_path %></span>: 
+					<span><%= @fandom_count %></span><%= ' ' + ts(" to date") %>
+				</li>
+	      <li>
+	        <span><%= link_to ts('works'), works_path %></span>:
+	        <span><%= @work_count %></span><%= ' ' + ts(" to date") %>
+	      </li>
         <li>
-          <span><%= link_to ts('people'), people_path %></span>: 
-          <span><%= @user_count %></span><%= ' ' + ts(" to date") %>
+	        <span><%= link_to ts('people'), people_path %></span>:
+	        <span><%= @user_count %></span><%= ' ' + ts(" to date") %>
         </li>
       </ul>    
   </div>
