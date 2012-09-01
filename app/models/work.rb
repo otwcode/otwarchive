@@ -1140,7 +1140,12 @@ class Work < ActiveRecord::Base
           must { term :in_unrevealed_collection, 'F' } unless options[:show_unrevealed]
           must { term :in_anon_collection, 'F' } unless options[:show_anon]
           must { term :language_id, options[:language_id] } if options[:language_id]
-          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :pseud_ids, :collection_ids].each do |id_list|
+          if options[:pseud_ids].present?
+            options[:pseud_ids].each do |id|
+              should { term :pseud_ids, id }
+            end
+          end
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
             if options[id_list].present?
               options[id_list].each do |id|
                 must { term id_list, id }
@@ -1223,7 +1228,7 @@ class Work < ActiveRecord::Base
     creatorships.value_of :pseud_id
   end
   def collection_ids
-    collections.value_of :id
+    collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
   def comments_count
     self.stat_counter.comments_count

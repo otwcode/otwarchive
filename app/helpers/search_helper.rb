@@ -15,12 +15,12 @@ module SearchHelper
                 ] + item_name.pluralize + " found"
     end
     if parent
-      parent_text = case parent.class
-                    when Collection
+      parent_text = case parent.class.to_s
+                    when 'Collection'
                       " in #{link_to(parent.title, parent)}"
-                    when Pseud
+                    when 'Pseud'
                       " by #{parent.byline}"
-                    when User
+                    when 'User'
                       " by #{parent.login}"
                     end
       if parent.is_a?(Tag)

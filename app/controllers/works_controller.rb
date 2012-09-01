@@ -96,12 +96,12 @@ class WorksController < ApplicationController
     
     @owner = @pseud || @user || @collection || @tag
     if @owner.present?
-      owner_name = case @owner.class
-                   when Pseud
+      owner_name = case @owner.class.to_s
+                   when 'Pseud'
                      @owner.name
-                   when User
+                   when 'User'
                      @owner.login
-                   when Collection
+                   when 'Collection'
                      @owner.title
                    else
                      @owner.try(:name)
