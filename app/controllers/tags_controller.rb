@@ -76,7 +76,7 @@ class TagsController < ApplicationController
       (@tag.child_types - %w(SubTag)).each do |child_type|
         tags = @tag.send(child_type.underscore.pluralize).limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
         unless tags.blank?
-          children[child_type] = tags
+          children[child_type] = tags.uniq
         end
       end
       children
