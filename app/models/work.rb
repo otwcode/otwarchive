@@ -133,17 +133,22 @@ class Work < ActiveRecord::Base
 
   # Checks that work has at least one author
   def validate_authors
-    if self.authors.blank?
-      if self.pseuds.blank?
-        errors.add(:base, ts("Work must have at least one author."))
-        return false
-      else
-        self.authors_to_sort_on = self.sorted_pseuds
-      end
+    if self.authors.blank? && self.pseuds.blank?
+      errors.add(:base, ts("Work must have at least one author."))
+      return false
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
-    else
+    end
+  end
+  
+  # Set the authors_to_sort_on value, which should be anon for anon works
+  def set_author_sorting
+    if self.anonymous?
+      self.authors_to_sort_on = "Anonymous"
+    elsif self.authors.present?
       self.authors_to_sort_on = self.sorted_authors
+    else
+      self.authors_to_sort_on = self.sorted_pseuds
     end
   end
 
@@ -179,18 +184,17 @@ class Work < ActiveRecord::Base
     end
   end
 
-
-
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :validate_authors, :set_author_sorting, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
+  before_create :set_anon_unrevealed
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
@@ -387,11 +391,11 @@ class Work < ActiveRecord::Base
     in_anon_collection?
   end
   
-  before_save :check_anon_author_sorting
-  def check_anon_author_sorting
-    if anonymous?
-      authors_to_sort_on = "Anonymous"
-    end
+  # Set the anonymous/unrevealed status of the work based on its collections
+  def set_anon_unrevealed
+    self.in_anon_collection = !self.collections.select{|c| c.anonymous? }.empty?
+    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+    return true
   end
 
   ########################################################################
