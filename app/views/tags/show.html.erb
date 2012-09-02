@@ -58,7 +58,7 @@
   <% unless @tag_children['Merger'].blank? %>
   <div class="synonym listbox group">
     <h3 class="heading"><%= ts('Tags with the same meaning') %>:</h3>
-    <ul class="tags commas index group"><%= tag_link_list(@tag_children.delete('Merger')) %></ul>
+    <ul class="tags commas index group"><%= tag_link_list(@tag_children['Merger']) %></ul>
   </div>
   <% end %>
 
@@ -80,7 +80,7 @@
   </div>
   <% end %>
 
-  <% unless @tag_children.blank? %>
+  <% unless (@tag_children.keys - ['Merger']).blank? %>
     <!-- caching -->
     <% cache("tag-#{@tag.cache_key}-children") do %>
       <div class="child listbox group">
