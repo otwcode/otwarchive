@@ -58,7 +58,7 @@
   <% unless @tag_children['Merger'].blank? %>
   <div class="synonym listbox group">
     <h3 class="heading"><%= ts('Tags with the same meaning') %>:</h3>
-    <ul class="tags commas index group"><%= tag_link_list(@tag_children['Merger']) %></ul>
+    <ul class="tags commas index group"><%= tag_link_list(@tag_children['Merger'].sort) %></ul>
   </div>
   <% end %>
 
@@ -84,13 +84,13 @@
     <!-- caching -->
     <% cache("tag-#{@tag.cache_key}-children") do %>
       <div class="child listbox group">
-        <h3 class="heading"><%= ts('Child tags (more specific)') %>:</h3>
+        <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
         <% %w(Character Relationship Freeform).each do |type| %>
           <% if @tag_children[type].present? %>
             <div class="<%= type.to_s.pluralize.downcase %> listbox">
               <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
               <ul class="tags commas index group">
-                <%= tag_link_list(@tag_children[type]) %>
+                <%= tag_link_list(@tag_children[type].sort) %>
                 <% if @tag_children[type].length > ArchiveConfig.TAG_LIST_LIMIT %>
                   <li><%= ts("and more") %></li>
                 <% end %>
