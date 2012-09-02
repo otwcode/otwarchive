@@ -91,9 +91,7 @@ class CollectionItem < ActiveRecord::Base
     return unless item_type == 'Work' && work.present? && work.chapters.present?
     work.in_unrevealed_collection = work.collection_items.where(:unrevealed => true).exists?
     work.in_anon_collection = work.collection_items.where(:anonymous => true).exists?
-    unless work.save
-      raise work.errors.inspect
-    end
+    work.save!
   end
 
   before_save :approve_automatically
