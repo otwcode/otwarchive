@@ -125,6 +125,12 @@ dl.stats + h6 + .actions {
   width: auto;
 }
 
+/*userstuff: workskin */
+
+#workskin {
+  font-size: 14px;
+}
+
 /*SKIN: Dash Line */
 
 /* DESCRIPTION: Horizontal dash inline*/
