@@ -51,50 +51,52 @@ class BookmarksController < ApplicationController
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
-    end
-    options = params.dup
-    if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
-      options[:pseud_ids] = @user.pseuds.value_of(:id)
-      if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
-        options[:pseud_ids] = [@author.id]
+      @bookmarks = @bookmarkable.bookmarks.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    else
+      options = params.dup
+      if params[:user_id].present?
+        @user = User.find_by_login(params[:user_id])
+        options[:pseud_ids] = @user.pseuds.value_of(:id)
+        if params[:pseud_id].present?
+          @author = @user.pseuds.find_by_name(params[:pseud_id])
+          options[:pseud_ids] = [@author.id]
+        end
       end
-    end
-    if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-      if @tag.present?
-        facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
-        options[facet_key] ||= []
-        options[facet_key] << @tag.id
-        params[facet_key] = options[facet_key]
-      else
+      if params[:tag_id]
+        @tag = Tag.find_by_name(params[:tag_id])
+        if @tag.present?
+          facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
+          options[facet_key] ||= []
+          options[facet_key] << @tag.id
+          params[facet_key] = options[facet_key]
+        else
         
+        end
       end
-    end
-    if @collection.present?
-      if params[:work_collections].present?
-        options[:work_collection_ids] ||= []
-        options[:work_collection_ids] << @collection.id
+      if @collection.present?
+        if params[:work_collections].present?
+          options[:work_collection_ids] ||= []
+          options[:work_collection_ids] << @collection.id
+        else
+          options[:collection_ids] ||= []
+          options[:collection_ids] << @collection.id
+        end
+      end
+      if @user.present? && @user == current_user
+        options[:private] = true
       else
-        options[:collection_ids] ||= []
-        options[:collection_ids] << @collection.id
+        options[:private] = false
       end
-    end
-    if @user.present? && @user == current_user
-      options[:private] = true
-    else
-      options[:private] = false
-    end
-    @owner = @bookmarkable || @pseud || @user || @collection || @tag
-    if @owner.present?
-      if @admin_settings.disable_filtering?
-        @bookmarks = Bookmark.list_without_filters(@owner, options)
+      @owner = @bookmarkable || @pseud || @user || @collection || @tag
+      if @owner.present?
+        if @admin_settings.disable_filtering?
+          @bookmarks = Bookmark.list_without_filters(@owner, options)
+        else
+          @bookmarks = Bookmark.search(options)
+        end
       else
-        @bookmarks = Bookmark.search(options)
+        @bookmarks = Bookmark.latest
       end
-    else
-      @bookmarks = Bookmark.latest
     end
   end
   
