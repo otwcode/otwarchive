@@ -118,7 +118,7 @@ end
 # our tasks which are production specific
 namespace :production_only do
   task :git_in_home, :roles => [:backend, :search] do
-    run "git pull origin master"
+    run "git pull origin deploy"
     run "bundle install --quiet"
 #    don't update config files in home. they may have been customized
 #    run "ln -nfs -t config/ /static/config/*"
