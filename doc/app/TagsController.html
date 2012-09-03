@@ -285,6 +285,8 @@
   
     <li><a href="./CommonTagging.html">CommonTagging</a>
   
+    <li><a href="./CommonTaggingSweeper.html">CommonTaggingSweeper</a>
+  
     <li><a href="./CreationObserver.html">CreationObserver</a>
   
     <li><a href="./Creatorship.html">Creatorship</a>
@@ -644,7 +646,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 148</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 152</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">type</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>][<span class="ruby-value">:type</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag</span>]
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>
@@ -694,7 +696,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 172</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Banned</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
@@ -747,7 +749,7 @@
 
           
           <div class="method-source-code" id="feed-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">feed</span>
   <span class="ruby-keyword">begin</span>
     <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -876,7 +878,7 @@
 
           
           <div class="method-source-code" id="mass_update-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 254</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 258</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mass_update</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] = <span class="ruby-string">'1'</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>].<span class="ruby-identifier">blank?</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] = <span class="ruby-string">'name'</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>], <span class="ruby-string">'tag'</span>)
@@ -939,7 +941,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 138</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>
 
@@ -1037,6 +1039,10 @@ regular user, show them</p>
     <span class="ruby-keyword">end</span>
     <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
   <span class="ruby-keyword">end</span>
+  <span class="ruby-comment"># cache the children, since it's a possibly massive query; expired in common_tagging_sweeper and tag_sweeper</span>
+  <span class="ruby-ivar">@tag_children</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span> <span class="ruby-node">&quot;views/tags/#{@tag.id}/children&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">children</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">group_by</span>(&amp;<span class="ruby-value">:type</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
           
@@ -1064,7 +1070,7 @@ regular user, show them</p>
 
           
           <div class="method-source-code" id="show_hidden-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 107</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_hidden</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:creation_id</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:creation_type</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_type</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">model</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:creation_type</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
@@ -1123,7 +1129,7 @@ regular user, show them</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 199</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 203</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-comment"># update everything except for the synonym,</span>
   <span class="ruby-comment"># so that the associations are there to move when the synonym is created</span>
@@ -1179,7 +1185,7 @@ regular user, show them</p>
 
           
           <div class="method-source-code" id="wrangle-source">
-            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 229</span>
+            <pre><span class="ruby-comment"># File app/controllers/tags_controller.rb, line 233</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wrangle</span>
   <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span>
   <span class="ruby-ivar">@counts</span> = {}

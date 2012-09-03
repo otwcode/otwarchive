@@ -455,6 +455,8 @@
   
     <li><a href="./CommonTagging.html">CommonTagging</a>
   
+    <li><a href="./CommonTaggingSweeper.html">CommonTaggingSweeper</a>
+  
     <li><a href="./CreationObserver.html">CreationObserver</a>
   
     <li><a href="./Creatorship.html">Creatorship</a>
@@ -1375,7 +1377,7 @@ canonical synonym</p>
             <pre><span class="ruby-comment"># File app/models/work.rb, line 383</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">anonymous?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-comment"># here we check if the story is in a currently-anonymous challenge</span>
-  <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">anonymous</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection_items</span>.<span class="ruby-identifier">anonymous</span>.<span class="ruby-identifier">empty?</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- anonymous-3F-source -->
           
@@ -3456,7 +3458,7 @@ than one synonymous tags</p>
             <pre><span class="ruby-comment"># File app/models/work.rb, line 378</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unrevealed?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-comment"># eventually here is where we check if it's in a challenge that hasn't been made public yet</span>
-  <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">unrevealed</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection_items</span>.<span class="ruby-identifier">unrevealed</span>.<span class="ruby-identifier">empty?</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- unrevealed-3F-source -->
           

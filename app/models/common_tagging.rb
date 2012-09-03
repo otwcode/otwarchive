@@ -1,6 +1,6 @@
 class CommonTagging < ActiveRecord::Base
-  belongs_to :common_tag, :class_name => 'Tag'
-  belongs_to :filterable, :polymorphic => true
+  belongs_to :common_tag, :class_name => 'Tag', :touch => true
+  belongs_to :filterable, :polymorphic => true, :touch => true
   
   validates_presence_of :common_tag, :filterable
   validates_uniqueness_of :common_tag_id, :scope => :filterable_id 

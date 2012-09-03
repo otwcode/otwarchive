@@ -28,7 +28,7 @@
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <fieldset>
     <h3 class="heading"><%= ts('Add new') %> <%= params[:show] %></h3>
-    <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
+    <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
       <div title="<%= ts('add new') %>">
         <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
         <%= hidden_field_tag :show, params[:show] %>
