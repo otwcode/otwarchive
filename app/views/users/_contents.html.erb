@@ -4,14 +4,9 @@
   <div class="fandom listbox group" id="user-fandoms">
     <!--NOTE TO BACK END, can this be regularised to one list and make expandable?-->
     <h3 class="heading"><%= ts("Fandoms") %></h3>
-    <ol class="index group">
-      <% @fandoms.each_with_index do |fandom, i| %>        
-        <% if i == ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-          </ol>
-          <h4 class="landmark heading"><%= ts("Listing More Fandoms") %></h4>
-          <ol id="fandom_full_list" class="index toggled<%= params[:expand_fandoms] ? '' : ' hidden' %>">
-        <% end %>
-        <li>
+    <ol id="fandoms-dashboard" class="index group">
+      <% @fandoms.each_with_index do |fandom, i| %>
+        <li<%= i >= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] ? " class='expanded-list hidden'" : "" %>>
           <% if fandom.merger %>
             <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
           <% else %>
@@ -20,7 +15,7 @@
         </li>
      <% end %>
     </ol>
-    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
@@ -29,9 +24,15 @@
             <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
           <% end %>
         </noscript>
-        <a class="fandom_full_list_open hidden" href="#"><%= ts("Expand full list") %></a>
-        <a class="fandom_full_list_close hidden" href="#"><%= ts("Hide full list") %></a>
+        <a class="hidden" id="expand-fandoms" href="#"><%= ts("Toggle full list") %></a>
       </p>
+      <script type="text/javascript">
+        $j(document).ready(function() {
+          $j("#expand-fandoms").removeClass("hidden").click(function() {
+            $j("#fandoms-dashboard>li.expanded-list").toggleClass("hidden");
+          });
+        });
+      </script>
     <% end %>
   </div>
   <% end %> 
