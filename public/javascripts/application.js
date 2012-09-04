@@ -255,7 +255,7 @@ function setupToggled(){
 //new collapsed-pane widget
 $j(document).ready(function(){
   var panes = $j(".collapsed-pane");
-  panes.hide().prev().click(function(e) {
+  panes.hide().prev().removeClass("hidden").click(function(e) {
     var title = $j(this);
     if(title.attr('href') == '#') {
       e.preventDefault();
@@ -263,7 +263,7 @@ $j(document).ready(function(){
     title.next().toggle();
   });
   //force-set via css here rather than just calling show(), because show() doesn't work on elements in a hidden parent
-  panes.find("a.close.action").css("display", "block").click(function(e) {
+  panes.find("a.close.action").css("display", "inline-block").click(function(e) {
     $j(this).parents(".collapsed-pane").hide();
     e.preventDefault();  //always.
   });
