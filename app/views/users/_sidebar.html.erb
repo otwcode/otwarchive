@@ -6,12 +6,11 @@
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
       <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login)) + ' &#8595;').html_safe %>
-      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= pseud_link_text %></a>
-      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= pseud_link_text %></a>
-      <ul id="pseud_switcher" class="toggled secondary">
+      <a title="Pseuds" title="<%= ts("Pseuds") %>" href="javascript:void(0)"><%= pseud_link_text %></a>
+      <ul id="pseud_switcher" class="secondary">
           <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
-        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher" href="#">X</a></li>
+        <li><a class="close action" style="display: none;" title="<%= ts("Close Pseud Switcher") %>" href="#">X</a></li>
       </ul>
     </li>
 	<% end %>
@@ -21,7 +20,16 @@
     <li><%= span_if_current ts("Skins"), user_skins_path(@user) %></li>
   <% end %>
 </ul>
-	
+<script type="text/javascript">
+  $j(document).ready(function() {
+    $j("#pseud_switcher").hide().prev().click(function() {
+      $j(this).next().toggle();
+    });
+    $j("#pseud_switcher .close.action").css({ cursor: "pointer", display: ""}).click(function() {
+      $j("#pseud_switcher").hide();
+    });
+  });
+</script>	
 	
 <h4 class="landmark heading"><%= ts("Pitch")%></h4>
 <ul class="navigation actions">
