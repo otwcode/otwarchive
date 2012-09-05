@@ -967,7 +967,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "margin"
     t.integer  "paragraph_gap"
     t.string   "font"
-    t.integer  "base_em"
+    t.integer "font_size"
     t.string   "background_color"
     t.string   "foreground_color"
     t.text     "description"

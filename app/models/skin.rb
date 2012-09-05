@@ -90,7 +90,7 @@ class Skin < ActiveRecord::Base
 
   validates_uniqueness_of :title, :message => ts('must be unique')
 
-  validates_numericality_of :margin, :base_em, :allow_nil => true
+  validates_numericality_of :margin, :font_size, :allow_nil => true
   validate :valid_font
   def valid_font
     return if self.font.blank?
@@ -315,12 +315,12 @@ class Skin < ActiveRecord::Base
       style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
     end
   
-    if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
+    if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.font_size.present?
       style += "body, #main	{
         #{self.background_color.present? ? "background: #{self.background_color};" : ''}
         #{self.foreground_color.present? ? "color: #{self.foreground_color};" : ''}"
-      if self.base_em.present?
-        style += "font-size: #{self.base_em}%; line-height:1.125;"
+      if self.font_size.present?
+        style += "font-size: #{self.font_size}%; line-height:1.125;"
       end
       if self.font.present?
         style += "\nfont-family: #{font};"
