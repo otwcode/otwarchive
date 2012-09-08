@@ -1,5 +1,7 @@
 # encoding=utf-8
 
+require 'nokogiri'
+
 class WordCounter
 
   attr_accessor :text

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'nokogiri'
 require 'word_counter'
 
 describe WordCounter do
