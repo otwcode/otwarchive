@@ -11,6 +11,9 @@ class PasswordsController < ApplicationController
     if @user.nil?
       setflash; flash[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
       render :action => "new"
+    elsif !@user.active?
+      setflash; flash[:error] = ts("Your account has not been activated. Please check your email (including your spam folder) for the activation link or contact support.")
+      render :action => "new"
     else
       @user.reset_user_password
       @user_session = UserSession.find
