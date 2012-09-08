@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-require 'spec_helper'
+
+require 'nokogiri'
+require 'word_counter'
 
 describe WordCounter do
  let(:word_counter) { WordCounter.new("") }
