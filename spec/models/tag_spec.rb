@@ -6,6 +6,10 @@ describe Tag do
   before(:each) do
     @tag = Tag.new
   end
+  
+  after(:each) do
+    User.current_user = nil
+  end
 
   it "should not be valid without a name" do
     @tag.save.should_not be_true
