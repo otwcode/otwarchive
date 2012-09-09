@@ -5,9 +5,9 @@ class SeriesController < ApplicationController
   before_filter :check_visibility, :only => [:show]
   
   def load_series
-    if Series.find_by_id(:id).nil?
+    if Series.find_by_id(params[:id]).nil?
     setflash; flash[:error] = ts("We're sorry, but that series does not exist.")
-    redirect_back_or_default
+    redirect_back_or_default works_path and return
     else
     @series = Series.find(params[:id])
     @check_ownership_of = @series
