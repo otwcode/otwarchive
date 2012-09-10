@@ -4,6 +4,7 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
+  before_filter :load_owner, :only => [ :index ]
   before_filter :users_only, :except => [ :index, :show, :navigate, :search ]
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts ]
@@ -23,110 +24,30 @@ class WorksController < ApplicationController
   def search
     @languages = Language.default_order
     @search = WorkSearch.new(params[:work_search])
-    if params[:work_search].present?
-      @works = Work.search(@search.options_for_search)
+    if params[:work_search].present? && params[:edit_search].blank?
+      @works = @search.search_results
+      render 'search_results'
     end
-    # @query = {}
-    # # to understand this, the code you are looking for is in lib/query.rb
-    # if params[:query]
-    #   @query = Query.standardize(params[:query])
-    #   page = params[:page] || 1
-    #   errors, @works = Query.search(Work, @query, page)
-    #   setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-    # end
-  end
-  
-  def load_owner
-    if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
-      if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
-      end
-    end
-    if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-    end
-    @owner = @author || @user || @collection || @tag
   end
 
   # GET /works
   def index
-    load_owner
-    options = params.dup
-    if params[:user_id].present?
-      @user = User.find_by_login(params[:user_id])
-      options[:pseud_ids] = @user.pseuds.value_of(:id)
-      if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
-        options[:pseud_ids] = [@author.id]
-      end
-      options[:show_anon] = false
+    if params[:work_search].present?
+      options = params[:work_search].dup
     else
-      options[:show_anon] = true
+      options = {}
     end
-    if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-      if @tag.present?
-        facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
-        options[facet_key] ||= []
-        options[facet_key] << @tag.id
-        params[facet_key] = options[facet_key]
-      else
-        
-      end
-    end
-    if params[:language_id].present?
-      @language = Language.find_by_short(params[:language_id])
-      if @language.present?
-        options[:language_id] = @language.id
-      else
-        options.delete(:language_id)
-      end
-    elsif params[:language_id]
-      options.delete(:language_id)
-    end
-    if @collection.present?
-      options[:collection_ids] ||= []
-      options[:collection_ids] << @collection.id
-      options[:show_unrevealed] = true
-    else
-      options[:show_unrevealed] = false
-    end
-    options[:show_drafts] = (@user.present? && @user == current_user)
     options[:show_restricted] = current_user.present?
-    
-    case params[:sort_column]
-    when 'author'
-      options[:sort_column] = 'authors_to_sort_on'
-    when 'title'
-      options[:sort_column] = 'title_to_sort_on'
-    when 'date'
-      options[:sort_column] = 'revised_at'
-    end
-    unless Work.sort_values.include?(options[:sort_column])
-      options[:sort_column] = 'revised_at'
-    end
-    options[:sort_direction] = Work.sort_direction(options[:sort_column])
+    @page_title = index_page_title
     
     if @owner.present?
-      owner_name = case @owner.class.to_s
-                   when 'Pseud'
-                     @owner.name
-                   when 'User'
-                     @owner.login
-                   when 'Collection'
-                     @owner.title
-                   else
-                     @owner.try(:name)
-                   end
-      @page_title = "#{owner_name} &raquo; Works".html_safe
       if @admin_settings.disable_filtering?
         @works = Work.list_without_filters(@owner, options)
       else
-        @works = Work.search(options)
+        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        @works = @search.search_results
       end
     else
-      @page_title = "Recent Works"
       @works = Work.latest
     end
   end
@@ -719,6 +640,19 @@ public
   end
 
   protected
+  
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+    end
+    @owner = @author || @user || @collection || @tag
+  end
 
   def load_pseuds
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -841,6 +775,24 @@ public
       tag_list.html_safe
     else
       ""
+    end
+  end
+  
+  def index_page_title
+    if @owner.present?
+      owner_name = case @owner.class.to_s
+                   when 'Pseud'
+                     @owner.name
+                   when 'User'
+                     @owner.login
+                   when 'Collection'
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      "#{owner_name} &raquo; Works".html_safe
+    else
+      "Latest Works"
     end
   end
 

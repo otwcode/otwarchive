@@ -1120,126 +1120,12 @@ class Work < ActiveRecord::Base
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
   
-  #############################################################################
-  #
-  # SORTING
-  #
-  #############################################################################
-  def self.sort_options
-    [
-      ['Author', 'author'],
-      ['Title', 'title'],
-      ['Date Posted', 'created_at'],
-      ['Date Updated', 'date'],
-      ['Word Count', 'word_count'],
-      ['Hits', 'hits'],
-      ['Kudos', 'kudos_count'],
-      ['Comments', 'comments_count'],
-      ['Bookmarks', 'bookmarks_count']
-    ]
-  end
-  
-  def self.sort_values
-    sort_options.map{ |option| option.last }
-  end
-  
-  def self.sort_direction(sort_column)
-    if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
-      'asc'
-    else
-      'desc'
-    end
-  end
   
   #############################################################################
   #
-  # SEARCH
+  # SEARCH INDEX
   #
   #############################################################################
-
-  self.include_root_in_json = false
-  def self.search(options)
-    if options[:other_tag_names].present?
-      names = options[:other_tag_names].split(",")
-      tags = Tag.where(:name => names)
-      tags.each do |tag|
-        facet_key = "#{tag.type.to_s.downcase}_ids".to_sym
-        options[facet_key] ||= []
-        options[facet_key] << tag.id
-      end
-      leftovers = names - tags.map(&:name)
-      options[:tag_names] ||= ""
-      options[:tag_names] << leftovers.join(" ") + " "
-    end
-    if options[:fandom_id]
-      options[:fandom_ids] ||= []
-      options[:fandom_ids] << options[:fandom_id]
-    end
-    
-    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
-      
-      query do
-        boolean do
-          must { string options[:query], default_operator: "AND" } if options[:query].present?
-          if options[:title].present?
-            must { terms :title, options[:title].split(" "), minimum_match: options[:title].split(" ").length }
-          end
-          must { terms :byline, options[:byline].split(" ") } if options[:byline].present?
-          must { terms :tag_names, options[:tag_names].split(" ") } if options[:tag_names].present?
-          must { term :restricted, 'F' } unless options[:show_restricted]
-          must { term :posted, 'T' } unless options[:show_drafts]
-          must { term :complete, 'T' } if options[:complete]
-          must { term :in_unrevealed_collection, 'F' } unless options[:show_unrevealed]
-          must { term :in_anon_collection, 'F' } unless options[:show_anon]
-          must { term :language_id, options[:language_id] } if options[:language_id]
-          if options[:pseud_ids].present?
-            must { terms :pseud_ids, options[:pseud_ids] }
-          end
-          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
-            if options[id_list].present?
-              options[id_list].each do |id|
-                must { term id_list, id }
-              end
-            end
-          end
-        end
-      end
-      [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
-        if options[countable].present?
-          filter :range, countable => Search.range_to_search(options[countable])
-        end
-      end
-      sort { by options[:sort_column], options[:sort_direction].downcase }
-      facet "rating" do
-        terms :rating_ids
-      end
-      facet "warning" do
-        terms :warning_ids
-      end
-      facet "category" do
-        terms :category_ids
-      end
-      facet "fandom" do
-        terms :fandom_ids
-      end
-      facet "character" do
-        terms :character_ids
-      end
-      facet "relationship" do
-        terms :relationship_ids
-      end
-      facet "freeform" do
-        terms :freeform_ids
-      end
-      facet "pseud" do
-        terms :pseud_ids
-      end
-      facet "collection" do
-        terms :collection_ids
-      end
-      # raise to_curl
-    end
-  end
   
   mapping do
     indexes :authors_to_sort_on,  :index    => :not_analyzed

@@ -1,0 +1,18 @@
+<h2 class="heading"><%= ts('Search Results') %></h2>
+
+<p><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></p>
+
+<% if @works.present? %>
+  <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
+
+  <h3 class="landmark heading">Works List</h3>
+  <ol class="work index group">
+    <% @works.each do |work| %>
+      <% unless work.nil? %>
+        <%= render :partial => 'work_blurb', :locals => {:work => work} %>
+      <% end %>
+    <% end %>
+  </ol>
+ 
+ <%= will_paginate @works %>
+<% end %>
