@@ -406,7 +406,16 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-    
+  
+  def remove_stale_from_autocomplete
+    super
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+      end
+    end
+  end
+
   def self.parse_autocomplete_value(current_autocomplete_value)
     current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
   end
