@@ -28,6 +28,9 @@ $j(document).ready(function() {
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
     $j('.commas li:last-child').addClass('last');
+
+    // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
+    $j('#comments_placeholder a[data-remote]').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
 
 function visualizeTables() {

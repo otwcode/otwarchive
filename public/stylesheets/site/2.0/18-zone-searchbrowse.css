@@ -67,6 +67,17 @@ form.filters {
   float: right;
 }
 
+form.filters legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
 .filters .tags {
   display: block;
 }

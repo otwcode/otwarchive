@@ -119,16 +119,16 @@ class Collection < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :name, :message => t('collection.no_name', :default => "Please enter a name for your collection.")
-  validates_uniqueness_of :name, :case_sensitive => false, :message => t('collection.duplicate_name', :default => 'Sorry, that name is already taken. Try again, please!')
+  validates_presence_of :name, :message => ts("Please enter a name for your collection.")
+  validates_uniqueness_of :name, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
   validates_length_of :name,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :name,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
@@ -137,13 +137,13 @@ class Collection < ActiveRecord::Base
 
   validates :email, :email_veracity => {:allow_blank => true}
 
-  validates_presence_of :title, :message => t('collection.no_title', :default => "Please enter a title to be displayed for your collection.")
+  validates_presence_of :title, :message => ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
     errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
@@ -153,10 +153,10 @@ class Collection < ActiveRecord::Base
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
-  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("Not a valid URL.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("Only gif, jpg, png files allowed.")
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
@@ -212,8 +212,13 @@ class Collection < ActiveRecord::Base
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
+
   def autocomplete_search_string
     "#{name} #{title}"
+  end
+
+  def autocomplete_search_string_was
+    "#{name_was} #{title_was}"
   end
 
   def autocomplete_prefixes
