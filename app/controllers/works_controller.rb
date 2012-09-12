@@ -650,6 +650,13 @@ public
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag.canonical?
+        if @tag.merger.present?
+          redirect_to tag_works_path(@tag.merger) and return
+        else
+          redirect_to tag_path(@tag) and return
+        end
+      end
     end
     @owner = @author || @user || @collection || @tag
   end
