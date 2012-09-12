@@ -18,13 +18,28 @@
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
-    <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
+  	<% if @user == current_user || @most_recent_bookmarks || @collection %>
+    	<li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
+
+    <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
+    <% # let the user reading this bookmark save a copy for themselves %>	
+      <% if logged_in? && !is_author_of?(@bookmark) %>
+        <li>
+          <% if (current_user_bookmark ||= bookmark_if_exists(@bookmarkable)) %>
+            <%= link_to ts("Edit Bookmark"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{@bookmarkable.id}", :remote => true %>
+          <% else %>
+            <%= link_to ts("Bookmark"), get_new_bookmark_path(@bookmarkable), :id => "bookmark_form_trigger_for_#{@bookmarkable.id}", :remote => true %>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
   <% end %>
+  
   <li>
-    <%= span_if_current(ts("View All Bookmarks"), url_for(params.merge :recs_only => false), params[:recs_only].blank?) %>
+    <%= span_if_current(ts("All Bookmarks"), url_for(params.merge :recs_only => false), params[:recs_only].blank?) %>
   </li>
   <li>
-    <%= span_if_current ts("View Recs Only"), url_for(params.merge :recs_only => true) %>
+    <%= span_if_current ts("Recs Only"), url_for(params.merge :recs_only => true) %>
   </li>
 <% if params[:tag_id] %>
   <%= taggable_list(params[:tag_id], "bookmarks") %>
@@ -32,14 +47,17 @@
 </ul>
 <!--/subnav-->
 
+<% if params[:work_id] || params[:series_id] || params[:external_work_id] %>
+  <% # bookmark form loaded here if requested %>
+  <div class="new dynamic" id="bookmark_form_placement_for_<%= @bookmarkable.id %>"></div>
+<% end %>
+
 <!--main content-->
-<h3 class="landmark heading">List of Bookmarks</h3>
+<h3 class="landmark heading"><%= ts("List of Bookmarks") %></h3>
 <ol class="bookmark index">
 	<%= render 'bookmarks/bookmarks' %>
 </ol>
 <!-- /content-->
-
-<div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
 	  <%= will_paginate @bookmarks %>
