@@ -1161,7 +1161,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url",       :limit => 191
     t.boolean  "recently_reset",                    :default => false, :null => false
     t.boolean  "suspended",                         :default => false, :null => false
     t.boolean  "banned",                            :default => false, :null => false
@@ -1174,7 +1173,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
   add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
 
   create_table "work_links", :force => true do |t|
