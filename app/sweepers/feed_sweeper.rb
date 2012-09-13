@@ -3,7 +3,7 @@ class FeedSweeper < ActionController::Caching::Sweeper
   observe Chapter, Work
 
   def after_create(record)
-    if record.posted?
+    if record.posted? && (record.is_a?(Work) || record.is_a?(Chapter) && record.work.present? && record.work.posted?)
       expire_tag_feeds(record)
     end
   end
