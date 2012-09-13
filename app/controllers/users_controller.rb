@@ -140,26 +140,6 @@ class UsersController < ApplicationController
     end
   end
 
-
-  def change_openid
-    if params[:identity_url]
-      @openid_url = params[:identity_url]
-      @openid_url = "http://#{@openid_url}" unless @openid_url.match("http://")
-      @openid_url = OpenID.normalize_url(@openid_url)
-      unless reauthenticate
-        render :change_openid and return
-      end
-      @user.identity_url = @openid_url
-      @user.recently_reset = false
-      if @user.save
-        setflash; flash[:notice] = ts('Your OpenID URL has been successfully updated.')
-        redirect_to user_profile_path(@user) and return
-      else
-        render :change_password and return
-      end
-    end
-  end
-
   def change_username
     if params[:new_login]
       @new_login = params[:new_login]
@@ -215,23 +195,9 @@ class UsersController < ApplicationController
       @user.password = params[:user][:password] if params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
       @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-      openid_url = params[:user][:identity_url]
-      unless openid_url.blank?
-        # normalize OpenID url before saving
-        # TODO validate openid before creating account
-        openid_url = "http://#{openid_url}" unless openid_url.match("http://")
-        if User.find_by_identity_url(openid_url)
-          params[:use_openid] = true
-          setflash; flash.now[:error] = "OpenID url is already being used"
-          render :action => "new" and return
-        else
-          @user.identity_url = OpenID.normalize_url(openid_url)
-        end
-      end
       if @user.save
         notify_and_show_confirmation_screen
       else
-        params[:use_openid] = true unless openid_url.blank?
         render :action => "new"
       end
     end
@@ -272,11 +238,7 @@ class UsersController < ApplicationController
           end
           flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
         end
-        if @user.identity_url
-          redirect_to(login_path(:use_openid => true))
-        else
-          redirect_to(login_path)
-        end
+        redirect_to(login_path)
       else
         setflash; flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
         redirect_to ''
