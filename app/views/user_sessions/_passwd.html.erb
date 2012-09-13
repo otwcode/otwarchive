@@ -10,8 +10,4 @@
 	<dt class="landmark">Submit</dt>
   	<dd class="submit actions"><%= f.submit ts("Log in"), :class => 'submit' %></dd>
   </dl>
-  <p>
-    <%= link_to ts('Log in using OpenID'),
-           {:controller => :user_sessions, :action => 'openid'}, :remote => true %>
-  </p>
 <% end %>
