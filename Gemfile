@@ -11,9 +11,6 @@ gem 'rails', '3.0.4'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
 
-# Here are all our application-specific gems
-gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
-
 gem 'will_paginate', '>=3.0.2'
 # gem 'will_paginate',
   # :git     => 'git://github.com/huerlisi/will_paginate.git',
