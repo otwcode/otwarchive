@@ -44,6 +44,7 @@ class WorkSearch < Search
     self.set_sorting!
     self.set_visibility!
     self.set_language!
+    self.clean_up_angle_brackets
     
     # Clean up blank options from forms
     self.options.delete_if { |key, value| value.blank? }
@@ -222,6 +223,15 @@ class WorkSearch < Search
     search_text
   end
   
+  def clean_up_angle_brackets
+    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
+      if options[countable].present?
+        options[countable].gsub!("&gt;", ">")
+        options[countable].gsub!("&lt;", "<")
+      end
+    end
+  end
+  
   def escape_reserved_characters(word)
     word.gsub!('!', '\\!')
     word.gsub!('+', '\\+')
@@ -259,7 +269,7 @@ class WorkSearch < Search
     unless tags.empty?
       summary << "Tags: #{tags.join(", ")}"
     end
-    if options[:complete].present?
+    if %w(1 true).include?(self.complete.to_s)
       summary << "Complete"
     end
     if options[:language_id].present?
