@@ -241,6 +241,8 @@ module TagsHelper
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
       tags.collect(&:name).join(", ")
+    elsif tags.blank?
+     "Choose Not To Use Archive Warnings"
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end
