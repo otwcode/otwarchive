@@ -206,15 +206,74 @@ class WorkSearch < Search
   
   # Search within text fields: general, titles, creator names, and partial tag names
   def generate_search_text
-    search_text = self.options[:query] || ""
+    search_text = self.query.present? ? self.query.dup : ""
     [:title, :byline, :tag_names].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
+          if word[0] == "-"
+            search_text << " NOT "
+            word.slice!(0)
+          end
+          word = escape_reserved_characters(word)
           search_text << " #{field.to_s}:#{word.downcase}"
         end
       end
     end
     search_text
+  end
+  
+  def escape_reserved_characters(word)
+    word.gsub!('!', '\\!')
+    word.gsub!('+', '\\+')
+    word.gsub!('-', '\\-')
+    word.gsub!('?', '\\?')
+    word.gsub!("~", '\\~')
+    word.gsub!("(", '\\(')
+    word.gsub!(")", '\\)')
+    word.gsub!("[", '\\[')
+    word.gsub!("]", '\\]')
+    word.gsub!(':', '\\:')
+    word
+  end
+  
+  def summary
+    summary = []
+    if options[:query].present?
+      summary << options[:query]
+    end
+    if options[:title].present?
+      summary << "Title: #{options[:title]}"
+    end
+    if options[:byline].present?
+      summary << "Creator: #{options[:byline]}"
+    end
+    tags = []
+    if options[:tag_names].present?
+      tags << options[:tag_names]
+    end
+    [:fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
+      if options[tag_ids].present?
+        tags << Tag.where(:id => options[tag_ids]).value_of(:name).join(", ")
+      end
+    end
+    unless tags.empty?
+      summary << "Tags: #{tags.join(", ")}"
+    end
+    if options[:complete].present?
+      summary << "Complete"
+    end
+    if options[:language_id].present?
+      language = Language.find_by_id(options[:language_id])
+      if language.present?
+        summary << "Language: #{language.name}"
+      end
+    end
+    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
+      if options[countable].present?
+        summary << "#{countable.to_s.humanize}: #{options[countable]}"
+      end
+    end
+    summary.join(", ")
   end
   
   #############################################################################

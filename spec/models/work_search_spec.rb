@@ -110,6 +110,12 @@ describe WorkSearch do
         work_search.options = { byline: "Baggins" }
         work_search.search_results.should_not include work
       end
+      
+      it "should turn - into NOT" do
+        work.update_index
+        work_search.options = { byline: "-Tolkien" }
+        work_search.search_results.should_not include work
+      end
     end
     
     describe "when searching by language" do
@@ -117,7 +123,15 @@ describe WorkSearch do
     end
     
     describe "when searching by fandom" do
-      it "should only return works in that fandom"
+      it "should only return works in that fandom" do
+        work_search.options = { fandom_names: "Harry Potter" }
+        work_search.search_results.should_not include work        
+      end
+      
+      it "should not choke on exclamation points" do
+        work_search.options = { fandom_names: "Potter!" }
+        work_search.search_results.should include second_work
+      end
     end
     
     describe "when searching by collection" do
