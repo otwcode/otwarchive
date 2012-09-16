@@ -61,7 +61,7 @@ end
 
 # Move hit counts from redis to database
 every 10.minutes do
-  rake "statistics:update_hit_counters"
+  rake "statistics:update_stat_counters"
 end
 
 # Move readings from redis to database

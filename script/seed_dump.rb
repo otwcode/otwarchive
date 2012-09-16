@@ -414,7 +414,7 @@ def work_associations(items)
     work.creatorships.each {|x| write_model(x)}
     work.pseuds.each {|p| PSEUDS[p.id] = p }
     write_model(work.language) if work.language
-    write_model(work.hit_counter)
+    write_model(work.stat_counter)
     work.gifts.each {|x| write_model(x)}
     work.gifts.each {|g| PSEUDS[g.pseud.id] = g.pseud if g.pseud}
     work.serial_works.each {|x| write_model(x)}
