@@ -1,13 +1,13 @@
 namespace :statistics do
 
   desc "update database hit counters from redis"
-  task(:update_hit_counters => :environment) do
-    HitCounter.hits_to_database
+  task(:update_stat_counters => :environment) do
+    StatCounter.hits_to_database
   end
 
   desc "update database statistics from nginx logfiles"
   task(:update_from_logfiles => :environment) do
-    HitCounter.logs_to_database
+    StatCounter.logs_to_database
   end
   
   desc "update database hit counts from squid cache logfiles"
@@ -26,7 +26,7 @@ namespace :statistics do
     work_hits.keys.each do |work_id|
       begin
         work = Work.where(:id => work_id).first
-        next unless work && work.hit_counter
+        next unless work && work.stat_counter
         work.add_to_hit_count(work_hits[work_id])
       rescue
       end
