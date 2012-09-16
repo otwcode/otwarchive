@@ -23,7 +23,9 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    @search = WorkSearch.new(params[:work_search])
+    options = params[:work_search] || {}
+    options.merge!(page: params[:page]) if params[:page].present
+    @search = WorkSearch.new(options)
     if params[:work_search].present? && params[:edit_search].blank?
       @works = @search.search_results
       render 'search_results'
@@ -37,6 +39,7 @@ class WorksController < ApplicationController
     else
       options = {}
     end
+    options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
     @page_title = index_page_title
     

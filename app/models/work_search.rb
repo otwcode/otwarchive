@@ -27,7 +27,8 @@ class WorkSearch < Search
     :freeform_names,
     :freeform_ids,
     :sort_column,
-    :show_restricted
+    :show_restricted,
+    :page
     
   attr_accessor :works_parent, :faceted
   
