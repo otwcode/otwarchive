@@ -157,7 +157,7 @@ class UserMailer < BulletproofMailer::Base
     @user = User.find(user_id)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Please activate your new account"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
     )
   end
 
