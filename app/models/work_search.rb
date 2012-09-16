@@ -164,15 +164,6 @@ class WorkSearch < Search
   def set_sorting!
     return unless faceted || options[:sort_column].present?
     
-    case options[:sort_column]
-    when 'author'
-      options[:sort_column] = 'authors_to_sort_on'
-    when 'title'
-      options[:sort_column] = 'title_to_sort_on'
-    when 'date'
-      options[:sort_column] = 'revised_at'
-    end
-    
     unless sort_values.include?(options[:sort_column])
       options[:sort_column] = 'revised_at'
     end
@@ -294,10 +285,10 @@ class WorkSearch < Search
   #############################################################################
   def sort_options
     [
-      ['Author', 'author'],
-      ['Title', 'title'],
+      ['Author', 'authors_to_sort_on'],
+      ['Title', 'title_to_sort_on'],
       ['Date Posted', 'created_at'],
-      ['Date Updated', 'date'],
+      ['Date Updated', 'revised_at'],
       ['Word Count', 'word_count'],
       ['Hits', 'hits'],
       ['Kudos', 'kudos_count'],
