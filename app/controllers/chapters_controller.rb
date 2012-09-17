@@ -10,6 +10,7 @@ class ChaptersController < ApplicationController
 
   cache_sweeper :chapter_sweeper
   cache_sweeper :work_sweeper
+  cache_sweeper :feed_sweeper
 
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml

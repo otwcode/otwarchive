@@ -122,3 +122,9 @@ Factory.define :collection do |f|
     collection.collection_participants.build(pseud_id: Factory.create(:pseud).id, participant_role: "Owner")
   end
 end
+
+Factory.define :subscription do |f|
+  f.association :user
+  f.subscribable_type "Series"
+  f.subscribable_id { Factory.create(:series).id }
+end
