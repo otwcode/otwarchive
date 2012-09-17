@@ -207,4 +207,11 @@ dl.stats dd {
   padding-right: 0.5em;
 }
 
+.concise li { 
+  width: 45%; 
+  float: left; 
+  clear: none; 
+  margin-right: 1.5em
+}
+
 /*END== */

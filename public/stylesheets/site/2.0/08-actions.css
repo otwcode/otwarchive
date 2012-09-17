@@ -159,4 +159,13 @@ dl.stats + h6 + .actions, li.news .actions {
   padding: 0 0 0.15em 0;
 }
 
+.many p.actions { 
+  float: none; 
+  text-align: right; 
+}
+
+.concise label.action { 
+  float: left; 
+}
+
 /*END== */

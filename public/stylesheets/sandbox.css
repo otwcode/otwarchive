@@ -24,33 +24,6 @@ background:purple; color:#555;}
     }
 }
 
-/* TEMP FIX Issue 2652 -- don't integrate this*/
-
-span.delete a {
-  margin: 0 0.2em;
-  border: 0;
-  padding: 0;
-  line-height: 0.5;
-    box-shadow: none;
-}
-
-/* fix for scrolling checkboxes */
-.many p.actions { 
-    float: none; 
-    text-align: right; 
-}
-.tags .options .tag { 
-    margin-right: 0.643em; 
-}
-.concise li { 
-    width: 45%; 
-    float:left; 
-    clear:none; 
-    margin-right:1.5em
-}
-.concise label.action { 
-    float: left; 
-}
 
 /* new stats page */
 .statistics .even { background: #eee; }
