@@ -296,6 +296,15 @@ eg collections, users, skins, instead of the 4-icon list
   text-align: center;
 }
 
+.bookmark .count a {
+  border-bottom: none;
+  color: #006699;
+}
+
+.bookmark .count a:hover, .bookmark .count a:focus {
+  color: #111;
+}
+
 .bookmark .datetime {
 	top: 28px;
 }
@@ -336,6 +345,10 @@ eg collections, users, skins, instead of the 4-icon list
 
 .bookmark .dynamic {
 	position: static;
+}
+
+.bookmark .recent .index {
+    width: 100%;
 }
 
 /* mod: READING */
