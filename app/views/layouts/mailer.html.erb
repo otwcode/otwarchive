@@ -1,10 +1,199 @@
-<%= yield %>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<style type="text/css">
+  .ReadMsgBody { width: 100% !important; }
+  .ExternalClass { width: 100% !important; display: block !important; }
+  .yshortcuts { border-bottom:none !important; background:none !important; color: inherit !important; }
+  #ForceOutlook2010BrowserLink span { padding: 0px; }
+  table td { border-collapse:collapse; }
+</style>
+</head>
+<body bgcolor="#dddddd" style="margin:0px !important; padding:0px !important; width:100% !important;-webkit-font-smoothing: antialiased; -webkit-text-size-adjust:none; -ms-text-size-adjust:none;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#dddddd" style="border-collapse: collapse;">
+  <tr>
+    <td align="center" valign="top" style="padding-top:25px">
+      <table width="683" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right" valign="top">
+          
+<!-- !logo top half -->
+            <img src="http://xiaoyin.li/web/ao3-email/images/ao3-em-header-logoA-201205.gif" height="22" width="96" style="display:block; border:none" alt="">
+<!-- /ogo top half -->
 
-<p>
-  If you've received this message in error, please contact Support at http://archiveofourown.org/support
-</p>
+          </td>
+        </tr>
+        <tr>
+          <td align="left" valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="354" align="center" valign="middle" bgcolor="#990000">
+                  <div style="font-family:Georgia, 'Times New Roman', Times, serif; font-size:28px; line-height:1em; color:#ffffff; font-weight:bold;">
+                  
+<!-- !banner -->
+                    <a href="http://archiveofourown.org" style="color:#ffffff; text-decoration:none"><span style="color:#ffffff; text-decoration:none">Archive of Our Own</span></a>
+<!-- /banner -->
+                    
+                    
+                  </div>
+                </td>
+                <td align="left" valign="top">
+                
+<!-- !logo bottom half -->
+                  <img src="http://xiaoyin.li/web/ao3-email/images/ao3-em-header-logoB-201205.gif" height="42" width="354" style="display:block; border:none" alt="">
+<!-- /logo bottom half -->
 
-<p>
-  The Archive of Our Own is a fan-run and fan-supported archive that relies on 
-  <%= link_to "your support", donate_url %>.
-</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="left" valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="8" align="left" valign="top" bgcolor="#dddddd"5>                
+                
+<!-- !banner corner -->
+                  <img src="http://xiaoyin.li/web/ao3-email/images/ao3-em-header-corner-201205.gif" height="6" width="8" style="display:block; border:none" alt="">
+<!-- !banner corner -->
+                  
+                  
+                </td>
+                <td width="2" bgcolor="#333333"></td>
+                <td align="left" valign="top" bgcolor="#ffffff">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom-color:#333333; border-bottom-style: solid; border-bottom-width:2px">
+                    <tr>
+                      <td align="left" valign="top" style="padding-left:30px; padding-right:30px; padding-top:25px; padding-bottom:30px;">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        
+                        
+                          <tr>
+                            <td align="left" valign="top">
+                              <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.85em; line-height:1.5em; color:#000000">                              
+
+<!-- !generic message -->
+                                <% if content_for?(:message) %>
+                                  <%= yield(:message) %>
+                                <% end %>
+<!-- !generic message -->
+                              
+<!-- !subscription announcement -->
+                                <% if content_for?(:work_url) %>
+                                  <strong style="color:#990000"><%= yield(:author_names) %> posted 
+                                
+                                  <% if content_for?(:chapter_url) %>
+                                    a new chapter of <a href="<%= yield(:chapter_url) %>" style="color:#990000;text-decoration:underline;font-weight:bold;font-style:italic"><%= yield(:chapter_title) %></a>:
+                                  <% else %>
+                                    posted a <%= yield(:new_old) %> work:
+                                  <% end %>
+                                  
+                                  </strong>
+                                <% end %>
+<!-- /subscription announcement -->
+                                
+                              </div>
+                            </td>
+                          </tr>                          
+                          
+<!-- !subscription work info -->
+                        <% if content_for?(:work_url) %>  
+                          <tr>
+                            <td align="left" valign="top" style="padding-top:15px;">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td align="left" valign="top" bgcolor="#ffffff">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    
+                                      <tr>
+                                        <td align="left" valign="top">
+                                          <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.85em; line-height:1.5em; color:#000000">
+                                            <% if content_for?(:chapter_url) %> 
+                                              <a href="<%= yield(:chapter_url) %>" style="color:#990000;text-decoration:underline;font-weight:bold;"><%= yield(:chapter_title) %></a>
+                                            <% else %>
+                                              <a href="<%= yield(:work_url) %>" style="color:#990000;text-decoration:underline;font-weight:bold;"><%= yield(:work_title) %></a>
+                                            <% end %>&nbsp;(<%= yield(:word_count) %> words)
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      
+                                      <tr>
+                                        <td align="left" valign="top">
+                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                              <td align="left" valign="middle" width="15">
+                                                <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.85em; line-height:1.5em; color:#000000">
+                                                  by&nbsp;
+                                                </div>
+                                              </td>
+                                              <td align="left" valign="middle" width="20">
+                                                <img src="http://xiaoyin.li/web/ao3-email/images/ao3-usericon-2011-11.gif" style="display:block; border:none" width="16" height="16" alt="">
+                                              </td>
+                                              <td align="left" valign="middle">
+                                                <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.85em; line-height:1.5em; color:#000000">
+                                                  <span style="text-decoration:underline; font-weight:bold"><%= yield(:author_links) %></span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                      
+                                      <tr>
+                                        <td align="left" valign="top" style="padding-top:10px">
+                                          <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.85em; line-height:1.5em; color:#000000">
+                                            <strong style="color:#990000">Fandom:</strong> <span style="text-decoration:underline"><%= yield(:fandom_links) %></span>
+                                            <br><strong style="color:#990000">Rating:</strong> <%= yield(:rating) %> 
+                                            <br><strong style="color:#990000">Warning:</strong> <%= yield(:warnings) %>
+                                            <br><strong style="color:#990000">Relationships:</strong> <%= yield(:relationships) %>
+                                            <br><strong style="color:#990000">Characters:</strong> <%= yield(:characters) %>
+                                            
+                                            <br><br><strong style="color:#990000">Summary:</strong>
+                                            <br><%= yield(:summary) %>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>                            
+                            
+                          </tr>                          
+                        <% end %>                          
+<!-- /subscription work info -->
+                          
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="top" style="padding-left:25px; padding-right:25px; padding-top:25px; padding-bottom:25px;" bgcolor="#990000">
+                        <div style="font-family:Lucida Grande, Verdana, Geneva, sans-serif; font-size:.7em; line-height:1.25em; color:#ffffff">
+                        
+                        
+<!-- !footer -->
+                          <% if content_for?(:subscription_url) %>  
+                            You're receiving this email because you've subscribed to <a href="<%= yield(:subscription_url) %>" style="color:#ffffff; text-decoration:underline"><span style="color:#ffffff; text-decoration:underline"><%= yield(:subscription_title) %></span></a>. Follow the link to unsubscribe if you no longer wish to receive updates.<br><br>
+                          <% end %>
+                          
+                          If you've received this message in error, please contact <a href="http://archiveofourown.org/" style="color:#ffffff; text-decoration:underline"><span style="color:#ffffff; text-decoration:underline">Support</span></a>.<br><br>
+                          
+                          The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="<%= donate_url %>" style="color:#ffffff; text-decoration:underline"><span style="color:#ffffff; text-decoration:underline">your support</span></a>.
+<!-- !footer -->
+
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="2" bgcolor="#333333"></td>
+                <td width="31" bgcolor="#dddddd"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
