@@ -128,7 +128,7 @@ namespace :After do
 #  desc "Move hit counts to their own table"
 #  task(:move_hit_counts => :environment) do
 #    Work.find_each do |work|
-#      counter = work.build_hit_counter(:hit_count => work.hit_count_old, :last_visitor => work.last_visitor_old)
+#      counter = work.build_stat_counter(:hit_count => work.hit_count_old, :last_visitor => work.last_visitor_old)
 #      counter.save
 #    end
 #  end
