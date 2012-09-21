@@ -17,6 +17,11 @@ Scenario: Create a collection
     And I fill in "Introduction" with "Welcome to the collection"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a collection</dd></dl>"
     And I fill in "Rules" with "Be nice to people"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_moderated"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_closed"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_unrevealed"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_anonymous"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_show_random"
     And I submit
   Then I should see "Collection was successfully created"
   When I follow "Profile"
