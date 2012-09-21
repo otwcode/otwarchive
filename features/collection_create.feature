@@ -4,7 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection and post to it
 
-Scenario: Create a collection, post a work to it
+Scenario: Create a collection
 
   Given I am logged in as "first_user"
   When I post the work "Test work thingy"
@@ -24,6 +24,11 @@ Scenario: Create a collection, post a work to it
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a collection" within "#faq"
     And I should see "Be nice to people" within "#rules"
+    
+Scenario: Post to collection from the work edit page
+  Given I have the collection "My Collection Thing" with name "collection_thing"
+    And basic tags
+    And I am logged in as "first_user"
   When I post the work "collect-y work"
     And I go to first_user's user page
   Then I should see "collect-y work"
