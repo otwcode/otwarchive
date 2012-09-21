@@ -22,6 +22,7 @@ Scenario: Create a collection
     And I check the 1st checkbox with id matching "collection_collection_preference_attributes_unrevealed"
     And I check the 1st checkbox with id matching "collection_collection_preference_attributes_anonymous"
     And I check the 1st checkbox with id matching "collection_collection_preference_attributes_show_random"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_email_notify"
     And I submit
   Then I should see "Collection was successfully created"
   When I follow "Profile"

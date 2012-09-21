@@ -90,6 +90,8 @@
         <dd>
           <%= preference_form.label :show_random, ts("Show random works on the front page instead of the most recent") %>
         </dd>
+        <dt><%= preference_form.check_box :email_notify %></dt>
+        <dd><%= preference_form.label :email_notify, ts("Send a message to the collection email when a work is added") %></dd>
         <dt><%= label_tag :challenge_type, ts("Type of challenge, if any") %>:</dt>
         <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
         <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
