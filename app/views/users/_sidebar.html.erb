@@ -6,12 +6,11 @@
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
       <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login)) + ' &#8595;').html_safe %>
-      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= pseud_link_text %></a>
-      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= pseud_link_text %></a>
-      <ul id="pseud_switcher" class="toggled secondary">
-          <%= print_pseud_selector(@user.pseuds) %>
+      <a title="<%= ts("Pseuds") %>" href="#"><%= pseud_link_text %></a>
+      <ul class="collapsed-pane secondary">
+        <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
-        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher" href="#">X</a></li>
+        <li><a class="close action"  title="Close Pseud Switcher" href="#">X</a></li>
       </ul>
     </li>
 	<% end %>

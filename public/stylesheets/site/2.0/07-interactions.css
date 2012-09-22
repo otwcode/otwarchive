@@ -410,4 +410,10 @@ div.dynamic {
   width: auto;
 }
 
+a.close.action, #dashboard a.close.action { /* Dashboard needs to be specifically mentioned or it will apply block display*/
+  cursor: pointer;
+  display: none; /* When javascript is disabled, this can't be visible. JavaScript will turn it on. */
+}
+
+
 /*END== */

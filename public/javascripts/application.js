@@ -224,6 +224,7 @@ jQuery(function($) {
 // - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
 // - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
 //   (and you can then add an alternative link for them using <noscript>)
+// UPDATE: For accordion-style collapsible widgets (like the pseud-switcher), use the collapsed-pane pattern instead (below).
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
@@ -254,6 +255,22 @@ function setupToggled(){
   });
 }
 
+//new collapsed-pane widget
+$j(document).ready(function(){
+  var panes = $j(".collapsed-pane");
+  panes.hide().prev().removeClass("hidden").click(function(e) {
+    var title = $j(this);
+    if(title.attr('href') == '#') {
+      e.preventDefault();
+    }
+    title.next().toggle();
+  });
+  //force-set via css here rather than just calling show(), because show() doesn't work on elements in a hidden parent
+  panes.find("a.close.action").css("display", "inline-block").click(function(e) {
+    $j(this).parents(".collapsed-pane").hide();
+    e.preventDefault();  //always.
+  });
+});
 
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
