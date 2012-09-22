@@ -82,10 +82,10 @@ class Work < ActiveRecord::Base
   
   # statistics
   has_many :work_links, :dependent => :destroy      
-  has_one :hit_counter, :dependent => :destroy
-  after_create :create_hit_counter
-  def create_hit_counter
-    counter = self.build_hit_counter
+  has_one :stat_counter, :dependent => :destroy
+  after_create :create_stat_counter
+  def create_stat_counter
+    counter = self.build_stat_counter
     counter.save
   end
   
@@ -1042,7 +1042,7 @@ class Work < ActiveRecord::Base
       @works = @works.unrestricted
     end
     if options[:sort_column] == "hit_count"
-      @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
+      @works = @works.select("works.*, stat_counters.hit_count AS hit_count").joins(:stat_counter)
     end
 
     @works = @works.order(sort_by).posted.unhidden
@@ -1098,7 +1098,7 @@ class Work < ActiveRecord::Base
 #    indexes chapters.content, :as => 'content'
 
     # attributes
-    has hit_counter.hit_count, :as => 'hit_count'
+    has stat_counter.hit_count, :as => 'hit_count'
     has word_count, revised_at
     has posted, restricted, hidden_by_admin
     has complete

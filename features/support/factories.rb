@@ -101,6 +101,12 @@ Factory.define :external_work do |f|
   end
 end
 
+Factory.define :subscription do |f|
+  f.association :user
+  f.subscribable_type "Series"
+  f.subscribable_id { Factory.create(:series).id }
+end
+
 # Factory.define :collection_participant do |f|
 #   f.association :pseud
 #   f.association :collection
