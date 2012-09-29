@@ -408,12 +408,7 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
-    if sort.match /item_count/
-      query = query.with_item_count
-      pagination_args.merge!({:order => sort})
-    else
-      query = query.order(sort)
-    end
+    query = query.order(sort)
 
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
