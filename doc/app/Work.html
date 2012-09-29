@@ -148,7 +148,7 @@
     
     <li><a href="#method-i-count_all_comments">#count_all_comments</a>
     
-    <li><a href="#method-i-create_hit_counter">#create_hit_counter</a>
+    <li><a href="#method-i-create_stat_counter">#create_stat_counter</a>
     
     <li><a href="#method-i-default_date">#default_date</a>
     
@@ -663,6 +663,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -987,7 +989,7 @@ been saved Can’t write to work.pseuds until the work has an id</p>
     <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">unrestricted</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;hit_count&quot;</span>
-    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;works.*, hit_counters.hit_count AS hit_count&quot;</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:hit_counter</span>)
+    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;works.*, stat_counters.hit_count AS hit_count&quot;</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:stat_counter</span>)
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">order</span>(<span class="ruby-identifier">sort_by</span>).<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>
@@ -1891,10 +1893,10 @@ hide their existence from other users</p>
       </div><!-- count_all_comments-method -->
 
     
-      <div id="method-i-create_hit_counter" class="method-detail ">
+      <div id="method-i-create_stat_counter" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">create_hit_counter</span><span
+          <span class="method-name">create_stat_counter</span><span
             class="method-args">()</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
@@ -1906,20 +1908,20 @@ hide their existence from other users</p>
           
 
           
-          <div class="method-source-code" id="create_hit_counter-source">
+          <div class="method-source-code" id="create_stat_counter-source">
             <pre><span class="ruby-comment"># File app/models/work.rb, line 87</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_hit_counter</span>
-  <span class="ruby-identifier">counter</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_hit_counter</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_stat_counter</span>
+  <span class="ruby-identifier">counter</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_stat_counter</span>
   <span class="ruby-identifier">counter</span>.<span class="ruby-identifier">save</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- create_hit_counter-source -->
+          </div><!-- create_stat_counter-source -->
           
         </div>
 
         
 
         
-      </div><!-- create_hit_counter-method -->
+      </div><!-- create_stat_counter-method -->
 
     
       <div id="method-i-default_date" class="method-detail ">
