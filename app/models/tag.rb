@@ -919,16 +919,13 @@ class Tag < ActiveRecord::Base
   #################################
   ## SEARCH #######################
   #################################
-  
-  # Tire runs into some odd issues with STI, so let's just make the tag type
-  # info easier to index without running into conflicts
-  def tag_type
-    self.type.to_s
-  end
-  
-  self.include_root_in_json = false
-  def to_indexed_json
-    to_json(methods: [:tag_type])
+
+
+  mapping do
+    indexes :id,           :index    => :not_analyzed
+    indexes :name,         :analyzer => 'snowball', :boost => 100
+    indexes :type,         :as       => 'tag_type'
+    indexes :canonical,    :type     => :boolean
   end
   
   def self.search(options={})
@@ -936,11 +933,11 @@ class Tag < ActiveRecord::Base
       query do
         boolean do
           must { string options[:name], default_operator: "AND" } if options[:name].present?
-          must { term :tag_type, options[:type].downcase } if options[:type].present?
+          must { term '_type', options[:type].downcase } if options[:type].present?
           must { term :canonical, 'T' } if options[:canonical].present?
         end
       end
     end
-  end
+  end  
 
 end
