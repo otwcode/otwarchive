@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class ChallengeSignupSweeper - RDoc Documentation</title>
+<title>class StatCounter - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -47,7 +47,7 @@
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
   <ul>
-    <li>app/sweepers/challenge_signup_sweeper.rb
+    <li>app/models/stat_counter.rb
   </ul>
 </nav>
 
@@ -59,20 +59,38 @@
     <nav id="parent-class-section" class="section">
   <h3 class="section-header">Parent</h3>
   
-  <p class="link">ActionController::Caching::Sweeper
+  <p class="link">ActiveRecord::Base
   
 </nav>
 
-    
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">LogfileReader</span>
+  
+  
+  
+    <li><span class="include">WorkStats</span>
+  
+  
+  </ul>
+</nav>
+
     <!-- Method Quickref -->
 <nav id="method-list-section" class="section">
   <h3 class="section-header">Methods</h3>
 
   <ul class="link-list">
     
-    <li><a href="#method-i-after_destroy">#after_destroy</a>
+    <li><a href="#method-c-hits_to_database">::hits_to_database</a>
     
-    <li><a href="#method-i-after_save">#after_save</a>
+    <li><a href="#method-c-logs_to_database">::logs_to_database</a>
+    
+    <li><a href="#method-i-init_redis">#init_redis</a>
     
   </ul>
 </nav>
@@ -586,7 +604,7 @@
 </nav>
 
 <div id="documentation">
-  <h1 class="class">class ChallengeSignupSweeper</h1>
+  <h1 class="class">class StatCounter</h1>
 
   <div id="description" class="description">
     
@@ -606,15 +624,122 @@
 
     <!-- Methods -->
     
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-hits_to_database" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hits_to_database</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Persist the hit counts to database</p>
+          
+
+          
+          <div class="method-source-code" id="hits_to_database-source">
+            <pre><span class="ruby-comment"># File app/models/stat_counter.rb, line 18</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hits_to_database</span>
+  <span class="ruby-comment"># persist from redis to db</span>
+  <span class="ruby-identifier">work_ids</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>}
+  <span class="ruby-identifier">found_works</span> = []
+
+  <span class="ruby-constant">StatCounter</span>.<span class="ruby-identifier">find_each</span>(<span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;work_id IN (?)&quot;</span>, <span class="ruby-identifier">work_ids</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stat_counter</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">redis_hits</span> = <span class="ruby-identifier">get_stat</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">work_id</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">redis_hits</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">hit_count</span>
+      <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">redis_hits</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;The redis hit count for work id: #{stat_counter.work_id} was #{redis_hits}. redis has been updated with the database value of #{stat_counter.hit_count}&quot;</span>
+      <span class="ruby-identifier">set_stat</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">hit_count</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">work_id</span>)
+    <span class="ruby-identifier">found_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">stat_counter</span>.<span class="ruby-identifier">work_id</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-comment"># Create hit counters for works that don't have them yet</span>
+  (<span class="ruby-identifier">work_ids</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">found_works</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work_id</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">stat_counter</span> = <span class="ruby-constant">StatCounter</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value">:work_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work_id</span>, <span class="ruby-value">:hit_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_stat</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">work_id</span>))
+    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">work_id</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hits_to_database-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hits_to_database-method -->
+
+    
+      <div id="method-c-logs_to_database" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">logs_to_database</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Move download counts and referers from logs to database</p>
+          
+
+          
+          <div class="method-source-code" id="logs_to_database-source">
+            <pre><span class="ruby-comment"># File app/models/stat_counter.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">logs_to_database</span>
+  <span class="ruby-identifier">start_date</span> = <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">stats_updated_at</span>
+  
+  <span class="ruby-comment"># downloads since the start date</span>
+  <span class="ruby-identifier">stats</span> = <span class="ruby-identifier">get_work_statistic_from_logs</span>(<span class="ruby-value">:download_count</span>, <span class="ruby-identifier">start_date</span>)
+  <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">new_count</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># add the count to the hit counter</span>
+    <span class="ruby-identifier">hc</span> = <span class="ruby-constant">StatCounter</span>.<span class="ruby-identifier">find_or_initialize_by_work_id</span>(<span class="ruby-value">:work_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work_id</span>)
+    <span class="ruby-identifier">hc</span>.<span class="ruby-identifier">download_count</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">new_count</span> <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">hc</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-comment"># update redis to current value</span>
+    <span class="ruby-identifier">set_stat</span>(<span class="ruby-value">:download_count</span>, <span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">hc</span>.<span class="ruby-identifier">download_count</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># referers</span>
+  <span class="ruby-identifier">stats</span> = <span class="ruby-identifier">get_work_statistic_from_logs</span>(<span class="ruby-value">:links</span>, <span class="ruby-identifier">start_date</span>)
+  <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">referers</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># group referers by url and pass count</span>
+    <span class="ruby-comment"># Let WorkLink determine whether url valid, etc</span>
+    <span class="ruby-identifier">referers</span>.<span class="ruby-identifier">group_by</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">referer</span><span class="ruby-operator">|</span> <span class="ruby-identifier">referer</span>}.<span class="ruby-identifier">each_pair</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">referer</span>, <span class="ruby-identifier">referers</span><span class="ruby-operator">|</span> <span class="ruby-constant">WorkLink</span>.<span class="ruby-identifier">create_or_increment</span>(<span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">referer</span>, <span class="ruby-identifier">referers</span>.<span class="ruby-identifier">count</span>)}      
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">set_stats_updated_at</span>(<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- logs_to_database-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- logs_to_database-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
     
-      <div id="method-i-after_destroy" class="method-detail ">
+      <div id="method-i-init_redis" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">after_destroy</span><span
-            class="method-args">(record)</span>
+          <span class="method-name">init_redis</span><span
+            class="method-args">()</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -625,49 +750,20 @@
           
 
           
-          <div class="method-source-code" id="after_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/challenge_signup_sweeper.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_destroy</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-identifier">expire_challenge_signup_cache_for</span>(<span class="ruby-identifier">record</span>)
+          <div class="method-source-code" id="init_redis-source">
+            <pre><span class="ruby-comment"># File app/models/stat_counter.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">init_redis</span>
+  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:hit_count</span>), <span class="ruby-value">0</span>)
+  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:download_count</span>), <span class="ruby-value">0</span>)
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- after_destroy-source -->
+          </div><!-- init_redis-source -->
           
         </div>
 
         
 
         
-      </div><!-- after_destroy-method -->
-
-    
-      <div id="method-i-after_save" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">after_save</span><span
-            class="method-args">(record)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="after_save-source">
-            <pre><span class="ruby-comment"># File app/sweepers/challenge_signup_sweeper.rb, line 4</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_save</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-identifier">expire_challenge_signup_cache_for</span>(<span class="ruby-identifier">record</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- after_save-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- after_save-method -->
+      </div><!-- init_redis-method -->
 
     
     </section><!-- public-instance-method-details -->

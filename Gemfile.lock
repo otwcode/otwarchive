@@ -262,7 +262,7 @@ DEPENDENCIES
   authlogic!
   aws-s3
   best_in_place
-  bundler (~> 1.0.0)
+  bundler
   capistrano-gitflow_version (>= 0.0.3)
   capybara (= 0.3.9)
   css_parser
