@@ -1,5 +1,6 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
+  before_filter :load_owner, :only => [ :index ]
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
@@ -27,72 +28,39 @@ class BookmarksController < ApplicationController
   end
 
   def search
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      page = params[:page] || 1
-      errors, @bookmarks = Query.search(Bookmark, @query, page)
-      setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
+    @languages = Language.default_order
+    options = params[:bookmark_search] || {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    @search = BookmarkSearch.new(options)
+    if params[:bookmark_search].present? && params[:edit_search].blank?
+      @bookmarks = @search.search_results
+      render 'search_results'
     end
-  end  
+  end
 
-  
-  # aggregates bookmarks for the same bookmarkable
-  # note, these do not show private bookmarks
-  # GET    /bookmarks
-  # GET    /tags/:tag_id/bookmarks
-  # non aggregates - show all bookmarks, even duplicates and private
-  # GET    /collections/:collection_id/bookmarks
-  # GET    /users/:user_id/pseuds/:pseud_id/bookmarks
-  # GET    /users/:user_id/bookmarks
-  # GET    /works/:work_id/bookmarks
-  # GET    /external_works/:external_work_id/bookmarks
-  # GET    /series/:series/bookmarks
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
       @bookmarks = @bookmarkable.bookmarks.is_public.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
     else
-      options = params.dup
-      if params[:user_id].present?
-        @user = User.find_by_login(params[:user_id])
-        options[:pseud_ids] = @user.pseuds.value_of(:id)
-        if params[:pseud_id].present?
-          @author = @user.pseuds.find_by_name(params[:pseud_id])
-          options[:pseud_ids] = [@author.id]
-        end
-      end
-      if params[:tag_id]
-        @tag = Tag.find_by_name(params[:tag_id])
-        if @tag.present?
-          facet_key = "#{@tag.type.to_s.downcase}_ids".to_sym
-          options[facet_key] ||= []
-          options[facet_key] << @tag.id
-          params[facet_key] = options[facet_key]
-        else
-        
-        end
-      end
-      if @collection.present?
-        if params[:work_collections].present?
-          options[:work_collection_ids] ||= []
-          options[:work_collection_ids] << @collection.id
-        else
-          options[:collection_ids] ||= []
-          options[:collection_ids] << @collection.id
-        end
-      end
-      if @user.present? && @user == current_user
-        options[:private] = true
+      if params[:bookmark_search].present?
+        options = params[:bookmark_search].dup
       else
-        options[:private] = false
+        options = {}
       end
-      @owner = @bookmarkable || @pseud || @user || @collection || @tag
+
+      options[:show_private] = (@user.present? && @user == current_user)
+      options[:show_restricted] = current_user.present?
+
+      options.merge!(page: params[:page])      
+      @page_title = index_page_title
+
       if @owner.present?
         if @admin_settings.disable_filtering?
           @bookmarks = Bookmark.list_without_filters(@owner, options)
         else
-          @bookmarks = Bookmark.search(options)
+          @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          @bookmarks = @search.search_results
         end
       else
         @bookmarks = Bookmark.latest
@@ -188,6 +156,46 @@ class BookmarksController < ApplicationController
   end
   def hide_recent
     @bookmarkable = @bookmark.bookmarkable
+  end
+
+  protected
+
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag.canonical?
+        if @tag.merger.present?
+          redirect_to tag_bookmarks_path(@tag.merger) and return
+        else
+          redirect_to tag_path(@tag) and return
+        end
+      end
+    end
+    @owner = @bookmarkable || @pseud || @user || @collection || @tag
+  end
+
+  def index_page_title
+    if @owner.present?
+      owner_name = case @owner.class.to_s
+                   when 'Pseud'
+                     @owner.name
+                   when 'User'
+                     @owner.login
+                   when 'Collection'
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      "#{owner_name} &raquo; Bookmarks".html_safe
+    else
+      "Latest Bookmarks"
+    end
   end
 
 end

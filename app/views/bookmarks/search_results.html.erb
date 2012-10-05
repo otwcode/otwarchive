@@ -1,0 +1,24 @@
+<h2 class="heading"><%= ts('Search Results') %></h2>
+
+<h4>
+  <%= ts("You searched for:") %>
+  <%= @search.summary %>
+</h4>
+<p><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></p>
+
+<% if @bookmarks.blank? %>
+  <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
+<% else %>
+  <h3 class="heading"><%= @bookmarks.total_entries %> Found <%= link_to_help "bookmark-search-results-help" %></h3>
+
+  <h3 class="landmark heading">Bookmarks List</h3>
+  <ol class="bookmark index group">
+    <% @bookmarks.each do |bookmark| %>
+      <% unless bookmark.nil? %>
+        <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
+      <% end %>
+    <% end %>
+  </ol>
+ 
+ <%= will_paginate @bookmarks %>
+<% end %>
