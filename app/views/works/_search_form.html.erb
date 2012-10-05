@@ -8,14 +8,17 @@
       <dt><%= f.label :title, ts('Title') %></dt>
       <dd><%= f.text_field :title %></dd>
       
-      <dt><%= f.label :byline, ts('Author') %></dt>
-      <dd><%= f.text_field :byline %>
+      <dt><%= f.label :creator, ts('Author/Artist') %></dt>
+      <dd><%= f.text_field :creator %>
         
       <dt><%= f.label :revised_at, ts('Date') %></dt>
       <dd><%= f.text_field :revised_at %></dd>
       
       <dt><%= f.label :complete, ts('Complete') %></dt>
       <dd><%= f.check_box :complete %></dd>
+
+      <dt><%= f.label :single_chapter, ts('Single Chapter') %></dt>
+      <dd><%= f.check_box :single_chapter %></dd>
       
       <dt><%= f.label :language_id, ts('Language') %></dt>
       <dd><%= f.collection_select :language_id, @languages, :id, :name, :prompt => true %>

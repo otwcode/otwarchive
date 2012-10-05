@@ -2,10 +2,11 @@ class WorkSearch < Search
   
   serialized_options :query, 
     :title, 
-    :byline, 
+    :creator, 
     :revised_at, 
     :language_id, 
     :complete, 
+    :single_chapter,
     :word_count, 
     :hits, 
     :kudos_count, 
@@ -13,8 +14,9 @@ class WorkSearch < Search
     :comments_count, 
     :pseud_ids,
     :collection_ids,
-    :tag_names,
+    :tag,
     :other_tag_names,
+    :filter_ids,
     :fandom_names,
     :fandom_ids,
     :rating_ids,
@@ -67,6 +69,7 @@ class WorkSearch < Search
           must { term :posted, 'T' }
           must { term :restricted, 'F' } unless search_opts[:show_restricted]
           must { term :complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
+          must { term :expected_number_of_chapters, 1 } if %w(1 true).include?(search_opts[:single_chapter].to_s)
           must { term :in_unrevealed_collection, 'F' } unless search_opts[:show_unrevealed]
           must { term :in_anon_collection, 'F' } unless search_opts[:show_anon]
           must { term :language_id, search_opts[:language_id].to_i } if search_opts[:language_id].present?
@@ -75,7 +78,7 @@ class WorkSearch < Search
             must { terms :pseud_ids, search_opts[:pseud_ids] }
           end
           
-          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
+          [:filter_ids, :rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
             if search_opts[id_list].present?
               search_opts[id_list].each do |id|
                 must { term id_list, id }
@@ -108,9 +111,8 @@ class WorkSearch < Search
   def set_parent_fields!
     if self.works_parent.present?
       if self.works_parent.is_a?(Tag)
-        facet_key = "#{works_parent.type.to_s.downcase}_ids".to_sym
-        options[facet_key] ||= []
-        options[facet_key] << works_parent.id
+        options[:filter_ids] ||= []
+        options[:filter_ids] << works_parent.id
       elsif self.works_parent.is_a?(Pseud)
         options[:pseud_ids] = [self.works_parent.id]
       elsif self.works_parent.is_a?(User)
@@ -136,25 +138,18 @@ class WorkSearch < Search
     
     # Associate tag names with specific tags where possible
     # to allow for precise filtering
-    options[:tag_names] ||= ""
+    options[:tag] ||= ""
     %w(fandom character relationship freeform other_tag).each do |tag_type|
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        if tag_type == 'other_tag'
-          tags = Tag.where(:name => names)
-          tags.each do |tag|
-            facet_key = "#{tag.type.to_s.downcase}_ids".to_sym
-            options[facet_key] ||= []
-            options[facet_key] << tag.id
-          end
-        else
-          tag_ids = "#{tag_type}_ids".to_sym
-          tags = tag_type.classify.constantize.where(:name => names)
-          options[tag_ids] = tags.map{ |tag| tag.id }
+        tags = Tag.where(:name => names)
+        unless tags.empty?
+          options[:filter_ids] ||= []
+          options[:filter_ids] += tags.map{ |tag| tag.id }
         end
         leftovers = names - tags.map{ |tag| tag.name }
-        options[:tag_names] << leftovers.join(" ") + " "
+        options[:tag] << leftovers.join(" ") + " "
       end
     end
   end
@@ -200,7 +195,7 @@ class WorkSearch < Search
   # Search within text fields: general, titles, creator names, and partial tag names
   def generate_search_text
     search_text = self.query.present? ? self.query.dup : ""
-    [:title, :byline, :tag_names].each do |field|
+    [:title, :creator, :tag].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
           if word[0] == "-"
@@ -246,14 +241,14 @@ class WorkSearch < Search
     if options[:title].present?
       summary << "Title: #{options[:title]}"
     end
-    if options[:byline].present?
-      summary << "Creator: #{options[:byline]}"
+    if options[:creator].present?
+      summary << "Creator: #{options[:creator]}"
     end
     tags = []
-    if options[:tag_names].present?
-      tags << options[:tag_names]
+    if options[:tag].present?
+      tags << options[:tag]
     end
-    [:fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
+    [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
         tags << Tag.where(:id => options[tag_ids]).value_of(:name).join(", ")
       end

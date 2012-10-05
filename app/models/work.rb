@@ -1126,46 +1126,78 @@ class Work < ActiveRecord::Base
   # SEARCH INDEX
   #
   #############################################################################
-  
+
   mapping do
     indexes :authors_to_sort_on,  :index    => :not_analyzed
     indexes :title_to_sort_on,    :index    => :not_analyzed
+    indexes :title,               :boost => 20
+    indexes :creator,             :boost => 15
   end
   
   def to_indexed_json
-    to_json(methods: [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :tag_names, :pseud_ids, :collection_ids, :hits, :comments_count, :kudos_count, :bookmarks_count, :byline])
+    to_json(methods:
+      [ :rating_ids, 
+        :warning_ids, 
+        :category_ids, 
+        :fandom_ids, 
+        :character_ids, 
+        :relationship_ids, 
+        :freeform_ids, 
+        :filter_ids,
+        :tag, 
+        :pseud_ids, 
+        :collection_ids, 
+        :hits, 
+        :comments_count, 
+        :kudos_count, 
+        :bookmarks_count, 
+        :creator
+      ])
   end
   
-  def rating_ids
-    ratings.value_of :id
-  end
-  def warning_ids
-    warnings.value_of :id
-  end
-  def category_ids
-    categories.value_of :id
-  end
-  def fandom_ids
-    filters.by_type("Fandom").value_of :id
-  end
-  def character_ids
-    filters.by_type("Character").value_of :id
-  end
-  def relationship_ids
-    filters.by_type("Relationship").value_of :id
-  end
-  def freeform_ids
-    filters.by_type("Freeform").value_of :id
-  end
-  def tag_names
+  # Simple name to make it easier for people to use in full-text search
+  def tag
     (tags + filters).uniq.map{ |t| t.name }
   end
+
+  # Index all the filters for pulling works
+  def filter_ids
+    filters.value_of :id
+  end
+
+  # Index only direct filters (non meta-tags) for facets
+  def filters_for_facets
+    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
+  end
+  def rating_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
+  end
+  def warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  end
+  def category_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
+  end
+  def fandom_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
+  end
+  def character_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
+  end
+  def relationship_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
+  end
+  def freeform_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  end
+
   def pseud_ids
     creatorships.value_of :pseud_id
   end
   def collection_ids
     collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
+
   def comments_count
     self.stat_counter.comments_count
   end
@@ -1175,7 +1207,8 @@ class Work < ActiveRecord::Base
   def bookmarks_count
     self.stat_counter.bookmarks_count
   end
-  def byline
+
+  def creator
     names = ""
     if anonymous?
       names = "Anonymous"
@@ -1188,6 +1221,6 @@ class Work < ActiveRecord::Base
       end
     end
     names
-  end
+  end  
 
 end
