@@ -12,7 +12,9 @@ class Series < ActiveRecord::Base
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
-  
+
+  has_many :subscriptions, :as => :subscribable, :dependent => :destroy
+   
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, 
