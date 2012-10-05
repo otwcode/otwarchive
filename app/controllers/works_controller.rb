@@ -24,7 +24,7 @@ class WorksController < ApplicationController
   def search
     @languages = Language.default_order
     options = params[:work_search] || {}
-    options.merge!(page: params[:page]) if params[:page].present
+    options.merge!(page: params[:page]) if params[:page].present?
     @search = WorkSearch.new(options)
     if params[:work_search].present? && params[:edit_search].blank?
       @works = @search.search_results
