@@ -30,6 +30,10 @@ Otwarchive::Application.routes.draw do
     end
   end
 
+  #### TECH GRAPHS ####
+
+ match  "/tech" => "tech#index"
+
   #### INVITATIONS ####
 
   resources :invitations
