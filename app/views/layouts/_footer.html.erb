@@ -27,6 +27,7 @@
     <li>&#8212; <%= link_to 'Donate/Volunteer', donate_path %></li>
     <li>&#8212; <%= link_to 'FAQ', archive_faqs_path %></li>
     <li>&#8212; <%= link_to 'Known Issues', known_issues_path %></li>
+    <li>&#8212; <%= link_to 'Perf stats', tech_path %></li>
     <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
     <% end %>
