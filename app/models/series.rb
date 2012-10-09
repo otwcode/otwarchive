@@ -24,6 +24,11 @@ class Series < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX, 
     :too_long=> t('title_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).html_safe
+  end
+
   validates_length_of :summary, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.SUMMARY_MAX, 
