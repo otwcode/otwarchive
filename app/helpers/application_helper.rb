@@ -11,7 +11,7 @@ module ApplicationHelper
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
     
-    if (@works.present? && @works.respond_to?(:facets)) || (@bookmarks.present? && @bookmarks.respond_to?(:facets)) || @collections.present?
+    if page_has_filters?
       class_names += " filtered"
     end
     
@@ -26,6 +26,12 @@ module ApplicationHelper
     end
     
     class_names
+  end
+  
+  def page_has_filters?
+    (@work_search.present? && @work_search.faceted) || 
+    (@bookmark_search.present? && @bookmark_search.faceted) || 
+    @collections.present?
   end
 
   # A more gracefully degrading link_to_remote.
