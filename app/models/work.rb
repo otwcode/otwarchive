@@ -216,6 +216,21 @@ class Work < ActiveRecord::Base
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
   end
+  
+  ########################################################################
+  # RESQUE
+  ########################################################################
+  
+  @queue = :utilities
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
+
+  # We can pass this any Work instance method that we want to run later.
+  def async(method, *args)
+    Resque.enqueue(Work, id, method, *args)
+  end
 
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
 
@@ -1223,5 +1238,21 @@ class Work < ActiveRecord::Base
     end
     names
   end  
+  
+  # Update the search index for both this work and its associated bookmarks
+  def async_work_and_bookmarks_index
+    async(:update_index)
+    async(:async_bookmarks_index)
+  end
+  
+  # This gets invoked as a callback in lib/work_stats.rb so we want to make
+  # sure it doesn't run synchronously for works with many bookmarks
+  def update_bookmarks_index
+    async(:async_bookmarks_index)
+  end
+  
+  def async_bookmarks_index
+    self.bookmarks.each{ |bookmark| bookmark.update_index }
+  end
 
 end

@@ -57,7 +57,7 @@ class Tag < ActiveRecord::Base
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
-  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
+  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :update_meta_filters
   has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
   has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
@@ -295,7 +295,19 @@ class Tag < ActiveRecord::Base
   scope :offered_in_challenge, lambda {|collection|
     in_challenge(collection).where("prompts.type = 'Offer'")
   }
+  
+  # Resque
+  
+  @queue = :utilities
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
 
+  # We can pass this any Tag instance method that we want to run later.
+  def async(method, *args)
+    Resque.enqueue(Tag, id, method, *args)
+  end
 
   # Class methods
 
@@ -562,12 +574,13 @@ class Tag < ActiveRecord::Base
   def update_filters_for_canonical_change
     if self.canonical_changed?
       if self.canonical?
-        self.add_filter_taggings
+        self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
         self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
-        self.reset_filter_count
+        self.async(:reset_filter_count)
+        self.works.each { |work| work.async_work_and_bookmarks_index }
       else
-        self.remove_filter_taggings
+        self.async(:remove_filter_taggings)
       end
     end
   end
@@ -584,11 +597,11 @@ class Tag < ActiveRecord::Base
         self.merger = nil
       end
       if self.merger && self.merger.canonical?
-        self.add_filter_taggings
+        self.async(:add_filter_taggings)
       end
       old_merger = Tag.find_by_id(self.merger_id_was)
       if old_merger && old_merger.canonical?
-        self.remove_filter_taggings(old_merger)
+        self.async(:remove_filter_taggings, old_merger)
       end
     end
   end
@@ -619,6 +632,7 @@ class Tag < ActiveRecord::Base
             end
           end
         end
+        work.async_work_and_bookmarks_index
       end
       tags_that_need_filter_count_reset.each do |tag_to_reset|
         tag_to_reset.reset_filter_count
@@ -662,10 +676,12 @@ class Tag < ActiveRecord::Base
             end
           end
         end
+        work.async_work_and_bookmarks_index
       end
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
+      self.works.each{ |work| work.async_work_and_bookmarks_index }
     end
   end
 
@@ -738,7 +754,7 @@ class Tag < ActiveRecord::Base
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
       tag_to_remove = Tag.find(tag_id)
       if tag_to_remove
-        self.remove_association(tag_to_remove)
+        self.async(:remove_association, tag_to_remove)
       end
     end
   end
@@ -763,6 +779,11 @@ class Tag < ActiveRecord::Base
     tag.touch
     self.touch
   end
+  
+  # Making this asynchronous
+  def update_meta_filters(meta_tag)
+    async(:remove_meta_filters, meta_tag)
+  end
 
   # When a meta tagging relationship is removed, things filter-tagged with the meta tag
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged
@@ -784,6 +805,7 @@ class Tag < ActiveRecord::Base
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filters.delete(tag)
+            work.async_work_and_bookmarks_index
           end
         end
       end
@@ -791,21 +813,25 @@ class Tag < ActiveRecord::Base
   end
 
   def remove_sub_filters(sub_tag)
-    sub_tag.remove_meta_filters(self)
+    sub_tag.update_meta_filters(self)
   end
 
   # If we're making a tag non-canonical, we need to update its synonyms and children
   before_update :check_canonical
   def check_canonical
     if self.canonical_changed? && !self.canonical?
-      self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
-      self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
-      self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
-      self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
+      self.async(:remove_canonical_associations)
     elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
     true
+  end
+  
+  def remove_canonical_associations
+    self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
+    self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
+    self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
+    self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
   end
 
   attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
