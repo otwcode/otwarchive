@@ -29,9 +29,7 @@ module ApplicationHelper
   end
   
   def page_has_filters?
-    (@work_search.present? && @work_search.faceted) || 
-    (@bookmark_search.present? && @bookmark_search.faceted) || 
-    @collections.present?
+    (@search.present? && @search.faceted) || @collections.present?
   end
 
   # A more gracefully degrading link_to_remote.
