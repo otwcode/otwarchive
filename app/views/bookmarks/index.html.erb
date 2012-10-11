@@ -42,6 +42,10 @@
   <div class="new dynamic" id="bookmark_form_placement_for_<%= @bookmarkable.id %>"></div>
 <% end %>
 
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
+<% end %>
+
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Bookmarks") %></h3>
 <ol class="bookmark index">
