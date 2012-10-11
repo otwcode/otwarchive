@@ -1,13 +1,6 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @most_recent_bookmarks %>
-    <%= ts("Recent") %>
-  <% elsif @user %>
-    <%= @user.login %>'s
-  <% else %>
-    <%= ts("Listing") %>
-<% end %>
-<%= ts("Bookmarks") %>
+  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
 </h2>
 <!-- /descriptions-->
 

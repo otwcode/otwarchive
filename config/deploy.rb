@@ -73,6 +73,10 @@ namespace :extras do
   task :run_after_tasks, {:roles => :backend} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
   end
+  # this actually restarts resque now - not obsolete!
+  task :restart_delayed_jobs, {:roles => :backend} do
+    run "/static/bin/dj_restart.sh"
+  end
   task :update_cron, {:roles => :backend} do
     run "whenever --update-crontab #{application}"
   end
@@ -143,4 +147,5 @@ after "deploy:symlink", "extras:update_revision"
 
 after "deploy:restart", "extras:update_cron"
 after "deploy:restart", "deploy:web:update_cron_web"
+after "deploy:restart", "extras:restart_delayed_jobs"
 after "deploy:restart", "deploy:cleanup"
