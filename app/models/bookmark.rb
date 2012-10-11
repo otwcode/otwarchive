@@ -23,7 +23,6 @@ class Bookmark < ActiveRecord::Base
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recent, limit(ArchiveConfig.SEARCH_RESULTS_MAX)
   scope :recs, where(:rec => true)
-  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE)
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
@@ -62,6 +61,8 @@ class Bookmark < ActiveRecord::Base
       (external_works.hidden_by_admin = 0)")
 
   scope :visible_to_admin, not_private
+
+  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope

@@ -4,6 +4,7 @@ class BookmarkSearch < Search
     :rec,
     :notes,
     :with_notes,
+    :date,
     :show_private,
     :pseud_ids,
     :bookmarker, 
@@ -93,9 +94,10 @@ class BookmarkSearch < Search
         end
       end
       
-      [:bookmarkable_word_count, :created_at, :bookmarkable_date].each do |countable|
+      [:bookmarkable_word_count, :date, :bookmarkable_date].each do |countable|
         if search_opts[countable].present?
-          filter :range, countable => Search.range_to_search(search_opts[countable])
+          key = (countable == :date) ? :created_at : countable
+          filter :range, key => Search.range_to_search(search_opts[countable])
         end
       end
       
@@ -200,7 +202,7 @@ class BookmarkSearch < Search
   end
   
   def clean_up_angle_brackets
-    [:created_at, :bookmarkable_date].each do |countable|
+    [:date, :bookmarkable_date].each do |countable|
       if options[countable].present?
         options[countable].gsub!("&gt;", ">")
         options[countable].gsub!("&lt;", "<")
@@ -254,9 +256,10 @@ class BookmarkSearch < Search
     if %w(1 true).include?(self.with_notes.to_s)
       summary << "With Notes"
     end
-    [:created_at, :bookmarkable_date].each do |countable|
+    [:date, :bookmarkable_date].each do |countable|
       if options[countable].present?
-        summary << "#{countable.to_s.humanize}: #{options[countable]}"
+        desc = (countable == :date) ? "Date bookmarked" : "Date updated"
+        summary << "#{desc}: #{options[countable]}"
       end
     end
     summary.join(", ")
@@ -270,7 +273,7 @@ class BookmarkSearch < Search
   def sort_options
     [
       ['Date Bookmarked', 'created_at'],
-      ['Date Updated', 'revised_at'],
+      ['Date Updated', 'bookmarkable_date'],
     ]
   end
   
@@ -283,3 +286,4 @@ class BookmarkSearch < Search
   end
   
 end
+

@@ -50,12 +50,19 @@
       <%= f.select :bookmarkable_type, options_for_select(["",  "Work", "Series", "External Work"]) %>
     </dd>
     <dt>
-      <%= f.label :created_at, ts('Date Bookmarked') %>
+      <%= f.label :date, ts('Date Bookmarked') %>
       <%= link_to_help "search-date-help" %>
     </dt>
     <dd>
-      <%= f.text_field :created_at %>
+      <%= f.text_field :date %>
     </dd>
+    <dt>
+      <%= f.label :bookmarkable_date, ts('Date Updated') %>
+      <%= link_to_help "search-bookmarkable-date-help" %>
+    </dt>
+    <dd>
+      <%= f.text_field :bookmarkable_date %>
+    </dd> 
  
     <dt class="landmark">Submit</dt>
     <dd class="submit actions"><%= f.submit ts('Search bookmarks') %></dd>

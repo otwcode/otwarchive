@@ -553,8 +553,8 @@ class Tag < ActiveRecord::Base
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
 
-  before_save :update_filters_for_canonical_change
-  before_save :update_filters_for_merger_change
+  before_update :update_filters_for_canonical_change
+  before_update :update_filters_for_merger_change
 
   # If a tag was not canonical but is now, it needs new filter_taggings
   # If it was canonical but isn't anymore, we need to change or remove
@@ -924,7 +924,7 @@ class Tag < ActiveRecord::Base
   mapping do
     indexes :id,           :index    => :not_analyzed
     indexes :name,         :analyzer => 'snowball', :boost => 100
-    indexes :type,         :as       => 'tag_type'
+    indexes :type
     indexes :canonical,    :type     => :boolean
   end
   

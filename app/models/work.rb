@@ -1132,6 +1132,7 @@ class Work < ActiveRecord::Base
     indexes :title_to_sort_on,    :index    => :not_analyzed
     indexes :title,               :boost => 20
     indexes :creator,             :boost => 15
+    indexes :revised_at,          :type  => 'date'
   end
   
   def to_indexed_json
