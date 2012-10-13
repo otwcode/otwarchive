@@ -355,6 +355,14 @@ namespace :After do
       end
     end
   end
+  
+  desc "Add filters to external works"
+  task(:external_work_filters => :environment) do
+    ExternalWork.find_each do |ew|
+      puts ew.id
+      ew.check_filter_taggings
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 
