@@ -156,7 +156,7 @@ class BookmarkSearch < Search
           options[:filter_ids] += tags.map{ |tag| tag.id }
         end
         leftovers = names - tags.map{ |tag| tag.name }
-        options[:tag_names] << leftovers.join(" ") + " "
+        options[:tag] << leftovers.join(" ") + " "
       end
     end
   end
@@ -236,8 +236,8 @@ class BookmarkSearch < Search
       summary << "Notes: #{options[:notes]}"
     end
     tags = []
-    if options[:tag_names].present?
-      tags << options[:tag_names]
+    if options[:tag].present?
+      tags << options[:tag]
     end
     [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
