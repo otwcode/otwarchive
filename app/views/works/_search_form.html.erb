@@ -20,6 +20,9 @@
       <dt><%= f.label :single_chapter, ts('Single Chapter') %></dt>
       <dd><%= f.check_box :single_chapter %></dd>
       
+      <dt><%= f.label :word_count, ts('Words') %></dt>
+      <dd><%= f.text_field :word_count %></dd>
+      
       <dt><%= f.label :language_id, ts('Language') %></dt>
       <dd><%= f.collection_select :language_id, @languages, :id, :name, :prompt => true %>
     </dl>
@@ -73,9 +76,7 @@
   <fieldset>
     <legend>Work Stats</legend>
     <dl>
-      <dt><%= f.label :word_count, ts('Words') %></dt>
-      <dd><%= f.text_field :word_count %></dd>
-      
+
       <dt><%= f.label :hits, ts('Hits') %></dt>
       <dd><%= f.text_field :hits %></dd>
       
