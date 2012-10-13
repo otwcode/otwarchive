@@ -150,7 +150,7 @@ class BookmarkSearch < Search
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        tags = Tag.where(:name => names)
+        tags = Tag.where(:name => names, :canonical => true)
         unless tags.empty?
           options[:filter_ids] ||= []
           options[:filter_ids] += tags.map{ |tag| tag.id }
