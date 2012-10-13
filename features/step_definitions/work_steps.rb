@@ -102,6 +102,7 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   fill_in("content", :with => "Another Chapter.")
   click_button("Preview")
   When %{I press "Post Chapter"}
+  Work.tire.index.refresh
 end
 
 When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, collection|
@@ -112,6 +113,7 @@ When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, coll
   end
   visit preview_work_url(work)
   click_button("Post")
+  Work.tire.index.refresh
   Then "I should see \"Work was successfully posted.\""
 end
 
@@ -120,6 +122,7 @@ When /^I post the work "([^\"]*)" without preview$/ do |title|
   if work.blank?
     Given %{I set up the draft "#{title}"}
     click_button("Post without preview")
+    Work.tire.index.refresh
     Then "I should see \"Work was successfully posted.\""
   end
 end
@@ -127,6 +130,7 @@ end
 When /^a chapter is added to "([^\"]*)"$/ do |work_title|
   When %{a draft chapter is added to "#{work_title}"}
   click_button("Post Chapter")
+  Work.tire.index.refresh
 end
 
 When /^a draft chapter is added to "([^\"]*)"$/ do |work_title|
@@ -137,11 +141,13 @@ When /^a draft chapter is added to "([^\"]*)"$/ do |work_title|
   And %{I follow "Add Chapter"}
   And %{I fill in "content" with "la la la la la la la la la la la"}
   And %{I press "Preview"}  
+  Work.tire.index.refresh
 end
 
 # meant to be used in conjunction with above step
 When /^I post the draft chapter$/ do
   click_button("Post Chapter")
+  Work.tire.index.refresh
 end
 
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)" with category "([^\"]*)"$/ do |title, fandom, freeform, category|
@@ -153,6 +159,7 @@ When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)
   visit preview_work_url(work)
   click_button("Post")
   Then "I should see \"Work was successfully posted.\""
+  Work.tire.index.refresh
 end
 
 When /^I post the work "([^\"]*)"$/ do |title|
@@ -227,6 +234,7 @@ When /^the work "([^\"]*)" was created (\d+) days ago$/ do |title, number|
   Given "the draft \"#{title}\""
   work = Work.find_by_title(title)
   work.update_attribute(:created_at, number.to_i.days.ago)
+  Work.tire.index.refresh
 end
 
 When /^I post the locked work "([^\"]*)"$/ do |title|
@@ -237,6 +245,7 @@ When /^I post the locked work "([^\"]*)"$/ do |title|
   end
   visit preview_work_url(work)
   click_button("Post")
+  Work.tire.index.refresh
 end
 
 When /^the locked draft "([^\"]*)"$/ do |title|
@@ -267,11 +276,13 @@ end
 When /^I browse the "([^"]+)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
+  Work.tire.index.refresh
 end
 
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
+  Work.tire.index.refresh
 end
 
 When /^I delete the work "([^\"]*)"$/ do |work|
@@ -279,6 +290,7 @@ When /^I delete the work "([^\"]*)"$/ do |work|
   visit work_url(work)
   And %{I follow "Delete"}
   click_button("Yes, Delete Work")
+  Work.tire.index.refresh
 end
 
 When /^I add my work to the collection$/ do
@@ -287,6 +299,25 @@ When /^I add my work to the collection$/ do
   click_button("Add")
 end
 
+When /^I preview the work$/ do
+  click_button("Preview")
+  Work.tire.index.refresh
+end
+
+When /^I update the work$/ do
+  click_button("Update")
+  Work.tire.index.refresh
+end
+
+When /^I post the work without preview$/ do
+  click_button "Post without preview"
+  Work.tire.index.refresh
+end
+
+When /^I post the work$/ do
+  click_button "Post"
+  # Work.tire.index.refresh
+end
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -298,3 +329,4 @@ Then /^I should not see Updated today$/ do
   today = Date.today.to_s
   Given "I should not see \"Updated:#{today}\""
 end
+

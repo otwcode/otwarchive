@@ -73,18 +73,9 @@ namespace :extras do
   task :run_after_tasks, {:roles => :backend} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
   end
+  # this actually restarts resque now - not obsolete!
   task :restart_delayed_jobs, {:roles => :backend} do
     run "/static/bin/dj_restart.sh"
-  end
-  task :restart_sphinx, {:roles => :search} do
-    run "/static/bin/ts_restart.sh"
-  end
-  task :reindex_sphinx, {:roles => :search} do
-    run "/static/bin/ts_reindex.sh"
-  end
-  desc "rebuild sphinx"
-  task :rebuild_sphinx, {:roles => :search} do
-    run "/static/bin/ts_rebuild.sh"
   end
   task :update_cron, {:roles => :backend} do
     run "whenever --update-crontab #{application}"

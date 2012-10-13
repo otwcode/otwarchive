@@ -21,12 +21,11 @@ Scenario: Posting locked work
     
     # shows as restricted
     Then I should see the "title" text "Restricted" within "h2.title"
-    When I press "Post"
+    When I post the work
     Then I should see the "alt" text "(Restricted)" within "h2.title"
-    When I go to the works page
+    When I go to the works tagged "Supernatural"
     Then I should see "Awesomeness" within "h4"
       And I should see the "alt" text "(Restricted)" within "h4"
-    Given the work indexes are updated
     When I fill in "site_search" with "Awesomeness"
       And I press "search"
     Then I should see "1 Found"
@@ -34,14 +33,14 @@ Scenario: Posting locked work
       
     # doesn't show when logged out
     When I am logged out
-      And I go to the works page
+      And I go to the works tagged "Supernatural"
     Then I should not see "Awesomeness"
       And I should not see the "alt" text "(Restricted)"
     When I am on fandomer's works page
     Then I should not see "Awesomeness"
     When I fill in "site_search" with "Awesomeness"
       And I press "search"
-    Then I should see "0 Found"
+    Then I should see "No results found"
       And I should not see "fandomer"
     
     # shows again if you log in as another user
@@ -60,7 +59,7 @@ Scenario: Editing posted work
       And I check "work_restricted"
     When I press "Preview"
     Then I should see the "title" text "Restricted" within "h2.title"
-    When I press "Update"
+    When I update the work
     Then I should see the "alt" text "(Restricted)" within "h2.title"
     When I go to the works page
     Then I should see "Sad generic work" within "h4"
@@ -78,14 +77,14 @@ Scenario: Editing posted work
       And I fill in "Notes" with "Random blather"
       And I press "Preview"
     Then I should see the "alt" text "(Restricted)" within "h2.title"
-    When I press "Update"
+    When I update the work
     Then I should see "Work was successfully updated."
       And I should see the "alt" text "(Restricted)" within "h2.title"
     When I edit the work "Sad generic work"
       And I uncheck "work_restricted"
       And I press "Preview"
     Then I should not see the "alt" text "(Restricted)"
-    When I press "Update"
+    When I update the work
     Then I should see "Work was successfully updated."
       And I should not see the "alt" text "(Restricted)"
     When I am logged out

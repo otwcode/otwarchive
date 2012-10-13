@@ -17,7 +17,7 @@
   <li class="search" role="search">
     <%= form_tag (@collection ? collection_people_path(@collection) : people_path), :class => "simple search", :method => :get do |form| %>
       <fieldset>
-	      <%= text_field_tag "query", @query, :title => "search" %>
+	      <%= text_field_tag :query, params[:query], :title => "search" %>
         <%= submit_tag "Search" %>
       </fieldset>
     <% end %>

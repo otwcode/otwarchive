@@ -1,17 +1,12 @@
 <!--SEARCHBROWSE-->
 <h2 class="heading"><%= ts("People Search: Alpha") %></h2>
 
-<ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Work Search"), search_index_path(:query => @query) %></li>
-  <li><%= span_if_current ts("Tag Search"), search_tags_path %></li>
-  <li><%= span_if_current ts("Bookmark Search"), search_bookmarks_path %></li>
-  <li><%= span_if_current ts("People Search"), search_people_path %></li>
-</ul>
+<%= render 'shared/search_nav' %>
 
 <%= render :partial => 'people/search_form' %>
 
 <% if @people %>
-  <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
+  <p><strong><%= @people.total_entries %> Found</strong></p>
   <h3 class="landmark heading">People List</h3>
   <ol class="pseud index group">
     <% for person in @people %>

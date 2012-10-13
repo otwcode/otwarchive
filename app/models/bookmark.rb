@@ -1,6 +1,8 @@
 class Bookmark < ActiveRecord::Base
 
   include Collectible
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
@@ -59,6 +61,8 @@ class Bookmark < ActiveRecord::Base
       (external_works.hidden_by_admin = 0)")
 
   scope :visible_to_admin, not_private
+
+  scope :latest, is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -128,29 +132,181 @@ class Bookmark < ActiveRecord::Base
     end
     return self.tags
   end
+  
+  def self.list_without_filters(owner, options)
+    bookmarks = owner.bookmarks
+    user = nil
+    if %w(Pseud User).include?(owner.class.to_s)
+      user = owner.respond_to?(:user) ? owner.user : owner
+    end
+    unless User.current_user == user
+      bookmarks = bookmarks.is_public
+    end
+    bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+  end
+  
+  #################################
+  ## SEARCH #######################
+  #################################
 
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes bookmarkable_type, :as => 'type'
-    indexes notes
-
-    # associations
-    indexes pseud(:name), :as => 'bookmarker'
-    indexes tags(:name), :as => 'tag'
-# TODO polymorphic associations can’t currently be used in field or attribute definitions. This will be fixed at some point.
-#    indexes bookmarkable.tags(:name), :as => 'indirect'
-
-    # attributes
-    has rec, updated_at, bookmarkable_id
-
-    # Don't index private and hidden bookmarks
-    where "private = 0 AND hidden_by_admin = 0"
-
-    # properties
-#    set_property :delta => :delayed
+  self.include_root_in_json = false
+  def to_indexed_json
+    to_json(methods: 
+      [ :bookmarker, 
+        :with_notes,
+        :bookmarkable_pseud_names, 
+        :bookmarkable_pseud_ids, 
+        :tag, 
+        :tag_ids, 
+        :filter_names, 
+        :filter_ids,
+        :fandom_ids, 
+        :character_ids, 
+        :relationship_ids, 
+        :freeform_ids, 
+        :rating_ids, 
+        :warning_ids, 
+        :category_ids, 
+        :bookmarkable_title, 
+        :bookmarkable_posted, 
+        :bookmarkable_restricted, 
+        :bookmarkable_hidden,
+        :bookmarkable_complete, 
+        :bookmarkable_language_id, 
+        :collection_ids, 
+        :bookmarkable_collection_ids,
+        :bookmarkable_date
+      ])
+  end 
+  
+  def bookmarker
+    pseud.name
   end
 
+  def with_notes
+    notes.present?
+  end
+  
+  def bookmarkable_pseud_names
+    if bookmarkable.respond_to?(:creator)
+      bookmarkable.creator
+    elsif bookmarkable.respond_to?(:pseuds)
+      bookmarkable.pseuds.value_of(:name)
+    elsif bookmarkable.respond_to?(:author)
+      bookmarkable.author
+    end
+  end
+  
+  def bookmarkable_pseud_ids
+    if bookmarkable.respond_to?(:creatorships)
+      bookmarkable.creatorships.value_of(:pseud_id)
+    end
+  end
+  
+  def tag
+    self.tags.value_of(:name)
+  end
+  
+  def tag_ids
+    self.tags.value_of(:id)
+  end
+  
+  def filters
+    if @filters.nil?
+      @filters = filters_for_facets
+      if bookmarkable.respond_to?(:filters)
+        @filters = (@filters + bookmarkable.filters.where("filter_taggings.inherited = 1")).uniq
+      end
+    end
+    @filters
+  end
+
+  def filters_for_facets
+    if @facet_filters.nil?
+      @facet_filters = self.tags.map{ |t| t.filter }.compact
+      if bookmarkable.respond_to?(:filters)
+        @facet_filters = (@facet_filters + bookmarkable.filters.where("filter_taggings.inherited = 0")).uniq
+      end
+    end
+    @facet_filters
+  end
+  
+  def filter_names
+    filters.map{ |t| t.name }
+  end
+
+  def filter_ids
+    filters.map{ |t| t.id }
+  end
+  
+  def fandom_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
+  end
+  
+  def character_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
+  end
+  
+  def relationship_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
+  end
+  
+  def freeform_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  end
+  
+  def rating_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
+  end
+  
+  def warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  end
+  
+  def category_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
+  end
+  
+  def collection_ids
+    collections.value_of(:id, :parent_id).flatten.uniq.compact
+  end
+  
+  def bookmarkable_collection_ids
+    if bookmarkable.respond_to?(:collections)
+      bookmarkable.collections.value_of(:id, :parent_id).flatten.uniq.compact
+    end
+  end
+  
+  def bookmarkable_title
+    bookmarkable.try(:title)
+  end
+  
+  def bookmarkable_posted
+    !bookmarkable.respond_to?(:posted) || bookmarkable.posted?
+  end
+  
+  def bookmarkable_restricted
+    bookmarkable.respond_to?(:restricted) && bookmarkable.restricted?
+  end
+
+  def bookmarkable_hidden
+    bookmarkable.respond_to?(:hidden_by_admin) && bookmarkable.hidden_by_admin?
+  end
+  
+  def bookmarkable_complete
+    !bookmarkable.respond_to?(:complete) || bookmarkable.complete?
+  end
+  
+  def bookmarkable_language_id
+    bookmarkable.language_id if bookmarkable.respond_to?(:language_id)
+  end
+
+  def bookmarkable_date
+    if bookmarkable.respond_to?(:revised_at)
+      bookmarkable.revised_at
+    elsif bookmarkable.respond_to?(:updated_at)
+      bookmarkable.updated_at
+    end
+  end 
 
 end

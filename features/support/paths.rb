@@ -10,6 +10,15 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /^the search bookmarks page$/i
+      Bookmark.tire.index.refresh
+      search_bookmarks_path
+    when /^the search tags page$/i
+      Tag.tire.index.refresh
+      search_tags_path
+    when /^the search works page$/i
+      Work.tire.index.refresh
+      search_works_path      
 
     # the following are examples using path_to_pickle
 
@@ -36,12 +45,14 @@ module NavigationHelpers
     when /^(.*)'s user url$/i
       user_url(:id => $1).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^(.*)'s works page$/i
+      Work.tire.index.refresh
       user_works_path(:user_id => $1)
     when /^the "(.*)" work page/
       work_path(Work.find_by_title($1))
     when /^the work page with title (.*)/
       work_path(Work.find_by_title($1))
     when /^(.*)'s bookmarks page$/i
+      Bookmark.tire.index.refresh
       user_bookmarks_path(:user_id => $1)
     when /^(.*)'s pseuds page$/i
       user_pseuds_path(:user_id => $1)
@@ -62,6 +73,7 @@ module NavigationHelpers
     when /my preferences page/
       user_preferences_path(User.current_user)
     when /my bookmarks page/
+      Bookmark.tire.index.refresh
       user_bookmarks_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)      
@@ -94,12 +106,16 @@ module NavigationHelpers
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)"$/i
+      Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
+      Work.tire.index.refresh
       tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^the works tagged "(.*)" in collection "(.*)"$/i
+      Work.tire.index.refresh
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
+      Work.tire.index.refresh
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^the admin-posts page$/i
       admin_posts_path
@@ -116,7 +132,7 @@ module NavigationHelpers
     when /^the "(.*)" tag ?set edit page$/i
       edit_tag_set_path(OwnedTagSet.find_by_title($1))    
     when /^the "(.*)" tag ?set page$/i
-      tag_set_path(OwnedTagSet.find_by_title($1))    
+      tag_set_path(OwnedTagSet.find_by_title($1))
       
     # Here is an example that pulls values out of the Regexp:
     #
@@ -137,3 +153,4 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
+

@@ -1,4 +1,7 @@
 class Pseud < ActiveRecord::Base
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   attr_protected :description_sanitizer_version
 
@@ -18,6 +21,7 @@ class Pseud < ActiveRecord::Base
   DESCRIPTION_MAX = 500
 
   belongs_to :user
+  delegate :login, :to => :user, :prefix => true
   has_many :kudos
   has_many :bookmarks, :dependent => :destroy
   has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
@@ -242,12 +246,12 @@ class Pseud < ActiveRecord::Base
   # Parse a string of the "pseud.name (user.login)" format into a pseud
   def self.parse_byline(byline, options = {})
     pseud_name = ""
-    user_login = ""
+    login = ""
     if byline.include?("(")
-      pseud_name, user_login = byline.split('(', 2)
+      pseud_name, login = byline.split('(', 2)
       pseud_name = pseud_name.strip
-      user_login = user_login.strip.chop
-      conditions = ['users.login = ? AND pseuds.name = ?', user_login, pseud_name]
+      login = login.strip.chop
+      conditions = ['users.login = ? AND pseuds.name = ?', login, pseud_name]
     else
       pseud_name = byline.strip
       if options[:assume_matching_login]
@@ -373,29 +377,33 @@ class Pseud < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes :name
-    indexes :description
-    indexes :icon_alt_text
-
-    # associations
-    indexes user(:login), :as => 'user'
-#    indexes works(:id), :as => 'work_id'
-#    indexes tags(:name), :as => 'tag'
-
-    # attributes
-    has bookmarks(:id), :as => :bookmarks_ids
-    has "COUNT(bookmarks.id)", :as => 'bookmark_count', :type => :integer
-
-#    has creatorship.creation(:id), :as => :creation_ids
-#    has "COUNT(works.id)", :as => 'work_count', :type => :integer
-
-    # properties
-#    set_property :delta => :delayed
+  
+  #################################
+  ## SEARCH #######################
+  #################################
+  
+  mapping do
+    indexes :name, boost: 20
+  end
+  
+  def collection_ids
+    collections.value_of(:id)
+  end
+  
+  self.include_root_in_json = false
+  def to_indexed_json
+    to_json(methods: [:user_login, :collection_ids])
+  end
+  
+  def self.search(options={})
+    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
+      query do
+        boolean do
+          must { string options[:query], default_operator: "AND" } if options[:query].present?
+          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
+        end
+      end
+    end
   end
 
 end

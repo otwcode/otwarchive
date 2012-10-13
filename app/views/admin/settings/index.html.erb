@@ -19,6 +19,8 @@
     <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
     <dt><%= f.label :days_to_purge_unactivated, "How much time (in days) do you have for activating your account before we purge it:" %> </dt>
     <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+    <dt><%= f.label :disable_filtering, "Turn off filtering on index pages" %></dt>
+    <dd><%= f.check_box :disable_filtering %> </dd>
     <dt><%= f.label :suspend_filter_counts, "Suspend some filter tracking due to high posting volume" %></dt>
     <dd><%= f.check_box :suspend_filter_counts %> </dd>
     <dt><%= f.label :tag_wrangling_off, "Turn off tag wrangling for non-admins" %></dt>
