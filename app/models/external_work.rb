@@ -2,11 +2,9 @@ include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   
   include Taggable
+  include Bookmarkable
 
   attr_protected :summary_sanitizer_version
-  
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
   
   has_many :related_works, :as => :parent  
   

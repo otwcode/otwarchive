@@ -47,7 +47,8 @@
     <li><%= span_if_current('bookmarks', bookmarks_path) %></li>
     <li><%= span_if_current('tags', tags_path) %></li>
     <li><%= span_if_current('collections', collections_path) %></li>
-	<li class="search"><%= render :partial => 'works/search_box' %></li>
+    <li class="search"><%= render :partial => 'works/search_box' %></li>
+    <li><%= link_to ts("Advanced Search"), search_works_path, class: 'unbuttoned' %></li>
   </ul>
 
   <% if logged_in_as_admin? %>

@@ -4,6 +4,7 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
+  before_filter :load_owner, :only => [ :index ]
   before_filter :users_only, :except => [ :index, :show, :navigate, :search ]
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts ]
@@ -22,122 +23,36 @@ class WorksController < ApplicationController
 
   def search
     @languages = Language.default_order
-    @query = {}
-    # to understand this, the code you are looking for is in lib/query.rb
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @works = Query.search_with_sphinx(Work, @query, page)
-        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
-      end
+    options = params[:work_search] || {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    @search = WorkSearch.new(options)
+    if params[:work_search].present? && params[:edit_search].blank?
+      @works = @search.search_results
+      render 'search_results'
     end
   end
 
   # GET /works
   def index
-    @sort_column = case params[:sort_column]
-      when 'author'
-        'authors_to_sort_on'
-      when 'title'
-        'title_to_sort_on' 
-      when 'word_count'
-        'word_count'
-      when 'hit_count'
-        'hit_count'
-      when 'created_at'
-        'created_at'
-      else
-        'revised_at'
-      end
-    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
-    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
-      params[:sort_direction] = 'DESC'
+    if params[:work_search].present?
+      options = params[:work_search].dup
+    else
+      options = {}
     end
-    # numerical ids for now
-    unless params[:selected_pseuds].blank?
-      begin
-        @selected_pseuds = Pseud.find(params[:selected_pseuds]).collect(&:id).uniq
-      rescue
-        setflash; flash[:error] = ts("Sorry, we couldn't find one or more of the authors you selected. Please try again.")
-      end
-    end
-
-    # if we're browsing by a particular tag, just add that
-    # tag to the selected_tags list.
-    unless params[:tag_id].blank?
-      @tag = Tag.find_by_name(params[:tag_id])
-      if @tag
-        @page_subtitle = @tag.name
-        @tag = @tag.merger if @tag.merger
-        redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
-      else
-        setflash; flash[:error] = ts("Sorry, there's no tag by that name in our system.")
-        redirect_to works_path
-        return
-      end
-    end
-    if params[:fandom_id].present?
-      @fandom = Fandom.find_by_id(params[:fandom_id])
-    end
+    options.merge!(page: params[:page])
+    options[:show_restricted] = current_user.present?
+    @page_title = index_page_title
     
-    if @collection
-      @page_subtitle = @collection.title
-    end
-
-    # if we're browsing by a particular user get works by that user
-    @selected_pseuds = []
-    unless params[:user_id].blank?
-      @user = User.find_by_login(params[:user_id])
-      if @user
-        unless params[:pseud_id].blank?
-          @author = @user.pseuds.find_by_name(params[:pseud_id])
-          if @author
-            @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
-          end
-        end
-        @page_subtitle = ts("by %{name}", :name => (@author ? @author.byline : @user.login))
+    if @owner.present?
+      if @admin_settings.disable_filtering?
+        @works = Work.list_without_filters(@owner, options)
       else
-        setflash; flash[:error] = ts("Sorry, there's no user by that name in our system.")
-        redirect_to works_path
-        return
-      end
-    end
-
-    @language = Language.find_by_short(params[:language_id]) if params[:language_id]
-    
-    # Now let's build the query
-    options = {
-      :user => @user, 
-      :author => @author, 
-      :selected_pseuds => @selected_pseuds,
-      :tag => @tag || @fandom, 
-      :collection => @collection,
-      :language_id => @language,
-      :sort_column => @sort_column, 
-      :sort_direction => @sort_direction,
-      :page => params[:page], 
-      :per_page => params[:per_page],
-      :complete => params[:complete]
-    }
-    # Add caching for tag pages
-    if @tag.present? && !@collection.present? && params[:sort_column].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
-      status = logged_in? ? "u" : "v"
-      page = params[:page] || 1
-      # This has views/ in it because that's what expire_fragment is looking for
-      @works = Rails.cache.fetch "views/works/t/#{@tag.id}/#{status}/p/#{page}" do
-        Work.find_with_options(options).compact
+        @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        @works = @search.search_results
       end
     else
-      @works = Work.find_with_options(options)
+      @works = Work.latest
     end
-
-    # we now have @works found
-    # only need to check this if the filters expose info about the works
-#    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-    @over_anon_threshold = true
   end
 
   def drafts
@@ -728,6 +643,26 @@ public
   end
 
   protected
+  
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id].present?
+        @author = @user.pseuds.find_by_name(params[:pseud_id])
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag.canonical?
+        if @tag.merger.present?
+          redirect_to tag_works_path(@tag.merger) and return
+        else
+          redirect_to tag_path(@tag) and return
+        end
+      end
+    end
+    @owner = @author || @user || @collection || @tag
+  end
 
   def load_pseuds
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -850,6 +785,24 @@ public
       tag_list.html_safe
     else
       ""
+    end
+  end
+  
+  def index_page_title
+    if @owner.present?
+      owner_name = case @owner.class.to_s
+                   when 'Pseud'
+                     @owner.name
+                   when 'User'
+                     @owner.login
+                   when 'Collection'
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      "#{owner_name} &raquo; Works".html_safe
+    else
+      "Latest Works"
     end
   end
 

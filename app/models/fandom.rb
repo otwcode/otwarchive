@@ -1,6 +1,7 @@
 class Fandom < Tag
 
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
+  index_name Tag.index_name
   
   has_many :wrangling_assignments
   has_many :wranglers, :through => :wrangling_assignments, :source => :user

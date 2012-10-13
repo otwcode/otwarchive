@@ -82,6 +82,17 @@ class CollectionItem < ActiveRecord::Base
       self.anonymous = true if collection.anonymous?
     end
   end
+  
+  after_save :update_work
+  after_destroy :update_work
+  # Set associated works to anonymous or unrevealed
+  # Check for chapters to avoid work association creation order shenanigans
+  def update_work
+    return unless item_type == 'Work' && work.present? && work.chapters.present?
+    work.in_unrevealed_collection = work.collection_items.where(:unrevealed => true).exists?
+    work.in_anon_collection = work.collection_items.where(:anonymous => true).exists?
+    work.save!
+  end
 
   before_save :approve_automatically
   def approve_automatically

@@ -375,13 +375,21 @@ class Collection < ActiveRecord::Base
   end
   
   def reveal!
-    approved_collection_items.update_all("unrevealed = 0")
+    async(:reveal_collection_items)
     async(:send_reveal_notifications)
   end
 
   def reveal_authors!
-    approved_collection_items.update_all("anonymous = 0")
+    async(:reveal_collection_item_authors)
     async(:send_author_reveal_notifications)
+  end
+  
+  def reveal_collection_items
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+  end
+  
+  def reveal_collection_item_authors
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
   
   def send_reveal_notifications

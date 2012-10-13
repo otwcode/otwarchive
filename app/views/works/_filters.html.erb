@@ -1,19 +1,73 @@
-<%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
+<%= form_for @search, 
+  url: (@collection ? collection_works_path(@collection) : works_path), 
+  html: { 
+    :method => :get, 
+    :class => 'filters', 
+    :id => 'work_filters'
+  } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
-    <p>Tag filtering is undergoing maintenance and will return shortly. <%= link_to_help "filters-info" %></p>
-    <p>To narrow your results, consider using <%= link_to "advanced search", search_path %>.</p>
     <dl class="filters" role="menu">
+      <dt>
+        <%= f.label :sort_column, ts("Sort by") %>
+      </dt>
+      <dd>
+        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
+      </dd>
+      <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
+        <dt>
+          <noscript><%= tag_type.capitalize %></noscript>
+          <span class="tag_category_<%= tag_type %>_open hidden">
+            <%= image_tag 'arrow-right.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+          <span class="tag_category_<%= tag_type %>_close hidden">
+            <%= image_tag 'arrow-down.gif', :alt => "" %>
+            <%= tag_type.capitalize %>
+          </span>
+        </dt>
+        <dd id="tag_category_<%= tag_type %>" class="tags toggled">
+          <ul>              
+            <% @works.facets[tag_type]['terms'].each do |facet| %>
+              <li>
+                <% tag = Tag.find(facet['term']) %>
+                <% if (tag_type == "rating") && @works.facets[tag_type]['terms'].length > 1 %>
+                  <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
+                    tag.id, 
+                    @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                    :id => "work_search_#{tag_type}_ids_#{tag.id}" %> 
+                <% else %>
+                  <%= check_box_tag "work_search[#{tag_type}_ids][]", 
+                    tag.id,
+                    @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                    :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
+                <% end %>
+                <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
+                  "#{tag.name} (#{facet['count']})" %>
+              </li>
+            <% end %>
+          </ul>
+        </dd>
+      <% end %>
+      <dt><%= f.label 'other_tag_names', ts("Other tags") %></dt>
+      <dd>
+        <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
+      </dd>
+      <dt><%= f.label :query, ts("Search within results") %></dt>
+      <dd><%= f.text_field :query %></dd>
       <dt><%= ts("Language") %></dt>
-      <dd><%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %></dd>
+      <dd><%= f.collection_select(:language_id, Language.default_order, :id, :name, :prompt => true) %></dd>
       <dt><%= ts("Status") %></dt>
-      <dd><%= check_box_tag 'complete', '1', params[:complete] == '1' %><%= label_tag 'complete', "Complete only" %></dd>
+      <dd>
+        <%= f.check_box :complete %>
+        <%= f.label :complete, ts("Complete only") %>
+      </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
+      <dd class="submit actions"><%= f.submit ts('Filter Works') %></dd>
     </dl>
     <div>
+      <%= hidden_field_tag("collection_id", @collection.id) if @collection %>
       <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
-      <%= hidden_field_tag("query", @query) if @query %>
       <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>

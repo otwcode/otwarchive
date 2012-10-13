@@ -35,16 +35,10 @@ class TagsController < ApplicationController
   end
 
   def search
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @tags = Query.search_with_sphinx(Tag, @query, page)
-        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
-      end
+    if params[:query].present?
+      options = params[:query].dup
+      options.merge!(:page => params[:page] || 1)
+      @tags = Tag.search(options)
     end
   end
 

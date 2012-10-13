@@ -59,7 +59,4 @@ Otwarchive::Application.configure do
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
 
-  ThinkingSphinx.remote_sphinx = true
-  ThinkingSphinx.updates_enabled = false
-
 end

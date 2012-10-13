@@ -5,7 +5,7 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INDEX PAGES (with filters)*/
 
-.works-index .index, .collections-index .index {
+.filtered .index {
   width: 75%;
   float: left;
 }
