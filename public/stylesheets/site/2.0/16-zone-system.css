@@ -41,6 +41,13 @@ SUBSECTIONS:
     text-shadow: none;
 }
 
+.system .module h2 {
+  font: bold oblique 1.5em Georgia, serif;
+  line-height: 1.75;
+  display: block;
+  text-align: center;
+}
+
 .system .intro p {
   padding: 0 0.75em;
 }
@@ -87,6 +94,18 @@ SUBSECTIONS:
 }
 
 .system .tweet_time {
+  font-family: monospace;
+}
+
+.system .tweets p {
+  margin-bottom: 0;
+}
+
+.system .tweets .tweet {
+  margin: 1.25em 0.5em 0; 
+}
+
+.system .tweets .time {
   font-family: monospace;
 }
 

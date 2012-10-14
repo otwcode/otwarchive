@@ -7,7 +7,7 @@
   <div class="intro module">
   <h2 class="heading"><%= ts('Welcome to the Archive of Our Own!') %></h2>
   <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fanvids, and podfic.") %></p>
-  <p><%= ts('Our goal is') %> <a href="http://www.archiveofourown.org/tos_faq#max_inclusiveness"><%= ts('maximum inclusiveness')%></a><%= ts('. However, while the archive is in beta, invitations are needed to create an account so we can manage our growth while continuing to improve the site.') %></p>
+  <p><%= ts('Our goal is') %> <a href="http://www.archiveofourown.org/tos_faq#max_inclusiveness"><%= ts('maximum inclusiveness')%></a><%= ts('. However, while the Archive is in beta, invitations are needed to create an account so we can manage our growth while continuing to improve the site.') %></p>
   <p><%= ts("The Archive of Our Own is a project of the ") %><a href="http://transformativeworks.org"><%= ts("Organization for Transformative Works") %></a><%= ts(".") %></p>
     <% if logged_in? %>
       <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Invite a friend'), user_invitations_path(current_user) %></p> 
@@ -66,52 +66,62 @@
         $j("#ao3org").tweet({
           username: "ao3org",
           count: 1,
-          fetch: 10,
+          fetch: 20,
           retweets: false,
           filter: function(t){ return ! /^@\w+/.test(t.tweet_raw_text); },
           loading_text: "Loading tweets...",
           join_text: ":",
           template: "{user}{join} {text} {time}"
+        }).bind("empty", function() {
+        $j(this).append('Follow <a href="http://twitter.com/ao3org">@ao3org</a> for general site news.');
         });
         $j("#ao3_status").tweet({
           username: "ao3_status",
           count: 1,
-          fetch: 10,
+          fetch: 20,
           retweets: false,
           filter: function(t){ return ! /^@\w+/.test(t.tweet_raw_text); },
           loading_text: "Loading tweets...",
           join_text: ":",
           template: "{user}{join} {text} {time}"
+        }).bind("empty", function() {
+        $j(this).append('Follow <a href="http://twitter.com/AO3_Status">@AO3_Status</a> for site performance updates.');
         });
         $j("#ao3_wranglers").tweet({
           username: "ao3_wranglers",
           count: 1,
-          fetch: 10,
+          fetch: 20,
           retweets: false,
           filter: function(t){ return ! /^@\w+/.test(t.tweet_raw_text); },
           loading_text: "Loading tweets...",
           join_text: ":",
           template: "{user}{join} {text} {time}"
+        }).bind("empty", function() {
+        $j(this).append('Follow <a href="http://twitter.com/ao3_wranglers">@ao3_wranglers</a> for Tag Wrangling updates.');
         });
         $j("#fanlore_news").tweet({
           username: "fanlore_news",
           count: 1,
-          fetch: 10,
+          fetch: 20,
           retweets: false,
           filter: function(t){ return ! /^@\w+/.test(t.tweet_raw_text); },
           loading_text: "Loading tweets...",
           join_text: ":",
           template: "{user}{join} {text} {time}"
+        }).bind("empty", function() {
+        $j(this).append('Follow <a href="http://twitter.com/fanlore_news">@fanlore_news</a> for news from the Fanlore wiki.');
         });
         $j("#otw_news").tweet({
           username: "otw_news",
           count: 1,
-          fetch: 10,
+          fetch: 20,
           retweets: false,
           filter: function(t){ return ! /^@\w+/.test(t.tweet_raw_text); },
           loading_text: "Loading tweets...",
           join_text: ":",
           template: "{user}{join} {text} {time}"
+        }).bind("empty", function() {
+        $j(this).append('Follow <a href="http://twitter.com/otw_news">@OTW_News</a> for news from The Organization for Transformative Works.');
         });
       });
 </script>
