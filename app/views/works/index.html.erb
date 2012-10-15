@@ -33,7 +33,7 @@
 <!---/subnav-->
 
 <% if @works.respond_to?(:total_pages) %>
-  <!-- <%= will_paginate @works %> -->
+  <%= will_paginate @works %>
 <% end %>
 
 <!--main content-->
