@@ -754,13 +754,14 @@ class Tag < ActiveRecord::Base
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
       tag_to_remove = Tag.find(tag_id)
       if tag_to_remove
-        self.async(:remove_association, tag_to_remove)
+        self.async(:remove_association, tag_to_remove.id)
       end
     end
   end
   
   # Determine how two tags are related and divorce them from each other
-  def remove_association(tag)
+  def remove_association(tag_id)
+    tag = Tag.find(tag_id)
     if tag.class == self.class
       if self.mergers.include?(tag)
         tag.update_attributes(:merger_id => nil)
