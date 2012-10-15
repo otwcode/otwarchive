@@ -78,7 +78,14 @@ class WorkSearch < Search
             must { terms :pseud_ids, search_opts[:pseud_ids] }
           end
           
-          [:filter_ids, :rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, :collection_ids].each do |id_list|
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[:filter_ids] ||= []
+              search_opts[:filter_ids] += search_opts[id_list]
+            end
+          end
+          
+          [:filter_ids, :collection_ids].each do |id_list|
             if search_opts[id_list].present?
               search_opts[id_list].each do |id|
                 must { term id_list, id }

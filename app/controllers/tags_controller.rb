@@ -281,7 +281,7 @@ class TagsController < ApplicationController
       params[:remove_associated].each do |tag_id|
         tag_to_remove = Tag.find(tag_id)
         if tag_to_remove
-          @tag.remove_association(tag_to_remove)
+          @tag.remove_association(tag_to_remove.id)
           saved << tag_to_remove
         end
       end
