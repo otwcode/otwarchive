@@ -330,6 +330,8 @@ class Pseud < ActiveRecord::Base
     elsif creation.is_a?(Series) && options[:skip_series]
       creation.works.each {|work| self.change_ownership(work, pseud)}
     end
+    # make sure changes affect caching/search/author fields
+    creation.save
   end
 
   def change_membership(collection, new_pseud)
