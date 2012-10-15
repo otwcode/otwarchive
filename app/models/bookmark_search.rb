@@ -82,9 +82,14 @@ class BookmarkSearch < Search
             must { terms :pseud_id, search_opts[:pseud_ids] }
           end
           
-          [:filter_ids, :tag_ids, :rating_ids, :warning_ids, :category_ids, :fandom_ids, 
-            :character_ids, :relationship_ids, :freeform_ids, :collection_ids, 
-            :bookmarkable_collection_ids].each do |id_list|
+          [:rating_ids, :warning_ids, :category_ids, :fandom_ids, :character_ids, :relationship_ids, :freeform_ids].each do |id_list|
+            if search_opts[id_list].present?
+              search_opts[:filter_ids] ||= []
+              search_opts[:filter_ids] += search_opts[id_list]
+            end
+          end
+          
+          [:filter_ids, :tag_ids, :collection_ids, :bookmarkable_collection_ids].each do |id_list|
             if search_opts[id_list].present?
               search_opts[id_list].each do |id|
                 must { term id_list, id }
@@ -150,13 +155,13 @@ class BookmarkSearch < Search
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        tags = Tag.where(:name => names)
+        tags = Tag.where(:name => names, :canonical => true)
         unless tags.empty?
           options[:filter_ids] ||= []
           options[:filter_ids] += tags.map{ |tag| tag.id }
         end
         leftovers = names - tags.map{ |tag| tag.name }
-        options[:tag_names] << leftovers.join(" ") + " "
+        options[:tag] << leftovers.join(" ") + " "
       end
     end
   end
@@ -236,8 +241,8 @@ class BookmarkSearch < Search
       summary << "Notes: #{options[:notes]}"
     end
     tags = []
-    if options[:tag_names].present?
-      tags << options[:tag_names]
+    if options[:tag].present?
+      tags << options[:tag]
     end
     [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?

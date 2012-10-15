@@ -65,6 +65,11 @@ class Series < ActiveRecord::Base
     self.works.posted
   end
   
+  # Get the filters for the works in this series
+  def filters
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1").group("tags.id")
+  end
+  
   # visibility aped from the work model
   def visible(current_user=User.current_user)
     if current_user.is_a?(Admin) || (current_user.is_a?(User) && current_user.is_author_of?(self))

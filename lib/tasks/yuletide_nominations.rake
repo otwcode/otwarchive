@@ -449,7 +449,7 @@ namespace :yuletide do
           if @char_tag && @fandom_tag
             # get it out of this fandom
             puts "\tUnwrangling #{@char_tag.name} from #{@fandom_tag.name}"
-            @char_tag.remove_association(@fandom_tag) unless @dry_run
+            @char_tag.remove_association(@fandom_tag.id) unless @dry_run
           end
         else
           # check to see if the char tag exists and if not, create it        
