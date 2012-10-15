@@ -31,6 +31,8 @@ class BookmarksController < ApplicationController
     @languages = Language.default_order
     options = params[:bookmark_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
+    options[:show_private] = false    
+    options[:show_restricted] = current_user.present?
     @search = BookmarkSearch.new(options)
     if params[:bookmark_search].present? && params[:edit_search].blank?
       @bookmarks = @search.search_results
@@ -164,7 +166,7 @@ class BookmarksController < ApplicationController
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
       if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
       end
     end
     if params[:tag_id]
