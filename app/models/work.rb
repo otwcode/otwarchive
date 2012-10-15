@@ -2,8 +2,11 @@ class Work < ActiveRecord::Base
 
   include Taggable
   include Collectible
+  include Bookmarkable
   include Pseudable
   include WorkStats
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -35,9 +38,6 @@ class Work < ActiveRecord::Base
   has_many :gifts, :dependent => :destroy
   accepts_nested_attributes_for :gifts, :allow_destroy => true
 
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
-  
   has_many :subscriptions, :as => :subscribable, :dependent => :destroy
 
   has_many :challenge_assignments, :as => :creation
@@ -133,17 +133,22 @@ class Work < ActiveRecord::Base
 
   # Checks that work has at least one author
   def validate_authors
-    if self.authors.blank?
-      if self.pseuds.blank?
-        errors.add(:base, ts("Work must have at least one author."))
-        return false
-      else
-        self.authors_to_sort_on = self.sorted_pseuds
-      end
+    if self.authors.blank? && self.pseuds.blank?
+      errors.add(:base, ts("Work must have at least one author."))
+      return false
     elsif !self.invalid_pseuds.blank?
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
-    else
+    end
+  end
+  
+  # Set the authors_to_sort_on value, which should be anon for anon works
+  def set_author_sorting
+    if self.anonymous?
+      self.authors_to_sort_on = "Anonymous"
+    elsif self.authors.present?
       self.authors_to_sort_on = self.sorted_authors
+    else
+      self.authors_to_sort_on = self.sorted_pseuds
     end
   end
 
@@ -179,18 +184,17 @@ class Work < ActiveRecord::Base
     end
   end
 
-
-
   ########################################################################
   # HOOKS
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :validate_authors, :set_author_sorting, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
+  before_create :set_anon_unrevealed
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
@@ -211,6 +215,21 @@ class Work < ActiveRecord::Base
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
+  end
+  
+  ########################################################################
+  # RESQUE
+  ########################################################################
+  
+  @queue = :utilities
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
+
+  # We can pass this any Work instance method that we want to run later.
+  def async(method, *args)
+    Resque.enqueue(Work, id, method, *args)
   end
 
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
@@ -377,12 +396,21 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    !self.collection_items.unrevealed.empty?
+    #!self.collection_items.unrevealed.empty?
+    in_unrevealed_collection?
   end
 
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    !self.collection_items.anonymous.empty?
+    #!self.collection_items.anonymous.empty?
+    in_anon_collection?
+  end
+  
+  # Set the anonymous/unrevealed status of the work based on its collections
+  def set_anon_unrevealed
+    self.in_anon_collection = !self.collections.select{|c| c.anonymous? }.empty?
+    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+    return true
   end
 
   ########################################################################
@@ -885,14 +913,12 @@ class Work < ActiveRecord::Base
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
 
-  scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
-
-  # ugh, have to do a left join here
-  scope :revealed, joins("LEFT JOIN collection_items ON collection_items.item_id = works.id AND collection_items.item_type = 'Work'
-                          AND collection_items.user_approval_status = #{CollectionItem::APPROVED}
-                          AND collection_items.collection_approval_status = #{CollectionItem::APPROVED}
-                          AND collection_items.unrevealed = 1").
-                   where("collection_items.id IS NULL")
+  scope :unrevealed, where(:in_unrevealed_collection => true)
+  scope :revealed, where(:in_unrevealed_collection => false)
+  scope :latest, visible_to_all.
+                 revealed.
+                 order("revised_at DESC").
+                 limit(ArchiveConfig.ITEMS_PER_PAGE)
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
@@ -1048,6 +1074,41 @@ class Work < ActiveRecord::Base
     @works = @works.order(sort_by).posted.unhidden
     return @works.paginate(page_args.merge(:total_entries => @works.size))
   end
+  
+  def self.list_without_filters(owner, options)
+    works = case owner.class.to_s
+            when 'Pseud'
+              works = Work.written_by_id([owner.id])
+            when 'User'
+              works = Work.owned_by(owner)
+            when 'Collection'
+              works = Work.in_collection(owner)
+            else
+              if owner.is_a?(Tag)
+                works = owner.filtered_works
+              end
+            end
+    if options[:fandom_id]
+      fandom = Fandom.find_by_id(options[:fandom_id])
+      if fandom.present?
+        works = works.with_filter(fandom)
+      end
+    end
+    
+    if %w(Pseud User).include?(owner.class.to_s)
+      works = works.where(:in_anon_collection => false)
+    end
+    unless owner.is_a?(Collection)
+      works = works.revealed
+    end
+    if User.current_user.nil? || User.current_user == :false
+      works = works.unrestricted
+    end
+
+    works = works.posted
+    works = works.order("#{options[:sort_column]} #{options[:sort_direction].upcase}")
+    works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+  end
 
   ########################################################################
   # SORTING
@@ -1073,46 +1134,125 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
+  
+  
   #############################################################################
   #
-  # SEARCH
-  # settings and methods used with the ThinkingSphinx plugin
-  # that connects us to the Sphinx search engine.
+  # SEARCH INDEX
   #
   #############################################################################
 
-  # Index for Thinking Sphinx
-  define_index do
+  mapping do
+    indexes :authors_to_sort_on,  :index    => :not_analyzed
+    indexes :title_to_sort_on,    :index    => :not_analyzed
+    indexes :title,               :boost => 20
+    indexes :creator,             :boost => 15
+    indexes :revised_at,          :type  => 'date'
+  end
+  
+  def to_indexed_json
+    to_json(methods:
+      [ :rating_ids, 
+        :warning_ids, 
+        :category_ids, 
+        :fandom_ids, 
+        :character_ids, 
+        :relationship_ids, 
+        :freeform_ids, 
+        :filter_ids,
+        :tag, 
+        :pseud_ids, 
+        :collection_ids, 
+        :hits, 
+        :comments_count, 
+        :kudos_count, 
+        :bookmarks_count, 
+        :creator
+      ])
+  end
+  
+  # Simple name to make it easier for people to use in full-text search
+  def tag
+    (tags + filters).uniq.map{ |t| t.name }
+  end
 
-    # fields
-    indexes authors_to_sort_on, :as => 'author', :sortable => true
-    indexes title_to_sort_on, :as => 'title', :sortable => true
-    indexes summary
-    indexes notes
+  # Index all the filters for pulling works
+  def filter_ids
+    filters.value_of :id
+  end
 
-    # field associations
-    indexes tags(:name), :as => 'tag'
-    indexes language(:name), :as => 'language'
+  # Index only direct filters (non meta-tags) for facets
+  def filters_for_facets
+    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
+  end
+  def rating_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
+  end
+  def warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  end
+  def category_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
+  end
+  def fandom_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
+  end
+  def character_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
+  end
+  def relationship_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
+  end
+  def freeform_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  end
 
-#    forced to remove for performance reasons
-#    indexes chapters.content, :as => 'content'
+  def pseud_ids
+    creatorships.value_of :pseud_id
+  end
+  def collection_ids
+    collections.value_of(:id, :parent_id).flatten.uniq.compact
+  end
 
-    # attributes
-    has stat_counter.hit_count, :as => 'hit_count'
-    has word_count, revised_at
-    has posted, restricted, hidden_by_admin
-    has complete
-    has bookmarks.rec, :as => 'recced'
-    has bookmarks.pseud_id, :as => 'bookmarker'
+  def comments_count
+    self.stat_counter.comments_count
+  end
+  def kudos_count
+    self.stat_counter.kudos_count
+  end
+  def bookmarks_count
+    self.stat_counter.bookmarks_count
+  end
 
-    # properties
-#    set_property :delta => :delayed
-    set_property :field_weights => {
-                                     :title => 20, :author => 20,
-                                     :tag => 15, :filter => 15,
-                                     :language => 10,
-                                     :summary => 5, :notes => 5,
-                                    }
+  def creator
+    names = ""
+    if anonymous?
+      names = "Anonymous"
+    else
+      pseuds.each do |pseud|
+        names << "#{pseud.name} #{pseud.user_login} "
+      end
+      external_author_names.value_of(:name).each do |name|
+        names << "#{name} "
+      end
+    end
+    names
+  end  
+  
+  # Update the search index for both this work and its associated bookmarks
+  def async_work_and_bookmarks_index
+    async(:update_index)
+    async(:async_bookmarks_index)
+  end
+  
+  # This gets invoked as a callback in lib/work_stats.rb so we want to make
+  # sure it doesn't run synchronously for works with many bookmarks
+  def update_bookmarks_index
+    async(:async_bookmarks_index)
+  end
+  
+  def async_bookmarks_index
+    self.bookmarks.each{ |bookmark| bookmark.update_index }
   end
 
 end

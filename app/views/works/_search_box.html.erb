@@ -1,8 +1,10 @@
-<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :id => 'search', :method => :get do %>
+<%= form_for WorkSearch.new, :url => search_works_path, :html => {:class => 'search', :id => 'search', :method => :get} do |f| %>
   <fieldset>
-	<legend>Search works</legend>
-	<p><%= text_field_tag "query[text]", nil, :class => 'text', :title => 'site search', :id => 'site_search' %>
-	<span class="tip">tip: <%= random_search_tip %></span>
-  <span class="submit actions"><%= submit_tag t('.forms.search', :default => 'search'), :class => 'button', :name => nil %></span></p>
+    <legend>Search works</legend>
+    <p>
+      <%= f.text_field :query, :class => 'text', :title => 'site search', :id => 'site_search' %>
+      <span class="tip">tip: <%= random_search_tip %></span>
+      <span class="submit actions"><%= submit_tag ts('search'), :class => 'button', :name => nil %></span>
+    </p>
   </fieldset>
 <% end %>

@@ -64,6 +64,10 @@ every 10.minutes do
   rake "statistics:update_stat_counters"
 end
 
+every 30.minutes do
+  rake "statistics:update_stats"
+end
+
 # Move readings from redis to database
 every 10.minutes do
   rake "readings:to_database"

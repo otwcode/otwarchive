@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'bundler', '~>1.0.0'
+gem 'bundler'
 
 gem 'rails', '3.0.4'
 
@@ -28,10 +28,8 @@ gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
-gem 'thinking-sphinx',
-  :git     => 'git://github.com/pat/thinking-sphinx.git',
-  :require => 'thinking_sphinx'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
+gem 'tire'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'

@@ -2,11 +2,9 @@ include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   
   include Taggable
+  include Bookmarkable
 
   attr_protected :summary_sanitizer_version
-  
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
   
   has_many :related_works, :as => :parent  
   
@@ -95,7 +93,7 @@ class ExternalWork < ActiveRecord::Base
   ####################################################################### 
  
   # FILTERING CALLBACKS
-  before_save :check_filter_taggings
+  after_save :check_filter_taggings
   
   # Add and remove filter taggings as tags are added and removed
   def check_filter_taggings

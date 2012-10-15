@@ -35,16 +35,10 @@ class TagsController < ApplicationController
   end
 
   def search
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @tags = Query.search_with_sphinx(Tag, @query, page)
-        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
-      end
+    if params[:query].present?
+      options = params[:query].dup
+      options.merge!(:page => params[:page] || 1)
+      @tags = Tag.search(options)
     end
   end
 
@@ -287,7 +281,7 @@ class TagsController < ApplicationController
       params[:remove_associated].each do |tag_id|
         tag_to_remove = Tag.find(tag_id)
         if tag_to_remove
-          @tag.remove_association(tag_to_remove)
+          @tag.remove_association(tag_to_remove.id)
           saved << tag_to_remove
         end
       end

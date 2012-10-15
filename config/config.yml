@@ -187,7 +187,7 @@ NONZERO_INTEGER_PARAMETERS:
   per_page: 25
 
 # These fields are query fields and are allowed to contain "less than" values
-FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date"]
+FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
 
 
 # Only the following fields are allowed to have HTML. In all others,

@@ -27,7 +27,7 @@ Feature: Edit Works Dates
       And I should see "Fandom: first fandom"
       And I should see "first chapter content"
       And I should see "Published:2010-04-30"
-    When I press "Update"
+    When I update the work
     Then I should see "Work was successfully updated."
       And I should see "Published:2010-04-30"
       And I should not see Updated today

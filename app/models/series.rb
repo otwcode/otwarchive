@@ -1,4 +1,6 @@
 class Series < ActiveRecord::Base
+  include Bookmarkable
+
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
   has_many :work_tags, :through => :works, :uniq => true, :source => :tags
@@ -6,8 +8,6 @@ class Series < ActiveRecord::Base
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
 
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
@@ -63,6 +63,11 @@ class Series < ActiveRecord::Base
  
   def posted_works
     self.works.posted
+  end
+  
+  # Get the filters for the works in this series
+  def filters
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1").group("tags.id")
   end
   
   # visibility aped from the work model

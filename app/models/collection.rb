@@ -375,13 +375,21 @@ class Collection < ActiveRecord::Base
   end
   
   def reveal!
-    approved_collection_items.update_all("unrevealed = 0")
+    async(:reveal_collection_items)
     async(:send_reveal_notifications)
   end
 
   def reveal_authors!
-    approved_collection_items.update_all("anonymous = 0")
+    async(:reveal_collection_item_authors)
     async(:send_author_reveal_notifications)
+  end
+  
+  def reveal_collection_items
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+  end
+  
+  def reveal_collection_item_authors
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
   
   def send_reveal_notifications
@@ -408,12 +416,7 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
-    if sort.match /item_count/
-      query = query.with_item_count
-      pagination_args.merge!({:order => sort})
-    else
-      query = query.order(sort)
-    end
+    query = query.order(sort)
 
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
