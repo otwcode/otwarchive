@@ -601,7 +601,7 @@ class Tag < ActiveRecord::Base
       end
       old_merger = Tag.find_by_id(self.merger_id_was)
       if old_merger && old_merger.canonical?
-        self.async(:remove_filter_taggings, old_merger)
+        self.async(:remove_filter_taggings, old_merger.id)
       end
     end
   end
@@ -643,8 +643,9 @@ class Tag < ActiveRecord::Base
   # Remove filter taggings for a given tag
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
-  def remove_filter_taggings(old_filter=nil)
-    if old_filter
+  def remove_filter_taggings(old_filter_id=nil)
+    if old_filter_id
+      old_filter = Tag.find(old_filter_id)
       # An old merger of a tag needs to be removed
       # This means we remove the old merger itself and all its meta tags unless they
       # should remain because of other existing tags of the work (or because they are
@@ -783,13 +784,14 @@ class Tag < ActiveRecord::Base
   
   # Making this asynchronous
   def update_meta_filters(meta_tag)
-    async(:remove_meta_filters, meta_tag)
+    async(:remove_meta_filters, meta_tag.id)
   end
 
   # When a meta tagging relationship is removed, things filter-tagged with the meta tag
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
-  def remove_meta_filters(meta_tag)
+  def remove_meta_filters(meta_tag_id)
+    meta_tag = Tag.find(meta_tag_id)
     # remove meta tag from this tag's sub tags
     self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
     # remove inherited meta tags from this tag and all of its sub tags
