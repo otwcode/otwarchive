@@ -157,7 +157,7 @@ blockquote, pre {
   margin: 1.5em;
 }
 
-kbd, tt, code, var {
+kbd, tt, code, var, samp  {
   font: normal 0.75em consolas, courier, monospace;
   margin: auto;
   padding: 0.25em;
