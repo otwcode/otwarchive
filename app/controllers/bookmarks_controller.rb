@@ -31,9 +31,12 @@ class BookmarksController < ApplicationController
     @languages = Language.default_order
     options = params[:bookmark_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
+    options[:show_private] = false    
+    options[:show_restricted] = current_user.present?
     @search = BookmarkSearch.new(options)
     if params[:bookmark_search].present? && params[:edit_search].blank?
-      @bookmarks = @search.search_results
+      results = @search.search_results
+      @bookmarks = results[:bookmarks]
       render 'search_results'
     end
   end
@@ -60,7 +63,9 @@ class BookmarksController < ApplicationController
           @bookmarks = Bookmark.list_without_filters(@owner, options)
         else
           @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
-          @bookmarks = @search.search_results
+          results = @search.search_results
+          @bookmarks = results[:bookmarks]
+          @facets = results[:facets]
         end
       else
         @bookmarks = Bookmark.latest
@@ -164,7 +169,7 @@ class BookmarksController < ApplicationController
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
       if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
       end
     end
     if params[:tag_id]
