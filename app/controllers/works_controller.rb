@@ -25,9 +25,11 @@ class WorksController < ApplicationController
     @languages = Language.default_order
     options = params[:work_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
+    options[:show_restricted] = current_user.present?
     @search = WorkSearch.new(options)
     if params[:work_search].present? && params[:edit_search].blank?
-      @works = @search.search_results
+      results = @search.search_results
+      @works = results[:works]
       render 'search_results'
     end
   end
@@ -48,7 +50,9 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        @works = @search.search_results
+        results = @search.search_results
+        @works = results[:works]
+        @facets = results[:facets]
       end
     else
       @works = Work.latest
