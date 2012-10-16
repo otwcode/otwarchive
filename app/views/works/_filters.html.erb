@@ -28,10 +28,10 @@
         </dt>
         <dd id="tag_category_<%= tag_type %>" class="tags toggled">
           <ul>              
-            <% @works.facets[tag_type]['terms'].each do |facet| %>
+            <% @facets[tag_type]['terms'].each do |facet| %>
               <li>
                 <% tag = Tag.find(facet['term']) %>
-                <% if (tag_type == "rating") && @works.facets[tag_type]['terms'].length > 1 %>
+                <% if (tag_type == "rating") && @facets[tag_type]['terms'].length > 1 %>
                   <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
                     tag.id, 
                     @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 

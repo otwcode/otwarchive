@@ -51,7 +51,7 @@
 <!--/content-->
 
 <!--filters subnav-->
-<% if @works.respond_to?(:facets) %>
+<% if @facets.present? %>
   <%= render :partial => 'filters' %>
 <% end %>
 <!---/subnav-->

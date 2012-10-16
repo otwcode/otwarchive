@@ -61,7 +61,7 @@ class WorkSearch < Search
     search_text = generate_search_text
     include_facets = self.faceted
     
-    Work.tire.search(page: search_opts[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
+    response = Work.tire.search(page: search_opts[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE) do
       query do
         boolean do
           must { string search_text, default_operator: "AND" } if search_text.present?
@@ -113,6 +113,8 @@ class WorkSearch < Search
         end
       end
     end
+    work_ids = response.results.map { |work| work['id'] }
+    { works: Work.where(:id => work_ids), facets: response.facets }
   end
   
   def set_parent_fields!
