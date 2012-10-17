@@ -5,7 +5,7 @@
 <% unless generated_live %>
   <p>
     <%= ts("Last generated at:") %> <span class="datetime"><%= time_in_zone(Time.now, (challenge_collection.challenge.time_zone || Time.zone.name)) %></span>
-    <%= ts("(Generated hourly on request while signups are open.)") %>
+    <%= ts("(Generated hourly on request while sign-ups are open.)") %>
   </p>
 <% end %>
 
