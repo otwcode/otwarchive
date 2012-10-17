@@ -1,15 +1,14 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+  <%= search_header @full_results, @search, "Bookmark", @owner %>
 </h2>
 <!-- /descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
-  	<% if @user == current_user || @most_recent_bookmarks || @collection %>
-    	<li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
-
+    <% if @user == current_user || @most_recent_bookmarks || @collection %>
+      <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
     <% # let the user reading this bookmark save a copy for themselves %>	
       <% if logged_in? && !is_author_of?(@bookmark) %>
@@ -39,8 +38,8 @@
   <p><%= ts("These are some of the latest bookmarks created on the archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
 <% end %>
 
-<% if @bookmarks.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarks %>
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
 <% end %>
 
 <!--main content-->
@@ -59,7 +58,7 @@
 <div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-<% if @bookmarks.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarks %>
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
 <% end %>
 <!-- /subnav-->
