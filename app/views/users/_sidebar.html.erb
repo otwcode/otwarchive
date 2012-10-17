@@ -35,7 +35,7 @@
 	  <li><%= @author ? print_pseud_bookmarks_link(@author) : print_bookmarks_link(@user) %></li>
 	<% end %>
 
-  <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.owned_collections.count), user_collections_path(@user) %></li>
+  <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.maintained_collections.count), user_collections_path(@user) %></li>
 </ul>
 	
 <% if @user == current_user %>
