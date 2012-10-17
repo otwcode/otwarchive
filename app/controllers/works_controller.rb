@@ -5,11 +5,11 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search ]
-  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search ]
-  before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts ]
+  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
@@ -29,6 +29,7 @@ class WorksController < ApplicationController
     @search = WorkSearch.new(options)
     if params[:work_search].present? && params[:edit_search].blank?
       results = @search.search_results
+      @full_results = results[:all]
       @works = results[:works]
       render 'search_results'
     end
@@ -51,12 +52,37 @@ class WorksController < ApplicationController
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
         results = @search.search_results
+        @full_results = results[:all]
         @works = results[:works]
         @facets = results[:facets]
       end
     else
       @works = Work.latest
     end
+  end
+
+  def collected
+    if params[:work_search].present?
+      options = params[:work_search].dup
+    else
+      options = {}
+    end
+    options.merge!(page: params[:page])
+    options[:show_restricted] = current_user.present?
+    
+    @user = User.find_by_login(params[:user_id])
+    if @user.present?
+      if @admin_settings.disable_filtering?
+        @works = Work.collected_without_filters(@user, options)
+      else
+        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+        results = @search.search_results
+        @full_results = results[:all]
+        @works = results[:works]
+        @facets = results[:facets]
+      end
+      @page_title = ts("Collected Works for %{username}", username: @user.login)
+    end    
   end
 
   def drafts

@@ -1,0 +1,29 @@
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
+  <%= ts("Works in Challenges/Collections") %>
+</h2>
+<!-- /end descriptions-->
+
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
+<% end %>
+
+<!--main content-->
+<h3 class="landmark heading">Listing Works</h3>
+<ol class="work index group">
+  <% for work in @works %>
+    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+  <% end %>
+</ol>
+  
+<!--/content-->
+
+<!--filters subnav-->
+<% if @facets.present? %>
+  <%= render :partial => 'collection_filters' %>
+<% end %>
+<!---/subnav-->
+
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
+<% end %>

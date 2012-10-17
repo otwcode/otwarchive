@@ -1106,7 +1106,18 @@ class Work < ActiveRecord::Base
     end
 
     works = works.posted
-    works = works.order("#{options[:sort_column]} #{options[:sort_direction].upcase}")
+    works = works.order("revised_at DESC")
+    works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+  end
+
+  def self.collected_without_filters(user, options)
+    works = Work.written_by_id([user.id])
+    works = works.join(:collection_items)
+    unless User.current_user == user
+      works = works.where(:in_anon_collection => false)
+      works = works.posted
+    end
+    works = works.order("revised_at DESC")
     works = works.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
 

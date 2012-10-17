@@ -32,7 +32,7 @@ class WorkSearch < Search
     :show_restricted,
     :page
     
-  attr_accessor :works_parent, :faceted
+  attr_accessor :works_parent, :faceted, :collected
   
   after_initialize :process_options
   
@@ -45,7 +45,6 @@ class WorkSearch < Search
     self.set_parent_fields!
     self.set_tag_fields!
     self.set_sorting!
-    self.set_visibility!
     self.set_language!
     self.clean_up_angle_brackets
     
@@ -59,19 +58,21 @@ class WorkSearch < Search
     self.options ||= {}
     search_opts = self.options
     search_text = generate_search_text
-    include_facets = self.faceted
+    facet_tags = self.faceted
+    facet_collections = self.collected
+    work_search = self
     
     response = Work.tire.search(page: search_opts[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE) do
       query do
         boolean do
           must { string search_text, default_operator: "AND" } if search_text.present?
           
-          must { term :posted, 'T' }
+          must { term :posted, 'T' } unless work_search.should_include_drafts?
           must { term :restricted, 'F' } unless search_opts[:show_restricted]
           must { term :complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
           must { term :expected_number_of_chapters, 1 } if %w(1 true).include?(search_opts[:single_chapter].to_s)
-          must { term :in_unrevealed_collection, 'F' } unless search_opts[:show_unrevealed]
-          must { term :in_anon_collection, 'F' } unless search_opts[:show_anon]
+          must { term :in_unrevealed_collection, 'F' } unless work_search.should_include_unrevealed?
+          must { term :in_anon_collection, 'F' } unless work_search.should_include_anon?
           must { term :language_id, search_opts[:language_id].to_i } if search_opts[:language_id].present?
           
           if search_opts[:pseud_ids].present?
@@ -105,7 +106,13 @@ class WorkSearch < Search
         sort { by search_opts[:sort_column], search_opts[:sort_direction] }
       end
 
-      if include_facets
+      if facet_collections
+        facet 'collections' do
+          terms "collection_ids".to_sym
+        end
+      end
+
+      if facet_tags
         %w(rating warning category fandom character relationship freeform).each do |facet_type|
           facet facet_type do
             terms "#{facet_type}_ids".to_sym
@@ -114,7 +121,7 @@ class WorkSearch < Search
       end
     end
     work_ids = response.results.map { |work| work['id'] }
-    { works: Work.where(:id => work_ids), facets: response.facets }
+    { all: response, works: Work.where(:id => work_ids).compact, facets: response.facets }
   end
   
   def set_parent_fields!
@@ -174,21 +181,21 @@ class WorkSearch < Search
     
     options[:sort_direction] = sort_direction(options[:sort_column]).downcase
   end
-  
-  # Don't show anonymous works on user/pseud pages
-  # Only show unrevealed works on collection pages
-  def set_visibility!
-    if self.works_parent.present? && %w(Pseud User).include?(self.works_parent.class.to_s)
-      options[:show_anon] = false
-    else
-      options[:show_anon] = true
-    end
-    
-    if self.works_parent.present? && self.works_parent.is_a?(Collection)
-      options[:show_unrevealed] = true
-    else
-      options[:show_unrevealed] = false
-    end
+
+  # Should include anonymous works unless we're on a user or pseud page
+  # OR unless the user is viewing their own collected works
+  def should_include_anon?
+    self.works_parent.blank? || 
+    !%w(Pseud User).include?(self.works_parent.class.to_s) ||
+    (self.collected && (User.current_user != self.works_parent))
+  end
+
+  def should_include_unrevealed?
+    self.works_parent.present? && (self.works_parent.is_a?(Collection) || self.collected)
+  end
+
+  def should_include_drafts?
+    self.collected && User.current_user.present? && (User.current_user == self.works_parent)
   end
   
   # Translate language abbreviations to numerical ids
@@ -215,6 +222,9 @@ class WorkSearch < Search
           search_text << " #{field.to_s}:#{word.downcase}"
         end
       end
+    end
+    if self.options[:collection_ids].blank? && self.collected
+      search_text << " collection_ids:*"
     end
     search_text
   end
@@ -251,7 +261,7 @@ class WorkSearch < Search
       summary << "Title: #{options[:title]}"
     end
     if options[:creator].present?
-      summary << "Creator: #{options[:creator]}"
+      summary << "Author/Artist: #{options[:creator]}"
     end
     tags = []
     if options[:tag].present?
@@ -314,3 +324,4 @@ class WorkSearch < Search
   end
   
 end
+

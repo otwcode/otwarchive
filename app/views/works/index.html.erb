@@ -1,6 +1,6 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @works, @search, "Work", @owner %>
+  <%= search_header @full_results, @search, "Work", @owner %>
 </h2>
 
 <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
@@ -36,8 +36,8 @@
   <p><%= ts("These are some of the latest works posted to the archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
 <% end %>
 
-<% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
 <% end %>
 
 <!--main content-->
@@ -56,8 +56,8 @@
 <% end %>
 <!---/subnav-->
 
-<% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
+<% if @full_results.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
 <% end %>
 
 
