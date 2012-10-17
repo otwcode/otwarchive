@@ -15,19 +15,19 @@
   <%= ts('Listed by fewest offers and most requests.') %>
 </p>
 
-<table id="challenge_summary" summary="<%= ts("Numbers of requests and offers for each requested %{tag_type} in this challenge, listed by fewest offers and most requests.", :tag_type => tag_type) %>">
-  <caption><%=ts("Requests and Offers for Requested %{tag_type}", tag_type.pluralize.capitalize) %></caption>
+<table id="challenge_summary" summary="<%= ts("Number of requests and offers for each requested %{tag_type} in this challenge, listed by fewest offers and most requests.", :tag_type => tag_type) %>">
+  <caption><%=ts("Requests and Offers for Requested %{tag_type}", :tag_type => tag_type.pluralize.capitalize) %></caption>
   <thead>
     <tr>
-      <th><%= tag_type.capitalize %></th>
-      <th><%= ts('Requests') %></th>
-      <th><%= ts('Offers') %></th>
+      <th scope="col"><%= tag_type.capitalize %></th>
+      <th scope="col"><%= ts('Requests') %></th>
+      <th scope="col"><%= ts('Offers') %></th>
     </tr>
   </thead>
   <tbody>
     <% summary_tags.each do |tag| %>
       <tr>
-        <th>
+        <th scope="row">
           <span class="<%= tag.requests > 0 ? 'requested' : '' %> <%= tag.offers > 0 ? 'offered' : '' %>">
             <%= tag.name %>
           </span>
