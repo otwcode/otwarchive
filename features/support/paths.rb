@@ -75,6 +75,9 @@ module NavigationHelpers
     when /my bookmarks page/
       Bookmark.tire.index.refresh
       user_bookmarks_path(User.current_user)
+    when /my works page/
+      Work.tire.index.refresh
+      user_works_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)      
     when /my profile page/

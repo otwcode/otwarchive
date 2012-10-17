@@ -29,7 +29,7 @@ module ApplicationHelper
   end
   
   def page_has_filters?
-    (@search.present? && @search.faceted) || @collections.present?
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections')
   end
 
   # A more gracefully degrading link_to_remote.
