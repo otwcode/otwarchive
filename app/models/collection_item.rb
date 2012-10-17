@@ -83,6 +83,13 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
+  after_create :notify_of_association
+  def notify_of_association
+    if self.collection.collection_preference.email_notify && !self.collection.email.blank?
+      CollectionMailer.item_added_notification(self.work.id, self.collection.id).deliver
+    end
+  end
+
   before_save :approve_automatically
   def approve_automatically
     if self.new_record?
