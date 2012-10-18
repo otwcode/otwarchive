@@ -211,7 +211,14 @@ class Bookmark < ActiveRecord::Base
   end
   
   def tag
-    self.tags.value_of(:name)
+    names = self.tags.value_of(:name) + filter_names
+    if bookmarkable.respond_to?(:tags)
+      names += bookmarkable.tags.where(canonical: false).value_of :name
+    end
+    if bookmarkable.respond_to?(:work_tags)
+      names += bookmarkable.work_tags.where(canonical: false).value_of :name
+    end
+    names.uniq
   end
   
   def tag_ids
