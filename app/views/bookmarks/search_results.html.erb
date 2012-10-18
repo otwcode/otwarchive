@@ -4,7 +4,10 @@
   <%= ts("You searched for:") %>
   <%= @search.summary %>
 </h4>
-<p><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></p>
+
+<ul class="user navigation actions" role="navigation">
+  <li><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></li>
+</ul>
 
 <% if @bookmarks.blank? %>
   <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
