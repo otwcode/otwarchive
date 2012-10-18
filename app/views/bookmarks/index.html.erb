@@ -22,10 +22,10 @@
       <% end %>
     <% end %>
   <% end %>
-
-<% if params[:tag_id] %>
-  <%= taggable_list(params[:tag_id], "bookmarks") %>
-<% end %>
+  <% if @tag %>
+    <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
+    <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
