@@ -71,9 +71,16 @@ class Bookmark < ActiveRecord::Base
   # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
   # on a work.
   scope :visible_to_user, lambda {|user|
-   user.is_a?(Admin) ? visible_to_admin :
-     (!user.is_a?(User) ? visible_to_all :
-      select("DISTINCT bookmarks.*").visible_to_registered_user.joins({:pseud => :user}).where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id))
+    if user.is_a?(Admin)
+      visible_to_admin
+    elsif !user.is_a?(User)
+      visible_to_all
+    else
+      select("DISTINCT bookmarks.*").
+      visible_to_registered_user.
+      joins("JOIN pseuds as p1 ON p1.id = bookmarks.pseud_id JOIN users ON users.id = p1.user_id").
+      where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id)
+    end
   }
 
   # Use the current user to determine what works are visible
