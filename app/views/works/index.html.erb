@@ -2,10 +2,6 @@
 <h2 class="heading">
   <%= search_header @full_results, @search, "Work", @owner %>
 </h2>
-
-<% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
-  <p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
-<% end %>
 <!-- /end descriptions-->
 
 <div class="navigation actions module">
@@ -18,13 +14,18 @@
   <% end %>
 
   <!--user role subnav-->
-  <% if params[:tag_id] || (@user && @user == current_user) %>
+  <% if @tag || (@user && @user == current_user) %>
     <ul class="user navigation actions" role="navigation">
       <% if @user && @user == current_user %>
         <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+        <li><%= link_to ts('Works in Collections'), collected_user_works_path(@user) %></li>
       <% end %>
-      <% if params[:tag_id] %>
-        <%= taggable_list(params[:tag_id], "works") %>
+      <% if @tag %>
+        <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
+        <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+      <% end %>
+      <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+        <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
       <% end %>
     </ul>
   <% end %>
