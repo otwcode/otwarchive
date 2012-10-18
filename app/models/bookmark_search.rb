@@ -76,7 +76,7 @@ class BookmarkSearch < Search
           must { term :bookmarkable_restricted, 'F' } unless search_opts[:show_restricted]
           must { term :bookmarkable_complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
           must { term :bookmarkable_language_id, search_opts[:language_id].to_i } if search_opts[:language_id].present?
-          must { term :bookmarkable_type, search_opts[:bookmarkable_type].downcase} if search_opts[:bookmarkable_type].present?
+          must { term :bookmarkable_type, search_opts[:bookmarkable_type].gsub(" ", "").downcase} if search_opts[:bookmarkable_type].present?
           
           if search_opts[:pseud_ids].present?
             must { terms :pseud_id, search_opts[:pseud_ids] }
