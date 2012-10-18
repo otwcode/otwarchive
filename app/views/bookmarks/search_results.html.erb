@@ -2,7 +2,7 @@
 
 <h4>
   <%= ts("You searched for:") %>
-  <%= @search.summary %>
+  <%= strip_tags @search.summary %>
 </h4>
 
 <ul class="user navigation actions" role="navigation">
