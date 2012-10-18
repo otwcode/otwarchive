@@ -42,6 +42,11 @@ class WorksController < ApplicationController
     else
       options = {}
     end
+    if params[:fandom_id]
+      @fandom = Fandom.find_by_id(params[:fandom_id])
+      options[:filter_ids] ||= []
+      options[:filter_ids] << params[:fandom_id]
+    end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
     @page_title = index_page_title

@@ -146,12 +146,6 @@ class WorkSearch < Search
       options[:rating_ids] = [options[:rating_ids]].flatten
     end
     
-    # Handle a single fandom id
-    if options[:fandom_id]
-      options[:fandom_ids] ||= []
-      options[:fandom_ids] << options[:fandom_id]
-    end
-    
     # Associate tag names with specific tags where possible
     # to allow for precise filtering
     options[:tag] ||= ""
