@@ -62,10 +62,10 @@ class Search < ActiveRecord::Base
     case operand
     when "<"
       time = time_from_string(amount, period)
-      { lt: time }
+      { gt: time }
     when ">"
       time = time_from_string(amount, period)
-      { gt: time }
+      { lt: time }
     when ""
       match = amount.match(/-/)
       if match

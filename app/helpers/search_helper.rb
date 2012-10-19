@@ -29,6 +29,9 @@ module SearchHelper
       if parent.is_a?(Tag)
         parent_text = " in #{link_to_tag(parent)}"
       end
+      if @fandom.present?
+        parent_text << " in #{link_to_tag(@fandom)}"
+      end
       header << parent_text
     end
     header.html_safe

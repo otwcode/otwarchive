@@ -68,6 +68,7 @@ class WorkSearch < Search
           must { string search_text, default_operator: "AND" } if search_text.present?
           
           must { term :posted, 'T' } unless work_search.should_include_drafts?
+          must { term :hidden_by_admin, 'F' }
           must { term :restricted, 'F' } unless search_opts[:show_restricted]
           must { term :complete, 'T' } if %w(1 true).include?(search_opts[:complete].to_s)
           must { term :expected_number_of_chapters, 1 } if %w(1 true).include?(search_opts[:single_chapter].to_s)
@@ -120,8 +121,7 @@ class WorkSearch < Search
         end
       end
     end
-    work_ids = response.results.map { |work| work['id'] }
-    { all: response, works: Work.where(:id => work_ids).compact, facets: response.facets }
+    SearchResult.new('Work', response)
   end
   
   def set_parent_fields!
@@ -144,12 +144,6 @@ class WorkSearch < Search
     # Possible to have a single id or an array
     if options[:rating_ids].present?
       options[:rating_ids] = [options[:rating_ids]].flatten
-    end
-    
-    # Handle a single fandom id
-    if options[:fandom_id]
-      options[:fandom_ids] ||= []
-      options[:fandom_ids] << options[:fandom_id]
     end
     
     # Associate tag names with specific tags where possible
