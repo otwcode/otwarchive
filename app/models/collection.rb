@@ -266,19 +266,12 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_works_count
-    if !User.current_user.nil? && User.current_user.active?
+    if !User.current_user.nil?
       count = self.approved_works.count
       self.children.each {|child| count += child.approved_works.count}
       count
     else
-      count = 0
-      # Count the items in the collection
-      all_approved_works.each do |collection_item|
-        work = Work.find_by_id(collection_item.id)
-        if !work.restricted?
-          count = count + 1
-        end
-      end
+      count = all_approved_works.where(:restricted => false).count
       count
     end
   end
