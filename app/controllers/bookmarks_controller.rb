@@ -35,9 +35,7 @@ class BookmarksController < ApplicationController
     options[:show_restricted] = current_user.present?
     @search = BookmarkSearch.new(options)
     if params[:bookmark_search].present? && params[:edit_search].blank?
-      results = @search.search_results
-      @full_results = results[:all]
-      @bookmarks = results[:bookmarks]
+      @bookmarks = @search.search_results
       render 'search_results'
     end
   end
@@ -65,9 +63,8 @@ class BookmarksController < ApplicationController
         else
           @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           results = @search.search_results
-          @full_results = results[:all]
-          @bookmarks = results[:bookmarks]
-          @facets = results[:facets]
+          @bookmarks = @search.search_results
+          @facets = @bookmarks.facets
         end
       else
         @bookmarks = Bookmark.latest

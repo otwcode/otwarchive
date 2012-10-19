@@ -1,6 +1,6 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <%= search_header @full_results, @search, "Bookmark", @owner %>
+  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
 </h2>
 <!-- /descriptions-->
 
@@ -38,8 +38,8 @@
   <p><%= ts("These are some of the latest bookmarks created on the archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
 <% end %>
 
-<% if @full_results.respond_to?(:total_pages) %>
-  <%= will_paginate @full_results %>
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
 <% end %>
 
 <!--main content-->
@@ -58,7 +58,7 @@
 <div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-<% if @full_results.respond_to?(:total_pages) %>
-  <%= will_paginate @full_results %>
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
 <% end %>
 <!-- /subnav-->

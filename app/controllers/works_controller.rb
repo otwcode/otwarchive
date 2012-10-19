@@ -28,9 +28,7 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present?
     @search = WorkSearch.new(options)
     if params[:work_search].present? && params[:edit_search].blank?
-      results = @search.search_results
-      @full_results = results[:all]
-      @works = results[:works]
+      @works = @search.search_results
       render 'search_results'
     end
   end
@@ -42,6 +40,11 @@ class WorksController < ApplicationController
     else
       options = {}
     end
+    if params[:fandom_id]
+      @fandom = Fandom.find_by_id(params[:fandom_id])
+      options[:filter_ids] ||= []
+      options[:filter_ids] << params[:fandom_id]
+    end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
     @page_title = index_page_title
@@ -51,10 +54,8 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        results = @search.search_results
-        @full_results = results[:all]
-        @works = results[:works]
-        @facets = results[:facets]
+        @works = @search.search_results
+        @facets = @works.facets
       end
     else
       @works = Work.latest
@@ -76,10 +77,8 @@ class WorksController < ApplicationController
         @works = Work.collected_without_filters(@user, options)
       else
         @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-        results = @search.search_results
-        @full_results = results[:all]
-        @works = results[:works]
-        @facets = results[:facets]
+        @works = @search.search_results
+        @facets = @works.facets
       end
       @page_title = ts("Collected Works for %{username}", username: @user.login)
     end    
