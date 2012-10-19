@@ -118,8 +118,7 @@ class BookmarkSearch < Search
         end
       end
     end
-    ids = response.results.map { |bookmark| bookmark['id'] }
-    { all: response, bookmarks: Bookmark.where(:id => ids), facets: response.facets }
+    SearchResult.new('Bookmark', response)
   end
   
   def set_parent_fields!

@@ -121,8 +121,7 @@ class WorkSearch < Search
         end
       end
     end
-    work_ids = response.results.map { |work| work['id'] }
-    { all: response, works: Work.where(:id => work_ids).compact, facets: response.facets }
+    SearchResult.new('Work', response)
   end
   
   def set_parent_fields!
