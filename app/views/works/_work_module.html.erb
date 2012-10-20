@@ -1,6 +1,6 @@
 <% # expects "work" %>
 
-<% is_unrevealed ||= (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
+<% is_unrevealed ||= work.unrevealed? %>
 <% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
 <% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
   <% if is_unrevealed %>

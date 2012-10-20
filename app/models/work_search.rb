@@ -116,7 +116,7 @@ class WorkSearch < Search
       if facet_tags
         %w(rating warning category fandom character relationship freeform).each do |facet_type|
           facet facet_type do
-            terms "#{facet_type}_ids".to_sym
+            terms "#{facet_type}_ids".to_sym, size: 50
           end
         end
       end
@@ -167,7 +167,7 @@ class WorkSearch < Search
   # Clean up sorting column and direction
   # Don't impose sorting on unsorted searches
   def set_sorting!
-    return unless faceted || options[:sort_column].present?
+    return unless faceted || collected || options[:sort_column].present?
     
     unless sort_values.include?(options[:sort_column])
       options[:sort_column] = 'revised_at'
@@ -181,7 +181,7 @@ class WorkSearch < Search
   def should_include_anon?
     self.works_parent.blank? || 
     !%w(Pseud User).include?(self.works_parent.class.to_s) ||
-    (self.collected && (User.current_user != self.works_parent))
+    (self.collected && (User.current_user == self.works_parent))
   end
 
   def should_include_unrevealed?
@@ -261,16 +261,23 @@ class WorkSearch < Search
     if options[:tag].present?
       tags << options[:tag]
     end
+    all_tag_ids = []
     [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
-        tags << Tag.where(:id => options[tag_ids]).value_of(:name).join(", ")
+        all_tag_ids += options[tag_ids]
       end
     end
+    unless all_tag_ids.empty?
+      tags << Tag.where(:id => all_tag_ids).value_of(:name).join(", ")
+    end
     unless tags.empty?
-      summary << "Tags: #{tags.join(", ")}"
+      summary << "Tags: #{tags.uniq.join(", ")}"
     end
     if %w(1 true).include?(self.complete.to_s)
       summary << "Complete"
+    end
+    if %w(1 true).include?(self.single_chapter.to_s)
+      summary << "Single Chapter"
     end
     if options[:language_id].present?
       language = Language.find_by_id(options[:language_id])

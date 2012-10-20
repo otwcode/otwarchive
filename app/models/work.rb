@@ -189,12 +189,13 @@ class Work < ActiveRecord::Base
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
-  before_save :validate_authors, :set_author_sorting, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
+  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
-  before_create :set_anon_unrevealed
+  before_create :set_anon_unrevealed, :set_author_sorting
+  before_update :set_author_sorting
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
@@ -913,6 +914,7 @@ class Work < ActiveRecord::Base
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
 
+  scope :non_anon, where(:in_anon_collection => false)
   scope :unrevealed, where(:in_unrevealed_collection => true)
   scope :revealed, where(:in_unrevealed_collection => false)
   scope :latest, visible_to_all.
