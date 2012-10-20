@@ -28,7 +28,7 @@
                   @search.collection_ids.present? && @search.collection_ids.include?(collection.id.to_s), 
                   :id => "work_search_collection_ids_#{collection.id}" %>
                 <%= label_tag "work_search_collection_ids_#{collection.id}", 
-                  "#{collection.name} (#{facet['count']})" %>
+                  "#{collection.title} (#{facet['count']})" %>
               </li>
             <% end %>
           </ul>

@@ -88,7 +88,7 @@ class CollectionItem < ActiveRecord::Base
   # Set associated works to anonymous or unrevealed
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
-    return unless item_type == 'Work' && work.present? && work.chapters.present?
+    return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
     work.in_unrevealed_collection = work.collection_items.where(:unrevealed => true).exists?
     work.in_anon_collection = work.collection_items.where(:anonymous => true).exists?
     work.save!
