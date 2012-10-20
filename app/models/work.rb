@@ -914,7 +914,7 @@ class Work < ActiveRecord::Base
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
 
-  scope :not_anon, where(:in_anon_collection => false)
+  scope :non_anon, where(:in_anon_collection => false)
   scope :unrevealed, where(:in_unrevealed_collection => true)
   scope :revealed, where(:in_unrevealed_collection => false)
   scope :latest, visible_to_all.
