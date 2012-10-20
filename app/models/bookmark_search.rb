@@ -245,13 +245,17 @@ class BookmarkSearch < Search
     if options[:tag].present?
       tags << options[:tag]
     end
+    all_tag_ids = []
     [:filter_ids, :fandom_ids, :rating_ids, :category_ids, :warning_ids, :character_ids, :relationship_ids, :freeform_ids].each do |tag_ids|
       if options[tag_ids].present?
-        tags << Tag.where(:id => options[tag_ids]).value_of(:name).join(", ")
+        all_tag_ids += options[tag_ids]
       end
     end
+    unless all_tag_ids.empty?
+      tags << Tag.where(:id => all_tag_ids).value_of(:name).join(", ")
+    end
     unless tags.empty?
-      summary << "Tags: #{tags.join(", ")}"
+      summary << "Tags: #{tags.uniq.join(", ")}"
     end
     if self.bookmarkable_type.present?
       summary << "Type: #{self.bookmarkable_type}"
