@@ -167,7 +167,7 @@ class WorkSearch < Search
   # Clean up sorting column and direction
   # Don't impose sorting on unsorted searches
   def set_sorting!
-    return unless faceted || options[:sort_column].present?
+    return unless faceted || collected || options[:sort_column].present?
     
     unless sort_values.include?(options[:sort_column])
       options[:sort_column] = 'revised_at'
