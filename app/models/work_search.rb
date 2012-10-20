@@ -116,7 +116,7 @@ class WorkSearch < Search
       if facet_tags
         %w(rating warning category fandom character relationship freeform).each do |facet_type|
           facet facet_type do
-            terms "#{facet_type}_ids".to_sym
+            terms "#{facet_type}_ids".to_sym, size: 50
           end
         end
       end
