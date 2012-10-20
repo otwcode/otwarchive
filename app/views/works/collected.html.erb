@@ -4,7 +4,7 @@
 </h2>
 <!-- /end descriptions-->
 
-<% if @full_results.respond_to?(:total_pages) %>
+<% if @works.respond_to?(:total_pages) %>
   <%= will_paginate @full_results %>
 <% end %>
 
@@ -24,6 +24,6 @@
 <% end %>
 <!---/subnav-->
 
-<% if @full_results.respond_to?(:total_pages) %>
+<% if @works.respond_to?(:total_pages) %>
   <%= will_paginate @full_results %>
 <% end %>
