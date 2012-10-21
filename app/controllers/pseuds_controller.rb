@@ -29,12 +29,12 @@ class PseudsController < ApplicationController
       setflash; flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
-    @author = @user.pseuds.find_by_name(params[:id])
-    unless @author
+    @pseud = @user.pseuds.find_by_name(params[:id])
+    unless @pseud
       setflash; flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
     end
-    @page_subtitle = @author.name
+    @page_subtitle = @pseud.name
 
     # very similar to show under users - if you change something here, change it there too
     if current_user.nil?
@@ -45,10 +45,10 @@ class PseudsController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
-      visible_works = @author.works.visible_to_all
-      visible_series = @author.series.visible_to_all
-      visible_bookmarks = @author.bookmarks.visible_to_all
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id)
+      visible_works = @pseud.works.visible_to_all
+      visible_series = @pseud.series.visible_to_all
+      visible_bookmarks = @pseud.bookmarks.visible_to_all
     else
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
@@ -56,10 +56,10 @@ class PseudsController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
-      visible_works = @author.works.visible_to_registered_user
-      visible_series = @author.series.visible_to_registered_user
-      visible_bookmarks = @author.bookmarks.visible_to_registered_user
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id)
+      visible_works = @pseud.works.visible_to_registered_user
+      visible_series = @pseud.series.visible_to_registered_user
+      visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
     end
     @fandoms = @fandoms.all # force eager loading
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)

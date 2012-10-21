@@ -95,8 +95,8 @@ class WorksController < ApplicationController
         redirect_to current_user
       else
         if params[:pseud_id]
-          @author = @user.pseuds.find_by_name(params[:pseud_id])
-          @works = @author.unposted_works.paginate(:page => params[:page])
+          @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+          @works = @pseud.unposted_works.paginate(:page => params[:page])
         else
           @works = @user.unposted_works.paginate(:page => params[:page])
         end
@@ -677,7 +677,7 @@ public
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
       if params[:pseud_id].present?
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
       end
     end
     if params[:tag_id]
@@ -690,7 +690,7 @@ public
         end
       end
     end
-    @owner = @author || @user || @collection || @tag
+    @owner = @pseud || @user || @collection || @tag
   end
 
   def load_pseuds
