@@ -600,6 +600,31 @@ class Work < ActiveRecord::Base
   def is_wip
     self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
+  
+  #NOTE TO SELF: ADDED 10/21/12. EDIT THIS OUT BEFORE COMMITTING!!
+  #returns true if status has been set to "abandoned"
+  def abandoned?
+	self.status == "abandoned"
+  end
+  
+  #checks status
+  def check_status
+	return self.status
+  end
+  
+  #updates status attribute from the boolean
+  before_save :change_status_to_complete
+  def change_status_to_complete
+	if self.complete
+		self.status = "complete"	
+  end
+  
+  #if user fails to specify value for status for whatever reason, set this to "wip" as default
+  before_save :set_status_to_wip
+  def set_status_to_wip
+	if self.status.nil
+		self.status = "wip"
+  end
 
   # Returns true if a work is complete
   def is_complete
@@ -876,8 +901,6 @@ class Work < ActiveRecord::Base
   VISIBLE_TO_USER_CONDITIONS = {:posted => true, :hidden_by_admin => false}
 
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
-
-
 
 
   #################################################################################
