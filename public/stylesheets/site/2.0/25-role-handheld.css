@@ -78,6 +78,10 @@ h1 a img {
   float: none;
 }
 
+#main dl.filters {
+  width: auto;
+}
+
 #footer {
   background: #900;
 }

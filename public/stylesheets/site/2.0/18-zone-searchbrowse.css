@@ -80,17 +80,13 @@ form.filters dt span {
   cursor: pointer;
 }
 
-.filters dd {
+.filters dd, .filters dt, .filters .submit input {
   width: 100%;
 }
 
 .filters .submit {
   text-align: center;
   padding-right: 0;
-}
-
-.filters .submit input {
-  width: 100%;
 }
 
 /*END== */
