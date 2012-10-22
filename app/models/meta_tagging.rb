@@ -32,6 +32,7 @@ class MetaTagging < ActiveRecord::Base
       self.sub_tag.filtered_works.each do |work|        
         unless work.filters.include?(self.meta_tag)
           work.filter_taggings.create!(:inherited => true, :filter_id => self.meta_tag.id)
+          work.async_work_and_bookmarks_index
         end
       end
     end 

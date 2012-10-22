@@ -13,4 +13,4 @@ Feature: Search People
     Then I should see "0 Found"
     When I fill in "people_search" with "test*"
       And I press "Search people"
-    Then I should see "5 Found"
+    Then I should see "6 Found"

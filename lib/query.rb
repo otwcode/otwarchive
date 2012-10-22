@@ -7,6 +7,10 @@ module Query
   PEOPLE_FIELDS = %w{id name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
   ALL_INDEXES = ALL_FIELDS + %w{words hits date rec canonical recced bookmarked}
+  
+  def Query.search(klass, query, page)
+    return nil, klass.paginate(:page => page)
+  end
 
   # this does the actual search on the class given a standardized query hash
   def Query.search_with_sphinx(klass, query, page)

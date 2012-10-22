@@ -1,6 +1,6 @@
 # otw1 runs sphinx off a slave database
 server "otw1.ao3.org", :search
-# otw2 runs delayed jobs, and memcache.
+# otw2 runs redis, resque and memcache.
 # it also runs the database migrations and can be used to get a console
 server "otw2.ao3.org", :backend, :db, :primary => true
 # otw3 and otw4 are the main web/app combos

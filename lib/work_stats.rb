@@ -62,6 +62,16 @@ module WorkStats
     $redis.set(key, self.hits) unless $redis.exists(key)
     $redis.incrby(key, amount)
   end
+  
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.total_comments.not_deleted.count,
+      bookmarks_count: self.bookmarks.where(:private => false).count
+    )
+    self.update_index
+  end
 
   protected 
 
