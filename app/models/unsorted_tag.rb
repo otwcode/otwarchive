@@ -1,6 +1,7 @@
 class UnsortedTag < Tag
 
   NAME = "Unsorted Tag"
+  index_name Tag.index_name
 
   # unsorted tags can have their type changed
   # but they need to be reloaded to be seen as an instance of the proper subclass

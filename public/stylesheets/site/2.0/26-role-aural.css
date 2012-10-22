@@ -33,7 +33,7 @@ abbr {
   content: attr(title);
 }
 
-code, kbd, tt {
+code, kbd, tt, samp {
   voice-rate: 95%;
 }
 

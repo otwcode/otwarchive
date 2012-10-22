@@ -248,6 +248,7 @@ Otwarchive::Application.routes.draw do
     resources :works do
       collection do
         get :drafts
+        get :collected
         get :show_multiple
         post :edit_multiple
         put :update_multiple
@@ -501,9 +502,8 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-  resources :search, :only => :index
 
-  match 'search' => 'search#index'
+  match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
