@@ -625,6 +625,8 @@ class Work < ActiveRecord::Base
 	if self.status.nil
 		self.status = "wip"
   end
+  
+  ##end added code. this spectacularly borks it, surprise!
 
   # Returns true if a work is complete
   def is_complete
