@@ -17,14 +17,14 @@
       <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
         <dt>
           <noscript><%= tag_type.capitalize %></noscript>
-          <span class="tag_category_<%= tag_type %>_open hidden">
+          <a class="tag_category_<%= tag_type %>_open hidden" href="#">
             <%= image_tag 'arrow-right.gif', :alt => "" %>
             <%= tag_type.capitalize %>
-          </span>
-          <span class="tag_category_<%= tag_type %>_close hidden">
+          </a>
+          <a class="tag_category_<%= tag_type %>_close hidden" href="#">
             <%= image_tag 'arrow-down.gif', :alt => "" %>
             <%= tag_type.capitalize %>
-          </span>
+          </a>
         </dt>
         <dd id="tag_category_<%= tag_type %>" class="tags toggled">
           <ul>              
