@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120415134615) do
+ActiveRecord::Schema.define(:version => 20121008003319) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
     t.integer  "default_skin_id"
     t.datetime "stats_updated_at"
+    t.boolean  "disable_filtering",                          :default => false,                 :null => false
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -244,15 +245,15 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 16777215
-    t.text     "faq",                     :limit => 16777215
-    t.text     "rules",                   :limit => 16777215
+    t.text     "intro",                   :limit => 2147483647
+    t.text     "faq",                     :limit => 2147483647
+    t.text     "rules",                   :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -421,11 +422,12 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "updated_at"
   end
 
-  add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id"
+  add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id", :unique => true
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
-  create_table "filter_taggings", :force => true do |t|
+  create_table "filter_taggings", :id => false, :force => true do |t|
+    t.integer  "id",                                                :null => false
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
     t.string   "filterable_type", :limit => 100
@@ -433,8 +435,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "updated_at"
     t.boolean  "inherited",                      :default => false, :null => false
   end
- 
-  execute 'ALTER TABLE filter_taggings DROP PRIMARY KEY, ADD PRIMARY KEY (id,filter_id);'
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
@@ -482,16 +482,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "gifts", ["pseud_id"], :name => "index_gifts_on_pseud_id"
   add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
   add_index "gifts", ["work_id"], :name => "index_gifts_on_work_id"
-
-  create_table "hit_counters", :force => true do |t|
-    t.integer "work_id"
-    t.integer "hit_count",      :default => 0, :null => false
-    t.string  "last_visitor"
-    t.integer "download_count", :default => 0, :null => false
-  end
-
-  add_index "hit_counters", ["hit_count"], :name => "index_hit_counters_on_hit_count"
-  add_index "hit_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
 
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id"
@@ -909,6 +899,15 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "roles_users", ["role_id", "user_id"], :name => "index_roles_users_on_role_id_and_user_id"
   add_index "roles_users", ["user_id", "role_id"], :name => "index_roles_users_on_user_id_and_role_id"
 
+  create_table "searches", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "options"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "serial_works", :force => true do |t|
     t.integer  "series_id"
     t.integer  "work_id"
@@ -994,6 +993,19 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "skins", ["public", "official"], :name => "index_skins_on_public_and_official"
   add_index "skins", ["title"], :name => "index_skins_on_title"
   add_index "skins", ["type"], :name => "index_skins_on_type"
+
+  create_table "stat_counters", :force => true do |t|
+    t.integer "work_id"
+    t.integer "hit_count",       :default => 0, :null => false
+    t.string  "last_visitor"
+    t.integer "download_count",  :default => 0, :null => false
+    t.integer "comments_count",  :default => 0, :null => false
+    t.integer "kudos_count",     :default => 0, :null => false
+    t.integer "bookmarks_count", :default => 0, :null => false
+  end
+
+  add_index "stat_counters", ["hit_count"], :name => "index_hit_counters_on_hit_count"
+  add_index "stat_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
 
   create_table "subscriptions", :force => true do |t|
     t.integer  "user_id"
@@ -1215,6 +1227,9 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "notes_sanitizer_version",     :limit => 2, :default => 0,     :null => false
     t.integer  "endnotes_sanitizer_version",  :limit => 2, :default => 0,     :null => false
     t.integer  "work_skin_id"
+    t.boolean  "in_anon_collection",                       :default => false, :null => false
+    t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
+    t.string   "status"
   end
 
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"
