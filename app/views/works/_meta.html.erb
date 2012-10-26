@@ -52,6 +52,14 @@
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
+	  
+	  <!--REMEMBER TO REMOVE THIS TESTING BIT!-->
+	  <%= work.check_status %>
+	  <%= work.abandoned? %>
+	  <%= work.is_wip %>
+	  <%= work.is_complete %>
+	  <!-- yay! the above code puts the status form out there-->
+	  
       <div class="clear"><!--clear stats--></div>      
     </dd>
   </dl>
