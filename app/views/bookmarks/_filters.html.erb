@@ -56,7 +56,7 @@
       <dd>
         <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
       </dd>
-      <dt><%= f.label :query, ts("Search within results") %></dt>
+      <dt><%= f.label :query, ts("Search within results") %><%= link_to_help "work-search-text-help" %></dt>
       <dd><%= f.text_field :query %></dd>
 
       <dt><%= ts("Bookmark type") %></dt>
