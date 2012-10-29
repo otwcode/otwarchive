@@ -76,8 +76,16 @@ form.filters dl {
   padding: 0;
 }
 
-form.filters dt span {
-  cursor: pointer;
+.filters dt a {
+  border: none;
+}
+
+.filters dt a:hover {
+  color: #111;
+}
+
+.filters dt a:focus img {
+  outline: none;
 }
 
 .filters dd, .filters dt, .filters .submit input {
