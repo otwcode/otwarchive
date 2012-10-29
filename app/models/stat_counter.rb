@@ -44,7 +44,7 @@ class StatCounter < ActiveRecord::Base
   def self.stats_to_database
     work_ids = $redis.smembers('works_to_update_stats').map{ |id| id.to_i }
 
-    Work.find_each(:conditions => ["id IN (?)", work_ids]) do |work|
+    Work.where(id: work_ids).find_each do |work|
       work.update_stat_counter
       $redis.srem('works_to_update_stats', work.id)
     end
