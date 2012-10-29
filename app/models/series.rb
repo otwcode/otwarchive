@@ -67,7 +67,7 @@ class Series < ActiveRecord::Base
   
   # Get the filters for the works in this series
   def filters
-    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1").group("tags.id")
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1 AND filter_taggings.filterable_type = 'Work'").group("tags.id")
   end
   
   # visibility aped from the work model
