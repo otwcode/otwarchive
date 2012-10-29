@@ -12,15 +12,9 @@
       <span class="count"><%=  (bookmark_count < 100) ? link_to_bookmarkable_bookmarks(bookmarkable, bookmark_count.to_s) : link_to_bookmarkable_bookmarks(bookmarkable, '*') %></span>
 		</p>
   
-  	<!--work module-->
-		<% if bookmarkable.is_a?(ExternalWork) %>
-			<%= render 'external_works/work_module', :external_work => bookmarkable, :bookmarkable => bookmarkable %>
-		<% elsif bookmarkable.is_a?(Series) %>
-			<%= render 'series/series_module', :series => bookmarkable %>
-		<% else %>
-			<%= render 'works/work_module', :work => bookmarkable %>
-		<% end %>
-
+  	<!--bookmark item module-->
+  	<%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
+		
     <!--navigation and actions-->
     <% if (bookmark_count > 1 && (params[:tag_id] || @most_recent_bookmarks)) || (logged_in? && !is_author_of?(bookmark)) %>
     	<ul class="navigation actions" role="navigation">
