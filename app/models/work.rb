@@ -1090,10 +1090,13 @@ class Work < ActiveRecord::Base
                 works = owner.filtered_works
               end
             end
-    if options[:fandom_id]
-      fandom = Fandom.find_by_id(options[:fandom_id])
-      if fandom.present?
-        works = works.with_filter(fandom)
+    
+    # Need to support user + fandom and collection + tag pages
+    if options[:fandom_id] || options[:filter_ids]
+      id = options[:fandom_id] || options[:filter_ids].first
+      tag = Tag.find_by_id(id)
+      if tag.present?
+        works = works.with_filter(tag)
       end
     end
     
