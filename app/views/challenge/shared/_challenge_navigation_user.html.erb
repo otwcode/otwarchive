@@ -3,11 +3,11 @@
 <% if collection.challenge && collection.challenge.signup_open %>
   <% if logged_in? %>
     <% if (@challenge_signup = ChallengeSignup.in_collection(collection).by_user(current_user).first) %>
-      <li><%= link_to ts("Edit Signup"), edit_collection_signup_path(collection, @challenge_signup) %></li>
+      <li><%= link_to ts("Edit Sign-up"), edit_collection_signup_path(collection, @challenge_signup) %></li>
       <li>
-        <%= link_to ts("Cancel Signup"), 
+        <%= link_to ts("Cancel Sign-up"), 
           collection_signup_path(collection, @challenge_signup), 
-          :confirm => ts("Are you sure you want to cancel your signup? All signup information will be lost."), 
+          :confirm => ts("Are you sure you want to cancel your sign-up? All signup information will be lost."), 
           :method => :delete %>
       </li>
     <% elsif (!collection.moderated? || collection.user_is_posting_participant?(current_user)) %>
