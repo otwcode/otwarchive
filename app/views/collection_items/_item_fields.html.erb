@@ -58,71 +58,7 @@
     </blockquote>
   <% end %>
   
-  <% # Tell the user if their work is revealed or anonymous instead of showing the buttons they cannot use...or we can show the buttons but checked and disabled. %>
-  <% if @user %>
-    <dl class="visibility stats">
-      <dt><%= ts("Unrevealed:") %></dt>
-      <dd>
-        <% if collection_item.collection.unrevealed? %>
-          <%= ts("Yes") %>
-        <% else %>
-          <%= ts("No") %>
-        <% end %>
-      </dd>
-      <dt><%= ts("Anonymous:") %></dt>
-      <dd>
-        <% if collection_item.collection.anonymous? %>
-          <%= ts("Yes") %>
-        <% else %>
-          <%= ts("No") %>
-        <% end %>
-      </dd>
-    </dl>
-  <% end %>
-
-  <% # User should only be able to remove item from collection...unless user approval status does something I'm missing. %>
-  <% # Why is this in the view when we have collection_item_controls partial? Only thing missing from partial is Details link %>
-  <!--actions--> 
-  <ul class="actions" role="menu">
-    <% if collection_item.item %>
-      <li>
-        <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
-        <%= link_to h(ts("Details")) + ' &#8595;'.html_safe, "#", :class => "#{id}_open" %>
-        <%= link_to h(ts("Close Details")) + ' &#8593;'.html_safe, "#", :class => "#{id}_close" %>
-      </li>
-    <% end %>
-    <li class="status action">
-      <% if @user %>
-        <%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
-      <% else %>
-        <%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
-      <% end %>
-    </li>
-
-    <% # Shows for both mods and users but recommend changing because users cannot change revealed or anon status %>
-    <% id = "collection_items_" %>
-    <% if collection_item.collection.unrevealed? %>
-      <li>
-        <label for="collection_items_<%= collection_item.id %>_unrevealed">
-          <%= ts("Unrevealed") %>
-          <%= form.check_box :unrevealed %>
-        </label>
-      </li>
-    <% end %>
-    <% if collection_item.collection.anonymous? %>
-      <li>
-        <label for="collection_items_<%= collection_item.id %>_anonymous">
-          <%= ts("Anonymous") %>
-          <%= form.check_box :anonymous %>
-        </label>
-      </li>
-    <% end %>        
-    <li>
-      <label for="collection_items_<%= collection_item.id %>_remove">
-        <%= ts("Remove") %>
-        <%= form.check_box :remove %>
-      </label>
-    </li>
-  </ul>
+  <!--actions-->
+  <%= render 'collection_item_controls', :collection_item => collection_item, :form => form %>
 </li>
 <% end %>
