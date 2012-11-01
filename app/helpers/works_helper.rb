@@ -210,6 +210,16 @@ module WorksHelper
     text
   end
 
+  def tweet_text(work)
+    if work.unrevealed?
+      ts("Mystery Work")
+    else
+      names = work.anonymous? ? ts("Anonymous") : work.pseuds.map(&:name).join(', ')
+      fandoms = work.fandoms.size > 2 ? ts("Multifandom") : work.fandoms.string
+      "#{work.title} by #{names} - #{fandoms}".truncate(95)
+    end
+  end
+
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||

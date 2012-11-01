@@ -140,14 +140,6 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-      if @work.unrevealed?
-        @tweet_text = ts("Mystery Work")
-      else
-        @tweet_text = @work.title + " by " +
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
-                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-        @tweet_text = @tweet_text.truncate(95)
-      end
     render :show
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
