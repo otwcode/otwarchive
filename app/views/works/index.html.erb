@@ -4,36 +4,38 @@
 </h2>
 <!-- /end descriptions-->
 
-<div class="navigation actions module">
+<!--Subnavigation, sorting and actions.-->
+<% if (@collection && @collection.gift_exchange?) || @tag || (@user && @user == current_user) %>
+  <div class="navigation actions module">
 
-  <!--Subnavigation, sorting and actions.-->
-  <h3 class="landmark heading">Navigation, Sorting and Actions</h3>
-  <!--gift search subnav-->
-  <% if @collection && @collection.gift_exchange? %>
-    <%= render :partial => 'gifts/gift_search' %>
-  <% end %>
+    <h3 class="landmark heading"><%= ts("Navigation, Sorting and Actions") %></h3>
+    <!--gift search subnav-->
+    <% if @collection && @collection.gift_exchange? %>
+      <%= render :partial => 'gifts/gift_search' %>
+    <% end %>
 
-  <!--user role subnav-->
-  <% if @tag || @user %>
-    <ul class="user navigation actions" role="navigation">
-      <% if @user %>
-        <% if @user == current_user %>
-          <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+    <!--user role subnav-->
+    <% if @tag || @user %>
+      <ul class="user navigation actions" role="navigation">
+        <% if @user %>
+          <% if @user == current_user %>
+            <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+          <% end %>
+          <li><%= link_to ts('Works in Collections'), collected_user_works_path(@user) %></li>
+          <li><%= span_if_current ts('Works'), user_works_path(@user) %></li>
         <% end %>
-        <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
-        <li><%= span_if_current ts('Works'), user_works_path(@user) %></li>
-      <% end %>
-      <% if @tag %>
-        <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
-        <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
-      <% end %>
-      <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
-        <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
-      <% end %>
-    </ul>
-  <% end %>
+        <% if @tag %>
+          <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
+          <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+        <% end %>
+        <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+          <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
+        <% end %>
+      </ul>
+    <% end %>
   
-</div>
+  </div>
+<% end %>
 <!---/subnav-->
 
 <% unless @owner.present? %>
