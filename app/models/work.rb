@@ -413,6 +413,11 @@ class Work < ActiveRecord::Base
     self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
     return true
   end
+  
+  # This work's collections and parent collections
+  def all_collections
+    Collection.where(id: self.collection_ids) || []
+  end
 
   ########################################################################
   # VERSIONS & REVISION DATES
@@ -1269,6 +1274,36 @@ class Work < ActiveRecord::Base
   
   def async_bookmarks_index
     self.bookmarks.each{ |bookmark| bookmark.update_index }
+  end
+  
+  def sweep_index_caches
+    to_expire = []
+    
+    all_collections = self.all_collections
+    all_collections.each do |collection|
+      to_expire << "collection/#{collection.id}"
+    end
+    
+    self.pseuds.each do |pseud|
+      to_expire << "pseud/#{pseud.id}"
+      to_expire << "user/#{pseud.user_id}"
+    end
+
+    # expire the first n cached pages for the tags on the work and the corresponding filter tags
+    (self.tags + self.filters).uniq.each do |tag|
+      to_expire << "tag/#{tag.id}"
+      all_collections.each do |collection|
+        to_expire <<  "collection/#{collection.id}/tag/#{tag.id}"
+      end
+    end
+    
+    # Expire all the relevant index page keys
+    to_expire.uniq.each do |exp|
+      5.times do |n|
+        Rails.cache.delete("views/works/v2/#{exp}/u/p/#{n+1}")
+        Rails.cache.delete("views/works/v2/#{exp}/v/p/#{n+1}")
+      end
+    end
   end
 
 end
