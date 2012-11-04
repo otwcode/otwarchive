@@ -5,9 +5,8 @@
   <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@pseud ? @pseud.name : @user.login)) + ' &#8595;').html_safe %>
-      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= pseud_link_text %></a>
-      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= pseud_link_text %></a>
+      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= sidebar_pseud_link_text(@user, @pseud) %></a>
+      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= sidebar_pseud_link_text(@user, @pseud) %></a>
       <ul id="pseud_switcher" class="toggled secondary">
           <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
@@ -25,14 +24,14 @@
 	
 <h4 class="landmark heading"><%= ts("Pitch")%></h4>
 <ul class="navigation actions">
-	<li><%= @pseud ? print_pseud_works_link(@pseud) : print_works_link(@user) %></li>
+	<li><%= print_works_link(@user, @pseud) %></li>
 	<% if @user == current_user %>
 	  <li><%= span_if_current ts("Drafts") + " (#{@user.unposted_works.size})", drafts_user_works_path(@user) %></li>
   <% end %>
-	<li><%= @pseud ? print_pseud_series_link(@pseud) : print_series_link(@user) %></li>
+	<li><%= print_series_link(@user, @pseud) %></li>
 
 	<% unless @user == User.orphan_account %>
-	  <li><%= @pseud ? print_pseud_bookmarks_link(@pseud) : print_bookmarks_link(@user) %></li>
+	  <li><%= print_bookmarks_link(@user, @pseud) %></li>
 	<% end %>
 
   <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.owned_collections.count), user_collections_path(@user) %></li>

@@ -15,14 +15,14 @@ class WorkSweeper < ActionController::Caching::Sweeper
     # in case this is a chapter of the work
     work = record
     work = record.work if record.is_a?(Chapter)
+    return unless work.present?
+    work.async(:sweep_index_caches)
     
     # expire all the blurbs and meta sections for this work
-    if work
-      %w(showwarn nowarn).each do |warning|
-       %w(showfreeform showfreeform).each do |freeform|
-         expire_fragment("work-#{work.id}-#{warning}-#{freeform}") 
-         expire_fragment("work-meta-#{work.id}-#{warning}-#{freeform}") 
-        end
+    %w(showwarn nowarn).each do |warning|
+     %w(showfreeform showfreeform).each do |freeform|
+       expire_fragment("work-#{work.id}-#{warning}-#{freeform}") 
+       expire_fragment("work-meta-#{work.id}-#{warning}-#{freeform}") 
       end
     end
   end

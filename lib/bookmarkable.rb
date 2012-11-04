@@ -9,7 +9,9 @@ module Bookmarkable
   end
 
   def public_bookmark_count
-    self.bookmarks.is_public.count
+    Rails.cache.fetch("#{self.cache_key}/bookmark_count", :expires_in => 2.hours) do
+      self.bookmarks.is_public.count
+    end
   end
 
   def update_bookmarks_index

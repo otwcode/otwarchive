@@ -40,10 +40,13 @@ class WorksController < ApplicationController
     else
       options = {}
     end
-    if params[:fandom_id]
-      @fandom = Fandom.find_by_id(params[:fandom_id])
+    if params[:fandom_id] || (@collection.present? && @tag.present?)
+      if params[:fandom_id].present?
+        @fandom = Fandom.find_by_id(params[:fandom_id])
+      end
+      tag = @fandom || @tag
       options[:filter_ids] ||= []
-      options[:filter_ids] << params[:fandom_id]
+      options[:filter_ids] << tag.id
     end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
@@ -54,11 +57,22 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        @works = @search.search_results
+        if params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
+          @works = Rails.cache.fetch(index_cache_key) do
+            results = @search.search_results
+            # calling this here to avoid frozen object errors
+            results.items
+            results
+          end
+        else
+          @works = @search.search_results
+        end
         @facets = @works.facets
       end
     else
-      @works = Work.latest
+      @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
+        Work.latest.to_a
+      end
     end
   end
 
@@ -833,6 +847,21 @@ public
     else
       "Latest Works"
     end
+  end
+  
+  # This has views/ in it because that's what expire_fragment is looking for
+  def index_cache_key
+    cache_key = ['views', 'works', 'v2']
+    cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
+    cache_key << @owner.id.to_s
+    if @collection.present? && @tag.present?
+      cache_key << "tag"
+      cache_key << @tag.id.to_s
+    end
+    cache_key << (logged_in? ? "u" : "v")
+    cache_key << 'p'
+    cache_key << (params[:page] || '1')
+    cache_key.join("/")
   end
 
 end

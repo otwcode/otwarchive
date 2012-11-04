@@ -67,7 +67,9 @@ class BookmarksController < ApplicationController
           @facets = @bookmarks.facets
         end
       else
-        @bookmarks = Bookmark.latest
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
+          Bookmark.latest.to_a
+        end
       end
     end
   end

@@ -51,18 +51,24 @@
     </dd>
     <dt>
       <%= f.label :date, ts('Date Bookmarked') %>
-      <%= link_to_help "search-date-help" %>
+      <%= link_to_help "bookmark-search-date-bookmarked-help" %>
     </dt>
     <dd>
       <%= f.text_field :date %>
     </dd>
     <dt>
       <%= f.label :bookmarkable_date, ts('Date Updated') %>
-      <%= link_to_help "search-bookmarkable-date-help" %>
+      <%= link_to_help "bookmark-search-date-updated-help" %>
     </dt>
     <dd>
       <%= f.text_field :bookmarkable_date %>
     </dd> 
+    <dt>
+      <%= f.label :sort_column, ts("Sort by") %>
+    </dt>
+    <dd>
+      <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column), { :include_blank => "Best Match" } %>
+    </dd>
  
     <dt class="landmark">Submit</dt>
     <dd class="submit actions"><%= f.submit ts('Search bookmarks') %></dd>

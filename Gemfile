@@ -67,7 +67,9 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
-gem 'newrelic_rpm'
+gem 'rpm_contrib'
+gem 'newrelic_rpm', ">= 3.5.0"
+gem 'newrelic-redis'
 
 # for generating graphs
 gem "google_visualr", ">= 2.1"
