@@ -41,7 +41,28 @@ class SearchResult
   end
   
   def facets
-    tire_response.facets
+    return if tire_response.facets.nil?
+    if @facets.nil?
+      @facets = {}
+      tire_response.facets.each_pair do |term, results|
+        @facets[term] = []
+        results = results['terms']
+        if Tag::TYPES.include?(term.classify) || term == 'tag'
+          ids = results.map{ |result| result['term'] }
+          tags = Tag.where(id: ids).group_by(&:id)
+          results.each do |facet|
+            @facets[term] << SearchFacet.new(facet['term'], tags[facet['term'].to_i].first.name, facet['count'])
+          end
+        elsif term == 'collections'
+          ids = results.map{ |result| result['term'] }
+          collections = Collection.where(id: ids).group_by(&:id)
+          results.each do |facet|
+            @facets[term] << SearchFacet.new(facet['term'], tags[facet['term'].to_i].first.title, facet['count'])
+          end
+        end
+      end
+    end
+    @facets
   end
   
   def total_pages
@@ -64,4 +85,7 @@ class SearchResult
     tire_response.current_page
   end
   
+end
+
+class SearchFacet < Struct.new(:id, :name, :count)
 end

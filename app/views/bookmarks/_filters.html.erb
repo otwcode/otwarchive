@@ -16,7 +16,7 @@
       <dd>
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
-      <% %w(tag rating warning category fandom character relationship freeform).each do |tag_type| %>
+      <% %w(rating warning category fandom character relationship freeform tag).each do |tag_type| %>
         <dt>
           <% tag_label = tag_type == 'tag' ? "Bookmarker's Tags" : tag_type.capitalize %>
           <noscript><%= tag_label %></noscript>
@@ -31,10 +31,9 @@
         </dt>
         <dd id="tag_category_<%= tag_type %>" class="tags toggled">
           <ul>              
-            <% @facets[tag_type]['terms'].each do |facet| %>
+            <% @facets[tag_type].each do |tag| %>
               <li>
-                <% tag = Tag.find(facet['term']) %>
-                <% if (tag_type == "rating") && @facets[tag_type]['terms'].length > 1 %>
+                <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
                   <%= radio_button_tag "bookmark_search[#{tag_type}_ids][]", 
                     tag.id, 
                     @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
@@ -46,7 +45,7 @@
                     :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                 <% end %>
                 <%= label_tag "bookmark_search_#{tag_type}_ids_#{tag.id}", 
-                  "#{tag.name} (#{facet['count']})" %>
+                  "#{tag.name} (#{tag.count})" %>
               </li>
             <% end %>
           </ul>

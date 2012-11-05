@@ -62,6 +62,7 @@ class WorksController < ApplicationController
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
+            results.facets
             results
           end
         else
