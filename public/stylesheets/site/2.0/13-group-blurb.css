@@ -178,6 +178,10 @@ li.blurb:after {
   background: url("/images/imageset.png") -175px -25px;
 }
 
+.blurb .abandoned {
+  background: url("/images/imageset.png") -175px -275px;
+}
+
 .blurb .warning-yes {
   background: url("/images/imageset.png") -150px -25px;
 }
