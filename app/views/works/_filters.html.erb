@@ -16,40 +16,45 @@
       <dd>
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
-      <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
-        <dt>
-          <noscript><%= tag_type.capitalize %></noscript>
-          <a class="tag_category_<%= tag_type %>_open hidden" href="#">
-            <%= image_tag 'arrow-right.gif', :alt => "" %>
-            <%= tag_type.capitalize %>
-          </a>
-          <a class="tag_category_<%= tag_type %>_close hidden" href="#">
-            <%= image_tag 'arrow-down.gif', :alt => "" %>
-            <%= tag_type.capitalize %>
-          </a>
-        </dt>
-        <dd id="tag_category_<%= tag_type %>" class="tags toggled">
-          <ul>              
-            <% @facets[tag_type].each do |tag| %>
-              <li>
-                <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
-                  <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
-                    tag.id, 
-                    @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                    :id => "work_search_#{tag_type}_ids_#{tag.id}" %> 
-                <% else %>
-                  <%= check_box_tag "work_search[#{tag_type}_ids][]", 
-                    tag.id,
-                    @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                    :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
+      <dt><%= ts("Top 10 Tags") %></dt>
+      <dd>
+        <dl>
+          <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
+            <dt>
+              <noscript><%= tag_type.capitalize %></noscript>
+              <a class="tag_category_<%= tag_type %>_open hidden" href="#">
+                <%= image_tag 'arrow-right.gif', :alt => "" %>
+                <%= tag_type.capitalize %>
+              </a>
+              <a class="tag_category_<%= tag_type %>_close hidden" href="#">
+                <%= image_tag 'arrow-down.gif', :alt => "" %>
+                <%= tag_type.capitalize %>
+              </a>
+            </dt>
+            <dd id="tag_category_<%= tag_type %>" class="tags toggled">
+              <ul>              
+                <% @facets[tag_type].each do |tag| %>
+                  <li>
+                    <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
+                      <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
+                        tag.id, 
+                        @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %> 
+                    <% else %>
+                      <%= check_box_tag "work_search[#{tag_type}_ids][]", 
+                        tag.id,
+                        @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
+                    <% end %>
+                    <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
+                      "#{tag.name} (#{tag.count})" %>
+                  </li>
                 <% end %>
-                <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
-                  "#{tag.name} (#{tag.count})" %>
-              </li>
-            <% end %>
-          </ul>
-        </dd>
-      <% end %>
+              </ul>
+            </dd>
+          <% end %>
+        </dl>
+      </dd>
       <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other tags") %></dt>
       <dd class="autocomplete">
         <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
