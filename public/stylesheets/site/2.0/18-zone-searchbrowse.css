@@ -101,4 +101,12 @@ form.filters dl {
   padding-right: 0;
 }
 
+form.filters dl dl {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
 /*END== */
