@@ -34,7 +34,11 @@ class BookmarksController < ApplicationController
     options[:show_private] = false    
     options[:show_restricted] = current_user.present?
     @search = BookmarkSearch.new(options)
+    @page_subtitle = ts("Search Bookmarks")
     if params[:bookmark_search].present? && params[:edit_search].blank?
+      if @search.query.present?
+        @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
+      end
       @bookmarks = @search.search_results
       render 'search_results'
     end
@@ -55,7 +59,7 @@ class BookmarksController < ApplicationController
       options[:show_restricted] = current_user.present?
 
       options.merge!(page: params[:page])      
-      @page_title = index_page_title
+      @page_subtitle = index_page_title
 
       if @owner.present?
         if @admin_settings.disable_filtering?
@@ -198,7 +202,7 @@ class BookmarksController < ApplicationController
                    else
                      @owner.try(:name)
                    end
-      "#{owner_name} &raquo; Bookmarks".html_safe
+      "#{owner_name} - Bookmarks".html_safe
     else
       "Latest Bookmarks"
     end

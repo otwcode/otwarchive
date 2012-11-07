@@ -27,7 +27,11 @@ class WorksController < ApplicationController
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_restricted] = current_user.present?
     @search = WorkSearch.new(options)
+    @page_subtitle = ts("Search Works")
     if params[:work_search].present? && params[:edit_search].blank?
+      if @search.query.present?
+        @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
+      end
       @works = @search.search_results
       render 'search_results'
     end
@@ -50,7 +54,7 @@ class WorksController < ApplicationController
     end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
-    @page_title = index_page_title
+    @page_subtitle = index_page_title
     
     if @owner.present?
       if @admin_settings.disable_filtering?
@@ -95,7 +99,7 @@ class WorksController < ApplicationController
         @works = @search.search_results
         @facets = @works.facets
       end
-      @page_title = ts("Collected Works for %{username}", username: @user.login)
+      @page_subtitle = ts("%{username} - Collected Works", username: @user.login)
     end    
   end
 
@@ -844,7 +848,7 @@ public
                    else
                      @owner.try(:name)
                    end
-      "#{owner_name} &raquo; Works".html_safe
+      "#{owner_name} - Works".html_safe
     else
       "Latest Works"
     end
