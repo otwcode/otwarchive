@@ -22,15 +22,14 @@
         </dt>
         <dd class="tags">
           <ul>              
-            <% @facets['collections']['terms'].each do |facet| %>
+            <% @facets['collections'].each do |collection| %>
               <li>
-                <% collection = Collection.find(facet['term']) %>
                 <%= check_box_tag "work_search[collection_ids][]", 
                   collection.id,
                   @search.collection_ids.present? && @search.collection_ids.include?(collection.id.to_s), 
                   :id => "work_search_collection_ids_#{collection.id}" %>
                 <%= label_tag "work_search_collection_ids_#{collection.id}", 
-                  "#{collection.title} (#{facet['count']})" %>
+                  "#{collection.name} (#{collection.count})" %>
               </li>
             <% end %>
           </ul>
