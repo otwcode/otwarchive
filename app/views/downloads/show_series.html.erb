@@ -1,0 +1,21 @@
+<center><u><h1><%= @series.title.html_safe %></h1></u></center>
+
+<% for serial in @serial_works %>
+  <% @work = serial.work %>
+  <% @chapters = @work.chapters.order('position ASC').where(:posted => true) %>
+
+  <%= render 'download_preface.html' %>
+
+  <div id="chapters" class="userstuff">
+    <% if @chapters.size > 1 %>
+      <% for chapter in @chapters %>
+        <%= render 'download_chapter.html', :chapter => chapter %>
+      <% end %>
+    <% else %>
+      <%=raw sanitize_field(@chapters.first, :content) %>
+    <% end %>
+  </div>
+
+<% end %>
+
+<%= render 'download_afterword.html' %>
