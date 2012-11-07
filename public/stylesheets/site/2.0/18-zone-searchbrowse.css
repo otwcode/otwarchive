@@ -71,6 +71,10 @@ form.filters {
   display: block;
 }
 
+.filters dt.autocomplete {
+  margin-top: 1.286em;
+}
+
 form.filters dl {
   margin-top: 0.375em;
   padding: 0;
