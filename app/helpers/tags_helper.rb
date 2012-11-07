@@ -1,4 +1,15 @@
 module TagsHelper
+  
+  def tag_type_label(tag_type)
+    case tag_type
+    when 'tag'
+      "Bookmarker's Tags"
+    when 'freeform'
+      "Additional Tags"
+    else
+      tag_type.capitalize.pluralize
+    end
+  end
 
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
