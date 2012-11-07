@@ -586,7 +586,7 @@ class Tag < ActiveRecord::Base
   def move_filter_taggings_to_merger
     self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
     self.async(:reset_filter_count)
-    self.works.each { |work| work.async_work_and_bookmarks_index }
+    self.works.each { |work| work.update_work_and_bookmarks_index }
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -636,7 +636,7 @@ class Tag < ActiveRecord::Base
             end
           end
         end
-        work.async_work_and_bookmarks_index
+        work.update_work_and_bookmarks_index
       end
       tags_that_need_filter_count_reset.each do |tag_to_reset|
         tag_to_reset.reset_filter_count
@@ -681,12 +681,24 @@ class Tag < ActiveRecord::Base
             end
           end
         end
-        work.async_work_and_bookmarks_index
+        work.update_work_and_bookmarks_index
       end
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
-      self.works.each{ |work| work.async_work_and_bookmarks_index }
+      self.works.each{ |work| work.update_work_and_bookmarks_index }
+    end
+  end
+
+    # Add filter taggings to this tag's works for one of its meta tags
+  def inherit_meta_filters(meta_tag_id)
+    meta_tag = Tag.find_by_id(meta_tag_id)
+    return unless meta_tag.present?
+    self.filtered_works.each do |work|        
+      unless work.filters.include?(meta_tag)
+        work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
+        work.update_work_and_bookmarks_index
+      end
     end
   end
 
@@ -812,7 +824,7 @@ class Tag < ActiveRecord::Base
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filters.delete(tag)
-            work.async_work_and_bookmarks_index
+            work.update_work_and_bookmarks_index
           end
         end
       end
@@ -980,3 +992,4 @@ class Tag < ActiveRecord::Base
   end  
 
 end
+
