@@ -576,13 +576,17 @@ class Tag < ActiveRecord::Base
       if self.canonical?
         self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
-        self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
-        self.async(:reset_filter_count)
-        self.works.each { |work| work.async_work_and_bookmarks_index }
+        self.async(:move_filter_taggings_to_merger)
       else
         self.async(:remove_filter_taggings)
       end
     end
+  end
+  
+  def move_filter_taggings_to_merger
+    self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+    self.async(:reset_filter_count)
+    self.works.each { |work| work.async_work_and_bookmarks_index }
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
