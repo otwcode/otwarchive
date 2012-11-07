@@ -51,13 +51,17 @@ class SearchResult
           ids = results.map{ |result| result['term'] }
           tags = Tag.where(id: ids).group_by(&:id)
           results.each do |facet|
-            @facets[term] << SearchFacet.new(facet['term'], tags[facet['term'].to_i].first.name, facet['count'])
+            unless tags[facet['term'].to_i].blank?
+              @facets[term] << SearchFacet.new(facet['term'], tags[facet['term'].to_i].first.name, facet['count'])
+            end
           end
         elsif term == 'collections'
           ids = results.map{ |result| result['term'] }
           collections = Collection.where(id: ids).group_by(&:id)
           results.each do |facet|
-            @facets[term] << SearchFacet.new(facet['term'], collections[facet['term'].to_i].first.title, facet['count'])
+            unless collections[facet['term'].to_i].blank?
+              @facets[term] << SearchFacet.new(facet['term'], collections[facet['term'].to_i].first.title, facet['count'])
+            end
           end
         end
       end
