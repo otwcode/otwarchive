@@ -57,7 +57,7 @@ class SearchResult
           ids = results.map{ |result| result['term'] }
           collections = Collection.where(id: ids).group_by(&:id)
           results.each do |facet|
-            @facets[term] << SearchFacet.new(facet['term'], tags[facet['term'].to_i].first.title, facet['count'])
+            @facets[term] << SearchFacet.new(facet['term'], collections[facet['term'].to_i].first.title, facet['count'])
           end
         end
       end
