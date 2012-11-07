@@ -1261,9 +1261,9 @@ class Work < ActiveRecord::Base
   end  
   
   # Update the search index for both this work and its associated bookmarks
-  def async_work_and_bookmarks_index
-    async(:update_index)
-    async(:async_bookmarks_index)
+  def update_work_and_bookmarks_index
+    self.update_index
+    self.bookmarks.each{ |bookmark| bookmark.update_index }
   end
   
   # This gets invoked as a callback in lib/work_stats.rb so we want to make
