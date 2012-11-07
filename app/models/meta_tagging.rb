@@ -29,12 +29,7 @@ class MetaTagging < ActiveRecord::Base
   # but not vice versa
   def add_filters
     if self.meta_tag.canonical?
-      self.sub_tag.filtered_works.each do |work|        
-        unless work.filters.include?(self.meta_tag)
-          work.filter_taggings.create!(:inherited => true, :filter_id => self.meta_tag.id)
-          work.async_work_and_bookmarks_index
-        end
-      end
+      self.sub_tag.async(:inherit_meta_filters, self.meta_tag.id)
     end 
   end
   
