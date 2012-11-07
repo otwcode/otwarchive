@@ -29,6 +29,7 @@ class AdminPostsController < ApplicationController
     @admin_post = AdminPost.find(params[:id])
     @commentable = @admin_post
     @comments = @admin_post.comments
+    @page_subtitle = @admin_post.title
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @admin_post }
