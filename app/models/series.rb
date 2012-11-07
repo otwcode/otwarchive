@@ -198,4 +198,40 @@ class Series < ActiveRecord::Base
       Work.in_series(self).visible.collect(&:revised_at).compact.uniq.sort.last
     end
   end
+
+  # spread downloads out by first two letters of authorname
+  def download_dir
+    "#{Rails.public_path}/#{self.download_folder}"
+  end
+
+  # split out so we can use this in works_helper
+  def download_folder
+    dl_authors = self.download_authors    
+    "downloads/series/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
+  end
+  
+  def download_fandoms
+    string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string.gsub(/[^[\w _-]]+/, '')
+  end
+  def display_authors
+    string = self.anonymous? ? ts("Anonymous") : self.work_pseuds.sort.map(&:name).join(', ')
+  end
+  # need the next two to be filesystem safe and not overly long
+  def download_authors
+    string = self.anonymous? ? ts("Anonymous") : self.work_pseuds.sort.map(&:name).join('-')
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = string.gsub(/[^[\w _-]]+/, '')
+    string.gsub(/^(.{24}[\w.]*).*/) {$1}
+  end
+  def download_title
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
+    string = string.gsub(/[^[\w _-]]+/, '')
+    string = "Work by " + download_authors if string.blank?
+    string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
+  end
+  def download_basename
+    "#{self.download_dir}/#{self.download_title}"
+  end
 end

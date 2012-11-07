@@ -47,4 +47,8 @@ module SeriesHelper
     end
   end
   
+  def download_url_for_series(series, format)
+    url_for ("/#{series.download_folder}/#{series.download_title}.#{format}").gsub(' ', '%20')
+  end
+  
 end

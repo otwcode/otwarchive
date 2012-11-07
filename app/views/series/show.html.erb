@@ -17,6 +17,7 @@
   <% end %>
   <% @bookmark ||= bookmark_if_exists(@series) %>
   <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
+  <li><%= link_to ts("Download as HTML"), download_url_for_series(@series, "html") %></li>
   <% if is_author_of?(@series) %>
     <li><%= link_to ts("Edit"), edit_series_path(@series) %></li>
     <li><%= link_to ts('Delete Series'), @series, :confirm => ts('Are you sure you want to delete this series? This will NOT delete the individual works.'), :method => :delete %></li>
