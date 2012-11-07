@@ -21,14 +21,14 @@
         <dl>
           <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
             <dt>
-              <noscript><%= tag_type.capitalize %></noscript>
+              <noscript><%= tag_type_label(tag_type) %></noscript>
               <a class="tag_category_<%= tag_type %>_open hidden" href="#">
                 <%= image_tag 'arrow-right.gif', :alt => "" %>
-                <%= tag_type.capitalize %>
+                <%= tag_type_label(tag_type) %>
               </a>
               <a class="tag_category_<%= tag_type %>_close hidden" href="#">
                 <%= image_tag 'arrow-down.gif', :alt => "" %>
-                <%= tag_type.capitalize %>
+                <%= tag_type_label(tag_type) %>
               </a>
             </dt>
             <dd id="tag_category_<%= tag_type %>" class="tags toggled">
@@ -55,7 +55,7 @@
           <% end %>
         </dl>
       </dd>
-      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other tags") %></dt>
+      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other Tags") %></dt>
       <dd class="autocomplete">
         <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
       </dd>
