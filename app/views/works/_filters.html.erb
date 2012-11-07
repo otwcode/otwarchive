@@ -62,7 +62,7 @@
       <dt><%= f.label :query, ts("Search within results") %><%= link_to_help "work-search-text-help" %></dt>
       <dd><%= f.text_field :query %></dd>
       <dt><%= ts("Language") %></dt>
-      <dd><%= f.collection_select(:language_id, Language.default_order, :id, :name, :prompt => true) %></dd>
+      <dd><%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %></dd>
       <dt><%= ts("Status") %></dt>
       <dd>
         <%= f.check_box :complete %>
