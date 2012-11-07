@@ -39,7 +39,40 @@ class DownloadsController < ApplicationController
     end
   end
 
+  def show_series
+    @series = Series.find(params[:id])
+    @check_visibility_of = @series
+
+    if @series.unrevealed?
+      setflash; flash[:error] = ts("Sorry, you can't download an unrevealed series")
+      redirect_back_or_default series_path and return
+    end
+
+    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
+
+    @download_basename = @series.download_basename
+
+    Rails.logger.debug "Series basename: #{@download_basename}"
+    FileUtils.mkdir_p @series.download_dir
+
+    respond_to do |format|
+      format.html {download_series_html}
+      # TODO format.pdf {download_pdf}
+      # mobipocket for kindle
+      # TODO format.mobi {download_mobi}
+      # epub for ibooks
+      # TODO format.epub {download_epub}
+    end
+  end
+
 protected
+
+  def download_series_html
+    create_series_html
+
+    # send as HTML
+    send_file("#{@download_basename}.html", :type => "text/html")
+  end
 
   def download_html
     create_work_html
@@ -140,6 +173,21 @@ protected
     # write to file
     File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
   end
+
+  def create_series_html
+    #return if File.exists?("#{@download_basename}.html")
+
+    # set up instance variables needed by template
+    @page_title = [@series.download_title, @series.download_authors].join(" - ")
+    #TODO(openendings):  find a sensible way of adding fandoms to @page_title
+
+    # render template
+    html = render_to_string(:template => "downloads/show_series.html", :layout => "barebones.html")
+
+
+    # write to file
+    File.open("#{@download_basename}.html", 'w') {|f| f.write(html)}
+   end
 
   def create_mobi_html
     return if File.exists?("#{@work.download_basename}.mobi")
