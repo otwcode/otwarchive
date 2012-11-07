@@ -61,7 +61,7 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        if params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
           @works = Rails.cache.fetch(index_cache_key) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
@@ -74,10 +74,12 @@ class WorksController < ApplicationController
         end
         @facets = @works.facets
       end
-    else
+    elsif use_caching?
       @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
         Work.latest.to_a
       end
+    else
+      @works = Work.latest.to_a
     end
   end
 
