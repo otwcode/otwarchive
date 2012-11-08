@@ -38,7 +38,7 @@ Feature: Orphan work
     When I choose "Leave a copy of my pseud on"
     And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
-    When I follow "Works"
+    When I am on my works page
     Then I should not see "Shenanigans2"
     When I view the work "Shenanigans2"
     Then I should see "orphaneer (orphan_account)"

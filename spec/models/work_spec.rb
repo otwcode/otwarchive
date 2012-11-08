@@ -1,6 +1,71 @@
 require 'spec_helper'
 
 describe Work do
+  
+  context "added to a collection", focus: true do
+    let(:collection) { Factory.create(:collection) }
+    let(:work) { Factory.build(:work, :collection_names => collection.name) }
+    subject { work }
+  
+    context "which is unrevealed" do
+      before(:each) do
+        collection.collection_preference.update_attribute(:unrevealed, true)
+        work.save!
+      end
+      
+      it { should be_unrevealed }
+      
+      describe "when the collection is revealed" do
+        before(:each) do
+          collection.collection_preference.update_attribute(:unrevealed, false)
+          work.reload
+        end
+        
+        it { should_not be_unrevealed }
+      end
+    end
+  
+    context "which is anonymous" do
+      before(:each) do
+        collection.collection_preference.update_attribute(:anonymous, true)
+        work.save!
+      end
+      
+      it { should be_anonymous }
+      
+      describe "when the collection stops being anonymous" do
+        before(:each) do
+          collection.collection_preference.update_attribute(:anonymous, false)
+          work.reload
+        end
+        
+        it { should_not be_anonymous }
+      end
+    end
+  
+    context "which is not unrevealed" do
+      before(:each) do
+        collection.collection_preference.update_attribute(:unrevealed, false)
+        work.save!
+      end
+      
+      it { should_not be_unrevealed }
+      
+      it "should become unrevealed when the collection does"
+    end
+    
+    context "which is not anonymous" do
+      before(:each) do
+        collection.collection_preference.update_attribute(:anonymous, false)
+        work.save!
+      end
+      
+      it { should_not be_anonymous }
+      
+      it "should become anonymous when the collection does"
+    end
+
+  end
 
   describe "save" do
 

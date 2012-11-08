@@ -5,7 +5,7 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INDEX PAGES (with filters)*/
 
-.works-index .index, .collections-index .index {
+.filtered .index {
   width: 75%;
   float: left;
 }
@@ -67,19 +67,12 @@ form.filters {
   float: right;
 }
 
-form.filters legend {
-  height: auto;
-  width: auto;
-  font-size: 100%;
-  background: #fff;
-  border: 2px solid #ddd;
-  padding: 0.5em;
-    box-shadow: 1px 2px 3px #999;
-    opacity: 1;
-}
-
 .filters .tags {
   display: block;
+}
+
+.filters dt.autocomplete {
+  margin-top: 1.286em;
 }
 
 form.filters dl {
@@ -87,12 +80,33 @@ form.filters dl {
   padding: 0;
 }
 
-form.filters dt span {
-  cursor: pointer;
+.filters dt a {
+  border: none;
 }
 
-.filters dd {
+.filters dt a:hover {
+  color: #111;
+}
+
+.filters dt a:focus img {
+  outline: none;
+}
+
+.filters dd, .filters dt, .filters .submit input {
   width: 100%;
+}
+
+.filters .submit {
+  text-align: center;
+  padding-right: 0;
+}
+
+form.filters dl dl {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
 }
 
 /*END== */

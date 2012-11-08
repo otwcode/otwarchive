@@ -35,7 +35,7 @@ Feature: Basic collection navigation
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
   Then I should see "Work for my collection by mod"
-    And I should see "1 Work found in My Collection"
+    And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"
   Then I should see "Listing Bookmarks"
     And I should see "View Recs Only"

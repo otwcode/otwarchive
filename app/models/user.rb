@@ -293,7 +293,7 @@ class User < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_work_count
-    Work.owned_by(self).visible_to_user(User.current_user).count(:id, :distinct => true)
+    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.count(:id, :distinct => true)
   end
 
   # Gets the user account for authored objects if orphaning is enabled
@@ -378,15 +378,12 @@ class User < ActiveRecord::Base
   # Options can include :categories and :limit
   def most_popular_tags(options = {})
     all_tags = []
-    if options[:categories].blank?
-      all_tags = self.tags + self.bookmark_tags
-    else
-      type_tags = []
-      options[:categories].each do |type_name|
-        type_tags << type_name.constantize.all
-      end
-      all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
+    options[:categories] ||= %w(Fandom Character Relationship Freeform)
+    type_tags = []
+    options[:categories].each do |type_name|
+      type_tags << type_name.constantize.all
     end
+    all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
     tags_with_count = {}
     all_tags.uniq.each do |tag|
       tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
