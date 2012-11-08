@@ -17,37 +17,46 @@
 <h3 class="landmark heading"><%= ts("Series Metadata") %></h3>
 <div class="wrapper">
 	<dl class="series meta group">
-    <dt><%= ts("Series Begun:") %></dt>
-    <dd><%= @series.published_at.to_date %></dd>
-    <dt><%= ts("Series Updated:") %></dt>
-    <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
-
-    <dt><%= ts("Works Included:") %></dt>
-    <dd><%= @series.visible_work_count %></dd>
-
-    <dt><%= ts("Complete:") %></dt>
-    <dd><%= @series.complete? ? ts("Yes") : ts("No") %></dd>
-
-    <dt><%= ts("Word Count:") %></dt>
-    <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
-
-    <% if @series.pseuds.many?%>
-      <dt><%= ts("Authors:") %></dt>
+	
+	  <% if @series.pseuds.many?%>
+      <dt><%= ts('Authors:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% else %>
-      <dt><%= ts("Author:") %></dt>
+      <dt><%= ts('Author:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% end %>
-
-  <% unless @series.summary.blank? %>
-      <dt><%= ts("Description:") %></dt>
+	
+    <dt><%= ts('Series Begun:') %></dt>
+    <dd><%= @series.published_at.to_date %></dd>
+    <dt><%= ts('Series Updated:') %></dt>
+    <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
+    
+    <% unless @series.summary.blank? %>
+      <dt><%= ts('Description:') %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
-	<% end %>
-	<% unless @series.notes.blank? %>
-      <dt><%= ts("Notes:") %></dt>
+	  <% end %>
+	  <% unless @series.notes.blank? %>
+      <dt><%= ts('Notes:') %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
-	<% end %>
-</dl>
+	  <% end %>
+	
+    <dt class="stats"><%= ts('Stats:') %></dt>
+    <dd class="stats"> 
+      <dl class="stats">
+        <dt><%= ts('Words:') %></dt>
+        <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
+        <dt><%= ts('Works:') %></dt>
+        <dd><%= @series.visible_work_count %></dd>
+        <dt><%= ts('Complete:') %></dt>
+        <dd><%= @series.complete? ? "Yes" : "No" %></dd>
+        <% if (bookmark_count = @series.bookmarks.is_public.count) > 0 %>
+          <dt><%= ts('Bookmarks:') %></dt>
+          <dd><%= link_to_bookmarkable_bookmarks(@series, bookmark_count.to_s) %></dd>
+        <% end %>
+      </dl>
+    </dd>
+	
+  </dl>
 </div>
 <% if logged_in? %>
   <div id="bookmark_form_placement" class="wrapper toggled">
@@ -61,7 +70,7 @@
 
 <% if logged_in_as_admin? %>
 <!-- BEGIN admin options -->
-<%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
+  <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>
 
 <h3 class="landmark heading"><%= ts("Listing Series") %></h3>
