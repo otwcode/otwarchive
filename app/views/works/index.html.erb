@@ -16,9 +16,10 @@
   <!--user role subnav-->
   <% if @tag || @user %>
     <ul class="user navigation actions" role="navigation">
-      <% if @user && @user == current_user %>
-        <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
-      <% elsif @user %>
+      <% if @user %>
+        <% if @user == current_user %>
+          <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+        <% end %>
         <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
         <li><%= span_if_current ts('Works'), user_works_path %></li>
       <% end %>
