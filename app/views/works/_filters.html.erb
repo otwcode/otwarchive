@@ -17,7 +17,7 @@
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
       <dt><%= ts("Top 10 Tags") %><%= link_to_help "filters-tags-help" %></dt>
-      <dd>                    t
+      <dd>
         <dl>
           <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
             <dt>
