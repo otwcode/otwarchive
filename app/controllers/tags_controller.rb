@@ -37,6 +37,7 @@ class TagsController < ApplicationController
   def search
     if params[:query].present?
       options = params[:query].dup
+      @query = options
       options.merge!(:page => params[:page] || 1)
       @tags = Tag.search(options)
     end
