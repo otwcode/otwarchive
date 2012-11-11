@@ -54,6 +54,7 @@ li.search fieldset {
   padding: 0.15em;
   font-size: 87.5%;
   overflow: visible;
+  width: auto;
 }
 
 .search .tags dd.submit {

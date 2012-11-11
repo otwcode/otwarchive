@@ -15,6 +15,12 @@ form {
   clear: right;
 }
 
+form > fieldset {
+  width: 98%;
+  padding: 0.643em 1%;
+  margin: 0.643em 0;
+}
+
 /*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
 but it's probably not complete. */
@@ -557,10 +563,6 @@ div.dynamic {
 
 .dashboard fieldset {
   clear: right;
-}
-
-.dashboard .filters dt {
-  width: auto;
 }
 
 /*END== */

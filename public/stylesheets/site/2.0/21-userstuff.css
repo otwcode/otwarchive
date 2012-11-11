@@ -4,6 +4,7 @@
   margin: 1.286em auto;
   padding: 0;
   line-height: 1.5;
+    word-wrap: break-word;
 }
 
 /*lists */
