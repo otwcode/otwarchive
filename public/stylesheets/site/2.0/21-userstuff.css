@@ -1,10 +1,13 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
+.userstuff {
+    word-wrap: break-word;
+}
+
 .userstuff p {
   margin: 1.286em auto;
   padding: 0;
   line-height: 1.5;
-    word-wrap: break-word;
 }
 
 /*lists */
