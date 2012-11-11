@@ -16,6 +16,7 @@
         <% else %>
           <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
         <% end %>
+        <% # Ideally, required and allowed numbers would also be part of the labels %>
         <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>
       </dt>
 
