@@ -1,3 +1,11 @@
+<!-- descriptions-->
+<h2 class="heading"><%= ts("Sign Up for %{title}", :title => @collection.title) %></h2>
+<!-- /descriptions-->
+
+<!--subnavigation, sorting and actions-->
+<!--/subnav-->
+
+<!--main content-->
 <% types = @challenge.class::PROMPT_TYPES.select {|t| @challenge.allowed(t) > @challenge.required(t)} %>
 <% unless types.empty? %>
   <noscript>

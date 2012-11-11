@@ -11,8 +11,12 @@
       <% tag_field_id =  field_id(tag_set_form, "#{tag_type}_tagnames") %>
 
       <dt<%= num_required > 0 ? ' class="required"'.html_safe : '' %>>
-        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, ((num_allowed > 1) ? tag_name.pluralize : tag_name), :class => tag_type %>
-        <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
+        <% if num_required > 0 %>
+          <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize + "*", :class => tag_type %>
+        <% else %>
+          <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
+        <% end %>
+        <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>
       </dt>
 
       <dd title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
