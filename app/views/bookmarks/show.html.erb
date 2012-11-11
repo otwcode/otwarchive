@@ -6,7 +6,13 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("My Bookmarks"), user_bookmarks_path(@bookmark.pseud.user) %></li>
+  <li>
+    <% if is_author_of?(@bookmark) %>
+      <%= link_to ts("My Bookmarks"), user_bookmarks_path(@bookmark.pseud.user) %>
+    <% else %>
+      <%= link_to ts("Bookmarks by %{bookmarker}", :bookmarker => @bookmark.pseud.byline), user_bookmarks_path(@bookmark.pseud.user) %>
+    <% end %>
+  </li>
 </ul>
 <!--/subnav-->
 
