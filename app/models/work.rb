@@ -413,6 +413,11 @@ class Work < ActiveRecord::Base
     self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
     return true
   end
+  
+  # This work's collections and parent collections
+  def all_collections
+    Collection.where(id: self.collection_ids) || []
+  end
 
   ########################################################################
   # VERSIONS & REVISION DATES
@@ -1090,10 +1095,13 @@ class Work < ActiveRecord::Base
                 works = owner.filtered_works
               end
             end
-    if options[:fandom_id]
-      fandom = Fandom.find_by_id(options[:fandom_id])
-      if fandom.present?
-        works = works.with_filter(fandom)
+    
+    # Need to support user + fandom and collection + tag pages
+    if options[:fandom_id] || options[:filter_ids]
+      id = options[:fandom_id] || options[:filter_ids].first
+      tag = Tag.find_by_id(id)
+      if tag.present?
+        works = works.with_filter(tag)
       end
     end
     
@@ -1253,9 +1261,9 @@ class Work < ActiveRecord::Base
   end  
   
   # Update the search index for both this work and its associated bookmarks
-  def async_work_and_bookmarks_index
-    async(:update_index)
-    async(:async_bookmarks_index)
+  def update_work_and_bookmarks_index
+    self.update_index
+    self.bookmarks.each{ |bookmark| bookmark.update_index }
   end
   
   # This gets invoked as a callback in lib/work_stats.rb so we want to make
@@ -1266,6 +1274,36 @@ class Work < ActiveRecord::Base
   
   def async_bookmarks_index
     self.bookmarks.each{ |bookmark| bookmark.update_index }
+  end
+  
+  def sweep_index_caches
+    to_expire = []
+    
+    all_collections = self.all_collections
+    all_collections.each do |collection|
+      to_expire << "collection/#{collection.id}"
+    end
+    
+    self.pseuds.each do |pseud|
+      to_expire << "pseud/#{pseud.id}"
+      to_expire << "user/#{pseud.user_id}"
+    end
+
+    # expire the first n cached pages for the tags on the work and the corresponding filter tags
+    (self.tags + self.filters).uniq.each do |tag|
+      to_expire << "tag/#{tag.id}"
+      all_collections.each do |collection|
+        to_expire <<  "collection/#{collection.id}/tag/#{tag.id}"
+      end
+    end
+    
+    # Expire all the relevant index page keys
+    to_expire.uniq.each do |exp|
+      5.times do |n|
+        Rails.cache.delete("views/works/v2/#{exp}/u/p/#{n+1}")
+        Rails.cache.delete("views/works/v2/#{exp}/v/p/#{n+1}")
+      end
+    end
   end
 
 end

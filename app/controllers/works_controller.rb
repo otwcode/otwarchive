@@ -27,7 +27,11 @@ class WorksController < ApplicationController
     options.merge!(page: params[:page]) if params[:page].present?
     options[:show_restricted] = current_user.present?
     @search = WorkSearch.new(options)
+    @page_subtitle = ts("Search Works")
     if params[:work_search].present? && params[:edit_search].blank?
+      if @search.query.present?
+        @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
+      end
       @works = @search.search_results
       render 'search_results'
     end
@@ -40,25 +44,42 @@ class WorksController < ApplicationController
     else
       options = {}
     end
-    if params[:fandom_id]
-      @fandom = Fandom.find_by_id(params[:fandom_id])
+    if params[:fandom_id] || (@collection.present? && @tag.present?)
+      if params[:fandom_id].present?
+        @fandom = Fandom.find_by_id(params[:fandom_id])
+      end
+      tag = @fandom || @tag
       options[:filter_ids] ||= []
-      options[:filter_ids] << params[:fandom_id]
+      options[:filter_ids] << tag.id
     end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present?
-    @page_title = index_page_title
+    @page_subtitle = index_page_title
     
     if @owner.present?
       if @admin_settings.disable_filtering?
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        @works = @search.search_results
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
+          @works = Rails.cache.fetch(index_cache_key) do
+            results = @search.search_results
+            # calling this here to avoid frozen object errors
+            results.items
+            results.facets
+            results
+          end
+        else
+          @works = @search.search_results
+        end
         @facets = @works.facets
       end
+    elsif use_caching?
+      @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
+        Work.latest.to_a
+      end
     else
-      @works = Work.latest
+      @works = Work.latest.to_a
     end
   end
 
@@ -80,7 +101,7 @@ class WorksController < ApplicationController
         @works = @search.search_results
         @facets = @works.facets
       end
-      @page_title = ts("Collected Works for %{username}", username: @user.login)
+      @page_subtitle = ts("%{username} - Collected Works", username: @user.login)
     end    
   end
 
@@ -684,7 +705,11 @@ public
       @tag = Tag.find_by_name(params[:tag_id])
       unless @tag.canonical?
         if @tag.merger.present?
-          redirect_to tag_works_path(@tag.merger) and return
+          if @collection.present?
+            redirect_to collection_tag_works_path(@collection, @tag.merger) and return
+          else
+            redirect_to tag_works_path(@tag.merger) and return
+          end
         else
           redirect_to tag_path(@tag) and return
         end
@@ -829,10 +854,25 @@ public
                    else
                      @owner.try(:name)
                    end
-      "#{owner_name} &raquo; Works".html_safe
+      "#{owner_name} - Works".html_safe
     else
       "Latest Works"
     end
+  end
+  
+  # This has views/ in it because that's what expire_fragment is looking for
+  def index_cache_key
+    cache_key = ['views', 'works', 'v2']
+    cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
+    cache_key << @owner.id.to_s
+    if @collection.present? && @tag.present?
+      cache_key << "tag"
+      cache_key << @tag.id.to_s
+    end
+    cache_key << (logged_in? ? "u" : "v")
+    cache_key << 'p'
+    cache_key << (params[:page] || '1')
+    cache_key.join("/")
   end
 
 end

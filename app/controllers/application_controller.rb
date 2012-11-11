@@ -292,6 +292,10 @@ public
     return true if current_user.preference && current_user.preference.adult
     return false
   end
+  
+  def use_caching?
+    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
+  end
 
   protected
 

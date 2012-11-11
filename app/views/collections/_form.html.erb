@@ -166,6 +166,7 @@
  </fieldset>
 
  <%= submit_fieldset collection_form %>
+  <% unless @collection.new_record? %>
   <%= render "collections/collection_form_delete" %>
-
+  <% end %>
 <% end %>

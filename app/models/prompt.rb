@@ -8,6 +8,8 @@ class Prompt < ActiveRecord::Base
 
   # maximum number of options to allow to be shown via checkboxes
   MAX_OPTIONS_FOR_CHECKBOXES = 10
+  
+  # ASSOCIATIONS
 
   belongs_to :collection
   belongs_to :pseud
@@ -25,7 +27,20 @@ class Prompt < ActiveRecord::Base
   
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
   
+  # SCOPES
+  
   scope :claimed, joins("INNER JOIN challenge_claims on prompts.id = challenge_claims.request_prompt_id")
+  
+  scope :in_collection, lambda {|collection| where(collection_id: collection.id) }
+  
+  scope :unused, {:conditions => {:used_up => false}}
+  
+  scope :with_tag, lambda { |tag| 
+    joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
+    where("set_taggings.tag_id = ?", tag.id) 
+  }
+  
+  # CALLBACKS
 
   before_destroy :clear_claims
   def clear_claims
@@ -33,7 +48,8 @@ class Prompt < ActiveRecord::Base
     request_claims.each {|claim| claim.destroy}
   end
 
-  # VALIDATION
+  # VALIDATIONS
+  
   attr_protected :description_sanitizer_version
 
   validates_presence_of :collection_id
@@ -167,6 +183,8 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
+  
+  # INSTANCE METHODS
       
   # make sure we are not blank
   def blank?
@@ -188,10 +206,6 @@ class Prompt < ActiveRecord::Base
       true
     end
   end
-
-  scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
-
-  scope :unused, {:conditions => {:used_up => false}}
   
   def unfulfilled_claims
     self.request_claims.unfulfilled_in_collection(self.collection)
