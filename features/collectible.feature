@@ -2,7 +2,7 @@
 
 Feature: Collectible items
   As a user
-  I want to add various items to collections
+  I want to add my items to collections
 
   Scenario: Add my work to a collection
     Given I have a collection "Various Penguins"
