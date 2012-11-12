@@ -25,7 +25,7 @@ class PromptMeme < ActiveRecord::Base
   PROMPT_TYPES.each do |type|
     %w(required allowed).each do |setting|
       prompt_limit_field = "#{type}_num_#{setting}"
-      validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX, :greater_than_or_equal_to => 0
+      validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX, :greater_than_or_equal_to => 1
     end
   end
 
