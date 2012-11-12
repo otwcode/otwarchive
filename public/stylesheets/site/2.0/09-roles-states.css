@@ -47,11 +47,11 @@ span.unread, .replied, span.claimed {
 }
 
 span.offered, .replied {
-  color: green;
+  color: #008000;
 }
 
 span.offered.requested {
-  color: #daa520;
+  color: #876714;
 }
 
 /*This is a helper for Back End and can be overridden contextually anywhere*/
