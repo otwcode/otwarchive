@@ -17,7 +17,7 @@ class CollectionsController < ApplicationController
     elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
       @collections = @collection.children.by_title.paginate(:page => params[:page])
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-      @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
+      @collections = @user.maintained_collections.by_title.paginate(:page => params[:page])
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
