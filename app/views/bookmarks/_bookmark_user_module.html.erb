@@ -19,6 +19,7 @@
     </ul>
   <% end %>
 
+  <% # When the user views their own bookmark blurb, they are warned about seeing their bookmark in a modded collection %>
   <% unless bookmark.collections.blank? %>
       <% bookmark.collections.each do |modded| %>
         <% if modded.moderated? %>
