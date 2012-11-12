@@ -276,8 +276,8 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_bookmarks_count
-    count = self.approved_bookmarks.count
-    self.children.each {|child| count += child.approved_bookmarks.count}
+    count = self.approved_bookmarks.where(:private => false).count
+    self.children.each {|child| count += child.approved_bookmarks.where(:private => false).count}
     count
   end
 
