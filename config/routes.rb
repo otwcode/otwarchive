@@ -334,6 +334,8 @@ Otwarchive::Application.routes.draw do
   resources :collections do
     collection do
       get :list_challenges
+      get :list_ge_challenges
+      get :list_pm_challenges
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections
