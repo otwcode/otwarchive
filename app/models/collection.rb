@@ -56,7 +56,7 @@ class Collection < ActiveRecord::Base
 
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+           :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
@@ -266,9 +266,14 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_works_count
-    count = self.approved_works.count
-    self.children.each {|child| count += child.approved_works.count}
-    count
+    if !User.current_user.nil?
+      count = self.approved_works.count
+      self.children.each {|child| count += child.approved_works.count}
+      count
+    else
+      count = all_approved_works.where(:restricted => false).count
+      count
+    end
   end
 
   def all_approved_bookmarks
