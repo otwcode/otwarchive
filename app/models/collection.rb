@@ -146,8 +146,8 @@ class Collection < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
-    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
-      title.match(/\,\,/)
+    errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
+      title.match(/\,/)
   end
 
   validates_length_of :description,
