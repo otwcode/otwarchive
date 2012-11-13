@@ -233,7 +233,7 @@ SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "colu
   "layout-grid", "list-style", "margin", "marker",
   "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+SUPPORTED_CSS_PROPERTIES: ["-moz-appearance", "-moz-user-select", "-replace", "-use-link-source", "-webkit-appearance",
   "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
   "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
   "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
