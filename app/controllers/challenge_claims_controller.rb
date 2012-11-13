@@ -68,6 +68,9 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
+    if !(@collection = Collection.find_by_name(params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
+      setflash; flash[:notice] = ts("This challenge is currently closed to new posts.")
+    end
     if params[:collection_id]
       return unless load_collection 
       @challenge = @collection.challenge if @collection
