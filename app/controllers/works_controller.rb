@@ -210,7 +210,7 @@ class WorksController < ApplicationController
   def create
     load_pseuds
     @series = current_user.series.uniq
-
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
@@ -229,7 +229,12 @@ class WorksController < ApplicationController
         if params[:preview_button] || params[:cancel_coauthor_button]
           redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
         else
-          redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          # We check here to see if we are attempting to post to moderated collection
+          if !@collection.nil? && @collection.moderated?
+            redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+          else
+            redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          end
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -275,6 +280,7 @@ class WorksController < ApplicationController
     # Need to get @pseuds and @series values before rendering edit
     load_pseuds
     @series = current_user.series.uniq
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     unless @work.errors.empty?
       render :edit and return
     end
@@ -354,6 +360,10 @@ class WorksController < ApplicationController
       end
       if saved
         if params[:post_button]
+          if !@collection.nil? && @collection.moderated?
+            setflash; flash[:notice] = ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+            redirect_to(@work) and return
+          end
           setflash; flash[:notice] = ts('Work was successfully posted.')
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
@@ -613,7 +623,9 @@ public
       setflash; flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work) and return
     end
-
+    if !@collection.nil? && @collection.moderated?
+      redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+    else
     setflash; flash[:notice] = ts("Your work was successfully posted.")
     redirect_to @work
   end
