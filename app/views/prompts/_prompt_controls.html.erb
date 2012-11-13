@@ -40,9 +40,8 @@
         <% # already claimed %>
         <% if collection.open? || collection.user_is_maintainer?(current_user) %>
           <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
-        <% else %>
-          <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %></li>
         <% end %>
+          <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %></li>
       <% else %>
         <li>
           <% new_claim = ChallengeClaim.new %>
