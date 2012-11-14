@@ -249,19 +249,79 @@ form li ul.autocomplete li.input {
     box-shadow: 0 0 3px #555;
 }
 
-/* WIDGET: TIMEPICKER (todo, requires ARIA managed focus) */
-
-.ui-timepicker-div dl dd {
-  margin: -1.286em 0 0.25em 6em;
-}
+/* WIDGET: DATEPICKER, TIMEPICKER (todo, requires ARIA managed focus) */
 
 #ui-datepicker-div {
   background: #fff;
+  display: none;
   overflow: hidden;
   padding: 0.643em;
   font-size: 87.5%;
     box-shadow: 3px 3px 5px;
 }
+
+.ui-datepicker dt, .ui-datepicker dd, .ui-datepicker-buttonpane, .ui-timepicker-div, a.ui-datepicker-prev {
+  float: left;
+}
+
+.ui-datepicker button {
+  height: 2em;
+}
+
+.ui-datepicker dt {
+  clear: left;
+  width: 5em;
+  margin: 0.25em 0;
+}
+
+.ui-datepicker dd {
+  margin: 0.25em 0;
+}
+
+.ui-datepicker table {
+  background: #eee;
+}
+
+.ui-datepicker td {
+  border: 1px solid #aaa;
+}
+
+.ui-datepicker tr:hover {
+  background: #ddd;
+}
+
+.ui-datepicker td:hover {
+  background: #fff;
+}
+
+.ui-datepicker td a {
+  border-bottom: none;
+}
+
+a.ui-datepicker-next {
+  float: right;
+}
+
+.ui-datepicker-title {
+  clear: both;
+  text-align: center;
+  margin-top: 0.643em;
+}
+
+.ui-datepicker-buttonpane {
+  clear: left;
+}
+
+.ui-timepicker-div dl {
+  float: left;
+  margin: 0.643em 0;
+}
+
+.ui_tpicker_hour_label, .ui_tpicker_minute_label {
+  padding-top: 0.25em;
+  height: 1.45em;
+}
+
 
 /*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
 qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
