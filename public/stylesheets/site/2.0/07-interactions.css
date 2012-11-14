@@ -266,6 +266,7 @@ form li ul.autocomplete li.input {
 
 .ui-datepicker button {
   height: 2em;
+  margin: 0 0.25em 0 0;
 }
 
 .ui-datepicker dt {
@@ -305,7 +306,6 @@ a.ui-datepicker-next {
 .ui-datepicker-title {
   clear: both;
   text-align: center;
-  margin-top: 0.643em;
 }
 
 .ui-datepicker-buttonpane {
