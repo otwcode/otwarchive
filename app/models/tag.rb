@@ -49,7 +49,7 @@ class Tag < ActiveRecord::Base
               :class_name => "FilterTagging",
               :foreign_key => 'filter_id',
               :conditions => "inherited = 0"
-  has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
+  # not used anymore? has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
@@ -530,6 +530,48 @@ class Tag < ActiveRecord::Base
 
   #### FILTERING ####
 
+  # Takes a block so we can be sure that we reindex all the taggables attached
+  # to this work
+  def reindex_taggables
+    reindex_all_works
+    reindex_all_bookmarks
+  end
+
+  # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)
+  # if work_ids are passed in, those will be used (eg if we need to save the ids before making changes, then
+  # reindex after the changes are done)
+  def reindex_all_works(work_ids = [])
+    if work_ids.empty? 
+      work_ids = all_filtered_work_ids
+    end
+    RedisSearchIndexQueue.queue_works(work_ids)
+  end
+
+  # In the case of works, the filter_taggings table already collects all the things tagged
+  # by this tag or its subtags/synonyms
+  def all_filtered_work_ids
+    self.filter_taggings.where(:filterable_type => "Work").value_of :id
+  end
+  
+  # Reindex all bookmarks (bookmark_ids argument works as above)
+  def reindex_all_bookmarks(bookmark_ids = [])
+    if bookmark_ids.empty?
+      bookmark_ids = all_bookmark_ids
+    end
+    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
+  end
+  
+  # call this recursively to update the index for all the works that are tagged by this tag or its subtags
+  # we use ids rather than works to avoid passing around a lot of instantiated AR objects around 
+  # arbitrarily limiting depth of the recursion to 10 here
+  def all_bookmark_ids(depth = 0)
+    return [] if depth == 10
+    self.bookmarks.value_of(:id) + 
+      self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten + 
+      self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
+  end
+  
+  
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
     Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
@@ -583,10 +625,17 @@ class Tag < ActiveRecord::Base
     end
   end
   
+  # this tag was canonical and now isn't anymore
+  # move the filter taggings from this tag to its new synonym and
+  # update the search index for the works under this tag and its subtags 
   def move_filter_taggings_to_merger
+    # save the work and bookmark ids that will need to be reindexed
+    work_ids = all_filtered_work_ids
+    bookmark_ids = all_bookmark_ids
     self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
     self.async(:reset_filter_count)
-    self.works.each { |work| work.update_work_and_bookmarks_index }
+    reindex_all_works(work_ids)
+    reindex_all_bookmarks(bookmark_ids)
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -611,7 +660,10 @@ class Tag < ActiveRecord::Base
   end
 
   # Add filter taggings for a given tag
+  # This is currently called only if this tag has just become canonical 
   def add_filter_taggings
+    # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
+    # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
       # we collect tags for resetting count so that it's only done once after we've added all filters to works
@@ -636,8 +688,12 @@ class Tag < ActiveRecord::Base
             end
           end
         end
-        work.update_work_and_bookmarks_index
       end
+      
+      # make sure that all the works and bookmarks under this tag get reindexed
+      # for filtering/searching
+      async(:reindex_taggables)
+      
       tags_that_need_filter_count_reset.each do |tag_to_reset|
         tag_to_reset.reset_filter_count
       end
@@ -648,6 +704,10 @@ class Tag < ActiveRecord::Base
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter_id=nil)
+    # save the work and bookmark ids that will need to be reindexed
+    work_ids = all_filtered_work_ids
+    bookmark_ids = all_bookmark_ids
+    
     if old_filter_id
       old_filter = Tag.find(old_filter_id)
       # An old merger of a tag needs to be removed
@@ -681,23 +741,23 @@ class Tag < ActiveRecord::Base
             end
           end
         end
-        work.update_work_and_bookmarks_index
       end
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
-      self.works.each{ |work| work.update_work_and_bookmarks_index }
     end
+    reindex_all_works(work_ids)
+    reindex_all_bookmarks(bookmark_ids)    
   end
 
-    # Add filter taggings to this tag's works for one of its meta tags
+  # Add filter taggings to this tag's works for one of its meta tags
   def inherit_meta_filters(meta_tag_id)
     meta_tag = Tag.find_by_id(meta_tag_id)
     return unless meta_tag.present?
     self.filtered_works.each do |work|        
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
-        work.update_work_and_bookmarks_index
+        RedisSearchIndexQueue.reindex(work)
       end
     end
   end
@@ -824,7 +884,7 @@ class Tag < ActiveRecord::Base
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filters.delete(tag)
-            work.update_work_and_bookmarks_index
+            RedisSearchIndexQueue.reindex(work)
           end
         end
       end
@@ -898,6 +958,10 @@ class Tag < ActiveRecord::Base
     self.merger.name if self.merger
   end
 
+  # Make this tag a synonym of another tag -- tag_string is the name of the other tag (which should be canonical)
+  # NOTE for potential confusion
+  # "merger" is the canonical tag of which this one will be a synonym
+  # "mergers" are the tags which are (currently) synonyms of THIS one
   def syn_string=(tag_string)
     if tag_string.blank?
       self.merger_id = nil
@@ -925,6 +989,10 @@ class Tag < ActiveRecord::Base
     end
   end
 
+
+  # When we make this tag a synonym of another canonical tag, we want to move all the associations this tag has
+  # (subtags, meta tags, etc) over to that canonical tag. 
+  # We also need to make sure that the works under those other tags get reindexed
   def add_merger_associations
     new_merger = self.merger
     return unless new_merger.present?
@@ -935,13 +1003,16 @@ class Tag < ActiveRecord::Base
       (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
     end
     self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-    self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
+    self.sub_tags.each do |subtag| 
+      subtag.meta_tags << new_merger unless subtag.meta_tags.include?(new_merger)
+      subtag.update_subtag_works
+    end
     self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
     self.children = []
     self.meta_tags = []
     self.sub_tags = []
   end
-
+  
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
