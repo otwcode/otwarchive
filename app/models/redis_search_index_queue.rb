@@ -38,7 +38,7 @@ class RedisSearchIndexQueue
       $redis.del(WORKS_INDEX_KEY)
     end
     
-    works.where(:id => work_ids).find_each do |w|
+    Work.where(:id => work_ids).find_each do |w|
       w.update_index
     end
   end
@@ -63,7 +63,7 @@ class RedisSearchIndexQueue
       $redis.del(BOOKMARKS_INDEX_KEY)
     end
 
-    bookmarks.where(:id => bookmark_ids).find_each do |b|
+    Bookmark.where(:id => bookmark_ids).find_each do |b|
       b.update_index
     end
   end

@@ -533,8 +533,11 @@ class Tag < ActiveRecord::Base
   # Takes a block so we can be sure that we reindex all the taggables attached
   # to this work
   def reindex_taggables
-    reindex_all_works
-    reindex_all_bookmarks
+    work_ids = all_filtered_work_ids
+    bookmark_ids = all_bookmark_ids
+    yield if block_given?
+    reindex_all_works(work_ids)
+    reindex_all_bookmarks(bookmark_ids)
   end
 
   # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)
@@ -994,23 +997,23 @@ class Tag < ActiveRecord::Base
   # (subtags, meta tags, etc) over to that canonical tag. 
   # We also need to make sure that the works under those other tags get reindexed
   def add_merger_associations
-    new_merger = self.merger
-    return unless new_merger.present?
-    ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
-    if new_merger.is_a?(Fandom)
-      (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
-    else
-      (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
+    # we want to pass this whole block to reindex_taggables so we get the right work_ids 
+    reindex_taggables do 
+      new_merger = self.merger
+      return unless new_merger.present?
+      ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
+      if new_merger.is_a?(Fandom)
+        (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
+      else
+        (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
+      end
+      self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+      self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
+      self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+      self.children = []
+      self.meta_tags = []
+      self.sub_tags = []
     end
-    self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-    self.sub_tags.each do |subtag| 
-      subtag.meta_tags << new_merger unless subtag.meta_tags.include?(new_merger)
-      subtag.update_subtag_works
-    end
-    self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
-    self.children = []
-    self.meta_tags = []
-    self.sub_tags = []
   end
   
   def merger_string=(tag_string)
