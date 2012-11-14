@@ -530,8 +530,21 @@ class Tag < ActiveRecord::Base
 
   #### FILTERING ####
 
-  # Takes a block so we can be sure that we reindex all the taggables attached
-  # to this work
+  # Usage is either:
+  # reindex_taggables
+  # 
+  # or:
+  # reindex taggables do 
+  #   # some other code
+  # end
+  #
+  # If you use the second method, what will happen is that the ids of the works and 
+  # bookmarks that need to be re-indexed for the search engine will first be saved,
+  # then the code will be executed, and then the works/bookmarks will be sent off for
+  # reindexing. (that's what the "yield" does -- it yields to the block you pass in)
+  # 
+  # Otherwise, if you removed the works from this tag in the code, you wouldn't have 
+  # a way of finding their ids to reindex them. :)
   def reindex_taggables
     work_ids = all_filtered_work_ids
     bookmark_ids = all_bookmark_ids
@@ -564,9 +577,11 @@ class Tag < ActiveRecord::Base
     RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
   end
   
-  # call this recursively to update the index for all the works that are tagged by this tag or its subtags
-  # we use ids rather than works to avoid passing around a lot of instantiated AR objects around 
-  # arbitrarily limiting depth of the recursion to 10 here
+  # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
+  # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around 
+  # I'm arbitrarily limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop.
+  # That means that if you have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
+  # have that much nesting anyway :P
   def all_bookmark_ids(depth = 0)
     return [] if depth == 10
     self.bookmarks.value_of(:id) + 
@@ -632,13 +647,12 @@ class Tag < ActiveRecord::Base
   # move the filter taggings from this tag to its new synonym and
   # update the search index for the works under this tag and its subtags 
   def move_filter_taggings_to_merger
-    # save the work and bookmark ids that will need to be reindexed
-    work_ids = all_filtered_work_ids
-    bookmark_ids = all_bookmark_ids
-    self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+    # we pass the code to be done to reindex taggables so the work and bookmark ids that will need to be reindexed
+    # get saved BEFORE we change the merger in all the filters!
+    reindex_taggables do
+      self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+    end
     self.async(:reset_filter_count)
-    reindex_all_works(work_ids)
-    reindex_all_bookmarks(bookmark_ids)
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -707,50 +721,48 @@ class Tag < ActiveRecord::Base
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter_id=nil)
-    # save the work and bookmark ids that will need to be reindexed
-    work_ids = all_filtered_work_ids
-    bookmark_ids = all_bookmark_ids
-    
-    if old_filter_id
-      old_filter = Tag.find(old_filter_id)
-      # An old merger of a tag needs to be removed
-      # This means we remove the old merger itself and all its meta tags unless they
-      # should remain because of other existing tags of the work (or because they are
-      # also meta tags of the new merger)
-      self.works.each do |work|
-        filters_to_remove = [old_filter] + old_filter.meta_tags
-        filters_to_remove.each do |filter_to_remove|
-          if work.filters.include?(filter_to_remove)
-            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
-            # meta. If any of these or its mergers (synonyms) are tags of the work, the
-            # filter_to_remove remains
-            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-            # don't include self because at this point in time (before the save) self
-            # is still in the list of submergers from when it was a synonym to the old filter
-            remaining_tags = work.tags - [self]
-            # instead we add the new merger of self (if there is one) as the relevant one to check
-            remaining_tags += [self.merger] unless self.merger.nil?
-            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-              work.filters.delete(filter_to_remove)
-              filter_to_remove.reset_filter_count
-            else # we should keep filter_to_remove, but check if inheritence needs to be updated
-              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-                ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-                ft.update_attribute(:inherited, true)
+    # we're going to have to reindex all the taggables that WERE attached to this work after 
+    # we do this
+    reindex_taggables do     
+      if old_filter_id
+        old_filter = Tag.find(old_filter_id)
+        # An old merger of a tag needs to be removed
+        # This means we remove the old merger itself and all its meta tags unless they
+        # should remain because of other existing tags of the work (or because they are
+        # also meta tags of the new merger)
+        self.works.each do |work|
+          filters_to_remove = [old_filter] + old_filter.meta_tags
+          filters_to_remove.each do |filter_to_remove|
+            if work.filters.include?(filter_to_remove)
+              # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
+              # meta. If any of these or its mergers (synonyms) are tags of the work, the
+              # filter_to_remove remains
+              all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+              sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+              all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+              # don't include self because at this point in time (before the save) self
+              # is still in the list of submergers from when it was a synonym to the old filter
+              remaining_tags = work.tags - [self]
+              # instead we add the new merger of self (if there is one) as the relevant one to check
+              remaining_tags += [self.merger] unless self.merger.nil?
+              if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+                work.filters.delete(filter_to_remove)
+                filter_to_remove.reset_filter_count
+              else # we should keep filter_to_remove, but check if inheritence needs to be updated
+                direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+                if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+                  ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                  ft.update_attribute(:inherited, true)
+                end
               end
             end
           end
         end
+      else
+        self.filter_taggings.destroy_all
+        self.reset_filter_count
       end
-    else
-      self.filter_taggings.destroy_all
-      self.reset_filter_count
     end
-    reindex_all_works(work_ids)
-    reindex_all_bookmarks(bookmark_ids)    
   end
 
   # Add filter taggings to this tag's works for one of its meta tags
