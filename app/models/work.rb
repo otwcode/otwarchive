@@ -199,7 +199,7 @@ class Work < ActiveRecord::Base
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
-  after_update :adjust_series_restriction
+  after_update :adjust_series_restriction, :set_anon_unrevealed
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
@@ -1047,41 +1047,7 @@ class Work < ActiveRecord::Base
     end
   end
 
-  # Used for non-search work filtering
-  def self.find_with_options(options = {})
-    page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-    sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
-
-    @works = Work
-
-    if options[:tag].present?
-      @works = @works.with_filter(options[:tag])
-    end
-    if !options[:user].nil? && !options[:selected_pseuds].empty?
-      @works = @works.written_by_id(options[:selected_pseuds])
-    elsif !options[:user].nil?
-      @works = @works.owned_by(options[:user])
-    end
-    if options[:language_id]
-      @works = @works.by_language(options[:language_id])
-    end
-    if options[:complete]
-      @works = @works.where(:complete => true)
-    end
-    if options[:collection]
-      @works = @works.in_collection(options[:collection])
-    end
-    if User.current_user.nil? || User.current_user == :false
-      @works = @works.unrestricted
-    end
-    if options[:sort_column] == "hit_count"
-      @works = @works.select("works.*, stat_counters.hit_count AS hit_count").joins(:stat_counter)
-    end
-
-    @works = @works.order(sort_by).posted.unhidden
-    return @works.paginate(page_args.merge(:total_entries => @works.size))
-  end
-  
+  # Used when admins have disabled filtering
   def self.list_without_filters(owner, options)
     works = case owner.class.to_s
             when 'Pseud'
@@ -1259,23 +1225,7 @@ class Work < ActiveRecord::Base
     end
     names
   end  
-  
-  # Update the search index for both this work and its associated bookmarks
-  def update_work_and_bookmarks_index
-    self.update_index
-    self.bookmarks.each{ |bookmark| bookmark.update_index }
-  end
-  
-  # This gets invoked as a callback in lib/work_stats.rb so we want to make
-  # sure it doesn't run synchronously for works with many bookmarks
-  def update_bookmarks_index
-    async(:async_bookmarks_index)
-  end
-  
-  def async_bookmarks_index
-    self.bookmarks.each{ |bookmark| bookmark.update_index }
-  end
-  
+    
   def sweep_index_caches
     to_expire = []
     

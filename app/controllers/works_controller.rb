@@ -626,8 +626,9 @@ public
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
     else
-    setflash; flash[:notice] = ts("Your work was successfully posted.")
-    redirect_to @work
+      setflash; flash[:notice] = ts("Your work was successfully posted.")
+      redirect_to @work
+    end
   end
 
   # WORK ON MULTIPLE WORKS
