@@ -224,7 +224,7 @@ class WorkSearch < Search
   end
   
   def clean_up_angle_brackets
-    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
+    [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at, :query].each do |countable|
       if options[countable].present?
         options[countable].gsub!("&gt;", ">")
         options[countable].gsub!("&lt;", "<")
