@@ -271,7 +271,8 @@ class Collection < ActiveRecord::Base
       self.children.each {|child| count += child.approved_works.count}
       count
     else
-      count = all_approved_works.where(:restricted => false).count
+      count = self.approved_works.where(:restricted => false).count
+      self.children.each {|child| count += child.approved_works.where(:restricted => false).count}
       count
     end
   end
