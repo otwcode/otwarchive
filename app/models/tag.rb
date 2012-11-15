@@ -579,9 +579,9 @@ class Tag < ActiveRecord::Base
   
   # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
   # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around 
-  # I'm arbitrarily limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop.
-  # That means that if you have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
-  # have that much nesting anyway :P
+  # Per discussion with TW chair Emilie, I'm limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop
+  # That means that if we ever have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
+  # have that much nesting anyway -- current max is 4 we think
   def all_bookmark_ids(depth = 0)
     return [] if depth == 10
     self.bookmarks.value_of(:id) + 
