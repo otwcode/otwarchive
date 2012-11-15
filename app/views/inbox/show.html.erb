@@ -28,23 +28,23 @@
         <!-- START of single comment -->
         <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>
-              <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
-                <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
-              <% else %>
-                <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
-              <% end %>
+            <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
+              <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+            <% else %>
+              <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+            <% end %>
           <% else %>
           <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
           <% end %>
           <div class="icon">
             <% if !inbox_comment.feedback_comment.pseud.nil? %>
-                <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
-                  <span class="visitor icon"><!-- visitor icon holder --></span>
-                <% else %>
-                  <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
-                <% end %>
-              <% else %>
+              <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
                 <span class="visitor icon"><!-- visitor icon holder --></span>
+              <% else %>
+                <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
+              <% end %>
+            <% else %>
+              <span class="visitor icon"><!-- visitor icon holder --></span>
             <% end %>
           </div>
           <blockquote class="userstuff"><%= raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
