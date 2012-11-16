@@ -53,7 +53,7 @@ class PromptsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)) || @collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user))
   end
 
   def maintainer_or_signup_owner_only
