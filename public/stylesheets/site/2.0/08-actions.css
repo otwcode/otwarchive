@@ -84,7 +84,7 @@ ol.pagination, div.pagination, ol.year {
     box-shadow: inset 1px 1px 3px #333;
 }
 
-.actions .disabled {
+.actions label.disabled {
   background: #ccc;
 }
 
