@@ -6,7 +6,9 @@
       <%= render 'download_chapter.html', :chapter => chapter %>
     <% end %>
   <% else %>
-    <%=raw sanitize_field(@chapters.first, :content) %>
+    <div class="userstuff">
+      <%=raw sanitize_field(@chapters.first, :content) %>
+    </div>
   <% end %>
 </div>
 
