@@ -566,7 +566,7 @@ class Tag < ActiveRecord::Base
   # In the case of works, the filter_taggings table already collects all the things tagged
   # by this tag or its subtags/synonyms
   def all_filtered_work_ids
-    self.filter_taggings.where(:filterable_type => "Work").value_of :id
+    self.filter_taggings.where(:filterable_type => "Work").value_of :filterable_id
   end
   
   # Reindex all bookmarks (bookmark_ids argument works as above)
