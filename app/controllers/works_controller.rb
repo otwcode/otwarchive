@@ -227,7 +227,12 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
+          if !@collection.nil? && @collection.moderated?
+            setflash; flash[:notice] = ts('Draft was successfully created. If you save this work, you will be submitting it to a moderated collection. It will show up in the collection once approved.')
+          else
+            setflash; flash[:notice] = ts('Draft was successfully created.')
+          end
+          redirect_to preview_work_path(@work)
         else
           # We check here to see if we are attempting to post to moderated collection
           if !@collection.nil? && @collection.moderated?
@@ -290,6 +295,11 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
+        if !@collection.nil? && @collection.moderated?
+          setflash; flash[:notice] = ts('Draft was successfully created. If you save this work, you will be submitting it to a moderated collection. It will show up in the collection once approved.')
+        else
+          setflash; flash[:notice] = ts('Draft was successfully created.')
+        end
         @chapter = @work.chapters.first unless @chapter
         render :preview
       else
@@ -366,9 +376,12 @@ class WorksController < ApplicationController
           end
           setflash; flash[:notice] = ts('Work was successfully posted.')
         elsif params[:update_button]
-          setflash; flash[:notice] = ts('Work was successfully updated.')
+          if !@collection.nil? && @collection.moderated?
+            setflash; flash[:notice] = ts('Work was submitted to a moderated collection. It will show up in the collection once approved. VIA PREVIEW')
+          else
+            setflash; flash[:notice] = ts('Work was successfully updated.')
+          end
         end
-
         redirect_to(@work)
       else
         unless @chapter.valid?
