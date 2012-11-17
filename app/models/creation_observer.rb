@@ -55,17 +55,17 @@ class CreationObserver < ActiveRecord::Observer
       recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         # Gather any of the collections that the work might have been added to
-      if work.collections.empty?
-        UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+        if work.collections.empty?
+          UserMailer.recipient_notification(pseud.user.id, work.id).deliver
         else
-        work.collections.each do |collection|
-          if collection.nil?
-            UserMailer.recipient_notification(pseud.user.id, work.id).deliver
-          else
-            UserMailer.recipient_notification(pseud.user.id, work.id, collection.id).deliver
+          work.collections.each do |collection|
+            if collection.nil?
+              UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+            else
+              UserMailer.recipient_notification(pseud.user.id, work.id, collection.id).deliver
+            end
           end
         end
-      end
       end
     end
   end
