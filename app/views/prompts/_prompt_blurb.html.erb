@@ -13,7 +13,7 @@
         <%= ts("by %{person}", :person => (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
       <% end %>
       <% unless @collection %>
-        <%= ts("in %{title}", :title => prompt.collection.title) %>
+        <%= ts("in") %> <%= link_to prompt.collection.title, collection_path(prompt.collection) %>
       <% end %>
     </h4>
 
