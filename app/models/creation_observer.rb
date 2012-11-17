@@ -54,11 +54,23 @@ class CreationObserver < ActiveRecord::Observer
     if !work.new_recipients.blank? && !work.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
+        # Gather any of the collections that the work might have been added to
+      if work.collections.empty?
         UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+        else
+        work.collections.each do |collection|
+          if collection.nil?
+            UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+          else
+            UserMailer.recipient_notification(pseud.user.id, work.id, collection.id).deliver
+          end
+        end
+      end
       end
     end
   end
-
+  #@work.collections.each do |collection|
+  #@work.collection_names = @collection.name if @collection
   # notify people subscribed to this creation or its authors
   def notify_subscribers(creation)
     work = creation.respond_to?(:work) ? creation.work : creation
@@ -72,7 +84,13 @@ class CreationObserver < ActiveRecord::Observer
   # notify prompters of response to their prompt
   def notify_prompters(work)
     if !work.challenge_claims.empty? && !work.unrevealed?
-      UserMailer.prompter_notification(work.id).deliver
+      work.collections.each do |collection|
+        if collection.nil?
+          UserMailer.prompter_notification(work.id,).deliver
+        else
+          UserMailer.prompter_notification(work.id, collection.id).deliver
+        end
+      end
     end
   end
 
