@@ -13,7 +13,7 @@
         <%= ts("by %{person}", :person => (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
       <% end %>
       <% unless @collection %>
-        <%= ts("in %{title}", :title => prompt.collection.title) %>
+        <%= ts("in") %> <%= link_to prompt.collection.title, collection_path(prompt.collection) %>
       <% end %>
     </h4>
 
@@ -30,7 +30,7 @@
 	  <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
   </div>
     
-  <h6 class="landmark heading">Tags</h6>  
+  <h6 class="landmark heading"><%= ts("Tags") %></h6>  
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
@@ -39,20 +39,20 @@
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-    <h6 class="heading">Optional:</h6>
+    <h6 class="heading"><%= ts("Optional:") %></h6>
     <ul class="tags commas">
       <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
     </ul>
   <% end %>
     
   <% unless prompt.description.blank? %>
-    <h6 class="landmark heading">Summary</h6>
+    <h6 class="landmark heading"><%= ts("Summary") %></h6>
     <blockquote class="userstuff summary" title="prompt">
       <%=raw sanitize_field(prompt, :description) %>
     </blockquote>
   <% end %>
 
-<!--review-->
+  <% # TODO: Exposed URLs like this are horribly annoying for screen reader users -- imagine it reading the URL one letter and punctuation mark at a time. We need a solution. %>
   <% unless prompt.url.blank? %>
     <p>
       <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL") : url_label %>:

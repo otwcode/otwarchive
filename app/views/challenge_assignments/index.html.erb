@@ -1,5 +1,5 @@
 <% if @user %>
-  <%= render :partial => "user_index" %>
+  <%= render "user_index" %>
 <% elsif @challenge && @challenge.user_allowed_to_see_assignments?(current_user) %>
-  <%= render :partial => "maintainer_index" %>
+  <%= render "maintainer_index" %>
 <% end %>
