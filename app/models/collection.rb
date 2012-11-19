@@ -56,7 +56,7 @@ class Collection < ActiveRecord::Base
 
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+           :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
@@ -146,8 +146,8 @@ class Collection < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
-    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
-      title.match(/\,\,/)
+    errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
+      title.match(/\,/)
   end
 
   validates_length_of :description,
@@ -266,9 +266,15 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_works_count
-    count = self.approved_works.count
-    self.children.each {|child| count += child.approved_works.count}
-    count
+    if !User.current_user.nil?
+      count = self.approved_works.count
+      self.children.each {|child| count += child.approved_works.count}
+      count
+    else
+      count = self.approved_works.where(:restricted => false).count
+      self.children.each {|child| count += child.approved_works.where(:restricted => false).count}
+      count
+    end
   end
 
   def all_approved_bookmarks
@@ -276,8 +282,8 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_bookmarks_count
-    count = self.approved_bookmarks.count
-    self.children.each {|child| count += child.approved_bookmarks.count}
+    count = self.approved_bookmarks.where(:private => false).count
+    self.children.each {|child| count += child.approved_bookmarks.where(:private => false).count}
     count
   end
 

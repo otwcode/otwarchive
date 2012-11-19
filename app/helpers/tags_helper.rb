@@ -1,4 +1,15 @@
 module TagsHelper
+  
+  def tag_type_label(tag_type)
+    case tag_type
+    when 'tag'
+      "Bookmarker's Tags"
+    when 'freeform'
+      "Additional Tags"
+    else
+      tag_type.capitalize.pluralize
+    end
+  end
 
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
@@ -230,6 +241,8 @@ module TagsHelper
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
       tags.collect(&:name).join(", ")
+    elsif tags.blank? && category_name.blank?
+     "Choose Not To Use Archive Warnings"
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end

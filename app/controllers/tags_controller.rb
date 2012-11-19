@@ -35,8 +35,13 @@ class TagsController < ApplicationController
   end
 
   def search
+    @page_subtitle = ts("Search Tags")
     if params[:query].present?
       options = params[:query].dup
+      @query = options
+      if @query[:name].present?
+        @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
+      end
       options.merge!(:page => params[:page] || 1)
       @tags = Tag.search(options)
     end
@@ -175,7 +180,7 @@ class TagsController < ApplicationController
   end
 
   def edit
-    @page_subtitle = @tag.name
+    @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
     if @tag.is_a?(Banned) && !logged_in_as_admin?
       setflash; flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
@@ -232,7 +237,7 @@ class TagsController < ApplicationController
   end
 
   def wrangle
-    @page_subtitle = @tag.name
+    @page_subtitle = ts("%{tag_name} - Wrangle", tag_name: @tag.name)
     @counts = {}
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count

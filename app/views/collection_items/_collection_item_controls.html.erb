@@ -1,6 +1,12 @@
 <% # expects collection_item, form %>
-<!--actions--> 
 <ul class="actions" role="menu">
+  <% if collection_item.item %>
+    <li>
+      <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
+      <%= link_to h(ts("Details")) + ' &#8595;'.html_safe, "#", :class => "#{id}_open" %>
+      <%= link_to h(ts("Close Details")) + ' &#8593;'.html_safe, "#", :class => "#{id}_close" %>
+    </li>
+  <% end %>
   <li class="status action">
     <% if @user %>
       <%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
@@ -8,20 +14,29 @@
       <%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
     <% end %>
   </li>
+
   <% id = "collection_items_" %>
   <% if collection_item.collection.unrevealed? %>
     <li>
-      <label for="collection_items_<%= collection_item.id %>_unrevealed">
+      <label for="collection_items_<%= collection_item.id %>_unrevealed" <% if @user %>class="disabled"<% end %>>
         <%= ts("Unrevealed") %>
-        <%= form.check_box :unrevealed %>
+        <% if @user %>
+          <%= form.check_box :unrevealed, :disabled => true %>
+        <% else %>
+          <%= form.check_box :unrevealed %>
+        <% end %>
       </label>
     </li>
   <% end %>
   <% if collection_item.collection.anonymous? %>
     <li>
-      <label for="collection_items_<%= collection_item.id %>_anonymous">
+      <label for="collection_items_<%= collection_item.id %>_anonymous" <% if @user %>class="disabled"<% end %>>
         <%= ts("Anonymous") %>
-        <%= form.check_box :anonymous %>
+        <% if @user %>
+          <%= form.check_box :anonymous, :disabled => true %>
+        <% else %>
+          <%= form.check_box :anonymous %>
+        <% end %>
       </label>
     </li>
   <% end %>        
