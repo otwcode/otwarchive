@@ -61,7 +61,7 @@ class PromptsController < ApplicationController
   end
 
   def not_signup_owner
-    setflash; flash[:error] = ts("You can't edit someone else's signup!")
+    setflash; flash[:error] = ts("You can't edit someone else's sign-up!")
     redirect_to @collection
     false
   end
@@ -119,7 +119,7 @@ class PromptsController < ApplicationController
     end
     
     if !@challenge_signup.valid?
-      setflash; flash[:error] = ts("That prompt would make your overall signup invalid, sorry.")
+      setflash; flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     elsif @prompt.save
       setflash; flash[:notice] = ts("Prompt was successfully added.")
@@ -140,10 +140,10 @@ class PromptsController < ApplicationController
 
   def destroy
     if !(@challenge.signup_open || @collection.user_is_maintainer?(current_user))
-      setflash; flash[:error] = ts("You cannot delete a prompt after signups are closed. Please contact a moderator for help.")
+      setflash; flash[:error] = ts("You cannot delete a prompt after sign-ups are closed. Please contact a moderator for help.")
     else
       if !@prompt.can_delete?
-        setflash; flash[:error] = ts("That would make your signup invalid, sorry! Please edit instead.")
+        setflash; flash[:error] = ts("That would make your sign-up invalid, sorry! Please edit instead.")
       else
         @prompt.destroy
         setflash; flash[:notice] = ts("Prompt was deleted.")
