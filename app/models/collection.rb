@@ -169,10 +169,13 @@ class Collection < ActiveRecord::Base
   scope :by_title, order(:title)
 
   # we need to add other challenge types to this join in future
-  scope :ge_signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
+  # Note: needs to be a RIGHT join instead of an INNER join in order to ensure that when this is
+  # daisy-chained with other AR query clauses on eg the collection_preferences, we still only end up 
+  # with the desired type of challenge
+  scope :ge_signups_open, joins("RIGHT JOIN gift_exchanges on gift_exchanges.id = challenge_id").
                        where("gift_exchanges.signup_open = 1").
                        order("gift_exchanges.signups_close_at")
-  scope :pm_signups_open, joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").
+  scope :pm_signups_open, joins("RIGHT JOIN prompt_memes on prompt_memes.id = challenge_id").
                        where("prompt_memes.signup_open = 1").
                        order("prompt_memes.signups_close_at")
 
