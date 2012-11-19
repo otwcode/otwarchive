@@ -15,11 +15,60 @@ class WorksController < ApplicationController
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
+  
+  before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
   cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
+  
+  # we want to extract the countable params from work_search and move them into their fields
+  def clean_work_search_params
+    if params[:work_search].present? && params[:work_search][:query].present?
+      # swap in gt/lt
+      params[:work_search][:query].gsub!('&gt;', '>')
+      params[:work_search][:query].gsub!('&lt;', '<')           
+
+      # extract countable params    
+      %w(word kudo comment bookmark hit).each do |term|        
+        if params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+          # pluralize, add _count, convert to symbol
+          term = term.pluralize unless term == "word"
+          term = term + "_count" unless term == "hits"
+          term = term.to_sym
+          
+          value = $1.gsub(/^(\:|\=)/, '') # get rid of : and =
+          # don't overwrite if submitting from advanced search?
+          params[:work_search][term] = value unless params[:work_search][term].present?
+        end
+      end        
+      
+      # get sort-by
+      if params[:work_search][:query].gsub!(/sort\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\s*(\w+))/i, '')
+        sortdir = $1
+        sortby = $2
+        
+        WorkSearch::SORT_OPTIONS.each do |opt, value|
+          if sortby.match(/#{opt}/i) || opt.match(/#{sortby}/i)
+            params[:work_search][:sort_column] = value
+            break
+          end
+        end
+        
+        if sortdir == ">"
+          params[:work_search][:sort_direction] = "asc"
+        elsif sortdir == "<"
+          params[:work_search][:sort_direction] = "desc"
+        end
+        
+      end
+
+      # swap out gt/lt
+      params[:work_search][:query].gsub!('>', '&gt;')
+      params[:work_search][:query].gsub!('<', '&lt;')           
+    end
+  end
 
   def search
     @languages = Language.default_order
