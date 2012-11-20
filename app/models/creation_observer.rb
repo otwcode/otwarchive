@@ -58,13 +58,11 @@ class CreationObserver < ActiveRecord::Observer
         if work.collections.empty?
           UserMailer.recipient_notification(pseud.user.id, work.id).deliver
         else
-          work.collections.each do |collection|
-            if collection.nil?
+            if work.collections.first.nil?
               UserMailer.recipient_notification(pseud.user.id, work.id).deliver
             else
-              UserMailer.recipient_notification(pseud.user.id, work.id, collection.id).deliver
+              UserMailer.recipient_notification(pseud.user.id, work.id, work.collections.first.id).deliver
             end
-          end
         end
       end
     end
