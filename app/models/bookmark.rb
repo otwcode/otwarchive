@@ -180,7 +180,7 @@ class Bookmark < ActiveRecord::Base
   end 
   
   def bookmarker
-    pseud.name
+    pseud.try(:name)
   end
 
   def with_notes
