@@ -34,10 +34,10 @@ feedback needed from realuse (is it annoying having the announcement on every ce
 	<tr>
 	<th scope="col"><%= ts('Characters') %></th>
 	<th scope="col"><%= ts('Relationships') %></th>
-	<th scope="col"><%= ts('Freeforms') %></th>
+	<th scope="col"><%= ts('Additional tags') %></th>
 	<th scope="col"><%= ts('Characters') %></th>
 	<th scope="col"><%= ts('Relationships') %></th>
-	<th scope="col"><%= ts('Freeforms') %></th>
+	<th scope="col"><%= ts('Additional tags') %></th>
     </tr>
 </thead>
 <tbody>
@@ -49,7 +49,7 @@ feedback needed from realuse (is it annoying having the announcement on every ce
       <td title="<%= ts('unfilterable freeforms') %>"><%= (tag_count = fandom.freeforms.unfilterable.size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unfilterable}) : " " %></td>
       <td title="<%= ts('unwrangled characters') %>"><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Character").size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unwrangled}) : " " %></td>
       <td title="<%= ts('unwrangled relationships') %>"><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Relationship").size)   > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :relationships, :status => :unwrangled}) : " " %></td>
-      <td title="<%= ts('unwrangled freeforms') %>"><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Freeform").size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unwrangled}) : " " %></td>
+      <td title="<%= ts('unwrangled additional tags') %>"><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Freeform").size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unwrangled}) : " " %></td>
     </tr>
     <% end %>
 </tbody>

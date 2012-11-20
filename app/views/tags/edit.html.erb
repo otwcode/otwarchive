@@ -28,7 +28,7 @@
       <dt><%= ts('Category') %></dt>
       <dd>
         <% if @tag.can_change_type? %>
-          <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
+          <%= f.select :type, options_for_select([ts("Fandom"), ts("Character"), ts("Relationship"), ts("Additional tag"), ts("Unsorted tag")], @tag.type.to_s) %>
         <% else %>
           <strong><%= @tag.type %></strong>
         <% end %>  
