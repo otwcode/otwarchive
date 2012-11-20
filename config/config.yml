@@ -165,9 +165,9 @@ DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
 
 # SEARCH TIPS
 SEARCH_TIPS: ['arthur/merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)', 
-    'hetalia f/f sort:kudos', '"sherlock (tv)" NOT "sherlock holmes/john watson"', 'austen words:10000-50000 sort:title"',
+    'hetalia f/f sort:kudos', '"sherlock (tv)" m/m NOT "sherlock holmes/john watson"', 'austen words:10000-50000 sort:title"',
     'katekyou "alternate universe" sort:>words', '"raven king" "white witch" sort:<words',
-    '"fallen london" AND "narnia" sort:comments'
+    '"fallen london" AND "narnia" sort:comments', 'sasuke/naruto angst kudos>10'
 ]
 
 # This is used to determine how many recent items

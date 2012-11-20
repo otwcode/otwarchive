@@ -26,9 +26,11 @@ class WorksController < ApplicationController
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
     if params[:work_search].present? && params[:work_search][:query].present?
-      # swap in gt/lt
+      # swap in gt/lt for ease of matching; swap them back out for safety at the end
       params[:work_search][:query].gsub!('&gt;', '>')
       params[:work_search][:query].gsub!('&lt;', '<')           
+
+      # put queries with a "/" in them into quotes
 
       # extract countable params    
       %w(word kudo comment bookmark hit).each do |term|        
@@ -47,16 +49,13 @@ class WorksController < ApplicationController
       # get sort-by
       if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
         sortdir = $3 || $1
-        sortby = $2
+        sortby = $2.gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
         
-        if sortby.match(/word/)
-          params[:work_search][:sort_column] = "word_count"
-        else
-          WorkSearch::SORT_OPTIONS.each do |opt, value|
-            if sortby.match(/#{opt}/i) || opt.match(/#{sortby}/i)
-              params[:work_search][:sort_column] = value
-              break
-            end
+        WorkSearch::SORT_OPTIONS.each do |opt, value|
+          # stop at the first one we find
+          if opt.match(/#{sortby}/i)
+            params[:work_search][:sort_column] = value
+            break
           end
         end
         
@@ -64,9 +63,18 @@ class WorksController < ApplicationController
           params[:work_search][:sort_direction] = "asc"
         elsif sortdir == "<" || sortdir == "descending"
           params[:work_search][:sort_direction] = "desc"
-        end
-        
+        end        
       end
+
+      # put pairings into quotes and convert het femslash and slash
+      qr = Regexp.new('(?:"|\')?')
+      %w(m/m f/f f/m m/f f/f/m m/m/f m/f/f f/m/m).each do |cat|
+        cr = Regexp.new("#{qr}#{cat}#{qr}")
+        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
+      end
+      params[:work_search][:query].gsub!(/\bfemslash\b/, '"f/f"')
+      params[:work_search][:query].gsub!(/\bhet\b/, '"m/f"')
+      params[:work_search][:query].gsub!(/\bslash\b/, '"m/m"')
 
       # swap out gt/lt
       params[:work_search][:query].gsub!('>', '&gt;')
