@@ -93,12 +93,6 @@ select {
   width: 32.5%;
 }
 
-input[type="checkbox"] {
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
 input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
   width: auto;
   margin-right: 0.375em;

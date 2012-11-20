@@ -57,6 +57,12 @@ p.submit, input.submit, dd.submit {
   cursor: text;
 }
 
+.actions input[type="checkbox"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 
