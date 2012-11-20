@@ -19,7 +19,8 @@ class Tag < ActiveRecord::Base
 
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
-  USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+  # note: need two-item arrays to allow for display names that are not identical to the class name (eg: "Additional tag" instead of "Freeform")
+  USER_DEFINED = [[Fandom::NAME, 'Fandom'], [Character::NAME, 'Character'], [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
 
   acts_as_commentable
   def commentable_name
@@ -528,8 +529,16 @@ class Tag < ActiveRecord::Base
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
+  def class_display_name
+    self.class::NAME
+  end
+
   def unwrangled?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
+  end
+
+  def is_user_defined?
+    Tag::USER_DEFINED.include?(self.class.name) || Tag::USER_DEFINED.rassoc(self.class.name)!=nil
   end
 
   # sort tags by name

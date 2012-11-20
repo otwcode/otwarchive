@@ -44,7 +44,7 @@ module TagsHelper
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
         sign_up_fandoms = tag.name
-      elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
+      elsif @tag.is_user_defined? && !tag.fandoms.blank?
         sign_up_fandoms = tag.fandoms.collect(&:name).join(', ')
       end
       link_to "Sign Up", tag_wranglers_path(:sign_up_fandoms => sign_up_fandoms)
