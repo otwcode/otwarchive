@@ -66,16 +66,13 @@ class WorksController < ApplicationController
         end        
       end
 
-      # put pairings into quotes and convert het femslash and slash
+      # put categories into quotes
       qr = Regexp.new('(?:"|\')?')
-      %w(m/m f/f f/m m/f f/f/m m/m/f m/f/f f/m/m).each do |cat|
+      %w(m/m f/f f/m m/f).each do |cat|
         cr = Regexp.new("#{qr}#{cat}#{qr}")
         params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
       end
-      params[:work_search][:query].gsub!(/\bfemslash\b/, '"f/f"')
-      params[:work_search][:query].gsub!(/\bhet\b/, '"m/f"')
-      params[:work_search][:query].gsub!(/\bslash\b/, '"m/m"')
-
+      
       # swap out gt/lt
       params[:work_search][:query].gsub!('>', '&gt;')
       params[:work_search][:query].gsub!('<', '&lt;')
