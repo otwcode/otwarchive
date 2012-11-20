@@ -45,20 +45,24 @@ class WorksController < ApplicationController
       end        
       
       # get sort-by
-      if params[:work_search][:query].gsub!(/sort\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\s*(\w+))/i, '')
-        sortdir = $1
+      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+        sortdir = $3 || $1
         sortby = $2
         
-        WorkSearch::SORT_OPTIONS.each do |opt, value|
-          if sortby.match(/#{opt}/i) || opt.match(/#{sortby}/i)
-            params[:work_search][:sort_column] = value
-            break
+        if sortby.match(/word/)
+          params[:work_search][:sort_column] = "word_count"
+        else
+          WorkSearch::SORT_OPTIONS.each do |opt, value|
+            if sortby.match(/#{opt}/i) || opt.match(/#{sortby}/i)
+              params[:work_search][:sort_column] = value
+              break
+            end
           end
         end
         
-        if sortdir == ">"
+        if sortdir == ">" || sortdir == "ascending"
           params[:work_search][:sort_direction] = "asc"
-        elsif sortdir == "<"
+        elsif sortdir == "<" || sortdir == "descending"
           params[:work_search][:sort_direction] = "desc"
         end
         
@@ -66,7 +70,10 @@ class WorksController < ApplicationController
 
       # swap out gt/lt
       params[:work_search][:query].gsub!('>', '&gt;')
-      params[:work_search][:query].gsub!('<', '&lt;')           
+      params[:work_search][:query].gsub!('<', '&lt;')
+      
+      # get rid of empty queries
+      params[:work_search][:query] = nil if params[:work_search][:query].match(/^\s*$/)
     end
   end
 

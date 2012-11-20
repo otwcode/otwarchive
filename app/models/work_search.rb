@@ -289,10 +289,15 @@ class WorkSearch < Search
     end
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
       if options[countable].present?
-        summary << "#{countable.to_s.humanize}: #{options[countable]}"
+        summary << "#{countable.to_s.humanize.downcase}: #{options[countable]}"
       end
     end
-    summary.join(", ")
+    if options[:sort_column].present?
+      summary << "sort by: #{name_for_sort_column(options[:sort_column]).downcase}" + 
+        (options[:sort_direction].present? ? 
+          (options[:sort_direction] == "asc" ? " ascending" : " descending") : "")
+    end
+    summary.join(" ")
   end
   
   #############################################################################
@@ -319,6 +324,11 @@ class WorkSearch < Search
   
   def sort_values
     sort_options.map{ |option| option.last }
+  end
+  
+  # extract the pretty name
+  def name_for_sort_column(sort_column)
+    Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
   end
   
   def sort_direction(sort_column)
