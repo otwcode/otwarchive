@@ -58,11 +58,11 @@ class CreationObserver < ActiveRecord::Observer
         if work.collections.empty?
           UserMailer.recipient_notification(pseud.user.id, work.id).deliver
         else
-            if work.collections.first.nil?
-              UserMailer.recipient_notification(pseud.user.id, work.id).deliver
-            else
-              UserMailer.recipient_notification(pseud.user.id, work.id, work.collections.first.id).deliver
-            end
+          if work.collections.first.nil?
+            UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+          else
+            UserMailer.recipient_notification(pseud.user.id, work.id, work.collections.first.id).deliver
+          end
         end
       end
     end
@@ -81,12 +81,10 @@ class CreationObserver < ActiveRecord::Observer
   # notify prompters of response to their prompt
   def notify_prompters(work)
     if !work.challenge_claims.empty? && !work.unrevealed?
-      work.collections.each do |collection|
-        if collection.nil?
-          UserMailer.prompter_notification(work.id,).deliver
-        else
-          UserMailer.prompter_notification(work.id, collection.id).deliver
-        end
+      if work.collections.first.nil?
+        UserMailer.prompter_notification(work.id,).deliver
+      else
+        UserMailer.prompter_notification(work.id, work.collections.first.id).deliver
       end
     end
   end
