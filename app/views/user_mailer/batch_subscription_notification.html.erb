@@ -1,35 +1,70 @@
-<% @seen = {} %>
-
 <% @creations.each do |creation| %>
 
-  <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-  <% if creation.is_a?(Chapter) %>
+  <% this_work = creation.is_a?(Work) ? creation.work : creation %>
   
-    <p>
-      <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted 
-      <%= link_to @subscription.chapter_name(creation), work_chapter_url(this_work, creation) %> of 
-      <%= link_to this_work.title, work_url(this_work) %> at 
-      <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>.
-    </p>
-    
-    <% unless creation.summary.blank? %>
-      <p>Chapter Summary:</p> <%= raw sanitize_field(creation, :summary) %>
+  <% content_for :author_names do %>
+    <%= this_work.pseuds.map{|p| p.byline}.to_sentence %>
+  <% end %>
+  
+  <% content_for :author_links do %>
+    <%= this_work.pseuds.map{|p| ("<a href\"" + user_pseud_url(p.user, p) + "\" style=\"color:#990000;\">" + p.byline + "</a>")}.to_sentence %>
+    # <%= this_work.pseuds.map{|p| link_to(p.byline, user_pseud_url(p.user, p))}.to_sentence %>
+  <% end %>
+  
+  <% content_for :work_title do %>
+    <%= this_work.title %>    
+  <% end %>  
+  <% content_for :work_url do %>
+    <%= work_url(this_work) %>    
+  <% end %>
+  
+  <% if creation.is_a?(Work) %>
+    <% content_for :new_old do %>
+      <%= this_work.backdate ? "backdated" : "new" %> 
     <% end %>
-
-  <% elsif creation.is_a?(Work) %>
-
-    <p>
-      <%= creation.pseuds.map{|p| p.byline}.to_sentence %> posted a <%= this_work.backdate ? "backdated" : "new" %> work:
-    </p>
-
+  <% else %>
+    <% content_for :chapter_title do %>
+      <%= @subscription.chapter_name(creation) %>
+    <% end %>
+    <% content_for :chapter_url do %>
+      <%= work_chapter_url(this_work, creation) %>
+    <% end %>
+  <% end %>  
+  
+  <% content_for :word_count do %>
+    <%= this_work.word_count %>    
   <% end %>
-
-  <% unless @seen[this_work.id] %>
-    <%= raw simple_format(get_embed_link(this_work)) %>
-    <% @seen[this_work.id] = true %>
+  
+  <% content_for :fandom_links do %>
+    <%= this_work.fandoms.map{|f| ("<a href\"" + fandom_url(f) + "\" style=\"color:#990000;\">" + f.name + "</a>")}.to_sentence %>
   <% end %>
-
+  
+  <% content_for :rating do %>
+    <%= this_work.rating_string %>
+  <% end %>  
+  
+  <% content_for :warnings do %>
+    <%= this_work.warning_string %>
+  <% end %>  
+  
+  <% content_for :relationships do %>
+    <%= this_work.relationship_string %>
+  <% end %>  
+  
+  <% content_for :characters do %>
+    <%= this_work.character_string %>
+  <% end %>  
+  
+  <% content_for :summary do %>
+    <%= raw sanitize_field(creation, :summary) %>
+  <% end %>  
+  
+  <% content_for :subscription_title %> 
+    <%= @subscription.name %>
+  <% end %>
+  <% content_for :subscription_url %> 
+    <%= polymorphic_url(@subscription.subscribable) %>
+  <% end %>
+  
 <% end %>
-
-
-<p>You're receiving this email because of your subscription to <%= link_to @subscription.name, polymorphic_url(@subscription.subscribable) %>. Follow the link to unsubscribe if you no longer want to receive updates.</p>
+  
