@@ -69,10 +69,6 @@ li.blurb:after {
   display: block;
 }
 
-.item .blurb .header {
-  display: none;
-}
-
 /* ==START icon block rules*/
 
 .blurb ul.required-tags {
@@ -265,9 +261,29 @@ eg collections, users, skins, instead of the 4-icon list
   min-width: 65px;
 }
 
+/* mod: ITEM
+blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
+*/
+
+.item .blurb blockquote, .item dl.stats {
+  margin: 0.643em auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+    box-shadow: none;
+}
+
+.item .blurb .header, .item dl.stats dt {
+  border: none;
+}
+
+.item dl.visibility {
+  background: #eee;
+}
+
 /* mod: BOOKMARK */
 
-.bookmark .status {
+.bookmark p.status {
   position: absolute;
   right: 0.25em;
   width: 60px;

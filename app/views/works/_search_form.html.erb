@@ -158,6 +158,14 @@
       <dd>
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column), { :include_blank => "Best Match" } %>
       </dd>
+      <dt>
+        <%= f.label :sort_direction, ts("Sort direction") %>
+      </dt>
+      <dd>
+        <%= select_tag "work_search[sort_direction]", 
+          '<option value="asc">Ascending</option><option value="desc">Descending</option>'.html_safe,
+          {:include_blank => true } %> 
+      </dd>
     </dl>
     <p class="submit"><%= f.submit ts('Search') %></p>
   </fieldset>

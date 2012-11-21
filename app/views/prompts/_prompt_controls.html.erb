@@ -38,10 +38,10 @@
         <li><%= ts("Sign in to claim prompts") %></li>
       <% elsif (claim ||= prompt.claim_by(current_user).first) %>
         <% # already claimed %>
-        <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
-        <li>
-          <%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
-        </li>
+        <% if !collection.closed? || collection.user_is_maintainer?(current_user) %>
+          <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
+        <% end %>
+          <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %></li>
       <% else %>
         <li>
           <% new_claim = ChallengeClaim.new %>

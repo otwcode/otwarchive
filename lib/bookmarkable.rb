@@ -15,7 +15,7 @@ module Bookmarkable
   end
 
   def update_bookmarks_index
-    self.bookmarks.each{ |bookmark| bookmark.update_index }
+    RedisSearchIndexQueue.queue_bookmarks(self.bookmarks.value_of :id)
   end
 
 end

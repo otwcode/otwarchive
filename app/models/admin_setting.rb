@@ -14,6 +14,9 @@ class AdminSetting < ActiveRecord::Base
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
   end
+  def self.request_invite_enabled?
+    self.first ? self.first.request_invite_enabled? : false
+  end
   def self.invite_from_queue_at
     self.first.invite_from_queue_at
   end

@@ -9,6 +9,9 @@ class Static::RestrictedWorksController < Static::BaseController
   def show
     @work = Work.find(params[:id])
     @chapters = @work.chapters.where(:posted => true).order(:position)
+    @page_title = get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+      @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
+      @work.title)
     render :action => 'static/works/show'
   end
 

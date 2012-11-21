@@ -56,7 +56,7 @@ module ApplicationHelper
   #2: show_text = true: shows "plain text with limited html" and link to help
   #3 show_list = true: plain text and limited html, link to help, list of allowed html
   def allowed_html_instructions(show_list = false, show_text=true)
-    (show_text ? h(ts("Plain text with limited html")) : ''.html_safe) + 
+    (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 

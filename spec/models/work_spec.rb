@@ -95,6 +95,12 @@ describe Work do
       @work.errors[:title].should_not be_empty
     end
     
+    it "should send an email when added to collection" do
+      collection = Collection.new
+      collection.collection_preference = CollectionPreference.new
+      @work.add_to_collection(collection)
+      
+    end
   end
   
   describe "new recipients virtual attribute" do

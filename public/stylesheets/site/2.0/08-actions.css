@@ -84,6 +84,10 @@ ol.pagination, div.pagination, ol.year {
     box-shadow: inset 1px 1px 3px #333;
 }
 
+.actions label.disabled {
+  background: #ccc;
+}
+
 .delete a, span.delete {
   color: #900;
   font-weight: 900;

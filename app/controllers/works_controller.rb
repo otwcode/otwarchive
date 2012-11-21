@@ -15,11 +15,67 @@ class WorksController < ApplicationController
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
+  
+  before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
   cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
+  
+  # we want to extract the countable params from work_search and move them into their fields
+  def clean_work_search_params
+    if params[:work_search].present? && params[:work_search][:query].present?
+      # swap in gt/lt
+      params[:work_search][:query].gsub!('&gt;', '>')
+      params[:work_search][:query].gsub!('&lt;', '<')           
+
+      # extract countable params    
+      %w(word kudo comment bookmark hit).each do |term|        
+        if params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+          # pluralize, add _count, convert to symbol
+          term = term.pluralize unless term == "word"
+          term = term + "_count" unless term == "hits"
+          term = term.to_sym
+          
+          value = $1.gsub(/^(\:|\=)/, '') # get rid of : and =
+          # don't overwrite if submitting from advanced search?
+          params[:work_search][term] = value unless params[:work_search][term].present?
+        end
+      end        
+      
+      # get sort-by
+      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+        sortdir = $3 || $1
+        sortby = $2
+        
+        if sortby.match(/word/)
+          params[:work_search][:sort_column] = "word_count"
+        else
+          WorkSearch::SORT_OPTIONS.each do |opt, value|
+            if sortby.match(/#{opt}/i) || opt.match(/#{sortby}/i)
+              params[:work_search][:sort_column] = value
+              break
+            end
+          end
+        end
+        
+        if sortdir == ">" || sortdir == "ascending"
+          params[:work_search][:sort_direction] = "asc"
+        elsif sortdir == "<" || sortdir == "descending"
+          params[:work_search][:sort_direction] = "desc"
+        end
+        
+      end
+
+      # swap out gt/lt
+      params[:work_search][:query].gsub!('>', '&gt;')
+      params[:work_search][:query].gsub!('<', '&lt;')
+      
+      # get rid of empty queries
+      params[:work_search][:query] = nil if params[:work_search][:query].match(/^\s*$/)
+    end
+  end
 
   def search
     @languages = Language.default_order
@@ -210,7 +266,7 @@ class WorksController < ApplicationController
   def create
     load_pseuds
     @series = current_user.series.uniq
-
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
@@ -229,7 +285,12 @@ class WorksController < ApplicationController
         if params[:preview_button] || params[:cancel_coauthor_button]
           redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
         else
-          redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          # We check here to see if we are attempting to post to moderated collection
+          if !@collection.nil? && @collection.moderated?
+            redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+          else
+            redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          end
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -275,6 +336,7 @@ class WorksController < ApplicationController
     # Need to get @pseuds and @series values before rendering edit
     load_pseuds
     @series = current_user.series.uniq
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     unless @work.errors.empty?
       render :edit and return
     end
@@ -354,6 +416,10 @@ class WorksController < ApplicationController
       end
       if saved
         if params[:post_button]
+          if !@collection.nil? && @collection.moderated?
+            setflash; flash[:notice] = ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+            redirect_to(@work) and return
+          end
           setflash; flash[:notice] = ts('Work was successfully posted.')
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
@@ -613,9 +679,12 @@ public
       setflash; flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work) and return
     end
-
-    setflash; flash[:notice] = ts("Your work was successfully posted.")
-    redirect_to @work
+    if !@collection.nil? && @collection.moderated?
+      redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+    else
+      setflash; flash[:notice] = ts("Your work was successfully posted.")
+      redirect_to @work
+    end
   end
 
   # WORK ON MULTIPLE WORKS
@@ -703,6 +772,9 @@ public
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end 
       unless @tag.canonical?
         if @tag.merger.present?
           if @collection.present?

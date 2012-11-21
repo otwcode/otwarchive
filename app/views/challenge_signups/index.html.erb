@@ -7,7 +7,7 @@
 <% elsif @user %>
   <!-- view in user dashboard -->
 
-  <h2 class="heading"><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
+  <h2 class="heading"><%= ts("Challenge Sign-ups for %{user}", :user => @user.login) %></h2>
 
   <dl class="signup index group">
     <% @challenge_signups.each do |challenge_signup| %>

@@ -4,9 +4,15 @@
 </p>
 
 <p>
-  <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
-  by <%= @work.anonymous? ? "an anonymous responder" : @work.pseuds.collect(&:byline).join(", ") %><br />
-  <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
+  <% if @collection.nil? %>
+    <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
+    by <%= @work.anonymous? ? "an anonymous responder" : @work.pseuds.collect(&:byline).join(", ") %><br />
+    <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
+  <% else %>
+    <%= link_to @work.title.html_safe, collection_work_url(@collection, @work) %><%= "(#{@work.word_count} words)" %><br />
+    by <%= @work.anonymous? ? "an anonymous responder" : @work.pseuds.collect(&:byline).join(", ") %><br />
+    <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
+  <% end %>
   <% unless @work.summary.blank? %>
     Summary: 
     <blockquote>
