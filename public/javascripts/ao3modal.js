@@ -107,12 +107,12 @@ jQuery(document).ready(function() {
         }
 
         function _show(href, title) {
-            _toggleScroll(false);
-
             _modalDiv.hide();
             _wrapDiv.show();
             if ($.support.opacity) { _bgDiv.add(_loadingDiv).fadeIn(); }
             else { _bgDiv.add(_loadingDiv).show(); }
+            
+            _toggleScroll(false);
 
             _loading = true;
 
@@ -157,13 +157,13 @@ jQuery(document).ready(function() {
 
         function _hide() {
             _loading = false;
-            _toggleScroll(true);
             _title.text('');
 
             _keyboard.toggleHandlers(false);
 
             _wrapDiv.fadeOut(function() {
                 _setContent('');
+                _toggleScroll(true);
                 _modalDiv.css('width', '').removeClass('tall img');
                 if (_mobile && _mobileScrollTop >= 0) {
                     $('html, body').animate({'scrollTop': _mobileScrollTop}, 'fast');
