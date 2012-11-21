@@ -3,7 +3,7 @@
   <div class="flash notice" id="first-login-help-banner">
     <p>
       Hi! It looks like you've just logged into the archive for the first time. 
-      <%= link_to_ibox ts("Learn some tips and tricks"), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
+      <%= link_to_modal ts("Learn some tips and tricks"), :for => first_login_help_path, :title => "First login help" %> 
       or dismiss this message permanently.
     </p>
       <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
