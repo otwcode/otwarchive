@@ -1,7 +1,7 @@
 /*
 
 THIS FILE GETS MINIFIED!  It is included as "ao3modal.min.js". 
-UPDATE THE .min.js FILE AFTER MAKING ANY CHANGES HERE!
+USE A MINIFIER AND UPDATE THE .min.js FILE AFTER MAKING ANY CHANGES HERE!
 
 TODO:
     change $.bind & $.unbind to on/off when jQuery is updated
