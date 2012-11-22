@@ -14,13 +14,13 @@
   
   if params[:show]
     cleaned_show_param = params[:show].singularize.titleize.gsub(' ', '')
-
-    if Kernel.const_defined? cleaned_show_param
-      class_object = Kernel.const_get(cleaned_show_param)
-      class_display_name = class_object::NAME.downcase
-    else
-      class_display_name = cleaned_show_param.downcase
-    end
+    class_display_name = tag_category_name(cleaned_show_param)
+#    if Kernel.const_defined? cleaned_show_param
+#      class_object = Kernel.const_get(cleaned_show_param)
+#      class_display_name = class_object::NAME.downcase
+#    else
+#      class_display_name = cleaned_show_param.downcase
+#    end
     
     if params[:status]
       showing_header = ts("Showing %{param_text}" , :param_text => params[:status] + " " + class_display_name.pluralize)
@@ -28,7 +28,7 @@
       showing_header = ts("Showing %{param_text}", :param_text => class_display_name.pluralize)
     end
   else
-    showing_header = ts("No parameters set.")
+    showing_header = ts("")
   end
 %>
 <% unless showing_header.blank? %>
@@ -57,7 +57,6 @@
   </fieldset>
 <% end %>
 
-<% # BACK END: Can we make these span_if_current? Front End suspects it would help the wranglers know what they're looking at %>
 <% if params[:show] %>
   <ul class="navigation actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
