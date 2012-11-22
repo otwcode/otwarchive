@@ -182,7 +182,7 @@ jQuery(document).ready(function() {
         function _addLink(elements) {
             elements.each(function() {
                 var img = $(this).is('img') ? $(this).removeClass('modal') : false,
-                    a = !img ? $(this) : $('<a>').addClass('modal')
+                    a = !img ? $(this) : $('<a>')
                         .css('border', 'none')
                         .attr({
                             'title': (img.attr('title') || img.attr('alt')),
@@ -190,10 +190,12 @@ jQuery(document).ready(function() {
                         }).replaceAll(img)
                         .append(img);
                 
-                a.click(function(event){
-                    _show($(this).attr('href'), $(this).attr('title'));
-                    event.preventDefault();
-                });
+                a.addClass('modal')
+                    .attr('aria-controls', '#modal')
+                    .click(function(event){
+                        _show($(this).attr('href'), $(this).attr('title'));
+                        event.preventDefault();
+                    });
                 
                 // if link refers to in-page modal content, extract it and store it
                 if (a.attr('href').indexOf('#') === 0) {
