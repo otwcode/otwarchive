@@ -18,9 +18,9 @@ class Tag < ActiveRecord::Base
 
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
-  # note: need two-item arrays to allow for display names that are not identical to the class name (eg: "Additional tag" instead of "Freeform") - 
+  # note: need two-item arrays to allow for display names that are not identical to the class name (eg: "Additional tag" instead of "Freeform")
   # warning: the constant string is the actual class name and mustn't be translated
-  USER_DEFINED = ['Fandom', 'Character', [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
+  USER_DEFINED = [[Fandom::NAME, 'Fandom'], [Character::NAME, 'Character'], [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
 
   acts_as_commentable
   def commentable_name
@@ -793,7 +793,8 @@ class Tag < ActiveRecord::Base
       current_filter = self.filter
       # we only need to cache values for user-defined tags
       # because they're the only ones we access
-      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+      # changes from Tag::USER_DEFINED.include?(current_filter.class.to_s))
+      if current_filter && current_filter.class.to_s.is_user-defined? 
         attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
           :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
         if current_filter.filter_count
