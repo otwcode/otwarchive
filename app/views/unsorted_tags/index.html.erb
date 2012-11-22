@@ -19,9 +19,9 @@
       <% @tags.each do |tag| %>
         <% cache("unsorted-#{tag.cache_key}") do %>
         <tr>
-          <th scope="row"><%= link_to tag.name, edit_tag_path(tag) %></td>
+          <th scope="row"><%= link_to tag.name, edit_tag_path(tag) %></th>
           <td><%= link_to ts("Bookmarks (%{count})", :count => tag.bookmarks.count), tag_bookmarks_path(tag) %></td>
-          <td><%= select_tag "tags[#{tag.id}]", options_for_select(["", Tag::USER_DEFINED]) %></td>
+          <td><%= select_tag "tags[#{tag.id}]", options_for_select([""] + Tag::USER_DEFINED, tag.id) %></td>
         </tr>
         <% end %>
       <% end %>
