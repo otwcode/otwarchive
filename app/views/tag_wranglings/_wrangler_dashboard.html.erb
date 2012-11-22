@@ -25,9 +25,16 @@
           <% end %>
         <% end %>
       <% elsif @tag  && @tag.child_types %>
-        <% for tag_type in @tag.child_types %>
+        <% for tag_type in @tag.child_types 
+            if Kernel.const_defined? tag_type
+              class_object = Kernel.const_get(tag_type.singularize.titleize)
+              class_display_name = class_object::NAME
+            else
+              class_display_name = tag_type
+            end
+          %>
           <li>
-            <%= span_if_current tag_type.pluralize + " (#{@counts[tag_type.underscore.pluralize.to_sym]})", url_for(:show => tag_type.underscore.pluralize, :id => @tag) %>
+            <%= span_if_current class_display_name.pluralize + " (#{@counts[tag_type.underscore.pluralize.to_sym]})", url_for(:show => tag_type.underscore.pluralize, :id => @tag, :status => 'all') %>
           </li>
         <% end %>
       <% else %>
