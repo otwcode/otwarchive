@@ -283,14 +283,14 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
+          setflash; flash[:notice] = ts('Draft was successfully created.')
+          in_moderated_collection
+          redirect_to preview_work_path(@work)
         else
           # We check here to see if we are attempting to post to moderated collection
-          if !@collection.nil? && @collection.moderated?
-            redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
-          else
-            redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
-          end
+          setflash; flash[:notice]= ts("Work was successfully posted.")
+          in_moderated_collection
+          redirect_to work_path(@work)
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -346,6 +346,8 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
+        setflash; flash[:notice] = ts('Draft was successfully created.')
+        in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
       else
@@ -416,15 +418,12 @@ class WorksController < ApplicationController
       end
       if saved
         if params[:post_button]
-          if !@collection.nil? && @collection.moderated?
-            setflash; flash[:notice] = ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
-            redirect_to(@work) and return
-          end
           setflash; flash[:notice] = ts('Work was successfully posted.')
+          in_moderated_collection
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
+          in_moderated_collection
         end
-
         redirect_to(@work)
       else
         unless @chapter.valid?
@@ -653,6 +652,14 @@ protected
         message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
         setflash; flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
+    end
+  end
+
+  # check to see if the work is being added / has been added to a moderated collection, then let user know that
+  def in_moderated_collection
+    if !@collection.nil? && @collection.moderated?
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
     end
   end
 
