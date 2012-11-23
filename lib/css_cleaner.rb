@@ -101,6 +101,8 @@ module CssCleaner
       end
     elsif property == "content"
       clean = sanitize_css_content(value)
+    elsif property == "position"
+      clean = sanitize_css_position(value)
     elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
@@ -224,5 +226,9 @@ module CssCleaner
       return ""
     end
   end 
+  
+  def sanitize_css_position(value)
+    return value == "fixed" ? "" : value
+  end
   
 end
