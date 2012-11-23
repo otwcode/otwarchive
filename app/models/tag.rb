@@ -21,7 +21,8 @@ class Tag < ActiveRecord::Base
   # the order is important, and it is the order in which they appear in the tag wrangling interface
   # note: need two-item arrays to allow for display names that are not identical to the class name (eg: "Additional tag" instead of "Freeform")
   # warning: the constant string is the actual class name and mustn't be translated
-  USER_DEFINED = [[Fandom::NAME, 'Fandom'], [Character::NAME, 'Character'], [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
+  # TODO: Find out why putting Fandom into an array like the other items results in catastrophic failures /o\
+  USER_DEFINED = ['Fandom', [Character::NAME, 'Character'], [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
 
   acts_as_commentable
   def commentable_name

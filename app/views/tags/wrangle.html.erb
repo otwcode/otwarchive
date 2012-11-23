@@ -14,18 +14,12 @@
   
   if params[:show]
     cleaned_show_param = params[:show].singularize.titleize.gsub(' ', '')
-    class_display_name = tag_category_name(cleaned_show_param)
-#    if Kernel.const_defined? cleaned_show_param
-#      class_object = Kernel.const_get(cleaned_show_param)
-#      class_display_name = class_object::NAME.downcase
-#    else
-#      class_display_name = cleaned_show_param.downcase
-#    end
+    class_display_name = tag_category_name(cleaned_show_param).pluralize
     
     if params[:status]
-      showing_header = ts("Showing %{param_text}" , :param_text => params[:status] + " " + class_display_name.pluralize)
+      showing_header = ts("Showing %{param_text}", :param_text => params[:status] + " " + class_display_name)
     else
-      showing_header = ts("Showing %{param_text}", :param_text => class_display_name.pluralize)
+      showing_header = ts("Showing %{param_text}", :param_text => class_display_name)
     end
   else
     showing_header = ts("")
@@ -41,7 +35,7 @@
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <fieldset>
-    <h3 class="heading"><%= ts('Add new') %> <%= class_display_name.pluralize %></h3>
+    <h3 class="heading"><%= ts('Add new') %> <%= class_display_name %></h3>
     <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
       <div title="<%= ts('add new') %>">
         <!-- Note: here we do want the actual class name (eg: "Freeform") -->
