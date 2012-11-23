@@ -268,8 +268,8 @@ jQuery(document).ready(function() {
                             var target = event.target,
                                 tag = event.target.tagName.toLowerCase();
 
-                            if (!$(target).parents('#modal')[0] || 
-                                tag != 'input' || tag != 'textarea') {
+                            if ($(target).parents('#modal')[0] && 
+                                tag != 'input' && tag != 'textarea') {
                                 _hide();
                                 event.preventDefault();
                             }                            
