@@ -128,3 +128,17 @@ Factory.define :subscription do |f|
   f.subscribable_type "Series"
   f.subscribable_id { Factory.create(:series).id }
 end
+
+Factory.define :owned_tag_set do |f|
+  f.sequence(:title) {|n| "Owned Tag Set #{n}"}
+  f.nominated true
+  f.after_build do |owned_tag_set|
+    owned_tag_set.build_tag_set
+    owned_tag_set.add_owner(Factory.create(:pseud))
+  end
+end
+
+Factory.define :tag_set_nomination do |f|
+  f.association :owned_tag_set
+  f.association :pseud
+end
