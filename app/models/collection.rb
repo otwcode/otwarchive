@@ -168,16 +168,13 @@ class Collection < ActiveRecord::Base
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
-  # we need to add other challenge types to this join in future
-  # Note: needs to be a RIGHT join instead of an INNER join in order to ensure that when this is
-  # daisy-chained with other AR query clauses on eg the collection_preferences, we still only end up 
-  # with the desired type of challenge
-  scope :ge_signups_open, joins("RIGHT JOIN gift_exchanges on gift_exchanges.id = challenge_id").
-                       where("gift_exchanges.signup_open = 1").
-                       order("gift_exchanges.signups_close_at")
-  scope :pm_signups_open, joins("RIGHT JOIN prompt_memes on prompt_memes.id = challenge_id").
-                       where("prompt_memes.signup_open = 1").
-                       order("prompt_memes.signups_close_at")
+  # Get only collections with running challenges
+  def self.signup_open(challenge_type)
+    table = challenge_type.tableize
+    unmoderated.not_closed.where(:challenge_type => challenge_type).
+      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
+      where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
+  end
 
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
