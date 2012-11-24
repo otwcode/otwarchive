@@ -22,11 +22,11 @@
   <% # prompts %>
   <% @work.challenge_claims.each do |claim| %>
     <% unless claim.request_prompt.nil? %>
-      <p>In response to a prompt by:
+      <p>In response to a prompt by
         <% if claim.request_prompt.anonymous? %>
           <%= ts("Anonymous in the ", link_to(claim.collection.name, collection_path(claim.collection))) %>
         <% else %>
-          <%= link_to(claim.request_signup.pseud.byline, user_pseud_path(claim.request_signup.user, claim.request_signup.pseud)) %> <%= ts(" in the ") %> <%= link_to(claim.collection.name, collection_path(claim.collection)) %>
+          <%= link_to(claim.request_signup.pseud.byline, user_pseud_path(claim.request_signup.user, claim.request_signup.pseud)) %> <%= ts(" in the ") %> <%= link_to(claim.collection.name, collection_path(claim.collection)) %> <%= ts(" collection.") %>
         <% end %>
       </p>
     <% end %>
