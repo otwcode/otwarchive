@@ -111,7 +111,7 @@
         </dd>
         <dt><%= preference_form.check_box :email_notify %></dt>
         <dd><%= preference_form.label :email_notify, ts("Send a message to the collection email when a work is added") %></dd>
-        <dt><%= label_tag :challenge_type, ts("Type of challenge, if any") %>:</dt>
+        <dt><%= label_tag :challenge_type, ts("Type of challenge, if any:") %></dt>
         <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
         <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
       </dl>
@@ -127,7 +127,7 @@
     <%= ts("Tip: if this is a subcollection or challenge, you don't need to repeat yourself: fields left blank will copy from your parent collection.") %>
     </p>
     
-    <h3 class="heading"><%= profile_form.label :intro, ts("Introduction") %>:</h3>
+    <h3 class="heading"><%= profile_form.label :intro, ts("Introduction:") %></h3>
     <p>
       <%= profile_form.text_area :intro, :rows => 10, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_intro', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
@@ -170,7 +170,4 @@
  </fieldset>
 
  <%= submit_fieldset collection_form %>
-  <% unless @collection.new_record? %>
-  <%= render "collections/collection_form_delete" %>
-  <% end %>
 <% end %>
