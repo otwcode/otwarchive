@@ -13,9 +13,9 @@
       <li>
         <% # Do not warn if matching has not run; OTHERWISE warn that matching will need to be rerun %>
         <% if collection.potential_matches.count == 0 %>
-          <%= link_to(ts('Edit Sign-Up'), edit_collection_signup_path(collection, challenge_signup)) %>
+          <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup)) %>
         <% else %>
-          <%= link_to(ts('Edit Sign-Up'), edit_collection_signup_path(collection, challenge_signup), 
+          <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup), 
             :confirm => ts("Note: Potential matches will need to be regenerated after your edits.")) %>
         <% end %>
       </li>
@@ -33,12 +33,12 @@
         <li>
           <% # Warn about prompt loss if matching has not run; OTHERWISE warn that matching will need to be rerun %>
           <% if collection.potential_matches.count == 0 %>
-            <%= link_to ts("Delete Sign-Up"), 
+            <%= link_to ts("Delete Sign-up"), 
               collection_signup_path(collection, challenge_signup), 
               :confirm => ts("Are you sure? All prompts in this sign-up will be lost."), 
               :method => :delete %>
           <% else %>
-            <%= link_to ts("Delete Sign-Up"), 
+            <%= link_to ts("Delete Sign-up"), 
               collection_signup_path(collection, challenge_signup), 
               :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
               :method => :delete %>

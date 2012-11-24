@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Your Claims") %> <% if @collection %><%= ts("in") %> <%= link_to(@collection.title, @collection) %><% end %></h2>
+<h2 class="heading"><%= ts("My Claims") %> <% if @collection %><%= ts("in") %> <%= link_to(@collection.title, @collection) %><% end %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -18,6 +18,10 @@
 <%= will_paginate @claims %>
 
 <!--main content-->
+<% unless @collection %>
+  <p class="note"><%= ts('Looking for assignments you have for a gift exchange? Try') %> <%= link_to ts("My Assignments"), user_asignments_path(@user) %></p>
+<% end %>
+
 <ol class="index group">
 
 	<% @claims.each do |claim| %>

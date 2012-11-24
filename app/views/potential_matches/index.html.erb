@@ -24,7 +24,7 @@
   </p>
 
   <p>
-    <%= ts("Currently generating potential matches for: ") %> <%= @current_position %> (<%= @progress %>%)
+    <%= ts("Currently generating potential matches for:") %> <%= @current_position %> (<%= @progress %>%)
   </p>
 
   <p class="actions" role="button"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
