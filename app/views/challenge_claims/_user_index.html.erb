@@ -19,7 +19,7 @@
 
 <!--main content-->
 <% unless @collection %>
-  <p class="note"><%= ts('Looking for assignments you have for a gift exchange? Try') %> <%= link_to ts("My Assignments"), user_asignments_path(@user) %></p>
+  <p class="note"><%= ts('Looking for assignments you were given for a gift exchange? Try') %> <%= link_to ts("My Assignments"), user_assignments_path(@user) %></p>
 <% end %>
 
 <ol class="index group">
