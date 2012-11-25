@@ -134,6 +134,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def defaulted
     !self.defaulted_at.nil?
   end
+  alias_method :defaulted?, :defaulted
   
   include Comparable
   # sort in order that puts assignments with no request ahead of assignments with no offer,
