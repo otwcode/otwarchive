@@ -199,7 +199,7 @@ class Work < ActiveRecord::Base
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
-  after_update :adjust_series_restriction, :set_anon_unrevealed
+  after_update :adjust_series_restriction
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
@@ -209,6 +209,11 @@ class Work < ActiveRecord::Base
   after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
+  end
+  
+  after_destroy :clean_up_assignments
+  def clean_up_assignments
+    self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
   def self.purge_old_drafts
@@ -341,8 +346,10 @@ class Work < ActiveRecord::Base
     challenge_claims.map(&:id)
   end
 
+  # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
-    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
+    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
+      select {|assign| (self.authors.collect(&:user) + self.users + [User.current_user]).include?(assign.offering_user)}
   end
 
   def recipients=(recipient_names)
@@ -405,13 +412,6 @@ class Work < ActiveRecord::Base
     # here we check if the story is in a currently-anonymous challenge
     #!self.collection_items.anonymous.empty?
     in_anon_collection?
-  end
-  
-  # Set the anonymous/unrevealed status of the work based on its collections
-  def set_anon_unrevealed
-    self.in_anon_collection = !self.collections.select{|c| c.anonymous? }.empty?
-    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
-    return true
   end
   
   # This work's collections and parent collections
@@ -1226,34 +1226,4 @@ class Work < ActiveRecord::Base
     names
   end  
     
-  def sweep_index_caches
-    to_expire = []
-    
-    all_collections = self.all_collections
-    all_collections.each do |collection|
-      to_expire << "collection/#{collection.id}"
-    end
-    
-    self.pseuds.each do |pseud|
-      to_expire << "pseud/#{pseud.id}"
-      to_expire << "user/#{pseud.user_id}"
-    end
-
-    # expire the first n cached pages for the tags on the work and the corresponding filter tags
-    (self.tags + self.filters).uniq.each do |tag|
-      to_expire << "tag/#{tag.id}"
-      all_collections.each do |collection|
-        to_expire <<  "collection/#{collection.id}/tag/#{tag.id}"
-      end
-    end
-    
-    # Expire all the relevant index page keys
-    to_expire.uniq.each do |exp|
-      5.times do |n|
-        Rails.cache.delete("views/works/v2/#{exp}/u/p/#{n+1}")
-        Rails.cache.delete("views/works/v2/#{exp}/v/p/#{n+1}")
-      end
-    end
-  end
-
 end

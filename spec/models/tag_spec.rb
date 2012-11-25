@@ -347,5 +347,58 @@ describe Tag do
       tag = Tag.find(tag.id)
       tag.should be_a(Character)
     end
+  end      
+
+  describe "relationships" do
+    before do
+      # set up tag with a synonym and a subtag
+      @canonical_tag = Factory.create(:fandom)
+      @syn_tag = Factory.create(:fandom)
+      @syn_tag.canonical = false
+      @syn_tag.save
+      @sub_tag = Factory.create(:fandom)
+    end
+    
+    it "should let you make a noncanonical tag the synonym of another one of the same type" do
+      @syn_tag.syn_string = @canonical_tag.name
+      @syn_tag.save
+
+      @syn_tag.merger.should eq(@canonical_tag)
+      @canonical_tag = Tag.find(@canonical_tag.id)
+      @canonical_tag.mergers.should eq([@syn_tag])
+    end
+    
+    it "should let you make a tag the subtag of another one of the same type" do
+      @sub_tag.meta_tag_string = @canonical_tag.name
+
+      @canonical_tag.sub_tags.should eq([@sub_tag])
+      @sub_tag.meta_tags.should eq([@canonical_tag])
+    end
+  
+    it "should find all works to reindex" do      
+      @syn_tag.syn_string = @canonical_tag.name
+      @syn_tag.save
+      @sub_tag.meta_tag_string = @canonical_tag.name
+      
+      # create works with all three tags
+      direct_work = Factory.create(:work, :fandom_string => @canonical_tag.name)
+      syn_work = Factory.create(:work, :fandom_string => @syn_tag.name)
+      sub_work = Factory.create(:work, :fandom_string => @sub_tag.name)
+
+      # get all the work ids that it would queue
+      @syn_tag.all_filtered_work_ids.should eq([syn_work.id])
+      @sub_tag.all_filtered_work_ids.should eq([sub_work.id])
+      @canonical_tag.all_filtered_work_ids.should eq([direct_work.id, syn_work.id, sub_work.id])
+      
+      # make sure the canonical tag continues to have the right ids even if set to non-canonical
+      @canonical_tag.canonical = false
+      @canonical_tag.all_filtered_work_ids.should eq([direct_work.id, syn_work.id, sub_work.id])
+      
+    end
+    
   end
+
+  
 end
+
+
