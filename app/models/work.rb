@@ -346,8 +346,10 @@ class Work < ActiveRecord::Base
     challenge_claims.map(&:id)
   end
 
+  # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
-    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
+    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
+      select {|assign| (self.authors.collect(&:user) + self.users + [User.current_user]).include?(assign.offering_user)}
   end
 
   def recipients=(recipient_names)

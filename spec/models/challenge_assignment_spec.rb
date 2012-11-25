@@ -16,16 +16,34 @@ describe ChallengeAssignment do
       @assignment.posted?.should be_false
       @assignment.fulfilled?.should be_false
       @assignment.defaulted?.should be_false
+      @collection.assignments.unstarted.should include(@assignment)
+      @collection.assignments.unposted.should include(@assignment)
+      @collection.assignments.unfulfilled.should include(@assignment)
     end
+
+    it "should be unsent" do
+      @collection.assignments.sent.should_not include(@assignment)
+    end
+    
+    describe "after being sent" do
+      before do
+        @assignment.send_out
+      end
+      it "should be sent" do
+        @collection.assignments.sent.should include(@assignment)
+      end
+    end      
     
     describe "when it has an unposted creation" do
       before do
+        @assignment.send_out
         @author = @assignment.offer_signup.pseud
         @work = Factory.create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
         @assignment.reload
       end
       
-      it "should not change status" do
+      it "should be started but not posted fulfilled or defaulted" do
+        @assignment.started?.should be_true
         @assignment.posted?.should be_false
         @assignment.fulfilled?.should be_false
         @assignment.defaulted?.should be_false

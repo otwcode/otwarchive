@@ -114,6 +114,10 @@ class ChallengeAssignment < ActiveRecord::Base
     return nil unless self.creation
     CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
+  
+  def started?
+    !self.creation.nil?
+  end
 
   def fulfilled?
     self.posted? && (item = get_collection_item) && item.approved?
