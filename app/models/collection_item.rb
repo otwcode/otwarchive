@@ -84,14 +84,16 @@ class CollectionItem < ActiveRecord::Base
   end
   
   after_save :update_work
-  after_destroy :update_work
-  # Set associated works to anonymous or unrevealed
+  # after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
+  #  this is a has-many-through relationship!!!
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # itself -- see collectible.rb
+  
+  # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
     return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
-    work.in_unrevealed_collection = work.collection_items.where(:unrevealed => true).exists?
-    work.in_anon_collection = work.collection_items.where(:anonymous => true).exists?
-    work.save!
+    work.set_anon_unrevealed!
   end
 
   after_create :notify_of_association

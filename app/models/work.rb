@@ -199,7 +199,7 @@ class Work < ActiveRecord::Base
 
   before_save :check_for_invalid_tags
   before_update :validate_tags
-  after_update :adjust_series_restriction, :set_anon_unrevealed
+  after_update :adjust_series_restriction
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
@@ -209,6 +209,11 @@ class Work < ActiveRecord::Base
   after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
+  end
+  
+  after_destroy :clean_up_assignments
+  def clean_up_assignments
+    self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
   def self.purge_old_drafts
@@ -405,13 +410,6 @@ class Work < ActiveRecord::Base
     # here we check if the story is in a currently-anonymous challenge
     #!self.collection_items.anonymous.empty?
     in_anon_collection?
-  end
-  
-  # Set the anonymous/unrevealed status of the work based on its collections
-  def set_anon_unrevealed
-    self.in_anon_collection = !self.collections.select{|c| c.anonymous? }.empty?
-    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
-    return true
   end
   
   # This work's collections and parent collections
