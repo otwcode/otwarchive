@@ -17,6 +17,10 @@ class TagSweeper < ActionController::Caching::Sweeper
         # decanonicalised tag
         tag.remove_from_autocomplete
       end
+    elsif tag.canonical
+      # clean up the autocomplete
+      tag.remove_stale_from_autocomplete
+      tag.add_to_autocomplete
     end
 
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
@@ -28,11 +32,6 @@ class TagSweeper < ActionController::Caching::Sweeper
 
     update_tag_nominations(tag)
 
-    if tag.canonical && tag.name_changed?
-      # canonical tag renamed: remove the old name from the autocomplete, add the current one
-      tag.remove_stale_from_autocomplete
-      tag.add_to_autocomplete
-    end
   end
 
   def before_destroy(tag)
