@@ -78,7 +78,7 @@ module Collectible
   # Set the anonymous/unrevealed status of the collectible based on its collections
   def set_anon_unrevealed
     self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? if self.respond_to?(:in_anon_collection)
-    self.in_unrevealed_collection = !collections.select{|c| c.unrevealed? }.empty? if self.respond_to?(:in_unrevealed_collection)
+    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty? if self.respond_to?(:in_unrevealed_collection)
     return true
   end
 

@@ -30,8 +30,6 @@ class WorksController < ApplicationController
       params[:work_search][:query].gsub!('&gt;', '>')
       params[:work_search][:query].gsub!('&lt;', '<')           
 
-      # put queries with a "/" in them into quotes
-
       # extract countable params    
       %w(word kudo comment bookmark hit).each do |term|        
         if params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
