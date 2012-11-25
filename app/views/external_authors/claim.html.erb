@@ -35,7 +35,7 @@
 </div>
 
 <div class="work listbox group">
-  <h3 class="heading"><%= ts("Your Imported Stories") %></h3>
+  <h3 class="heading"><%= ts("My Imported Stories") %></h3>
 <ul id="imported_works" class="index group">
   <% @external_author.works.each do |work| %>
     <%= render "works/work_blurb", :work => work %>
@@ -52,16 +52,19 @@
 <%= form_for @external_author do |f| %>
     <fieldset>
       <legend><%= ts("Other Options") %></legend>
+      <h4><%= ts("Actions")%></h4>
     <ul>
       <li>
         <%= radio_button_tag "imported_stories", "nothing" %>
         <%= label_tag "imported_stories_nothing", ts("Leave my stories in the care of the archivist.") %>
       </li>
+    </ul>
+    <ul>
       <li>
         <%= hidden_field_tag :invitation_token, @invitation.token %>
         <%= radio_button_tag "imported_stories", "orphan" %>
-        <%= label_tag "imported_stories_orphan", ts("Orphan my stories and take my email address off them. ")%>
-        <%= link_to ts("View orphaning FAQ"), archive_faqs_path %>
+        <%= label_tag "imported_stories_orphan", ts("Orphan my stories and take my email address off them. ") %>
+        <%= link_to ts("View orphaning FAQ"), archive_faqs_path + "/17" %>
         <ul>
           <li>
             <%= check_box_tag "remove_pseud" %>
@@ -73,6 +76,9 @@
         <%= radio_button_tag "imported_stories", "delete" %>
         <%= label_tag "imported_stories_delete", ts("Please remove my stories from the archive entirely.") %>
       </li>
+    </ul>
+      <h4><%= ts("Notifications") %></h4>
+    <ul>
       <li>
         <%= f.check_box :do_not_email %>
         <%= f.label :do_not_email, ts("Do not email me in future when stories are imported with this email address.") %>
