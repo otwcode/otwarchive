@@ -19,6 +19,7 @@ class ChallengeAssignment < ActiveRecord::Base
   scope :undefaulted, where("defaulted_at IS NULL")
   scope :uncovered, where("covered_at IS NULL")
   scope :covered, where("covered_at IS NOT NULL")
+  scope :sent, where("sent_at IS NOT NULL")
   
   scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
 
