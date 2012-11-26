@@ -1,4 +1,12 @@
+<!--descriptions-->
 <h2 class="heading"><%= ts("Setting Up the %{title} Prompt Meme", :title => @collection.title) -%></h2>
+<!-- /descriptions-->
+
+<!--subnav-->
+<%= render "challenge/shared/challenge_form_delete" %>
+<!--/subnav-->
+
+<!--main content-->
 
 <h3 class="landmark heading"><%= ts("Notes") %></h3>
 <ul class="notes">
@@ -8,11 +16,6 @@
     set the "Allowed" number if you want more allowed than required.') %></li>
 </ul>
 
-<!-- /descriptions-->
-<!--subnavigation, sorting and actions-->
-<!--/subnav-->
-
-<!--main content-->
 <h3 class="landmark heading"><%= ts("Prompt Meme Settings") %></h3>
 
 <%= form_for([@collection, @challenge], :url => collection_prompt_meme_path(@collection), :html => {:class => "verbose create challenge"}) do |f| %>
@@ -43,7 +46,3 @@
 <% end %>
 
 <!--/content-->
-
-<!--subnav-->
-<%= render "challenge/shared/challenge_form_delete" %>
-<!--/subnav-->

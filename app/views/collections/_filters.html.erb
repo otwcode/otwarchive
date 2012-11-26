@@ -1,39 +1,39 @@
 <%= form_tag collections_url, :method => :get, :class => 'filters' do %>
-  <h3 class="landmark heading">Filters</h3>
+  <h3 class="landmark heading"><%= ts("Filters") %></h3>
 <%= field_set_tag ts('Filter collections:') do %>
  		<dl class="filters" role="menu">
-      <dt><%= label_tag 'collection_filters_title', "Filter by title or name" %></dt>
-      <dd title="by title or name">
+      <dt><%= label_tag 'collection_filters_title', "Filter by Title or Name" %></dt>
+      <dd>
         <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title], autocomplete_options("collection_fullname", :autocomplete_token_limit => 1) %>
       </dd>
-      <dt><%= label_tag 'collection_filters_fandom', "Filter by fandom" %></dt>
-      <dd title="by fandom">
+      <dt><%= label_tag 'collection_filters_fandom', ts("Filter by Fandom") %></dt>
+      <dd>
         <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
       </dd>
-      <dt>Closed</dt>
+      <dt><%= ts("Closed") %></dt>
       <dd>
         <ul>
         <li><%= radio_button_tag "collection_filters[closed]", true, params[:collection_filters][:closed] == "true" %>
-        <%= label_tag "collection_filters_closed_true", "Yes" %></li>   
+        <%= label_tag "collection_filters_closed_true", ts("Yes") %></li>   
         <li><%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" %>
-        <%= label_tag "collection_filters_closed_false", "No" %></li>   
+        <%= label_tag "collection_filters_closed_false", ts("No") %></li>   
         <li><%= radio_button_tag "collection_filters[closed]", '', params[:collection_filters][:closed] == "" %>
-        <%= label_tag "collection_filters_closed_", "Either" %></li>          
+        <%= label_tag "collection_filters_closed_", ts("Either") %></li>          
       </ul>
       </dd>
-      <dt>Moderated</dt>
+      <dt><%= ts("Moderated") %></dt>
       <dd>
         <ul>
         <li><%= radio_button_tag "collection_filters[moderated]", true, params[:collection_filters][:moderated] == "true" %>
-        <%= label_tag "collection_filters_moderated_true", "Yes" %></li>    
+        <%= label_tag "collection_filters_moderated_true", ts("Yes") %></li>    
         <li><%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" %>
-        <%= label_tag "collection_filters_moderated_false", "No" %></li>
+        <%= label_tag "collection_filters_moderated_false", ts("No") %></li>
         <li><%= radio_button_tag "collection_filters[moderated]", '', params[:collection_filters][:moderated] == "" %>
-        <%= label_tag "collection_filters_moderated_", "Either" %></li>
+        <%= label_tag "collection_filters_moderated_", ts("Either") %></li>
         </ul>   
       </dd>
     <dt class="landmark"><%= ts('Submit') %></dt>
-    <dd class="submit actions"><%= submit_tag "Filter" %></dd>
+    <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
   </dl>
   <% end %>
 <% end %>
