@@ -11,71 +11,40 @@
     <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
     <% if (challenge.signup_open && user == current_user) || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || (collection.challenge_type == "PromptMeme" && collection.user_is_maintainer?(current_user)) %>
       <li>
-        <% unless collection.potential_matches.count == 0 %>
-          <%= link_to(ts('Edit'), edit_collection_signup_path(collection, challenge_signup), 
-                  :confirm => ts("Note: potential matches will need to be regenerated after your edits.")) %>
+        <% # Do not warn if matching has not run; OTHERWISE warn that matching will need to be rerun %>
+        <% if collection.potential_matches.count == 0 %>
+          <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup)) %>
         <% else %>
-          <%= link_to(ts('Edit'), edit_collection_signup_path(collection, challenge_signup)) %>
+          <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup), 
+            :confirm => ts("Note: Potential matches will need to be regenerated after your edits.")) %>
         <% end %>
       </li>
     <% end %>
-    <% # The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme and if they haven't hit the max number of prompts %>
-    <% if (challenge.signup_open && user == current_user && controller.action_name == "show" && collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge.requests_num_allowed)  %>
+    
+    <% # The add prompt link should show up if signups are open and the current user owns the signup and is on the signup show page for a prompt meme and they haven't hit the max number of prompts %>
+    <% if (challenge.signup_open && user == current_user && controller.action_name == "show" && collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge.requests_num_allowed) %>
       <li>
-        <%= link_to ts('Add another prompt'), new_collection_prompt_path(collection) %>
+        <%= link_to ts('Add Prompt'), new_collection_prompt_path(collection) %>
       </li>
     <% end %>
-    <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
+    
+    <% # The delete link should show up if signups are open and the current user owns the prompt, OR if the current user is a maintainer, AND only if the signup has more than the minimum number of prompts %>
       <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))  %>
-      <li>
-        <% unless collection.potential_matches.count == 0 %>
-          <%= link_to ts("Delete"), 
-            collection_signup_path(collection, challenge_signup), 
-            :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
-            :method => :delete %>
-        <% else %>
-          <%= link_to ts("Delete"), 
-            collection_signup_path(collection, challenge_signup), 
-            :confirm => ts("Are you sure? All prompts in this signup will be lost."), 
-            :method => :delete %>
-        <% end %>
-      </li>
-      <% end %>
-    <% end %>
-    <% if current_user && collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
-    <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>
-      <% @claimed = 0
-         challenge_signup.request_claims.each do |claim|
-            if claim.claiming_user == current_user && claim.request_prompt_id == prompt_id
-              @claimed = 1
-            end
-        end %>
-      <% if @claimed == 1 %>
-      <li>
-        <%= ts("Already claimed by you") %>
-      </li>
-      <% else %>
-      <li>
-        <% new_claim = ChallengeClaim.new %>
-          <%= form_for [@collection, new_claim], :url => collection_claims_path(@collection) do |claim_form| %>
-              <%= claim_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
-              <%= claim_form.hidden_field :request_prompt_id, :value => prompt_id %>
-              <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-              <%= submit_tag "Claim", :id => "prompt_" + prompt_id.to_s %>
+        <li>
+          <% # Warn about prompt loss if matching has not run; OTHERWISE warn that matching will need to be rerun %>
+          <% if collection.potential_matches.count == 0 %>
+            <%= link_to ts("Delete Sign-up"), 
+              collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? All prompts in this sign-up will be lost."), 
+              :method => :delete %>
+          <% else %>
+            <%= link_to ts("Delete Sign-up"), 
+              collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
+              :method => :delete %>
           <% end %>
-      </li>
+        </li>
       <% end %>
-    <% elsif collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
-      <li><%= ts("Sign in to claim prompts") %></li>
-    <% end %>
-    <% if current_user && collection.challenge_type == "PromptMeme" && !@user && controller.action_name == "index" && ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) %>
-    <% # for prompt memes, either signup owner or collection owner can delete prompts %>
-      <li>
-        <%= link_to ts("Remove prompt"), 
-          collection_prompt_path(collection, Prompt.find_by_id(prompt_id)), 
-          :confirm => ts("Are you sure? Everything in this prompt will be lost."), :method => :delete %>
-      </li>
     <% end %>
   </ul>
 <% end %>
