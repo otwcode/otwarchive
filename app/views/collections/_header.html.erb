@@ -1,4 +1,3 @@
-
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
 	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
@@ -12,10 +11,10 @@
     <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && @collection.closed? && @collection.challenge_type != "PromptMeme" && (@collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
-      <li><%= link_to ts("Post To Collection"), new_collection_work_path(@collection) %></li>
+      <li><%= link_to ts("Post to Collection"), new_collection_work_path(@collection) %></li>
         <% else %>
           <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
-            <li><%= link_to ts("Post To Collection"), new_collection_work_path(@collection) %></li>
+            <li><%= link_to ts("Post to Collection"), new_collection_work_path(@collection) %></li>
           <% end %>
     <% end %>
 
