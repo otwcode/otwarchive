@@ -62,9 +62,13 @@ h1 a img {
   margin: 0;
 }
 
+#header #small_login {
+  margin-left: 45px;
+}
+
 /*regions */
 
-#main.dashboard {
+#main, #main.dashboard {
   float: none;
   margin: auto;
   width: auto;
@@ -129,7 +133,7 @@ dl.stats + h6 + .actions {
 
 /* DESCRIPTION: Horizontal dash inline*/
 
-#outer #dashboard, #main.dashboard {
+#outer #dashboard, #main, #main.dashboard {
   float: none;
   width: auto;
   max-width: 100%;
