@@ -12,7 +12,7 @@
 	
 	<p class="datetime"><%= h(ts('Posted ')) + single_comment.created_at %>
   <% unless single_comment.edited_at.blank? %>
-  <%= ts(", Last Edited ") + l(single_comment.edited_at) %>
+  <%= h(ts(", Last Edited ")) + l(single_comment.edited_at) %>
   <% end %>
 	</p>
 </li>
