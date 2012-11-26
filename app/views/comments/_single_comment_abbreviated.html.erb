@@ -1,17 +1,18 @@
 <li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
 	<h4 class="heading byline">
-	  <%= h(ts("Posted on ")) + link_to_comment_ultimate_parent(single_comment) + h(ts(" by ")) + get_commenter_pseud_or_name(single_comment) %>
+	  <%= h(ts("Posted on ")) + link_to_comment_ultimate_parent(single_comment) + h(ts(" by ")) %>
+      <%= (single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anonymous? && single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent)) ? ts("Anonymous Creator") : get_commenter_pseud_or_name(single_comment) %>
 	</h4>
 	<% unless single_comment.pseud.nil? %>
 		<div class="icon">
-	  <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
+	  <%=(single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anonymous? && single_comment.pseud.user.is_author_of?(single_comment.ultimate_parent)) ? "" : icon_display(single_comment.pseud.user, single_comment.pseud) %>
 		</div>
 	<% end %>
 	<blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
 	
 	<p class="datetime"><%= h(ts('Posted ')) + single_comment.created_at %>
   <% unless single_comment.edited_at.blank? %>
-  <%= h(ts(", Last Edited ")) + l(single_comment.edited_at) %>
+  <%= ts(", Last Edited ") + l(single_comment.edited_at) %>
   <% end %>
 	</p>
 </li>
