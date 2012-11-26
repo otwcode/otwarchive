@@ -74,16 +74,15 @@ module PromptRestrictionsHelper
 
 
   # generate the string to use for the labels on sign-up forms
-  def challenge_signup_label(tag_type, num_allowed, num_required)
+  def challenge_signup_label(tag_name, num_allowed, num_required)
 	  if num_required > 0 && (num_allowed > num_required)
-	   "#{((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize} (#{num_required} - #{num_allowed}): *"
-		  # "#{tag_type.titleize}* (#{num_required} - #{num_allowed})"
+	   "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required} - #{num_allowed}): *"
 	  elsif num_required > 0 && (num_allowed == num_required)
-		  "#{((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize} (#{num_required}): *"
+		  "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required}): *"
 		elsif num_allowed > 0
-		  "#{((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize} (#{num_required} - #{num_allowed}):"
+		  "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required} - #{num_allowed}):"
 	  else
-		  "#{tag_type.titleize}:"
+		  "#{tag_name.titleize}:"
 	  end
   end
   
