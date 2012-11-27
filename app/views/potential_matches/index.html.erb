@@ -102,7 +102,7 @@
 
     <% # the people with no-one writing for them %>
     <% if @assignments_with_no_offer.size > 0 %>
-      <h3 id="missing-givers"><%= ts("Participants with Missing Givers") %></h3>
+      <h3 id="missing-givers" class="heading"><%= ts("Participants with Missing Givers") %></h3>
       <p class="note">
         <%= ts("These people could not be assigned a giver. You can shuffle the") %> <a href="#main-assignments"><%= ts("main assignments") %></a> <%= ts("to free someone up, or you can assign a pinch hitter. 
         (Note: the form") %> <em><%= ts("will") %></em> <%= ts("allow you to double-assign people, but remember to make sure they can write two assignments first!)") %>
@@ -129,7 +129,7 @@
     
     <% # the successful assignments %>
     <% if @assignments_with_request_and_offer.count > 0 %>
-      <h3 id="main-assignments"><%= ts("Main Assignments") %></h3>
+      <h3 id="main-assignments" class="heading"><%= ts("Main Assignments") %></h3>
       <p class="note">
         <%= ts("You can shuffle these assignments around as much as you want. 
         Circular matches (where A is assigned to B and B is assigned to A)
