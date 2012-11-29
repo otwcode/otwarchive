@@ -294,11 +294,14 @@
 
   <fieldset class="create">
     <legend><%= ts('Post') %></legend>
-    <p class="submit cancel actions">
-      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %>
-      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
-    </p>
+    <ul class="submit cancel actions">
+      <% if !@work.posted? # needs to appear only on edit page %>
+        <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
+      <% end %>
+      <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
+      <li><%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %></li>
+      <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
+    </ul>
   </fieldset>
 <% end %> <!-- end of form_for -->
 </div>
