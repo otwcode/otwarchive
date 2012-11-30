@@ -60,7 +60,7 @@ class CommentsController < ApplicationController
       @commentable = AdminPost.find(params[:admin_post_id])
     elsif params[:tag_id]
       @commentable = Tag.find_by_name(params[:tag_id])
-      @page_subtitle = @commentable.name
+      @page_subtitle = @commentable.try(:name)
     end
   end
 
