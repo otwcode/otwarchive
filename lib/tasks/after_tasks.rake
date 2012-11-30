@@ -364,6 +364,15 @@ namespace :After do
     end
   end
 
+  desc "Set initial values for sortable tag names"
+  task(:sortable_tag_names => :environment) do
+    Fandom.find_each do |fandom|
+      fandom.set_sortable_name
+      puts fandom.sortable_name
+      fandom.save
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -377,4 +386,4 @@ desc "Run all current migrate tasks"
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
 #                 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => []
+task :After => ['After:sortable_tag_names']
