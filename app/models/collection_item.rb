@@ -141,7 +141,10 @@ class CollectionItem < ActiveRecord::Base
   after_update :notify_of_status_change
   def notify_of_status_change
     if unrevealed_changed?
-      notify_of_reveal
+      # making sure that creation_observer.rb has not already notified the user
+      if !work.new_recipients.blank?
+        notify_of_reveal
+      end
     end
     if anonymous_changed?
       notify_of_author_reveal
