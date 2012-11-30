@@ -97,6 +97,9 @@
 <fieldset>
 <legend><%= ts("Post Chapter") %></legend>
     <p class="submit actions">
+      <% unless @chapter.new_record? || @chapter.posted? %>
+        <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
+      <% end %>
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
       <% if chapter.posted? %>
         <%= submit_tag ts('Update Without Preview'), :name => 'post_without_preview_button' %>
