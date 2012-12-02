@@ -300,7 +300,7 @@ PRODUCTION_CACHE: "memcache"
 AUTOCOMPLETE_EXPIRATION_TIME: 10
 
 # how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
-CACHE_PAGES_TO_EXPIRE: 5
+PAGES_TO_CACHE: 5
 
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true
