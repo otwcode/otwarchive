@@ -34,8 +34,8 @@ class RedisSearchIndexQueue
   # tell elasticsearch to reindex each work 
   def self.reindex_works
     Work.where(:id => get_ids(WORKS_INDEX_KEY)).find_each do |w|
-      w.update_index
       w.touch
+      w.update_index
     end
   end
 
