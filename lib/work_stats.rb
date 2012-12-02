@@ -70,7 +70,7 @@ module WorkStats
       comments_count: self.total_comments.not_deleted.count,
       bookmarks_count: self.bookmarks.where(:private => false).count
     )
-    self.update_index
+    RedisSearchIndexQueue.reindex(self)
   end
 
   protected 

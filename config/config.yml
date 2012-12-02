@@ -117,12 +117,6 @@ MAX_OPTIONS_TO_SHOW: 500
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
-# maximum number of records retrieved by sphinx.
-# http://www.sphinxsearch.com/docs/current.html#conf-max-matches
-# edit max_matches in config/sphinx.yml to match
-# edit public/help/work-search-results-help.html to match
-SEARCH_RESULTS_MAX: 1000
-
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
 WARNING_DEFAULT_TAG_NAME: 'Choose Not To Use Archive Warnings'
@@ -298,15 +292,15 @@ HELP_DIRECTORY: '/help'
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"
 
-# turn delta indexes on and off
-USE_DELTA_INDEXING: false
-
 # production caching
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
-# how long we cache search results in minutes
+# how long we cache autocomplete search results in minutes
 AUTOCOMPLETE_EXPIRATION_TIME: 10
+
+# how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
+PAGES_TO_CACHE: 5
 
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true

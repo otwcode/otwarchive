@@ -37,6 +37,10 @@ class StatCounter < ActiveRecord::Base
       stat_counter = StatCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
       $redis.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
+    
+    # queue the works for reindexing
+    # we might have to reduce the frequency of this -- will see!
+    RedisSearchIndexQueue.queue_works(work_ids)
   end
   
   # Update stat counters and search indexes for works with new kudos, comments, or bookmarks.
