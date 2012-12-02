@@ -17,8 +17,9 @@
   <% end %>
   <div class="userstuff">
     <% for q in @archive_faq.questions %>
-        <h3 id="<%= q.anchor %>"><%= q.question %></h3>
-        <%= raw sanitize_field(q, :content) %>
+        <a name="#<%= q.anchor %>"></a>
+        <h2><%= q.question %></h2><br />
+        <%= q.content.html_safe %>
         <% unless q.screencast.to_s == "" %>
             <%= raw sanitize_field(q, :screencast) %>
         <% end %>

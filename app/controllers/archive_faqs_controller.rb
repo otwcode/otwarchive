@@ -45,12 +45,6 @@ class ArchiveFaqsController < ApplicationController
     @archive_faqs = ArchiveFaq.order('position ASC')
   end
 
-  # GET /archive_faqs/manage_questions/1
-  def manage_questions
-
-    @archive_faq_questions = ArchiveFaq.find(params[:id])
-  end
-
   # POST /archive_faqs
   # POST /archive_faqs.xml
   def create
@@ -98,22 +92,6 @@ class ArchiveFaqsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to(archive_faqs_path) }
-      format.js { render :nothing => true }
-    end
-  end
-  # reorder FAQ questions
-  def update_question_positions
-    if params[:question]
-      @archive_faqs_question = Question.reorder(params[:question])
-      setflash; flash[:notice] = ts("Archive Category Question order was successfully updated.")
-    elsif params[:question]
-      params[:question].each_with_index do |id, position|
-       Question.update(id, :position => position + 1)
-        (@archive_faqs_question ||= []) << Question.find(id)
-      end
-    end
-    respond_to do |format|
-      format.html { redirect_to(@archive_faqs_question) }
       format.js { render :nothing => true }
     end
   end

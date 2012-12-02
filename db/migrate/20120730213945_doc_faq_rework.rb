@@ -9,16 +9,15 @@ class DocFaqRework < ActiveRecord::Migration
       t.text    :screencast
       t.timestamps
     end
-    # Create new columns for content and screencast sanitizer and position for reordering
+    # Create new columns for content and screencast sanitizer
     add_column :questions, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
     add_column :questions, :screencast_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
-    add_column :questions, :position, :integer, :default => 1
 
   end
 
   def self.down
     drop_table :questions
-    remove_column :archive_faqs, :content
-    remove_column :archive_faqs, :content_sanitizer_version
+    remove_column :archive_faqs, :anchor
+    remove_column :archive_faqs, :questions
   end
 end
