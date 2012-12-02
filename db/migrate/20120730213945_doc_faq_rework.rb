@@ -14,11 +14,15 @@ class DocFaqRework < ActiveRecord::Migration
     add_column :questions, :screencast_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
     add_column :questions, :position, :integer, :default => 1
 
+    # Remove the old archive_faqs table's column called 'content', as it is being moved inside the Questions table
+    remove_column :archive_faqs, :content
+    remove_column :archive_faqs, :content_sanitizer_version
+
   end
 
   def self.down
     drop_table :questions
-    remove_column :archive_faqs, :content
-    remove_column :archive_faqs, :content_sanitizer_version
+    add_column :archive_faqs, :content
+    add_column :archive_faqs, :content_sanitizer_version
   end
 end
