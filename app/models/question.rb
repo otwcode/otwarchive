@@ -14,4 +14,8 @@ class Question < ActiveRecord::Base
 
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
                       :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+
+  def self.reorder(positions)
+    SortableList.new(self.find(:all, :order => 'position ASC')).reorder_list(positions)
+  end
 end

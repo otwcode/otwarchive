@@ -1,12 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t("archive_faq_subsection", :default => "Edit Archive FAQ Subsection") %></h2>
+<h2 class="heading"><%=h 'Manage Archive FAQs Questions' %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <%= render :partial => 'admin/admin_nav' %>
-
 <!--/subnav-->
 
 <!--main content-->
-<%= render :partial => 'archive_faq_form' %>
+<%= render :partial => 'archive_faq_questions_order',  %>
 <!--/content-->
