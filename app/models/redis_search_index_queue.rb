@@ -34,6 +34,9 @@ class RedisSearchIndexQueue
   # tell elasticsearch to reindex each work 
   def self.reindex_works
     Work.where(:id => get_ids(WORKS_INDEX_KEY)).find_each do |w|
+      # we touch works when reindexing for wrangling changes in order to expire the cache 
+      # for those works on index pages, so the filters won't be stale
+      w.touch
       w.update_index
     end
   end

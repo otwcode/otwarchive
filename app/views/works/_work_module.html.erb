@@ -20,7 +20,7 @@
       <!-- do not cache -->
       <%= byline(work) %>
 
-<!-- caching -->
+<% #### CACHE show/hide #### %>
 <% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
@@ -43,7 +43,6 @@
   	<p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
 	  
-	<!-- do not cache -->
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading">Tags</h6>
   <ul class="tags commas">
@@ -77,7 +76,9 @@
   	<dd><%= work.chapter_total_display %></dd>
 
 <% end %>
-<!-- end cached section -->
+<% #### END CACHE show/hide %>
+
+<% #### CACHE stats #### %>
 <% cache("#{work.cache_key}/stats", :expires_in => 1.hour) do %>
   <% unless work.approved_collections.empty? %>
     <dt><%= ts('Collections')  %>:</dt>
@@ -106,6 +107,8 @@
     <dd><%= work.hits %></dd>
   <% end %>
 <% end %>
+<% #### END CACHE stats #### %>
+
   </dl>
 
 <% end %>

@@ -18,7 +18,6 @@ class WorksController < ApplicationController
   
   before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
-  cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
@@ -120,7 +119,10 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && 
+          (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
+          # we only cache some first initial number of pages since those are biggest bang for 
+          # the buck -- users don't often go past them
           @works = Rails.cache.fetch(index_cache_key) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
@@ -942,19 +944,22 @@ public
     end
   end
   
-  # This has views/ in it because that's what expire_fragment is looking for
+  # This will change (and thereby automatically invalidates the cache) any time 
+  # one of the @owner's works is created, updated, deleted, or orphaned. 
+  # * The most-recent-updated-at date will capture any work being created or updated
+  # * The count of works will capture an older work being deleted or orphaned
+  # * Can't keep both the same if one of those things has changed!
+  # * To deal with wrangling changes making the filters stale, works are "touched" when they are 
+  #   reindexed for those changes, in the RedisSearchIndexQueue, which will change the updated_at 
+  #   dates. 
   def index_cache_key
-    cache_key = ['views', 'works', 'v2']
+    cache_key = "works_index_for_"
     cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
     cache_key << @owner.id.to_s
-    if @collection.present? && @tag.present?
-      cache_key << "tag"
-      cache_key << @tag.id.to_s
-    end
-    cache_key << (logged_in? ? "u" : "v")
-    cache_key << 'p'
-    cache_key << (params[:page] || '1')
-    cache_key.join("/")
+    cache_key << "_"
+    cache_key << @owner.works.count.to_s
+    cache_key << "_"
+    cache_key << @owner.works.order("updated_at DESC").limit(1).value_of(:updated_at).first.to_s.underscore
   end
 
 end
