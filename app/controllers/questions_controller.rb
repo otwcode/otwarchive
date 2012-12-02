@@ -1,6 +1,5 @@
 class QuestionController <
 
-
   # GET /archive_faqs/manage
   def manage
     @archive_faqs_questions = Question.order('position ASC')
