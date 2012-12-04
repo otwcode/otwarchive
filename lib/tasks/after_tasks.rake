@@ -330,39 +330,39 @@ namespace :After do
 #     work.save
 #   end
 # end
-
+# 
+# desc "Set stat counts for works"
+# task(:set_work_stats => :environment) do
+#   Work.find_each do |work|
+#     puts work.id
+#     work.update_stat_counter
+#   end
+# end
+# 
+# desc "Set anon/unrevealed status for works"
+# task(:set_anon_unrevealed => :environment) do
+#   CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
+#     puts collection_item.id
+#     work = collection_item.item
+#     if work.present?
+#       work.update_attributes(
+#         in_anon_collection: collection_item.anonymous, 
+#         in_unrevealed_collection: collection_item.unrevealed
+#       )
+#     end
+#   end
+# end
+# 
+# desc "Add filters to external works"
+# task(:external_work_filters => :environment) do
+#   ExternalWork.find_each do |ew|
+#     puts ew.id
+#     ew.check_filter_taggings
+#   end
+# end
 
   #### Add your new tasks here
   
-  desc "Set stat counts for works"
-  task(:set_work_stats => :environment) do
-    Work.find_each do |work|
-      puts work.id
-      work.update_stat_counter
-    end
-  end
-  
-  desc "Set anon/unrevealed status for works"
-  task(:set_anon_unrevealed => :environment) do
-    CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
-      puts collection_item.id
-      work = collection_item.item
-      if work.present?
-        work.update_attributes(
-          in_anon_collection: collection_item.anonymous, 
-          in_unrevealed_collection: collection_item.unrevealed
-        )
-      end
-    end
-  end
-  
-  desc "Add filters to external works"
-  task(:external_work_filters => :environment) do
-    ExternalWork.find_each do |ew|
-      puts ew.id
-      ew.check_filter_taggings
-    end
-  end
 
 end # this is the end that you have to put new tasks above
 
@@ -372,9 +372,6 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 # NOTE: 
 desc "Run all current migrate tasks"
-#task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-#task :After => ['autocomplete:reload_data']
-#task :After => ['After:set_complete_status', 'After:invite_external_authors']
-# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
-#                 'skins:load_user_skins', 'After:remove_old_epubs']
+# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
+# 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
 task :After => []

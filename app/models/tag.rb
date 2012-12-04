@@ -529,6 +529,14 @@ class Tag < ActiveRecord::Base
   end
 
   #### FILTERING ####
+  
+  include WorksOwner  
+  # Used in works_controller to determine whether to expire the cache for this tag's works index page
+  def works_index_cache_key
+    index_works = self.canonical? ? self.filtered_works : self.works
+    super(index_works.where(:posted => true))
+  end
+    
 
   # Usage is either:
   # reindex_taggables

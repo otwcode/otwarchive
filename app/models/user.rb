@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  include WorksOwner
+
 #### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
 ## TODO move to ArchiveConfig

@@ -260,9 +260,15 @@ class Collection < ActiveRecord::Base
   def all_participants
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
-
+  
+  def all_items
+    CollectionItem.where(:collection_id => ([self.id] + self.children.value_of(:id)))
+  end
+  
   def all_approved_works
-    (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
+    work_ids = all_items.where(:item_type => "Work", :user_approval_status => CollectionItem::APPROVED, 
+      :collection_approval_status => CollectionItem::APPROVED).value_of(:item_id)
+    Work.where(:id => work_ids, :posted => true)
   end
 
   def all_approved_works_count
@@ -449,5 +455,13 @@ class Collection < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
+
+  include WorksOwner  
+  # Used in works_controller to determine whether to expire the cache for this tag's works index page
+  def works_index_cache_key
+    index_works = self.children.present? ? self.all_approved_works : self.approved_works
+    super(index_works)
+  end
+
 
 end

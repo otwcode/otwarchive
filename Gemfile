@@ -88,6 +88,7 @@ group :test do
   # cuke fast
   gem 'fakeweb'
   gem 'vcr'
+  gem 'delorean'
 end
 
 # Deploy with Capistrano
