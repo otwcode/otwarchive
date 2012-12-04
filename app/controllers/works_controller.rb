@@ -119,11 +119,15 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
+        
+        # If we're using caching we'll try to get the results from cache
+        # Note: we only cache some first initial number of pages since those are biggest bang for 
+        # the buck -- users don't often go past them
         if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && 
           (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
-          # we only cache some first initial number of pages since those are biggest bang for 
-          # the buck -- users don't often go past them
-          @works = Rails.cache.fetch(@owner.works_index_cache_key) do
+          # the subtag is for eg collections/COLL/tags/TAG
+          subtag = (@tag.present? && @tag != @owner) ? @tag : nil
+          @works = Rails.cache.fetch(@owner.works_index_cache_key(subtag)) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items

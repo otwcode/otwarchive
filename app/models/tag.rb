@@ -532,9 +532,9 @@ class Tag < ActiveRecord::Base
   
   include WorksOwner  
   # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key
-    index_works = self.canonical? ? self.filtered_works : self.works
-    super(index_works.where(:posted => true))
+  def works_index_cache_key(tag=nil, index_works=nil)
+    index_works ||= self.canonical? ? self.filtered_works : self.works
+    super(tag, index_works.where(:posted => true))
   end
     
 
