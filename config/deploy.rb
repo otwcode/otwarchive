@@ -178,7 +178,7 @@ namespace :production_only do
 end
 
 namespace :db do
-  task :reset, :roles => :db do
+  task :reset_on_stage, :roles => :db do
     # just holder for invoking the db reset script, 
     # which we only want to happen on stage, so we 
     # define it in staging.rb only, as an after task trigger
