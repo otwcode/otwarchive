@@ -123,7 +123,7 @@ class WorksController < ApplicationController
           (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # we only cache some first initial number of pages since those are biggest bang for 
           # the buck -- users don't often go past them
-          @works = Rails.cache.fetch(index_cache_key) do
+          @works = Rails.cache.fetch(@owner.works_index_cache_key) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -944,22 +944,4 @@ public
     end
   end
   
-  # This will change (and thereby automatically invalidates the cache) any time 
-  # one of the @owner's works is created, updated, deleted, or orphaned. 
-  # * The most-recent-updated-at date will capture any work being created or updated
-  # * The count of works will capture an older work being deleted or orphaned
-  # * Can't keep both the same if one of those things has changed!
-  # * To deal with wrangling changes making the filters stale, works are "touched" when they are 
-  #   reindexed for those changes, in the RedisSearchIndexQueue, which will change the updated_at 
-  #   dates. 
-  def index_cache_key
-    cache_key = "works_index_for_"
-    cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
-    cache_key << @owner.id.to_s
-    cache_key << "_"
-    cache_key << @owner.works.count.to_s
-    cache_key << "_"
-    cache_key << @owner.works.order("updated_at DESC").limit(1).value_of(:updated_at).first.to_s.underscore
-  end
-
 end
