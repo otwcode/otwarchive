@@ -120,7 +120,7 @@ namespace :stage_only do
   
   # Reindex elasticsearch database in the background
   task :reindex_elasticsearch do
-    run "/static/bin/reindex_elastic.sh"
+    run "nohup /static/bin/reindex_elastic.sh &"
   end
 
   task :notify_testers do
