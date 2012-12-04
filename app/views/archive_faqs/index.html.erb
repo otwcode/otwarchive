@@ -7,29 +7,29 @@
 
 <!--main content-->
 <div class="admin userstuff">
-  <p>Some commonly asked questions about the Archive are answered here.
-    Questions and answers about our Terms of Service can be found in the <%= link_to "TOS FAQ", tos_faq_path %>.
-    You may also like to check out our <%= link_to "Known Issues", known_issues_path %>.
-    If you need more help, please submit a <%= link_to "support request", feedbacks_path %>.</p>
+  <p><%= ts("Some commonly asked questions about the Archive are answered here.
+    Questions and answers about our Terms of Service can be found in the") %> <%= link_to ts("TOS FAQ"), tos_faq_path %>.
+    <%= ts("You may also like to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.
+    <%= ts("If you need more help, please submit a ") %><%= link_to ts("Support request"), feedbacks_path %>.</p>
 
   <% unless @archive_faqs.blank?  %>
-      <h3 id="categories"><%= ts("Available Categories") %></h3>
-      <ol role="navigation">
+    <h3 id="categories" class="heading"><%= ts("Available Categories") %></h3>
+      <ol role="navigation" class="faq index group">
         <% for faq in @archive_faqs %>
-            <li>
-              <a href="javascript:void(0)"><%= faq.title %></a>
-              <ul>
-                <% for q in faq.questions %>
-                    <li>
-                      <%= link_to q.question, archive_faq_path(faq, :anchor => q.anchor) %>
-                      <% unless q.screencast.to_s.empty? %>
-                          <br/>
-                          <%= ts("Screencast: ") %><%= raw sanitize_field(q, :screencast) %>
-                      <% end %>
-                    </li>
-                <% end %>
-              </ul>
-            </li>
+          <li class="category">
+          <a href="javascript:void(0)" class="title"><%= faq.title %></a>
+            <ul>
+              <% for q in faq.questions %>
+                <li>
+                  <%= link_to q.question, archive_faq_path(faq, :anchor => q.anchor) %>
+                  <% unless q.screencast.to_s.empty? %>
+                    <br/>
+                    <%= ts("Screencast: ") %><%= raw sanitize_field(q, :screencast) %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
         <% end %>
       </ol>
   <% end %>
