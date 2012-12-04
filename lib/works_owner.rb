@@ -12,9 +12,13 @@ module WorksOwner
   # * Note: to deal with wrangling changes making the filters stale, works are "touched" when they are 
   #   reindexed for those changes, in the RedisSearchIndexQueue, which will change the updated_at 
   #   dates on the works involved.   
-  def works_index_cache_key(index_works=nil)
+  def works_index_cache_key(tag=nil, index_works=nil)
     cache_key = "works_index_for_#{self.class.name.underscore}_#{self.id}_"
     index_works ||= self.works.where(:posted => true)
+    if tag.present?
+      cache_key << "tag_#{tag.id}_"
+      index_works = index_works.joins(:taggings).where("taggings.tagger_id = ?", tag.id)
+    end
     cache_key << index_works.count.to_s
     cache_key << "_"
     cache_key << index_works.order("updated_at DESC").limit(1).value_of(:updated_at).first.to_s

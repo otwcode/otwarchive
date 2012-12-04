@@ -117,6 +117,55 @@ describe WorksOwner do
         it_should_behave_like "an owner"
         it_should_behave_like "an owner collection"
       end
+      
+      describe "with a subtag" do
+        before do
+          @fandom = Factory.create(:fandom)
+          @work.fandom_string = @fandom.name
+          @work.save
+          @original_cache_key = @owner.works_index_cache_key(@fandom)
+          @original_cache_key_without_subtag = @owner.works_index_cache_key
+        end
+        
+        it "should have a different key than without the subtag" do
+          @original_cache_key.should_not eq(@original_cache_key_without_subtag)
+        end
+        
+        describe "when a new work is added with that tag" do
+          before do
+            Delorean.time_travel_to "1 second from now"
+            @work2 = Factory.create(:work, :fandom_string => @fandom.name, :collection_names => @owner.name, :posted => true)
+            @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
+            Delorean.back_to_the_present
+          end
+          
+          it "should update both the cache keys" do
+            @original_cache_key_without_subtag.should_not eq(@owner.works_index_cache_key)
+            @original_cache_key.should_not eq(@owner.works_index_cache_key(@fandom))
+          end
+        end            
+        
+        describe "when a new work is added without that tag" do
+          before do
+            @fandom2 = Factory.create(:fandom)
+            Delorean.time_travel_to "1 second from now"
+            @work2 = Factory.create(:work, :fandom_string => @fandom2.name, :collection_names => @owner.name, :posted => true)
+            @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
+            Delorean.back_to_the_present
+          end
+          
+          it "should update the main cache key without the tag" do
+            @original_cache_key_without_subtag.should_not eq(@owner.works_index_cache_key)
+          end
+        
+          it "should not update the cache key with the tag" do
+            @owner.works_index_cache_key(@fandom).should eq(@original_cache_key)
+          end
+        end 
+        
+      end
+
+      
     end
 
     describe "for a user" do
