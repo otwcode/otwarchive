@@ -84,23 +84,40 @@ end
 
 # our tasks which are staging specific
 namespace :stage_only do
+  
+  # Use git to pull down the latest version of the master branch
   task :git_in_home do
     run "git pull origin master"
     run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
   end
+  
+  # Update the public/ folder from the current release to point to shared/static
+  # folders that we want to carry over
   task :update_public do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
   end
+  
   task :update_configs do
     run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
   end
+  
+  # Reset the entire database from the latest backup from production -- takes a LONG TIME
   task :reset_db do
     run "/static/bin/reset_database.sh"
   end
+
+  # Get rid of subscriptions so we don't spam people
+  task :clear_subscriptions do
+    run "cd #{release_path}; bundle exec rake deploy:clear_subscriptions RAILS_ENV=production"
+  end
+
+  # Redact emails so we don't spam people
+  task :clear_emails do
+    run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=production"
+  end
+
   task :notify_testers do
     system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
   end
@@ -108,30 +125,48 @@ end
 
 # our tasks which are production specific
 namespace :production_only do
+  # Use git to pull down the deploy branch
   task :git_in_home, :roles => [:backend, :search] do
     run "git pull origin deploy"
     run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ /static/config/*"
   end
+  
+  # copy over the unicorn configs to the config folder
+  task :get_local_configs, :roles => [:app] do
+    run "cp /root/unicorn* #{release_path}/config/"
+  end  
+  
+  # create symlinks from the new public/ folder in the current release to the
+  # carried-over folders for the downloads, skins, other static files
   task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
+  
+  # TEMPORARY FIX: there are too many files in the tags feed folder for 
+  # an ext2 filesystem, ack. They have temporarily been moved to a different
+  # filesys. 
+  task :update_tag_feeds, :roles => [:web] do
+    run "ln -nfs -t #{release_path}/public/tags /mnt1"
+  end
+  
   task :update_configs, :roles => [:app, :backend] do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
+  
+  # Back up the production database 
   task :backup_db, {:roles => :search} do
     run "/static/bin/backup_database.sh &"
   end
+  
+  # Update the crontabs on various machines
   task :update_cron_email, {:roles => :backend} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
   end
-  task :update_cron_reindex, {:roles => :search} do
-    run "whenever --update-crontab search -f config/schedule_search.rb"
-  end
+
+  # Send out notification 
   task :notify_testers do
     system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
   end
