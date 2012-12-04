@@ -78,6 +78,7 @@ GEM
       selenium-webdriver (>= 0.0.3)
     childprocess (0.1.3)
       ffi (~> 0.6.3)
+    chronic (0.8.0)
     cocaine (0.2.0)
     columnize (0.3.1)
     configuration (1.1.0)
@@ -92,6 +93,8 @@ GEM
       cucumber (>= 0.8.0)
     culerity (0.2.12)
     database_cleaner (0.6.0.rc.3)
+    delorean (2.0.0)
+      chronic
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -275,6 +278,7 @@ DEPENDENCIES
   cucumber (>= 0.9.1)
   cucumber-rails
   database_cleaner (>= 0.6.0.rc.3)
+  delorean
   escape_utils
   factory_girl
   fakeweb

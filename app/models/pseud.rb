@@ -2,6 +2,7 @@ class Pseud < ActiveRecord::Base
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
