@@ -161,6 +161,11 @@ namespace :production_only do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
   
+  # Back up the production database
+  task :backup_db, :roles => [:db] do
+    run "/static/bin/backup_database.sh &"
+  end
+  
   # Update the crontabs on various machines
   task :update_cron_email, {:roles => :backend} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
@@ -173,10 +178,6 @@ namespace :production_only do
 end
 
 namespace :db do
-  task :backup, :roles => :db do
-    run "/static/bin/backup_database.sh &"
-  end
-  
   task :reset, :roles => :db do
     # just holder for invoking the db reset script, 
     # which we only want to happen on stage, so we 

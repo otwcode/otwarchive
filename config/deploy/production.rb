@@ -15,7 +15,7 @@ server "otw5.ao3.org", :db
 before "deploy:update_code", "production_only:git_in_home", "production_only:get_local_configs"
 after "deploy:update_code", "production_only:update_public", "production_only:update_tag_feeds", "production_only:update_configs"
 
-before "deploy:migrate", "db:backup"
+before "deploy:migrate", "production_only:backup_db"
 after "deploy:restart", "production_only:update_cron_email", "production_only:update_cron_reindex"
 after "deploy:restart", "production_only:notify_testers"
 
