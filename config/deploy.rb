@@ -1,3 +1,39 @@
+# BACKGROUND:
+# To describe the idea here -- these are capistrano "recipes" which are a bit like rake tasks
+# You wrap all the fiddly systems scripts and things that you need to do for a deploy into these nice neat little individual tasks
+# and then you can chain the tasks together
+# 
+# when you run "cap deploy:migrate" let's say, all the things you've told to run before or after it go automatically
+# eg this line in deploy/production.rb:
+#    before "deploy:migrate", "production_only:backup_db"
+# says, if I run "cap deploy:migrate production" then before doing any of the actual work of the deploy, 
+# run the task called "production_only:backup_db" which is defined in deploy.rb as:
+#
+# namespace :production_only do
+#   # Back up the production database
+#   task :backup_db, :roles => [:db] do
+#     run "/static/bin/backup_database.sh &"
+#   end
+# end
+#
+# which says, run this script backup_database.sh
+# and run it on the machine that has the ":db" role
+# 
+# The roles are defined in each of deploy/production.rb and deploy/staging.rb, 
+# and can be set differently for whichever system you are deploying to:
+# 
+# so for example in production.rb:
+# # otw3 and otw4 are the main web/app combos
+# server "otw3.ao3.org", :web, :app
+# server "otw4.ao3.org", :web, :app
+# 
+# # otw5 is the db server
+# server "otw5.ao3.org", :db
+# 
+# 
+# while in staging.rb it is pretty simple, it's all one machine:
+# server "stage.ao3.org", :search, :backend, :web, :app, :db, :primary => true
+#
 require './config/boot'
 require 'airbrake/capistrano'
 
