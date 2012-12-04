@@ -117,6 +117,11 @@ namespace :stage_only do
   task :clear_emails do
     run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=production"
   end
+  
+  # Reindex elasticsearch database in the background
+  task :reindex_elasticsearch do
+    run "/static/bin/reindex_elastic.sh"
+  end
 
   task :notify_testers do
     system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
@@ -156,11 +161,6 @@ namespace :production_only do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
   
-  # Back up the production database 
-  task :backup_db, {:roles => :search} do
-    run "/static/bin/backup_database.sh &"
-  end
-  
   # Update the crontabs on various machines
   task :update_cron_email, {:roles => :backend} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
@@ -172,8 +172,19 @@ namespace :production_only do
   end
 end
 
-# after and before task triggers
+namespace :db do
+  task :backup, :roles => :db do
+    run "/static/bin/backup_database.sh &"
+  end
+  
+  task :reset, :roles => :db do
+    # just holder for invoking the db reset script, 
+    # which we only want to happen on stage, so we 
+    # define it in staging.rb only, as an after task trigger
+  end
+end
 
+# after and before task triggers that should run on both staging and production
 before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
 
