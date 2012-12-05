@@ -6,10 +6,11 @@
 <%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
   <%= error_messages_for @admin_setting %>
   <dl>
-    <dt><%= f.label :account_creation_enabled, "Account Creation Enabled (Can people create accounts without an invitation?)" %>
-</dt>
+    <dt><%= f.label :account_creation_enabled, "Account Creation Enabled" %></dt>
     <dd><%= f.check_box :account_creation_enabled %> </dd>
-    <dt><%= f.label :request_invite_enabled, "Users can request invitations?" %></dt>
+    <dt><%= f.label :creation_requires_invite, "Account Creation requires invitation" %></dt>
+    <dd><%= f.check_box :creation_requires_invite %></dd>
+    <dt><%= f.label :request_invite_enabled, "Can users request invitations?" %></dt>
     <dd><%= f.check_box :request_invite_enabled %></dd>
     <dt><%= f.label :invite_from_queue_enabled, "Invite from Queue Enabled
 (Can people add themselves to the queue and are invitations sent out automatically?)" %>
