@@ -199,7 +199,7 @@ namespace :production_only do
   
   # Back up the production database
   task :backup_db, :roles => [:db] do
-    run "/static/bin/backup_database.sh &"
+    run "/root/backup_archive_db.sh &"
   end
   
   # Update the crontabs on various machines

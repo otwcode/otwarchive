@@ -7,7 +7,7 @@ server "otw2.ao3.org", :backend, :primary => true
 
 # otw3 and otw4 are the main web/app combos
 server "otw3.ao3.org", :web, :app
-server "otw4.ao3.org", :web, :app
+server "otw4.ao3.org", :app
 
 # otw5 is the db server
 server "otw5.ao3.org", :db
