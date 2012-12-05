@@ -10,8 +10,4 @@ namespace :search do
     RedisSearchIndexQueue.reindex_bookmarks
   end
 
-  desc "Reindex all of elasticsearch"
-  task(:reindex_all) do
-    %q{/static/bin/reindex_elasticsearch.sh}
-  end
 end
