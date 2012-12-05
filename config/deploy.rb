@@ -100,20 +100,32 @@ end
 
 # our tasks which are not environment specific
 namespace :extras do
-  task :update_revision, {:roles => :backend} do
+  
+  # This loads the current version of the archive into the local.yml
+  task :update_revision, :roles => :app do
     run "/static/bin/fix_revision.sh"
   end
-  task :reload_site_skins, {:roles => :backend} do
+  
+  # This re-caches the site skins and puts the new versions into the static files area
+  # Needs to run on web servers but they must also have rails 
+  task :reload_site_skins, :roles => :web do
     run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=production"
   end
-  task :run_after_tasks, {:roles => :backend} do
+
+  # After tasks generally clean up state after a migration and should only run
+  # on one machine
+  task :run_after_tasks, :roles => :app, :only => {:primary => true} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
   end
-  # this actually restarts resque now - not obsolete!
-  task :restart_delayed_jobs, {:roles => :backend} do
+  
+  # Restart our queueing software -- currently Resque -- on all worker machines
+  task :restart_delayed_jobs, :roles => :worker do
     run "/static/bin/dj_restart.sh"
   end
-  task :update_cron, {:roles => :backend} do
+  
+  # update the crontab for whatever machine should run the scheduled tasks
+  # This should only be one machine 
+  task :update_cron, :roles => :app, :only => {:primary => true} do
     run "whenever --update-crontab #{application}"
   end
 end
@@ -135,8 +147,9 @@ namespace :stage_only do
     run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
   end
   
+  # copy over config 
   task :update_configs do
-    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
+    run "cp #{deploy_to}/shared/config/*  #{release_path}/config/"
   end
   
   # Reset the entire database from the latest backup from production -- takes a LONG TIME
@@ -154,7 +167,7 @@ namespace :stage_only do
     run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=production"
   end
   
-  # Reindex elasticsearch database in the background
+  # Reindex elasticsearch database in the background -- takes a long time
   task :reindex_elasticsearch do
     run "nohup /static/bin/reindex_elastic.sh &"
   end
@@ -166,20 +179,25 @@ end
 
 # our tasks which are production specific
 namespace :production_only do
-  # Use git to pull down the deploy branch
-  task :git_in_home, :roles => [:backend, :search] do
+  # Use git to pull down the deploy branch and install bundle
+  task :git_in_home, :roles => :app do
     run "git pull origin deploy"
     run "bundle install --quiet"
   end
   
-  # copy over the unicorn configs to the config folder
-  task :get_local_configs, :roles => [:app] do
-    run "cp /root/unicorn* #{release_path}/config/"
+  # Get the config files 
+  task :update_configs, :roles => :app do
+    # copy over the default config files from the static folder which lives on the NAS
+    # and is shared
+    run "cp /static/config/* #{release_path}/config/"
+    
+    # copy over the custom config files for this particular app server
+    run "cp /root/config/* #{release_path}/config/"
   end  
   
   # create symlinks from the new public/ folder in the current release to the
   # carried-over folders for the downloads, skins, other static files
-  task :update_public, :roles => [:web, :backend] do
+  task :update_public, :roles => :web do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
@@ -189,21 +207,17 @@ namespace :production_only do
   # TEMPORARY FIX: there are too many files in the tags feed folder for 
   # an ext2 filesystem, ack. They have temporarily been moved to a different
   # filesys. 
-  task :update_tag_feeds, :roles => [:web] do
+  task :update_tag_feeds, :roles => :web do
     run "ln -nfs -t #{release_path}/public/tags /mnt1"
   end
   
-  task :update_configs, :roles => [:app, :backend] do
-    run "ln -nfs -t #{release_path}/config/ /static/config/*"
-  end
-  
   # Back up the production database
-  task :backup_db, :roles => [:db] do
+  task :backup_db, :roles => :db do
     run "/root/backup_archive_db.sh &"
   end
   
-  # Update the crontabs on various machines
-  task :update_cron_email, {:roles => :backend} do
+  # Update the crontab on the primary app machine 
+  task :update_cron_email, :roles => :app, :only => {:primary => true} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
   end
 

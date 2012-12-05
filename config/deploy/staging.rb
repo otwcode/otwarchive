@@ -1,4 +1,4 @@
-server "stage.ao3.org", :search, :backend, :web, :app, :db, :primary => true
+server "stage.ao3.org", :web, :app, :worker, :db, :primary => true
 
 before "deploy:update_code", "stage_only:git_in_home"
 after "deploy:update_code", "stage_only:update_public", "stage_only:update_configs"
