@@ -41,8 +41,13 @@ class UsersController < ApplicationController
     elsif @admin_settings.creation_requires_invite?
       token = params[:invitation_token]
       if token.blank?
-        flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-        redirect_to invite_requests_path and return
+        if !@admin_settings.invite_from_queue_enabled?
+          flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out further invitations at present, but existing invitations can still be used to create an account.")
+          redirect_to root_path and return
+        else
+          flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
+          redirect_to invite_requests_path and return
+        end
       else
         invitation = Invitation.find_by_token(token)
         if !invitation
