@@ -8,14 +8,14 @@
 # otw3 runs nginx and squid and rails; if you want a console get it here
 server "otw3.ao3.org", :web, :app
 
-# otw4 runs rails and resque 
-server "otw4.ao3.org", :app, :worker, :primary => true
+# otw4 runs rails and resque and db migrations 
+server "otw4.ao3.org", :app, :worker, :db, :primary => true
 
 # otw5 is the db server
-server "otw5.ao3.org", :db, :primary => true
+server "otw5.ao3.org", :db, :no_release => true
 
-before "deploy:update_code", "production_only:git_in_home", "production_only:get_local_configs"
-after "deploy:update_code", "production_only:update_public", "production_only:update_tag_feeds", "production_only:update_configs"
+before "deploy:update_code", "production_only:git_in_home", "production_only:update_configs"
+after "deploy:update_code", "production_only:update_public", "production_only:update_tag_feeds"
 
 before "deploy:migrate", "production_only:backup_db"
 after "deploy:restart", "production_only:update_cron_email", "production_only:update_cron_reindex"

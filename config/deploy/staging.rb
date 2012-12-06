@@ -12,6 +12,4 @@ after "db:reset_on_stage", "deploy:web:enable"
 # reload the site skins after each deploy since there may have been CSS changes
 after "deploy:restart", "extras:reload_site_skins"
 after "deploy:restart", "stage_only:notify_testers"
-# try restarting resque one extra time to see if this does the trick?
-after "deploy:restart", "extras:restart_delayed_jobs"
 
