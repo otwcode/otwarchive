@@ -50,7 +50,7 @@ every 1.day, :at => '7:40 am' do
 end
 
 # Send kudos notifications
-every 1.day, :at => '6:10am' do
+every 1.day, :at => '10:00 am' do
   rake "notifications:deliver_kudos"
 end
 
