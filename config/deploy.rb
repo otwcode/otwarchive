@@ -7,7 +7,7 @@
 # eg this line in deploy/production.rb:
 #    before "deploy:migrate", "production_only:backup_db"
 # says, if I run "cap deploy:migrate production" then before doing any of the actual work of the deploy, 
-# run the task called "production_only:backup_db" which is defined in deploy.rb as:
+# run the task called "production_only:backup_db" which is defined in deploy.rb 
 #
 # namespace :production_only do
 #   # Back up the production database
@@ -21,6 +21,8 @@
 # 
 # The roles are defined in each of deploy/production.rb and deploy/staging.rb, 
 # and can be set differently for whichever system you are deploying to.
+#
+# Several tasks run automatically based on behind-the-scenes magic 
 #
 require './config/boot'
 require 'airbrake/capistrano'
