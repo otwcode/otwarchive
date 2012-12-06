@@ -135,15 +135,15 @@ module AutocompleteSource
           phrases_with_scores = []
           if lastpiece && search_piece.length < 3
             # use a limit
-            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores, :limit, 0, 50)
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 
+              'inf', 0, :withscores => true, :limit => [0, 50])
           else
-            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 
+              'inf', 0, :withscores => true)
           end
           
-          while phrases_with_scores.length > 0 do 
-            phrase = phrases_with_scores.shift
-            score = phrases_with_scores.shift
-          
+          phrases_with_scores.each do |phrase, score|     
+            score = score.to_i      
             if options[:constraint_sets]
               # phrases must be in these sets or else no go
               # O(logN) complexity
@@ -152,11 +152,11 @@ module AutocompleteSource
           
             if count[phrase]
               # if we've already seen this phrase, increase the score
-              scored_results[phrase] += score.to_i
+              scored_results[phrase] += score
               count[phrase] += 1
             else
               # initialize the score and check if it exactly matches our regexp
-              scored_results[phrase] = score.to_i
+              scored_results[phrase] = score
               if lastpiece
                 # don't count if it only matches the last search piece
                 count[phrase] = 0

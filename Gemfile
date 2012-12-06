@@ -11,6 +11,11 @@ gem 'rails', '3.0.4'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
 
+# Version of redis-rb gem
+# We are currently running Redis 2.6.4 (12/6/2012)
+gem 'redis', ">=3.0"
+gem 'redis-namespace'
+
 # Here are all our application-specific gems
 gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
@@ -68,7 +73,7 @@ gem 'best_in_place'
 gem 'timeliness'
 
 gem 'rpm_contrib'
-gem 'newrelic_rpm', ">= 3.5.0"
+gem 'newrelic_rpm', ">= 3.5.3.25"
 gem 'newrelic-redis'
 
 # for generating graphs
