@@ -2,15 +2,26 @@
 <dd class="notes">
   <ul>
     <li class="start">
-      <%= check_box_tag "front-notes-options-show", "1", !f.object.notes.blank?, :class => "toggle_formfield" %>
-      <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
+      <% if !params[:claim_id].blank? %>
+          <%= check_box_tag "front-notes-options-show", "1", true, :class => "toggle_formfield" %>
+          <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
+        <% else %>
+          <%= check_box_tag "front-notes-options-show", "1", !f.object.notes.blank?, :class => "toggle_formfield" %>
+          <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
+        <% end %>
       <span class="warning<%= f.object.notes.blank? ? ' hidden' : '' %>">
         <%= ts("Warning: Unchecking this box will delete the existing beginning note.") %>
       </span>
       <fieldset id="front-notes-options" class="start">
         <legend><%= f.label :notes, ts("Notes") %></legend>
-        <%= f.text_area :notes, :class => "observe_textlength" %>
-        <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
+        <% if !params[:claim_id].blank? %>
+        <% posting_claim = ChallengeClaim.find(params[:claim_id]) %>
+          <%= f.text_area :notes, :class => "observe_textlength", :value => "<strong>Prompt:</strong> " << posting_claim.request_prompt.description %>
+          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
+        <% else %>
+          <%= f.text_area :notes, :class => "observe_textlength" %>
+          <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
+        <% end %>
       </fieldset>
     </li>
 

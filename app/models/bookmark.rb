@@ -21,7 +21,6 @@ class Bookmark < ActiveRecord::Base
   scope :not_public, where(:private => true)
   scope :not_private, where(:private => false)
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
-  scope :recent, limit(ArchiveConfig.SEARCH_RESULTS_MAX)
   scope :recs, where(:rec => true)
 
   scope :in_collection, lambda {|collection|
@@ -187,7 +186,7 @@ class Bookmark < ActiveRecord::Base
   end 
   
   def bookmarker
-    pseud.name
+    pseud.try(:name)
   end
 
   def with_notes

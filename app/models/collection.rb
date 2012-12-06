@@ -56,7 +56,7 @@ class Collection < ActiveRecord::Base
 
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+           :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
@@ -146,8 +146,8 @@ class Collection < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
-    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
-      title.match(/\,\,/)
+    errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
+      title.match(/\,/)
   end
 
   validates_length_of :description,
@@ -168,13 +168,13 @@ class Collection < ActiveRecord::Base
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
-  # we need to add other challenge types to this join in future
-  scope :ge_signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
-                       where("gift_exchanges.signup_open = 1").
-                       order("gift_exchanges.signups_close_at")
-  scope :pm_signups_open, joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").
-                       where("prompt_memes.signup_open = 1").
-                       order("prompt_memes.signups_close_at")
+  # Get only collections with running challenges
+  def self.signup_open(challenge_type)
+    table = challenge_type.tableize
+    unmoderated.not_closed.where(:challenge_type => challenge_type).
+      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
+      where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
+  end
 
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
@@ -260,15 +260,27 @@ class Collection < ActiveRecord::Base
   def all_participants
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
-
+  
+  def all_items
+    CollectionItem.where(:collection_id => ([self.id] + self.children.value_of(:id)))
+  end
+  
   def all_approved_works
-    (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
+    work_ids = all_items.where(:item_type => "Work", :user_approval_status => CollectionItem::APPROVED, 
+      :collection_approval_status => CollectionItem::APPROVED).value_of(:item_id)
+    Work.where(:id => work_ids, :posted => true)
   end
 
   def all_approved_works_count
-    count = self.approved_works.count
-    self.children.each {|child| count += child.approved_works.count}
-    count
+    if !User.current_user.nil?
+      count = self.approved_works.count
+      self.children.each {|child| count += child.approved_works.count}
+      count
+    else
+      count = self.approved_works.where(:restricted => false).count
+      self.children.each {|child| count += child.approved_works.where(:restricted => false).count}
+      count
+    end
   end
 
   def all_approved_bookmarks
@@ -276,8 +288,8 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_bookmarks_count
-    count = self.approved_bookmarks.count
-    self.children.each {|child| count += child.approved_bookmarks.count}
+    count = self.approved_bookmarks.where(:private => false).count
+    self.children.each {|child| count += child.approved_bookmarks.where(:private => false).count}
     count
   end
 
@@ -443,5 +455,13 @@ class Collection < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
+
+  include WorksOwner  
+  # Used in works_controller to determine whether to expire the cache for this tag's works index page
+  def works_index_cache_key(tag=nil, index_works=nil)
+    index_works ||= self.children.present? ? self.all_approved_works : self.approved_works
+    super(tag, index_works)
+  end
+
 
 end

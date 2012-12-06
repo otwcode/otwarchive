@@ -1,3 +1,39 @@
+# BACKGROUND:
+# To describe the idea here -- these are capistrano "recipes" which are a bit like rake tasks
+# You wrap all the fiddly systems scripts and things that you need to do for a deploy into these nice neat little individual tasks
+# and then you can chain the tasks together
+# 
+# when you run "cap deploy:migrate" let's say, all the things you've told to run before or after it go automatically
+# eg this line in deploy/production.rb:
+#    before "deploy:migrate", "production_only:backup_db"
+# says, if I run "cap deploy:migrate production" then before doing any of the actual work of the deploy, 
+# run the task called "production_only:backup_db" which is defined in deploy.rb as:
+#
+# namespace :production_only do
+#   # Back up the production database
+#   task :backup_db, :roles => [:db] do
+#     run "/static/bin/backup_database.sh &"
+#   end
+# end
+#
+# which says, run this script backup_database.sh
+# and run it on the machine that has the ":db" role
+# 
+# The roles are defined in each of deploy/production.rb and deploy/staging.rb, 
+# and can be set differently for whichever system you are deploying to:
+# 
+# so for example in production.rb:
+# # otw3 and otw4 are the main web/app combos
+# server "otw3.ao3.org", :web, :app
+# server "otw4.ao3.org", :web, :app
+# 
+# # otw5 is the db server
+# server "otw5.ao3.org", :db
+# 
+# 
+# while in staging.rb it is pretty simple, it's all one machine:
+# server "stage.ao3.org", :search, :backend, :web, :app, :db, :primary => true
+#
 require './config/boot'
 require 'airbrake/capistrano'
 
@@ -64,43 +100,78 @@ end
 
 # our tasks which are not environment specific
 namespace :extras do
-  task :update_revision, {:roles => :backend} do
+  
+  # This loads the current version of the archive into the local.yml
+  task :update_revision, :roles => :app do
     run "/static/bin/fix_revision.sh"
   end
-  task :reload_site_skins, {:roles => :backend} do
+  
+  # This re-caches the site skins and puts the new versions into the static files area
+  # Needs to run on web servers but they must also have rails 
+  task :reload_site_skins, :roles => :web do
     run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=production"
   end
-  task :run_after_tasks, {:roles => :backend} do
+
+  # After tasks generally clean up state after a migration and should only run
+  # on one machine
+  task :run_after_tasks, :roles => :app, :only => {:primary => true} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
   end
-  # this actually restarts resque now - not obsolete!
-  task :restart_delayed_jobs, {:roles => :backend} do
+  
+  # Restart our queueing software -- currently Resque -- on all worker machines
+  task :restart_delayed_jobs, :roles => :worker do
     run "/static/bin/dj_restart.sh"
   end
-  task :update_cron, {:roles => :backend} do
+  
+  # update the crontab for whatever machine should run the scheduled tasks
+  # This should only be one machine 
+  task :update_cron, :roles => :app, :only => {:primary => true} do
     run "whenever --update-crontab #{application}"
   end
 end
 
 # our tasks which are staging specific
 namespace :stage_only do
+  
+  # Use git to pull down the latest version of the master branch
   task :git_in_home do
     run "git pull origin master"
     run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
   end
+  
+  # Update the public/ folder from the current release to point to shared/static
+  # folders that we want to carry over
   task :update_public do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
   end
+  
+  # copy over config 
   task :update_configs do
-    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
+    run "cp #{deploy_to}/shared/config/*  #{release_path}/config/"
   end
+  
+  # Reset the entire database from the latest backup from production -- takes a LONG TIME
   task :reset_db do
     run "/static/bin/reset_database.sh"
   end
+
+  # Get rid of subscriptions so we don't spam people
+  task :clear_subscriptions do
+    run "cd #{release_path}; bundle exec rake deploy:clear_subscriptions RAILS_ENV=production"
+  end
+
+  # Redact emails so we don't spam people
+  task :clear_emails do
+    run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=production"
+  end
+  
+  # Reindex elasticsearch database in the background -- takes a long time
+  task :reindex_elasticsearch do
+    run "nohup /static/bin/reindex_elastic.sh &"
+  end
+
   task :notify_testers do
     system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
   end
@@ -108,37 +179,63 @@ end
 
 # our tasks which are production specific
 namespace :production_only do
-  task :git_in_home, :roles => [:backend, :search] do
+  # Use git to pull down the deploy branch and install bundle
+  task :git_in_home, :roles => :app do
     run "git pull origin deploy"
     run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ /static/config/*"
   end
-  task :update_public, :roles => [:web, :backend] do
+  
+  # Get the config files 
+  task :update_configs, :roles => :app do
+    # copy over the default config files from the static folder which lives on the NAS
+    # and is shared
+    run "cp /static/config/* #{release_path}/config/"
+    
+    # copy over the custom config files for this particular app server
+    run "cp /root/config/* #{release_path}/config/"
+  end  
+  
+  # create symlinks from the new public/ folder in the current release to the
+  # carried-over folders for the downloads, skins, other static files
+  task :update_public, :roles => :web do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
-  task :update_configs, :roles => [:app, :backend] do
-    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+  
+  # TEMPORARY FIX: there are too many files in the tags feed folder for 
+  # an ext2 filesystem, ack. They have temporarily been moved to a different
+  # filesys. 
+  task :update_tag_feeds, :roles => :web do
+    run "ln -nfs -t #{release_path}/public/tags /mnt1"
   end
-  task :backup_db, {:roles => :search} do
-    run "/static/bin/backup_database.sh &"
+  
+  # Back up the production database
+  task :backup_db, :roles => :db do
+    run "/root/backup_archive_db.sh &"
   end
-  task :update_cron_email, {:roles => :backend} do
+  
+  # Update the crontab on the primary app machine 
+  task :update_cron_email, :roles => :app, :only => {:primary => true} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
   end
-  task :update_cron_reindex, {:roles => :search} do
-    run "whenever --update-crontab search -f config/schedule_search.rb"
-  end
+
+  # Send out notification 
   task :notify_testers do
     system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
   end
 end
 
-# after and before task triggers
+namespace :db do
+  task :reset_on_stage, :roles => :db do
+    # just holder for invoking the db reset script, 
+    # which we only want to happen on stage, so we 
+    # define it in staging.rb only, as an after task trigger
+  end
+end
 
+# after and before task triggers that should run on both staging and production
 before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
 

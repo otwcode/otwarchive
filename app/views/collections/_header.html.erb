@@ -1,4 +1,3 @@
-
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
 	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
@@ -11,8 +10,12 @@
   <ul class="navigation actions" role="menu">
     <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
 
-    <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
-      <li><%= link_to ts("Post To Collection"), new_collection_work_path(@collection) %></li>
+    <% if logged_in? && @collection.closed? && @collection.challenge_type != "PromptMeme" && (@collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+      <li><%= link_to ts("Post to Collection"), new_collection_work_path(@collection) %></li>
+        <% else %>
+          <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
+            <li><%= link_to ts("Post to Collection"), new_collection_work_path(@collection) %></li>
+          <% end %>
     <% end %>
 
   	<% if @collection.challenge # add custom navigation for the specific challenge if there is one %>
@@ -21,7 +24,7 @@
 
     <% unless @collection.challenge || @collection.user_is_owner?(current_user) %>
       <% if (@participant ||= @collection.get_participants_for_user(current_user).first) %>  
-        <li><%= link_to ts("Leave"), collection_participant_path(@collection, @participant), 
+        <li><%= link_to ts("Leave"), collection_participant_path(@collection, @participant),
           :confirm => ts('Are you certain you want to leave this collection?'), 
           :method => :delete %></li>
       <% elsif logged_in? && @collection.moderated? %>

@@ -210,6 +210,11 @@ class Work < ActiveRecord::Base
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
   end
+  
+  after_destroy :clean_up_assignments
+  def clean_up_assignments
+    self.challenge_assignments.each {|a| a.creation = nil; a.save!}
+  end
 
   def self.purge_old_drafts
     draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
@@ -341,8 +346,10 @@ class Work < ActiveRecord::Base
     challenge_claims.map(&:id)
   end
 
+  # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
-    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
+    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
+      select {|assign| (self.authors.collect(&:user) + self.users + [User.current_user]).include?(assign.offering_user)}
   end
 
   def recipients=(recipient_names)
@@ -405,13 +412,6 @@ class Work < ActiveRecord::Base
     # here we check if the story is in a currently-anonymous challenge
     #!self.collection_items.anonymous.empty?
     in_anon_collection?
-  end
-  
-  # Set the anonymous/unrevealed status of the work based on its collections
-  def set_anon_unrevealed
-    self.in_anon_collection = !self.collections.select{|c| c.anonymous? }.empty?
-    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
-    return true
   end
   
   # This work's collections and parent collections
@@ -1047,41 +1047,7 @@ class Work < ActiveRecord::Base
     end
   end
 
-  # Used for non-search work filtering
-  def self.find_with_options(options = {})
-    page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-    sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
-
-    @works = Work
-
-    if options[:tag].present?
-      @works = @works.with_filter(options[:tag])
-    end
-    if !options[:user].nil? && !options[:selected_pseuds].empty?
-      @works = @works.written_by_id(options[:selected_pseuds])
-    elsif !options[:user].nil?
-      @works = @works.owned_by(options[:user])
-    end
-    if options[:language_id]
-      @works = @works.by_language(options[:language_id])
-    end
-    if options[:complete]
-      @works = @works.where(:complete => true)
-    end
-    if options[:collection]
-      @works = @works.in_collection(options[:collection])
-    end
-    if User.current_user.nil? || User.current_user == :false
-      @works = @works.unrestricted
-    end
-    if options[:sort_column] == "hit_count"
-      @works = @works.select("works.*, stat_counters.hit_count AS hit_count").joins(:stat_counter)
-    end
-
-    @works = @works.order(sort_by).posted.unhidden
-    return @works.paginate(page_args.merge(:total_entries => @works.size))
-  end
-  
+  # Used when admins have disabled filtering
   def self.list_without_filters(owner, options)
     works = case owner.class.to_s
             when 'Pseud'
@@ -1259,51 +1225,5 @@ class Work < ActiveRecord::Base
     end
     names
   end  
-  
-  # Update the search index for both this work and its associated bookmarks
-  def update_work_and_bookmarks_index
-    self.update_index
-    self.bookmarks.each{ |bookmark| bookmark.update_index }
-  end
-  
-  # This gets invoked as a callback in lib/work_stats.rb so we want to make
-  # sure it doesn't run synchronously for works with many bookmarks
-  def update_bookmarks_index
-    async(:async_bookmarks_index)
-  end
-  
-  def async_bookmarks_index
-    self.bookmarks.each{ |bookmark| bookmark.update_index }
-  end
-  
-  def sweep_index_caches
-    to_expire = []
     
-    all_collections = self.all_collections
-    all_collections.each do |collection|
-      to_expire << "collection/#{collection.id}"
-    end
-    
-    self.pseuds.each do |pseud|
-      to_expire << "pseud/#{pseud.id}"
-      to_expire << "user/#{pseud.user_id}"
-    end
-
-    # expire the first n cached pages for the tags on the work and the corresponding filter tags
-    (self.tags + self.filters).uniq.each do |tag|
-      to_expire << "tag/#{tag.id}"
-      all_collections.each do |collection|
-        to_expire <<  "collection/#{collection.id}/tag/#{tag.id}"
-      end
-    end
-    
-    # Expire all the relevant index page keys
-    to_expire.uniq.each do |exp|
-      5.times do |n|
-        Rails.cache.delete("views/works/v2/#{exp}/u/p/#{n+1}")
-        Rails.cache.delete("views/works/v2/#{exp}/v/p/#{n+1}")
-      end
-    end
-  end
-
 end

@@ -15,11 +15,69 @@ class WorksController < ApplicationController
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
+  
+  before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
-  cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
+  
+  # we want to extract the countable params from work_search and move them into their fields
+  def clean_work_search_params
+    if params[:work_search].present? && params[:work_search][:query].present?
+      # swap in gt/lt for ease of matching; swap them back out for safety at the end
+      params[:work_search][:query].gsub!('&gt;', '>')
+      params[:work_search][:query].gsub!('&lt;', '<')           
+
+      # extract countable params    
+      %w(word kudo comment bookmark hit).each do |term|        
+        if params[:work_search][:query].gsub!(/#{term}s?\s*(?:\_?count)?\s*:?\s*((?:<|>|=|:)\s*\d+(?:\-\d+)?)/i, '')
+          # pluralize, add _count, convert to symbol
+          term = term.pluralize unless term == "word"
+          term = term + "_count" unless term == "hits"
+          term = term.to_sym
+          
+          value = $1.gsub(/^(\:|\=)/, '') # get rid of : and =
+          # don't overwrite if submitting from advanced search?
+          params[:work_search][term] = value unless params[:work_search][term].present?
+        end
+      end        
+      
+      # get sort-by
+      if params[:work_search][:query].gsub!(/sort(?:ed)?\s*(?:by)?\s*:?\s*(<|>|=|:)\s*(\w+)\s*(ascending|descending)?/i, '')
+        sortdir = $3 || $1
+        sortby = $2.gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
+        
+        WorkSearch::SORT_OPTIONS.each do |opt, value|
+          # stop at the first one we find
+          if opt.match(/#{sortby}/i)
+            params[:work_search][:sort_column] = value
+            break
+          end
+        end
+        
+        if sortdir == ">" || sortdir == "ascending"
+          params[:work_search][:sort_direction] = "asc"
+        elsif sortdir == "<" || sortdir == "descending"
+          params[:work_search][:sort_direction] = "desc"
+        end        
+      end
+
+      # put categories into quotes
+      qr = Regexp.new('(?:"|\')?')
+      %w(m/m f/f f/m m/f).each do |cat|
+        cr = Regexp.new("#{qr}#{cat}#{qr}")
+        params[:work_search][:query].gsub!(cr, "\"#{cat}\"")
+      end
+      
+      # swap out gt/lt
+      params[:work_search][:query].gsub!('>', '&gt;')
+      params[:work_search][:query].gsub!('<', '&lt;')
+      
+      # get rid of empty queries
+      params[:work_search][:query] = nil if params[:work_search][:query].match(/^\s*$/)
+    end
+  end
 
   def search
     @languages = Language.default_order
@@ -61,8 +119,15 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
-          @works = Rails.cache.fetch(index_cache_key) do
+        
+        # If we're using caching we'll try to get the results from cache
+        # Note: we only cache some first initial number of pages since those are biggest bang for 
+        # the buck -- users don't often go past them
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && 
+          (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
+          # the subtag is for eg collections/COLL/tags/TAG
+          subtag = (@tag.present? && @tag != @owner) ? @tag : nil
+          @works = Rails.cache.fetch(@owner.works_index_cache_key(subtag)) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -210,7 +275,7 @@ class WorksController < ApplicationController
   def create
     load_pseuds
     @series = current_user.series.uniq
-
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
@@ -227,9 +292,14 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
+          setflash; flash[:notice] = ts('Draft was successfully created.')
+          in_moderated_collection
+          redirect_to preview_work_path(@work)
         else
-          redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          # We check here to see if we are attempting to post to moderated collection
+          setflash; flash[:notice]= ts("Work was successfully posted.")
+          in_moderated_collection
+          redirect_to work_path(@work)
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -275,6 +345,7 @@ class WorksController < ApplicationController
     # Need to get @pseuds and @series values before rendering edit
     load_pseuds
     @series = current_user.series.uniq
+    @collection = Collection.find_by_name(params[:work][:collection_names])
     unless @work.errors.empty?
       render :edit and return
     end
@@ -284,6 +355,8 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
+        setflash; flash[:notice] = ts('Draft was successfully created.')
+        in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
       else
@@ -355,10 +428,11 @@ class WorksController < ApplicationController
       if saved
         if params[:post_button]
           setflash; flash[:notice] = ts('Work was successfully posted.')
+          in_moderated_collection
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
+          in_moderated_collection
         end
-
         redirect_to(@work)
       else
         unless @chapter.valid?
@@ -590,6 +664,14 @@ protected
     end
   end
 
+  # check to see if the work is being added / has been added to a moderated collection, then let user know that
+  def in_moderated_collection
+    if !@collection.nil? && @collection.moderated?
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+    end
+  end
+
 public
 
 
@@ -613,9 +695,12 @@ public
       setflash; flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work) and return
     end
-
-    setflash; flash[:notice] = ts("Your work was successfully posted.")
-    redirect_to @work
+    if !@collection.nil? && @collection.moderated?
+      redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
+    else
+      setflash; flash[:notice] = ts("Your work was successfully posted.")
+      redirect_to @work
+    end
   end
 
   # WORK ON MULTIPLE WORKS
@@ -703,6 +788,9 @@ public
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end 
       unless @tag.canonical?
         if @tag.merger.present?
           if @collection.present?
@@ -860,19 +948,4 @@ public
     end
   end
   
-  # This has views/ in it because that's what expire_fragment is looking for
-  def index_cache_key
-    cache_key = ['views', 'works', 'v2']
-    cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
-    cache_key << @owner.id.to_s
-    if @collection.present? && @tag.present?
-      cache_key << "tag"
-      cache_key << @tag.id.to_s
-    end
-    cache_key << (logged_in? ? "u" : "v")
-    cache_key << 'p'
-    cache_key << (params[:page] || '1')
-    cache_key.join("/")
-  end
-
 end

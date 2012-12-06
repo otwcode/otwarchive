@@ -73,6 +73,9 @@ class Prompt < ActiveRecord::Base
   def description_required?
     (restriction = get_prompt_restriction) && restriction.description_required
   end
+  validates_length_of :description,
+    :maximum => ArchiveConfig.NOTES_MAX,
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
   def title_required?
     (restriction = get_prompt_restriction) && restriction.title_required
   end
@@ -151,7 +154,7 @@ class Prompt < ActiveRecord::Base
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("These %{tag_type} tags in your %{prompt_type} are not canonical and can't be used unless the moderator adds them: %{taglist}",
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please contact your challenge moderator who can then log a request with Support for the tags to be made canonical if appropriate.",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
               :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))

@@ -1,6 +1,7 @@
 class CollectionPreferenceObserver < ActiveRecord::Observer
 
-  def before_update(collection_preference)
+  # must be AFTER update or else the collection still returns true for being unrevealed/anonymous!
+  def after_update(collection_preference)
     collection = collection_preference.collection
     if collection.valid? && collection_preference.valid?
       if collection_preference.unrevealed_changed? && !collection_preference.unrevealed?
