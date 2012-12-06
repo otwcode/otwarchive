@@ -1,0 +1,18 @@
+require 'spec_helper'
+
+describe AutocompleteController do
+  
+  describe "do_tag" do
+    it "should only return matching tags" do
+      @tag = Factory.create(:fandom, :name => "Match")
+      @tag2 = Factory.create(:fandom, :name => "Blargh")
+      
+      # we need to set this to make the controller return the JSON-encoded data we want
+      @request.env['HTTP_ACCEPT'] = "application/json"
+      get :tag, {:term => "Ma"}
+      response.body.should include("Match")
+      response.body.should_not include("Blargh")
+    end
+  end
+  
+end

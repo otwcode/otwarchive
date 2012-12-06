@@ -145,7 +145,7 @@ GEM
     newrelic-redis (1.4.0)
       newrelic_rpm (~> 3.0)
       redis (< 4.0)
-    newrelic_rpm (3.5.0.1)
+    newrelic_rpm (3.5.3.25)
     nokogiri (1.5.0)
     paperclip (2.3.16)
       activerecord (>= 2.3.0)
@@ -182,12 +182,11 @@ GEM
       thor (~> 0.14.4)
     raindrops (0.7.0)
     rake (0.9.2.2)
-    redis (2.1.1)
-    redis-namespace (0.10.0)
-      redis (< 3.0.0)
+    redis (3.0.2)
+    redis-namespace (1.2.1)
+      redis (~> 3.0.0)
     resque (1.14.0)
       json (~> 1.4.6)
-      redis-namespace (>= 0.10.0)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
     resque_mailer (1.0.1)
@@ -292,13 +291,15 @@ DEPENDENCIES
   mocha
   mysql2
   newrelic-redis
-  newrelic_rpm (>= 3.5.0)
+  newrelic_rpm (>= 3.5.3.25)
   nokogiri (>= 1.4.2)
   paperclip (>= 2.3.16)
   permit_yo
   pickle
   rack-openid (>= 0.2.1)
   rails (= 3.0.4)
+  redis (>= 3.0)
+  redis-namespace
   resque (>= 1.14.0)
   resque_mailer
   rest-client
