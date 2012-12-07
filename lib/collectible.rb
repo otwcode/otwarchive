@@ -76,9 +76,19 @@ module Collectible
   #### UNREVEALED/ANONYMOUS
 
   # Set the anonymous/unrevealed status of the collectible based on its collections
+  # TODO: need a better long-term fix
+  # Collection items can be revealed independently of a collection, so we don't want
+  # to check the collection status when those are updated, but a new work doesn't have
+  # collection items yet
   def set_anon_unrevealed
-    self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? if self.respond_to?(:in_anon_collection)
-    self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty? if self.respond_to?(:in_unrevealed_collection)
+    return true unless self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
+    if self.new_record?
+      self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? 
+      self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+    else
+      self.in_anon_collection = !self.collection_items.select {|c| c.anonymous? }.empty?
+      self.in_unrevealed_collection = !self.collection_items.select{|c| c.unrevealed? }.empty?
+    end
     return true
   end
 
