@@ -127,7 +127,8 @@ class WorksController < ApplicationController
           (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = (@tag.present? && @tag != @owner) ? @tag : nil
-          @works = Rails.cache.fetch(@owner.works_index_cache_key(subtag)) do
+          user = current_user.present? ? "logged_in" : "logged_out"
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}") do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
