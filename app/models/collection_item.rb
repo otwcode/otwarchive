@@ -96,6 +96,14 @@ class CollectionItem < ActiveRecord::Base
     work.set_anon_unrevealed!
   end
 
+  # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
+  after_update :update_item_for_status_change
+  def update_item_for_status_change
+    if user_approval_status_changed? || collection_approval_status_changed?
+      item.save
+    end
+  end
+
   after_create :notify_of_association
   def notify_of_association
     if self.collection.collection_preference.email_notify && !self.collection.email.blank?
