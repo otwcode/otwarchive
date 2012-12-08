@@ -1,5 +1,14 @@
 server "stage.ao3.org", :web, :app, :worker, :db, :primary => true
 
+# ORDER OF EVENTS
+# Calling "cap deploy" runs:
+#   deploy:update which runs:
+#       deploy:update_code
+#       deploy:symlink
+#   deploy:restart
+#
+# Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
+
 before "deploy:update_code", "stage_only:git_in_home"
 after "deploy:update_code", "stage_only:update_public", "stage_only:update_configs"
 

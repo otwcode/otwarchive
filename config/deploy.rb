@@ -238,6 +238,16 @@ namespace :db do
   end
 end
 
+# ORDER OF EVENTS
+# Calling "cap deploy" runs:
+#   deploy:update which runs:
+#       deploy:update_code
+#       deploy:symlink
+#   deploy:restart
+#
+# Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
+#
+
 # after and before task triggers that should run on both staging and production
 before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
