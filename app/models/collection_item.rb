@@ -93,7 +93,20 @@ class CollectionItem < ActiveRecord::Base
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
     return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
-    work.set_anon_unrevealed!
+    # Check if this is new - can't use new_record? with after_save
+    if self.id_changed?
+      work.set_anon_unrevealed!
+    else
+      work.update_anon_unrevealed!
+    end
+  end
+
+  # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
+  after_update :update_item_for_status_change
+  def update_item_for_status_change
+    if user_approval_status_changed? || collection_approval_status_changed?
+      item.save
+    end
   end
 
   after_create :notify_of_association

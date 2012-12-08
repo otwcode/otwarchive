@@ -6,9 +6,9 @@
 class RedisSearchIndexQueue
 
   # Reindex an object
-  def self.reindex(item)
+  def self.reindex(item, options={})
     if item.is_a?(Work)
-      queue_work(item)
+      queue_work(item, options)
     elsif item.is_a?(Bookmark)
       queue_bookmark(item)
     end
@@ -19,16 +19,20 @@ class RedisSearchIndexQueue
   
   WORKS_INDEX_KEY = "search_index_works"
   
-  def self.queue_works(work_ids)
-    queue_ids(WORKS_INDEX_KEY, work_ids)    
-    # queue their bookmarks also
-    queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id))
+  def self.queue_works(work_ids, options={})
+    queue_ids(WORKS_INDEX_KEY, work_ids)   
+    unless options[:without_bookmarks].present? 
+      # queue their bookmarks also
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id))
+    end
   end    
   
   # queue a work to have its search index updated
-  def self.queue_work(work)
+  def self.queue_work(work, options={})
     queue_item(WORKS_INDEX_KEY, work)
-    queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id))
+    unless options[:without_bookmarks].present?
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id))
+    end
   end
   
   # tell elasticsearch to reindex each work 

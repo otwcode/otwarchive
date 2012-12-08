@@ -281,12 +281,12 @@ class Bookmark < ActiveRecord::Base
   end
   
   def collection_ids
-    collections.value_of(:id, :parent_id).flatten.uniq.compact
+    approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
   
   def bookmarkable_collection_ids
-    if bookmarkable.respond_to?(:collections)
-      bookmarkable.collections.value_of(:id, :parent_id).flatten.uniq.compact
+    if bookmarkable.respond_to?(:approved_collections)
+      bookmarkable.approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
     end
   end
   
