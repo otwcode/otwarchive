@@ -1198,7 +1198,7 @@ class Work < ActiveRecord::Base
     creatorships.value_of :pseud_id
   end
   def collection_ids
-    collections.value_of(:id, :parent_id).flatten.uniq.compact
+    approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
 
   def comments_count
