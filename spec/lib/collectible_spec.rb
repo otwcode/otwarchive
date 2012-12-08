@@ -83,6 +83,18 @@ describe Collectible do
             work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection").should_not be_true
           end
         end
+        describe "when the work's collection item is individually changed" do
+          before do
+            ci = work.collection_items.first
+            ci.send("#{state}=", false)
+            ci.save
+            work.reload
+          end
+          
+          it "should no longer be #{state}" do
+            work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection").should_not be_true
+          end
+        end
       end
     end
   end
