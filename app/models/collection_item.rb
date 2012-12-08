@@ -93,7 +93,11 @@ class CollectionItem < ActiveRecord::Base
   # Check for chapters to avoid work association creation order shenanigans
   def update_work
     return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
-    work.set_anon_unrevealed!
+    if self.new_record?
+      work.set_anon_unrevealed!
+    else
+      work.update_anon_unrevealed!
+    end
   end
 
   after_create :notify_of_association
