@@ -44,11 +44,6 @@ gem 'paperclip', '>=2.3.16'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
-gem 'tolk',
-  :git => 'git://github.com/ambtus/tolk.git',
-  :branch => 'rails3',
-  :require => 'tolk'
-
 gem 'authlogic',
   :git     => 'git://github.com/odorcicd/authlogic.git',
   :branch  => 'rails3',
