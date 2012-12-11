@@ -118,7 +118,7 @@ class ChaptersController < ApplicationController
               redirect_to [@work, @chapter]
             end
         elsif @work.save
-          setflash; flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+          flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
           redirect_to [:preview, @work, @chapter]
         else
           render :new
@@ -140,12 +140,17 @@ class ChaptersController < ApplicationController
       @chapter.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-      flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+      if @chapter.posted?
+        flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
+      else
+        flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
+      end
       render :preview
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')
     elsif params[:edit_button]
+      setflash; flash[:notice] = nil
       render :edit
     else
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
@@ -222,7 +227,11 @@ class ChaptersController < ApplicationController
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        setflash; flash[:notice] = ts("The chapter was successfully deleted.")
+        if @chapter.posted?
+          setflash; flash[:notice] = ts("The chapter was successfully deleted.")
+        else
+          setflash; flash[:notice] = ts("Your chapter draft has been discarded.")
+        end
       else
         setflash; flash[:error] = ts("Something went wrong. Please try again.")
       end
