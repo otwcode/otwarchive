@@ -34,4 +34,8 @@
       <dd class="datetime"><%= f.text_field :authors_reveal_at_string , :class => 'timepicker' %></dd>
     <% end %>
   </dl>
-</fieldset>  
+</fieldset>
+
+<%= content_for :footer_js do %>
+  <script src="/javascripts/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+<% end %>  
