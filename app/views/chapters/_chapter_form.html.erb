@@ -99,12 +99,12 @@
     <p class="submit actions">
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
       <% if chapter.posted? %>
-        <%= submit_tag ts('Update without preview'), :name => 'post_without_preview_button' %>
-        <%= link_to ts('Delete chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+        <%= submit_tag ts('Update Without Preview'), :name => 'post_without_preview_button' %>
+        <%= link_to ts('Delete Chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
       <% else %>
-        <%= submit_tag ts('Post without preview'), :name => 'post_without_preview_button' %>
+        <%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button' %>
         <% unless chapter.published_at.nil? %>
-          <%= link_to ts('Discard draft'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+          <%= link_to ts('Discard Draft'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
         <% end %>
       <% end %>
       <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
