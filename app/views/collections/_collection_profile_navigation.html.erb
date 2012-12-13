@@ -1,14 +1,14 @@
-<h3 class="landmark heading">Navigation</h3>
+<h3 class="landmark heading"><%= ts("Navigation") %></h3>
 <% if show_collection_profile_navigation(@collection, section) %>
 <ul class="navigation actions" role="navigation">
 	<% if show_collection_section(@collection, "intro") && section != "intro" %>
-	<li><a href="#intro"><%=h t('.intro', :default => "Intro:") %></a></li>
+	<li><a href="#intro"><%= ts("Intro:") %></a></li>
 	<% end %>
 	<% if show_collection_section(@collection, "faq") && section != "faq" %>
-	<li><a href="#faq"><%=h t('.faq', :default => "FAQ:") %></a></li>
+	<li><a href="#faq"><%= ts("FAQ:") %></a></li>
 	<% end %>
 	<% if show_collection_section(@collection, "rules") && section != "rules" %>
-	<li><a href="#rules"><%=h t('.rules', :default => "Rules:") %></a></li>
+	<li><a href="#rules"><%= ts("Rules:") %></a></li>
 	<% end %>
 </ul>
 <% end %>

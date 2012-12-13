@@ -12,14 +12,14 @@
 <% if @collections.empty? %>
   <h3 class="heading"><%= ts("Sorry, there were no collections found.") %></h3>
 <% else %>
-  <h3 class="heading"><%= search_header @collections, @query, "Collection" %> </h3>
+  <h3 class="heading"><%= search_header @collections, @query, ts("Collection") %> </h3>
 <% end %>
  
 <!--/descriptions-->
 <!--Subnavigation, sorting and actions-->
 <div class="navigation module">
   <% if logged_in? %>
-    <h3 class="landmark heading">Navigation</h3>
+    <h3 class="landmark heading"><%= ts("Navigation") %></h3>
     <ul class="navigation actions" role="navigation">
       <% if @user && @user == current_user %>
         <li><%= link_to ts("Manage Collected Works"), user_collection_items_path(@user) %></li>
@@ -27,7 +27,7 @@
       <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
         <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
       <% else %>
-    	  <li><%= link_to ts("See Open Challenges"), list_challenges_collections_path %></li>
+    	  <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
     	  <li><%= link_to ts("New Collection"), new_collection_path %></li>
     	<% end %>
     </ul>
@@ -48,7 +48,7 @@
   <%= will_paginate @collections %>
 
   <!--main content-->
-  <h3 class="landmark heading">List of Collections</h3>
+  <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
   <ul class="collection picture index group">
   <% @collections.each do |collection| %>
     <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
