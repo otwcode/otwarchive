@@ -30,7 +30,7 @@
             <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
           <% end %>
         <% # When the thing that we are commenting on is a comment (read: replying to) then we use this statement. Shows in user Inbox and nested reply %>
-        <% if commentable.is_a?(Comment) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent) %>
+        <% if commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent) %>
           <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
         <% end %>
         <% if current_user.pseuds.count > 1 %>
