@@ -200,7 +200,7 @@ namespace :production_only do
   end  
   
   desc "Update the public/ folder from the current release to point to the static file folders (hosted on NAS)"
-  task :update_public, :roles => :web do
+  task :update_public, :roles => :app do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
@@ -212,7 +212,7 @@ namespace :production_only do
   # filesys. 
   desc "Point the public/tags/ folder with tag feeds to another filesystem"
   task :update_tag_feeds, :roles => :web do
-    run "ln -s #{release_path}/public/tags /mnt1"
+    run "ln -s /mnt1 #{release_path}/public/tags"
   end
   
   desc "Back up the production database"
