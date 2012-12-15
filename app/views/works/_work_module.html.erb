@@ -1,21 +1,15 @@
 <% # expects "work" %>
 
-<% is_unrevealed ||= work.unrevealed? %>
-<% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
-<% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
-  <% if is_unrevealed %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-  <% elsif is_anonymous %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
-  <% end %>
+<% if work.unrevealed? && !is_author_of?(work) %>
+  <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
 <% else %>
 
   <!--title, author, fandom-->
   <div class="header module">
 
     <h4 class="heading" title="title">
-  	  <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
-   		 <%= ts('by') %>
+      <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
+      <%= ts('by') %>
         
       <!-- do not cache -->
       <%= byline(work) %>

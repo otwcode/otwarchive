@@ -20,7 +20,7 @@ tinyMCE.init({
 	theme_advanced_toolbar_align : "left",
 	theme_advanced_resizing : true,
 	
-	content_css : "css/custom_content.css",
+	//content_css : "css/custom_content.css",
 	theme_advanced_font_sizes: "10px,12px,13px,14px,16px,18px,20px",
 	font_size_style_values : "10px,12px,13px,14px,16px,18px,20px",
 

@@ -34,4 +34,17 @@
       <dd class="datetime"><%= f.text_field :authors_reveal_at_string , :class => 'timepicker' %></dd>
     <% end %>
   </dl>
-</fieldset>  
+</fieldset>
+
+<%= content_for :footer_js do %>
+  <script src="/javascripts/jquery-ui-timepicker-addon.js" type="text/javascript"></script>  
+  <%= javascript_tag do %>
+      $j('.timepicker').datetimepicker({
+        ampm: true,
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'hh:mmTT',
+        hourGrid: 5,
+        minuteGrid: 10
+      });
+  <% end %>
+<% end %> 
