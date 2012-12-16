@@ -29,7 +29,7 @@ after "deploy:update_code", "production_only:update_public", "production_only:up
 
 before "deploy:migrate", "production_only:backup_db"
 
-after "deploy:restart", "production_only:update_cron_email", "production_only:update_cron_reindex"
+after "deploy:restart", "production_only:update_cron_email"
 after "deploy:restart", "production_only:notify_testers"
 
 # deploy from clean branch
