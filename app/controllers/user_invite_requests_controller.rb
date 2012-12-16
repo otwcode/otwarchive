@@ -4,7 +4,7 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
   def index
-    @user_invite_requests = UserInviteRequest.not_handled
+    @user_invite_requests = UserInviteRequest.not_handled.page(params[:page])
   end
 
   # GET /user_invite_requests/new
