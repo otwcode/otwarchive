@@ -64,7 +64,7 @@ INVITE_FROM_QUEUE_FREQUENCY: 7
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 # number of invites users can request
-MAX_USER_INVITE_REQUEST: 25
+MAX_USER_INVITE_REQUEST: 10
 
 # this determines how long we keep processed results like tag set nominations in redis
 DAYS_TO_SAVE_PROCESSED: 56
