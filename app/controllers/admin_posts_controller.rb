@@ -31,6 +31,8 @@ class AdminPostsController < ApplicationController
       flash[:error] = ts("We couldn't find that admin post.")
       redirect_to admin_posts_path and return
     end
+    @previous_admin_post = AdminPost.non_translated.order('created_at DESC').where('created_at < ?', @admin_post.created_at).first
+    @next_admin_post = AdminPost.non_translated.order('created_at ASC').where('created_at > ?', @admin_post.created_at).first
     @commentable = @admin_post
     @comments = @admin_post.comments
     @page_subtitle = @admin_post.try(:title)
