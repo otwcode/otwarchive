@@ -121,8 +121,9 @@ module WorksHelper
     link_to ts("Mark as read"), marktoread_work_path(work)
   end
 
+  # how do I make it so tag isn't required, thus producing numb of arg errors?
   private
-  def add_label_for_embed(label, text) ; text.blank? ? nil : label + text ; end
+  def add_label_for_embed(label, text, tag='') ; text.blank? ? nil : label + text + tag; end
 
   public
   # get a nicely formatted bit of text for pasting into other services
@@ -135,20 +136,20 @@ module WorksHelper
   def get_embed_link(work)
     title_link = link_to(content_tag(:strong, work.title.html_safe), work_url(work)) + " (#{work.word_count} #{ts('words')})"
     if work.anonymous?
-      profile_link = ts("Anonymous")
+      profile_link = ts("Anonymous") + tag("br")
     else
-      profile_link = work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
+      profile_link = work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe + tag("br")
     end
 
-    chapters_text = ts("Chapters: ") + work.chapter_total_display
-    fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)
-    rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
-    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '))
-    warning_text = add_label_for_embed(ts("Warning: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '))
-    relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '))
-    char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '))
+    chapters_text = ts("Chapters: ") + work.chapter_total_display + tag("br")
+    fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe, tag("br"))
+    rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '), tag("br"))
+    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '), tag("br"))
+    warning_text = add_label_for_embed(ts("Warning: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '), tag("br"))
+    relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '), tag("br"))
+    char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '), tag("br"))
     if work.series.count != 0
-      series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work))
+      series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work), tag("br"))
     end
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
 
@@ -164,8 +165,8 @@ module WorksHelper
   def get_bookmark_embed_link(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
       work_embed = get_embed_link(bookmark.bookmarkable)
-      tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "))
-      bookmark_text = add_label_for_embed(content_tag(:strong, ts("Bookmarker's Notes: ")), raw(sanitize_field(bookmark, :notes)))
+      tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "), tag("br"))
+      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :notes)))
       [work_embed, tags_text, bookmark_text].compact.join("\n")
     end
   end
