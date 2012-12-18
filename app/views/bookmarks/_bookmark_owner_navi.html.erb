@@ -8,6 +8,15 @@
     <div id="share_<%= bookmark.id %>" style="display: none;">
 			<p><%= ts("Copy and paste the following code to repost this bookmark elsewhere (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all).") %></p>
       <p><textarea rows="4" cols="50"><%= get_bookmark_embed_link(bookmark) %></textarea></p>
+      <!-- twitter, tumblr buttons go here -->
+        <ul>
+          <li>
+            <a href="http://www.tumblr.com/share/link?url=<%=u work_url(bookmark) %>&name=<%= ts('Bookmark') %>&description=<%=u get_bookmark_embed_link(bookmark) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;">
+              <%= ts('Share on Tumblr') %>
+            </a>
+          </li>
+        </ul>
+
     </div>
   </li>
   <% end %>
