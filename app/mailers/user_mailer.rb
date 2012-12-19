@@ -268,7 +268,7 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Sends email to authors when a creation is deleted
+  # Sends email to authors when a creation is deleted by abuse
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
   def abuse_deleted_work_notification(user, work)
