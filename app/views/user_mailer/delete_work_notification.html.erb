@@ -1,4 +1,3 @@
-<p><%= ts("Dear ") %><%= @user.default_pseud.byline %><%= ts(":") %></p>
-<p><%= ts("Your work") %> <cite><%= @work.title.html_safe %></cite> <%= ts("was deleted at ") %> <%= (@work.pseuds.count > 1 && @user != User.current_user) ? ts("the request of ") + User.current_user.default_pseud.byline + ts(".") : ts("your request.") %> </p>
-<p><%= ts("If you have questions, please contact") %> <%= ts("Support (http://archiveofourown.org/support)") %>.</p>
+<p><%=h "Your story" %> <cite><%=h @work.title.html_safe %></cite> <%=h "was deleted at your request." %></p>
+<p><%=h "If you have questions, please contact" %> <%= "Support (http://archiveofourown.org/support)" %>.</p>
 <p><%= ts("Attached is a copy of your work for your reference.") %></p>
