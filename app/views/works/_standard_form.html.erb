@@ -280,7 +280,19 @@
       <% end %>
 
     <% end %> <!-- end of fields for chapters -->
- 
+  <fieldset class="comment" role="article">
+    <legend><%= ts('Comments') %></legend>
+    <h3 class="landmark heading"><%= ts('Comments') %></h3>
+    <dl>
+      <dt class="anon_commenting_enabled">
+        <%= f.label :anon_commenting_enabled, ts("Anonymous commenting enabled") %><%= link_to_help "anonymous-commenting" %>
+      </dt>
+      <dd class="anon_commenting_enabled">
+        <%= f.check_box :anon_commenting_enabled %>
+      </dd>
+    </dl>
+  </fieldset>
+
   <fieldset class="create">
     <legend><%= ts('Post') %></legend>
     <p class="submit cancel actions">

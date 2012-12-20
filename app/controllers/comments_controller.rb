@@ -13,6 +13,7 @@ class CommentsController < ApplicationController
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
+  before_filter :check_anonymous_comment_preference, :only => [:new, :create]
 
   cache_sweeper :comment_sweeper
 
@@ -35,6 +36,12 @@ class CommentsController < ApplicationController
               end
     if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
       redirect_to login_path(:restricted_commenting => true) and return
+  end
+
+  def check_anonymous_comment_preference
+    if @commentable.is_a?(Work) && !@commentable.anon_commenting_enabled && !logged_in?
+      setflash; flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      redirect_to work_path(@commentable)
     end
   end
 
