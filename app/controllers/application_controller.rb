@@ -173,7 +173,7 @@ public
 
   # Prevents admin from logging in as users
   def admin_logout_required
-    if logged_in_as_admin?
+    if logged_in_as_admin?  && !ta
       setflash; flash[:notice] = 'Please log out of your admin account first!'
       redirect_to root_path
     end
