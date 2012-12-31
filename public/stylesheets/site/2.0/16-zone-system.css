@@ -123,22 +123,21 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
 .tag_caution {
   background: #ffe34e;
   border: 1px solid #c2d2df;
-  margin: 0.643em auto;
+  margin: auto 3em;
   padding: 0.25em 0.375em;
 }
 
 .tag_notice {
   background: #d1e1ef;
   border: 1px solid #c2d2df;
-  margin: 0.643em auto;
+  margin: auto 3em;
   padding: 0.25em 0.375em;
 }
 
 .tag_example {
-  background: #ffe34e;
   border: 1px solid #c2d2df;
-  margin: 0.643em auto;
-  padding: 0.25em 0.375em;
+  margin: auto 3em;
+  padding: 0.25em 0.5em;
 }
 
 /*END== */
