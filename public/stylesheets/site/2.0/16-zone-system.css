@@ -120,24 +120,13 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
 
 /* ZONE: SYSTEM: FAQS: TAG GUIDELINES */
 
-.tag_caution {
-  background: #ffe34e;
-  border: 1px solid #c2d2df;
-  margin: auto 3em;
-  padding: 0.25em 0.375em;
-}
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .userstuff .example { 
+margin: 0.643em 3.958em; 
+padding: 0.643em;
+} 
 
-.tag_notice {
-  background: #d1e1ef;
-  border: 1px solid #c2d2df;
-  margin: auto 3em;
-  padding: 0.25em 0.375em;
-}
-
-.tag_example {
-  border: 1px solid #c2d2df;
-  margin: auto 3em;
-  padding: 0.25em 0.5em;
+.faq .userstuff .example {
+border: 1px solid #c2d2df;
 }
 
 /*END== */
