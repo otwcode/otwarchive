@@ -281,3 +281,7 @@ a.help .landmark, a.email .landmark, .restricted .landmark, .flagged .landmark {
 .restricted .landmark, .flagged .landmark {
   vertical-align: baseline;
 }
+
+a.email .landmark, .flagged .landmark {
+  color: #900;
+}
