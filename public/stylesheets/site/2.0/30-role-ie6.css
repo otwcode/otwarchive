@@ -262,3 +262,18 @@ span.replied. span.unreviewed, .actions a, .action, .symbol {
 .group {
   zoom: 1;
 }
+
+/* symbols */
+
+a .symbol { 
+  display: none;
+}
+
+a.help .landmark, a.email .landmark {
+  font-size: 75%;
+  color: #0000CD;
+  height: auto;
+  opacity: 1.0;
+  vertical-align: super;
+  line-height: 1.125em;
+}
