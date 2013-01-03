@@ -52,7 +52,7 @@ module ApplicationHelper
   end
   
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
+    link_to((content_tag(:span, '', :class => "symbol", :'aria-hidden' => "true", :'data-icon' => "\ue0b1") + ts("Subscribe to Feed")), link_to_feed, :class => "rss") 
   end
   
   #1: default shows just the link to help
@@ -183,7 +183,7 @@ module ApplicationHelper
    end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
-  def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
+  def link_to_help(help_entry, link = '<span class="symbol" aria-hidden="true" data-icon="&#xe0a3;" title="Help"></span><span class="landmark">(Help)</span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
@@ -193,7 +193,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
@@ -361,8 +361,9 @@ module ApplicationHelper
   end
   
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
-      <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"email\">
+      <span class=\"symbol\" aria-hidden=\"true\" data-icon=\"\ue0ce\" title=\"Email #{h(user.login)}\"></span>
+      <span class=\"landmark\">Email #{h(user.login)}</span>
     </a>".html_safe
   end
 

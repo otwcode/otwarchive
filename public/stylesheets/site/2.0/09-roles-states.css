@@ -82,6 +82,13 @@ span.offered.requested {
   content: none;
 }
 
+/* font and content to create a symbol (e.g. envelope for email links, lock for restricted works, question mark for help links); glyphs and corresponding Unicode character codes in fonts/Entypo/index.html */
+
+[data-icon]:before {
+  font-family: 'Entypo-for-Archive-of-Our-Own';
+  content: attr(data-icon);
+}
+
 /* CONTEXTS */
 
 .dashboard .own {
