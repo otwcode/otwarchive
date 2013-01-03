@@ -188,7 +188,7 @@ a.rss, a.help, a.email, .symbol {
   font-weight: normal;
 }
 
-.restricted .symbol { 
+.help .symbol, .restricted .symbol { 
   color: #0000CD;
 }
 
