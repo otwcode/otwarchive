@@ -73,9 +73,6 @@ span.error {
   display: block;
 }
 
-/* SYMBOLS (mostly help button, arguably an action but hey ho); 
-IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot */
-
 /*SYMBOLS KEY (help content) */
 
 dl#symbols-key dt {
