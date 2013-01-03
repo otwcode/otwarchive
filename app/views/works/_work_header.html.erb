@@ -14,8 +14,18 @@
 <div id="workskin">
   <div class="preface group">
     <h2 class="title heading">
-      <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-      <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <% if @work.restricted %>
+        <span class="restricted">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+          <span class="landmark"><%= ts("Restricted") %></span>
+        </span>
+      <% end %>
+      <% if @work.hidden_by_admin %>
+        <span class="flagged">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+          <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+        </span>
+      <% end %>
       <%= @work.title.html_safe %>
     </h2>
     <h3 class="byline heading">

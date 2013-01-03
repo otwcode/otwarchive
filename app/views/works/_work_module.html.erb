@@ -22,8 +22,18 @@
       <% unless work.recipients.blank? %>
         <%= ts("for") %> <%= recipients_link(work) %>
       <% end %>
-      <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-      <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <% if work.restricted %>
+        <span class="restricted">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+          <span class="landmark"><%= ts("Restricted") %></span>
+        </span>
+      <% end %>
+      <% if work.hidden_by_admin %>
+        <span class="flagged">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+          <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+        </span>
+      <% end %>
     </h4>
 
   	<h5 class="fandoms heading" title="fandom">

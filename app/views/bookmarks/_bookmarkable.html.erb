@@ -12,10 +12,16 @@
   <!--title, byline, fandom-->
     <h4 class="heading">
       <% if bookmarkable.respond_to?(:restricted) && bookmarkable.restricted %>
-        <%= image_tag("lockblue.png", :size => "15x15", :alt => ts("(Restricted)"), :title => "Restricted") %>
+        <span class="restricted">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+          <span class="landmark"><%= ts("Restricted") %></span>
+        </span>
       <% end %>
       <% if bookmarkable.respond_to?(:hidden_by_admin) && bookmarkable.hidden_by_admin %>
-        <%= image_tag("lockred.png", :size => "15x15", :alt => ts("(Hidden by Admin)"), :title => "Hidden by Administrator") %>
+        <span class="flagged">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+          <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+        </span>
       <% end %>
       <%= link_to bookmarkable.title, bookmarkable %>
       <%= ts('by') %>
