@@ -183,7 +183,7 @@ module ApplicationHelper
    end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
-  def link_to_help(help_entry, link = '<span class="symbol" aria-hidden="true" data-icon="&#xe0a3;" title="Help"></span><span class="landmark">(Help)</span>'.html_safe)
+  def link_to_help(help_entry, link = '<span class="symbol" aria-hidden="true" data-icon="&#xe0a3;" title="Help"></span><span class="landmark">Help</span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
