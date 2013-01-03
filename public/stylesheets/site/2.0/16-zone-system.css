@@ -118,4 +118,15 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
   margin: 0.643em;
 }
 
+/* ZONE: SYSTEM: FAQS: TAG GUIDELINES */
+
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .userstuff .example { 
+  margin: 0.643em 3.958em; 
+  padding: 0.643em;
+} 
+
+.faq .userstuff .example {
+  border: 1px solid #c2d2df;
+}
+
 /*END== */
