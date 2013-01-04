@@ -121,7 +121,6 @@ module WorksHelper
     link_to ts("Mark as read"), marktoread_work_path(work)
   end
 
-  # how do I make it so tag isn't required, thus producing numb of arg errors?
   private
   def add_label_for_embed(label, text, tag='') ; text.blank? ? nil : label + text + tag; end
 
