@@ -118,7 +118,7 @@ class ChaptersController < ApplicationController
               redirect_to [@work, @chapter]
             end
         elsif @work.save
-          flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
+          setflash; flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
           redirect_to [:preview, @work, @chapter]
         else
           render :new
@@ -141,9 +141,9 @@ class ChaptersController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @chapter.posted?
-        flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
+        setflash; flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
       else
-        flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
+        setflash; flash[:notice] = ts("This is a draft which shows what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. This draft will be stored until you post or discard it.")
       end
       render :preview
     elsif params[:cancel_button]
