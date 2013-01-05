@@ -88,8 +88,8 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if params[:work_id]
-      theWork = Work.find(params[:work_id])
-      if theWork.restricted && !logged_in?
+      work = Work.find(params[:work_id])
+      if work.restricted && !logged_in?
         redirect_to login_path(:restricted_commenting => true) and return
       end
     end
