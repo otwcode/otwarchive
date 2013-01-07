@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   end
 
   def has_no_credentials?
-    self.crypted_password.blank? && self.identity_url.blank?
+    self.crypted_password.blank?
   end
 
   # Authorization plugin
@@ -46,9 +46,6 @@ class User < ActiveRecord::Base
   acts_as_authorizable
   has_many :roles_users
   has_many :roles, :through => :roles_users
-
-  # OpenID plugin
-  attr_accessible :identity_url
 
   ### BETA INVITATIONS ###
   has_many :invitations, :as => :creator

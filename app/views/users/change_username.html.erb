@@ -11,15 +11,6 @@
   <li><%= span_if_current ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
   <li><%= span_if_current ts("Change Email"), change_email_user_path(@user) %></li>
-  <% if ArchiveConfig.USE_OPENID %>	
-    <li>
-    <% if @user.identity_url %>
-      <%= link_to ts("Change My OpenID"), change_openid_user_path(@user) %>
-    <% else %>
-      <%= link_to ts("Add An OpenID"), change_openid_user_path(@user) %>
-    <% end %>
-    </li>
-  <% end %>
 </ul> 
 <!--/subnav-->
 

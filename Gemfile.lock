@@ -153,9 +153,6 @@ GEM
     rack (1.2.4)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
-    rack-openid (1.2.0)
-      rack (>= 1.1.0)
-      ruby-openid (>= 2.1.8)
     rack-test (0.5.7)
       rack (>= 1.0)
     rails (3.0.4)
@@ -207,7 +204,6 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby-debug-base19 (>= 0.11.19)
-    ruby-openid (2.1.8)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
@@ -286,7 +282,6 @@ DEPENDENCIES
   paperclip (>= 2.3.16)
   permit_yo
   pickle
-  rack-openid (>= 0.2.1)
   rails (= 3.0.4)
   redis (>= 3.0)
   redis-namespace
