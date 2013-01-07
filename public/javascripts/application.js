@@ -30,7 +30,7 @@ $j(document).ready(function() {
     $j('.commas li:last-child').addClass('last');
 
     // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
-    $j('#comments_placeholder a[data-remote], .actions.work .comments a').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
+    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
 
 function visualizeTables() {
@@ -197,18 +197,6 @@ jQuery(function($){
     });
   });
 });
-
-// Timepicker
-jQuery(function($) {
-  $('.timepicker').datetimepicker({
-    ampm: true,
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mmTT',
-    hourGrid: 5,
-    minuteGrid: 10
-  });
-});
-
 
 // Set up open and close toggles for a given object
 // Typical setup (this will leave the toggled item open for users without javascript but hide the controls from them):

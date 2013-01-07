@@ -13,9 +13,9 @@
         <% end %>
         <li>
           <% if fandom.merger %>
-            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
           <% else %>
-            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :fandom_id => fandom.id} %> (<%= fandom.work_count %>)
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :fandom_id => fandom.id} %> (<%= fandom.work_count %>)
           <% end %>
         </li>
      <% end %>
@@ -24,7 +24,7 @@
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
-            <%= link_to ts("Hide full list"), [@user, @author] %>
+            <%= link_to ts("Hide full list"), [@user, @pseud] %>
           <% else %>
             <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
           <% end %>
@@ -45,7 +45,7 @@
       <% end %>
     </ul>
     <% if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-      <ul class="navigation actions" role="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
+      <ul class="navigation actions" role="navigation"><li><%= @pseud ? print_pseud_works_link(@pseud) : print_works_link(@user) %></li></ul>
     <% end %>
   </div>
   <% end %>
@@ -57,9 +57,9 @@
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
       <% end %>
-      <% if @author %>
-        <% if @author.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation actions" role="navigation"><li><%= print_pseud_series_link(@author) %></li></ul>
+      <% if @pseud %>
+        <% if @pseud.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="navigation actions" role="navigation"><li><%= print_pseud_series_link(@pseud) %></li></ul>
         <% end %>
       <% else %>
         <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
@@ -78,9 +78,9 @@
         <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
       <% end %>
       <% unless @user == User.orphan_account %>
-        <% if @author %>
-          <% if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation actions" role="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
+        <% if @pseud %>
+          <% if @pseud.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+            <ul class="navigation actions" role="navigation"><li><%= print_pseud_bookmarks_link(@pseud) %></li></ul>
           <% end %>
         <% else %>
           <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>

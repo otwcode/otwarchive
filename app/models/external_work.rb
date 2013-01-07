@@ -2,11 +2,9 @@ include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   
   include Taggable
+  include Bookmarkable
 
   attr_protected :summary_sanitizer_version
-  
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
   
   has_many :related_works, :as => :parent  
   
@@ -32,16 +30,16 @@ class ExternalWork < ActiveRecord::Base
   
   validates_presence_of :title
   validates_length_of :title, :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title, :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
       
   validates_presence_of :author
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
-    :too_long=> t('author_too_long', :default => "must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
 
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them
@@ -95,7 +93,7 @@ class ExternalWork < ActiveRecord::Base
   ####################################################################### 
  
   # FILTERING CALLBACKS
-  before_save :check_filter_taggings
+  after_save :check_filter_taggings
   
   # Add and remove filter taggings as tags are added and removed
   def check_filter_taggings

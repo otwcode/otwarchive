@@ -18,7 +18,7 @@ Feature: Work Drafts
   Given the work indexes are updated
     When I fill in "site_search" with "draft"
       And I press "search"
-    Then I should see "0 Found"
+    Then I should see "No results found"
 
   Scenario: Posting drafts from drafts page
     Given I am logged in as "drafter" with password "something"

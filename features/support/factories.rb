@@ -70,14 +70,14 @@ end
 
 Factory.define :work do |f|
   f.title "My title"
+  f.fandom_string "Testing"
+  f.rating_string "Not Rated"
+  f.warning_string "No Archive Warnings Apply"
+  chapter_info = { content: "This is some chapter content for my work." }
+  f.chapter_attributes chapter_info
 
   f.after_build do |work|
-    work.chapters = [Factory.build(:chapter, :work => work)] if work.chapters.blank?
     work.authors = [Factory.build(:pseud)] if work.authors.blank?
-    work.fandoms = [Factory.build(:fandom)] if work.fandoms.blank?
-    work.characters = [Factory.build(:character)] if work.characters.nil?
-    work.relationships = [Factory.build(:relationship)] if work.relationships.nil?
-    work.freeforms = [Factory.build(:freeform)] if work.freeforms.nil?
   end
 end
 
@@ -101,31 +101,63 @@ Factory.define :external_work do |f|
   end
 end
 
+Factory.define :collection_participant do |f|
+  f.association :pseud
+  f.participant_role "Owner"
+end
+
+Factory.define :collection_preference do |f|
+  f.association :collection
+end
+
+Factory.define :collection_profile do |f|
+  f.association :collection
+end
+
+Factory.define :collection do |f|
+  f.sequence(:name) {|n| "basic_collection_#{n}"}
+  f.sequence(:title) {|n| "Basic Collection #{n}"}
+    
+  f.after_build do |collection|
+    collection.collection_participants.build(pseud_id: Factory.create(:pseud).id, participant_role: "Owner")
+  end
+end
+
 Factory.define :subscription do |f|
   f.association :user
   f.subscribable_type "Series"
   f.subscribable_id { Factory.create(:series).id }
 end
 
-# Factory.define :collection_participant do |f|
-#   f.association :pseud
-#   f.association :collection
-#   f.participant_role = "Owner"
-# end
-# 
-# Factory.define :collection_preference do |f|
-#   f.association :collection
-# end
-# 
-# Factory.define :collection_profile do |f|
-#   f.association :collection
-# end
-# 
-# Factory.define :collection do |f|
-#   f.sequence(:name) = {|n| "basic_collection_#{n}"}
-#   f.sequence(:title) = {|n| "Basic Collection #{n}"}
-#   
-#   f.association :user
-#   f.association :collection_preference
-#   f.association :collection_profile
-# end
+Factory.define :owned_tag_set do |f|
+  f.sequence(:title) {|n| "Owned Tag Set #{n}"}
+  f.nominated true
+  f.after_build do |owned_tag_set|
+    owned_tag_set.build_tag_set
+    owned_tag_set.add_owner(Factory.create(:pseud))
+  end
+end
+
+Factory.define :tag_set_nomination do |f|
+  f.association :owned_tag_set
+  f.association :pseud
+end
+
+Factory.define :challenge_assignment do |f| 
+  f.after_build do |assignment|
+    assignment.collection_id = Factory.create(:collection, :challenge => GiftExchange.new).id unless assignment.collection_id
+    assignment.request_signup = Factory.create(:challenge_signup, :collection_id => assignment.collection_id)
+    assignment.offer_signup = Factory.create(:challenge_signup, :collection_id => assignment.collection_id)
+  end
+end
+
+Factory.define :challenge_signup do |f|
+  f.after_build do |signup|
+    signup.pseud_id = Factory.create(:pseud).id unless signup.pseud_id
+    signup.collection_id = Factory.create(:collection, :challenge => GiftExchange.new).id unless signup.collection_id
+    signup.offers.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
+    signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
+  end
+end
+
+

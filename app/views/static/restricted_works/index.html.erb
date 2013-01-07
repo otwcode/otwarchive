@@ -1,6 +1,6 @@
 <div class="works-index">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading">Restricted Works</h2>
+  <h2 class="heading"><%= ts("Restricted Works") %></h2>
 
   <ul class="index group">
     <% for work in @works %>
@@ -8,10 +8,10 @@
       <li class="work blurb group" role="article">
         <div class="header module">
           <h4 class="heading" title="title">
-      	    <%= link_to work.title.html_safe, {:controller => "yuletide2010", :action => :restricted_work, :id => "#{work.id}-#{work.title.parameterize}"} %>
-       		  by <%= byline(work) %>
+      	    <%= link_to work.title.html_safe, static_collection_restricted_work_path(@collection, "#{work.id}-#{work.title.parameterize}") %>
+       		  <%= ts("by") %> <%= byline(work) %>
             <% unless work.recipients.blank? %>
-            for <%= recipients_link(work) %>
+            <%= ts("for") %> <%= recipients_link(work) %>
             <% end %>
           </h4>
 
@@ -20,7 +20,7 @@
       	  </h5>
         </div>
 	  
-      	<h6 class="landmark heading">Tags</h6>
+      	<h6 class="landmark heading"><%= ts("Tags") %></h6>
       	<p class="tags">
       	  <% tags = (tag_groups['Rating'] || []) + 
       	            (tag_groups['Warning'] || []) + 
@@ -33,7 +33,7 @@
 
         <!--summary-->	
       	<% unless work.summary.blank? %>
-      		<h6 class="landmark heading">Summary</h6>
+      		<h6 class="landmark heading"><%= ts("Summary") %></h6>
       		<blockquote class="userstuff summary" title="summary">
       		  <%=raw strip_images(sanitize_field(work, :summary)) %>
       		</blockquote>
@@ -41,9 +41,9 @@
 
         <!--stats-->
       	<dl class="stats" title="stats">
-      		<dt>Words: </dt>
+      		<dt><%= ts("Words") %>: </dt>
       		<dd><%= number_with_delimiter(work.word_count) %></dd>
-      		<dt>Chapters: </dt>
+      		<dt><%= ts("Chapters") %>: </dt>
       		<dd><%= work.chapter_total_display %></dd>
       	</dl>
       </li>

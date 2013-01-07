@@ -137,8 +137,7 @@ module WorksHelper
     if work.anonymous?
       profile_link = ts("Anonymous")
     else
-      profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon", :border => "0"), user_profile_url(pseud.user)) +
-                                    link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
+      profile_link = work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
     end
 
     chapters_text = ts("Chapters: ") + work.chapter_total_display

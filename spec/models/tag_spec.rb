@@ -6,6 +6,10 @@ describe Tag do
   before(:each) do
     @tag = Tag.new
   end
+  
+  after(:each) do
+    User.current_user = nil
+  end
 
   it "should not be valid without a name" do
     @tag.save.should_not be_true
@@ -343,9 +347,81 @@ describe Tag do
       tag = Tag.find(tag.id)
       tag.should be_a(Character)
     end
+  end      
+
+  describe "multiple tags of the same type" do
+    before do
+      # set up three tags of the same type
+      @canonical_tag = Factory.create(:fandom)
+      @syn_tag = Factory.create(:fandom)
+      @sub_tag = Factory.create(:fandom)
+    end
+    
+    it "should let you make a tag the synonym of a canonical one" do
+      @syn_tag.syn_string = @canonical_tag.name
+      @syn_tag.save
+
+      @syn_tag.merger.should eq(@canonical_tag)
+      @canonical_tag = Tag.find(@canonical_tag.id)
+      @canonical_tag.mergers.should eq([@syn_tag])
+    end
+    
+    it "should let you make a canonical tag the subtag of another canonical one" do
+      @sub_tag.meta_tag_string = @canonical_tag.name
+
+      @canonical_tag.sub_tags.should eq([@sub_tag])
+      @sub_tag.meta_tags.should eq([@canonical_tag])
+    end
+    
+    describe "with a synonym and a subtag" do
+      before do
+        @syn_tag.syn_string = @canonical_tag.name
+        @syn_tag.save
+        @sub_tag.meta_tag_string = @canonical_tag.name
+      end
+      
+      describe "and works under each" do
+        before do
+          # create works with all three tags
+          @direct_work = Factory.create(:work, :fandom_string => @canonical_tag.name)
+          @syn_work = Factory.create(:work, :fandom_string => @syn_tag.name)
+          @sub_work = Factory.create(:work, :fandom_string => @sub_tag.name)
+        end
+        
+        it "should find all works that would need to be reindexed" do      
+          # get all the work ids that it would queue
+          @syn_tag.all_filtered_work_ids.should eq([@syn_work.id])
+          @sub_tag.all_filtered_work_ids.should eq([@sub_work.id])
+          @canonical_tag.all_filtered_work_ids.should eq([@direct_work.id, @syn_work.id, @sub_work.id])
+      
+          # make sure the canonical tag continues to have the right ids even if set to non-canonical
+          @canonical_tag.canonical = false
+          @canonical_tag.all_filtered_work_ids.should =~ [@direct_work.id, @syn_work.id, @sub_work.id]
+      
+        end
+      end
+      
+      describe "and bookmarks under each" do
+        before do
+          # create bookmarks with all three tags
+          @direct_bm = Factory.create(:bookmark, :tag_string => @canonical_tag.name)
+          @syn_bm = Factory.create(:bookmark, :tag_string => @syn_tag.name)
+          @sub_bm = Factory.create(:bookmark, :tag_string => @sub_tag.name)
+        end
+        
+        it "should find all bookmarks that would need to be reindexed" do
+          @syn_tag.all_bookmark_ids.should eq([@syn_bm.id])
+          @sub_tag.all_bookmark_ids.should eq([@sub_bm.id])
+          @canonical_tag.all_bookmark_ids.should  =~ [@direct_bm.id, @syn_bm.id, @sub_bm.id]
+        end
+      end
+      
+    end
+    
   end
 
   describe "update_taggings_count" do
     it "should reflect the actual number of uses"
   end
+
 end

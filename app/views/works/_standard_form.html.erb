@@ -43,7 +43,7 @@
     <legend><%= ts('Associations') %></legend>
     <h3 class="landmark heading"><%= ts('Associations') %></h3>
     <dl>
-      <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted).empty? || !@work.challenge_assignments.empty? %>
+      <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted.sent).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %><%= link_to_help "add-work-to-assignment" %>
@@ -68,7 +68,7 @@
        
       <!-- Add collection -->
       <dt class="collection">
-        <%= f.label :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-work-to-collection" %>
+        <%= f.label :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-collectible-to-collection" %>
       </dt>
       <dd class="collection" title="post to collection">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>

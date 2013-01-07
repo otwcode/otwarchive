@@ -37,8 +37,22 @@ class StatCounter < ActiveRecord::Base
       stat_counter = StatCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
       $redis.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
+    
+    # queue the works for reindexing
+    # we might have to reduce the frequency of this -- will see!
+    RedisSearchIndexQueue.queue_works(work_ids, without_bookmarks: true)
   end
+  
+  # Update stat counters and search indexes for works with new kudos, comments, or bookmarks.
+  # TODO: build out redis tracking to actually store kudos and reduce the load on mysql
+  def self.stats_to_database
+    work_ids = $redis.smembers('works_to_update_stats').map{ |id| id.to_i }
 
+    Work.where(id: work_ids).find_each do |work|
+      work.update_stat_counter
+      $redis.srem('works_to_update_stats', work.id)
+    end
+  end
 
   # Move download counts and referers from logs to database
   def self.logs_to_database

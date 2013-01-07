@@ -10,7 +10,7 @@
 <% if @collection %>
   <!-- custom css for header -->
   <style type="text/css">
-  #header h2, #footer { 
+  #header h2 { 
     background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
       <% height = (size = FastImage.size(header_url, :timeout => 1)) ? size[1].to_s + 'px' : '100%' %>
       url(<%= header_url %>); height: <%= height %>
@@ -47,7 +47,8 @@
     <li><%= span_if_current('bookmarks', bookmarks_path) %></li>
     <li><%= span_if_current('tags', tags_path) %></li>
     <li><%= span_if_current('collections', collections_path) %></li>
-	<li class="search"><%= render :partial => 'works/search_box' %></li>
+    <li class="search"><%= render :partial => 'works/search_box' %></li>
+    <li><%= link_to ts("Advanced Search"), search_works_path, class: 'unbuttoned' %></li>
   </ul>
 
   <% if logged_in_as_admin? %>

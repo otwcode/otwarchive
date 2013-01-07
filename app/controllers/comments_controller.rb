@@ -60,7 +60,7 @@ class CommentsController < ApplicationController
       @commentable = AdminPost.find(params[:admin_post_id])
     elsif params[:tag_id]
       @commentable = Tag.find_by_name(params[:tag_id])
-      @page_subtitle = @commentable.name
+      @page_subtitle = @commentable.try(:name)
     end
   end
 
@@ -87,6 +87,12 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
+    if params[:work_id]
+      work = Work.find(params[:work_id])
+      if work.restricted && !logged_in?
+        redirect_to login_path(:restricted_commenting => true) and return
+      end
+    end
     if @commentable.nil?
       setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)

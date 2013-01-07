@@ -18,15 +18,15 @@ class SeriesController < ApplicationController
       unless @user
         raise ActiveRecord::RecordNotFound and return
       end
-      @page_subtitle = ts("by ") + @user.login
+      @page_subtitle = ts("%{username} - Series", username: @user.login)
       pseuds = @user.pseuds
       if params[:pseud_id]
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
-        unless @author
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @pseud
           raise ActiveRecord::RecordNotFound and return
         end
-        @page_subtitle = ts("by ") + @author.byline
-        pseuds = [@author]
+        @page_subtitle = ts("by ") + @pseud.byline
+        pseuds = [@pseud]
       end
     end
     if pseuds        
