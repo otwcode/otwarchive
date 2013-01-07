@@ -292,6 +292,10 @@ public
     return true if current_user.preference && current_user.preference.adult
     return false
   end
+  
+  def use_caching?
+    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
+  end
 
   protected
 
@@ -364,7 +368,7 @@ public
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'
-      allowed = ['collections.title', 'collections.created_at', 'item_count']
+      allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
       allowed = %w(fandom created_at prompter)
     elsif model.to_s.downcase == 'claim'

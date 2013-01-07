@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'bundler', '~>1.0.0'
+gem 'bundler'
 
 gem 'rails', '3.0.4'
 
@@ -10,6 +10,13 @@ gem 'rails', '3.0.4'
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
+
+# Version of redis-rb gem
+# We are currently running Redis 2.6.4 (12/6/2012)
+gem 'redis', ">=3.0"
+gem 'redis-namespace'
+
+# Here are all our application-specific gems
 
 gem 'will_paginate', '>=3.0.2'
 # gem 'will_paginate',
@@ -25,11 +32,8 @@ gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
-gem 'thinking-sphinx',
-  :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
-  :branch  => 'rails3',
-  :require => 'thinking_sphinx'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
+gem 'tire'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
@@ -38,11 +42,6 @@ gem 'paperclip', '>=2.3.16'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
-
-gem 'tolk',
-  :git => 'git://github.com/ambtus/tolk.git',
-  :branch => 'rails3',
-  :require => 'tolk'
 
 gem 'authlogic',
   :git     => 'git://github.com/odorcicd/authlogic.git',
@@ -67,7 +66,9 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
-gem 'newrelic_rpm'
+gem 'rpm_contrib'
+gem 'newrelic_rpm', ">= 3.5.3.25"
+gem 'newrelic-redis'
 
 # for generating graphs
 gem "google_visualr", ">= 2.1"
@@ -86,6 +87,7 @@ group :test do
   # cuke fast
   gem 'fakeweb'
   gem 'vcr'
+  gem 'delorean'
 end
 
 # Deploy with Capistrano

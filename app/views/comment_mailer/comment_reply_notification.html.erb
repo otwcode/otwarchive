@@ -1,6 +1,10 @@
 <h4 class="heading">
 <% if @comment.comment_owner %>
-  <%= link_to @comment.comment_owner_name, polymorphic_url(@comment.comment_owner, :only_path => false) %>
+  <% if @comment.comment_owner.is_author_of?(@comment.ultimate_parent) && @comment.ultimate_parent.anonymous? %>
+    <%= "Anonymous Creator" %>
+  <% else %>
+    <%= link_to @comment.comment_owner_name, polymorphic_url(@comment.comment_owner, :only_path => false) %>
+  <% end %>
 <% else %>
   <%= @comment.comment_owner_name %>
 <% end %>
@@ -17,8 +21,11 @@
 <blockquote>
 <%=raw @your_comment.sanitized_content %>
 </blockquote>
-
-<p><%= @comment.comment_owner_name %> <%= ts("responded") %>:</p>
-<p><%=raw @comment.sanitized_content %></p>
-
+<% if @comment.comment_owner && @comment.comment_owner.is_author_of?(@comment.ultimate_parent) && @comment.ultimate_parent.anonymous? %>
+  <p><%= "Anonymous Creator" %> <%= ts("responded") %>:</p>
+  <p><%=raw @comment.sanitized_content %></p>
+<% else %>
+  <p><%= @comment.comment_owner_name %> <%= ts("responded") %>:</p>
+  <p><%=raw @comment.sanitized_content %></p>
+<% end %>
 <%= render :partial => 'comment_notification_footer' %>

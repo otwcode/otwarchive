@@ -38,10 +38,11 @@ module PromptRestrictionsHelper
     result += content_tag(:dt, form.label(:rating_num_required, ts("Rating(s):")))
     result += required_and_allowed(form, "rating", allowany)
 
-    result += content_tag(:dt, form.label(:category_num_required, ts("Categories:")))
+    result += content_tag(:dt, form.label(:category_num_required, ts("Categories:")) +
+                          link_to_help("challenge-category-tags"))
     result += required_and_allowed(form, "category", allowany)
 
-    result += content_tag(:dt, form.label(:freeform_num_required, ts("Freeform(s):")))
+    result += content_tag(:dt, form.label(:freeform_num_required, ts("Additional tag(s):")))
     result += required_and_allowed(form, "freeform", allowany)
 
     result += content_tag(:dt, form.label(:warning_num_required, ts("Archive Warning(s):")))

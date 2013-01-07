@@ -129,45 +129,17 @@ Scenario: Create a bookmark
       And I follow "Bookmark"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-    When I go to the bookmarks page
-    Then I should see "Secret Masterpiece"
     When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Mystery"
       But I should see "Public Masterpiece"
       And I should see "Publicky"
-    When I follow "View Recs Only"
-    Then I should see "Public Masterpiece"
-      But I should not see "Publicky"
     When I go to another_bookmark_user's bookmarks page
     Then I should not see "Secret Masterpiece"
     When I am logged in as "first_bookmark_user"
       And I go to another_bookmark_user's bookmarks page
     Then I should see "Secret Masterpiece"
-    When I go to the bookmarks page
-    Then I should see "Secret Masterpiece"
-      And I should see "Mystery"
-      And I should see "Public Masterpiece"
-      And I should see "Publicky"
-    When I follow "View Recs Only"
-    Then I should see "Secret Masterpiece"
-      But I should not see "Mystery"
-      And I should see "Public Masterpiece"
-      But I should not see "Publicky"
-    When I go to the bookmarks page
-    Then I should see "Stargate SG-1"
-      And I should see "Secret Masterpiece"
-      And I should see "Mystery"
-      And I should see "Public Masterpiece"
-      And I should see "Publicky"
-    When I am logged out
-      And I go to the bookmarks page
-    Then I should see "Stargate SG-1"
-      And I should not see "Secret Masterpiece"
-      And I should not see "Mystery"
-      But I should see "Public Masterpiece"
-      And I should see "Publicky"
 
 Scenario: extra commas in bookmark form (Issue 2284)
 
@@ -177,3 +149,4 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I fill in "Your Tags" with "Good tag, ,, also good tag, "
     And I press "Create"
   Then I should see "created"
+

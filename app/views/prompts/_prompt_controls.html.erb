@@ -6,43 +6,38 @@
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
   <ul class="navigation actions" role="menu">
-    <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
-    <% if (challenge.signup_open && user == current_user) || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || (collection.challenge_type == "PromptMeme" && collection.user_is_maintainer?(current_user)) %>
+    <% # The edit link should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
+    <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
-          <%= link_to(ts('Edit whole signup'), edit_collection_signup_path(collection, challenge_signup)) %>
+        <%= link_to(ts('Edit Sign-up'), edit_collection_signup_path(collection, challenge_signup)) %>
       </li>
       <li>
-          <%= link_to(ts('Edit prompt'), edit_collection_prompt_path(collection, prompt)) %>
-      </li>
-    <% end %>
-    <% # The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme and if they haven't hit the max number of prompts %>
-    <% if (challenge.signup_open && user == current_user && controller.action_name == "show" && collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge.requests_num_allowed)  %>
-      <li>
-        <%= link_to ts('Add another prompt'), new_collection_prompt_path(collection) %>
+        <%= link_to(ts('Edit Prompt'), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
-    <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-		<% # it will also be hidden if the user already has the minimum number of prompts so can't delete without editing or deleting signup %>
+    
+    <% # The delete link should show up if signups are open and the current user owns the prompt, OR if the current user is a maintainer, AND only if the signup has more than the minimum number of prompts %>
     <% if ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) && prompt.can_delete? %>
     <li>
-        <%= link_to ts("Delete"), 
-          collection_prompt_path(collection, prompt), 
-          :confirm => ts("Are you sure? All information in this prompt will be lost."), 
-          :method => :delete %>
+      <%= link_to ts("Delete Prompt"), 
+        collection_prompt_path(collection, prompt), 
+        :confirm => ts("Are you sure? All information in this prompt will be lost."), 
+        :method => :delete %>
     </li>
     <% end %>
     
-    <% # if this prompt can be claimed let the user unclaim/claim it %>
+    <% # The claiming and fulfilling options should show up if the prompt is claimable %>
     <% if prompt.claimable? %>
-      <% if !logged_in? %>
-        <li><%= ts("Sign in to claim prompts") %></li>
-      <% elsif (claim ||= prompt.claim_by(current_user).first) %>
-        <% # already claimed %>
-        <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
-        <li>
-          <%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
-        </li>
-      <% else %>
+      <% # The drop link should always show up if the user has claimed the prompt and the fulfil link should sometimes show up %>
+      <% if (claim ||= prompt.claim_by(current_user).first) %>
+        <% # The fulfill link should show up if the collection is open OR if the current user is the maintainer %>
+        <% if !collection.closed? || collection.user_is_maintainer?(current_user) %>
+          <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
+        <% end %>
+        <% # The drop claim link should show up if the current user has claimed the prompt %>
+        <li><%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %></li>
+        <% # The claim link should show up if the user has not already claimed the prompt %>
+        <% else %>
         <li>
           <% new_claim = ChallengeClaim.new %>
             <%= form_for [collection, new_claim], :url => collection_claims_path(collection) do |claim_form| %>
@@ -50,7 +45,7 @@
                 <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
                 <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
                 <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-                <%= submit_tag "Claim", :id => "prompt_" + prompt.id.to_s %>
+                <%= submit_tag ts("Claim"), :id => "prompt_" + prompt.id.to_s %>
             <% end %>
         </li>
       <% end %>

@@ -246,6 +246,7 @@ Otwarchive::Application.routes.draw do
     resources :works do
       collection do
         get :drafts
+        get :collected
         get :show_multiple
         post :edit_multiple
         put :update_multiple
@@ -331,6 +332,8 @@ Otwarchive::Application.routes.draw do
   resources :collections do
     collection do
       get :list_challenges
+      get :list_ge_challenges
+      get :list_pm_challenges
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections
@@ -497,9 +500,8 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-  resources :search, :only => :index
 
-  match 'search' => 'search#index'
+  match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'

@@ -4,7 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection and post to it
 
-Scenario: Create a collection, post a work to it
+Scenario: Create a collection
 
   Given I am logged in as "first_user"
   When I post the work "Test work thingy"
@@ -17,6 +17,12 @@ Scenario: Create a collection, post a work to it
     And I fill in "Introduction" with "Welcome to the collection"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a collection</dd></dl>"
     And I fill in "Rules" with "Be nice to people"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_moderated"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_closed"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_unrevealed"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_anonymous"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_show_random"
+    And I check the 1st checkbox with id matching "collection_collection_preference_attributes_email_notify"
     And I submit
   Then I should see "Collection was successfully created"
   When I follow "Profile"
@@ -24,6 +30,11 @@ Scenario: Create a collection, post a work to it
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a collection" within "#faq"
     And I should see "Be nice to people" within "#rules"
+    
+Scenario: Post to collection from the work edit page
+  Given I have the collection "My Collection Thing" with name "collection_thing"
+    And basic tags
+    And I am logged in as "first_user"
   When I post the work "collect-y work"
     And I go to first_user's user page
   Then I should see "collect-y work"

@@ -26,9 +26,14 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/1.xml
   def show
     @admin_posts = AdminPost.non_translated.order('created_at DESC').limit(8)
-    @admin_post = AdminPost.find(params[:id])
+    @admin_post = AdminPost.find_by_id(params[:id])
+    unless @admin_post
+      flash[:error] = ts("We couldn't find that admin post.")
+      redirect_to admin_posts_path and return
+    end
     @commentable = @admin_post
     @comments = @admin_post.comments
+    @page_subtitle = @admin_post.try(:title)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @admin_post }

@@ -1,13 +1,17 @@
 <p><%= ts("Hello, %{name}!", :name => @user.login) %></p>
 
 <p>
-<%= ts("A gift story has been posted for you ") %>
-<%= @collection ? "in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
+<%= ts("A gift story has been posted for you") %> <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
 </p>
 
 <p>
-  <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
-  by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
+  <% if @collection.nil? %>
+    <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
+    by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
+  <% else %>
+    <%= link_to @work.title.html_safe, collection_work_url(@collection, @work) %><%= "(#{@work.word_count} words)" %><br />
+    by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
+  <% end %>
   <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %><br />
   <% unless @work.summary.blank? %>
     Summary: 
@@ -23,5 +27,5 @@
 
 <p>
   Please note: if you don't want to receive emails like this one, you can set your preferences 
-  at the archive not to receive notification of gift stories.
+  at the Archive not to receive notification of gift stories.
 </p>
