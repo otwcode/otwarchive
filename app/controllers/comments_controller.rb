@@ -87,6 +87,12 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
+    if params[:work_id]
+      work = Work.find(params[:work_id])
+      if work.restricted && !logged_in?
+        redirect_to login_path(:restricted_commenting => true) and return
+      end
+    end
     if @commentable.nil?
       setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
