@@ -73,7 +73,7 @@ class UsersController < ApplicationController
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
                    group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed &
+                   Work.visible_to_all.revealed.non_anon &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
     INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
@@ -85,7 +85,7 @@ class UsersController < ApplicationController
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
                    group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed &
+                   Work.visible_to_registered_user.revealed.non_anon &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
     INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
