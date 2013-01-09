@@ -326,8 +326,10 @@ class Pseud < ActiveRecord::Base
           end
         end
       end
-      comment_ids = creation.find_all_comments.collect(&:id).join(",")
-      Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+      comments.each do |comment|
+        comment.update_attribute(:pseud_id, pseud.id)
+      end
     elsif creation.is_a?(Series) && options[:skip_series]
       creation.works.each {|work| self.change_ownership(work, pseud)}
     end
