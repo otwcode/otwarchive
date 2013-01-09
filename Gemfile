@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler'
 
-gem 'rails', '3.0.4'
+gem 'rails', '3.0.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -24,6 +24,8 @@ gem 'will_paginate', '>=3.0.2'
   # :git     => 'git://github.com/huerlisi/will_paginate.git',
   # :branch  => 'rails3',
   # :require => 'will_paginate'
+
+gem 'nested_has_many_through'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
