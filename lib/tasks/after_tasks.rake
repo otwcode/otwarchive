@@ -373,6 +373,15 @@ namespace :After do
     end
   end
 
+  desc "Set initial values for sortable tag names"
+  task(:sortable_tag_names => :environment) do
+    Fandom.find_each do |fandom|
+      fandom.set_sortable_name
+      puts fandom.sortable_name
+      fandom.save
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
