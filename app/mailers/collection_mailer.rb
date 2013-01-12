@@ -4,7 +4,6 @@ class CollectionMailer < ActionMailer::Base
   helper :application
   helper :tags
   helper :works
-  helper :series
 
   layout 'mailer'
   default :from => ArchiveConfig.RETURN_ADDRESS

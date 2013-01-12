@@ -29,6 +29,8 @@ class Work < ActiveRecord::Base
   has_many :serial_works, :dependent => :destroy
   has_many :series, :through => :serial_works
 
+  has_many :work_keys, :dependent => :destroy
+
   has_many :related_works, :as => :parent
   has_many :approved_related_works, :as => :parent, :class_name => "RelatedWork", :conditions => "reciprocal = 1"
   has_many :parent_work_relationships, :class_name => "RelatedWork", :dependent => :destroy
@@ -210,7 +212,7 @@ class Work < ActiveRecord::Base
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
   end
-  
+
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
@@ -419,6 +421,15 @@ class Work < ActiveRecord::Base
     Collection.where(id: self.collection_ids) || []
   end
 
+  # Transfer ownership of this work to the AnonymousCreator account
+  def transfer_to_anonymous=(setting)
+    if setting == "1"
+      self.authors << nil
+      new_user = User.find_by_login("AnonymousCreator")
+      old_user = User.current_user
+      change_ownership(old_user, new_user)
+    end
+  end
   ########################################################################
   # VERSIONS & REVISION DATES
   ########################################################################
@@ -482,7 +493,7 @@ class Work < ActiveRecord::Base
     elsif !attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
-      new_series.restricted = self.restricted
+      new_series.restrictedrestricted = self.restricted
       new_series.authors = (self.pseuds + (self.authors.blank? ? [] : self.authors)).flatten.uniq
       new_series.save
       self.series << new_series
@@ -804,7 +815,7 @@ class Work < ActiveRecord::Base
   ########################################################################
 
   # Works (internal or external) that this work was inspired by
-  # Can't make this a has_many association because it's polymorphic
+  # Can't make this a has_many association because it's polymorphorphic
   def parents
     self.parent_work_relationships.collect(&:parent).compact
   end

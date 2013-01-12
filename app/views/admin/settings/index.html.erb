@@ -15,6 +15,8 @@
 (Can people add themselves to the queue and are invitations sent out automatically?)" %>
 </dt>
     <dd><%= f.check_box :invite_from_queue_enabled %></dd>
+    <dt><%= f.label :allow_anonymous_works, "Enable use of 'AnonymousCreator' account for site-wide anonymity" %></dt>
+    <dd><%= f.check_box :allow_anonymous_works %></dd>
     <dt><%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> </dt>
     <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
     <dt><%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %></dt>

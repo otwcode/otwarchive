@@ -208,14 +208,6 @@
         </fieldset>
       </dd>
  
-      <!-- Privacy dropdown (storyprivacy) -->
-      <dt class="restrict">
-        <%= f.check_box :restricted %>
-      </dt>
-      <dd class="restrict">
-        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
-      </dd>
- 
       <dt class="language">
         <%= f.label :language_id, ts("Choose a language") %> <%= link_to_help "languages-help" %>
       </dt>
@@ -229,6 +221,29 @@
         <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
     </dl>
  
+  </fieldset>
+
+  <!-- privacy settings -->
+  <fieldset class="privacy" role="article">
+    <legend><%= ts('Privacy') %></legend>
+    <h3 class="landmark heading"><%= ts('Comments') %></h3>
+    <dl>
+      <!-- Privacy dropdown (storyprivacy) -->
+      <% if AdminSetting.allow_anonymous_works? %>
+        <dt class="anonymous">
+          <%= f.check_box :transfer_to_anonymous %>
+        </dt>
+        <dd>
+          <%= f.label :transfer_to_anonymous, ts("Post this work anonymously?") %><%= link_to_help "post-anonymously" %>
+        </dd>
+      <% end %>
+      <dt class="restrict">
+        <%= f.check_box :restricted %>
+      </dt>
+      <dd class="restrict">
+        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
+      </dd>
+    </dl>
   </fieldset>
  
       <% unless @chapters %>
@@ -280,7 +295,7 @@
       <% end %>
 
     <% end %> <!-- end of fields for chapters -->
- 
+
   <fieldset class="create">
     <legend><%= ts('Post') %></legend>
     <p class="submit cancel actions">

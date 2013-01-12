@@ -1,0 +1,96 @@
+== NOTE: rails 2.3 users might want to try the experimental rails-2.3 branch
+
+= nested_has_many_through
+
+A fantastic patch/plugin has been floating around for a while:
+
+* http://dev.rubyonrails.org/ticket/6461
+* http://code.torchbox.com/svn/rails/plugins/nested_has_many_through
+
+obrie made the original ticket and Matt Westcott released the first version of
+the plugin, under the MIT license.  Many others have contributed, see the trac
+ticket for details.
+
+Here is a refactored version (I didn't write the original), suitable for edge/2.0-stable
+with a bunch of acceptance specs.  I'm concentrating on plugin usage, once 
+it becomes stable, and well enough speced/understood, then it's time to pester
+rails-core.
+
+== Why republish this on github?
+
+* The previous implementations are very poorly speced/tested, so it's pretty 
+  hard to refactor and understand this complicated bit of sql-fu, especially
+  when you're aiming at a moving target (edge)
+* the lastest patches don't apply on edge
+* github - let's collab to make this better and get a patch accepted, fork away!
+
+== Help out
+
+I'm releasing 'early and often' in the hope that people will use it and find bugs/problems.
+Report them at http://ianwhite.lighthouseapp.com, or fork and pull request, yada yada.
+
+== History
+
+Here's the original description:
+
+  This plugin makes it possible to define has_many :through relationships that
+  go through other has_many :through relationships, possibly through an
+  arbitrarily deep hierarchy. This allows associations across any number of
+  tables to be constructed, without having to resort to find_by_sql (which isn't
+  a suitable solution if you need to do eager loading through :include as well).
+
+== Contributors
+
+* Matt Westcott
+* terceiro
+* shoe
+* mhoroschun
+* Ian White (http://github.com/ianwhite)
+* Claudio (http://github.com/masterkain)
+* releod (http://github.com/releod)
+
+Get in touch if you should be on this list
+
+== Show me the money!
+
+Here's some models from the specs:
+
+  class Author < User
+    has_many :posts
+    has_many :categories, :through => :posts, :uniq => true
+    has_many :similar_posts, :through => :categories, :source => :posts
+    has_many :similar_authors, :through => :similar_posts, :source => :author, :uniq => true
+    has_many :posts_of_similar_authors, :through => :similar_authors, :source => :posts, :uniq => true
+    has_many :commenters, :through => :posts, :uniq => true
+  end
+  
+  class Post < ActiveRecord::Base
+    belongs_to :author
+    belongs_to :category
+    has_many :comments
+    has_many :commenters, :through => :comments, :source => :user, :uniq => true
+  end
+  
+The first two has_manys of Author are plain vanilla, the last four are what this plugin enables
+
+  # has_many through a has_many :through
+  has_many :similar_posts, :through => :categories, :source => :posts
+
+  # doubly nested has_many :through 
+  has_many :similar_authors, :through => :similar_posts, :source => :author, :uniq => true
+
+  # whoah!
+  has_many :posts_of_similar_authors, :through => :similar_authors, :source => :posts, :uniq => true
+
+  # has_many through a has_many :through in another model
+  has_many :commenters, :through => :posts, :uniq => true
+
+== What does it run on?
+
+Currently the master branch is running on 2.1, and 2.2 stable branches
+
+Recent changes have made master incompatible with rails 2.0, if you want to use this
+with rails 2.0, then use the rails-2.0 branch.
+
+If you want to run the CI suite, then check out garlic_example.rb (The CI suite
+is being cooked with garlic - git://github.com/ianwhite/garlic)

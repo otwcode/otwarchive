@@ -73,7 +73,7 @@ class UsersController < ApplicationController
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
                    group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed.non_anon &
+                   Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
     INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
@@ -85,7 +85,7 @@ class UsersController < ApplicationController
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
                    group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed.non_anon &
+                   Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
     INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
@@ -304,13 +304,11 @@ class UsersController < ApplicationController
         @old_email = @user.email
         @user.email = params[:new_email]
         @new_email = params[:new_email]
-        @confirm_email = params[:email_confirmation]
-        if @new_email == @confirm_email && @user.save
+        if @user.save
           setflash; flash[:notice] = ts("Your email has been successfully updated")
           UserMailer.change_email(@user.id, @old_email, @new_email).deliver
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
         else
-          setflash; flash[:error] = ts("Email addresses don't match! Please retype and try again")
           render :change_email and return
         end
       end

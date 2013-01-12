@@ -11,6 +11,18 @@ class AdminSetting < ActiveRecord::Base
   
   belongs_to :default_skin, :class_name => 'Skin'
 
+  validate :check_for_anon_account
+  def check_for_anon_account
+    if self.allow_anonymous_works?
+      unless !User.find_by_login("AnonymousCreator").nil?
+        errors.add(:base, ts("The 'AnonymousCreator' account does not yet exist. Please create it before enabling site-wide anonymity."))
+      end
+    end
+  end
+  def self.allow_anonymous_works?
+    self.first ? self.first.allow_anonymous_works? : false
+  end
+
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
   end

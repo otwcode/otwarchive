@@ -2,7 +2,6 @@ class Tag < ActiveRecord::Base
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
-  include StringCleaner
 
   NAME = "Tag"
 
@@ -89,8 +88,6 @@ class Tag < ActiveRecord::Base
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
-
-  validates_presence_of :sortable_name
     
   validate :unwrangleable_status
   def unwrangleable_status
@@ -124,11 +121,6 @@ class Tag < ActiveRecord::Base
   before_validation :squish_name
   def squish_name
     self.name = name.squish if self.name
-  end
-
-  before_validation :set_sortable_name
-  def set_sortable_name
-    self.sortable_name = remove_articles_from_string(self.name)
   end
 
   before_save :set_last_wrangler
@@ -191,7 +183,7 @@ class Tag < ActiveRecord::Base
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
   scope :by_popularity, order('taggings_count DESC')
-  scope :by_name, order('sortable_name ASC')
+  scope :by_name, order('name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
