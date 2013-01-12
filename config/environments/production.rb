@@ -27,9 +27,6 @@ Otwarchive::Application.configure do
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, 'mem.ao3.org'
   require 'memcache'
-  require 'openid/store/memcache'
-  config.middleware.use 'Rack::OpenID', OpenID::Store::Memcache.new(MemCache.new("mem.ao3.org"))
-
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this

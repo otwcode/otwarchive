@@ -36,11 +36,7 @@
 <% end %>
 
 <div id="loginform">
-  <%- if params[:use_openid] -%>
-    <%= render :partial => "user_sessions/openid" %>
-  <%- else -%>
-    <%= render :partial => "user_sessions/passwd" %>
-  <% end %>
+  <%= render "user_sessions/passwd" %>
 </div>
 
 <p>

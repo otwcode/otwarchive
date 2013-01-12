@@ -17,7 +17,6 @@ gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
-gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
 gem 'will_paginate', '>=3.0.2'
 # gem 'will_paginate',
