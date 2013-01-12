@@ -296,13 +296,14 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  def abuse_report(report_id)
-    report = AbuseReport.find(report_id)
-    @url = report.url
-    @comment = report.comment
+  def abuse_report(abuse_report_id)
+    abuse_report = AbuseReport.find(abuse_report_id)
+    @email = abuse_report.email
+    @url = abuse_report.url
+    @comment = abuse_report.comment
     mail(
-      :to => report.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
+        :to => abuse_report.email,
+        :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Your Abuse Report"
     )
   end
 
