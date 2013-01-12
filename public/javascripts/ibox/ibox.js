@@ -78,14 +78,14 @@ function init_ibox() {
 
 showBG = function() {
     var box_w = getElem('ibox_w');    
-    box_w.style.visibility = "";
+    box_w.style.display = "";
     box_w.style.opacity = "0.6";
 }
 
 hideBG = function() {
     var box_w = getElem('ibox_w');
     setTimeout(function() { box_w.style.opacity = "0"; }, 0); // Firefox seems to need a delay
-    setTimeout(function() { box_w.style.visibility = "hidden"; }, 400); // time should match transition-duration
+    setTimeout(function() { box_w.style.display = "none"; }, 400); // time should match transition-duration
 }
 
 showIndicator = function() {
@@ -103,9 +103,9 @@ hideIndicator = function() {
 
 createIbox = function(elem) {
     // a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
-    var strHTML = "<div id=\"ibox_w\" aria-live=\"assertive\" aria-relevant=\"additions removals text\" role=\"dialog\" tabindex=\"-1\" style=\"visibility:hidden;\"></div>";
+    var strHTML = "<div id=\"ibox_w\" aria-live=\"assertive\" aria-relevant=\"additions removals text\" role=\"dialog\" tabindex=\"-1\" style=\"display:none;\"></div>";
     strHTML +=    "<div id=\"ibox_progress\" aria-busy=\"true\" style=\"display:none;\">" +indicator_img_html +"</div>";
-    strHTML +=    "<div id=\"ibox_wrapper\" style=\"visibility:hidden;\">";    
+    strHTML +=    "<div id=\"ibox_wrapper\" style=\"display:none;\">";    
     strHTML +=    "<div id=\"ibox_content\" class=\"userstuff\" aria-busy=\"false\"></div>";
     strHTML +=    "<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\">";
     strHTML +=    "<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\" role=\"button\">CLOSE</a></div>";
@@ -175,7 +175,7 @@ showIbox = function(url,title,params) {
                     
                     posToCenter(ibox);
 
-                    ibox.style.visibility = "";
+                    ibox.style.display = "";
                     ibox.style.opacity = "1";
                     setIBoxContent(strHTML);
                 }                    
@@ -204,7 +204,7 @@ showIbox = function(url,title,params) {
             
             if(elemSrc) {strHTML = elemSrc.innerHTML;}
         
-            ibox.style.visibility = "";
+            ibox.style.display = "";
             ibox.style.opacity = "1";
             setIBoxContent(strHTML);
             
@@ -228,7 +228,7 @@ showIbox = function(url,title,params) {
                     }
                     posToCenter(ibox, autosize);
                     
-                    ibox.style.visibility = "";
+                    ibox.style.display = "";
                     ibox.style.opacity = "1";
                     var response = http.responseText;
                     setIBoxContent(response);
@@ -278,7 +278,7 @@ hideIbox = function() {
     var ibox = getElem('ibox_wrapper');
     setTimeout(function() { ibox.style.opacity = "0"; }, 0);
     setTimeout(function() { 
-        ibox.style.visibility = "hidden";
+        ibox.style.display = "none";
 
         // restore page scrolling and remove right margin
         document.body.style.overflowY = "";
@@ -451,7 +451,7 @@ function getScrollBarWidth() {
     outer.style.position = "absolute";
     outer.style.top = "0px";
     outer.style.left = "0px";
-    outer.style.visibility = "hidden";
+    outer.style.display = "none";
     outer.style.width = "200px";
     outer.style.height = "150px";
     outer.style.overflow = "hidden";
