@@ -21,7 +21,7 @@
           <% if @user == current_user %>
             <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
           <% end %>
-          <li><%= link_to ts('Works in Collections'), collected_user_works_path(@user) %></li>
+          <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
           <li><%= span_if_current ts('Works'), user_works_path(@user) %></li>
         <% end %>
         <% if @tag %>
