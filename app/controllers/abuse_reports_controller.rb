@@ -23,16 +23,24 @@ class AbuseReportsController < ApplicationController
     respond_to do |format|
       if @abuse_report.save
         require 'rest_client'
-        # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
-          site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => ArchiveConfig.BUGS_USER, :password => ArchiveConfig.BUGS_PASSWORD)
-          site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
-        end
-        # Email bug to feedback email address
-        AdminMailer.abuse_report(@abuse_report.id).deliver
         # The user requested a copy of the Abuse Report, send it to them
-        if @abuse_report.email_copy?
+        if @abuse_report.cc_me == "1"
+          # Send bug to 16bugs
+          if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
+            site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => ArchiveConfig.BUGS_USER, :password => ArchiveConfig.BUGS_PASSWORD)
+            site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
+          end
+          # Email bug to feedback email address & the user
+          AdminMailer.abuse_report(@abuse_report.id).deliver
           UserMailer.abuse_report(@abuse_report.id).deliver
+        else
+          # Send bug to 16bugs but NOT to the user
+          if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
+            site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => ArchiveConfig.BUGS_USER, :password => ArchiveConfig.BUGS_PASSWORD)
+            site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
+          end
+          # Email bug to feedback email address
+          AdminMailer.abuse_report(@abuse_report.id).deliver
         end
         setflash; flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
         format.html { redirect_to '' }

@@ -101,3 +101,10 @@ drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643e
   box-shadow: none;
   text-decoration: underline;
 }
+
+/* CLAIMS form (Issue
+Needs nested ul to be indented
+*/
+.edit_external_author ul ul {
+  margin-left: 40px;
+}

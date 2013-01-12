@@ -78,9 +78,6 @@ class User < ActiveRecord::Base
 
   after_update :log_change_if_login_was_edited
 
-  # Anonymous posting associations
-  has_many :work_keys, :dependent => :destroy
-
   has_many :collection_participants, :through => :pseuds
   has_many :collections, :through => :collection_participants
   has_many :invited_collections, :through => :collection_participants, :source => :collection,
@@ -306,11 +303,6 @@ class User < ActiveRecord::Base
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
 
-  # Gets the anonymous user account
-  def self.anonymous_account
-    User.fetch_anonymous_account if AdminSetting.allow_anonymous_works?
-  end
-
   # Allow admins to set roles and change email
   def admin_update(attributes)
     if User.current_user.is_a?(Admin)
@@ -459,11 +451,6 @@ class User < ActiveRecord::Base
       Rails.logger.fatal "You must have a User with the login 'orphan_account'. Please create one."
     end
     orphan_account
-  end
-
-  # Create and/or return a user account for holding anonymous works
-  def self.fetch_anonymous_account
-    anonymous_account = User.find_by_login("AnonymousCreator")
   end
 
    def log_change_if_login_was_edited
