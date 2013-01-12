@@ -5,7 +5,7 @@
 <!-- /end descriptions-->
 
 <!--Subnavigation, sorting and actions.-->
-<% if (@collection && @collection.gift_exchange?) || @tag || (@user && @user == current_user) %>
+<% if (@collection && @collection.gift_exchange?) || @tag || @user %>
   <div class="navigation actions module">
 
     <h3 class="landmark heading"><%= ts("Navigation, Sorting and Actions") %></h3>
