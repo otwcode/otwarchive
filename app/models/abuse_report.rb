@@ -3,13 +3,13 @@ class AbuseReport < ActiveRecord::Base
   validates_presence_of :url
   validates :email, :email_veracity => {:allow_blank => true}
   attr_accessor :cc_me
-  validates :email, :presence => {:message => ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, :if => "check_email?"
+  validates :email, :presence => {:message => ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, :if => "email_copy?"
   scope :by_date, order("created_at DESC")
 
   attr_protected :comment_sanitizer_version
 
-  def check_email?
-   cc_me == "1" ? true : false
+  def email_copy?
+   cc_me == "1"
   end
   
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
