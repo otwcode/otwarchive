@@ -772,7 +772,7 @@ public
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
-    setflash; flash[:notice] = ts("This work was marked to read later. You can find it in your #{view_context.link_to('history', user_readings_path(current_user))}. (The work may take a short while to show up there.)").html_safe
+    setflash; flash[:notice] = ts("This work was marked to read later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
