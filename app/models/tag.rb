@@ -128,7 +128,9 @@ class Tag < ActiveRecord::Base
 
   before_validation :set_sortable_name
   def set_sortable_name
-    self.sortable_name = remove_articles_from_string(self.name)
+    if sortable_name.blank?
+      self.sortable_name = remove_articles_from_string(self.name)
+    end
   end
 
   before_save :set_last_wrangler
