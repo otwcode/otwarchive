@@ -1,6 +1,6 @@
 <fieldset>
-  <legend>About</legend>
-  <h3 class="landmark heading">About</h3>
+  <legend><%= ts("About") %></legend>
+  <h3 class="landmark heading"><%= ts("About") %></h3>
   <dl>      
     <dt><%= label_tag "skin_type", ts('Type') %> <%= link_to_help "skins-basics" %></dt>
     <% if @skin.id %>
@@ -28,24 +28,24 @@
 </fieldset>
 
 <fieldset>
-  <legend>CSS</legend>
+  <legend><%= ts("CSS") %></legend>
   <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help "skins-creating" %></h3>
     <p><%= f.text_area :css, :cols => 70, :class => "large" %></p>        
 </fieldset>
   
 <fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
-  <legend>Advanced 
+  <legend><%= ts("Advanced") %> 
   <span class="action">
     <a href="#" class="<%= show_advanced_skin?(@skin) ? 'advanced_skin_close' : 'advanced_skin_open' %> hidden"><%= ts("Show") %> &#8595;</a>
-        <a href="#" class="<%= show_advanced_skin?(@skin) ? 'advanced_skin_open' : 'advanced_skin_close' %> hidden"><%= ts("Hide") %> &#8593;</a>
+    <a href="#" class="<%= show_advanced_skin?(@skin) ? 'advanced_skin_open' : 'advanced_skin_close' %> hidden"><%= ts("Hide") %> &#8593;</a>
   </span>
   </legend>
 
 
   <div id="advanced_skin" class="<%= show_advanced_skin?(@skin) ? 'toggled open' : 'toggled' %>">
     <fieldset>
-      <legend>Conditions <%= link_to_help "skins-conditions" %></legend>
-      <h4 class="heading landmark">Conditions</h4>
+      <legend><%= ts("Conditions") %> <%= link_to_help "skins-conditions" %></legend>
+      <h4 class="landmark heading"><%= ts("Conditions") %></h4>
       <dl>
         <dt><%= f.label :role, ts('What it does: ')%></dt>
         <dd>
@@ -62,7 +62,7 @@
         <dt><%= f.label :media, ts('Media: ')%></dt>
         <dd>
           <fieldset class="listbox group">
-          <h5 class="heading">Choose @media</h5>
+          <h5 class="heading"><%= ts("Choose @media") %></h5>
             <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || Skin::DEFAULT_MEDIA, :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
           </fieldset>
         </dd>        
@@ -70,8 +70,8 @@
     </fieldset>
   
     <fieldset class="listbox group">
-      <legend>Parent Skins <%= link_to_help "skins-parents" %></legend>
-      <h4 class="heading landmark">Parent Skins</h4>
+      <legend><%= ts("Parent Skins") %> <%= link_to_help "skins-parents" %></legend>
+      <h4 class="landmark heading"><%= ts("Parent Skins") %></h4>
        <ul class="index group">
        <% f.object.skin_parents.each_with_index do |parent, index| %>
         <%= f.fields_for :skin_parents, parent do |parent_form| %>
