@@ -192,8 +192,13 @@ class MassImportTool
       query = "Select id from tags where name = '#{temptag.tag}'; "
       r = connection.query(query)
       if r.num_rows == 0 then
-        self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
-        temptag.new_id = connection.query("SELECT last_insert_id() ")
+      # '' self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
+temp_new_tag = tag.new()
+temp_new_tag.type = "#{temptag.tag_type}"
+temp_new_tag.name = "#{temptag.tag}"
+temp_new_tag.save
+
+    temptag.new_id = temp_new_tag.id
       else
         r.each do |r|
           temptag.new_id = r[0]
