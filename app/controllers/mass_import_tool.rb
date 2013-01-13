@@ -286,7 +286,7 @@ temp_new_tag.save
 
         i = 0
         while i <= tl.length - 1
-          current_tag = self.tl(i)
+          current_tag = tl[i]
           if current_tag.tag_type == 1
             self.update_record_source("update #{@source_stories_table} set scid = #{current_tag.new_id} where scid = #{current_tag.old_id}")
           end
