@@ -439,7 +439,7 @@ class MassImportTool
       end
     end
 =end
-  ImportTag = Struct.net(:old_id,:new_id,:tag,:tag_type)
+  ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
 
   ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
                             :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
