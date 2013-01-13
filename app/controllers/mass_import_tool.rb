@@ -189,13 +189,13 @@ class MassImportTool
       temptag = self.tl[i]
       connection = mysql.new(@target_database_connection)
 
-      query = "Select id from tags where name = '#{temptag.Tag}'; "
+      query = "Select id from tags where name = '#{temptag.tag}'; "
       r = connection.query(query)
       if r.num_rows == 0 then
-        self.update_record_target("Insert into tags (name, type) values ('#{temptag.Tag}','#{temptag.TagType}');")
-        temptag.NewId = connection.query("SELECT last_insert_id() ")
+        self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
+        temptag.new_id = connection.query("SELECT last_insert_id() ")
       else
-        temptag.NewId = r[0]
+        temptag.new_id = r[0]
       end
       connection.Close()
       self.tl[i] = temptag
@@ -206,16 +206,16 @@ class MassImportTool
 
   def get_tag_list(tl, at)
     taglist = tl
-    connection = mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
     case at
       when 4
         query = "Select caid, caname from #{@source_table_prefix}category; " #
         r = connection.query(query)
         r.each do |r|
-          nt = NewOtwTag.new()
-          nt.TagType = TagType.Category
-          nt.OldID = r[0]
-          nt.Tag = r[1]
+          nt = ImportTag.new()
+          nt.tag_type = 1
+          nt.old_id = r[0]
+          nt.tag = r[1]
           taglist.Add(nt)
         end
         r.Clear()
@@ -223,43 +223,43 @@ class MassImportTool
         query2 = "Select subid, subname from #{@source_table_prefix}subcategory; "
         rr = connection.query(query2)
         rr.each do |rr|
-          nt = NewOtwTag.new()
-          nt.TagType = OtwTagType.SubCategory
-          nt.OldID = rr[0]
-          nt.Tag = rr[1]
+          nt = ImportTag.new()
+          nt.tag+type = 99
+          nt.old_id = rr[0]
+          nt.tag = rr[1]
           taglist.Add(nt)
         end
       when 3
         query = "Select class_id, class_type, class_name from #{@source_table_prefix}classes; " #
         r = connection.query(query)
         r.each do |r|
-          nt = NewOtwTag.new()
+          nt = ImportTag.new()
           if r[1] == @srcWarningClassTypeID
-            nt.TagType = OtwTagType.Warning
+            nt.tag_type = 6
           else
-            nt.TagType = OtwTagType.FreeForm
+            nt.tag_type = 3
           end
-          nt.OldID = r[0]
-          nt.Tag = r[2]
+          nt.old_id = r[0]
+          nt.tag = r[2]
           taglist.Add(nt)
         end
         query2 = "Select catid, category from #{@source_table_prefix}categories; "
         rr = connection.query(query2)
         rr.each do |rr|
-          nt = NewOtwTag.new()
-          nt.TagType = OtwTagType.Category
-          nt.OldID = rr[0]
-          nt.Tag = rr[1]
+          nt = ImportTag.new()
+          nt.tag_type = 1
+          nt.old_id = rr[0]
+          nt.tag = rr[1]
           taglist.Add(nt)
 
         end
         query3 = "Select charid, charname from #{@source_table_prefix}characters; "
         rrr = connection.query(query3)
         rrr.each do |rrr|
-          nt = NewOtwTag.new()
-          nt.TagType = OtwTagType.Character
-          nt.OldID = rrr.Rows(i).Item(0)
-          nt.Tag = rrr.Rows(i).Item(1)
+          nt = ImportTag.new()
+          nt.tag_type = 2
+          nt.old_id = rrr[0]
+          nt.tag = rrr[1]
           taglist.Add(nt)
         end
       when ArchiveType.efiction2
@@ -271,18 +271,18 @@ class MassImportTool
 
 
   def update_source_tags(tl)
-    case srcArchiveType
+    case @source_archive_type
       when 4
         Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
         i = 0
         i = 0
         while i <= tl.Count - 1
-          currentTag = self.tl(i)
-          if currentTag.TagType == OtwTagType.Category
-            self.update_record_source("update #{@source_stories_table} set scid = #{currentTag.NewId} where scid = #{currentTag.OldID}")
+          current_tag = self.tl(i)
+          if current_tag.tag_type == 1
+            self.update_record_source("update #{@source_stories_table} set scid = #{current_tag.new_id} where scid = #{current_tag.old_id}")
           end
-          if currentTag.TagType == OtwTagType.SubCategory
-            self.updateRecordSRC(" update #{@source_stories_table} set ssubid = #{currentTag.NewId}  where ssubid = #{currentTag.OldID}")
+          if current_tag.tag_type == 99
+            self.update_record_source(" update #{@source_stories_table} set ssubid = #{current_tag.new_id}  where ssubid = #{current_tag.ol_id}")
           end
           i = i + 1
         end
@@ -321,66 +321,65 @@ class MassImportTool
       ns = ImportStory.new()
       a = ImportUser.new()
       #Create Taglisit for this story
-      myTagList = Array.new()
+      my_tag_list = Array.new()
       begin
         case srcArchiveType
           when 4
-            ns.OldSid = r[0]
+            ns.old_story_id = r[0]
             ns.title = r[1]
             ns.summary = r[2]
-            ns.AuthOldID = r[3]
-            ns.RatingInt = r[4]
-            rating_tag = NewOtwTag.new()
-            rating_tag.TagType = OtwTagType.Rating
-            rating_tag.NewId = ns.RatingInt
-            myTagList.Add(rating_tag)
+            ns.old_user_id = r[3]
+            ns.rating_integer = r[4]
+            rating_tag = ImportTag.new()
+            rating_tag.tag_type = 7
+            rating_tag.new_id = ns.rating_integer
+            my_tag_list.Add(rating_tag)
 
-            ns.Published =  r[5]
+            ns.published =  r[5]
 
-            cattag = NewOtwTag.new()
+            cattag = ImportTag.new()
             if useProperCategories == true
-              cattag.TagType = OtwTagType.Category
+              cattag.tag_type = 1
             else
-              cattag.TagType = OtwTagType.FreeForm
+              cattag.tag_type = 3
             end
-            cattag.NewId = r[6]
-            myTagList.Add(cattag)
-            subcattag = NewOtwTag.new()
+            cattag.new_id = r[6]
+            my_tag_list.Add(cattag)
+            subcattag = ImportTag.new()
             if useProperCategories == true
-              subcattag.TagType = OtwTagType.Category
+              subcattag.tag_type = 1
             else
-              subcattag.TagType = OtwTagType.FreeForm
+              subcattag.tag_type = 3
             end
-            subcattag.NewId =r[11]
+            subcattag.new_id =r[11]
             myTagList.Add(subcattag)
-            ns.Updated = r[9]
-            ns.Completed = r[12]
+            ns.updated = r[9]
+            ns.completed = r[12]
             ns.hits = r[10]
           when 3
-            ns.OldSid = r[0]
+            ns.old_story_id = r[0]
             ns.title = r[1]
             ns.summary = r[2]
-            ns.AuthOldID = r[10]
-            ns.RatingInt = r[4]
-            rating_tag = NewOtwTag.new()
-            rating_tag.TagType = OtwTagType.Rating
-            rating_tag.NewId = ns.RatingInt
+            ns.old_user_id = r[10]
+            ns.rating_integer = r[4]
+            rating_tag = ImportTag.new()
+            rating_tag.tag_type =7
+            rating_tag.new_id = ns.rating_integer
             tag_list.Add(rating_tag)
 
-            ns.Published = r[8]
+            ns.published = r[8]
 
-            ns.Updated = r[9]
-            ns.Completed = r[12]
+            ns.updated = r[9]
+            ns.completed = r[12]
             ns.hits = r[10]
-          when ArchiveType.efiction2
-          when ArchiveType.OTW
+
         end
-        ns.NewAuthId = self.getauthorIDbyOld(ns.AuthOldID, ns.StoryArchive, ArchiveType.OTW)
-        if ns.NewAuthId == 0
-          a = self.getAuthorObjectFromSRC(ns.AuthOldID)
-          newA = self.AddOTWAuthor(a)
-          ns.NewAuthId = newA.defaultPsuid
-          ns.Author = newA.PenName
+        ns.new_author_id = self.getauthorIDbyOld(ns.old_user_id, ns.source_archive, ArchiveType.OTW)
+        if ns.new_author_id == 0
+          a = self.getAuthorObjectFromSRC(ns.old_user_id)
+          new_a = self.add_user(a)
+          ns.new_user_id = new_a.default_pseud
+          ns.author = new_a.penname
         end
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, srcArchive, srcID) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', " + ImportArchiveID + ", " + ns.OldSid + "); ")
 
@@ -440,6 +439,7 @@ class MassImportTool
       end
     end
 =end
+  ImportTag = Struct.net(:old_id,:new_id,:tag,:tag_type)
 
   ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
                             :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
@@ -447,6 +447,9 @@ class MassImportTool
   ImportChapter = Struct.new(:new_work_id,:old_story_id,:source_archive_id,:title,
                              :summary,:notes,:old_user_id,:body,:position,:date_added)
 
+  ImportWork = Struct.new(:old_story_id,:new_work_id,:author_string,:title,:summary,:classes,:old_user_id,:characters,
+                          :hits,:new_author_id,:word_count,:completed,:updated,:source_archive,:generes,:rating,
+                          :rating_integer,:warnings,:chapters,:published,:cats)
   class NewOtwTag
     def initialize()
     end
