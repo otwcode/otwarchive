@@ -20,7 +20,7 @@ class DevmodeController < ApplicationController
       #testing here, stephanie
       ni = MassImportTool.new
 
-      end
+
       setflash; flash[:info] = 'Successfully cleared URL associations'
     end
   end
