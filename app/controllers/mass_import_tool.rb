@@ -216,7 +216,7 @@ class MassImportTool
           nt.tag_type = 1
           nt.old_id = r[0]
           nt.tag = r[1]
-          taglist.Add(nt)
+          taglist.push(nt)
         end
         r.Clear()
 
@@ -227,7 +227,7 @@ class MassImportTool
           nt.tag+type = 99
           nt.old_id = rr[0]
           nt.tag = rr[1]
-          taglist.Add(nt)
+          taglist.push(nt)
         end
       when 3
         query = "Select class_id, class_type, class_name from #{@source_table_prefix}classes; " #
@@ -241,7 +241,7 @@ class MassImportTool
           end
           nt.old_id = r[0]
           nt.tag = r[2]
-          taglist.Add(nt)
+          taglist.push(nt)
         end
         query2 = "Select catid, category from #{@source_table_prefix}categories; "
         rr = connection.query(query2)
@@ -250,7 +250,7 @@ class MassImportTool
           nt.tag_type = 1
           nt.old_id = rr[0]
           nt.tag = rr[1]
-          taglist.Add(nt)
+          taglist.push(nt)
 
         end
         query3 = "Select charid, charname from #{@source_table_prefix}characters; "
@@ -260,7 +260,7 @@ class MassImportTool
           nt.tag_type = 2
           nt.old_id = rrr[0]
           nt.tag = rrr[1]
-          taglist.Add(nt)
+          taglist.push(nt)
         end
       when ArchiveType.efiction2
     end
