@@ -299,7 +299,7 @@ class MassImportTool
     query = " SELECT * FROM #{@source_stories_table} ;"
     connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
 
-    if skip_rating_transform == false
+    if @skip_rating_transform == false
       puts " Tranforming source ratings "
       self.transform_source_ratings()
     else
