@@ -199,7 +199,7 @@ class MassImportTool
           temptag.new_id = r[0]
         end
       end
-      connection.Close()
+      connection.close()
       self.tl[i] = temptag
       i = i + 1
     end
@@ -392,18 +392,18 @@ class MassImportTool
         rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = #{@import_archive_id}")
         ns.NewSid = rr[0] #create creatorship
         self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + ns.NewSid + ", " + ns.NewAuthId + ", 'work') ") #ADD CHAPTERS
-        tgtConnection.Close()
+        tgtConnection.close()
 
-        connection.Close()
+        connection.close()
         self.AddChaptersOTW(ns)
       rescue Exception => ex
         puts " Error : " + ex.Message
-        connection.Close()
+        connection.close()
       ensure
       end
       i = i + 1
     end
-    connection.Close()
+    connection.close()
   end
 =begin
     #Check For Author
@@ -616,8 +616,9 @@ class MassImportTool
       else
         return r[0]
       end
+      connection.close()
     rescue Exception => ex
-      connection.Close()
+      connection.close()
     ensure
     end
   end
@@ -629,6 +630,7 @@ class MassImportTool
       rowsEffected = 0
       rowsEffected = mysql.query(query)
       connection.free
+      connection.close()
       return rowsEffected
     rescue Exception => ex
       if connection.State != ConnectionState.Closed
@@ -646,11 +648,11 @@ class MassImportTool
       rowsEffected = 0
 
       rowsEffected = mysql.query(query)
-      connection.Close()
+      connection.close()
       return rowsEffected
     rescue Exception => ex
       if connection.State != ConnectionState.Closed
-        connection.Close()
+        connection.close()
       end
       puts ex.Message
     end
