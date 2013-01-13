@@ -187,7 +187,7 @@ class MassImportTool
     i = 0
     while i <= tl.length - 1
       temptag = tl[i]
-      connection = mysql.new('localhost','stephanies','Trustno1','stephanies_development')
+      connection =Mysql.new('localhost','stephanies','Trustno1','stephanies_development')
 
       query = "Select id from tags where name = '#{temptag.tag}'; "
       r = connection.query(query)
