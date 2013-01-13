@@ -120,6 +120,8 @@ class MassImportTool
 
       #Source Categories Table
       @source_categories_table = ""
+
+      #string holder
       @get_author_from_source_query = ""
 
       #Skip Rating Transformation (ie if import in progress or testing)
@@ -265,6 +267,7 @@ class MassImportTool
       connection.Close()
       return taglist
     end
+
 
 
     def UpdateSourceTags(tl)
@@ -426,26 +429,30 @@ class MassImportTool
       reader.Close()
     end
 
-    def PostChapterOTW(c, sourceType)
+    def post_chapters(c, sourceType)
       case sourceType
         when ArchiveType.StoryLine18
           self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at) values ('" + c.body + "', '" + c.dateposted.ToString + "', '" + c.dateposted.ToString + "', 1, '" + c.title + "', '" + c.dateposted.ToString + "') ")
           self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + c.newSid + ", " + c.newUserId + ", 'chapter') ")
+
+
       end
     end
 
-    ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
+  ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
                               :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
 
+  ImportChapter = Struct.New(:new_work_id,:old_story_id,:source_archive_id,:title,
+                               :summary,:notes,:old_user_id,:body,:position,:date_added)
 
-    class NewOtwTag
+  class NewOtwTag
       def initialize()
       end
       #Old Tag ID #New Tag ID #Tag
     end #Tag Type
 
 
-    def AddOTWAuthor(a)
+    def add_user(a)
       begin #add new user
         self.update_record_target("insert into users (email, login, source_archive_id, srcid) values ('#{a.email}', '#{a.email}',#{a.source_archive_id},#{a.srcuid}); ")
         a.newuid = self.getauthorIDbyOld(a.source_archive_id, a.srcuid, ArchiveType.OTW)
@@ -512,7 +519,7 @@ class MassImportTool
 
     def get_imported_author_from_source(authid)
       a = ImportedAuthor.new()
-      connection = mysql.new(srcDBCON)
+      connection = mysql.new(@source_database_connection)
       r = my.query("#{qryGetAuthorFromSource} #{authid}")
       r.each_hash do |r|
         a.srcuid = authid
@@ -612,7 +619,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
     def update_record_target(query)
-      connection = mysql.new(tgtDBCON)
+      connection = mysql.new(@target_database_connection)
       begin
         rowsEffected = 0
         rowsEffected = mysql.query(query)
@@ -629,7 +636,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
     def update_record_src(query)
-      connection = mysql.new(srcDBCON)
+      connection = mysql.new(@source_database_connection)
       begin
         rowsEffected = 0
 
