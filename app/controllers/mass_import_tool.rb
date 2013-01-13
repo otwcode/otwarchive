@@ -297,7 +297,7 @@ class MassImportTool
       puts " Setting Import Values "
       self.SetImportStrings()
       query = " SELECT * FROM #{@source_stories_table} ;"
-      connection = mysql.new(@source_database_connection)
+      connection = Mysql.new(@source_database_connection)
 
       if dbgSkipRatingTransform == false
         puts " Tranforming source ratings "
@@ -402,6 +402,7 @@ class MassImportTool
       end
       connection.Close()
     end
+=begin
     #Check For Author
     def AddChaptersOTW(ns)
       connection = MySqlConnection.new()
@@ -438,6 +439,7 @@ class MassImportTool
 
       end
     end
+=end
 
   ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
                               :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
@@ -515,7 +517,7 @@ class MassImportTool
 
     def get_imported_author_from_source(authid)
       a = ImportedAuthor.new()
-      connection = mysql.new(@source_database_connection)
+      connection = Mysql.new(@source_database_connection)
       r = my.query("#{qryGetAuthorFromSource} #{authid}")
       r.each_hash do |r|
         a.srcuid = authid
@@ -599,7 +601,7 @@ class MassImportTool
     # Get New Author ID from old User ID & old archive ID
     def get_new_author_id_from_old(old_archive_id, old_user_id)
       begin
-        connection = mysql.new(@target_database_connection)
+        connection = Mysql.new(@target_database_connection)
         query = " Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} "
         r = connection.query(query)
         if r.num_rows == 0
@@ -615,7 +617,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
     def update_record_target(query)
-      connection = mysql.new(@target_database_connection)
+      connection = Mysql.new(@target_database_connection)
       begin
         rowsEffected = 0
         rowsEffected = mysql.query(query)
@@ -632,7 +634,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
     def update_record_src(query)
-      connection = mysql.new(@source_database_connection)
+      connection = Mysql.new(@source_database_connection)
       begin
         rowsEffected = 0
 
