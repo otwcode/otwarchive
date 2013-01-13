@@ -218,7 +218,6 @@ class MassImportTool
           nt.tag = r[1]
           taglist.push(nt)
         end
-        r.Clear()
 
         query2 = "Select subid, subname from #{@source_table_prefix}subcategory; "
         rr = connection.query(query2)
