@@ -193,7 +193,7 @@ class MassImportTool
       r = connection.query(query)
       if r.num_rows == 0 then
       # '' self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
-temp_new_tag = tag.new()
+temp_new_tag = Tag.new()
 temp_new_tag.type = "#{temptag.tag_type}"
 temp_new_tag.name = "#{temptag.tag}"
 temp_new_tag.save
