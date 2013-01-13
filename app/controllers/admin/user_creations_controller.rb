@@ -8,6 +8,8 @@ class Admin::UserCreationsController < ApplicationController
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
     creation.save(:validate => false)
+    action = creation.hidden_by_admin? ? "hide" : "unhide"
+    AdminActivity.log_action(current_admin, creation, action: action)
     setflash; flash[:notice] = creation.hidden_by_admin? ? 
                         t('item_hidden', :default => 'Item has been hidden.') : 
                         t('item_unhidden', :default => 'Item is no longer hidden.')
@@ -23,6 +25,7 @@ class Admin::UserCreationsController < ApplicationController
   def destroy
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
+    AdminActivity.log_action(current_admin, creation, action: 'destroy', summary: creation.inspect)
     creation.destroy
     setflash; flash[:notice] = t('item_deleted', :default => 'Item was successfully deleted.')
     if creation_class == Comment 
