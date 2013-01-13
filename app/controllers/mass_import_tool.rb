@@ -185,7 +185,7 @@ class MassImportTool
 
   def fill_tag_list(tl)
     i = 0
-    while i <= tl.Count - 1
+    while i <= tl.length - 1
       temptag = self.tl[i]
       connection = mysql.new('localhost','stephanies','Trustno1','stephanies_development')
 
