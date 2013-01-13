@@ -125,7 +125,7 @@ class MassImportTool
     @get_author_from_source_query = ""
 
     #Skip Rating Transformation (ie if import in progress or testing)
-    @dbgSkipRatingTransform = true
+    @skip_rating_transform = true
   end
 
 
@@ -299,7 +299,7 @@ class MassImportTool
     query = " SELECT * FROM #{@source_stories_table} ;"
     connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
 
-    if dbgSkipRatingTransform == false
+    if skip_rating_transform == false
       puts " Tranforming source ratings "
       self.transform_source_ratings()
     else
