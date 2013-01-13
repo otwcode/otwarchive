@@ -625,7 +625,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_target(query)
-    connection = Mysql.new(@target_database_connection)
+    connection = Mysql.new('localhost','stephanies','password','stepahanies_development')
     begin
       rowsEffected = 0
       rowsEffected = mysql.query(query)
