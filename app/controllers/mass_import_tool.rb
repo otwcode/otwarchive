@@ -187,7 +187,7 @@ class MassImportTool
     i = 0
     while i <= tl.Count - 1
       temptag = self.tl[i]
-      connection = mysql.new(@target_database_connection)
+      connection = mysql.new('localhost','stephanies','Trustno1','stephanies_development')
 
       query = "Select id from tags where name = '#{temptag.tag}'; "
       r = connection.query(query)
@@ -312,7 +312,7 @@ class MassImportTool
     puts (" Updating Tags ")
     tag_list = Array.new()
     tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
-    tag_list = self.fill_tag_list(tage_list)
+    tag_list = self.fill_tag_list(tag_list)
     self.update_source_tags(tag_list)
     r = connection.query(query)
 
