@@ -308,20 +308,20 @@ class MassImportTool
 
       #Update Tags and get Taglist
       puts (" Updating Tags ")
-      TagList = ArrayList.new()
-      TagList2 = self.getTaglist(TagList, srcArchiveType)
-      TagList = self.fillTagList(TagList)
-      self.UpdateSourceTags(TagList)
+      tag_list = Array.new()
+      tag_list2 = self.getTaglist(tag_list, @source_archive_type)
+      tag_list = self.fillTagList(tage_list)
+      self.UpdateSourceTags(tag_list)
       r = connection.query(query)
 
       puts (" Importing Stories ")
       i = 0
       while i <= r.num_rows
         puts " Importing Story " + i + 1 + " of " * r.num_rows
-        ns = ImportedStory.new()
-        a = ImportedAuthor.new()
+        ns = ImportStory.new()
+        a = ImportUser.new()
         #Create Taglisit for this story
-        myTagList = ArrayList.new()
+        myTagList = Array.new()
         begin
           case srcArchiveType
             when ArchiveType.StoryLine18
