@@ -451,36 +451,32 @@ class MassImportTool
       #Old Tag ID #New Tag ID #Tag
     end #Tag Type
 
+    def get_user_id_from_email(email)
+      connection = Mysql.new(@target_database_connection)
+      r = connection.query("select user_id from users where email = '#{email}'")
+      return r[0]
+    end
 
     def add_user(a)
-      begin #add new user
-        self.update_record_target("insert into users (email, login, source_archive_id, srcid) values ('#{a.email}', '#{a.email}',#{a.source_archive_id},#{a.srcuid}); ")
-        a.newuid = self.getauthorIDbyOld(a.source_archive_id, a.srcuid, ArchiveType.OTW)
-        self.update_record_target("Insert into profiles (user_id, about_me) values ( #{a.newuid},'#{a.bio}'); ")
-        self.update_record_target("Insert into pseuds (user_id, name, description, is_default) values (#{a.newuid}, '#{a.PenName}', 'Imported Pseudonym', 1); ")
-        self.update_record_target("Insert into preferences (user_id) values (#{a.newuid}); ")
-
+        new_user = user.create(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
+        new_user.create_default_associateds
+        a.new_user_id = new_user.id
+=begin
+        #self.update_record_target("insert into users (email, login) values ('#{a.email}', '#{a.email}'); ")
+        #a.new_user_id = self.get_user_id_from_email(a.email)
+        #a.newuid = self.getauthorIDbyOld(a.source_archive_id, a.srcuid, ArchiveType.OTW)
+        #self.update_record_target("Insert into profiles (user_id, about_me) values ( #{a.newuid},'#{a.bio}'); ")
+        #self.update_record_target("Insert into pseuds (user_id, name, description, is_default) values (#{a.newuid}, '#{a.PenName}', 'Imported Pseudonym', 1); ")
+        #self.update_record_target("Insert into preferences (user_id) values (#{a.newuid}); ")
+        self.update_record_target("Insert into user_imports (user_id,source_user_id,source_archive_id,source_penname) values (#{a.newuid},#{a.source_archive_id},#{a.source_user_id}")
         cmd.CommandText = "Select id from users where source_archive_id = #{@import_archive_id} and srcid = #{a.srcuid}"
-        reader2 = cmd.ExecuteReader
-        r2 = DataTable.new()
-        r2.Load(reader2)
         a.newuid = r2.Rows(0).Item(0)
-        r2.Clear()
         cmd.CommandText = "Select id from pseuds where user_id = #{a.newuid} and is_default = 1 "
-        reader2.Close()
-        reader2 = cmd.ExecuteReader
-        r2.Load(reader2)
         a.defaultPsuid = r2.Rows(0).Item(0)
         connection.Close()
+=end
         return a
-      rescue Exception => ex
-        if connection.State != ConnectionState.Closed then
-          connection.Close()
-        end
-        Console.WriteLine(ex.Message)
-        return a
-      ensure
-      end
+
     end
     # <summary> # Set Archive Strings and values # </summary> # <remarks></remarks>
     def SetImportStrings

@@ -17,11 +17,9 @@ class DevmodeController < ApplicationController
 
   def unregister_imports
     if params[:okgo]
-      for work in Work.all
-        if work.imported_from_url
-          work.imported_from_url = nil
-          work.save false
-        end
+      #testing here, stephanie
+      ni = MassImportTool.new
+
       end
       setflash; flash[:info] = 'Successfully cleared URL associations'
     end
