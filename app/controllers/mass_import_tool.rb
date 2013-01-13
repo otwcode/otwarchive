@@ -6,7 +6,7 @@ class MassImportTool
       @Version = 1
 
       #import config filename
-      @config = OTW.Settings.INIFile.new("config.ini") #'
+      #@config = OTW.Settings.INIFile.new("config.ini") #'
 
       #temporary table prefix
       @temptableprefix = "temp321"
