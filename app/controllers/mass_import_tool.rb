@@ -186,7 +186,7 @@ class MassImportTool
   def fill_tag_list(tl)
     i = 0
     while i <= tl.length - 1
-      temptag = self.tl[i]
+      temptag = tl[i]
       connection = mysql.new('localhost','stephanies','Trustno1','stephanies_development')
 
       query = "Select id from tags where name = '#{temptag.tag}'; "
