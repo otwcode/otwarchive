@@ -526,7 +526,7 @@ class MassImportTool
         a.Bio = r[3]
         a.joindate = r[4]
         a.password = r[5]
-        if @source_archive_type == ArchiveType.efiction2 | @source_archive_type == ArchiveType.storyline
+        if @source_archive_type == ArchiveType.efiction2 || @source_archive_type == ArchiveType.storyline
           a.website = r[6]
           a.aol = r[7]
           a.msn = r[8]
