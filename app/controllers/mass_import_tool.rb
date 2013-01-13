@@ -330,10 +330,10 @@ class MassImportTool
               ns.summary = r[2]
               ns.AuthOldID = r[3]
               ns.RatingInt = r[4]
-              RatingTag = NewOtwTag.new()
-              RatingTag.TagType = OtwTagType.Rating
-              RatingTag.NewId = ns.RatingInt
-              myTagList.Add(RatingTag)
+              rating_tag = NewOtwTag.new()
+              rating_tag.TagType = OtwTagType.Rating
+              rating_tag.NewId = ns.RatingInt
+              myTagList.Add(rating_tag)
 
               ns.Published =  r[5]
 
@@ -362,10 +362,10 @@ class MassImportTool
               ns.summary = r[2]
               ns.AuthOldID = r[10]
               ns.RatingInt = r[4]
-              RatingTag = NewOtwTag.new()
-              RatingTag.TagType = OtwTagType.Rating
-              RatingTag.NewId = ns.RatingInt
-              TagList.Add(RatingTag)
+              rating_tag = NewOtwTag.new()
+              rating_tag.TagType = OtwTagType.Rating
+              rating_tag.NewId = ns.RatingInt
+              tag_list.Add(rating_tag)
 
               ns.Published = r[8]
 
@@ -386,7 +386,7 @@ class MassImportTool
 
           tgtConnection = Mysql.new(@target_database_connection)
 
-          rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = " + ImportArchiveID)
+          rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = #{@import_archive_id}")
           ns.NewSid = rr[0] #create creatorship
           self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + ns.NewSid + ", " + ns.NewAuthId + ", 'work') ") #ADD CHAPTERS
           tgtConnection.Close()
