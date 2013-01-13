@@ -221,7 +221,7 @@ class MassImportTool
 
         query2 = "Select subid, subname from #{@source_table_prefix}subcategory; "
         rr = connection.query(query2)
-        if rr.num_rows <> 0
+        unless rr.num_rows.nil? || rr.num_rows == 0
           rr.each do |rr|
             nt = ImportTag.new()
             nt.tag_type = 99
