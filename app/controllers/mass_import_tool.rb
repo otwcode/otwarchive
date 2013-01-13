@@ -86,7 +86,7 @@ class MassImportTool
     ##################
 
     #Source DB Connection
-    @source_database_connection = "thepotionsmaster.net','sltest','test1','password'"
+    @source_database_connection = "thepotionsmaster.net,sltest,test1,password"
 
     #Source Archive Type
     @source_archive_type = 4
