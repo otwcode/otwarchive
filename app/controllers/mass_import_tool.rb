@@ -204,7 +204,7 @@ class MassImportTool
       return tl
     end
 
-    def getTaglist(tl, at)
+    def get_tag_list(tl, at)
       taglist = tl
       connection = mysql.new(@source_database_connection)
       case at
@@ -270,7 +270,7 @@ class MassImportTool
 
 
 
-    def UpdateSourceTags(tl)
+    def update_source_tags(tl)
       case srcArchiveType
         when ArchiveType.StoryLine18
           Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
@@ -293,7 +293,7 @@ class MassImportTool
 
 
     # <summary> # Main Worker Sub # </summary> # <remarks></remarks>
-    def ImportData()
+    def import_data()
       puts " Setting Import Values "
       self.SetImportStrings()
       query = " SELECT * FROM #{@source_stories_table} ;"
@@ -301,7 +301,7 @@ class MassImportTool
 
       if dbgSkipRatingTransform == false
         puts " Tranforming source ratings "
-        self.transformSRCratings()
+        self.transform_source_ratings()
       else
         puts " Skipping source rating transformation per config "
       end
@@ -309,9 +309,9 @@ class MassImportTool
       #Update Tags and get Taglist
       puts (" Updating Tags ")
       tag_list = Array.new()
-      tag_list2 = self.getTaglist(tag_list, @source_archive_type)
-      tag_list = self.fillTagList(tage_list)
-      self.UpdateSourceTags(tag_list)
+      tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
+      tag_list = self.fill_tag_list(tage_list)
+      self.update_source_tags(tag_list)
       r = connection.query(query)
 
       puts (" Importing Stories ")

@@ -19,7 +19,7 @@ class DevmodeController < ApplicationController
     if params[:okgo]
       #testing here, stephanie
       ni = MassImportTool.new
-
+      ni.import_data
 
       setflash; flash[:info] = 'Successfully cleared URL associations'
     end
