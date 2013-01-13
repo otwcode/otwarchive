@@ -633,10 +633,8 @@ class MassImportTool
       connection.close()
       return rowsEffected
     rescue Exception => ex
-      if connection.State != ConnectionState.Closed
-        connection.free
-      end
-      puts ex.Message
+      connection.close()
+      puts ex.message
     ensure
     end
   end
@@ -651,10 +649,10 @@ class MassImportTool
       connection.close()
       return rowsEffected
     rescue Exception => ex
-      if connection.State != ConnectionState.Closed
+
         connection.close()
-      end
-      puts ex.Message
+
+      puts ex.message
     end
   end
 
