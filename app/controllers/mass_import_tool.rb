@@ -200,7 +200,7 @@ class MassImportTool
         end
       end
       connection.close()
-      self.tl[i] = temptag
+      tl[i] = temptag
       i = i + 1
     end
     return tl
