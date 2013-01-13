@@ -89,7 +89,7 @@ class MassImportTool
       @source_database_connection = "thepotionsmaster.net','sltest','test1','password'"
 
       #Source Archive Type
-      @source_archive_type = ArchiveType.StoryLine18
+      @source_archive_type = 5
 
       #If archivetype being imported is efiction 3 >  then specify what class holds warning information
       @source_warning_class_id = 1
