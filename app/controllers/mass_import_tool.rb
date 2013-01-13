@@ -221,13 +221,16 @@ class MassImportTool
 
         query2 = "Select subid, subname from #{@source_table_prefix}subcategory; "
         rr = connection.query(query2)
-        rr.each do |rr|
-          nt = ImportTag.new()
-          nt.tag+type = 99
-          nt.old_id = rr[0]
-          nt.tag = rr[1]
-          taglist.push(nt)
+        if rr.num_rows <> 0
+          rr.each do |rr|
+            nt = ImportTag.new()
+            nt.tag_type = 99
+            nt.old_id = rr[0]
+            nt.tag = rr[1]
+            taglist.push(nt)
+          end
         end
+
       when 3
         query = "Select class_id, class_type, class_name from #{@source_table_prefix}classes; " #
         r = connection.query(query)
