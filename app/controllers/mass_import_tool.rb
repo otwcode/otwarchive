@@ -282,8 +282,8 @@ temp_new_tag.save
   def update_source_tags(tl)
     case @source_archive_type
       when 4
-        Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
-        i = 0
+        #{'}"Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
+
         i = 0
         while i <= tl.Count - 1
           current_tag = self.tl(i)
@@ -291,7 +291,7 @@ temp_new_tag.save
             self.update_record_source("update #{@source_stories_table} set scid = #{current_tag.new_id} where scid = #{current_tag.old_id}")
           end
           if current_tag.tag_type == 99
-            self.update_record_source(" update #{@source_stories_table} set ssubid = #{current_tag.new_id}  where ssubid = #{current_tag.ol_id}")
+            self.update_record_source("update #{@source_stories_table} set ssubid = #{current_tag.new_id}  where ssubid = #{current_tag.old_id}")
           end
           i = i + 1
         end
