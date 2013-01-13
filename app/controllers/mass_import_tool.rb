@@ -266,7 +266,7 @@ class MassImportTool
         end
       when ArchiveType.efiction2
     end
-    connection.Close()
+    connection.close()
     return taglist
   end
 
