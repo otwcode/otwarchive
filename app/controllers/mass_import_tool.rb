@@ -167,18 +167,18 @@ class MassImportTool
   def transform_source_ratings()
     case @source_archive_type
       when 4
-        self.update_record_src("update #{@source_stories_table} set srating= #{@target_rating_1} where srating = 1;")
-        self.update_record_src("update #{@source_stories_table} set srating= #{@target_rating_2} where srating = 2;")
-        self.update_record_src("update #{@source_stories_table} set srating= #{@target_rating_3} where srating = 3;")
-        self.update_record_src("update #{@source_stories_table} set srating= #{@target_rating_4} where srating = 4;")
-        self.update_record_src("update #{@source_stories_table} set srating= #{@target_rating_5} where srating = 5;")
+        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_1} where srating = 1;")
+        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_2} where srating = 2;")
+        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_3} where srating = 3;")
+        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_4} where srating = 4;")
+        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_5} where srating = 5;")
 
       when 3
-        self.update_record_src("update #{@source_stories_table} set rid= #{@target_rating_1} where rid=1;")
-        self.update_record_src("update #{@source_stories_table} set rid= #{@target_rating_2} where rid=2;")
-        self.update_record_src("update #{@source_stories_table} set rid= #{@target_rating_3} where rid=3;")
-        self.update_record_src("update #{@source_stories_table} set rid= #{@target_rating_4} where rid=4;")
-        self.update_record_src("update #{@source_stories_table} set rid= #{@target_rating_5} where rid=5;")
+        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_1} where rid=1;")
+        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_2} where rid=2;")
+        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_3} where rid=3;")
+        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_4} where rid=4;")
+        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_5} where rid=5;")
       when ArchiveType.efiction2
     end
   end
@@ -192,13 +192,13 @@ class MassImportTool
       query = "Select id from tags where name = '#{temptag.tag}'; "
       r = connection.query(query)
       if r.num_rows == 0 then
-      # '' self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
-temp_new_tag = Tag.new()
-temp_new_tag.type = "#{temptag.tag_type}"
-temp_new_tag.name = "#{temptag.tag}"
-temp_new_tag.save
+        # '' self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
+        temp_new_tag = Tag.new()
+        temp_new_tag.type = "#{temptag.tag_type}"
+        temp_new_tag.name = "#{temptag.tag}"
+        temp_new_tag.save
 
-    temptag.new_id = temp_new_tag.id
+        temptag.new_id = temp_new_tag.id
       else
         r.each do |r|
           temptag.new_id = r[0]
@@ -645,7 +645,7 @@ temp_new_tag.save
   end
 
 # Update db record takes query as peram #
-  def update_record_src(query)
+  def update_record_source(query)
     connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
     begin
       rowsEffected = 0
@@ -655,7 +655,7 @@ temp_new_tag.save
       return rowsEffected
     rescue Exception => ex
 
-        connection.close()
+      connection.close()
 
       puts ex.message
     end
