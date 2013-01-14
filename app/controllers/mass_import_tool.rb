@@ -118,6 +118,8 @@ class MassImportTool
     #Source Subcategories Table
     @source_subcatagories_table = ""
 
+    @debug_update_source_tags = false
+
     #Source Categories Table
     @source_categories_table = ""
 
@@ -283,7 +285,7 @@ class MassImportTool
     case @source_archive_type
       when 4
         #{'}"Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
-
+        puts "updating source tags"
         i = 0
         while i <= tl.length - 1
           current_tag = tl[i]
@@ -320,6 +322,8 @@ class MassImportTool
     tag_list = Array.new()
     tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
     tag_list = self.fill_tag_list(tag_list)
+    if @debug_update_source_tags = true
+      self.update_source_tags(tag_list)    end
     self.update_source_tags(tag_list)
     r = connection.query(query)
 
