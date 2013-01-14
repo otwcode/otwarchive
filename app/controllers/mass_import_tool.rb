@@ -320,7 +320,7 @@ class MassImportTool
     #Update Tags and get Taglist
     puts (" Updating Tags ")
     tag_list = Array.new()
-    tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
+    #tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
     tag_list = self.fill_tag_list(tag_list)
     if @debug_update_source_tags = true
       self.update_source_tags(tag_list)
@@ -638,7 +638,7 @@ class MassImportTool
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     begin
       rowsEffected = 0
-      rowsEffected = mysql.query(query)
+      rowsEffected = connection.query(query)
       connection.free
       connection.close()
       return rowsEffected
@@ -655,7 +655,7 @@ class MassImportTool
     begin
       rowsEffected = 0
 
-      rowsEffected = mysql.query(query)
+      rowsEffected = conection.query(query)
       connection.close()
       return rowsEffected
     rescue Exception => ex
