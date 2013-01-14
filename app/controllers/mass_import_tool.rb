@@ -331,7 +331,7 @@ class MassImportTool
 
     puts (" Importing Stories ")
     i = 0
-    while i <= r.num_rows
+    r.each do
       puts " Importing Story #{i}"
       ns = ImportWork.new()
       a = ImportUser.new()
@@ -414,6 +414,9 @@ class MassImportTool
       end
       i = i + 1
     end
+    end
+
+
     connection.close()
   end
 =begin
