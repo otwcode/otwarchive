@@ -399,7 +399,7 @@ class MassImportTool
         if ns.new_author_id == 0
           a = self.get_import_user_from_source(ns.old_user_id)
           new_a = self.add_user(a)
-          puts "newid = #{new_a.id}"
+          puts "newid = #{new_a.new_user_id}"
 
 
           ns.new_user_id = new_a.default_pseud
