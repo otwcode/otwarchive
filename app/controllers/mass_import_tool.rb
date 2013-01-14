@@ -404,7 +404,8 @@ class MassImportTool
           puts "newid = #{new_a.new_user_id}"
 
 
-          ns.new_user_id = new_a.default_pseud
+          ns.new_user_id = new_a.new_user_id
+          update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
           ns.author = new_a.penname
         end
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, srcArchive, srcID) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', " + ImportArchiveID + ", " + ns.OldSid + "); ")
@@ -517,7 +518,7 @@ end
       new_user.login = login_temp
       new_user.password = a.password
       new_user.password_confirmation = a.password
-
+      new_user.age_over_13 = true
     new_user.save!
     new_user.create_default_associateds
     puts new_user.id
@@ -538,6 +539,13 @@ end
 =end
     return a
 
+  end
+  def get_default_pseud_id(user_id)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    r = connection.query("select id from pseuds where user_id = #{user_id}")
+    r.each do |row|
+      return row[0]
+    end
   end
   # <summary> # Set Archive Strings and values # </summary> # <remarks></remarks>
   def set_import_strings
