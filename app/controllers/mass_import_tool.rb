@@ -505,8 +505,9 @@ end
   end
 
   def add_user(a)
-    new_user = User.create(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
+    new_user = User.new(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
     new_user.create_default_associateds
+    new_user.save
     a.new_user_id = new_user.id
 =begin
         #self.update_record_target("insert into users (email, login) values ('#{a.email}', '#{a.email}'); ")
