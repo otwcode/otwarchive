@@ -398,6 +398,8 @@ class MassImportTool
         ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_author_id == 0
           a = self.get_import_user_from_source(ns.old_user_id)
+
+          puts "=== #{a.email}"
           new_a = self.add_user(a)
           puts "newid = #{new_a.new_user_id}"
 
