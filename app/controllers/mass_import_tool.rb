@@ -565,13 +565,13 @@ end
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("#{@get_author_from_source_query} #{authid}")
     r.each  do |r|
-      a.srcuid = authid
-      a.RealName = r[0]
+      a.old_user_id = authid
+      a.realname = r[0]
       a.source_archive_id = @import_archive_id
 
-      a.PenName = r[1]
+      a.penname = r[1]
       a.email = r[2]
-      a.Bio = r[3]
+      a.bio = r[3]
       a.joindate = r[4]
       a.password = r[5]
       if @source_archive_type == 2 || @source_archive_type == 4
@@ -579,9 +579,9 @@ end
         a.aol = r[7]
         a.msn = r[8]
         a.icq = r[9]
-        a.Bio = self.build_bio(a).Bio
+        a.bio = self.build_bio(a).bio
         a.yahoo = ""
-        if srcArchiveType == 2
+        if @source_archive_type == 2
           a.yahoo = r[10]
           a.isadult = r[11]
         end
@@ -600,24 +600,24 @@ end
       a.yahoo = " "
     end
     if a.aol.length > 1 || a.yahoo.length > 1 || a.website.length > 1 || a.icq.length > 1 || a.msn.length > 1
-      if a.Bio.length > 0
-        a.Bio << "<br /><br />"
+      if a.bio.length > 0
+        a.bio << "<br /><br />"
       end
     end
     if a.aol.length > 1
-      a.Bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
+      a.bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
     end
     if a.website.length > 1
-      a.Bio << "<br /><b>Website:</ b><br /> #{a.website} "
+      a.bio << "<br /><b>Website:</ b><br /> #{a.website} "
     end
     if a.yahoo.length > 1
-      a.Bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
+      a.bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
     end
     if a.msn.length > 1
-      a.Bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
+      a.bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
     end
     if a.icq.length > 1
-      a.Bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
+      a.bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
     end
     return a
   end
