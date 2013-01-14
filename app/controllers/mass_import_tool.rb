@@ -19,7 +19,7 @@ class MassImportTool
     @create_collection = true
 
     #Match Existing Authors by Email-Address
-    @matchExistingAuthors = true
+    @match_existing_authors = true
 
     #Import Job Name
     @import_name = "New Import"
@@ -28,10 +28,10 @@ class MassImportTool
     @import_archive_id = 100
 
     #Import categories as categories or use ao3 cats
-    @useProperCategories = false
+    @use_proper_categories = false
 
     #Create record for imported archive
-    @CreateImportArchiveRecord = false
+    @create_import_archive_record = false
 
     #Import reviews t/f
     @import_reviews = true
@@ -156,7 +156,7 @@ class MassImportTool
   end
 =end
 
-  def DisplayStartupInfo()
+  def display_startup_info()
     puts "AO3 Importer Starting "
     puts "Version #{@Version}"
     puts "Running: #{@import_name}"
@@ -353,7 +353,7 @@ class MassImportTool
             ns.published =  row[5]
 
             cattag = ImportTag.new()
-            if useProperCategories == true
+            if @use_proper_categories == true
               cattag.tag_type = 1
             else
               cattag.tag_type = 3
@@ -361,7 +361,7 @@ class MassImportTool
             cattag.new_id = row[6]
             my_tag_list.push(cattag)
             subcattag = ImportTag.new()
-            if useProperCategories == true
+            if @use_proper_categories == true
               subcattag.tag_type = 1
             else
               subcattag.tag_type = 3
@@ -542,10 +542,10 @@ class MassImportTool
     r = my.query("#{qryGetAuthorFromSource} #{authid}")
     r.each_hash do |r|
       a.srcuid = authid
-      a.RealName = r["realname"]
+      a.RealName = r[0]
       a.source_archive_id = @importArchiveID
-      a.PenName = r["penname"]
-      a.email = r["email"]
+      a.PenName = r[1]
+      a.email = r[2]
       a.Bio = r[3]
       a.joindate = r[4]
       a.password = r[5]
@@ -572,24 +572,24 @@ class MassImportTool
     if a.yahoo == nil
       a.yahoo = " "
     end
-    if a.aol.Length > 1 | a.yahoo.Length > 1 | a.website.Length > 1 | a.icq.Length > 1 | a.msn.Length > 1
-      if a.Bio.Length > 0
+    if a.aol.length > 1 || a.yahoo.length > 1 || a.website.length > 1 || a.icq.length > 1 || a.msn.length > 1
+      if a.Bio.length > 0
         a.Bio << "<br /><br />"
       end
     end
-    if a.aol.Length > 1
+    if a.aol.length > 1
       a.Bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
     end
-    if a.website.Length > 1
+    if a.website.length > 1
       a.Bio << "<br /><b>Website:</ b><br /> #{a.website} "
     end
-    if a.yahoo.Length > 1
+    if a.yahoo.length > 1
       a.Bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
     end
-    if a.msn.Length > 1
+    if a.msn.length > 1
       a.Bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
     end
-    if a.icq.Length > 1
+    if a.icq.length > 1
       a.Bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
     end
     return a
@@ -615,7 +615,7 @@ class MassImportTool
       return r.num_rows
     end
 
-    connection.Close()
+    connection.close()
 
   end
 
