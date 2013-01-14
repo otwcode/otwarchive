@@ -511,7 +511,7 @@ end
     login_temp = a.email.tr("@", "")
     login_temp = login_temp.tr(".","")
     puts  login_temp
-    new_user = User.new(age_over_13:true,terms_of_service:false,email:"#{a.email}",login:"#{login_temp}",password:"#{a.password}",password_confirmation:"#{a.password}")
+    new_user = User.new(age_over_13:true,terms_of_service:true,email:a.email},login:login_temp,password:a.password,password_confirmation:a.password)
     new_user.save!
     new_user.create_default_associateds
     puts new_user.id
