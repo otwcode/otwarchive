@@ -333,7 +333,7 @@ class MassImportTool
     i = 0
     while i <= r.num_rows
       puts " Importing Story #{i}"
-      ns = ImportStory.new()
+      ns = ImportWork.new()
       a = ImportUser.new()
       #Create Taglisit for this story
       my_tag_list = Array.new()
