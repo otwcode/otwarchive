@@ -125,6 +125,7 @@ Otwarchive::Application.routes.draw do
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
+    resources :activities, :only => [:index, :show]
     resources :settings
     resources :skins do
       collection do
