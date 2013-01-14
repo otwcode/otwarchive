@@ -507,9 +507,10 @@ end
   end
 
   def add_user(a)
+    puts "====email #{a.email}"
     new_user = User.new(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
-    new_user.create_default_associateds
     new_user.save!
+    new_user.create_default_associateds
     puts new_user.id
     a.new_user_id = new_user.id
 =begin
@@ -568,6 +569,7 @@ end
     a = ImportUser.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("#{@get_author_from_source_query} #{authid}")
+    puts
     r.each  do |r|
       a.old_user_id = authid
       a.realname = r[0]
