@@ -393,6 +393,7 @@ class MassImportTool
             ns.hits = row[10]
 
         end
+        puts "attempting to get author id"
         ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive)
         if ns.new_author_id == 0
           a = self.get_import_user_from_source(ns.old_user_id)
