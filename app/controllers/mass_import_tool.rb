@@ -389,16 +389,16 @@ class MassImportTool
             ns.hits = row[10]
 
         end
-        ns.new_author_id = self.getauthorIDbyOld(ns.old_user_id, ns.source_archive, ArchiveType.OTW)
+        ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive)
         if ns.new_author_id == 0
-          a = self.getAuthorObjectFromSRC(ns.old_user_id)
+          a = self.get_import_user_from_source(ns.old_user_id)
           new_a = self.add_user(a)
           ns.new_user_id = new_a.default_pseud
           ns.author = new_a.penname
         end
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, srcArchive, srcID) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', " + ImportArchiveID + ", " + ns.OldSid + "); ")
 
-        tgtConnection = Mysql.new(@target_database_connection)
+        tgtConnection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
         rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = #{@import_archive_id}")
         ns.NewSid = rr[0] #create creatorship
@@ -457,6 +457,19 @@ class MassImportTool
       end
     end
 =end
+
+def get_new_user_id_from_imported(old_id,source_archive)
+  connection = Mysql.new()
+  result = connection.query("select user_id from user_imports where old_user_id = #{old_id} and source_archive = #{source_archive}")
+  if result.num_rows == 0
+      return 0
+  else
+      result.each do |myrow|
+          return myrow[0]
+      end
+  end
+end
+
   ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
 
   ImportUser = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
@@ -475,7 +488,7 @@ class MassImportTool
   end #Tag Type
 
   def get_user_id_from_email(email)
-    connection = Mysql.new(@target_database_connection)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("select user_id from users where email = '#{email}'")
     return r[0]
   end
@@ -536,11 +549,11 @@ class MassImportTool
     end
   end
 
-  def get_imported_author_from_source(authid)
+  def get_import_user_from_source(authid)
     a = ImportedAuthor.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = my.query("#{qryGetAuthorFromSource} #{authid}")
-    r.each_hash do |r|
+    r.each  do |r|
       a.srcuid = authid
       a.RealName = r[0]
       a.source_archive_id = @importArchiveID
