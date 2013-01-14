@@ -17,7 +17,11 @@ module WorksOwner
     index_works ||= self.works.where(:posted => true)
     if tag.present?
       cache_key << "tag_#{tag.id}_"
-      index_works = index_works.joins(:taggings).where("taggings.tagger_id = ?", tag.id)
+      if tag.canonical?
+        index_works = index_works.joins(:filter_taggings).where("filter_taggings.filter_id = ?", tag.id)
+      else
+        index_works = index_works.joins(:taggings).where("taggings.tagger_id = ?", tag.id)
+      end
     end
     cache_key << index_works.count.to_s
     cache_key << "_"
