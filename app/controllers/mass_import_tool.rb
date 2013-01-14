@@ -367,7 +367,7 @@ class MassImportTool
               subcattag.tag_type = 3
             end
             subcattag.new_id =row[11]
-            myTagList.push(subcattag)
+            my_tag_list.push(subcattag)
             ns.updated = row[9]
             ns.completed = row[12]
             ns.hits = row[10]
