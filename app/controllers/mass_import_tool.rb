@@ -331,7 +331,7 @@ class MassImportTool
 
     puts (" Importing Stories ")
     i = 0
-    r.each do
+    r.each do |row|
       puts " Importing Story #{i}"
       ns = ImportWork.new()
       a = ImportUser.new()
@@ -340,17 +340,17 @@ class MassImportTool
       begin
         case @source_archive_type
           when 4
-            ns.old_story_id = r[0]
-            ns.title = r[1]
-            ns.summary = r[2]
-            ns.old_user_id = r[3]
-            ns.rating_integer = r[4]
+            ns.old_story_id = row[0]
+            ns.title = row[1]
+            ns.summary = row[2]
+            ns.old_user_id = row[3]
+            ns.rating_integer = row[4]
             rating_tag = ImportTag.new()
             rating_tag.tag_type = 7
             rating_tag.new_id = ns.rating_integer
             my_tag_list.Add(rating_tag)
 
-            ns.published =  r[5]
+            ns.published =  row[5]
 
             cattag = ImportTag.new()
             if useProperCategories == true
@@ -358,7 +358,7 @@ class MassImportTool
             else
               cattag.tag_type = 3
             end
-            cattag.new_id = r[6]
+            cattag.new_id = row[6]
             my_tag_list.Add(cattag)
             subcattag = ImportTag.new()
             if useProperCategories == true
@@ -366,27 +366,27 @@ class MassImportTool
             else
               subcattag.tag_type = 3
             end
-            subcattag.new_id =r[11]
+            subcattag.new_id =row[11]
             myTagList.Add(subcattag)
-            ns.updated = r[9]
-            ns.completed = r[12]
-            ns.hits = r[10]
+            ns.updated = row[9]
+            ns.completed = row[12]
+            ns.hits = row[10]
           when 3
-            ns.old_story_id = r[0]
-            ns.title = r[1]
-            ns.summary = r[2]
-            ns.old_user_id = r[10]
-            ns.rating_integer = r[4]
+            ns.old_story_id = row[0]
+            ns.title = row[1]
+            ns.summary = row[2]
+            ns.old_user_id = row[10]
+            ns.rating_integer = row[4]
             rating_tag = ImportTag.new()
             rating_tag.tag_type =7
             rating_tag.new_id = ns.rating_integer
             tag_list.Add(rating_tag)
 
-            ns.published = r[8]
+            ns.published = row[8]
 
-            ns.updated = r[9]
-            ns.completed = r[12]
-            ns.hits = r[10]
+            ns.updated = row[9]
+            ns.completed = row[12]
+            ns.hits = row[10]
 
         end
         ns.new_author_id = self.getauthorIDbyOld(ns.old_user_id, ns.source_archive, ArchiveType.OTW)
