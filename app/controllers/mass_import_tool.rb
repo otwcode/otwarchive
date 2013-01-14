@@ -86,7 +86,7 @@ class MassImportTool
     ##################
 
     #Source DB Connection
-    #"thepotionsmaster.net","test1","Trustno1","sltest" = "\"thepotionsmaster.net\",\"sltest\",\"test1\",\"password\""
+    #"localhost","stephanies","Trustno1","stephanies_development" = "\"thepotionsmaster.net\",\"sltest\",\"test1\",\"password\""
 
     #Source Archive Type
     @source_archive_type = 4
@@ -216,7 +216,7 @@ class MassImportTool
 
   def get_tag_list(tl, at)
     taglist = tl
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     case at
       when 4
         query = "Select caid, caname from #{@source_table_prefix}category; " #
@@ -309,7 +309,7 @@ class MassImportTool
     puts " Setting Import Values "
     self.set_import_strings()
     query = " SELECT * FROM #{@source_stories_table} ;"
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
     if @skip_rating_transform == false
       puts " Tranforming source ratings "
@@ -535,7 +535,7 @@ class MassImportTool
 
   def get_imported_author_from_source(authid)
     a = ImportedAuthor.new()
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = my.query("#{qryGetAuthorFromSource} #{authid}")
     r.each_hash do |r|
       a.srcuid = authid
@@ -652,7 +652,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_source(query)
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     begin
       rowsEffected = 0
 
