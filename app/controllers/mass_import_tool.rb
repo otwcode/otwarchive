@@ -338,7 +338,7 @@ class MassImportTool
       #Create Taglisit for this story
       my_tag_list = Array.new()
       begin
-        case srcArchiveType
+        case @source_archive_type
           when 4
             ns.old_story_id = r[0]
             ns.title = r[1]
