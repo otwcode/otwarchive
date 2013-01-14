@@ -505,7 +505,7 @@ end
   end
 
   def add_user(a)
-    new_user = user.create(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
+    new_user = User.create(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
     new_user.create_default_associateds
     a.new_user_id = new_user.id
 =begin
