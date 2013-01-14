@@ -399,6 +399,9 @@ class MassImportTool
         if ns.new_author_id == 0
           a = self.get_import_user_from_source(ns.old_user_id)
           new_a = self.add_user(a)
+          puts "newid = #{new_a.id}"
+
+
           ns.new_user_id = new_a.default_pseud
           ns.author = new_a.penname
         end
@@ -466,7 +469,7 @@ class MassImportTool
 
 def get_new_user_id_from_imported(old_id,source_archive)
   connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-  result = connection.query("select user_id from user_imports where old_user_id = #{old_id} and source_archive = #{source_archive}")
+  result = connection.query("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
   connection.close
   if result.num_rows == 0
       return 0
