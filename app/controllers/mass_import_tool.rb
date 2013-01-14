@@ -459,7 +459,7 @@ class MassImportTool
 =end
 
 def get_new_user_id_from_imported(old_id,source_archive)
-  connection = Mysql.new()
+  connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
   result = connection.query("select user_id from user_imports where old_user_id = #{old_id} and source_archive = #{source_archive}")
   if result.num_rows == 0
       return 0
