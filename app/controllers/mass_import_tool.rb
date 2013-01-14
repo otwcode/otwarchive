@@ -348,7 +348,7 @@ class MassImportTool
             rating_tag = ImportTag.new()
             rating_tag.tag_type = 7
             rating_tag.new_id = ns.rating_integer
-            my_tag_list.Add(rating_tag)
+            my_tag_list.push(rating_tag)
 
             ns.published =  row[5]
 
@@ -359,7 +359,7 @@ class MassImportTool
               cattag.tag_type = 3
             end
             cattag.new_id = row[6]
-            my_tag_list.Add(cattag)
+            my_tag_list.push(cattag)
             subcattag = ImportTag.new()
             if useProperCategories == true
               subcattag.tag_type = 1
@@ -367,7 +367,7 @@ class MassImportTool
               subcattag.tag_type = 3
             end
             subcattag.new_id =row[11]
-            myTagList.Add(subcattag)
+            myTagList.push(subcattag)
             ns.updated = row[9]
             ns.completed = row[12]
             ns.hits = row[10]
@@ -380,7 +380,7 @@ class MassImportTool
             rating_tag = ImportTag.new()
             rating_tag.tag_type =7
             rating_tag.new_id = ns.rating_integer
-            tag_list.Add(rating_tag)
+            tag_list.push(rating_tag)
 
             ns.published = row[8]
 
