@@ -502,32 +502,32 @@ class MassImportTool
   def set_import_strings
     case @source_archive_type
       when 1
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_categories_table = "#{@source_table_prefix} categories"
-        @source_users_table = "#{@source_table_prefix} authors"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_categories_table = "#{@source_table_prefix}categories"
+        @source_users_table = "#{@source_table_prefix}authors"
         @get_author_from_source_query = " "
       when 2
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_users_table = "#{@source_table_prefix} authors"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_users_table = "#{@source_table_prefix}authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass, website, aol, msn, yahoo, icq, ageconsent from  #{@source_users_table} where uid ="
       when 3
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
         @source_users_table = "#{@source_table_prefix} authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass from #{@source_users_table} where uid ="
       when 5
       when 4
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_users_table = "#{@source_table_prefix} users"
-        @source_categories_table = "#{@source_table_prefix} category"
-        @source_subcategories_table = "#{@source_table_prefix} subcategory"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_users_table = "#{@source_table_prefix}users"
+        @source_categories_table = "#{@source_table_prefix}category"
+        @source_subcategories_table = "#{@source_table_prefix}subcategory"
         @srcRatingsTable = "" #None
         @get_author_from_source_query = "SELECT urealname, upenname, uemail, ubio, ustart, upass, uurl, uaol, umsn, uicq from #{@source_users_table} where uid ="
     end
