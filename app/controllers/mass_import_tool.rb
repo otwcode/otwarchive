@@ -414,7 +414,7 @@ class MassImportTool
       end
       i = i + 1
     end
-    end
+
 
 
     connection.close()
