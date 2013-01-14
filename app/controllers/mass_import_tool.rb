@@ -341,7 +341,11 @@ class MassImportTool
         case @source_archive_type
           when 4
             ns.old_story_id = row[0]
+            puts ns.old_story_id
+
             ns.title = row[1]
+            puts ns.title
+
             ns.summary = row[2]
             ns.old_user_id = row[3]
             ns.rating_integer = row[4]
@@ -461,6 +465,7 @@ class MassImportTool
 def get_new_user_id_from_imported(old_id,source_archive)
   connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
   result = connection.query("select user_id from user_imports where old_user_id = #{old_id} and source_archive = #{source_archive}")
+  connection.close
   if result.num_rows == 0
       return 0
   else
@@ -490,6 +495,7 @@ end
   def get_user_id_from_email(email)
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("select user_id from users where email = '#{email}'")
+    connection.close
     return r[0]
   end
 
@@ -556,20 +562,21 @@ end
     r.each  do |r|
       a.srcuid = authid
       a.RealName = r[0]
-      a.source_archive_id = @importArchiveID
+      a.source_archive_id = @import_archive_id
+
       a.PenName = r[1]
       a.email = r[2]
       a.Bio = r[3]
       a.joindate = r[4]
       a.password = r[5]
-      if @source_archive_type == ArchiveType.efiction2 || @source_archive_type == ArchiveType.storyline
+      if @source_archive_type == 2 || @source_archive_type == 4
         a.website = r[6]
         a.aol = r[7]
         a.msn = r[8]
         a.icq = r[9]
         a.Bio = self.build_bio(a).Bio
         a.yahoo = ""
-        if srcArchiveType == ArchiveType.efiction2
+        if srcArchiveType == 2
           a.yahoo = r[10]
           a.isadult = r[11]
         end
@@ -577,6 +584,8 @@ end
 
     end
     my.free
+    my.close
+
     return a
   end
 
@@ -619,9 +628,10 @@ end
   # <summary> # Return new story id given old id and archive #
   def get_new_story_id_from_old_id(source_archive_id, old_story_id) #
     query = " select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}"
-    connection = Mysql.new(@target_database_connection)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
     r = Mysql.query(query)
+
     if r.num_rows > 0
       return r[0]
     else
@@ -635,9 +645,10 @@ end
   # Get New Author ID from old User ID & old archive ID
   def get_new_author_id_from_old(old_archive_id, old_user_id)
     begin
-      connection = Mysql.new(@target_database_connection)
+      connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       query = " Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} "
       r = connection.query(query)
+      connection.close
       if r.num_rows == 0
         return 0
       else
