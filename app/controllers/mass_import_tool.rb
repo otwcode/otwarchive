@@ -508,6 +508,8 @@ end
 
   def add_user(a)
     puts "====email #{a.email}"
+    login_temp = a.email.tr("@", "")
+    login_temp = login_temp.tr(".","")
     new_user = User.new(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",password_confirmation:"#{a.password}")
     new_user.save!
     new_user.create_default_associateds
