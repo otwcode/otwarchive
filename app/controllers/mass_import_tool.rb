@@ -516,7 +516,7 @@ end
       new_user.email = a.email
       new_user.login = login_temp
       new_user.password = a.password
-      new_user.password_confirmation = a.password)
+      new_user.password_confirmation = a.password
 
     new_user.save!
     new_user.create_default_associateds
