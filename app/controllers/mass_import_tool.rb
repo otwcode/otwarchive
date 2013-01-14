@@ -340,7 +340,7 @@ class MassImportTool
       begin
         case @source_archive_type
           when 4
-            ns.source_archive = @import_archive_id
+            ns.source_archive_id = @import_archive_id
             ns.old_story_id = row[0]
             puts ns.old_story_id
 
@@ -394,8 +394,8 @@ class MassImportTool
             ns.hits = row[10]
 
         end
-        puts "attempting to get author id, user: #{ns.old_user_id}, source: #{ns.source_archive}"
-        ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive)
+        puts "attempting to get author id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
+        ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_author_id == 0
           a = self.get_import_user_from_source(ns.old_user_id)
           new_a = self.add_user(a)
