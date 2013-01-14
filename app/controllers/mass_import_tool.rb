@@ -456,7 +456,7 @@ class MassImportTool
 =end
   ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
 
-  ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
+  ImportUser = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
                             :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
 
   ImportChapter = Struct.new(:new_work_id,:old_story_id,:source_archive_id,:title,
