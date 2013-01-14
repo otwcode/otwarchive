@@ -340,6 +340,7 @@ class MassImportTool
       begin
         case @source_archive_type
           when 4
+            ns.source_archive = @import_archive_id
             ns.old_story_id = row[0]
             puts ns.old_story_id
 
