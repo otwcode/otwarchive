@@ -15,7 +15,7 @@ class DevmodeController < ApplicationController
     render 
   end
 
-  def unregister_imports
+  def initialize()
     if params[:okgo]
       #testing here, stephanie
       ni = MassImportTool.new
