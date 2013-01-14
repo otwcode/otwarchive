@@ -24,9 +24,16 @@ class CommentsController < ApplicationController
     @check_visibility_of = @comment
   end
 
-  # Users shouldn't be able to see comments on restricted works unless logged in
+  # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
-    if !logged_in? && (params[:work_id] && Work.find_by_id(params[:work_id]).respond_to?(:restricted) || params[:id] && Comment.find(params[:id]).ultimate_parent.respond_to?(:restricted))
+    parent =  if @comment.present?
+                @comment.ultimate_parent
+              elsif @commentable.present? && @commentable.respond_to?(:work)
+                @commentable.work
+              else
+                @commentable
+              end
+    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
       redirect_to login_path(:restricted_commenting => true) and return
     end
   end
