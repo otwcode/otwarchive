@@ -563,7 +563,7 @@ end
   def get_import_user_from_source(authid)
     a = ImportUser.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = my.query("#{qryGetAuthorFromSource} #{authid}")
+    r = connection.query("#{qryGetAuthorFromSource} #{authid}")
     r.each  do |r|
       a.srcuid = authid
       a.RealName = r[0]
@@ -588,8 +588,8 @@ end
       end
 
     end
-    my.free
-    my.close
+
+    connection.close
 
     return a
   end
