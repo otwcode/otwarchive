@@ -95,7 +95,7 @@ class MassImportTool
     @source_warning_class_id = 1
 
     #Holds Value for source table prefix
-    @source_table_prefix = "SL18_"
+    @source_table_prefix = "sl18_"
 
     #Source Ratings Table
     @source_ratings_table = ""
