@@ -323,7 +323,7 @@ class MassImportTool
     tag_list = Array.new()
     #tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
     tag_list = self.fill_tag_list(tag_list)
-    if @debug_update_source_tags = true
+    if @debug_update_source_tags == true
       self.update_source_tags(tag_list)
     end
 
