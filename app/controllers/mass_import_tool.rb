@@ -561,7 +561,7 @@ end
   end
 
   def get_import_user_from_source(authid)
-    a = ImportedAuthor.new()
+    a = ImportedUser.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = my.query("#{qryGetAuthorFromSource} #{authid}")
     r.each  do |r|
