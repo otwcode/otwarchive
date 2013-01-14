@@ -167,6 +167,7 @@ class MassImportTool
 
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
+    puts "transform source ratings"
     case @source_archive_type
       when 4
         self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_1} where srating = 1;")
