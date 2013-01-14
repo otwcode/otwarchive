@@ -118,7 +118,7 @@ class MassImportTool
     #Source Subcategories Table
     @source_subcatagories_table = ""
 
-    @debug_update_source_tags = false
+    @debug_update_source_tags = true
 
     #Source Categories Table
     @source_categories_table = ""
@@ -127,7 +127,7 @@ class MassImportTool
     @get_author_from_source_query = ""
 
     #Skip Rating Transformation (ie if import in progress or testing)
-    @skip_rating_transform = true
+    @skip_rating_transform = false
   end
 
 
