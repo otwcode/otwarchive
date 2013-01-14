@@ -408,7 +408,7 @@ class MassImportTool
         connection.close()
         self.AddChaptersOTW(ns)
       rescue Exception => ex
-        puts " Error : " + ex.Message
+        puts " Error : " + ex.message
         connection.close()
       ensure
       end
