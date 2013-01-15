@@ -1218,7 +1218,6 @@ class Work < ActiveRecord::Base
     else
       pseuds.each do |pseud|
         names << "#{pseud.name} #{pseud.user_login} "
-        #names << "#{pseud.name} "
       end
       external_author_names.value_of(:name).each do |name|
         names << "#{name} "
