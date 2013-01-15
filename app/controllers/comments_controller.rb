@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
+  before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access, :only => [:index, :show]
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
@@ -15,10 +16,26 @@ class CommentsController < ApplicationController
 
   cache_sweeper :comment_sweeper
 
+
+
   def load_comment
     @comment = Comment.find(params[:id])
     @check_ownership_of = @comment
     @check_visibility_of = @comment
+  end
+
+  # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
+  def check_if_restricted
+    parent =  if @comment.present?
+                @comment.ultimate_parent
+              elsif @commentable.present? && @commentable.respond_to?(:work)
+                @commentable.work
+              else
+                @commentable
+              end
+    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
+      redirect_to login_path(:restricted_commenting => true) and return
+    end
   end
 
   def check_tag_wrangler_access
@@ -87,12 +104,6 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-    if params[:work_id]
-      work = Work.find(params[:work_id])
-      if work.restricted && !logged_in?
-        redirect_to login_path(:restricted_commenting => true) and return
-      end
-    end
     if @commentable.nil?
       setflash; flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
