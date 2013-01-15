@@ -162,9 +162,6 @@ class MassImportTool
     puts "Running: #{@import_name}"
   end
 
-
-
-
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
     puts "transform source ratings"
@@ -281,11 +278,11 @@ class MassImportTool
   end
 
 
-
+  #update tags in source database to match destination values
   def update_source_tags(tl)
     case @source_archive_type
       when 4
-        #{'}"Console.WriteLine(" Updating tags in source database for Archive Type 'StoryLine' ")
+        puts " Updating tags in source database for Archive Type 'StoryLine' "
         puts "updating source tags"
         i = 0
         while i <= tl.length - 1
@@ -304,7 +301,7 @@ class MassImportTool
 
 
 
-  # <summary> # Main Worker Sub # </summary> # <remarks></remarks>
+  # Main Worker Sub
   def import_data()
     puts " Setting Import Values "
     self.set_import_strings()
@@ -345,8 +342,8 @@ class MassImportTool
             puts ns.old_story_id
 
             ns.title = row[1]
+            #debug info
             puts ns.title
-
             ns.summary = row[2]
             ns.old_user_id = row[3]
             ns.rating_integer = row[4]
@@ -395,25 +392,52 @@ class MassImportTool
 
         end
         puts "attempting to get author id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
+
         ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_author_id == 0
-          a = self.get_import_user_from_source(ns.old_user_id)
+          a = self.get_import_user_object_from_source(ns.old_user_id)
 
-          puts "=== #{a.email}"
-          new_a = self.add_user(a)
-          puts "newid = #{new_a.new_user_id}"
+          temp_author_id = get_user_id_from_email(a.email)
+          if temp_author_id == 0 then
+            #add new user with user object, passing old author object
+            new_a = self.add_user(a)
+
+            #pass values to new story object
+            ns.author = new_a.penname
+            ns.new_user_id = new_a.new_user_id
+
+            #debug info
+            puts "newid = #{new_a.new_user_id}"
+
+            #get newly created pseud id
+            new_pseud_id = get_default_pseud_id(ns.new_user_id)
+
+            #set the penname on newly created pseud to proper value
+            update_record_target("update pseuds set name = ''#{ns.author}' where id = #{new_pseud_id}")
+            update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
+          else
+            update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
+            ns.author = a.penname
+            #check to see if penname exists as pseud
+            temp_pseud_id = get_pseud_id_for_penname(temp_author_id,ns.penname)
+            if temp_pseud_id == 0
+              update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{temp_author_id},'#{a.penname}',1,'Imported'")
+
+              temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.author)
+              update_record_target("update user_imports set matching_pseud = #{ns.new_user_id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
+              ns.new_user_id = temp_pseud_id
+            end
+          end
 
 
-          ns.new_user_id = new_a.new_user_id
-          update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-          ns.author = new_a.penname
+
         end
-        self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, srcArchive, srcID) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', " + ImportArchiveID + ", " + ns.OldSid + "); ")
+        self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', '#{@import_archive_id}~~iveID + ", " + ns.OldSid + "); ")
 
         tgtConnection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
         rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = #{@import_archive_id}")
-        ns.NewSid = rr[0] #create creatorship
+        ns.new_work_id = rr[0] #create creatorship
         self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + ns.NewSid + ", " + ns.NewAuthId + ", 'work') ") #ADD CHAPTERS
         tgtConnection.close()
 
@@ -426,11 +450,24 @@ class MassImportTool
       end
       i = i + 1
     end
-
-
-
     connection.close()
   end
+
+
+  #given valid user_id search for psued belonging to that user_id with matching penname
+  def get_pseud_id_for_penname(user_id,penname)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    r = connection.query("select id from pseuds where user_id = #{user_id} and name = '#{penname}'")
+    connection.close
+    if r.num_rows == 0
+      return 0
+    else
+      r.each do |row|
+        return row[0]
+      end
+    end
+  end
+
 =begin
     #Check For Author
     def AddChaptersOTW(ns)
@@ -470,6 +507,7 @@ class MassImportTool
     end
 =end
 
+#return old new id from user_imports table based on old user id & source archive
 def get_new_user_id_from_imported(old_id,source_archive)
   connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
   result = connection.query("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
@@ -496,24 +534,11 @@ end
                           :rating_integer,:warnings,:chapters,:published,:cats)
 
 
-  class NewOtwTag
-    def initialize()
-    end
-    #Old Tag ID #New Tag ID #Tag
-  end #Tag Type
 
-  def get_user_id_from_email(email)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = connection.query("select user_id from users where email = '#{email}'")
-    connection.close
-    return r[0]
-  end
-
+#Add User
   def add_user(a)
-    puts "====email #{a.email}"
     login_temp = a.email.tr("@", "")
     login_temp = login_temp.tr(".","")
-    puts  login_temp
     new_user = User.new()
       new_user.terms_of_service = true
       new_user.email = a.email
@@ -522,8 +547,9 @@ end
       new_user.password_confirmation = a.password
       new_user.age_over_13 = true
     new_user.save!
+
+    #Create Default Pseud / Profile
     new_user.create_default_associateds
-    puts new_user.id
     a.new_user_id = new_user.id
 =begin
         #self.update_record_target("insert into users (email, login) values ('#{a.email}', '#{a.email}'); ")
@@ -542,6 +568,8 @@ end
     return a
 
   end
+
+
   def get_default_pseud_id(user_id)
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("select id from pseuds where user_id = #{user_id}")
@@ -549,7 +577,7 @@ end
       return row[0]
     end
   end
-  # <summary> # Set Archive Strings and values # </summary> # <remarks></remarks>
+  # Set Archive Strings and values # </summary> # <remarks></remarks>
   def set_import_strings
     case @source_archive_type
       when 1
@@ -584,10 +612,11 @@ end
     end
   end
 
-  def get_import_user_from_source(authid)
+  ##get import user object, by source_user_id
+  def get_import_user_object_from_source(source_user_id)
     a = ImportUser.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = connection.query("#{@get_author_from_source_query} #{authid}")
+    r = connection.query("#{@get_author_from_source_query} #{source_user_id}")
     puts
     r.each  do |r|
       a.old_user_id = authid
@@ -648,29 +677,25 @@ end
   end
 #TODO
 
-# <summary> # Converts d/m/y to m/d/y # </summary> #
+# Converts d/m/y to m/d/y # </summary> #
   def tppDateFix(dv)
     s = dv.Split("/")
     nd = self.s(1) + "/" + self.s(0) + "/" + self.s(2)
     return nd
   end
 
-  # <summary> # Return new story id given old id and archive #
-  def get_new_story_id_from_old_id(source_archive_id, old_story_id) #
+  # Return new story id given old id and archive
+  def get_new_work_id_from_old_id(source_archive_id, old_story_id) #
     query = " select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}"
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-
     r = Mysql.query(query)
-
     if r.num_rows > 0
       return r[0]
     else
       return r.num_rows
     end
-
     connection.close()
-
-  end
+    end
 
   # Get New Author ID from old User ID & old archive ID
   def get_new_author_id_from_old(old_archive_id, old_user_id)
@@ -688,6 +713,20 @@ end
     rescue Exception => ex
       connection.close()
     ensure
+    end
+  end
+
+#check for existing user by email address
+  def get_user_id_from_email(emailaddress)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    r = connection.query("select id from users where email = '#{emailaddress}'")
+    connection.close
+    if r.num_rows == 0
+      return 0
+    else
+      r.each do |rr|
+      return rr[0]
+      end
     end
   end
 
