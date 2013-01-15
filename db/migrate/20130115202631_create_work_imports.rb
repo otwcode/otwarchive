@@ -8,6 +8,7 @@ class CreateWorkImports < ActiveRecord::Migration
       t.integer :source_user_id
 
       t.timestamps
+
     end
   end
 
