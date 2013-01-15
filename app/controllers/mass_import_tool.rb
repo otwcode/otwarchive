@@ -19,7 +19,7 @@ class MassImportTool
     @create_collection = true
 
     #Match Existing Authors by Email-Address
-    @matchExistingAuthors = true
+    @match_existing_authors = true
 
     #Import Job Name
     @import_name = "New Import"
@@ -28,10 +28,10 @@ class MassImportTool
     @import_archive_id = 100
 
     #Import categories as categories or use ao3 cats
-    @useProperCategories = false
+    @use_proper_categories = false
 
     #Create record for imported archive
-    @CreateImportArchiveRecord = false
+    @create_import_archive_record = false
 
     #Import reviews t/f
     @import_reviews = true
@@ -86,7 +86,7 @@ class MassImportTool
     ##################
 
     #Source DB Connection
-    #"thepotionsmaster.net","test1","Trustno1","sltest" = "\"thepotionsmaster.net\",\"sltest\",\"test1\",\"password\""
+    #"localhost","stephanies","Trustno1","stephanies_development" = "\"thepotionsmaster.net\",\"sltest\",\"test1\",\"password\""
 
     #Source Archive Type
     @source_archive_type = 4
@@ -95,7 +95,7 @@ class MassImportTool
     @source_warning_class_id = 1
 
     #Holds Value for source table prefix
-    @source_table_prefix = "SL18_"
+    @source_table_prefix = "sl18_"
 
     #Source Ratings Table
     @source_ratings_table = ""
@@ -118,7 +118,7 @@ class MassImportTool
     #Source Subcategories Table
     @source_subcatagories_table = ""
 
-    @debug_update_source_tags = false
+    @debug_update_source_tags = true
 
     #Source Categories Table
     @source_categories_table = ""
@@ -127,7 +127,7 @@ class MassImportTool
     @get_author_from_source_query = ""
 
     #Skip Rating Transformation (ie if import in progress or testing)
-    @skip_rating_transform = true
+    @skip_rating_transform = false
   end
 
 
@@ -156,7 +156,7 @@ class MassImportTool
   end
 =end
 
-  def DisplayStartupInfo()
+  def display_startup_info()
     puts "AO3 Importer Starting "
     puts "Version #{@Version}"
     puts "Running: #{@import_name}"
@@ -216,7 +216,7 @@ class MassImportTool
 
   def get_tag_list(tl, at)
     taglist = tl
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     case at
       when 4
         query = "Select caid, caname from #{@source_table_prefix}category; " #
@@ -309,7 +309,7 @@ class MassImportTool
     puts " Setting Import Values "
     self.set_import_strings()
     query = " SELECT * FROM #{@source_stories_table} ;"
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
     if @skip_rating_transform == false
       puts " Tranforming source ratings "
@@ -331,74 +331,86 @@ class MassImportTool
 
     puts (" Importing Stories ")
     i = 0
-    while i <= r.num_rows
-      puts " Importing Story " + i + 1 + " of " * r.num_rows
-      ns = ImportStory.new()
+    r.each do |row|
+      puts " Importing Story #{i}"
+      ns = ImportWork.new()
       a = ImportUser.new()
       #Create Taglisit for this story
       my_tag_list = Array.new()
       begin
-        case srcArchiveType
+        case @source_archive_type
           when 4
-            ns.old_story_id = r[0]
-            ns.title = r[1]
-            ns.summary = r[2]
-            ns.old_user_id = r[3]
-            ns.rating_integer = r[4]
+            ns.source_archive_id = @import_archive_id
+            ns.old_story_id = row[0]
+            puts ns.old_story_id
+
+            ns.title = row[1]
+            puts ns.title
+
+            ns.summary = row[2]
+            ns.old_user_id = row[3]
+            ns.rating_integer = row[4]
             rating_tag = ImportTag.new()
             rating_tag.tag_type = 7
             rating_tag.new_id = ns.rating_integer
-            my_tag_list.Add(rating_tag)
+            my_tag_list.push(rating_tag)
 
-            ns.published =  r[5]
+            ns.published =  row[5]
 
             cattag = ImportTag.new()
-            if useProperCategories == true
+            if @use_proper_categories == true
               cattag.tag_type = 1
             else
               cattag.tag_type = 3
             end
-            cattag.new_id = r[6]
-            my_tag_list.Add(cattag)
+            cattag.new_id = row[6]
+            my_tag_list.push(cattag)
             subcattag = ImportTag.new()
-            if useProperCategories == true
+            if @use_proper_categories == true
               subcattag.tag_type = 1
             else
               subcattag.tag_type = 3
             end
-            subcattag.new_id =r[11]
-            myTagList.Add(subcattag)
-            ns.updated = r[9]
-            ns.completed = r[12]
-            ns.hits = r[10]
+            subcattag.new_id =row[11]
+            my_tag_list.push(subcattag)
+            ns.updated = row[9]
+            ns.completed = row[12]
+            ns.hits = row[10]
           when 3
-            ns.old_story_id = r[0]
-            ns.title = r[1]
-            ns.summary = r[2]
-            ns.old_user_id = r[10]
-            ns.rating_integer = r[4]
+            ns.old_story_id = row[0]
+            ns.title = row[1]
+            ns.summary = row[2]
+            ns.old_user_id = row[10]
+            ns.rating_integer = row[4]
             rating_tag = ImportTag.new()
             rating_tag.tag_type =7
             rating_tag.new_id = ns.rating_integer
-            tag_list.Add(rating_tag)
+            tag_list.push(rating_tag)
 
-            ns.published = r[8]
+            ns.published = row[8]
 
-            ns.updated = r[9]
-            ns.completed = r[12]
-            ns.hits = r[10]
+            ns.updated = row[9]
+            ns.completed = row[12]
+            ns.hits = row[10]
 
         end
-        ns.new_author_id = self.getauthorIDbyOld(ns.old_user_id, ns.source_archive, ArchiveType.OTW)
+        puts "attempting to get author id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
+        ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_author_id == 0
-          a = self.getAuthorObjectFromSRC(ns.old_user_id)
+          a = self.get_import_user_from_source(ns.old_user_id)
+
+          puts "=== #{a.email}"
           new_a = self.add_user(a)
-          ns.new_user_id = new_a.default_pseud
+          puts "newid = #{new_a.new_user_id}"
+
+
+          ns.new_user_id = new_a.new_user_id
+          update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
           ns.author = new_a.penname
         end
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, srcArchive, srcID) values ('" + ns.title + "', '" + ns.summary + "', '" + ns.Author + "', '" + ns.title + "', '" + ns.Updated + "', '" + ns.Published + "', " + ImportArchiveID + ", " + ns.OldSid + "); ")
 
-        tgtConnection = Mysql.new(@target_database_connection)
+        tgtConnection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
         rr=tgtconnection.Query("select id from works where srcid = #{ns.OldSid} and srcArchive = #{@import_archive_id}")
         ns.NewSid = rr[0] #create creatorship
@@ -408,12 +420,15 @@ class MassImportTool
         connection.close()
         self.AddChaptersOTW(ns)
       rescue Exception => ex
-        puts " Error : " + ex.Message
+        puts " Error : " + ex.message
         connection.close()
       ensure
       end
       i = i + 1
     end
+
+
+
     connection.close()
   end
 =begin
@@ -454,16 +469,30 @@ class MassImportTool
       end
     end
 =end
+
+def get_new_user_id_from_imported(old_id,source_archive)
+  connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+  result = connection.query("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
+  connection.close
+  if result.num_rows == 0
+      return 0
+  else
+      result.each do |myrow|
+          return myrow[0]
+      end
+  end
+end
+
   ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
 
-  ImportAuthor = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
-                            :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
+  ImportUser = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
+                          :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
 
   ImportChapter = Struct.new(:new_work_id,:old_story_id,:source_archive_id,:title,
                              :summary,:notes,:old_user_id,:body,:position,:date_added)
 
   ImportWork = Struct.new(:old_story_id,:new_work_id,:author_string,:title,:summary,:classes,:old_user_id,:characters,
-                          :hits,:new_author_id,:word_count,:completed,:updated,:source_archive,:generes,:rating,
+                          :hits,:new_author_id,:word_count,:completed,:updated,:source_archive_id,:generes,:rating,
                           :rating_integer,:warnings,:chapters,:published,:cats)
   class NewOtwTag
     def initialize()
@@ -472,14 +501,27 @@ class MassImportTool
   end #Tag Type
 
   def get_user_id_from_email(email)
-    connection = Mysql.new(@target_database_connection)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("select user_id from users where email = '#{email}'")
+    connection.close
     return r[0]
   end
 
   def add_user(a)
-    new_user = user.create(email:"#{a.email}",login:"#{a.email}",password:"#{a.password}",confiirmpassword:"#{a.password}")
+    puts "====email #{a.email}"
+    login_temp = a.email.tr("@", "")
+    login_temp = login_temp.tr(".","")
+    puts  login_temp
+    new_user = User.new()
+      new_user.terms_of_service = true
+      new_user.email = a.email
+      new_user.login = login_temp
+      new_user.password = a.password
+      new_user.password_confirmation = a.password
+      new_user.age_over_13 = true
+    new_user.save!
     new_user.create_default_associateds
+    puts new_user.id
     a.new_user_id = new_user.id
 =begin
         #self.update_record_target("insert into users (email, login) values ('#{a.email}', '#{a.email}'); ")
@@ -498,69 +540,80 @@ class MassImportTool
     return a
 
   end
+  def get_default_pseud_id(user_id)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    r = connection.query("select id from pseuds where user_id = #{user_id}")
+    r.each do |row|
+      return row[0]
+    end
+  end
   # <summary> # Set Archive Strings and values # </summary> # <remarks></remarks>
   def set_import_strings
     case @source_archive_type
       when 1
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_categories_table = "#{@source_table_prefix} categories"
-        @source_users_table = "#{@source_table_prefix} authors"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_categories_table = "#{@source_table_prefix}categories"
+        @source_users_table = "#{@source_table_prefix}authors"
         @get_author_from_source_query = " "
       when 2
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_users_table = "#{@source_table_prefix} authors"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_users_table = "#{@source_table_prefix}authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass, website, aol, msn, yahoo, icq, ageconsent from  #{@source_users_table} where uid ="
       when 3
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
         @source_users_table = "#{@source_table_prefix} authors"
         @get_author_from_source_query = "Select realname, penname, email, bio, date, pass from #{@source_users_table} where uid ="
       when 5
       when 4
-        @source_chapters_table = "#{@source_table_prefix} chapters"
-        @source_reviews_table = "#{@source_table_prefix} reviews"
-        @source_stories_table = "#{@source_table_prefix} stories"
-        @source_users_table = "#{@source_table_prefix} users"
-        @source_categories_table = "#{@source_table_prefix} category"
-        @source_subcategories_table = "#{@source_table_prefix} subcategory"
+        @source_chapters_table = "#{@source_table_prefix}chapters"
+        @source_reviews_table = "#{@source_table_prefix}reviews"
+        @source_stories_table = "#{@source_table_prefix}stories"
+        @source_users_table = "#{@source_table_prefix}users"
+        @source_categories_table = "#{@source_table_prefix}category"
+        @source_subcategories_table = "#{@source_table_prefix}subcategory"
         @srcRatingsTable = "" #None
         @get_author_from_source_query = "SELECT urealname, upenname, uemail, ubio, ustart, upass, uurl, uaol, umsn, uicq from #{@source_users_table} where uid ="
     end
   end
 
-  def get_imported_author_from_source(authid)
-    a = ImportedAuthor.new()
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
-    r = my.query("#{qryGetAuthorFromSource} #{authid}")
-    r.each_hash do |r|
-      a.srcuid = authid
-      a.RealName = r["realname"]
-      a.source_archive_id = @importArchiveID
-      a.PenName = r["penname"]
-      a.email = r["email"]
-      a.Bio = r[3]
+  def get_import_user_from_source(authid)
+    a = ImportUser.new()
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    r = connection.query("#{@get_author_from_source_query} #{authid}")
+    puts
+    r.each  do |r|
+      a.old_user_id = authid
+      a.realname = r[0]
+      a.source_archive_id = @import_archive_id
+
+      a.penname = r[1]
+      a.email = r[2]
+      a.bio = r[3]
       a.joindate = r[4]
       a.password = r[5]
-      if @source_archive_type == ArchiveType.efiction2 || @source_archive_type == ArchiveType.storyline
+      if @source_archive_type == 2 || @source_archive_type == 4
         a.website = r[6]
         a.aol = r[7]
         a.msn = r[8]
         a.icq = r[9]
-        a.Bio = self.build_bio(a).Bio
+        a.bio = self.build_bio(a).bio
         a.yahoo = ""
-        if srcArchiveType == ArchiveType.efiction2
+        if @source_archive_type == 2
           a.yahoo = r[10]
           a.isadult = r[11]
         end
       end
 
     end
-    my.free
+
+    connection.close
+
     return a
   end
 
@@ -569,25 +622,25 @@ class MassImportTool
     if a.yahoo == nil
       a.yahoo = " "
     end
-    if a.aol.Length > 1 | a.yahoo.Length > 1 | a.website.Length > 1 | a.icq.Length > 1 | a.msn.Length > 1
-      if a.Bio.Length > 0
-        a.Bio << "<br /><br />"
+    if a.aol.length > 1 || a.yahoo.length > 1 || a.website.length > 1 || a.icq.length > 1 || a.msn.length > 1
+      if a.bio.length > 0
+        a.bio << "<br /><br />"
       end
     end
-    if a.aol.Length > 1
-      a.Bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
+    if a.aol.length > 1
+      a.bio << " <br /><b>AOL / AIM :</b><br /> #{a.aol} "
     end
-    if a.website.Length > 1
-      a.Bio << "<br /><b>Website:</ b><br /> #{a.website} "
+    if a.website.length > 1
+      a.bio << "<br /><b>Website:</ b><br /> #{a.website} "
     end
-    if a.yahoo.Length > 1
-      a.Bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
+    if a.yahoo.length > 1
+      a.bio << "<br /><b>Yahoo :</b><br /> #{a.yahoo} "
     end
-    if a.msn.Length > 1
-      a.Bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
+    if a.msn.length > 1
+      a.bio << "<br /><b>Windows Live:</ b><br /> #{a.msn} "
     end
-    if a.icq.Length > 1
-      a.Bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
+    if a.icq.length > 1
+      a.bio << "<br /><b>ICQ :</b><br /> #{a.icq} "
     end
     return a
   end
@@ -603,25 +656,27 @@ class MassImportTool
   # <summary> # Return new story id given old id and archive #
   def get_new_story_id_from_old_id(source_archive_id, old_story_id) #
     query = " select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}"
-    connection = Mysql.new(@target_database_connection)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
     r = Mysql.query(query)
+
     if r.num_rows > 0
       return r[0]
     else
       return r.num_rows
     end
 
-    connection.Close()
+    connection.close()
 
   end
 
   # Get New Author ID from old User ID & old archive ID
   def get_new_author_id_from_old(old_archive_id, old_user_id)
     begin
-      connection = Mysql.new(@target_database_connection)
+      connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       query = " Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} "
       r = connection.query(query)
+      connection.close
       if r.num_rows == 0
         return 0
       else
@@ -652,11 +707,11 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_source(query)
-    connection = Mysql.new("thepotionsmaster.net","test1","Trustno1","sltest")
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     begin
       rowsEffected = 0
 
-      rowsEffected = conection.query(query)
+      rowsEffected = connection(query)
       connection.close()
       return rowsEffected
     rescue Exception => ex
