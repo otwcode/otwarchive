@@ -84,13 +84,10 @@ class MassImportTool
     @target_rating_5 = 13
     #
     #target db connection string
-    @target_database_connection = "'localhost','stephanies','password','stepahanies_development'"
+    #@target_database_connection =
 
     #Source Variables
     ##################
-
-    #Source DB Connection
-    #"localhost","stephanies","Trustno1","stephanies_development" = "\"thepotionsmaster.net\",\"sltest\",\"test1\",\"password\""
 
     #Source Archive Type
     @source_archive_type = 4
@@ -441,21 +438,14 @@ class MassImportTool
               ns.new_user_id = temp_pseud_id
             end
           end
-
-
-
         end
         #insert work object
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values ('#{ns.title}','#{ns.summary}','#{ns.Author}','#{ns.title}','#{ns.Updated}','#{ns.Published}', '#{@import_archive_id}~~#{ns.OldSid}'); ")
-
-
 
       #return new work id
       ns.new_work_id =  get_new_work_id_fresh(ns.old_story_id,ns.source_archive_id)
         #add creation
         self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_author_id}, 'work') ")
-
-
 
         connection.close()
         self.add_chapters(ns)
@@ -471,26 +461,10 @@ class MassImportTool
   end
 
 
-  #given valid user_id search for psued belonging to that user_id with matching penname
-  def get_pseud_id_for_penname(user_id,penname)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = connection.query("select id from pseuds where user_id = #{user_id} and name = '#{penname}'")
-    connection.close
-    if r.num_rows == 0
-      return 0
-    else
-      r.each do |row|
-        return row[0]
-      end
-    end
-  end
-
 
     #add chapters
     def add_chapters(ns)
       connection = MySqlConnection.new()
-
-
       r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
       r.each do |rr|
         c = ImportChapter.new()
@@ -500,36 +474,20 @@ class MassImportTool
         c.dateposted = rr[4]
         c.body = rr[3]
         self.post_chapters(c, @source_archive_type)
-
-      end
+                end
       connection.close()
-
-    end
+      end
 
     def post_chapters(c, sourceType)
       case sourceType
         when 4
           self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at) values ('" + c.body + "', '" + c.dateposted.ToString + "', '" + c.dateposted.ToString + "', 1, '" + c.title + "', '" + c.dateposted.ToString + "') ")
           self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + c.new_chapter_id + ", " + c.newUserId + ", 'chapter') ")
-
-
       end
     end
 
 
-#return old new id from user_imports table based on old user id & source archive
-def get_new_user_id_from_imported(old_id,source_archive)
-  connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-  result = connection.query("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
-  connection.close
-  if result.num_rows == 0
-      return 0
-  else
-      result.each do |myrow|
-          return myrow[0]
-      end
-  end
-end
+
 
 #Structures
 ################
@@ -551,6 +509,7 @@ end
   def add_user(a)
     login_temp = a.email.tr("@", "")
     login_temp = login_temp.tr(".","")
+    #new user model
     new_user = User.new()
       new_user.terms_of_service = true
       new_user.email = a.email
@@ -563,33 +522,11 @@ end
     #Create Default Pseud / Profile
     new_user.create_default_associateds
     a.new_user_id = new_user.id
-=begin
-        #self.update_record_target("insert into users (email, login) values ('#{a.email}', '#{a.email}'); ")
-        #a.new_user_id = self.get_user_id_from_email(a.email)
-        #a.newuid = self.getauthorIDbyOld(a.source_archive_id, a.srcuid, ArchiveType.OTW)
-        #self.update_record_target("Insert into profiles (user_id, about_me) values ( #{a.newuid},'#{a.bio}'); ")
-        #self.update_record_target("Insert into pseuds (user_id, name, description, is_default) values (#{a.newuid}, '#{a.PenName}', 'Imported Pseudonym', 1); ")
-        #self.update_record_target("Insert into preferences (user_id) values (#{a.newuid}); ")
-        self.update_record_target("Insert into user_imports (user_id,source_user_id,source_archive_id,source_penname) values (#{a.newuid},#{a.source_archive_id},#{a.source_user_id}")
-        cmd.CommandText = "Select id from users where source_archive_id = #{@import_archive_id} and srcid = #{a.srcuid}"
-        a.newuid = r2.Rows(0).Item(0)
-        cmd.CommandText = "Select id from pseuds where user_id = #{a.newuid} and is_default = 1 "
-        a.defaultPsuid = r2.Rows(0).Item(0)
-        connection.Close()
-=end
+
     return a
-
   end
 
 
-  def get_default_pseud_id(user_id)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = connection.query("select id from pseuds where user_id = #{user_id}")
-    connection.close
-    r.each do |row|
-      return row[0]
-    end
-  end
   # Set Archive Strings and values # </summary> # <remarks></remarks>
   def set_import_strings
     case @source_archive_type
@@ -690,63 +627,50 @@ end
   end
 #TODO
 
-def get_new_work_id_fresh(source_work_id,source_archive_id)
-  con = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-  r = con.query("select id from works where import_from_url = '#{source_work_id}~~#{source_archive_id}'")
-  con.close
-  r.each do |rr|
-    return rr[0]
-  end
-end
-# Converts d/m/y to m/d/y # </summary> #
-  def tppDateFix(dv)
-    s = dv.Split("/")
-    nd = self.s(1) + "/" + self.s(0) + "/" + self.s(2)
-    return nd
+
+  #return old new id from user_imports table based on old user id & source archive
+  def get_new_user_id_from_imported(old_id,source_archive)
+    return get_single_value_target("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
   end
 
-  # Return new story id given old id and archive
+  def get_default_pseud_id(user_id)
+    return get_single_value_target("select id from pseuds where user_id = #{user_id}")
+  end
+
+  #given valid user_id search for psued belonging to that user_id with matching penname
+  def get_pseud_id_for_penname(user_id,penname)
+    return get_single_value_target("select id from pseuds where user_id = #{user_id} and name = '#{penname}'")
+  end
+
+
+  def get_new_work_id_fresh(source_work_id,source_archive_id)
+  return get_single_value_target("select id from works where import_from_url = '#{source_work_id}~~#{source_archive_id}'")
+  end
+
+# Return new story id given old id and archive
   def get_new_work_id_from_old_id(source_archive_id, old_story_id) #
-    query = " select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}"
+    return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}")
+  end
+
+ # Get New Author ID from old User ID & old archive ID
+  def get_new_author_id_from_old(old_archive_id, old_user_id)
+   return get_single_value_target(" Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} ")
+  end
+
+  #check for existing user by email address
+  def get_user_id_from_email(emailaddress)
+    return get_single_value_target("select id from users where email = '#{emailaddress}'")
+  end
+
+  def get_single_value_target(query)
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query(query)
-    if r.num_rows > 0
-      return r[0]
-    else
-      return r.num_rows
-    end
-    connection.close()
-  end
-
-  # Get New Author ID from old User ID & old archive ID
-  def get_new_author_id_from_old(old_archive_id, old_user_id)
-    begin
-      connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-      query = " Select user_id from user_imports where source_archive_id = #{old_archive_id} and source_user_id = #{old_user_id} "
-      r = connection.query(query)
-      connection.close
-      if r.num_rows == 0
-        return 0
-      else
-        return r[0]
-      end
-      connection.close()
-    rescue Exception => ex
-      connection.close()
-    ensure
-    end
-  end
-
-#check for existing user by email address
-  def get_user_id_from_email(emailaddress)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    r = connection.query("select id from users where email = '#{emailaddress}'")
     connection.close
     if r.num_rows == 0
       return 0
     else
       r.each do |rr|
-      return rr[0]
+        return rr[0]
       end
     end
   end
