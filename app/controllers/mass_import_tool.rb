@@ -492,26 +492,35 @@ class MassImportTool
 
     #add chapters
     def add_chapters(ns)
-      connection = MySqlConnection.new()
-      r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
-      connection.close()
-      r.each do |rr|
-        c = ImportChapter.new()
-        c.new_work_id = ns.new_work_id
-        c.new_pseud_id = ns.new_user_id
-        c.title = rr[1]
-        c.dateposted = rr[4]
-        c.body = rr[3]
-        self.post_chapters(c, @source_archive_type)
+      connection = Myql.new()
+      case @source_archive_type
+        when 4
+          r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+          ix = 1
+          r.each do |rr|
+            c = ImportChapter.new()
+            c.new_work_id = ns.new_work_id
+            c.new_pseud_id = ns.new_user_id
+            c.title = rr[1]
+            c.dateposted = rr[4]
+            c.body = rr[3]
+            c.position = ix
+            self.post_chapters(c, @source_archive_type)
+          end
+        when 3
+
       end
+
+      connection.close()
+
 
   end
 
     def post_chapters(c, sourceType)
       case sourceType
         when 4
-          self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at) values ('" + c.body + "', '" + c.dateposted.ToString + "', '" + c.dateposted.ToString + "', 1, '" + c.title + "', '" + c.dateposted.ToString + "') ")
-          self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (" + c.new_chapter_id + ", " + c.newUserId + ", 'chapter') ")
+          self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at,position) values ('#{c.body}', '#{c.dateposted.ToString}', '#{c.dateposted.ToString}', 1,'#{c.title}', '#{c.dateposted.ToString}',#{c.position}) ")
+          self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{c.new_chapter_id},#{c.newUserId},'chapter') ")
       end
     end
 
