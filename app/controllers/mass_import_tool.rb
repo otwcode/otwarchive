@@ -182,11 +182,11 @@ class MassImportTool
       when 2
     end
 
-    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_1} where  #{rating_field_name} = 1;")
-    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_2} where  #{rating_field_name} = 2;")
-    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_3} where  #{rating_field_name} = 3;")
-    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_4} where  #{rating_field_name} = 4;")
-    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_5} where #{rating_field_name} = 5;")
+    self.update_record_target("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_1} where  #{rating_field_name} = 1;")
+    self.update_record_target("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_2} where  #{rating_field_name} = 2;")
+    self.update_record_target("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_3} where  #{rating_field_name} = 3;")
+    self.update_record_target("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_4} where  #{rating_field_name} = 4;")
+    self.update_record_target("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_5} where #{rating_field_name} = 5;")
   end
 
   #link up tags from source to target
