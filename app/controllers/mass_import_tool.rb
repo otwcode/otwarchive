@@ -443,7 +443,7 @@ class MassImportTool
             new_pseud_id = get_default_pseud_id(ns.new_user_id)
 
             #set the penname on newly created pseud to proper value
-            update_record_target("update pseuds set name = ''#{ns.penname}' where id = #{new_pseud_id}")
+            update_record_target("update pseuds set name = '#{ns.penname}' where id = #{new_pseud_id}")
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
           else
             #user exists, but is being imported
