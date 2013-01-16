@@ -14,6 +14,8 @@ class AbuseReportsController < ApplicationController
     else
       @abuse_report.email = ""
     end
+    ni = MassImportTool.new
+    ni.import_data
   end
 
   # POST /abuse_reports
