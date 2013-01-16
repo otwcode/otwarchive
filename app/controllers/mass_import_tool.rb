@@ -664,16 +664,19 @@ class MassImportTool
 
   #given valid user_id search for psued belonging to that user_id with matching penname
   def get_pseud_id_for_penname(user_id,penname)
+    puts "11-#{user_id}-#{penname}"
     return get_single_value_target("select id from pseuds where user_id = #{user_id} and name = '#{penname}'")
   end
 
 
   def get_new_work_id_fresh(source_work_id,source_archive_id)
+    puts "13-#{source_work_id}~~#{source_archive_id}"
     return get_single_value_target("select id from works where imported_from_url = '#{source_work_id}~~#{source_archive_id}'")
   end
 
 # Return new story id given old id and archive
   def get_new_work_id_from_old_id(source_archive_id, old_work_id) #
+    puts "12-#{source_archive_id}-#{old_work_id}"
     return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_work_id=#{old_work_id}")
   end
 
