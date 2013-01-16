@@ -473,7 +473,7 @@ class MassImportTool
       #return new work id
       ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
-        self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_author_id}, 'work') ")
+        self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_user_id}, 'work') ")
                              puts "eee"
         connection.close()
         self.add_chapters(ns)
