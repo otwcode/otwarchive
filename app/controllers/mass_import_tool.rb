@@ -355,7 +355,9 @@ class MassImportTool
     i = 0
     r.each do |row|
       puts " Importing Story #{i}"
+      #create new ImportWork Object
       ns = ImportWork.new()
+      #create new importuser object
       a = ImportUser.new()
       #Create Taglisit for this story
       my_tag_list = Array.new()
@@ -364,8 +366,8 @@ class MassImportTool
           #storyline
           when 4
             ns.source_archive_id = @import_archive_id
-            ns.old_story_id = row[0]
-            puts ns.old_story_id
+            ns.old_work_id = row[0]
+            puts ns.old_work_id
 
             ns.title = row[1]
             #debug info
@@ -399,7 +401,7 @@ class MassImportTool
             ns.hits = row[10]
           #efiction 3
           when 3
-            ns.old_story_id = row[0]
+            ns.old_work_id = row[0]
             ns.title = row[1]
             ns.summary = row[2]
             ns.old_user_id = row[10]
@@ -415,10 +417,10 @@ class MassImportTool
 
         end
 #debug info
-        puts "attempting to get author id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
+        puts "attempting to get new user id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
 #see if user / author exists for this import already
-        ns.new_author_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
-        if ns.new_author_id == 0
+        ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
+        if ns.new_user_id == 0
           ##get import user object from source database
           a = self.get_import_user_object_from_source(ns.old_user_id)
           #see if user account exists by checking email,
@@ -453,7 +455,8 @@ class MassImportTool
 
               #return newly created pseud
               temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.author)
-              update_record_target("update user_imports set matching_pseud = #{ns.new_user_id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
+              update_record_target("update user_imports set pseud_id = #{ns.new_user_id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
+
               ns.new_user_id = temp_pseud_id
             end
           end
@@ -462,7 +465,7 @@ class MassImportTool
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values ('#{ns.title}','#{ns.summary}','#{ns.Author}','#{ns.title}','#{ns.Updated}','#{ns.Published}', '#{@import_archive_id}~~#{ns.OldSid}'); ")
 
       #return new work id
-      ns.new_work_id =  get_new_work_id_fresh(ns.old_story_id,ns.source_archive_id)
+      ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
         self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_author_id}, 'work') ")
 
@@ -655,8 +658,8 @@ class MassImportTool
   end
 
 # Return new story id given old id and archive
-  def get_new_work_id_from_old_id(source_archive_id, old_story_id) #
-    return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_story_id=#{old_story_id}")
+  def get_new_work_id_from_old_id(source_archive_id, old_work_id) #
+    return get_single_value_target(" select work_id from work_imports where source_archive_id #{source_archive_id} and old_work_id=#{old_work_id}")
   end
 
  # Get New Author ID from old User ID & old archive ID
