@@ -469,12 +469,12 @@ class MassImportTool
         end
         #insert work object
         self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values ('#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
-
+                    puts "yy"
       #return new work id
       ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
         self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_author_id}, 'work') ")
-
+                             puts "eee"
         connection.close()
         self.add_chapters(ns)
 
