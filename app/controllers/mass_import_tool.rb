@@ -422,6 +422,7 @@ class MassImportTool
         ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_user_id == 0
           ##get import user object from source database
+          a = ImportUser.new
           a = self.get_import_user_object_from_source(ns.old_user_id)
           #see if user account exists by checking email,
           temp_author_id = get_user_id_from_email(a.email)
