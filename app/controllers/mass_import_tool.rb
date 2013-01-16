@@ -496,6 +496,7 @@ class MassImportTool
       case @source_archive_type
         when 4
           r = connection.query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+          puts "333"
           ix = 1
           r.each do |rr|
             c = ImportChapter.new()
