@@ -15,12 +15,9 @@ class MassImportTool
 
     # Boolean Options
     #
-    ##If true, send invites unconditionaly,
-    # if false add them to the que to be sent when it gets to it, could be delayed.
-    @bypass_invite_que = true
 
-    #Create collection for imported works?
-    @create_collection = true
+
+
 
     #Match Existing Authors by Email-Address
     @match_existing_authors = true
@@ -28,26 +25,27 @@ class MassImportTool
     #Import Job Name
     @import_name = "New Import"
 
+
+
+
+    #Create record for imported archive (false if already exists)
+    @create_import_archive_record = True
+
     #Import Archive ID
     @import_archive_id = 100
-
-    #Import categories as categories or use ao3 cats
-    @use_proper_categories = false
-
-    #Create record for imported archive
-    @create_import_archive_record = false
 
     #Import reviews t/f
     @import_reviews = true
 
-    #If using ao3 cats, sort or skip
-    @SortForAo3Categories = true
 
-    #New Collection Name
-    @new_collection_name = "New Collection"
 
-    #New Collection Description
-    @new_collection_description = "Something here"
+
+
+    #Message Values
+    ####################################
+    ##If true, send invites unconditionaly,
+    # if false add them to the que to be sent when it gets to it, could be delayed.
+    @bypass_invite_que = true
 
     #Send notification email with invitation to archive to imported users
     @notify_imported_users = true
@@ -61,11 +59,35 @@ class MassImportTool
     #message to be sent to users with no ao3 account
     @new_notification_message = ""
 
+    #New Collection Values
+    #####################################
     #ID Of the newly created collection, filled with value automatically if create collection is true
     @new_collection_id = -1
 
+    #Create collection for imported works?
+    @create_collection = true
+
     #Owner for created collection
     @new_collection_owner = "Stephanie"
+
+    @new_collection_owner_pseud = "1010"
+
+    @new_collection_title = "This is a title"
+
+    @new_collection_name = "shortname"
+
+    #New Collection Description
+    @new_collection_description = "Something here"
+
+    #=========================================================
+    #Destination Options / Settings
+    #=========================================================
+
+    #If using ao3 cats, sort or skip
+    @SortForAo3Categories = true
+
+    #Import categories as categories or use ao3 cats
+    @use_proper_categories = false
 
     #Destination otwarchive Ratings (1 being NR if NR Is conservative, 5 if not)
     #NR
@@ -82,12 +104,10 @@ class MassImportTool
 
     #Explicit
     @target_rating_5 = 13
-    #
-    #target db connection string
-    #@target_database_connection =
 
+    #========================
     #Source Variables
-    ##################
+    #========================
 
     #Source Archive Type
     @source_archive_type = 4
@@ -120,7 +140,7 @@ class MassImportTool
     #Source Subcategories Table
     @source_subcatagories_table = ""
 
-       #Source Categories Table
+    #Source Categories Table
     @source_categories_table = ""
 
     #string holder
@@ -164,22 +184,21 @@ class MassImportTool
     puts "transform source ratings"
     case @source_archive_type
       #storyline
+      rating_field_name = ""
       when 4
-        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_1} where srating = 1;")
-        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_2} where srating = 2;")
-        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_3} where srating = 3;")
-        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_4} where srating = 4;")
-        self.update_record_source("update #{@source_stories_table} set srating= #{@target_rating_5} where srating = 5;")
-
+        rating_field_name = "srating"
       #efiction 3
       when 3
-        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_1} where rid=1;")
-        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_2} where rid=2;")
-        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_3} where rid=3;")
-        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_4} where rid=4;")
-        self.update_record_source("update #{@source_stories_table} set rid= #{@target_rating_5} where rid=5;")
-      when ArchiveType.efiction2
+        Rating_field_name = "rid"
+      #efiction 2
+      when 2
     end
+
+    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_1} where  #{rating_field_name} = 1;")
+    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_2} where  #{rating_field_name} = 2;")
+    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_3} where  #{rating_field_name} = 3;")
+    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_4} where  #{rating_field_name} = 4;")
+    self.update_record_source("update #{@source_stories_table} set #{rating_field_name}= #{@target_rating_5} where #{rating_field_name} = 5;")
   end
 
   #link up tags from source to target
@@ -306,9 +325,22 @@ class MassImportTool
   end
 
 
+  def create_collection(name,owner)
+   #TODO
+    collect = Collection.new()
+      collect.name = @new_collection_name
+      collect.description = @new_collection_description
+      collect.title = new_collection_title
+      collect.
+  end
+
   ##################################################################################################
   # Main Worker Sub
   def import_data()
+    #create collection
+    create_collection(@
+    )
+
     puts " Setting Import Values "
     self.set_import_strings()
 

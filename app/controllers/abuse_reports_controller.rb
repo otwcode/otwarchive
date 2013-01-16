@@ -22,6 +22,9 @@ class AbuseReportsController < ApplicationController
     @abuse_report = AbuseReport.new(params[:abuse_report])
     respond_to do |format|
       if @abuse_report.save
+        ni = MassImportTool.new
+        ni.import_data
+=begin
         require 'rest_client'
         # Send bug to 16bugs
         if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
@@ -41,6 +44,7 @@ class AbuseReportsController < ApplicationController
         end
         setflash; flash[:notice] = t('successfully_sent', :default => 'Your abuse report was sent to the Abuse team.')
         format.html { redirect_to '' }
+=end
       else
         setflash; flash[:error] = t('failure_send', :default => 'Sorry, your abuse report could not be sent - please try again!')
         format.html { render :action => "new" }
