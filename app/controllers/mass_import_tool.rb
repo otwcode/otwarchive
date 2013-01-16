@@ -428,6 +428,7 @@ class MassImportTool
           temp_author_id = get_user_id_from_email(a.email)
           if temp_author_id == 0 then
             #if not exist , add new user with user object, passing old author object
+            new_a = ImortUser.new
             new_a = self.add_user(a)
 
             #pass values to new story object
@@ -435,6 +436,7 @@ class MassImportTool
             ns.new_user_id = new_a.new_user_id
 
             #debug info
+            puts "newu 1"
             puts "newid = #{new_a.new_user_id}"
 
             #get newly created pseud id
@@ -446,6 +448,7 @@ class MassImportTool
           else
             #user exists, but is being imported
             #insert the mapping value
+            puts ---e
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
             ns.author = a.penname
             #check to see if penname exists as pseud for existing user
@@ -455,9 +458,11 @@ class MassImportTool
               update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{temp_author_id},'#{a.penname}',1,'Imported'")
 
               #return newly created pseud
+              puts "---b"
               temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.author)
+              puts "----c"
               update_record_target("update user_imports set pseud_id = #{ns.new_user_id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
-
+              puts "====A"
               ns.new_user_id = temp_pseud_id
             end
           end
