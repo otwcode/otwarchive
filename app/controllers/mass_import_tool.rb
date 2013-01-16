@@ -19,7 +19,7 @@ class MassImportTool
     @import_name = "New Import"
 
     #Create record for imported archive (false if already exists)
-    @create_import_archive_record = True
+    @create_import_archive_record = true
 
     #Import Archive ID
     @import_archive_id = 100
