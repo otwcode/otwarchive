@@ -198,6 +198,7 @@ class MassImportTool
 
 
       r = connection.query("Select id from tags where name = '#{temptag.tag}'; ")
+      connection.close
       ##if not found add tag
       if r.num_rows == 0 then
         # '' self.update_record_target("Insert into tags (name, type) values ('#{temptag.tag}','#{temptag.tag_type}');")
@@ -224,11 +225,11 @@ class MassImportTool
   def get_tag_list(tl, at)
     taglist = tl
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+
     case at
       #storyline
       when 4
-        query = "Select caid, caname from #{@source_table_prefix}category; " #
-        r = connection.query(query)
+        r = connection.query("Select caid, caname from #{@source_table_prefix}category; ")
         r.each do |r|
           nt = ImportTag.new()
           nt.tag_type = 1
@@ -237,8 +238,8 @@ class MassImportTool
           taglist.push(nt)
         end
 
-        query2 = "Select subid, subname from #{@source_table_prefix}subcategory; "
-        rr = connection.query(query2)
+
+        rr = connection.query("Select subid, subname from #{@source_table_prefix}subcategory; ")
         unless rr.num_rows.nil? || rr.num_rows == 0
           rr.each do |rr|
             nt = ImportTag.new()
@@ -250,8 +251,7 @@ class MassImportTool
         end
       #efiction 3
       when 3
-        query = "Select class_id, class_type, class_name from #{@source_table_prefix}classes; " #
-        r = connection.query(query)
+        r = connection.query("Select class_id, class_type, class_name from #{@source_table_prefix}classes; ")
         r.each do |r|
           nt = ImportTag.new()
           if r[1] == @srcWarningClassTypeID
@@ -263,8 +263,8 @@ class MassImportTool
           nt.tag = r[2]
           taglist.push(nt)
         end
-        query2 = "Select catid, category from #{@source_table_prefix}categories; "
-        rr = connection.query(query2)
+
+        rr = connection.query("Select catid, category from #{@source_table_prefix}categories; ")
         rr.each do |rr|
           nt = ImportTag.new()
           nt.tag_type = 1
@@ -273,8 +273,8 @@ class MassImportTool
           taglist.push(nt)
 
         end
-        query3 = "Select charid, charname from #{@source_table_prefix}characters; "
-        rrr = connection.query(query3)
+
+        rrr = connection.query("Select charid, charname from #{@source_table_prefix}characters; ")
         rrr.each do |rrr|
           nt = ImportTag.new()
           nt.tag_type = 2
@@ -350,7 +350,7 @@ class MassImportTool
     end
 
     r = connection.query("SELECT * FROM #{@source_stories_table} ;")
-
+    connection.close()
     puts (" Importing Stories ")
     i = 0
     r.each do |row|
@@ -485,6 +485,7 @@ class MassImportTool
     def add_chapters(ns)
       connection = MySqlConnection.new()
       r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+      connection.close()
       r.each do |rr|
         c = ImportChapter.new()
         c.new_work_id = ns.new_work_id
@@ -494,7 +495,7 @@ class MassImportTool
         c.body = rr[3]
         self.post_chapters(c, @source_archive_type)
       end
-      connection.close()
+
   end
 
     def post_chapters(c, sourceType)
@@ -586,7 +587,8 @@ class MassImportTool
     a = ImportUser.new()
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     r = connection.query("#{@get_author_from_source_query} #{source_user_id}")
-    puts
+    connection.close
+
     r.each  do |r|
       a.old_user_id = authid
       a.realname = r[0]
@@ -612,7 +614,7 @@ class MassImportTool
 
     end
 
-    connection.close
+
 
     return a
   end
@@ -700,7 +702,7 @@ class MassImportTool
     begin
       rowsEffected = 0
       rowsEffected = connection.query(query)
-      connection.free
+
       connection.close()
       return rowsEffected
     rescue Exception => ex
