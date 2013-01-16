@@ -492,7 +492,7 @@ class MassImportTool
 
     #add chapters
     def add_chapters(ns)
-      connection = Myql.new()
+      connection = Mysql.new()
       case @source_archive_type
         when 4
           r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
