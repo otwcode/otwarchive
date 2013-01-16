@@ -224,11 +224,12 @@ class MassImportTool
   #get all possible tags from source
   def get_tag_list(tl, at)
     taglist = tl
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+
 
     case at
       #storyline
       when 4
+        connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
         r = connection.query("Select caid, caname from #{@source_table_prefix}category; ")
         r.each do |r|
           nt = ImportTag.new()
@@ -249,6 +250,7 @@ class MassImportTool
             taglist.push(nt)
           end
         end
+        connection.close
       #efiction 3
       when 3
         r = connection.query("Select class_id, class_type, class_name from #{@source_table_prefix}classes; ")
@@ -417,10 +419,12 @@ class MassImportTool
 
         end
 #debug info
+
         puts "attempting to get new user id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
 #see if user / author exists for this import already
         ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_user_id == 0
+          puts "user existed"
           ##get import user object from source database
           a = ImportUser.new
           a = self.get_import_user_object_from_source(ns.old_user_id)
