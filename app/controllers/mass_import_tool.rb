@@ -651,7 +651,7 @@ class MassImportTool
 
   #return old new id from user_imports table based on old user id & source archive
   def get_new_user_id_from_imported(old_id,source_archive)
-    return get_single_value_target("select user_id from user_imports where source_user_id = #{old_id} and source_archive = #{source_archive}")
+    return get_single_value_target("select user_id from user_imports where source_user_id = #{old_id} and source_archive_id = #{source_archive}")
   end
 
   def get_default_pseud_id(user_id)
