@@ -182,14 +182,15 @@ class MassImportTool
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
     puts "transform source ratings"
+    rating_field_name = ""
     case @source_archive_type
       #storyline
-      rating_field_name = ""
+
       when 4
         rating_field_name = "srating"
       #efiction 3
       when 3
-        Rating_field_name = "rid"
+        rating_field_name = "rid"
       #efiction 2
       when 2
     end
