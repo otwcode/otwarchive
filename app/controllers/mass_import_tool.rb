@@ -495,7 +495,7 @@ class MassImportTool
       connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       case @source_archive_type
         when 4
-          r = connection.Query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+          r = connection.query = "Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
           ix = 1
           r.each do |rr|
             c = ImportChapter.new()
