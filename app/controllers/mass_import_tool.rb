@@ -590,7 +590,7 @@ class MassImportTool
     connection.close
 
     r.each  do |r|
-      a.old_user_id = authid
+      a.old_user_id = source_user_id
       a.realname = r[0]
       a.source_archive_id = @import_archive_id
 
