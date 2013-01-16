@@ -491,17 +491,13 @@ class MassImportTool
 
 #Structures
 ################
-  ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
 
-  ImportUser = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
-                          :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
 
-  ImportChapter = Struct.new(:new_chapter_id,:new_work_id,:old_story_id,:source_archive_id,:title,:new_pseud_id,
-                             :summary,:notes,:old_user_id,:body,:position,:date_added)
 
-  ImportWork = Struct.new(:old_story_id,:new_work_id,:author_string,:title,:summary,:classes,:old_user_id,:characters,
-                          :hits,:new_author_id,:word_count,:completed,:updated,:source_archive_id,:generes,:rating,
-                          :rating_integer,:warnings,:chapters,:published,:cats)
+
+
+
+
 
 
 
