@@ -339,8 +339,7 @@ class MassImportTool
   # Main Worker Sub
   def import_data()
     #create collection
-    create_collection(@
-    )
+
 
     puts " Setting Import Values "
     self.set_import_strings()
