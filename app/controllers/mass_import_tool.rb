@@ -660,7 +660,7 @@ class MassImportTool
 
 
   def get_new_work_id_fresh(source_work_id,source_archive_id)
-    return get_single_value_target("select id from works where import_from_url = '#{source_work_id}~~#{source_archive_id}'")
+    return get_single_value_target("select id from works where imported_from_url = '#{source_work_id}~~#{source_archive_id}'")
   end
 
 # Return new story id given old id and archive
