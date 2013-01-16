@@ -432,7 +432,7 @@ class MassImportTool
             new_a = self.add_user(a)
 
             #pass values to new story object
-            ns.author = new_a.penname
+            ns.penname = new_a.penname
             ns.new_user_id = new_a.new_user_id
 
             #debug info
@@ -443,14 +443,14 @@ class MassImportTool
             new_pseud_id = get_default_pseud_id(ns.new_user_id)
 
             #set the penname on newly created pseud to proper value
-            update_record_target("update pseuds set name = ''#{ns.author}' where id = #{new_pseud_id}")
+            update_record_target("update pseuds set name = ''#{ns.penname}' where id = #{new_pseud_id}")
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
           else
             #user exists, but is being imported
             #insert the mapping value
             puts "---e"
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-            ns.author = a.penname
+            ns.penname = a.penname
             #check to see if penname exists as pseud for existing user
             temp_pseud_id = get_pseud_id_for_penname(temp_author_id,ns.penname)
             if temp_pseud_id == 0
