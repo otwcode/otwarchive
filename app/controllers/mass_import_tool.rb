@@ -12,21 +12,11 @@ class MassImportTool
     @temptableprefix = "temp321"
     #####################################################
 
-
-    # Boolean Options
-    #
-
-
-
-
     #Match Existing Authors by Email-Address
     @match_existing_authors = true
 
     #Import Job Name
     @import_name = "New Import"
-
-
-
 
     #Create record for imported archive (false if already exists)
     @create_import_archive_record = True
@@ -36,10 +26,6 @@ class MassImportTool
 
     #Import reviews t/f
     @import_reviews = true
-
-
-
-
 
     #Message Values
     ####################################
@@ -74,6 +60,7 @@ class MassImportTool
 
     @new_collection_title = "This is a title"
 
+
     @new_collection_name = "shortname"
 
     #New Collection Description
@@ -93,7 +80,7 @@ class MassImportTool
     #NR
     @target_rating_1 = 9
 
-    #general audiences
+   #general audiences
     @target_rating_2 = 10
 
     #teen
@@ -332,7 +319,7 @@ class MassImportTool
       collect.name = @new_collection_name
       collect.description = @new_collection_description
       collect.title = new_collection_title
-      collect.
+
   end
 
   ##################################################################################################
@@ -506,9 +493,9 @@ class MassImportTool
         c.dateposted = rr[4]
         c.body = rr[3]
         self.post_chapters(c, @source_archive_type)
-                end
-      connection.close()
       end
+      connection.close()
+  end
 
     def post_chapters(c, sourceType)
       case sourceType
@@ -676,7 +663,7 @@ class MassImportTool
 
 
   def get_new_work_id_fresh(source_work_id,source_archive_id)
-  return get_single_value_target("select id from works where import_from_url = '#{source_work_id}~~#{source_archive_id}'")
+    return get_single_value_target("select id from works where import_from_url = '#{source_work_id}~~#{source_archive_id}'")
   end
 
 # Return new story id given old id and archive
