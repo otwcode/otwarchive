@@ -454,31 +454,73 @@ class MassImportTool
             #insert the mapping value
             puts "---e"
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
+            new_ui = UserImport.new
+            new_ui.user_id = ns.new_user
+            new_ui.source_user_id = ns.old_user_id
+            new_ui.source_archive_id = ns.source_archive_id
+            new_ui.save!
+
             ns.penname = a.penname
             #check to see if penname exists as pseud for existing user
             temp_pseud_id = get_pseud_id_for_penname(temp_author_id,ns.penname)
             if temp_pseud_id == 0
               #add pseud if not exist
-              update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{temp_author_id},'#{a.penname}',1,'Imported'")
+              new_pseud = Pseud.new
+              new_pseud.user_id = temp_author_id
+              new_pseud.name = a.penname
+              new_pseud.is_default = true
+              new_pseud.description = "Imported"
+              new_pseud.save!
+
+              'update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{},'#{}',1,'Imported'")
 
               #return newly created pseud
-              puts "---b"
-              temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
-              puts "----c"
-              update_record_target("update user_imports set pseud_id = #{ns.new_user_id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
+             # 'puts "---b"
+             # 'temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
+             #'' puts "----c"
+
+              update_record_target("update user_imports set pseud_id = #{new_pseud.id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
               puts "====A"
-              ns.new_user_id = temp_pseud_id
+              ns.new_user_id = new_pseud.id
             end
           end
         end
         #insert work object
-        self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values ('#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
-                    puts "yy"
+        new_work = Work.new
+        new_work.title = ns.title
+        new_work.summary = ns.summary
+        new_work.authors_to_sort_on = ns.penname
+        new_work.title_to_sort_on = ns.title
+        new_work.revised_at = ns.updated
+        new_work.created_at = ns.published
+        new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
+        new_work.save!
+
+        puts "new work created #{new_work.id}"
+        #self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values (
+        #'#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
+
+        new_wc = Creatorship.new
+        new_wc.creation_id = new_work.id
+        new_wc.creation_type = "work"
+        new_wc.pseud_id = ns.new_user_id
+        new_wc.save!
+        puts "new work creatorship #{new_wc.id}"
+
+        new_wi = WorkImport.new
+        new_wi.work_id = new_work.id
+        new_wi.pseud_id = ns.new_user_id
+        new_wi.source_archive_id = ns.source_archive_id
+        new_wi.source_work_id = ns.old_work_id
+        new_wi.source_user_id = ns.old_user_id
+        new_wi.save!
+
+       puts "new workimport #{new_wi.id}
       #return new work id
-      ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
+      #ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
-        self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_user_id}, 'work') ")
-                             puts "eee"
+        #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_user_id}, 'work') ")
+        #                     puts "eee"
         connection.close()
         self.add_chapters(ns)
 
