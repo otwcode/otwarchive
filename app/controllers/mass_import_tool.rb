@@ -527,8 +527,8 @@ class MassImportTool
         when 4
           new_c = Chapter.new
           new_c.work_id =  c.new_work_id
-          new_c.created_at = c.date_posted.ToString
-          new_c.updated_at = c.date_posted.ToString
+          new_c.created_at = c.date_posted
+          new_c.updated_at = c.date_posted
           new_c.posted = 1
           new_c.position = c.position
           new_c.title = c.title
