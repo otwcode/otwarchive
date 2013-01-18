@@ -59,7 +59,7 @@
     <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
   <% end %>
 
-  <% if commentable.is_a?(Work) && !@work.anon_commenting_enabled && !logged_in? %>
+  <% if !logged_in? && (commentable.is_a?(Work) && !commentable.anon_commenting_enabled || commentable.is_a?(Chapter) && !commentable.work.anon_commenting_enabled) %>
     <p class="notice">
       <%= ts("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!") %>
     </p>
