@@ -527,8 +527,8 @@ class MassImportTool
         when 4
           new_c = Chapter.new
           new_c.work_id =  c.new_work_id
-          new_c.created_at = c.dateposted.ToString
-          new_c.updated_at = c.dateposted.ToString
+          new_c.created_at = c.date_posted.ToString
+          new_c.updated_at = c.date_posted.ToString
           new_c.posted = 1
           new_c.position = c.position
           new_c.title = c.title
@@ -545,7 +545,7 @@ class MassImportTool
           new_creation.save!
 
           puts "New creatorship #{new_creation.id}"
-          #self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at,position) values ('#{c.body}', '#{c.date_posted.ToString}', '#{c.date_posted.ToString}', 1,'#{c.title}', '#{c.dateposted.ToString}',#{c.position}) ")
+          #self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at,position) values ('#{c.body}', '#{c.date_posted.ToString}', '#{c.date_posted.ToString}', 1,'#{c.title}', '#{c.date_posted.ToString}',#{c.position}) ")
           #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{c.new_chapter_id},#{c.new_user_id},'chapter') ")
       end
     end
