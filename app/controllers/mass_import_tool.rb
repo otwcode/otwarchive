@@ -455,7 +455,7 @@ class MassImportTool
             puts "---e"
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
             new_ui = UserImport.new
-            new_ui.user_id = ns.new_user
+            new_ui.user_id = ns.new_user_id
             new_ui.source_user_id = ns.old_user_id
             new_ui.source_archive_id = ns.source_archive_id
             new_ui.save!
