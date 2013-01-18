@@ -213,10 +213,12 @@ class User < ActiveRecord::Base
   end
 
   ### AUTHENTICATION AND PASSWORDS
+  #Is user activated?
   def active?
     !activated_at.nil?
   end
 
+  #Generate random password, used by reset password and possibly other methods
   def generate_password(length=8)
     chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
     password = ''
@@ -232,11 +234,13 @@ class User < ActiveRecord::Base
     UserMailer.reset_password(self.id, temp_password).deliver! 
   end
 
+  #activate user object
   def activate
     return false if self.active?
     self.update_attribute(:activated_at, Time.now.utc)
   end
 
+  #Create the corresponding profile and preference records
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :is_default => true)
     self.profile = Profile.new
