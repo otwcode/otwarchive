@@ -515,7 +515,7 @@ class MassImportTool
         new_wi.source_user_id = ns.old_user_id
         new_wi.save!
 
-       puts "new workimport #{new_wi.id}
+       puts "new workimport #{new_wi.id}"
       #return new work id
       #ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
