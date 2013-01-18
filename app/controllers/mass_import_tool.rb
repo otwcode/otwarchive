@@ -506,7 +506,7 @@ class MassImportTool
           r.each do |rr|
             c = ImportChapter.new()
             c.new_work_id = ns.new_work_id
-            c.new_pseud_id = ns.new_user_id
+            c.pseud_id = ns.new_user_id
             c.title = rr[1]
             c.date_posted = rr[4]
             c.body = rr[3]
