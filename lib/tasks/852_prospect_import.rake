@@ -35,11 +35,18 @@ namespace :massimport852 do
 
   # send invitations to external authors for a given set of works
   def send_external_invites(work_ids, archivist)
+    @users = User.select("DISTINCT users.*").joins(:creatorships).where("creation_id IN (?) AND creation_type = 'Work'", work_ids)
+    @users.each do |user|
+      UserMailer.deliver_claim_notification(user.id, work_ids, true)
+    end
     @external_authors = ExternalAuthor.select("DISTINCT external_authors.*").joins(:external_creatorships).where("creation_id IN (?) AND creation_type = 'Work'", work_ids)
     @external_authors.each do |external_author|
       external_author.find_or_invite(archivist)
     end
   end
+
+  # send notification to existing users
+
 
   # add to a collection and approve the item
   def collection_approve(work, collection)
@@ -414,11 +421,11 @@ namespace :massimport852 do
 
     # get email address from the story file if necessary
     if work_params[:email].blank?
-      #if story.match(/<a href=(?:"|')?(mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+@[^'">]+)(?:"|')?>(.+)<\/a>/i)
-      #  work_params[:email] = $2
-      #end
+      if story.match(/<a href=(?:"|')?(mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+@[^'">]+)(?:"|')?>(.+)<\/a>/i)
+        work_params[:email] = $2
+      end
     end
-    work_params[:email] = "astele@astele.co.uk"
+    #work_params[:email] = "astele@astele.co.uk"
     message("Email set to " + work_params[:email])
 
     # strip mailto: links to avoid spam
