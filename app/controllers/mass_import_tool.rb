@@ -690,8 +690,9 @@ class MassImportTool
             c.title = rr[1]
             c.created_at  = rr[4]
             c.updated_at = rr[4]
-            c.body = rr[3]
+            c.content = rr[3]
             c.position = ix
+            c.posted = true
             ns.chapters << c
 
             ix = ix + 1
