@@ -17,6 +17,7 @@ class MassImportTool
 
     #Import Job Name
     @import_name = "New Import"
+    @import_fandom = "Harry Potter"
 
     #Create record for imported archive (false if already exists)
     @create_import_archive_record = true
@@ -324,6 +325,76 @@ class MassImportTool
 
   end
 
+  def set_work_attributes(work, location="", options = {})
+    raise Error, "Work could not be downloaded" if work.nil?
+    work.imported_from_url = location
+    work.expected_number_of_chapters = work.chapters.length
+
+    # set authors for the works
+    pseuds = []
+    pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
+    pseuds << options[:archivist].default_pseud if options[:archivist]
+    pseuds += options[:pseuds] if options[:pseuds]
+    pseuds = pseuds.uniq
+    raise Error, "A work must have at least one author specified" if pseuds.empty?
+    pseuds.each do |pseud|
+      work.pseuds << pseud unless work.pseuds.include?(pseud)
+      work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
+    end
+
+    # handle importing works for others
+    # build an external creatorship for each author
+    if options[:importing_for_others]
+      external_author_names = options[:external_author_names] || parse_author(location)
+      external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+      external_author_names.each do |external_author_name|
+        if external_author_name && external_author_name.external_author
+          if external_author_name.external_author.do_not_import
+            # we're not allowed to import works from this address
+            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+          end
+          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
+        end
+      end
+    end
+
+    # lock to registered users if specified or importing for others
+    work.restricted = options[:restricted] || options[:importing_for_others] || false
+
+    # set default values for required tags for any works that don't have them
+    work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
+    work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
+    work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
+    work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
+    work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
+    work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
+    work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
+
+    # set default value for title
+    work.title = "Untitled Imported Work" if work.title.blank?
+
+    work.posted = true if options[:post_without_preview]
+    work.chapters.each do |chapter|
+      if chapter.content.length > ArchiveConfig.CONTENT_MAX
+        # TODO: eventually: insert a new chapter
+        chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+      end
+
+      chapter.posted = true
+      # ack! causing the chapters to exist even if work doesn't get created!
+      # chapter.save
+    end
+    return work
+  end
+
+=begin
+  def check_for_previous_import(location)
+    work = Work.find_by_imported_from_url(location)
+    if work
+      raise Error, "A work has already been imported from #{location}."
+    end
+  end
+=end
   ##################################################################################################
   # Main Worker Sub
   def import_data()
@@ -422,11 +493,13 @@ class MassImportTool
 
         puts "attempting to get new user id, user: #{ns.old_user_id}, source: #{ns.source_archive_id}"
 #see if user / author exists for this import already
+
+        a = ImportUser.new
         ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
         if ns.new_user_id == 0
           puts "user existed"
           ##get import user object from source database
-          a = ImportUser.new
+
           a = self.get_import_user_object_from_source(ns.old_user_id)
           #see if user account exists by checking email,
           temp_author_id = get_user_id_from_email(a.email)
@@ -448,17 +521,25 @@ class MassImportTool
 
             #set the penname on newly created pseud to proper value
             update_record_target("update pseuds set name = '#{ns.penname}' where id = #{new_pseud_id}")
+            a = new_a
+            a.pseud_id = new_pseud_id
             update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
           else
             #user exists, but is being imported
             #insert the mapping value
             puts "---e"
             #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-            new_ui = UserImport.new
-            new_ui.user_id = ns.new_user_id
-            new_ui.source_user_id = ns.old_user_id
-            new_ui.source_archive_id = ns.source_archive_id
-            new_ui.save!
+
+            begin
+              new_ui = UserImport.new
+              new_ui.user_id = ns.new_user_id
+              new_ui.source_user_id = ns.old_user_id
+              new_ui.source_archive_id = ns.source_archive_id
+              new_ui.save!
+            rescue Exception=>e
+              puts "Error: 777: #{e}"
+            end
+
 
             ns.penname = a.penname
             #check to see if penname exists as pseud for existing user
@@ -472,6 +553,8 @@ class MassImportTool
                 new_pseud.is_default = true
                 new_pseud.description = "Imported"
                 new_pseud.save!
+                temp_pseud_id = new_pseud.id
+
               rescue Exception=>e
                 puts "Error: 111: #{e}"
               end
@@ -480,16 +563,18 @@ class MassImportTool
               'update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{},'#{}',1,'Imported'")
 
               #return newly created pseud
-             # 'puts "---b"
+
              # 'temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
-             #'' puts "----c"
+
 
               update_record_target("update user_imports set pseud_id = #{new_pseud.id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
               puts "====A"
               ns.new_user_id = new_pseud.id
+              a.pseud_id = new_pseud.id
             end
           end
         end
+
         #insert work object
         begin
           new_work = Work.new
@@ -497,18 +582,27 @@ class MassImportTool
           new_work.summary = ns.summary
           new_work.authors_to_sort_on = ns.penname
           new_work.title_to_sort_on = ns.title
+          new_work.restricted = true
+          new_work.posted = true
+          new_work.pseuds << a.pseud_id
           new_work.revised_at = ns.updated
           new_work.created_at = ns.published
+          new_work.fandom_string = @import_fandom
+          new_work.rating_string = "Not Rated"
+          new_work.warning_strings = "None"
+          new_work.authors = [pseud]
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
+
           new_work.save!
           puts "new work created #{new_work.id}"
-# something potentially bad
+
         rescue Exception=>e
           puts "Error: 222: #{e}"
-# handle e
+
         end
 
 
+=begin
 
         #self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values (
         #'#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
@@ -520,11 +614,13 @@ class MassImportTool
           new_wc.save!
           puts "new work creatorship #{new_wc.id}"
 
-# something potentially bad
+
         rescue Exception=>e
           puts "Error: 333: #{e}"
-# handle e
+
         end
+
+
         new_wc = Creatorship.new
         new_wc.creation_id = new_work.id
         new_wc.creation_type = "work"
@@ -532,22 +628,32 @@ class MassImportTool
         new_wc.save!
         puts "new work creatorship #{new_wc.id}"
 
-        new_wi = WorkImport.new
-        new_wi.work_id = new_work.id
-        new_wi.pseud_id = ns.new_user_id
-        new_wi.source_archive_id = ns.source_archive_id
-        new_wi.source_work_id = ns.old_work_id
-        new_wi.source_user_id = ns.old_user_id
-        new_wi.save!
+=end
 
-       puts "new workimport #{new_wi.id}"
+
+        begin
+          new_wi = WorkImport.new
+          new_wi.work_id = new_work.id
+          new_wi.pseud_id = ns.new_user_id
+          new_wi.source_archive_id = ns.source_archive_id
+          new_wi.source_work_id = ns.old_work_id
+          new_wi.source_ user_id = ns.old_user_id
+          new_work = add_chapters(new_work)
+          new_wi.save!
+
+        rescue Exception=>e
+          puts "Error: 888: #{e}"
+        end
+
+
+
       #return new work id
       #ns.new_work_id =  get_new_work_id_fresh(ns.old_work_id,ns.source_archive_id)
         #add creation
         #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{ns.new_work_id},#{ns.new_user_id}, 'work') ")
         #                     puts "eee"
         connection.close()
-        self.add_chapters(ns)
+
 
       rescue Exception => ex
         puts " Error : " + ex.message
@@ -559,9 +665,11 @@ class MassImportTool
     connection.close()
   end
 
+    def create_work_from_import_work(ns)
 
+    end
 
-    #add chapters
+    #add chapters    takes chapters and adds them to import work object
     def add_chapters(ns)
       connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       case @source_archive_type
@@ -571,21 +679,25 @@ class MassImportTool
           puts "333"
           ix = 1
           r.each do |rr|
-            c = ImportChapter.new()
-            c.new_work_id = ns.new_work_id
-            c.pseud_id = ns.new_user_id
+            c = Chapter.new()
+            #c.new_work_id = ns.new_work_id     will be made automatically
+            c.pseud_id = ns.pseuds[0]
             c.title = rr[1]
-            c.date_posted = rr[4]
+            c.created_at  = rr[4]
+            c.updated_at = rr[4]
             c.body = rr[3]
             c.position = ix
-            self.post_chapters(c, @source_archive_type)
+            ns.chapters << c
+
+            ix = ix + 1
+            #self.post_chapters(c, @source_archive_type)
           end
         when 3
 
       end
 
       connection.close()
-
+      return ns
 
   end
 
