@@ -5,7 +5,7 @@ module StringCleaner
   end
 
   def article_removing_regex
-    Regexp.new(/^(a|an|the|la|les|l'|un|une|des|die|das|il|el|las|los|der|den)\s/i)
+    Regexp.new(/^(a|an|the|la|le|les|l'|un|une|des|die|das|il|el|las|los|der|den)\s/i)
   end
 
 end
