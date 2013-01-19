@@ -567,7 +567,7 @@ class MassImportTool
              # 'temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
 
 
-              update_record_target("update user_imports set pseud_id = #{new_pseud.id} where user_id = #{ns.new_user_id} and source_archive_id = #{ns.source_archive_id}")
+              update_record_target("update user_imports set pseud_id = #{new_pseud.id} where user_id = #{ns.new_user_id} and source_archive_id = #{@import_archive_id}")
               puts "====A"
               ns.new_user_id = new_pseud.id
               a.pseud_id = new_pseud.id
@@ -644,7 +644,7 @@ class MassImportTool
           new_wi = WorkImport.new
           new_wi.work_id = new_work.id
           new_wi.pseud_id = ns.new_user_id
-          new_wi.source_archive_id = ns.source_archive_id
+          new_wi.source_archive_id = @import_archive_id
           new_wi.source_work_id = ns.old_work_id
           new_wi.source_user_id = ns.old_user_id
 
