@@ -590,10 +590,7 @@ class MassImportTool
           new_work.fandom_string = @import_fandom
           new_work.rating_string = "Not Rated"
           new_work.warning_strings = "None"
-         # new_work.authors = [pseud]
-          new_work.pseuds.each do |p|
-            np = Pseud.find_by_id(p)
-            new_work.authors << np
+          new_work.authors = [pseud]
           end
 
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
