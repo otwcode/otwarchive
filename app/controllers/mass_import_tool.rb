@@ -584,7 +584,7 @@ class MassImportTool
           new_work.title_to_sort_on = ns.title
           new_work.restricted = true
           new_work.posted = true
-          new_work.pseuds << a.pseud_id
+          new_work.pseuds << Pseud.find_by_id(a.pseud_id)
           new_work.revised_at = ns.updated
           new_work.created_at = ns.published
           new_work.fandom_string = @import_fandom
