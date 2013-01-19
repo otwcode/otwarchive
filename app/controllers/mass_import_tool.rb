@@ -590,7 +590,8 @@ class MassImportTool
           new_work.fandom_string = @import_fandom
           new_work.rating_string = "Not Rated"
           new_work.warning_strings = "None"
-          new_work.authors = [pseud]
+         # new_work.authors = [pseud]
+          new_work.authors = new_work.pseuds
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
 
           new_work.save!
@@ -637,7 +638,7 @@ class MassImportTool
           new_wi.pseud_id = ns.new_user_id
           new_wi.source_archive_id = ns.source_archive_id
           new_wi.source_work_id = ns.old_work_id
-          new_wi.source_ user_id = ns.old_user_id
+          new_wi.source_user_id = ns.old_user_id
           new_work = add_chapters(new_work)
           new_wi.save!
 
