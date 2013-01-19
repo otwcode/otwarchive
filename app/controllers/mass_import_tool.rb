@@ -591,10 +591,16 @@ class MassImportTool
           new_work.rating_string = "Not Rated"
           new_work.warning_strings = "None"
          # new_work.authors = [pseud]
-          new_work.authors = new_work.pseuds
+          new_work.pseuds.each do |p|
+            np = Pseud.find_by_id(p)
+            new_work.authors << np
+          end
+
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
 
           new_work.save!
+          new_work.chapters.build
+
           puts "new work created #{new_work.id}"
 
         rescue Exception=>e
@@ -702,6 +708,7 @@ class MassImportTool
 
   end
 
+=begin
     def post_chapters(c, sourceType)
       case sourceType
         when 4
@@ -729,6 +736,7 @@ class MassImportTool
           #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{c.new_chapter_id},#{c.new_user_id},'chapter') ")
       end
     end
+=end
 
 
 
