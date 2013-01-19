@@ -453,7 +453,7 @@ class MassImportTool
             #user exists, but is being imported
             #insert the mapping value
             puts "---e"
-            update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
+            #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
             new_ui = UserImport.new
             new_ui.user_id = ns.new_user_id
             new_ui.source_user_id = ns.old_user_id
@@ -465,12 +465,17 @@ class MassImportTool
             temp_pseud_id = get_pseud_id_for_penname(temp_author_id,ns.penname)
             if temp_pseud_id == 0
               #add pseud if not exist
-              new_pseud = Pseud.new
-              new_pseud.user_id = temp_author_id
-              new_pseud.name = a.penname
-              new_pseud.is_default = true
-              new_pseud.description = "Imported"
-              new_pseud.save!
+              begin
+                new_pseud = Pseud.new
+                new_pseud.user_id = temp_author_id
+                new_pseud.name = a.penname
+                new_pseud.is_default = true
+                new_pseud.description = "Imported"
+                new_pseud.save!
+              rescue Exception=>e
+                puts "Error: 111: #{e}"
+              end
+
 
               'update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{},'#{}',1,'Imported'")
 
@@ -486,20 +491,40 @@ class MassImportTool
           end
         end
         #insert work object
-        new_work = Work.new
-        new_work.title = ns.title
-        new_work.summary = ns.summary
-        new_work.authors_to_sort_on = ns.penname
-        new_work.title_to_sort_on = ns.title
-        new_work.revised_at = ns.updated
-        new_work.created_at = ns.published
-        new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
-        new_work.save!
+        begin
+          new_work = Work.new
+          new_work.title = ns.title
+          new_work.summary = ns.summary
+          new_work.authors_to_sort_on = ns.penname
+          new_work.title_to_sort_on = ns.title
+          new_work.revised_at = ns.updated
+          new_work.created_at = ns.published
+          new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
+          new_work.save!
+          puts "new work created #{new_work.id}"
+# something potentially bad
+        rescue Exception=>e
+          puts "Error: 222: #{e}"
+# handle e
+        end
 
-        puts "new work created #{new_work.id}"
+
+
         #self.update_record_target("Insert into works (title, summary, authors_to_sort_on, title_to_sort_on, revised_at, created_at, imported_from_url) values (
         #'#{ns.title}','#{ns.summary}','#{ns.penname}','#{ns.title}','#{ns.updated}','#{ns.published}', '#{@import_archive_id}~~#{ns.old_work_id}'); ")
+        begin
+          new_wc = Creatorship.new
+          new_wc.creation_id = new_work.id
+          new_wc.creation_type = "work"
+          new_wc.pseud_id = ns.new_user_id
+          new_wc.save!
+          puts "new work creatorship #{new_wc.id}"
 
+# something potentially bad
+        rescue Exception=>e
+          puts "Error: 333: #{e}"
+# handle e
+        end
         new_wc = Creatorship.new
         new_wc.creation_id = new_work.id
         new_wc.creation_type = "work"
