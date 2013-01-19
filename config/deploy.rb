@@ -113,14 +113,14 @@ namespace :extras do
   # Needs to run on web servers but they must also have rails 
   desc "Re-caches the site skins and puts the new versions into the static files area"
   task :reload_site_skins, :roles => :web do
-    run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=production"
+    run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=#{rails_env}"
   end
 
   # After tasks generally clean up state after a migration and should only run
   # on one machine
   desc "Run after tasks on one app server"
   task :run_after_tasks, :roles => :app, :only => {:primary => true} do
-    run "cd #{release_path}; rake After RAILS_ENV=production"
+    run "cd #{release_path}; rake After RAILS_ENV=#{rails_env}"
   end
   
   desc "Restart our queueing software -- currently Resque -- on all worker machines"
@@ -163,12 +163,12 @@ namespace :stage_only do
 
   desc "Get rid of subscriptions so we don't spam people"
   task :clear_subscriptions do
-    run "cd #{release_path}; bundle exec rake deploy:clear_subscriptions RAILS_ENV=production"
+    run "cd #{release_path}; bundle exec rake deploy:clear_subscriptions RAILS_ENV=#{rails_env}"
   end
 
   desc "Redact emails so we don't spam people"
   task :clear_emails do
-    run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=production"
+    run "cd #{release_path}; bundle exec rake deploy:clear_emails RAILS_ENV=#{rails_env}"
   end
   
   desc "Reindex elasticsearch database in the background -- takes a long time"
