@@ -22,7 +22,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   (n_chapters.to_i - 1).times do |i|
     When %{I follow "Add Chapter"}
     fill_in("content", :with => "Yet another chapter.")
-    click_button("Post without preview")
+    click_button("Post Without Preview")
   end
   And %{I am logged out}
   n_comments ||= 0
@@ -121,7 +121,7 @@ When /^I post the work "([^\"]*)" without preview$/ do |title|
   work = Work.find_by_title(title)
   if work.blank?
     Given %{I set up the draft "#{title}"}
-    click_button("Post without preview")
+    click_button("Post Without Preview")
     Work.tire.index.refresh
     Then "I should see \"Work was successfully posted.\""
   end
@@ -310,7 +310,7 @@ When /^I update the work$/ do
 end
 
 When /^I post the work without preview$/ do
-  click_button "Post without preview"
+  click_button "Post Without Preview"
   Work.tire.index.refresh
 end
 

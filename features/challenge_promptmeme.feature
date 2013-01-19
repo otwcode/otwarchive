@@ -691,7 +691,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
   # TODO: *should* I (myname4) see "Mystery work"?
@@ -714,7 +714,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Battle 12"
     And I should see "Othercoll"
     
@@ -870,7 +870,7 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "My Gift Exchange"
     And I should not see "Battle 12"
   # TODO: should it be unrevealed or not? It isn't unrevealed
