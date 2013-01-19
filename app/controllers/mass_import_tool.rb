@@ -757,23 +757,28 @@ class MassImportTool
 
 #Add User
   def add_user(a)
-    login_temp = a.email.tr("@", "")
-    login_temp = login_temp.tr(".","")
-    #new user model
-    new_user = User.new()
+    begin
+      login_temp = a.email.tr("@", "")
+      login_temp = login_temp.tr(".","")
+      #new user model
+      new_user = User.new()
       new_user.terms_of_service = true
       new_user.email = a.email
       new_user.login = login_temp
       new_user.password = a.password
       new_user.password_confirmation = a.password
       new_user.age_over_13 = true
-    new_user.save!
+      new_user.save!
 
-    #Create Default Pseud / Profile
-    new_user.create_default_associateds
-    a.new_user_id = new_user.id
+      #Create Default Pseud / Profile
+      new_user.create_default_associateds
+      a.new_user_id = new_user.id
 
-    return a
+      return a
+    rescue Exception=>e
+      puts "error 1010: #{e}"
+    end
+
   end
 
 
