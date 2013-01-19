@@ -686,7 +686,7 @@ class MassImportTool
           r.each do |rr|
             c = Chapter.new()
             #c.new_work_id = ns.new_work_id     will be made automatically
-            c.pseud_id = ns.pseuds[0]
+            #c.pseud_id = ns.pseuds[0]
             c.title = rr[1]
             c.created_at  = rr[4]
             c.updated_at = rr[4]
