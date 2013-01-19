@@ -596,8 +596,9 @@ class MassImportTool
 
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
           new_work = add_chapters(new_work,ns.old_work_id)
-          new_work.save!
           new_work.chapters.build
+          new_work.save!
+
 
           puts "new work created #{new_work.id}"
 
