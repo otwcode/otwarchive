@@ -497,11 +497,11 @@ class MassImportTool
         a = ImportUser.new
         ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, @import_archive_id)
         if ns.new_user_id == 0
-          puts "didnt exist"
+          puts "didnt exist in this import"
           ##get import user object from source database
 
           a = self.get_import_user_object_from_source(ns.old_user_id)
-          #see if user account exists by checking email,
+          #see if user account exists in main archive by checking email,
           temp_author_id = get_user_id_from_email(a.email)
           if temp_author_id == 0 then
             #if not exist , add new user with user object, passing old author object
@@ -523,13 +523,13 @@ class MassImportTool
             update_record_target("update pseuds set name = '#{ns.penname}' where id = #{new_pseud_id}")
             a = new_a
             a.pseud_id = new_pseud_id
-            update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
+            update_record_target("insert into user_imports (user_id pseud_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{a.pseud_id},#{ns.old_user_id},#{ns.source_archive_id})")
           else
             #user exists, but is being imported
             #insert the mapping value
             puts "---existed"
             #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-
+            tempuser2 = User.find_by_id(ns.new_user_id)
             begin
               new_ui = UserImport.new
               new_ui.user_id = ns.new_user_id
@@ -567,10 +567,10 @@ class MassImportTool
              # 'temp_pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
 
 
-              update_record_target("update user_imports set pseud_id = #{new_pseud.id} where user_id = #{ns.new_user_id} and source_archive_id = #{@import_archive_id}")
+              update_record_target("update user_imports set pseud_id = #{temp_pseud_id} where user_id = #{ns.new_user_id} and source_archive_id = #{@import_archive_id}")
               puts "====A"
-              ns.new_user_id = new_pseud.id
-              a.pseud_id = new_pseud.id
+              ns.new_user_id = temp_pseud_id
+              a.pseud_id = temp_pseud_id
             end
           end
         end
