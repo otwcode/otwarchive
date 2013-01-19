@@ -68,6 +68,6 @@ Feature: Edit Works
       And I follow "Edit"
       And I select "testy" from "work_author_attributes_ids_"
       And I unselect "testuser" from "work_author_attributes_ids_"
-      And I press "Post without preview"
+      And I press "Post Without Preview"
     Then I should see "testy"
       And I should not see "testuser,"
