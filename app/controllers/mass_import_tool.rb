@@ -495,9 +495,9 @@ class MassImportTool
 #see if user / author exists for this import already
 
         a = ImportUser.new
-        ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, ns.source_archive_id)
+        ns.new_user_id = self.get_new_user_id_from_imported(ns.old_user_id, @import_archive_id)
         if ns.new_user_id == 0
-          puts "user existed"
+          puts "didnt exist"
           ##get import user object from source database
 
           a = self.get_import_user_object_from_source(ns.old_user_id)
@@ -527,7 +527,7 @@ class MassImportTool
           else
             #user exists, but is being imported
             #insert the mapping value
-            puts "---e"
+            puts "---existed"
             #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
 
             begin
@@ -887,6 +887,7 @@ class MassImportTool
 
   #return old new id from user_imports table based on old user id & source archive
   def get_new_user_id_from_imported(old_id,source_archive)
+    puts "#{old_id}"
     return get_single_value_target("select user_id from user_imports where source_user_id = #{old_id} and source_archive_id = #{source_archive}")
   end
 
