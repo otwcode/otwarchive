@@ -12,7 +12,7 @@ server "otw3.ao3.org", :web, :app
 server "otw4.ao3.org", :app, :worker, :db, :primary => true
 
 # otw5 is the db server
-server "otw5.ao3.org", :db, :no_release => true
+server "otw5.ao3.org", :db, :no_release => true, :primary => false
 
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:
@@ -34,3 +34,4 @@ after "deploy:restart", "production_only:notify_testers"
 
 # deploy from clean branch
 set :branch, "deploy"
+set :rails_env, 'production'
