@@ -505,7 +505,7 @@ class MassImportTool
           temp_author_id = get_user_id_from_email(a.email)
           if temp_author_id == 0 then
             #if not exist , add new user with user object, passing old author object
-            new_a = ImortUser.new
+            new_a = ImportUser.new
             new_a = self.add_user(a)
 
             #pass values to new story object
