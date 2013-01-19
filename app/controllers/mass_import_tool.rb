@@ -523,7 +523,7 @@ class MassImportTool
             update_record_target("update pseuds set name = '#{ns.penname}' where id = #{new_pseud_id}")
             a = new_a
             a.pseud_id = new_pseud_id
-            update_record_target("insert into user_imports (user_id pseud_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{a.pseud_id},#{ns.old_user_id},#{ns.source_archive_id})")
+            update_record_target("insert into user_imports (user_id, pseud_id,source_archive_id,source_user_id) values (#{new_a.new_user_id},#{a.pseud_id},#{ns.source_archive_id},#{ns.old_user_id})")
           else
             #user exists, but is being imported
             #insert the mapping value
