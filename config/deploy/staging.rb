@@ -9,6 +9,8 @@ server "stage.ao3.org", :web, :app, :worker, :db, :primary => true
 #
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
 
+set :rails_env, 'staging'
+
 before "deploy:update_code", "stage_only:git_in_home"
 after "deploy:update_code", "stage_only:update_public", "stage_only:update_configs"
 
