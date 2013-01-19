@@ -594,7 +594,7 @@ class MassImportTool
 
 
           new_work.imported_from_url = "#{@import_archive_id}~~#{ns.old_work_id}"
-
+          new_work = add_chapters(new_work,ns.old_work_id)
           new_work.save!
           new_work.chapters.build
 
@@ -642,7 +642,7 @@ class MassImportTool
           new_wi.source_archive_id = ns.source_archive_id
           new_wi.source_work_id = ns.old_work_id
           new_wi.source_user_id = ns.old_user_id
-          new_work = add_chapters(new_work)
+
           new_wi.save!
 
         rescue Exception=>e
@@ -674,11 +674,11 @@ class MassImportTool
     end
 
     #add chapters    takes chapters and adds them to import work object
-    def add_chapters(ns)
+    def add_chapters(ns,old_work_id)
       connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       case @source_archive_type
         when 4
-          puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+          puts "1121 == Select * from #{@source_chapters_table} where csid = #{old_work_id}"
           r = connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
           puts "333"
           ix = 1
