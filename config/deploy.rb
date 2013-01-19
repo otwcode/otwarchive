@@ -25,7 +25,7 @@
 # Several tasks run automatically based on behind-the-scenes magic 
 #
 require './config/boot'
-require 'airbrake/capistrano'
+require 'new_relic/recipes'
 
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
@@ -259,3 +259,5 @@ after "deploy:restart", "extras:update_cron"
 after "deploy:restart", "deploy:web:update_cron_web"
 after "deploy:restart", "extras:restart_delayed_jobs"
 after "deploy:restart", "deploy:cleanup"
+
+after "deploy:update", "newrelic:notice_deployment"
