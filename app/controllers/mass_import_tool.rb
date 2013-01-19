@@ -601,7 +601,10 @@ class MassImportTool
           end
           #new_work.chapters.build
           new_work.save!
-
+          new_work.chapters.each do |cc|
+            cc.work_id = new_work.id
+            cc.save!
+          end
 
           puts "new work created #{new_work.id}"
 
