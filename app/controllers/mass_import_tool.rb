@@ -530,16 +530,6 @@ class MassImportTool
             puts "---existed"
             #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
             tempuser2 = User.find_by_id(ns.new_user_id)
-            begin
-              new_ui = UserImport.new
-              new_ui.user_id = ns.new_user_id
-              new_ui.source_user_id = ns.old_user_id
-              new_ui.source_archive_id = ns.source_archive_id
-              new_ui.save!
-            rescue Exception=>e
-              puts "Error: 777: #{e}"
-            end
-
 
             ns.penname = a.penname
             #check to see if penname exists as pseud for existing user
@@ -558,6 +548,19 @@ class MassImportTool
               rescue Exception=>e
                 puts "Error: 111: #{e}"
               end
+            begin
+              new_ui = UserImport.new
+              new_ui.user_id = temp_author_id
+              new_ui.pseud_id = temp_pseud_id
+              new_ui.source_user_id = ns.old_user_id
+              new_ui.source_archive_id = ns.source_archive_id
+              new_ui.save!
+            rescue Exception=>e
+              puts "Error: 777: #{e}"
+            end
+
+
+
 
 
               'update_record_target("insert into pseuds (user_id,name,is_default,description) values (#{},'#{}',1,'Imported'")
