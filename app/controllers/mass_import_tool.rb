@@ -602,6 +602,7 @@ class MassImportTool
           new_work.fandom_string = @import_fandom
           new_work.rating_string = "Not Rated"
           new_work.warning_strings = "None"
+          new_work.errors.full_messages
           puts "old work id = #{ns.old_work_id}"
 
 
@@ -695,6 +696,27 @@ class MassImportTool
   end
 
     def create_work_from_import_work(ns)
+
+    end
+  def add_chapters2(ns)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    case @source_archive_type
+      when 4
+        puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+        r = connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
+        puts "333"
+        ix = 1
+        r.each do |rr|
+          c = ImportChapter.new()
+          c.new_work_id = ns.new_work_id
+          c.new_pseud_id = ns.new_user_id
+          c.title = rr[1]
+          c.dateposted = rr[4]
+          c.body = rr[3]
+          c.position = ix
+          self.post_chapters(c, @source_archive_type)
+        end
+      when 3
 
     end
 
