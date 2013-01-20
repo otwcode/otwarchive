@@ -625,6 +625,10 @@ class MassImportTool
             cc.errors.full_messages
           end
            add_chapters2(ns,new_work.id)
+
+          my_tag_list.each do |t|
+             add_work_taggings(new_work.id,t)
+          end
           puts "new work created #{new_work.id}"
 
         rescue Exception=>e
@@ -699,7 +703,10 @@ class MassImportTool
     def create_work_from_import_work(ns)
 
     end
+  def add_work_tagging(work_id,tag)
+    new_tagging = Tagging.new
 
+  end
   def add_chapters2(ns,new_id)
     connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
     case @source_archive_type
