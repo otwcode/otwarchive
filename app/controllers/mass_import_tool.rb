@@ -713,7 +713,7 @@ class MassImportTool
             #c.pseud_id = ns.pseuds[0]
             c.title = rr[1]
             c.created_at  = rr[4]
-            c.updated_at = rr[4]
+            #c.updated_at = rr[4]
             c.content = rr[3]
             c.position = ix
             c.summary = ""
@@ -732,7 +732,7 @@ class MassImportTool
 
   end
 
-=begin
+
     def post_chapters(c, sourceType)
       case sourceType
         when 4
@@ -760,7 +760,7 @@ class MassImportTool
           #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{c.new_chapter_id},#{c.new_user_id},'chapter') ")
       end
     end
-=end
+
 
 
 
