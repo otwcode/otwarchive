@@ -1,11 +1,4 @@
-<% # load and cache site skin %>
-<% set_site_skin %>
-<% if @site_skin %>
-  <% skin_cache_key, roles = get_skin_cache(@site_skin) %>
-  <% cache(skin_cache_key) do %>
-    <%= @site_skin.get_style(roles) %>
-  <% end %>
-<% end %>
+<!--# include virtual="/frak/skins" -->
 
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox' %>

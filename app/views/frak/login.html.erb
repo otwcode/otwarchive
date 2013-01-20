@@ -1,0 +1,11 @@
+  <div id="login">
+    <% if logged_in? || logged_in_as_admin? %>
+      <%= render 'user_sessions/greeting' %>
+    <% else %>
+      <p class="actions" role="menu">
+  			<a class='small_login_open hidden' href='#'><%= ts("Log in") %></a>
+  			<a class='small_login_close hidden' href='#'><%= ts("Cancel") %></a>
+  		</p>
+      <%= render 'user_sessions/login' %>
+   	<% end %>
+  </div>
