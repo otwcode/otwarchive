@@ -717,7 +717,7 @@ class MassImportTool
             c.content = rr[3]
             c.position = ix
             c.summary = ""
-            c.posted = true
+            c.posted = 1
             ns.chapters << c
 
             ix = ix + 1
