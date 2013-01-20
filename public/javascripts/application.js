@@ -33,20 +33,6 @@ $j(document).ready(function() {
     $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
 
-function visualizeTables() {
-     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
-     $j("table.stats-line").visualize({type: 'line'});
-}
-
-// Shows expandable fields when clicked on
-function ShowExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'inline';
-  var collapsible = document.getElementById('collapsible');
-  if (collapsible != null) collapsible.style.display = 'none';
-}
-
-
 ///////////////////////////////////////////////////////////////////
 // Autocomplete
 ///////////////////////////////////////////////////////////////////
@@ -242,13 +228,6 @@ function setupToggled(){
   });
 }
 
-
-// Hides expandable fields if Javascript is enabled
-function hideExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'none';
-}
-
 function hideHideMe() {
     $j('.hideme').each(function() { $j(this).hide(); });
 }
@@ -306,14 +285,6 @@ function toggleFormField(element_id) {
         var item = document.getElementById('work_wip_length');
         if (item.value == 1 || item.value == '1') {item.value = '?';}
         else {item.value = 1;}
-    }
-}
-
-function showOptions(idToCheck, idToShow) {
-    var checkbox = document.getElementById(idToCheck);
-    var areaToShow = document.getElementById(idToShow);
-    if (checkbox.checked) {
-        Element.toggle(idToShow);
     }
 }
 
