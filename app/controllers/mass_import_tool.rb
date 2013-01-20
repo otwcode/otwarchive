@@ -624,7 +624,7 @@ class MassImportTool
             cc.save!
             cc.errors.full_messages
           end
-
+           add_chapters2(ns,new_work.id)
           puts "new work created #{new_work.id}"
 
         rescue Exception=>e
@@ -711,7 +711,7 @@ class MassImportTool
         r.each do |rr|
           c = ImportChapter.new()
           c.new_work_id = new_id
-          c.pseud_id = ns.new_user_id
+
           c.title = rr[1]
           c.date_posted = rr[4]
           c.body = rr[3]
