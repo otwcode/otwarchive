@@ -76,7 +76,7 @@ describe "Comments" do
       before do
         visit login_path
         fill_in "User name",with: "testy"
-        fill_in "Password", with: "testy"
+        fill_in "Password", with: "t3st1ng"
         check "Remember me"
         click_button "Log in"
       end
