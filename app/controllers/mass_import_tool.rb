@@ -581,6 +581,7 @@ class MassImportTool
           end
 
         else
+              ns.penname = a.penname
               a.pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
           puts "#{a.pseud_id} this is the matching pseud id"
         end
