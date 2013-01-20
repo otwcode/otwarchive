@@ -614,6 +614,11 @@ class MassImportTool
           new_work.save!
           new_work.chapters.each do |cc|
             puts "attempting to save chapter for #{new_work.id}"
+            puts cc.content
+            puts cc.title
+            puts cc.posted
+            puts cc.work_id
+            puts cc.position
             cc.work_id = new_work.id
             cc.save!
           end
