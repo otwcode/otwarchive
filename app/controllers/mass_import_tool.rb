@@ -622,6 +622,7 @@ class MassImportTool
             puts cc.position
             cc.work_id = new_work.id
             cc.save!
+            cc.errors.full_messages
           end
 
           puts "new work created #{new_work.id}"
@@ -699,8 +700,63 @@ class MassImportTool
 
     end
 
+  def add_chapters2(ns,new_id)
+    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    case @source_archive_type
+      when 4
+        puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
+        r = connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
+        puts "333"
+        ix = 1
+        r.each do |rr|
+          c = ImportChapter.new()
+          c.new_work_id = new_id
+          c.pseud_id = ns.new_user_id
+          c.title = rr[1]
+          c.date_posted = rr[4]
+          c.body = rr[3]
+          c.position = ix
+          self.post_chapters(c, @source_archive_type)
+        end
+      when 3
 
-    #add chapters    takes chapters and adds them to import work object
+    end
+
+    connection.close()
+
+
+  end
+
+  def post_chapters2(c, sourceType)
+    case sourceType
+      when 4
+        new_c = Chapter.new
+        new_c.work_id =  c.new_work_id
+        new_c.created_at = c.date_posted
+        new_c.updated_at = c.date_posted
+        new_c.posted = 1
+        new_c.position = c.position
+        new_c.title = c.title
+        new_c.summary = c.summary
+        new_c.content = c.body
+        new_c.save!
+
+        puts "New chapter id #{new_c.id}"
+
+        new_creation = Creatorship.new()
+        new_creation.creation_type = "chapter"
+        new_creation.pseud_id = c.pseud_id
+        new_creation.creation_id = new_c.id
+        new_creation.save!
+
+        puts "New creatorship #{new_creation.id}"
+      #self.update_record_target("Insert into Chapters (content, work_id, created_at, updated_at, posted, title, published_at,position) values ('#{c.body}', '#{c.date_posted.ToString}', '#{c.date_posted.ToString}', 1,'#{c.title}', '#{c.date_posted.ToString}',#{c.position}) ")
+      #self.update_record_target("Insert into creatorships(creation_id, pseud_id, creation_type) values (#{c.new_chapter_id},#{c.new_user_id},'chapter') ")
+    end
+  end
+
+
+  #add chapters    takes chapters and adds them to import work object
     def add_chapters(ns,old_work_id)
       connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
       case @source_archive_type
