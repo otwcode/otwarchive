@@ -621,7 +621,7 @@ class MassImportTool
             puts cc.work_id
             puts cc.position
             cc.work_id = new_work.id
-            cc.save!
+            #cc.save!
             cc.errors.full_messages
           end
            add_chapters2(ns,new_work.id)
