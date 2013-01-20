@@ -710,6 +710,7 @@ class MassImportTool
             c.updated_at = rr[4]
             c.content = rr[3]
             c.position = ix
+            c.summary = ""
             c.posted = true
             ns.chapters << c
 
