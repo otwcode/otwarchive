@@ -576,6 +576,9 @@ class MassImportTool
               a.pseud_id = temp_pseud_id
             end
           end
+
+        else
+              a.pseud_id = get_pseud_id_for_penname(ns.new_user_id,ns.penname)
         end
 
         #insert work object
