@@ -698,27 +698,7 @@ class MassImportTool
     def create_work_from_import_work(ns)
 
     end
-  def add_chapters2(ns)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
-    case @source_archive_type
-      when 4
-        puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}"
-        r = connection.query("Select * from #{@source_chapters_table} where csid = #{ns.old_work_id}")
-        puts "333"
-        ix = 1
-        r.each do |rr|
-          c = ImportChapter.new()
-          c.new_work_id = ns.new_work_id
-          c.new_pseud_id = ns.new_user_id
-          c.title = rr[1]
-          c.dateposted = rr[4]
-          c.body = rr[3]
-          c.position = ix
-          self.post_chapters(c, @source_archive_type)
-        end
-      when 3
 
-    end
 
     #add chapters    takes chapters and adds them to import work object
     def add_chapters(ns,old_work_id)
