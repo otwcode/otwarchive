@@ -19,7 +19,7 @@ When /^I add the work "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_t
   else
     fill_in("work_series_attributes_title", :with => series_title)
   end
-  click_button("Post without preview")
+  click_button("Post Without Preview")
 end
 
 When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|
@@ -36,6 +36,6 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     When "I edit the work \"#{work_title}\""
     check("series-options-show")
     fill_in("work_series_attributes_title", :with => series_title + i.to_s)
-    click_button("Post without preview")
+    click_button("Post Without Preview")
   end
 end
