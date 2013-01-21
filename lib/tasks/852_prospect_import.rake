@@ -34,7 +34,7 @@ namespace :massimport852 do
   end
 
   # send invitations to external authors for a given set of works
-  def send_external_invites(work_ids, archivist)
+  def send_external_invites_852(work_ids, archivist)
     @users = User.select("DISTINCT users.*").joins(:creatorships).where("creation_id IN (?) AND creation_type = 'Work'", work_ids)
     @users.each do |user|
       UserMailer.deliver_claim_notification(user.id, work_ids, true)
@@ -44,8 +44,6 @@ namespace :massimport852 do
       external_author.find_or_invite(archivist)
     end
   end
-
-  # send notification to existing users
 
 
   # add to a collection and approve the item
@@ -256,10 +254,11 @@ namespace :massimport852 do
                   :load_comments => options[:load_comments], :comment_parse_method => options[:comment_parse_method],
                   :author_email => options[:author_email])
 
-    # send invites
+    # send invites and notifications if the command line option is set
     if options[:send_invites] == "true"
-      message("Sending invites")
-      send_external_invites(work_ids, archivist)
+      message("Sending invites and notifications")
+
+      send_external_invites_852(work_ids, archivist)
     end
   end
 
@@ -420,16 +419,19 @@ namespace :massimport852 do
     end
 
     # get email address from the story file if necessary
+    email_regex = /<a href=(?:"|')?(?:mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+?@[^'"\?>]+?)(?:\?.+?)?(?:">|'>|>)(.+?)<\/a>/mi
     if work_params[:email].blank?
-      if story.match(/<a href=(?:"|')?(mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+@[^'">]+)(?:"|')?>(.+)<\/a>/i)
-        work_params[:email] = $2
+      if story.match(email_regex)
+
+        # there are mailto in the format <a href="mailto:email_1, email_2"> so we just want the first one
+        work_params[:email] = $1.split(',')[0]
       end
     end
     #work_params[:email] = "astele@astele.co.uk"
     message("Email set to " + work_params[:email])
 
     # strip mailto: links to avoid spam
-    story.gsub!(/<a href=(?:"|')?(mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+@[^'">]+)(?:"|')?>(.+)<\/a>/i, '\3')
+    story.gsub!(email_regex, '\2')
 
 
     category_string = "" ; warning_strings = "" ;  freeform_string = ","; relationship_string = ""
