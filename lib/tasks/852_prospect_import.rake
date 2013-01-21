@@ -274,8 +274,7 @@ namespace :massimport852 do
 
   desc "Clear collection TESTING ONLY"
   task(:clear_collection_testing_only => :environment) do
-    #collection_name = ask("Collection name? (ALL WORKS IN THIS COLLECTION WILL BE DELETED!!!!)")
-    collection_name = "852_prospect_archive"
+    collection_name = ask("Name of the collection name to wipe? (ALL WORKS IN THIS COLLECTION WILL BE DELETED!!!!) ")
     c = Collection.find_by_name(collection_name)
     unless c
       puts "No collection #{collection_name} found!"
@@ -304,7 +303,12 @@ namespace :massimport852 do
     if u.new_record?
       archivist_password = ask("Archivist temp password? ")
       archivist_email = ask("Archivist email? ")
-      u.password = archivist_password; u.email = archivist_email; u.save
+      u.password = archivist_password 
+      u.email = archivist_email
+      u.age_over_13 = "1"
+      u.terms_of_service = "1"
+      u.password_confirmation = archivist_password
+      u.save
     end
     unless u.is_archivist?
       u.roles << Role.find_by_name("archivist")
@@ -315,7 +319,7 @@ namespace :massimport852 do
     c = Collection.find_or_initialize_by_name(@collection_name)
     if c.new_record?
       @collection_title ||= ask("Collection title? ")
-      c.title = collection_title
+      c.title = @collection_title
     else
       collection_title = c.title
     end
@@ -327,7 +331,7 @@ namespace :massimport852 do
       p.save
     end
     c.save
-    puts "Archivist #{u.login} set up as owner of collection #{c.name}."
+    puts "Archivist #{u.login} set up as owner of collection #{c.title} (#{c.name})."
   end
 
 
