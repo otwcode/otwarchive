@@ -298,12 +298,12 @@ namespace :massimport852 do
 
   desc "Create archivist and collection if they don't already exist"
   task(:create_archivist_and_collection => :environment) do
-    @archivist_login ||= ask("Archivist login?")
+    @archivist_login ||= ask("Archivist login? ")
     # make the archivist user if it doesn't exist already
     u = User.find_or_initialize_by_login(@archivist_login)
     if u.new_record?
-      archivist_password = ask("Archivist temp password?")
-      archivist_email = ask("Archivist email?")
+      archivist_password = ask("Archivist temp password? ")
+      archivist_email = ask("Archivist email? ")
       u.password = archivist_password; u.email = archivist_email; u.save
     end
     unless u.is_archivist?
@@ -311,11 +311,13 @@ namespace :massimport852 do
       u.save
     end
     # make the collection if it doesn't exist already
-    @collection_name ||= ask("Collection name?")
+    @collection_name ||= ask("Collection name (no spaces or extended characters)? ")
     c = Collection.find_or_initialize_by_name(@collection_name)
     if c.new_record?
-      @collection_title ||= ask("Collection title?")
+      @collection_title ||= ask("Collection title? ")
       c.title = collection_title
+    else
+      collection_title = c.title
     end
     # add the user as an owner if not already one
     unless c.owners.include?(u.default_pseud)
@@ -325,7 +327,7 @@ namespace :massimport852 do
       p.save
     end
     c.save
-    puts "Archivist #{u.login} set up and owns collection #{c.name}."
+    puts "Archivist #{u.login} set up as owner of collection #{c.name}."
   end
 
 
@@ -348,14 +350,14 @@ namespace :massimport852 do
 
     message("Send invites: #{args.send_invites}")
 
-    @archivist_login = "ariana_paris"
-    @collection_name = "852_prospect_archive"
-    @collection_title = "852 Prospect Archive"
+    @archivist_login = nil # insert user name here to skip prompt
+    @collection_name = nil # will be eg: "852_prospect_archive"
+    @collection_title = nil # eg: "852 Prospect Archive"
     @send_invites = args.send_invites
     Rake::Task['massimport852:create_archivist_and_collection'].invoke
 
     base_url = "http://852prospect.org/archive"
-    archive_file = "ARCHIVE_MINI.pl"
+    archive_file = ask("Name of archive file (eg: ARCHIVE_DB.pl)? ") # "ARCHIVE_MINI.pl"
     author_email = nil
 
     message("Archive file: #{archive_file}")
@@ -467,6 +469,7 @@ namespace :massimport852 do
       pairing.gsub!(/B\/S/, "Simon Banks/Blair Sandburg")
       pairing.gsub!(/J\/B/, "Jim Ellison/Blair Sandburg")
       # characters at start of string
+      
       pairing.gsub!(/\AJ\//, "Jim Ellison/")
       pairing.gsub!(/\AB\//, "Blair Sandburg/")
       pairing.gsub!(/\AS\//, "Simon Banks/")
