@@ -50,7 +50,7 @@
         <%= f.text_field :email, :size => 60 %>
   		  <p class="footnote"><%= ts("Leave this blank to file an anonymous report.") %></p>
         <p>
-          <%= label_tag('cc_me', ts("Email me a copy of my message (optional)")) %>:
+          <%= f.label :cc_me, ts("Email me a copy of my message (optional)") %>:
           <%= f.check_box :cc_me %>
         </p>
         <%= f.hidden_field :ip_address, :value => request.remote_ip %>
