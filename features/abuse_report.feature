@@ -92,7 +92,7 @@ Feature: Filing an abuse report
   # And I should see "Your abuse report was sent to the Abuse team."
     And 1 email should be delivered
 
-  Scenario: File a request but accidentally tick the box to have a copy emailed
+  Scenario: File a request and tick the box to have a copy emailed but forget to enter email address
 
   When I am logged in as "otheruser"
     And I am on the home page
