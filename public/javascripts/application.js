@@ -3,7 +3,6 @@
 
 //things to do when the page loads
 $j(document).ready(function() {
-    // visualizeTables();
     // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };
@@ -32,11 +31,6 @@ $j(document).ready(function() {
     // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
     $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').on('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
-
-function visualizeTables() {
-     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
-     $j("table.stats-line").visualize({type: 'line'});
-}
 
 // Shows expandable fields when clicked on
 function ShowExpandable() {
