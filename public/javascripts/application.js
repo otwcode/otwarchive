@@ -30,7 +30,7 @@ $j(document).ready(function() {
     $j('.commas li:last-child').addClass('last');
 
     // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
-    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
+    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').on('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
 
 function visualizeTables() {
@@ -349,7 +349,7 @@ function generateCharacterCounters() {
   $j(".observe_textlength").each(function(){
       updateCharacterCounter(this);
   });
-  $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
+  $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
       updateCharacterCounter(this);
   });
 }
