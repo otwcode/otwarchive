@@ -260,7 +260,7 @@ class MassImportTool
           if r[1] == @srcWarningClassTypeID
             nt.tag_type = 6
           else
-            nt.tag_type = 3
+            nt.tag_type = "freeform"
           end
           nt.old_id = r[0]
           nt.tag = r[2]
@@ -270,7 +270,7 @@ class MassImportTool
         rr = connection.query("Select catid, category from #{@source_table_prefix}categories; ")
         rr.each do |rr|
           nt = ImportTag.new()
-          nt.tag_type = 1
+          nt.tag_type = "category"
           nt.old_id = rr[0]
           nt.tag = rr[1]
           taglist.push(nt)
@@ -280,7 +280,7 @@ class MassImportTool
         rrr = connection.query("Select charid, charname from #{@source_table_prefix}characters; ")
         rrr.each do |rrr|
           nt = ImportTag.new()
-          nt.tag_type = 2
+          nt.tag_type = "character"
           nt.old_id = rrr[0]
           nt.tag = rrr[1]
           taglist.push(nt)
@@ -292,6 +292,7 @@ class MassImportTool
   end
 
 
+=begin
   #update tags in source database to match destination values
   def update_source_tags(tl)
     case @source_archive_type
@@ -314,10 +315,11 @@ class MassImportTool
       when 3
     end
   end
+=end
 
 
-  def create_collection(name,owner)
-   #TODO
+  def create_child_collection(name,parent_id,description)
+
     collect = Collection.new()
       collect.name = @new_collection_name
       collect.description = @new_collection_description
@@ -829,20 +831,6 @@ class MassImportTool
 
 
 
-
-#Structures
-################
-  ImportTag = Struct.new(:old_id,:new_id,:tag,:tag_type)
-
-  ImportUser = Struct.new(:old_username, :penname,:realname,:joindate,:source_archive_id,:old_user_id,:bio,:password,
-                          :password_salt,:website,:aol,:yahoo,:msn,:icq,:new_user_id,:email,:is_adult)
-
-  ImportChapter = Struct.new(:new_chapter_id,:new_work_id,:old_story_id,:source_archive_id,:title,:new_pseud_id,
-                             :summary,:notes,:old_user_id,:body,:position,:date_added)
-
-  ImportWork = Struct.new(:old_story_id,:new_work_id,:author,:title,:summary,:classes,:old_user_id,:characters,
-                          :hits,:new_author_id,:word_count,:completed,:updated,:source_archive_id,:generes,:rating,
-                          :rating_integer,:warnings,:chapters,:published,:cats)
 
 
 
