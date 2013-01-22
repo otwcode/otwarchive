@@ -3,7 +3,7 @@ class MassImportTool
 
   def initialize()
     #Import Class Version Number
-    @Version = 1
+    @version = 1
 
     #not using for testing
     #import config filename
@@ -28,6 +28,10 @@ class MassImportTool
     @temptableprefix = "ODimport"
     #####################################################
 
+    @archivist_login = nil
+    @archivist_password = nil
+    @archivist_email = nil
+
 
 
     #Match Existing Authors by Email-Address
@@ -48,7 +52,7 @@ class MassImportTool
     @import_reviews = true
 
     #import categories as subcollections, if false, they will be converted to freeform tags
-    @import_categories_as_subcollections = true
+    @categories_as_subcollections = true
 
 
     #Message Values
@@ -425,13 +429,11 @@ class MassImportTool
   ##################################################################################################
   # Main Worker Sub
   def import_data()
-    #create collection
-
+    #create collection & archivist
+    self.create_archivist_and_collection
 
     puts " Setting Import Values "
     self.set_import_strings()
-
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
 
     if @skip_rating_transform == false
       puts " Tranforming source ratings "
@@ -443,12 +445,9 @@ class MassImportTool
     #Update Tags and get Taglist
     puts (" Updating Tags ")
     tag_list = Array.new()
-    #tag_list2 = self.get_tag_list(tag_list, @source_archive_type)
     tag_list = self.fill_tag_list(tag_list)
-    if @debug_update_source_tags == true
-      self.update_source_tags(tag_list)
-    end
 
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     r = connection.query("SELECT * FROM #{@source_stories_table} ;")
     connection.close()
     puts (" Importing Stories ")
@@ -559,7 +558,7 @@ class MassImportTool
             #insert the mapping value
             puts "---existed"
             #update_record_target("insert into user_imports (user_id,source_archive_id,source_user_id) values (#{ns.new_user_id},#{ns.old_user_id},#{ns.source_archive_id})")
-            tempuser2 = User.find_by_id(ns.new_user_id)
+            #tempuser2 = User.find_by_id(ns.new_user_id)
 
             ns.penname = a.penname
             #check to see if penname exists as pseud for existing user
@@ -735,7 +734,7 @@ class MassImportTool
 
   end
   def add_chapters2(ns,new_id)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     case @source_archive_type
       when 4
         puts "1121 == Select * from #{@source_chapters_table} where csid = #{ns.old_work_id} order by id asc"
@@ -760,6 +759,40 @@ class MassImportTool
 
 
   end
+
+#copied and modified from mass import rake, stephanies 1/22/2012
+#Create archivist and collection if they don't already exist"
+ def create_archivist_and_collection
+
+    # make the archivist user if it doesn't exist already
+    u = User.find_or_initialize_by_login(@archivist_login)
+    if u.new_record?
+      u.password = @archivist_password
+      u.email = @archivist_email
+      u.save
+    end
+    unless u.is_archivist?
+      u.roles << Role.find_by_name("archivist")
+      u.save
+    end
+    # make the collection if it doesn't exist already
+    c = Collection.find_or_initialize_by_name(@new_collection_name)
+    if c.new_record?
+      c.description = @new_collection_description
+      c.title = @new_collection_title
+    end
+    # add the user as an owner if not already one
+    unless c.owners.include?(u.default_pseud)
+      p = c.collection_participants.where(:pseud_id => u.default_pseud.id).first || c.collection_participants.build(:pseud => u.default_pseud)
+      p.participant_role = "Owner"
+      c.save
+      p.save
+    end
+    c.save
+    @new_collection_id = c.id
+    puts "Archivist #{u.login} set up and owns collection #{c.name}."
+  end
+
 
   def post_chapters2(c, sourceType)
     case sourceType
@@ -792,7 +825,7 @@ class MassImportTool
 
   #add chapters    takes chapters and adds them to import work object
     def add_chapters(ns,old_work_id)
-      connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+      connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
       case @source_archive_type
         when 4
           puts "1121 == Select * from #{@source_chapters_table} where csid = #{old_work_id}"
@@ -924,7 +957,7 @@ class MassImportTool
   ##get import user object, by source_user_id
   def get_import_user_object_from_source(source_user_id)
     a = ImportUser.new()
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     r = connection.query("#{@get_author_from_source_query} #{source_user_id}")
     connection.close
 
@@ -1027,7 +1060,7 @@ class MassImportTool
   end
 
   def get_single_value_target(query)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     r = connection.query(query)
     connection.close
     if r.num_rows == 0
@@ -1041,7 +1074,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_target(query)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     begin
       rowsEffected = 0
       rowsEffected = connection.query(query)
@@ -1057,7 +1090,7 @@ class MassImportTool
 
 # Update db record takes query as peram #
   def update_record_source(query)
-    connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+    connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     begin
       rowsEffected = 0
 
