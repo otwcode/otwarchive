@@ -18,21 +18,21 @@ class Series < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
     :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
     
   after_save :adjust_restricted
 
@@ -112,19 +112,19 @@ class Series < ActiveRecord::Base
     !self.works.select { |work| work.unrevealed? }.empty?    
   end
   
-	# if the series includes an unrestricted work, restricted should be false
-	# if the series includes no unrestricted works, restricted should be true
-	def adjust_restricted
-		unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
-		  self.restricted = !(self.works.where(:restricted => false).count > 0)
-		  self.save(:validate => false)
-		end
-	end
+  # if the series includes an unrestricted work, restricted should be false
+  # if the series includes no unrestricted works, restricted should be true
+  def adjust_restricted
+    unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
+      self.restricted = !(self.works.where(:restricted => false).count > 0)
+      self.save(:validate => false)
+    end
+  end
 	
-	# Change the positions of the serial works in the series
-	def reorder(positions)
-	  SortableList.new(self.serial_works.in_order).reorder_list(positions)
-	end
+  # Change the positions of the serial works in the series
+  def reorder(positions)
+    SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
   
   # return list of pseuds on this series
   def allpseuds

@@ -5,11 +5,13 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
+  before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
@@ -18,7 +20,6 @@ class WorksController < ApplicationController
   
   before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
-  cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
@@ -120,8 +121,16 @@ class WorksController < ApplicationController
         @works = Work.list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
-        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && (params[:page].blank? || params[:page].to_i < 6)
-          @works = Rails.cache.fetch(index_cache_key) do
+        
+        # If we're using caching we'll try to get the results from cache
+        # Note: we only cache some first initial number of pages since those are biggest bang for 
+        # the buck -- users don't often go past them
+        if use_caching? && params[:work_search].blank? && params[:fandom_id].blank? && 
+          (params[:page].blank? || params[:page].to_i <= ArchiveConfig.PAGES_TO_CACHE)
+          # the subtag is for eg collections/COLL/tags/TAG
+          subtag = (@tag.present? && @tag != @owner) ? @tag : nil
+          user = current_user.present? ? "logged_in" : "logged_out"
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}") do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -217,14 +226,6 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-      if @work.unrevealed?
-        @tweet_text = ts("Mystery Work")
-      else
-        @tweet_text = @work.title + " by " +
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
-                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-        @tweet_text = @tweet_text.truncate(95)
-      end
     render :show
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
@@ -469,6 +470,9 @@ class WorksController < ApplicationController
       cancel_posting_and_redirect
     elsif params[:edit_button]
       render :edit_tags
+    elsif params[:save_button]
+    	setflash; flash[:notice] = ts('Tags were successfully updated.')
+      redirect_to(@work)
     else
       saved = true
 
@@ -767,7 +771,8 @@ public
   def marktoread
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
-    setflash; flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    read_later_path = user_readings_path(current_user, :show => 'to-read')
+    setflash; flash[:notice] = ts("This work was marked to read later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -942,19 +947,4 @@ public
     end
   end
   
-  # This has views/ in it because that's what expire_fragment is looking for
-  def index_cache_key
-    cache_key = ['views', 'works', 'v2']
-    cache_key << (@owner.is_a?(Tag) ? 'tag' : @owner.class.to_s.underscore)
-    cache_key << @owner.id.to_s
-    if @collection.present? && @tag.present?
-      cache_key << "tag"
-      cache_key << @tag.id.to_s
-    end
-    cache_key << (logged_in? ? "u" : "v")
-    cache_key << 'p'
-    cache_key << (params[:page] || '1')
-    cache_key.join("/")
-  end
-
 end

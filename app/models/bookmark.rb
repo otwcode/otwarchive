@@ -21,7 +21,6 @@ class Bookmark < ActiveRecord::Base
   scope :not_public, where(:private => true)
   scope :not_private, where(:private => false)
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
-  scope :recent, limit(ArchiveConfig.SEARCH_RESULTS_MAX)
   scope :recs, where(:rec => true)
 
   scope :in_collection, lambda {|collection|
@@ -282,12 +281,12 @@ class Bookmark < ActiveRecord::Base
   end
   
   def collection_ids
-    collections.value_of(:id, :parent_id).flatten.uniq.compact
+    approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
   
   def bookmarkable_collection_ids
-    if bookmarkable.respond_to?(:collections)
-      bookmarkable.collections.value_of(:id, :parent_id).flatten.uniq.compact
+    if bookmarkable.respond_to?(:approved_collections)
+      bookmarkable.approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
     end
   end
   

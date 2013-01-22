@@ -128,7 +128,9 @@ class Tag < ActiveRecord::Base
 
   before_validation :set_sortable_name
   def set_sortable_name
-    self.sortable_name = remove_articles_from_string(self.name)
+    if sortable_name.blank?
+      self.sortable_name = remove_articles_from_string(self.name)
+    end
   end
 
   before_save :set_last_wrangler
@@ -537,6 +539,14 @@ class Tag < ActiveRecord::Base
   end
 
   #### FILTERING ####
+  
+  include WorksOwner  
+  # Used in works_controller to determine whether to expire the cache for this tag's works index page
+  def works_index_cache_key(tag=nil, index_works=nil)
+    index_works ||= self.canonical? ? self.filtered_works : self.works
+    super(tag, index_works.where(:posted => true))
+  end
+    
 
   # Usage is either:
   # reindex_taggables

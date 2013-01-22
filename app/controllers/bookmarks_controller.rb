@@ -181,6 +181,9 @@ class BookmarksController < ApplicationController
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end
       unless @tag.canonical?
         if @tag.merger.present?
           redirect_to tag_bookmarks_path(@tag.merger) and return

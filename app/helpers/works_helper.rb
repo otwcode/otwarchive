@@ -137,8 +137,7 @@ module WorksHelper
     if work.anonymous?
       profile_link = ts("Anonymous")
     else
-      profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon", :border => "0"), user_profile_url(pseud.user)) +
-                                    link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
+      profile_link = work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
     end
 
     chapters_text = ts("Chapters: ") + work.chapter_total_display
@@ -208,6 +207,16 @@ module WorksHelper
     end
     text << "</ul>"
     text
+  end
+
+  def tweet_text(work)
+    if work.unrevealed?
+      ts("Mystery Work")
+    else
+      names = work.anonymous? ? ts("Anonymous") : work.pseuds.map(&:name).join(', ')
+      fandoms = work.fandoms.size > 2 ? ts("Multifandom") : work.fandoms.string
+      "#{work.title} by #{names} - #{fandoms}".truncate(95)
+    end
   end
 
   # Returns true or false to determine whether the work notes module should display
