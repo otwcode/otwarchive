@@ -172,7 +172,7 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', true);
+      checkboxes.prop('checked', true);
       event.preventDefault();
     });
   });
@@ -192,7 +192,7 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', false);
+      checkboxes.prop('checked', false);
       event.preventDefault();
     });
   });
