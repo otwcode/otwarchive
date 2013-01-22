@@ -7,10 +7,28 @@ class MassImportTool
 
     #not using for testing
     #import config filename
-    #@config = OTW.Settings.INIFile.new("config.ini") #'
-    #temporary table prefix
-    @temptableprefix = "temp321"
+    #@config = "filename" #'
+
+   #################################################
+    #Database Settings
+    ###############################################
+    #Database Host Address (localhost)
+    @database_host = "localhost"
+
+    #Database Username (funnyuser)
+    @database_username = "stephanies"
+
+    #Database Password (password)
+    @database_password = "Trustno1"
+
+    #database name
+    @database_name = "stephanies_development"
+
+   #temporary table prefix to be added to table names during import
+    @temptableprefix = "ODimport"
     #####################################################
+
+
 
     #Match Existing Authors by Email-Address
     @match_existing_authors = true
@@ -22,11 +40,16 @@ class MassImportTool
     #Create record for imported archive (false if already exists)
     @create_import_archive_record = true
 
+    #will error if not unique, just let it create it and assign it if you are unsure
     #Import Archive ID
     @import_archive_id = 100
 
     #Import reviews t/f
     @import_reviews = true
+
+    #import categories as subcollections, if false, they will be converted to freeform tags
+    @import_categories_as_subcollections = true
+
 
     #Message Values
     ####################################
@@ -49,7 +72,7 @@ class MassImportTool
     #New Collection Values
     #####################################
     #ID Of the newly created collection, filled with value automatically if create collection is true
-    @new_collection_id = -1
+    @new_collection_id = 123456789
 
     #Create collection for imported works?
     @create_collection = true
@@ -108,31 +131,31 @@ class MassImportTool
 
     ################# Self Defined based on above
     #Source Ratings Table
-    @source_ratings_table = ""
+    @source_ratings_table = nil
 
     #Source Users Table
-    @source_users_table = ""
+    @source_users_table = nil
 
     #Source Stories Table
-    @source_stories_table = ""
+    @source_stories_table = nil
 
     #Source Reviews Table
-    @source_reviews_table = ""
+    @source_reviews_table = nil
 
     #Source Chapters Table
-    @source_chapters_table = ""
+    @source_chapters_table = nil
 
     #Source Characters Table
-    @source_characters_table = ""
+    @source_characters_table = nil
 
     #Source Subcategories Table
-    @source_subcatagories_table = ""
+    @source_subcatagories_table = nil
 
     #Source Categories Table
-    @source_categories_table = ""
+    @source_categories_table = nil
 
     #string holder
-    @get_author_from_source_query = ""
+    @get_author_from_source_query = nil
 
     #############
     #debug stuff
@@ -167,6 +190,7 @@ class MassImportTool
   end
 =end
 
+=begin
 # Convert Source DB Ratings to those of target archive in advance
   def transform_source_ratings()
     puts "transform source ratings"
@@ -221,6 +245,7 @@ class MassImportTool
     end
     return tl
   end
+=end
 
   #get all possible tags from source
   def get_tag_list(tl, at)
@@ -230,7 +255,7 @@ class MassImportTool
     case at
       #storyline
       when 4
-        connection = Mysql.new("localhost","stephanies","Trustno1","stephanies_development")
+        connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
         r = connection.query("Select caid, caname from #{@source_table_prefix}category; ")
         r.each do |r|
           nt = ImportTag.new()
