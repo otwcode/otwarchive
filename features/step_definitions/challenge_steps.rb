@@ -68,7 +68,7 @@ end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I am on "#{challengename}" gift exchange edit page}
-  check "Signup open?"
+  check "Sign-up open?"
   And "I submit"
 end  
 
@@ -202,9 +202,9 @@ end
 
 When /^I fill in Battle 12 challenge options$/ do
   When "I fill in prompt meme challenge options"
-    And %{I fill in "Signup Instructions" with "Please request easy things"}
-    And %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
-    And %{I fill in "Signup closes" with "2016-09-20 12:40AM"}
+    And %{I fill in "Sign-up Instructions" with "Please request easy things"}
+    And %{I fill in "Sign-up opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Sign-up closes" with "2016-09-20 12:40AM"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "Time zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
     check("prompt_meme_request_restriction_attributes_title_allowed")
@@ -213,19 +213,19 @@ end
 
 When /^I fill in future challenge options$/ do
   When "I fill in prompt meme challenge options"
-    And %{I fill in "Signup opens" with "2015-09-20 12:40AM"}
-    And %{I fill in "Signup closes" with "2016-09-20 12:40AM"}
+    And %{I fill in "Sign-up opens" with "2015-09-20 12:40AM"}
+    And %{I fill in "Sign-up closes" with "2016-09-20 12:40AM"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
-    And %{I uncheck "Signup open?"}
+    And %{I uncheck "Sign-up open?"}
     And %{I submit}
 end
 
 When /^I fill in past challenge options$/ do
   When "I fill in prompt meme challenge options"
-    And %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
-    And %{I fill in "Signup closes" with "2010-09-20 12:40AM"}
+    And %{I fill in "Sign-up opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Sign-up closes" with "2010-09-20 12:40AM"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
-    And %{I uncheck "Signup open?"}
+    And %{I uncheck "Sign-up open?"}
     And %{I submit}
 end
 
@@ -241,13 +241,13 @@ When /^I fill in no-column challenge options$/ do
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
-    And %{I check "Signup open?"}
+    And %{I check "Sign-up open?"}
     And %{I submit}
 end
 
 When /^I fill in single-prompt challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
-    And %{I check "Signup open?"}
+    And %{I check "Sign-up open?"}
     check("prompt_meme_request_restriction_attributes_title_allowed")
     And %{I submit}
 end
@@ -259,18 +259,18 @@ When /^I fill in multi-prompt challenge options$/ do
 end
 
 When /^I fill in prompt meme challenge options$/ do
-  When %{I fill in "General Signup Instructions" with "Here are some general tips"}
+  When %{I fill in "General Sign-up Instructions" with "Here are some general tips"}
     fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"}
     And %{I fill in "prompt_meme_requests_num_required" with "2"}
-    And %{I check "Signup open?"}
+    And %{I check "Sign-up open?"}
 end
 
 When /^I fill in gift exchange challenge options$/ do
-  When %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
-    And %{I fill in "Signup closes" with "2013-09-20 12:40AM"}
+  When %{I fill in "Sign-up opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Sign-up closes" with "2013-09-20 12:40AM"}
     select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
     fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
@@ -298,7 +298,7 @@ When /^I open signups for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
-    And %{I check "Signup open?"}
+    And %{I check "Sign-up open?"}
     And %{I submit}
   Then %{I should see "Challenge was successfully updated"}
 end
@@ -354,7 +354,7 @@ When /^I sign up for Battle 12 with combination C$/ do
     And %{I fill in the 1st field with id matching "title" with "weird SGA history AU"}
     And %{I fill in the 2nd field with id matching "title" with "canon SGA love"}
     click_button "Submit"
-  Then %{I should see "Signup was successfully created"}
+  Then %{I should see "Sign-up was successfully created"}
     And %{I should see "Stargate Atlantis"}
     And %{I should see "Something else weird"}
 end
@@ -499,7 +499,7 @@ end
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Edit Signup"}
+  When %{I follow "Edit Sign-up"}
 end
 
 When /^I add a new prompt to my signup$/ do
@@ -619,7 +619,7 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
-    And %{I uncheck "Signup open?"}
+    And %{I uncheck "Sign-up open?"}
     And %{I press "Update"}
   Then %{I should see an update confirmation message}
 end
@@ -681,9 +681,9 @@ end
 
 Then /^I should see Battle 12 descriptions$/ do
   Then %{I should see "Welcome to the meme" within "#intro"}
-  Then %{I should see "Signup: Open"}
-  Then %{I should see "Signup closes:"}
-  Then %{I should see "2012" within ".collection .meta"}
+  Then %{I should see "Sign-up: Open"}
+  Then %{I should see "Sign-up closes:"}
+  Then %{I should see "2011" within ".collection .meta"}
   Then %{I should see "What is this thing?" within "#faq"}
   Then %{I should see "It is a comment fic thing" within "#faq"}
   Then %{I should see "Be nicer to people" within "#rules"}
@@ -709,8 +709,8 @@ end
 
 Then /^signup should be open$/ do
   When %{I follow "Profile"}
-  Then %{I should see "Signup: Open" within ".collection .meta"}
-    And %{I should see "Signup closes:"}
+  Then %{I should see "Sign-up: Open" within ".collection .meta"}
+    And %{I should see "Sign-up closes:"}
 end
 
 Then /^I should see both timezones$/ do
@@ -721,7 +721,7 @@ end
 
 Then /^I should see just one timezone$/ do
   When %{I follow "Profile"}
-  Then %{I should see "Signup: Open"}
+  Then %{I should see "Sign-up: Open"}
   And %{I should not see "EST" within "#main"}
   And %{I should see "AKST" within "#main"}
 end
@@ -818,7 +818,7 @@ Then /^12 should be the last signup in the table$/ do
 end
 
 Then /^I should see the whole signup$/ do
-  page.should have_content("Signup for")
+  page.should have_content("Sign-up for")
   page.should have_content("Requests")
   page.should have_content("Request 1")
   page.should have_content("Request 2")

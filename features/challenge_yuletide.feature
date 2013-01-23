@@ -44,7 +44,7 @@ Feature: Collection
     And I submit
   Then I should see "Collection was successfully created"
     And I should see "Setting Up The Yuletide Gift Exchange"
-  When I fill in "General Signup Instructions" with "Here are some general tips"
+  When I fill in "General Sign-up Instructions" with "Here are some general tips"
     And I fill in "Request Instructions" with "Please request easy things"
     And I fill in "Offer Instructions" with "Please offer lots of stuff"
     # for testing convenience while still exercising the options, we are going with
