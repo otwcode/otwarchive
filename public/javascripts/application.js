@@ -3,7 +3,6 @@
 
 //things to do when the page loads
 $j(document).ready(function() {
-    // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
