@@ -43,7 +43,7 @@ Feature: Collection
     And I check "This collection is anonymous"
     And I submit
   Then I should see "Collection was successfully created"
-    And I should see "Setting Up The Yuletide Gift Exchange"
+    And I should see "Setting Up the Yuletide Gift Exchange"
   When I fill in "General Sign-up Instructions" with "Here are some general tips"
     And I fill in "Request Instructions" with "Please request easy things"
     And I fill in "Offer Instructions" with "Please offer lots of stuff"
@@ -77,7 +77,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
-    And I check "Signup open?"
+    And I check "Sign-up open?"
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
@@ -88,9 +88,9 @@ Feature: Collection
   Then I should see "Sign Up"
   When I follow "Profile"
   Then I should see "About Yuletide (yule2011)"
-    And I should see "Signup:" within ".collection .meta"
+    And I should see "Sign-up:" within ".collection .meta"
     And I should see "Open" within ".collection .meta"
-    And I should see "Signup closes:" within ".collection .meta"
+    And I should see "Sign-up closes:" within ".collection .meta"
     And I should see "Assignments due:" within ".collection .meta"
     And I should see "Works revealed:" within ".collection .meta"
     And I should see "Authors revealed:" within ".collection .meta"
@@ -101,7 +101,7 @@ Feature: Collection
     And I should see "It's a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
-  Then I should see "General sign up instructions"
+  #Then I should see "General Sign-up Instructions" # This title is no longer there
     And I should see "Here are some general tips"
     And I should see "Requests (2 - 3)"
     And I should see "Please request easy things"
@@ -170,8 +170,8 @@ Feature: Collection
     And I check the 4th checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
-  Then I should see "Signup was successfully created"
-    And I should see "Signup for myname1"
+  Then I should see "Sign-up was successfully created"
+    And I should see "Sign-up for myname1"
     And I should see "Requests"
     And I should see "This is my wordy request"
     And I should see "Offers"
@@ -202,7 +202,7 @@ Feature: Collection
     #Then I should see "Request 3"
     #And I check "challenge_signup_requests_attributes_3_fandom_30"
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
 
   # and a third person signs up
   When I log out
@@ -222,7 +222,7 @@ Feature: Collection
     And I should see a not-in-fandom error message for "Any" in "Starsky & Hutch"
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
 
   # fourth person signs up
   When I log out
@@ -238,15 +238,15 @@ Feature: Collection
     And I check the 4th checkbox with value "Starsky & Hutch"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, John Sheppard"
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
 
   # ordinary users can't see signups until 5 people have signed up
   When I go to the collections page
     And I follow "Yuletide"
-  Then I should not see "Signups"
-    And I should see "Signup Summary"
-  When I follow "Signup Summary"
-  Then I should see "Summary does not appear until at least 5 signups have been made!"
+  Then I should not see "Sign-ups"
+    And I should see "Sign-up Summary"
+  When I follow "Sign-up Summary"
+  Then I should see "Summary does not appear until at least 5 sign-ups have been made!"
     And I should not see "Stargate Atlantis"
 
   # fifth person signs up
@@ -262,19 +262,19 @@ Feature: Collection
     And I check the 4th checkbox with value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
 
   # ordinary users can't see signups but can see summary
   When I go to the collections page
     And I follow "Yuletide"
-  Then I should not see "Signups"
-    And I should see "Signup Summary"
-  When I follow "Signup Summary"
-  Then I should see "Signup Summary for Yuletide"
+  Then I should not see "Sign-ups"
+    And I should see "Sign-up Summary"
+  When I follow "Sign-up Summary"
+  Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch (4, 3)"
-    And I should see "Stargate Atlantis (3, 3)"
-    And I should see "Tiny fandom (3, 3)"
+    And I should see "Starsky & Hutch 4 3"
+    And I should see "Stargate Atlantis 3 3"
+    And I should see "Tiny fandom 3 3"
 
   # signup summary changes when another person signs up
   When I log out
@@ -289,22 +289,22 @@ Feature: Collection
     And I check the 4th checkbox with value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   When I go to the collections page
     And I follow "Yuletide"
-    And I follow "Signup Summary"
-  Then I should see "Signup Summary for Yuletide"
+    And I follow "Sign-up Summary"
+  Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch (5, 3)"
-    And I should see "Stargate Atlantis (4, 4)"
-    And I should see "Tiny fandom (3, 4)"
+    And I should see "Starsky & Hutch 5 3"
+    And I should see "Stargate Atlantis 4 4"
+    And I should see "Tiny fandom 3 4"
 
   # mod can view signups
   When I log out
     And I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
-    And I follow "Signups"
+    And I follow "Sign-ups"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"
     And I should see "myname2" within "#main"
@@ -317,10 +317,10 @@ Feature: Collection
 
   # mod runs matching
   When I follow "Matching"
-  Then I should see "You can't generate matches while signup is still open."
+  Then I should see "You can't generate matches while sign-up is still open."
     And I should not see "Generate Potential Matches"
   When I follow "Challenge Settings"
-    And I uncheck "Signup open?"
+    And I uncheck "Sign-up open?"
     And I press "Update"
   Then I should see "Challenge was successfully updated"
   When I follow "Matching"
@@ -379,7 +379,7 @@ Feature: Collection
     #' stop annoying syntax highlighting after apostrophe
   Then I should see "Assignments (1)"
   When I follow "Assignments"
-  Then I should see "Yuletide For myname2" within "dl"
+  Then I should see "Yuletide or myname2" within "dl"
     And I should see "Fulfill"
   When I follow "Fulfill"
   Then I should see "Post New Work"

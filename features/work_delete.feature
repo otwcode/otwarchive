@@ -82,7 +82,7 @@ Feature: Delete Works
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
-      And I fill in "Gift this work to" with "Someone else, recipient"
+      And I fill in "Gift this work to" with "recipient"
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "My new series"
       And I select "Pseud2" from "work_author_attributes_ids_"

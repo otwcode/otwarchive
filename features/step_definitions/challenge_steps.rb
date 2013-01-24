@@ -613,6 +613,16 @@ When /^I fulfill my assignment$/ do
   Then %{I should see "Work was successfully posted"}
 end
 
+### WHEN we need the author attribute to be set
+When /^I fulfill my assignment and the author is "([^\"]*)"$/ do |new_user|
+  When %{I start to fulfill my assignment}
+    And %{I select "#{new_user}" from "Author / Pseud(s)"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
+
+end
+
 ### WHEN other
 
 When /^I close signups for "([^\"]*)"$/ do |title|
@@ -780,7 +790,7 @@ end
 
 Then /^My Gift Exchange gift exchange should be correctly created$/ do
   Then %{I should see "Collection was successfully created"}
-  Then %{I should see "Setting Up The My Gift Exchange Gift Exchange"}
+  Then %{I should see "Setting Up the My Gift Exchange Gift Exchange"}
   Then %{I should see "Offer Settings"}
   Then %{I should see "Request Settings"}
   Then %{I should see "If you plan to use automated matching"} 
