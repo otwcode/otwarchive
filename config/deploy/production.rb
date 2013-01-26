@@ -34,3 +34,4 @@ after "deploy:restart", "production_only:notify_testers"
 
 # deploy from clean branch
 set :branch, "deploy"
+set :rails_env, 'production'

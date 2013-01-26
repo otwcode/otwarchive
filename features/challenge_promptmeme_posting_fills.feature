@@ -34,7 +34,7 @@ Feature: Prompt Meme Challenge
     And I fill in "Work Title" with "Kinky Story"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   Given all emails have been delivered
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Kinky Story"
   # TODO: Figure out why this isn't working
   # email the anonymous prompter that they've received a fill!

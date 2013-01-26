@@ -26,7 +26,7 @@ class RedirectController < ApplicationController
         redirect_to work_path(@work) and return
       else 
         setflash; flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
-        unless Rails.env.production?
+        if Rails.env.development?
           flash[:error] += " We checked all of the following URLs: #{urls.to_sentence}" 
         end
       end

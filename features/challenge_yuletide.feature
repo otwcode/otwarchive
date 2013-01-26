@@ -577,7 +577,7 @@ Feature: Collection
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "Coding late at night is bad for the brain."
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Work was successfully posted"
   
   When I am logged in as "mod1"

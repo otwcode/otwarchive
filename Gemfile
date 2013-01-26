@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler'
 
-gem 'rails', '3.0.4'
+gem 'rails', '3.0.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -17,13 +17,14 @@ gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
-gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
 gem 'will_paginate', '>=3.0.2'
 # gem 'will_paginate',
   # :git     => 'git://github.com/huerlisi/will_paginate.git',
   # :branch  => 'rails3',
   # :require => 'will_paginate'
+
+gem 'nested_has_many_through'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false

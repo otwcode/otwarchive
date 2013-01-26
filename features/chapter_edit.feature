@@ -179,7 +179,7 @@ Feature: Edit chapters
   Then I should see "This is a preview of what this chapter will look like"
   When I follow "Edit Chapter"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
     Then I should see "Chapter was successfully updated."
     And I should not see "This chapter is a draft and hasn't been posted yet!"
 

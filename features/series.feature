@@ -179,7 +179,7 @@ Feature: Create and Edit Series
       And I should see "Part 1 of the Black Beauty series" within "li"
       And I should see "Part 3 of the Many a Pony series" within "li"
 
-Scenario: Post without preview
+Scenario: Post Without Preview
   Given I am logged in as "whoever" with password "whatever"
     And I add the work "public" to series "be_public"
     And I follow "be_public"
