@@ -84,8 +84,8 @@ class Pseud < ActiveRecord::Base
     group(:id).
     order(:name)
 
-  scope :with_posted_works, with_works & Work.visible_to_registered_user
-  scope :with_public_works, with_works & Work.visible_to_all
+  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
+  scope :with_public_works, with_works.merge(Work.visible_to_all)
 
   scope :with_bookmarks,
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
@@ -94,14 +94,14 @@ class Pseud < ActiveRecord::Base
     order(:name)
 
   # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
-  scope :with_public_bookmarks, with_bookmarks & Bookmark.is_public
+  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
 
   scope :with_public_recs,
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
-    order(:name) &
-    Bookmark.is_public.recs
+    order(:name).
+    merge(Bookmark.is_public.recs)
 
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
