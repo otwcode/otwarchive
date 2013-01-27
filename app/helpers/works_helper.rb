@@ -190,7 +190,7 @@ module WorksHelper
   
   # get work title, word count, and creator and add app short name, but do not add formatting so it can be link text for Tumblr sharing
   def get_tumblr_embed_link_title(work)
-    title = work.title.html_safe + " (#{work.word_count} #{ts('words')})"
+    title = work.title + " (#{work.word_count} #{ts('words')})".html_safe
     if work.anonymous?
       pseud = ts("Anonymous")
     else
