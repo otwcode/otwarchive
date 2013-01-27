@@ -155,6 +155,15 @@ class Bookmark < ActiveRecord::Base
   ## SEARCH #######################
   #################################
 
+  mapping do
+    indexes :notes
+    indexes :private
+    indexes :bookmarkable_type
+    indexes :bookmarkable_id
+    indexes :created_at,          :type  => 'date'
+    indexes :bookmarkable_date,   :type  => 'date'
+  end
+
   self.include_root_in_json = false
   def to_indexed_json
     to_json(methods: 
