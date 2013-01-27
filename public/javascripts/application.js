@@ -19,6 +19,7 @@ $j(document).ready(function() {
       e.preventDefault();
     });
     setupTooltips();
+    setupDropdown();
 
     // replace all GET delete links with their AJAXified equivalent
     $j('a[href$="/confirm_delete"]').each(function(){
@@ -341,4 +342,17 @@ jQuery.fn.preventDoubleSubmit = function() {
       this.beenSubmitted = true;
   });
 };
+
+// add attributes that are only needed in the primary menus and when JavaScript is enabled
+function setupDropdown(){
+  $j('#header .dropdown').attr({
+    'aria-haspopup': true
+  });
+  $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
+    'class': 'dropdown-toggle',
+    'data-toggle': 'dropdown',
+    'data-target': '#'
+  });  
+  $j('.dropdown ul').addClass("dropdown-menu");  
+}
 
