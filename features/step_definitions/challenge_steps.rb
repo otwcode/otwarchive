@@ -518,7 +518,7 @@ end
 When /^I edit the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "Edit whole signup"}
+  When %{I follow "Edit whole sign-up"}
 end
 
 ### WHEN viewing after signups
@@ -638,7 +638,7 @@ When /^I delete my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Your Prompts"}
   When %{I follow "Delete"}
-  Then %{I should see "Challenge signup was deleted."}
+  Then %{I should see "Challenge sign-up was deleted."}
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
@@ -714,7 +714,7 @@ Then /^I should see gift exchange options$/ do
 end
 
 Then /^I should be editing the challenge settings$/ do
-  Then %{I should see "Setting Up The Battle 12 Prompt Meme"}
+  Then %{I should see "Setting Up the Battle 12 Prompt Meme"}
 end
 
 Then /^signup should be open$/ do
@@ -836,7 +836,7 @@ end
 
 Then /^I should just see request 1$/ do
   page.should have_content("Request by myname1")
-  page.should have_content("Edit whole signup")
+  page.should have_content("Edit whole sign-up")
   page.should have_content("Edit prompt")
   page.should have_content("Stargate Atlantis")
   page.should have_content("Alternate Universe - Historical")
@@ -844,9 +844,10 @@ Then /^I should just see request 1$/ do
 end
 
 Then /^I should see single prompt editing$/ do
-  page.should have_content("Edit whole signup instead")
+  page.should have_content("Edit whole sign-up instead")
   page.should have_content("Freeforms")
   Then %{the field labeled "Freeforms" should contain "Alternate Universe - Historical"}
   page.should have_no_content("Just add one new prompt instead")
 end
+
 
