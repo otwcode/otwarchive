@@ -5,11 +5,14 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
+  before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
+  before_filter :log_admin_activity, :only => [ :update_tags ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
@@ -224,14 +227,6 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-      if @work.unrevealed?
-        @tweet_text = ts("Mystery Work")
-      else
-        @tweet_text = @work.title + " by " +
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
-                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-        @tweet_text = @tweet_text.truncate(95)
-      end
     render :show
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
@@ -476,6 +471,9 @@ class WorksController < ApplicationController
       cancel_posting_and_redirect
     elsif params[:edit_button]
       render :edit_tags
+    elsif params[:save_button]
+    	setflash; flash[:notice] = ts('Tags were successfully updated.')
+      redirect_to(@work)
     else
       saved = true
 
@@ -774,7 +772,8 @@ public
   def marktoread
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
-    setflash; flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    read_later_path = user_readings_path(current_user, :show => 'to-read')
+    setflash; flash[:notice] = ts("This work was marked to read later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -946,6 +945,16 @@ public
       "#{owner_name} - Works".html_safe
     else
       "Latest Works"
+    end
+  end
+
+  def log_admin_activity
+    if logged_in_as_admin?
+      options = { action: params[:action] }
+      if params[:action] == 'update_tags'
+        summary = "Old tags: #{@work.tags.value_of(:name).join(", ")}"
+      end
+      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
     end
   end
   

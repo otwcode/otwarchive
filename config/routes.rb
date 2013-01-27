@@ -125,6 +125,7 @@ Otwarchive::Application.routes.draw do
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
+    resources :activities, :only => [:index, :show]
     resources :settings
     resources :skins do
       collection do
@@ -171,8 +172,6 @@ Otwarchive::Application.routes.draw do
       get :browse
       get :change_email
       post :change_email
-      get :change_openid
-      post :change_openid
       get :change_password
       post :change_password
       get :change_username
@@ -434,9 +433,7 @@ Otwarchive::Application.routes.draw do
 
   resources :user_sessions, :only => [:new, :create, :destroy] do
     collection do
-      get :openid_small
       get :passwd_small
-      get :openid
       get :passwd
     end
   end

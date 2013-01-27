@@ -278,9 +278,6 @@ DEFAULT_LANGUAGE_NAME: 'English'
 DEFAULT_LOCALE_ISO: 'en'
 DEFAULT_LOCALE_NAME: 'English (US)'
 
-#Allow OpenID Authentication
-USE_OPENID: true
-
 # Allow orphaninig
 ORPHANING_ALLOWED: true
 

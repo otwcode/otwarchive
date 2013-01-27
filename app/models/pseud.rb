@@ -8,10 +8,10 @@ class Pseud < ActiveRecord::Base
 
   has_attached_file :icon,
     :styles => { :standard => "100x100>" },
-    :path => Rails.env.production? ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
-    :storage => Rails.env.production? ? :s3 : :filesystem,
+    :path => %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
-    :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+    :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     :default_url => "/images/skins/iconsets/default/icon_user.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
@@ -84,8 +84,8 @@ class Pseud < ActiveRecord::Base
     group(:id).
     order(:name)
 
-  scope :with_posted_works, with_works & Work.visible_to_registered_user
-  scope :with_public_works, with_works & Work.visible_to_all
+  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
+  scope :with_public_works, with_works.merge(Work.visible_to_all)
 
   scope :with_bookmarks,
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
@@ -94,14 +94,14 @@ class Pseud < ActiveRecord::Base
     order(:name)
 
   # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
-  scope :with_public_bookmarks, with_bookmarks & Bookmark.is_public
+  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
 
   scope :with_public_recs,
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
-    order(:name) &
-    Bookmark.is_public.recs
+    order(:name).
+    merge(Bookmark.is_public.recs)
 
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
@@ -326,8 +326,10 @@ class Pseud < ActiveRecord::Base
           end
         end
       end
-      comment_ids = creation.find_all_comments.collect(&:id).join(",")
-      Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+      comments.each do |comment|
+        comment.update_attribute(:pseud_id, pseud.id)
+      end
     elsif creation.is_a?(Series) && options[:skip_series]
       creation.works.each {|work| self.change_ownership(work, pseud)}
     end

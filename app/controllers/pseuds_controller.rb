@@ -42,10 +42,10 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id)
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_all.revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_all
       visible_series = @pseud.series.visible_to_all
       visible_bookmarks = @pseud.bookmarks.visible_to_all
@@ -53,10 +53,10 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id)
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_registered_user.revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @pseud.id))
       visible_works = @pseud.works.visible_to_registered_user
       visible_series = @pseud.series.visible_to_registered_user
       visible_bookmarks = @pseud.bookmarks.visible_to_registered_user
