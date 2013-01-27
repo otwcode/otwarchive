@@ -23,17 +23,17 @@ Feature: Gift Exchange Challenge
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   Then I should see "Challenge was successfully updated"
-    And I should see "Signup: Open" within ".collection .meta"
-    And I should see "Signup closes:"
+    And I should see "Sign-up: Open" within ".collection .meta"
+    And I should see "Sign-up closes:"
     
   Scenario: Gift exchange appears in list of open challenges
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   When I view open challenges
   Then I should see "My Gift Exchange"  
@@ -42,7 +42,7 @@ Feature: Gift Exchange Challenge
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   When I view open challenges
     And I follow "Gift Exchange Challenges"
@@ -78,17 +78,17 @@ Feature: Gift Exchange Challenge
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
-  Scenario: Signups can be seen in the dashboard
+  Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
-  Then I should see "Signups (1)"
-  When I follow "Signups (1)"
+  Then I should see "Sign-ups (1)"
+  When I follow "Sign-ups (1)"
   Then I should see "Awesome Gift Exchange"
   
   Scenario: Ordinary users cannot see other signups
@@ -99,7 +99,7 @@ Feature: Gift Exchange Challenge
   When I sign up for "Awesome Gift Exchange" with combination A
   When I go to the collections page
     And I follow "Awesome Gift Exchange"
-  Then I should not see "Signups"
+  Then I should not see "Sign-ups"
   
   Scenario: Mod can view signups
   
@@ -109,7 +109,7 @@ Feature: Gift Exchange Challenge
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
-    And I follow "Signups"
+    And I follow "Sign-ups"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"
     And I should see "myname2" within "#main"
@@ -126,7 +126,7 @@ Feature: Gift Exchange Challenge
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
     And I follow "Matching"
-  Then I should see "You can't generate matches while signup is still open."
+  Then I should see "You can't generate matches while sign-up is still open."
     And I should not see "Generate Potential Matches"
     
   Scenario: Matches can be generated
@@ -205,8 +205,8 @@ Feature: Gift Exchange Challenge
     And I have opened signup for the gift exchange "Sensitive Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Sensitive Gift Exchange" with combination A
-  Then I should see "Signup was successfully created"
-    And I should see "Signup for myname1"
+  Then I should see "Sign-up was successfully created"
+    And I should see "Sign-up for myname1"
   When I edit my signup for "Sensitive Gift Exchange"
   Then I should not see "othername"
   
@@ -249,3 +249,4 @@ Feature: Gift Exchange Challenge
 
 
     
+
