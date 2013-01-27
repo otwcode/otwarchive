@@ -316,7 +316,11 @@ class Tag < ActiveRecord::Base
 
   # We can pass this any Tag instance method that we want to run later.
   def async(method, *args)
-    Resque.enqueue(Tag, id, method, *args)
+    if Rails.env.test?
+      send(method, *args)
+    else
+      Resque.enqueue(Tag, id, method, *args)
+    end
   end
 
   # Class methods
