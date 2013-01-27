@@ -19,6 +19,9 @@ module NavigationHelpers
     when /^the search works page$/i
       Work.tire.index.refresh
       search_works_path      
+    when /^the search people page$/i
+      Pseud.tire.index.refresh
+      search_people_path
 
     # the following are examples using path_to_pickle
 
