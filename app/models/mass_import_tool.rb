@@ -443,14 +443,14 @@ class MassImportTool
     end
 
     #Update Tags and get Taglist
-    puts (" Updating Tags ")
+    puts " Updating Tags "
     tag_list = Array.new()
     tag_list = self.fill_tag_list(tag_list)
 
     connection = Mysql.new(@database_host,@database_username,@database_password,@database_name)
     r = connection.query("SELECT * FROM #{@source_stories_table} ;")
     connection.close()
-    puts (" Importing Stories ")
+    puts " Importing Stories "
     i = 0
     r.each do |row|
       puts " Importing Story #{i}"
@@ -857,7 +857,7 @@ class MassImportTool
   new_creation.pseud_id = pseud_id
   new_creation.creation_id = chapter_id
   new_creation.save!
-  puts "New creatorship #{new_creation.id}")
+  puts "New creatorship #{new_creation.id}"
  end
 
 
