@@ -101,7 +101,7 @@ Feature: Collection
     And I should see "It's a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
-  #Then I should see "General Sign-up Instructions" # This title is no longer there
+  Then I should see "General Sign Up Instructions"
     And I should see "Here are some general tips"
     And I should see "Requests (2 - 3)"
     And I should see "Please request easy things"
