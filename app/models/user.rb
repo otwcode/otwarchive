@@ -196,7 +196,24 @@ class User < ActiveRecord::Base
     joins(:request_claims).
     where("challenge_claims.id IN (?)", claims_ids)
   end
-  
+
+  # Parse a string of the "pseud.name (user.login)" format into a user
+  def self.parse_byline_login(byline, options = {})
+    pseud_name = ""
+    login = ""
+    userid = ""
+    begin
+      if byline.include?("(")
+        pseud_name, login = byline.split('(', 2)
+        pseud_name = pseud_name.strip
+        login = login.strip.chop
+        conditions = ['users.login = ?', login]
+      end
+      User.find(:all, :conditions => conditions)
+    rescue
+    end
+  end
+
   # Find users with a particular role and/or by name or email
   # Options: inactive, page
   def self.search_by_role(role, query, options = {})

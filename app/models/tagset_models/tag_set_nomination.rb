@@ -1,5 +1,5 @@
 class TagSetNomination < ActiveRecord::Base
-  belongs_to :pseud
+  belongs_to :user
   belongs_to :owned_tag_set, :inverse_of => :tag_set_nominations
   
   has_many :tag_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
@@ -14,9 +14,9 @@ class TagSetNomination < ActiveRecord::Base
   }
   
   validates_presence_of :owned_tag_set_id
-  validates_presence_of :pseud_id
+  validates_presence_of :user_id
 
-  validates_uniqueness_of :owned_tag_set_id, :scope => [:pseud_id], :message => ts("You have already submitted nominations for that tag set. Try editing them instead.")
+  validates_uniqueness_of :owned_tag_set_id, :scope => [:user_id], :message => ts("You have already submitted nominations for that tag set. Try editing them instead.")
   
   validate :can_nominate
   def can_nominate
@@ -74,11 +74,12 @@ class TagSetNomination < ActiveRecord::Base
   def count_by_fandom?(tag_type)
     %w(character relationship).include?(tag_type) && self.owned_tag_set.fandom_nomination_limit > 0
   end
-  
+
+  #changed this to simply return an attribute on user object
+  #simpler fix rather then replacing all owned_by instances and ensures things dont break,
+  #stephanies 1/27/13
   def self.owned_by(user = User.current_user)
-    select("DISTINCT tag_set_nominations.*").
-    joins(:pseud => :user).
-    where("users.id = ?", user.id)
+   return user.id
   end
 
   def self.for_tag_set(tag_set)
