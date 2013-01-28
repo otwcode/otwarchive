@@ -134,13 +134,13 @@ Factory.define :owned_tag_set do |f|
   f.nominated true
   f.after_build do |owned_tag_set|
     owned_tag_set.build_tag_set
-    owned_tag_set.add_owner(Factory.create(:pseud))
+    owned_tag_set.add_owner(Factory.create(:user))
   end
 end
 
 Factory.define :tag_set_nomination do |f|
   f.association :owned_tag_set
-  f.association :pseud
+  f.association :user
 end
 
 Factory.define :challenge_assignment do |f| 
