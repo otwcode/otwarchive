@@ -475,7 +475,7 @@ When /^I add prompt (\d+)$/ do |number|
 end
 
 When /^I add prompt (\d+) with "([^"]+)"$/ do |number, tag|
-  When %{I follow "Add another prompt"}
+  When %{I follow "Add Prompt"}
   Then %{I should see "Request #{number}"}
   When %{I check the 1st checkbox with the value "#{tag}"}
     # there is only one form on the individual prompt page
