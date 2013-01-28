@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   end
 
   def has_no_credentials?
-    self.crypted_password.blank?
+    self.crypted_password.blank? && self.identity_url.blank?
   end
 
   # Authorization plugin
@@ -46,6 +46,9 @@ class User < ActiveRecord::Base
   acts_as_authorizable
   has_many :roles_users
   has_many :roles, :through => :roles_users
+
+  # OpenID plugin
+  attr_accessible :identity_url
 
   ### BETA INVITATIONS ###
   has_many :invitations, :as => :creator
@@ -172,6 +175,7 @@ class User < ActiveRecord::Base
   attr_accessor :terms_of_service
   attr_accessible :age_over_13, :terms_of_service
 
+=begin
   validates_acceptance_of :terms_of_service,
                          :allow_nil => false,
                          :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
@@ -181,6 +185,7 @@ class User < ActiveRecord::Base
                           :allow_nil => false,
                           :message => ts('Sorry, you have to be over 13!'),
                           :if => :first_save?
+=end
 
   def to_param
     login
@@ -191,7 +196,24 @@ class User < ActiveRecord::Base
     joins(:request_claims).
     where("challenge_claims.id IN (?)", claims_ids)
   end
-  
+
+  # Parse a string of the "pseud.name (user.login)" format into a user
+  def self.parse_byline_login(byline, options = {})
+    pseud_name = ""
+    login = ""
+    userid = ""
+    begin
+      if byline.include?("(")
+        pseud_name, login = byline.split('(', 2)
+        pseud_name = pseud_name.strip
+        login = login.strip.chop
+        conditions = ['users.login = ?', login]
+      end
+      User.find(:all, :conditions => conditions)
+    rescue
+    end
+  end
+
   # Find users with a particular role and/or by name or email
   # Options: inactive, page
   def self.search_by_role(role, query, options = {})
@@ -210,10 +232,12 @@ class User < ActiveRecord::Base
   end
 
   ### AUTHENTICATION AND PASSWORDS
+  #Is user activated?
   def active?
     !activated_at.nil?
   end
 
+  #Generate random password, used by reset password and possibly other methods
   def generate_password(length=8)
     chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
     password = ''
@@ -229,11 +253,13 @@ class User < ActiveRecord::Base
     UserMailer.reset_password(self.id, temp_password).deliver! 
   end
 
+  #activate user object
   def activate
     return false if self.active?
     self.update_attribute(:activated_at, Time.now.utc)
   end
 
+  #Create the corresponding profile and preference records
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :is_default => true)
     self.profile = Profile.new

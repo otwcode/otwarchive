@@ -15,14 +15,12 @@ class DevmodeController < ApplicationController
     render 
   end
 
-  def unregister_imports
+  def initialize()
     if params[:okgo]
-      for work in Work.all
-        if work.imported_from_url
-          work.imported_from_url = nil
-          work.save false
-        end
-      end
+      #testing here, stephanie
+      ni = MassImportTool.new
+      ni.import_data
+
       setflash; flash[:info] = 'Successfully cleared URL associations'
     end
   end
