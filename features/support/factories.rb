@@ -140,7 +140,7 @@ end
 
 Factory.define :tag_set_nomination do |f|
   f.association :owned_tag_set
-  f.association :pseud
+  f.association :user
 end
 
 Factory.define :challenge_assignment do |f| 
