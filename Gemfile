@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler'
 
-gem 'rails', '3.0.20'
+gem 'rails', '3.0.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -94,6 +94,7 @@ end
 
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
+gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
