@@ -99,10 +99,10 @@ class User < ActiveRecord::Base
   has_many :comments, :through => :pseuds
   has_many :kudos, :through => :pseuds
   has_many :creatorships, :through => :pseuds
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true, :readonly => false
   has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true, :readonly => false
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true, :readonly => false
 
   has_many :related_works, :through => :works
   has_many :parent_work_relationships, :through => :works
