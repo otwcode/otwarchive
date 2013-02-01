@@ -193,7 +193,7 @@ class Work < ActiveRecord::Base
 
   before_save :post_first_chapter, :set_word_count
 
-  after_save :save_chapters, :save_parents
+  after_save :save_chapters, :save_parents, :save_new_recipients
   before_create :set_anon_unrevealed, :set_author_sorting
   before_update :set_author_sorting
 
@@ -353,28 +353,32 @@ class Work < ActiveRecord::Base
   end
 
   def recipients=(recipient_names)
-    new_gifts = []
+    names = []
     recipient_names.split(',').each do |name|
-      gift = self.gifts.for_name_or_byline(name.strip).first
-      if gift
-        new_gifts << gift
-      else
-        new_gifts << Gift.new(:recipient => name.strip)
-      end
+      name.strip!
+      gift = self.gifts.for_name_or_byline(name).first
+      names << name unless (gift && self.posted) # all recipients are new if work isn't posted
     end
-    set_new_recipients(new_gifts)
-    self.gifts = new_gifts
-  end
-
-  def recipients
-    self.gifts.collect(&:recipient).join(",")
+    self.new_recipients = names.join(",")
   end
   
-  def set_new_recipients(gifts)
-    current_gifts = self.gifts.collect(&:recipient)
-    new_gifts = gifts.collect(&:recipient)
-    diff = new_gifts - current_gifts
-    self.new_recipients = diff.join(",")
+  def recipients
+    names = self.gifts.collect(&:recipient)
+    unless self.new_recipients.blank?
+      self.new_recipients.split(",").each do |name|
+        names << name unless names.include? name
+      end
+    end
+    names.join(",")
+  end
+  
+  def save_new_recipients
+    unless self.new_recipients.blank?
+      self.new_recipients.split(',').each do |name|
+        gift = self.gifts.for_name_or_byline(name).first
+        self.gifts << Gift.new(:recipient => name) unless gift
+      end
+    end
   end
   
   ########################################################################
