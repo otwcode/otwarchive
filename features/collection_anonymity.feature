@@ -35,7 +35,7 @@ Feature: Collection
   # Also check that subscription notices don't go out
   Given all emails have been delivered
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -49,7 +49,7 @@ Feature: Collection
   
   # Post to collection with preview
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -182,7 +182,7 @@ Feature: Collection
   # Post to collection without preview
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -197,7 +197,7 @@ Feature: Collection
   # Post to collection with preview
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -323,7 +323,7 @@ Feature: Collection
     And I am logged in as "first_user"
   Given all emails have been delivered
   When I go to "Hidden Treasury" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -339,7 +339,7 @@ Feature: Collection
     
   # post to collection for day 2
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet 2"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"

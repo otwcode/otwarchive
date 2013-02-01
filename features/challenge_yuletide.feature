@@ -379,7 +379,7 @@ Feature: Collection
     #' stop annoying syntax highlighting after apostrophe
   Then I should see "Assignments (1)"
   When I follow "Assignments"
-  Then I should see "Yuletide or myname2" within "dl"
+  Then I should see "Yuletide for myname2" within "dl"
     And I should see "Fulfill"
   When I follow "Fulfill"
   Then I should see "Post New Work"
@@ -445,11 +445,11 @@ Feature: Collection
   When I log out
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
-  Then I should see "Mystery Work"
-    And I should see "Yuletide"
+  Then I should not see "Mystery Work"
+    And I should not see "Yuletide"
     And I should not see "Fulfilling Story 1"
     And I should not see "Stargate Atlantis"
-  When I follow "Works (1)"
+  When I follow "Works (0)"
   Then I should not see "Stargate Atlantis"
 
   # user edits it to undo fulfilling the assignment
@@ -615,16 +615,16 @@ Feature: Collection
     And the email should not contain "by myname6"
 
   # someone views the story they wrote and it is anonymous
-  When I am logged in as "myname1"
-    And I go to myname1's user page
-    #'
-  Then I should see "Fulfilling Story 1"
-    And I should see "Anonymous"
-  When I follow "Fulfilling Story 1"
-  Then I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
+  # When I am logged in as "myname1"
+  #   And I go to myname1's user page
+  #   #'
+  # Then I should see "Fulfilling Story 1"
+  #   And I should see "Anonymous"
+  # When I follow "Fulfilling Story 1"
+  # Then I should see "For myname"
+  #   And I should see "Collections:"
+  #   And I should see "Yuletide" within ".meta"
+  #   And I should see "Anonymous"
 
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
@@ -685,4 +685,5 @@ Feature: Collection
     And I am logged in as "myname6"
     And I follow "post new"
   Then I should not see "Does this fulfill a challenge assignment"
+
 
