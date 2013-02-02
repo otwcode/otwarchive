@@ -322,10 +322,10 @@ a.ui-datepicker-next {
 }
 
 
-/*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS, especially since jQuery UI has tooltips)
+/*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
 qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 
-.ui-tooltip, .qtip {
+.qtip {
   position: absolute;
   left: -28000px;
   top: -28000px;
@@ -336,7 +336,7 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
   z-index: 15000;
 }
 
-.ui-tooltip-content, .qtip-content {
+.qtip-content {
   position: relative;
   padding: 0.15em 0.25em;
   background: #FFFFA3;

@@ -74,3 +74,21 @@
   </ol>
 
 </div>
+
+<%= content_for :footer_js do %>
+  <%= javascript_include_tag '/javascripts/jquery-migrate-1.0.0.js' %><!--might need its own special content_for-->
+  <%= javascript_include_tag '/javascripts/jquery.qtip.min.js' %><!--updated but needs jquery migrate-->
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      setupTooltips();
+    });
+    function setupTooltips() {
+      $j('span[tooltip]').each(function(){
+        $j(this).qtip({
+            content: $j(this).attr('tooltip'),
+            position: {corner: {target: 'topMiddle'}}
+        });
+      });
+    }
+  <% end %>
+<% end %>
