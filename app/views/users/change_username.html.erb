@@ -21,13 +21,9 @@
   <dl>
     <dt><%= ts("Current User Name") %></dt>
       <dd><strong><%= @user.login %></strong></dd>
-    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+      <dt><%= label_tag :new_login, ts("New User Name") %></dt>
       <dd><%= text_field_tag :new_login, @new_login %></dd>
-    <%= live_validation_for_field('new_login', 
-      :exclusion => User.find(:all, :select => :login).map{|user| user.login}, 
-      :failureMessage => ts("username already taken"),
-      :validMessage => ts("username available")) %>
-    <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
+      <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
       <dd id="passwd"><%= password_field_tag :password %></dd>
   <dt class="landmark"><%= ts("Submit") %></dt>
 	<dd class="submit actions"><%= submit_tag "Change" %></dd>

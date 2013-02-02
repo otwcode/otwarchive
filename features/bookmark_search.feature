@@ -2,10 +2,11 @@
 Feature: Search Bookmarks
   In order to test search
   As a humble coder
-  I have to use cucumber with thinking sphinx
+  I have to use cucumber with elasticsearch
 
   Scenario: Search bookmarks
     Given I have loaded the fixtures
+      And all search indexes are updated
     When I am on the search bookmarks page
     When I fill in "Tag" with "classic"
       And I press "Search bookmarks"

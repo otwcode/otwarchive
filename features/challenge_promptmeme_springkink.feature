@@ -14,7 +14,7 @@ Feature: Prompt Meme Challenge
     When I go to the collections page
     When I set up an anon promptmeme "Spring Kink"
       And I follow "Challenge Settings"
-    When I fill in "General Signup Instructions" with "Here are some general tips"
+    When I fill in "General Sign-up Instructions" with "Here are some general tips"
       And I fill in "Tag Sets To Use:" with "Standard Challenge Tags"
       And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
       And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
@@ -32,7 +32,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sign Up"
     And I check "Stargate Atlantis"
     And I submit
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
     And I should see "Prompts (1)"
     
   # writer 1 replies to prompt, which is anon

@@ -2,6 +2,8 @@ class AdminActivity < ActiveRecord::Base
   belongs_to :admin
   belongs_to :target, polymorphic: true
 
+  validates_presence_of :admin_id
+
   delegate :login, :to => :admin, :prefix => true
 
   def self.log_action(admin, target, options={})

@@ -72,8 +72,8 @@ Feature: Tag Wrangling - special cases
   Then I should see "Work was successfully updated"
   When I view the tag "Evan ?"
     And I follow "filter works"
-  Then I should see "1 Work found in Evan ?"
+  Then I should see "1 Work in Evan ?"
   When I view the tag "James T. Kirk"
     And I follow "filter works"
-  Then I should see "1 Work found in James T. Kirk"
+  Then I should see "1 Work in James T. Kirk"
   
