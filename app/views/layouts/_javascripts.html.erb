@@ -2,27 +2,27 @@
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce %>
 <% end %>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js" type="text/javascript"></script><!--updated-->
-<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js" type="text/javascript"></script><!--updated, but change to google api min before deploy-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js" type="text/javascript"></script>
 <!-- if user has googleapis blocked for some reason we need a fallback -->
 <script type="text/javascript">
 if (typeof jQuery == 'undefined')
 {
-    document.write(unescape("%3Cscript src='/javascripts/jquery.min.js' type='text/javascript'%3E%3C/script%3E")); //updated
-    document.write(unescape("%3Cscript src='/javascripts/jquery-ui.min.js' type='text/javascript'%3E%3C/script%3E")); //updated
+    document.write(unescape("%3Cscript src='/javascripts/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+    document.write(unescape("%3Cscript src='/javascripts/jquery-ui.min.js' type='text/javascript'%3E%3C/script%3E"));
 }
 </script>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag 'jquery.livequery.min.js' %><!--no update available or needed-->
-<%= javascript_include_tag 'rails' %><!--updated-->
+<%= javascript_include_tag 'jquery.livequery.min.js' %>
+<%= javascript_include_tag 'rails' %>
 <%= javascript_include_tag 'application' %>
 <%= javascript_include_tag 'livevalidation_standalone' %>
-<%= javascript_include_tag 'jquery.qtip.min.js' %><!--updated but needs jquery migrate-->
-<%= javascript_include_tag 'jquery-shuffle.js' %><!--no update needed-->
-<%= javascript_include_tag 'jquery.scrollTo.min.js' %><!--updated-->
-<%= javascript_include_tag 'jquery.tokeninput.js' %><!--no update needed-->
-<%= javascript_include_tag "ibox/ibox" %><!--no update needed-->
+<%= javascript_include_tag 'jquery.qtip.min.js' %>
+<%= javascript_include_tag 'jquery-shuffle.js' %>
+<%= javascript_include_tag 'jquery.scrollTo.min.js' %>
+<%= javascript_include_tag 'jquery.tokeninput.js' %>
+<%= javascript_include_tag "ibox/ibox" %>
 <%= javascript_include_tag "jquery.cookie" %>
 <%= javascript_include_tag "bootstrap/bootstrap-dropdown.js" %>
 

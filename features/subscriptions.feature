@@ -20,7 +20,7 @@
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
     And the email should contain "first_user"
-    And the email should contain "Awesome Story"
+    And the email should contain "Awesome"
   When all emails have been delivered
     And I post the work "Yet Another Awesome Story" without preview
     And subscription notifications are sent

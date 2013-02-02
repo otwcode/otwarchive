@@ -189,8 +189,8 @@ Feature: Create Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-      And "issue 1807" is fixed
-      # And 1 email should be delivered to "giftee@example.org"
+      And "gift emails not being sent?" is fixed
+      #And 1 email should be delivered to "giftee@example.org"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
 
@@ -240,7 +240,8 @@ Feature: Create Works
       And I press "Preview"
     Then I should see a save error message
       And I should see a collection not found message for "collection1"
-      And I should see a collection not found message for "collection2"
+    # Collections are now parsed by collectible.rb which only shows the first failing collection and nothing else
+    # And I should see a collection not found message for "collection2"
     When I fill in "work_collection_names" with ""
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"

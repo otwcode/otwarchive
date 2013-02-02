@@ -52,7 +52,7 @@ Scenario: Post to collection from the collection home page
     And I am logged in as "first_user"
   When I go to the collections page
     And I follow "My Collection Thing"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
   Then I should see "Post New Work"
     And I should see "collection_thing" in the "Post to Collections / Challenges" input
   When I fill in the basic work information for "My Collected Work"
