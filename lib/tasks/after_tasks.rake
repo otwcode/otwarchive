@@ -366,6 +366,8 @@ namespace :After do
 
   desc "Set initial values for sortable tag names"
   task(:sortable_tag_names => :environment) do
+    Media.all.each{ |m| m.save }
+    
     Fandom.find_each do |fandom|
       fandom.set_sortable_name
       puts fandom.sortable_name

@@ -608,7 +608,7 @@ protected
     end
 
     unless @work && @work.save
-      setflash; flash[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
+      setflash; flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
       @series = current_user.series.uniq
@@ -949,11 +949,13 @@ public
   end
 
   def log_admin_activity
-    options = { action: params[:action] }
-    if params[:action] == 'update_tags'
-      summary = "Old tags: #{@work.tags.value_of(:name).join(", ")}"
+    if logged_in_as_admin?
+      options = { action: params[:action] }
+      if params[:action] == 'update_tags'
+        summary = "Old tags: #{@work.tags.value_of(:name).join(", ")}"
+      end
+      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
     end
-    AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
   end
   
 end

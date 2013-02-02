@@ -75,7 +75,9 @@ end
 
 
 When /^I enter a birthdate that shows I am under age$/ do
-  select("1999", :from => "profile_attributes[date_of_birth(1i)]")
+  time = Time.new
+  under_age_year = time.year - 13
+  select("#{under_age_year}", :from => "profile_attributes[date_of_birth(1i)]")
   select("December", :from => "profile_attributes[date_of_birth(2i)]")
   select("31", :from => "profile_attributes[date_of_birth(3i)]")
   click_button("Update")

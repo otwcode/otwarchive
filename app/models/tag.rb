@@ -193,7 +193,7 @@ class Tag < ActiveRecord::Base
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
   scope :by_popularity, order('taggings_count DESC')
-  scope :by_name, order('name ASC')
+  scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
@@ -316,7 +316,11 @@ class Tag < ActiveRecord::Base
 
   # We can pass this any Tag instance method that we want to run later.
   def async(method, *args)
-    Resque.enqueue(Tag, id, method, *args)
+    if Rails.env.test?
+      send(method, *args)
+    else
+      Resque.enqueue(Tag, id, method, *args)
+    end
   end
 
   # Class methods

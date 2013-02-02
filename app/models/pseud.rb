@@ -28,12 +28,12 @@ class Pseud < ActiveRecord::Base
   has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
   has_many :comments
   has_many :creatorships
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :readonly => false
   has_many :tags, :through => :works
   has_many :filters, :through => :works
   has_many :direct_filters, :through => :works
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :readonly => false
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :readonly => false
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
   has_many :tag_set_ownerships, :dependent => :destroy
@@ -84,8 +84,8 @@ class Pseud < ActiveRecord::Base
     group(:id).
     order(:name)
 
-  scope :with_posted_works, with_works & Work.visible_to_registered_user
-  scope :with_public_works, with_works & Work.visible_to_all
+  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
+  scope :with_public_works, with_works.merge(Work.visible_to_all)
 
   scope :with_bookmarks,
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
@@ -94,14 +94,14 @@ class Pseud < ActiveRecord::Base
     order(:name)
 
   # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
-  scope :with_public_bookmarks, with_bookmarks & Bookmark.is_public
+  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
 
   scope :with_public_recs,
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
-    order(:name) &
-    Bookmark.is_public.recs
+    order(:name).
+    merge(Bookmark.is_public.recs)
 
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
@@ -334,7 +334,7 @@ class Pseud < ActiveRecord::Base
       creation.works.each {|work| self.change_ownership(work, pseud)}
     end
     # make sure changes affect caching/search/author fields
-    creation.save
+    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
