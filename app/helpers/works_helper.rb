@@ -122,7 +122,7 @@ module WorksHelper
   end
 
   private
-  def add_label_for_embed(label, text) ; text.blank? ? nil : label + text ; end
+  def add_label_for_embed(label, text, tag='') ; text.blank? ? nil : label + text + tag; end
 
   public
   # get a nicely formatted bit of text for pasting into other services
@@ -132,41 +132,79 @@ module WorksHelper
   # Rating:
   # Warnings:
   # etc
-  def get_embed_link(work)
+  
+  # get work title, word count, and creator and add formatting for share code
+  def get_embed_link_title(work)
     title_link = link_to(content_tag(:strong, work.title.html_safe), work_url(work)) + " (#{work.word_count} #{ts('words')})"
     if work.anonymous?
       profile_link = ts("Anonymous")
     else
       profile_link = work.pseuds.map {|pseud| link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
-    end
-
-    chapters_text = ts("Chapters: ") + work.chapter_total_display
-    fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)
-    rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
-    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '))
-    warning_text = add_label_for_embed(ts("Warning: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '))
-    relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '))
-    char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '))
+    end 
+    title_link + ts(" by ") + profile_link
+  end
+  
+  # get work information for share code
+  def get_embed_link_meta(work)
+    chapters_text = ts("Chapters: ") + work.chapter_total_display + tag("br")
+    fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe, tag("br"))
+    rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '), tag("br"))
+    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '), tag("br"))
+    warning_text = add_label_for_embed(ts("Warnings: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '), tag("br"))
+    relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '), tag("br"))
+    char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '), tag("br"))
+    tags_text = add_label_for_embed(ts("Additional Tags: "), work.freeforms.map {|freeform| freeform.name}.join(', '), tag("br"))
     if work.series.count != 0
-      series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work))
+      series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work), tag("br"))
     end
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
-
-    # we deliberately don't html_safe this because we want it escaped
+    
     if work.series.count != 0
-      [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, series_text, summary_text].compact.join("\n")
+      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, series_text, summary_text].compact.join("")
     else
-      [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
+      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, summary_text].compact.join("")
+    end   
+  end
+  
+  # combine title, word count, creator, and meta to make copy and paste share code for a work
+  def get_embed_link(work)
+    [get_embed_link_title(work) + tag("br"), get_embed_link_meta(work)].compact.join("")
+  end
+
+  # get bookmark information for share code
+  def get_embed_link_bookmark_meta(bookmark)
+    if bookmark.bookmarkable.is_a?(Work)
+      tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "), tag("br"))
+      bookmark_text = add_label_for_embed(ts("Bookmarker's Notes: "), raw(sanitize_field(bookmark, :notes)))
     end
   end
 
-  # convert a bookmark into a nicely formatted chunk of text
+  # combine full copy and paste share code for a work with bookmark information to make copy and paste share code for a bookmark
   def get_bookmark_embed_link(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
       work_embed = get_embed_link(bookmark.bookmarkable)
-      tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "))
-      bookmark_text = add_label_for_embed(content_tag(:strong, ts("Bookmarker's Notes: ")), raw(sanitize_field(bookmark, :notes)))
-      [work_embed, tags_text, bookmark_text].compact.join("\n")
+      bookmark_meta = get_embed_link_bookmark_meta(bookmark)
+      [work_embed, bookmark_meta].compact.join("")
+    end
+  end
+  
+  # get work title, word count, and creator and add app short name, but do not add formatting so it can be link text for Tumblr sharing
+  def get_tumblr_embed_link_title(work)
+    title = work.title + " (#{work.word_count} #{ts('words')})".html_safe
+    if work.anonymous?
+      pseud = ts("Anonymous")
+    else
+      pseud = work.pseuds.map {|pseud| (pseud.name)}.join(', ').html_safe
+    end
+    title + ts(" by ") + pseud + ts(" [#{ArchiveConfig.APP_SHORT_NAME}]")
+  end
+  
+  # combine work information and bookmark information to make body of link post for Tumblr sharing
+  def get_tumblr_bookmark_embed_link(bookmark)
+    if bookmark.bookmarkable.is_a?(Work)
+      work_meta = get_embed_link_meta(bookmark.bookmarkable)
+      bookmark_meta = get_embed_link_bookmark_meta(bookmark)
+      [work_meta, bookmark_meta].compact.join("")
     end
   end
   

@@ -31,16 +31,16 @@ class Bookmark < ActiveRecord::Base
   }
 
   scope :join_work,
-    joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')") &
-    Work.visible_to_all
+    joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
+    merge(Work.visible_to_all)
 
   scope :join_series,
-    joins("LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')") &
-    Series.visible_to_all
+    joins("LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')").
+    merge(Series.visible_to_all)
 
   scope :join_external_works,
-    joins("LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')") &
-    ExternalWork.visible_to_all
+    joins("LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')").
+    merge(ExternalWork.visible_to_all)
 
   scope :join_bookmarkable,
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')
@@ -154,6 +154,15 @@ class Bookmark < ActiveRecord::Base
   #################################
   ## SEARCH #######################
   #################################
+
+  mapping do
+    indexes :notes
+    indexes :private
+    indexes :bookmarkable_type
+    indexes :bookmarkable_id
+    indexes :created_at,          :type  => 'date'
+    indexes :bookmarkable_date,   :type  => 'date'
+  end
 
   self.include_root_in_json = false
   def to_indexed_json

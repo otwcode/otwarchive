@@ -7,7 +7,7 @@ Feature: Gift Exchange Challenge
   Scenario: Create a collection to house a gift exchange
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
-  When I set up the collection "My Gift Exchange" 
+  When I set up the collection "My Gift Exchange"
     And I select "Gift Exchange" from "challenge_type"
     And I submit
   Then My Gift Exchange gift exchange should be correctly created
@@ -23,30 +23,30 @@ Feature: Gift Exchange Challenge
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   Then I should see "Challenge was successfully updated"
     And I should see "Signup: Open" within ".collection .meta"
     And I should see "Signup closes:"
-    
+
   Scenario: Gift exchange appears in list of open challenges
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   When I view open challenges
-  Then I should see "My Gift Exchange"  
+  Then I should see "My Gift Exchange"
 
   Scenario: Gift exchange also appears in list of open gift exchange challenges
   Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
-  When I check "Signup open?"
+  When I check "Sign-up open?"
     And I submit
   When I view open challenges
     And I follow "Gift Exchange Challenges"
-  Then I should see "My Gift Exchange"  
+  Then I should see "My Gift Exchange"
 
   Scenario: Change timezone for a gift exchange
   Given I am logged in as "mod1"
@@ -56,9 +56,9 @@ Feature: Gift Exchange Challenge
     And I submit
   Then I should see "Challenge was successfully updated"
   Then I should find "Alaska"
-  
+
   Scenario: Add a co-mod
-  
+
   Given the following activated users exist
     | login   |
     | comod   |
@@ -72,25 +72,25 @@ Feature: Gift Exchange Challenge
   Then I should see "New members invited: comod"
 
   Scenario: Sign up for a gift exchange
-  
+
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
-  Scenario: Signups can be seen in the dashboard
+  Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
-  Then I should see "Signups (1)"
-  When I follow "Signups (1)"
+  Then I should see "Sign-ups (1)"
+  When I follow "Sign-ups (1)"
   Then I should see "Awesome Gift Exchange"
-  
+
   Scenario: Ordinary users cannot see other signups
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
@@ -99,26 +99,26 @@ Feature: Gift Exchange Challenge
   When I sign up for "Awesome Gift Exchange" with combination A
   When I go to the collections page
     And I follow "Awesome Gift Exchange"
-  Then I should not see "Signups"
+  Then I should not see "Sign-ups"
   
   Scenario: Mod can view signups
-  
+
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
-    And I follow "Signups"
+    And I follow "Sign-ups"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"
     And I should see "myname2" within "#main"
     And I should see "myname1" within "#main"
     And I should see "Something else weird"
     And I should see "Alternate Universe - Historical"
-    
+
   Scenario: Cannot generate matches while signup is open
-  
+
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
@@ -126,9 +126,9 @@ Feature: Gift Exchange Challenge
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
     And I follow "Matching"
-  Then I should see "You can't generate matches while signup is still open."
+  Then I should see "You can't generate matches while sign-up is still open."
     And I should not see "Generate Potential Matches"
-    
+
   Scenario: Matches can be generated
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
@@ -142,7 +142,7 @@ Feature: Gift Exchange Challenge
     And I wait 3 seconds
   When I reload the page
   Then I should see "Main Assignments"
-  
+
   Scenario: Assignments can be sent
 
   Given I am logged in as "mod1"
@@ -166,9 +166,9 @@ Feature: Gift Exchange Challenge
     And the email should link to "Awesome Gift Exchange" collection's url
       And the email should link to myname1's user url
       And the email should link to the works tagged "Stargate Atlantis"
-      
+
   Scenario: User signs up for two gift exchanges at once #'
-  
+
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
@@ -186,9 +186,9 @@ Feature: Gift Exchange Challenge
     # TODO: Uncomment when the intermittent bug has been fixed
   #Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
   #  And the "Second Challenge (myname3)" checkbox should be checked
-  
+
   Scenario: User has more than one pseud on signup form
-  
+
   Given "myname1" has the pseud "othername"
   Given I am logged in as "mod1"
     And I have created the gift exchange "Sensitive Gift Exchange"
@@ -196,22 +196,22 @@ Feature: Gift Exchange Challenge
   When I am logged in as "myname1"
   When I start to sign up for "Sensitive Gift Exchange" gift exchange
   Then I should see "othername"
-  
+
   Scenario: User tries to change pseud on a challenge signup and should not be able to, as it would break matching
-  
+
   Given "myname1" has the pseud "othername"
   Given I am logged in as "mod1"
     And I have created the gift exchange "Sensitive Gift Exchange"
     And I have opened signup for the gift exchange "Sensitive Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Sensitive Gift Exchange" with combination A
-  Then I should see "Signup was successfully created"
-    And I should see "Signup for myname1"
+  Then I should see "Sign-up was successfully created"
+    And I should see "Sign-up for myname1"
   When I edit my signup for "Sensitive Gift Exchange"
   Then I should not see "othername"
-  
+
   Scenario: User can see their assignment
-  
+
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
@@ -222,7 +222,7 @@ Feature: Gift Exchange Challenge
     And I go to my user page
     And I follow "Assignments"
   Then I should see "Awesome Gift Exchange"
-  
+
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
   
   Given I am logged in as "mod1"
@@ -249,3 +249,4 @@ Feature: Gift Exchange Challenge
 
 
     
+

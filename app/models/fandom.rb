@@ -14,7 +14,6 @@ class Fandom < Tag
     
 
   scope :by_media, lambda {|media| where(:media_id => media.id)}
-  scope :by_name, order('sortable_name ASC')
 
   def self.unwrangled
     joins(:common_taggings).

@@ -18,7 +18,7 @@ Feature: Prompt Meme Challenge
     And I check "challenge_signup_requests_attributes_0_anonymous"
     # there are two forms in this page, can't use I submit
     And I press "Submit"
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   When I log out
     And I am logged in as "myname2"
     And I go to "The Kissing Game" collection's page
