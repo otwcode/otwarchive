@@ -360,7 +360,7 @@ namespace :massimport852 do
     @send_invites = args.send_invites
     Rake::Task['massimport852:create_archivist_and_collection'].invoke
 
-    base_url = "http://852prospect.org/archive"
+    base_url = "http://www.852prospect.org/archive/archive"
     archive_file = ask("Name of archive file (eg: ARCHIVE_DB.pl)? ") # "ARCHIVE_MINI.pl"
     author_email = nil
 
