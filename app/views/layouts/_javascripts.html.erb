@@ -24,6 +24,7 @@ if (typeof jQuery == 'undefined')
 <%= javascript_include_tag 'jquery.tokeninput.js' %>
 <%= javascript_include_tag "ibox/ibox" %>
 <%= javascript_include_tag "jquery.cookie" %>
+<%= javascript_include_tag "bootstrap/bootstrap-dropdown.js" %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
