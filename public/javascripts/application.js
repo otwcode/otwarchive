@@ -3,8 +3,6 @@
 
 //things to do when the page loads
 $j(document).ready(function() {
-    // visualizeTables();
-    // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
@@ -20,7 +18,7 @@ $j(document).ready(function() {
       $j('#notice-banner').hide();
       e.preventDefault();
     });
-    setupTooltips();
+    setupDropdown();
 
     // replace all GET delete links with their AJAXified equivalent
     $j('a[href$="/confirm_delete"]').each(function(){
@@ -30,22 +28,8 @@ $j(document).ready(function() {
     $j('.commas li:last-child').addClass('last');
 
     // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
-    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').live('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
+    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').on('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
-
-function visualizeTables() {
-     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
-     $j("table.stats-line").visualize({type: 'line'});
-}
-
-// Shows expandable fields when clicked on
-function ShowExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'inline';
-  var collapsible = document.getElementById('collapsible');
-  if (collapsible != null) collapsible.style.display = 'none';
-}
-
 
 ///////////////////////////////////////////////////////////////////
 // Autocomplete
@@ -172,7 +156,7 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', true);
+      checkboxes.prop('checked', true);
       event.preventDefault();
     });
   });
@@ -192,7 +176,7 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', false);
+      checkboxes.prop('checked', false);
       event.preventDefault();
     });
   });
@@ -240,13 +224,6 @@ function setupToggled(){
       });
     });
   });
-}
-
-
-// Hides expandable fields if Javascript is enabled
-function hideExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'none';
 }
 
 function hideHideMe() {
@@ -309,14 +286,6 @@ function toggleFormField(element_id) {
     }
 }
 
-function showOptions(idToCheck, idToShow) {
-    var checkbox = document.getElementById(idToCheck);
-    var areaToShow = document.getElementById(idToShow);
-    if (checkbox.checked) {
-        Element.toggle(idToShow);
-    }
-}
-
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($j('#work-form') != null) {
@@ -349,18 +318,9 @@ function generateCharacterCounters() {
   $j(".observe_textlength").each(function(){
       updateCharacterCounter(this);
   });
-  $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
+  $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
       updateCharacterCounter(this);
   });
-}
-
-function setupTooltips() {
-    $j('span[tooltip]').each(function(){
-       $j(this).qtip({
-          content: $j(this).attr('tooltip'),
-          position: {corner: {target: 'topMiddle'}}
-       });
-    });
 }
 
 // prevent double submission for JS enabled
@@ -372,4 +332,17 @@ jQuery.fn.preventDoubleSubmit = function() {
       this.beenSubmitted = true;
   });
 };
+
+// add attributes that are only needed in the primary menus and when JavaScript is enabled
+function setupDropdown(){
+  $j('#header .dropdown').attr({
+    'aria-haspopup': true
+  });
+  $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
+    'class': 'dropdown-toggle',
+    'data-toggle': 'dropdown',
+    'data-target': '#'
+  });  
+  $j('.dropdown ul').addClass("dropdown-menu");  
+}
 

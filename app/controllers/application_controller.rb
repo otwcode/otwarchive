@@ -236,6 +236,13 @@ public
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
   end
+  
+  # Define media for fandoms menu
+  before_filter :set_media
+  def set_media
+    uncategorized = Media.uncategorized
+    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+  end
 
   ### GLOBALIZATION ###
 
