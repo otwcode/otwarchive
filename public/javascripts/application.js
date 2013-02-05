@@ -18,7 +18,6 @@ $j(document).ready(function() {
       $j('#notice-banner').hide();
       e.preventDefault();
     });
-    setupTooltips();
     setupDropdown();
 
     // replace all GET delete links with their AJAXified equivalent
@@ -322,15 +321,6 @@ function generateCharacterCounters() {
   $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
       updateCharacterCounter(this);
   });
-}
-
-function setupTooltips() {
-    $j('span[tooltip]').each(function(){
-       $j(this).qtip({
-          content: $j(this).attr('tooltip'),
-          position: {corner: {target: 'topMiddle'}}
-       });
-    });
 }
 
 // prevent double submission for JS enabled

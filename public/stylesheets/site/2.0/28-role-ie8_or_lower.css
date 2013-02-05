@@ -78,7 +78,7 @@ form dd.notes dl {
 
 /* Determines actual width in IE */
 
-.ui-tooltip-fluid {
+.qtip-fluid {
   display: block;
   visibility: hidden;
   position: static !important;
@@ -105,7 +105,7 @@ span.symbol, span.symbol span {
   vertical-align: middle;
 }
 
-.ui-tooltip-titlebar .ui-state-default {
+.qtip-titlebar .ui-state-default {
   top: 16px;
 }
 
