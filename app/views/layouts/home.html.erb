@@ -26,10 +26,10 @@
       <% end %>
     </title>
 
-    <%= render :partial => 'layouts/includes' %>
+    <%= render 'layouts/includes' %>
   </head>
 
-  <body onload="hideFormFields(); initSelect('languages_menu')" id="home">
+  <body id="home">
       <div id="outer" class="wrapper">
         <ul id="skiplinks"><li><a href="#main"><%= ts("Main Content") %></a></li><li><a href="#signup"><%= ts("Sign Up") %></a></li></ul>
   
@@ -39,7 +39,8 @@
 
   <!-- END main -->
   
-  <%= render :partial => 'layouts/footer' %>
+  <%= render 'layouts/footer' %>
 </div>
+<%= render 'layouts/javascripts' %>
   </body>
 </html>

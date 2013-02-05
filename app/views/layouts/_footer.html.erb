@@ -4,8 +4,6 @@
   <div id="globalize"><!-- locales_menu --></div>
 	<p class="beta"><span class="landmark"><abbr title="Archive Of Our Own">AO3</abbr> Beta</span></p>
 
-  <%= yield :footer_js %>
-
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
       <li>
