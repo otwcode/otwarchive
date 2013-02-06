@@ -8,7 +8,7 @@ $j(document).ready(function() {
     hideHideMe();
     showShowMe();
     handlePopUps();
-    generateCharacterCounters();
+    attachCharacterCounters();
     $j('#expandable-link').click(function(e){
           e.preventDefault();
           expandList();
@@ -303,23 +303,20 @@ function hideField(id) {
   $j('#' + id).toggle();
 }
 
-function updateCharacterCounter(counter) {
-    var input_id = '#' + $j(counter).attr('id');
-    var maxlength = $j(input_id + '_counter').attr('data-maxlength');
-    var input_value = $j(input_id).val();
-    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n');
-    var remaining_characters = maxlength - input_value.length;
-    $j(input_id + '_counter').html(remaining_characters);
-    $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);
-}
+function attachCharacterCounters() {
+    var countFn = function() {
+        var id = this.id,
+            counter = $j('#'+id+'_counter'),
+            max = parseInt(counter.attr('data-maxlength')),
+            val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
+            remaining = max - val.length;
+            
+        counter.html(remaining);
+        counter.attr("aria-valuenow", remaining);
+    };
 
-function generateCharacterCounters() {
-  $j(".observe_textlength").each(function(){
-      updateCharacterCounter(this);
-  });
-  $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
-      updateCharacterCounter(this);
-  });
+    $j(document).on('keyup keydown mouseup mousedown change', '.observe_textlength', countFn);
+    $j('.observe_textlength').each(countFn);
 }
 
 // prevent double submission for JS enabled
