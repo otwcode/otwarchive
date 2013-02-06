@@ -305,8 +305,7 @@ function hideField(id) {
 
 function attachCharacterCounters() {
     var countFn = function() {
-        var id = this.id,
-            counter = $j('#'+id+'_counter'),
+        var counter = $j(this).nextAll('.character_counter').first().find('.value'),
             max = parseInt(counter.attr('data-maxlength')),
             val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
             remaining = max - val.length;
