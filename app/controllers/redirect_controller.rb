@@ -1,6 +1,10 @@
 class RedirectController < ApplicationController
   before_filter :get_url_to_look_for
   
+  def index
+    do_redirect 
+  end
+  
   def get_url_to_look_for
     @original_url = params[:original_url] || ""
     @minimal_url = @original_url
