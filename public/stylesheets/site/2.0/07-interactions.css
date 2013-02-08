@@ -409,9 +409,8 @@ a.modal.help { cursor: help; }
   border-bottom: 1px solid #ccc;
   font-size: 0.875em;
   overflow: auto;
+  padding: 1.5em;
 }
-
-#modal .content, #modal footer { padding: 0.6432em; }
 
 #modal.tall {
   height: 80%;
@@ -478,8 +477,7 @@ a.modal.help { cursor: help; }
   height: 44px;
   left: 0;
   line-height: 44px;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0 0.6432em;
   right: 0;
   position: absolute;
 }
@@ -497,6 +495,10 @@ a.modal.help { cursor: help; }
   position: absolute;
   right: 8px;
 }
+
+#modal .content > h1:first-child, 
+#modal .content > h2:first-child, 
+#modal .content > .heading:first-child { margin-top: 0.5em; }
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 
