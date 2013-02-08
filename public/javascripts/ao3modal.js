@@ -3,8 +3,6 @@
 THIS FILE GETS MINIFIED!  It is included as "ao3modal.min.js". 
 USE A MINIFIER AND UPDATE THE .min.js FILE AFTER MAKING ANY CHANGES HERE!
 
-TODO:
-    change $.bind & $.unbind to on/off when jQuery is updated
 */
 
 jQuery(document).ready(function() {
@@ -294,9 +292,9 @@ jQuery(document).ready(function() {
                     for (var eventType in handlers) {
                         if (handlers.hasOwnProperty(eventType)) {
                             if (on) {
-                                $('body').bind(eventType, handlers[eventType]);
+                                $('body').on(eventType, handlers[eventType]);
                             } else {
-                                $('body').unbind(eventType, handlers[eventType]);
+                                $('body').off(eventType, handlers[eventType]);
                             }
                         }
                     }
