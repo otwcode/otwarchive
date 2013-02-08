@@ -6,13 +6,6 @@
 	<!--/descriptions-->
 </div>
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <% if @fandoms.empty? %>
-  <li><%= link_to 'Your lack of fandoms makes the wrangulator sad', tag_wranglers_path %></li>
-  <% else %>
-  <li><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></li>
-  <% end %>
-</ul>
 <!--/subnav-->
 
 <!--main content-->
