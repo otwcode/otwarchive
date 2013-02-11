@@ -85,6 +85,7 @@ class ChallengeSignup < ActiveRecord::Base
     end
   end
 
+
   # make sure that tags are unique across each group of prompts
   validate :unique_tags
   def unique_tags

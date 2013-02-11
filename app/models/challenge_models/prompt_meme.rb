@@ -30,6 +30,8 @@ class PromptMeme < ActiveRecord::Base
   end
 
   before_validation :update_allowed_values
+  # make sure that challenge sign-up / close / open dates aren't contradictory
+  validate :validate_signup_dates
 
   #FIXME hack because time zones are being html encoded. couldn't figure out why.
   before_save :fix_time_zone
