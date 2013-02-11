@@ -8,6 +8,10 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
 
 /*regions */
 
+#header .logo {
+  height: 1.75em;
+}
+
 #header .dropdown a:focus {
   outline: none;
 }
