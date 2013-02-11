@@ -2,6 +2,7 @@ class AdminMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
+  helper :mailer
   default :from => ArchiveConfig.RETURN_ADDRESS
 
   def abuse_report(abuse_report_id)

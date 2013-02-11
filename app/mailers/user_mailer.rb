@@ -10,6 +10,7 @@ class UserMailer < BulletproofMailer::Base
   helper_method :logged_in_as_admin?
 
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :users
