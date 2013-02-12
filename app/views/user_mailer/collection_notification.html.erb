@@ -1,10 +1,14 @@
-<p><%= "Dear Collection Maintainers!" %></p>
+<% content_for :message do %>
 
-<p>
-  <%= ts("You have received a message about your collection ") %>
-  <%= link_to(@collection.title, collection_url(@collection)) %>:
-</p>
+  <p>Dear Collection Maintainers!</p>
 
-<%=raw @message %>
+  <p>
+    You have received a message about your collection <%= style_link(@collection.title, collection_url(@collection)) %>:
+  </p>
 
-<p><%= "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>
+  <%= style_quote(raw @message) %>
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>
