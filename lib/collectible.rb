@@ -22,7 +22,9 @@ module Collectible
     names.each do |name|
       c = Collection.find_by_name(name)
       errors.add(:base, ts("We couldn't find the collection %{name}.", :name => name)) and return if c.nil?
-      errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.closed? && c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id.to_s)
+      if c.closed?
+        errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id.to_s)
+      end
       add_to_collection(c)
     end
   end
