@@ -16,19 +16,18 @@ module Collectible
 
   # add collections based on a comma-separated list of names
   def collections_to_add=(collection_names)
-    old_collections = ""
-    old_collections << self.collection_items.collect(&:collection_id).join(",")
+    old_collections = self.collection_items.collect(&:collection_id)
     names = trim_collection_names(collection_names)
     names.each do |name|
       c = Collection.find_by_name(name)
       errors.add(:base, ts("We couldn't find the collection %{name}.", :name => name)) and return if c.nil?
       if c.closed?
-        errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id.to_s)
+        errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id)
       end
       add_to_collection(c)
     end
   end
-  
+
   # remove collections based on an array of ids
   def collections_to_remove=(collection_ids)
     collection_ids.reject {|id| id.blank?}.map {|id| id.is_a?(String) ? id.strip : id}.each do |id|
