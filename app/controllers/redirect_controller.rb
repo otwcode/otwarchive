@@ -9,8 +9,12 @@ class RedirectController < ApplicationController
     @minimal_url.gsub!(/\#.*$/, "")
 
     # remove www if present
-    @nowww_url = @original_url
-    @nowww_url.gsub!(/http:\/\/www\./, 'http://')
+    @no_www_url = @original_url
+    @no_www_url.gsub!(/http:\/\/www\./, "http://")
+
+    # add www in case it is needed
+    @with_www_url = @original_url
+    @with_www_url.gsub!(/http:\/\//, "http://www.")
 
     # get encoded and unencoded versions
     @encoded_url = URI.encode(@minimal_url)
@@ -21,9 +25,9 @@ class RedirectController < ApplicationController
     if @original_url.blank?
       setflash; flash[:error] = ts("What url did you want to look up?")
     else
-      urls = [@original_url, @minimal_url, @nowww_url, @encoded_url, @decoded_url]
+      urls = [@original_url, @minimal_url, @no_www_url, @with_www_url, @encoded_url, @decoded_url]
       @work = Work.where(:imported_from_url => @original_url).first ||
-          Work.where(:imported_from_url => [@minimal_url, @nowww_url, @encoded_url, @decoded_url]).first ||
+          Work.where(:imported_from_url => [@minimal_url, @no_www_url, @with_www_url, @encoded_url, @decoded_url]).first ||
           Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{@encoded_url}%", "%#{@decoded_url}%").first
       if @work
         setflash; flash[:notice] = ts("You have been redirected here from #{@original_url}. Please update the original link if possible!")
