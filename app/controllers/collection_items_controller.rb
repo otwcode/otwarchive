@@ -106,7 +106,7 @@ class CollectionItemsController < ApplicationController
         errors << ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
       elsif @item.collections.include?(collection)
         errors << ts("This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
-      elsif collection.closed?
+      elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
         errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
