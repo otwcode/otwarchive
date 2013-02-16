@@ -24,7 +24,6 @@
       <ul class="menu">
         <li><%= link_to ts('Site Map'), site_map_path %></li>
         <li><%= link_to ts('Terms of Service'), tos_path %></li>
-        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
       </ul>
     </li>
     <li class="module group">
@@ -44,6 +43,7 @@
         <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
           <li><%= link_to 'Devmode', devmode_path %></li>
         <% end %>
+        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
       </ul>
     </li>
   </ul>
