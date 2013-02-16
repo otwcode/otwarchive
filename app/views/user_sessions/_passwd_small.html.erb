@@ -11,7 +11,7 @@
     <%= f.submit ts("Log In") %>
   </p>    
   <ul class="footnote actions">
-  	<li><%= link_to ts("Forgot password?"), new_password_path %>
+  	<li><%= link_to ts("Forgot password?"), new_password_path %></li>
   	<% if @admin_settings.account_creation_enabled? %>
       <li>
         <%= link_to ts("Sign Up"), new_user_path %>
