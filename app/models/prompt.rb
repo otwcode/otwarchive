@@ -118,13 +118,13 @@ class Prompt < ActiveRecord::Base
               ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
+            errors.add(:base, ts("Your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
               :taglist => taglist_string))
           elsif required == allowed
-            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("Your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
               :required => required))
           else
-            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+            errors.add(:base, ts("Your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
               :required => required, :allowed => allowed))
           end
         end
