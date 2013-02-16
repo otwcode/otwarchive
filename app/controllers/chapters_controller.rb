@@ -223,15 +223,12 @@ class ChaptersController < ApplicationController
       setflash; flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_url(@work))
     else
+      was_draft = !@chapter.posted?
       if @chapter.destroy
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        if @chapter.posted?
-          setflash; flash[:notice] = ts("The chapter was successfully deleted.")
-        else
-          setflash; flash[:notice] = ts("Your chapter draft has been discarded.")
-        end
+        setflash; flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
       else
         setflash; flash[:error] = ts("Something went wrong. Please try again.")
       end
