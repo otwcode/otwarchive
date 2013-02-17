@@ -107,6 +107,8 @@ Otwarchive::Application.routes.draw do
     member do
       get :batch_load
       put :do_batch_load
+      get :confirm_delete
+      put :do_confirm_delete
     end
     collection do
       get :show_options

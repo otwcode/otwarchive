@@ -165,6 +165,10 @@ class OwnedTagSetsController < ApplicationController
     end
   end
 
+  def confirm_delete
+    @tag_set = OwnedTagSet.find(params[:id])
+  end
+
   def destroy
     @tag_set.destroy
     flash[:notice] = ts("Tag set was successfully deleted.")
