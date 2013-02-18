@@ -44,6 +44,8 @@ describe "Comments" do
       @work1.index.refresh
       @comment = Comment.create(:comment)
       @work1.comments << @comment
+      @user = Factory.create(:user)
+      @user.activate
     end
 
     it "should not be creatable by guests on a work" do
@@ -75,8 +77,8 @@ describe "Comments" do
     it_behaves_like "one another" do
       before do
         visit login_path
-        fill_in "User name",with: "testy"
-        fill_in "Password", with: "t3st1ng"
+        fill_in "User name",with: "#{@user.login}"
+        fill_in "Password", with: "testing"
         check "Remember me"
         click_button "Log in"
       end
