@@ -2,6 +2,7 @@ class CollectionMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
   
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :series
