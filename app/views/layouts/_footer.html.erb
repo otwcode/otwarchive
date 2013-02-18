@@ -24,7 +24,6 @@
       <ul class="menu">
         <li><%= link_to ts('Site Map'), site_map_path %></li>
         <li><%= link_to ts('Terms of Service'), tos_path %></li>
-        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
       </ul>
     </li>
     <li class="module group">
@@ -40,12 +39,13 @@
         <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="<%= ts('View License') %>">GPL/CC</a> <%= ts('by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
         <% unless ArchiveConfig.REVISION.blank? %>
           <li><%= link_to ts('otwarchive %{rev_number}', :rev_number => ArchiveConfig.REVISION), "https://github.com/otwcode/otwarchive/commits/#{ArchiveConfig.REVISION}" %></li>
+        <% end %>
         <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
           <li><%= link_to 'Devmode', devmode_path %></li>
         <% end %>
-        </ul>
-      </li>
-    <% end %>
+        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
+      </ul>
+    </li>
   </ul>
 </div>
 <!-- END footer -->

@@ -14,7 +14,7 @@ $j(document).ready(function() {
           expandList();
           return false;
       });
-    $j('#hide-notice-banner').click(function (e) {
+    $j('#hide-notice-banner').click(function(e){
       $j('#notice-banner').hide();
       e.preventDefault();
     });
@@ -25,10 +25,9 @@ $j(document).ready(function() {
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
+    
+    // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
-
-    // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
-    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').on('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -335,14 +334,13 @@ jQuery.fn.preventDoubleSubmit = function() {
 
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
-  $j('#header .dropdown').attr({
-    'aria-haspopup': true
-  });
+  $j('#header .dropdown').attr("aria-haspopup", true);
   $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
     'class': 'dropdown-toggle',
     'data-toggle': 'dropdown',
     'data-target': '#'
   });  
-  $j('.dropdown ul').addClass("dropdown-menu");  
+  $j('.dropdown .menu').addClass("dropdown-menu");
+  $j('.dropdown .menu li').attr("role", "menu-item");  
 }
 
