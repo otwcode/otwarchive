@@ -10,7 +10,16 @@
     <label for="user_session_remember_me" class="action"><%= check_box_tag "user_session[remember_me]", 1, false, :id => 'user_session_remember_me' %><%= ts('Remember Me') %></label>
     <%= f.submit ts("Log In") %>
   </p>    
-  <p class="footnote action">
-  	<%= link_to ts("Forgot password?"), new_password_path %>
-  </p>
+  <ul class="footnote actions">
+  	<li><%= link_to ts("Forgot password?"), new_password_path %></li>
+  	<% if @admin_settings.account_creation_enabled? %>
+      <li>
+        <%= link_to ts("Sign Up"), new_user_path %>
+      </li>
+    <% elsif @admin_settings.invite_from_queue_enabled? %>
+      <li>
+        <%= link_to ts('Get Invite'), invite_requests_path %>
+      </li>
+    <% end %>
+  </ul>
 <% end %>
