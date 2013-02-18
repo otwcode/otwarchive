@@ -15,7 +15,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_challenge
-    setflash; flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -26,7 +26,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_assignment
-    setflash; flash[:error] = t('potential_match.no_match', :default => "What potential match did you want to work on?")
+    flash[:error] = t('potential_match.no_match', :default => "What potential match did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -36,7 +36,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def signup_open
-    setflash; flash[:error] = t('potential_match.signup_open', :default => "Signup is still open, you cannot determine potential matches now.")
+    flash[:error] = t('potential_match.signup_open', :default => "Signup is still open, you cannot determine potential matches now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -46,7 +46,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def assignments_sent
-    setflash; flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
@@ -78,13 +78,13 @@ class PotentialMatchesController < ApplicationController
   # Generate potential matches
   def generate
     if PotentialMatch.in_progress?(@collection)
-      setflash; flash[:error] = ts("Potential matches are already being generated for this collection!")
+      flash[:error] = ts("Potential matches are already being generated for this collection!")
     else
       # delete all existing assignments and potential matches for this collection
       ChallengeAssignment.clear!(@collection)
       PotentialMatch.clear!(@collection)
       
-      setflash; flash[:notice] = ts("Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
+      flash[:notice] = ts("Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
       PotentialMatch.set_up_generating(@collection)
       PotentialMatch.generate(@collection)
     end
@@ -95,12 +95,12 @@ class PotentialMatchesController < ApplicationController
   
   def cancel_generate
     if !PotentialMatch.in_progress?(@collection)
-      setflash; flash[:error] = ts("Potential matches are not currently being generated for this challenge.")
+      flash[:error] = ts("Potential matches are not currently being generated for this challenge.")
     elsif PotentialMatch.canceled?(@collection)
-      setflash; flash[:error] = ts("Potential match generation has already been canceled, please refresh again shortly.")
+      flash[:error] = ts("Potential match generation has already been canceled, please refresh again shortly.")
     else
       PotentialMatch.cancel_generation(@collection)
-      setflash; flash[:notice] = ts("Potential match generation cancellation requested. This may take a while, please refresh shortly.")
+      flash[:notice] = ts("Potential match generation cancellation requested. This may take a while, please refresh shortly.")
     end
     
     redirect_to collection_potential_matches_path(@collection)

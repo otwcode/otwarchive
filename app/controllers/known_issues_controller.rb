@@ -47,7 +47,7 @@ class KnownIssuesController < ApplicationController
 
     respond_to do |format|
       if @known_issue.save
-        setflash; flash[:notice] = 'KnownIssue was successfully created.'
+        flash[:notice] = 'KnownIssue was successfully created.'
         format.html { redirect_to(@known_issue) }
         format.xml  { render :xml => @known_issue, :status => :created, :location => @known_issue }
       else
@@ -64,7 +64,7 @@ class KnownIssuesController < ApplicationController
 
     respond_to do |format|
       if @known_issue.update_attributes(params[:known_issue])
-        setflash; flash[:notice] = 'KnownIssue was successfully updated.'
+        flash[:notice] = 'KnownIssue was successfully updated.'
         format.html { redirect_to(@known_issue) }
         format.xml  { head :ok }
       else
