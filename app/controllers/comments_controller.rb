@@ -194,7 +194,6 @@ class CommentsController < ApplicationController
           redirect_back_or_default(root_path)
         end
       else
-        setflash
         render :action => "new"
       end
     end
