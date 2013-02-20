@@ -35,10 +35,9 @@ Feature: Basic collection navigation
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
   Then I should see "Work for my collection by mod"
-    And I should see "1 Work found in My Collection"
+    And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"
-  Then I should see "Listing Bookmarks"
-    And I should see "View Recs Only"
+  Then I should see "0 Bookmarks"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I follow "People"
@@ -47,7 +46,7 @@ Feature: Basic collection navigation
   When I follow "Tags"
     Then I should see "Free"
   When I follow "Settings"
-    Then I should see "Editing collection"
+    Then I should see "Edit Collection"
   When I am logged out
     And I am on the collections page
     And I follow "My Collection"

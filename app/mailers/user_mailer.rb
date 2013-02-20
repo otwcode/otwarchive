@@ -10,6 +10,7 @@ class UserMailer < BulletproofMailer::Base
   helper_method :logged_in_as_admin?
 
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :users
@@ -157,7 +158,7 @@ class UserMailer < BulletproofMailer::Base
     @user = User.find(user_id)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Please activate your new account"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
     )
   end
 
@@ -267,6 +268,23 @@ class UserMailer < BulletproofMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted"
     )
   end
+
+  # Sends email to authors when a creation is deleted by abuse
+  # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
+  # TODO refactor to make it asynchronous by passing the content in the method
+  def abuse_deleted_work_notification(user, work)
+    @user = user
+    @work = work
+    work_copy = generate_attachment_content_from_work(work)
+    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
+    attachments["#{filename}.txt"] = {:content => work_copy}
+    attachments["#{filename}.html"] = {:content => work_copy}
+
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
+    )
+  end
   
   def delete_signup_notification(user, challenge_signup)
     @user = user
@@ -296,13 +314,14 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  def abuse_report(report_id)
-    report = AbuseReport.find(report_id)
-    @url = report.url
-    @comment = report.comment
+  def abuse_report(abuse_report_id)
+    abuse_report = AbuseReport.find(abuse_report_id)
+    @email = abuse_report.email
+    @url = abuse_report.url
+    @comment = abuse_report.comment
     mail(
-      :to => report.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
+        :to => abuse_report.email,
+        :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Your Abuse Report"
     )
   end
 

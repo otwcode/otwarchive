@@ -26,7 +26,7 @@ Feature: Collection
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
     And I should see "Old Snippet"
@@ -35,11 +35,11 @@ Feature: Collection
   # Also check that subscription notices don't go out
   Given all emails have been delivered
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "New Snippet"
     And I should see "Work was successfully posted"
     And I should see "first_user" within ".byline"
@@ -49,7 +49,7 @@ Feature: Collection
   
   # Post to collection with preview
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -81,7 +81,7 @@ Feature: Collection
     And I edit the work "Part b"
     And I check "series-options-show"
     And I fill in "work_series_attributes_title" with "New series"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
         
   When I log out
     And I go to "Hidden Treasury" collection's page
@@ -171,7 +171,7 @@ Feature: Collection
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "anonyhugs"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Old Snippet"
     And I should see "Collections: Anonymous Hugs"
   When I log out
@@ -182,11 +182,11 @@ Feature: Collection
   # Post to collection without preview
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "New Snippet"
     And I should see "Work was successfully posted"
   When I log out
@@ -197,7 +197,7 @@ Feature: Collection
   # Post to collection with preview
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -229,11 +229,11 @@ Feature: Collection
     And I edit the work "Part b"
     And I check "series-options-show"
     And I fill in "work_series_attributes_title" with "New series"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
     And I edit the work "Another Snippet"
     And I check "series-options-show"
     And I select "New series" from "work_series_attributes_id"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Part 2 of the New series series"
         
   When I log out
@@ -323,12 +323,12 @@ Feature: Collection
     And I am logged in as "first_user"
   Given all emails have been delivered
   When I go to "Hidden Treasury" collection's page
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
     And I fill in "Additional Tags" with "Purim Day 1"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "New Snippet"
     And I should see "Work was successfully posted"
     And I should see "first_user" within ".byline"
@@ -339,12 +339,12 @@ Feature: Collection
     
   # post to collection for day 2
   When I follow "Hidden Treasury"
-    And I follow "Post To Collection"
+    And I follow "Post to Collection"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet 2"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
     And I fill in "Additional Tags" with "Purim Day 2"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "New Snippet"
     And I should see "Work was successfully posted"
     And I should see "first_user" within ".byline"

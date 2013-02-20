@@ -70,7 +70,7 @@
 <!-- END work -->
 
 <!-- BEGIN comment section -->
-<%= render :partial => 'comments/commentable', :locals => {:commentable => @work} %>
+<%= render 'comments/commentable', :commentable => @work %>
 <!-- END comment section -->
 <% end %>
 <!-- END revealed -->

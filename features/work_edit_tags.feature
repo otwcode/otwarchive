@@ -25,7 +25,7 @@ Feature: Edit tags on a work
     And I should see "Testerwork"
   When I fill in "Fandoms" with "Stargate SG-1, Hana Yori Dango"
     And I fill in "Additional Tags" with "Alternate Universe"
-    And I press "Update"
+    And I press "Post Without Preview"
   Then I should see "Stargate SG-1"
     And I should see "Hana Yori Dango"
     And I should see "Alternate Universe"

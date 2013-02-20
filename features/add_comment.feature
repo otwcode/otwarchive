@@ -26,7 +26,7 @@ Scenario: When logged in I can comment on a work
     And I view the work "The One Where Neal is Awesome"
     And I follow "Add Chapter"
     And I fill in "content" with "A second chapter to test multi-chapter comments"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
     And I follow "Entire Work"
     And I follow "Comments (1)"
   Then I should see "commenter on Chapter 1" within "h4"

@@ -152,4 +152,12 @@
   margin: auto 3.5em;
 }
 
+.bookmark .user .userstuff {
+	line-height: 1.5;
+}
+
+.bookmark .user .userstuff blockquote {
+	margin-bottom: 1.286em;
+}
+
 /*END== */

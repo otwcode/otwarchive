@@ -45,7 +45,7 @@ li.blurb:after {
   margin-bottom: 0.375em;
 }
 
-.blurb .header .heading, .blurb .header ul, .blurb .header p.status {
+.blurb .header .heading, .blurb .header ul {
   display: block;
   background: transparent;
   margin: 0.375em 5.25em 0 65px;
@@ -67,10 +67,6 @@ li.blurb:after {
 
 .blurb .heading {
   display: block;
-}
-
-.item .blurb .header {
-  display: none;
 }
 
 /* ==START icon block rules*/
@@ -265,13 +261,33 @@ eg collections, users, skins, instead of the 4-icon list
   min-width: 65px;
 }
 
+/* mod: ITEM
+blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
+*/
+
+.item .blurb blockquote, .item dl.stats {
+  margin: 0.643em auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+    box-shadow: none;
+}
+
+.item .blurb .header, .item dl.stats dt {
+  border: none;
+}
+
+.item dl.visibility {
+  background: #eee;
+}
+
 /* mod: BOOKMARK */
 
-.bookmark .status {
+.bookmark p.status {
   position: absolute;
-  right: 0.5em;
+  right: 0.25em;
   width: 60px;
-  z-index: 50;
+  margin-top: 0.429em;
 }
 
 .bookmark .status span, .bookmark .status a {
@@ -295,15 +311,59 @@ eg collections, users, skins, instead of the 4-icon list
   text-align: center;
 }
 
-.bookmark .status.icon {
-  left: -50px;
-  top: 0;
+.bookmark .count a {
+  border-bottom: none;
+  color: #069;
+}
+
+.bookmark .count a:hover, .bookmark .count a:focus {
+  color: #111;
+}
+
+.bookmark .datetime {
+	top: 28px;
 }
 
 .bookmark .user {
   border: 1px solid #ccc;
   clear: right;
   overflow: hidden;
+}
+
+.bookmark .user .meta {
+	display: inline;
+	font-family: Georgia, serif;
+	font-size: 0.875em;
+	line-height: 2;
+}
+
+/* line break between types of meta */
+.bookmark .user ul.meta:after {
+	content: '\A';
+	white-space: pre;
+}
+
+.bookmark .short .header {
+	min-height: 30px;
+}
+
+.bookmark .user .datetime, .bookmark .work .datetime {
+  top: 0;
+}
+
+.bookmark .short .status {
+	left: 30px;
+	margin-top: 0;
+	top: 0;
+	width: 25px;
+}
+
+.bookmark .dynamic {
+	position: static;
+}
+
+.bookmark .recent .index {
+    width: 100%;
 }
 
 /* mod: READING */

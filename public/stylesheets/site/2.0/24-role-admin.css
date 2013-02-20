@@ -13,14 +13,14 @@ This shows the archive when logged in as admin, and overrides with admin styles,
   display: none;
 }
 
-#header ul.admin {
-  text-align: right;
-  float: none;
-  margin: auto;
+#header .admin {
   background: #066;
-  border-bottom: 2px solid;
-  padding: 0.25em 120px;
-    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.25);
+  border-top: 1px solid #fff;
+    box-shadow: none;
+}
+
+#header .admin a:hover, #header .admin a:focus {
+  color: #111;
 }
 
 #admin-options a {

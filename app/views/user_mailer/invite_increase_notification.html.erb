@@ -1,6 +1,16 @@
-<p>Hi, <%= @user.login %>!</p>
+<% content_for :message do %>
+  <p>
+    Hi, <%= style_bold(@user.login) %>!
+  </p>
 
-<p>We just wanted to let you know that you have <%= @total %> new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at your invitations page: <%= link_to(user_invitations_url(@user), user_invitations_url(@user)) %></p>
+  <p>
+    We just wanted to let you know that you have <%= @total %> new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at <%= style_link("your invitations page", user_invitations_url(@user)) %>.
+  </p>
 
-<p>Cheers,</p>
-<p><%= link_to ArchiveConfig.APP_SHORT_NAME, root_path %></p>
+  <p>
+    Cheers,
+    <br>
+    <%= style_link(ArchiveConfig.APP_SHORT_NAME, root_path) %>
+  </p>
+<% end %>
+

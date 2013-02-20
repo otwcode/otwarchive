@@ -7,18 +7,29 @@ module ApplicationHelper
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
+    
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
-      if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
-        class_names = "system support " + controller.controller_name + ' ' + controller.action_name
-      end
-      if controller.controller_name == "archive_faqs"
-        class_names = "system support faq " + controller.action_name
-      end
-      if controller.controller_name == "home"
-        class_names = "system docs " + controller.action_name
-      end
+    
+    if page_has_filters?
+      class_names += " filtered"
+    end
+    
+    if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
+      class_names = "system support " + controller.controller_name + ' ' + controller.action_name
+    end
+    if controller.controller_name == "archive_faqs"
+      class_names = "system support faq " + controller.action_name
+    end
+    if controller.controller_name == "home"
+      class_names = "system docs " + controller.action_name
+    end
+    
     class_names
+  end
+  
+  def page_has_filters?
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections')
   end
 
   # A more gracefully degrading link_to_remote.
@@ -45,7 +56,7 @@ module ApplicationHelper
   #2: show_text = true: shows "plain text with limited html" and link to help
   #3 show_list = true: plain text and limited html, link to help, list of allowed html
   def allowed_html_instructions(show_list = false, show_text=true)
-    (show_text ? h(ts("Plain text with limited html")) : ''.html_safe) + 
+    (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 

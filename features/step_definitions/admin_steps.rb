@@ -128,7 +128,7 @@ end
 
 When /^(\d+) Archive FAQs? exists?$/ do |n|	
   (1..n.to_i).each do |i|
-    Factory.create(:archive_faq)
+    Factory.create(:archive_faq, id: i)
   end
 end
 

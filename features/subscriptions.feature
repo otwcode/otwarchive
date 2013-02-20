@@ -20,7 +20,7 @@
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"
     And the email should contain "first_user"
-    And the email should contain "Awesome Story"
+    And the email should contain "Awesome"
   When all emails have been delivered
     And I post the work "Yet Another Awesome Story" without preview
     And subscription notifications are sent
@@ -88,7 +88,7 @@
     And I set up the draft "Second Work"
     And I check "series-options-show"
     And I select "Awesome Series" from "work_series_attributes_id"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then 0 emails should be delivered
   When subscription notifications are sent
   Then 1 email should be delivered to "second_user@foo.com"

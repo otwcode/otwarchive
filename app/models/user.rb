@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  include WorksOwner
+
 #### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
 ## TODO move to ArchiveConfig
@@ -36,7 +38,7 @@ class User < ActiveRecord::Base
   end
 
   def has_no_credentials?
-    self.crypted_password.blank? && self.identity_url.blank?
+    self.crypted_password.blank?
   end
 
   # Authorization plugin
@@ -44,9 +46,6 @@ class User < ActiveRecord::Base
   acts_as_authorizable
   has_many :roles_users
   has_many :roles, :through => :roles_users
-
-  # OpenID plugin
-  attr_accessible :identity_url
 
   ### BETA INVITATIONS ###
   has_many :invitations, :as => :creator
@@ -100,10 +99,10 @@ class User < ActiveRecord::Base
   has_many :comments, :through => :pseuds
   has_many :kudos, :through => :pseuds
   has_many :creatorships, :through => :pseuds
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true, :readonly => false
   has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true, :readonly => false
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true, :readonly => false
 
   has_many :related_works, :through => :works
   has_many :parent_work_relationships, :through => :works
@@ -293,7 +292,7 @@ class User < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_work_count
-    Work.owned_by(self).visible_to_user(User.current_user).count(:id, :distinct => true)
+    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.count(:id, :distinct => true)
   end
 
   # Gets the user account for authored objects if orphaning is enabled
@@ -378,15 +377,12 @@ class User < ActiveRecord::Base
   # Options can include :categories and :limit
   def most_popular_tags(options = {})
     all_tags = []
-    if options[:categories].blank?
-      all_tags = self.tags + self.bookmark_tags
-    else
-      type_tags = []
-      options[:categories].each do |type_name|
-        type_tags << type_name.constantize.all
-      end
-      all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
+    options[:categories] ||= %w(Fandom Character Relationship Freeform)
+    type_tags = []
+    options[:categories].each do |type_name|
+      type_tags << type_name.constantize.all
     end
+    all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
     tags_with_count = {}
     all_tags.uniq.each do |tag|
       tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size

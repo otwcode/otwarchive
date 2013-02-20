@@ -16,7 +16,7 @@ Feature: Edit Works
     When I am on testuser's works page
     # These are my works and should all have edit links on the blurbs
     Then I should see "Edit"
-      And I follow "First work"
+    When I follow "First work"
     # This is my individual work and should have an edit link on the show page
     Then I should see "first fandom" 
       And I should see "Edit"
@@ -68,6 +68,6 @@ Feature: Edit Works
       And I follow "Edit"
       And I select "testy" from "work_author_attributes_ids_"
       And I unselect "testuser" from "work_author_attributes_ids_"
-      And I press "Post without preview"
+      And I press "Post Without Preview"
     Then I should see "testy"
       And I should not see "testuser,"

@@ -11,15 +11,6 @@
   <li><%= span_if_current ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
   <li><%= span_if_current ts("Change Email"), change_email_user_path(@user) %></li>
-  <% if ArchiveConfig.USE_OPENID %>	
-    <li>
-    <% if @user.identity_url %>
-      <%= link_to ts("Change My OpenID"), change_openid_user_path(@user) %>
-    <% else %>
-      <%= link_to ts("Add An OpenID"), change_openid_user_path(@user) %>
-    <% end %>
-    </li>
-  <% end %>
 </ul> 
 <!--/subnav-->
 
@@ -30,13 +21,9 @@
   <dl>
     <dt><%= ts("Current User Name") %></dt>
       <dd><strong><%= @user.login %></strong></dd>
-    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+      <dt><%= label_tag :new_login, ts("New User Name") %></dt>
       <dd><%= text_field_tag :new_login, @new_login %></dd>
-    <%= live_validation_for_field('new_login', 
-      :exclusion => User.find(:all, :select => :login).map{|user| user.login}, 
-      :failureMessage => ts("username already taken"),
-      :validMessage => ts("username available")) %>
-    <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
+      <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
       <dd id="passwd"><%= password_field_tag :password %></dd>
   <dt class="landmark"><%= ts("Submit") %></dt>
 	<dd class="submit actions"><%= submit_tag "Change" %></dd>

@@ -13,38 +13,6 @@ RAILS_ENV=production rails runner script/seed_dump.rb
 
 BACKUPDIR = Rails.root.to_s + '/db/seed'
 
-# users who have webdavs or asked to be added
-# or who have problematic works which need testing
-SEEDS = [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza",
-]
-
-# seeds who want their email address preserved for testing
-EMAIL = [ 
-          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
-          "admin-kielix", "admin-shalott", "admin-sidra",
-          "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
-          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" , 
-          "zz9pzza",
-]
-
-# a bunch of bigger collections (>250 works)
-# probably would be scooped up anyway, but just in case
-
-COLLECTION_SEEDS = [
-          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
-          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
-          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
-          "Remix2011", "PornBattleXII",
-]
 
 # N determines how many users, works, bookmarks, etc. are dumped if they aren't all dumped
 N = 10
@@ -122,7 +90,7 @@ def write_model(thing)
   # redact email addresses
   if thing.respond_to? :email
     if thing.respond_to? :login  # users and admins
-      thing.email = "#{thing.login}-seed@ao3.org" unless EMAIL.include?(thing.login)
+      thing.email = "#{thing.login}-seed@ao3.org" unless ArchiveConfig.DUMP_EMAIL.include?(thing.login)
     else # everything else
       thing.email = "#{thing.class.name}-#{thing.id.to_s}-seed@ao3.org"
     end
@@ -151,7 +119,7 @@ PSEUDS = {}
 TAGS = {}
 
 # populate the hashes
-SEEDS.each do |seed|
+ArchiveConfig.DUMP_SEEDS.each do |seed|
   user = User.find_by_login(seed)
   raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
   USERS[user.id] = user
@@ -336,7 +304,7 @@ user_associations(USERS)
 ## COLLECTIONS first because it add more WORKS
 
 if MULTI
-  COLLECTION_SEEDS.each do |seed|
+  ArchiveConfig.DUMP_COLLECTION_SEEDS.each do |seed|
     collection = Collection.find_by_name(seed)
     raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
     COLLECTIONS[collection.id] = collection
@@ -414,7 +382,7 @@ def work_associations(items)
     work.creatorships.each {|x| write_model(x)}
     work.pseuds.each {|p| PSEUDS[p.id] = p }
     write_model(work.language) if work.language
-    write_model(work.hit_counter)
+    write_model(work.stat_counter)
     work.gifts.each {|x| write_model(x)}
     work.gifts.each {|g| PSEUDS[g.pseud.id] = g.pseud if g.pseud}
     work.serial_works.each {|x| write_model(x)}

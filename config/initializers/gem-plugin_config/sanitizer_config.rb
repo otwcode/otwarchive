@@ -92,8 +92,6 @@ class Sanitize
         then "viddler"
       when /^http:\/\/(?:www\.)?metacafe\.com\//
         then "metacafe"
-      when /^http:\/\/(?:www\.)?4shared\.net\//
-          then "4shared"
       when /^http:\/\/(?:www\.)?vidders\.net\//
         then "vidders.net"
       when /^http:\/\/(?:www\.)?criticalcommons\.org\//
@@ -104,6 +102,12 @@ class Sanitize
         then "archiveofourown"
       when /^http:\/\/(?:www\.)?podfic\.com\//
         then "podfic"
+      when /^https:\/\/(?:embed\.)?spotify\.com\//
+        then "spotify"
+      when /^http:\/\/(?:www\.)?8tracks\.com\//
+        then "8tracks"
+      when /^https:\/\/(?:w\.)?soundcloud\.com\//
+        then "soundcloud"
       else
         nil
       end
@@ -111,7 +115,7 @@ class Sanitize
       # if we don't know the source, sorry
       return if source.nil?           
 
-      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic"]
+      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or

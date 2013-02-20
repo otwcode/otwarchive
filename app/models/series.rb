@@ -1,4 +1,6 @@
 class Series < ActiveRecord::Base
+  include Bookmarkable
+
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
   has_many :work_tags, :through => :works, :uniq => true, :source => :tags
@@ -6,31 +8,31 @@ class Series < ActiveRecord::Base
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-  has_bookmarks
-  has_many :user_tags, :through => :bookmarks, :source => :tags
 
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
-  
+
+  has_many :subscriptions, :as => :subscribable, :dependent => :destroy
+   
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
     :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
     
   after_save :adjust_restricted
 
@@ -61,6 +63,11 @@ class Series < ActiveRecord::Base
  
   def posted_works
     self.works.posted
+  end
+  
+  # Get the filters for the works in this series
+  def filters
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1 AND filter_taggings.filterable_type = 'Work'").group("tags.id")
   end
   
   # visibility aped from the work model
@@ -105,19 +112,19 @@ class Series < ActiveRecord::Base
     !self.works.select { |work| work.unrevealed? }.empty?    
   end
   
-	# if the series includes an unrestricted work, restricted should be false
-	# if the series includes no unrestricted works, restricted should be true
-	def adjust_restricted
-		unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
-		  self.restricted = !(self.works.where(:restricted => false).count > 0)
-		  self.save(:validate => false)
-		end
-	end
+  # if the series includes an unrestricted work, restricted should be false
+  # if the series includes no unrestricted works, restricted should be true
+  def adjust_restricted
+    unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
+      self.restricted = !(self.works.where(:restricted => false).count > 0)
+      self.save(:validate => false)
+    end
+  end
 	
-	# Change the positions of the serial works in the series
-	def reorder(positions)
-	  SortableList.new(self.serial_works.in_order).reorder_list(positions)
-	end
+  # Change the positions of the serial works in the series
+  def reorder(positions)
+    SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
   
   # return list of pseuds on this series
   def allpseuds

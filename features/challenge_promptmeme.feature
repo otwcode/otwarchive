@@ -35,6 +35,14 @@ Feature: Prompt Meme Challenge
     And I am logged in as a random user
   When I view open challenges
   Then I should see "Battle 12"
+
+  Scenario: Prompt meme is also in list of open prompt meme challenges
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as a random user
+  When I view open challenges
+    And I follow "Prompt Meme Challenges"
+  Then I should see "Battle 12"
   
   Scenario: Past challenge is not in list of open challenges
   
@@ -72,13 +80,13 @@ Feature: Prompt Meme Challenge
   When I edit settings for "Battle 12" challenge
   Then I should be editing the challenge settings
   
-  Scenario: Signup being open is shown on profile
+  Scenario: Sign-up being open is shown on profile
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as a random user
   When I go to "Battle 12" collection's page
     And I follow "Profile"
-  Then I should see "Signup: Open"
+  Then I should see "Sign-up: Open"
   
   Scenario: User can see profile descriptions
   
@@ -95,7 +103,7 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
   Then I should see "Sign Up"
   When I sign up for Battle 12 with combination A
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
     And I should see "Prompts (2)"
     And I should see the whole signup
   
@@ -106,7 +114,7 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 12" with missing prompts
   Then I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
   When I fill in the missing prompt
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
   Scenario: Correct number of signups is shown in user sidebar
   
@@ -114,7 +122,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am on my user page
-  Then I should see "Signups (1)"
+  Then I should see "Sign-ups (1)"
   
   Scenario: View signups in the dashboard
   
@@ -143,7 +151,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Prompts: 2"
 
-  Scenario: Signups in the dashboard have correct controls
+  Scenario: Sign-ups in the dashboard have correct controls
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
@@ -199,7 +207,7 @@ Feature: Prompt Meme Challenge
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
   Scenario: If there are no fandoms, prompt info on claims should show description or URL
   
@@ -256,21 +264,21 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
   Scenario: Sign up with neither prompt anon
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
   Scenario: Sign up with one anon prompt and one not
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
-  Then I should see "Signup was successfully created"
+  Then I should see "Sign-up was successfully created"
   
   Scenario: User has more than one pseud on signup form
   
@@ -286,15 +294,15 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  Then I should see "Signup was successfully created"
-    And I should see "Signup for myname1"
+  Then I should see "Sign-up was successfully created"
+    And I should see "Sign-up for myname1"
   When I edit my signup for "Battle 12"
   Then I should see "othername"
   When I select "othername" from "challenge_signup_pseud_id"
     # two forms in this page, must specify which button to press
     And I press "Update" 
-  Then I should see "Signup was successfully updated"
-  Then I should see "Signup for othername (myname1)"
+  Then I should see "Sign-up was successfully updated"
+  Then I should see "Sign-up for othername (myname1)"
   
   Scenario: Add more requests button disappears correctly from signup show page
   
@@ -309,13 +317,13 @@ Feature: Prompt Meme Challenge
   When I add prompt 4
   Then I should not see "Add another prompt"
     
-  Scenario: Remove prompt button shouldn't show on Signups
+  Scenario: Remove prompt button shouldn't show on Sign-ups
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am on my user page
-  When I follow "Signups"
+  When I follow "Sign-ups"
   Then I should not see "Remove prompt"
   
   Scenario: Mod can't edit signups
@@ -325,7 +333,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I am logged in as "mod1"
   When I edit the signup by "myname1"
-  Then I should see "You can't edit someone else's signup"
+  Then I should see "You can't edit someone else's sign-up"
   
   Scenario: Mod can't delete whole signups
 
@@ -356,7 +364,7 @@ Feature: Prompt Meme Challenge
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
     And I should see "Prompts for Battle 12"
-    And I should not see "Signups for Battle 12"
+    And I should not see "Sign-ups for Battle 12"
   #  TODO: And "myname1" should be emailed
   
   Scenario: Mod cannot edit someone else's prompt
@@ -609,7 +617,7 @@ Feature: Prompt Meme Challenge
   When I follow "Delete"
   Then I should see "The claim was deleted."
   
-  Scenario: Signup can be deleted after response has been posted
+  Scenario: Sign-up can be deleted after response has been posted
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -619,7 +627,7 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am logged in as "myname1"
     And I delete my signup for "Battle 12"
-  Then I should see "Challenge signup was deleted."
+  Then I should see "Challenge sign-up was deleted."
   # work fulfilling is still fine
   When I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
@@ -683,7 +691,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
   # TODO: *should* I (myname4) see "Mystery work"?
@@ -706,7 +714,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "Battle 12"
     And I should see "Othercoll"
     
@@ -808,7 +816,7 @@ Feature: Prompt Meme Challenge
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
   
-  Scenario: Sign up for several challenges and see Signups are sorted
+  Scenario: Sign up for several challenges and see Sign-ups are sorted
   
   Given I have Battle 12 prompt meme fully set up
   When I set up a basic promptmeme "Battle 13"
@@ -818,7 +826,7 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 13" many-fandom prompt meme
   When I sign up for "Battle 14" many-fandom prompt meme
   When I am on my user page
-    And I follow "Signups"
+    And I follow "Sign-ups"
   # Then 14 should be the last signup in the table
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
@@ -862,7 +870,7 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
-    And I press "Post without preview"
+    And I press "Post Without Preview"
   Then I should see "My Gift Exchange"
     And I should not see "Battle 12"
   # TODO: should it be unrevealed or not? It isn't unrevealed
@@ -907,7 +915,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I delete my signup for "Battle 12"
   When I go to my signups page
-  Then I should see "Signups (0)"
+  Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
 
   Scenario: When user deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
@@ -937,7 +945,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
     And I delete my signup for "Battle 12"
-  Then I should see "Challenge signup was deleted."
+  Then I should see "Challenge sign-up was deleted."
   When I am logged in as "myname4"
     And I go to my claims page
   Then I should see "Claims (0)"
@@ -1396,3 +1404,4 @@ Feature: Prompt Meme Challenge
     And I am logged in as "mod1"
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
+

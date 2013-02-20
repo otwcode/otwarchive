@@ -3,8 +3,6 @@
 
 //things to do when the page loads
 $j(document).ready(function() {
-    // visualizeTables();
-    // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
@@ -16,33 +14,21 @@ $j(document).ready(function() {
           expandList();
           return false;
       });
-    $j('#hide-notice-banner').click(function (e) {
+    $j('#hide-notice-banner').click(function(e){
       $j('#notice-banner').hide();
       e.preventDefault();
     });
-    setupTooltips();
+    setupDropdown();
 
     // replace all GET delete links with their AJAXified equivalent
     $j('a[href$="/confirm_delete"]').each(function(){
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
+    
+    // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
 });
-
-function visualizeTables() {
-     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
-     $j("table.stats-line").visualize({type: 'line'});
-}
-
-// Shows expandable fields when clicked on
-function ShowExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'inline';
-  var collapsible = document.getElementById('collapsible');
-  if (collapsible != null) collapsible.style.display = 'none';
-}
-
 
 ///////////////////////////////////////////////////////////////////
 // Autocomplete
@@ -169,7 +155,7 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', true);
+      checkboxes.prop('checked', true);
       event.preventDefault();
     });
   });
@@ -189,23 +175,11 @@ jQuery(function($){
           }
         }
       }
-      checkboxes.attr('checked', false);
+      checkboxes.prop('checked', false);
       event.preventDefault();
     });
   });
 });
-
-// Timepicker
-jQuery(function($) {
-  $('.timepicker').datetimepicker({
-    ampm: true,
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mmTT',
-    hourGrid: 5,
-    minuteGrid: 10
-  });
-});
-
 
 // Set up open and close toggles for a given object
 // Typical setup (this will leave the toggled item open for users without javascript but hide the controls from them):
@@ -249,13 +223,6 @@ function setupToggled(){
       });
     });
   });
-}
-
-
-// Hides expandable fields if Javascript is enabled
-function hideExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'none';
 }
 
 function hideHideMe() {
@@ -318,14 +285,6 @@ function toggleFormField(element_id) {
     }
 }
 
-function showOptions(idToCheck, idToShow) {
-    var checkbox = document.getElementById(idToCheck);
-    var areaToShow = document.getElementById(idToShow);
-    if (checkbox.checked) {
-        Element.toggle(idToShow);
-    }
-}
-
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($j('#work-form') != null) {
@@ -358,18 +317,9 @@ function generateCharacterCounters() {
   $j(".observe_textlength").each(function(){
       updateCharacterCounter(this);
   });
-  $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
+  $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
       updateCharacterCounter(this);
   });
-}
-
-function setupTooltips() {
-    $j('span[tooltip]').each(function(){
-       $j(this).qtip({
-          content: $j(this).attr('tooltip'),
-          position: {corner: {target: 'topMiddle'}}
-       });
-    });
 }
 
 // prevent double submission for JS enabled
@@ -381,4 +331,16 @@ jQuery.fn.preventDoubleSubmit = function() {
       this.beenSubmitted = true;
   });
 };
+
+// add attributes that are only needed in the primary menus and when JavaScript is enabled
+function setupDropdown(){
+  $j('#header .dropdown').attr("aria-haspopup", true);
+  $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
+    'class': 'dropdown-toggle',
+    'data-toggle': 'dropdown',
+    'data-target': '#'
+  });  
+  $j('.dropdown .menu').addClass("dropdown-menu");
+  $j('.dropdown .menu li').attr("role", "menu-item");  
+}
 

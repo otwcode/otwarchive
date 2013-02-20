@@ -236,6 +236,13 @@ public
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
   end
+  
+  # Define media for fandoms menu
+  before_filter :set_media
+  def set_media
+    uncategorized = Media.uncategorized
+    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+  end
 
   ### GLOBALIZATION ###
 
@@ -291,6 +298,10 @@ public
     return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
     return false
+  end
+  
+  def use_caching?
+    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
   end
 
   protected
@@ -364,7 +375,7 @@ public
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'
-      allowed = ['collections.title', 'collections.created_at', 'item_count']
+      allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
       allowed = %w(fandom created_at prompter)
     elsif model.to_s.downcase == 'claim'

@@ -16,6 +16,7 @@ class MediaController < ApplicationController
           Fandom.public_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}})
       end
     end
+    @page_subtitle = ts("Fandoms")
   end
 
   def show

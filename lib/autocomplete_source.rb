@@ -19,9 +19,17 @@ module AutocompleteSource
   def autocomplete_search_string
     "#{name}"
   end
+
+  def autocomplete_search_string_was
+    "#{name_was}"
+  end
   
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{name}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title}" : "")
+  end
+
+  def autocomplete_value_was
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{name_was}" + (self.respond_to?(:title) ? "#{AUTOCOMPLETE_DELIMITER}#{title_was}" : "")
   end
   
   def autocomplete_score
@@ -46,24 +54,14 @@ module AutocompleteSource
       end
     end
   end
-  
-  def remove_from_autocomplete    
-    self.class.autocomplete_pieces(autocomplete_search_string).each do |word_piece|
-      autocomplete_prefixes.each do |prefix|
-        # we leave the word pieces in the completion set so we don't accidentally trash
-        # parts of other completions -- doing a weekly reload for cleanup is good enough
-        if (self.class.is_complete_word?(word_piece))
-          word = self.class.get_word(word_piece)
-          phrases = $redis.zrevrangebyscore(self.class.autocomplete_score_key(prefix, word), 'inf', 0)
-          if phrases.count == 1 && phrases.first == autocomplete_value
-            # there's only one phrase for this word and we're removing it, remove the completed word from the completion set
-            $redis.zrem(self.class.autocomplete_completion_key(prefix), word_piece)
-          end
-          # remove the phrase we're deleting from the score set
-          $redis.zrem(self.class.autocomplete_score_key(prefix, word_piece), autocomplete_value)
-        end
-      end
-    end
+
+  def remove_from_autocomplete
+    self.class.remove_from_autocomplete(self.autocomplete_search_string, self.autocomplete_prefixes, self.autocomplete_value)
+  end
+
+  def remove_stale_from_autocomplete
+    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
+    self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
   
   module ClassMethods
@@ -75,7 +73,7 @@ module AutocompleteSource
     
     # takes either an array or string of search terms (typically extra values passed in through live params, like fandom)
     # and returns an array of stripped and lowercase words for actual searching or use in keys
-    def get_search_terms(search_term)      
+    def get_search_terms(search_term)
       terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
       terms.map {|term| term.strip.downcase}
     end
@@ -137,15 +135,15 @@ module AutocompleteSource
           phrases_with_scores = []
           if lastpiece && search_piece.length < 3
             # use a limit
-            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores, :limit, 0, 50)
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 
+              'inf', 0, :withscores => true, :limit => [0, 50])
           else
-            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 
+              'inf', 0, :withscores => true)
           end
           
-          while phrases_with_scores.length > 0 do 
-            phrase = phrases_with_scores.shift
-            score = phrases_with_scores.shift
-          
+          phrases_with_scores.each do |phrase, score|     
+            score = score.to_i      
             if options[:constraint_sets]
               # phrases must be in these sets or else no go
               # O(logN) complexity
@@ -154,11 +152,11 @@ module AutocompleteSource
           
             if count[phrase]
               # if we've already seen this phrase, increase the score
-              scored_results[phrase] += score.to_i
+              scored_results[phrase] += score
               count[phrase] += 1
             else
               # initialize the score and check if it exactly matches our regexp
-              scored_results[phrase] = score.to_i
+              scored_results[phrase] = score
               if lastpiece
                 # don't count if it only matches the last search piece
                 count[phrase] = 0
@@ -214,8 +212,8 @@ module AutocompleteSource
     end
       
     def autocomplete_phrase_split(string)
-        # split into words
-        string.downcase.split(/(?:\s+|\&|\/)/) # split on spaces, slash, ampersand
+      # split into words
+      string.downcase.split(/(?:\s+|\&|\/)/) # split on spaces, slash, ampersand
     end
     
     def autocomplete_pieces(string)
@@ -262,7 +260,26 @@ module AutocompleteSource
       
       results
     end
-                
+  
+    # generic method to remove pieces for given search string and value from the given autocomplete prefixes
+    def remove_from_autocomplete(search_string, prefixes, value)
+      autocomplete_pieces(search_string).each do |word_piece|
+        prefixes.each do |prefix|
+          # we leave the word pieces in the completion set so we don't accidentally trash
+          # parts of other completions -- doing a weekly reload for cleanup is good enough
+          if is_complete_word?(word_piece)
+            word = get_word(word_piece)
+            phrases = $redis.zrevrangebyscore(autocomplete_score_key(prefix, word), 'inf', 0)
+            if phrases.count == 1 && phrases.first == value
+              # there's only one phrase for this word and we're removing it, remove the completed word from the completion set
+              $redis.zrem(autocomplete_completion_key(prefix), word_piece)
+            end
+            # remove the phrase we're deleting from the score set
+            $redis.zrem(autocomplete_score_key(prefix, word_piece), value)
+          end
+        end
+      end
+    end
   end
   
   def self.included(base)
