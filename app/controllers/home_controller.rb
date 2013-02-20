@@ -24,6 +24,11 @@ class HomeController < ApplicationController
     render :action => "donate", :layout => "application"
   end
   
+  # about
+  def about
+    render :action => "about", :layout => "application"
+  end
+  
   def first_login_help
     render :action => "first_login_help", :layout => false
   end
