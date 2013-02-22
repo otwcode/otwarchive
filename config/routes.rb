@@ -92,7 +92,7 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
-  resources :tag_sets, :controller => 'owned_tag_sets' do 
+  resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
         put :update_multiple
@@ -103,12 +103,11 @@ Otwarchive::Application.routes.draw do
       collection do
         put :update_multiple
       end
-    end      
+    end
     member do
       get :batch_load
       put :do_batch_load
       get :confirm_delete
-      put :do_confirm_delete
     end
     collection do
       get :show_options
@@ -252,7 +251,7 @@ Otwarchive::Application.routes.draw do
     resources :skins, :only => [:index]
     resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
-    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
     resources :works do
       collection do
         get :drafts
