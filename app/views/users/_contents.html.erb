@@ -2,11 +2,14 @@
 <!-- expects @fandoms, @works, @series, @bookmarks -->
   <% unless @fandoms.empty? %>
   <div class="fandom listbox group" id="user-fandoms">
-    <!--NOTE TO BACK END, can this be regularised to one list and make expandable?-->
     <h3 class="heading"><%= ts("Fandoms") %></h3>
     <ol id="fandoms-dashboard" class="index group">
       <% @fandoms.each_with_index do |fandom, i| %>
-        <li<%= i >= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] ? " class='expanded-list hidden'" : "" %>>
+        <% if i>= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] %>
+          <li class="more hidden">
+        <% else %>
+          <li>
+        <% end %>
           <% if fandom.merger %>
             <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
           <% else %>
@@ -19,20 +22,14 @@
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
-            <%= link_to ts("Hide full list"), [@user, @pseud] %>
+            <%= link_to ts("Collapse Fandoms List"), [@user, @pseud] %>
           <% else %>
-            <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
+            <%= link_to ts("Expand Fandoms List"), url_for(:expand_fandoms => true) %>
           <% end %>
         </noscript>
-        <a class="hidden" id="expand-fandoms" href="#"><%= ts("Show/Hide full list") %></a>
+        <a class="hidden" id="expand-fandoms" href="#"><%= ts("Expand Fandoms List") %></a>
+        <a class="hidden" id="collapse-fandoms" href="#"><%= ts("Collapse Fandoms List") %></a>
       </p>
-      <script type="text/javascript">
-        $j(document).ready(function() {
-          $j("#expand-fandoms").removeClass("hidden").click(function() {
-            $j("#fandoms-dashboard>li.expanded-list").toggleClass("hidden");
-          });
-        });
-      </script>
     <% end %>
   </div>
   <% end %> 
@@ -107,3 +104,21 @@
   <% end %>
 <% end %>
 <!--/content-->
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      $j("#expand-fandoms").removeClass("hidden").click(function(e) {
+        e.preventDefault();
+        $j(".more").toggleClass("hidden");
+        $j("#collapse-fandoms").toggleClass("hidden");
+        $j(this).toggleClass("hidden");
+      });
+      $j("#collapse-fandoms").click(function(e) {
+        e.preventDefault();
+        $j(".more").toggleClass("hidden");
+        $j("#expand-fandoms").toggleClass("hidden");
+        $j(this).toggleClass("hidden");
+      });          
+    });
+  <% end %>
+<% end %>
