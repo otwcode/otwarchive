@@ -3,7 +3,7 @@
   <% unless @fandoms.empty? %>
   <div class="fandom listbox group" id="user-fandoms">
     <h3 class="heading"><%= ts("Fandoms") %></h3>
-    <ol id="fandoms-dashboard" class="index group">
+    <ol class="index group">
       <% @fandoms.each_with_index do |fandom, i| %>
         <% if i>= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] %>
           <li class="more hidden">
