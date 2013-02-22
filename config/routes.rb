@@ -98,6 +98,9 @@ Otwarchive::Application.routes.draw do
         put :update_multiple
         post :destroy_multiple
       end
+      member do
+        get :confirm_delete
+      end
     end
     resources :associations, :controller => 'tag_set_associations', :only => [:index] do
       collection do
