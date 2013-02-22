@@ -9,6 +9,10 @@ class CollectionsController < ApplicationController
 
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
+    unless @collection
+      setflash; flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
+      redirect_to collections_path and return
+    end
   end
 
   def index
@@ -54,10 +58,6 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    unless @collection
-  	  setflash; flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
-      redirect_to collections_path and return
-    end
     @page_subtitle = @collection.title
 
     if @collection.collection_preference.show_random? || params[:show_random]
