@@ -98,7 +98,7 @@
 <legend><%= ts("Post Chapter") %></legend>
     <p class="submit actions">
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button' %>
+      <%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button', :disable_with => ts("Please wait...") %>
       <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
 </fieldset>
