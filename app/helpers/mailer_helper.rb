@@ -1,7 +1,7 @@
 module MailerHelper
 
   def style_bold(text)
-    ("<b style=\"color:#990000\">" + text + "</b>").html_safe
+    ("<b style=\"color:#990000\">" + "#{text}".html_safe + "</b>").html_safe
   end
   
   def style_link(body, url, html_options = {})

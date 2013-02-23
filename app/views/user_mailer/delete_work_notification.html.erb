@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p>Dear <%= @user.default_pseud.byline %>,</p>
 
-  <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> was deleted at <%= (@work.pseuds.count > 1 && @user != User.current_user) ? ts("the request of ") + style_pseud(User.current_user.default_pseud) : "your request" %>.</p>
+  <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> was deleted at <%= (@work.pseuds.count > 1 && @user != User.current_user) ? ts("the request of ") + style_pseud_link(User.current_user.default_pseud) : "your request" %>.</p>
   
   <p>If you have questions, please <%= support_link("contact Support") %>.</p>  
   
