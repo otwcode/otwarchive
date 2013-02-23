@@ -9,7 +9,7 @@ class OwnedTagSetsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to look at?")
+      flash[:notice] = ts("What Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
@@ -54,7 +54,11 @@ class OwnedTagSetsController < ApplicationController
   def show_options
     @restriction = PromptRestriction.find(params[:restriction])
     unless @restriction
+<<<<<<< HEAD
       flash[:error] = ts("Which tag set did you want to look at?")
+=======
+      setflash; flash[:error] = ts("Which Tag Set did you want to look at?")
+>>>>>>> Casing issues. Adding confirm message.
       redirect_to tag_sets_path and return
     end
     @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
@@ -144,7 +148,11 @@ class OwnedTagSetsController < ApplicationController
     @tag_set = OwnedTagSet.new(params[:owned_tag_set])
     @tag_set.add_owner(current_user.default_pseud)
     if @tag_set.save
+<<<<<<< HEAD
       flash[:notice] = ts('Tag set was successfully created.')
+=======
+      setflash; flash[:notice] = ts('Tag Set was successfully created.')
+>>>>>>> Casing issues. Adding confirm message.
       redirect_to tag_set_path(@tag_set)
     else 
       render :action => "new"
@@ -157,7 +165,11 @@ class OwnedTagSetsController < ApplicationController
   
   def update
     if @tag_set.update_attributes(params[:owned_tag_set]) && @tag_set.tag_set.save
+<<<<<<< HEAD
       flash[:notice] = ts("Tag set was successfully updated.")
+=======
+      setflash; flash[:notice] = ts("Tag Set was successfully updated.")
+>>>>>>> Casing issues. Adding confirm message.
       redirect_to tag_set_path(@tag_set)
     else
       get_parent_child_tags
@@ -173,7 +185,11 @@ class OwnedTagSetsController < ApplicationController
     begin
       name = @tag_set.title
       @tag_set.destroy
+<<<<<<< HEAD
       flash[:notice] = ts("Your tagset %{name} was deleted.", :name => name)
+=======
+      setflash; flash[:notice] = ts("Your Tag Set %{name} was deleted.", :name => name)
+>>>>>>> Casing issues. Adding confirm message.
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
