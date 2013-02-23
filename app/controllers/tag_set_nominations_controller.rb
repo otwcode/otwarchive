@@ -103,6 +103,7 @@ class TagSetNominationsController < ApplicationController
     end
   end
 
+
   def update
     if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
       flash[:notice] = ts("Your nominations were successfully updated.")
@@ -183,6 +184,9 @@ class TagSetNominationsController < ApplicationController
     if @tag_set.tag_nominations.unreviewed.empty?
       flash[:notice] = ts("No nominations to review!")
     end
+  end
+
+  def confirm_destroy_multiple
   end
   
   def destroy_multiple
