@@ -4,13 +4,12 @@
 <% unless params[:show] %>
   <h4 class="landmark heading"><%= ts("Notes") %></h4>
   <ul class="notes">
-    <li><%= ts("When users create new tags, they're not 'canonical', or official, and they don't have any associations with other tags.") %></li>
-    <li><%= ts("Use mass wrangling pages to manage new tags as they come in, and to edit multiple tags at once.") %></li> 
-    <li><%= ts("The counts (47) are the number of unwrangled tags in each category.") %></li>
-    <li><%= ts("To associate relationships with characters, first choose a fandom to narrow down the scope. Choose a category to get started.") %></li>
+    <li><%= ts("Make tags canonical according to <a href=\"#{archive_faqs_path + "/31"}\">the wrangling guidelines</a>.".html_safe) %></li>
+    <li><%= ts("For more information on wrangling and volunteer guidelines, see <a href=\"http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee\">the internal OTW wiki</a>. If you have trouble accessing the wiki, or any other questions, please <a href=\"mailto: tagwranglers-staff@transformativeworks.org\">email the wrangling staff</a>.".html_safe) %></li>
   </ul>
+<% end %>
 
-<% end %><!--/descriptions-->
+<!--/descriptions-->
 
 <!--subnav-->
 <!--/subnav-->
