@@ -108,7 +108,7 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Emails a user to say that their request for invitation codes has been declined
-  def invitecode_request_declined(user_id, total, reason)
+  def invite_request_declined(user_id, total, reason)
     @user = User.find(user_id)
     @total = total
     @reason = reason

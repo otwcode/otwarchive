@@ -55,7 +55,7 @@ class UserInviteRequestsController < ApplicationController
           request = UserInviteRequest.find(id)
           requested_total = request.quantity
           request.quantity = 0
-          UserMailer.invitecode_request_declined(request.user_id, requested_total, request.reason).deliver
+          UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver
           request.save!
         end
       end
