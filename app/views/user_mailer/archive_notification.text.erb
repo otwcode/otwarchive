@@ -1,7 +1,7 @@
 <%- content_for :message do -%>
 Dear <%= @user.login %>,
   
-<%=raw @message %>
+<%= to_plain_text(raw @message) %>
 <%- end -%>
 
 <%- content_for :sent_at do -%>

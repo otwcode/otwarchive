@@ -5,8 +5,12 @@ Hi! We're working really hard to reply to everyone, and we'll be with you as soo
 In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.
   
 Here is a copy of your message for your reference:
-<%= raw @summary %>
-<%= strip_tags(raw @comment) %>
+<%= text_divider %>
+
+* <%= to_plain_text(raw @summary) %> *
+<%= to_plain_text(raw @comment) %>
+
+<%= text_divider %>
 
 Love, the AO3 Support team.
 <%- end -%>

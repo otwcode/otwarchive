@@ -6,9 +6,10 @@ Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
 <%- end -%>
 
 Feedback: 
+<%= text_divider %>
 
-<%= raw @summary %>
-"<%= strip_tags(raw @comment) %>"
+* <%= to_plain_text(raw @summary) %> *
+<%= to_plain_text(raw @comment) %>
 <%- end -%>
 
 <% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

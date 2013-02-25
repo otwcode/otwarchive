@@ -46,4 +46,16 @@ module MailerHelper
   def text_divider
     "--------------------"
   end
+  
+  def to_plain_text(html)
+    strip_tags(
+      html.gsub(/<p>|<\/p>\z|<br( ?\/)?>\z/, "")
+        .gsub(/<\/p>/, "\n\n")
+        .gsub(/<br( ?\/)?>/, "\n")
+        .gsub(/<\/?(b|em|strong)>/, "*")
+        .gsub(/<\/?(i|cite)>/, "/")
+        .gsub(/<\/?u>/, "_")
+    )
+  end
+  
 end # end of MailerHelper
