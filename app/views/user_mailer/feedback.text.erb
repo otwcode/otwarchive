@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 
 Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.
   
@@ -13,6 +13,6 @@ Here is a copy of your message for your reference:
 <%= text_divider %>
 
 Love, the AO3 Support team.
-<%- end -%>
+<% end %>
 
-<%- content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end -%>
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
