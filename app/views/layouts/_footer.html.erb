@@ -6,10 +6,9 @@
       <li class="module group">
         <h4 class="heading"><%= ts('Customize') %></h4>
         <ul class="menu">
-          <li>
-            <a href="#" class="skin_chooser_open"><%= ts('Choose Skin') %> &#8595;</a>
-            <a href="#" class="skin_chooser_close"><%= ts('Close') %> &#8593;</a>
-            <ul id="skin_chooser" class="toggled secondary">
+          <li aria-haspopup="true">
+            <a href="#"><%= ts("Choose Skin") %></a>
+            <ul id="skin_chooser" class="collapsible secondary">
               <li><%= link_to ts("Default"), unset_skins_path %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
                 <li><%= link_to s.title, set_skin_path(s) %></li>

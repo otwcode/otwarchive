@@ -58,6 +58,14 @@ span.offered.requested {
   color: #876714;
 }
 
+.opened:after { 
+  content: " \2191";
+}
+
+.closed:after {
+  content: " \2193";
+}
+
 /*This is a helper for Back End and can be overridden contextually anywhere*/
 
 .commas li:after {

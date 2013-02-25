@@ -8,12 +8,8 @@ $j(document).ready(function() {
     hideHideMe();
     showShowMe();
     handlePopUps();
+    setupAccordion();
     generateCharacterCounters();
-    $j('#expandable-link').click(function(e){
-          e.preventDefault();
-          expandList();
-          return false;
-      });
     $j('#hide-notice-banner').click(function(e){
       $j('#notice-banner').hide();
       e.preventDefault();
@@ -195,6 +191,7 @@ jQuery(function($){
 // - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
 // - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
 //   (and you can then add an alternative link for them using <noscript>)
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion   
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
@@ -344,3 +341,22 @@ function setupDropdown(){
   $j('.dropdown .menu li').attr("role", "menu-item");  
 }
 
+// Accordion-style collapsible widgets
+// The collapsible pane can be expanded or collapsed using the expander (link)
+// Typical set up:
+// <li aria-haspopup="true">
+//  <a href="#">Expander</a>
+//  <div class="collapsible">
+//    foo!
+//  </div>
+// </li>
+function setupAccordion() {
+  var panes = $j(".collapsible");
+  panes.hide().prev().removeClass("hidden").addClass("closed").click(function(e) {
+    var expander = $j(this);
+    if (expander.attr('href') == '#') {
+      e.preventDefault();
+    }
+    expander.toggleClass("opened").toggleClass("closed").next().toggle();
+  });
+}
