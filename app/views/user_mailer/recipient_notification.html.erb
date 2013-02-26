@@ -13,7 +13,7 @@
       <i><%= style_bold(link_to(@work.title.html_safe, collection_work_url(@collection, @work))) %></i> <%= "(#{@work.word_count} words)" %>
     <% end %>
     <br>
-    by <%= @work.anonymous? ? "an anonymous responder" : (work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
+    by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
     <br>
     <%= style_bold("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
   </p>
