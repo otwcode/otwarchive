@@ -58,11 +58,13 @@ span.offered.requested {
   color: #876714;
 }
 
-.opened:after { 
+/* Arrows for the accordion widget */
+
+.collapsed:after { 
   content: " \2191";
 }
 
-.closed:after {
+.expanded:after {
   content: " \2193";
 }
 

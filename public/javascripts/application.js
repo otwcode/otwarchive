@@ -342,21 +342,22 @@ function setupDropdown(){
 }
 
 // Accordion-style collapsible widgets
-// The collapsible pane can be expanded or collapsed using the expander (link)
+// The pane element can be showen or hidden using the expander (link)
+// Apply hidden to the pane element if it shouldn't be visible when JavaScript is disabled
 // Typical set up:
 // <li aria-haspopup="true">
 //  <a href="#">Expander</a>
-//  <div class="collapsible">
+//  <div class="expandable">
 //    foo!
 //  </div>
 // </li>
 function setupAccordion() {
-  var panes = $j(".collapsible");
-  panes.hide().prev().removeClass("hidden").addClass("closed").click(function(e) {
+  var panes = $j(".expandable");
+  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
     var expander = $j(this);
     if (expander.attr('href') == '#') {
       e.preventDefault();
     }
-    expander.toggleClass("opened").toggleClass("closed").next().toggle();
+    expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
   });
 }

@@ -25,8 +25,8 @@
       <noscript>
         <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
       </noscript>
-      <a class="hidden"><%= ts('Chapter Index') %></a>
-      <ul id="chapter_index" class="collapsed-pane secondary hidden">
+      <a class="hidden" href="#"><%= ts('Chapter Index') %></a>
+      <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
             <p>
@@ -37,7 +37,6 @@
           <% end %>
         </li>
         <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
-        <li><a class="close action" title="<%= ts("Close Chapter Index") %>">X</a></li>
       </ul>
     </li>
   <% elsif @chapters %>
@@ -105,7 +104,7 @@
 
   <li class="download" aria-haspopup="true">
     <a href="#"><%= ts("Download") %></a>
-    <ul class="collapsible secondary">
+    <ul class="expandable secondary">
       <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
       <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
       <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>

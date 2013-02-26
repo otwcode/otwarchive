@@ -8,7 +8,7 @@
         <ul class="menu">
           <li aria-haspopup="true">
             <a href="#"><%= ts("Choose Skin") %></a>
-            <ul id="skin_chooser" class="collapsible secondary">
+            <ul id="skin_chooser" class="expandable secondary">
               <li><%= link_to ts("Default"), unset_skins_path %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
                 <li><%= link_to s.title, set_skin_path(s) %></li>
