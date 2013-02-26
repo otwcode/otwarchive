@@ -58,6 +58,16 @@ span.offered.requested {
   color: #876714;
 }
 
+/* Arrows for the accordion widget */
+
+.collapsed:after { 
+  content: " \2191";
+}
+
+.expanded:after {
+  content: " \2193";
+}
+
 /*This is a helper for Back End and can be overridden contextually anywhere*/
 
 .commas li:after {
