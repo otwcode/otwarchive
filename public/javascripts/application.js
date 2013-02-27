@@ -310,8 +310,8 @@ function attachCharacterCounters() {
             val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
             remaining = max - val.length;
             
-        counter.html(remaining);
-        counter.attr("aria-valuenow", remaining);
+        counter.html(remaining)
+            .attr("aria-valuenow", remaining);
     };
 
     $j(document).on('keyup keydown mouseup mousedown change', '.observe_textlength', countFn);
