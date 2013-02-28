@@ -156,7 +156,7 @@ class Collection < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("is not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("Only gif, jpg, png files allowed.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("can only point to a gif, jpg, or png file.")
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
