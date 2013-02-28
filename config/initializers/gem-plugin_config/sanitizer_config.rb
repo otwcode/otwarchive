@@ -24,7 +24,6 @@ class Sanitize
         'ol' => ['start', 'type'],
         'p' => ['dir'],
         'q' => ['cite'],
-        'span' => ['dir'],
         'table' => ['border', 'summary', 'width'],
         'td' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'width'],
         'th' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'scope', 'width'],
