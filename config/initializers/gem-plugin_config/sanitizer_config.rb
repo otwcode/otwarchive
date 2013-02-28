@@ -21,6 +21,7 @@ class Sanitize
         'hr' => ['align', 'width'],
         'img' => ['align', 'alt', 'border', 'height', 'src', 'width'],
         'ol' => ['start', 'type'],
+        'p' => ['dir'],
         'q' => ['cite'],
         'table' => ['border', 'summary', 'width'],
         'td' => ['abbr', 'axis', 'colspan', 'height', 'rowspan', 'width'],
