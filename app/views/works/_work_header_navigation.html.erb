@@ -25,9 +25,8 @@
       <noscript>
         <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
       </noscript>
-      <a class="chapter_index_open open hidden"><%= ts('Chapter Index') %></a>
-      <a class="chapter_index_close close hidden"><%= ts('Chapter Index') %></a>
-      <ul id="chapter_index" class="toggled hidden secondary">
+      <a class="hidden" href="#"><%= ts('Chapter Index') %></a>
+      <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
             <p>
@@ -38,7 +37,6 @@
           <% end %>
         </li>
         <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
-        <li><a class="chapter_index_close close" style="cursor: pointer;" title="Close Chapter Index">X</a></li>
       </ul>
     </li>
   <% elsif @chapters %>
@@ -105,14 +103,12 @@
   <% end %>
 
   <li class="download" aria-haspopup="true">
-    <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
-    <a title="Download Close" class="downloads_close close hidden"><%= ts("Download") %> &#8595;</a>
-    <ul id="downloads" class="toggled secondary">
+    <a href="#"><%= ts("Download") %></a>
+    <ul class="expandable secondary">
       <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
       <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
       <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
       <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-      <li><a class="downloads_close close hidden" style="cursor: pointer;" title="Close Download Options">X</a></li>
     </ul>
   </li>
 </ul>
