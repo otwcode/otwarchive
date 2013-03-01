@@ -35,15 +35,15 @@ is verbose-->
     	</p>
     <% end %>
     <dl>
-      <% if @challenge.collection.prompts.empty? %>
+      <% if @challenge.new_record? || !@challenge.collection.prompts.exists? %>
         <p class="notice"><%= ts("These settings can only be changed until prompts are added.") %></p>
       <% elsif %>
         <p class="notice"><%= ts("Prompts have been added so these settings can no longer be changed.") %></p>
       <% end %>
       <% if type == "gift_exchange" %>
-        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true, @challenge.collection.prompts.empty?) %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true,  (@challenge.new_record? || !@challenge.collection.prompts.exists?)) %>
       <% else %>
-        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false, @challenge.collection.prompts.empty?) %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false,  (@challenge.new_record? || !@challenge.collection.prompts.exists?)) %>
       <% end %>
     </dl>
   </fieldset>
