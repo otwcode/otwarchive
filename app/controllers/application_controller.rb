@@ -241,7 +241,7 @@ public
   before_filter :set_media
   def set_media
     uncategorized = Media.uncategorized
-    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   ### GLOBALIZATION ###

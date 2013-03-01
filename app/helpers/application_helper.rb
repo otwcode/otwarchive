@@ -170,6 +170,14 @@ module ApplicationHelper
       pseud.byline
   end
 
+   def link_to_modal(content="",options = {})   
+     options[:class] ||= ""
+     options[:for] ||= ""
+     options[:title] ||= options[:for]
+     
+     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}     
+     link_to content, options[:for], html_options
+   end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -182,7 +190,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
@@ -275,7 +283,7 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
     content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
   
