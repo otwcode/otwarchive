@@ -49,7 +49,7 @@ class UserInviteRequestsController < ApplicationController
   # PUT /user_invite_requests/1
   # PUT /user_invite_requests/1.xml
   def update
-    if params[:commit].to_s == "Decline All"
+    if params[:decline_all]
       params[:requests].each_pair do |id, quantity|
         unless quantity.blank?
           request = UserInviteRequest.find(id)
