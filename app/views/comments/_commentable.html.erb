@@ -12,6 +12,12 @@
     <% if @work && @next_chapter %>
       <li><%= link_to (ts('Next Chapter') + ' &#8594;').html_safe, [@work, @next_chapter] %></li>
     <% end %>
+    <% if @previous_admin_post %>
+      <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+    <% end %>
+    <% if @next_admin_post %>
+      <li><%= link_to("Next Post", @next_admin_post) %></li>
+    <% end %>
     <% if @admin_post %>
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
