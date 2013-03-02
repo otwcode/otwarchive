@@ -53,10 +53,10 @@ class UserInviteRequestsController < ApplicationController
       params[:requests].each_pair do |id, quantity|
         unless quantity.blank?
           request = UserInviteRequest.find(id)
-          requested_total = request.quantity
+          requested_total = request.quantity.to_i
           request.quantity = 0
-          UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver
           request.save!
+          UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver
         end
       end
       setflash; flash[:notice] = 'All Requests were declined.'
