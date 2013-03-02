@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 You're receiving this e-mail because 852 Prospect (http://852prospect.org/archive/), the Sentinel Adult Fiction Archive, has recently been imported by Open Doors (http://opendoors.transformativeworks.org/) into the Archive of Our Own (root_url), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete) these stories if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!
 
 852 Prospect's software has become somewhat creaky over the years, to the point where all updates are now required by hand. Looking for a more sustainable home for the archive, the archivist <%= @archivist %> has decided to move 852 Prospect to AO3. (You can read the rest of the announcement at http://archiveofourown.org/admin_posts/215, and find additional information on Open Doors' FAQ page at http://opendoors.transformativeworks.org/faq. For any questions not answered in the FAQ or this e-mail, please contact Support at <%= root_url %>support.)
@@ -9,9 +9,9 @@ Claim or remove your works: <%= claim_url(:invitation_token => @token) %>
 
 The works uploaded include:
 
-<%- @external_author.works.each do |work| -%>
+<% @external_author.works.each do |work| %>
 * <%= work.title.html_safe %><%= work.fandom_string.blank? ? "" : " (#{work.fandom_string})" %>: <%= work_url(work) %>
-<%- end -%>
+<% end %>
 
 If these works don't belong to you, please don't delete them! Copy the above links and contact Open Doors (http://opendoors.transformativeworks.org/contact) so that we can move them for safekeeping.
 
@@ -25,4 +25,4 @@ For other inquiries, please contact Support.
 
 Many thanks!
 - The Open Doors team  
-<%- end -%>
+<% end %>

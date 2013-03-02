@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 Hello from the Archive of Our Own!
   
 You're receiving this e-mail because 852 Prospect (http://852prospect.org/archive/), the Sentinel Adult Fiction Archive, has recently been imported by Open Doors (http://opendoors.transformativeworks.org), into the Archive of Our Own (root_url). Because this e-mail address is connected to one registered on 852 Prospect, the associated 852 Prospect stories have been automatically added to your AO3 account.
@@ -9,9 +9,9 @@ All of these imported stories are restricted to registered users only (to keep t
 
 These works were written under the e-mail <%= @external_email %>.
 
-<%- @claimed_works.each do |work| -%>
+<% @claimed_works.each do |work| %>
 * <%= work.title.html_safe %>: <%= work_url(work)) %>
-<%- end -%>
+<% end %>
   
 If this is a mistake and these are not your stories, please don't delete them! Contact Support and we will whisk them away to wait until someone else comes along to claim them. :)
 
@@ -23,4 +23,4 @@ For other inquiries, please contact Support.
 
 Many thanks!
 - The Open Doors team
-<%- end -%>
+<% end %>
