@@ -107,6 +107,17 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  # Emails a user to say that their request for invitation codes has been declined
+  def invite_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+    )
+  end
+
   # Sends an admin message to a user
   def archive_notification(admin_login, user_id, subject, message)
     @user = User.find(user_id)
