@@ -531,5 +531,20 @@ module ApplicationHelper
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
   end
+  
+  # Cache fragments of a view if +condition+ is true
+  #
+  # <%= cache_if admin?, project do %>
+  # <b>All the topics on this project</b>
+  # <%= render project.topics %>
+  # <% end %>
+  def cache_if(condition, name = {}, options = nil, &block)
+    if condition
+      cache(name, options, &block)
+    else
+      yield
+    end
+    nil
+  end
     
 end # end of ApplicationHelper

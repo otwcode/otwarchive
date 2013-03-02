@@ -126,6 +126,7 @@ class ChaptersController < ApplicationController
               redirect_to [@work, @chapter]
             end
         elsif @work.save
+          @preview_mode = true
           draft_flash_message(@work)
           redirect_to [:preview, @work, @chapter]
         else
