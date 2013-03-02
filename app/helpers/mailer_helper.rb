@@ -47,6 +47,13 @@ module MailerHelper
     "--------------------"
   end
   
+  # strip opening paragraph tags, and line breaks or close-pargraphs at the end of the string
+  # all other close-paragraphs become double line breaks
+  # line break tags become single line breaks
+  # bold text is wrapped in *
+  # italic text is wrapped in /
+  # underlined text is wrapped in _
+  # all other html tags are stripped
   def to_plain_text(html)
     strip_tags(
       html.gsub(/<p>|<\/p>\z|<br( ?\/)?>\z/, "")

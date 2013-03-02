@@ -32,11 +32,11 @@ Additional Tags: <%= atags %><% end %><% if otags %>
 Optional Tags: <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
 Prompt URL: <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
 Description:
-    <%= strip_tags(prompt.description) %><% end %>
+    <%= to_plain_text(prompt.description) %><% end %>
 
 <% end %><%= text_divider %>
 
-This assignment is due at: <%= strip_tags(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
+This assignment is due at: <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
 You can look up this assignment from your archive dashboard at <%= user_assignments_url(@assigned_user) %>.
 <% if @collection && !@collection.assignment_notification.blank? %>
