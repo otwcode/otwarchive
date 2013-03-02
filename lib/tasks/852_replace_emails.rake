@@ -2,9 +2,8 @@ namespace :massimport852 do
   desc "Replace emails in files"
   task(:replace_emails) do |t|
     require 'fileutils'
-    src_dir = "/home/ariana/Dropbox/OTW-Projects/test"
-    #dest_dir = "/var/tmp/852Prospect"
-    dest_dir = "/home/ariana/Dropbox/OTW-Projects/output"
+    src_dir = ""
+    dest_dir = ""
 
     until src_dir.present? && Dir.exists?(src_dir)
       puts "Couldn't find source: #{src_dir}!"
@@ -46,9 +45,9 @@ namespace :massimport852 do
 
       # assign stories to different email addresses (criteria to be defined)
       if filedir.match(/^test\/1/)
-        newemail="ariana@astele.co.uk"
+        newemail="test1@example.org"
       else
-        newemail="test@example.org"
+        newemail="test2@example.org"
       end
       oldemail=""
       
