@@ -1,6 +1,6 @@
 /*
 
-THIS FILE GETS MINIFIED!  It is included as "ao3modal.min.js". 
+THIS FILE GETS MINIFIED!  It is included as "ao3modal.min.js".
 USE A MINIFIER AND UPDATE THE .min.js FILE AFTER MAKING ANY CHANGES HERE!
 
 */
@@ -72,7 +72,7 @@ jQuery(document).ready(function() {
 
                 _modalDiv.toggleClass('tall', _modalDiv.height() >= 0.95*_bgDiv.height());
             } else if (!_mobile) {
-                scaledHeight = _bgDiv.height()*_tallHeight.scale;                
+                scaledHeight = _bgDiv.height()*_tallHeight.scale;
                 maxHeight = Math.min(scaledHeight, _tallHeight.max);
 
                 _modalDiv.toggleClass(!maxHeight || _modalDiv[0].scrollHeight > maxHeight);
@@ -86,7 +86,7 @@ jQuery(document).ready(function() {
 
         function _setContent(content, title) {
             _loading = false;
-            
+
             _contentDiv.empty();
             if (content instanceof $) { _contentDiv.append(content); }
             else { _contentDiv.html(content); }
@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
 
             if (!_contentDiv.is(':empty')) {
                 _calcSize();
-        
+
                 if (!_contentDiv.is(':visible')) {
                     _keyboard.toggleHandlers(true);
                     _loadingDiv.hide();
@@ -113,34 +113,34 @@ jQuery(document).ready(function() {
             _wrapDiv.show();
             if ($.support.opacity) { _bgDiv.add(_loadingDiv).fadeIn(); }
             else { _bgDiv.add(_loadingDiv).show(); }
-            
+
             _toggleScroll(false);
 
             _loading = true;
 
             if (href.indexOf('#') === 0) {
                 _setContent(_pageModals[href.substring(1)], title || '');
-            } else if (href.indexOf('.jpg') == href.length-'.jpg'.length || 
-                href.indexOf('.gif') == href.length-'.gif'.length || 
-                href.indexOf('.bmp') == href.length-'.bmp'.length || 
+            } else if (href.indexOf('.jpg') == href.length-'.jpg'.length ||
+                href.indexOf('.gif') == href.length-'.gif'.length ||
+                href.indexOf('.bmp') == href.length-'.bmp'.length ||
                 href.indexOf('.png') == href.length-'.png'.length) {
-                
+
                 _modalDiv.addClass('img');
 
                 var img = $('<img>').appendTo($('body')).attr('src', href),
                     imgLoad = function() {
-            
+
                         var srcLink = $('<a>').addClass('title')
                             .attr({'href': href, 'title': 'View original', 'target': '_blank'})
-                            .text(title || 
+                            .text(title ||
                                 (href.indexOf('/') != -1 ? href.substring(href.lastIndexOf('/')+1) : href)
                             ).css('text-decoration', 'underline');
-                            
+
                         img.remove();
                         if (!_loading) { return; }
-                        
+
                         if (title) { img.attr('alt', title); }
-                        
+
                         _setContent(img[0], srcLink);
                     };
 
@@ -176,7 +176,7 @@ jQuery(document).ready(function() {
             if ($.support.opacity) { _bgDiv.fadeOut(); }
             else { _bgDiv.hide(); }
         }
-        
+
         function _addLink(elements) {
             elements.each(function() {
                 var img = $(this).is('img') ? $(this).removeClass('modal') : false,
@@ -187,18 +187,18 @@ jQuery(document).ready(function() {
                             'href': img.attr('src')
                         }).replaceAll(img)
                         .append(img);
-                
+
                 a.addClass('modal')
                     .attr('aria-controls', '#modal')
                     .click(function(event){
                         _show($(this).attr('href'), $(this).attr('title'));
                         event.preventDefault();
                     });
-                
+
                 // if link refers to in-page modal content, extract it and store it
                 if (a.attr('href').indexOf('#') === 0) {
                     var pageModal = $(a.attr('href'));
-                    
+
                     if (pageModal[0]) {
                         _pageModals[pageModal.attr('id')] = pageModal.remove();
                     }
@@ -236,7 +236,7 @@ jQuery(document).ready(function() {
 
         // enable exit controls
         $('body').click(function(event) {
-            if ($(event.target).hasClass('modal-closer') || 
+            if ($(event.target).hasClass('modal-closer') ||
                 (_modalDiv.hasClass('img') && $(event.target).hasClass('content'))) {
                 _hide();
             }
@@ -261,16 +261,24 @@ jQuery(document).ready(function() {
                         if (scrollValues[event.which]) {
                             _contentDiv[0].scrollTop += scrollValues[event.which];
                             event.preventDefault();
-                        } 
-                        else if (event.which == 13 || event.which == 27) {
+                        } else if (_modalDiv.is(':visible')) {
                             var target = event.target,
-                                tag = event.target.tagName.toLowerCase();
+                                tag = target.tagName.toLowerCase(),
+                                escKey = event.which == 27,
+                                enterKey = event.which == 13,
+                                targetIsInput = /^(input|textarea|a|button)$/.test(tag),
+                                    // ignore enter keypresses on links & inputs
+                                targetInModal = !!$(target).closest('#modal')[0];
 
-                            if ($(target).parents('#modal')[0] && 
-                                tag != 'input' && tag != 'textarea') {
+                            if (escKey || enterKey && (!targetInModal || !targetIsInput)) {
                                 _hide();
+                            }
+
+                            // key events triggered from outside the modal should also die
+                            if (escKey || !targetInModal || enterKey && !targetIsInput) {
                                 event.preventDefault();
-                            }                            
+                                event.stopPropagation();
+                            }
                         }
                     },
                     'keypress': function(event) {
@@ -304,7 +312,7 @@ jQuery(document).ready(function() {
 
         // set modal-classed links to open modal boxes
         _addLink($('a.modal, img.modal'));
-        
+
         return {
             show: _show,
             setContent: _setContent,
