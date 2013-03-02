@@ -33,7 +33,7 @@
       <% end %>
     </tbody>
   </table>
-  <p class="submit"><%= submit_tag ts("Update") %></p>
+  <p class="submit"><%= submit_tag ts("Update") %><%= submit_tag ts("Decline All"), :name => 'decline_all', :confirm => "This will decline ALL requests. Are you sure?" %></p>
   <% end %>
   <!--/content-->
 
