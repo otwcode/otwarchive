@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="300">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/01-core.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/02-elements.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/03-region-header.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/04-region-dashboard.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/05-region-main.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/06-region-footer.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/07-interactions.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/08-actions.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/09-roles-states.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/10-types-groups.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/11-group-listbox.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/12-group-meta.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/13-group-blurb.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/14-group-preface.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/15-group-comments.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/16-zone-system.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/17-zone-home.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/18-zone-searchbrowse.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/19-zone-tags.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/20-zone-translation.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/21-userstuff.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/22-system-messages.css">
+<link rel="stylesheet" type="text/css" media="only screen and (max-width: 480px), handheld" href="/stylesheets/site/2.0/25-role-handheld.css">
+<link rel="stylesheet" type="text/css" media="speech" href="/stylesheets/site/2.0/26-role-aural.css">
+<link rel="stylesheet" type="text/css" media="print" href="/stylesheets/site/2.0/27-role-print.css">
+<meta charset="utf-8" />
+<title>Archive of our own system status</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script src="/javascripts/jquery.timeago.js" type="text/javascript"></script>
+<script>
+ $(function() {
+$( "#tabs" ).tabs({
+beforeLoad: function( event, ui ) {
+ui.jqXHR.error(function() {
+ui.panel.html(
+"We are having issues loading this page." +
+'Follow <a href="http://twitter.com/ao3_status/">@AO3_Status</a> on Twitter for updates.' );
+});
+}
+});
+});
+</script>
+ <script>
+$(function() {
+$( document ).tooltip();
+});
+</script>
+<style>
+label {
+display: inline-block;
+width: 5em;
+}
+</style>
+</head>
+<body>
+<div id="header" class="region">
+<img alt="AO3 logo - the letters A O 3 combined with arms raised in celebration, symbolizing the joy of fannish creation in the Archive" class="logo" src="/images/ao3_logos/logo-stroke.png">
+<a href="/"> <span> Archive of Our Own </span> <sup> beta </sup>
+</a><center>System Status</center>
+</div>
+<div id="tabs">
+<ul>
+<li><a href="/status/simple_status.html">Component Status</a></li>
+<li><a href="/status/24_hour.html">Last days performance</a></li>
+<li><a href="/status/3_hour.html">Trailing three hour performance</a></li>
+</ul>
+</div>
+</body>
+</html>
