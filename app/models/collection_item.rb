@@ -8,7 +8,6 @@ class CollectionItem < ActiveRecord::Base
   LABEL[NEUTRAL] = ""
   LABEL[APPROVED] = ts("Approved")
   LABEL[REJECTED] = ts("Rejected")
-  LABEL[INVITED]  = ts("Invited")
 
   APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
                        [LABEL[APPROVED], APPROVED],
@@ -25,11 +24,11 @@ class CollectionItem < ActiveRecord::Base
     :message => ts("already contains this item.")
 
   validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :user_approval_status, :in => [-2, -1, 0, 1], :allow_blank => true,
+  validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
     :message => ts("is not a valid approval status.")
 
   validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :collection_approval_status, :in => [-2, -1, 0, 1], :allow_blank => true,
+  validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
     :message => ts("is not a valid approval status.")
 
   validate :collection_is_open, :on => :create
@@ -61,7 +60,7 @@ class CollectionItem < ActiveRecord::Base
 
   def self.unreviewed_by_user
     where(:user_approval_status => NEUTRAL)
-end
+  end
   
   def self.approved_by_collection
     where(:collection_approval_status => APPROVED).where(:user_approval_status => APPROVED)

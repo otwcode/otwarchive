@@ -122,6 +122,8 @@ class CollectionItemsController < ApplicationController
       elsif @item.add_to_collection(collection) && @item.save
         if @item.approved_collections.include?(collection)
           new_collections << collection
+        else
+          unapproved_collections << collection
         end
         if !User.current_user.is_author_of?(@item)
           setflash; flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection.".html_safe)
