@@ -102,7 +102,7 @@
         <%= submit_tag ts('Update Without Preview'), :name => 'post_without_preview_button' %>
         <%= link_to ts('Delete Chapter'), [@work, chapter], :confirm => ts('Are you sure?'), :method => :delete %>
       <% else %>
-        <%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button' %>
+        <%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button', :disable_with => ts("Please wait...") %>
         <% unless chapter.published_at.nil? %>
           <%= link_to ts('Discard Draft'), [@work, chapter], :confirm => ts('Are you sure?'), :method => :delete %>
         <% end %>
