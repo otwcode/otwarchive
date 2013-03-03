@@ -4,6 +4,11 @@ module UsersHelper
   def is_author_of?(item) 
     current_user.is_a?(User) ? current_user.is_author_of?(item) : false
   end
+
+  # Can be used to check if user is maintainer of any collections
+  def is_maintainer?
+    current_user.is_a?(User) ? current_user.maintained_collections.present? : false
+  end
   
   #print all works that belong to a given pseud
   def print_works(pseud)

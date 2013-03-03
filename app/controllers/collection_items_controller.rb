@@ -90,6 +90,11 @@ class CollectionItemsController < ApplicationController
     end
   end
 
+  def add
+    # TODO: Find some way to let mods add works from inside the collection
+  end
+
+
   def new
   end
 

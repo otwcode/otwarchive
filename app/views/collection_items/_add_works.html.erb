@@ -1,6 +1,0 @@
-<!--Descriptive page name, messages and instructions-->
-<% unless @user %>
-  <h2 class="heading"><%= ts("Add Works to") %> <%= link_to(@collection.title, @collection) %></h2>
-<% end %>
-<!--/descriptions-->
-<%= render "collectibles/collectible_form", :form => form, :collectibles => @works %>
