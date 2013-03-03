@@ -8,11 +8,11 @@ class CollectionItem < ActiveRecord::Base
   LABEL[NEUTRAL] = ""
   LABEL[APPROVED] = ts("Approved")
   LABEL[REJECTED] = ts("Rejected")
+  LABEL[INVITED]  = ts("Invited")
 
   APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
-
   belongs_to :collection, :inverse_of => :collection_items
   belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
@@ -25,11 +25,11 @@ class CollectionItem < ActiveRecord::Base
     :message => ts("already contains this item.")
 
   validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
+  validates_inclusion_of :user_approval_status, :in => [-2, -1, 0, 1], :allow_blank => true,
     :message => ts("is not a valid approval status.")
 
   validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
-  validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
+  validates_inclusion_of :collection_approval_status, :in => [-2, -1, 0, 1], :allow_blank => true,
     :message => ts("is not a valid approval status.")
 
   validate :collection_is_open, :on => :create
@@ -61,10 +61,14 @@ class CollectionItem < ActiveRecord::Base
 
   def self.unreviewed_by_user
     where(:user_approval_status => NEUTRAL)
-  end
+end
   
   def self.approved_by_collection
-    where(:collection_approval_status => APPROVED)
+    where(:collection_approval_status => APPROVED).where(:user_approval_status => APPROVED)
+  end
+
+  def self.invited_by_collection
+    where(:collection_approval_status => APPROVED).where(:user_approval_status => NEUTRAL)
   end
 
   def self.rejected_by_collection
@@ -145,7 +149,11 @@ class CollectionItem < ActiveRecord::Base
 
         users.each do |user|
           if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+            # if the work is being added by a collection maintainer and at
+            # least ONE of the works owners allows automatic inclusion in collections,
+            # add the work to the collection
             approve_by_user
+            # TODO: Generate an email letting all the users know that their work has been added to the collection
             break
           end
         end

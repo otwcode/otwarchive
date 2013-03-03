@@ -1,5 +1,6 @@
 class CollectionItemsController < ApplicationController
   before_filter :load_collection
+  before_filter :load_user, :only => [:update_multiple]
   before_filter :load_item_and_collection, :only => [:destroy]
   before_filter :load_collectible_item, :only => [ :new, :create ]
   before_filter :allowed_to_destroy, :only => [:destroy]
@@ -30,6 +31,8 @@ class CollectionItemsController < ApplicationController
         @collection_items.approved_by_collection
       when params[:rejected]
         @collection_items.rejected_by_collection
+      when params[:invited]
+        @collection_items.invited_by_collection
       else
         @collection_items.unreviewed_by_collection
       end
@@ -37,7 +40,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
       when params[:approved]
-        @collection_items.approved_by_user
+        @collection_items.approved_by_user.approved_by_collection
       when params[:rejected]
         @collection_items.rejected_by_user
       else
@@ -47,7 +50,7 @@ class CollectionItemsController < ApplicationController
       flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
     end
-    
+
     sort = "created_at DESC"
     # case params[:sort]
     # when "item"
@@ -55,11 +58,11 @@ class CollectionItemsController < ApplicationController
     # when "collection"
     #   @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
     # when "word_count"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }      
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }
     # when "creator"
     #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
     # when "member"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }      
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }
     # when "user_approval"
     #   @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
     # when "collection_approval"
@@ -70,7 +73,7 @@ class CollectionItemsController < ApplicationController
     #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     # end
 
-    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE          
+    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
   end
 
   def load_collectible_item
@@ -78,6 +81,12 @@ class CollectionItemsController < ApplicationController
       @item = Work.find(params[:work_id])
     elsif params[:bookmark_id]
       @item = Bookmark.find(params[:bookmark_id])
+    end
+  end
+
+  def load_user
+    unless @collection
+      @user = User.current_user
     end
   end
 
@@ -108,13 +117,14 @@ class CollectionItemsController < ApplicationController
         errors << ts("This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
       elsif collection.closed?
         errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
-      elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
-        errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
+      elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
+        errors << ts("%{collection_title}, because either you don't own this item or are not a moderator of the collection.", :collection_title => collection.title)
       elsif @item.add_to_collection(collection) && @item.save
         if @item.approved_collections.include?(collection)
           new_collections << collection
-        else
-          unapproved_collections << collection
+        end
+        if !User.current_user.is_author_of?(@item)
+          setflash; flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection.".html_safe)
         end
       else
         errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
@@ -140,7 +150,7 @@ class CollectionItemsController < ApplicationController
 
     redirect_to(@item)
   end
-  
+
   def update_multiple
     # whoops, not working because it freezes the hash
     # not_allowed = CollectionItem.where(:id => params[:collection_items].keys)
@@ -154,6 +164,7 @@ class CollectionItemsController < ApplicationController
     #   flash[:error] = ts("You are not allowed to modify that!")
     #   redirect_to root_path and return
     # end
+
     @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")

@@ -20,6 +20,19 @@ class UserMailer < BulletproofMailer::Base
 
   default :from => ArchiveConfig.RETURN_ADDRESS
 
+  # Send a request to a work owner asking that they approve the inclusion
+  # of their work in a collection
+
+  def invite_to_collection(user_id, work_id, collection_id)
+    @user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id)
+    mail(
+        :to => @user.email,
+        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+    )
+  end
+
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
   # TODO refactor to make it asynchronous
