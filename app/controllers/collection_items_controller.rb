@@ -117,22 +117,22 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if !collection
-        errors << ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
+        errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", :name => collection_name)
       elsif @item.collections.include?(collection)
-        errors << ts("This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
+        errors << ts("%{collection_title}, because this item has already been submitted to it.", :collection_title => collection.title)
       elsif collection.closed?
         errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
-        errors << ts("%{collection_title}, because either you don't own this item or are not a moderator of the collection.", :collection_title => collection.title)
+        errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", :collection_title => collection.title)
       elsif @item.add_to_collection(collection) && @item.save
         if @item.approved_collections.include?(collection)
           new_collections << collection
         else
           unapproved_collections << collection
         end
-        if !User.current_user.is_author_of?(@item)
-          setflash; flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection.".html_safe)
-        end
+        #if !User.current_user.is_author_of?(@item)
+        #  flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection.".html_safe)
+        #end
       else
         errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
       end
@@ -148,8 +148,10 @@ class CollectionItemsController < ApplicationController
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
-        :moderated => unapproved_collections.collect(&:title).join(", "))
+       unapproved_collections.each do |needs_approval|
+         flash[:notice] ||= ""
+         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection (#{collection.title}).").html_safe
+       end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?

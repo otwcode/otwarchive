@@ -40,17 +40,9 @@ module Collectible
 
   def add_to_collection(collection)
     if collection && !self.collections.include?(collection)
-      if !User.current_user.is_author_of?(self)
-        # a maintainer is attempting to add this work to their collection
-        UserMailer.invite_to_collection(User.current_user.id, self.id, collection.id).deliver!
-      end
       self.collections << collection
     end
   end
-  #if !User.current_user.is_author_of?(self) && collection.user_is_maintainer(User.current_user)
-  #  self.invited_collections << collection
-  #
-  #else
 
   def remove_from_collection(collection)
     if collection && self.collections.include?(collection)

@@ -152,14 +152,29 @@ class CollectionItem < ActiveRecord::Base
             # least ONE of the works owners allows automatic inclusion in collections,
             # add the work to the collection
             approve_by_user
-            # TODO: Generate an email letting all the users know that their work has been added to the collection
+            users.each do |email_user|
+              UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+            end
             break
           end
         end
       end
     end
   end
-  
+
+  after_save :send_work_invitation
+  def send_work_invitation
+    if !approved_by_user?
+      if !User.current_user.is_author_of?(item)
+        # a maintainer is attempting to add this work to their collection
+        # so we send an email to all the works owners
+        item.users.each do |email_author|
+          UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+        end
+      end
+    end
+  end
+
   after_update :notify_of_status_change
   def notify_of_status_change
     if unrevealed_changed?
