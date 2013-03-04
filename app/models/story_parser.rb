@@ -634,7 +634,6 @@ class StoryParser
       end
 
       # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
-      # #gmi-ResViewContainer table.f td.f div.text
       text_table = body.css("#gmi-ResViewContainer div.gr-box.gr-genericbox div.text")[0]
       unless text_table.nil?
         # Try to remove some metadata (title and author) from the work's text, if possible
