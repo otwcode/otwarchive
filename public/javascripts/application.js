@@ -302,7 +302,7 @@ function hideField(id) {
 
 function attachCharacterCounters() {
     var countFn = function() {
-        var counter = $j(this).closest('form').find('.character_counter .value'),
+        var counter = $j(this).nextAll('.character_counter').first().find('.value'),
             max = parseInt(counter.attr('data-maxlength')),
             val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
             remaining = max - val.length;
