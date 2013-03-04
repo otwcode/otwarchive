@@ -12,6 +12,7 @@ class CollectionItem < ActiveRecord::Base
   APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
+
   belongs_to :collection, :inverse_of => :collection_items
   belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items

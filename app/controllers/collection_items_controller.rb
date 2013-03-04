@@ -130,9 +130,6 @@ class CollectionItemsController < ApplicationController
         else
           unapproved_collections << collection
         end
-        #if !User.current_user.is_author_of?(@item)
-        #  flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection.".html_safe)
-        #end
       else
         errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
       end
@@ -173,7 +170,6 @@ class CollectionItemsController < ApplicationController
     #   flash[:error] = ts("You are not allowed to modify that!")
     #   redirect_to root_path and return
     # end
-
     @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")

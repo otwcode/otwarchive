@@ -17,6 +17,7 @@
   <li><%= span_if_current ts("Approved"), base_path + "?approved=true" %></li>
 </ul>
 <!--/subnav-->
+
 <% if params[:invited] %>
   <p class="notice">
     <%= ts("Works listed here have already been approved for this collection.") %>
