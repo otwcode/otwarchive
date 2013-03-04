@@ -1,7 +1,7 @@
 <% content_for :message do %>
 Dear <%= @user.default_pseud.byline %>,
 
-The collection maintainers of <%= style_link(@collection.title, collection_url(@collection)) %> have added your work (<%= style_bold(@work.title.html_safe) %>) to their collection!
+The collection maintainers of <%= @collection.title %> have added your work (<%= @work.title.html_safe %>) to their collection!
 
 You are receiving this notification because you have previously elected to allow automatic inclusion of your works into collections on the Archive of Our Own.
 

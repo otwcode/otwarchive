@@ -164,7 +164,7 @@ class CollectionItem < ActiveRecord::Base
 
   after_save :send_work_invitation
   def send_work_invitation
-    if !approved_by_user?
+    if !approved_by_user? && approved_by_collection?
       if !User.current_user.is_author_of?(item)
         # a maintainer is attempting to add this work to their collection
         # so we send an email to all the works owners

@@ -150,7 +150,7 @@ class CollectionItemsController < ApplicationController
     unless unapproved_collections.empty?
        unapproved_collections.each do |needs_approval|
          flash[:notice] ||= ""
-         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(collection)}?invited=true\">Invited</a> to your collection (#{collection.title}).").html_safe
+         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_approval)}?invited=true\">Invited</a> to your collection (#{needs_approval.title}).").html_safe
        end
     end
 
