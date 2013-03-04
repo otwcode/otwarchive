@@ -463,6 +463,20 @@ class Work < ActiveRecord::Base
   def published_at
     self.first_chapter.published_at
   end
+  
+  # ensure published_at date is correct: reset its value for non-backdated works
+  # "chapter" arg should be the unsaved session instance of the work's first chapter
+  def reset_published_at(chapter)
+    if !self.backdate
+      if self.backdate_changed? # work was backdated but now it's not
+        # so reset its date to our best guess at its original pub date:
+        chapter.published_at = self.created_at.to_date
+      else # pub date may have changed without user's explicitly setting backdate option
+        # so reset it to the previous value:
+        chapter.published_at = chapter.published_at_was || Date.today
+      end    
+    end
+  end
 
   def default_date
     backdate = first_chapter.try(:published_at) if self.backdate
@@ -508,6 +522,7 @@ class Work < ActiveRecord::Base
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     if self.posted_changed?
+      self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
       self.chapters.first.save
     end

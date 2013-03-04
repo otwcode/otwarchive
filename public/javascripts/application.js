@@ -267,7 +267,7 @@ function toggleFormField(element_id) {
     }
     else {
         $j('#' + element_id).addClass('hidden');
-        if (element_id != 'chapters-options') {
+        if (element_id != 'chapters-options' && element_id != 'backdate-options') {
             $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
                 if ($j(d).attr('type') == "checkbox") {$j(d).attr('checked', false);}
                 else {$j(d).val('');}

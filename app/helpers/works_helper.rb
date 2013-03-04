@@ -73,23 +73,6 @@ module WorksHelper
     end
   end
 
-  # Return true or false to determine whether the published at field should show on the work form
-  def check_backdate_box(work, chapter)
-
-    return true if work.backdate
-
-    if !chapter.created_at.nil?
-      # A draft or posted work already exists
-      return chapter.created_at.to_date != chapter.published_at
-    elsif !chapter.published_at.nil?
-      # There's data from the input form but the work that hasn't been
-      # stored as a draft yet
-      return chapter.published_at != Date.today
-    end
-
-  end
-
-
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
