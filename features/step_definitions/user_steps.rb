@@ -40,7 +40,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   fill_in "User name", :with => login
   fill_in "Password", :with => password
   check "Remember me"
-  click_button "Log in"
+  click_button "Log In"
   assert UserSession.find
 end
 
