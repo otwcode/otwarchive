@@ -197,6 +197,11 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
+    @page_title = @work.unrevealed? ? ts("Mystery Work") :
+      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
+        @work.title)
+    
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -223,10 +228,6 @@ class WorksController < ApplicationController
                       current_user.subscriptions.build(:subscribable => @work)
     end
 
-    @page_title = @work.unrevealed? ? ts("Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
-        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
-        @work.title)
     render :show
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
