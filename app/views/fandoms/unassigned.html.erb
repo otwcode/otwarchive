@@ -1,5 +1,5 @@
-<!--ZONE- TAGS, ZONE HOME? Descriptive page name, messages and instructions-->
-<h2 class="heading">Fandoms in need of a wrangler</h2>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Fandoms in Need of a Wrangler") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -15,10 +15,10 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading">Listing fandoms</h3>
+<h3 class="landmark heading"><%= ts("Listing Fandoms") %></h3>
 
 <% unless @fandoms.blank? %>
-  <ul class="fandoms">
+  <ul class="fandoms index group">
     <% for fandom in @fandoms %>
       <li>
         <%= link_to fandom.name + " (#{fandom.count})", {:controller => :tags, :action => :show, :id => fandom.to_param} %>
@@ -28,18 +28,21 @@
 <% end %>
 
 <!--subnav-->
-<h3 class="landmark heading"><%= ts('Filters') %></h3>
 <%= form_tag unassigned_fandoms_path, :class => 'filters', :method => :get do %>
+  <h3 class="landmark heading"><%= ts('Filters') %></h3>
   <dl class="filters" role="menu">
-    <dt>Filter by Media</dt>
+    <dt class="landmark"><%= ts("Submit") %></dt>
+    <dd class="submit actions"><%= submit_tag ts('Sort and Filter') %></dd>
+    <dt><%= label_tag ts("Sort by") %></dt>
+    <dd></dd>
+    <dt><%= label_tag :media_id, ts("Media to Show") %></dt>
     <dd>
-      <p>Show only:</p>
       <%= select_tag :media_id, options_for_select([''] + Media.canonical.by_name.map{|m| m.name}, params[:media_id]) %>
     </dd>
+    <dt class="landmark"><%= ts("Submit") %></dt>
+    <dd class="submit actions"><%= submit_tag ts('Sort and Filter') %></dd>
   </dl>
-  <p class="submit actions"><%= submit_tag 'Go' %></p>  
 <% end %>
 
-<h3 class="landmark heading">Next Page</h3>
 <%= will_paginate(@fandoms) %>
 <!--/subnav-->
