@@ -55,7 +55,7 @@ class FandomsController < ApplicationController
     end
     @fandoms = Fandom.joins(join_string).
                       where(conditions).
-                      order(params[:sort] == 'count' ? "count DESC" : "sortable_name ASC").
+                      order(params[:sort] == 'Work Count' ? "count DESC" : "sortable_name ASC").
                       with_count.
                       paginate(:page => params[:page], :per_page => 250)  
   end
