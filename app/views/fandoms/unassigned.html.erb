@@ -4,14 +4,6 @@
 
 <!--subnav-->
 <%= will_paginate(@fandoms) %>
-
-<!--sorting subnav-->
-<ul class="sorting actions" role="menu">
-  <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-  <li><%= link_to ts('Name'), unassigned_fandoms_path %></li>
-  <li><%= link_to ts('Work Count'), unassigned_fandoms_path(:sort => :count) %></li>
-</ul>
-<!---/subnav-->
 <!--/subnav-->
 
 <!--main content-->
