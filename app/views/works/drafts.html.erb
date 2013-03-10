@@ -7,10 +7,9 @@
 
 <!--BACK END, can we just remove this laquo etc-->
 <%= paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-
-    <ul class="work index group">
-      <% for work in @works %>
-          <%= render 'work_blurb', :work => work %>
-      <% end %>
-    </ul>
+  <ul class="work index group">
+     <% for work in @works %>
+        <%= render 'work_blurb', :work => work %>
+     <% end %>
+   </ul>
 <% end %>
