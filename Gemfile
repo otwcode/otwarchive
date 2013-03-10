@@ -78,6 +78,7 @@ gem "google_visualr", ">= 2.1"
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'
+  gem 'rake'
   gem 'shoulda'
   gem 'factory_girl'
   gem 'capybara', '=0.3.9'
