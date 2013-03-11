@@ -14,8 +14,10 @@ jQuery(document).ready(function() {
             _wrapDiv = $('<div>', {'id': 'modal-wrap'}).addClass('modal-closer'),
             _modalDiv = $('<div>', {'id': 'modal'}),
             _contentDiv = $('<div>').addClass('content userstuff'),
-            _closeButton = $('<div>').addClass('action modal-closer')
-                .attr('tabindex', 0).text('CLOSE'),
+            _closeButton = $('<a>').addClass('action modal-closer')
+                .click(function(event) { event.preventDefault(); })
+                .attr('href', '#')
+                .text('Close'),
             _title = $('<span>').addClass('title'),
             _pageModals = {},
             _tallHeight,
@@ -102,6 +104,7 @@ jQuery(document).ready(function() {
                     _keyboard.toggleHandlers(true);
                     _loadingDiv.hide();
                     _modalDiv.fadeIn(function() {
+                        _modalDiv.trap();
                         _contentDiv.focus();
                     });
                 }
