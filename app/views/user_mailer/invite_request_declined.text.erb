@@ -1,6 +1,6 @@
 <% content_for :message do %>
 <%= ts("Dear #{@user.login}, ")%>
-<%= ts("We regret to inform you that your request for #{@total} new invitation(s) cannot be fulfilled at this time.") %>
+<%= ts("We regret to inform you that your request for #{@total} new ") %><%= @total == 1 ? ts("invitation") : ts("invitations") %><%= ts(" cannot be fulfilled at this time.") %>
 <%= ts("Your request was: ") %>
 <%= to_plain_text(raw @reason) %>
 
