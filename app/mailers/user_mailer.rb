@@ -276,7 +276,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
     )
   end
 
