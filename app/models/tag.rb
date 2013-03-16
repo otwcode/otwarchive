@@ -1011,7 +1011,7 @@ class Tag < ActiveRecord::Base
         if new_merger && new_merger == self
           self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
         elsif new_merger && !new_merger.canonical?
-          self.errors.add(:base, new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+          self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
         elsif new_merger && new_merger.class != self.class
           self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
         elsif !new_merger

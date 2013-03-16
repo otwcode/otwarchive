@@ -191,7 +191,7 @@
  
       <!--backdate-->
       <dt class="backdate">
-        <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :class => "toggle_formfield" %> 
+        <%= f.check_box :backdate, {:id => "backdate-options-show", :class => "toggle_formfield"} %>
       </dt>
       <dd class="backdate">
         <%= label_tag "backdate-options-show", ts("Set a different publication date") %> <%= link_to_help "backdating-help" %>
@@ -202,8 +202,6 @@
             <dd id="managePublicationDate" class="datetime" title="set date">
               <!--BACK END, this select box does not seem to be acquiring the label published_at -->
               <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %></dd>
-            <dt><%= f.check_box :backdate %></dt>
-            <dd><%= f.label :backdate, ts("Set this publication date for the entire work") %></dd>
           </dl>
         </fieldset>
       </dd>
@@ -285,7 +283,7 @@
     <legend><%= ts('Post') %></legend>
     <p class="submit cancel actions">
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'post_button' %>
+      <%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %>
       <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
   </fieldset>

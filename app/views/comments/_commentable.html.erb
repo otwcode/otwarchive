@@ -12,6 +12,12 @@
     <% if @work && @next_chapter %>
       <li><%= link_to (ts('Next Chapter') + ' &#8594;').html_safe, [@work, @next_chapter] %></li>
     <% end %>
+    <% if @previous_admin_post %>
+      <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+    <% end %>
+    <% if @next_admin_post %>
+      <li><%= link_to("Next Post", @next_admin_post) %></li>
+    <% end %>
     <% if @admin_post %>
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
@@ -97,3 +103,13 @@
 
 </div>
 <!-- END comments -->
+
+<%= content_for :footer_js do %>
+  <script src="/javascripts/jquery.scrollTo.min.js" type="text/javascript"></script>
+  <%= javascript_tag do %>
+    // Set things up to scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
+    $j('#comments_placeholder .pagination a[data-remote]').livequery('click.rails', function(e){
+      $j.scrollTo('#comments_placeholder');
+    });
+  <% end %>
+<% end %>

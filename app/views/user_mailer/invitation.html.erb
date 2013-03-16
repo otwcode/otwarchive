@@ -1,34 +1,36 @@
-<p>
-  Hello from the <%=h "#{ArchiveConfig.APP_NAME}" %>!
-</p>
+<% content_for :message do %>
+  <p>
+    Hello from the <%= "#{ArchiveConfig.APP_NAME}" %>!
+  </p>
 
-<p>
-  <% if !@user_name.blank? %>
-  <%=h @user_name %> has invited you to join our beta!
-  <% else %>
-  You've been invited to join our beta!
-  <% end %>
-</p>
+  <p>
+    <% if !@user_name.blank? %>
+      <%= style_bold(@user_name) %> has invited you to join our beta!
+    <% else %>
+      You've been invited to join our beta!
+    <% end %>
+  </p>
 
-<p>
-  The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are
-  multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and
-  podfic. We run on the open-source otwarchive software, and our servers are owned by the
-  nonprofit Organization for Transformative Works, which works to protect fan rights and
-  preserve fanworks.
-</p>
+  <p>
+    The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are
+    multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and
+    podfic. We run on the open-source otwarchive software, and our servers are owned by the
+    nonprofit Organization for Transformative Works, which works to protect fan rights and
+    preserve fanworks.
+  </p>
 
-<p>
-  Also, we have a lot of spiffy features for finding the fanworks you want, and for
-  posting and sharing your work with others. There are lots more coming soon! Your feedback now
-  during our beta can help us build an even better archive. \o/
-</p>
+  <p>
+    Also, we have a lot of spiffy features for finding the fanworks you want, and for
+    posting and sharing your work with others. There are lots more coming soon! Your feedback now
+    during our beta can help us build an even better archive. \o/
+  </p>
 
-<p>
-  If you'd like to join us, please sign up at the following address:
-  <%= link_to(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
-</p>
+  <p>
+    If you'd like to join us, please sign up at the following address:
+    <%= style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
+  </p>
 
-<p>
-  For more information, please check out our FAQ at: <%= link_to(archive_faqs_url, archive_faqs_url) %>
-</p>
+  <p>
+    For more information, please check out <%= style_link("our FAQ", archive_faqs_url) %>.
+  </p>
+<% end %>

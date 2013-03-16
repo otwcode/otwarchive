@@ -1,10 +1,17 @@
-<h3 class="heading">Dear <%= @user.login %>,</h3>
+<% content_for :message do %>
+  <p>
+    Dear <%= style_bold(@user.login) %>,
+  </p>
+  
+  <p>
+    <%=raw @message %>
+  </p>
+<% end %>
 
-<%=raw @message %>
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>
 
-<p><%=h "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>
-
-<p><%=h "Sent by:" %> <%= @admin_login %></p>
-
-
-
+<% content_for :sent_by do %>
+  <%= @admin_login %>
+<% end %>
