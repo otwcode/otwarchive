@@ -472,7 +472,7 @@ a.modal.help { cursor: help; }
   max-width: 100%;
 }
 
-#modal footer {
+#modal .footer {
   bottom: 0;
   height: 44px;
   left: 0;
@@ -482,7 +482,7 @@ a.modal.help { cursor: help; }
   position: absolute;
 }
 
-#modal.img footer {
+#modal.img .footer {
   background: rgba(0, 0, 0, 0.6);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   color: #fff;
@@ -490,7 +490,7 @@ a.modal.help { cursor: help; }
   text-align: center;
 }
 
-#modal footer .action.modal-closer {
+#modal .footer .action.modal-closer {
   bottom: 8px;
   position: absolute;
   right: 8px;
