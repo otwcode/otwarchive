@@ -215,7 +215,7 @@ jQuery(document).ready(function() {
             _wrapDiv.append(
                 _modalDiv.append(
                     _contentDiv,
-                    $('<footer>')
+                    $('<div>').addClass('footer')
                         .append(
                             _title,
                             _closeButton
