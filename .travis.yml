@@ -1,7 +1,0 @@
-language: ruby
-rvm:
-  - "1.8.7"
-  - "1.9.2"
-# uncomment this line if your project needs to run something other than `rake`:
-script: bundle exec rspec spec
-script: bundle exec cucumber features
