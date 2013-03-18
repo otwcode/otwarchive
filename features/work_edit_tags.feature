@@ -11,7 +11,7 @@ Feature: Edit tags on a work
     | myname        | something   |
     And I am logged in as "myname" with password "something"
   Then I should see "Hi, myname!"
-    And I should see "log out"
+    And I should see "Log Out"
   When I post the work "Testerwork"
   Then I should see "Work was successfully posted."
     And I should see "Stargate SG-1"

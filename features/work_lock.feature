@@ -27,7 +27,7 @@ Scenario: Posting locked work
     Then I should see "Awesomeness" within "h4"
       And I should see the "alt" text "(Restricted)" within "h4"
     When I fill in "site_search" with "Awesomeness"
-      And I press "search"
+      And I press "Search"
     Then I should see "1 Found"
       And I should see "fandomer" within "#main"
       
@@ -39,7 +39,7 @@ Scenario: Posting locked work
     When I am on fandomer's works page
     Then I should not see "Awesomeness"
     When I fill in "site_search" with "Awesomeness"
-      And I press "search"
+      And I press "Search"
     Then I should see "No results found"
       And I should not see "fandomer"
     

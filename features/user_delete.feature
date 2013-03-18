@@ -12,11 +12,11 @@ Scenario: delete a user with no works
   When I follow "Delete My Account"
   Then I should not see "Do you want to orphan or delete your works?"
     And I should see "You have successfully deleted your account."
-    And I should not see "log out"
-    And I should see "Log in"
+    And I should not see "Log Out"
+    And I should see "Log In"
   When I fill in "User name" with "downthemall"
     And I fill in "Password" with "password"
-    And I press "Log in"
+    And I press "Log In"
   Then I should get the error message for wrong username or password
 
 Scenario: delete a user and delete the works
@@ -34,11 +34,11 @@ Scenario: delete a user and delete the works
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 1 email should be delivered
-    And I should not see "log out"
-    And I should see "Log in"
+    And I should not see "Log Out"
+    And I should see "Log In"
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
-    And I press "Log in"
+    And I press "Log In"
   Then I should get the error message for wrong username or password
   When I go to the works page
   Then I should not see "To be deleted"
@@ -60,11 +60,11 @@ Scenario: delete a user and orphan the works
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
-    And I should not see "log out"
-    And I should see "Log in"
+    And I should not see "Log Out"
+    And I should see "Log In"
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
-    And I press "Log in"
+    And I press "Log In"
   Then I should get the error message for wrong username or password
   When I go to the works page
   Then I should see "To be orphaned"
@@ -88,8 +88,8 @@ Scenario: delete a user with a collection
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
-    And I should not see "log out"
-    And I should see "Log in"
+    And I should not see "Log Out"
+    And I should see "Log In"
   When I go to the collections page
   Then I should see "fake"
     And I should see "orphan_account"

@@ -62,6 +62,7 @@ Feature: Edit Works
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
     And I press "Cancel"
+    And the Work indexes are updated
       Then I should see "second chapter content"
     # Test changing pseuds on a work
     When I go to testuser's works page
