@@ -21,3 +21,9 @@
   </li>
   <% end %>
 </ul>
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+  $j(".actions .hidden").removeClass("hidden");
+  <% end %>
+<% end %>
