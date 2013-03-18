@@ -70,9 +70,9 @@
     </li>
   <% end %>
 
-  <li class="share">
+  <li class="share hidden">
     <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
-    <div id="share" style="display: none;">
+    <div id="share">
       <p><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
       <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
       <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
