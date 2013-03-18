@@ -10,10 +10,9 @@ Feature: Edit Works Dates
       And I am logged in as "testuser" with password "testuser"
     When I am on testuser's works page
     Then I should not see "less than 1 minute ago"
-      And I should see "29 Apr 2010"
+      And I should see "29 Apr 2012"
     When I follow "First work"
     Then I should see "first fandom"
-      And I should see "Published:2010-04-30"
       And I should see "Edit"
 
     # Editing a work doesn't change the published date
@@ -36,9 +35,10 @@ Feature: Edit Works Dates
     When I follow "Add Chapter"
       And I fill in "content" with "this is my second chapter"
       And I press "Preview"
-    Then I should see "This is a preview of what this chapter will look like"
-    When I press "Post Chapter"
-    Then I should see "Chapter has been posted"
+    Then I should see "This is a draft showing what this chapter will look like"
+    When I press "Post"
+    # we're going from a preview (draft) state, so it says updated instead of posted
+    Then I should see "Chapter was successfully updated."
       And I should see "Published:2010-04-30"
       And I should see Updated today
     When I am on testuser's works page

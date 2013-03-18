@@ -68,7 +68,7 @@ Given /^I am logged in as a random user$/ do
   fill_in "User name", :with => name
   fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember me"
-  click_button "Log in"
+  click_button "Log In"
   assert UserSession.find
 end
 
@@ -80,7 +80,7 @@ Given /^I am logged out$/ do
 end
 
 Given /^I log out$/ do
-  Given %{I follow "log out"}
+  Given %{I follow "Log Out"}
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
@@ -114,6 +114,10 @@ end
 
 Given /^I am a visitor$/ do
   Given %{I am logged out}
+end
+
+Given /^I view the people page$/ do
+  visit people_path
 end
 
 Then /^I should get the error message for wrong username or password$/ do

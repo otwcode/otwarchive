@@ -65,7 +65,6 @@
     And I go to first_user's profile page
     And I press "Subscribe"
   Then I should see "You are now following first_user"
-    And I should not see "Fandoms"
   When I press "Unsubscribe"
   Then I should see "successfully unsubscribed"
 

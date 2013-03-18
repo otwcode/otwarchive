@@ -231,7 +231,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     
   # create a relationship from posting a work as a regular user, just in case
    Given I am logged in as "writer" with password "password"
-    And I follow "post new"
+    And I follow "New Work"
     And I fill in "Fandoms" with "Up with Testing"
     And I fill in "Work Title" with "whatever"
     And I fill in "Relationships" with "Testypants/Testyskirt"

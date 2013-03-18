@@ -17,7 +17,7 @@ Scenario: creating pseud with unicode characters
   Then I should see "Àlice and Bôb"
     And I should not see "Alice"
   When I follow "Back To Pseuds"
-    And I follow "people" within ".navigation"
+    And I view the people page
   Then I should see "Àlice and Bôb"
     And I should see "special character name"
     And I should not see "Alice"

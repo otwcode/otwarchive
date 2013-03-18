@@ -10,7 +10,7 @@ All of these imported stories are restricted to registered users only (to keep t
 These works were written under the e-mail <%= @external_email %>.
 
 <% @claimed_works.each do |work| %>
-* <%= work.title.html_safe %>: <%= work_url(work)) %>
+* <%= work.title.html_safe %>: <%= work_url(work) %>
 <% end %>
   
 If this is a mistake and these are not your stories, please don't delete them! Contact Support and we will whisk them away to wait until someone else comes along to claim them. :)

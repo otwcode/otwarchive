@@ -76,8 +76,8 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   visit login_path
   fill_in "User name", :with => user
   fill_in "Password", :with => password
-  check "Remember me"
-  click_button "Log in"
+  check "Remember Me"
+  click_button "Log In"
   assert UserSession.find
   fandom = Fandom.find_or_create_by_name_and_canonical(fandomname, true)
   visit tag_wranglers_url

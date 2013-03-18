@@ -62,7 +62,7 @@ Feature: Pseud dashboard
 
   # check on pseud that posted the work
 
-  When I follow "Me" within ".pseud"
+  When I follow "Me" within ".pseud .expandable li"
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -70,7 +70,7 @@ Feature: Pseud dashboard
 
   # check on pseud that didn't post the work
 
-  When I follow "myself" within ".pseud"
+  When I follow "myself" within ".pseud .expandable li"
   Then I should not see "Stargate"
     And I should not see "SG-1"
     And I should not see "Stargate Franchise"
@@ -92,7 +92,7 @@ Feature: Pseud dashboard
 
   # check on pseud that posted the work
 
-  When I follow "Me" within ".pseud"
+  When I follow "Me" within ".pseud .expandable li"
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -101,7 +101,7 @@ Feature: Pseud dashboard
 
   # check on pseud that didn't post the work
 
-  When I follow "myself" within ".pseud"
+  When I follow "myself" within ".pseud .expandable li"
   Then I should not see "Stargate"
     And I should not see "SG-1"
     And I should not see "Stargate Franchise"

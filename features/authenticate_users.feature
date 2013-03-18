@@ -11,7 +11,7 @@ Feature: User Authentication
     When I am on the home page
       And I fill in "User name" with "sam"
       And I fill in "Password" with "test"
-      And I press "Log in"
+      And I press "Log In"
     Then I should see "The password or user name you entered doesn't match our records"
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
@@ -24,14 +24,14 @@ Feature: User Authentication
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
-    And I press "Log in"
+    And I press "Log In"
     Then I should see "Hi, sam"
 
     # password from email should also work
     When I am logged out
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
-    And I press "Log in"
+    And I press "Log In"
     Then I should see "Hi, sam"
     And I should see "Change My Password"
 
@@ -46,7 +46,7 @@ Feature: User Authentication
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
-    And I press "Log in"
+    And I press "Log In"
     Then I should not see "Hi, sam"
 
     # generated password should no longer work
@@ -54,7 +54,7 @@ Feature: User Authentication
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
-    And I press "Log in"
+    And I press "Log In"
     Then I should not see "Hi, sam"
 
     # new password should work
@@ -62,13 +62,13 @@ Feature: User Authentication
     When I am on the homepage
     And I fill in "User name" with "sam"
     And I fill in "Password" with "newpass"
-    And I press "Log in"
+    And I press "Log In"
     Then I should see "Hi, sam"
 
   Scenario: invalid user
     Given I have loaded the "users" fixture
     When I am on the home page
-    And I follow "forgot password?"
+    And I follow "Forgot password?"
     When I fill in "login" with "testuser"
       And I press "Reset password"
     Then I should see "Check your email"
@@ -77,7 +77,7 @@ Feature: User Authentication
     # password from email should work
     When I fill in "User name" with "testuser"
     And I fill in "testuser"'s temporary password
-    And I press "Log in"
+    And I press "Log In"
     Then I should see "Hi, testuser"
     And I should see "Change My Password"
 
@@ -92,7 +92,7 @@ Feature: User Authentication
     When I am on the homepage
     And I fill in "User name" with "testuser"
     And I fill in "Password" with "newpas"
-    And I press "Log in"
+    And I press "Log In"
     Then I should see "Hi, testuser"
 
   Scenario: Wrong username
@@ -104,7 +104,7 @@ Feature: User Authentication
     When I am on the home page
       And I fill in "User name" with "sammy"
       And I fill in "Password" with "test"
-      And I press "Log in"
+      And I press "Log In"
     Then I should see "The password or user name you entered doesn't match our records."
 
   Scenario: Wrong username
@@ -116,15 +116,15 @@ Feature: User Authentication
     When I am on the home page
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
-      And I press "Log in"
+      And I press "Log In"
     Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below."
 
   Scenario: Logged out
     Given I have no users
      And a user exists with login: "sam"
     When I am on sam's user page
-    Then I should see "Log in"
-      And I should not see "log out"
+    Then I should see "Log In"
+      And I should not see "Log Out"
       And I should not see "Preferences"
 
   Scenario Outline: Show or hide preferences link
@@ -139,10 +139,10 @@ Feature: User Authentication
 
     Examples:
       | login | user  | action                   |
-      | sam   | sam   | not see "Log in"         |
-      | sam   | sam   | see "log out"            |
-      | sam   | sam   | see "Preferences"     |
-      | sam   | dean  | see "log out"            |
-      | sam   | dean  | not see "Preferences" |
-      | sam   | dean  | not see "Log in"         |
+      | sam   | sam   | not see "Log In"         |
+      | sam   | sam   | see "Log Out"            |
+      | sam   | sam   | see "Preferences" within "#dashboard .navigation li"    |
+      | sam   | dean  | see "Log Out"            |
+      | sam   | dean  | not see "Preferences" within "#dashboard .navigation li" |
+      | sam   | dean  | not see "Log In"         |
 

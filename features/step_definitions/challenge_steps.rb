@@ -229,13 +229,6 @@ When /^I fill in past challenge options$/ do
     And %{I submit}
 end
 
-When /^I fill in unlimited prompt challenge options$/ do
-  When "I fill in prompt meme challenge options"
-    And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
-    And %{I fill in "prompt_meme_requests_num_allowed" with "50"}
-    And %{I submit}
-end
-
 When /^I fill in no-column challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "0"}
@@ -344,6 +337,7 @@ When /^I sign up for Battle 12 with combination B$/ do
     And %{I fill in the 1st field with id matching "title" with "High School AU SG1"}
     And %{I fill in the 2nd field with id matching "title" with "random SGA love"}
     click_button "Submit"
+  Then %{I should see "Sign-up was successfully created"}
 end
 
 When /^I sign up for Battle 12 with combination C$/ do
@@ -503,14 +497,14 @@ When /^I edit my signup for "([^\"]*)"$/ do |title|
 end
 
 When /^I add a new prompt to my signup$/ do
-  When %{I follow "Add another prompt"}
+  When %{I follow "Add Prompt"}
     And %{I check "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "My extra tag"}
     And %{I press "Submit"}
 end
 
 When /^I add a new prompt to my signup for a prompt meme$/ do
-  When %{I follow "Add another prompt"}
+  When %{I follow "Add Prompt"}
     And %{I check "Stargate Atlantis"}
     And %{I press "Submit"}
 end
@@ -518,14 +512,14 @@ end
 When /^I edit the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "Edit whole sign-up"}
+  When %{I follow "Edit Sign-up"}
 end
 
 ### WHEN viewing after signups
 
 When /^I view my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Your Prompts"}
+  When %{I follow "My Prompts"}
 end
 
 When /^I view unposted claims for "([^\"]*)"$/ do |title|
@@ -550,6 +544,10 @@ end
 When /^I claim two prompts from "([^\"]*)"$/ do |title|
   When %{I claim a prompt from "#{title}"}
   When %{I claim a prompt from "#{title}"}
+end
+
+When /^I want to search for exactly one term$/ do
+  Capybara.exact = true
 end
 
 ### WHEN fulfilling claims
@@ -577,7 +575,15 @@ When /^I fulfill my claim$/ do
 end
 
 When /^I fulfill my claim again$/ do
-  When %{I start to fulfill my claim with "Second Story"}
+  When %{I am on my user page}
+  When %{I follow "Claims ("}
+  When %{I follow "Fulfilled Claims"}
+  When %{I follow "Fulfill"}
+  And %{I fill in "Work Title" with "Second Story"}
+    And %{I select "Not Rated" from "Rating"}
+    And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "Fandom" with "Stargate Atlantis"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis"}
   When %{I press "Preview"}
     And %{I press "Post"}
   Then %{I should see "Work was successfully posted"}
@@ -636,15 +642,15 @@ end
 
 When /^I delete my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Your Prompts"}
-  When %{I follow "Delete"}
+  When %{I follow "My Prompts"}
+  When %{I follow "Delete Sign-up"}
   Then %{I should see "Challenge sign-up was deleted."}
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Prompts ("}
-  When %{I follow "Delete"}
+  When %{I press "Delete Prompt"}
 end
 
 When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
@@ -655,13 +661,15 @@ end
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "Delete"}
+  When %{I follow "Delete Prompt"}
 end
 
 When /^I edit the first prompt$/ do
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "Edit prompt"}
+  # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
+  # Prompt Meme challenges
+  #When %{I follow "Edit Prompt"}
 end
 
 When /^I edit the prompt by "([^\"]*)"$/ do |participant|
@@ -693,7 +701,7 @@ Then /^I should see Battle 12 descriptions$/ do
   Then %{I should see "Welcome to the meme" within "#intro"}
   Then %{I should see "Sign-up: Open"}
   Then %{I should see "Sign-up closes:"}
-  Then %{I should see "2011" within ".collection .meta"}
+  Then %{I should see "2013" within ".collection .meta"}
   Then %{I should see "What is this thing?" within "#faq"}
   Then %{I should see "It is a comment fic thing" within "#faq"}
   Then %{I should see "Be nicer to people" within "#rules"}
@@ -718,7 +726,7 @@ Then /^I should be editing the challenge settings$/ do
 end
 
 Then /^signup should be open$/ do
-  When %{I follow "Profile"}
+  When %{I should see "Profile" within ".collection .navigation"}
   Then %{I should see "Sign-up: Open" within ".collection .meta"}
     And %{I should see "Sign-up closes:"}
 end
@@ -739,7 +747,7 @@ end
 Then /^I should see a prompt is claimed$/ do
   # note, prompts are in reverse date order by default
   Then %{I should see "New claim made."}
-    And %{I should see "Your Claims In Battle 12"}
+    And %{I should see "My Claims in Battle 12"}
     And %{I should see "Fulfill"}
     And %{I should see "Drop Claim"}
     
@@ -777,7 +785,7 @@ end
 Then /^claims are shown$/ do
   When %{I go to "Battle 12" collection's page}
     And %{I follow "Unposted Claims"}
-  Then %{I should see "myname4" within ".claims"}
+  Then %{I should see "myname4" within "h5"}
     And %{I should not see "Secret!"}
     And %{I should see "Stargate Atlantis"}
 end
@@ -807,7 +815,7 @@ Then /^my claim should be fulfilled$/ do
     And %{I should see "Fandom:"}
     And %{I should see "Stargate Atlantis"}
     And %{I should not see "Alternate Universe - Historical"}
-    And %{I should see "In response to a prompt by:"}
+    And %{I should see "In response to a prompt by"}
 end
 
 Then /^14 should be the last signup in the table$/ do
@@ -836,17 +844,17 @@ end
 
 Then /^I should just see request 1$/ do
   page.should have_content("Request by myname1")
-  page.should have_content("Edit whole sign-up")
-  page.should have_content("Edit prompt")
+  page.should have_content("Edit Sign-up")
+  page.should have_content("Edit Prompt")
   page.should have_content("Stargate Atlantis")
   page.should have_content("Alternate Universe - Historical")
   page.should have_no_content("Request 2")
 end
 
 Then /^I should see single prompt editing$/ do
-  page.should have_content("Edit whole sign-up instead")
-  page.should have_content("Freeforms")
-  Then %{the field labeled "Freeforms" should contain "Alternate Universe - Historical"}
+  page.should have_content("Edit Sign-up")
+  page.should have_content("Additional Tags")
+  Then %{the field labeled "Additional Tags" should contain "Alternate Universe - Historical"}
   page.should have_no_content("Just add one new prompt instead")
 end
 

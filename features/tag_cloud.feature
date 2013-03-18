@@ -45,7 +45,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
   # test the tags with fun names
 
   When I am logged out
-    And I follow "tags" within "ul.navigation"
+    And I follow "Tags" within "ul.navigation"
   Then I should not see "100 words"
     And I should not see "five things"
 
@@ -63,7 +63,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I choose "Freeform"
     And I check "Canonical"
     And I press "Create Tag"
-    And I follow "tags" within "ul.navigation"
+    And I follow "Tags" within "ul.navigation"
   Then I should not see "Five Things"
     And I should not see "5 Things"
     And I should not see "N Things"
@@ -72,7 +72,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I fill in "Additional Tags" with "Five Things"
     And I press "Preview"
     And I press "Update"
-    And I follow "tags" within "ul.navigation"
+    And I follow "Tags" within "ul.navigation"
   Then I should not see "Five Things"
 
   # set up boringly-named tags
@@ -93,7 +93,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
 
   # check the cloud for the boring tags
 
-  When I follow "tags" within "ul.navigation"
+  When I follow "Tags" within "ul.navigation"
   Then I should not see "Non-canonical NoFandom"
     And I should not see "Non-canonical Fandomish"
     And I should not see "Non-canonical unwrangled"

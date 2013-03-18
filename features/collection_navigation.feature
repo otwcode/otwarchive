@@ -14,7 +14,7 @@ Feature: Basic collection navigation
   Given basic tags
     And I have a canonical "TV Shows" fandom tag named "New Fandom"
     And a freeform exists with name: "Free", canonical: true
-  When I follow "post new"
+  When I follow "New Work" within "#greeting .dropdown li"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
@@ -40,12 +40,12 @@ Feature: Basic collection navigation
   Then I should see "0 Bookmarks"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
-  When I follow "People"
+  When I follow "People" within "#dashboard .navigation li"
     Then I should see "A Random Selection of Participants in My Collection"
     And I should see "mod"
-  When I follow "Tags"
+  When I follow "Tags" within "#dashboard .navigation li"
     Then I should see "Free"
-  When I follow "Settings"
+  When I follow "Collection Settings"
     Then I should see "Edit Collection"
   When I am logged out
     And I am on the collections page

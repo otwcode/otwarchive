@@ -17,7 +17,7 @@ Feature: Work Drafts
     And the draft "draft to post" 
   Given the work indexes are updated
     When I fill in "site_search" with "draft"
-      And I press "search"
+      And I press "Search"
     Then I should see "No results found"
 
   Scenario: Posting drafts from drafts page

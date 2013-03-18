@@ -15,7 +15,7 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
   
   # create a basic single-chapter work
-  When I follow "post new"
+  When I follow "New Work"
   Then I should see "Post New Work"
   When I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
@@ -36,8 +36,8 @@ Feature: Edit chapters
     And I fill in "chapter_wip_length" with "100"
     And I fill in "content" with "original chapter two"
     And I press "Preview"
-  Then I should see "This is a preview of what this chapter will look like"
-  When I press "Post Chapter"
+  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+  When I press "Post"
     Then I should see "2/100"
     And I should see "Words:8"
   When I follow "Add Chapter"
@@ -46,7 +46,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering chapter three"
     And I press "Preview"
   Then I should see "Chapter 3"
-  When I press "Post Chapter"
+  When I press "Post"
   Then I should see "3/50"
     And I should see "Words:11"
   
@@ -57,7 +57,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering fourth chapter out of order"
     And I press "Preview"
   Then I should see "Chapter 4"
-  When I press "Post Chapter"
+  When I press "Post"
     And I should see "4/17"
     And I should see "Words:17"
     
@@ -75,7 +75,7 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "content" with "entering second chapter out of order"
     And I press "Preview"
-  When I press "Post Chapter"
+  When I press "Post"
   Then I should see "4/17"
     And I should see "Words:20"
   
@@ -158,7 +158,7 @@ Feature: Edit chapters
   When I select "5. My title" from "selected_id"
     And I press "Go"
     Then I should see "This chapter is a draft and hasn't been posted yet!"
-  When I press "Post Chapter"
+  When I press "Post"
     Then I should see "5/5"
   When I follow "Edit"
     Then I should not see "Draft"
@@ -176,7 +176,7 @@ Feature: Edit chapters
     And I fill in "Chapter title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
-  Then I should see "This is a preview of what this chapter will look like"
+  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
   When I follow "Edit Chapter"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Post Without Preview"
@@ -190,7 +190,7 @@ Feature: Edit chapters
     And I fill in "Chapter title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
-  Then I should see "This is a preview of what this chapter will look like"
+  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
   When I follow "Edit Chapter"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Preview"
@@ -208,7 +208,7 @@ Feature: Edit chapters
     And basic tags
   When I am logged in as "epicauthor"
     And I go to epicauthor's user page
-    And I follow "post new"
+    And I follow "New Work"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"

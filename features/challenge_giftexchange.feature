@@ -26,8 +26,8 @@ Feature: Gift Exchange Challenge
   When I check "Sign-up open?"
     And I submit
   Then I should see "Challenge was successfully updated"
-    And I should see "Signup: Open" within ".collection .meta"
-    And I should see "Signup closes:"
+    And I should see "Sign-up: Open" within ".collection .meta"
+    And I should see "Sign-up closes:"
 
   Scenario: Gift exchange appears in list of open challenges
   Given I am logged in as "mod1"
@@ -99,7 +99,7 @@ Feature: Gift Exchange Challenge
   When I sign up for "Awesome Gift Exchange" with combination A
   When I go to the collections page
     And I follow "Awesome Gift Exchange"
-  Then I should not see "Sign-ups"
+  Then I should not see "Sign-ups" within "#dashboard"
   
   Scenario: Mod can view signups
 

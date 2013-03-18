@@ -88,8 +88,8 @@ When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
 end
 
 When /^I sort by fandom$/ do
-  within(:xpath, "//li[a[contains(@title,'sort')]]") do
-    When %{I follow "Fandom"}
+  within(:xpath, "//li[a[contains(@title,'Sort')]]") do
+    When %{I follow "Fandom 1"}
   end
 end
 

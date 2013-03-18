@@ -1,4 +1,4 @@
-DEFAULT_TITLE = "My Work Title"
+sDEFAULT_TITLE = "My Work Title"
 DEFAULT_FANDOM = "Stargate SG-1"
 DEFAULT_RATING = "Not Rated"
 DEFAULT_WARNING = "No Archive Warnings Apply"
@@ -101,7 +101,7 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   When %{I follow "Add Chapter"}
   fill_in("content", :with => "Another Chapter.")
   click_button("Preview")
-  When %{I press "Post Chapter"}
+  When %{I press "Post"}
   Work.tire.index.refresh
 end
 
@@ -129,7 +129,7 @@ end
 
 When /^a chapter is added to "([^\"]*)"$/ do |work_title|
   When %{a draft chapter is added to "#{work_title}"}
-  click_button("Post Chapter")
+  click_button("Post")
   Work.tire.index.refresh
 end
 
@@ -146,7 +146,7 @@ end
 
 # meant to be used in conjunction with above step
 When /^I post the draft chapter$/ do
-  click_button("Post Chapter")
+  click_button("Post")
   Work.tire.index.refresh
 end
 

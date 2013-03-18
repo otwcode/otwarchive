@@ -33,7 +33,7 @@ Feature: Rearrange works within a series
       And I press "Preview"
     Then I should see "Part 2 of the Tale of Woe series"
     When I press "Post"
-    Then I follow "post new"
+    Then I follow "New Work"
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"

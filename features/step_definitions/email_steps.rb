@@ -47,7 +47,7 @@ Then(/^#{capture_email} should have #{capture_fields}$/) do |email_ref, fields|
 end
 
 Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
-  email(email_ref).body.should =~ /#{text}/
+  email(email_ref).body.should =~ /#{text.html_safe}/
 end
 
 Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|
