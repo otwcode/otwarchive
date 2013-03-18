@@ -42,7 +42,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   font-weight: 700;
 }
 
-.hidden, body .hidden {
+.hidden, body .hidden, .actions .hidden {
   display: none;
 }
 
