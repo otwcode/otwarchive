@@ -73,6 +73,8 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
     tw.save
   end
   tw.tag_wrangler = '1'
+  visit logout_path
+  assert !UserSession.find
   visit login_path
   fill_in "User name", :with => user
   fill_in "Password", :with => password
