@@ -179,7 +179,6 @@ Feature: Edit preferences
     And I should see "This also has warnings and tags"
     And I should see "No Archive Warnings Apply" within ".own .tags"
     # we can see warnings on works that we created
-    And show me the page
     And I should not see "No Archive Warnings Apply" within ".work .tags"
     # we cannot see warnings on works which we do not own
     And I should see "No Archive Warnings Apply" within "#work .work"
@@ -190,7 +189,6 @@ Feature: Edit preferences
   When I follow "All Fandoms"
   # we're looking at a non-canonical tag page, preferences set to hide warnings
     And I follow "Stargate SG-2"
-    And show me the page
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
     And I should not see "No Archive Warnings Apply" within "#work .work"

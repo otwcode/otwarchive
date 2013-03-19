@@ -19,7 +19,7 @@ Given(/^(\d)+ emails? should be delivered$/) do |count|
 end
 
 When(/^(?:I|they) follow "([^"]*?)" in #{capture_email}$/) do |link, email_ref|
-  visit_in_email(email(email_ref), link)
+  visit_in_email(email(email_ref).html_part, link)
 end
 
 When(/^(?:I|they) click the first link in #{capture_email}$/) do |email_ref|
@@ -47,7 +47,12 @@ Then(/^#{capture_email} should have #{capture_fields}$/) do |email_ref, fields|
 end
 
 Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
-  email(email_ref).body.should =~ /#{text.html_safe}/
+  if email(email_ref).multipart?
+    email(email_ref).text_part.body.should =~ /#{text}/
+    email(email_ref).html_part.body.should =~ /#{text}/
+  else
+    email(email_ref).body.should =~ /#{text}/
+  end
 end
 
 Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|

@@ -195,7 +195,9 @@ Feature: Admin tasks
   When the system processes jobs
   # confirmation email to admin, and to one user
   Then 1 email should be delivered to e@e.org
-    And the email should contain "Dear enigel"
+    # Hack for HTML emails. 'Enigel' is a link the new mailers, tests not catching that
+    And the email should contain "Dear"
+    And the email should contain "enigel"
     And "Issue 2035" is fixed
     # And the email should contain "Hey, we did stuff"
     And the email should contain "And it was awesome"

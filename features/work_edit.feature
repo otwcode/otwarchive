@@ -37,7 +37,7 @@ Feature: Edit Works
     Then I should see "First work"
       And I should see "first fandom"
       And I should see "new tag"
-    When I follow "Edit"
+    When I edit the work "First work"
       And I follow "Add Chapter"
       And I fill in "content" with "second chapter content"
       And I press "Preview"
@@ -47,7 +47,7 @@ Feature: Edit Works
     Then I should see "Chapter was successfully updated."
       And I should not see "first chapter content"
       And I should see "second chapter content"
-    When I follow "Edit"
+    When I edit the work "First work"
     Then I should not see "chapter content"
     When I follow "1"
       And I fill in "content" with "first chapter new content"
@@ -57,12 +57,11 @@ Feature: Edit Works
     Then I should see "Chapter was successfully updated."
       And I should see "first chapter new content"
       And I should not see "second chapter content"
-    When I follow "Edit"
+    When I edit the work "First Work"
       And I follow "2"
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
-    And I press "Cancel"
-    And the Work indexes are updated
+      And I press "Cancel"
       Then I should see "second chapter content"
     # Test changing pseuds on a work
     When I go to testuser's works page
