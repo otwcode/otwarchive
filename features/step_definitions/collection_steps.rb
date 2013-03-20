@@ -17,7 +17,8 @@ end
 
 Given /^I have (?:a|the) hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   When %{I am logged in as "moderator"}
-  When %{I set up the collection "#{title}" with name "#{name}"}
+  When %{I 
+    collection "#{title}" with name "#{name}"}
   When %{I check "This collection is unrevealed"}
   And %{I submit}
 

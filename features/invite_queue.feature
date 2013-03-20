@@ -146,7 +146,8 @@ Feature: Invite queue management
     When I press "Create Account"
     Then I should see "Account Created!"
     Then 1 email should be delivered
-      And the email should contain "Welcome to the Archive of Our Own, newuser!"
+      And the email should contain "Welcome to the Archive of Our Own,"
+      And the email should contain "newuser"
       And the email should contain "Please activate your account"
     
     # user activates account

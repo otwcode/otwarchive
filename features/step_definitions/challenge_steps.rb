@@ -208,6 +208,7 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "Time zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
     check("prompt_meme_request_restriction_attributes_title_allowed")
+    Abd %{show me the page}
     And %{I submit}
 end
 

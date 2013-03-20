@@ -243,7 +243,7 @@ Feature: Collection
   # ordinary users can't see signups until 5 people have signed up
   When I go to the collections page
     And I follow "Yuletide"
-  Then I should not see "Sign-ups"
+  Then I should not see "Sign-ups" within "#dashboard"
     And I should see "Sign-up Summary"
   When I follow "Sign-up Summary"
   Then I should see "Summary does not appear until at least 5 sign-ups have been made!"
@@ -267,7 +267,7 @@ Feature: Collection
   # ordinary users can't see signups but can see summary
   When I go to the collections page
     And I follow "Yuletide"
-  Then I should not see "Sign-ups"
+  Then I should not see "Sign-ups" within "#dashboard"
     And I should see "Sign-up Summary"
   When I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
