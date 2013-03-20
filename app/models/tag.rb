@@ -99,7 +99,7 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  before_update :remove_index_for_type_change, if: :type_changed?
+  after_save :remove_index_for_type_change, if: :type_changed?
   def remove_index_for_type_change
     @destroyed = true
     tire.update_index
