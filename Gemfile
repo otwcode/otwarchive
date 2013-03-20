@@ -83,7 +83,8 @@ group :test do
   gem 'capybara', '=0.3.9'
   gem 'database_cleaner', '>=0.6.0.rc.3'
   gem 'cucumber-rails'
-  gem 'cucumber', '>=0.9.1'
+  gem 'cucumber', '>=1.0.0'
+  gem 'gherkin', '>=2.4.1' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
