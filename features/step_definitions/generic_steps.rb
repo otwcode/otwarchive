@@ -32,7 +32,7 @@ Then /^I should see errors/ do
 end
 
 Then /^show me the form$/ do
-  Then %{show me the 1st form}
+  step %{show me the 1st form}
 end
 
 Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
@@ -55,7 +55,7 @@ end
 
 Then /^I should see Posted now$/ do
 	now = Time.zone.now.to_s
-  Given "I should see \"Posted #{now}\""
+  step "I should see \"Posted #{now}\""
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
@@ -79,7 +79,7 @@ Then /^I should see an update confirmation message$/ do
 end
 
 Then /^I should see a save error message$/ do
-  Then %{I should see "We couldn't save"}
+  step %{I should see "We couldn't save"}
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
@@ -165,7 +165,7 @@ When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |
 end
 
 When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, suffix, value|
-  When %{I check the #{index}#{suffix} checkbox with the value "#{value}"}
+  step %{I check the #{index}#{suffix} checkbox with the value "#{value}"}
 end
 
 When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
@@ -197,7 +197,7 @@ end
 
 # This will submit the first submit button in a page by default
 When /^I submit$/ do
-  When %{I submit with the 1st button}
+  step %{I submit with the 1st button}
 end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them

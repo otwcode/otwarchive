@@ -1,7 +1,7 @@
 Given /^I want to edit my profile$/ do
   visit user_profile_path(User.current_user)
   click_link("Edit My Profile")
-  And %{I should see "Edit My Profile"}
+  step %{I should see "Edit My Profile"}
 end
 
 
@@ -49,7 +49,7 @@ end
 
 When /^I view my profile$/ do
   visit user_path(User.current_user)
-  Then %{I should see "Dashboard"}
+  step %{I should see "Dashboard"}
   click_link("Profile")
 end
 

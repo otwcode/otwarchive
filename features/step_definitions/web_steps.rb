@@ -62,7 +62,7 @@ end
 When /^(?:|I )fill in the following(?: within "([^"]*)")?:$/ do |selector, fields|
   with_scope(selector) do
     fields.rows_hash.each do |name, value|
-      When %{I fill in "#{name}" with "#{value}"}
+      step %{I fill in "#{name}" with "#{value}"}
     end
   end
 end

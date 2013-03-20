@@ -55,9 +55,9 @@ Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  Given "I am logged out"
+  step "I am logged out"
   username = "wrangler"
-  Given %{I am logged in as "#{username}"}
+  step %{I am logged in as "#{username}"}
   user = User.find_by_login(username)
   user.tag_wrangler = '1'
 end
@@ -117,25 +117,25 @@ When /^I set up the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, t
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
-  Given "I set up the comment \"#{comment_text}\" on the tag \"#{tag}\""
+  step "I set up the comment \"#{comment_text}\" on the tag \"#{tag}\""
   click_button("Comment")
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)" via web$/ do |comment_text, tag|
-  When %{I view the tag "#{tag}"}
-  When %{I follow " comments"}
-    And %{I fill in "Comment" with "#{comment_text}"}
-    And %{I press "Comment"}
-  Then %{I should see "Comment created!"}
+  step %{I view the tag "#{tag}"}
+  step %{I follow " comments"}
+    step %{I fill in "Comment" with "#{comment_text}"}
+    step %{I press "Comment"}
+  step %{I should see "Comment created!"}
 end
 
 When /^I view tag wrangling discussions$/ do
-  When %{I follow "Tag Wrangling"}
-  When %{I follow "Discussion"}
+  step %{I follow "Tag Wrangling"}
+  step %{I follow "Discussion"}
 end
 
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
-  Then %{I should see "wrangler" within ".tag_edit"}
+  step %{I should see "wrangler" within ".tag_edit"}
 end

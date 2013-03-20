@@ -26,7 +26,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
 end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
-  Given "I am logged out"
+  step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
     user = Factory.create(:user, {:login => login, :password => password})
@@ -45,11 +45,11 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
-  Given %{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"}
+  step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
 Given /^I am logged in$/ do
-  Given %{I am logged in as "#{DEFAULT_USER}"}
+  step(%{I am logged in as "#{DEFAULT_USER}"})
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
@@ -60,7 +60,7 @@ end
 
 
 Given /^I am logged in as a random user$/ do
-  Given "I am logged out"
+  step("I am logged out")
   name = "testuser#{User.count + 1}"
   user = Factory.create(:user, :login => name, :password => DEFAULT_PASSWORD)
   user.activate
@@ -80,7 +80,7 @@ Given /^I am logged out$/ do
 end
 
 Given /^I log out$/ do
-  Given %{I follow "Log Out"}
+  step(%{I follow "Log Out"})
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
@@ -91,9 +91,9 @@ When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
 end
 
 Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
-  When %{I am logged in as "#{username}"}
-  When %{"#{username}" creates the pseud "#{pseud}"}
-  When "I am logged out"
+  step (%{I am logged in as "#{username}"})
+  step(%{"#{username}" creates the pseud "#{pseud}"})
+  step("I am logged out")
 end
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
@@ -108,12 +108,12 @@ end
 
 Given /^"([^\"]*)" deletes their account/ do |username|
   visit user_path(username)
-  Given %{I follow "Profile"}
-  Given %{I follow "Delete My Account"}
+  step(%{I follow "Profile"})
+  step(%{I follow "Delete My Account"})
 end
 
 Given /^I am a visitor$/ do
-  Given %{I am logged out}
+  step(%{I am logged out})
 end
 
 Given /^I view the people page$/ do
@@ -121,5 +121,5 @@ Given /^I view the people page$/ do
 end
 
 Then /^I should get the error message for wrong username or password$/ do
-  Then %{I should see "The password or user name you entered doesn't match our records. Please try again"}
+  step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
 end
