@@ -36,7 +36,7 @@
   <% end %>
 <!--actions-->
   <% if is_author_of?(bookmark) %>
-    <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
+    <%= render :partial => 'bookmarks/bookmark_owner_navigation', :locals => {:bookmark => bookmark} %>
   <% elsif logged_in_as_admin? %>
     <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
   <% end %>

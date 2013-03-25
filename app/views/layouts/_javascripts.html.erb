@@ -17,14 +17,12 @@ if (typeof jQuery == 'undefined')
 <%= javascript_include_tag 'jquery.livequery.min.js' %>
 <%= javascript_include_tag 'rails' %>
 <%= javascript_include_tag 'application' %>
-<%= javascript_include_tag 'livevalidation_standalone' %>
-<%= javascript_include_tag 'jquery.qtip.min.js' %>
-<%= javascript_include_tag 'jquery-shuffle.js' %>
-<%= javascript_include_tag 'jquery.scrollTo.min.js' %>
-<%= javascript_include_tag 'jquery.tokeninput.js' %>
-<%= javascript_include_tag "ibox/ibox" %>
-<%= javascript_include_tag "jquery.cookie" %>
 <%= javascript_include_tag "bootstrap/bootstrap-dropdown.js" %>
+<%= javascript_include_tag 'jquery-shuffle.js' %>
+<%= javascript_include_tag 'jquery.tokeninput.js' %>
+<%= javascript_include_tag 'jquery.trap.min.js' %>
+<%= javascript_include_tag 'ao3modal.min.js' %>
+<%= javascript_include_tag "jquery.cookie" %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>

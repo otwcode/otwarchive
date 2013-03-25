@@ -1,0 +1,6 @@
+<% content_for :message do %>
+You successfully edited the following story:
+  
+<%= @work.title.html_safe %>
+(<%= work_url(@work) %>)
+<% end %>

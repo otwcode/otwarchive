@@ -1,0 +1,10 @@
+<% content_for :message do %>
+Dear Collection Maintainers!
+
+You have received a message about your collection "<%= @collection.title %>" (<%= collection_url(@collection) %>):
+<%= text_divider %>
+
+<%= raw @message %>"
+
+<% end %>
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

@@ -270,6 +270,7 @@ class WorksController < ApplicationController
   # POST /works
   def create
     load_pseuds
+    @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
@@ -340,12 +341,13 @@ class WorksController < ApplicationController
   def update
     # Need to get @pseuds and @series values before rendering edit
     load_pseuds
+    @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
     unless @work.errors.empty?
       render :edit and return
     end
-
+    
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
