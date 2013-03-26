@@ -547,7 +547,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   Then I should not see "myname4" within "h5"
     And I should not see "mod1" within "h5"
-    And I should see "Fulfilled Story by Anonymous " within "h4"
+    And I should see "Fulfilled Story by Anonymous" within "h4"
   
   Scenario: User cannot see unposted claims to delete
   
@@ -848,12 +848,6 @@ Feature: Prompt Meme Challenge
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
 
-# TODO: Figure out why I'm getting the following error 
-#You have a nil object when you didn't expect it!
-#You might have expected an instance of Array.
-#The error occurred while evaluating nil.collect (NoMethodError)
-#./app/models/work.rb:352:in `block in challenge_assignment_ids='
-
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
@@ -866,6 +860,7 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
+    And I fill in "Post to Collections / Challenges" with ""
     And I press "Post Without Preview"
   Then I should see "My Gift Exchange"
     And I should not see "Battle 12"
@@ -890,7 +885,8 @@ Feature: Prompt Meme Challenge
   # TODO: fix the form in the partial collection_participants/participant_form and make sure the moderator is a real mod. Can't delete prompts because there are only 2 and so are not allowed to be deleted (needs to be three)
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
+  When I sign up for Battle 12 with combination C
+  When I add a new prompt to my signup for a prompt meme
   When I am logged in as "mod2"
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted."
@@ -1083,6 +1079,7 @@ Feature: Prompt Meme Challenge
     
   Scenario: Story is anon when challenge is revealed
   
+  Given I have standard challenge tags setup
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I am logged in as "myname4"
@@ -1099,7 +1096,6 @@ Feature: Prompt Meme Challenge
     And I should see "Collections: Battle 12"
     And I should see "Anonymous" within ".byline"
     And I should not see "mod1" within ".byline"
-    And I should see "Alternate Universe - Historical"
     
   Scenario: Authors can be revealed
   
@@ -1316,7 +1312,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname4"
     And I go to the "Battle 12" requests page
   When I press "Claim"
-  When I follow "New Work"
+  When I follow "Fulfill"
     And I fill in the basic work information for "Existing work"
     And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Preview"
@@ -1328,7 +1324,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Your work was successfully posted"
     And I should see "In response to a prompt by Anonymous"
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts ("
   Then I should see "myname4"
     And I should see "Fulfilled By"
   When I follow "Existing work"

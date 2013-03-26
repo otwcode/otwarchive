@@ -1,4 +1,4 @@
-sDEFAULT_TITLE = "My Work Title"
+DEFAULT_TITLE = "My Work Title"
 DEFAULT_FANDOM = "Stargate SG-1"
 DEFAULT_RATING = "Not Rated"
 DEFAULT_WARNING = "No Archive Warnings Apply"

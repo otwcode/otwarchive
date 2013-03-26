@@ -561,7 +561,7 @@ Feature: Collection
   When I fill in the 1st field with id matching "cover" with "pinchhitter"
     And I submit
   Then 1 email should be delivered
-    And the email should contain "Your Assignment"
+    And the email should contain "You have been assigned the following request"
     And I should see "Assignment updates complete!"
     And all emails have been delivered    
   When I follow "Pinch Hits"
@@ -606,7 +606,7 @@ Feature: Collection
     And the email should contain "A gift story has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
-    And the email should contain "by an anonymous giver"
+    And the email should contain "by an anonymous responder"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"
     And the email should not contain "by myname3"
@@ -675,15 +675,15 @@ Feature: Collection
   Then I should not see "Anonymous"
    And I should see "myname" within ".byline"
 
-  When I follow "post new"
+  When I follow "New Work"
   Then I should not see "Does this fulfill a challenge assignment"
   When I log out
     And I am logged in as "pinchhitter"
-    And I follow "post new"
+    And I follow "New Work"
   Then I should not see "Does this fulfill a challenge assignment"
   When I log out
     And I am logged in as "myname6"
-    And I follow "post new"
+    And I follow "New Work"
   Then I should not see "Does this fulfill a challenge assignment"
 
 

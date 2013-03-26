@@ -76,7 +76,7 @@ gem 'newrelic-redis'
 gem "google_visualr", ">= 2.1"
 
 group :test do
-  gem 'rspec-rails', '>=2.5.0'
+  gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
@@ -102,3 +102,4 @@ group :production do
   gem "memcache-client"
   gem 'airbrake'
 end
+
