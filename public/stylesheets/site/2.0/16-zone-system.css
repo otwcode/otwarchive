@@ -21,7 +21,7 @@ SUBSECTIONS:
 .system .intro {
   background: #ededed;
   font: 1.571em Georgia, serif;
-  margin: 0 auto 2.571em 1%;
+  margin: 1em auto 2.5em 1%;
   max-width: 68%;
   float: left;
   overflow: hidden;
@@ -39,13 +39,6 @@ SUBSECTIONS:
   display: block;
   text-align: center;
     text-shadow: none;
-}
-
-.system .module h2 {
-  font: bold oblique 1.5em Georgia, serif;
-  line-height: 1.75;
-  display: block;
-  text-align: center;
 }
 
 .system .intro p {
@@ -66,7 +59,7 @@ SUBSECTIONS:
 .system .latest, .system div.news {
   width: 25%;
   float: left;
-  margin: auto 1% 2.5em 5%;
+  margin: 1.571em 1% 1.571em 5%;
 }
 
 .system .tweets {
