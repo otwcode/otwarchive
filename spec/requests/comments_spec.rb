@@ -79,11 +79,12 @@ describe "Comments" do
   end
   context "logged in users" do
     before do
+      @user = Factory.create(:user)
       visit login_path
-      fill_in "User name",with: "testy"
-      fill_in "Password", with: "testy"
+      fill_in "User name",with: "#{@user.login}"
+      fill_in "Password", with: "password"
       check "Remember me"
-      click_button "Log in"
+      click_button "Log In"
     end
     it_behaves_like "on unrestricted works" do
     end
@@ -91,7 +92,7 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = Factory.create(:work, :posted => true, :fandom_string => "Merlin (TV)", anon_commenting_enabled: "false" )
+      @work = Factory.create(:work, :posted => true, :fandom_string => "Merlin (TV)", :anon_commenting_disabled => "true" )
       @work.index.refresh
       @comment = Comment.create(:comment)
       @work.comments << @comment
