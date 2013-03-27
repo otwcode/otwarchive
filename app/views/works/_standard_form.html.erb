@@ -234,10 +234,10 @@
         <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
       </dd>
       <dt class="anonymous comments">
-        <%= f.check_box :anon_commenting_enabled %>
+        <%= f.check_box :anon_commenting_disabled %>
       </dt>
       <dd class="anonymous comments">
-        <%= f.label :anon_commenting_enabled, ts("Anonymous commenting enabled") %><%= link_to_help "anonymous-commenting" %>
+        <%= f.label :anon_commenting_disabled, ts("Anonymous commenting disabled") %><%= link_to_help "anonymous-commenting" %>
       </dd>
     </dl>
   </fieldset>
