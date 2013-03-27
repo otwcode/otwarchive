@@ -21,7 +21,7 @@ $j(document).ready(function() {
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
-    
+
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
 });
@@ -191,7 +191,7 @@ jQuery(function($){
 // - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
 // - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
 //   (and you can then add an alternative link for them using <noscript>)
-// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion   
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
@@ -302,11 +302,32 @@ function hideField(id) {
 
 function attachCharacterCounters() {
     var countFn = function() {
-        var counter = $j(this).closest('form').find('.character_counter .value'),
-            max = parseInt(counter.attr('data-maxlength')),
+        var counter = (function(input) {
+                /* Character-counted inputs do not always have the same hierarchical relationship
+                to their associated counter elements in the DOM, and some cc-inputs have 
+                duplicate ids. So search for the input's associated counter element first by id, 
+                then by checking the input's siblings, then by checking its cousins. */
+                var cc = $j('#' +input.attr('id') +'_counter');
+                
+                if (cc.length === 1) { return cc; }
+                    
+                cc = input.nextAll('character_counter').first().find('.value');
+                
+                if (cc.length) { return cc; }
+
+                var parent = input.parent();
+                for (var i = 0; i < 2; i++) {
+                    cc = parent.find('.character_counter .value');
+                    if (cc.length) { return cc; }
+                    parent = parent.parent();
+                }
+                
+                return $j(); // return empty jquery element if search found nothing
+            })($j(this)),
+            max = parseInt(counter.attr('data-maxlength'), 10),
             val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
             remaining = max - val.length;
-            
+
         counter.html(remaining)
             .attr("aria-valuenow", remaining);
     };
@@ -332,9 +353,9 @@ function setupDropdown(){
     'class': 'dropdown-toggle',
     'data-toggle': 'dropdown',
     'data-target': '#'
-  });  
+  });
   $j('.dropdown .menu').addClass("dropdown-menu");
-  $j('.dropdown .menu li').attr("role", "menu-item");  
+  $j('.dropdown .menu li').attr("role", "menu-item");
 }
 
 // Accordion-style collapsible widgets
