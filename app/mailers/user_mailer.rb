@@ -321,7 +321,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_SHORT_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
@@ -332,7 +332,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = abuse_report.comment
     mail(
         :to => abuse_report.email,
-        :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Your Abuse Report"
+        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 
