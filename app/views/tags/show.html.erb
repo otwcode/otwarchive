@@ -4,8 +4,10 @@
     <h2 class="heading"><%= @tag.name %></h2>
     <div class="icon"></div>
     <ul class="navigation actions" role="navigation">
-      <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
-      <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+      <% if @tag.canonical %>
+        <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
+        <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+      <% end %>
     	<% if can_wrangle? %>
       	<li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       	<li><%= tag_comment_link(@tag) %></li>
