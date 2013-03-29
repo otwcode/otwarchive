@@ -1,15 +1,14 @@
 <% content_for :message do %>
 Hello, <%= @user.login %>!
 
-A gift story has been posted for you <%= @collection ? "in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
+A gift story has been posted for you<% if @collection then %> in the "<%= @collection.title %>" collection<% end %> at the Archive of Our Own!
 
-<% if @collection.nil? %>
-"<%= @work.title.html_safe %>" (<%= work_url(@work) %>) (<%= @work.word_count %> <%= ts("words") %>)<% else %>
-"<%= @work.title.html_safe %>" (<%= collection_work_url(@collection, @work) %>) (<%= @work.word_count %> <%= ts("words") %>)<% end %>
+"<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
+<%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-by <%= "#{(@work.anonymous? ? "an anonymous responder" : @work.pseuds.map {|p| text_pseud(p) }.to_sentence)}" %>
+by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
 
-<%= ts("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
+<% unless @work.fandom_string.blank? %>Fandom: <%= @work.fandom_string %><% end %>
 
 <% unless @work.summary.blank? %><%= ts("Summary:") %>
 <%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>
