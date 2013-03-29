@@ -4,7 +4,7 @@ A response to your prompt has been posted <% if @collection then %>in the "":<%=
 "<%= @work.title.html_safe %>" (<%= @work.word_count %> words)
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-by <%= @work.anonymous? ? "an anonymous responder" : (work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
+by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
 
 Fandom: <%= @work.fandom_string unless @work.fandom_string.blank? %>
 <% unless @work.summary.blank? %>
