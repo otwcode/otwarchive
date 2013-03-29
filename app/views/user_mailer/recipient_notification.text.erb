@@ -1,23 +1,17 @@
 <% content_for :message do %>
-  Hello, <%= style_bold(@user.login) %>!
+Hello, <%= @user.login %>!
 
-  A gift story has been posted for you <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
+A gift story has been posted for you <%= @collection ? "in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
 
-  <% if @collection.nil? %>
-    <%= style_link(@work.title.html_safe) %> (<%= work_url(@work) %>) <%= "(#{@work.word_count} words)" %>
-  <% else %>
-    <%= style_link(@work.title.html_safe) %> (<%= collection_work_url(@collection, @work) %>) <%= "(#{@work.word_count} words)" %>
-  <% end %>
-  by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
-  <%= style_bold("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
+<% if @collection.nil? %>
+"<%= @work.title.html_safe %>" (<%= work_url(@work) %>) (<%= @work.word_count %> <%= ts("words") %>)<% else %>
+"<%= @work.title.html_safe %>" (<%= collection_work_url(@collection, @work) %>) (<%= @work.word_count %> <%= ts("words") %>)<% end %>
 
-  <% unless @work.summary.blank? %>
-    <%= style_bold("Summary:") %>
-    <%= style_quote(raw sanitize_field(@work, :summary)) %>
-  <% end %>
-  
-  <% if @collection && !@collection.gift_notification.blank? %>
-    <%= @collection.gift_notification %>
-  <% end %>
-  
-<% end %>
+by <%= "#{(@work.anonymous? ? "an anonymous responder" : @work.pseuds.map {|p| text_pseud(p) }.to_sentence)}" %>
+
+<%= ts("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
+
+<% unless @work.summary.blank? %><%= ts("Summary:") %>
+<%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>
+
+<% if @collection && !@collection.gift_notification.blank? %><%= @collection.gift_notification %><% end %><% end %>

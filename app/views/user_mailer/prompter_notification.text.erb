@@ -6,13 +6,10 @@ A response to your prompt has been posted <% if @collection then %>in the "":<%=
 
 by <%= @work.anonymous? ? "an anonymous responder" : (work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
 
-Fandom: <%= @work.fandom_string unless @work.fandom_string.blank? %>
-<% unless @work.summary.blank? %>
+<%= ts("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
 
-Summary:
-<%= to_plain_text(raw sanitize_field(@work, :summary)) %>
-<% end %>  
+<% unless @work.summary.blank? %><%= ts("Summary:") %>
+<%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>  
+
 <% if @collection && !@collection.gift_notification.blank? %>
-
-<%= @collection.gift_notification %>
-<% end %><% end %>
+<%= @collection.gift_notification %><% end %><% end %>
