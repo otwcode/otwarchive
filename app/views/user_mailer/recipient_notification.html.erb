@@ -15,7 +15,9 @@
     <br>
     by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
     <br>
-    <%= style_bold("Fandom:") %> <%= @work.fandom_string unless @work.fandom_string.blank? %>
+    <% unless @work.fandom_string.blank? %>
+      <%= style_bold("Fandom:") %> <%= @work.fandom_string %>
+    <% end %>
   </p>
   
   <% unless @work.summary.blank? %>
