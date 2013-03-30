@@ -37,9 +37,6 @@ GEM
       activemodel (= 3.0.20)
       activesupport (= 3.0.20)
     activesupport (3.0.20)
-    airbrake (3.0.4)
-      activesupport
-      builder
     archive-tar-minitar (0.5.2)
     arel (2.0.10)
     aws-s3 (0.6.2)
@@ -258,7 +255,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   authlogic!
   aws-s3
   best_in_place
