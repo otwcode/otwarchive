@@ -119,9 +119,8 @@ Feature: Create Works
     Then I should see "Work was successfully posted."
       And 1 email should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
-    When "gift emails not being sent?" is fixed
-      # And 1 email should be delivered to "recipient@example.org"
-      # And the email should contain "A gift story has been posted for you"
+       And 1 email should be delivered to "recipient@example.org"
+       And the email should contain "A gift story has been posted for you"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -186,8 +185,7 @@ Feature: Create Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-      And "gift emails not being sent?" is fixed
-      #And 1 email should be delivered to "giftee@example.org"
+      And 1 email should be delivered to "giftee@example.org"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
 

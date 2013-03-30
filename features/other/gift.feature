@@ -34,5 +34,14 @@ Feature: Create Gifts
   Then I should see "Gifts for myname2"
     And I should see "GiftStory1"
     And I should see "GiftStory2"
+
+  # Give a third gift using Post Without Preview
+  Given I set up the draft "GiftStory3"
+    And I fill in "work_recipients" with "myname3"
+    And I press "Post Without Preview"
+
+  Then 1 email should be delivered to "myname3@foo.com"
+    And the email should contain "A gift story has been posted for you"
+
     
     
