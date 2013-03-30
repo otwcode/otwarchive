@@ -6,9 +6,6 @@ URL of the page the abuse is on: <%= @url %>
 Description of the abuse:
 <%= text_divider %>
 
-<%= to_plain_text(@comment) %>
-<% end %>
+<%= to_plain_text(@comment) %><% end %>
 
-<% content_for :sent_at do %>
-<%= Time.now.to_s(:time_for_mailers) %>
-<% end %>
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
