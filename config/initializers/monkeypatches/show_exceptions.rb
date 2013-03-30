@@ -14,7 +14,6 @@ module ActionDispatch
           rescue_action_locally(request, exception)
         else          
           status = status_code(exception)
-          Airbrake.notify(exception) if Rails.env == 'production'
           begin
             body = ErrorsController.action(rescue_responses[exception.class.name]).call(env)
             body
