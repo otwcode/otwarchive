@@ -55,16 +55,6 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
-    user = User.find(user_id)
-    @subscription = Subscription.find(subscription_id)
-    @creation = creation_class_name.constantize.find(creation_id)
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{@subscription.subject_text(@creation)}"
-    )
-  end
-
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
     @subscription = Subscription.find(subscription_id)
