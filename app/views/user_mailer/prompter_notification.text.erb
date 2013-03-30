@@ -8,7 +8,7 @@ by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_
 
 <% unless @work.fandom_string.blank? %>Fandom: <%= @work.fandom_string %><% end %>
 
-<% unless @work.summary.blank? %><%= ts("Summary:") %>
+<% unless @work.summary.blank? %>Summary:
 <%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>  
 
 <% if @collection && !@collection.gift_notification.blank? %><%= @collection.gift_notification %><% end %><% end %>
