@@ -304,32 +304,30 @@ function attachCharacterCounters() {
     var countFn = function() {
         var counter = (function(input) {
                 /* Character-counted inputs do not always have the same hierarchical relationship
-                to their associated counter elements in the DOM, and some cc-inputs have 
-                duplicate ids. So search for the input's associated counter element first by id, 
+                to their associated counter elements in the DOM, and some cc-inputs have
+                duplicate ids. So search for the input's associated counter element first by id,
                 then by checking the input's siblings, then by checking its cousins. */
-                var cc = $j('#' +input.attr('id') +'_counter');
-                
-                if (cc.length === 1) { return cc; }
-                    
-                cc = input.nextAll('character_counter').first().find('.value');
-                
-                if (cc.length) { return cc; }
+                var cc = $j('.character_counter [id='+input.attr('id')+'_counter]');
+                if (cc.length === 1) { return cc; } // id search, use attribute selector rather 
+                // than # to check for duplicate ids
 
-                var parent = input.parent();
+                cc = input.nextAll('.character_counter').first().find('.value'); // sibling search
+                if (cc.length) { return cc; } 
+
+                var parent = input.parent(); // 2 level cousin search
                 for (var i = 0; i < 2; i++) {
-                    cc = parent.find('.character_counter .value');
+                    cc = parent.nextAll('.character_counter').find('.value');                    
                     if (cc.length) { return cc; }
                     parent = parent.parent();
                 }
-                
+
                 return $j(); // return empty jquery element if search found nothing
             })($j(this)),
             max = parseInt(counter.attr('data-maxlength'), 10),
             val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
             remaining = max - val.length;
 
-        counter.html(remaining)
-            .attr("aria-valuenow", remaining);
+        counter.html(remaining).attr("aria-valuenow", remaining);
     };
 
     $j(document).on('keyup keydown mouseup mousedown change', '.observe_textlength', countFn);
