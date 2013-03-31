@@ -39,8 +39,19 @@ Feature: Create Gifts
   Given I set up the draft "GiftStory3"
     And I fill in "work_recipients" with "myname3"
     And I press "Post Without Preview"
-
   Then 1 email should be delivered to "myname3@foo.com"
+    And all emails have been delivered
+    And I follow "Edit"
+  # Change the recipient of the gift
+  Then I fill in "work_recipients" with "myname2"
+    And I press "Preview"
+    And 0 emails should be delivered
+    And I press "Edit"
+    And I press "Preview"
+    And 0 emails should be delivered
+    And I press "Update"
+    And I should see "For myname3, myname2"
+  Then 1 email should be delivered to "myname2@foo.com"
     And the email should contain "A gift story has been posted for you"
 
     
