@@ -104,7 +104,6 @@ jQuery(document).ready(function() {
                     _keyboard.toggleHandlers(true);
                     _loadingDiv.hide();
                     _modalDiv.fadeIn(function() {
-                        _modalDiv.trap();
                         _contentDiv.focus();
                     });
                 }
@@ -220,7 +219,7 @@ jQuery(document).ready(function() {
                             _title,
                             _closeButton
                         )
-                )
+                ).trap()
             )
         );
 
