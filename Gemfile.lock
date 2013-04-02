@@ -212,6 +212,8 @@ GEM
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
+    rvm-capistrano (1.2.7)
+      capistrano (>= 2.0.0)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
     selenium-webdriver (0.0.29)
@@ -298,6 +300,7 @@ DEPENDENCIES
   rpm_contrib
   rspec-rails (>= 2.5.0)
   ruby-debug19
+  rvm-capistrano
   sanitize
   shoulda
   timeliness

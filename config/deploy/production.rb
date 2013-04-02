@@ -6,8 +6,11 @@
 # 
 
 # otw3 runs nginx and squid and rails; if you want a console get it here
-server "ao3-app01.ao3.org",  :app , :web , :db
+server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app02.ao3.org",  :app 
+server "ao3-app03.ao3.org",  :app
+server "ao3-front01.ao3.org",  :app , :web , :primary
+
 
 # ao3-db01 is the db server
 #server "ao3-db01.ao3.org", :db, :no_release => true
