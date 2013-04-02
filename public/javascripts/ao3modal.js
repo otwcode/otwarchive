@@ -19,7 +19,6 @@ jQuery(document).ready(function() {
                 .attr('href', '#')
                 .text('Close'),
             _title = $('<span>').addClass('title'),
-            _pageModals = {},
             _tallHeight,
             _mobile = (function(uastring) { // detectmobilebrowsers.com (added ipad to regex)
                 return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(ad|hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(uastring) ||
@@ -121,7 +120,7 @@ jQuery(document).ready(function() {
             _loading = true;
 
             if (href.indexOf('#') === 0) {
-                _setContent(_pageModals[href.substring(1)], title || '');
+                _setContent($(href).html(), title || '');
             } else if (href.indexOf('.jpg') == href.length-'.jpg'.length ||
                 href.indexOf('.gif') == href.length-'.gif'.length ||
                 href.indexOf('.bmp') == href.length-'.bmp'.length ||
@@ -197,13 +196,9 @@ jQuery(document).ready(function() {
                         event.preventDefault();
                     });
 
-                // if link refers to in-page modal content, extract it and store it
+                // if link refers to in-page modal content, find it and hide it
                 if (a.attr('href').indexOf('#') === 0) {
-                    var pageModal = $(a.attr('href'));
-
-                    if (pageModal[0]) {
-                        _pageModals[pageModal.attr('id')] = pageModal.remove();
-                    }
+                    $(a.attr('href')).hide();
                 }
             });
         }
