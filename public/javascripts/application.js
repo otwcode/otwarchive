@@ -46,19 +46,22 @@ function get_token_input_options(self) {
 
 // Look for autocomplete_options in application helper and throughout the views to
 // see how to use this!
-jQuery(function($) {
-  $('input.autocomplete').livequery(function(){
-    var self = $(this);
-    var token_input_options = get_token_input_options(self);
-    var method;
-    try {
-        method = $.parseJSON(self.attr('autocomplete_method'));
-    } catch (err) {
-        method = self.attr('autocomplete_method');
-    }
-    self.tokenInput(method, token_input_options);
+var input = $j('input.autocomplete');
+if (input.livequery) {
+  jQuery(function($) {
+    $('input.autocomplete').livequery(function(){
+      var self = $(this);
+      var token_input_options = get_token_input_options(self);
+      var method;
+      try {
+          method = $.parseJSON(self.attr('autocomplete_method'));
+      } catch (err) {
+          method = self.attr('autocomplete_method');
+      }
+      self.tokenInput(method, token_input_options);
+    });
   });
-});
+}
 
 ///////////////////////////////////////////////////////////////////
 
