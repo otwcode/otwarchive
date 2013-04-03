@@ -190,7 +190,7 @@ p.character_counter {
   margin: 0.25em auto auto;
 }
 
-.autocomplete input, div.dropdown ul li {
+.autocomplete input, .autocomplete .dropdown ul li {
   display: block;
   margin: 0.25em 0 0;
   min-width: 10em;
