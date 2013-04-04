@@ -7,9 +7,11 @@
 <%= creation.is_a?(Work) ? this_work.title.html_safe : @subscription.chapter_name(creation) %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
 by <%= this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
 
+Chapter: <%= this_work.chapter_total_display %>
 Fandom: <%= this_work.fandoms.map{|f| f.name}.to_sentence.html_safe %>
 <% if this_work.character_string && !this_work.character_string.blank? then %>Characters: <%= this_work.character_string %><% end %>
 <% if this_work.relationship_string && !this_work.relationship_string.blank? then %>Relationships: <%= this_work.relationship_string %><% end %>
+<% if this_work.freeform_string && !this_work.freeform_string.blank? %>Additional Tags: <%= this_work.freeform_string %><% end %>
 Rating: <%= this_work.rating_string %>
 Warnings: <%= this_work.warning_string %><% @seen[this_work.id] = true %><% end %>
 
