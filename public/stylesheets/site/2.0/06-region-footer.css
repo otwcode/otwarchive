@@ -4,61 +4,76 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 
 #footer {
   background: #900 url("/images/skins/textures/tiles/red-ao3.png");
-  clear: both;
   border-top: 2px solid;
+  color: #fff;
+  float: left;
+  font-size: 0.75em;
   position: relative;
-  min-height: 150px;
+  padding: 0;
+  width: 100%;
 }
 
 #footer ul {
   border: 0;
   clear: both;
-  color: #fff;
-  font-size: 0.75em;
   margin: 1.5em 0;
-  padding: 1em;
-  text-align: center;
-  float: none;
+  padding: 1em 5%;
+  float: left;
+  text-align: left;
+  width: 90%;
 }
 
-#footer a {
+#footer li {
+  position: relative;
+  display: block;
+}
+
+#footer a, #footer .secondary {
   background: transparent;
-  color: #fff;
   border: 0;
   font-weight: 400;
   margin: auto;
+  outline: 0;
   padding: 0;
+  vertical-align: baseline;
     box-shadow: none;
+    border-radius: 0;
 }
 
-#footer a:hover, #footer a:focus {
-  background: #500;
-    box-shadow: none;
+#footer a {
+  color: #fff;
+  display: inline;
+  border-bottom: 1px solid;
+  line-height: 1.5;
+  white-space: normal;
 }
 
-#footer p.beta {
-  background: url("/images/imageset.png") 0 -375px no-repeat;
-  height: 150px;
-  width: 100px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0;
+#footer a:focus {
+  outline: 1px dotted;
+}
+
+#footer .module {
+  max-width: 20%;
+  padding: 0 2%;
+}
+
+#footer .menu {
   margin: 0;
+  padding: 0;
+}
+
+#footer .heading {
+  display: block;
+  color: #fff;
 }
 
 #footer .secondary {
-  margin: auto;
-  right: auto;
-    box-shadow: inset 2px 2px 2px #111;
+  position: static;
+    box-shadow: none;
 }
 
-#footer .secondary a {
-  color: #900;
-}
-
-#footer .secondary a:hover, #footer .secondary a:focus {
-  background: transparent;
+#footer .secondary li {
+  display: block;
 }
 
 /*END== */

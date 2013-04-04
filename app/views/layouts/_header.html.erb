@@ -20,39 +20,46 @@
 <% end %>
 
 <div id="header" class="region<% if @collection %> collection<% end %>">
-  <!--NOTE: have removed role="banner" for now due to user feedback-->
-  <div id="login">
-    <% if logged_in? || logged_in_as_admin? %>
-      <%= render 'user_sessions/greeting' %>
-    <% else %>
-      <p class="actions" role="menu">
-  			<a class='small_login_open hidden' href='#'><%= ts("Log in") %></a>
-  			<a class='small_login_close hidden' href='#'><%= ts("Cancel") %></a>
-  		</p>
-      <%= render 'user_sessions/login' %>
-   	<% end %>
-  </div>
 
   <h1 class="heading">
-    <%= link_to(content_tag(:span, "#{ArchiveConfig.APP_NAME} (BETA)", :class => "landmark") +
-    image_tag('/images/ao3_logos/logo-stroke.png', :alt => "#{ArchiveConfig.ALT_LOGO}"), root_path) %> 
+    <%= link_to(content_tag(:span, "#{ArchiveConfig.APP_NAME}") + content_tag(:sup, " beta") +
+    image_tag('/images/ao3_logos/logo_42.png', :alt => "#{ArchiveConfig.ALT_LOGO}", :class => "logo"), root_path) %> 
   </h1>
 
-  <h3 class="landmark heading">Site Navigation</h3>
+  <% if logged_in? || logged_in_as_admin? %>
+    <%= render 'user_sessions/greeting' %>
+  <% else %>
+    <div id="login" class="dropdown">
+      <p class="user actions" role="menu">
+        <%= link_to ts('Log In'), {:controller => :user_sessions, :action => 'new'} %>
+      </p>
+      <%= render 'user_sessions/login' %>
+    </div>
+  <% end %>
+
+  <h3 class="landmark heading"><%= ts("Site Navigation") %></h3>
   <ul class="primary navigation actions" role="navigation">
-    <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
-    <li><%= span_if_current('fandoms', media_path) %></li>
-    <li><%= span_if_current('works', works_path) %></li>
-    <li><%= span_if_current('people', people_path) %></li>
-    <li><%= span_if_current('bookmarks', bookmarks_path) %></li>
-    <li><%= span_if_current('tags', tags_path) %></li>
-    <li><%= span_if_current('collections', collections_path) %></li>
-    <li class="search"><%= render :partial => 'works/search_box' %></li>
-    <li><%= link_to ts("Advanced Search"), search_works_path, class: 'unbuttoned' %></li>
+    <li class="dropdown">
+      <%= link_to ts('Fandoms'), menu_fandoms_path %>
+      <%= render 'menu/menu_fandoms' %>
+    </li>
+    <li class="dropdown">
+      <%= link_to ts('Browse'), menu_browse_path %>
+      <%= render 'menu/menu_browse' %>
+    </li>
+    <li class="dropdown">
+      <%= link_to ts('Search'), menu_search_path %>
+      <%= render 'menu/menu_search' %>
+    </li>
+    <li class="dropdown">
+      <%= link_to ts('About'), menu_about_path %>
+      <%= render 'menu/menu_about' %>
+    </li>
+	  <li class="search"><%= render 'works/search_box' %></li>
   </ul>
 
   <% if logged_in_as_admin? %>
-    <%= render :partial => 'admin/header' %>
+    <%= render 'admin/header' %>
   <% end %>
 
   <% if @collection %>
@@ -67,7 +74,6 @@
 
 </div>
 
-<%= render :partial => "layouts/banner" %>
+<%= render "layouts/banner" %>
 
 <!-- END header -->
-

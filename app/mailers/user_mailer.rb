@@ -10,6 +10,7 @@ class UserMailer < BulletproofMailer::Base
   helper_method :logged_in_as_admin?
 
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :users
@@ -54,16 +55,6 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
-    user = User.find(user_id)
-    @subscription = Subscription.find(subscription_id)
-    @creation = creation_class_name.constantize.find(creation_id)
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{@subscription.subject_text(@creation)}"
-    )
-  end
-
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
     @subscription = Subscription.find(subscription_id)
@@ -103,6 +94,17 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+    )
+  end
+
+  # Emails a user to say that their request for invitation codes has been declined
+  def invite_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
     )
   end
 
@@ -264,7 +266,24 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+    )
+  end
+
+  # Sends email to authors when a creation is deleted by abuse
+  # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
+  # TODO refactor to make it asynchronous by passing the content in the method
+  def abuse_deleted_work_notification(user, work)
+    @user = user
+    @work = work
+    work_copy = generate_attachment_content_from_work(work)
+    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
+    attachments["#{filename}.txt"] = {:content => work_copy}
+    attachments["#{filename}.html"] = {:content => work_copy}
+
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
     )
   end
   
@@ -292,7 +311,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_SHORT_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
@@ -303,7 +322,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = abuse_report.comment
     mail(
         :to => abuse_report.email,
-        :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Your Abuse Report"
+        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

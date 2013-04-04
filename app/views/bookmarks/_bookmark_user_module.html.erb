@@ -46,7 +46,7 @@
 
   <!--navigation and actions-->
   <% if is_author_of?(bookmark) %>
-    <%= render 'bookmarks/bookmark_owner_navi', :bookmark => bookmark %>
+    <%= render 'bookmarks/bookmark_owner_navigation', :bookmark => bookmark %>
   <% elsif logged_in_as_admin? %>
     <%= render 'admin/admin_options', :item => bookmark %>
   <% end %>

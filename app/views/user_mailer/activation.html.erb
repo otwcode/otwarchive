@@ -1,3 +1,5 @@
-<%=h @user.login %><%=h ', your account has been activated!  To visit the site, follow the link:' %>
+<% content_for :message do %>
+  <%= style_bold(@user.login) %>, your account has been activated!  To visit the site, follow the link:
 
-<p><%= link_to ArchiveConfig.APP_NAME, root_url %></p>
+  <p><%= style_link(ArchiveConfig.APP_NAME, root_url) %></p>
+<% end %>

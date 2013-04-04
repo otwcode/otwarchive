@@ -1,0 +1,18 @@
+<% content_for :message do %>
+Here's some user feedback on the archive!  
+<% unless ArchiveConfig.REVISION.blank? %>
+
+Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+<% end %>
+
+Feedback: 
+<%= text_divider %>
+
+* <%= to_plain_text(raw @summary) %> *
+<%= to_plain_text(raw @comment) %>
+<% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
+
+
+
