@@ -25,7 +25,7 @@ Warnings: <%= this_work.warning_string %>
 
 <% unless @seen_summary[this_work.id] %><% if this_work.summary.present? %>
 Summary:
-    <%= raw creation.is_a?(Work) ? to_plain_text(sanitize_field(creation, :summary)) : to_plain_text(sanitize_field(creation.work, :summary)) %><% end %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
+    <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% end %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>
 
