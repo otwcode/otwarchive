@@ -59,7 +59,7 @@
           <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
         </p>
         <% @seen_summary[this_work.id] = true %>
-      <% end %>
+    <% end %>
 
     <% if (index < @creations.length-1) %>
       <%= styled_divider %>
