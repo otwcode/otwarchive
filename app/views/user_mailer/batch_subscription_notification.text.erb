@@ -23,9 +23,9 @@ Warnings: <%= this_work.warning_string %>
 <% if this_work.series.count > 0 %>Series: <%=raw to_plain_text(series_list_for_feeds(this_work)) %><% end %>
 <% @seen[this_work.id] = true %><% end %>
 
-<% unless @seen_summary[this_work.id] %><% if this_work.summary.present? %>
+<% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
 Summary:
-    <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% end %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
+    <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>
 
