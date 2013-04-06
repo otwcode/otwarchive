@@ -26,7 +26,7 @@ $j(document).ready(function() {
     $j('.commas li:last-child').addClass('last');
     
     // make Share buttons on works and own bookmarks visible
-    $j('#share_button').removeClass('hidden');
+    $j('.share').removeClass('hidden');
 });
 
 ///////////////////////////////////////////////////////////////////
