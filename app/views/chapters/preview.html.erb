@@ -24,7 +24,7 @@
     <% if @chapter.posted? %>
       <%= submit_tag ts("Cancel"), :name => 'cancel_button' %>
     <% else %>
-      <%= submit_tag ts("Keep Draft"), :name => 'cancel_button' %>
+      <%= submit_tag ts("Keep Draft"), :name => 'save_button' %>
       <%= link_to ts('Discard Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %>
     <% end %>
   </p>
