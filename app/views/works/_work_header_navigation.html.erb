@@ -25,9 +25,8 @@
       <noscript>
         <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
       </noscript>
-      <a class="chapter_index_open open hidden"><%= ts('Chapter Index') %></a>
-      <a class="chapter_index_close close hidden"><%= ts('Chapter Index') %></a>
-      <ul id="chapter_index" class="toggled hidden secondary">
+      <a class="hidden" href="#"><%= ts('Chapter Index') %></a>
+      <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
             <p>
@@ -38,7 +37,6 @@
           <% end %>
         </li>
         <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
-        <li><a class="chapter_index_close close" style="cursor: pointer;" title="Close Chapter Index">X</a></li>
       </ul>
     </li>
   <% elsif @chapters %>
@@ -72,41 +70,52 @@
     </li>
   <% end %>
 
-  <li class="share">
-    <%= link_to_ibox ts("Share"), :for => "#share" %>
-    <div id="share" style="display: none;">
-      <p><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("ctrl A")%></kbd><%= ts(" / ") %><kbd><%= ts("cmd A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
+  <li class="share hidden">
+    <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
+    <div id="share">
+      <p><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
       <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
       <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
-        <p><%= ts("The author has chosen to disable share buttons.") %></p>
+        <p><%= ts("This user has chosen to disable share buttons on their works.") %></p>
       <% else %>
         <!-- twitter, tumblr buttons go here -->
-        <p>
-          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
-          <% content_for :footer_js do %>
-            <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-          <% end %>
-        </p>
+        <ul>
+          <li>
+            <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= tweet_text(@work) %>" data-url="<%= work_url(@work) %>">Tweet</a>
+            <% content_for :footer_js do %>
+              <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            <% end %>
+          </li>
+          <li>
+            <a href="http://www.tumblr.com/share/link?url=<%=u work_url(@work) %>&name=<%=u get_tumblr_embed_link_title(@work) %>&description=<%=u get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+              <%= ts('Share on Tumblr') %>
+            </a>
+          </li>
+        </ul>
       <% end %>
     </div>
   </li>
   
   <% if current_user && @subscription %>
     <li class="subscribe">
-      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
+      <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
 
   <li class="download" aria-haspopup="true">
-    <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
-    <a title="Download Close" class="downloads_close close hidden"><%= ts("Download") %> &#8595;</a>
-    <ul id="downloads" class="toggled secondary">
+    <a href="#"><%= ts("Download") %></a>
+    <ul class="expandable secondary">
       <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
       <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
       <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
       <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-      <li><a class="downloads_close close hidden" style="cursor: pointer;" title="Close Download Options">X</a></li>
     </ul>
   </li>
 </ul>
 <!-- END navigation -->
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+  $j(".actions .hidden").removeClass("hidden");
+  <% end %>
+<% end %>

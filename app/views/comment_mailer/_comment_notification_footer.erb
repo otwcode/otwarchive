@@ -4,73 +4,78 @@
     <br /><%= ts("Last edited") %>: <%= @comment.edited_at %>
   <% end %>
 </p>
-<p>
-  <% if @comment.ultimate_parent.is_a?(Tag) %>
-    <%= link_to ts("Read all comments on %{name}", 
-      :name => @comment.ultimate_parent.name), 
-      {
-        :controller => :comments, 
-        :action => :index, 
-        :tag_id => @comment.ultimate_parent, 
-        :only_path => false
-      } 
-    %>
-    <br />
-    <% unless @noreply %>
-      <%= link_to ts("Reply to this comment"), 
-        {
-          :controller => :comments, 
-          :action => :index, 
-          :tag_id => @comment.ultimate_parent, 
-          :only_path => false, 
-          :add_comment_reply_id => @comment.id, 
-          :anchor => "comment_#{@comment.id}"
-        } 
-      %>
-      <br />
-    <% end %>
-    <%= link_to ts("Go to the thread starting from this comment"), 
+
+<% if @comment.ultimate_parent.is_a?(Tag) %>
+
+  <%= style_link("Read all comments on " + @comment.ultimate_parent.name, 
+    {
+      :controller => :comments, 
+      :action => :index, 
+      :tag_id => @comment.ultimate_parent, 
+      :only_path => false
+    }) %>
+    
+  <br />
+  
+  <% unless @noreply %>
+    <%= style_link("Reply to this comment",
       {
         :controller => :comments, 
         :action => :index, 
         :tag_id => @comment.ultimate_parent, 
         :only_path => false, 
+        :add_comment_reply_id => @comment.id, 
         :anchor => "comment_#{@comment.id}"
-      }
-    %>
+      }) %>
     <br />
-    <% unless @comment.id == @comment.thread %>
-      <%= link_to ts("Go to the thread to which this comment belongs"), 
-        {
-          :controller => :comments, 
-          :action => :index, 
-          :tag_id => @comment.ultimate_parent, 
-          :anchor => "comment_#{@comment.thread}", 
-          :only_path => false
-        } 
-      %>
-    <% end %>
-  <% else %>
-    <% unless @noreply %>
-      <%= link_to ts("Reply to this comment"), 
-        comment_url(@comment, :add_comment_reply_id => @comment.id, :only_path => false) %>
-      <br />
-    <% end %>
-    <%= link_to ts("Go to the thread starting from this comment"), 
-      comment_url(@comment, :only_path => false) %>
-    <br />
-    <% unless @comment.id == @comment.thread %>
-      <%= link_to ts("Go to the thread to which this comment belongs"), 
-        comment_url(:id => @comment.thread, :only_path => false) %>
-      <br />
-    <% end %>
-    <%= link_to (ts("Read all comments on %{name}", :name => @comment.ultimate_parent.commentable_name)).html_safe, 
-      polymorphic_url(@comment.ultimate_parent, 
-        :view_full_work => true, 
-        :show_comments => true, 
-        :anchor => :comments, 
-        :only_path => false
-      ) 
-    %>
   <% end %>
-</p>
+  
+  <%= style_link("Go to the thread starting from this comment", 
+    {
+      :controller => :comments, 
+      :action => :index, 
+      :tag_id => @comment.ultimate_parent, 
+      :only_path => false, 
+      :anchor => "comment_#{@comment.id}"
+    }) %>
+    
+  <br />
+  
+  <% unless @comment.id == @comment.thread %>
+    <%= style_link("Go to the thread to which this comment belongs", 
+      {
+        :controller => :comments, 
+        :action => :index, 
+        :tag_id => @comment.ultimate_parent, 
+        :anchor => "comment_#{@comment.thread}", 
+        :only_path => false
+      }) %>
+  <% end %>
+  
+<% else %>
+
+  <% unless @noreply %>
+    <%= style_link("Reply to this comment", 
+      comment_url(@comment, :add_comment_reply_id => @comment.id, :only_path => false)) %>
+    <br />
+  <% end %>
+  
+  <%= style_link("Go to the thread starting from this comment", 
+    comment_url(@comment, :only_path => false)) %>
+  <br />
+  
+  <% unless @comment.id == @comment.thread %>
+    <%= style_link("Go to the thread to which this comment belongs", 
+      comment_url(:id => @comment.thread, :only_path => false)) %>
+    <br />
+  <% end %>
+  
+  <%= style_link("Read all comments on <i>" + @comment.ultimate_parent.commentable_name + "</i>", 
+    polymorphic_url(@comment.ultimate_parent, 
+      :view_full_work => true, 
+      :show_comments => true, 
+      :anchor => :comments, 
+      :only_path => false
+    )) %>
+  
+<% end %>

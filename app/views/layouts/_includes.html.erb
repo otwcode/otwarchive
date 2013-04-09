@@ -9,42 +9,6 @@
 
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox' %>
-
-<!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
-<!-- check to see if this controller/action allow tinymce before we load the gigantor js; see application_helper -->
-<% if allow_tinymce?(controller) %>
-  <%= yield :tinymce %>
-<% end %>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" type="text/javascript"></script>
-<!-- if user has googleapis blocked for some reason we need a fallback -->
-<script type="text/javascript">
-if (typeof jQuery == 'undefined')
-{
-    document.write(unescape("%3Cscript src='/javascripts/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
-    document.write(unescape("%3Cscript src='/javascripts/jquery-ui.min.js' type='text/javascript'%3E%3C/script%3E"));
-}
-</script>
-
-<script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag 'jquery.livequery.min.js' %>
-<%= javascript_include_tag 'rails' %>
-<%= javascript_include_tag 'application' %>
-<%= javascript_include_tag 'visualize.jQuery.js' %>
 <%= javascript_include_tag 'livevalidation_standalone' %>
-<%= javascript_include_tag 'jquery.qtip.js' %>
-<%= javascript_include_tag 'jquery-shuffle.js' %>
-<%= javascript_include_tag 'accessible' %>
-<%= javascript_include_tag 'jquery.scrollTo-1.4.2-min.js' %>
-<%= javascript_include_tag 'jquery.tokeninput.js' %>
-<%= javascript_include_tag 'jquery.purr.js' %>
-<%= javascript_include_tag 'best_in_place.js' %>
-<%= javascript_include_tag "ibox/ibox" %>
-<%= javascript_include_tag "jquery.cookie" %>
 
 <%= csrf_meta_tag %>
-
-<% if allow_tinymce?(controller) %>
-  <%= yield :tinymce_init %>
-<% end %>
-

@@ -2,6 +2,7 @@ class Tag < ActiveRecord::Base
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include StringCleaner
 
   NAME = "Tag"
 
@@ -88,12 +89,20 @@ class Tag < ActiveRecord::Base
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+
+  validates_presence_of :sortable_name
     
   validate :unwrangleable_status
   def unwrangleable_status
     if unwrangleable? && (canonical? || merger_id.present?)
       self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
     end
+  end
+
+  before_update :remove_index_for_type_change, if: :type_changed?
+  def remove_index_for_type_change
+    @destroyed = true
+    tire.update_index
   end
 
   before_validation :check_synonym
@@ -121,6 +130,13 @@ class Tag < ActiveRecord::Base
   before_validation :squish_name
   def squish_name
     self.name = name.squish if self.name
+  end
+
+  before_validation :set_sortable_name
+  def set_sortable_name
+    if sortable_name.blank?
+      self.sortable_name = remove_articles_from_string(self.name)
+    end
   end
 
   before_save :set_last_wrangler
@@ -188,7 +204,7 @@ class Tag < ActiveRecord::Base
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
   scope :by_popularity, order('taggings_count DESC')
-  scope :by_name, order('name ASC')
+  scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
@@ -311,7 +327,11 @@ class Tag < ActiveRecord::Base
 
   # We can pass this any Tag instance method that we want to run later.
   def async(method, *args)
-    Resque.enqueue(Tag, id, method, *args)
+    if Rails.env.test?
+      send(method, *args)
+    else
+      Resque.enqueue(Tag, id, method, *args)
+    end
   end
 
   # Class methods
@@ -1002,7 +1022,7 @@ class Tag < ActiveRecord::Base
         if new_merger && new_merger == self
           self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
         elsif new_merger && !new_merger.canonical?
-          self.errors.add(:base, new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+          self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
         elsif new_merger && new_merger.class != self.class
           self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
         elsif !new_merger

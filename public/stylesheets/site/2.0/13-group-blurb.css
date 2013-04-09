@@ -122,83 +122,83 @@ li.blurb:after {
 
 /*icon image replacement*/
 
-.blurb .rating-general-audience {
+.required-tags .rating-general-audience {
   background: url("/images/imageset.png") -50px -25px;
 }
 
-.blurb .rating-explicit {
+.required-tags .rating-explicit {
   background: url("/images/imageset.png") -25px -25px;
 }
 
-.blurb .rating-mature {
+.required-tags .rating-mature {
   background: url("/images/imageset.png") -75px -25px;
 }
 
-.blurb .rating-notrated, .blurb .category-none, .blurb .warning-no, .blurb .count {
+.required-tags .rating-notrated, .required-tags .category-none, .required-tags .warning-no, .status .count {
   background: url("/images/imageset.png") -150px 0px;
 }
 
-.blurb .rating-teen {
+.required-tags .rating-teen {
   background: url("/images/imageset.png") 0px -25px;
 }
 
-.blurb .category-femslash {
+.required-tags .category-femslash {
   background: url("/images/imageset.png") -25px 0px;
 }
 
-.blurb .category-gen {
+.required-tags .category-gen {
   background: url("/images/imageset.png") -50px 0px;
 }
 
-.blurb .category-slash {
+.required-tags .category-slash {
   background: url("/images/imageset.png") 0px 0px;
 }
 
-.blurb .category-het {
+.required-tags .category-het {
   background: url("/images/imageset.png") -75px 0px;
 }
 
-.blurb .category-multi {
+.required-tags .category-multi {
   background: url("/images/imageset.png") -100px -0px;
 }
 
-.blurb .category-other {
+.required-tags .category-other {
   background: url("/images/imageset.png") -125px 0px;
 }
 
-.blurb .complete-no {
+.required-tags .complete-no {
   background: url("/images/imageset.png") -100px -25px;
 }
 
-.blurb .complete-yes {
+.required-tags .complete-yes {
   background: url("/images/imageset.png") -175px -25px;
 }
 
-.blurb .warning-yes {
+.required-tags .warning-yes {
   background: url("/images/imageset.png") -150px -25px;
 }
 
-.blurb .warning-choosenotto {
+.required-tags .warning-choosenotto {
   background: url("/images/imageset.png") -125px -25px;
 }
 
-.blurb .external-work {
+.required-tags .external-work {
   background: url("/images/imageset.png") -75px -50px;
 }
 
-.blurb .private .text {
+.status .private .text {
   background: url("/images/imageset.png") -175px -50px;
 }
 
-.blurb .public {
+.status .public {
   background: url("/images/imageset.png") -125px -50px;
 }
 
-.blurb .hidden {
+.status .hidden {
   background: url("/images/imageset.png") -150px -50px;
 }
 
-.blurb .rec {
+.status .rec {
   background: url("/images/imageset.png") -100px -50px;
 }
 
@@ -288,7 +288,6 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
-  z-index: 50;
 }
 
 .bookmark .status span, .bookmark .status a {

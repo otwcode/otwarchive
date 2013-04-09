@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler'
 
-gem 'rails', '3.0.4'
+gem 'rails', '3.0.20'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -17,13 +17,14 @@ gem 'redis', ">=3.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
-gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
 gem 'will_paginate', '>=3.0.2'
 # gem 'will_paginate',
   # :git     => 'git://github.com/huerlisi/will_paginate.git',
   # :branch  => 'rails3',
   # :require => 'will_paginate'
+
+gem 'nested_has_many_through'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
@@ -75,14 +76,15 @@ gem 'newrelic-redis'
 gem "google_visualr", ">= 2.1"
 
 group :test do
-  gem 'rspec-rails', '>=2.5.0'
+  gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
   gem 'capybara', '=0.3.9'
   gem 'database_cleaner', '>=0.6.0.rc.3'
   gem 'cucumber-rails'
-  gem 'cucumber', '>=0.9.1'
+  gem 'cucumber', '>=1.0.0'
+  gem 'gherkin', '>=2.4.1' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
@@ -98,5 +100,5 @@ group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
   gem "memcache-client"
-  gem 'airbrake'
 end
+

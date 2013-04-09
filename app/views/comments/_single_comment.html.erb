@@ -56,8 +56,10 @@
       <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
       <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
-        <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
-        <li><%= link_to ts("Thread"), single_comment %></li>
+        <% unless single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anon_commenting_disabled && !logged_in? %>
+          <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
+        <% end %>
+          <li><%= link_to ts("Thread"), single_comment %></li>
         <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
           <li id="edit_comment_link_<%= single_comment.id %>">
             <%= edit_comment_link single_comment %>

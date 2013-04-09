@@ -1,0 +1,13 @@
+<% content_for :message do %>
+Dear <%= @user.login %>,
+  
+<%= to_plain_text(raw @message) %>
+<% end %>
+
+<% content_for :sent_at do %>
+<%= Time.now.to_s(:time_for_mailers) %>
+<% end %>
+
+<% content_for :sent_by do %>
+<%= @admin_login %>
+<% end %>

@@ -1,0 +1,18 @@
+<% content_for :message do %>
+Hello from the <%= "#{ArchiveConfig.APP_NAME}" %>!
+
+<% if !@user_name.blank? %>
+<%= @user_name %> has invited you to join our beta!
+<% else %>
+You've been invited to join our beta!
+<% end %>
+
+The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. We are multifannish and welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic. We run on the open-source otwarchive software, and our servers are owned by the nonprofit Organization for Transformative Works, which works to protect fan rights and preserve fanworks.
+
+Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \o/
+
+If you'd like to join us, please sign up at the following address:
+<%= signup_url(:invitation_token => @invitation.token) %>
+
+For more information, please check out our FAQ at <%= archive_faqs_url %>.
+<% end %>

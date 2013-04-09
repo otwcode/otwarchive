@@ -6,55 +6,39 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   font-size: 12px;
 }
 
-/*header */
+/*regions */
 
-#header {
-  min-height: 0;
+#header .logo {
+  height: 1.75em;
 }
 
-#greeting {
-  width: 45px;
-  float: right;
-  z-index: 50;
+#header .dropdown a:focus {
+  outline: none;
 }
 
-#greeting p.icon img {
-  border: none;
-  padding: 0;
-  top: 0;
+#header .primary > li:first-of-type {
+  margin-left: 0;
 }
 
-#greeting ul {
-  padding: 0;
+#header .dropdown a:focus, #header .dropdown .menu a:focus {
+  background: transparent;
+  color: #111;
 }
 
-#greeting li {
-  display: block;
-  margin: 0 0 .25em 0;
-  text-align: right;
+#header .open a:focus {
+  background: #ddd;
 }
 
-#greeting li a {
-  padding: 0;
+#header .primary .dropdown a:focus {
+  color: #fff;
 }
 
-h1 a img {
-  width: 30px;
-  border: 0;
+#header .primary .open a:focus {
+  color: #111;
 }
 
-#greeting .icon {
-  height: 35px;
-  width: 35px;
-  border: none;
-}
-
-#header .landmark {
-  clear: none;
-}
-
-#header ul.primary {
-  padding: 0.25em 35px;
+#header .user .open a:focus {
+  color: #900;
 }
 
 #header h2.collections {
@@ -65,8 +49,6 @@ h1 a img {
 #header #small_login {
   margin-left: 45px;
 }
-
-/*regions */
 
 #main, #main.dashboard {
   float: none;

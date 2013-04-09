@@ -1,31 +1,32 @@
-<p><%= ts("Hello, %{name}!", :name => @user.login) %></p>
+<% content_for :message do %>
 
-<p>
-<%= ts("A gift story has been posted for you") %> <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
-</p>
+  <p>Hello, <%= style_bold(@user.login) %>!</p>
 
-<p>
-  <% if @collection.nil? %>
-    <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
-    by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
-  <% else %>
-    <%= link_to @work.title.html_safe, collection_work_url(@collection, @work) %><%= "(#{@work.word_count} words)" %><br />
-    by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
-  <% end %>
-  <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %><br />
+  <p>
+    A gift story has been posted for you <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
+  </p>
+
+  <p>
+    <% if @collection.nil? %>
+      <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i> <%= "(#{@work.word_count} words)" %>
+    <% else %>
+      <i><b><%= style_link(@work.title.html_safe, collection_work_url(@collection, @work)) %></b></i> <%= "(#{@work.word_count} words)" %>
+    <% end %>
+    <br>
+    by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
+    <br>
+    <% unless @work.fandom_string.blank? %>
+      <%= style_bold("Fandom:") %> <%= @work.fandom_string %>
+    <% end %>
+  </p>
+  
   <% unless @work.summary.blank? %>
-    Summary: 
-    <blockquote>
-      <%=raw sanitize_field(@work, :summary) %>
-    </blockquote>
+    <%= style_bold("Summary:") %>
+    <%= style_quote(raw sanitize_field(@work, :summary)) %>
   <% end %>
+  
   <% if @collection && !@collection.gift_notification.blank? %>
-    <%= @collection.gift_notification %>
+    <p><%= @collection.gift_notification %></p>
   <% end %>
-</p>
-
-
-<p>
-  Please note: if you don't want to receive emails like this one, you can set your preferences 
-  at the Archive not to receive notification of gift stories.
-</p>
+  
+<% end %>

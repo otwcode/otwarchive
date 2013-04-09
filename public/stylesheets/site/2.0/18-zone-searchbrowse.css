@@ -45,7 +45,7 @@ Arguably filter and search could be styled in interactions but I've put them her
 }
 
 li.search:hover .tip {
-  left: 1em;
+  right: 1em;
   top: 2.75em;
 }
 

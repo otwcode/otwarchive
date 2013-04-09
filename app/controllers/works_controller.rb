@@ -12,6 +12,7 @@ class WorksController < ApplicationController
   before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
+  before_filter :log_admin_activity, :only => [ :update_tags ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
@@ -226,14 +227,6 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-      if @work.unrevealed?
-        @tweet_text = ts("Mystery Work")
-      else
-        @tweet_text = @work.title + " by " +
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
-                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-        @tweet_text = @tweet_text.truncate(95)
-      end
     render :show
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
@@ -277,6 +270,7 @@ class WorksController < ApplicationController
   # POST /works
   def create
     load_pseuds
+    @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
     if params[:edit_button]
@@ -347,12 +341,13 @@ class WorksController < ApplicationController
   def update
     # Need to get @pseuds and @series values before rendering edit
     load_pseuds
+    @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
     unless @work.errors.empty?
       render :edit and return
     end
-
+    
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
@@ -615,7 +610,7 @@ protected
     end
 
     unless @work && @work.save
-      setflash; flash[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
+      setflash; flash.now[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
       @chapter = @work.chapters.first
       load_pseuds
       @series = current_user.series.uniq
@@ -780,7 +775,7 @@ public
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
-    setflash; flash[:notice] = ts("Your #{view_context.link_to('history', read_later_path)} was updated. It may take a short while to show up.").html_safe
+    setflash; flash[:notice] = ts("This work was marked to read later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -952,6 +947,16 @@ public
       "#{owner_name} - Works".html_safe
     else
       "Latest Works"
+    end
+  end
+
+  def log_admin_activity
+    if logged_in_as_admin?
+      options = { action: params[:action] }
+      if params[:action] == 'update_tags'
+        summary = "Old tags: #{@work.tags.value_of(:name).join(", ")}"
+      end
+      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
     end
   end
   

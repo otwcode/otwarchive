@@ -109,7 +109,7 @@
               :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
       <p class="submit actions">
-        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}" %>
+        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", :disable_with => ts("Please wait...") %>
         <% if controller.controller_name == 'inbox' %>
           <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
         <% elsif commentable.class.name == "Comment" || !comment.new_record? %>
