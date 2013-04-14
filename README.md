@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) 
+
 ## About OTW-Archive
 
 The OTW-Archive software is an open-source web application intended for hosting archives
