@@ -1,8 +1,8 @@
 module ShareHelper
 
   private
-  def add_label_for_embed(label, text, tag='') ; text.blank? ? nil : label + text + tag; end
-  
+    def add_label_for_embed(label, text, tag='') ; text.blank? ? nil : label + text + tag; end
+
   public
   # get a nicely formatted bit of text for pasting into other services
   # title (# words) by authors
