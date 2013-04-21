@@ -14,6 +14,11 @@ class HomeController < ApplicationController
     render :action => "tos_faq", :layout => "application"
   end
   
+  # diversity statement
+  def diversity 
+    render :action => "diversity_statement", :layout => "application"
+  end
+  
   # site map
   def site_map 
     render :action => "site_map", :layout => "application"
