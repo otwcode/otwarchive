@@ -588,10 +588,12 @@ namespace :massimport do
   # 852 categories and story files
   def parse_content_from_852_file(work_params, story)
     # notes embedded in the file
-    if story.match(/author's notes: (.*)$/i)
+=begin
+    if story.match(/author's notes: (.*?)$/i)
       work_params[:notes] = $1
       story.gsub!(/author's notes: (.*)$/i, '')
     end
+=end
   
     # strip old archive links from bottom
     story.gsub!(/<hr>\s*<center>.*?<\/center>\s*<\/body>\s*<\/html>\s*$/im, '')
