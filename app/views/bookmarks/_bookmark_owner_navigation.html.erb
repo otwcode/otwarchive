@@ -5,7 +5,7 @@
   <% if bookmark.bookmarkable.is_a?(Work) && !bookmark.bookmarkable.unrevealed? %>
   <li class="share hidden">
     <%= link_to_modal ts("Share"), :for => "#share_#{bookmark.id}", :title => ts("Share Bookmark") %>
-    <%= render 'share/share', :bookmark => bookmark %>
+    <%= render 'share/share', :shareable => bookmark, :bookmark => bookmark %>
   </li>
   <% end %>
 </ul>

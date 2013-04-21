@@ -5,12 +5,6 @@ module ShareHelper
 
   public
   # get a nicely formatted bit of text for pasting into other services
-  # title (# words) by authors
-  # Chapters: 
-  # Fandom:
-  # Rating:
-  # Warnings:
-  # etc
   
   # get work title, word count, and creator and add formatting for share code
   def get_embed_link_title(work)

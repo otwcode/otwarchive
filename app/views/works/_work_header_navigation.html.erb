@@ -72,7 +72,7 @@
 
   <li class="share hidden">
     <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
-    <%= render 'share/share', :work => @work %>
+    <%= render 'share/share', :shareable => @work %>
   </li>
   
   <% if current_user && @subscription %>
