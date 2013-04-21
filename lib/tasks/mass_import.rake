@@ -588,11 +588,11 @@ namespace :massimport do
   # 852 categories and story files
   def parse_content_from_852_file(work_params, story)
     # notes embedded in the file
-    if story.match(/author's notes: (.*)$/i)
+    if story.match(/author's notes: (.*?)$/i)
       work_params[:notes] = $1
       story.gsub!(/author's notes: (.*)$/i, '')
     end
-  
+
     # strip old archive links from bottom
     story.gsub!(/<hr>\s*<center>.*?<\/center>\s*<\/body>\s*<\/html>\s*$/im, '')
   
@@ -602,7 +602,7 @@ namespace :massimport do
     end
   
     # get email address from the story file if necessary
-    email_regex = /<a href=(?:"|')?(?:mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+?@[^'"\?>]+?)(?:\?.+?)?(?:">|'>|>)(.+?)<\/a>/mi
+    email_regex = /<a href=(?:['"]?)(?!http|'http|"http)(?:mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+?@[^'"\?>]+?)(?:\?.+?)?(?:">|'>|>)(.+?)<\/a>/mi
     if work_params[:email].blank?
       if story.match(email_regex)
   
