@@ -22,6 +22,8 @@ module NavigationHelpers
     when /^the search people page$/i
       Pseud.tire.index.refresh
       search_people_path
+    when /^the bookmarks page$/i
+      bookmarks_path
 
     # the following are examples using path_to_pickle
 
