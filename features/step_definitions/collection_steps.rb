@@ -58,6 +58,24 @@ Given /^I have a closed collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |ti
   step "I am logged out"
 end
 
+Given /^I open the collection with the title "([^\"]*)"$/ do |title|
+  step %{I am logged in as "moderator"}
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Collection Settings"}
+  step %{I uncheck "This collection is closed"}
+  step %{I submit}
+  step %{I am logged out}
+end
+
+Given /^I close the collection with the title "([^\"]*)"$/ do |title|
+  step %{I am logged in as "moderator"}
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Collection Settings"}
+  step %{I check "This collection is closed"}
+  step %{I submit}
+  step %{I am logged out}
+end
+
 Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
   # create the user 
   step %{I am logged in as "#{name}"}
