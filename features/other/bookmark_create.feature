@@ -192,7 +192,6 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
-    And show me the page
     And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
     And I am logged out
   # Create a collection, put a bookmark in it, close the collection, then try
@@ -204,14 +203,14 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
-    And I should see "Bookmark successfully created"
+    And I should see "Bookmark was successfully created"
     And I am logged out
   When I close the collection with the title "Rescue 911"
     And I am logged in as "Scott" with password "password"
     And I view the work "Sing a Song of Murder"
     And I follow "Edit Bookmark"
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
-    And I press "Update"
+    And I press "Edit"
   Then I should see "Bookmark was successfully updated."
 
 
