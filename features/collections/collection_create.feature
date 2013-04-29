@@ -4,7 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection and post to it
 
-Scenario: Create a collection
+Scenario: Create a collection then edit its name
 
   Given I am logged in as "first_user"
   When I post the work "Test work thingy"
@@ -30,6 +30,13 @@ Scenario: Create a collection
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a collection" within "#faq"
     And I should see "Be nice to people" within "#rules"
+  Then I follow "Collection Settings"
+    And I fill in "Collection Name" with " "
+    And I submit
+    And I should see "Please enter a name for your collection"
+  Then I fill in "Collection Name" with "collection_thing2"
+    And I submit
+    And I should see "Collection was successfully updated"
     
 Scenario: Post to collection from the work edit page
   Given I have the collection "My Collection Thing" with name "collection_thing"
