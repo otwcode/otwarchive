@@ -1,32 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
-		<meta name="generator" content="HTML Tidy, see www.w3.org" />
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>
-			<%= ArchiveConfig.APP_NAME  %>
-			<% unless ArchiveConfig.REVISION.blank? %>(rev.
-			<%= ArchiveConfig.REVISION %>)
-			<% end %>&gt;&gt;
-			<%= controller.controller_name %>
-			<%= controller.action_name %>
-		</title>
-		<%= render :partial => 'layouts/includes' %>
-	</head>
-	<body onload="hideFormFields(); initSelect('languages_menu')">
+  <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      <% if defined?(@page_title) %>
+        <%= @page_title %>
+      <% else %>
+        <% if defined?(@page_subtitle) %>
+          <%= @page_subtitle %>
+        <% else %>
+          <%= controller.action_name=="index" ? "" : controller.action_name.humanize.titleize %>
+          <%= controller.action_name=="index" ? controller.controller_name.humanize.titleize : controller.controller_name.singularize.humanize.titleize %>
+        <% end %>
+        |
+        <%= ArchiveConfig.APP_NAME  %>
+      <% end %>
+    </title>
+    <%= render :partial => 'layouts/includes' %>
+  </head>
+  <body onload="hideFormFields(); initSelect('languages_menu')">
     <%= render :partial => 'layouts/header' %>
-<!-- BEGIN main -->
-		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
-			<%= flash_div :error, :caution, :notice %>
-			
-			<p id="logo">
-				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
-			</p>
-				<div id="signin" role="main">
-					<%= yield %>
-				</div>
-		</div>
+    <!-- BEGIN main -->
+    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">
+      <%= flash_div :error, :caution, :notice %>
+      <p id="logo">
+        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
+      </p>
+      <div id="signin" role="main">
+        <%= yield %>
+      </div>
+    </div>
     <!-- END main -->
     <%= render :partial => 'layouts/footer' %>
+    <%= render :partial => 'layouts/javascripts' %>
   </body>
 </html>

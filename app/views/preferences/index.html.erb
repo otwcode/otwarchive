@@ -80,7 +80,7 @@
       <dt><%= f.label :time_zone, ts("Your time zone: ")%></dt>
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
 
-      <dt><%= f.label :work_title_format, ts("Format your own titles")  %> 	<%= link_to_help "work_title_format" %>:</dt>
+      <dt><%= f.label :work_title_format, ts("Browser page title format")  %> 	<%= link_to_help "work_title_format" %>:</dt>
     	<dd><%= f.text_field :work_title_format %></dd>
     </dl>
 </fieldset>

@@ -26,7 +26,7 @@ class InviteRequestsController < ApplicationController
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
-      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}."
+      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
     else
       render :action => :index
@@ -34,7 +34,7 @@ class InviteRequestsController < ApplicationController
   end
   
   def manage
-    @invite_requests = InviteRequest.find(:all, :order => :position)
+    @invite_requests = InviteRequest.order(:position).page(params[:page])
   end
   
   def reorder

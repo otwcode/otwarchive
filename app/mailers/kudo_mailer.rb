@@ -2,6 +2,7 @@ class KudoMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
+  helper :mailer
   default :from => ArchiveConfig.RETURN_ADDRESS
 
   def kudo_notification(user_id, kudo_id)
@@ -20,7 +21,7 @@ class KudoMailer < ActionMailer::Base
   # [commentable_type]_[commentable_id] => [array of users who left kudos with the last entry being "# guests" if any]
   def batch_kudo_notification(user_id, user_kudos)
     @commentables = []
-    @kudos = {}
+    @kudo_givers = {}
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
     kudos_hash.each_pair do |commentable_info, kudo_givers|
@@ -28,9 +29,7 @@ class KudoMailer < ActionMailer::Base
       commentable = commentable_type.constantize.find_by_id(commentable_id)
       next unless commentable
       @commentables << commentable
-      kudos_sentence = kudo_givers.to_sentence
-      kudos_sentence.capitalize! if kudos_sentence == "a guest"
-      @kudos[commentable_info] = kudos_sentence
+      @kudo_givers[commentable_info] = kudo_givers
     end
     mail(
       :to => user.email,

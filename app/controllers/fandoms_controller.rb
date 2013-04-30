@@ -26,7 +26,7 @@ class FandomsController < ApplicationController
       redirect_to media_path(:notice => "Please choose a media category to start browsing fandoms.")
       return
     end
-    @fandoms_by_letter = @fandoms.group_by {|f| f.name[0].upcase}
+    @fandoms_by_letter = @fandoms.group_by {|f| f.sortable_name[0].upcase}
   end
   
   def show
@@ -55,7 +55,7 @@ class FandomsController < ApplicationController
     end
     @fandoms = Fandom.joins(join_string).
                       where(conditions).
-                      order(params[:sort] == 'count' ? "count DESC" : "name ASC").
+                      order(params[:sort] == 'count' ? "count DESC" : "sortable_name ASC").
                       with_count.
                       paginate(:page => params[:page], :per_page => 250)  
   end
