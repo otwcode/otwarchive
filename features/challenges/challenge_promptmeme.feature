@@ -1384,3 +1384,12 @@ Feature: Prompt Meme Challenge
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 
+  Scenario: Validation error doesn't cause semi-anon ticky to lose state (Issue 2617)
+  Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
+    And I am logged in as "Scott" with password "password"
+    And I go to "Scotts Prompt" collection's page
+    And I follow "Prompt Form"
+    And I check "Semi-anonymous prompt"
+    And I press "Submit"
+  Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
+    And the "Semi-anonymous prompt" checkbox should be checked
