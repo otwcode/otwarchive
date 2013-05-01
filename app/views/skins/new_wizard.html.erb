@@ -1,12 +1,11 @@
 <!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
-<h2 class="heading"><%= ts('Create New Archive Skin')  %></h2>
+<h2 class="heading"><%= ts("Create New Archive Site Skin")  %></h2>
 
 <%= error_messages_for :skin %>
 
 <%= render :partial => "skin_top_navigation" %>
 
-<h3 class="landmark heading">New Archive Skin Wizard</h3>
+<h3 class="landmark heading"><%= ts("New Archive Site Skin Wizard") %>"</h3>
 
 <%= form_for @skin do |f| %>
   <%= render 'wizard_form', :f => f %>
-<% end %>
