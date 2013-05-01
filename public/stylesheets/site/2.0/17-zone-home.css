@@ -61,6 +61,11 @@ user home, collections and challenges home, tag home, admin comms home
   width: 100%;
 }
 
+.dashboard.works-index h4.landmark, .dashboard.works-index ol.pagination {
+	float: left;
+	width: 100%;
+}
+
 #dynamic-bookmark + h4.landmark {
   clear: both;
 }

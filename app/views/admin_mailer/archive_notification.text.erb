@@ -1,0 +1,15 @@
+<% content_for :message do %>
+The following archive notice has been sent:
+
+Subject: <%= @subject %>
+To users: <%= @user_login_string %>
+
+"<%= to_plain_text(raw @message) %>"
+<% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
+
+<% content_for :sent_by do %><%= @admin_login %><% end %>
+
+
+

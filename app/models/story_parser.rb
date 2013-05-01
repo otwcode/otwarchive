@@ -56,7 +56,7 @@ class StoryParser
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
   SOURCE_DW = 'dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
-  SOURCE_FFNET = 'fanfiction\.net'
+  SOURCE_FFNET = '(^|[^A-Za-z0-9-])fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
@@ -634,7 +634,7 @@ class StoryParser
       end
 
       # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
-      text_table = body.css("#gmi-ResViewContainer table.f td.f div.text")[0]
+      text_table = body.css("#gmi-ResViewContainer div.gr-box.gr-genericbox div.text")[0]
       unless text_table.nil?
         # Try to remove some metadata (title and author) from the work's text, if possible
         # Try to remove the title: if it exists, and if it's the same as the browser title

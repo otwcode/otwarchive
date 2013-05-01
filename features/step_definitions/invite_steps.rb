@@ -14,25 +14,25 @@ def invite(attributes = {})
 end
 
 Given /^I have invitations set up$/ do
-  Given %{I have no users}
-    And %{I have an AdminSetting}
-    And %{I am logged in as "user1"}
+  step %{I have no users}
+    step %{I have an AdminSetting}
+    step %{I am logged in as "user1"}
 end
 
 ### WHEN
 
 When /^I turn on the invitation queue$/ do
-  When "I am logged in as an admin"
-  When %{I go to the admin-settings page}
-      And %{I check "admin_setting_invite_from_queue_enabled"}
-      And %{I press "Update"}
+  step "I am logged in as an admin"
+  step %{I go to the admin-settings page}
+      step %{I check "admin_setting_invite_from_queue_enabled"}
+      step %{I press "Update"}
 end
 
 When /^I turn off the invitation queue$/ do
-  When "I am logged in as an admin"
-  When %{I go to the admin-settings page}
-      And %{I uncheck "admin_setting_invite_from_queue_enabled"}
-      And %{I press "Update"}
+  step "I am logged in as an admin"
+  step %{I go to the admin-settings page}
+      step %{I uncheck "admin_setting_invite_from_queue_enabled"}
+      step %{I press "Update"}
 end
 
 When /^I use an invitation to sign up$/ do
@@ -53,33 +53,33 @@ When /^I use an already used invitation to sign up$/ do
 end
 
 When /^I try to invite a friend from the homepage$/ do
-  When %{I am logged in as "user1"}
-      And %{I go to the homepage}
-    When %{I follow "Invite a friend"}
+  step %{I am logged in as "user1"}
+      step %{I go to the homepage}
+    step %{I follow "Invite a friend"}
 end
 
 When /^I try to invite a friend from my user page$/ do
-  When %{I am logged in as "user1"}
-      And %{I go to my user page}
-    When %{I follow "Invitations"}
+  step %{I am logged in as "user1"}
+      step %{I go to my user page}
+    step %{I follow "Invitations"}
 end
 
 When /^I request some invites$/ do
-  When %{I try to invite a friend from my user page}
-    When %{I follow "Request more"}
-    When %{I fill in "user_invite_request_quantity" with "3"}
-      And %{I fill in "user_invite_request_reason" with "I want them for a friend"}
-      And %{I press "Send Request"}
+  step %{I try to invite a friend from my user page}
+    step %{I follow "Request more"}
+    step %{I fill in "user_invite_request_quantity" with "3"}
+      step %{I fill in "user_invite_request_reason" with "I want them for a friend"}
+      step %{I press "Send Request"}
 end
 
 When /^I view requests as an admin$/ do
-  When %{I am logged in as an admin}
-    When %{I follow "Invitations"}
-      And %{I follow "Manage requests"}
+  step %{I am logged in as an admin}
+    step %{I follow "Invitations"}
+      step %{I follow "Manage requests"}
 end
 
 When /^an admin grants the request$/ do
-  When %{I view requests as an admin}
-    When %{I fill in "requests[user1]" with "2"}
-      And %{I press "Update"}
+  step %{I view requests as an admin}
+    step %{I fill in "requests[user1]" with "2"}
+      step %{I press "Update"}
 end

@@ -1,30 +1,29 @@
-<h3 class="heading"><%= t('.history', :default => 'User History') %></h3>
-<!--note, the summary should explain the table, the caption should title it-->
+<h3 class="heading"><%= ts('User History') %></h3>
 <div class="wrapper">
-	<table summary="shows what notable actions, such as creating an account, a user performed, and when they did them">
-	<caption><%= t('.user_history_caption', :default => 'History of user actions') %></caption>
-  <thead>
-	<tr>
-    <th scope="col"><%= t('.log_date', :default => 'Date / Time') %></th>
-    <th scope="col"><%= t('.log_action', :default => 'Action') %></th>
-    <th scope="col"><%= t('.log_details', :default => 'Details') %></th>
-  </tr>
-</thead>
-<tbody>
-  <% unless @log_items.blank?
-     @log_items.each do |item| %>
-  <tr>
-    <td><%= item.created_at%></td>
-    <td><%=h log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
-    <td><%=h item.note %></td>
-  </tr>
-  <% end %>
-  <% end %>
-  <tr>
-    <td><%= @user.created_at %></td>
-    <td><%= t('.log_created', :default => 'Account Created') %></td>
-    <td><%= t('.log_system', :default => 'System Generated') %></td>
-  </tr>
- </tbody> 
-</table>
+	<table id="user_history" summary="<%= ts('Shows what notable actions, such as creating an account, a user performed, and when they did them.') %>">
+	  <caption><%= ts('History of User Actions') %></caption>
+    <thead>
+	    <tr>
+        <th scope="col"><%= ts('Date / Time') %></th>
+        <th scope="col"><%= ts('Action') %></th>
+        <th scope="col"><%= ts('Details') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @log_items.blank?
+        @log_items.each do |item| %>
+        <tr>
+          <td><%= item.created_at %></td>
+          <td><%= log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
+          <td><%= item.note %></td>
+        </tr>
+        <% end %>
+      <% end %>
+      <tr>
+        <td><%= @user.created_at %></td>
+        <td><%= ts('Account Created') %></td>
+        <td><%= ts('System Generated') %></td>
+      </tr>
+    </tbody> 
+  </table>
 </div>

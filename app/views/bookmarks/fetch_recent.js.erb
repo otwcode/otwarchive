@@ -1,8 +1,8 @@
 $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').html('<%= escape_javascript(render "bookmarks", :params => {:show_recent => true}) %>');
 <% if @bookmark.bookmarkable.bookmarks.size > 5 %>
-  $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append('<%= escape_javascript(link_to(ts("View all"), eval(@bookmark.bookmarkable.class.to_s.underscore + "_bookmarks_path(@bookmark.bookmarkable)"), :class => "action")) %>');
-  $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append(" | ");
+  $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append('<%= escape_javascript(link_to(ts("View All"), eval(@bookmark.bookmarkable.class.to_s.underscore + "_bookmarks_path(@bookmark.bookmarkable)"), :class => "action")) %>');
+  $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append(" ");
 <% end %>
-$j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append('<%= escape_javascript(link_to("Hide most recent bookmarks", {:controller => "bookmarks", :action => "hide_recent", :id => @bookmark.id }, :method => :get, :remote => true, :class => "action")) %>');
-$j('#recent_link_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').html('<%= escape_javascript(link_to("Hide most recent bookmarks", {:controller => "bookmarks", :action => "hide_recent", :id => @bookmark.id}, :method => :get, :remote => true, :class => "action")) %>');
+$j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append('<%= escape_javascript(link_to("Hide Most Recent Bookmarks", {:controller => "bookmarks", :action => "hide_recent", :id => @bookmark.id }, :method => :get, :remote => true, :class => "action")) %>');
+$j('#recent_link_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').html('<%= escape_javascript(link_to("Hide Most Recent Bookmarks", {:controller => "bookmarks", :action => "hide_recent", :id => @bookmark.id}, :method => :get, :remote => true, :class => "action")) %>');
 $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').slideDown();

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120415134615) do
+ActiveRecord::Schema.define(:version => 20121129192353) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -73,6 +74,8 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
     t.integer  "default_skin_id"
     t.datetime "stats_updated_at"
+    t.boolean  "disable_filtering",                          :default => false,                 :null => false
+    t.boolean  "request_invite_enabled",                     :default => false,                 :null => false
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -238,21 +241,22 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.boolean  "gift_exchange", :default => false, :null => false
     t.boolean  "show_random",   :default => false, :null => false
     t.boolean  "prompt_meme",   :default => false, :null => false
+    t.boolean  "email_notify",  :default => false, :null => false
   end
 
   add_index "collection_preferences", ["collection_id"], :name => "index_collection_preferences_on_collection_id"
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 16777215
-    t.text     "faq",                     :limit => 16777215
-    t.text     "rules",                   :limit => 16777215
+    t.text     "intro",                   :limit => 2147483647
+    t.text     "faq",                     :limit => 2147483647
+    t.text     "rules",                   :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -421,11 +425,12 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "updated_at"
   end
 
-  add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id"
+  add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id", :unique => true
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
-  create_table "filter_taggings", :force => true do |t|
+  create_table "filter_taggings", :id => false, :force => true do |t|
+    t.integer  "id",                                                :null => false
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
     t.string   "filterable_type", :limit => 100
@@ -433,8 +438,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "updated_at"
     t.boolean  "inherited",                      :default => false, :null => false
   end
- 
-  execute 'ALTER TABLE filter_taggings DROP PRIMARY KEY, ADD PRIMARY KEY (id,filter_id);'
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
@@ -482,16 +485,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "gifts", ["pseud_id"], :name => "index_gifts_on_pseud_id"
   add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
   add_index "gifts", ["work_id"], :name => "index_gifts_on_work_id"
-
-  create_table "hit_counters", :force => true do |t|
-    t.integer "work_id"
-    t.integer "hit_count",      :default => 0, :null => false
-    t.string  "last_visitor"
-    t.integer "download_count", :default => 0, :null => false
-  end
-
-  add_index "hit_counters", ["hit_count"], :name => "index_hit_counters_on_hit_count"
-  add_index "hit_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
 
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id"
@@ -909,6 +902,15 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "roles_users", ["role_id", "user_id"], :name => "index_roles_users_on_role_id_and_user_id"
   add_index "roles_users", ["user_id", "role_id"], :name => "index_roles_users_on_user_id_and_role_id"
 
+  create_table "searches", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "options"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "serial_works", :force => true do |t|
     t.integer  "series_id"
     t.integer  "work_id"
@@ -995,6 +997,19 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "skins", ["title"], :name => "index_skins_on_title"
   add_index "skins", ["type"], :name => "index_skins_on_type"
 
+  create_table "stat_counters", :force => true do |t|
+    t.integer "work_id"
+    t.integer "hit_count",       :default => 0, :null => false
+    t.string  "last_visitor"
+    t.integer "download_count",  :default => 0, :null => false
+    t.integer "comments_count",  :default => 0, :null => false
+    t.integer "kudos_count",     :default => 0, :null => false
+    t.integer "bookmarks_count", :default => 0, :null => false
+  end
+
+  add_index "stat_counters", ["hit_count"], :name => "index_hit_counters_on_hit_count"
+  add_index "stat_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
+
   create_table "subscriptions", :force => true do |t|
     t.integer  "user_id"
     t.integer  "subscribable_id"
@@ -1075,6 +1090,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "last_wrangler_id"
     t.string   "last_wrangler_type"
     t.boolean  "unwrangleable",                     :default => false, :null => false
+    t.string   "sortable_name",                     :default => "",    :null => false
   end
 
   add_index "tags", ["canonical"], :name => "index_tags_on_canonical"
@@ -1082,63 +1098,8 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "tags", ["id", "type"], :name => "index_tags_on_id_and_type"
   add_index "tags", ["merger_id"], :name => "index_tags_on_merger_id"
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
+  add_index "tags", ["sortable_name"], :name => "index_tags_on_sortable_name"
   add_index "tags", ["type"], :name => "index_tags_on_type"
-
-  create_table "tolk_locales", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "tolk_locales", ["name"], :name => "index_tolk_locales_on_name", :unique => true
-
-  create_table "tolk_phrases", :force => true do |t|
-    t.text     "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "tolk_translations", :force => true do |t|
-    t.integer  "phrase_id"
-    t.integer  "locale_id"
-    t.text     "text"
-    t.text     "previous_text"
-    t.boolean  "primary_updated", :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "tolk_translations", ["phrase_id", "locale_id"], :name => "index_tolk_translations_on_phrase_id_and_locale_id", :unique => true
-
-  create_table "translation_notes", :force => true do |t|
-    t.text     "note"
-    t.string   "namespace"
-    t.integer  "user_id"
-    t.integer  "locale_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "note_sanitizer_version", :limit => 2, :default => 0, :null => false
-  end
-
-  add_index "translation_notes", ["locale_id"], :name => "index_translation_notes_on_locale_id"
-  add_index "translation_notes", ["user_id"], :name => "index_translation_notes_on_user_id"
-
-  create_table "translations", :force => true do |t|
-    t.string   "tr_key"
-    t.integer  "locale_id"
-    t.text     "text"
-    t.string   "namespace"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "updated",       :default => false, :null => false
-    t.boolean  "betaed",        :default => false, :null => false
-    t.integer  "translator_id"
-    t.integer  "beta_id"
-    t.boolean  "translated",    :default => false, :null => false
-  end
-
-  add_index "translations", ["tr_key", "locale_id", "updated_at"], :name => "index_translations_on_tr_key_and_locale_id_and_updated_at"
-  add_index "translations", ["tr_key", "locale_id"], :name => "index_translations_on_tr_key_and_locale_id"
 
   create_table "user_invite_requests", :force => true do |t|
     t.integer  "user_id"
@@ -1161,7 +1122,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url",       :limit => 191
     t.boolean  "recently_reset",                    :default => false, :null => false
     t.boolean  "suspended",                         :default => false, :null => false
     t.boolean  "banned",                            :default => false, :null => false
@@ -1174,7 +1134,6 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
   add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
 
   create_table "work_links", :force => true do |t|
@@ -1215,6 +1174,8 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.integer  "notes_sanitizer_version",     :limit => 2, :default => 0,     :null => false
     t.integer  "endnotes_sanitizer_version",  :limit => 2, :default => 0,     :null => false
     t.integer  "work_skin_id"
+    t.boolean  "in_anon_collection",                       :default => false, :null => false
+    t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
   end
 
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"

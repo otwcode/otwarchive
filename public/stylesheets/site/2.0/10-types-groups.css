@@ -87,6 +87,11 @@ a.cloud8 {
     box-shadow: 1px 1px 5px #aaa;
 }
 
+#outer.wrapper {
+  float: left;
+  width: 100%;
+}
+
 #outer.wrapper, #inner.wrapper {
     box-shadow: none;
 }

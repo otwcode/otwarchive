@@ -446,13 +446,17 @@ $.TokenList = function (input, url_or_data, settings) {
           };
 
         // The 'delete token' button
-        $("<span>" + settings.deleteText + "</span>")
+        var delete_span_token = $("<span></span>")
             .addClass(settings.classes.tokenDelete)
             .appendTo(this_token)
             .click(function () {
                 delete_token($(this).parent());
                 return false;
             });
+				// Link with a title attribute for better accessibility
+        $("<a href=\"#\">" + settings.deleteText + "</a>")
+						.attr("title", "remove " + value)
+						.appendTo(delete_span_token)
 
         // Store data on the token
         var token_data = {"id": id, "name": value};

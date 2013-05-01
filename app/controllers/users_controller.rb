@@ -72,11 +72,11 @@ class UsersController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_all.revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -84,18 +84,18 @@ class UsersController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_registered_user.revealed.non_anon).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
     end
 
     @fandoms = @fandoms.all # force eager loading
-    @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
@@ -133,26 +133,6 @@ class UsersController < ApplicationController
       if @user.save
         setflash; flash[:notice] = ts("Your password has been changed")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
-        redirect_to user_profile_path(@user) and return
-      else
-        render :change_password and return
-      end
-    end
-  end
-
-
-  def change_openid
-    if params[:identity_url]
-      @openid_url = params[:identity_url]
-      @openid_url = "http://#{@openid_url}" unless @openid_url.match("http://")
-      @openid_url = OpenID.normalize_url(@openid_url)
-      unless reauthenticate
-        render :change_openid and return
-      end
-      @user.identity_url = @openid_url
-      @user.recently_reset = false
-      if @user.save
-        setflash; flash[:notice] = ts('Your OpenID URL has been successfully updated.')
         redirect_to user_profile_path(@user) and return
       else
         render :change_password and return
@@ -215,23 +195,9 @@ class UsersController < ApplicationController
       @user.password = params[:user][:password] if params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
       @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-      openid_url = params[:user][:identity_url]
-      unless openid_url.blank?
-        # normalize OpenID url before saving
-        # TODO validate openid before creating account
-        openid_url = "http://#{openid_url}" unless openid_url.match("http://")
-        if User.find_by_identity_url(openid_url)
-          params[:use_openid] = true
-          setflash; flash.now[:error] = "OpenID url is already being used"
-          render :action => "new" and return
-        else
-          @user.identity_url = OpenID.normalize_url(openid_url)
-        end
-      end
       if @user.save
         notify_and_show_confirmation_screen
       else
-        params[:use_openid] = true unless openid_url.blank?
         render :action => "new"
       end
     end
@@ -272,11 +238,7 @@ class UsersController < ApplicationController
           end
           flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
         end
-        if @user.identity_url
-          redirect_to(login_path(:use_openid => true))
-        else
-          redirect_to(login_path)
-        end
+        redirect_to(login_path)
       else
         setflash; flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
         redirect_to ''
@@ -304,11 +266,13 @@ class UsersController < ApplicationController
         @old_email = @user.email
         @user.email = params[:new_email]
         @new_email = params[:new_email]
-        if @user.save
+        @confirm_email = params[:email_confirmation]
+        if @new_email == @confirm_email && @user.save
           setflash; flash[:notice] = ts("Your email has been successfully updated")
           UserMailer.change_email(@user.id, @old_email, @new_email).deliver
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
         else
+          setflash; flash[:error] = ts("Email addresses don't match! Please retype and try again")
           render :change_email and return
         end
       end

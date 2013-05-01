@@ -5,22 +5,22 @@
 <%= challenge_form.fields_for(:potential_match_settings) do |match_settings_form| %>
 
   <fieldset id="match_settings">
-    <legend>Minimum Number To Match</legend>
-    <h3 class="heading">Minimum Number To Match</h3>
+    <legend><%= ts("Minimum Number to Match") %></legend>
+    <h3 class="landmark heading"><%= ts("Minimum Number to Match") %></h3>
     <p class="note">
-      This means the <em>minimum</em> level of matching needed for an offer to match a request.
-      Any matches above the minimum required number will be used to rank the quality of potential matches.
+      <%= ts("This means the") %> <em><%= ts("minimum") %></em> <%= ts("level of matching needed for an offer to match a request.
+      Any matches above the minimum required number will be used to rank the quality of potential matches.") %>
     </p>
 
     <p class="note">
-     If you change these
-      settings <em>after</em> you generate potential matches,
-      you will need to <em>regenerate potential matches</em> before your changes show.
+     <%= ts("If you change these
+      settings") %> <em><%= ts("after") %></em> <%= ts("you generate potential matches,
+      you will need to") %> <em><%= ts("regenerate potential matches") %></em> <%= ts("before your changes show.") %>
     </p>
 
     <dl>
       <dt>
-        <%= match_settings_form.label(:num_required_prompts, ts("Requests: ")) %>
+        <%= match_settings_form.label(:num_required_prompts, ts("Requests:")) %>
       </dt>
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) %></dd>
 

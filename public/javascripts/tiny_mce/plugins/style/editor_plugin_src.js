@@ -1,8 +1,11 @@
 /**
- * $Id: editor_plugin_src.js 787 2008-04-10 11:40:57Z spocke $
+ * editor_plugin_src.js
  *
- * @author Moxiecode
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * Copyright 2009, Moxiecode Systems AB
+ * Released under LGPL License.
+ *
+ * License: http://tinymce.moxiecode.com/license
+ * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
 (function() {
@@ -10,14 +13,30 @@
 		init : function(ed, url) {
 			// Register commands
 			ed.addCommand('mceStyleProps', function() {
+
+				var applyStyleToBlocks = false;
+				var blocks = ed.selection.getSelectedBlocks();
+				var styles = [];
+
+				if (blocks.length === 1) {
+					styles.push(ed.selection.getNode().style.cssText);
+				}
+				else {
+					tinymce.each(blocks, function(block) {
+						styles.push(ed.dom.getAttrib(block, 'style'));
+					});
+					applyStyleToBlocks = true;
+				}
+
 				ed.windowManager.open({
 					file : url + '/props.htm',
 					width : 480 + parseInt(ed.getLang('style.delta_width', 0)),
-					height : 320 + parseInt(ed.getLang('style.delta_height', 0)),
+					height : 340 + parseInt(ed.getLang('style.delta_height', 0)),
 					inline : 1
 				}, {
+					applyStyleToBlocks : applyStyleToBlocks,
 					plugin_url : url,
-					style_text : ed.selection.getNode().style.cssText
+					styles : styles
 				});
 			});
 

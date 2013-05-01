@@ -4,7 +4,7 @@ class Preference < ActiveRecord::Base
 
 
   validates_format_of :work_title_format, :with => /^[a-zA-Z0-9_\-,\. ]+$/,
-    :message => t('invalid_work_title_format', :default => "can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore).")
+    :message => ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore).")
 
   before_create :set_default_skin
   def set_default_skin

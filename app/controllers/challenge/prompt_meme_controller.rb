@@ -45,7 +45,7 @@ class Challenge::PromptMemeController < ChallengesController
       if initializing_tag_sets?
         flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
       end
-      redirect_to @collection
+      redirect_to collection_profile_path(@collection)
     else
       render :action => :new
     end

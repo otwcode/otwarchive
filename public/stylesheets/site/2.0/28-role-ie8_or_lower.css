@@ -20,38 +20,12 @@ a.tag {
 
 /* pathing and inheritance*/
 
-html body #header form #small_login {
-  width: 99% !important;
-}
-
 .blurb .stats dd, #comment_form p {
   position: static;
 }
 
 .works-show .module {
   border: 0;
-}
-
-/*inheritance?*/
-
-#header .icon {
-  position: absolute;
-  right: 0;
-}
-
-#header #greeting ul.navigation {
-  position: absolute;
-  top: 106px;
-  right: 0;
-  width: 110px;
-  padding: 0.25em 0 0;
-}
-
-#footer p.beta {
-  background: none;
-  height: auto;
-  width: auto;
-  position: static;
 }
 
 /*float/clear */
@@ -88,14 +62,9 @@ form dd.notes dl {
   border: 0;
 }
 
-#footer {
-  height: 120px;
-  background: #900;
-}
-
 /* Determines actual width in IE */
 
-.ui-tooltip-fluid {
+.qtip-fluid {
   display: block;
   visibility: hidden;
   position: static !important;
@@ -122,11 +91,7 @@ span.symbol, span.symbol span {
   vertical-align: middle;
 }
 
-#header fieldset {
-  margin-bottom: -0.643em;
-}
-
-.ui-tooltip-titlebar .ui-state-default {
+.qtip-titlebar .ui-state-default {
   top: 16px;
 }
 
@@ -153,7 +118,7 @@ input, select, option, textarea, legend, label, .actions a {
 
 /*hasLayout */
 
-#main, div.home, textarea, li.pseud, .listbox .index {
+#header, #main, div.home, textarea, li.pseud, .listbox .index {
   zoom: 1;
 }
 
@@ -169,6 +134,14 @@ input, select, option, textarea, legend, label, .actions a {
   display: none;
 }
 
+#header .primary .menu a:hover, #header .primary .menu a:focus {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#26000000', endColorstr='#26000000',GradientType=0);
+}
+
+#header .admin .menu a:hover, #header .admin .menu a:focus {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#26ffffff', endColorstr='#26ffffff',GradientType=0);
+}
+
 /* commas */
 
 .commas li.last:after {
@@ -177,8 +150,9 @@ input, select, option, textarea, legend, label, .actions a {
 
 /*DIAGNOSIS*/
 
-/* WIDGET: IBOX (called by help links)*/
+/* WIDGET: MODAL DIALOGS (called by help links) */
 
-#ibox_w {
-  filter: alpha(opacity=60);
+#modal-bg {
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2000000,endColorstr=#B2000000)";
 }
+

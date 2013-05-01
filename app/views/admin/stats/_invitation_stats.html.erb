@@ -1,42 +1,38 @@
-<!--this table is irregular and incomplete. headers need scopes, the summary must be completed, and empty cells should be avoided-->
-
-<table summary="">
-	<caption>Invitations: by status</caption>
+<table id="invitations_by_status" summary="<%= ts('How many invitation tokens have been redeemed, sent but unredeemed, and unsent.') %>">
+	<caption><%= ts('Invitations by Status') %></caption>
 	<thead>
 		<tr>
-			<td></td>
-			<th>total</th>
+			<th scope="col"><%= ts('Status') %></th>
+			<th scope="col"><%= ts('Total') %></th>
 		</tr>
 	</thead>
 	<tbody>
 	  <% @invitations_by_status.each_pair do |status, count| %>
 		<tr>
-			<th><%= status.to_s %></th>
+			<th scope="row"><%= status.to_s %></th>
 			<td><%= count.to_s %></td>
 		</tr>
     <% end %>
 	</tbody>
 </table>
 
-<!--this table is irregular and incomplete. headers need scopes, the summary must be completed, and empty cells should be avoided-->
-
-<table class="stats" summary="">
-	<caption>Invitations: by week</caption>
+<table id="invitations_by_week" summary="<%= ts('Number of invitations created and redeemed by week for the last fourteen weeks.') %>">
+	<caption><%= ts('Invitations Created per Week') %></caption>
 	<thead>
 		<tr>
-			<td></td>
-			<%= @graph_dates.collect {|d| "<th>" + d.strftime('%m-%d-%y') + "</th>"}.join.html_safe %>
+			<th scope="col"><%= ts('Action') %></th>
+			<%= @graph_dates.collect {|d| '<th scope="col">' + d.strftime('%m-%d-%y') + '</th>'}.join.html_safe %>
 		</tr>
 	</thead>
 	<tbody>
 	  <tr>
-			<th>invitations created</th>
+			<th scope="row"><%= ts('invitations created') %></th>
 			<% @graph_dates.each do |date| %>
 			<td><%= @invitations_created_weekly[date] ? @invitations_created_weekly[date].length : 0 %></td>
 			<% end %>
 		</tr>
 		<tr>
-			<th>invitations redeemed</th>
+			<th scope="row"><%= ts('invitations redeemed') %></th>
 			<% @graph_dates.each do |date| %>
 			<td><%= @invitations_redeemed_weekly[date] ? @invitations_redeemed_weekly[date].length : 0 %></td>
 			<% end %>
