@@ -9,10 +9,10 @@
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>
     </blockquote>
     <dl class="stats">
-      <dt>Users: </dt><dd><%= @skin.preferences.count %></dd>
-      <dt>Role: </dt><dd><%= @skin.role %></dd>
-      <dt>Media: </dt><dd><%= @skin.get_media %></dd>
-      <dt>Condition: </dt>
+      <dt><%= ts("Users:") %></dt><dd><%= @skin.preferences.count %></dd>
+      <dt><%= ts("Role:") %></dt><dd><%= @skin.role %></dd>
+      <dt><%= ts("Media:") %></dt><dd><%= @skin.get_media %></dd>
+      <dt><%= ts("Condition:") %></dt>
       <dd>
         <% unless @skin.ie_condition.present? || @skin.unusable? %>normal<% end %>
         <% if @skin.ie_condition.present? %><abbr title="Internet Explorer"><%= @skin.ie_condition %></abbr><% end %>
@@ -32,7 +32,7 @@
   
   <% unless @skin.parent_skins.empty? %>
     <div class="parents module">
-      <h3 class="heading">Parent Skins</h3>
+      <h3 class="heading"><%= ts("Parent Skins") %></h3>
       <ul class="index group">
       <% @skin.parent_skins.each do |parent| %>
         <li><%= link_to parent.title, skin_path(parent) %></li>
@@ -43,22 +43,38 @@
 
   <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
     <div class="wizard module">
-  		<h3 class="heading">Wizard Settings</h3>
-      <p class="notes">(Can be overridden by custom <abbr title="cascading style sheets">CSS</abbr>)</p>
+  		<h3 class="heading"><%= ts("Wizard Settings") %></h3>
+      <p class="notes"><%= ts("(Can be overridden by custom <abbr title='cascading style sheets'>CSS</abbr>)").html_safe %></p>
   
       <div class="wrapper">
-    		<!--REVIEW: is this meta? It doesn't match-->
-    		<dl class="meta group">
-          <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end %>
-          <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end %>
-          <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end %>
-          <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end %>
-          <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end %>
-          <% if @skin.paragraph_margin %><dt>Paragraph margin</dt><dd><%= @skin.paragraph_margin %><% end %>
-          <% unless @skin.headercolor.blank? %><dt>Header color</dt><dd><%= @skin.headercolor %><% end %>
-          <% unless @skin.accent_color.blank? %><dt>Accent color</dt><dd><%= @skin.accent_color %><% end %>
+        <!--REVIEW: is this meta? It doesn't match-->
+        <dl class="meta group">
+          <% if @skin.margin %>
+            <dt><%= ts("Margin:") %></dt><dd><%= @skin.margin %></dd>
+          <% end %>
+          <% unless @skin.font.blank? %>
+            <dt><%= ts("Font:") %></dt><dd><%= @skin.font %></dd>
+          <% end %>
+          <% unless @skin.background_color.blank? %>
+            <dt><%= ts("Background color:") %></dt><dd><%= @skin.background_color %></dd>
+          <% end %>
+          <% unless @skin.foreground_color.blank? %>
+            <dt><%= ts("Foreground color:") %></dt><dd><%= @skin.foreground_color %></dd>
+          <% end %>
+          <% if @skin.base_em %>
+            <dt><%= ts("Relative font size:") %></dt><dd><%= @skin.base_em %></dd>
+          <% end %>
+          <% if @skin.paragraph_margin %>
+            <dt><%= ts("Paragraph margin:") %></dt><dd><%= @skin.paragraph_margin %></dd>
+          <% end %>
+          <% unless @skin.headercolor.blank? %>
+            <dt><%= ts("Header color:") %></dt><dd><%= @skin.headercolor %></dd>
+          <% end %>
+          <% unless @skin.accent_color.blank? %>
+            <dt><%= ts("Accent color:") %></dt><dd><%= @skin.accent_color %></dd>
+          <% end %>
         </dl>
-  	  </div<>
+      </div<>
     </div>
   <% end %>
 
