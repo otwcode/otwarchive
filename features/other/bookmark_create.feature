@@ -154,6 +154,33 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
+Scenario: bookmark added to moderated collection has flash notice only when not approved
+  Given the following activated users exist
+    | login      | password |
+    | workauthor | password |
+    | bookmarker | password |
+    | otheruser  | password |
+    And I have a moderated collection "Five Pillars" with name "five_pillars"
+    And I am logged in as "workauthor" with password "password"
+    And I post the work "Fire Burn, Cauldron Bubble"
+  When I log out
+    And I am logged in as "bookmarker" with password "password"
+    And I view the work "Fire Burn, Cauldron Bubble"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "five_pillars"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "The collection Five Pillars is currently moderated."
+  When I go to bookmarker's bookmarks page
+    Then I should see "The collection Five Pillars is currently moderated."
+  When I log out
+    And I am logged in as "moderator" with password "password"
+    And I approve the first item in the collection "Five Pillars"
+    And I am logged in as "bookmarker" with password "password"
+    And I go to bookmarker's bookmarks page
+  Then I should not see "The collection Five Pillars is currently moderated."
+
+
 Scenario: bookmarks added to moderated collections appear correctly
   Given the following activated users exist
     | login      | password |
