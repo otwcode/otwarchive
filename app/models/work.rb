@@ -353,13 +353,16 @@ class Work < ActiveRecord::Base
   end
 
   def recipients=(recipient_names)
-    names = []
+    new_recipients = [] # collect names of new recipients
+    gifts = [] # rebuild the list of associated gifts using the new list of names
     recipient_names.split(',').each do |name|
       name.strip!
       gift = self.gifts.for_name_or_byline(name).first
-      names << name unless (gift && self.posted) # all recipients are new if work isn't posted
+      new_recipients << name unless (gift && self.posted) # all recipients are new if work isn't posted
+      gifts << gift unless !gift # new gifts are added after saving, not now
     end
-    self.new_recipients = names.join(",")
+    self.new_recipients = new_recipients.uniq.join(",")
+    self.gifts = gifts
   end
   
   def recipients
