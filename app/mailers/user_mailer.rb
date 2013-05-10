@@ -45,12 +45,16 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author_id, claimed_work_ids)
-    external_author = ExternalAuthor.find(external_author_id)
-    @external_email = external_author.email
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
+    if is_user
+      creator = User.find(creator_id)
+    else
+      creator = ExternalAuthor.find(creator_id)
+    end
+    @external_email = creator.email
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
-      :to => external_author.user.email,
+      :to => creator.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
     )
   end
