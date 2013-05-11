@@ -6,7 +6,7 @@ describe Chapter do
   describe "save" do
 
     before(:each) do
-      @work = Factory.create(:work)
+      @work = FactoryGirl.create(:work)
       @chapter = Chapter.new(:work => @work, :content => "Cool story, bro!")
     end
     

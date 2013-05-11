@@ -7,7 +7,7 @@ describe Series do
   let(:restricted_work) { Factory(:work, :restricted => true) }
   
   before(:each) do
-    @series = Factory.create(:series)
+    @series = FactoryGirl.create(:series)
   end
   
   it "should be unrestricted when it has unrestricted works" do

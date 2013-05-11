@@ -7,7 +7,7 @@ end
 
 # create n models
 Given(/^(\d+) #{capture_plural_factory} exist(?: with #{capture_fields})?$/) do |count, plural_factory, fields|
-  count.to_i.times { create_model(plural_factory.singularize, fields) }
+  count.to_i.times { create_model(plural_FactoryGirl.singularize, fields) }
 end
 
 # create models from a table
@@ -32,7 +32,7 @@ end
 
 # find exactly n models
 Then(/^(\d+) #{capture_plural_factory} should exist(?: with #{capture_fields})?$/) do |count, plural_factory, fields|
-  find_models(plural_factory.singularize, fields).size.should == count.to_i
+  find_models(plural_FactoryGirl.singularize, fields).size.should == count.to_i
 end
 
 # assert equality of models

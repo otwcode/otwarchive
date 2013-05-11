@@ -4,7 +4,7 @@ require 'spec_helper'
 describe StatCounter do
   
   before(:each) do
-    @work = Factory.create(:work)
+    @work = FactoryGirl.create(:work)
   end
 
   it "should be created for a new work" do

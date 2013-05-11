@@ -12,7 +12,7 @@ describe Collectible do
   
   it "should not be put into a nonexistent collection" do
     fake_name = "blah_blah_blah_not_an_existing_name"
-    work = Factory.create(:work)
+    work = FactoryGirl.create(:work)
     work.collection_names = fake_name
     work.errors[:base].first.should match("find") # use a very basic part of the error message
     work.errors[:base].first.should match(fake_name)
@@ -22,9 +22,9 @@ describe Collectible do
   end  
   
   context "being posted to a collection", focus: true do
-    let(:collection) { Factory.create(:collection) }
+    let(:collection) { FactoryGirl.create(:collection) }
     # build but don't save so we can change the collection settings
-    let(:work) { Factory.build(:work, :collection_names => collection.name) }
+    let(:work) { FactoryGirl.build(:work, :collection_names => collection.name) }
     subject { work }
     
     describe "once added" do
