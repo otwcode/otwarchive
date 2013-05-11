@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler'
 
-gem 'rails', '3.0.20'
+gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -19,12 +19,8 @@ gem 'redis-namespace'
 # Here are all our application-specific gems
 
 gem 'will_paginate', '>=3.0.2'
-# gem 'will_paginate',
-  # :git     => 'git://github.com/huerlisi/will_paginate.git',
-  # :branch  => 'rails3',
-  # :require => 'will_paginate'
-
-gem 'nested_has_many_through'
+gem 'acts_as_list'
+gem 'akismetor'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
@@ -37,7 +33,6 @@ gem 'resque_mailer'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'aws-s3', :require => 'aws/s3'
-gem 'mocha'
 gem 'css_parser'
 
 gem 'paperclip', '>=2.3.16'
@@ -45,10 +40,7 @@ gem 'paperclip', '>=2.3.16'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
-gem 'authlogic',
-  :git     => 'git://github.com/odorcicd/authlogic.git',
-  :branch  => 'rails3',
-  :require => 'authlogic'
+gem 'authlogic'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -56,9 +48,6 @@ gem 'permit_yo'
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
-
-# enable debugging with "rails server -u" or "rails server --debugger"
-gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'jquery-rails', '>= 0.2.6'
 
@@ -80,17 +69,18 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
-  gem 'capybara', '=0.3.9'
-  gem 'database_cleaner', '>=0.6.0.rc.3'
+  gem 'capybara'
+  gem 'database_cleaner'
   gem 'cucumber-rails'
-  gem 'cucumber', '>=1.0.0'
-  gem 'gherkin', '>=2.4.1' 
+  gem 'cucumber'
+  gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
   gem 'fakeweb'
   gem 'vcr'
   gem 'delorean'
+  gem 'faker'
 end
 
 # Deploy with Capistrano
@@ -101,4 +91,5 @@ group :production do
   gem 'unicorn', :require => false
   gem "memcache-client"
 end
+
 
