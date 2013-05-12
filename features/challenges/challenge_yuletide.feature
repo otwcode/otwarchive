@@ -605,7 +605,7 @@ Feature: Collection
   Then 5 emails should be delivered
     And the email should contain "A gift story has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
-    And the email should contain "in the Yuletide collection at the Archive of Our Own"
+    And the email should contain "in the \"Yuletide\" collection at the Archive of Our Own"
     And the email should contain "by an anonymous responder"
     And the email should not contain "by myname1"
     And the email should not contain "by myname2"

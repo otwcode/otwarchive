@@ -68,7 +68,7 @@ Feature: Archivist bulk imports
       And I should see "That Shall Achieve The Sword"
     Given the system processes jobs
     Then 1 email should be delivered to "shalott@intimations.org"
-      And the email should contain invitation warnings from "elynross" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
+      And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
  
   Scenario: Importing only sends one email even if there are many works
   
@@ -111,7 +111,7 @@ Feature: Archivist bulk imports
       And I should see "Name change"
     Given the system processes jobs
     Then 1 email should be delivered to "jennyst@dreamwidth.org"
-      And the email should contain invitation warnings from "elynross" for work "Name change" in fandom "No Fandom"
+      And the email should contain invitation warnings from "alice ttlg" for work "Name change" in fandom "No Fandom"
   #    And 1 email should be delivered to "opendoors@transformativeworks.org"
   # TODO
 
