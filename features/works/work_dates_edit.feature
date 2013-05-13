@@ -45,10 +45,9 @@ Feature: Edit Works Dates
     Then I should see "less than 1 minute ago"
       And I should not see "29 Apr 2010"
 
-    # Backdating the first chapter changes published date but not updated date
+    # Backdating the first chapter (the Work) changes published date AND the updated date
     When I edit the work "First work"
       And I check "backdate-options-show"
-    Then I should see "Set this publication date for the entire work"
     When I select "1" from "work_chapter_attributes_published_at_3i"
       And I select "January" from "work_chapter_attributes_published_at_2i"
       And I select "1990" from "work_chapter_attributes_published_at_1i"
@@ -57,35 +56,30 @@ Feature: Edit Works Dates
     Then I should see "Published:1990-01-01"
       And I should see "first chapter content"
       And I should not see "this is my second chapter"
-      And I should see Updated today
+      And I should see "Updated:1990-01-01"
 
-    # Published date is the same for all chapters
+    # Published & Updated date is the same for all chapters
     When I follow "Next Chapter"
     Then I should see "Published:1990-01-01"
-      And I should see Updated today
+      And I should see "Updated:1990-01-01"
       And I should not see "first chapter content"
       And I should see "this is my second chapter"
 
-    # Set this date for the entire work changes both published and updated dates
-    When I edit the work "First work"
-      And I check "backdate-options-show"
-    Then I should see "Set this publication date for the entire work"
-    When I select "2" from "work_chapter_attributes_published_at_3i"
-      And I select "February" from "work_chapter_attributes_published_at_2i"
-      And I select "1991" from "work_chapter_attributes_published_at_1i"
-      And I check "work_backdate"
+  # The entire work is backdated. Now, I want to edit chapter two to have a
+  # "Chapter Publication Date" date set to January 16th, 2013.
+    When I follow "Edit Chapter"
+      And I select "16" from "chapter_published_at_3i"
+      And I select "January" from "chapter_published_at_2i"
+      And I select "2013" from "chapter_published_at_1i"
       And I press "Preview"
       And I press "Update"
-    Then I should see "Published:1991-02-02"
-      And "backdating work with previous chapters" is fixed
-      #And I should see "Updated:1991-02-01"
-      And I should not see Updated today
-      And I should see "first chapter content"
-      And I should not see "this is my second chapter"
-    When I follow "Next Chapter"
-    Then I should see "Published:1991-02-02"
-      And "ditto" is fixed
-      #And I should see "Updated:1991-02-01"
-      And I should not see Updated today
+    Then I should see "Published:1990-01-01"
+      And I should see "Updated:2013-01-16"
       And I should not see "first chapter content"
       And I should see "this is my second chapter"
+    When I follow "Previous Chapter"
+  # This published at date should be the same on all chapters, since we set it for the Work
+    Then I should see "Published:1990-01-01"
+  # The Updated date on this should have changed to January 16th, 2013 when we
+  # changed the "Published" at day for the previous chapter.
+      And I should see "Updated:2013-01-16"
