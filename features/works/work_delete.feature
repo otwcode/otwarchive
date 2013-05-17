@@ -127,7 +127,7 @@ Feature: Delete Works
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
-    When I press "Post Chapter"
+    When I press "Post"
     Then I should see "All Something Breaks Loose"
       And I should see "Chapter 1"
       And I should see "Bad things happen, etc."
