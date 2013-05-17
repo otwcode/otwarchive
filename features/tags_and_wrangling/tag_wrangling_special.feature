@@ -70,6 +70,7 @@ Feature: Tag Wrangling - special cases
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
+    And all search indexes are updated
   When I view the tag "Evan ?"
     And I follow "filter works"
   Then I should see "1 Work in Evan ?"
