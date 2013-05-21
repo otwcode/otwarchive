@@ -16,14 +16,6 @@ background:purple; color:#555;}
 
 */
 
-/*OPERA 11 HEADER SEARCH TEMP FIX*/
-
-@media not screen and (1) { 
-    #header fieldset {
-      margin-bottom: -0.643em
-    }
-}
-
 /* TEMP FIX Issue 2652 -- don't integrate this*/
 
 span.delete a {
@@ -86,21 +78,6 @@ drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643e
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
-
-/* Messing with header */
-#header .actions a.unbuttoned {
-  border: none;
-  background: none;
-  color: #eee;
-  font-size: .8em;
-  padding: 0;
-  box-shadow: none;
-  text-shadow: none;
-}
-#header .actions a.unbuttoned:hover {
-  box-shadow: none;
-  text-decoration: underline;
-}
 
 /* CLAIMS form (Issue
 Needs nested ul to be indented
