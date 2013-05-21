@@ -202,7 +202,7 @@ module TagsHelper
       tag.direct_sub_tags.each do |sub|
         sub_ul << "<li>" + link_to_tag(sub) + "</li>"
         unless sub.direct_sub_tags.empty?
-          sub_ul << sub_tag_tree(sub)
+          sub_ul << "<li>" + sub_tag_tree(sub) + "</li>"
         end
       end
       sub_ul << "</ul>"
