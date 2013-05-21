@@ -30,7 +30,6 @@ Feature: Leave kudos
     And the email should contain "myname2"
     And the email should contain "left kudos"
     And the email should contain "."
-    And the email should not contain "!"
     And all emails have been delivered
   When I press "Kudos ♥"
   Then I should see "You have already left kudos here. :)"
@@ -42,7 +41,6 @@ Feature: Leave kudos
     And the email should contain "A guest"
     And the email should contain "left kudos"
     And the email should contain "."
-    And the email should not contain "!"
   Then I should see "Thank you for leaving kudos!"
   # guest kudos don't show up immediately
   # Then I should see "myname2 as well as a guest left kudos on this work!"
