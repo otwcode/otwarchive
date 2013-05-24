@@ -4,7 +4,7 @@ Given /^I have the default comment notifications setup$/ do
 end
 
 Given /^I have the receive all comment notifications setup$/ do
-  When %{I set my preferences to receive copies of my own comments}
+  step %{I set my preferences to receive copies of my own comments}
 end
 
 Given /^I have the receive no comment notifications setup$/ do
@@ -19,21 +19,21 @@ end
 
 Then /^I should see Posted today$/ do
   today = Date.today.to_s(:date_for_comment_test)
-  Given "I should see \"Posted #{today}\""
+  step "I should see \"Posted #{today}\""
 end
 
 Then /^I should see Posted nowish$/ do
   nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
-  Given "I should see \"Posted #{nowish}\""
+  step "I should see \"Posted #{nowish}\""
 end
 
 Then /^I should see Last Edited nowish$/ do
   nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
-  Given "I should see \"Last Edited #{nowish}\""
+  step "I should see \"Last Edited #{nowish}\""
 end
 
 Then /^I should see the comment form$/ do
-  Then %{I should see "New comment on"}
+  step %{I should see "New comment on"}
 end
 
 # WHEN
@@ -45,20 +45,20 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
-  Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
   click_button("Comment")
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comment_text, work|
-  Given "I am logged out"
-  Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  step "I am logged out"
+  step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
   fill_in("Name", :with => "guest")
   fill_in("Email", :with => "guest@foo.com")
   click_button "Comment"
 end
 
 When /^I edit a comment$/ do
-  When %{I follow "Edit"}
+  step %{I follow "Edit"}
   fill_in("comment[content]", :with => "Edited comment")
   click_button "Update"
 end
@@ -71,8 +71,8 @@ end
 
 # this step assumes that the reply-to-comment form can be opened
 When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
-  When %{I follow "Reply"}
-  Then %{I should see the reply to comment form}
+  step %{I follow "Reply"}
+  step %{I should see the reply to comment form}
   with_scope(".odd") do
     fill_in("comment[content]", :with => comment_text)
     click_button("Comment")
@@ -85,10 +85,10 @@ When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
 end
 
 When /^I comment on an admin post$/ do
-  When "I go to the admin-posts page"
-    And %{I follow "Comment"}
-    And %{I fill in "comment[content]" with "Excellent, my dear!"}
-    And %{I press "Comment"}
+  step "I go to the admin-posts page"
+    step %{I follow "Comment"}
+    step %{I fill in "comment[content]" with "Excellent, my dear!"}
+    step %{I press "Comment"}
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
@@ -103,10 +103,10 @@ Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicul
 end
 
 When /^I delete the comment$/ do
-  When %{I follow "Delete" within ".odd"}
-    And %{I follow "Yes, delete!"}
+  step %{I follow "Delete" within ".odd"}
+    step %{I follow "Yes, delete!"}
 end
 
 Then /^I should see the reply to comment form$/ do
-  Then %{I should see "Comment as" within ".odd"}
+  step %{I should see "Comment as" within ".odd"}
 end

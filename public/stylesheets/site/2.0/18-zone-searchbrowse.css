@@ -33,7 +33,6 @@ Arguably filter and search could be styled in interactions but I've put them her
 .search span.tip {
   background: #ddd;
   border: 1px solid #fff;
-  max-width: 25em;
   padding: 0.15em;
   position: absolute;
   left: -999em;
@@ -46,7 +45,7 @@ Arguably filter and search could be styled in interactions but I've put them her
 }
 
 li.search:hover .tip {
-  left: 1em;
+  right: 1em;
   top: 2.75em;
 }
 

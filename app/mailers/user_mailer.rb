@@ -45,23 +45,17 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author_id, claimed_work_ids)
-    external_author = ExternalAuthor.find(external_author_id)
-    @external_email = external_author.email
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
+    if is_user
+      creator = User.find(creator_id)
+    else
+      creator = ExternalAuthor.find(creator_id)
+    end
+    @external_email = creator.email
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
-      :to => external_author.user.email,
+      :to => creator.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
-    )
-  end
-
-  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
-    user = User.find(user_id)
-    @subscription = Subscription.find(subscription_id)
-    @creation = creation_class_name.constantize.find(creation_id)
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{@subscription.subject_text(@creation)}"
     )
   end
 
@@ -104,6 +98,17 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+    )
+  end
+
+  # Emails a user to say that their request for invitation codes has been declined
+  def invite_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
     )
   end
 
@@ -265,7 +270,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
     )
   end
 
@@ -310,7 +315,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_SHORT_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
@@ -321,7 +326,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = abuse_report.comment
     mail(
         :to => abuse_report.email,
-        :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Your Abuse Report"
+        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

@@ -46,6 +46,14 @@
           <%= form.check_box :unrestricted %>
         </label>
       </dd>
+
+      <dt><%= ts("Comment Settings") %><%= link_to_help "anonymous-commenting" %></dt>
+      <dd>
+        <label for="work_anon_commenting_disabled">
+          <%= ts("Anonymous commenting disabled") %>
+          <%= form.check_box :anon_commenting_disabled %>
+        </label>
+      </dd>
  
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>

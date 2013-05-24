@@ -150,9 +150,9 @@ input, select, option, textarea, legend, label, .actions a {
 
 /*DIAGNOSIS*/
 
-/* WIDGET: IBOX (called by help links)*/
+/* WIDGET: MODAL DIALOGS (called by help links) */
 
-#ibox_w {
-  filter: alpha(opacity=60);
+#modal-bg {
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2000000,endColorstr=#B2000000)";
 }
 

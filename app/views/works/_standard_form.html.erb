@@ -191,7 +191,7 @@
  
       <!--backdate-->
       <dt class="backdate">
-        <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :class => "toggle_formfield" %> 
+        <%= f.check_box :backdate, {:id => "backdate-options-show", :class => "toggle_formfield"} %>
       </dt>
       <dd class="backdate">
         <%= label_tag "backdate-options-show", ts("Set a different publication date") %> <%= link_to_help "backdating-help" %>
@@ -202,18 +202,8 @@
             <dd id="managePublicationDate" class="datetime" title="set date">
               <!--BACK END, this select box does not seem to be acquiring the label published_at -->
               <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %></dd>
-            <dt><%= f.check_box :backdate %></dt>
-            <dd><%= f.label :backdate, ts("Set this publication date for the entire work") %></dd>
           </dl>
         </fieldset>
-      </dd>
- 
-      <!-- Privacy dropdown (storyprivacy) -->
-      <dt class="restrict">
-        <%= f.check_box :restricted %>
-      </dt>
-      <dd class="restrict">
-        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
       </dd>
  
       <dt class="language">
@@ -229,6 +219,27 @@
         <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
     </dl>
  
+  </fieldset>
+
+  <!-- privacy settings -->
+  <fieldset class="privacy" role="article">
+    <legend><%= ts('Privacy') %></legend>
+    <h3 class="landmark heading"><%= ts('Comments') %></h3>
+    <dl>
+      <!-- Privacy dropdown (storyprivacy) -->
+      <dt class="restrict">
+        <%= f.check_box :restricted %>
+      </dt>
+      <dd class="restrict">
+        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
+      </dd>
+      <dt class="anonymous comments">
+        <%= f.check_box :anon_commenting_disabled %>
+      </dt>
+      <dd class="anonymous comments">
+        <%= f.label :anon_commenting_disabled, ts("Anonymous commenting disabled") %><%= link_to_help "anonymous-commenting" %>
+      </dd>
+    </dl>
   </fieldset>
  
       <% unless @chapters %>
@@ -280,12 +291,12 @@
       <% end %>
 
     <% end %> <!-- end of fields for chapters -->
- 
+
   <fieldset class="create">
     <legend><%= ts('Post') %></legend>
     <p class="submit cancel actions">
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'post_button' %>
+      <%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %>
       <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
   </fieldset>

@@ -5,12 +5,11 @@
   <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <a class="pseud_switcher_open open" title="Pseuds" href="#"><%= sidebar_pseud_link_text(@user, @pseud) %></a>
-      <a class="pseud_switcher_close close" title="Pseuds" href="#"><%= sidebar_pseud_link_text(@user, @pseud) %></a>
-      <ul id="pseud_switcher" class="toggled secondary">
-          <%= print_pseud_selector(@user.pseuds) %>
+      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
+      <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
+      <ul class="expandable secondary">
+        <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
-        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher" href="#">X</a></li>
       </ul>
     </li>
 	<% end %>
