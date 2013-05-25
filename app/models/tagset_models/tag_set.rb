@@ -258,8 +258,9 @@ class TagSet < ActiveRecord::Base
   protected
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
+      #Tag::USER_DEFINED.include?(type.classify)
       if type
-        if Tag::USER_DEFINED.include?(type.classify)
+        if type.classify.is_user_defined? 
           # allow users to create these
           taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)}
         else
