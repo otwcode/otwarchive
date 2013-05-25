@@ -1,10 +1,14 @@
-<h2><%= ts("Unsorted Tags") %></h2>
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading"><%= ts("Unsorted Tags") %></h2>
+<!--/end descriptions-->
 
 <% if @tags %>
 
+  <%= will_paginate @tags %>
+
   <% form_tag mass_update_unsorted_tags_path do %>
 
-  <p><%= submit_tag ts("Update") %></p>
+  <p class="submit"><%= submit_tag ts("Update") %></p>
 
   <table summary="<%= ts("Tags used on bookmarks that need to be sorted into tag categories.") %>">
     <caption><%= ts("Unsorted Tags") %></caption>
@@ -28,7 +32,9 @@
     </tbody>
   </table>
 
-  <p><%= submit_tag ts("Update") %></p>
+  <p class="submit"><%= submit_tag ts("Update") %></p>
+  
+  <%= will_paginate @tags %>
 
   <% end %>
 

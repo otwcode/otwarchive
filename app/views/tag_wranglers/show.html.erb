@@ -6,22 +6,17 @@
 	<!--/descriptions-->
 </div>
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <% if @fandoms.empty? %>
-  <li><%= link_to 'Your lack of fandoms makes the wrangulator sad', tag_wranglers_path %></li>
-  <% else %>
-  <li><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></li>
-  <% end %>
-</ul>
 <!--/subnav-->
 
 <!--main content-->
 <!--TEST NOTE: these tds are titled to expose headings to Chromevox, which doesn't read scope
 feedback needed from realuse (is it annoying having the announcement on every cell, and is it doubling up, basically?)-->
-<% unless @fandoms.empty? %>
-  <div class="assigned module">
+<div class="assigned module">
 	<h3 class="heading"><%= ts('Assigned Fandoms') %></h3>
-  <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of
+	<% if @fandoms.empty? %>
+	  <p><%= ts("Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the") %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %><%= ts(".")%></p>
+	<% else %>
+    <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of
   unwrangled tags which were used on works in the given fandom.') %></p>
   <table summary="<%= ts('Overview of your assigned fandoms and how many unfilterable and unwrangled tags belong to each assigned fandom.') %>">
     <caption><%= ts('Unfilterable and Unwrangled Tag Counts for Your Assigned Fandoms') %></caption>
@@ -55,7 +50,6 @@ feedback needed from realuse (is it annoying having the announcement on every ce
 </tbody>
   </table>
 </div>
-<% end %>
 <div class="clear"><!--presentational--></div>
 
 
