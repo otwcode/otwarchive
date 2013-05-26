@@ -72,10 +72,6 @@ ol.pagination, div.pagination, ol.year {
   margin: 0.643em auto;
 }
 
-ul.viewing {
-  clear: right;
-}
-
 .actions a:visited {
   color: #111;
 }

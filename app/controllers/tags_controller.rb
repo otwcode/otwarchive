@@ -20,24 +20,16 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      if params[:view] == "list"
-        @tags = Freeform.canonical.for_collections_with_count_as_list([@collection] + @collection.children)
-      else
-        @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
-      end
+      @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+      @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_LIST)
       # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      if params[:show] == "random" && params[:view] == "list"
-        @tags = @tags.random.canonical
-      elsif params[:show] == "random"
+      # and then sort again at the very end to make it alphabetic (aka append .sort for cloud)
+      if params[:show] == "random"
         @tags = @tags.random.canonical.sort
-      elsif params[:view] == "list"
-        @tags = @tags.popular.canonical
       else
-        @tags = @tags.popular.canonical.sort
+        @tags = @tags.popular.canonical
       end
     end
   end
