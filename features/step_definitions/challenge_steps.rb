@@ -298,7 +298,7 @@ end
 
 When /^I view open challenges$/ do
   step "I go to the collections page"
-  step %{I follow "See Open Challenges"}
+  step %{I follow "Open Challenges"}
 end
 
 ### WHEN sign up
