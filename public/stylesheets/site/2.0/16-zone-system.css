@@ -62,44 +62,10 @@ SUBSECTIONS:
   margin: 1.571em 1% 1.571em 5%;
 }
 
-.system .tweets {
-  width: 100%;
-}
-
-.system .latest h3, .system div.news h3, .system .tweets h3 {
+.system .latest h3, .system div.news h3 {
   color: #900;
   border-bottom: 1px solid #c8c8c8;
   font: bold 1.75em Georgia, serif;
-}
-
-.system .tweet_list {
-  background: #eee;
-    border-radius: 0.571em;
-}
-
-.system .tweet_list li {
-  padding: 0.571em;
-  margin: 0;
-}
-
-.system .tweet_list li:nth-child(even) {
-  background: #ddd;
-}
-
-.system .tweet_time {
-  font-family: monospace;
-}
-
-.system .tweets p {
-  margin-bottom: 0;
-}
-
-.system .tweets .tweet {
-  margin: 1.25em 0.5em 0; 
-}
-
-.system .tweets .time {
-  font-family: monospace;
 }
 
 /* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
