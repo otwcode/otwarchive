@@ -14,11 +14,7 @@
 
 <% unless @collection %>
   <h3 class="landmark heading">
-    <% if params[:show] == "random" %>
-      <%= ts('Browse Random Tags')%>
-    <% else %>
-      <%= ts('Browse Popular Tags')%>
-    <% end %>
+    <%= params[:show] == "random" ? ts('Browse Random Tags') : ts('Browse Popular Tags') %>
   </h3>
 <% end %>
 
@@ -26,14 +22,11 @@
   <% @tags.each do |tag| %>
     <li>
       <% if @collection %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.count})"))
- %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.count})" + '</span>').html_safe) %>
       <% elsif logged_in? || logged_in_as_admin? %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.unhidden_works_count})"))
- %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.unhidden_works_count})" + '</span>').html_safe) %>
       <% else %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.public_works_count})"))
- %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.public_works_count})"  + '</span>').html_safe) %>
       <% end %>
     </li>
   <% end %>

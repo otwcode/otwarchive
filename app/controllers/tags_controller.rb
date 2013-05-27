@@ -27,7 +27,7 @@ class TagsController < ApplicationController
       # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
       # and then sort the random tags from most used to least used
       if params[:show] == "random"
-        @tags = @tags.random.canonical.sort{ |a,b| b.count <=> a.count }
+        @tags = @tags.random.canonical.sort{ |a, b| b.count <=> a.count }
       else
         @tags = @tags.popular.canonical
       end
