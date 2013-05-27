@@ -191,6 +191,12 @@ describe HtmlCleaner do
         doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip.should == "foobar"
       end
 
+      it "should allow RTL content" do
+        result = sanitize_value(:content, '<p dir="rtl">This is RTL content</p>')
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath("./p[contains(@dir, 'rtl')]").children.to_s.strip.should == "This is RTL content"
+      end
+
       it "should allow youtube embeds" do
         html = '<iframe width="560" height="315" src="http://www.youtube.com/embed/123" frameborder="0"></iframe>'
         result = sanitize_value(:content, html)
