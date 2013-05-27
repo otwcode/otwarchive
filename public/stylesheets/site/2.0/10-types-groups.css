@@ -34,60 +34,51 @@ ol.tags li {
   list-style: decimal inside;
 }
 
-/*GROUP CLOUD */
-
-ul.cloud {
-  margin: 2em auto;
-  text-align: center;
-  line-height: 2;
+ol.cloud li {
+  display: inline;
+  float: none;
+  margin: 0 0.25em;
+  width: auto;
 }
 
-a.cloud1 {
-  color: #200;
-  font-size: 0.625em;
-  font-weight: 100;
+.cloud .count {
+  display: none;
 }
 
-a.cloud2 {
-  color: #300;
-  font-size: 0.75em;
-  font-weight: 200;
+.cloud .micro {
+font-size: 0.75em
 }
 
-a.cloud3 {
-  color: #400;
-  font-size: 0.875em;
-  font-weight: 300;
+.cloud .milli {
+font-size: 0.875em;
 }
 
-a.cloud4 {
-  color: #500;
-  font-size: 1em;
-  font-weight: 400;
+.cloud .centi {
+font-size: 1em;
 }
 
-a.cloud5 {
-  color: #600;
-  font-size: 1.125em;
-  font-weight: 500;
+.cloud .deci {
+font-size: 1.25em;
 }
 
-a.cloud6 {
-  color: #700;
-  font-size: 1.5em;
-  font-weight: 600;
+.cloud .base {
+font-size: 1.5em;
 }
 
-a.cloud7 {
-  color: #800;
-  font-size: 1.875em;
-  font-weight: 700;
+.cloud .deka {
+font-size: 1.75em;
 }
 
-a.cloud8 {
-  color: #900;
-  font-size: 2.25em;
-  font-weight: 800;
+.cloud .hecto {
+font-size: 2em;
+}
+
+.cloud .kilo {
+font-size: 2.25em;
+}
+
+.cloud .mega {
+font-size: 2.5em;
 }
 
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/

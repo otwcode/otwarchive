@@ -1,16 +1,26 @@
 <!--SEARCHBROWSE-->
 <h2 class="heading"><%= ts("Tags") %></h2>
 
-<% unless @collection %>
-  <ul class="navigation actions" role="navigation">
-    <li class="search"><%= render 'tags/search_form' %></li>
-    <% if logged_in? %>
-      <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
-    <% end %>
-    <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
-    <li><%= span_if_current(ts('Random'), tags_path(:show => 'random')) %></li>
+<div class="navigation actioins module">
+  <h3 class="landmark heading">Navigation and Actions</h3>
+  <% unless @collection %>
+    <ul class="navigation actions" role="navigation">
+      <li class="search"><%= render 'tags/search_form' %></li>
+      <% if logged_in? %>
+        <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
+      <% end %>
+      <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
+      <li><%= span_if_current(ts('Random'), tags_path(:show => 'random')) %></li>
+    </ul>
+  <% end %>
+  <ul class="actions hidden" role="menu">
+    <li><h4 class="heading"><%= ts('Arrange:') %></h4></li>
+    <li><a id="tag-list" href="#"><%= ts("List") %></a></li>
+    <li><a id="tag-cloud" href="#"><%= ts("Cloud") %></a></li>
+    <li><a id="by-uses" href="#"><%= ts("Uses") %></a></li>
+    <li><a id="by-name" href="#"><%= ts("Name") %></a></li>
   </ul>
-<% end %> 
+</div>
 
 <% unless @collection %>
   <h3 class="landmark heading">
@@ -19,15 +29,48 @@
 <% end %>
 
 <ol class="concise tags index group">
-  <% @tags.each do |tag| %>
+  <% tag_cloud @tags, %w(micro milli centi deci base deka hecto kilo mega) do |tag, css_class| %>
     <li>
       <% if @collection %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.count})" + '</span>').html_safe) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.count})" + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.count) %>
       <% elsif logged_in? || logged_in_as_admin? %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.unhidden_works_count})" + '</span>').html_safe) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.unhidden_works_count})" + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.filter_count.unhidden_works_count) %>
       <% else %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.public_works_count})"  + '</span>').html_safe) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.public_works_count})"  + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.filter_count.public_works_count) %>
       <% end %>
     </li>
   <% end %>
 </ol>
+
+<%= content_for :footer_js do %>
+  <script src="/javascripts/jquery.tinysort.min.js" type="text/javascript"></script>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      $j(".actions").removeClass("hidden");
+      $j("#tag-cloud").click(function(e) {
+        e.preventDefault();
+        $j(".tags").addClass("cloud");
+        $j("#tag-list").removeClass("current");
+        $j(this).addClass("current");
+      });
+      $j("#tag-list").addClass("current").click(function(e) {
+        e.preventDefault();
+        $j(".tags").removeClass("cloud");
+        $j("#tag-cloud").removeClass("current");
+        $j(this).addClass("current");
+      });
+      $j("#by-name").click(function(e) {
+        e.preventDefault();
+        $j(".tags li").tsort();
+        $j("#by-uses").removeClass("current");
+        $j(this).addClass("current");
+      });
+      $j("#by-uses").addClass("current").click(function(e) {
+        e.preventDefault();
+        $j(".tags li").tsort("a.tag", {order: "desc", data: "tag-count"});
+        $j("#by-name").removeClass("current");
+        $j(this).addClass("current");      
+      });
+    });
+  <% end %>
+<% end %>
