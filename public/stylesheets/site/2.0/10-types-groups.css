@@ -34,9 +34,14 @@ ol.tags li {
   list-style: decimal inside;
 }
 
+.cloud {
+  text-align: center;
+}
+
 ol.cloud li {
   display: inline;
   float: none;
+  line-height: 1;
   margin: 0 0.25em;
   width: auto;
 }
@@ -46,39 +51,49 @@ ol.cloud li {
 }
 
 .cloud .micro {
-font-size: 0.75em
+font-size: 0.875em;
+line-height: 3;
 }
 
 .cloud .milli {
-font-size: 0.875em;
+font-size: 1.25em;
+line-height: 2;
 }
 
 .cloud .centi {
-font-size: 1em;
+font-size: 1.625em;
+line-height: 1.5;
 }
 
 .cloud .deci {
-font-size: 1.25em;
+font-size: 1.875em;
+line-height: 1.5;
 }
 
 .cloud .base {
-font-size: 1.5em;
+font-size: 2.25em;
+line-height: 1.5;
 }
 
 .cloud .deka {
-font-size: 1.75em;
+font-size: 2.875em;
+line-height: 1.5;
 }
 
 .cloud .hecto {
-font-size: 2em;
+font-size: 3.25em;
+line-height: 1;
 }
 
 .cloud .kilo {
-font-size: 2.25em;
+font-size: 3.5em;
+line-height: 1;
 }
 
 .cloud .mega {
-font-size: 2.5em;
+font-size: 4em;
+font-weight: 700;
+line-height: 1;
 }
 
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/

@@ -1,7 +1,7 @@
 <!--SEARCHBROWSE-->
 <h2 class="heading"><%= ts("Tags") %></h2>
 
-<div class="navigation actioins module">
+<div class="navigation actions module">
   <h3 class="landmark heading">Navigation and Actions</h3>
   <% unless @collection %>
     <ul class="navigation actions" role="navigation">
@@ -13,13 +13,6 @@
       <li><%= span_if_current(ts('Random'), tags_path(:show => 'random')) %></li>
     </ul>
   <% end %>
-  <ul class="actions hidden" role="menu">
-    <li><h4 class="heading"><%= ts('Arrange:') %></h4></li>
-    <li><a id="tag-list" href="#"><%= ts("List") %></a></li>
-    <li><a id="tag-cloud" href="#"><%= ts("Cloud") %></a></li>
-    <li><a id="by-uses" href="#"><%= ts("Uses") %></a></li>
-    <li><a id="by-name" href="#"><%= ts("Name") %></a></li>
-  </ul>
 </div>
 
 <% unless @collection %>
@@ -28,15 +21,24 @@
   </h3>
 <% end %>
 
+  <ul class="sorting actions hidden" role="menu">
+    <li><h4 class="heading"><%= ts('Display As') %></h4></li>
+    <li><a id="tag-list" href="#" class="current"><%= ts("List") %></a></li>
+    <li><a id="tag-cloud" href="#"><%= ts("Cloud") %></a></li>
+    <li><h4 class="heading"><%= ts("Sort By") %></h4></li>
+    <li><a id="by-uses" href="#" class="current"><%= ts("Uses") %></a></li>
+    <li><a id="by-name" href="#"><%= ts("Name") %></a></li>
+  </ul>
+
 <ol class="concise tags index group">
   <% tag_cloud @tags, %w(micro milli centi deci base deka hecto kilo mega) do |tag, css_class| %>
     <li>
       <% if @collection %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.count})" + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.count) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + '<span class="count">' + ' (<span>' + "#{tag.count}" + '</span>)</span>').html_safe, :class => css_class.dup) %>
       <% elsif logged_in? || logged_in_as_admin? %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.unhidden_works_count})" + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.filter_count.unhidden_works_count) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + '<span class="count">' + ' (<span>' + "#{tag.filter_count.unhidden_works_count}" + '</span>)</span>').html_safe, :class => css_class.dup) %>
       <% else %>
-        <%= link_to_tag_works_with_text(tag, (tag.name + ' <span class="count">' + "(#{tag.filter_count.public_works_count})"  + '</span>').html_safe, :class => css_class.dup, 'data-tag-count' => tag.filter_count.public_works_count) %>
+        <%= link_to_tag_works_with_text(tag, (tag.name + '<span class="count">' + ' (<span>' + "#{tag.filter_count.public_works_count}"  + '</span>)</span>').html_safe, :class => css_class.dup) %>
       <% end %>
     </li>
   <% end %>
@@ -53,7 +55,7 @@
         $j("#tag-list").removeClass("current");
         $j(this).addClass("current");
       });
-      $j("#tag-list").addClass("current").click(function(e) {
+      $j("#tag-list").click(function(e) {
         e.preventDefault();
         $j(".tags").removeClass("cloud");
         $j("#tag-cloud").removeClass("current");
@@ -65,9 +67,9 @@
         $j("#by-uses").removeClass("current");
         $j(this).addClass("current");
       });
-      $j("#by-uses").addClass("current").click(function(e) {
+      $j("#by-uses").click(function(e) {
         e.preventDefault();
-        $j(".tags li").tsort("a.tag", {order: "desc", data: "tag-count"});
+        $j(".tags li").tsort(".count span", {order: "desc"});
         $j("#by-name").removeClass("current");
         $j(this).addClass("current");      
       });
