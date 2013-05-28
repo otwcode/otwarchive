@@ -192,15 +192,17 @@ describe HtmlCleaner do
       end
 
       it "should allow RTL content in p" do
-        result = sanitize_value(:content, '<p dir="rtl">This is RTL content</p>')
-        doc = Nokogiri::HTML.fragment(result)
-        doc.xpath("./p[contains(@dir, 'rtl')]").children.to_s.strip.should == "This is RTL content"
+        html = '<p dir="rtl">This is RTL content</p>'
+        result = sanitize_value(:content, html)
+        result.should == html
       end
 
       it "should allow RTL content in div" do
-        result = sanitize_value(:content, '<div dir="rtl">This is RTL content</p>')
-        doc = Nokogiri::HTML.fragment(result)
-        doc.xpath("./div[contains(@dir, 'rtl')]").children.to_s.strip.should == "This is RTL content"
+        html = '<div dir="rtl"><p>This is RTL content</p></div>'
+        result = sanitize_value(:content, html)
+        # Yes, this is ugly. We should maybe try to figure out why our parser
+        # wants to wrap All The Things in <p> tags.
+        result.to_s.squish.should == '<p></p><div dir="rtl"> <p>This is RTL content</p> </div>'
       end
 
       it "should allow youtube embeds" do
