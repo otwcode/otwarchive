@@ -288,6 +288,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
+  z-index: 1;
 }
 
 .bookmark .status span, .bookmark .status a {
