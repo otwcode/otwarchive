@@ -2,12 +2,8 @@ class CommentMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
-<<<<<<< HEAD
   helper :mailer
-  default :from => "Archive of Our Own " + ArchiveConfig.RETURN_ADDRESS
-=======
   default :from => "\"Archive of Our Own\" <#{ArchiveConfig.RETURN_ADDRESS}>"
->>>>>>> Trying new format for From line
 
   # Sends email to an owner of the top-level commentable when a new comment is created
   def comment_notification(user_id, comment_id)
