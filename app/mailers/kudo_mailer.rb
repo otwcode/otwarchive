@@ -2,12 +2,8 @@ class KudoMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
-<<<<<<< HEAD
   helper :mailer
-  default :from => "Archive of Our Own " + ArchiveConfig.RETURN_ADDRESS
-=======
   default :from => "\"Archive of Our Own\" <#{ArchiveConfig.RETURN_ADDRESS}>"
->>>>>>> Trying new format for From line
 
   def kudo_notification(user_id, kudo_id)
     user = User.find(user_id)
