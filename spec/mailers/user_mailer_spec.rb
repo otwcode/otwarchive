@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserMailer do
-  describe "basic emails" do
+  describe "basic user emails" do
 
     before(:each) do
       @user = User.new

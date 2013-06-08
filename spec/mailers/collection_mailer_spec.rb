@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CollectionMailer do
-  describe "basic emails" do
+  describe "basic collection emails" do
 
     before(:each) do
       @collection = Collection.new
