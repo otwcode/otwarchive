@@ -2,6 +2,24 @@
 @no-txn
 Feature: Work Drafts
 
+  Scenario: Creating a work draft
+  Given I am logged in as "Scott" with password "password"
+  When the draft "scotts draft"
+    And I press "Cancel"
+  Then I should see "The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive."
+
+  Scenario: Creating an draft Chapter on a draft Work
+  Given I am logged in as "Scott" with password "password"
+    And the draft "scotts other draft"
+    And I press "Cancel"
+    And I edit the work "scotts other draft"
+    And I follow "Add Chapter"
+    And I fill in "content" with "this is second chapter content"
+    And I press "Preview"
+  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted (unposted work drafts are automatically deleted one week after creation; this chapter's work is scheduled for deletion at"
+
+
+
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
     When the work "old draft work" was created 8 days ago
