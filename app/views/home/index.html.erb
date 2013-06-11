@@ -10,7 +10,7 @@
       <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
       <p><%= ts("The Archive of Our Own is a project of the ") %><%= link_to ts("Organization for Transformative Works"), "http://transformativeworks.org" %>.</p>
       <% if logged_in? %>
-          <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Invite a friend'), user_invitations_path(current_user) %></p>
+        <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Invite a friend'), user_invitations_path(current_user) %></p>
       <% else %>
           <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
               <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %> </p>
