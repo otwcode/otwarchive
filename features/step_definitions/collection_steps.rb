@@ -101,6 +101,13 @@ When /^I reveal works for "([^\"]*)"$/ do |title|
   click_button "Update"
 end
 
+When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
+  the_collection = Collection.find_by_title(collection)
+  collection_item_id = the_collection.collection_items.first.id
+  visit user_collection_items_path(User.current_user)
+  step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
+end
+
 ### THEN
 
 Then /^Battle 12 collection exists$/ do
