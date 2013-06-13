@@ -47,7 +47,7 @@ class CommentsController < ApplicationController
   def check_anonymous_comment_preference
     parent =  find_parent
     if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
-      setflash; flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
     end
   end
