@@ -4,7 +4,7 @@ Feature: Import Works
   As an author
   I want to create new works by importing them
 
-  @work_import_errors
+  @work_import_errors @wip
   Scenario: Entering a bogus URL
     Given basic tags
       And I am logged in as a random user
