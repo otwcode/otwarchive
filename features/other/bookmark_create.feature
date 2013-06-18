@@ -138,6 +138,7 @@ Scenario: Create a bookmark
     When I go to another_bookmark_user's bookmarks page
     Then I should not see "Secret Masterpiece"
     When I am logged in as "first_bookmark_user"
+    #
       And I go to another_bookmark_user's bookmarks page
     Then I should see "Secret Masterpiece"
 
