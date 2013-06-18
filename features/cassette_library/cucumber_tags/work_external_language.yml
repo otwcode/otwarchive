@@ -1,0 +1,45 @@
+--- 
+http_interactions: 
+- request: 
+    method: head
+    uri: http://www.google.com/
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      Accept: 
+      - "*/*"
+      User-Agent: 
+      - Ruby
+  response: 
+    status: 
+      code: 302
+      message: Found
+    headers: 
+      Location: 
+      - http://www.google.co.uk/
+      Cache-Control: 
+      - private
+      Content-Type: 
+      - text/html; charset=UTF-8
+      Set-Cookie: 
+      - NID=67=hy9eBnsxehrywhQC9INhkcfB3ji0ersl2cORGwFUiVSGhlLoC1z7b1i6MaHZ2IbPnlh3Z99ZxdEbquHMcU_qLN2bPwflPMGzh9IKMGX1w-PqxCJpaTuSo2Dem1w5bGr8; expires=Wed, 18-Dec-2013 20:35:11 GMT; path=/; domain=.google.com; HttpOnly
+      - PREF=ID=a9293f60276166cf:FF=0:TM=1371587711:LM=1371587711:S=NHjr9EvmC8vyGZDN; expires=Thu, 18-Jun-2015 20:35:11 GMT; path=/; domain=.google.com
+      P3p: 
+      - CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
+      Date: 
+      - Tue, 18 Jun 2013 20:35:11 GMT
+      Server: 
+      - gws
+      Content-Length: 
+      - "221"
+      X-Xss-Protection: 
+      - 1; mode=block
+      X-Frame-Options: 
+      - SAMEORIGIN
+    body: 
+      encoding: US-ASCII
+      string: ""
+    http_version: 
+  recorded_at: Tue, 18 Jun 2013 20:35:11 GMT
+recorded_with: VCR 2.5.0

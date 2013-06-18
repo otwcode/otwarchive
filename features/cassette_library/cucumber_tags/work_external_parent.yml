@@ -1,0 +1,75 @@
+--- 
+http_interactions: 
+- request: 
+    method: head
+    uri: http://google.com/
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      Accept: 
+      - "*/*"
+      User-Agent: 
+      - Ruby
+  response: 
+    status: 
+      code: 301
+      message: Moved Permanently
+    headers: 
+      Location: 
+      - http://www.google.com/
+      Content-Type: 
+      - text/html; charset=UTF-8
+      Date: 
+      - Tue, 18 Jun 2013 20:30:31 GMT
+      Expires: 
+      - Thu, 18 Jul 2013 20:30:31 GMT
+      Cache-Control: 
+      - public, max-age=2592000
+      Server: 
+      - gws
+      Content-Length: 
+      - "219"
+      X-Xss-Protection: 
+      - 1; mode=block
+      X-Frame-Options: 
+      - SAMEORIGIN
+    body: 
+      encoding: US-ASCII
+      string: ""
+    http_version: 
+  recorded_at: Tue, 18 Jun 2013 20:30:31 GMT
+- request: 
+    method: head
+    uri: http://testarchive.transformativeworks.org/
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      Accept: 
+      - "*/*"
+      User-Agent: 
+      - Ruby
+  response: 
+    status: 
+      code: 302
+      message: Moved Temporarily
+    headers: 
+      Server: 
+      - nginx/1.4.1
+      Date: 
+      - Tue, 18 Jun 2013 20:30:35 GMT
+      Content-Type: 
+      - text/html
+      Content-Length: 
+      - "160"
+      Connection: 
+      - keep-alive
+      Location: 
+      - http://test.archiveofourown.org/
+    body: 
+      encoding: US-ASCII
+      string: ""
+    http_version: 
+  recorded_at: Tue, 18 Jun 2013 20:30:35 GMT
+recorded_with: VCR 2.5.0
