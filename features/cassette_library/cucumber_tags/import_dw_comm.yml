@@ -1,100 +1,101 @@
 --- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://rarelitfic.dreamwidth.org:80/5572.html?format=light
+http_interactions: 
+- request: 
+    method: get
+    uri: http://rarelitfic.dreamwidth.org/5572.html?format=light
     body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - Ruby
+  response: 
+    status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:26:45 GMT
       server: 
-      - Apache/2.2.11 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.0
+      - Apache/2.2.14 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.1
       set-cookie: 
-      - ljuniq=pjSSBBQQHi3Iq2b%3A1297448805; domain=.dreamwidth.org; path=/; expires=Tue, 12-Apr-2011 18:26:45 GMT
+      - ljuniq=Yr8T3pFawQe4xn5%3A1371517835; domain=.dreamwidth.org; path=/; expires=Sat, 17-Aug-2013 01:10:35 GMT
       cache-control: 
       - private, proxy-revalidate
       etag: 
-      - "\"ba28e335b6caebf21b9a3b8722a04330\""
-      content-length: 
-      - "8128"
+      - "\"8826bf782cf01994ad2f946b8ff4f470\""
       vary: 
       - Accept-Encoding
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
       content-type: 
       - text/html; charset=utf-8
       content-language: 
       - en
-    body: "\n\
-      <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
-      <html xmlns=\"http://www.w3.org/1999/xhtml\">\n    <head>\n    <title>\n    Discretion Advised\n    </title>\n\n    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n\n    \n    \n        <script type=\"text/javascript\">\n            var Site;\n            if (!Site)\n                Site = {};\n\n            var site_p = {\"media_embed_enabled\": 1,\n\
-      \"inbox_update_poll\": 1,\n\
-      \"ctx_popup_userhead\": 1,\n\
-      \"ctx_popup_icons\": 1,\n\
-      \"has_remote\": 0,\n\
-      \"statprefix\": \"http://s.dreamwidth.org/stc\",\n\
-      \"ctx_popup\": 1,\n\
-      \"imgprefix\": \"http://s.dreamwidth.org/img\",\n\
-      \"esn_async\": 1,\n\
-      \"currentJournal\": \"\",\n\
-      \"siteroot\": \"http://www.dreamwidth.org\",\n\
-      \"currentJournalBase\": \"\"};\n            var site_k = [\"media_embed_enabled\", \"inbox_update_poll\", \"ctx_popup_userhead\", \"ctx_popup_icons\", \"has_remote\", \"statprefix\", \"ctx_popup\", \"imgprefix\", \"esn_async\", \"currentJournal\", \"siteroot\", \"currentJournalBase\"];\n            for (var i = 0; site_k.length > i; i++) {\n                Site[site_k[i]] = site_p[site_k[i]];\n            }\n       </script>\n    <script type=\"text/javascript\" src=\"http://s.dreamwidth.org/js/??core.js,dom.js,httpreq.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,hourglass.js,contextualhover.js,nav.js?v=1287800898\"></script>\n\
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"http://s.dreamwidth.org/stc/??lj_base.css,esn.css,contextualhover.css,reset.css,jquery/jquery.ui.theme.smoothness.css,lj_base-app.css,tropo/tropo-base.css,tropo/tropo-red.css?v=1294300929\" />\n\n\n    <link rel=\"openid.server\" href=\"http://www.dreamwidth.org/openid/server\" />\n\
-      <meta http-equiv=\"X-XRDS-Location\" content=\"http://rarelitfic.dreamwidth.org/data/yadis\" />\n\n\n\
-      </head>\n\n    <body >\n        <div id=\"canvas\">\n            <div id=\"page\">\n                <div id=\"masthead\">\n                    <span id=\"logo\">\n                        <a href='http://www.dreamwidth.org/'><img src='http://s.dreamwidth.org/img/tropo-red/dw_logo_beta.png' alt='Dreamwidth' /></a>\n\n                    </span>\n                </div>\n\n                <div id=\"content\" >\n                <h1></h1>\n                <div class='adult_warning adult_concepts warning-box message-box'><h1 class='title'>Discretion Advised</h1><p>You're about to view content that <span class='ljuser' lj:user='rarelitfic' style='white-space: nowrap;'><a href='http://rarelitfic.dreamwidth.org/profile'><img src='http://s.dreamwidth.org/img/silk/identity/community.png' alt='[community profile] ' width='16' height='16' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://rarelitfic.dreamwidth.org/'><b>rarelitfic</b></a></span> has advised <strong>should be viewed with discretion</strong>. To continue, you must confirm you want to view this content.</p></div><br /><div align='center'><form method='POST' action='http://www.dreamwidth.org/misc/adult_concepts'><input type='hidden' name=\"lj_form_auth\" value=\"c0:1297447200:1605:86400:KkaKBUknpj-0-pjSSBBQQHi3Iq2b:9f8012048b8e10bd1f53a28ba3c027dd\" /><input type='hidden' name=\"ret\" value=\"http://rarelitfic.dreamwidth.org/5572.html?format=light\" /><input type='hidden' name=\"journalid\" value=\"59613\" /><input type='hidden' name=\"entryid\" value=\"5572\" /><input type='submit' name=\"adult_check\" value=\"Yes, I want to view this content.\" /> <a href='http://www.dreamwidth.org/'>No, return me to Dreamwidth.</a></form></div>\n\n                </div>\n                <div id=\"account-links\">\n                    <form action='http://www.dreamwidth.org/login?ret=1' method='post'><input type='hidden' name=\"returnto\" /><input type='hidden' name='chal' class='lj_login_chal' value='c0:1297447200:1605:300:rsi6QCJfUANeC8kYyHa8:aea95149d37721814a62dc1aa72daf48' />\n\
-      <input type='hidden' name='response' class='lj_login_response' value='' />\n\
-      <table summary='' id='login-table'><tr><td><label for='login_user'>Account name:</label></td><td class='input-cell' colspan='2'><input type=\"text\" maxlength=\"27\" tabindex=\"1\" name=\"user\" id=\"login_user\" size=\"20\" aria-required=\"true\" /> <a href='http://www.dreamwidth.org/openid/' tabindex=5>Log in with OpenID?</a></td></tr><tr><td><label for='login_password'>Password:</label></td><td class='input-cell' colspan='2'><input type=\"password\" tabindex=\"2\" name=\"password\" id=\"login_password\" size=\"20\" aria-required=\"true\" /> <a href='http://www.dreamwidth.org/lostinfo' tabindex=6>Forget your password?</a></td></tr><tr><td>&nbsp;</td><td class='remember-me-cell'><input type='checkbox' tabindex=\"3\" value=\"1\" name=\"remember_me\" id=\"login_remember_me\" /> <label for='login_remember_me'>Remember me</label></td><td><input type='submit' name=\"login\" value=\"Log in\" tabindex=\"4\" /></td></tr></table></form>\n\n                </div>\n                <div id=\"menu\">\n                    <ul>\n\
-      <li id='create_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/create'>Create</a>\n\
-      <ul id='create_subnav' class='subnav_container'>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/create'>Create Account</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/manage/settings/?cat=display'>Display Preferences</a></li>\n\
-      </ul>\n\
-      </li>\n\
-      <li id='explore_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/explore'>Explore</a>\n\
-      <ul id='explore_subnav' class='subnav_container'>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/interests'>Interests</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/directorysearch'>Directory Search</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/search'>Site and Journal Search</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/latest'>Latest Things</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/random'>Random Journal</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/community/random'>Random Community</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/support/faq'>FAQ</a></li>\n\
-      </ul>\n\
-      </li>\n\
-      <li id='shop_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/shop'>Shop</a>\n\
-      <ul id='shop_subnav' class='subnav_container'>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/shop'>Buy Dreamwidth Services</a></li>\n\
-      <li class='subnav'><a href='http://www.dreamwidth.org/shop/randomgift'>Gift a Random User</a></li>\n\
-      <li class='subnav'><a href='http://www.zazzle.com/dreamwidth*'>DW Merchandise</a></li>\n\
-      </ul>\n\
-      </li>\n\
-      </ul>\n\n\n                    <div class='appwidget appwidget-search' id='LJWidget_425'>\n\
-      <form action='http://www.dreamwidth.org/multisearch' method='post'>\n\
-      <input type=\"text\" name=\"q\" title=\"Search\" class=\"text\" id=\"search\" size=\"20\" /> <select name=\"type\" class=\"select\">\n\
-      <option value=\"int\" selected='selected'>Interest</option>\n\
-      <option value=\"region\">Region</option>\n\
-      <option value=\"nav_and_user\">Site and Account</option>\n\
-      <option value=\"faq\">FAQ</option>\n\
-      <option value=\"email\">Email</option>\n\
-      <option value=\"im\">IM Info</option>\n\
-      </select> <input type='submit' value=\"Go\" /></form></div><!-- end .appwidget-search -->\n\n                </div>\n                <div id=\"footer\">\n                    <ul>\n    <li><a href=\"http://www.dreamwidth.org/legal/privacy\">Privacy Policy</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/tos\">Terms of Service</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/diversity\">Diversity Statement</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/principles\">Guiding Principles</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/\">Site Map</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/suggest\">Make a Suggestion</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/opensource\">Open Source</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/support\">Help</a></li>\n\
-      </ul>\n\
-      <p>Copyright &copy; 2009-2011 Dreamwidth Studios, LLC. All rights reserved.</p>\n\n                </div>\n            </div>\n        </div>\n        <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'></div>\n\n        <div id=\"shim-alpha\"> </div>\n    </body>\n\
-      </html>\n\n"
-    http_version: "1.0"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://rarelitfic.dreamwidth.org:80/5572.html?format=light
+      content-length: 
+      - "9264"
+      accept-ranges: 
+      - bytes
+      date: 
+      - Tue, 18 Jun 2013 01:10:35 GMT
+      connection: 
+      - keep-alive
     body: 
+      encoding: US-ASCII
+      string: "\n\
+        <!DOCTYPE html>\n\
+        <html lang=\"en\">\n    <head>\n    <title>Discretion Advised</title>\n\n    <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n    \n            <script type=\"text/javascript\">\n                var Site;\n                if (!Site)\n                    Site = {};\n\n                var site_p = {\"media_embed_enabled\": 1,\n\
+        \"inbox_update_poll\": 1,\n\
+        \"ctx_popup_userhead\": 1,\n\
+        \"iconprefix\": \"http://www.dreamwidth.org/userpic\",\n\
+        \"ctx_popup_icons\": 1,\n\
+        \"has_remote\": 0,\n\
+        \"statprefix\": \"http://www.dreamwidth.org/stc\",\n\
+        \"ctx_popup\": 1,\n\
+        \"imgprefix\": \"http://www.dreamwidth.org/img\",\n\
+        \"esn_async\": 1,\n\
+        \"currentJournal\": \"\",\n\
+        \"user_domain\": \"dreamwidth.org\",\n\
+        \"siteroot\": \"http://www.dreamwidth.org\",\n\
+        \"currentJournalBase\": \"\"};\n                var site_k = [\"media_embed_enabled\", \"inbox_update_poll\", \"ctx_popup_userhead\", \"iconprefix\", \"ctx_popup_icons\", \"has_remote\", \"statprefix\", \"ctx_popup\", \"imgprefix\", \"esn_async\", \"currentJournal\", \"user_domain\", \"siteroot\", \"currentJournalBase\"];\n                for (var i = 0; site_k.length > i; i++) {\n                    Site[site_k[i]] = site_p[site_k[i]];\n                }\n           </script>\n        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??6alib/core.js,6alib/dom.js,6alib/httpreq.js,livejournal.js,esn.js,6alib/ippu.js,lj_ippu.js,6alib/hourglass.js,contextualhover.js,nav.js?v=1362202084\"></script>\n\
+        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??md5.js,login.js?v=1348362434\"></script>\n\
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.dreamwidth.org/stc/??lj_base.css,esn.css,contextualhover.css,reset.css,jquery/jquery.ui.theme.smoothness.css,lj_base-app.css,base-colors-light.css,tropo/tropo-base.css,tropo/tropo-red.css?v=1370663384\" />\n\n    <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS: all entries\" href=\"http://rarelitfic.dreamwidth.org/data/rss\" />\n\
+        <link rel=\"alternate\" type=\"application/atom+xml\" title=\"Atom: all entries\" href=\"http://rarelitfic.dreamwidth.org/data/atom\" />\n\
+        <link rel=\"service\" type=\"application/atomsvc+xml\" title=\"AtomAPI service document\" href=\"http://www.dreamwidth.org/interface/atom\" />\n\
+        <link rel=\"openid.server\" href=\"http://www.dreamwidth.org/openid/server\" />\n\
+        <meta http-equiv=\"X-XRDS-Location\" content=\"http://rarelitfic.dreamwidth.org/data/yadis\" />\n\n\n    \n    <!--[if lte IE 8]>\n    <script src=\"http://www.dreamwidth.org/js/html5.js\" type=\"text/javascript\"></script>\n    <![endif]-->\n\
+        </head>\n    <body >\n        <div id=\"canvas\">\n            <div id=\"page\">\n                \n                <div id=\"masthead\" role=\"banner\">\n                    <span id=\"logo\">\n                        <a href=\"http://www.dreamwidth.org/\"><img src='http://www.dreamwidth.org/img/tropo-red/dw_logo.png' /></a>\n                    </span>\n                </div>\n\n                <div id=\"content\" role=\"main\" >\n                <h1></h1>\n                <div class='adult_warning adult_concepts warning-box message-box'><h1 class='title'>Discretion Advised</h1><p>You're about to view content that <span lj:user='rarelitfic' style='white-space: nowrap;' class='ljuser'><a href='http://rarelitfic.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/community.png' alt='[community profile] ' width='16' height='16' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://rarelitfic.dreamwidth.org/'><b>rarelitfic</b></a></span> has advised <strong>should be viewed with discretion</strong>. To continue, you must confirm you want to view this content.</p></div><br /><div align='center'><form method='POST' action='http://www.dreamwidth.org/misc/adult_concepts'><input type='hidden' name=\"lj_form_auth\" value=\"c0:1371517200:635:86400:HFGE72EzeT-0-Yr8T3pFawQe4xn5:3bf2122dda8d29d3032bb47287b2462a\" /><input type='hidden' name=\"ret\" value=\"http://rarelitfic.dreamwidth.org/5572.html?format=light\" /><input type='hidden' name=\"journalid\" value=\"59613\" /><input type='hidden' name=\"entryid\" value=\"5572\" /><input type='submit' name=\"adult_check\" value=\"Yes, I want to view this content.\" /> <a href='http://www.dreamwidth.org/'>No, return me to Dreamwidth.</a></form></div>\n\n                </div>\n                <div id=\"account-links\" role=\"navigation\">\n                    <form action='http://www.dreamwidth.org/login?ret=1' method='post' class='lj_login_form'><input type=\"hidden\" name=\"returnto\" value=\"\" /><input type='hidden' name='chal' class='lj_login_chal' value='c0:1371517200:635:300:xEwvfQT345UUAsVdJm6s:0609157773671f0e1c4e5d3c972a98cb' />\n    <input type='hidden' name='response' class='lj_login_response' value='' />\n    <table summary='' id='login-table'><tr><td><label for='login_user'>Account name:</label></td><td class='input-cell' colspan='2'><input name=\"user\" id=\"login_user\" size=\"20\" maxlength=\"27\" tabindex=\"1\" aria-required=\"true\" /> <a href='http://www.dreamwidth.org/openid/' tabindex=5>Log in with OpenID?</a></td></tr><tr><td><label for='login_password'>Password:</label></td><td class='input-cell' colspan='2'><input type=\"password\" name=\"password\" id=\"login_password\" size=\"20\" tabindex=\"2\" aria-required=\"true\" class=\"lj_login_password\"> <a href='http://www.dreamwidth.org/lostinfo' tabindex=6>Forget your password?</a></td></tr><tr><td>&nbsp;</td><td class='remember-me-cell'><input type=\"checkbox\" name=\"remember_me\" id=\"login_remember_me\" value=\"1\" tabindex=\"3\" /> <label for='login_remember_me'>Remember me</label></td><td><input type=\"submit\" name=\"login\" value=\"Log in\" tabindex=\"4\"/></td></tr></table></form>\n                </div>\n                <nav role=\"navigation\">\n                    <ul><li id='create_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/create'>Create</a>\n\
+        <ul id='create_subnav' class='subnav_container'>\n                <li class='subnav'><a href='http://www.dreamwidth.org/create'>Create Account</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/manage/settings/?cat=display'>Display Preferences</a></li>\n\
+        </ul>\n\
+        </li><li id='explore_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/explore'>Explore</a>\n\
+        <ul id='explore_subnav' class='subnav_container'>\n                <li class='subnav'><a href='http://www.dreamwidth.org/interests'>Interests</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/directorysearch'>Directory Search</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/search'>Site and Journal Search</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/latest'>Latest Things</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/random'>Random Journal</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/community/random'>Random Community</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/support/faq'>FAQ</a></li>\n\
+        </ul>\n\
+        </li><li id='shop_topnav' class='topnav'><a href='http://www.dreamwidth.org/nav/shop'>Shop</a>\n\
+        <ul id='shop_subnav' class='subnav_container'>\n                <li class='subnav'><a href='http://www.dreamwidth.org/shop'>Buy Dreamwidth Services</a></li>\n                <li class='subnav'><a href='http://www.dreamwidth.org/shop/randomgift'>Gift a Random User</a></li>\n                <li class='subnav'><a href='http://www.zazzle.com/dreamwidth*'>DW Merchandise</a></li>\n\
+        </ul>\n\
+        </li>\n\
+        </ul>\n                    <div role=\"search\">\n                    <div class='appwidget appwidget-search' id='LJWidget_111'>\n\
+        <form action='http://www.dreamwidth.org/multisearch' method='post'>\n\
+        <input type=\"text\" name=\"q\" title=\"Search\" class=\"text\" id=\"search\" size=\"20\" /> <select name=\"type\" class=\"select\">\n\
+        <option value=\"int\" selected='selected'>Interest</option>\n\
+        <option value=\"region\">Region</option>\n\
+        <option value=\"nav_and_user\">Site and Account</option>\n\
+        <option value=\"faq\">FAQ</option>\n\
+        <option value=\"email\">Email</option>\n\
+        <option value=\"im\">IM Info</option>\n\
+        </select> <input type='submit' value=\"Go\" /></form></div><!-- end .appwidget-search -->\n\n                    </div>\n                </nav>\n                <footer role=\"contentinfo\">\n                    <ul>\n    <li><a href=\"http://www.dreamwidth.org/legal/privacy\">Privacy Policy</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/tos\">Terms of Service</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/diversity\">Diversity Statement</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/legal/principles\">Guiding Principles</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/\">Site Map</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/suggest\">Make a Suggestion</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/site/opensource\">Open Source</a> &bull; </li>\n    <li><a href=\"http://www.dreamwidth.org/support\">Help/Support</a></li>\n\
+        </ul>\n\
+        <p>Copyright &copy; 2009-2013 Dreamwidth Studios, LLC. <a href=\"http://www.dreamwidth.org/site/opensource\">Some</a> rights reserved.</p>\n                </footer>\n            </div>\n        </div>\n        <div id='statistics' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'></div>\n\n        <div id=\"shim-alpha\"> </div>\n    </body>\n\
+        </html>\n\n"
+    http_version: "1.1"
+  recorded_at: Tue, 18 Jun 2013 01:10:35 GMT
+- request: 
+    method: get
+    uri: http://rarelitfic.dreamwidth.org/5572.html?format=light
+    body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
+      accept: 
+      - "*/*"
       user-agent: 
       - WWW-Mechanize/1.0.0 (http://rubyforge.org/projects/mechanize/)
       connection: 
@@ -109,104 +110,115 @@
       - rarelitfic.dreamwidth.org
       accept-charset: 
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+  response: 
+    status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:26:45 GMT
       server: 
-      - Apache/2.2.11 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.0
+      - Apache/2.2.14 (Ubuntu)
       set-cookie: 
-      - ljuniq=ns2yiD5c54W2O9Z%3A1297448805; domain=.dreamwidth.org; path=/; expires=Tue, 12-Apr-2011 18:26:45 GMT
+      - ljuniq=h8Li5h2O5AsYy34%3A1371517835; domain=.dreamwidth.org; path=/; expires=Sat, 17-Aug-2013 01:10:35 GMT
       cache-control: 
       - private, proxy-revalidate
       etag: 
-      - "\"ab7762c03214c57e500590a23afdc741\"-gzip"
+      - "\"8ed9061fd5eab72c4c7de96a431add94\""
       vary: 
       - Accept-Encoding
       content-encoding: 
       - gzip
-      content-length: 
-      - "2674"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
       content-type: 
       - text/html; charset=utf-8
       content-language: 
       - en
-    body: !binary |
-      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
-      fPxFA/WGz2yw8/+pQGKfwB8AAA==
-
-    http_version: "1.0"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :post
-    uri: http://www.dreamwidth.org:80/misc/adult_concepts
+      content-length: 
+      - "2885"
+      accept-ranges: 
+      - bytes
+      date: 
+      - Tue, 18 Jun 2013 01:10:35 GMT
+      connection: 
+      - keep-alive
     body: 
+      encoding: ASCII-8BIT
+      string: !binary |
+        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
+        PzAkAAA=
+
+    http_version: "1.1"
+  recorded_at: Tue, 18 Jun 2013 01:10:35 GMT
+- request: 
+    method: post
+    uri: http://www.dreamwidth.org/misc/adult_concepts
+    body: 
+      encoding: UTF-8
+      string: lj_form_auth=c0%3A1371517200%3A635%3A86400%3AnaGwr6doMl-0-h8Li5h2O5AsYy34%3A09e484cff6b9d1a872b71f813ec80723&ret=http%3A%2F%2Frarelitfic.dreamwidth.org%2F5572.html%3Fformat%3Dlight&journalid=59613&entryid=5572&adult_check=Yes%2C+I+want+to+view+this+content.
     headers: 
+      accept: 
+      - "*/*"
       user-agent: 
       - WWW-Mechanize/1.0.0 (http://rubyforge.org/projects/mechanize/)
       connection: 
@@ -222,54 +234,60 @@
       accept-charset: 
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
       cookie: 
-      - ljuniq=ns2yiD5c54W2O9Z%3A1297448805
+      - ljuniq=h8Li5h2O5AsYy34%3A1371517835
       referer: 
       - http://rarelitfic.dreamwidth.org/5572.html?format=light
       content-type: 
       - application/x-www-form-urlencoded
       content-length: 
-      - "258"
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+      - "257"
+  response: 
+    status: 
       code: 302
       message: Found
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:26:45 GMT
       server: 
-      - Apache/2.2.11 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.0
+      - Apache/2.2.14 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.1
       set-cookie: 
-      - ljuniq=ns2yiD5c54W2O9Z%3A1297448805; domain=.dreamwidth.org; path=/; expires=Tue, 12-Apr-2011 18:26:45 GMT
+      - ljuniq=h8Li5h2O5AsYy34%3A1371517836; domain=.dreamwidth.org; path=/; expires=Sat, 17-Aug-2013 01:10:36 GMT
       location: 
       - http://rarelitfic.dreamwidth.org/5572.html?format=light
       vary: 
       - Accept-Encoding
       content-encoding: 
       - gzip
-      content-length: 
-      - "298"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
       content-type: 
       - text/html; charset=iso-8859-1
-    body: !binary |
-      H4sIAAAAAAAAA11Qy07DMBC85yuWnOBQr+MSQMg1gj5EpQKRSA+ckFtv60hJ
-      E1wnEX+P0/bEZbWzs6MZjbyafUzzr2wOr/nbCrL1y2o5hXiEuJznC8RZPjsz
-      gnHE+XusIml9VSppSZsAfOFLUmMuYFG3ByPxfIgknh7kpja/gyZRFz5skWxU
-      bglMvW0rOniw+ghV3ZEBqcE62k1i633ziOi0o7Lwu2LLjCNd9YXxltVuj2l6
-      L9gQ5WlXu0r7SVnsrY+VJUcStWISm8HYhaFNEB+P6rnRW0somGBJAtfrTXvw
-      7U2wNt+6cfQjRoLzNBHjJPzcMX5iGnJlgJzdQjasXcoSHrhPch050B76vv+X
-      DrLaeXjgIcjFOhRyqiIUMNQX/QEeWxiieQEAAA==
-
-    http_version: "1.0"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://rarelitfic.dreamwidth.org:80/5572.html?format=light
+      content-length: 
+      - "299"
+      accept-ranges: 
+      - bytes
+      date: 
+      - Tue, 18 Jun 2013 01:10:36 GMT
+      connection: 
+      - keep-alive
     body: 
+      encoding: ASCII-8BIT
+      string: !binary |
+        H4sIAAAAAAAAA11Qy07DMBC85yuWnOBQr+M2gJBrBH2ISgUikR44Ibfe1pGS
+        JrhOI/6+TtsTl9XszqxmNPJm+jnJv7MZvOXvS8hWr8vFBOIB4mKWzxGn+fTC
+        CMYRZx+xiqT1VamkJW3C4gtfkhpyAfO63RuJl0Mk8SyQ69r89T+JuvIBRbJR
+        uSUw9aataO/B6gNU9ZEMSA3W0XYcW++bJ0SnHZWF3xYbZhzpqiuMt6x2O0zT
+        B8H6KM/b2lXaj8tiZ32sLDmSqBWT2PTGLgxtwvPhoF4avbGEggmWjOB2tW73
+        vr0L1uZHN45+xUBwniZimATNPeNnpiFXhpWzEWQ9PKYs4SyBL3JHcqA9dF33
+        Lx1ktfPwyEOQq3Uo5FxFKKCvLzoB0PWElHkBAAA=
+
+    http_version: "1.1"
+  recorded_at: Tue, 18 Jun 2013 01:10:36 GMT
+- request: 
+    method: get
+    uri: http://rarelitfic.dreamwidth.org/5572.html?format=light
+    body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
+      accept: 
+      - "*/*"
       user-agent: 
       - WWW-Mechanize/1.0.0 (http://rubyforge.org/projects/mechanize/)
       connection: 
@@ -285,96 +303,110 @@
       accept-charset: 
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
       cookie: 
-      - ljuniq=ns2yiD5c54W2O9Z%3A1297448805
+      - ljuniq=h8Li5h2O5AsYy34%3A1371517836
       referer: 
       - http://www.dreamwidth.org/misc/adult_concepts
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+  response: 
+    status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:26:45 GMT
       server: 
-      - Apache/2.2.11 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.0
+      - Apache/2.2.14 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.1
       set-cookie: 
-      - ljuniq=ns2yiD5c54W2O9Z%3A1297448805; domain=.dreamwidth.org; path=/; expires=Tue, 12-Apr-2011 18:26:45 GMT
-      cache-control: 
-      - private, proxy-revalidate
-      etag: 
-      - "\"aeea54dd1d563f3c77d1aec9ef9099b6\"-gzip"
+      - ljuniq=h8Li5h2O5AsYy34%3A1371517836; domain=.dreamwidth.org; path=/; expires=Sat, 17-Aug-2013 01:10:36 GMT
       vary: 
       - Accept-Encoding
       content-encoding: 
       - gzip
-      content-length: 
-      - "2586"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
       content-type: 
       - text/html; charset=utf-8
-      content-language: 
-      - en
-    body: !binary |
-      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
-      jRy2IZSs6UphivP/D9+1teShHAAA
+      content-length: 
+      - "3330"
+      accept-ranges: 
+      - bytes
+      date: 
+      - Tue, 18 Jun 2013 01:10:36 GMT
+      connection: 
+      - keep-alive
+    body: 
+      encoding: ASCII-8BIT
+      string: !binary |
+        H4sIAAAAAAAAA7Ua/XPTuPL3/hV7vhlShjrOR5u2aROmFDi4ocCjfcO7YZiM
+        YsuxWtsylpw0j+P97W9Xdhw7SWkKXGeaWNLuarXfK+f0t+fvzq/+ev8CAh2F
+        8P7fz968PgfLdpyP3XPHeX71HP7z6uriDbSbLbhKWayEFjJmoeO8eGuBFWid
+        9B1nNps1Z92mTCfO1Qfnlmi1Cbl4tHUFs+lpzxrunJoNb6MwVoMNZNrHx8c5
+        toHlzMOvUMQ3kPIQEWTELdBCh3xgvTKDIOV+jZKXchbNhKcDQ9ECp0bClbHm
+        sVYlmUuhOVyw5H5SeBS+Ri/gYVLSuuJuEAuXhXCZJYlM9RZEc8Cc7s6p0vOQ
+        D3cA/34/l1FErMIX+AoJ8zwRT+yQ+7oPneYBj07Ax8PYBqUPQrNQuCfwbefU
+        KaicGraGKUNOhfaFC3/Dp/dSpFJ/hpevz/tgXaQKLjWLZ1J6DQXPRKoDj83h
+        PUv13ILxHD7wMXdd1oQc0XnFlEZG1B68/+PUyXfYMQwv/k6Vm4pEg54nKBPN
+        b7VzzaYsn7WGNVj6m7IUSAsnayvCh93faOnx2hL9GdUN4Ou3k52NRElho4Qg
+        rIh7go14NObeiMdsHHLP6kN7b8cS8VjejrLEYwQsw7CYd/UtDpMsGWWKp2SK
+        CwQ0oQS1Km5x4juaJbREuFaNFiGrglDA1CjlkdQcJ1o4oTTT21BWuk51wVg0
+        2QYbwQibq3jE1Dx2F+fN0hSt7U+ZpeiuRGJpNwRPxxl5MmIipsU6UQIgaadS
+        6u/ubq3t9IwpXkFZbrqK+W3dPkol36CSP21U8h5s0DBOblAvgS51W4PJ1YZT
+        FZ3hqKKwKrihVCoDB0tZE1hd0DhTFS1RXQhyDdjI6vO6HHyZwi4JQ6AcWieF
+        TJohjyc6gCGIExBPnjyGr3e60acc5ZP4/BlJ5I5TmVvf8lt1BiOOce6lb38/
+        BoBK3e8FxWvlPH16/SXj6dzJv+x286jZbV6rPW/meDPblSmnUQ2omYnmnQtI
+        fcL1xiUtZahFslxrsmt2W5upQCcyz2kV8EBOefraJJbKrEk1tzpjoVnHlafT
+        Qbvb6/WOjntHLWu4FNsvE1fzSybcm5Qn4bzCicYsxDx+m7DYM4ysn2qcaV09
+        U2UJnSqUk9rBTGKKWMwmFWE30cwrI/K0ytA4ZxIylwcy9Cri6By0uq3j45o4
+        lvnVpDIVcI5iqEjHVWqL3KpdFEx4PRqj3zQRZY84pO/NZrNxZWEcmxcDHvGm
+        itBbg5grVYFaUz8tFbzYLMkJmoErQ5kqOxSTQOdQ8/jWoQ8aGSEdtnq9bvdo
+        f7X6+Hnp3GUIG49bWELtkFVTMCKOdTpPFiMKIVPBZ2r1PMftw95hu6h6Iq4Z
+        EKc2R/udDqzzvEqzr/BMFhQ1W3E4qg5PwA1YqrgeZNq3j1bFQvQWAkFRY13E
+        yGOd1POfYO1Z1msv3529XBHUnfnHwfTBHF8yf3MJuG2h57MvOYFffWhMN9P7
+        2ZjIp55IBwT8CNNGxPTAGN4jVFQkvMHBwWHn0XWebgaVCmBlsxiZ2nozAv6Z
+        zVwWS1NWb60rItw0bYQhtYgrjgOejBsa3JTNQtCBUE0Aio1QOUQoprxgiuzb
+        8fiUhzLhqYMRFFWI1e8OJds3f47cCEe+NCUmHXDEMh1QNeO2+mjl7YP2YafV
+        6ve6vf5Rbx+fzl69+ivk7vm/9u2WHRy9EQdB593Bmfpr3t3v816Hd9xuu+Mf
+        cn/c6/I23++w9pHH3PF+t7dviicWXyYsKoq2sny0aO36rtoNkc68KC/cLNMg
+        LAKtk/dYO6dj6c2BHjwxhVSSd5h6ZJjPuCFT2LEZ57ZnKToVT6E2sqXngeJY
+        sAg9t5NsjF6HolU6FS45n7LfXr78CAWPNjmnfQ6YTLHYsdO8yegcdA5KiErb
+        glWXXZTT5lll42vuogGiDdV5sknzK0wrnrCUaayRyid7zFFdHHNOBU7EMU8p
+        DeFc8bl++OqeG/YqaNTmSMRrk5sAFx3D8JStGPpSPGvVvKlMh6dYb95XJhTk
+        nV6ng+WHc7B/3Oocl7Gwskcfdp9zn2Whfgy7Z2NsAi9dkWkJfiojeHv++hJm
+        AgtLzH4wk6kHj75kUp9MOL/Jnx5bwEK9QvNHCC0ZsQACTrFjYLVbLQvMsYpn
+        B7XFNmmssC5yURK1wvqnvlSYcDGwhlU73M3hw+s+CW7QqKw1wCTeQWMWYCSz
+        Ec7FDjyWZIQnjWKLRnhNiI1Sm437tZmk0hchbyz12fhuI+coEd44wsNjoNcZ
+        DTeTeNIw4m98QodQdPkCBd3P0CgE12gfNhYCNc/FgbBQ0RRpbYaBOu4DJR97
+        LLEkiE5gjCriaZ86jMV1REoUMBYlt3juQg/bHxfPOa7K/NQZF6ok0Q8fwyzF
+        8AYihlVdlLHhJ1VxZwb5SU1QXZTF+FRVRzm5SR+9ij56/6g+7jxzro5yeUUb
+        i6+qF1FLrUVEgXR1uhLFnE6r3XKsIX0RQXtlxSzeudTpEmq3wgnUNsv3bx/2
+        O/srnBYBYT0uMJORUI63d0XlLKynvLzApVLXprpEAcXd/BEPGooFtCla6GNE
+        FRb4IlXapmrHQq7ZP1ed5WaaG8Sg0WqU8bFnLeNmrwjL75G8kJmCF3lGKzLA
+        6vQ96aQ0eiMhJymwyeAxWC9icihMKVeTT8SxUPK89Ty3YRdqv5SDGIjwdP3k
+        j1iUnFSE80BJnGHNcoE1VEUK1amHSSAiLMEVnW0LKWgehiMfEeKHSIKwWI71
+        68Vxif0Fhyssi1dMY33hYaKpcL2FZIz/mA7jIU7z8C7jQbJ5i+RXpFKdepg8
+        iNdNgnCycDVsrUev4k5QrcQu6iepR4U8PdiLcR7OjJTrUXoBYIdszEOoD+1I
+        SrTL83wvuMBRfxF+YZtqk05MNJwbFl8LJ8DyfN6cCL+UXiHXamF3tKzrTHsL
+        m/klvUJtVHDLb10ceWX8L2W6SYyaTVbSFs7Y2pidUSrgWC0OvRQhy5tSQt+2
+        HUVYhzpDmfafVModa1hMQq0GYsO90i9+eDufxZ6M+k8S89bGGhZjyMe/aJOQ
+        xZMM82L/CY8noVCBNSynoJjaaN0VdazYdvF6DqheKwZ35eiq6qqN5nbdENkn
+        JfFRrPxZ7ot1w6R2tWqcPasaH5xFlbFzGnTrtYIhY0J6QfCXvnP7gTuQ4S9+
+        6UcKDbrD9YuBUmFYR17R2ftUQ67FcJa6gZhy6WNMlrPYcIvt341y2p3D407b
+        Gn6XQ8PAOCUVjIcvc7s2++TMgg1nE6YDBudBKpBvXgKf5e5mgIsjlmt/8Dgt
+        +L3IKCPAxZy6wjk8WZUCfJBYD7pLuh8YzefISIen2HKdZR6mO5erEuojJhpX
+        ZrHOAf8HnaNmq9Uq1y+zKGLpvOChIoE98FlEhRndodPbZbR2TkJEJvH4+A8y
+        9CDPryD9gt89bJymGA+V6a89rjn6x5QbFMrkCruVG+HeQHku7MyJ5ngh7oTE
+        3YTnWYrLREWk2JjgAtMlc3DBYpnuAeoS2ZxKuv/B3TIJIfIY0+YIrSTG64Co
+        sLHMtOEIDyXCOR4GeyIZA3KUcDcLBUNqxKPQ4Emu6L5OsxsOoUR0FJ8IgZKc
+        NwcVyBmGiqQJHwNspxYGQMjlmRTXYHaUJA4MEwKNgxsGXKb43hIS3QcDFi84
+        RoCUo+1hTccJOT99LmMViISgYhRXw8MnmdHd/UKT9HmFqzdGoldYF4eeNFwl
+        OIu5mb7ax8ct8+JujInMpjtIZOI3eBSg1LQ6Wf2u0i4+H+xVG8NiOkYFND1O
+        GcNRhVJHJnKN9lstExnR3xF1WHW8H+PgpQxDOUM7JsGcvesu723urXp8KfXd
+        t2hBWvZ2Yznldh6PBIajtGj28l6NroPN+8lazjHvMGx6aaEWF4nlPeBqJ7hG
+        M+/J11vBHNy8ijNVbbUXRMnJ2A3R+eheSWNpCn4WG6K7ZH2P4WsxvXyft2tp
+        mRS8WnvQ2qNLXwP8bZdush83tu3zy8zwNJIeHxjqtcq5AcP3UqEjQcxnUOy5
+        VZm6rrdNt6/MN6q89/K1Qg3r+EbBiGpUMRsGsz5V0yiaWmIeGvVqj15L2X7I
+        9Ib71i1EV+s0iNaAaP2+4BFtHYfVS4u/YX17ZM2WcTj/VSws6FXYuMKpN/QG
+        A8rfE71DiNrFjpE5yc9cbofXX1JdsbXiLsryhEpCNqfbtZifWFW8iid9x5U2
+        6NZ4rjOsvnaI2ZRCNLoCIibDT7B6gbWhmGsM6ddgdCYS8/3w+Y9BGrmVm2I/
+        x93ZAjeUExE3hm/kBBNKseU2eHn/nifuxvDSfD8APb+BQnxtshUe+RkGWcXh
+        XWKq3geQMj9kQxaKX74ZzM+nTjJcdTj6fQtVUK4qLyRNsCsuI+m3aIsfoYn/
+        8n7rhFp3buclMw2XT/QK3MfY3w+E5/H4pLE0BErl5lUU2vTw/0QOyRebKAAA
 
-    http_version: "1.0"
+    http_version: "1.1"
+  recorded_at: Tue, 18 Jun 2013 01:10:36 GMT
+recorded_with: VCR 2.5.0
