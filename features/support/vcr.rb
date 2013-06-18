@@ -2,12 +2,12 @@ require 'vcr'
 
 VCR.configure do |c|
   c.cassette_library_dir     = 'features/cassette_library'
-  c.hook_into                :fakeweb
-  c.ignore_localhost         = true
+  c.hook_into                :webmock
+  c.ignore_localhost = true
   #use this after setup...
-  c.default_cassette_options = { :record => :none, :re_record_interval => 30.days }
+  #c.default_cassette_options = { :record => :none, :re_record_interval => 30.days }
   #use this for setup...
-  #c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 30.days }
+  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 30.days }
 end
 
 VCR.cucumber_tags do |t|

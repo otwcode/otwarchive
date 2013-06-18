@@ -88,7 +88,7 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
-  gem 'fakeweb'
+  gem 'webmock'
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
 end

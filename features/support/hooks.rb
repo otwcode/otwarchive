@@ -6,6 +6,7 @@ Before do
   Bookmark.tire.index.delete
   Bookmark.create_elasticsearch_index
   Bookmark.import
+  Bookmark.tire.index.refresh
 
   Tag.tire.index.delete
   Tag.create_elasticsearch_index

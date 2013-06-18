@@ -5,6 +5,11 @@
 # files.
 
 ENV["RAILS_ENV"] ||= "test"
+
+# Set webmock, that is used by vcr, to allow net connections BEFORE we require the environment file
+require 'webmock'
+WebMock.allow_net_connect!
+
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
 require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
