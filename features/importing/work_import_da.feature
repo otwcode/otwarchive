@@ -53,7 +53,7 @@ Feature: Import Works from deviantart
   #    Then I should see "Work was successfully posted."
   #    When I am on cosomeone's user page
   #      #'
-  #      Then I should see "Flooded"
+  #      Then I should see "Flooded"#
   @import_da_fic
   Scenario: Creating a new fic from an deviantart
     Given basic tags
