@@ -5,7 +5,7 @@ VCR.configure do |c|
   c.hook_into                :webmock
   c.ignore_localhost = true
   #use this after setup...
-  c.default_cassette_options = { :record => :none, :re_record_interval => 30.days }
+  c.default_cassette_options = { :record => :none, :re_record_interval => 30.days } # Delete the cassettes after 30 days and re_record
   #use this for setup...
   #c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 30.days }
 end
