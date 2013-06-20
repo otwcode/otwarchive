@@ -243,7 +243,7 @@ GEM
       raindrops (~> 0.6)
     valium (0.2.1)
       activerecord (>= 3.0.2)
-    vcr (1.7.2)
+    vcr (2.5.0)
     vegas (0.1.8)
       rack (>= 1.0.0)
     whenever (0.6.2)
@@ -304,6 +304,6 @@ DEPENDENCIES
   tire
   unicorn
   valium
-  vcr (~> 1.7.0)
+  vcr (~> 2.5.0)
   whenever (~> 0.6.2)
   will_paginate (>= 3.0.2)

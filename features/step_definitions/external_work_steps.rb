@@ -15,6 +15,7 @@ Given /^I set up an external work$/ do
   fill_in("URL", :with => DEFAULT_EXTERNAL_URL)
   fill_in("Author", :with => DEFAULT_EXTERNAL_AUTHOR)
   fill_in("Title", :with => DEFAULT_EXTERNAL_TITLE)
+  step %{I fill in basic external work tags}
   fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
   fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
 end

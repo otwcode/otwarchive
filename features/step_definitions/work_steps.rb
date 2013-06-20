@@ -187,12 +187,18 @@ When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   check(DEFAULT_WARNING)
   fill_in("Work Title", :with => title)
   fill_in("content", :with => DEFAULT_CONTENT)
-end  
+end
 
 When /^I fill in basic work tags$/ do
   select(DEFAULT_RATING, :from => "Rating")
   fill_in("Fandoms", :with => DEFAULT_FANDOM)
   fill_in("Additional Tags", :with => DEFAULT_FREEFORM)
+end
+
+When /^I fill in basic external work tags$/ do
+  select(DEFAULT_RATING, :from => "Rating")
+  fill_in("Fandoms", :with => DEFAULT_FANDOM)
+  fill_in("Your Tags", :with => DEFAULT_FREEFORM)
 end
 
 # the (?: ) construct means: do not use the stuff in () as a capture/match
