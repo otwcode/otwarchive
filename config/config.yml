@@ -49,6 +49,7 @@ ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
+ELASTICSEARCH_URL: 'http://localhost:9200'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
