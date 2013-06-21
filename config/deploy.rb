@@ -66,6 +66,11 @@ namespace :deploy do
     run "/home/ao3app/bin/unicorns_reload"
   end
 
+  desc "Restart the resque workers"
+  task :restart_workers, :roles => :web do
+    run "/home/ao3app/bin/workers_reload"
+  end
+
   desc "Get the config files "
   task :update_configs, :roles => :app do
     run "/home/ao3app/bin/create_links_on_install"
@@ -109,5 +114,6 @@ end
 #after "deploy:restart", "extras:restart_delayed_jobs"
 #after "deploy:restart", "deploy:cleanup"
 
+after "deploy:restart", "deploy:restart_workers"
 after "deploy:symlink", "deploy:update_configs"
 after "deploy:update", "newrelic:notice_deployment"
