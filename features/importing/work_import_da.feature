@@ -14,6 +14,7 @@ Feature: Import Works from deviantart
        And I should find "Flooded_by_bingeling.jpg" within "img[src]"
        And I should see "Digital Art" within "dd.freeform"
        And I should see "People" within "dd.freeform"
+       And I should see "People" within "dd.freeform"
        And I should see "Vector" within "dd.freeform"
        And I should see "Published:2007-01-04"
        And I should see "Flooded" within "h2.title"
@@ -52,7 +53,7 @@ Feature: Import Works from deviantart
   #    Then I should see "Work was successfully posted."
   #    When I am on cosomeone's user page
   #      #'
-  #      Then I should see "Flooded"
+  #      Then I should see "Flooded"#
   @import_da_fic
   Scenario: Creating a new fic from an deviantart
     Given basic tags
