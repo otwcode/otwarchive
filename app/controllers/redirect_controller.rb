@@ -7,18 +7,15 @@ class RedirectController < ApplicationController
 
   def get_url_to_look_for
     @original_url = params[:original_url] || ""
-    @minimal_url = @original_url
+
     # strip it down to the most basic URL
-    @minimal_url.gsub!(/\?.*$/, "")
-    @minimal_url.gsub!(/\#.*$/, "")
+    @minimal_url = @original_url.gsub(/\?.*$/, "").gsub(/\#.*$/, "")
 
     # remove www if present
-    @no_www_url = @original_url
-    @no_www_url.gsub!(/http:\/\/www\./, "http://")
+    @no_www_url = @original_url.gsub(/http:\/\/www\./, "http://")
 
     # add www in case it is needed
-    @with_www_url = @original_url
-    @with_www_url.gsub!(/http:\/\//, "http://www.")
+    @with_www_url = @original_url.gsub(/http:\/\//, "http://www.")
 
     # get encoded and unencoded versions
     @encoded_url = URI.encode(@minimal_url)
