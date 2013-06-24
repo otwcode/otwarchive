@@ -22,9 +22,19 @@ $(document).ready(function() {
 <td><!--# include virtual="/status/mysql_mod.html" --></td>
 </tr>
 <tr>
+<td title="Mysql is our long term persistant datastore (This is our onsite backup).">Mysql Secondary</td>
+<td><!--# include virtual="/status/mysql_slave.html" --></td>
+<td><!--# include virtual="/status/mysql_slave_mod.html" --></td>
+</tr>
+<tr>
 <td title="Redis is used to store semi peristant data such as resque queues.">Redis</td>
 <td><!--# include virtual="/status/redis.html" --></td>
 <td><!--# include virtual="/status/redis_mod.html" --></td>
+</tr>
+<tr>
+<td title="Redis is used to store semi peristant data such as resque queues (This is our onsite backup).">Redis Secondary</td>
+<td><!--# include virtual="/status/redis_slave.html" --></td>
+<td><!--# include virtual="/status/redis_slave_mod.html" --></td>
 </tr>
 <tr>
 <td title="Elastic search is used to power the tag system and the search.">Elastic Search</td>
@@ -37,10 +47,14 @@ $(document).ready(function() {
 <td><!--# include virtual="/status/squid_mod.html" --></td>
 </tr>
 <tr>
-<tr>
 <td title="Resque workers, execute code asynchronously such as the subscription emails.">Resque workers ao3-front01</td>
 <td><!--# include virtual="/status/resque_status_ao3-front01.html" --></td>
 <td><!--# include virtual="/status/resque_status_ao3-front01_mod.html" --></td>
+</tr>
+<tr>
+<td title="Resque queues (This is how behind we are with our batch jobs).">Resque queues</td>
+<td><!--# include virtual="/status/resque_queue.html" --></td>
+<td><!--# include virtual="/status/resque_queue_mod.html" --></td>
 </tr>
 <tr>
 <td title="Unicorns give you the pages.">Unicorns ao3-app01</td>
