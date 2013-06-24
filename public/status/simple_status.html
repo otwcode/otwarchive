@@ -12,12 +12,12 @@ $(document).ready(function() {
 </tr>
 </thead>
 <tr>
-<td title="Memcached is a in memory fast cache for non persistant data." >Memcached</td>
+<td title="Memcached is an in-memory fast cache for non-persistent data." >Memcached</td>
 <td><!--# include virtual="/status/memcached.html" --></td>
 <td><!--# include virtual="/status/memcached_mod.html" --></td>
 </tr>
 <tr>
-<td title="mysql is our long term persistant datastore.">Mysql</td>
+<td title="Mysql is our long term persistent datastore.">Mysql</td>
 <td><!--# include virtual="/status/mysql.html" --></td>
 <td><!--# include virtual="/status/mysql_mod.html" --></td>
 </tr>
@@ -32,24 +32,34 @@ $(document).ready(function() {
 <td><!--# include virtual="/status/elastic_search_mod.html" --></td>
 </tr>
 <tr>
-<td title="Squid is our full page caching system">Squid</td>
+<td title="Squid is our full page caching system.">Squid</td>
 <td><!--# include virtual="/status/squid.html" --></td>
 <td><!--# include virtual="/status/squid_mod.html" --></td>
 </tr>
 <tr>
 <tr>
-<td title="Resque workers, execute code asynchronously such as the subscription emails.">Resque workers ao3-app01</td>
-<td><!--# include virtual="/status/resque_status_ao3-app01.html" --></td>
-<td><!--# include virtual="/status/resque_status_ao3-app01_mod.html" --></td>
+<td title="Resque workers, execute code asynchronously such as the subscription emails.">Resque workers ao3-front01</td>
+<td><!--# include virtual="/status/resque_status_ao3-front01.html" --></td>
+<td><!--# include virtual="/status/resque_status_ao3-front01_mod.html" --></td>
 </tr>
 <tr>
-<td title="Unicorn's give you the pages .">Unicorns ao3-app01</td>
+<td title="Unicorns give you the pages.">Unicorns ao3-app01</td>
 <td><!--# include virtual="/status/uncorn_status_ao3-app01.html" --></td>
 <td><!--# include virtual="/status/uncorn_status_ao3-app01_mod.html" --></td>
 </tr>
 <tr>
-<td title="Unicorn's give you the pages .">Unicorns ao3-app02</td>
+<td title="Unicorns give you the pages.">Unicorns ao3-app02</td>
 <td><!--# include virtual="/status/uncorn_status_ao3-app02.html" --></td>
 <td><!--# include virtual="/status/uncorn_status_ao3-app02_mod.html" --></td>
+</tr>
+<tr>
+<td title="Unicorns give you the pages.">Unicorns ao3-app03</td>
+<td><!--# include virtual="/status/uncorn_status_ao3-app03.html" --></td>
+<td><!--# include virtual="/status/uncorn_status_ao3-app03_mod.html" --></td>
+</tr>
+<tr>
+<td title="Unicorns give you the pages.">Unicorns ao3-front01</td>
+<td><!--# include virtual="/status/uncorn_status_ao3-app03.html" --></td>
+<td><!--# include virtual="/status/uncorn_status_ao3-app03_mod.html" --></td>
 </tr>
 </table>
