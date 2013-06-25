@@ -53,9 +53,12 @@ span.delete a {
 }
 
 /* new stats page */
-.statistics .even { background: #eee; }
 .statistics .index li {
  padding: 0.643em 0.375em;
+}
+
+.statistics .index li:nth-of-type(even) { 
+  background: #eee;
 }
 .statistics dt:after {content: ":";}
 

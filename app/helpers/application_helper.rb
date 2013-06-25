@@ -480,12 +480,9 @@ module ApplicationHelper
       if options[:extra_info_method]
         checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
-      content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
+      content_tag(:li, checkbox_and_label)
     end.join("\n").html_safe
     checkboxes_ul = content_tag(:ul, checkboxes)
-
-    # reset the tiger striping
-    reset_cycle("tigerstriping")
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
