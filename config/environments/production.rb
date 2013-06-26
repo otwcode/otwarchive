@@ -25,7 +25,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, 'mem.ao3.org'
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_URL
   require 'memcache'
 
   # Disable Rails's static asset server
