@@ -561,7 +561,7 @@ class StoryParser
       # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
-      storytext = body.css("div.b-singlepost-body").inner_html
+      storytext = body.css("article.b-singlepost-body").inner_html
       storytext = body.inner_html if storytext.empty?
 
       # cleanup the text
@@ -585,11 +585,11 @@ class StoryParser
       work_params = {:chapter_attributes => {}}
 
       body = @doc.css("body")
-      content_divs = body.css("div#entry")
+      content_divs = body.css("div.contents")
       
       unless content_divs[0].nil?
         # Get rid of the DW metadata table
-        content_divs[0].css("table.currents, div#entrysubj").each do |node|
+        content_divs[0].css("div.currents, ul.entry-management-links, div.header.inner, span.restrictions, h3.entry-title").each do |node|
           node.remove
         end
         storytext = content_divs[0].inner_html
@@ -613,7 +613,7 @@ class StoryParser
       end
 
       # get the date
-      date = @doc.css("span.time").inner_text
+      date = @doc.css("span.date").inner_text
       work_params[:revised_at] = convert_revised_at(date)
 
       return work_params
@@ -634,7 +634,7 @@ class StoryParser
       end
 
       # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
-      text_table = body.css("#gmi-ResViewContainer div.gr-box.gr-genericbox div.text")[0]
+      text_table = body.css(".grf-indent > div:nth-child(1)")[0]
       unless text_table.nil?
         # Try to remove some metadata (title and author) from the work's text, if possible
         # Try to remove the title: if it exists, and if it's the same as the browser title

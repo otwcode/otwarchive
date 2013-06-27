@@ -14,7 +14,7 @@
 
     <% def styled_tag_list(tags) %>
       <% return nil if !tags || tags.empty? %>
-      <% tags.map{|tag| style_link(tag.name, tag_url(tag))}.to_sentence.html_safe %>
+      <% tags.map{|tag| style_link(tag.name, tag_works_url(tag))}.to_sentence.html_safe %>
     <% end %>
 
     <% fandoms = prompt.any_fandom ? "Any" : styled_tag_list(tag_groups["Fandom"]) %>

@@ -78,13 +78,14 @@ group :test do
   # automatically record http requests and save them to make
   # cuke fast
   gem 'fakeweb'
-  gem 'vcr'
+  gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
 end
 
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
+gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
