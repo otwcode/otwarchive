@@ -1,6 +1,7 @@
 
 Given /^a set of tags for testing autocomplete$/ do
-  step %{a canonical fandom "Supernatural"}
+  step %{basic tags}
+    step %{a canonical fandom "Supernatural"}
     step %{a canonical fandom "Battlestar Galactica"}
     step %{a noncanonical fandom "Super Awesome"}
     step %{a canonical character "Ellen Harvelle" in fandom "Supernatural"}

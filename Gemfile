@@ -89,7 +89,7 @@ group :test do
   # automatically record http requests and save them to make
   # cuke fast
   gem 'fakeweb'
-  gem 'vcr'
+  gem "vcr", "~> 2.5.0"
   gem 'delorean'
 end
 

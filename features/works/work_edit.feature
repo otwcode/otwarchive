@@ -10,6 +10,7 @@ Feature: Edit Works
     When I view the work "First work"
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
+      And all search indexes are updated
     # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
@@ -33,6 +34,7 @@ Feature: Edit Works
       And I should see "first chapter content"
     When I press "Update"
     Then I should see "Work was successfully updated."
+      And all search indexes are updated
     When I go to testuser's works page
     Then I should see "First work"
       And I should see "first fandom"
