@@ -282,7 +282,6 @@ DEPENDENCIES
   capistrano-gitflow_version (>= 0.0.3)
   capybara
   css_parser
-  cucumber
   cucumber-rails
   database_cleaner
   delorean

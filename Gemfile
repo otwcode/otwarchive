@@ -71,8 +71,7 @@ group :test do
   gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'cucumber-rails'
-  gem 'cucumber'
+  gem 'cucumber-rails', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
