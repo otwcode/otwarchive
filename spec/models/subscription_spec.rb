@@ -15,7 +15,7 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end
@@ -32,7 +32,7 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end
@@ -49,7 +49,7 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end

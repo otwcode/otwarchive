@@ -140,8 +140,10 @@ class User < ActiveRecord::Base
   validates_associated :log_items
 
   before_destroy :remove_pseud_from_kudos
+
   def remove_pseud_from_kudos
-    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
+    ids = self.pseuds.collect(&:id).join(',')
+    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{ids})") if ids.present?
   end
 
   def read_inbox_comments
