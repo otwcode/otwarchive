@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+ruby '1.9.3'
+
 gem 'bundler'
 
 gem 'rails', '3.2.13'
@@ -35,7 +37,8 @@ gem 'tire'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'css_parser'
 
-gem 'paperclip', '>=2.3.16'
+gem 'cocaine', "= 0.3.2"
+gem 'paperclip', '=3.0.4'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
