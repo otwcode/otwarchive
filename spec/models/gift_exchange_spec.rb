@@ -4,7 +4,7 @@ describe GiftExchange do
 
   describe "a gift exchange challenge" do
     before do
-      @collection = Factory.create(:collection)
+      @collection = FactoryGirl.create(:collection)
       @collection.challenge = GiftExchange.new
       @challenge = @collection.challenge
     end

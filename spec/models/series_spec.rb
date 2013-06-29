@@ -3,11 +3,11 @@ require 'spec_helper'
 
 describe Series do
   
-  let(:unrestricted_work) { Factory(:work, :restricted => false) }
-  let(:restricted_work) { Factory(:work, :restricted => true) }
+  let(:unrestricted_work) { FactoryGirl.create(:work, :restricted => false) }
+  let(:restricted_work) { FactoryGirl.create(:work, :restricted => true) }
   
   before(:each) do
-    @series = Factory.create(:series)
+    @series = FactoryGirl.create(:series)
   end
   
   it "should be unrestricted when it has unrestricted works" do

@@ -169,7 +169,7 @@ end
 
 Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
-    user = Factory.create(:user, {:login => username, :password => DEFAULT_PASSWORD})
+    user = FactoryGirl.create(:user, {:login => username, :password => DEFAULT_PASSWORD})
     user.activate
   end
 end

@@ -14,7 +14,7 @@ end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
-    admin = Factory.create(:admin, hash)
+    admin = FactoryGirl.create(:admin, hash)
   end
 end
 
@@ -22,7 +22,7 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
-    admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
+    admin = FactoryGirl.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
   end
   visit admin_login_path
   fill_in "Admin user name", :with => "testadmin"
@@ -128,7 +128,7 @@ end
 
 When /^(\d+) Archive FAQs? exists?$/ do |n|	
   (1..n.to_i).each do |i|
-    Factory.create(:archive_faq, id: i)
+    FactoryGirl.create(:archive_faq, id: i)
   end
 end
 
