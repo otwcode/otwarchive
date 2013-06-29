@@ -71,11 +71,11 @@ When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
 end
 
 Then /^I should see a create confirmation message$/ do
-  page.find('was successfully created')
+  page.should have_content('was successfully created')
 end
 
 Then /^I should see an update confirmation message$/ do
-  page.find('was successfully updated')
+  page.should have_content('was successfully updated')
 end
 
 Then /^I should see a save error message$/ do
@@ -84,13 +84,13 @@ end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.find(text)
+    page.all(text)
   end
 end
 
 Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.find(text)
+    page.should have_content(text)
   end
 end
 
@@ -98,7 +98,7 @@ Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     begin
       wait_until do
-        page.find(text)
+        page.should have_content(text)
       end
     rescue Capybara::TimeoutError
     end
@@ -161,7 +161,7 @@ end
 
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
-  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+  check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
 end
 
 When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, suffix, value|
@@ -169,15 +169,15 @@ When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index,
 end
 
 When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
-  uncheck(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+  uncheck(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
 end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, id_string|
-  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'])
+  check(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'], :with => value)
+  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
 end
 
 
