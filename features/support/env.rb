@@ -28,10 +28,16 @@ require 'cucumber/rails'
 #
 ActionController::Base.allow_rescue = false
 
+# Some config options to help with the upgrade from 1.0 to 2.1 (lets never wait this long again)
+Capybara.configure do |config|
+  config.match = :prefer_exact
+  config.ignore_hidden_elements = false
+end
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
