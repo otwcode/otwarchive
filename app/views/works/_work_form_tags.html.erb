@@ -33,8 +33,8 @@
     </dt>
     <dd class="fandom required" title="fandom">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
-                         autocomplete_options('fandom', 
-                          :id => "work_fandom") %>
+            autocomplete_options('fandom',
+            :id => "work_fandom") %>
     <p class="footnote"><%= ts("If this is the first work for a fandom, it may not show up in the fandoms page for a day or two") %></p>
 	</dd>
     
@@ -59,27 +59,35 @@
       <label for="work_relationship"><%= Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %></label>
     </dt>
     <dd class="relationship" title="relationships">
-      <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
+      <%= text_field_tag "work[relationship_string]",
+                         include_blank ? "" : @work.relationship_string,
                          autocomplete_options("relationship_in_fandom",
-                           :id => "work_relationship",
- 							:title => "relationship",
-                           :autocomplete_live_params => 'fandom=work_fandom') %>
+                                              :id => "work_relationship",
+                                              :title => "relationship",
+                                              :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="character">
       <label for="work_character"><%= Character::NAME.pluralize %> <%= link_to_help "characters-help" %></label>
     </dt>
     <dd class="character" title="characters">
-      <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
-                        autocomplete_options('character_in_fandom', 
-                          :id => "work_character", :title => "character", :autocomplete_live_params => 'fandom=work_fandom') %>
+      <%= text_field_tag "work[character_string]",
+                         include_blank ? "" : @work.character_string,
+                         autocomplete_options('character_in_fandom',
+                                              :id => "work_character",
+                                              :title => "character",
+                                              :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="freeform">
-      <label for="work_freeform"><%= Freeform::NAME %> <%=	 link_to_help "additional-tags-help" %></label>
+      <label for="work_freeform"><%= Freeform::NAME.pluralize %> <%=	 link_to_help "additional-tags-help" %></label>
     </dt>
     <dd class="freeform" title="additional tags">
-      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform', :id => "work_freeform", :title => "freeform") %>
+      <%= text_field_tag "work[freeform_string]",
+                         include_blank ? "" : @work.freeform_string,
+                         autocomplete_options('freeform',
+                                              :id => "work_freeform",
+                                              :title => "freeform") %>
     </dd>
 
   </dl>

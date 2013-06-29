@@ -11,7 +11,7 @@ Feature: Tag wrangling
       | dizmo       |
       And I have loaded the "roles" fixture
     When I am logged in as "dizmo"
-    Then I should not see "Tag Wrangling"
+    Then I should not find "Tag Wrangling" within ".dropdown-menu"
     When I am logged in as an admin
       And I fill in "query" with "dizmo"
       And I press "Find"
