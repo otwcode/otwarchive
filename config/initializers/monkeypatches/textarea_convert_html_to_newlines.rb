@@ -47,7 +47,7 @@ module ActionView
       alias_method_chain :text_area_tag, :html_breaks
     end
     
-    module InstanceTagMethods      
+    class InstanceTag
       def to_text_area_tag_with_html_breaks(options = {})
         options = DEFAULT_TEXT_AREA_OPTIONS.merge(options.stringify_keys)
         add_default_name_and_id(options)
