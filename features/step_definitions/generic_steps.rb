@@ -90,7 +90,7 @@ end
 
 Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.should have_content(text)
+    page.all(text)
   end
 end
 
@@ -98,7 +98,7 @@ Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     begin
       wait_until do
-        page.should have_content(text)
+        page.all(text)
       end
     rescue Capybara::TimeoutError
     end
