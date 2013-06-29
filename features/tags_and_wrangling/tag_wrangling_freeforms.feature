@@ -14,7 +14,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # create a new canonical freeform from tag wrangling interface
     And I follow "New Tag"
     And I fill in "Name" with "Alternate Universe Pirates"
-    And I choose "Freeform"
+    And I choose "Additional tag"
     And I check "tag_canonical"
     And I press "Create Tag"
   Then I should see "Tag was successfully created"
@@ -24,7 +24,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # create a new non-canonical freeform from tag wrangling interface
   When I follow "New Tag"
     And I fill in "Name" with "Pirates! in Spaaaaace! AU"
-    And I choose "Freeform"
+    And I choose "Additional tag"
     And I press "Create Tag"
   Then I should see "Tag was successfully created"
     And the "tag_canonical" checkbox should not be checked
@@ -88,7 +88,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"
-    And I choose "Freeform"
+    And I choose "Additional tag"
     And I press "Create Tag"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "SubTags" with "Alternate Universe P"
@@ -123,11 +123,11 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   # trying to syn a non-canonical to another non-canonical
   When I follow "New Tag"
     And I fill in "Name" with "Drabble"
-    And I choose "Freeform"
+    And I choose "Additional tag"
     And I press "Create Tag"
     And I follow "New Tag"
     And I fill in "Name" with "100 words"
-    And I choose "Freeform"
+    And I choose "Additional tag"
     And I press "Create Tag"
     And I fill in "Synonym of" with "Drabble"
     And I press "Save changes"

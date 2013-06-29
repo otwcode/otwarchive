@@ -825,8 +825,8 @@ class Tag < ActiveRecord::Base
       current_filter = self.filter
       # we only need to cache values for user-defined tags
       # because they're the only ones we access
-      # changes from Tag::USER_DEFINED.include?(current_filter.class.to_s))
-      if current_filter && current_filter.class.to_s.is_user-defined? 
+      # note: is_user_defined? unfortunately doesn't work here
+      if current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
         attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
           :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
         if current_filter.filter_count
