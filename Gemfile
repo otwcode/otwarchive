@@ -37,8 +37,8 @@ gem 'tire'
 gem 'aws-sdk'
 gem 'css_parser'
 
-gem 'cocaine', "= 0.3.2"
-gem 'paperclip', '=3.0.4'
+gem 'cocaine'
+gem 'paperclip'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
