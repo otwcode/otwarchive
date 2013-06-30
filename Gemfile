@@ -34,7 +34,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
-gem 'aws-s3', :require => 'aws/s3'
+gem 'aws-sdk'
 gem 'css_parser'
 
 gem 'cocaine', "= 0.3.2"
