@@ -1,0 +1,53 @@
+<% # not working code, although bookmark and work variables are currently passed in from work_header_navigation and bookmark_owner_navigation %>
+<% # can we set it up to use variable 'shareable' and do different things with shareable based on whether shareable.is_a?(Bookmark) or shareable.is_a?(Work) like we do with bookmarks? we could potentially add admin posts in the future %>
+<% # let's get the share stuff out of works_helper and into share_helper since it is used on bookmarks and works %>
+
+<div id="share<% if shareable.is_a?(Bookmark) %>_<%= bookmark.id %><% end %>">
+
+  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
+  
+  <% # HTML share code %>
+  <p>
+    <% # use text_area_tag to avoid unwanted whitespace while keeping nicely indented code,
+    # set the textarea ID to be unique to each bookmark on bookmark indices,
+    # get the embed code,
+    # set the size of the textarea in rows and cols %>
+    <%= text_area_tag(shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code",
+    shareable.is_a?(Bookmark) ? get_bookmark_embed_link(bookmark) : get_embed_link(@work),
+    rows: 4, cols: 50) %>
+  </p>
+  
+  <% # Share buttons unless disabled %>
+  <% if !shareable.is_a?(Bookmark) && @work.users.all? {|u| u.preference.disable_share_links?} %>
+    <p><%= ts("This user has chosen to disable share buttons on their works.") %></p>
+  <% else %>
+    <ul class="actions">
+    
+      <% # Twitter share %>
+      <li>
+        <% if shareable.is_a?(Bookmark) %>
+          <% # To-do: create Twitter option for bookmark sharing %>
+        <% else %>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= tweet_text(@work) %>" data-url="<%= work_url(@work) %>">
+            <%= ts('Tweet') %>
+          </a>
+        <% end %>
+      </li>
+      
+      <% # Tumblr share %>
+      <li>
+        <% if shareable.is_a?(Bookmark) %>
+          <a href="http://www.tumblr.com/share/link?url=<%=u work_url(bookmark) %>&name=<%=u get_tumblr_embed_link_title(bookmark.bookmarkable) %>&description=<%=u get_tumblr_bookmark_embed_link(bookmark) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+        <% else %>
+          <a href="http://www.tumblr.com/share/link?url=<%=u work_url(@work) %>&name=<%=u get_tumblr_embed_link_title(@work) %>&description=<%=u get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+        <% end %>
+        <%= ts('Share on Tumblr') %>
+        </a>
+      </li>
+      
+    </ul>
+  <% end %>
+  
+</div>
+
+<% # FRONTEND NOTE: Twitter widget JavaScript is included separately in bookmarks/index and works/show to ensure it is only loaded once per page %>
