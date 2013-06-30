@@ -1,4 +1,11 @@
 Otwarchive::Application.routes.draw do
+  
+  #### ERRORS ####
+  
+  match '/403', :to => 'errors#403'
+  match '/404', :to => 'errors#404'
+  match '/422', :to => 'errors#422'
+  match '/500', :to => 'errors#500'
 
   #### DOWNLOADS ####
 

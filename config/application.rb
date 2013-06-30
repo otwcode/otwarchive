@@ -58,6 +58,9 @@ module Otwarchive
     config.active_record.schema_format = :sql
 
     ### end of preservation section
+    
+    # handle errors with custom error pages:
+    config.exceptions_app = self.routes
 
   end
 end
