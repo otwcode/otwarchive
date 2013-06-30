@@ -93,13 +93,9 @@ module ShareHelper
   
   def tweet_text(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
-      if bookmark.bookmarkable.unrevealed?
-        ts("Bookmark of Mystery Work")
-      else
-        names = bookmark.bookmarkable.anonymous? ? ts("Anonymous") : bookmark.bookmarkable.pseuds.map(&:name).join(', ')
-        fandoms = bookmark.bookmarkable.fandoms.size > 2 ? ts("Multifandom") : bookmark.bookmarkable.fandoms.string
-        "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
-      end    
+      names = bookmark.bookmarkable.anonymous? ? ts("Anonymous") : bookmark.bookmarkable.pseuds.map(&:name).join(', ')
+      fandoms = bookmark.bookmarkable.fandoms.size > 2 ? ts("Multifandom") : bookmark.bookmarkable.fandoms.string
+      "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
     end
   end
   
