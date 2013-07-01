@@ -26,11 +26,11 @@
       <% # Twitter share %>
       <li>
         <% if shareable.is_a?(Bookmark) %>
-          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= tweet_text(bookmark) %>" data-url="<%= bookmark_url(bookmark) %>">
+          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= get_tweet_text_for_bookmark(bookmark) %>" data-url="<%= bookmark_url(bookmark) %>">
             <%= ts('Tweet') %>
           </a>
         <% else %>
-          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= tweet_text(@work) %>" data-url="<%= work_url(@work) %>">
+          <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= get_tweet_text(@work) %>" data-url="<%= work_url(@work) %>">
             <%= ts('Tweet') %>
           </a>
         <% end %>

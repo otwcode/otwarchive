@@ -81,7 +81,7 @@ module ShareHelper
     end
   end
   
-  def tweet_text(work)
+  def get_tweet_text(work)
     if work.unrevealed?
       ts("Mystery Work")
     else
@@ -91,7 +91,7 @@ module ShareHelper
     end
   end
   
-  def tweet_text(bookmark)
+  def get_tweet_text_for_bookmark(bookmark)
     if bookmark.bookmarkable.is_a?(Work)
       names = bookmark.bookmarkable.anonymous? ? ts("Anonymous") : bookmark.bookmarkable.pseuds.map(&:name).join(', ')
       fandoms = bookmark.bookmarkable.fandoms.size > 2 ? ts("Multifandom") : bookmark.bookmarkable.fandoms.string
