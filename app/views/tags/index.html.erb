@@ -2,14 +2,22 @@
 <h2 class="heading"><%= ts("Tags") %></h2>
 
 <div class="navigation actions module">
-  <h3 class="landmark heading"><%= ts("Navigation and Actions") %></h3>
+  <h3 class="landmark heading"><%= ts("Sorting and Navigation") %></h3>
   <% unless @collection %>
     <ul class="navigation actions" role="navigation">
       <% if logged_in? %>
         <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
       <% end %>
-      <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
-      <li><%= span_if_current(ts('Random'), tags_path(:show => 'random')) %></li>
+      <li><%= span_if_current(ts("Most Popular"), tags_path, params[:show].blank?) %></li>
+      <li><%= span_if_current(ts("Random"), tags_path(:show => 'random')) %></li>
+    </ul>
+    <ul class="sorting actions hidden" role="menu">
+      <li><h4 class="heading"><%= ts("Display As") %></h4></li>
+      <li><a id="tag-list" href="#" class="current"><%= ts("List") %></a></li>
+      <li><a id="tag-cloud" href="#"><%= ts("Cloud") %></a></li>
+      <li><h4 class="heading"><%= ts("Sort By") %></h4></li>
+      <li><a id="by-uses" href="#" class="current"><%= ts("Uses") %></a></li>
+      <li><a id="by-name" href="#"><%= ts("Name") %></a></li>
     </ul>
   <% end %>
 </div>
@@ -19,17 +27,6 @@
     <%= params[:show] == "random" ? ts('Listing Random Tags') : ts('Listing Popular Tags') %>
   </h3>
 <% end %>
-
-  <ul class="sorting actions hidden" role="menu">
-    <li><h4 class="heading"><%= ts('Display As') %></h4></li>
-    <li><a id="tag-list" href="#" class="current"><%= ts("List") %></a></li>
-    <li><a id="tag-cloud" href="#"><%= ts("Cloud") %></a></li>
-  </ul>
-  <ul class="sorting actions hidden" role="menu">
-    <li><h4 class="heading"><%= ts("Sort By") %></h4></li>
-    <li><a id="by-uses" href="#" class="current"><%= ts("Uses") %></a></li>
-    <li><a id="by-name" href="#"><%= ts("Name") %></a></li>
-  </ul>
 
 <ol class="concise tags index group">
   <% tag_cloud @tags, %w(micro milli centi deci base deka hecto kilo mega) do |tag, css_class| %>
