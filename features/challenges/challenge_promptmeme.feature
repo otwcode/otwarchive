@@ -69,8 +69,8 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I go to "Battle 12" collection's page
     And I follow "Profile"
-  Then I should see "Challenge Settings" within ".navigation"
-  When I follow "Challenge Settings" within ".navigation"
+  Then I should see "Challenge Settings" within "div#dashboard.navigation"
+  When I follow "Challenge Settings" within "div#dashboard.navigation"
   Then I should be editing the challenge settings
   
   Scenario: Can edit settings for a prompt meme

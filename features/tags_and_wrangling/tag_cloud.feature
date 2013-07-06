@@ -63,7 +63,7 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I choose "Freeform"
     And I check "Canonical"
     And I press "Create Tag"
-    And I follow "Tags" within "ul.navigation"
+    And I follow "Tags" within "ul.menu"
   Then I should not see "Five Things"
     And I should not see "5 Things"
     And I should not see "N Things"
