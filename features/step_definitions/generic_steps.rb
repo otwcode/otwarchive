@@ -96,12 +96,7 @@ end
 
 Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    begin
-      wait_until do
-        page.all(text)
-      end
-    rescue Capybara::TimeoutError
-    end
+    page.all(text)
   end
 end
 
