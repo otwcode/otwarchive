@@ -48,8 +48,8 @@ class Series < ActiveRecord::Base
   scope :exclude_anonymous, 
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
            INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`)").
-    where("works.in_anon_collection = 0 AND works.in_unrevealed_collection = 0").
-    group("series.id")
+    group("series.id").
+    having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   
   scope :for_pseuds, lambda {|pseuds|
     joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
