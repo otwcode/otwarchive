@@ -303,7 +303,7 @@ class User < ActiveRecord::Base
   # Gets the user's most recent unposted work
   def unposted_work
     return @unposted_work if @unposted_work
-    @unposted_work = @unposted_works.first
+    @unposted_work = unposted_works.first
   end
 
   def unposted_works
