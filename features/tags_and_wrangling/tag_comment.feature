@@ -137,13 +137,15 @@ I'd like to comment on a tag'
     # I get redirected to the tag comments page
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
+      And I am logged out
     When I follow "Read all comments on Eroica" in the email
+      And show me the page
       And I fill in "User name:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
     # TODO: This goes to the dashboard instead of a redirect to the tag! Why, why? I mean, why? Why?
-    # Then I should see "Reading Comments on Eroica"
-      # And I should see "really clever stuff"
+     Then I should see "Reading Comments on Eroica"
+     And I should see "really clever stuff"
     When I follow "Reply to this comment" in the email
       And I fill in "User name:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
