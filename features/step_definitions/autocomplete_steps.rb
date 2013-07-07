@@ -144,7 +144,7 @@ Then /^the tag autocomplete fields should list only matching canonical tags$/ do
 	step %{I should only see matching canonical character tags in the autocomplete}
 	step %{I enter text in the relationship autocomplete field}
 	step %{I should only see matching canonical relationship tags in the autocomplete}
-	if page.find("Additional Tags")
+	if page.should have_content("Additional Tags")
 	  puts "Testing freeform field"
 	  step %{I enter text in the freeform autocomplete field}
 	  step %{I should only see matching canonical freeform tags in the autocomplete}
