@@ -113,7 +113,8 @@ Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
-  find_field(field).node.xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
+  page.has_select?(field, :selected => value).should == true
+  #find_field(field).xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|

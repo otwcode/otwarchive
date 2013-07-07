@@ -14,6 +14,7 @@ Feature: Basic collection navigation
   Given basic tags
     And I have a canonical "TV Shows" fandom tag named "New Fandom"
     And a freeform exists with name: "Free", canonical: true
+    And show me the page
   When I follow "New Work" within "#greeting .dropdown li"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
