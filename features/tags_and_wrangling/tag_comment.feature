@@ -139,7 +139,6 @@ I'd like to comment on a tag'
       And I should see "really clever stuff"
       And I am logged out
     When I follow "Read all comments on Eroica" in the email
-      And show me the page
       And I fill in "User name:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
