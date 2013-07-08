@@ -28,7 +28,7 @@ end
 # by Nokogiri in the typical find
 # note: this might only work for the first autocomplete in a page D:
 Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
-  string == page.find("input.autocomplete").node['value']
+  string == page.find("input.autocomplete")['value']
 end
 
 # Define all values to be entered here depending on the fieldname

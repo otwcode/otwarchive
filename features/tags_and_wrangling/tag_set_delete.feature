@@ -10,7 +10,4 @@ Feature: deleting tag sets
     And I should see a create confirmation message
     And I should see "tagsetter" within ".meta"
   When I follow "Delete"
-    And I should see "Delete Tag Set?"
-    And I should see "Are you certain you want to delete the murder_mystery_tags Tag Set?"
-    And I press "Yes, Delete Tag Set"
-  Then I should see "Your Tag Set murder_mystery_tags was deleted"
+  Then I should see "Tag set was successfully deleted."

@@ -102,7 +102,6 @@ I'd like to comment on a tag'
     # receive copies of own comments
     When I am logged in as "Enigel" with password "wrangulator"
       And I go to Enigel's user page
-      #'
       And I follow "Preferences"
       And I uncheck "Turn off copies of your own comments"
       And I press "Update"
@@ -111,7 +110,6 @@ I'd like to comment on a tag'
     # fellow wrangler leaves a comment on a wrangler's fandom  
     When I am logged in as "Cesy" with password "wrangulator"
       And I go to Cesy's user page
-      #'
       And I follow "Preferences"
       And I check "Turn off copies of your own comments"
       And I press "Update"
@@ -137,28 +135,29 @@ I'd like to comment on a tag'
     # I get redirected to the tag comments page
     Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
-      And I am logged out
+      And I log out
     When I follow "Read all comments on Eroica" in the email
       And I fill in "User name:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-    # TODO: This goes to the dashboard instead of a redirect to the tag! Why, why? I mean, why? Why?
      Then I should see "Reading Comments on Eroica"
      And I should see "really clever stuff"
+     And I log out
     When I follow "Reply to this comment" in the email
       And I fill in "User name:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
       And I press "Log In"
-    # TODO: This goes to the dashboard instead of a redirect to the tag!
-    # Then I should see "Reading Comments on Eroica"
-      # And I should see "really clever stuff"
-    
-    When I view the tag "Doctor Who"
+     Then I should see "Reading Comments on Eroica"
+      And I should see "really clever stuff"
       And all emails have been delivered
+      And I am logged in as "Enigel" with password "wrangulator"
+
+    When I view the tag "Doctor Who"
       And I follow "0 comments"
       And I fill in "Comment" with "really clever stuff"
       And I press "Comment"
     Then I should see "Comment created"
+      And show me the emails
       And 1 email should be delivered to "cesy@example.org"
       And 1 email should be delivered to "dizmo@example.org"
       And 1 email should be delivered to "enigel@example.org"
