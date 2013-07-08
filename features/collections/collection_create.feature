@@ -105,5 +105,6 @@ Scenario: Fill out new collection form with faulty data
    And I should see "My Rules" in the "Rules" input
    And I should see "My Message" in the "Assignment Notification Message" input
    And I should see "My Other Message" in the "Gift Notification Message" input
+   And show me the page
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"

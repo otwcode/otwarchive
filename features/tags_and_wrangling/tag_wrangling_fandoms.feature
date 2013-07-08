@@ -189,6 +189,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     # And I should see "Lord of the Rings" within ".odd"
     And I should see "TV Shows" within ".even"
     # And I should see "Stargate" within ".even"
+    And show me the page
     And I should see "Video Games" within ".odd"
     # And I should see "Final Fantasy" within ".odd"
     And I should see "Uncategorized Fandoms" within ".even"
