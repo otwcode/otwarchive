@@ -4,6 +4,7 @@
 
 When /^I leave kudos on "([^\"]*)"$/ do |work_title|
   step %{I view the work "#{work_title}"}
+  step %{show me the page}
   click_button("kudo_submit")
 end
 

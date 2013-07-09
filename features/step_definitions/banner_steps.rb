@@ -9,6 +9,7 @@ end
 When /^an admin sets a custom banner notice$/ do
   step %{I am logged in as an admin}
   step %{I go to the admin-settings page}
+  step %{show me the page}
   step %{I fill in "Banner notice" with "Custom notice words"}
     step %{I press "Update"}
     # Changing from null to empty string counts as a change to the banner
