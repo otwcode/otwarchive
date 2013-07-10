@@ -27,10 +27,22 @@
       <% for inbox_comment in @inbox_comments %>
         <!-- START of single comment -->
         <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
+          <% if !inbox_comment.feedback_comment.pseud.nil? %>
+            <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
+              <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+            <% else %>
+              <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+            <% end %>
+          <% else %>
           <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+          <% end %>
           <div class="icon">
             <% if !inbox_comment.feedback_comment.pseud.nil? %>
-              <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
+              <% if inbox_comment.feedback_comment.pseud.user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) && inbox_comment.feedback_comment.ultimate_parent.anonymous? %>
+                <span class="visitor icon"><!-- visitor icon holder --></span>
+              <% else %>
+                <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
+              <% end %>
             <% else %>
               <span class="visitor icon"><!-- visitor icon holder --></span>
             <% end %>
@@ -61,8 +73,8 @@
   <fieldset class="actions">
     <legend><%= ts("Mass Edit Options") %></legend>
     <ul role="menu">
-      <li><a class="checkall"><%= ts("Select All") %></a></li>
-      <li><a class="checknone"><%= ts("Select None") %></a></li>
+      <li><a class="check_all"><%= ts("Select All") %></a></li>
+      <li><a class="check_none"><%= ts("Select None") %></a></li>
       <li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
       <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
       <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
@@ -73,7 +85,7 @@
 
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
   <!-- this div will contain the reply-to-comment form -->
-  <div id="reply-to-comment" class="dynamic hidden"></div> 
+  <div id="reply-to-comment" class="dynamic hidden"></div>
 <% end %>
 
 <!--/content-->

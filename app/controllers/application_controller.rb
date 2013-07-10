@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
   def clear_flash_cookie
     cookies.delete(:flash_is_set)
   end
+
+
+  # So if there is not a user_credentials cookie and the user appears to be logged in then 
+  # redirect to the logout page
+  before_filter :logout_if_not_user_credentials
+  def logout_if_not_user_credentials
+    if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
+      logger.error "Forcing logout"
+      # You can only have one flash message, so you can't set a helpful error  message here.
+      redirect_to '/logout' and return
+    end
+  end
+
   
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
@@ -223,6 +236,13 @@ public
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
   end
+  
+  # Define media for fandoms menu
+  before_filter :set_media
+  def set_media
+    uncategorized = Media.uncategorized
+    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+  end
 
   ### GLOBALIZATION ###
 
@@ -278,6 +298,10 @@ public
     return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
     return false
+  end
+  
+  def use_caching?
+    %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
   end
 
   protected
@@ -351,7 +375,7 @@ public
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'
-      allowed = ['collections.title', 'collections.created_at', 'item_count']
+      allowed = ['collections.title', 'collections.created_at']
     elsif model.to_s.downcase == 'prompt'
       allowed = %w(fandom created_at prompter)
     elsif model.to_s.downcase == 'claim'

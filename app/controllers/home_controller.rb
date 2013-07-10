@@ -2,6 +2,7 @@ class HomeController < ApplicationController
 
   before_filter :users_only, :only => [:site_pages]
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
+  skip_before_filter :store_location, :only => [:first_login_help]
   
   # terms of service
   def tos
@@ -13,6 +14,11 @@ class HomeController < ApplicationController
     render :action => "tos_faq", :layout => "application"
   end
   
+  # diversity statement
+  def diversity 
+    render :action => "diversity_statement", :layout => "application"
+  end
+  
   # site map
   def site_map 
     render :action => "site_map", :layout => "application"
@@ -21,6 +27,11 @@ class HomeController < ApplicationController
   # donate
   def donate
     render :action => "donate", :layout => "application"
+  end
+  
+  # about
+  def about
+    render :action => "about", :layout => "application"
   end
   
   def first_login_help

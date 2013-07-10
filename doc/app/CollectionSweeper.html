@@ -80,8 +80,6 @@
     
     <li><a href="#method-i-before_destroy">#before_destroy</a>
     
-    <li><a href="#method-i-before_update">#before_update</a>
-    
   </ul>
 </nav>
 
@@ -481,6 +479,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -534,6 +534,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -658,7 +662,7 @@
 
           
           <div class="method-source-code" id="after_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 28</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_destroy</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">expire_collection_cache_for</span>(<span class="ruby-identifier">record</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -688,7 +692,7 @@
 
           
           <div class="method-source-code" id="after_save-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 20</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_save</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">expire_collection_cache_for</span>(<span class="ruby-identifier">record</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -718,9 +722,12 @@
 
           
           <div class="method-source-code" id="after_update-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 14</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_update</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:name</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:title</span>))
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">name_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">title_changed?</span>)
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Removing renamed collection from autocomplete: #{record.autocomplete_search_string_was}&quot;</span>
+    <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_stale_from_autocomplete</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Adding renamed collection to autocomplete: #{record.autocomplete_search_string}&quot;</span>
     <span class="ruby-identifier">record</span>.<span class="ruby-identifier">add_to_autocomplete</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -750,7 +757,7 @@
 
           
           <div class="method-source-code" id="before_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 24</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">before_destroy</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_from_autocomplete</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -762,38 +769,6 @@
 
         
       </div><!-- before_destroy-method -->
-
-    
-      <div id="method-i-before_update" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">before_update</span><span
-            class="method-args">(record)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="before_update-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">before_update</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:name</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:title</span>))
-    <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_from_autocomplete</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- before_update-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- before_update-method -->
 
     
     </section><!-- public-instance-method-details -->

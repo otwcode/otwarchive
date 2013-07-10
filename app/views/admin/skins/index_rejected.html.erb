@@ -1,3 +1,4 @@
+<div class="admin">
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Manage Rejected Skins') %></h2>
 <!--/descriptions-->
@@ -12,15 +13,15 @@
   <fieldset>
     <legend><%= ts('Rejected Skins') %></legend>
     <h3 class="heading"><%= ts('Rejected Skins') %></h3>
-    <table id="rejected" summary="">
-      <caption></caption>
+    <table id="rejected_skins" summary="<%= ts('Details of rejected skins, along with administrative notes and the option to unreject the skin.') %>">
+      <caption><%= ts('Rejected Skins') %></caption>
       <thead>
         <tr>
-        <th scope="col">Skin</th>
-        <th scope="col">Type</th>
-        <th scope="col">Creator</th>
-        <th scope="col">Admin Note</th>
-        <th scope="col">Unreject</th>
+        <th scope="col"><%= ts('Skin') %></th>
+        <th scope="col"><%= ts('Type') %></th>
+        <th scope="col"><%= ts('Creator') %></th>
+        <th scope="col"><%= ts('Admin Note') %></th>
+        <th scope="col"><%= ts('Unreject') %></th>
       </tr>
     </thead>
     <tbody>
@@ -38,7 +39,7 @@
     </table>
   </fieldset>
 
-  <p class="submit actions"><%= submit_tag "Update" %></p>
+  <p class="submit"><%= submit_tag ts('Update') %></p>
 
 <% end %>
 
@@ -46,3 +47,4 @@
 
 <!--subnav-->
 <!--/subnav-->
+</div>

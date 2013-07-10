@@ -5,7 +5,7 @@
       <!-- the artist and their contact info -->
       <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
       <span class="recipient">
-        for
+        <%= ts("for") %>
         <% if assignment.request.nil? %>
           <strong><%= ts("No Recipient!")%></strong>
         <% else %>

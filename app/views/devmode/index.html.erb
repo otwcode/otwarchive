@@ -1,8 +1,9 @@
-<h1><%= t('.devmode', :default => "Devmode") %></h1>
-<table>
-<tr><td>Generate users</td><td><a href="devmode/seedusers">Create seed users</a></td></tr>
-<tr><td>Generate works</td><td><a href="devmode/seedworks">Create seed works, comments, etc.</a> - Don't do it on a database you value!</td></tr>
-<tr><td>Inspect controllers/views</td><td><a href="devmode/list_controllers">See a dynamic list of active controllers, and drill down through views.</a></td></tr>
-<tr><td>Unregister all imported works</td><td><a href="devmode/unregister_imports">Unregister all imported works</a> - Causes the archive to forget every URL that's ever been imported, so they can be imported again. </td></tr>
-<tr><td>Show profiling logs</td><td><a href="devmode/profile_logs">Show profile logs</a></td></tr>
-</table>
+<h1><%= ts('Devmode') %></h1>
+
+<ul>
+  <li><a href="devmode/seedusers"><%= ts("Create seed users") %></a></li>
+  <li><a href="devmode/seedworks"><%= ts("Create seed works, comments, etc.") %></a> <span class="warning">Don't do it on a database you value!</span></li>
+  <li><a href="devmode/list_controllers"><%= ts("See a dynamic list of active controllers, and drill down through views.") %></a></li>
+  <li><a href="devmode/unregister_imports"><%= ts("Unregister all imported works") %></a> <span>Causes the archive to forget every URL that's ever been imported, so they can be imported again.</span></li>
+  <li><a href="devmode/profile_logs"><%= ts("Show profile logs") %></a></li>
+</ul>

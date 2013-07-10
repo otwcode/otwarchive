@@ -87,6 +87,11 @@ a.cloud8 {
     box-shadow: 1px 1px 5px #aaa;
 }
 
+#outer.wrapper {
+  float: left;
+  width: 100%;
+}
+
 #outer.wrapper, #inner.wrapper {
     box-shadow: none;
 }
@@ -176,7 +181,6 @@ li.relationships {
 }
 
 .icon {
-  background: #900 url("/images/imageset.png") no-repeat 0px -75px;
   height: 100px;
   width: 100px;
   margin: 0;

@@ -12,7 +12,7 @@ class InviteRequestsController < ApplicationController
   def show
     @invite_request = InviteRequest.find_by_email(params[:email])
     unless (request.xml_http_request?) || @invite_request
-      setflash; flash[:error] = "Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help."
+      setflash; flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
       redirect_to invite_requests_url and return
     end
     respond_to do |format|
@@ -26,7 +26,7 @@ class InviteRequestsController < ApplicationController
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
-      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}."
+      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
     else
       render :action => :index
@@ -34,7 +34,7 @@ class InviteRequestsController < ApplicationController
   end
   
   def manage
-    @invite_requests = InviteRequest.find(:all, :order => :position)
+    @invite_requests = InviteRequest.order(:position).page(params[:page])
   end
   
   def reorder

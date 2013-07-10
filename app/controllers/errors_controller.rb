@@ -31,7 +31,7 @@ class ErrorsController < ApplicationController
   %w(403 404 422 500 502).each do |error_code|
     define_method error_code.to_sym do
       respond_to do |format|
-        format.html { render error_code, :status => error_code }
+        format.any(:html, :text, :pdf, :mobi, :epub) { render error_code, :status => error_code }
         format.any(:js) { head error_code }
       end
     end

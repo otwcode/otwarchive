@@ -139,8 +139,11 @@ class ChallengeAssignmentsController < ApplicationController
 
   def show
     unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user
-      setflash; flash[:error] = "You aren't allowed to see that assignment!"
+      setflash; flash[:error] = ts("You aren't allowed to see that assignment!")
       redirect_to "/" and return
+    end
+    if @challenge_assignment.defaulted?
+      setflash; flash[:notice] = ts("This assignment has been defaulted-on.")
     end
   end
 

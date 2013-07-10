@@ -473,6 +473,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -526,6 +528,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -661,19 +667,18 @@
           
           <div class="method-source-code" id="series_list_for_feeds-source">
             <pre><span class="ruby-comment"># File app/helpers/series_helper.rb, line 28</span>
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">series_list_for_feeds</span>(<span class="ruby-identifier">work</span>)
-    <span class="ruby-identifier">series</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">series</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">series</span>.<span class="ruby-identifier">empty?</span>
-      <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;None&quot;</span>
-    <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">list</span> = []
-      <span class="ruby-keyword">for</span> <span class="ruby-identifier">s</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">series</span>
-        <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Part #{s.serial_works.where(:work_id =&gt; work.id).select(:position).first.position} of 
-#{link_to(s.title, s)}&quot;</span>
-      <span class="ruby-keyword">end</span>
-      <span class="ruby-keyword">return</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">series_list_for_feeds</span>(<span class="ruby-identifier">work</span>)
+  <span class="ruby-identifier">series</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">series</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">series</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-string">&quot;None&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">list</span> = []
+    <span class="ruby-keyword">for</span> <span class="ruby-identifier">s</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">series</span>
+      <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Part #{s.serial_works.where(:work_id =&gt; work.id).select(:position).first.position} of #{link_to(s.title, s)}&quot;</span>
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span></pre>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
           </div><!-- series_list_for_feeds-source -->
           
         </div>
@@ -700,7 +705,7 @@
 
           
           <div class="method-source-code" id="series_removal_confirmation-source">
-            <pre><span class="ruby-comment"># File app/helpers/series_helper.rb, line 43</span>
+            <pre><span class="ruby-comment"># File app/helpers/series_helper.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">series_removal_confirmation</span>(<span class="ruby-identifier">series</span>, <span class="ruby-identifier">user</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">series</span>.<span class="ruby-identifier">work_pseuds</span> &amp; <span class="ruby-identifier">user</span>.<span class="ruby-identifier">pseuds</span>).<span class="ruby-identifier">empty?</span>
     <span class="ruby-string">&quot;You're listed as an author of works in this series. Do you want to remove yourself as an author of this series and all of its works?&quot;</span>

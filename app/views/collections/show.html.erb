@@ -1,19 +1,19 @@
 <div id="collection-page" class="collection home">
 
-  <%= render :partial => "collections/header", :locals => {:collection => @collection} %>
+  <%= render "collections/header", :collection => @collection %>
 
   <!--main content-->
   <% # expects @works, @bookmarks %>  
   <% unless @works.blank? %>
-    <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
+    <%= render 'works_module', :collection => @collection, :works => @works %>
   <% end %>
 
   <% unless @bookmarks.blank? %>
-    <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
+    <%= render 'bookmarks_module', :collection => @collection, :bookmarks => @bookmarks %>
   <% end %>
 
   <% if @works.blank? && @bookmarks.blank? %>
-    <p class="alt message">There are no works or bookmarks in this collection yet.</p>
+    <p class="alt message"><%= ts("There are no works or bookmarks in this collection yet.") %></p>
   <% end %>
   <!--/content-->
   

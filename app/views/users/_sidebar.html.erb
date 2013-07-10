@@ -5,13 +5,11 @@
   <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login)) + ' &#8595;').html_safe %>
-      <a class="pseud_switcher_open open" title="Pseuds"><%= pseud_link_text %></a>
-      <a class="pseud_switcher_close close" title="Pseuds"><%= pseud_link_text %></a>
-      <ul id="pseud_switcher" class="toggled secondary">
-          <%= print_pseud_selector(@user.pseuds) %>
+      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
+      <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
+      <ul class="expandable secondary">
+        <%= print_pseud_selector(@user.pseuds) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
-        <li><a class="pseud_switcher_close close action" style='cursor: pointer;' title="Close Pseud Switcher">X</a></li>
       </ul>
     </li>
 	<% end %>
@@ -25,17 +23,17 @@
 	
 <h4 class="landmark heading"><%= ts("Pitch")%></h4>
 <ul class="navigation actions">
-	<li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li>
+	<li><%= print_works_link(@user, @pseud) %></li>
 	<% if @user == current_user %>
 	  <li><%= span_if_current ts("Drafts") + " (#{@user.unposted_works.size})", drafts_user_works_path(@user) %></li>
   <% end %>
-	<li><%= @author ? print_pseud_series_link(@author) : print_series_link(@user) %></li>
+	<li><%= print_series_link(@user, @pseud) %></li>
 
 	<% unless @user == User.orphan_account %>
-	  <li><%= @author ? print_pseud_bookmarks_link(@author) : print_bookmarks_link(@user) %></li>
+	  <li><%= print_bookmarks_link(@user, @pseud) %></li>
 	<% end %>
 
-  <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.owned_collections.count), user_collections_path(@user) %></li>
+  <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.maintained_collections.count), user_collections_path(@user) %></li>
 </ul>
 	
 <% if @user == current_user %>
@@ -53,7 +51,7 @@
 <h4 class="landmark heading"><%= ts("Switch")%></h4>
 <ul class="navigation actions">
   <% if @user == current_user %>
-    <li><%= span_if_current ts("Signups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
+    <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
     <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
     <li><%= span_if_current ts("Claims (%{claim_number})", :claim_number => (@user.request_claims.unposted.count)), user_claims_path(@user) %></li>
     <li><%= span_if_current ts("Related Works (%{related_works_number})", :related_works_number => (@user.related_works.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>

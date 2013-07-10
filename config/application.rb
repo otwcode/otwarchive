@@ -15,9 +15,9 @@ module Otwarchive
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += %W(#{Rails.root}/lib)
-    config.autoload_paths += %W(#{Rails.root}/app/models/challenge)
     config.autoload_paths += %W(#{Rails.root}/app/sweepers)
-    config.autoload_paths += %W(#{Rails.root}/app/challenge)
+    config.autoload_paths += %W(#{Rails.root}/app/models/challenge_models)
+    config.autoload_paths += %W(#{Rails.root}/app/models/tagset_models)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -26,7 +26,7 @@ module Otwarchive
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-    config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_observer, :kudo_observer
+    config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_preference_observer, :kudo_observer, :response_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -58,6 +58,9 @@ module Otwarchive
     config.active_record.schema_format = :sql
 
     ### end of preservation section
+    
+    # handle errors with custom error pages:
+    config.exceptions_app = self.routes
 
   end
 end

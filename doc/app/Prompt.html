@@ -517,6 +517,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -570,6 +572,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -1008,14 +1014,14 @@ people</p>
             <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;none&quot;</span>) <span class="ruby-operator">:</span>
             <span class="ruby-node">&quot;(#{tag_count}) -- &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">taglist</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DELIMITER_FOR_OUTPUT</span>)
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">allowed</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.&quot;</span>,
-                               <span class="ruby-value">:taglist</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">taglist_string</span>))
+          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type}: your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.&quot;</span>,
+            <span class="ruby-value">:taglist</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">taglist_string</span>))
         <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">required</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">allowed</span>
-          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.&quot;</span>,
-            <span class="ruby-value">:required</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">required</span>, <span class="ruby-value">:taglist</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">taglist_string</span>))
+          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type}: your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.&quot;</span>,
+            <span class="ruby-value">:required</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">required</span>))
         <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.&quot;</span>,
-            <span class="ruby-value">:required</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">required</span>, <span class="ruby-value">:allowed</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">allowed</span>, <span class="ruby-value">:taglist</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">taglist_string</span>))
+          <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^#{prompt_type}: your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.&quot;</span>,
+            <span class="ruby-value">:required</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">required</span>, <span class="ruby-value">:allowed</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">allowed</span>))
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>

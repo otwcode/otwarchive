@@ -18,30 +18,27 @@ class SeriesController < ApplicationController
       unless @user
         raise ActiveRecord::RecordNotFound and return
       end
-      @page_subtitle = ts("by ") + @user.login
+      @page_subtitle = ts("%{username} - Series", username: @user.login)
       pseuds = @user.pseuds
       if params[:pseud_id]
-        @author = @user.pseuds.find_by_name(params[:pseud_id])
-        unless @author
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @pseud
           raise ActiveRecord::RecordNotFound and return
         end
-        @page_subtitle = ts("by ") + @author.byline
-        pseuds = [@author]
+        @page_subtitle = ts("by ") + @pseud.byline
+        pseuds = [@pseud]
       end
     end
-    if pseuds        
-      if current_user.nil?
-        @series = Series.visible_to_all.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
-      else
-        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
-      end
+
+    if current_user.nil?
+      @series = Series.visible_to_all
     else
-      if current_user.nil?
-        @series = Series.visible_to_all.paginate(:page => params[:page])
-      else
-        @series = Series.visible_to_registered_user.paginate(:page => params[:page])
-      end
+      @series = Series.visible_to_registered_user
     end
+    if pseuds.present?
+      @series = @series.exclude_anonymous.for_pseuds(pseuds)
+    end
+    @series = @series.paginate(:page => params[:page])
   end
 
   # GET /series/1

@@ -1,0 +1,17 @@
+
+*** These modified files were found in JOE when it aborted on Wed Jul 10 07:26:49 2013
+*** JOE was aborted by UNIX signal 1
+
+*** File '(Unnamed)'
+.git/MERGE_MSG
+
+*** File '.git/MERGE_MSG'
+h
+
+Merge branch 'master' of git://github.com/otwcode/otwarchive
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+# 
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.

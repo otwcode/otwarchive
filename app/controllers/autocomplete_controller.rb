@@ -173,6 +173,8 @@ class AutocompleteController < ApplicationController
   
 private
 
+  # Because of the respond_to :json at the top of the controller, this will return a JSON-encoded
+  # response which the autocomplete javascript on the other end should be able to handle :)
   def render_output(result_strings)
     if result_strings.first.is_a?(String)
       respond_with(result_strings.map {|str| {:id => str, :name => str}})
