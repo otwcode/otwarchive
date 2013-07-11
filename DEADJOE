@@ -15,3 +15,82 @@ Merge branch 'master' of git://github.com/otwcode/otwarchive
 # 
 # Lines starting with '#' will be ignored, and an empty message aborts
 # the commit.
+
+*** These modified files were found in JOE when it aborted on Thu Jul 11 07:00:18 2013
+*** JOE was aborted because the terminal closed
+
+*** File '(Unnamed)'
+.git/COMMIT_EDITMSG
+
+*** File '.git/COMMIT_EDITMSG'
+exit
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# Explicit paths specified without -i nor -o; assuming --only paths...
+# On branch admin_mailer_spec
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   Gemfile
+#
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   Gemfile.lock
+#	deleted:    vendor/plugins/faker/MIT-LICENSE
+#	deleted:    vendor/plugins/faker/README
+#	deleted:    vendor/plugins/faker/Rakefile
+#	deleted:    vendor/plugins/faker/init.rb
+#	deleted:    vendor/plugins/faker/install.rb
+#	deleted:    vendor/plugins/faker/lib/extensions/array.rb
+#	deleted:    vendor/plugins/faker/lib/extensions/object.rb
+#	deleted:    vendor/plugins/faker/lib/faker.rb
+#	deleted:    vendor/plugins/faker/lib/faker/address.rb
+#	deleted:    vendor/plugins/faker/lib/faker/company.rb
+#	deleted:    vendor/plugins/faker/lib/faker/internet.rb
+#	deleted:    vendor/plugins/faker/lib/faker/lorem.rb
+#	deleted:    vendor/plugins/faker/lib/faker/name.rb
+#	deleted:    vendor/plugins/faker/lib/faker/phone_number.rb
+#	deleted:    vendor/plugins/faker/lib/faker/version.rb
+#	deleted:    vendor/plugins/faker/test/faker_test.rb
+#	deleted:    vendor/plugins/faker/uninstall.rb
+#
+
+*** These modified files were found in JOE when it aborted on Thu Jul 11 07:04:33 2013
+*** JOE was aborted because the terminal closed
+
+*** File '(Unnamed)'
+.git/COMMIT_EDITMSG
+
+*** File '.git/COMMIT_EDITMSG'
+removed fakerH
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# Explicit paths specified without -i nor -o; assuming --only paths...
+# On branch admin_mailer_spec
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   DEADJOE
+#	modified:   Gemfile
+#	modified:   Gemfile.lock
+#	deleted:    vendor/plugins/faker/MIT-LICENSE
+#	deleted:    vendor/plugins/faker/README
+#	deleted:    vendor/plugins/faker/Rakefile
+#	deleted:    vendor/plugins/faker/init.rb
+#	deleted:    vendor/plugins/faker/install.rb
+#	deleted:    vendor/plugins/faker/lib/extensions/array.rb
+#	deleted:    vendor/plugins/faker/lib/extensions/object.rb
+#	deleted:    vendor/plugins/faker/lib/faker.rb
+#	deleted:    vendor/plugins/faker/lib/faker/address.rb
+#	deleted:    vendor/plugins/faker/lib/faker/company.rb
+#	deleted:    vendor/plugins/faker/lib/faker/internet.rb
+#	deleted:    vendor/plugins/faker/lib/faker/lorem.rb
+#	deleted:    vendor/plugins/faker/lib/faker/name.rb
+#	deleted:    vendor/plugins/faker/lib/faker/phone_number.rb
+#	deleted:    vendor/plugins/faker/lib/faker/version.rb
+#	deleted:    vendor/plugins/faker/test/faker_test.rb
+#	deleted:    vendor/plugins/faker/uninstall.rb
+#
