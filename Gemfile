@@ -84,7 +84,10 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+<<<<<<< HEAD
   gem 'email_spec'
+=======
+>>>>>>> 6bde3ee5bdccd3885d738a8e5262d7ec94107ef8
 end
 
 gem 'tolk'
