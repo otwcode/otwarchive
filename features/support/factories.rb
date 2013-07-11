@@ -1,3 +1,4 @@
+require 'faker'
 FactoryGirl.define do
   factory :user do |f|
     f.sequence(:login) { |n| "testuser#{n}" }
@@ -157,5 +158,20 @@ FactoryGirl.define do
       signup.offers.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
+  end
+
+  factory :abuse_report do
+    email {Faker::Internet.email}
+    url {"http://#{ArchiveConfig.APP_HOST}/works/685590"}
+    comment {Faker::Lorem.paragraph(3)}
+    category {1}
+    cc_me false
+  end
+
+  factory :feedback do
+    email {Faker::Internet.email}
+    category 11483
+    summary {Faker::Lorem.word}
+    comment {Faker::Lorem.paragraph(2)}
   end
 end
