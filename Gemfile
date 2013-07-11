@@ -87,8 +87,6 @@ group :test do
   gem 'email_spec'
 end
 
-gem 'tolk'
-gem 'paperclip'
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
 gem 'rvm-capistrano'
