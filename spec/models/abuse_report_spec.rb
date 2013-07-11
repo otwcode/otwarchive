@@ -42,4 +42,14 @@ describe AbuseReport do
     end
   end
 
+  context "abuse_report cc_me" do
+    it "is invalid if an email is not provided" do
+      build(:abuse_report, email: nil, cc_me: true)
+    end
+
+    it "is valid if an email is provided" do
+      build(:abuse_report, cc_me: true)
+    end
+  end
+
 end

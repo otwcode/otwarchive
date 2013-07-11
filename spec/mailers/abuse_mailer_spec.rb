@@ -1,6 +1,6 @@
 require 'spec_helper'
 describe AdminMailer do
-  context "#abuse_reports with email" do
+  context "abuse_reports with email" do
     let(:report) {create(:abuse_report)}
     let(:mail) {AdminMailer.abuse_report(report.id)}
 
@@ -30,7 +30,7 @@ describe AdminMailer do
 
   end
 
-  context "#abuse_reports without email" do
+  context "abuse_reports without email" do
     let(:report) {create(:abuse_report)}
     let(:mail) {AdminMailer.abuse_report(report.id)}
 
@@ -55,4 +55,10 @@ describe AdminMailer do
     end
 
   end
+
+  context "abuse_reports sends copy if cc_me is checked" do
+   pending
+  end
+
+
 end
