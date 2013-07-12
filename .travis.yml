@@ -3,7 +3,7 @@ env:
     - secure: "hxowDd+uosiHCnDVhSvFvvkqbFbfqrIuwBJMOQBD8tDD+jva+Sc4Y0N1SCwj\nNpa8KRfSrpBPdw1gW8mWxg0ZOoWqAhSuCqE0Tgi827AfkRXAWwnZ+37TGjFG\n6YdWAHdJ+zaWlMYhhQzHLW0uUxNKjiuCYuDnCXlcehvYK9UXulU="
     - secure: "ME9CJoiEDFtQLVAxVYDRmBqyAHX85an2cwdo03XgC7y8bBdJ2AclJtNEt3p8\no6yNrs4aiSQoXZGelXsIZJXUr62TISNdZQdM4fFKqIN/G4mhx5hFCwMHqjyn\nJUGjAzvYc4mQnRMa2G2W2aEsXDdKMZG2K6WpUUm53GPmdqG9cpM="
 rvm:
-  - "1.9.2-p320"
+  - "1.9.3"
 services:
   - elasticsearch
   - redis-server
