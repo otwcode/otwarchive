@@ -1,5 +1,5 @@
 require 'vcr'
-
+unless ENV['TRAVIS']
 VCR.configure do |c|
   c.cassette_library_dir     = 'features/cassette_library'
   c.hook_into                :fakeweb
@@ -58,3 +58,4 @@ VCR.cucumber_tags do |t|
   t.tags '@work_external_language'
 end
 
+end
