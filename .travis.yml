@@ -1,7 +1,7 @@
 env:
   global:
-    - secure: "noUKHdLXx5kbjVhvUbMtAm05Ezl+OnA5MjlEPGc0QBtWzhWwNJ76KU6xFjnV\ny3cH9+dVCMDBO+iFRj+Tuk+pARGvinF63thaPn50goCUrXb5FE809A+elDYg\nmKAtm+rspF0ne3XCJa5XDQDxxTitPx405zIXcwe7aroygGVe85k="
-    - secure: "aM8rVH4vLVQDmmMuYs0wPOYA8QbkQg2cirJuKQPKBvPeMR86TmNFwtHjZw2J\nZ4Baz5JchjPc4gMykkIiA9iqosn/mBWg/+lmB8poBX7bOB3ZLK0mkSkmAHgA\nAe38mMc4ZrRwb8KhvQnec9peNZ3IXNLzYuY4cWMiQBuVtjImFKY="
+    - SAUCE_USERNAME=otw-adt
+    - SAUCE_ACCESS_KEY=07b82b94-79d9-4904-ba98-7566069173ff
 rvm:
   - "1.9.3"
 services:
