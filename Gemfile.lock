@@ -336,6 +336,7 @@ DEPENDENCIES
   newrelic_rpm (>= 3.5.3.25)
   nokogiri (>= 1.4.2)
   paperclip
+  parallel_tests
   permit_yo
   pickle
   rails (= 3.2.13)

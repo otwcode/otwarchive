@@ -35,6 +35,7 @@ Capybara.configure do |config|
   config.ignore_hidden_elements = false
 end
 
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin

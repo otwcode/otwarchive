@@ -1,0 +1,9 @@
+// config/sauce_browser_matrix.json
+
+// see https://saucelabs.com/docs/platforms
+[
+//  [platform       browser             version   options ]
+    ["Windows 7",  "Internet Explorer",  "9",      "--tags ~@no-svg" ],
+    ["Windows XP", "Internet Explorer",  "8",      "--tags ~@svg" ],
+    ["Windows 7",  "Firefox",            "21",     "--tags ~@no-svg" ]
+]

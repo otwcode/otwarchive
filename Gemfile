@@ -85,6 +85,7 @@ group :test do
   gem 'faker'
   gem 'sauce-cucumber', :require => false
   gem 'sauce-connect'
+  gem 'parallel_tests'
 end
 
 # Deploy with Capistrano
