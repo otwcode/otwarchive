@@ -83,6 +83,8 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'sauce-cucumber', :require => false
+  gem 'sauce-connect'
 end
 
 # Deploy with Capistrano

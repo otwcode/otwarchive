@@ -1,11 +1,8 @@
 env:
-  - TEST_GROUP=importing
-  - TEST_GROUP=challenges
-  - TEST_GROUP=collections
+  global:
+    - secure: "hxowDd+uosiHCnDVhSvFvvkqbFbfqrIuwBJMOQBD8tDD+jva+Sc4Y0N1SCwj\nNpa8KRfSrpBPdw1gW8mWxg0ZOoWqAhSuCqE0Tgi827AfkRXAWwnZ+37TGjFG\n6YdWAHdJ+zaWlMYhhQzHLW0uUxNKjiuCYuDnCXlcehvYK9UXulU="
+    - secure: "ME9CJoiEDFtQLVAxVYDRmBqyAHX85an2cwdo03XgC7y8bBdJ2AclJtNEt3p8\no6yNrs4aiSQoXZGelXsIZJXUr62TISNdZQdM4fFKqIN/G4mhx5hFCwMHqjyn\nJUGjAzvYc4mQnRMa2G2W2aEsXDdKMZG2K6WpUUm53GPmdqG9cpM=" 
   - TEST_GROUP=users
-  - TEST_GROUP=works
-  - TEST_GROUP=tags_and_wrangling
-  - TEST_GROUP=other
 rvm:
   - "1.9.2-p320"
 services:
@@ -18,6 +15,7 @@ script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec cucumber -f progress -r features features/$TEST_GROUP -b
 before_script:
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
   - mysql -e 'create database otwarchive_test;'
   - cp config/database.travis.yml config/database.yml
   - cp config/newrelic.example config/newrelic.yml

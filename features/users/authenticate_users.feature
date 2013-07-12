@@ -1,5 +1,6 @@
 @users
 @admin
+@selenium
 Feature: User Authentication
 
   Scenario: Forgot password
