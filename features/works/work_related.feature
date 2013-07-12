@@ -77,7 +77,7 @@ Scenario: Can approve a relationship
     And I should see "Translation into Deutsch available:" within ".notes"
     And I should see "Worldbuilding Translated by translator" within ".notes"
     And I should see "Works inspired by this one:"
-    And I should see "Worldbuilding Translated by translator" within "li"
+    And I should see "Worldbuilding Translated by translator" within "div.preface h4"
 
 Scenario: Approved work appears
 

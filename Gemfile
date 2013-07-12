@@ -83,6 +83,9 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'sauce-cucumber', :require => false
+  gem 'sauce-connect'
+  gem 'parallel_tests'
 end
 
 # Deploy with Capistrano

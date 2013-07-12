@@ -1,5 +1,6 @@
 @users
 @admin
+@selenium
 Feature: User Authentication
 
   Scenario: Forgot password
@@ -141,8 +142,8 @@ Feature: User Authentication
       | login | user  | action                   |
       | sam   | sam   | not see "Log In"         |
       | sam   | sam   | see "Log Out"            |
-      | sam   | sam   | see "Preferences" within "#dashboard .navigation li"    |
+      | sam   | sam   | see "Preferences" within "#dashboard"    |
       | sam   | dean  | see "Log Out"            |
-      | sam   | dean  | not see "Preferences" within "#dashboard .navigation li" |
+      | sam   | dean  | not see "Preferences" within "#dashboard" |
       | sam   | dean  | not see "Log In"         |
 

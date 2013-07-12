@@ -17,7 +17,7 @@ http_interactions:
       message: OK
     headers: 
       date: 
-      - Wed, 19 Jun 2013 21:24:37 GMT
+      - Fri, 12 Jul 2013 00:38:44 GMT
       server: 
       - Apache
       cache-control: 
@@ -25,7 +25,7 @@ http_interactions:
       p3p: 
       - policyref="/w3c/p3p.xml", CP="NOI DSP COR CURa OUR STP"
       set-cookie: 
-      - userinfo=__19501b5fbcdab3d6031e%3B%7B%22username%22%3A%22%22%2C%22uniqueid%22%3A%222f7d1af53b796a32c360a300abce4b1a%22%2C%22vd%22%3A%221371677077%2C1371677077%2C1371677077%2C1%2C1%2C0%2C1%2C0%2C1%2C1371677077%2C1371677077%2C1%2C1%2C0%2C1371677077%2C2%2C0%22%7D; expires=Fri, 19-Jul-2013 21:24:37 GMT; path=/; domain=.deviantart.com
+      - userinfo=__02d63a26714cdfc28cf8%3B%7B%22username%22%3A%22%22%2C%22uniqueid%22%3A%22a39183c9e056d14811f9eac6a0bae2c1%22%2C%22vd%22%3A%221373589524%2C1373589524%2C1373589524%2C1%2C1%2C0%2C1%2C0%2C1%2C1373589524%2C1373589524%2C1%2C1%2C0%2C1373589524%2C2%2C0%22%7D; expires=Sun, 11-Aug-2013 00:38:44 GMT; path=/; domain=.deviantart.com
       transfer-encoding: 
       - chunked
       content-type: 
@@ -34,7 +34,11 @@ http_interactions:
       encoding: US-ASCII
       string: |
         <!DOCTYPE html>
-        <html>
+        <!--[if IE 8]><html class="ie eq8 lt9 lt10 "><![endif]-->
+        <!--[if IE 9]><html class="ie eq9 lt10 "><![endif]-->
+        <!--[if IE 10]><html class="ie eq10 "><![endif]-->
+        <!--[if gt IE 10]><html class="ie "><![endif]-->
+        <!--[if !IE]><!--><html><!--<![endif]-->
         <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
@@ -87,9 +91,9 @@ http_interactions:
         <meta name="og:description" content="This is the description of the story above.">
         <meta name="title" content="AO3 testing text by ~cesy12 on deviantART">
         
-        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/deviantart-network.css?1259298876" media="Screen,Projection,TV">
-        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/v6core.css?2287673543" media="Screen,Projection,TV">
-        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/group_secrets.css?31607188612" media="Screen,Projection,TV"><!--[if IE]>
+        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/deviantart-network.css?2837861534" media="Screen,Projection,TV">
+        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/v6core.css?4100497169" media="Screen,Projection,TV">
+        <link rel="stylesheet" type="text/css" href="http://st.deviantart.net/css/group_secrets.css?2335335083" media="Screen,Projection,TV"><!--[if IE]>
         <link href="http://www.deviantart.com/favicon_hd.ico" rel="shortcut icon"/>
         <meta name="application-name" content="deviantART" />
         <meta name="msapplication-starturl" content="http://www.deviantart.com/" />
@@ -99,22 +103,19 @@ http_interactions:
         <link href="http://cesy12.deviantart.com/art/AO3-testing-text-196158032" rel="canonical">
         <script type="text/javascript">
         if (!window.deviantART) deviantART = {};deviantART.deviant ={};
-        deviantART.pageData={"tao":{"minibrowseads":{"token":"tao-mba-1-c","version":1,"group":"control"}},"deviation_initial_hit_ref_unknown":true,"deviation_initial_hit_ref_external":false,"deviationid":196158032,"catpath":"scraps","custom_fullview":0,"pimp_deviation_artist":"cesy12","is_not_favouritable":0,"deviation_has_print":0,"deviation_is_unlockable":0,"deviation_is_recent":false,"deviation_width":150,"deviation_height":138,"deviation_width_fullview":150,"deviation_height_fullview":138,"pimp_me":null,"overlay_sponsor":1,"user":{"symbol":"","username":""},"ads":{"deviation_banner_textad":1,"atf_right_300x250":1,"btf_right_300x250":1},"dwait_total":4};
+        deviantART.pageData={"deviation_initial_hit_ref_unknown":true,"deviation_initial_hit_ref_external":false,"deviationid":196158032,"catpath":"scraps","custom_fullview":0,"pimp_deviation_artist":"cesy12","is_not_favouritable":0,"deviation_has_print":0,"deviation_is_unlockable":0,"deviation_is_recent":false,"deviation_width":150,"deviation_height":138,"deviation_width_fullview":150,"deviation_height_fullview":138,"pimp_me":null,"overlay_sponsor":1,"user":{"symbol":"","username":""},"ads":{"deviation_banner_textad":1,"atf_right_300x250":1,"btf_right_300x250":1},"dwait_total":4};
         AdHug={apply: function (a,b,c,d) { DWait.ready("jms/chrome/adhug.js", DWait.bind(this, function () { AdHug.apply.apply(this, arguments) }, [a,b,c,d]));DWait.ready("cssms/chrome/ad-hug.css", new Function); }}
         </script>
         <script type="text/javascript">(function(f){var c=function(k){if(!k||typeof k!=="object"||k.nodeType||k==f){return false}var h=Object.prototype.hasOwnProperty;try{if(k.constructor&&!h.call(k,"constructor")&&!h.call(k.constructor.prototype,"isPrototypeOf")){return false}}catch(j){return false}var i;for(i in k){}return i===undefined||h.call(k,i)};var d=function(k){var i={},h,j;for(h in k){if(c(k[h])){i[h]=d(k[h])}else{i[h]=k[h]}}return i};var a=Array.isArray||function(h){return Object.prototype.toString.call(h)==="[object Array]"};var b={};var e=/^.*\..*$/;var g=function(k){if(!k){return}if(typeof k==="function"){throw"Glbl isn't meant to store functions, yo"}if(a(k)){for(var j=0,h=k.length;j<h;j++){g(k[j])}}else{if(c(k)){for(var j in k){g(k[j])}}}};f.Glbl=function(h,i){if(arguments.length==1){i=b[h];if(c(i)){i=d(i)}return i}else{if(typeof h!=="string"||!e.test(h)){console.trace();throw"Glbl keys need to be namespaced (dot-separated)"}g(i);if(c(i)){i=d(i)}b[h]=i;return i}};f.Glbl.dflt=function(i,j){if(c(i)){if(j!==undefined){throw"Misuse of Glbl, you cannot pass a dictionary AND a default value"}for(var h in i){Glbl.dflt(h,i[h])}}else{if(Glbl(i)===undefined){Glbl(i,j)}}};f.Glbl.plus=function(h,i){if(arguments.length===1){i=1}g(i);return Glbl(h,Glbl(h)+i)};f.Glbl.minus=function(h,i){if(arguments.length===1){i=1}g(i);return Glbl(h,Glbl(h)-i)};f.Glbl.match=function(j){var h={};for(var i in b){if(j.test(i)){h[i]=b[i]}}return h};f.Glbl.del=function(h){if(b[h]!==undefined){delete b[h]}}})(window);</script>
-        <script type="text/javascript">window.deviantART||(window.deviantART={}),function(){var e=function(){};window.breakpoint||(window.breakpoint=e),window.console||(window.console={log:e,trace:e,info:e,warn:e}),window.ddt||(window.ddt={log:e,info:e,warn:e,watch:e,unwatch:e,watching:e,alert:e})}(),DWait={X:[],L:{},T:{},R:{},D:"jms/dwait/download.js",MC:((window.deviantART||{}).pageData||{}).dwait_total||0,ready:function(e,t){var n,r;e instanceof Array||(e=[e]),t instanceof Array||(t=[this,t]),typeof t[1]=="string"&&(t[1]=new Function(t[1])),r={};for(n=0;n!=e.length;n++)r[e[n]]=1;DWait.X.push({m:r,c:t}),DWait.fire();for(n=0;n!=e.length;n++)DWait._trip(e[n])},_trip:function(e){if(!DWait.L[e]&&DWait.T[e]&&e!=DWait.D){var t=DWait.T[e];DWait.ready(DWait.D,function(){DWait.download(t,function(){DWait.unroll(t)})})}},count:function(){--DWait.MC||setTimeout(function(){DWait.run(".allready")},1)},fire:function(){var e,t,n,r;for(e=0;r=!1,n=this.X[e];e++){for(t in n.m){if(!this.L[t]){r=!0;break}delete n.m[t]}if(r)continue;this.X.splice(e,1),e--,n.c[1].apply(n.c[0],(n.c[2]||[]).concat([this.L[t]])),setTimeout(function(){DWait.fire()},1);break}},run:function(e,t,n){e.indexOf("__")>0&&console.log("[DWait] Running branched file: ",e),this.L[e.replace(/__([A-Za-z0-9-_]+)/,"")]=t||1,this.T[e]&&!n&&this.unroll(this.T[e],t),DWait.fire()},unroll:function(e,t){e instanceof Array||(e=[e]);var n,r,i,s,o;for(n=0;r=e[n];n++){r=r.replace(/\?.*/,""),i=this.R[r];if(i)for(s=0;o=i[s];s++)!this.L[o]&&this._is_css.test(o)&&this.run(o,t,!0);delete this.R[r]}},_is_css:/\.css$/,N:[],readyLink:function(e,t,n){var r;window.event&&(window.event.cancelBubble=!0),n instanceof Array||(n=[t,n,[]]);if(!this.L[e]){for(r=0;r!=this.N.length;r++)if(this.N[r]==t)return!1;this.N.push(t),t.style.cursor="wait",t.className+=" active",this.ready(e,[this,this.fixLink,[t]])}this.ready.call(t,e,n);if(t.blur)try{t.blur()}catch(i){}return!1},linkCheck:function(e,t){return!0},fixLink:function(e){var t;e.style.cursor="pointer",e.className=e.className.replace(/\bactive\b/,"");for(t=0;t!=this.N.length;t++)if(this.N[t]==e)return this.N.splice(t,1)},bind:function(e,t,n){return[e,t,n]},loadDownloadMap:function(e){this.T=e,this.retrip()},loadRollupMap:function(e){this.R=e},retrip:function(){for(var e=this.X.length;e--;)for(var t in this.X[e].m)this._trip(t)},replay:function(){DWait.replay.active=!0;try{$(document.body).on("click.dwait",function(e){e.preventDefault()}).find(".dwaiting").removeClass("dwaiting active").gmiWake().click().end().off("click.dwait")}finally{DWait.replay.active=!1}}},function(){function o(t){t=t||window.event;var n=t.target||t.srcElement,i=n,s=n,o=r+t.type,a,f=t.type&&t.type=="click"&&(!DWait.replay||!DWait.replay.active);while(n&&!(n.getAttribute&&(a=n.getAttribute(o))||f&&/\bdwait\b/.test(n.className)))n=n.parentNode;if(t.type==="click"&&!t.defaultPrevented&&t.returnValue!==!1&&(t.altKey||t.ctrlKey||t.metaKey||t.shiftKey))do if(s.nodeName==="A"){if(s.href&&s.href.indexOf("javascript:")!==0&&s.href!=="#")return!0;break}while(s=s.parentNode);var l=function(){t.stopPropagation?t.stopPropagation():t.cancelBubble=!0,t.preventDefault?t.preventDefault():t.returnValue=!1};return a?n.dwait_init_done?!0:(l(),n.dwait_init_id?t.type=="click"&&(e[n.dwait_init_id]=i):u(a,n,t),!1):f&&n&&/\bdwait\b/.test(n.className)?(/\bdwaiting\b/.test(i.className)||(i.className+=" active dwaiting"),DWait.replay.active===undefined&&(DWait.replay.active=!1,DWait.ready([".jqready",".allready"],DWait.replay)),l(),!1):!0}function u(n,s,o){function l(){if(t[n])for(var r=0;r<t[n].length;r++)t[n][r].call(s,s,f);s.dwait_init_done=!0,s.className=s.className.replace(/\binit-waiting\b/,""),e[s.dwait_init_id]&&setTimeout(function(){e[s.dwait_init_id].click()},1)}var u=i++,a=s.getAttribute(r+"deps"),f=o&&o.type?o.type:"domready";s.dwait_init_id=u,f=="click"&&(e[u]=o.target||o.srcElement);if(a&&a.split){a=a.split(","),s.className+=" init-waiting",DWait.ready(a,l);return}l()}var e={},t={},n=["click","mouseover"],r="data-dwait-",i=1,s;DWait.init=function(e,n){t[e]||(t[e]=[]),t[e].push(n)},DWait.init_domready=function(){$("[data-dwait-domready]").each(function(){!this.dwait_init_done&&!this.dwait_init_id&&this.getAttribute&&u(this.getAttribute("data-dwait-domready"),this)})},DWait.ready(".domready",DWait.init_domready);for(s=0;s<n.length;s++)document.addEventListener?document.addEventListener(n[s],o,!1):document.attachEvent&&document.attachEvent("on"+n[s],o)}();
-        </script>
+        <script type="text/javascript">window.deviantART||(window.deviantART={}),function(){var t=function(){};window.breakpoint||(window.breakpoint=t),window.console||(window.console={log:t,trace:t,info:t,warn:t}),window.ddt||(window.ddt={log:t,info:t,warn:t,watch:t,unwatch:t,watching:t,alert:t})}(),DWait={X:[],L:{},T:{},R:{},D:"jms/dwait/download.js",MC:((window.deviantART||{}).pageData||{}).dwait_total||0,ready:function(t,i){var a,e;for(t instanceof Array||(t=[t]),i instanceof Array||(i=[this,i]),"string"==typeof i[1]&&(i[1]=Function(i[1])),e={},a=0;a!=t.length;a++)e[t[a]]=1;for(DWait.X.push({m:e,c:i}),DWait.fire(),a=0;a!=t.length;a++)DWait._trip(t[a])},_trip:function(t){if(!DWait.L[t]&&DWait.T[t]&&t!=DWait.D){var i=DWait.T[t];DWait.ready(DWait.D,function(){DWait.download(i,function(){DWait.unroll(i)})})}},count:function(){--DWait.MC||setTimeout(function(){DWait.run(".allready")},1)},fire:function(){var t,i,a,e;for(t=0;a=this.X[t];t++){e=!1;for(i in a.m){if(!this.L[i]){e=!0;break}delete a.m[i]}if(!e){this.X.splice(t,1),t--,a.c[1].apply(a.c[0],(a.c[2]||[]).concat([this.L[i]])),setTimeout(function(){DWait.fire()},1);break}}},run:function(t,i,a){t.indexOf("__")>0&&console.log("[DWait] Running branched file: ",t),this.L[t.replace(/__([A-Za-z0-9-_]+)/,"")]=i||1,this.T[t]&&!a&&this.unroll(this.T[t],i),DWait.fire()},unroll:function(t,i){t instanceof Array||(t=[t]);var a,e,n,r,o;for(a=0;e=t[a];a++){if(e=e.replace(/\?.*/,""),n=this.R[e])for(r=0;o=n[r];r++)!this.L[o]&&this._is_css.test(o)&&this.run(o,i,!0);delete this.R[e]}},_is_css:/\.css$/,N:[],readyLink:function(t,i,a){var e;if(window.event&&(window.event.cancelBubble=!0),a instanceof Array||(a=[i,a,[]]),!this.L[t]){for(e=0;e!=this.N.length;e++)if(this.N[e]==i)return!1;this.N.push(i),i.style.cursor="wait",i.className+=" active",this.ready(t,[this,this.fixLink,[i]])}if(this.ready.call(i,t,a),i.blur)try{i.blur()}catch(n){}return!1},linkCheck:function(){return!0},fixLink:function(t){var i;for(t.style.cursor="pointer",t.className=t.className.replace(/\bactive\b/,""),i=0;i!=this.N.length;i++)if(this.N[i]==t)return this.N.splice(i,1)},bind:function(t,i,a){return[t,i,a]},loadDownloadMap:function(t){this.T=t,this.retrip()},loadRollupMap:function(t){this.R=t},retrip:function(){for(var t=this.X.length;t--;)for(var i in this.X[t].m)this._trip(i)},replay:function(){DWait.replay.active=!0;try{$(document.body).on("click.dwait",function(t){t.preventDefault()}).find(".dwaiting").removeClass("dwaiting active").gmiWake().click().end().off("click.dwait")}finally{DWait.replay.active=!1}}},function(){function t(t){t=t||window.event;for(var a,n=t.target||t.srcElement,r=n,c=n,d=o+t.type,s=t.type&&"click"==t.type&&!(DWait.replay&&DWait.replay.active);n&&!(n.getAttribute&&(a=n.getAttribute(d))||s&&/\bdwait\b/.test(n.className));)n=n.parentNode;if("click"===t.type&&!t.defaultPrevented&&t.returnValue!==!1&&(t.altKey||t.ctrlKey||t.metaKey||t.shiftKey))do if("A"===c.nodeName){if(c.href&&0!==c.href.indexOf("javascript:")&&"#"!==c.href)return!0;break}while(c=c.parentNode);var l=function(){t.stopPropagation?t.stopPropagation():t.cancelBubble=!0,t.preventDefault?t.preventDefault():t.returnValue=!1};return a?n.dwait_init_done?!0:(l(),n.dwait_init_id?"click"==t.type&&(e[n.dwait_init_id]=r):i(a,n,t),!1):s&&n&&/\bdwait\b/.test(n.className)?(/\bdwaiting\b/.test(r.className)||(r.className+=" active dwaiting"),void 0===DWait.replay.active&&(DWait.replay.active=!1,DWait.ready([".jqready",".allready"],DWait.replay)),l(),!1):!0}function i(t,i,a){function r(){if(n[t])for(var a=0;n[t].length>a;a++)n[t][a].call(i,i,l);i.dwait_init_done=!0,i.className=i.className.replace(/\binit-waiting\b/,""),e[i.dwait_init_id]&&setTimeout(function(){e[i.dwait_init_id].click()},1)}var d=c++,s=i.getAttribute(o+"deps"),l=a&&a.type?a.type:"domready";return i.dwait_init_id=d,"click"==l&&(e[d]=a.target||a.srcElement),s&&s.split?(s=s.split(","),i.className+=" init-waiting",DWait.ready(s,r),void 0):(r(),void 0)}var a,e={},n={},r=["click","mouseover"],o="data-dwait-",c=1;for(DWait.init=function(t,i){n[t]||(n[t]=[]),n[t].push(i)},DWait.init_domready=function(){$("[data-dwait-domready]").each(function(){this.dwait_init_done||this.dwait_init_id||!this.getAttribute||i(this.getAttribute("data-dwait-domready"),this)})},DWait.ready(".domready",DWait.init_domready),a=0;r.length>a;a++)document.addEventListener?document.addEventListener(r[a],t,!1):document.attachEvent&&document.attachEvent("on"+r[a],t)}();</script>
         <script type="text/javascript">window.dsize_get=function(g,q,A,h,i,C){var u,r,o,l,t,a,w,j,n,z,y,f,e,d,k,b,m,c,s,B,v;u=navigator.userAgent.toLowerCase();r=/(msie) ([\w.]+)/.exec(u);o=u.indexOf("compatible")<0&&/(mozilla)(?:.*? rv:([\w.]+))?/.exec(u);l=/(webkit)[ \/]([\w.]+)/.exec(u);t=Number((document.body||{}).clientWidth||window.innerWidth||document.documentElement.offsetWidth);a=window.innerHeight||document.documentElement.offsetHeight;if(!g||!q){return{resview:{w:t-160,h:null}}}var p=(!(window.deviantART||{deviant:{}}).deviant.loggedIn||(window.deviantART||{deviant:{}}).deviant.ads)?58:0;w=300;j=20;n=60;MYSTERY_PIXELS=-70;z=60;CONTAINER_MIN_HEIGHT=200;if(C){if(o){t-=15}else{if(r){t-=20}else{if(l){t+=15}}}}y=Math.max(300,t-(n+w+MYSTERY_PIXELS+j+z));f=Math.max(300,a-(vms_feature("new_devpage")?164:138)-p);e=g/y;d=q/f;if(e>1||d>1){k=(e>d)?(y/g):(f/q);ht=Math.round(q*k);padding_top=ht>2&&ht<CONTAINER_MIN_HEIGHT?(CONTAINER_MIN_HEIGHT-ht)/2:null;b={w:Math.round(g*k),h:ht,y:padding_top}}else{ht=q;padding_top=ht>2&&ht<CONTAINER_MIN_HEIGHT?(CONTAINER_MIN_HEIGHT-ht)/2:null;b={w:g,h:ht,y:padding_top}}v=(document.getElementById("ile-container"));y=Math.max(i?(v?850:650):300,t-(i?0:(n+z)));if(A&&h){k=Math.min(1,y/A);ht=Math.round(h*k);padding_top=ht>2&&ht<CONTAINER_MIN_HEIGHT?(CONTAINER_MIN_HEIGHT-ht)/2:null;c={w:Math.round(A*k),h:ht,y:padding_top}}m={w:Math.max((v?860:650),t-(i?0:(90+MYSTERY_PIXELS))),h:null,y:Math.max(i?-7:0,Math.min(0,(t-7)-A))};return{resview:m,img:b,fullimg:c}};if(!window.dsize_artificial_view){window.dsize_artificial_view=function(p,f,q,j,c,n){var g,d,l,e,k,i,b,o,m,a;a=((document.body||{}).clientWidth||window.innerWidth||document.documentElement.offsetWidth);window_height=(window.innerHeight||document.documentElement.offsetHeight);o=-368+a;if(n){m=-311+(window.innerHeight||document.documentElement.offsetHeight)}else{m=-140+(window.innerHeight||document.documentElement.offsetHeight)}k=a/p;b=Math.min(f,(f*(k)));i=Math.min(p,(p*(k)));if((f>p)&&(p*(200/f)<100)){e=1;g=c}else{if(b<m){if(p<o){g=0;d=1;e=0}else{e=1;g=c}}else{e=1;g=c}}return{new_artificial_view:g,upgrade_smallview:d,use_larger_image:l,enable_zoom:e,min_x:o,min_y:m}}}RBH=/^\#?\/d([0-9a-z])+$/;var _WCSS=[],_W,_H,_FW,_FH,_RET,_FULL,_HIRES;_WCSS.push("<style type=text/css>");if((window.location.hash||"").match(RBH)){_WCSS.push("#output,#depths{display:none}")}_W=Number(deviantART.pageData.deviation_width);_H=Number(deviantART.pageData.deviation_height);_FW=Number(deviantART.pageData.deviation_width_fullview);_FH=Number(deviantART.pageData.deviation_height_fullview);if(!deviantART.pageData.custom_fullview){with(dsize_artificial_view(_FW,_FH,_W,_H,undefined,!((deviantART.deviant||{}).subbed))){_FULL=new_artificial_view;_HIRES=use_larger_image}}R=dsize_get(_W,_H,_FW,_FH,_FULL,1);for(var x in R){_WCSS.push("#gmi-"+(x=="resview"?"ResViewContainer":"ResViewSizer_"+x)+"{");if(_W){_WCSS.push("width:"+(R[x]||{}).w+"px;"+(x.indexOf("img")>=0?"":"min-")+"height:"+(R[x]||{}).h+"px")}if(_Y=(R[x]||{}).y){_WCSS.push(";margin-top:"+_Y+"px")}_WCSS.push("}")}if(_FULL){_WCSS.push("#gmi-ResourcePageMetaPane {display:none}")}_WCSS.push("</style>");if(_FULL&&!window.attachEvent){_WCSS.push("<div class=fullview>")}if(_HIRES&&!window.attachEvent){_WCSS.push("<div class=hiresview>")}document.write(_WCSS.join(""));</script>
         <script type="text/javascript">document.write('<style type="text/css">div.unscripted, span.unscripted {display:none} div.scripted, div.unlock div.unscripted {display:block} span.scripted, div.unlock span.unscripted {display:inline}</style>');</script>
-        <script type="text/javascript">(function(e){var t="ddt_watch",n=" ;path=/ ;domain=."+e.location.host.split(".").slice(-2).join("."),r=["sta.sh","www.deviantart.com"],i={},s={get:function(){var e=new RegExp("(?:^|; )"+encodeURIComponent(t)+"=([^;]+)"),n=e.exec(document.cookie);return n?String(decodeURIComponent(n[1])).split(","):[]},set:function(){var e=[];for(var t in i)e.push(t);var n,s=e.join(",");for(var o=0;o<r.length;o++)n=new Image,n.src="//"+r[o]+"/ddt/?channels="+s},del:function(){var e=new Date;e.setTime(e.getTime()-864e5),document.cookie=encodeURIComponent(t)+"=; expires="+e.toUTCString()+n}},o=function(e){if(e in console)return function(t,n,r){if(t.toLowerCase()in i){var s=Array.prototype.slice.call(arguments,1);s[0]="["+t+"] "+n,console[e].apply(console,s)}};throw new Error("DDT can only proxy methods defined in console")};e.ddt={log:o("log"),info:o("info"),warn:o("warn"),error:o("error"),trace:function(e,t,n){ddt.watching(e)&&(ddt.log.apply(ddt,arguments),console.trace())},watch:function(t,n){if(!t)return!1;if(t instanceof Array){for(var r in t)e.ddt.watch(t[r],!0);s.set()}else{if(!/^[a-zA-Z]+$/.test(t))return console.warn("[ddt] attempted to watch invalid package",t),!1;i[t.toLowerCase()]=!0,n||s.set()}return!0},unwatch:function(t,n){if(!t)return console.warn("[ddt] need a package name"),!1;if(t instanceof Array){for(var r in t)e.ddt.unwatch(t[r],!0);s.set()}else{if(!/^[a-zA-Z]+$/.test(t))return console.warn("[ddt] attempted to watch invalid package",t),!1;t=t.toLowerCase(),t in i&&delete i[t],n||s.set()}return!0},watching:function(e){if(e)return e in i;var t=[];for(var n in i)t.push(n);return t},alert:function(t,n,r,i,s){ddt.warn(t,n,r),DWait.ready(["jms/lib/jquery/jquery.current.js","jms/lib/difi.js"],function(){$.isPlainObject(r)||(r&&console.warn("[ddt] alert data is not a plain object",r),r={}),s!==!1&&($.extend(r,{url:e.top.location.href,useragent:navigator.userAgent}),(e.deviantART||{}).deviant&&$.extend(r,{username:deviantART.deviant.username,symbol:deviantART.deviant.symbol,userid:deviantART.deviant.id,features:deviantART.deviant.features})),typeof i=="string"&&(i=[i]),DiFi.pushPost("Logr","logr",["js",n,r,i||[]],$.noop),DiFi.send()})}};var u=s.get();u&&(u instanceof Array&&u.length?(e.ddt.watch(u),console.log("[ddt] watching",e.ddt.watching())):s.del())})(window);
-        </script>
+        <script type="text/javascript">(function(e){if(e.console){var t="ddt_watch",n=" ;path=/ ;domain=."+e.location.host.split(".").slice(-2).join("."),o=["sta.sh","www.deviantart.com","dreamup.com"],a={},r={get:function(){var e=RegExp("(?:^|; )"+encodeURIComponent(t)+"=([^;]+)"),n=e.exec(document.cookie);return n?(decodeURIComponent(n[1])+"").split(","):[]},set:function(){var e=[];for(var t in a)e.push(t);for(var n,r=e.join(","),i=0;o.length>i;i++)n=new Image,n.src="//"+o[i]+"/ddt/?channels="+r},del:function(){var e=new Date;e.setTime(e.getTime()-864e5),document.cookie=encodeURIComponent(t)+"=; expires="+e.toUTCString()+n}},i=function(e){if(!(e in console))throw Error("DDT can only proxy methods defined in console");return function(t,n){if(t.toLowerCase()in a){var o=Array.prototype.slice.call(arguments,1);o[0]="["+t+"] "+n,console[e].apply(console,o)}}};e.ddt={log:i("log"),info:i("info"),warn:i("warn"),error:i("error"),trace:function(e){ddt.watching(e)&&(ddt.log.apply(ddt,arguments),console.trace())},watch:function(t,n){if(!t)return!1;if(t instanceof Array){for(var o in t)e.ddt.watch(t[o],!0);r.set()}else{if(!/^[a-zA-Z]+$/.test(t))return console.warn("[ddt] attempted to watch invalid package",t),!1;a[t.toLowerCase()]=!0,n||r.set()}return!0},unwatch:function(t,n){if(!t)return console.warn("[ddt] need a package name"),!1;if(t instanceof Array){for(var o in t)e.ddt.unwatch(t[o],!0);r.set()}else{if(!/^[a-zA-Z]+$/.test(t))return console.warn("[ddt] attempted to watch invalid package",t),!1;t=t.toLowerCase(),t in a&&delete a[t],n||r.set()}return!0},watching:function(e){if(e)return e in a;var t=[];for(var n in a)t.push(n);return t},alert:function(t,n,o,a,r){ddt.warn(t,n,o),DWait.ready(["jms/lib/jquery/jquery.current.js","jms/lib/difi.js"],function(){$.isPlainObject(o)||(o&&console.warn("[ddt] alert data is not a plain object",o),o={}),r!==!1&&($.extend(o,{url:e.top.location.href,useragent:navigator.userAgent}),(e.deviantART||{}).deviant&&$.extend(o,{username:deviantART.deviant.username,symbol:deviantART.deviant.symbol,userid:deviantART.deviant.id,features:deviantART.deviant.features})),"string"==typeof a&&(a=[a]),DiFi.pushPost("Logr","logr",["js",n,o,a||[]],$.noop),DiFi.send()})}};var d=r.get();d&&(d instanceof Array&&d.length?(e.ddt.watch(d),console.log("[ddt] watching",e.ddt.watching())):r.del())}})(window);</script>
         <script type="text/javascript">window.autobob_reload=function(e){var g=e.target||e.srcElement;var h=g.src;var f=parseInt(g.retries||0,10)+1;h=(h.indexOf("?")==-1?h:h.substr(0,h.length-String(f-1).length-1))+"?"+f;if((!window.isVM||vms_feature("vm_fileserving"))&&f<6){g.retries=f;setTimeout(function(){if(g.readyState||g.complete){g.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="}g.src=h},3500)}else{g.autobob_done=true}};</script>
         <script type="text/javascript">var d=(window.location.hash||"").match(/^#\/d([a-z0-9]+)$/);if(d){window.location="http://www.deviantart.com/deviation/"+parseInt(d[1],36)+"/"};</script>
         <script type="text/javascript">W=(window.innerHeight||document.documentElement.offsetHeight)-97;document.write('<style type="text/css">html body #output div.bubbleview,.match-body-height{min-height:'+W+"px;_height:"+W+"}.max-body-height{max-height: "+W+"px;}</style>");</script>
-        <script type="text/javascript">OHM_ON=150,OHM_OFF=300,OHM={sync:function(e,t){var n,r;n=OHM.getLink(e.target||e.srcElement);if(!n)return!1;t||(n=null),OHM.want=n,OHM.timer&&clearTimeout(OHM.timer),navigator.userAgent.indexOf("Mobile")>=0?OHM.hit("m",e.target):OHM.timer=setTimeout(OHM.hit,OHM.got&&n?10:n?OHM_ON:OHM_OFF)},hit:function(e,t){delete OHM.timer;if(OHM.want&&e=="m"){while(!t.href&&(t=t.parentNode));t&&!t.onclick&&(t.className||"").match(/\bmi\b/)&&(window.location.href=t.href)}if(OHM.want==OHM.got)return;OHM.got&&(OHM.got.className=OHM.got.className.replace(/\s*\bmmhover{1,2}\b/g,""),window.Popup2&&Popup2.showOverlayElements(),OHM.scrLink(OHM.got,0)),OHM.got=OHM.want,OHM.got&&window.Popup2&&!Popup2.anyActivePopup()&&(OHM.got.className+=" mmhover",Popup2.hideOverlayElements($(OHM.got.getElementsByTagName("div")[1]||OHM.got)),OHM.scrLink(OHM.got,1))},getLink:function(e){while((e.tagName!="DIV"&&e.tagName!="TD"||!((e.className||"").indexOf("oh-ml")>=0||(e.className||"").indexOf("oh-hashover")>=0)||!((document.body.className||"").indexOf("no-apps")>=0||(document.body.className||"").indexOf("stash-submit-page")>=0||(e.className||"").indexOf("oh-mmain")<0))&&(e=e.parentNode))if(e.tagName=="H1")return 0;return e},scrLink:function(e,t){if(!window.$)return;e.getAttribute("onhax")&&(this.hax||(this.hax=new Function("",e.getAttribute("onhax"))),this.hax.call(e,t))}};
-        </script><script type="text/javascript">if (window.DWait) {DWait.run('jms/lib/glbl.js');DWait.run('jms/dwait/dwait.js');DWait.run('jms/chrome/deviationsize_inline.js');DWait.run('jms/lib/unscripted.js');DWait.run('jms/lib/ddt.js');DWait.run('jms/chrome/autobob.js');DWait.run('jms/chrome/deviation_redirect.js');DWait.run('jms/chrome/bodysize.js');DWait.run('jms/chrome/overhead_mouse.js');}</script><script type="text/javascript">
-                    DWait.loadRollupMap({"http:\/\/st.deviantart.net\/css\/deviantart-network.css":["cssms\/lib\/survival.css","cssms\/lib\/nudge.css","cssms\/lib\/thumbnails.css","cssms\/lib\/thumbnails-200H.css","cssms\/lib\/thumbnails-stream.css","cssms\/lib\/thumbnails-maturefilter.css","cssms\/lib\/thumbnails-lit.css","cssms\/lib\/thumbnails-journal.css","cssms\/lib\/thumbnails-film.css","cssms\/lib\/thumbnails-misc.css","cssms\/lib\/thumbnails-stack.css","cssms\/lib\/maturefilter.css","cssms\/lib\/icons.css","cssms\/lib\/popup.css","cssms\/lib\/shadows.css","cssms\/lib\/modals.css","cssms\/modals\/purchase-modal.css","cssms\/pages\/misc\/gmbutton2.css","cssms\/pages\/misc\/smbutton.css","cssms\/pages\/grusers\/boxes.css","cssms\/modals\/signup-modal.css","cssms\/pages\/misc\/subble.css","cssms\/pages\/misc\/quicktip.css","cssms\/pages\/misc\/buttons.css","cssms\/pages\/comment-box.css","cssms\/pages\/misc\/megamisc.css","cssms\/pages\/deviation\/paddles-ab.css","cssms\/pages\/misc\/iconbar.css","cssms\/topsecret\/quiet-comments.css","cssms\/pages\/talkpost.css","cssms\/lib\/pager.css","cssms\/lib\/da.misc.widgets.pager.css","cssms\/pages\/deviation\/deviation-misc.css","cssms\/pages\/deviation\/deviation-devlinkzone.css","cssms\/pages\/deviation\/deviation-stash.css","cssms\/pages\/deviation\/deviation-group.css","cssms\/pages\/deviation\/deviation-share.css","cssms\/pages\/deviation\/deviation-ch.css","cssms\/pages\/deviation\/deviation-artistcomments.css","cssms\/pages\/deviation\/deviation-sparta.css","cssms\/pages\/deviation\/deviation-boxtop.css","cssms\/pages\/deviation\/deviation-popup2.css","cssms\/pages\/deviation\/deviation.css","cssms\/chrome\/overhead.css","cssms\/chrome\/body-misc.css","cssms\/chrome\/v6-legacy.css","cssms\/pages\/writeranywhere.css","cssms\/lib\/writer-overrides.css"],"http:\/\/st.deviantart.net\/css\/v6core.css":["cssms\/pages\/lesport.css","cssms\/chrome\/depthsv7.css","cssms\/pages\/misc\/tabselect.css","cssms\/chrome\/nav.css","cssms\/pages\/critique-deviation.css","cssms\/pages\/critique-itempage.css","cssms\/pages\/deviation\/groupmenu.css","cssms\/pages\/deviation\/journals.css","cssms\/pages\/deviation\/literature.css","cssms\/pages\/browse\/browse.css","cssms\/pages\/browse\/browse-journals.css","cssms\/pages\/ad-square.css","cssms\/pages\/ad-da-custom.css","cssms\/pages\/sitback.css","cssms\/minish\/hpto.css","cssms\/pages\/misc\/gmbutton.css","cssms\/topsecret\/contests.css","cssms\/lib\/thumbnails-news.css","cssms\/lib\/thumbnails-portal.css","cssms\/lib\/commentcount.css","cssms\/lib\/thumbnails-cropthumb.css","cssms\/pages\/deviation\/deviation-favebtn.css","cssms\/pages\/deviation\/deviation-megabag.css","cssms\/pages\/deviation\/deviation-collect.css","cssms\/pages\/deviation\/deviation-more.css","cssms\/pages\/deviation\/deviation-iconcommentstats.css","cssms\/pages\/browselikethis\/browselikethis.css","cssms\/pages\/browselikethis\/browselikethis.top_bar.css","cssms\/pages\/browselikethis\/browselikethis.left_bar.css","cssms\/pages\/browselikethis\/browselikethis.results.css","cssms\/pages\/browselikethis\/browselikethis.deviation_full_views.css","cssms\/pages\/browselikethis\/browselikethis.groups.css","cssms\/pages\/browselikethis\/browselikethis.shop.css","cssms\/pages\/browselikethis\/browselikethis.ads.css","cssms\/pages\/browselikethis\/browselikethis.search_input.css"],"http:\/\/st.deviantart.net\/css\/group_secrets.css":["cssms\/pages\/grusers\/messaging.css","cssms\/pages\/grusers\/groupops-approvals.css","cssms\/pages\/grusers\/page-layout.css","cssms\/lib\/thumbnails-devgallery.css","cssms\/pages\/grusers\/gmemzone.css","cssms\/pages\/grusers\/stats.css","cssms\/pages\/grusers\/indiboxes.css","cssms\/pages\/grusers\/widgets\/issue_tracker.css","cssms\/pages\/grusers\/widgets\/members.css","cssms\/pages\/grusers\/widgets\/bloggers.css","cssms\/pages\/grusers\/widgets\/shoutforum.css","cssms\/pages\/grusers\/widgets\/conversation.css","cssms\/pages\/grusers\/widgets\/countdown.css","cssms\/pages\/grusers\/widgets\/info.css","cssms\/pages\/grusers\/widgets\/log.css","cssms\/pages\/grusers\/widgets\/groupnotes.css","cssms\/pages\/grusers\/widgets\/affiliates.css","cssms\/pages\/grusers\/widgets\/group_list.css","cssms\/lib\/cropsizer.css","cssms\/lib\/slider.css"],"http:\/\/st.deviantart.net\/css\/font.depot.css":["cssms\/font\/depot.css"],"http:\/\/st.deviantart.net\/css\/da-widgets.css":["cssms\/pages\/widgets\/twitter-search.css","cssms\/pages\/widgets\/guestbook.css"],"http:\/\/st.deviantart.net\/css\/v6loggedin.css":["cssms\/lib\/drag.css","cssms\/minish\/lub.css","cssms\/pages\/misc\/progressbar.css","cssms\/pages\/grusers\/editmode.css","cssms\/pages\/grusers\/editmode-modal.css","cssms\/lib\/jquery\/jquery.select.pager.css"],"http:\/\/st.deviantart.net\/css\/notes-modal.css":["cssms\/pages\/deviation\/note-modal.css"],"http:\/\/st.deviantart.net\/css\/ad-hug.css":["cssms\/chrome\/ad-hug.css","cssms\/chrome\/datheater.css","cssms\/chrome\/hugs\/9dvd.css","cssms\/chrome\/hugs\/adobe.css","cssms\/chrome\/hugs\/aioca.css","cssms\/chrome\/hugs\/assassin.css","cssms\/chrome\/hugs\/ati.css","cssms\/chrome\/hugs\/boostr.css","cssms\/chrome\/hugs\/canon.css","cssms\/chrome\/hugs\/dbz.css","cssms\/chrome\/hugs\/defjam.css","cssms\/chrome\/hugs\/disney.css","cssms\/chrome\/hugs\/earts.css","cssms\/chrome\/hugs\/eureka.css","cssms\/chrome\/hugs\/enix.css","cssms\/chrome\/hugs\/eve.css","cssms\/chrome\/hugs\/focus.css","cssms\/chrome\/hugs\/freelance.css","cssms\/chrome\/hugs\/fullsail.css","cssms\/chrome\/hugs\/funimation.css","cssms\/chrome\/hugs\/gamepot.css","cssms\/chrome\/hugs\/kin.css","cssms\/chrome\/hugs\/mazda.css","cssms\/chrome\/hugs\/mentos.css","cssms\/chrome\/hugs\/nbc.css","cssms\/chrome\/hugs\/nfwb.css","cssms\/chrome\/hugs\/nikon.css","cssms\/chrome\/hugs\/nvidia.css","cssms\/chrome\/hugs\/playfish.css","cssms\/chrome\/hugs\/redbull.css","cssms\/chrome\/hugs\/residentevil.css","cssms\/chrome\/hugs\/smartcar.css","cssms\/chrome\/hugs\/sony.css","cssms\/chrome\/hugs\/spectrobes.css","cssms\/chrome\/hugs\/tattooed.css","cssms\/chrome\/hugs\/teachamerica.css","cssms\/chrome\/hugs\/theai.css","cssms\/chrome\/hugs\/thq.css","cssms\/chrome\/hugs\/toshiba.css","cssms\/chrome\/hugs\/wacom.css","cssms\/chrome\/hugs\/warner.css","cssms\/chrome\/hugs\/wizards.css","cssms\/chrome\/hugs\/xbox.css"],"http:\/\/st.deviantart.net\/css\/writer.css":["cssms\/lib\/writer.css","cssms\/lib\/writer-imagecontrols.css","cssms\/lib\/writer-toolbar.css","cssms\/lib\/writer-subtoolbar.css","cssms\/lib\/writer-sidebar.css"],"http:\/\/st.deviantart.net\/css\/stash.css":["cssms\/pages\/stash\/stash.css","cssms\/pages\/stash\/stash.header.css","cssms\/pages\/stash\/stash.folder.css","cssms\/pages\/stash\/stash.uploadzone.css","cssms\/pages\/stash\/stash.auth.css","cssms\/pages\/stash\/stash.upgrade.css","cssms\/pages\/stash\/stash.thumb.dnd.css","cssms\/pages\/stash\/stash.thumb.hover.css","cssms\/pages\/stash\/stash.thumb.upload.css","cssms\/pages\/stash\/stash.thumb.stack.css","cssms\/pages\/stash\/stash.override.comments.css","cssms\/pages\/stash\/stash.override.deviation.css","cssms\/pages\/stash\/stash.override.global.css","cssms\/pages\/stash\/stash.override.header.css","cssms\/pages\/stash\/stash.override.modal.css","cssms\/pages\/stash\/stash.override.pagination.css","cssms\/pages\/stash\/stash.override.thumbs.css","cssms\/pages\/ile\/ile.shares.with.stash.css"],"http:\/\/st.deviantart.net\/css\/muro.css":["cssms\/lib\/canvas_drawing.css","cssms\/pages\/drawplz\/header_controls.css","cssms\/pages\/drawplz\/basic_controls.css","cssms\/pages\/drawplz\/colorpicker.css","cssms\/pages\/drawplz\/brushpreview.css","cssms\/pages\/drawplz\/greenGuy.css","cssms\/pages\/drawplz\/modals.css","cssms\/pages\/drawplz\/layers.css","cssms\/pages\/drawplz\/zoom.css","cssms\/pages\/drawplz\/comment_version.css","cssms\/pages\/drawplz\/adslot.css","cssms\/pages\/drawplz\/drawplz.override.pagination.css","cssms\/pages\/drawplz\/recordedDrawing.css"],"http:\/\/st.deviantart.net\/css\/adcatch-modal.css":["cssms\/modals\/adcatch-modal.css"]});
+        <script type="text/javascript">OHM_ON=150,OHM_OFF=300,OHM={disabled:!1,sync:function(e,t){var a;return(a=OHM.getLink(e.target||e.srcElement))?(t||(a=null),OHM.disabled?!1:(OHM.want=a,OHM.timer&&clearTimeout(OHM.timer),navigator.userAgent.indexOf("Mobile")>=0?OHM.hit("m",e.target):OHM.timer=setTimeout(OHM.hit,OHM.got&&a?10:a?OHM_ON:OHM_OFF),void 0)):!1},hit:function(e,t){if(delete OHM.timer,OHM.want&&"m"==e){for(;!t.href&&(t=t.parentNode););t&&!t.onclick&&(t.className||"").match(/\bmi\b/)&&(window.location.href=t.href)}OHM.want!=OHM.got&&(OHM.got&&(OHM.got.className=OHM.got.className.replace(/\s*\bmmhover{1,2}\b/g,""),window.Popup2&&Popup2.showOverlayElements(),OHM.scrLink(OHM.got,0)),OHM.got=OHM.want,OHM.got&&window.Popup2&&!Popup2.anyActivePopup()&&(OHM.got.className+=" mmhover",Popup2.hideOverlayElements($(OHM.got.getElementsByTagName("div")[1]||OHM.got)),OHM.scrLink(OHM.got,1)))},getLink:function(e){for(;("DIV"!=e.tagName&&"TD"!=e.tagName||!((e.className||"").indexOf("oh-ml")>=0||(e.className||"").indexOf("oh-hashover")>=0)||!((document.body.className||"").indexOf("no-apps")>=0||(document.body.className||"").indexOf("stash-submit-page")>=0||0>(e.className||"").indexOf("oh-mmain")))&&(e=e.parentNode);)if("H1"==e.tagName)return 0;return e},scrLink:function(e,t){window.$&&e.getAttribute("onhax")&&(this.hax||(this.hax=Function("",e.getAttribute("onhax"))),this.hax.call(e,t))}};</script><script type="text/javascript">if (window.DWait) {DWait.run('jms/lib/glbl.js');DWait.run('jms/dwait/dwait.js');DWait.run('jms/chrome/deviationsize_inline.js');DWait.run('jms/lib/unscripted.js');DWait.run('jms/lib/ddt.js');DWait.run('jms/chrome/autobob.js');DWait.run('jms/chrome/deviation_redirect.js');DWait.run('jms/chrome/bodysize.js');DWait.run('jms/chrome/overhead_mouse.js');}</script><script type="text/javascript">
+                    DWait.loadRollupMap({"http:\/\/st.deviantart.net\/css\/deviantart-network.css":["cssms\/lib\/survival.css","cssms\/lib\/nudge.css","cssms\/lib\/thumbnails.css","cssms\/lib\/thumbnails-200H.css","cssms\/lib\/thumbnails-stream.css","cssms\/lib\/thumbnails-maturefilter.css","cssms\/lib\/thumbnails-lit.css","cssms\/lib\/thumbnails-journal.css","cssms\/lib\/thumbnails-film.css","cssms\/lib\/thumbnails-misc.css","cssms\/lib\/thumbnails-stack.css","cssms\/lib\/deviation-placeholders.css","cssms\/lib\/maturefilter.css","cssms\/lib\/icons.css","cssms\/lib\/popup.css","cssms\/lib\/shadows.css","cssms\/lib\/modals.css","cssms\/modals\/purchase-modal.css","cssms\/pages\/misc\/gmbutton2.css","cssms\/pages\/misc\/smbutton.css","cssms\/pages\/grusers\/boxes.css","cssms\/modals\/signup-modal.css","cssms\/pages\/misc\/subble.css","cssms\/pages\/misc\/quicktip.css","cssms\/pages\/misc\/buttons.css","cssms\/pages\/comment-box.css","cssms\/pages\/misc\/megamisc.css","cssms\/pages\/deviation\/paddles-ab.css","cssms\/pages\/misc\/iconbar.css","cssms\/topsecret\/quiet-comments.css","cssms\/pages\/talkpost.css","cssms\/lib\/pager.css","cssms\/lib\/da.misc.widgets.pager.css","cssms\/pages\/deviation\/deviation-misc.css","cssms\/pages\/deviation\/deviation-devlinkzone.css","cssms\/pages\/deviation\/deviation-stash.css","cssms\/pages\/deviation\/deviation-group.css","cssms\/pages\/deviation\/deviation-share.css","cssms\/pages\/deviation\/deviation-ch.css","cssms\/pages\/deviation\/deviation-artistcomments.css","cssms\/pages\/deviation\/deviation-sparta.css","cssms\/pages\/deviation\/deviation-boxtop.css","cssms\/pages\/deviation\/deviation-popup2.css","cssms\/pages\/deviation\/deviation.css","cssms\/chrome\/overhead.css","cssms\/chrome\/body-misc.css","cssms\/chrome\/v6-legacy.css","cssms\/pages\/writeranywhere.css","cssms\/lib\/writer-overrides.css"],"http:\/\/st.deviantart.net\/css\/v6core.css":["cssms\/pages\/lesport.css","cssms\/chrome\/depthsv7.css","cssms\/pages\/misc\/tabselect.css","cssms\/chrome\/nav.css","cssms\/pages\/critique-deviation.css","cssms\/pages\/critique-itempage.css","cssms\/pages\/deviation\/groupmenu.css","cssms\/pages\/deviation\/journals.css","cssms\/pages\/deviation\/literature.css","cssms\/pages\/browse\/browse.css","cssms\/pages\/browse\/browse-journals.css","cssms\/pages\/ad-square.css","cssms\/pages\/ad-da-custom.css","cssms\/pages\/sitback.css","cssms\/minish\/hpto.css","cssms\/pages\/misc\/gmbutton.css","cssms\/topsecret\/contests.css","cssms\/lib\/thumbnails-news.css","cssms\/lib\/thumbnails-portal.css","cssms\/lib\/commentcount.css","cssms\/lib\/thumbnails-cropthumb.css","cssms\/pages\/deviation\/deviation-favebtn.css","cssms\/pages\/deviation\/deviation-megabag.css","cssms\/pages\/deviation\/deviation-collect.css","cssms\/pages\/deviation\/deviation-more.css","cssms\/pages\/deviation\/deviation-iconcommentstats.css","cssms\/pages\/browselikethis\/browselikethis.css","cssms\/pages\/browselikethis\/browselikethis.top_bar.css","cssms\/pages\/browselikethis\/browselikethis.left_bar.css","cssms\/pages\/browselikethis\/browselikethis.results.css","cssms\/pages\/browselikethis\/browselikethis.deviation_full_views.css","cssms\/pages\/browselikethis\/browselikethis.groups.css","cssms\/pages\/browselikethis\/browselikethis.shop.css","cssms\/pages\/browselikethis\/browselikethis.ads.css","cssms\/pages\/browselikethis\/browselikethis.search_input.css"],"http:\/\/st.deviantart.net\/css\/group_secrets.css":["cssms\/pages\/grusers\/journals.css","cssms\/pages\/grusers\/messaging.css","cssms\/pages\/grusers\/groupops-approvals.css","cssms\/pages\/grusers\/page-layout.css","cssms\/lib\/thumbnails-devgallery.css","cssms\/pages\/grusers\/gmemzone.css","cssms\/pages\/grusers\/stats.css","cssms\/pages\/grusers\/indiboxes.css","cssms\/pages\/grusers\/widgets\/issue_tracker.css","cssms\/pages\/grusers\/widgets\/members.css","cssms\/pages\/grusers\/widgets\/bloggers.css","cssms\/pages\/grusers\/widgets\/shoutforum.css","cssms\/pages\/grusers\/widgets\/conversation.css","cssms\/pages\/grusers\/widgets\/countdown.css","cssms\/pages\/grusers\/widgets\/info.css","cssms\/pages\/grusers\/widgets\/log.css","cssms\/pages\/grusers\/widgets\/groupnotes.css","cssms\/pages\/grusers\/widgets\/affiliates.css","cssms\/pages\/grusers\/widgets\/group_list.css","cssms\/pages\/grusers\/widgets\/twitter.css","cssms\/lib\/cropsizer.css","cssms\/lib\/slider.css"],"http:\/\/st.deviantart.net\/css\/font.depot.css":["cssms\/font\/depot.css"],"http:\/\/st.deviantart.net\/css\/da-widgets.css":["cssms\/pages\/widgets\/twitter-search.css","cssms\/pages\/widgets\/guestbook.css"],"http:\/\/st.deviantart.net\/css\/v6loggedin.css":["cssms\/lib\/drag.css","cssms\/minish\/lub.css","cssms\/pages\/misc\/progressbar.css","cssms\/pages\/grusers\/editmode.css","cssms\/pages\/grusers\/editmode-modal.css","cssms\/lib\/jquery\/jquery.select.pager.css"],"http:\/\/st.deviantart.net\/css\/notes-modal.css":["cssms\/pages\/deviation\/note-modal.css"],"http:\/\/st.deviantart.net\/css\/ad-hug.css":["cssms\/chrome\/ad-hug.css","cssms\/chrome\/datheater.css","cssms\/chrome\/hugs\/9dvd.css","cssms\/chrome\/hugs\/adobe.css","cssms\/chrome\/hugs\/aioca.css","cssms\/chrome\/hugs\/assassin.css","cssms\/chrome\/hugs\/ati.css","cssms\/chrome\/hugs\/boostr.css","cssms\/chrome\/hugs\/canon.css","cssms\/chrome\/hugs\/dbz.css","cssms\/chrome\/hugs\/defjam.css","cssms\/chrome\/hugs\/disney.css","cssms\/chrome\/hugs\/earts.css","cssms\/chrome\/hugs\/eureka.css","cssms\/chrome\/hugs\/enix.css","cssms\/chrome\/hugs\/eve.css","cssms\/chrome\/hugs\/focus.css","cssms\/chrome\/hugs\/freelance.css","cssms\/chrome\/hugs\/fullsail.css","cssms\/chrome\/hugs\/funimation.css","cssms\/chrome\/hugs\/gamepot.css","cssms\/chrome\/hugs\/kin.css","cssms\/chrome\/hugs\/mazda.css","cssms\/chrome\/hugs\/mentos.css","cssms\/chrome\/hugs\/nbc.css","cssms\/chrome\/hugs\/nfwb.css","cssms\/chrome\/hugs\/nikon.css","cssms\/chrome\/hugs\/nvidia.css","cssms\/chrome\/hugs\/playfish.css","cssms\/chrome\/hugs\/redbull.css","cssms\/chrome\/hugs\/residentevil.css","cssms\/chrome\/hugs\/smartcar.css","cssms\/chrome\/hugs\/sony.css","cssms\/chrome\/hugs\/spectrobes.css","cssms\/chrome\/hugs\/tattooed.css","cssms\/chrome\/hugs\/teachamerica.css","cssms\/chrome\/hugs\/theai.css","cssms\/chrome\/hugs\/thq.css","cssms\/chrome\/hugs\/toshiba.css","cssms\/chrome\/hugs\/wacom.css","cssms\/chrome\/hugs\/warner.css","cssms\/chrome\/hugs\/wizards.css","cssms\/chrome\/hugs\/xbox.css"],"http:\/\/st.deviantart.net\/css\/writer.css":["cssms\/lib\/writer.css","cssms\/lib\/writer-imagecontrols.css","cssms\/lib\/writer-toolbar.css","cssms\/lib\/writer-subtoolbar.css"],"http:\/\/st.deviantart.net\/css\/stash.css":["cssms\/pages\/stash\/stash.css","cssms\/pages\/stash\/stash.header.css","cssms\/pages\/stash\/stash.folder.css","cssms\/pages\/stash\/stash.uploadzone.css","cssms\/pages\/stash\/stash.auth.css","cssms\/pages\/stash\/stash.upgrade.css","cssms\/pages\/stash\/stash.thumb.dnd.css","cssms\/pages\/stash\/stash.thumb.hover.css","cssms\/pages\/stash\/stash.thumb.upload.css","cssms\/pages\/stash\/stash.thumb.stack.css","cssms\/pages\/stash\/stash.override.comments.css","cssms\/pages\/stash\/stash.override.deviation.css","cssms\/pages\/stash\/stash.override.global.css","cssms\/pages\/stash\/stash.override.header.css","cssms\/pages\/stash\/stash.override.modal.css","cssms\/pages\/stash\/stash.override.pagination.css","cssms\/pages\/stash\/stash.override.thumbs.css","cssms\/pages\/ile\/ile.shares.with.stash.css"],"http:\/\/st.deviantart.net\/css\/muro.css":["cssms\/lib\/canvas_drawing.css","cssms\/pages\/drawplz\/header_controls.css","cssms\/pages\/drawplz\/basic_controls.css","cssms\/pages\/drawplz\/colorpicker.css","cssms\/pages\/drawplz\/brushpreview.css","cssms\/pages\/drawplz\/greenGuy.css","cssms\/pages\/drawplz\/modals.css","cssms\/pages\/drawplz\/layers.css","cssms\/pages\/drawplz\/zoom.css","cssms\/pages\/drawplz\/comment_version.css","cssms\/pages\/drawplz\/adslot.css","cssms\/pages\/drawplz\/drawplz.override.pagination.css","cssms\/pages\/drawplz\/recordedDrawing.css"],"http:\/\/st.deviantart.net\/css\/sidebar.css":["cssms\/lib\/writer-sidebar.css"],"http:\/\/st.deviantart.net\/css\/adcatch-modal.css":["cssms\/modals\/adcatch-modal.css"]});
                     </script>
         <script type="text/javascript">
                         if (window.DWait) {
@@ -155,7 +156,6 @@ http_interactions:
         
                 });this.parentNode.parentNode.parentNode.submit();if (window.event)event.cancelBubble=1;return false">Search<b></b></a></span><span class="unscripted"><input type="submit" value=""></span></div></form></td><td
                 id="oh-loginbutton"
-                onhax="try{with(document.getElementById('login-username')) if (arguments[0] && !value) focus()}catch(e){}"
                 class="oh-keep oh-hasmenu oh-hashover"
             ><div class="oh-menuctrl"><div id="oh-loginmenu" class="oh-menu">
                 <form style="padding:12px" id="form-login" action="https://www.deviantart.com/users/login" method="post"><input type="hidden" id="loginbar-ref" name="ref" value=""/><label>
@@ -204,7 +204,7 @@ http_interactions:
             </div></div>
             <a
             href="http://l.deviantart.com/"
-            onclick="try{document.getElementById('login-username').focus();if (window.event)event.cancelBubble=true;return false}catch(e){}"
+            onclick="if((OHM||{}).disabled){return;}try{document.getElementById('login-username').focus();if (window.event)event.cancelBubble=true;return false}catch(e){}"
             class=oh-l
             >Deviant Login</a>
             </td><td id="oh-menu-shop" class="oh-hasmenu oh-hashover oh-keep"
@@ -306,13 +306,13 @@ http_interactions:
                         ,target: 'scraps/196158032'
                     });">
                         <span class="share-verb">Share</span>
-                </a><script type='text/javascript' id='dwaitdatex-51c2219568522'>
+                </a><script type='text/javascript' id='dwaitdatex-51df5014c0896'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c2219568522');
+                    var elem = document.getElementById('dwaitdatex-51df5014c0896');
                     context = elem ? elem.parentNode : context;
                     (function(){ $(':gmi(ResourceViewShareTumblr)').gmi(); }).apply(context);
                 }
@@ -455,13 +455,13 @@ http_interactions:
                 </div>        </div>
             </div>
         
-            </div></div><script type='text/javascript' id='dwaitdatex-51c2219568791'>
+            </div></div><script type='text/javascript' id='dwaitdatex-51df5014c0ae1'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c2219568791');
+                    var elem = document.getElementById('dwaitdatex-51df5014c0ae1');
                     context = elem ? elem.parentNode : context;
                     (function(){ 
                     $(':gmi(ResourceViewShare)').gmi();
@@ -480,252 +480,252 @@ http_interactions:
                             <iframe scrolling="no" frameborder="0" onload="this.style.visibility = 'visible';"
                         data-da-ad="1"
                         style="border:0;visibility:hidden;width:300px;height:250px;"
-                        src="http://www.da-ads.com/google.html?cb=1422442424#%7B%22size%22%3A%5B300%2C250%5D%2C%22service%22%3A%221008370%5C%2Fca-pub-2005626271413567%22%2C%22slot%22%3A%22atf_right_300x250_v7_deviation%22%2C%22adsense%22%3A%7B%22adsense_channel_ids%22%3A%228286327485%22%2C%22google_hints%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw_type%22%3A%22broad%22%7D%2C%22da%22%3A%7B%22LoggedIn%22%3A%22No%22%2C%22pageid%22%3A196158032%2C%22dailyimp%22%3A%221%22%2C%22sessimp%22%3A%221%22%7D%2C%22ri%22%3A%7B%22site%22%3A1122%2C%22zone%22%3A1339%7D%7D">
+                        src="http://www.da-ads.com/google.html?cb=1422442424#%7B%22size%22%3A%5B300%2C250%5D%2C%22service%22%3A%221008370%5C%2Fca-pub-2005626271413567%22%2C%22slot%22%3A%22atf_right_300x250_v7_deviation%22%2C%22adsense%22%3A%7B%22adsense_channel_ids%22%3A%226796827591%22%2C%22google_hints%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw_type%22%3A%22broad%22%7D%2C%22da%22%3A%7B%22LoggedIn%22%3A%22No%22%2C%22pageid%22%3A196158032%2C%22dailyimp%22%3A%221%22%2C%22sessimp%22%3A%221%22%7D%2C%22ri%22%3A%7B%22site%22%3A1122%2C%22zone%22%3A30109%7D%7D">
                 </iframe>
                         </div>
             </div>        <div class="iconset-art icons vicons devlinkzone">
-                <div style="display:none" name="gmi-ResourceViewMessageButton" id="gmi-ResourceViewMessageButton" data-gmiclass="ResourceViewMessageButton"></div></div>            <div class="deviation-mlt-preview deviation-mlt-preview-b">
-                        <div class="deviation-mlt-preview-body">
-                            <div class="stream"  name="gmi-ResourceStream" id="gmi-ResourceStream" data-gmiclass="ResourceStream" gmi-duperbrowse_enabled="1" gmi-duperbrowse_class="Cropthumb">
-                                <div
-                    class="tt-crop"
-                    collect_rid="1:378108282"
-                    data-deviationid="378108282"
+                <div style="display:none" name="gmi-ResourceViewMessageButton" id="gmi-ResourceViewMessageButton" data-gmiclass="ResourceViewMessageButton"></div></div>        <div class="deviation-mlt-preview deviation-mlt-preview-b">
+                                <div class="deviation-mlt-preview-body">
+                        <div class="stream"  name="gmi-ResourceStream" id="gmi-ResourceStream" data-gmiclass="ResourceStream" gmi-duperbrowse_enabled="1" gmi-duperbrowse_class="Cropthumb">
+                            <div
+                    class="tt-crop thumb"
+                    collect_rid="1:383461118"
+                    data-deviationid="383461118"
+                 data-super-img="http://th05.deviantart.net/fs71/PRE/f/2013/187/1/5/the_fandom_has_spoken_by_ponykillerx-d6cawhq.png" data-super-width="816" data-super-height="979" data-super-transparent="true" data-super-full-img="http://fc02.deviantart.net/fs71/f/2013/187/1/5/the_fandom_has_spoken_by_ponykillerx-d6cawhq.png" data-super-full-width="1000" data-super-full-height="1200">
+                    <a
+                        href="http://ponykillerx.deviantart.com/art/The-fandom-has-spoken-383461118"
+                        title="The fandom has spoken by ~ponyKillerX, Jul 6, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th02.deviantart.net/fs71/200H/f/2013/187/1/5/the_fandom_has_spoken_by_ponykillerx-d6cawhq.png);"
+                        >
+                            <img src="http://th02.deviantart.net/fs71/200H/f/2013/187/1/5/the_fandom_has_spoken_by_ponykillerx-d6cawhq.png" class="fakethumb" data-width="167" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:383097226"
+                    data-deviationid="383097226"
+                 data-super-img="http://fc05.deviantart.net/fs71/f/2013/186/9/5/952a31c46a2d446f3aaa06a2f123d69a-d6c33pm.png" data-super-width="568" data-super-height="418" data-super-transparent="true">
+                    <a
+                        href="http://ladollblanche.deviantart.com/art/Rayne-383097226"
+                        title="Rayne by =LaDollBlanche, Jul 5, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th00.deviantart.net/fs71/200H/f/2013/186/9/5/952a31c46a2d446f3aaa06a2f123d69a-d6c33pm.png);"
+                        >
+                            <img src="http://th00.deviantart.net/fs71/200H/f/2013/186/9/5/952a31c46a2d446f3aaa06a2f123d69a-d6c33pm.png" class="fakethumb" data-width="272" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:383261731"
+                    data-deviationid="383261731"
+                 data-super-img="http://fc04.deviantart.net/fs71/i/2013/186/d/d/sup__by_vengefulspirits-d6c6mn7.png" data-super-width="600" data-super-height="434" data-super-transparent="true">
+                    <a
+                        href="http://vengefulspirits.deviantart.com/art/Sup-383261731"
+                        title="Sup! by =VengefulSpirits, Jul 5, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th00.deviantart.net/fs71/200H/i/2013/186/d/d/sup__by_vengefulspirits-d6c6mn7.png);"
+                        >
+                            <img src="http://th00.deviantart.net/fs71/200H/i/2013/186/d/d/sup__by_vengefulspirits-d6c6mn7.png" class="fakethumb" data-width="276" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:384587459"
+                    data-deviationid="384587459"
+                 data-super-img="http://th06.deviantart.net/fs70/PRE/i/2013/192/b/d/old_lineart_omg_by_officernipples-d6cz1kz.png" data-super-width="899" data-super-height="889" data-super-transparent="true" data-super-full-img="http://fc01.deviantart.net/fs70/i/2013/192/b/d/old_lineart_omg_by_officernipples-d6cz1kz.png" data-super-full-width="1024" data-super-full-height="1013">
+                    <a
+                        href="http://officernipples.deviantart.com/art/OLD-LINEART-OMG-384587459"
+                        title="OLD LINEART OMG by =OfficerNipples, Jul 11, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th01.deviantart.net/fs70/200H/i/2013/192/b/d/old_lineart_omg_by_officernipples-d6cz1kz.png);"
+                        >
+                            <img src="http://th01.deviantart.net/fs70/200H/i/2013/192/b/d/old_lineart_omg_by_officernipples-d6cz1kz.png" class="fakethumb" data-width="202" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:384006529"
+                    data-deviationid="384006529"
+                 data-super-img="http://fc06.deviantart.net/fs70/f/2013/189/6/5/651afa7a02bf85a434c973d43d264358-d6cmlc1.png" data-super-width="911" data-super-height="700" data-super-transparent="true">
+                    <a
+                        href="http://ninjakato.deviantart.com/art/Duality-2012-Moeteimasu-384006529"
+                        title="Duality (2012) -Moeteimasu- by *NinjaKato, Jul 8, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th04.deviantart.net/fs70/200H/f/2013/189/6/5/651afa7a02bf85a434c973d43d264358-d6cmlc1.png);"
+                        >
+                            <img src="http://th04.deviantart.net/fs70/200H/f/2013/189/6/5/651afa7a02bf85a434c973d43d264358-d6cmlc1.png" class="fakethumb" data-width="260" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:383039984"
+                    data-deviationid="383039984"
+                 data-super-img="http://th08.deviantart.net/fs70/PRE/i/2013/186/0/5/open__1__sold___2__open__by_reimann-d6c1vjk.png" data-super-width="886" data-super-height="902" data-super-transparent="true" data-super-full-img="http://fc06.deviantart.net/fs70/i/2013/186/0/5/open__1__sold___2__open__by_reimann-d6c1vjk.png" data-super-full-width="1280" data-super-full-height="1302">
+                    <a
+                        href="http://reimann.deviantart.com/art/OPEN-1-SOLD-2-OPEN-383039984"
+                        title="OPEN {1: SOLD} {2: OPEN} by =Reimann, Jul 5, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th05.deviantart.net/fs70/200H/i/2013/186/0/5/open__1__sold___2__open__by_reimann-d6c1vjk.png);"
+                        >
+                            <img src="http://th05.deviantart.net/fs70/200H/i/2013/186/0/5/open__1__sold___2__open__by_reimann-d6c1vjk.png" class="fakethumb" data-width="197" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:384176497"
+                    data-deviationid="384176497"
                 >
                     <a
-                        href="http://zutheskunk.deviantart.com/art/Come-At-Me-Bro-378108282"
-                        title="Come At Me, Bro by *ZuTheSkunk, Jun 15, 2013"
+                        href="http://ninjakato.deviantart.com/art/How-cat-people-eat-ice-cream-gif-384176497"
+                        title="How cat people eat ice cream (.gif) by *NinjaKato, Jul 9, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://fc08.deviantart.net/fs70/f/2013/167/5/c/come_at_me__bro_by_zutheskunk-d69467u.png);"
+                            style="background-image:url(http://fc02.deviantart.net/fs71/f/2013/190/7/9/how_cat_people_eat_ice_cream___gif__by_ninjakato-d6cq8hd.png);"
                         >
-                            <img src="http://fc08.deviantart.net/fs70/f/2013/167/5/c/come_at_me__bro_by_zutheskunk-d69467u.png" class="fakethumb" data-width="150" data-height="150">
+                            <img src="http://fc02.deviantart.net/fs71/f/2013/190/7/9/how_cat_people_eat_ice_cream___gif__by_ninjakato-d6cq8hd.png" class="fakethumb" data-width="100" data-height="100">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377721468"
-                    data-deviationid="377721468"
-                 data-super-img="http://th08.deviantart.net/fs70/PRE/f/2013/164/8/3/free_finnedyr_lineart__by_griffsnuff-d68vvr0.png" data-super-width="894" data-super-height="894" data-super-transparent="true" data-super-full-img="http://fc09.deviantart.net/fs70/f/2013/164/8/3/free_finnedyr_lineart__by_griffsnuff-d68vvr0.png" data-super-full-width="1000" data-super-full-height="1000">
+                    class="tt-crop thumb"
+                    collect_rid="1:383774897"
+                    data-deviationid="383774897"
+                 data-super-img="http://fc05.deviantart.net/fs70/i/2013/189/f/d/domestic_cat_line_art_by_ninjakato-d6chmlt.png" data-super-width="1024" data-super-height="470" data-super-transparent="true">
                     <a
-                        href="http://griffsnuff.deviantart.com/art/Free-finnedyr-lineart-377721468"
-                        title="Free finnedyr lineart! by =griffsnuff, Jun 13, 2013"
+                        href="http://ninjakato.deviantart.com/art/Domestic-cat-line-art-383774897"
+                        title="Domestic cat line art by *NinjaKato, Jul 8, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th09.deviantart.net/fs70/200H/f/2013/164/8/3/free_finnedyr_lineart__by_griffsnuff-d68vvr0.png);"
+                            style="background-image:url(http://th05.deviantart.net/fs70/200H/i/2013/189/f/d/domestic_cat_line_art_by_ninjakato-d6chmlt.png);"
                         >
-                            <img src="http://th09.deviantart.net/fs70/200H/f/2013/164/8/3/free_finnedyr_lineart__by_griffsnuff-d68vvr0.png" class="fakethumb" data-width="200" data-height="200">
+                            <img src="http://th05.deviantart.net/fs70/200H/i/2013/189/f/d/domestic_cat_line_art_by_ninjakato-d6chmlt.png" class="fakethumb" data-width="300" data-height="138">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377854886"
-                    data-deviationid="377854886"
-                 data-super-img="http://th06.deviantart.net/fs71/PRE/i/2013/165/6/5/wow_another_wip_by_agent_birdy-d68yqp2.png" data-super-width="899" data-super-height="889" data-super-transparent="false" data-super-full-img="http://fc01.deviantart.net/fs71/i/2013/165/6/5/wow_another_wip_by_agent_birdy-d68yqp2.png" data-super-full-width="1024" data-super-full-height="1013">
+                    class="tt-crop thumb"
+                    collect_rid="1:384282854"
+                    data-deviationid="384282854"
+                 data-super-img="http://fc00.deviantart.net/fs71/i/2013/190/a/4/flat_color_chibi_commission_turntechno_by_vengefulspirits-d6csijq.png" data-super-width="600" data-super-height="606" data-super-transparent="true">
                     <a
-                        href="http://agent-birdy.deviantart.com/art/WOW-ANOTHER-WIP-377854886"
-                        title="WOW ANOTHER WIP by =Agent-Birdy, Jun 14, 2013"
+                        href="http://vengefulspirits.deviantart.com/art/Flat-color-chibi-commission-Turntechno-384282854"
+                        title="Flat color chibi commission Turntechno by =VengefulSpirits, Jul 9, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th03.deviantart.net/fs71/200H/i/2013/165/6/5/wow_another_wip_by_agent_birdy-d68yqp2.png);"
+                            style="background-image:url(http://th09.deviantart.net/fs71/200H/i/2013/190/a/4/flat_color_chibi_commission_turntechno_by_vengefulspirits-d6csijq.png);"
                         >
-                            <img src="http://th03.deviantart.net/fs71/200H/i/2013/165/6/5/wow_another_wip_by_agent_birdy-d68yqp2.png" class="fakethumb" data-width="202" data-height="200">
+                            <img src="http://th09.deviantart.net/fs71/200H/i/2013/190/a/4/flat_color_chibi_commission_turntechno_by_vengefulspirits-d6csijq.png" class="fakethumb" data-width="198" data-height="200">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377731072"
-                    data-deviationid="377731072"
+                    class="tt-crop thumb"
+                    collect_rid="1:383026695"
+                    data-deviationid="383026695"
+                 data-super-img="http://th05.deviantart.net/fs70/PRE/i/2013/185/c/e/happy_pyr0_day___by_phation-d6c1laf.png" data-super-width="728" data-super-height="1097" data-super-transparent="true" data-super-full-img="http://fc09.deviantart.net/fs70/i/2013/185/c/e/happy_pyr0_day___by_phation-d6c1laf.png" data-super-full-width="800" data-super-full-height="1205">
+                    <a
+                        href="http://phation.deviantart.com/art/happy-PYr0-day-383026695"
+                        title="happy PYr0 day^^ by *phation, Jul 4, 2013"
+                    >
+                        <div
+                            class="tinythumb scaledown"
+                            style="background-image:url(http://th09.deviantart.net/fs70/200H/i/2013/185/c/e/happy_pyr0_day___by_phation-d6c1laf.png);"
+                        >
+                            <img src="http://th09.deviantart.net/fs70/200H/i/2013/185/c/e/happy_pyr0_day___by_phation-d6c1laf.png" class="fakethumb" data-width="133" data-height="200">
+                        </div>
+                    </a></div><div
+                    class="tt-crop thumb"
+                    collect_rid="1:383421671"
+                    data-deviationid="383421671"
                 >
                     <a
-                        href="http://agoraphobic-blue.deviantart.com/art/JewelyCat-377731072"
-                        title="JewelyCat by *Agoraphobic-Blue, Jun 13, 2013"
+                        href="http://agoraphobic-blue.deviantart.com/art/WolfSoulKeeper-383421671"
+                        title="WolfSoulKeeper by *Agoraphobic-Blue, Jul 6, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://fc05.deviantart.net/fs70/f/2013/164/6/9/jewelycat_by_agoraphobic_blue-d68w35s.gif);"
+                            style="background-image:url(http://fc09.deviantart.net/fs70/f/2013/187/5/d/wolfsoulkeeper_by_agoraphobic_blue-d6ca21z.gif);"
                         >
-                            <img src="http://fc05.deviantart.net/fs70/f/2013/164/6/9/jewelycat_by_agoraphobic_blue-d68w35s.gif" class="fakethumb" data-width="150" data-height="150">
+                            <img src="http://fc09.deviantart.net/fs70/f/2013/187/5/d/wolfsoulkeeper_by_agoraphobic_blue-d6ca21z.gif" class="fakethumb" data-width="150" data-height="150">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378295557"
-                    data-deviationid="378295557"
-                 data-super-img="http://fc01.deviantart.net/fs70/f/2013/166/d/f/anime_render___carol_by_ladypirouette-d6986px.png" data-super-width="800" data-super-height="600" data-super-transparent="true">
+                    class="tt-crop thumb"
+                    collect_rid="1:383760927"
+                    data-deviationid="383760927"
+                 data-super-img="http://th00.deviantart.net/fs71/PRE/f/2013/188/9/d/9de056dfc3daafda0dc6bca72644610a-d6chbtr.png" data-super-width="1256" data-super-height="636" data-super-transparent="true" data-super-full-img="http://fc04.deviantart.net/fs71/f/2013/188/9/d/9de056dfc3daafda0dc6bca72644610a-d6chbtr.png" data-super-full-width="1422" data-super-full-height="720">
                     <a
-                        href="http://ladypirouette.deviantart.com/art/Anime-Render-Carol-378295557"
-                        title="Anime Render | Carol by ~LadyPirouette, Jun 15, 2013"
+                        href="http://ninjakato.deviantart.com/art/La-da-da-da-da-da-da-da-383760927"
+                        title="La da da da da da da da by *NinjaKato, Jul 7, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th09.deviantart.net/fs70/200H/f/2013/166/d/f/anime_render___carol_by_ladypirouette-d6986px.png);"
+                            style="background-image:url(http://th07.deviantart.net/fs71/200H/f/2013/188/9/d/9de056dfc3daafda0dc6bca72644610a-d6chbtr.png);"
                         >
-                            <img src="http://th09.deviantart.net/fs70/200H/f/2013/166/d/f/anime_render___carol_by_ladypirouette-d6986px.png" class="fakethumb" data-width="267" data-height="200">
+                            <img src="http://th07.deviantart.net/fs71/200H/f/2013/188/9/d/9de056dfc3daafda0dc6bca72644610a-d6chbtr.png" class="fakethumb" data-width="300" data-height="152">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378637053"
-                    data-deviationid="378637053"
-                 data-super-img="http://fc02.deviantart.net/fs71/f/2013/168/5/5/55de7af55f28d7a3eb2b16e2072fd0bb-d69fi7x.jpg" data-super-width="636" data-super-height="900" data-super-transparent="false">
+                    class="tt-crop thumb"
+                    collect_rid="1:383550645"
+                    data-deviationid="383550645"
+                 data-super-img="http://fc06.deviantart.net/fs71/f/2013/188/d/9/_usawitch__by_lneko_hime-d6cctkl.png" data-super-width="663" data-super-height="812" data-super-transparent="true">
                     <a
-                        href="http://tohdaryl.deviantart.com/art/Gesundheit-378637053"
-                        title="Gesundheit by ~tohdaryl, Jun 17, 2013"
+                        href="http://lneko-hime.deviantart.com/art/UsaWitch-383550645"
+                        title=".UsaWitch. by *lNeko-Hime, Jul 7, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th01.deviantart.net/fs71/200H/f/2013/168/5/5/55de7af55f28d7a3eb2b16e2072fd0bb-d69fi7x.jpg);"
+                            style="background-image:url(http://th07.deviantart.net/fs71/200H/f/2013/188/d/9/_usawitch__by_lneko_hime-d6cctkl.png);"
                         >
-                            <img src="http://th01.deviantart.net/fs71/200H/f/2013/168/5/5/55de7af55f28d7a3eb2b16e2072fd0bb-d69fi7x.jpg" class="fakethumb" data-width="141" data-height="200">
+                            <img src="http://th07.deviantart.net/fs71/200H/f/2013/188/d/9/_usawitch__by_lneko_hime-d6cctkl.png" class="fakethumb" data-width="163" data-height="200">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378243595"
-                    data-deviationid="378243595"
-                 data-super-img="http://th06.deviantart.net/fs70/PRE/i/2013/166/b/f/at__ciel_heartfilia_by_tsunyandere-d6972mj.png" data-super-width="846" data-super-height="945" data-super-transparent="false" data-super-full-img="http://fc00.deviantart.net/fs70/i/2013/166/b/f/at__ciel_heartfilia_by_tsunyandere-d6972mj.png" data-super-full-width="1024" data-super-full-height="1144">
-                    <a
-                        href="http://tsunyandere.deviantart.com/art/AT-ciel-heartfilia-378243595"
-                        title="AT: ciel-heartfilia by *tsunyandere, Jun 15, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th08.deviantart.net/fs70/200H/i/2013/166/b/f/at__ciel_heartfilia_by_tsunyandere-d6972mj.png);"
-                        >
-                            <img src="http://th08.deviantart.net/fs70/200H/i/2013/166/b/f/at__ciel_heartfilia_by_tsunyandere-d6972mj.png" class="fakethumb" data-width="179" data-height="200">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377823538"
-                    data-deviationid="377823538"
+                    class="tt-crop thumb"
+                    collect_rid="1:383421523"
+                    data-deviationid="383421523"
                 >
                     <a
-                        href="http://sharpie91.deviantart.com/art/Mabel-WIP-377823538"
-                        title="Mabel-WIP by *sharpie91, Jun 13, 2013"
+                        href="http://agoraphobic-blue.deviantart.com/art/WolfSoulKeeper-383421523"
+                        title="WolfSoulKeeper by *Agoraphobic-Blue, Jul 6, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th01.deviantart.net/fs71/200H/f/2013/164/9/f/mabel_wip_by_sharpie91-d68y2ia.png);"
+                            style="background-image:url(http://fc03.deviantart.net/fs71/f/2013/187/a/b/wolfsoulkeeper_by_agoraphobic_blue-d6ca1xv.gif);"
                         >
-                            <img src="http://th01.deviantart.net/fs71/200H/f/2013/164/9/f/mabel_wip_by_sharpie91-d68y2ia.png" class="fakethumb" data-width="206" data-height="200">
+                            <img src="http://fc03.deviantart.net/fs71/f/2013/187/a/b/wolfsoulkeeper_by_agoraphobic_blue-d6ca1xv.gif" class="fakethumb" data-width="150" data-height="150">
                         </div>
                     </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378111234"
-                    data-deviationid="378111234"
-                 data-super-img="http://th08.deviantart.net/fs70/PRE/f/2013/166/a/a/aaa1240a382996b230824bf770cd9eb9-d6948hu.png" data-super-width="1435" data-super-height="557" data-super-transparent="true" data-super-full-img="http://fc01.deviantart.net/fs70/f/2013/166/a/a/aaa1240a382996b230824bf770cd9eb9-d6948hu.png" data-super-full-width="1545" data-super-full-height="600">
+                    class="tt-crop thumb"
+                    collect_rid="1:384007238"
+                    data-deviationid="384007238"
+                 data-super-img="http://fc00.deviantart.net/fs71/i/2013/189/6/0/baka_by_vengefulspirits-d6cmlvq.png" data-super-width="600" data-super-height="574" data-super-transparent="true">
                     <a
-                        href="http://ninjakato.deviantart.com/art/Sanori-2013-378111234"
-                        title="Sanori 2013 by *NinjaKato, Jun 15, 2013"
+                        href="http://vengefulspirits.deviantart.com/art/Baka-384007238"
+                        title="Baka by =VengefulSpirits, Jul 8, 2013"
                     >
                         <div
                             class="tinythumb scaledown"
-                            style="background-image:url(http://th01.deviantart.net/fs70/200H/f/2013/166/a/a/aaa1240a382996b230824bf770cd9eb9-d6948hu.png);"
+                            style="background-image:url(http://th08.deviantart.net/fs71/200H/i/2013/189/6/0/baka_by_vengefulspirits-d6cmlvq.png);"
                         >
-                            <img src="http://th01.deviantart.net/fs70/200H/f/2013/166/a/a/aaa1240a382996b230824bf770cd9eb9-d6948hu.png" class="fakethumb" data-width="300" data-height="117">
+                            <img src="http://th08.deviantart.net/fs71/200H/i/2013/189/6/0/baka_by_vengefulspirits-d6cmlvq.png" class="fakethumb" data-width="209" data-height="200">
                         </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377709328"
-                    data-deviationid="377709328"
-                 data-super-img="http://fc07.deviantart.net/fs70/f/2013/164/7/2/location_map_blank_by_griffsnuff-d68vmds.png" data-super-width="911" data-super-height="540" data-super-transparent="true">
-                    <a
-                        href="http://griffsnuff.deviantart.com/art/Location-map-blank-377709328"
-                        title="Location map blank by =griffsnuff, Jun 13, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th05.deviantart.net/fs70/200H/f/2013/164/7/2/location_map_blank_by_griffsnuff-d68vmds.png);"
-                        >
-                            <img src="http://th05.deviantart.net/fs70/200H/f/2013/164/7/2/location_map_blank_by_griffsnuff-d68vmds.png" class="fakethumb" data-width="300" data-height="178">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377649977"
-                    data-deviationid="377649977"
-                 data-super-img="http://th01.deviantart.net/fs71/PRE/f/2013/164/8/1/switch_meme___remy__kat__and_tat_by_tatchit-d68ucl5.png" data-super-width="844" data-super-height="947" data-super-transparent="true" data-super-full-img="http://fc01.deviantart.net/fs71/f/2013/164/8/1/switch_meme___remy__kat__and_tat_by_tatchit-d68ucl5.png" data-super-full-width="865" data-super-full-height="970">
-                    <a
-                        href="http://tatchit.deviantart.com/art/Switch-Meme-Remy-Kat-and-Tat-377649977"
-                        title="Switch Meme - Remy, Kat, and Tat by *Tatchit, Jun 13, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th09.deviantart.net/fs71/200H/f/2013/164/8/1/switch_meme___remy__kat__and_tat_by_tatchit-d68ucl5.png);"
-                        >
-                            <img src="http://th09.deviantart.net/fs71/200H/f/2013/164/8/1/switch_meme___remy__kat__and_tat_by_tatchit-d68ucl5.png" class="fakethumb" data-width="178" data-height="200">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378704519"
-                    data-deviationid="378704519"
-                 data-super-img="http://fc06.deviantart.net/fs71/i/2013/168/b/8/pen_drawing_of_a_girl_by_oomizuao-d69gy9z.jpg" data-super-width="1024" data-super-height="704" data-super-transparent="false">
-                    <a
-                        href="http://oomizuao.deviantart.com/art/Pen-Drawing-Of-A-Girl-378704519"
-                        title="Pen Drawing Of A Girl by *oomizuao, Jun 17, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th01.deviantart.net/fs71/200H/i/2013/168/b/8/pen_drawing_of_a_girl_by_oomizuao-d69gy9z.jpg);"
-                        >
-                            <img src="http://th01.deviantart.net/fs71/200H/i/2013/168/b/8/pen_drawing_of_a_girl_by_oomizuao-d69gy9z.jpg" class="fakethumb" data-width="291" data-height="200">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:377562695"
-                    data-deviationid="377562695"
-                >
-                    <a
-                        href="http://agoraphobic-blue.deviantart.com/art/XxValleybreezexX-377562695"
-                        title="XxValleybreezexX by *Agoraphobic-Blue, Jun 12, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://fc06.deviantart.net/fs70/f/2013/163/c/5/xxvalleybreezexx_by_agoraphobic_blue-d68sh8n.gif);"
-                        >
-                            <img src="http://fc06.deviantart.net/fs70/f/2013/163/c/5/xxvalleybreezexx_by_agoraphobic_blue-d68sh8n.gif" class="fakethumb" data-width="139" data-height="146">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:379021545"
-                    data-deviationid="379021545"
-                 data-super-img="http://th08.deviantart.net/fs70/PRE/f/2013/169/f/f/y_by_agent_birdy-d69nqw9.png" data-super-width="981" data-super-height="814" data-super-transparent="false" data-super-full-img="http://fc09.deviantart.net/fs70/f/2013/169/f/f/y_by_agent_birdy-d69nqw9.png" data-super-full-width="1000" data-super-full-height="830">
-                    <a
-                        href="http://agent-birdy.deviantart.com/art/Y-379021545"
-                        title="Y by =Agent-Birdy, Jun 18, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th08.deviantart.net/fs70/200H/f/2013/169/f/f/y_by_agent_birdy-d69nqw9.png);"
-                        >
-                            <img src="http://th08.deviantart.net/fs70/200H/f/2013/169/f/f/y_by_agent_birdy-d69nqw9.png" class="fakethumb" data-width="241" data-height="200">
-                        </div>
-                    </a></div><div
-                    class="tt-crop"
-                    collect_rid="1:378363133"
-                    data-deviationid="378363133"
-                 data-super-img="http://fc06.deviantart.net/fs70/f/2013/167/d/2/rivaille_wip_by_brilcrist-d699mv1.jpg" data-super-width="1000" data-super-height="625" data-super-transparent="false">
-                    <a
-                        href="http://brilcrist.deviantart.com/art/Rivaille-WIP-378363133"
-                        title="Rivaille WIP by =brilcrist, Jun 16, 2013"
-                    >
-                        <div
-                            class="tinythumb scaledown"
-                            style="background-image:url(http://th07.deviantart.net/fs70/200H/f/2013/167/d/2/rivaille_wip_by_brilcrist-d699mv1.jpg);"
-                        >
-                            <img src="http://th07.deviantart.net/fs70/200H/f/2013/167/d/2/rivaille_wip_by_brilcrist-d699mv1.jpg" class="fakethumb" data-width="300" data-height="188">
-                        </div>
-                    </a></div>                    </div>
-                            <div class="morelink">
-                                <a href="http://www.deviantart.com/morelikethis/196158032" class="smbutton smbutton-textonly" onclick="PubSub.publish('DaGa.track_event_link', {
+                    </a></div>                </div>
+                                    <div class="morelink">
+                        <a href="http://www.deviantart.com/morelikethis/196158032" class="smbutton smbutton-textonly" onclick="PubSub.publish('DaGa.track_event_link', {
                     event: event
                     ,element: this
                     ,category: &quot;Deviation&quot;
                     ,action: &quot;mlt_browse&quot;
                 });">
-                                    <span><strong>Browse More Like This</strong></span>
-                                </a>
-                            </div>
-                        </div>
+                            <span><strong>Browse More Like This</strong></span>
+                        </a>
                     </div>
-                    <div class="iconset-art icons vicons devlinkzone"><a class="smbutton smbutton-textonly" id="download-button" rel="nofollow" href="http://www.deviantart.com/download/196158032/ao3_testing_text_by_cesy12-d38sci8.html?token=86dffb1933b986fe21c8b0f5b222f503921b241d&amp;ts=1371677677"><span>
+                                </div>
+                </div>
+                <div class="iconset-art icons vicons devlinkzone"><a class="smbutton smbutton-textonly" id="download-button" rel="nofollow" href="http://www.deviantart.com/download/196158032/ao3_testing_text_by_cesy12-d38sci8.html?token=930895a59d1b9c1d241819d7d07c7a8da437b73e&amp;ts=1373590124"><span>
                     <i class="i7"></i><strong>Download File</strong><br/>
                     <small>HTML, 231 bytes</small>
                 </span></a><script type="text/javascript">DWait.ready([".domready"], function(){ PubSub.publish("PurchaseAutoload.scroll", 1) });</script>
@@ -746,7 +746,7 @@ http_interactions:
                 </div>
         
                 <div class="details-section">
-                <label>Submitted:</label> <span title="123w 5d ago" ts="1296850193" offset="-1">February 4, 2011</span><br>
+                <label>Submitted:</label> <span title="126w 6d ago" ts="1296850193" offset="-1">February 4, 2011</span><br>
                             <label>File Size:</label> 231 bytes<br>        <div>
                     <strong>Link</strong><br>
                     <input class="embed-code" readonly onclick="PubSub.publish('DaGa.track_event_link', {
@@ -773,7 +773,7 @@ http_interactions:
                 <div class="details-section">
                 <span class="comments"><span class="iconcommentsstats"></span>Comments:</span> Disabled<br>
                 <span class="favourites"><span class="iconcommentsstats"></span>Favourites:</span> 0<br>
-                <span class="views"><span class="iconcommentsstats"></span>Views:</span> 434 <span class="label">(7 today)</span><br>
+                <span class="views"><span class="iconcommentsstats"></span>Views:</span> 494 <span class="label">(1 today)</span><br>
                 <span class="downloads"><span class="iconcommentsstats"></span>Downloads:</span> 0 <span class="label">(0 today)</span><br>
                 </div>    <div class="preload" id="pimp-preload"><span class="i"></span><span class="ii"></span><span class="iii"></span></div>
             <div id="pimp-196158032" class="light pimp" style="display:none">
@@ -812,7 +812,7 @@ http_interactions:
                             <iframe scrolling="no" frameborder="0" onload="this.style.visibility = 'visible';"
                         data-da-ad="1"
                         style="border:0;visibility:hidden;width:300px;height:250px;"
-                        src="http://www.da-ads.com/google.html?cb=1422442424#%7B%22size%22%3A%5B300%2C250%5D%2C%22service%22%3A%221008370%5C%2Fca-pub-2005626271413567%22%2C%22slot%22%3A%22btf_right_300x250_v7_deviation%22%2C%22adsense%22%3A%7B%22adsense_channel_ids%22%3A%228286327485%22%2C%22google_hints%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw_type%22%3A%22broad%22%7D%2C%22da%22%3A%7B%22LoggedIn%22%3A%22No%22%2C%22pageid%22%3A196158032%2C%22dailyimp%22%3A%221%22%2C%22sessimp%22%3A%221%22%7D%2C%22ri%22%3A%7B%22site%22%3A1122%2C%22zone%22%3A1339%7D%7D">
+                        src="http://www.da-ads.com/google.html?cb=1422442424#%7B%22size%22%3A%5B300%2C250%5D%2C%22service%22%3A%221008370%5C%2Fca-pub-2005626271413567%22%2C%22slot%22%3A%22btf_right_300x250_v7_deviation%22%2C%22adsense%22%3A%7B%22adsense_channel_ids%22%3A%226796827591%22%2C%22google_hints%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw%22%3A%22graphic+design%2Cweb+design%2Cgaming%2Cphotography%2Canimation%2Ccomic+books%2Cdigital+images%22%2C%22google_kw_type%22%3A%22broad%22%7D%2C%22da%22%3A%7B%22LoggedIn%22%3A%22No%22%2C%22pageid%22%3A196158032%2C%22dailyimp%22%3A%221%22%2C%22sessimp%22%3A%221%22%7D%2C%22ri%22%3A%7B%22site%22%3A1122%2C%22zone%22%3A30109%7D%7D">
                 </iframe>
                         </div>
             </div>                </div>
@@ -835,7 +835,7 @@ http_interactions:
                         <ul>
                             <li class="author">
                                 by <span class="name">~<a class="u" href="http://cesy12.deviantart.com/">cesy12</a></span>,
-                                <span title="123 weeks, 5 days ago">Feb 4, 2011, 12:09:53 PM</span>
+                                <span title="126 weeks, 6 days ago">Feb 4, 2011, 12:09:53 PM</span>
                             </li>
                             <li class="category">
                                 <a href="http://browse.deviantart.com/scraps/">Scraps</a>                    </li>
@@ -849,13 +849,13 @@ http_interactions:
                                 <div usr class="c ppb alink bottom">
                         <a usr class="a commentslink" href="http://cesy12.deviantart.com/art/AO3-testing-text-196158032#comments">No Comments</a>
                     </div>        </div>
-                <script type='text/javascript' id='dwaitdatex-51c2219573671'>
+                <script type='text/javascript' id='dwaitdatex-51df5014cec98'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c2219573671');
+                    var elem = document.getElementById('dwaitdatex-51df5014cec98');
                     context = elem ? elem.parentNode : context;
                     (function(){ PubSub.publish('DuperbrowseStreamLoader.load', {stream: 'freeform.custom'}); }).apply(context);
                 }
@@ -908,13 +908,13 @@ http_interactions:
                 <i usr class="gr3 gb"></i>
                 <i usr class="gr2 gb"></i>
                 <i usr class="gr1 gb gb1"></i>    </div>
-            </div><script type='text/javascript' id='dwaitdatex-51c221957410e'>
+            </div><script type='text/javascript' id='dwaitdatex-51df5014cfa7c'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c221957410e');
+                    var elem = document.getElementById('dwaitdatex-51df5014cfa7c');
                     context = elem ? elem.parentNode : context;
                     (function(){ PubSub.publish('DuperbrowseStreamLoader.load', {stream: 'freeform.custom'}); }).apply(context);
                 }
@@ -952,8 +952,8 @@ http_interactions:
               name="gmi-ResourceStream" id="gmi-ResourceStream" data-gmiclass="ResourceStream" gmi-duperbrowse_enabled="1" gmi-duperbrowse_class="Channel" gmi-show_title="0"     data-gmiclass="ResourceStream"
              data-dwait-click="gmi_wake"
              data-dwait-deps="jms/pages/duperbrowse/stream/channel.resource.stream.js">
-            <keeper for="Smoothie.thumbs"></keeper><smoothie q="special:dd" label="Daily Deviations" offset="0" count_per_page="8" moreleft="1"></smoothie><div class="tt-a ta" collect_rid="1:377873592" usericon="http://a.deviantart.net/avatars/s/k/skipdesign.jpg?2" userid="12769437" username="SkipDesign" symbol="~" category="digitalart/typography/other"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/106/150/logo3.png);"><a class="thumb hasprint" href="http://skipdesign.deviantart.com/art/The-Digital-Decade-377873592" title="The Digital Decade by ~SkipDesign, Jun 14, 2013 in Digital Art &gt; Typography &gt; Other" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://th01.deviantart.net/fs70/PRE/f/2013/165/d/6/the_digital_decade_by_skipdesign-d68z54o.jpg" data-super-width="752" data-super-height="1063" data-super-transparent="false" data-super-full-img="http://fc08.deviantart.net/fs70/f/2013/165/d/6/the_digital_decade_by_skipdesign-d68z54o.jpg" data-super-full-width="800" data-super-full-height="1131"><i></i><img  onerror="autobob_reload(event)" width="106" height="150" src="http://th09.deviantart.net/fs70/150/f/2013/165/d/6/the_digital_decade_by_skipdesign-d68z54o.jpg" data-src="http://th09.deviantart.net/fs70/150/f/2013/165/d/6/the_digital_decade_by_skipdesign-d68z54o.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a super-wi" collect_rid="1:377736304" usericon="http://a.deviantart.net/avatars/h/i/hifarry.jpg?2" userid="1076710" username="hifarry" symbol="~" category="digitalart/paintings/landscapes"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/84/logo3.png);"><a class="thumb" href="http://hifarry.deviantart.com/art/Finding-Majapahit-377736304" title="Finding Majapahit by ~hifarry, Jun 13, 2013 in Digital Art &gt; Drawings &amp; Paintings &gt; Landscapes &amp; Scenery" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc04.deviantart.net/fs71/i/2013/164/3/2/finding_majapahit_by_hifarry-d68w774.jpg" data-super-width="1024" data-super-height="576" data-super-transparent="false"><i></i><img  onerror="autobob_reload(event)" width="150" height="84" src="http://th02.deviantart.net/fs71/150/i/2013/164/3/2/finding_majapahit_by_hifarry-d68w774.jpg" data-src="http://th02.deviantart.net/fs71/150/i/2013/164/3/2/finding_majapahit_by_hifarry-d68w774.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a sq" collect_rid="1:374656279" usericon="http://a.deviantart.net/avatars/a/l/alois-noette.png?1" userid="3681392" username="Alois-Noette" symbol="~" category="literature/poetry/narrative/spokenword"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/125/logo3.png);"><a href="http://alois-noette.deviantart.com/art/27-374656279" class="thumb lit" onmouseover="if (window.LitBox) LitBox.hover(this, true)" onmouseout="if (window.LitBox) LitBox.out(this)"><i></i><img class="lit" src="http://a.deviantart.net/littags/e/t/t/alois-noette.png?3"><span class="wrap" style="width: 150px"><q>
-                <strong>27</strong>He had 27 bones <br />in his left hand, &#8232;all under a thick netting <br />of coral reef. &#8232;He had &#8232;27 bones in his &#8232;right hand too, &#8232;each perfectly preserved. <br />Both hands held their breath <br />as he approached stage &#8232;exit.<br /><br />Listen closely. <br />Hit every bar, tour every state. <br />A river runs interstate through Texas. <br />Small yellow lines jump straight through it. <br />Take the US-27 &#8232;from Fort Wayne to Miami. A second doesn&rsquo;t make it <br />to his destination.<br /><br />Cobalt. Aluminum. &#8232;A third was found dead, &#8232;drowned in his pool, <br />an empty shot glass floating beside him. <br />Cobalt weighed &#8232;down his shoulders. Alumi</q></span></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a ta" collect_rid="1:372524687" usericon="http://a.deviantart.net/avatars/b/i/biniwood.png?11" userid="22396664" username="Biniwood" symbol="*" category="artisan/customdolls/plushies"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/111/150/logo3.png);"><a class="thumb" href="http://biniwood.deviantart.com/art/Under-The-Willow-Tree-372524687" title="Under The Willow Tree by *Biniwood, May 19, 2013 in Artisan Crafts &gt; Dolls, Plushies &amp; Custom Toys &gt; Plushies" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc02.deviantart.net/fs70/i/2013/139/a/9/under_the_willow_tree_by_biniwood-d65shvz.jpg" data-super-width="600" data-super-height="809" data-super-transparent="false"><i></i><img  onerror="autobob_reload(event)" width="111" height="150" src="http://th09.deviantart.net/fs70/150/i/2013/139/a/9/under_the_willow_tree_by_biniwood-d65shvz.jpg" data-src="http://th09.deviantart.net/fs70/150/i/2013/139/a/9/under_the_willow_tree_by_biniwood-d65shvz.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a ta" collect_rid="1:375409513" usericon="http://a.deviantart.net/avatars/g/u/guilemo.jpg?1" userid="2623579" username="guilemo" symbol="~" category="digitalart/3d/characters/creatures"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/103/150/logo3.png);"><a class="thumb" href="http://guilemo.deviantart.com/art/Moody-Conrad-375409513" title="Moody Conrad by ~guilemo, Jun 2, 2013 in Digital Art &gt; 3-Dimensional Art &gt; Characters &gt; Animals &amp; Creatures" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://th09.deviantart.net/fs70/PRE/f/2013/153/d/4/moody_conrad_by_guilemo-d67ibu1.jpg" data-super-width="742" data-super-height="1077" data-super-transparent="false" data-super-full-img="http://fc02.deviantart.net/fs70/f/2013/153/d/4/moody_conrad_by_guilemo-d67ibu1.jpg" data-super-full-width="890" data-super-full-height="1292"><i></i><img  onerror="autobob_reload(event)" width="103" height="150" src="http://th08.deviantart.net/fs70/150/f/2013/153/d/4/moody_conrad_by_guilemo-d67ibu1.jpg" data-src="http://th08.deviantart.net/fs70/150/f/2013/153/d/4/moody_conrad_by_guilemo-d67ibu1.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a sq" collect_rid="1:376739553" usericon="http://a.deviantart.net/avatars/o/r/oro-elui.png?7" userid="3072848" username="oro-elui" symbol="*" category="photography/transportation"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/144/logo3.png);"><a class="thumb" href="http://oro-elui.deviantart.com/art/Journey-of-Life-376739553" title="Journey of Life. by *oro-elui, Jun 8, 2013 in Photography &gt; Transportation" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc03.deviantart.net/fs71/i/2013/159/f/d/journey_of_life__by_oro_elui-d68au3l.png" data-super-width="600" data-super-height="577" data-super-transparent="false"><i></i><img  onerror="autobob_reload(event)" width="150" height="144" src="http://th05.deviantart.net/fs71/150/i/2013/159/f/d/journey_of_life__by_oro_elui-d68au3l.png" data-src="http://th05.deviantart.net/fs71/150/i/2013/159/f/d/journey_of_life__by_oro_elui-d68au3l.png"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a super-wi" collect_rid="1:254117121" usericon="http://a.deviantart.net/avatars/c/h/champagne-meat.jpg?5" userid="7375453" username="Champagne-meat" symbol="~" category="photography/people/cosplay"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/97/logo3.png);"><a class="thumb" href="http://champagne-meat.deviantart.com/art/Trinity-Blood-254117121" title="Trinity Blood by ~Champagne-meat, Aug 20, 2011 in Photography &gt; People &amp; Portraits &gt; Cosplay" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc07.deviantart.net/fs71/i/2011/232/9/9/trinity_blood_by_champagne_meat-d47am0x.jpg" data-super-width="1024" data-super-height="665" data-super-transparent="false"><i></i><img  onerror="autobob_reload(event)" width="150" height="97" src="http://th04.deviantart.net/fs71/150/i/2011/232/9/9/trinity_blood_by_champagne_meat-d47am0x.jpg" data-src="http://th04.deviantart.net/fs71/150/i/2011/232/9/9/trinity_blood_by_champagne_meat-d47am0x.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a wi" collect_rid="1:376853418" usericon="http://a.deviantart.net/avatars/k/r/kroszi102.png?2" userid="5053136" username="kroszi102" symbol="~" category="photography/journalism/naturalevents"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/100/logo3.png);"><a class="thumb hasprint" href="http://kroszi102.deviantart.com/art/How-376853418" title="How? by ~kroszi102, Jun 9, 2013 in Photography &gt; Photojournalism &gt; Natural Events" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc05.deviantart.net/fs71/i/2013/160/9/4/how__by_kroszi102-d68d9yi.jpg" data-super-width="1024" data-super-height="681" data-super-transparent="false"><i></i><img  onerror="autobob_reload(event)" width="150" height="100" src="http://th08.deviantart.net/fs71/150/i/2013/160/9/4/how__by_kroszi102-d68d9yi.jpg" data-src="http://th08.deviantart.net/fs71/150/i/2013/160/9/4/how__by_kroszi102-d68d9yi.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div></div>
+            <keeper for="Smoothie.thumbs"></keeper><smoothie q="special:dd" label="Daily Deviations" offset="0" count_per_page="8" moreleft="1"></smoothie><div class="tt-a sq" collect_rid="1:380269006" usericon="http://a.deviantart.net/avatars/s/o/solaces.jpg" userid="5871931" username="Solaces" symbol="~" category="literature/poetry/general/open"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/125/logo3.png);"><a href="http://solaces.deviantart.com/art/Mollusca-380269006" class="thumb lit" onmouseover="if (window.LitBox) LitBox.hover(this, true)" onmouseout="if (window.LitBox) LitBox.out(this)"><i></i><img class="lit" src="http://a.deviantart.net/littags/s/e/c/solaces.png"><span class="wrap" style="width: 150px"><q>
+                <strong>Mollusca</strong>1.<br /><br />Find whatever it is that is your treasure.<br /><br />Bury it alive.<br /><br />2.<br /><br />I wrestled the guardian angel for my birthstone,<br />just a pearl like some full moon risen from a mollusk's growing pain.<br />I counted the sheets of nacre like birthday candles,<br />peeled away each one until I at last remembered<br />that what I treasure is an infection.<br /><br />3.<br /><br />It was a gentle kind of wrestling,<br />not Biblical, not even assertive,<br />more like the way two sprite wolf cubs play,<br />a light lunge, a jovial snarl,<br />a fight over nothing in particular.<br /><br />The guardian angel renounced itself<br />as a guardian angel, said<br /><br /> I am a siren.<br />I lie in the tunnels of nautilus shells<br />and sing until I co</q></span></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a wi" collect_rid="1:381861725" usericon="http://a.deviantart.net/avatars/w/o/woxys.gif" userid="4534776" username="woxys" symbol="*" category="photography/nature/wild"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/116/logo3.png);"><a class="thumb" href="http://woxys.deviantart.com/art/So-much-hate-in-that-tiny-face-381861725" title="So much hate in that tiny face by *woxys, Jun 30, 2013 in Photography &gt; Animals, Plants &amp; Nature &gt; Wild Animals" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc08.deviantart.net/fs70/f/2013/181/0/5/so_much_hate_in_that_tiny_face_by_woxys-d6bcme5.jpg" data-super-width="804" data-super-height="620" data-super-transparent="false"><i></i><img   width="150" height="116" src="http://th04.deviantart.net/fs70/150/f/2013/181/0/5/so_much_hate_in_that_tiny_face_by_woxys-d6bcme5.jpg" data-src="http://th04.deviantart.net/fs70/150/f/2013/181/0/5/so_much_hate_in_that_tiny_face_by_woxys-d6bcme5.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a sq" collect_rid="1:382510723" usericon="http://a.deviantart.net/avatars/k/r/kry1.gif?1" userid="851316" username="kry1" symbol="*" category="artisan/jewelry/necklaces"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/150/logo3.png);"><a class="thumb" href="http://kry1.deviantart.com/art/The-Pond-Koi-Lotus-Necklace-382510723" title="The Pond Koi Lotus Necklace by *kry1, Jul 2, 2013 in Artisan Crafts &gt; Jewelry &gt; Necklaces &amp; Pendants" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc04.deviantart.net/fs71/f/2013/183/d/0/the_pond_koi_lotus_necklace_by_kry1-d6bqj5v.jpg" data-super-width="720" data-super-height="720" data-super-transparent="false"><i></i><img   width="150" height="150" src="http://th07.deviantart.net/fs71/150/f/2013/183/d/0/the_pond_koi_lotus_necklace_by_kry1-d6bqj5v.jpg" data-src="http://th07.deviantart.net/fs71/150/f/2013/183/d/0/the_pond_koi_lotus_necklace_by_kry1-d6bqj5v.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a super-wi" collect_rid="1:382293489" usericon="http://a.deviantart.net/avatars/s/s/ssglushakov.jpg?7" userid="14964127" username="SSGlushakov" symbol="~" category="digitalart/paintings/scifi"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/86/logo3.png);"><a class="thumb hasprint" href="http://ssglushakov.deviantart.com/art/Far-exploration-382293489" title="Far exploration by ~SSGlushakov, Jul 1, 2013 in Digital Art &gt; Drawings &amp; Paintings &gt; Sci-Fi" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://th08.deviantart.net/fs70/PRE/i/2013/182/1/1/far_exploration_by_ssglushakov-d6blvjl.jpg" data-super-width="1182" data-super-height="676" data-super-transparent="false" data-super-full-img="http://fc09.deviantart.net/fs70/i/2013/182/1/1/far_exploration_by_ssglushakov-d6blvjl.jpg" data-super-full-width="1280" data-super-full-height="732"><i></i><img   width="150" height="86" src="http://th00.deviantart.net/fs70/150/i/2013/182/1/1/far_exploration_by_ssglushakov-d6blvjl.jpg" data-src="http://th00.deviantart.net/fs70/150/i/2013/182/1/1/far_exploration_by_ssglushakov-d6blvjl.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a ta" collect_rid="1:375457362" usericon="http://a.deviantart.net/avatars/m/i/michaelelliottfurr.jpg?8" userid="17227592" username="michaelelliottfurr" symbol="~" category="traditional/paintings/animals"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/112/150/logo3.png);"><a class="thumb" href="http://michaelelliottfurr.deviantart.com/art/Bird-of-Prey-Osprey-375457362" title="Bird of Prey: Osprey by ~michaelelliottfurr, Jun 2, 2013 in Traditional Art &gt; Paintings &gt; Animals" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://th03.deviantart.net/fs71/PRE/f/2013/153/c/0/bird_of_prey__osprey_by_michaelelliottfurr-d67jcr6.png" data-super-width="771" data-super-height="1037" data-super-transparent="false" data-super-full-img="http://fc03.deviantart.net/fs71/f/2013/153/c/0/bird_of_prey__osprey_by_michaelelliottfurr-d67jcr6.png" data-super-full-width="987" data-super-full-height="1327"><i></i><img   width="112" height="150" src="http://th08.deviantart.net/fs71/150/f/2013/153/c/0/bird_of_prey__osprey_by_michaelelliottfurr-d67jcr6.png" data-src="http://th08.deviantart.net/fs71/150/f/2013/153/c/0/bird_of_prey__osprey_by_michaelelliottfurr-d67jcr6.png"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a sq" collect_rid="1:101256292" usericon="http://a.deviantart.net/avatars/c/o/correiae.png?1" userid="1978409" username="correiae" symbol="~" category="photography/abstract/abstracts"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/150/150/logo3.png);"><a class="thumb" href="http://correiae.deviantart.com/art/Soft-ponton-101256292" title="Soft ponton by ~correiae, Oct 20, 2008 in Photography &gt; Abstract &amp; Surreal &gt; Abstract" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc02.deviantart.net/fs33/f/2008/294/a/8/Soft_ponton_by_correiae.jpg" data-super-width="500" data-super-height="500" data-super-transparent="false"><i></i><img   width="150" height="150" src="http://th06.deviantart.net/fs33/150/f/2008/294/a/8/Soft_ponton_by_correiae.jpg" data-src="http://th06.deviantart.net/fs33/150/f/2008/294/a/8/Soft_ponton_by_correiae.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a ta" collect_rid="1:383135860" usericon="http://a.deviantart.net/avatars/h/o/hoodoo78.jpg?1" userid="3312949" username="hoodoo78" symbol="~" category="photography/horror"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/100/150/logo3.png);"><a class="thumb" href="http://hoodoo78.deviantart.com/art/31-383135860" title="31 by ~hoodoo78, Jul 5, 2013 in Photography &gt; Horror &amp; Macabre" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc01.deviantart.net/fs70/f/2013/186/5/1/31_by_hoodoo78-d6c3xis.jpg" data-super-width="467" data-super-height="700" data-super-transparent="false"><i></i><img   width="100" height="150" src="http://th03.deviantart.net/fs70/150/f/2013/186/5/1/31_by_hoodoo78-d6c3xis.jpg" data-src="http://th03.deviantart.net/fs70/150/f/2013/186/5/1/31_by_hoodoo78-d6c3xis.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div><div class="tt-a ta" collect_rid="1:335672838" usericon="http://a.deviantart.net/avatars/l/j/ljs-photo.jpg?1" userid="10377818" username="LJS-Photo" symbol="~" category="photography/people/glamour"><span class="tt-w"><span class="shadow" style="background-image:url(http://sh.deviantart.net/shadow/x/100/150/logo3.png);"><a class="thumb" href="http://ljs-photo.deviantart.com/art/Fabienne-III-335672838" title="Fabienne III by ~LJS-Photo, Nov 2, 2012 in Photography &gt; People &amp; Portraits &gt; Glamour Portraits" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'Thumbnail'});" data-super-img="http://fc07.deviantart.net/fs71/f/2012/307/d/8/d8e59bb7893aa2b932d7d0223bb92890-d5jumti.jpg" data-super-width="600" data-super-height="900" data-super-transparent="false"><i></i><img   width="100" height="150" src="http://th07.deviantart.net/fs71/150/f/2012/307/d/8/d8e59bb7893aa2b932d7d0223bb92890-d5jumti.jpg" data-src="http://th07.deviantart.net/fs71/150/f/2012/307/d/8/d8e59bb7893aa2b932d7d0223bb92890-d5jumti.jpg"></a></span><!-- ^TTT --><!-- TTT$ --></span></div></div>
         <span id="footer_ad_safe" is_ad_safe=""></span>
                     </div><div class="channels-pane-faux3dborder"></div></div></div> <!-- /top bit -->
                     <div id="footer-pane-extra" class="base-pane footer-pane-open">
@@ -965,154 +965,154 @@ http_interactions:
                         <table id="footerstuff" class="footer-pane-content f">
             <tr>
                 <td class="f" id="footer_journals">
-                    <h2><a href="http://browse.deviantart.com/journals/?order=11" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalBrowse', label: 'link-portal'});">The Journal Portal</a></h2><ul id="footer-da-journal"><li class="first">    <a href="http://omocha-san.deviantart.com/journal/Raffle-15k-watchers-TY-30-free-comm-raffle-378858595" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Raffle: 15k+ watchers TY - 30$ free comm raffle!</a>
+                    <h2><a href="http://browse.deviantart.com/journals/?order=11" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalBrowse', label: 'link-portal'});">The Journal Portal</a></h2><ul id="footer-da-journal"><li class="first">    <a href="http://lieveheersbeestje.deviantart.com/journal/Bokehlicious-384635861" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Bokehlicious</a>
             <br/>
             <div class="rowuser">
                 <p class="mavatar">
-                    <a target="_self" href="http://omocha-san.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/o/m/omocha-san.gif?6" alt=":iconomocha-san:" title="omocha-san" /></a>        </p>
-                <span class="user">=<a class="u" href="http://omocha-san.deviantart.com/">omocha-san</a></span>
-                <span class="date">Jun 18, 2013</span>
-                <span class="comments">116 comments</span>
+                    <a target="_self" href="http://lieveheersbeestje.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/l/i/lieveheersbeestje.gif?12" alt=":iconlieveheersbeestje:" title="lieveheersbeestje" /></a>        </p>
+                <span class="user">=<a class="u" href="http://lieveheersbeestje.deviantart.com/">lieveheersbeestje</a></span>
+                <span class="date">Jul 11, 2013</span>
+                <span class="comments">34 comments</span>
             </div>
             <div class="excerpt">
-                <p>Hi everyone!Today I
-        reached 15k+
-        watchers. That's
-        really nice having
-        such a huge support
-        from you guys, so I
-        want to do this
-        little raffle as a
-        thank &nbsp;you to
-        you. &lt;3My free
-        time is really
-        limited, so I we'll
-        have only 1 winner
-        this time
-        though.:bulletred:
-        To join this raffle,
-        you must:Be...</p>
-                <p class="more"><a href="http://omocha-san.deviantart.com/journal/Raffle-15k-watchers-TY-30-free-comm-raffle-378858595" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
+                <p>:thumb279146542:
+        :thumb382555380:
+        :thumb179446715:
+        :thumb372511331:
+        :thumb180832944:
+        :thumb168932812:
+        :thumb317506050:
+        :thumb206779295:
+        :thumb322671963:
+        :thumb372114267:
+        :thumb353576721:
+        :thumb75082227:
+        :thumb206747728:
+        :thumb124561964:
+        :thumb157070168:
+        :thumb352994442:
+        :thumb140550745:
+        :thumb186...</p>
+                <p class="more"><a href="http://lieveheersbeestje.deviantart.com/journal/Bokehlicious-384635861" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
             </div>
             <span class="toggle" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.newsAccordion(this)')"><span class="arrow"></span></span>
-            </li><li>    <a href="http://missmady.deviantart.com/journal/OFFICIAL-HOUSE-OF-HADES-SNEAK-PEAK-378805740" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">OFFICIAL HOUSE OF HADES SNEAK PEAK</a>
+            </li><li>    <a href="http://monochromatiq.deviantart.com/journal/OPEN-WIN-FREE-POINTS-2000PTS-GIVEAWAY-384728040" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">[OPEN] WIN FREE POINTS! 2000PTS GIVEAWAY!</a>
             <br/>
             <div class="rowuser">
                 <p class="mavatar">
-                    <a target="_self" href="http://missmady.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/m/i/missmady.jpg" alt=":iconmissmady:" title="missmady" /></a>        </p>
-                <span class="user">=<a class="u" href="http://missmady.deviantart.com/">missmady</a></span>
-                <span class="date">Jun 17, 2013</span>
-                <span class="comments">191 comments</span>
+                    <a target="_self" href="http://monochromatiq.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/m/o/monochromatiq.gif?8" alt=":iconmonochromatiq:" title="monochromatiq" /></a>        </p>
+                <span class="user">=<a class="u" href="http://monochromatiq.deviantart.com/">monochromatiq</a></span>
+                <span class="date">Jul 11, 2013</span>
+                <span class="comments">35 comments</span>
             </div>
             <div class="excerpt">
-                <p>OH MY GOD THERE IS A
-        SNEAK PEAK TO THE
-        FIRST CHAPTER OF
-        HOUSE OF HADES THAT
-        CAME IN THE E-BOOK
-        VERSION OF SON OF
-        SOBEK
-        :ICONSQUEEEEPLZ::ico
-        naahplz::iconsqueeep
-        lz::iconwoohooplz::i
-        conwootplz::iconohye
-        ahplz:What do you
-        guys think?
-        Feelings?Yours in
-        demigodishness,missm
-        ady
-        :iconluvluvplz:My
-        Tumblr:...</p>
-                <p class="more"><a href="http://missmady.deviantart.com/journal/OFFICIAL-HOUSE-OF-HADES-SNEAK-PEAK-378805740" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
+                <p>:thumb319238221:Give
+        away time is back !
+        This time I've got
+        2000pts to give away
+        c:I've been quiet
+        lately on dA lol but
+        have been doing
+        plenty on tumblr.
+        Anyway! I've been
+        working on some of
+        the art I owe
+        people, but like I
+        promised before,
+        I've decided to do
+        another giveaway:I
+        will split the
+        poin...</p>
+                <p class="more"><a href="http://monochromatiq.deviantart.com/journal/OPEN-WIN-FREE-POINTS-2000PTS-GIVEAWAY-384728040" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
             </div>
             <span class="toggle" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.newsAccordion(this)')"><span class="arrow"></span></span>
-            </li><li>    <a href="http://dragonfly-oli.deviantart.com/journal/Pure-Beauty-XV-378676555" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Pure Beauty XV</a>
+            </li><li>    <a href="http://aeirmid.deviantart.com/journal/Telling-our-stories-through-art-features-383935432" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Telling our stories through art features</a>
             <br/>
             <div class="rowuser">
                 <p class="mavatar">
-                    <a target="_self" href="http://dragonfly-oli.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/d/r/dragonfly-oli.jpg?15" alt=":icondragonfly-oli:" title="dragonfly-oli" /></a>        </p>
-                <span class="user">`<a class="u" href="http://dragonfly-oli.deviantart.com/">dragonfly-oli</a></span>
-                <span class="date">Jun 17, 2013</span>
-                <span class="comments">39 comments</span>
+                    <a target="_self" href="http://aeirmid.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/a/e/aeirmid.gif?5" alt=":iconaeirmid:" title="Aeirmid" /></a>        </p>
+                <span class="user">^<a class="u" href="http://aeirmid.deviantart.com/">Aeirmid</a></span>
+                <span class="date">Jul 10, 2013</span>
+                <span class="comments">34 comments</span>
             </div>
             <div class="excerpt">
-                <p>Beauty can be found
-        everywhere.This
-        feature is for the
-        beautiful people on
-        deviantART and their
-        models.Profitez de
-        ces
-        beaut&eacute;s.And
-        last but not least:
-        Thank you, Ines, for
-        portraying me.Thank
-        you for these
-        beautiful
-        artworks.:heart::dev
-        dragonfly-oli::iconb
-        reathtaking-photos:</p>
-                <p class="more"><a href="http://dragonfly-oli.deviantart.com/journal/Pure-Beauty-XV-378676555" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
+                <p>If someone told you
+        that you had to find
+        the 5-7 pieces of
+        art on dA that best
+        represent you, could
+        you do it? :XD:What
+        do your favorite
+        works of art say
+        about you? Have you
+        ever thought about
+        it?I'm featuring 7
+        deviations that blow
+        me away, that I turn
+        to for my own
+        inspiration. Each
+        one tells a...</p>
+                <p class="more"><a href="http://aeirmid.deviantart.com/journal/Telling-our-stories-through-art-features-383935432" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
             </div>
             <span class="toggle" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.newsAccordion(this)')"><span class="arrow"></span></span>
-            </li><li>    <a href="http://beccalicious.deviantart.com/journal/PE-Story-Planning-Round-up-378695534" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">PE: Story Planning Round-up</a>
+            </li><li>    <a href="http://astralseed.deviantart.com/journal/ProjectPorkchop-Vol244-384513412" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">ProjectPorkchop Vol244</a>
             <br/>
             <div class="rowuser">
                 <p class="mavatar">
-                    <a target="_self" href="http://beccalicious.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/b/e/beccalicious.png?11" alt=":iconbeccalicious:" title="Beccalicious" /></a>        </p>
-                <span class="user">^<a class="u" href="http://beccalicious.deviantart.com/">Beccalicious</a></span>
-                <span class="date">Jun 17, 2013</span>
-                <span class="comments">72 comments</span>
+                    <a target="_self" href="http://astralseed.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/a/s/astralseed.gif?2" alt=":iconastralseed:" title="Astralseed" /></a>        </p>
+                <span class="user">^<a class="u" href="http://astralseed.deviantart.com/">Astralseed</a></span>
+                <span class="date">Jul 10, 2013</span>
+                <span class="comments">9 comments</span>
             </div>
             <div class="excerpt">
-                <p>Greetings all!WHAT
-        AN AWESOME WEEK!So
-        last week we had a
-        fantastic event
-        based on Story
-        Planning; a week
-        that was slightly
-        relaxed for a PE
-        week, but full of
-        good advice. These
-        articles haven't
-        just been written
-        for the sake of
-        filling a week, we
-        genuinely hope there
-        is something in them
-        that is...</p>
-                <p class="more"><a href="http://beccalicious.deviantart.com/journal/PE-Story-Planning-Round-up-378695534" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
+                <p>:devProjectPorkchop:
+        is all about
+        bringing more
+        exposure to the many
+        talented yet under
+        appreciated artists
+        going unseen on
+        deviantART daily.
+        The artists chosen
+        truly deserve more
+        attention based on
+        low counts of
+        favorites, comments,
+        and watchers, added
+        to their incredible
+        artistic
+        talent.:iconke...</p>
+                <p class="more"><a href="http://astralseed.deviantart.com/journal/ProjectPorkchop-Vol244-384513412" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
             </div>
             <span class="toggle" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.newsAccordion(this)')"><span class="arrow"></span></span>
-            </li><li class="last">    <a href="http://kaz-d.deviantart.com/journal/5-Reasons-you-should-learn-photography-manually-375722722" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">5 Reasons you should learn photography manually!</a>
+            </li><li class="last">    <a href="http://kaz-d.deviantart.com/journal/Nom-Nom-46-Lychee-382154083" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Nom Nom 46# Lychee!</a>
             <br/>
             <div class="rowuser">
                 <p class="mavatar">
                     <a target="_self" href="http://kaz-d.deviantart.com/"><img class="avatar" src="http://a.deviantart.net/avatars/k/a/kaz-d.jpg?1" alt=":iconkaz-d:" title="Kaz-D" /></a>        </p>
                 <span class="user">^<a class="u" href="http://kaz-d.deviantart.com/">Kaz-D</a></span>
-                <span class="date">Jun 18, 2013</span>
-                <span class="comments">34 comments</span>
+                <span class="date">Jul 10, 2013</span>
+                <span class="comments">17 comments</span>
             </div>
             <div class="excerpt">
-                <p>I once met someone
-        who was determined
-        not to use a D-SLR
-        until he had
-        mastered a Manual
-        Camera first. I
-        thought he was a bit
-        stuck up, maybe a
-        little arrogant of
-        his own abilities
-        too...but actually,
-        he was right. You
-        will not truly value
-        Photography until
-        you go right back to
-        basics and learn
-        ho...</p>
-                <p class="more"><a href="http://kaz-d.deviantart.com/journal/5-Reasons-you-should-learn-photography-manually-375722722" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
+                <p>&nbsp;Headed created
+        by :devtouchedd:|
+        Strawberries |
+        Cinnamon | Chicken |
+        Apples | Chocolate |
+        Brussel Sprouts |
+        Cocktails | Ice
+        Cream | Spaghetti |
+        Raspberries |
+        Pineapple | Bread |
+        Rice | Blueberries |
+        Cupcakes | Tea |
+        Cherries | Toast |
+        Cheesecake | Soup |
+        Apple Pie |
+        Casserole |
+        Halloween |...</p>
+                <p class="more"><a href="http://kaz-d.deviantart.com/journal/Nom-Nom-46-Lychee-382154083" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'JournalLink'});">Read More</a></p>
             </div>
             <span class="toggle" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.newsAccordion(this)')"><span class="arrow"></span></span>
             </li></ul>
@@ -1128,50 +1128,42 @@ http_interactions:
                 <span class="righttab"></span>
                 <div class="pollslider-outer">
                     <div class="pollslider">
-                        <h3>What is your preferred drawing software?</h3>
+                        <h3>What element of creating art brings you the most stress?</h3>
         
-                        <input type="hidden" name="pollid" value="411" />
+                        <input type="hidden" name="pollid" value="412" />
                         <div class="results">
                                             <ul>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2295" id="choice_0" />
-                                    deviantART muro</label>
+                                    <label><input type="radio" name="answer" value="2305" id="choice_0" />
+                                    Lack of time</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2296" id="choice_1" />
-                                    MS Paint</label>
+                                    <label><input type="radio" name="answer" value="2306" id="choice_1" />
+                                    Procrastination</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2297" id="choice_2" />
-                                    Autodesk SketchBook</label>
+                                    <label><input type="radio" name="answer" value="2307" id="choice_2" />
+                                    Artist's block/no inspiration</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2298" id="choice_3" />
-                                    ArtRage</label>
+                                    <label><input type="radio" name="answer" value="2308" id="choice_3" />
+                                    Insufficient/inferior tools</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2299" id="choice_4" />
-                                    Adobe Photoshop/Illustrator</label>
+                                    <label><input type="radio" name="answer" value="2309" id="choice_4" />
+                                    Concern that your work won't turn out as envisioned</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2300" id="choice_5" />
-                                    Corel Painter</label>
+                                    <label><input type="radio" name="answer" value="2310" id="choice_5" />
+                                    Fear about how your work will be received</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2301" id="choice_6" />
-                                    PaintTool SAI</label>
+                                    <label><input type="radio" name="answer" value="2311" id="choice_6" />
+                                    Self doubt</label>
                                 </li>
                                                     <li>
-                                    <label><input type="radio" name="answer" value="2302" id="choice_7" />
-                                    Smith Micro Anime/Manga Studio</label>
-                                </li>
-                                                    <li>
-                                    <label><input type="radio" name="answer" value="2303" id="choice_8" />
-                                    openCanvas</label>
-                                </li>
-                                                    <li>
-                                    <label><input type="radio" name="answer" value="2304" id="choice_9" />
-                                    I use something else (please comment)</label>
+                                    <label><input type="radio" name="answer" value="2312" id="choice_7" />
+                                    Other (please comment)</label>
                                 </li>
                                                 </ul>
                                         </div>
@@ -1183,12 +1175,12 @@ http_interactions:
                             <a href="javascript:void(0)" class="vote_button smbutton smbutton-deepgreen" onclick="return DWait.readyLink('jms/chrome/depths.js', this, 'da_footer.vote(this)')"><span>Vote!</span></a>
                         </span>
                                 <span class="totalvotes">
-                        <span class="votecount-wrap">(<span class="vote_count">115,234</span> votes)</span>
+                        <span class="votecount-wrap">(<span class="vote_count">81,218</span> votes)</span>
                         <span class="commentcount">
                             <i></i>
-                            <a href="http://poll.deviantart.com/411/"
+                            <a href="http://poll.deviantart.com/412/"
                                 onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'PollCommentsLink'});"
-                                >6,689 comments</a>
+                                >2,431 comments</a>
                         </span>
                     </span>
                 </div>
@@ -1205,8 +1197,8 @@ http_interactions:
             <div class="text text-ii">
                 <ol class="definition">
                     <li>The world's largest online art community
-                    <li>Proudly showing <span>259 million</span> pieces of art from over <span>27 million</span> registered artists and art appreciators
-                    <li>Deviously serving the art and skin community for 4,699 days
+                    <li>Proudly showing <span>261 million</span> pieces of art from over <span>27 million</span> registered artists and art appreciators
+                    <li>Deviously serving the art and skin community for 4,721 days
                 </ol>
                 <em class="heart">deviantART loves you! <img src="http://e.deviantart.net/emoticons/h/heart.gif" class="emoticon"></em>
             </div>
@@ -1258,13 +1250,13 @@ http_interactions:
                                                    target="_blank"
                     onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'FollowButton', label: 'follow-tumblr'});">
                     <span class="share-button-title">Share on Tumblr</span>
-                </a><script type='text/javascript' id='dwaitdatex-51c221957a324'>
+                </a><script type='text/javascript' id='dwaitdatex-51df5014d5182'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c221957a324');
+                    var elem = document.getElementById('dwaitdatex-51df5014d5182');
                     context = elem ? elem.parentNode : context;
                     (function(){ $(':gmi(ResourceViewShareTumblr)').gmi(); }).apply(context);
                 }
@@ -1278,13 +1270,13 @@ http_interactions:
                                                    target="_blank"
                     onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'FollowButton', label: 'follow-gplus'});">
                     <span class="share-button-title">Share on Google+</span>
-                </a></div></div><script type='text/javascript' id='dwaitdatex-51c221957a427'>
+                </a></div></div><script type='text/javascript' id='dwaitdatex-51df5014d520f'>
         (function(DWait){
             var DWaitReady = false
                 ,context = this
                 ,cb = function() {
                     DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c221957a427');
+                    var elem = document.getElementById('dwaitdatex-51df5014d520f');
                     context = elem ? elem.parentNode : context;
                     (function(){ 
                     $(':gmi(ResourceViewShare)').gmi();
@@ -1298,7 +1290,7 @@ http_interactions:
                 <td class="f" id="footer_deviousness">
                         <h2>Deviousness</h2>
                 <div class="deviousness_text">
-                <a target="_self" href="http://chewedkandi.deviantart.com/"><img class="avatar float-left" src="http://a.deviantart.net/avatars/c/h/chewedkandi.gif?11" alt=":iconchewedkandi:" title="ChewedKandi" /></a>        `<a class="u" href="http://chewedkandi.deviantart.com">ChewedKandi</a> has certainly gone out of her way to keep the vector community on the right path. Always making sure that her talents are infinitely scalable, Sharon has put her bezier curves to excellent use, and firmly anchored herself as an inspirational leader. We're absolutely delighted to bestow the Deviousness Award for June 2013 to `<a class="u" href="http://chewedkandi.deviantart.com">ChewedKandi</a>. Congratulations, Sharon!&nbsp;&nbsp;<a href="http://today.deviantart.com" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'DeviousnessReadMore'});">Read More</a>
+                <a target="_self" href="http://synfull.deviantart.com/"><img class="avatar float-left" src="http://a.deviantart.net/avatars/s/y/synfull.png?14" alt=":iconsynfull:" title="Synfull" /></a>        `<a class="u" href="http://synfull.deviantart.com">Synfull</a> has firmly rooted herself at the heart of the emoticon gallery and made it her mission to bring pixel passion to every part of deviantART. With a personal gallery that's filled to the brim with exremely detailed emoticons and informative tutorials, Karen has developed an reputation with many deviants for being somewhat of a legendary emoticon artist. We very much agree that Karen's dedication and inspiring efforts deserve recognition, and therefore it's without any hesitation that we bestow the Deviousness Award for July 2013 to `<a class="u" href="http://synfull.deviantart.com">Synfull</a>, congratulations!&nbsp;&nbsp;<a href="http://today.deviantart.com" onclick="PubSub.publish('DaGa.track_event', {category: 'Footer', action: 'DeviousnessReadMore'});">Read More</a>
             </div>
                 </td>
             </tr>
@@ -1386,29 +1378,15 @@ http_interactions:
                 </div>
             </div>
             
-        <script type="text/javascript" src="http://st.deviantart.net/css/deviantart-network_jc.js?2511686058" charset="utf-8"></script>
-        <script type="text/javascript" src="http://st.deviantart.net/css/v6core_jc.js?274726227" charset="utf-8"></script>
-        <script type="text/javascript" src="http://st.deviantart.net/css/groupmenu_jc.js?1739545856" charset="utf-8"></script>
-        <script type="text/javascript" src="http://st.deviantart.net/css/deviation_old_jc.js?1837072946" charset="utf-8"></script><a id="deviantART-loves-you"> </a>
+        <script type="text/javascript" src="http://st.deviantart.net/css/deviantart-network_jc.js?1382380669" charset="utf-8"></script>
+        <script type="text/javascript" src="http://st.deviantart.net/css/v6core_jc.js?127494147" charset="utf-8"></script>
+        <script type="text/javascript" src="http://st.deviantart.net/css/groupmenu_jc.js?1385609626" charset="utf-8"></script>
+        <script type="text/javascript" src="http://st.deviantart.net/css/deviation_old_jc.js?536101663" charset="utf-8"></script><a id="deviantART-loves-you"> </a>
         <script type="text/javascript">
-                        DWait.loadDownloadMap({"jms\/pages\/widgets\/progressbar.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/font\/depot.css":["http:\/\/st.deviantart.net\/css\/font.depot.css?1282389690"],"jms\/pages\/widgets\/madlibs.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/font.depot.css?1282389690"],"jms\/pages\/widgets\/countdownclock.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/pages\/widgets\/guestbook.css":["http:\/\/st.deviantart.net\/css\/da-widgets.css?2987294767"],"jms\/pages\/widgets\/guestbook.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/da-widgets.css?2987294767"],"jms\/pages\/widgets\/valentinedeviation.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/pages\/widgets\/twitter-search.css":["http:\/\/st.deviantart.net\/css\/da-widgets.css?2987294767"],"jms\/pages\/widgets\/twitter-search.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532","http:\/\/st.deviantart.net\/css\/da-widgets.css?2987294767"],"jms\/pages\/gruzecontrol\/gmframe_gruser.js":["http:\/\/st.deviantart.net\/css\/page_editor_jc.js?30105792511","http:\/\/st.deviantart.net\/css\/jquery-extras_jc.js?25013521382","http:\/\/st.deviantart.net\/css\/v6loggedin.css?457163758","http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532"],"jms\/pages\/duperbrowse\/stream\/freeform.custom.stream.js":["http:\/\/st.deviantart.net\/css\/duperbrowse.stream_jc.js?3904863735"],"jms\/pages\/gruzecontrol\/widgets\/utils.js":["http:\/\/st.deviantart.net\/css\/page_editor_jc.js?30105792511","http:\/\/st.deviantart.net\/css\/jquery-extras_jc.js?25013521382","http:\/\/st.deviantart.net\/css\/v6loggedin.css?457163758","http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532"],"cssms\/pages\/deviation\/note-modal.css":["http:\/\/st.deviantart.net\/css\/notes-modal.css?2818570072"],"jms\/lib\/pager.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666"],"jms\/lib\/popup2menu.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666"],"jms\/lib\/pager.js.mood.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666"],"jms\/chrome\/adhug.js":["http:\/\/st.deviantart.net\/css\/adhug_jc.js?3329374913","http:\/\/st.deviantart.net\/css\/ad-hug.css?75290182502"],"cssms\/chrome\/ad-hug.css":["http:\/\/st.deviantart.net\/css\/ad-hug.css?75290182502"],"cssms\/lib\/writer.css":["http:\/\/st.deviantart.net\/css\/writer.css?891708799"],"cssms\/pages\/stash\/stash.override.thumbs.css":["http:\/\/st.deviantart.net\/css\/stash.css?3979723612"],"cssms\/lib\/writer-subtoolbar.css":["http:\/\/st.deviantart.net\/css\/writer.css?891708799"],"cssms\/lib\/canvas_drawing.css":["http:\/\/st.deviantart.net\/css\/muro.css?3012630606"],"jms\/lib\/writer\/factory.js":["http:\/\/st.deviantart.net\/css\/stashwriter_jc.js?1521797101","http:\/\/st.deviantart.net\/css\/stash_jc.js?1476070864","http:\/\/st.deviantart.net\/css\/jquery.ui_jc.js?21460231626","http:\/\/st.deviantart.net\/css\/dragger_jc.js?601990923","http:\/\/st.deviantart.net\/css\/header_jc.js?3435839881","http:\/\/st.deviantart.net\/css\/writer.css?891708799"],"jms\/lib\/writer\/sidebar.js":["http:\/\/st.deviantart.net\/css\/stashwriter_jc.js?1521797101","http:\/\/st.deviantart.net\/css\/writer.css?891708799","http:\/\/st.deviantart.net\/css\/stash_jc.js?1476070864","http:\/\/st.deviantart.net\/css\/jquery.ui_jc.js?21460231626","http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666"],"jms\/modals\/adcatch-modal.js":["http:\/\/st.deviantart.net\/css\/adcatch-modal_jc.js?2341818380","http:\/\/st.deviantart.net\/css\/adcatch-modal.css?230560223"],"cssms\/modals\/adcatch-modal.css":["http:\/\/st.deviantart.net\/css\/adcatch-modal.css?230560223"],"jms\/chrome\/more7.js":["http:\/\/st.deviantart.net\/css\/more7_jc.js?2837279153"],"jms\/chrome\/more7.custom2.js":["http:\/\/st.deviantart.net\/css\/more7_jc.js?2837279153","http:\/\/st.deviantart.net\/css\/v6loggedin_jc.js?964782305","http:\/\/st.deviantart.net\/css\/deviantart-network-loggedin_jc.js?1528702634"],"jms\/chrome\/depths.js":["http:\/\/st.deviantart.net\/css\/chrome_jc.js?652623254","http:\/\/st.deviantart.net\/css\/menusys_jc.js?3167661666","http:\/\/st.deviantart.net\/css\/tvthumbs_jc.js?4306966849"]});
+                        DWait.loadDownloadMap({"jms\/pages\/widgets\/progressbar.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/font\/depot.css":["http:\/\/st.deviantart.net\/css\/font.depot.css?1282389690"],"jms\/pages\/widgets\/madlibs.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/font.depot.css?1282389690"],"jms\/pages\/widgets\/countdownclock.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/pages\/widgets\/guestbook.css":["http:\/\/st.deviantart.net\/css\/da-widgets.css?313573421"],"jms\/pages\/widgets\/guestbook.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/da-widgets.css?313573421"],"jms\/pages\/widgets\/valentinedeviation.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158"],"cssms\/pages\/widgets\/twitter-search.css":["http:\/\/st.deviantart.net\/css\/da-widgets.css?313573421"],"jms\/pages\/widgets\/twitter-search.js":["http:\/\/st.deviantart.net\/css\/da-widgets_jc.js?9911265158","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532","http:\/\/st.deviantart.net\/css\/da-widgets.css?313573421"],"jms\/pages\/gruzecontrol\/gmframe_gruser.js":["http:\/\/st.deviantart.net\/css\/page_editor_jc.js?2785523099","http:\/\/st.deviantart.net\/css\/jquery-extras_jc.js?25013521382","http:\/\/st.deviantart.net\/css\/v6loggedin.css?215941381","http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532"],"jms\/pages\/duperbrowse\/stream\/freeform.custom.stream.js":["http:\/\/st.deviantart.net\/css\/duperbrowse.stream_jc.js?3904863735"],"jms\/pages\/gruzecontrol\/widgets\/utils.js":["http:\/\/st.deviantart.net\/css\/page_editor_jc.js?2785523099","http:\/\/st.deviantart.net\/css\/jquery-extras_jc.js?25013521382","http:\/\/st.deviantart.net\/css\/v6loggedin.css?215941381","http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738","http:\/\/st.deviantart.net\/css\/v6gruser_jc.js?9959939532"],"cssms\/pages\/deviation\/note-modal.css":["http:\/\/st.deviantart.net\/css\/notes-modal.css?2818570072"],"jms\/lib\/pager.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738"],"jms\/lib\/popup2menu.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738"],"jms\/lib\/pager.js.mood.js":["http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738"],"jms\/chrome\/adhug.js":["http:\/\/st.deviantart.net\/css\/adhug_jc.js?3329374913","http:\/\/st.deviantart.net\/css\/ad-hug.css?75290182502"],"cssms\/chrome\/ad-hug.css":["http:\/\/st.deviantart.net\/css\/ad-hug.css?75290182502"],"cssms\/lib\/writer.css":["http:\/\/st.deviantart.net\/css\/writer.css?3996870169"],"cssms\/pages\/stash\/stash.override.thumbs.css":["http:\/\/st.deviantart.net\/css\/stash.css?554843198"],"cssms\/lib\/writer-subtoolbar.css":["http:\/\/st.deviantart.net\/css\/writer.css?3996870169"],"cssms\/lib\/canvas_drawing.css":["http:\/\/st.deviantart.net\/css\/muro.css?3422112258"],"jms\/lib\/writer\/factory.js":["http:\/\/st.deviantart.net\/css\/stashwriter_jc.js?3760754490","http:\/\/st.deviantart.net\/css\/stash_jc.js?2983092561","http:\/\/st.deviantart.net\/css\/jquery.ui_jc.js?21460231626","http:\/\/st.deviantart.net\/css\/dragger_jc.js?601990923","http:\/\/st.deviantart.net\/css\/header_jc.js?2435888481","http:\/\/st.deviantart.net\/css\/writer.css?3996870169"],"jms\/lib\/sidebar.js":["http:\/\/st.deviantart.net\/css\/sidebar_jc.js?4103282036","http:\/\/st.deviantart.net\/css\/sidebar.css?2759018395","http:\/\/st.deviantart.net\/css\/stash_jc.js?2983092561","http:\/\/st.deviantart.net\/css\/jquery.ui_jc.js?21460231626","http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738"],"jms\/modals\/adcatch-modal.js":["http:\/\/st.deviantart.net\/css\/adcatch-modal_jc.js?2341818380","http:\/\/st.deviantart.net\/css\/adcatch-modal.css?230560223"],"cssms\/modals\/adcatch-modal.css":["http:\/\/st.deviantart.net\/css\/adcatch-modal.css?230560223"],"jms\/chrome\/more7.js":["http:\/\/st.deviantart.net\/css\/more7_jc.js?2837279153"],"jms\/chrome\/more7.custom2.js":["http:\/\/st.deviantart.net\/css\/more7_jc.js?2837279153","http:\/\/st.deviantart.net\/css\/v6loggedin_jc.js?538788944","http:\/\/st.deviantart.net\/css\/deviantart-network-loggedin_jc.js?1528702634"],"jms\/chrome\/depths.js":["http:\/\/st.deviantart.net\/css\/chrome_jc.js?652623254","http:\/\/st.deviantart.net\/css\/menusys_jc.js?2817407738","http:\/\/st.deviantart.net\/css\/tvthumbs_jc.js?4306966849"]});
                         </script><script type="text/javascript">
             _gaq.push(["_setCustomVar",1,"user-type","visitor",1], 
         ["_trackPageview"]);
-        </script>
-        <script type='text/javascript' id='dwaitdatex-51c221958ce79'>
-        (function(DWait){
-            var DWaitReady = false
-                ,context = this
-                ,cb = function() {
-                    DWaitReady = true;
-                    var elem = document.getElementById('dwaitdatex-51c221958ce79');
-                    context = elem ? elem.parentNode : context;
-                    (function(){ PubSub.publish('DaGa.init', { slots: {}, hits: [{"type":"pageview"}] });PubSub.publish('DaGa.track_virtual_pageview', {"page_namespace":"deviation"}); }).apply(context);
-                }
-                ;
-            DWait.ready([".analytics", "jms/lib/pubsub.js", "jms/lib/analytics.js"], cb);
-        })(DWait);
         </script>
         <script type="text/javascript">
             (function() {
@@ -1417,6 +1395,20 @@ http_interactions:
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
             if(window.DWait) { DWait.run('.analytics'); }
+        </script>
+        <script type='text/javascript' id='dwaitdatex-51df5014e7366'>
+        (function(DWait){
+            var DWaitReady = false
+                ,context = this
+                ,cb = function() {
+                    DWaitReady = true;
+                    var elem = document.getElementById('dwaitdatex-51df5014e7366');
+                    context = elem ? elem.parentNode : context;
+                    (function(){ PubSub.publish('DaGa.init', { slots: {}, hits: [{"type":"pageview"}] }); }).apply(context);
+                }
+                ;
+            DWait.ready(["jms/lib/pubsub.js", "jms/lib/analytics.js"], cb);
+        })(DWait);
         </script>
                 <script type="text/javascript">
                 if (self._qevents) {
@@ -1454,5 +1446,5 @@ http_interactions:
         </html>
 
     http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 21:24:38 GMT
+  recorded_at: Fri, 12 Jul 2013 00:38:46 GMT
 recorded_with: VCR 2.5.0

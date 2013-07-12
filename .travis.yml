@@ -1,13 +1,10 @@
+language: ruby
 env:
-  - TEST_GROUP=importing
-  - TEST_GROUP=challenges
-  - TEST_GROUP=collections
-  - TEST_GROUP=users
-  - TEST_GROUP=works
-  - TEST_GROUP=tags_and_wrangling
-  - TEST_GROUP=other
+  global:
+    - SAUCE_USERNAME: otw-adt
+    - SAUCE_ACCESS_KEY: 07b82b94-79d9-4904-ba98-7566069173ff
 rvm:
-  - "1.9.2-p320"
+  - "1.9.3"
 services:
   - elasticsearch
   - redis-server
@@ -16,8 +13,9 @@ script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec cucumber -f progress -r features features/$TEST_GROUP -b
+  - bundle exec cucumber -f progress -r features features/users/authenticate_users.feature
 before_script:
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
   - mysql -e 'create database otwarchive_test;'
   - cp config/database.travis.yml config/database.yml
   - cp config/newrelic.example config/newrelic.yml
