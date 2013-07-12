@@ -1,7 +1,7 @@
 env:
   global:
-    - secure: "hxowDd+uosiHCnDVhSvFvvkqbFbfqrIuwBJMOQBD8tDD+jva+Sc4Y0N1SCwj\nNpa8KRfSrpBPdw1gW8mWxg0ZOoWqAhSuCqE0Tgi827AfkRXAWwnZ+37TGjFG\n6YdWAHdJ+zaWlMYhhQzHLW0uUxNKjiuCYuDnCXlcehvYK9UXulU="
-    - secure: "ME9CJoiEDFtQLVAxVYDRmBqyAHX85an2cwdo03XgC7y8bBdJ2AclJtNEt3p8\no6yNrs4aiSQoXZGelXsIZJXUr62TISNdZQdM4fFKqIN/G4mhx5hFCwMHqjyn\nJUGjAzvYc4mQnRMa2G2W2aEsXDdKMZG2K6WpUUm53GPmdqG9cpM="
+   - secure: "LXtuRdyJs0HaozkILD7hL9NrQeAPbEaQ+nz96L1Qh/h5ba8KxH+hMHAHjL9Y\n+optTX3mOx+6NL5ieM8qTf6ppi/LQv9LuZ4l2Lt0BwIYibUx3QH3Iwu66COf\nYylO1jjEqfPLGICFTvnBHQuWCnC5egwHJCW9Mtv0WvRSGyCX4x4="
+   - secure: "gxAjvZiY1N70IR9NvA8rRi1wwcrkbcc6LKl2x40F8FZbpuAiFypPZtRX62dq\njgDrE97nTw/3P6zCRCLxUrpSzi1lITeWxdTLlXHHkesi9cA0DMuElGlSVs5W\nok7xw16f8VyA0j1g/scypO5l3ygWgnf1Bae+eMtIYW2EmDk5tAE="
 rvm:
   - "1.9.3"
 services:
