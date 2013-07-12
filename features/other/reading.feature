@@ -43,7 +43,6 @@ Feature: Reading count
     When I check "Turn on Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
-      And show me the page
       And I should see "Viewed once"
       And I should see "Last viewed: 25 May 2010"
     When I am on writer's works page

@@ -150,7 +150,6 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Jack Harkness/Male Character"
     And I should see "Janto"
     And I should see "Jack/Ianto"
-    And show me the page
     And I should see "Jack Harkness/Ianto Jones" within "div#child_Merger_associations_to_remove_checkboxes"
     
   # trying to syn a non-canonical to another non-canonical

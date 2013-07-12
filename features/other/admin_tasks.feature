@@ -123,7 +123,6 @@ Feature: Admin tasks
 
   When I am logged in as an admin
   When I follow "Settings"
-    And show me the page
   Then I should see "Turn off downloading for guests"
     And I should see "Turn off tag wrangling for non-admins"
   When I check "Turn off downloading for guests"

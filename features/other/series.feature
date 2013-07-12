@@ -71,7 +71,6 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "This is a series about ponies. Of course" within "blockquote.userstuff"
-      And show me the page
       And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote.userstuff"
       And I should see "Complete: No"
     When I follow "Edit"
