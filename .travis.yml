@@ -1,7 +1,8 @@
+language: ruby
 env:
   global:
-    - SAUCE_USERNAME=otw-adt
-    - SAUCE_ACCESS_KEY=07b82b94-79d9-4904-ba98-7566069173ff
+    - secure: "RsJu8TA/Ru/h02jzYFuJV+XO8CM1jLvtkRC0M5zmRM3zOjTI/khsMlZG6wTB\nl8T3vFPrUD9AJHmEl7jPfloR73UrBHbSh/vpw9jEILr54mSi/fLqd2/CPb2F\natOKJppDf2GZl9UTwJA7Qd2ah+yV5g2E/B3dGCzI/3tEQGUOyQg="
+    - secure: "Bn0k7aJOrDdtkoUAyLScQwXvz9Whjsz7ypoqMhjcEKZtzvsQnKzaKbNHgo9l\nMZ6au7qyQ2aTiremuY0Z+LGq47hsZzZBctDmmnBaeS7wEnh5a5zdfyc9SQc/\nnPnmu0JpwI9jnMTpwo+r0pLHA82ERpR3T3MkJeOJxyU3YdgsJyg="
 rvm:
   - "1.9.3"
 services:
