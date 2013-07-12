@@ -1,8 +1,7 @@
 env:
   global:
     - secure: "hxowDd+uosiHCnDVhSvFvvkqbFbfqrIuwBJMOQBD8tDD+jva+Sc4Y0N1SCwj\nNpa8KRfSrpBPdw1gW8mWxg0ZOoWqAhSuCqE0Tgi827AfkRXAWwnZ+37TGjFG\n6YdWAHdJ+zaWlMYhhQzHLW0uUxNKjiuCYuDnCXlcehvYK9UXulU="
-    - secure: "ME9CJoiEDFtQLVAxVYDRmBqyAHX85an2cwdo03XgC7y8bBdJ2AclJtNEt3p8\no6yNrs4aiSQoXZGelXsIZJXUr62TISNdZQdM4fFKqIN/G4mhx5hFCwMHqjyn\nJUGjAzvYc4mQnRMa2G2W2aEsXDdKMZG2K6WpUUm53GPmdqG9cpM=" 
-  - TEST_GROUP=users
+    - secure: "ME9CJoiEDFtQLVAxVYDRmBqyAHX85an2cwdo03XgC7y8bBdJ2AclJtNEt3p8\no6yNrs4aiSQoXZGelXsIZJXUr62TISNdZQdM4fFKqIN/G4mhx5hFCwMHqjyn\nJUGjAzvYc4mQnRMa2G2W2aEsXDdKMZG2K6WpUUm53GPmdqG9cpM="
 rvm:
   - "1.9.2-p320"
 services:
@@ -13,7 +12,7 @@ script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec cucumber -f progress -r features features/$TEST_GROUP -b
+  - bundle exec cucumber -f progress -r features features/users/authenticate_users.feature
 before_script:
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
   - mysql -e 'create database otwarchive_test;'
