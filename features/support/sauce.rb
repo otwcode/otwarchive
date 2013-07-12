@@ -6,6 +6,6 @@ Sauce.config do |c|
   c[:browser] = "Firefox"
   c[:version] = "18"
   c[:os] = "linux"
-  c[:start_tunnel] = true
+  c[:start_tunnel] = false
 end
 

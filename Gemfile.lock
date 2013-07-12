@@ -140,7 +140,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.6.7)
+    net-ssh (2.6.8)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     newrelic-redis (1.4.0)
@@ -237,8 +237,6 @@ GEM
       rest-client
       sauce_whisk (~> 0.0.8)
       selenium-webdriver (>= 0.1.2)
-    sauce-connect (3.0.0)
-      sauce (~> 3.0.0.beta.2)
     sauce-cucumber (3.0.0)
       cucumber (>= 1.2.0)
       sauce (~> 3.0.0)
@@ -348,7 +346,6 @@ DEPENDENCIES
   rspec-rails (>= 2.6.0)
   rvm-capistrano
   sanitize
-  sauce-connect
   sauce-cucumber
   shoulda
   timeliness
