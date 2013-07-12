@@ -23,8 +23,8 @@ Feature: Create and Edit Series
       And I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted"
-      And I should see "Part 1 of the Ponies series" within "li"
-      And I should see "Part 1 of the Ponies series" within "dd"
+      And I should see "Part 1 of the Ponies series" within "div#series"
+      And I should see "Part 1 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
     When I go to the new work page
@@ -71,6 +71,7 @@ Feature: Create and Edit Series
       And I press "Update"
     Then I should see "Series was successfully updated."
       And I should see "This is a series about ponies. Of course" within "blockquote.userstuff"
+      And show me the page
       And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote.userstuff"
       And I should see "Complete: No"
     When I follow "Edit"
@@ -87,8 +88,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "li"
-      And I should see "Part 3 of the Many a Pony series" within "li"
+      And I should see "Part 1 of the Black Beauty series" within "div#series"
+      And I should see "Part 3 of the Many a Pony series" within "div#series"
     
   Scenario: Three ways to add a work to a series: a user with more than one pseud
     Given the following activated user exists
@@ -112,8 +113,8 @@ Feature: Create and Edit Series
     When I press "Post"
     Then I should see "Work was successfully posted"
       And I should see "Pointless Pseud"
-      And I should see "Part 1 of the Ponies series" within "li"
-      And I should see "Part 1 of the Ponies series" within "dd"
+      And I should see "Part 1 of the Ponies series" within "div#series"
+      And I should see "Part 1 of the Ponies series" within "dd.series"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
     When I go to the new work page
@@ -176,8 +177,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "li"
-      And I should see "Part 3 of the Many a Pony series" within "li"
+      And I should see "Part 1 of the Black Beauty series" within "div#series"
+      And I should see "Part 3 of the Many a Pony series" within "div#series"
 
 Scenario: Post Without Preview
   Given I am logged in as "whoever" with password "whatever"

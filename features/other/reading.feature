@@ -8,9 +8,9 @@ Feature: Reading count
   When I am logged in as "second_reader"
     And I go to first_reader's reading page
     Then I should see "Sorry, you don't have permission"
-    And I should not see "History" within "#dashboard .navigation li"
+    And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-    Then I should see "History" within "#dashboard .navigation li"
+    Then I should see "History" within "div#dashboard"
 
   Scenario: disable reading history
     also issue 1691
@@ -43,6 +43,7 @@ Feature: Reading count
     When I check "Turn on Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
+      And show me the page
       And I should see "Viewed once"
       And I should see "Last viewed: 25 May 2010"
     When I am on writer's works page
@@ -66,14 +67,14 @@ Feature: Reading count
       And I follow "Proceed"
       And the reading rake task is run
     When I go to fandomer's reading page
-    Then I should see "History" within "#dashboard .navigation li"
+    Then I should see "History" within "div#dashboard"
       And I should see "First work"
       And I should see "second work"
       And I should see "fifth"
       But I should not see "fourth"
     When I follow "Clear History"
       Then I should see "Your history is now cleared"
-      And I should see "History" within "#dashboard .navigation li"
+      And I should see "History" within "div#dashboard"
       But I should not see "First work"
       And I should not see "second work"
       And I should not see "fifth"
