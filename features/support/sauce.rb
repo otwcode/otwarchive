@@ -19,8 +19,9 @@ if ENV['TRAVIS']
       start_tunnel_for_parallel_tests(c)
     end
 
-    platform, name, version = ENV["BROWSER"].split(',')
-    c[:browsers] = [[platform, name, version]]
+    c[:browser] = "Firefox"
+    c[:version] = "18"
+    c[:os] = "linux"
   end
 
   Around do |scenario, block|
