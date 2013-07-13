@@ -70,7 +70,8 @@ gem "google_visualr", ">= 2.1"
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
-  gem 'shoulda'
+  gem 'shoulda-context'
+  gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'
@@ -83,6 +84,7 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'email_spec'
 end
 
 # Deploy with Capistrano

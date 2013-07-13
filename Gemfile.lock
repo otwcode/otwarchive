@@ -86,6 +86,9 @@ GEM
     diff-lcs (1.2.4)
     domain_name (0.5.12)
       unf (>= 0.0.5, < 1.0.0)
+    email_spec (1.4.0)
+      launchy (~> 2.1)
+      mail (~> 2.2)
     erubis (2.7.0)
     escape_utils (0.3.2)
     factory_girl (4.2.0)
@@ -217,9 +220,6 @@ GEM
       capistrano (>= 2.0.0)
     sanitize (2.0.4)
       nokogiri (~> 1.6.0)
-    shoulda (3.5.0)
-      shoulda-context (~> 1.0, >= 1.0.1)
-      shoulda-matchers (>= 1.4.1, < 3.0)
     shoulda-context (1.1.4)
     shoulda-matchers (2.2.0)
       activesupport (>= 3.0.0)
@@ -286,6 +286,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   delorean
+  email_spec
   escape_utils
   factory_girl
   faker
@@ -315,7 +316,8 @@ DEPENDENCIES
   rspec-rails (>= 2.6.0)
   rvm-capistrano
   sanitize
-  shoulda
+  shoulda-context
+  shoulda-matchers
   timeliness
   tire
   unicorn
