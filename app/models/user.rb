@@ -4,21 +4,14 @@ class User < ActiveRecord::Base
 
 #### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
-## TODO move to ArchiveConfig
-  LOGIN_LENGTH_MIN = 3
-  LOGIN_LENGTH_MAX = 40
-
-  validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => LOGIN_LENGTH_MAX)
-
-  PASSWORD_LENGTH_MIN = 6
-  PASSWORD_LENGTH_MAX = 40
+  validates_length_of :login, :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
 
   # allow nil so can save existing users
-  validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => PASSWORD_LENGTH_MAX)
+  validates_length_of :password, :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX, :allow_nil => true,
+    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
 
 ####
 
@@ -33,8 +26,8 @@ class User < ActiveRecord::Base
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
     config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
-    config.validates_length_of_password_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
+    config.validates_length_of_password_field_options = {:on => :update, :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN, :if => :has_no_credentials?}
+    config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN, :if => :has_no_credentials?}
   end
 
   def has_no_credentials?
