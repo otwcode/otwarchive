@@ -88,23 +88,19 @@ describe User do
 
       let(:new) {build(:user, login: @existing.login)}
       it "should not save user when login exists already" do
-        puts @existing.login
-        puts new.login
         new.save.should be_false
         new.errors[:login].should_not be_empty
       end
 
-      let(:new) {build(:user, login: @existing.login)}
+      let(:new) {build(:duplicate_user, login: @existing.login)}
       it "should prevent duplicate logins even when Rails validation misses it" do
-        puts @existing.login
-        puts new.login
         lambda do
           # pass ':validate => false' to 'save' in order to skip the validations, to simulate race conditions
           new.save(:validate => false)
         end.should raise_error(ActiveRecord::RecordNotUnique)
       end
 
-      let(:new) {build(:user, email: @existing.email)}
+      let(:new) {build(:duplicate_user, email: @existing.email)}
       it "should not save user when email exists already" do
         new.save.should be_false
         new.errors[:email].should_not be_empty

@@ -6,7 +6,13 @@ FactoryGirl.define do
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+
+    factory :duplicate_user do
+      login nil
+      email nil
+    end
   end
+
 
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
