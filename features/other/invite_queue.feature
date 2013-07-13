@@ -130,6 +130,11 @@ Feature: Invite queue management
       And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
       And I should see "Sorry, you have to be over 13!"
       And I should not see "Email address is too short"
+    When I fill in "user_login" with "87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2"
+      And I fill in "user_password" with '87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2'
+      And I press "Create Account"
+    Then I should see "Login is too long (maximum is 40 characters)"
+      And I should see "Password is too long (maximum is 40 characters)"
     When I fill in "user_login" with "newuser"
       And I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password1"
