@@ -59,6 +59,13 @@ describe User do
       end
     end
 
+    context "email veracity", :wip do
+      let(:bad_email) {build(:user, email: "fakey@crazy-z3d9df-domain.com")}
+      it "does not save if email is not valid" do
+        bad_email.save.should be_false
+        bad_email.errors[:email].should_not be_empty
+      end
+    end
 
     context "password length" do
       let(:password_short) {build(:user, password: ArchiveConfig.PASSWORD_LENGTH_MIN - 1)}
@@ -103,15 +110,17 @@ describe User do
   end
 
   describe "has_no_credentials?" do
-    it "is false if password is blank" do
+    it "is true if password is blank" do
       @user = build(:user, password: nil)
-      @user.has_no_credentials.should be_false
+      puts @user.password
+      @user.has_no_credentials?.should be_true
     end
-    it "is true if password is not blank" do
+    it "is false if password is not blank" do
       @user = build(:user)
-      @user.has_no_credentials.should be_false
+      @user.has_no_credentials?.should be_false
     end
   end
+
 end
 
 

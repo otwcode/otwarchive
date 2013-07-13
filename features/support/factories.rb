@@ -1,4 +1,9 @@
 FactoryGirl.define do
+
+  sequence :email do |n|
+    "foo#{n}@archiveofourown.org"
+  end
+
   factory :user do |f|
     f.sequence(:login) { |n| "testuser#{n}" }
     f.password "password"
@@ -6,6 +11,7 @@ FactoryGirl.define do
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+    f.activation_code nil
   end
 
   factory :pseud do |f|
@@ -157,5 +163,9 @@ FactoryGirl.define do
       signup.offers.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
+  end
+
+  factory :invite_request do
+    email
   end
 end
