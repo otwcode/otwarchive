@@ -7,11 +7,6 @@ describe Work do
     create(:work).should be_valid
   end
 
-  context "work skin" do
-    it "work_skin_allowed true"
-    it "work_skin_allowed false"
-  end
-
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
       expect {
@@ -34,18 +29,22 @@ describe Work do
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
       build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
     end
-
-    it "is too short after leading " do
-      pending "Changing the ArchiveConfig.TITLE_MIN" do
-        build(:work, title: " #{too_short}").should be_invalid
-      end
-    end
   end
 
-  it "strips out leading spaces from the title" do
-    @work = create(:work, title: "    Has Leading Spaces")
-    @work.reload
-    @work.title.should == "Has Leading Spaces"
+  context "clean_and_validate_title" do
+    it "strips out leading spaces from the title" do
+      @work = create(:work, title: "    Has Leading Spaces")
+      @work.reload
+      @work.title.should == "Has Leading Spaces"
+    end
+
+    let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
+    it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
+      @work = create(:work, title: "     #{too_short}")
+      @work.reload
+      @work.errors[:base].should include("Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+    end
+
   end
 
   context "invalid summary" do
@@ -86,25 +85,31 @@ describe Work do
     end
   end
 
-  describe "work skin" do
+  describe "work_skin_allowed", :pending do
     context "public skin"
 
     context "private skin" do
       before :each do
         @skin_author = create(:user)
-        @private_skin = create(:private_skin, author_id: @skin_author.id)
+        @second_author = create(:user)
+        @private_skin = create(:private_work_skin, author_id: @skin_author.id)
       end
 
       let(:work_author) {@skin_author}
-      let(:work){build(:custom_work_skin, authors: [work_author], skin_id: @private_skin.id)}
+      let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "can be used by the work skin author" do
+        puts work_author.login
+        puts work_author.pseuds.first.name
         work.save.should be_true
       end
 
-      let(:work_author) {create(:user)}
-      let(:work){build(:custom_work_skin, authors: [work_author], skin_id: @private_skin.id)}
+      let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "cannot be used by another user" do
-         work.save.should be_false
+        puts @skin_author.login
+        puts @skin_author.pseuds.first.name
+        puts @second_author.login
+        puts @second_author.pseuds.first.name
+        work.save.should be_false
          work.errors[:base].should include("You do not have permission to use that custom work stylesheet.")
       end
     end
