@@ -1,12 +1,12 @@
 env:
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/importing
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/challenges
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/collections
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/users
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/works
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/tags_and_wrangling
-  - TEST_GROUP=bundle exec cucumber -f progress -r features features/other
-  - TEST_GROUP=bundle exec rspec spec
+  - CUCUMBER_TESTS=importing
+  - CUCUMBER_TESTS=challenges
+  - CUCUMBER_TESTS=collections
+  - CUCUMBER_TESTS=users
+  - CUCUMBER_TESTS=works
+  - CUCUMBER_TESTS=tags_and_wrangling
+  - CUCUMBER_TESTS=other
+  - RSPEC_TESTS=spec
 rvm:
   - "1.9.3"
 services:
@@ -17,7 +17,8 @@ script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - $TEST_GROUP
+  - bundle exec cucumber -f progress -r features features/$CUCUMBER_TESTS
+  - bundle exec rspec $RSPEC_TESTS
 before_script:
   - mysql -e 'create database otwarchive_test;'
   - cp config/database.travis.yml config/database.yml
