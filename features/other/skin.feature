@@ -189,7 +189,7 @@ Feature: creating and editing skins
   Then I should see "Archive Skin Wizard"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS" within "form#new_skin"
+  Then I should see "CSS"
   When I follow "Use Wizard Instead?"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
