@@ -64,3 +64,6 @@ features/cassette_library/cucumber_tags/work_import_special_characters_man_latin
 features/cassette_library/cucumber_tags/import_lj_comm.yml
 
 features_report.html
+coverage
+Gemfile
+Gemfile.lock

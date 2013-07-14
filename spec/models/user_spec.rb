@@ -46,13 +46,13 @@ describe User do
     end
 
     context "login length" do
-      let(:login_short) {build(:user, login: ArchiveConfig.LOGIN_LENGTH_MIN - 1)}
+      let(:login_short) {build(:user, login: User::LOGIN_LENGTH_MIN - 1)}
       it "should not save user with too short login" do
         login_short.save.should be_false
         login_short.errors[:login].should_not be_empty
       end
 
-      let(:login_long) {build(:user, login: ArchiveConfig.LOGIN_LENGTH_MAX + 1)}
+      let(:login_long) {build(:user, login: User::LOGIN_LENGTH_MAX + 1)}
       it "should not save user with too long login" do
         login_long.save.should be_false
         login_long.errors[:login].should_not be_empty
@@ -68,13 +68,13 @@ describe User do
     end
 
     context "password length" do
-      let(:password_short) {build(:user, password: ArchiveConfig.PASSWORD_LENGTH_MIN - 1)}
+      let(:password_short) {build(:user, password: User::PASSWORD_LENGTH_MIN - 1)}
       it "should not save user with too short login" do
         password_short.save.should be_false
         password_short.errors[:password].should_not be_empty
       end
 
-      let(:password_long) {build(:user, password: ArchiveConfig.PASSWORD_LENGTH_MAX + 1)}
+      let(:password_long) {build(:user, password: User::PASSWORD_LENGTH_MAX + 1)}
       it "should not save user with too long login" do
         password_long.save.should be_false
         password_long.errors[:password].should_not be_empty
@@ -122,6 +122,7 @@ describe User do
   end
 
 end
+
 
 
 #  describe "most_popular_tags", :pending do
