@@ -3,11 +3,8 @@ require 'spec_helper'
 describe User do
   describe "most_popular_tags", :wip do
 
-    before (:all) do
-      @user = create(:user)
-    end
-
     before(:each) do
+      @user = create(:user)
       @fandom1 = create(:fandom)
       @fandom2 = create(:fandom)
       @character = create(:character)
@@ -34,11 +31,11 @@ describe User do
     end
 
     it "should find two fandoms for two works" do
-      create(:work, { :authors => [@user.pseuds.first],
+      @pseud = @user.pseuds.first
+      create(:work, { :authors => [@pseud],
                       :fandom_string => @fandom1.name })
-      create(:work, { :authors => [@user.pseuds.first],
-                      :fandoms => [@fandom1] })
-
+      create(:work, { :authors => [@pseud],
+                      :fandoms => [@fandom2.name] })
       @user.most_popular_tags.should =~ [@fandom1, @fandom2]
       @user.most_popular_tags.first.taggings_count.should == 1
       @user.most_popular_tags.last.taggings_count.should == 1

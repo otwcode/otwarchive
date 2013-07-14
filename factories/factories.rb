@@ -1,39 +1,38 @@
+require 'faker'
 FactoryGirl.define do
 
   sequence(:login) do |n|
-    "testuser#{n}"
+    "#{Faker::Lorem.characters(8)}#{n}"
   end
+
   sequence :email do |n|
-    "email#{n}@factory.com"
+    Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
   end
   sequence :admin_login do |n|
     "testadmin#{n}"
   end
-  sequence(:name) do |n|
-    "test pseud #{n}"
-  end
 
   factory :user do
-    login
+    login {generate(:login)}
     password "password"
     age_over_13 '1'
     terms_of_service '1'
     password_confirmation { |u| u.password }
-    email
-
+    email {generate(:email)}
     factory :duplicate_user do
-      login nil
-      email nil
+      login "placeholder"
+      email "placeholder"
     end
 
     factory :invited_user do
+      login {generate(:login)}
       invitation_token nil
     end
   end
 
 
-  factory :pseud do |f|
-    name
+  factory :pseud do
+    name {Faker::Lorem.word}
     user
   end
 
