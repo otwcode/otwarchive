@@ -5,7 +5,7 @@ Feature: Links in ToS
 	Scenario: Following links on the ToS
 		Given I am logged in as "myself" with password "password"
 		When I am on the home page
-			And I follow "Terms of Service" within ".navigation"
+			And I follow "Terms of Service" within "div#footer"
 			
 		# check	you're on the Terms of service page 
 		

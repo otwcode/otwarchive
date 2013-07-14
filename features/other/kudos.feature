@@ -96,8 +96,8 @@ Feature: Leave kudos
   When I view the work "BigBang"
     And I view the 2nd chapter
     And I press "Kudos ♥"
-  Then I should see "Chapter 2" within ".title"
-    And I should not see "Chapter 1" within ".title"
+  Then I should see "Chapter 2" within "div#chapters"
+    And I should not see "Chapter 1" within "div#chapters"
 
   Scenario: redirection when kudosing on a middle chapter, with default preferences but in temporary view full mode
 
@@ -105,8 +105,8 @@ Feature: Leave kudos
     And I am logged in as a random user
   When I view the work "BigBang" in full mode
     And I press "Kudos ♥"
-  Then I should see "Chapter 2" within ".title"
-    And I should see "Chapter 3" within ".title"
+  Then I should see "Chapter 2" within "div#chapters"
+    And I should see "Chapter 3" within "div#chapters"
     
   Scenario: batched kudos email
   

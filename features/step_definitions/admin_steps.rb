@@ -36,6 +36,10 @@ Given /^I am logged out as an admin$/ do
   assert !AdminSession.find
 end
 
+Given /^This is the end of the scenario$/ do
+  Rails.logger.debug "THIS IS THE END OF THE SCENARIO. DATABASE CLEANER BETTER TRUCATE THIS SHIT"
+end
+
 Given /^basic languages$/ do
   Language.default
   Language.find_or_create_by_short_and_name("DE", "Deutsch")
