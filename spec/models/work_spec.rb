@@ -72,29 +72,57 @@ describe Work do
 
   context "validate authors" do
 
-    it "does not save an invalid pseud with *" do
-      @work = build(:work, author: ["*pseud*"])
-      @work.should be_invalid
+    it "does not save an invalid pseud with *", :pending do
+      @pseud = create(:pseud, name: "*pseud*")
+      @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
+      @work.save.should be_false
+      @work.errors[:base].should include["These pseuds are invalid: *pseud*"]
     end
 
     it "does not save if author is blank" do
       @work = build(:no_authors)
-      @work.should be_invalid
+      @work.save.should be_false
+      @work.errors[:base].should include "Work must have at least one author."
     end
   end
 
+  describe "work skin" do
+    context "public skin"
+
+    context "private skin" do
+      before :each do
+        @skin_author = create(:user)
+        @private_skin = create(:private_skin, author_id: @skin_author.id)
+      end
+
+      let(:work_author) {@skin_author}
+      let(:work){build(:custom_work_skin, authors: [work_author], skin_id: @private_skin.id)}
+      it "can be used by the work skin author" do
+        work.save.should be_true
+      end
+
+      let(:work_author) {create(:user)}
+      let(:work){build(:custom_work_skin, authors: [work_author], skin_id: @private_skin.id)}
+      it "cannot be used by another user" do
+         work.save.should be_false
+         work.errors[:base].should include("You do not have permission to use that custom work stylesheet.")
+      end
+    end
+  end
+
+  #TODO: Move to a collection mailer spec
   it "should send an email when added to collection"
 
   describe "new recipients virtual attribute", :pending do
 
     before(:each) do
-      @author = FactoryGirl.create(:user)
-      @recipient1 = FactoryGirl.create(:user)
-      @recipient2 = FactoryGirl.create(:user)
-      @recipient3 = FactoryGirl.create(:user)
+      @author = create(:user)
+      @recipient1 = create(:user)
+      @recipient2 = create(:user)
+      @recipient3 = create(:user)
 
-      @fandom1 = FactoryGirl.create(:fandom)
-      @chapter1 = FactoryGirl.create(:chapter)
+      @fandom1 = create(:fandom)
+      @chapter1 = create(:chapter)
 
       @work = Work.new(:title => "Title")
       @work.fandoms << @fandom1
