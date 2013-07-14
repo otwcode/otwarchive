@@ -324,7 +324,6 @@ Feature: Edit preferences
   Then I should not see "Scary tag"
     And I should see "Scarier"
     And I should see "Show additional tags"
-    And show me the page
     And I should not see "Bookmarks" within "div.work ul.index li.own"
     And I should not see "Works" within "div.work ul.index li.own"
   When I follow "My new series"
