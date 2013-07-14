@@ -12,6 +12,15 @@ FactoryGirl.define do
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
     f.activation_code nil
+
+    factory :duplicate_user do
+      login nil
+      email nil
+    end
+
+    factory :invited_user do
+      invitation_token "1"
+    end
   end
 
   factory :pseud do |f|
@@ -168,4 +177,9 @@ FactoryGirl.define do
   factory :invite_request do
     email
   end
+
+  factory :invitation do
+    invitee_email "default@email.com"
+  end
+
 end
