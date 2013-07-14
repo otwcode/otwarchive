@@ -65,7 +65,7 @@ describe Work do
 
   context "invalid endnotes" do
     let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
-    it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
+    it "cannot be longer than ArchiveConfig.NOTES_MAX" do
       build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
     end
   end
@@ -73,7 +73,7 @@ describe Work do
   context "validate authors" do
 
     it "does not save an invalid pseud with *" do
-      @work = build(:work, author: "*pseud*")
+      @work = build(:work, author: ["*pseud*"])
       @work.should be_invalid
     end
 

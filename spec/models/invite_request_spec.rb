@@ -1,6 +1,6 @@
 require 'spec_helper'
-describe InviteRequest do
-  describe "Validation", :wip do
+describe InviteRequest, :ready do
+  describe "Validation" do
 
     context "Invalid email" do
 

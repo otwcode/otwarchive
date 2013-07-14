@@ -1,9 +1,4 @@
 FactoryGirl.define do
-
-  sequence :email do |n|
-    "foo#{n}@archiveofourown.org"
-  end
-
   factory :user do |f|
     f.sequence(:login) { |n| "testuser#{n}" }
     f.password "password"
@@ -11,17 +6,13 @@ FactoryGirl.define do
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
-    f.activation_code nil
 
     factory :duplicate_user do
       login nil
       email nil
     end
-
-    factory :invited_user do
-      invitation_token "1"
-    end
   end
+
 
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
@@ -131,7 +122,7 @@ FactoryGirl.define do
   factory :collection do |f|
     f.sequence(:name) {|n| "basic_collection_#{n}"}
     f.sequence(:title) {|n| "Basic Collection #{n}"}
-      
+
     after(:build) do |collection|
       collection.collection_participants.build(pseud_id: FactoryGirl.create(:pseud).id, participant_role: "Owner")
     end
@@ -157,7 +148,7 @@ FactoryGirl.define do
     f.association :pseud
   end
 
-  factory :challenge_assignment do |f| 
+  factory :challenge_assignment do |f|
     after(:build) do |assignment|
       assignment.collection_id = FactoryGirl.create(:collection, :challenge => GiftExchange.new).id unless assignment.collection_id
       assignment.request_signup = FactoryGirl.create(:challenge_signup, :collection_id => assignment.collection_id)
@@ -181,5 +172,4 @@ FactoryGirl.define do
   factory :invitation do
     invitee_email "default@email.com"
   end
-
 end
