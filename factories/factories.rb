@@ -107,6 +107,10 @@ FactoryGirl.define do
         work.authors = []
       end
     end
+
+    factory :custom_work_skin do
+      skin_id {FactoryGirl.create(:skin) if work.skin_id.blank?}
+    end
   end
 
   factory :series do |f|
@@ -194,6 +198,16 @@ FactoryGirl.define do
 
   factory :invitation do
     invitee_email "default@email.com"
+  end
+
+  factory :skin do
+      author_id {FactoryGirl.create(:user).id}
+      title {Faker::Lorem.word}
+      type "WorkSkin"
+
+      factory :private_skin do
+
+      end
   end
 
 end
