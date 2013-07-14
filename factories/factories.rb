@@ -1,41 +1,6 @@
 require 'faker'
 FactoryGirl.define do
 
-  sequence(:login) do |n|
-    "#{Faker::Lorem.characters(8)}#{n}"
-  end
-
-  sequence :email do |n|
-    Faker::Internet.email(name="#{Faker::Name.first_name}_#{n}")
-  end
-  sequence :admin_login do |n|
-    "testadmin#{n}"
-  end
-
-  factory :user do
-    login {generate(:login)}
-    password "password"
-    age_over_13 '1'
-    terms_of_service '1'
-    password_confirmation { |u| u.password }
-    email {generate(:email)}
-    factory :duplicate_user do
-      login "placeholder"
-      email "placeholder"
-    end
-
-    factory :invited_user do
-      login {generate(:login)}
-      invitation_token nil
-    end
-  end
-
-
-  factory :pseud do
-    name {Faker::Lorem.word}
-    user
-  end
-
   factory :admin do
     login
     password "password"
@@ -91,25 +56,25 @@ FactoryGirl.define do
   # end
 
   factory :work do |f|
-    f.title "My title"
-    f.fandom_string "Testing"
-    f.rating_string "Not Rated"
-    f.warning_string "No Archive Warnings Apply"
+    title "My title"
+    fandom_string "Testing"
+    rating_string "Not Rated"
+    warning_string "No Archive Warnings Apply"
     chapter_info = { content: "This is some chapter content for my work." }
-    f.chapter_attributes chapter_info
+    chapter_attributes chapter_info
 
     after(:build) do |work|
       work.authors = [FactoryGirl.build(:pseud)] if work.authors.blank?
     end
 
-    factory :no_authors, parent: :work do
+    factory :no_authors do
       after(:build) do |work|
         work.authors = []
       end
     end
 
     factory :custom_work_skin do
-      skin_id {FactoryGirl.create(:skin) if work.skin_id.blank?}
+      work_skin_id 1
     end
   end
 
@@ -200,13 +165,14 @@ FactoryGirl.define do
     invitee_email "default@email.com"
   end
 
-  factory :skin do
+  factory :private_work_skin, class: Skin do
       author_id {FactoryGirl.create(:user).id}
       title {Faker::Lorem.word}
       type "WorkSkin"
+      public false
 
-      factory :private_skin do
-
+      factory :public_work_skin do
+        public true
       end
   end
 
