@@ -24,4 +24,15 @@ describe ExternalWork do
     end
   end
 
+  context "valid urls" do
+    URLS = ["http://the--ivorytower.livejournal.com/153798.html"]
+
+    URLS.each do |url|
+      let(:valid_url) {build(:external_work, url: url)}
+      it "saves the external work" do
+        valid_url.save.should be_true
+      end
+    end
+  end
+
 end
