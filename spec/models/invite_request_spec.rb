@@ -10,11 +10,13 @@ describe InviteRequest, :ready do
         @invite.errors[:email].should_not be_empty
       end
 
-      it "invitation is not created for an email that does not pass the veracity check" do
-        @invite = build(:invite_request, email: "fakey@crazy-z3d9df-domain.com")
-        puts @invite.email
-        @invite.save.should be_false
-        @invite.errors[:email].should_not be_empty
+      BAD_EMAILS.each do |email|
+        let(:bad_email) {build(:user, email: email)}
+        it "cannot be created if the email does not pass veracity check" do
+          bad_email.save.should be_false
+          bad_email.errors[:email].should include("should look like an email address.")
+          bad_email.errors[:email].should include("does not seem to be a valid address.")
+        end
       end
     end
 

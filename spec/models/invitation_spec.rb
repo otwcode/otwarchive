@@ -41,10 +41,12 @@ describe Invitation, :ready do
 
     context "Create Invitation for invalid emails" do
 
-      let(:bad_email) {build(:user, email: "fakey@crazy-z3d9df-domain.com")}
-      it "cannot be created if the email does not pass veracity check" do
-        bad_email.save.should be_false
-        bad_email.errors[:invitee_email].should_not be_empty
+      BAD_EMAILS.each do |email|
+        let(:bad_email) {build(:invitation, invitee_email: email)}
+        it "cannot be created if the email does not pass veracity check" do
+          bad_email.save.should be_false
+          bad_email.errors[:invitee_email].should include("does not seem to be a valid address. Please use a different address or leave blank.")
+        end
       end
     end
   end
@@ -53,10 +55,6 @@ describe Invitation, :ready do
 
 
     context "Update Invitation for existing user" do
-
-      before(:all) do
-        @invite = create(:invitation)
-      end
 
       let(:user) {create(:user)}
       let(:invite_for_existing) {build(:invitation, invitee_email: user.email)}
@@ -68,10 +66,12 @@ describe Invitation, :ready do
 
     context "Create Invitation for invalid emails" do
 
-      let(:bad_email) {build(:user, email: "fakey@crazy-z3d9df-domain.com")}
-      it "cannot be created if the email does not pass veracity check" do
-        bad_email.save.should be_false
-        bad_email.errors[:invitee_email].should_not be_empty
+      BAD_EMAILS.each do |email|
+        let(:bad_email) {build(:invitation, invitee_email: email)}
+        it "cannot be created if the email does not pass veracity check" do
+          bad_email.save.should be_false
+          bad_email.errors[:invitee_email].should include("does not seem to be a valid address. Please use a different address or leave blank.")
+        end
       end
     end
   end
