@@ -1,6 +1,8 @@
 class RelatedWork < ActiveRecord::Base
   belongs_to :work
   belongs_to :parent, :polymorphic => true
+  
+  scope :posted, joins(:work).where(works: { posted: true })
 
   def notify_parent_owners
     if parent.respond_to?(:pseuds)
