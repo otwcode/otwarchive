@@ -224,12 +224,12 @@ Scenario: Translate your own work
   Then approving the related work should succeed
 
 Scenario: Draft works should not show up on related works
-  # Given I have related works setup
-  #   And I am logged in as "translator"
-  #   And I draft a translation
-  # When I am logged in as "inspiration"
-  #   And I view my related works
-  # Then I should not see "Worldbuilding Translated"
+  Given I have related works setup
+    And I am logged in as "translator"
+    And I draft a translation
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should not see "Worldbuilding Translated"
 
 @work_external_parent
 Scenario: Listing external works as inspirations
