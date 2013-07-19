@@ -113,7 +113,6 @@
 
 .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
   background: transparent;
-  color: #222;
   border: none;
 }
 
