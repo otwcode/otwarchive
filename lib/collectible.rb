@@ -72,7 +72,7 @@ module Collectible
 
   # NOTE: better to use collections_to_add/remove above instead for more consistency
   def collection_names
-    @collection_names ? @collection_names : self.collections.collect(&:name).join(",")
+    @collection_names ? @collection_names : self.collections.collect(&:name).uniq.join(",")
   end
   
   

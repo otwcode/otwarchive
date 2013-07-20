@@ -5,9 +5,9 @@ Scenario: creating pseud with unicode characters
 
   Given I am logged in as "myself"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Àlice and Bôb"
     And I fill in "Description" with "special character name"
     And I fill in "Icon alt text:" with "special Alice"
@@ -26,9 +26,9 @@ Scenario: creating pseud with chinese characters
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "爱丽丝"
     And I press "Create"
   Then I should see "Pseud was successfully created."
@@ -39,9 +39,9 @@ Scenario: creating pseud with pinyin characters
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Aì lì sī"
     And I press "Create"
   Then I should see "Pseud was successfully created."
@@ -52,9 +52,9 @@ Scenario: creating pseud with japanese characters
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "アリス"
     And I press "Create"
   Then I should see "Pseud was successfully created."
@@ -65,9 +65,9 @@ Scenario: creating pseud with russian characters
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Алиса"
     And I press "Create"
   Then I should see "Pseud was successfully created."
@@ -79,9 +79,9 @@ Scenario: not creating pseuds with characters which break urls
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice/Bob"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -89,9 +89,9 @@ Scenario: not creating pseuds with characters which break urls
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice & Bob"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -99,9 +99,9 @@ Scenario: not creating pseuds with characters which break urls
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice."
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -109,9 +109,9 @@ Scenario: not creating pseuds with characters which break urls
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice?"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -119,9 +119,9 @@ Scenario: not creating pseuds with characters which break urls
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice#"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -131,9 +131,9 @@ Scenario: not creating pseuds with other characters we don't allow
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice + Bob"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -143,9 +143,9 @@ Scenario: not creating pseuds with more characters we don't allow
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice 'Bob'"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
@@ -155,9 +155,9 @@ Scenario: not creating pseuds with even more characters we don't allow
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's user page
-    And I follow "Profile" within ".navigation"
-    And I follow "Manage My Pseuds" within ".navigation"
-    And I follow "New Pseud" within ".navigation"
+    And I follow "Profile" within "div#dashboard ul.navigation.actions"
+    And I follow "Manage My Pseuds" within "div.user"
+    And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Alice (Bob)"
     And I press "Create"
   Then I should not see "Pseud was successfully created."
