@@ -184,12 +184,12 @@ Feature: creating and editing skins
   Given basic skins
     And I am logged in as "skinner"
   When I am on skin's new page
-  Then I should see "CSS" within "form"
+  Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard Instead?"
   Then I should see "Archive Skin Wizard"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS" within "form"
+  Then I should see "CSS"
   When I follow "Use Wizard Instead?"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"

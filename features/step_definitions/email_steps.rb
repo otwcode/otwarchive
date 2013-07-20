@@ -12,6 +12,7 @@ end
 # Clear the deliveries array, useful if your background sends email that you want to ignore
 Given(/^all emails? (?:have|has) been delivered$/) do
   ActionMailer::Base.deliveries.clear
+  ActionMailer::Base.deliveries.should be_empty # Sanity check, ftw
 end
 
 Given(/^(\d)+ emails? should be delivered$/) do |count|

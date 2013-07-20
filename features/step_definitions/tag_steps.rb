@@ -137,5 +137,5 @@ end
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
-  step %{I should see "wrangler" within ".tag_edit"}
+  step %{I should see "wrangler" within "fieldset dl"}
 end

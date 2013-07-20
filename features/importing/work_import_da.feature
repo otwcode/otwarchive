@@ -62,7 +62,7 @@ Feature: Import Works from deviantart
       And I fill in "urls" with "http://cesy12.deviantart.com/art/AO3-testing-text-196158032"
     When I press "Import"
     Then I should see "Preview"
-       And I should see "Scraps" within "dd.freeform"
+       And I should see "Scraps"
        And I should see "Published:2011-02-04"
        And I should see "AO3 testing text" within "h2.title"
        And I should see "This is the description of the story above." within "div.notes"
