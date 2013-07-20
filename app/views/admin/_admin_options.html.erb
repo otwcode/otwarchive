@@ -7,7 +7,9 @@
   <% else %>
     <li><%= link_to ts('Hide'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %></li>
   <% end %>
+  <% if @work.present? %>
   <li><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
+  <% end %>
   <li><%= link_to ts('Delete'), {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => ts('Are you sure?'), :method => :delete %></li>
   </ul>
 </div>
