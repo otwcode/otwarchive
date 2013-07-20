@@ -50,7 +50,7 @@
 
 <ul class="view actions" role="menu">
   <% if params[:flat_view] %>
-    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => false) %></li>
+    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => nil) %></li>
   <% else %>
     <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
   <% end %>
