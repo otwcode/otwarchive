@@ -17,8 +17,7 @@
 <% @challenge_signups.each do |challenge_signup| %>
   
   <% # the person who signed up, linking to their full individual signup, and a way to email them %>
-  <%= link_to challenge_signup.pseud.name, collection_signup_path(@collection, challenge_signup) %>
-  <%= mailto_link challenge_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
+  <%= email_and_signup_link(challenge_signup, challenge_signup.byline) %>
   
   <% # %>
   

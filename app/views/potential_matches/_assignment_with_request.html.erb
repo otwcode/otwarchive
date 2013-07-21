@@ -1,10 +1,9 @@
-<!-- expects local "assignment" -->
+<% # expects local "assignment" %>
 <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <% request_signup = assignment.request_signup %>
   <tr>
     <th scope="row">
-      <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
-      <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) %>
+      <%= email_and_signup_link(request_signup, assignment.request_byline) %>
     </th>
 
     <td>
@@ -16,45 +15,32 @@
           (offer_assignment.pinch_request_signup ?
             "#{offer_assignment.pinch_request_signup.pseud.byline}* 
              (pinch recipient)" : 
-             "<strong>None</strong>")}.join(", ").html_safe
+             "<span class=\"warning\">None</span>")}.join(", ").html_safe
       %>
     </td>
     <td>
       <% @pmatches = request_signup.request_potential_matches.sort.reverse %>
       <%= assignment_form.collection_select :offer_signup_id, @pmatches.collect(&:offer_signup), :id, :byline, 
-                                              :include_blank => "- None Assigned -" %>
+                                              :include_blank => ts("None Assigned") %>
     </td>
     <td>
       <% if @pmatches.size > 0 %>
-        <h5 id="show_potentials_for_<%= request_signup.id %>">(Show <%= @pmatches.size %>)</h5>
-        <div id="potentials_for_<%= request_signup.id %>" class="hideme">
+        <a class="potentials_for_<%= request_signup.id %>_open hidden" href="#">
+          <%= ts("Show %{number_of_matches}", :number_of_matches => @pmatches.size) %>
+        </a>
+        <div id="potentials_for_<%= request_signup.id %>" class="toggled">
           <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ").html_safe %>
         </div>
-        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id %>">(Hide)</h5>
+        <a class="potentials_for_<%= request_signup.id %>_close hidden" href="#">
+          <%= ts("Hide") %>
+        </a>
       <% else %>
-        <strong>No potential matches.</strong>
+        <span class="warning"><%= ts("No potential matches.") %></span>
       <% end %>
     </td>
-    <td><!--BACK END this td should probably be titled, but what with?-->
+    <td title="<%= ts('Pinch hitter')%>">
       <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
     </td>
   </tr>
-  
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function() {
-      $j("#show_potentials_for_<%= request_signup.id %>").click(function() {
-          $j("#potentials_for_<%= request_signup.id %>").show();
-          $j("#hide_potentials_for_<%= request_signup.id %>").show();
-          $j(this).hide();
-      });
-      $j("#hide_potentials_for_<%= request_signup.id %>").click(function() {
-          $j("#potentials_for_<%= request_signup.id %>").hide();
-          $j("#show_potentials_for_<%= request_signup.id %>").show();
-          $j(this).hide();
-      });
-    })
-  <% end %>
-<% end %>
 
-<% end %> <!-- end form -->
+<% end %>
