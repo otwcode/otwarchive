@@ -155,12 +155,17 @@ p.character_counter {
 }
 
 /* WIDGET: LIVE VALIDATION (todo: ARIA live region)
-spoofs the system message style */
+We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating. */
 
 .LV_validation_message {
-  border: 1px solid;
-  display: block;
   font-weight: 900;
+}
+
+.LV_invalid {
+  background: #efd1d1;
+  border: 1px solid #900;
+  color: #900;
+  display: block;
   margin: 0.643em auto;
   padding: 0.25em 0.375em;
   position: absolute;
@@ -168,36 +173,18 @@ spoofs the system message style */
     border-radius: 0.25em;
 }
 
-.LV_valid {
-  color: #0c0;
-}
-
-.LV_invalid {
-  /* color: #c00; */
-  background: #efd1d1;
-  border-color: #900;
-  color: #900;
-}
-
 .LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
   border: 1px solid #c00;
 }
 
-.LV_validation_message:before {
+.LV_invalid:before {
+  border-color: #900 transparent;
   border-style: solid;
   border-width: 0 0.643em 0.643em;
   content: "";
   left: 0.875em;
   position: absolute;
   top: -0.643em;
-}
-
-.LV_invalid:before {
-  border-color: #900 transparent;
-}
-
-.LV_valid:before {
-  border-color: #0c0 transparent;
 }
 
 /* WIDGET: AUTO COMPLETE */
