@@ -145,19 +145,27 @@ p.character_counter {
   text-align: right;
 }
 
-.character_counter span {
+/* .character_counter span {
   display: inline-block;
   width: 3.75em;
-}
+} */
 
 .comment .character_counter {
   float: left;
 }
 
-/* WIDGET: LIVE VALIDATION (todo: ARIA live region)*/
+/* WIDGET: LIVE VALIDATION (todo: ARIA live region)
+spoofs the system message style */
 
 .LV_validation_message {
-  font-weight: bold;
+  border: 1px solid;
+  display: block;
+  font-weight: 900;
+  margin: 0.643em auto;
+  padding: 0.25em 0.375em;
+  position: absolute;
+    box-shadow: 1px 1px 2px;
+    border-radius: 0.25em;
 }
 
 .LV_valid {
@@ -165,11 +173,31 @@ p.character_counter {
 }
 
 .LV_invalid {
-  color: #c00;
+  /* color: #c00; */
+  background: #efd1d1;
+  border-color: #900;
+  color: #900;
 }
 
 .LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
   border: 1px solid #c00;
+}
+
+.LV_validation_message:before {
+  border-style: solid;
+  border-width: 0 0.643em 0.643em;
+  content: "";
+  left: 0.875em;
+  position: absolute;
+  top: -0.643em;
+}
+
+.LV_invalid:before {
+  border-color: #900 transparent;
+}
+
+.LV_valid:before {
+  border-color: #0c0 transparent;
 }
 
 /* WIDGET: AUTO COMPLETE */
