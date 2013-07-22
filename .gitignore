@@ -66,8 +66,6 @@ features/cassette_library/cucumber_tags/import_lj_comm.yml
 spec/results.html
 features_report.html
 coverage
-Gemfile
-Gemfile.lock
 
 .simplecov
 .rspec
