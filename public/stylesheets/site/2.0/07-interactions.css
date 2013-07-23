@@ -136,6 +136,10 @@ form dd + dd {
   margin-left: 0.5625em;
 }
 
+form dd.required {
+  color: #2a2a2a;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
@@ -144,11 +148,6 @@ p.character_counter {
   font-size: 87.5%;
   text-align: right;
 }
-
-/* .character_counter span {
-  display: inline-block;
-  width: 3.75em;
-} */
 
 .comment .character_counter {
   float: left;
@@ -165,7 +164,6 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   background: #efd1d1;
   border: 1px solid #900;
   color: #900;
-  display: block;
   margin: 0.643em auto;
   padding: 0.25em 0.375em;
   position: absolute;
@@ -367,7 +365,9 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 
 /* WIDGET: MODAL DIALOGS (called by help links) */
 
-a.modal.help { cursor: help; }
+a.modal.help { 
+  cursor: help;
+}
 
 #modal-bg, #modal-wrap {
   display: none;
@@ -414,7 +414,6 @@ a.modal.help { cursor: help; }
 #modal {
   background: #fff;
   border: 10px solid #eee;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   margin: 3% 0;
   max-width: 800px;
   min-width: 200px;
@@ -423,6 +422,7 @@ a.modal.help { cursor: help; }
   text-align: left;
   width: 80%; 
   z-index: 501;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .content {
@@ -453,13 +453,13 @@ a.modal.help { cursor: help; }
 #modal.img {
   background: transparent;
   border: 0;
-  box-shadow: none;
   margin: 0 0 44px;
   max-height: none;
   max-width: 90%;
   min-width: 0;
   padding: 0;
   width: auto;
+    box-shadow: none;
 }
 
 #modal.img a {
@@ -486,10 +486,10 @@ a.modal.help { cursor: help; }
 }
 
 #modal.img .content img {
-  border: 1px solid rgba(0,0,0,0.5);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   max-height: 100%;
   max-width: 100%;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .footer {
@@ -504,10 +504,10 @@ a.modal.help { cursor: help; }
 
 #modal.img .footer {
   background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   color: #fff;
   position: fixed;
   text-align: center;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .footer .action.modal-closer {
@@ -516,9 +516,9 @@ a.modal.help { cursor: help; }
   right: 8px;
 }
 
-#modal .content > h1:first-child, 
-#modal .content > h2:first-child, 
-#modal .content > .heading:first-child { margin-top: 0.5em; }
+#modal .content > h1:first-child, #modal .content > h2:first-child, #modal .content > .heading:first-child { 
+  margin-top: 0.5em;
+}
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 
