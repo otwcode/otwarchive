@@ -6,20 +6,20 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = Factory.create(:user, :login => 'orphan_account')
+  user = FactoryGirl.create(:user, :login => 'orphan_account')
   user.activate
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
-    user = Factory.create(:user, hash)
+    user = FactoryGirl.create(:user, hash)
     user.activate
   end
 end
 
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
-    user = Factory.create(:user, hash)
+    user = FactoryGirl.create(:user, hash)
     user.activate
     user.tag_wrangler = '1'
   end
@@ -29,7 +29,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
-    user = Factory.create(:user, {:login => login, :password => password})
+    user = FactoryGirl.create(:user, {:login => login, :password => password})
     user.activate
   else
     user.password = password
@@ -39,7 +39,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   visit login_path
   fill_in "User name", :with => login
   fill_in "Password", :with => password
-  check "Remember me"
+  check "Remember Me"
   click_button "Log In"
   assert UserSession.find
 end
@@ -62,7 +62,7 @@ end
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = Factory.create(:user, :login => name, :password => DEFAULT_PASSWORD)
+  user = FactoryGirl.create(:user, :login => name, :password => DEFAULT_PASSWORD)
   user.activate
   visit login_path
   fill_in "User name", :with => name

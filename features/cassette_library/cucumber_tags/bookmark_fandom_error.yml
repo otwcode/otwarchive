@@ -1,28 +1,38 @@
 --- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :head
-    uri: http://test.sidrasue.com:80/short.html
+http_interactions: 
+- request: 
+    method: head
+    uri: http://test.sidrasue.com/short.html
     body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - Ruby
+  response: 
+    status: 
       code: 200
       message: OK
     headers: 
       server: 
-      - nginx/0.8.54
+      - nginx/1.2.1
       date: 
-      - Fri, 11 Feb 2011 14:16:09 GMT
+      - Wed, 19 Jun 2013 19:52:18 GMT
       content-type: 
       - text/html
       content-length: 
       - "6368"
       last-modified: 
-      - Sun, 04 Oct 2009 16:56:17 GMT
+      - Fri, 15 Mar 2013 17:30:28 GMT
       connection: 
       - keep-alive
       accept-ranges: 
       - bytes
     body: 
+      encoding: US-ASCII
+      string: ""
     http_version: "1.1"
+  recorded_at: Wed, 19 Jun 2013 19:52:18 GMT
+recorded_with: VCR 2.5.0

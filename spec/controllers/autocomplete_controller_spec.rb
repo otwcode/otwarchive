@@ -9,8 +9,8 @@ describe AutocompleteController do
   
   describe "do_tag" do
     it "should only return matching tags" do
-      @tag = Factory.create(:fandom, :name => "Match")
-      @tag2 = Factory.create(:fandom, :name => "Blargh")
+      @tag = FactoryGirl.create(:fandom, :name => "Match")
+      @tag2 = FactoryGirl.create(:fandom, :name => "Blargh")
       
       # we need to set this to make the controller return the JSON-encoded data we want
       @request.env['HTTP_ACCEPT'] = "application/json"
