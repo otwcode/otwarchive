@@ -1,7 +1,7 @@
 <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <dt>
     <label for="challenge_assignments_<%= assignment.id %>_pinch_request_signup_id">
-      <%= ts("Pinch Recipient for %{participant}", :participant => email_and_signup_link(assignment.offer_signup, assignment.offer_byline)).html_safe %>
+      <%= ts("Pinch Recipient for %{participant}", :participant => email_and_signup_link(assignment.offer_byline, assignment.offer_signup)).html_safe %>
     </label>
   </dt>
   <dd>
