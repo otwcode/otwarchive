@@ -262,7 +262,7 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = "" 
     content_for :tinymce do
-      javascript_include_tag "tiny_mce/tiny_mce"
+      javascript_include_tag "tinymce/tinymce.min.js"
     end
     @content_for_tinymce_init = "" 
     content_for :tinymce_init do
