@@ -1,9 +1,9 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-  plugins: "link image paste tabfocus",
+  plugins: "directionality image link paste tabfocus",
   menubar: false,
-  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo",
+  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
   browser_spellcheck: true,
   
@@ -19,7 +19,7 @@ tinyMCE.init({
 	// Add HTML tags the editor will accept
 	// - span when it contains a class attribute
 	// - strike for strikethrough formatting
-	extended_valid_elements: "span[!class], strike",
+	extended_valid_elements: "span[!class|!dir], strike",
 	
 	// Override the default method of styling
 	// - align$value: align="$value" attribute replaces style="text-align: $value"
