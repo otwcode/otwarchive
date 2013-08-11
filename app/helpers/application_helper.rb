@@ -266,7 +266,7 @@ module ApplicationHelper
     end
     @content_for_tinymce_init = "" 
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor"
+      javascript_include_tag "mce_editor.min.js"
     end
   end  
   
