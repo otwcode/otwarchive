@@ -8,12 +8,12 @@
       <%= f.text_field :title, :title =>"title" %></h4>
       <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
       <ul class="hidden rtf-html-switch actions">
-        <li><a id="richTextLink" href="#"><%= ts('Rich Text') %></a></li>
-        <li><a id="plainTextLink" href="#"><%= ts('HTML') %></a></li>
+        <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+        <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
       </ul>
       <p class="rtf-html-instructions note">
-        <span id="plainTextNotes"><%= allowed_html_instructions %></span>
-        <span id="richTextNotes" class="hidden"><%= ts("Type or paste formatted text.") %></span>
+        <span class="html-notes"><%= allowed_html_instructions %></span>
+        <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %></span>
       </p>
       <% use_tinymce %>
       <div class="rtf-html-field">

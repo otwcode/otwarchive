@@ -9,12 +9,12 @@
       <dt><%= f.label :content, ts("FAQ Subsection") %></dt>
       <dd>
         <ul class="hidden rtf-html-switch actions">
-          <li><a id="richTextLink" href="#"><%= ts('Rich Text') %></a></li>
-          <li><a id="plainTextLink" href="#"><%= ts('HTML') %></a></li>
+          <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+          <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
         </ul>
         <p class="rtf-html-instructions note">
-          <span id="plainTextNotes"><%= allowed_html_instructions %></span>
-          <span id="richTextNotes" class="hidden"><%= ts("Type or paste formatted text.") %></span>
+          <span class="html-notes"><%= allowed_html_instructions %></span>
+          <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %></span>
         </p>
         <% use_tinymce %>
         <div class="rtf-html-field">

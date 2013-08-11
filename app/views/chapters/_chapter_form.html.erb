@@ -46,15 +46,15 @@
   <legend> <%= f.label :content, ts("Chapter text"), :class => "required" %></legend>
   <h4 class="landmark heading"><%= ts("Chapter Text") %></h4>
   <ul class="hidden rtf-html-switch actions">
-    <li><a id="richTextLink" href="#"><%= ts('Rich Text') %></a></li>
-    <li><a id="plainTextLink" href="#"><%= ts('HTML') %></a></li>
+    <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+    <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
   </ul>
   <p class="rtf-html-instructions note">
-    <span id="plainTextNotes"><%= allowed_html_instructions %></span>
-    <span id="richTextNotes" class="hidden"><%= ts("Type or paste formatted text.") %></span>
+    <span class="html-notes"><%= allowed_html_instructions %></span>
+    <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %></span>
   </p>  
   <div class="rtf-html-field">
-    <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength large" %>
+    <%= f.text_area :content, :id => "content", :class => "mce-editor observe_textlength large" %>
     <%= live_validation_for_field('content', 
           :maximum_length => ArchiveConfig.CONTENT_MAX_DISPLAYED, 
           :minimum_length => ArchiveConfig.CONTENT_MIN, 

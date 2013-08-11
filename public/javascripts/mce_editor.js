@@ -50,28 +50,23 @@ function removeEditor(id) {
 $j(document).ready(function(){
   $j(".rtf-html-switch").removeClass('hidden');
   
-  $j("#plainTextLink").addClass('current');
-
-  // close! we need a way to toggle between add and remove editor
-  //$j(".rtf-html-switch").on('click', 'a', function(event){
-    //addEditor('content');
-    //$j(this).addClass('current');
-    //$j(this).closest('fieldset').children('.rtf-html-instructions').find('span').toggleClass('hidden');
-    //$j(this).siblings().removeClass('current');
-    //event.preventDefault();
-  //});    
+  $j(".html-link").addClass('current'); 
   
-  $j("#richTextLink").click(function(event){
+  $j(".rtf-link").click(function(event){
     addEditor('content');
-    $j(this).addClass('current').closest('fieldset').children('.rtf-html-instructions').find('span').toggleClass('hidden');
-    $j('#plainTextLink').removeClass('current');
+    $j(this).addClass('current');
+    $j('.rtf-notes').removeClass('hidden');
+    $j('.html-link').removeClass('current');
+    $j('.html-notes').addClass('hidden');
     event.preventDefault();
   });            
   
-  $j('#plainTextLink').click(function(event){
+  $j('.html-link').click(function(event){
     removeEditor('content');
-    $j(this).addClass('current').closest('fieldset').children('.rtf-html-instructions').find('span').toggleClass('hidden');
-    $j('#richTextLink').removeClass('current');
+    $j(this).addClass('current');
+    $j('.html-notes').removeClass('hidden');
+    $j('.rtf-link').removeClass('current');
+    $j('.rtf-notes').addClass('hidden');
     event.preventDefault();
   });
 })      
