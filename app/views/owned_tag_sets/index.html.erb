@@ -7,7 +7,7 @@
   <% elsif @restriction %>
     <%= ts("Tag Sets Used In This Challenge") %>
   <% elsif @query %>
-    <%= search_header @tag_sets, @query, "Tag Set" %> <%= link_to_help 'tagset-about' %>
+    <%= search_header @tag_sets, nil, "Tag Set" %> <%= link_to_help 'tagset-about' %>
   <% else %>
     <%= ts("Tag Sets") %> <%= link_to_help 'tagset-about' %> <%= ts("in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
   <% end %>
