@@ -59,6 +59,8 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
+  before_destroy :remove_pseud_from_kudos # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
 
@@ -184,8 +186,6 @@ class User < ActiveRecord::Base
 
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
-
-  before_destroy :remove_pseud_from_kudos
 
   def remove_pseud_from_kudos
     ids = self.pseuds.collect(&:id).join(',')
