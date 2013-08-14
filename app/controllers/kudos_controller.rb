@@ -1,44 +1,32 @@
 class KudosController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :only => [:create]
   
   cache_sweeper :kudos_sweeper
 
   def create
-    @commentable = params[:kudo][:kudosable_type] == 'Work' ? Work.find(params[:kudo][:kudosable_id]) : Chapter.find(params[:kudo][:kudosable_id])
-    unless @commentable
-      setflash; flash[:error] = ts("What did you want to leave kudos on?")
-      redirect_to root_path and return
-    end
-
-    pseud = logged_in? ? current_user.default_pseud : nil
-    if current_user && current_user.is_author_of?(@commentable)
-      setflash; flash[:comment_error] = ts("You can't leave kudos for yourself. :)")
+    @kudo = Kudo.new(params[:kudo])
+    if current_user.present?
+      @kudo.pseud = current_user.default_pseud
     else
-      ip_address = logged_in? ? nil : request.remote_ip
-      if (@kudo = Kudo.new(:commentable => @commentable, :pseud => pseud, :ip_address => ip_address)) && @kudo.save
-        setflash; flash[:comment_notice] = ts("Thank you for leaving kudos!")
-      else
-        setflash; flash[:comment_error] = @kudo ? @kudo.errors.full_messages.map {|msg| msg.gsub(/^(.+)\^/, '')}.join(", ") : ts("We couldn't save your kudos, sorry!")
+      @kudo.ip_address = request.remote_ip
+    end
+    respond_to do |format|
+      format.html do
+        if @kudo.save
+          setflash; flash[:comment_notice] = ts("Thank you for leaving kudos!")
+        else
+          msg = @kudo.dup? ? "You have already left kudos here. :)" : "We couldn't save your kudos, sorry!"
+          setflash; flash[:comment_error] = ts(msg)
+        end
+        redirect_to request.referer
+      end
+      format.js do
+        if @kudo.save
+          render json: @kudo, status: :created
+        else
+          render json: { errors: @kudo.errors }
+        end
       end
     end
-        
-    if request.referer.match(/static/)
-      # came here from a static page
-      # so go to the kudos page if you can, instead of reloading the full work
-      if @kudo && @kudo.id # saved
-        redirect_to kudo_path(@kudo, :url => request.referer)
-      else
-        redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :anchor => "comments"
-      end
-    else
-      # redirect to what the user was actually reading - chapter or work - when they left kudos
-      redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :view_full_work => params[:view_full_work], :page => params[:page], :anchor => "comments"
-    end
-  end
-
-  def show
-    @kudo = Kudo.find(params[:id])
-    @referrer = params[:url].blank? ? url_for(@kudo.commentable) : params[:url]
   end
 
 end
