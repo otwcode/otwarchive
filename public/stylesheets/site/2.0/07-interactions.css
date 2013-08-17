@@ -560,6 +560,11 @@ div.dynamic {
 
 /* CONTEXT: dashboard*/
 
+.dashboard .post {
+  float: left;
+  width: 100%;
+}
+
 .dashboard fieldset {
   clear: right;
 }
