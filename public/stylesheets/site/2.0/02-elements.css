@@ -134,7 +134,7 @@ kbd, tt, code, var, pre, samp {
 }
 
 pre {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 strong, b {
