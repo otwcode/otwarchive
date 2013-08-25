@@ -1,10 +1,10 @@
-<% # not working code, although bookmark and work variables are currently passed in from work_header_navigation and bookmark_owner_navigation %>
+<% # not working code (tags are missing from HTML share code and some of the HTML tags have been stripped out), although bookmark and work variables are currently passed in from work_header_navigation and bookmark_owner_navigation %>
 <% # can we set it up to use variable 'shareable' and do different things with shareable based on whether shareable.is_a?(Bookmark) or shareable.is_a?(Work) like we do with bookmarks? we could potentially add admin posts in the future %>
 <% # let's get the share stuff out of works_helper and into share_helper since it is used on bookmarks and works %>
 
 <div id="share<% if shareable.is_a?(Bookmark) %>_<%= bookmark.id %><% end %>">
 
-  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts(" / ") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
+  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts("/") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet link to share the work on Twitter.") %></p>
   
   <% # HTML share code %>
   <p>
