@@ -56,7 +56,7 @@ module ShareHelper
     if bookmark.bookmarkable.is_a?(Work)
       work_embed = get_embed_link(bookmark.bookmarkable)
       bookmark_meta = get_embed_link_bookmark_meta(bookmark)
-      [work_embed, bookmark_meta].compact.join("")
+      [work_embed, bookmark_meta].compact.join
     end
   end
   
@@ -76,7 +76,7 @@ module ShareHelper
     if bookmark.bookmarkable.is_a?(Work)
       work_meta = get_embed_link_meta(bookmark.bookmarkable)
       bookmark_meta = get_embed_link_bookmark_meta(bookmark)
-      [work_meta, bookmark_meta].compact.join("")
+      [work_meta, bookmark_meta].compact.join
     end
   end
   
