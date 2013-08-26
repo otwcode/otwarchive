@@ -8,13 +8,7 @@
   
   <% # HTML share code %>
   <p>
-    <% # use text_area_tag to avoid unwanted whitespace while keeping nicely indented code,
-    # set the textarea ID to be unique to each bookmark on bookmark indices,
-    # get the embed code,
-    # set the size of the textarea in rows and cols %>
-    <%= text_area_tag(shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code",
-    shareable.is_a?(Bookmark) ? get_bookmark_embed_link(bookmark) : get_embed_link(@work),
-    rows: 4, cols: 50) %>
+    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= shareable.is_a?(Bookmark) ? get_bookmark_embed_link(bookmark) : get_embed_link(@work) %></textarea>
   </p>
   
   <% # Share buttons unless disabled %>

@@ -32,15 +32,15 @@ module ShareHelper
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
     
     if work.series.count != 0
-      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, series_text, summary_text].compact.join("")
+      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, series_text, summary_text].compact.join
     else
-      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, summary_text].compact.join("")
+      [chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, tags_text, summary_text].compact.join
     end   
   end
   
   # combine title, word count, creator, and meta to make copy and paste share code for a work
   def get_embed_link(work)
-    [get_embed_link_title(work) + tag("br"), get_embed_link_meta(work)].compact.join("")
+    [get_embed_link_title(work), tag("br"), get_embed_link_meta(work)].compact.join
   end
 
   # get bookmark information for share code
