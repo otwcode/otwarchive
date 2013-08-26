@@ -22,7 +22,6 @@ module ShareHelper
     chapters_text = ts("Chapters: ") + work.chapter_total_display + tag("br")
     fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe, tag("br"))
     rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '), tag("br"))
-    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '), tag("br"))
     warning_text = add_label_for_embed(ts("Warnings: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '), tag("br"))
     relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '), tag("br"))
     char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '), tag("br"))
