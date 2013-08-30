@@ -157,7 +157,7 @@ class Bookmark < ActiveRecord::Base
 
   mapping do
     indexes :notes
-    indexes :private
+    indexes :private, :type => 'boolean'
     indexes :bookmarkable_type
     indexes :bookmarkable_id
     indexes :created_at,          :type  => 'date'
