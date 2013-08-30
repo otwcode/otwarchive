@@ -100,5 +100,5 @@ Feature: Admin posts
       And I fill in "admin_post_tag_list" with "quotes, futurama"
       And I press "Post"
     Then I should see "Admin Post was successfully created."
-      And I should see "toaster" within ".admin"
+      And I should see "toaster" within "div.admin.home"
       And I should see "futurama" within ".tags"

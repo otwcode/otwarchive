@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Work < ActiveRecord::Base
 
   include Taggable
@@ -23,7 +25,8 @@ class Work < ActiveRecord::Base
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
+  # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
+  has_many :chapters, conditions: "work_id IS NOT NULL"
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
@@ -44,7 +47,7 @@ class Work < ActiveRecord::Base
   has_many :challenge_claims, :as => :creation
   accepts_nested_attributes_for :challenge_claims
 
-  has_many :filter_taggings, :as => :filterable, :dependent => :destroy
+  has_many :filter_taggings, :as => :filterable
   has_many :filters, :through => :filter_taggings
   has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
   has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
@@ -52,20 +55,48 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating',
-    :before_remove => :remove_filter_tagging
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category',
-    :before_remove => :remove_filter_tagging
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning',
-    :before_remove => :remove_filter_tagging
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
-    :before_remove => :remove_filter_tagging
-  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship',
-    :before_remove => :remove_filter_tagging
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
-    :before_remove => :remove_filter_tagging
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
-    :before_remove => :remove_filter_tagging
+  has_many :ratings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Rating'"
+  has_many :categories, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Category'"
+  has_many :warnings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Warning'"
+  has_many :fandoms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Fandom'"
+  has_many :relationships, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_taggingg,
+    :conditions => "tags.type = 'Relationship'"
+  has_many :characters, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Character'"
+  has_many :freeforms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Freeform'"
 
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
@@ -209,6 +240,11 @@ class Work < ActiveRecord::Base
   after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
+  end
+
+  after_destroy :clean_up_filter_taggings
+  def clean_up_filter_taggings
+    FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
   end
   
   after_destroy :clean_up_assignments
@@ -421,6 +457,13 @@ class Work < ActiveRecord::Base
     in_anon_collection?
   end
   
+  before_update :bust_anon_caching
+  def bust_anon_caching
+    if in_anon_collection_changed?
+      async(:poke_cached_creator_comments)
+    end
+  end
+  
   # This work's collections and parent collections
   def all_collections
     Collection.where(id: self.collection_ids) || []
@@ -556,9 +599,15 @@ class Work < ActiveRecord::Base
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
-    unless self.comments.empty?
-      self.comments.each{ |c| c.touch }
-    end
+    async(:poke_cached_comments)
+  end
+  
+  def poke_cached_comments
+    self.comments.each { |c| c.touch }
+  end
+  
+  def poke_cached_creator_comments
+    self.creator_comments.each { |c| c.touch }
   end
 
   # Get the total number of chapters for a work
@@ -587,7 +636,11 @@ class Work < ActiveRecord::Base
 
   # Gets the current first chapter
   def first_chapter
-    self.chapters.order('position ASC').first || self.chapters.first
+    if self.new_record?
+      self.chapters.first || self.chapters.build
+    else
+      self.chapters.order('position ASC').first
+    end
   end
 
   # Gets the current last chapter
@@ -806,6 +859,12 @@ class Work < ActiveRecord::Base
       :commentable_type => 'Chapter', 
       :commentable_id => self.chapters.value_of(:id)
     )
+  end
+  
+  # All comments left by the creators of this work
+  def creator_comments
+    pseud_ids = Pseud.where(user_id: self.pseuds.value_of(:user_id)).value_of(:id)
+    find_all_comments.where(pseud_id: pseud_ids)
   end
   
   def guest_kudos_count

@@ -73,7 +73,7 @@
     </dl>
     <div>
       <%= hidden_field_tag("collection_id", @collection.id) if @collection %>
-      <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
+      <%= hidden_field_tag("tag_id", @tag.to_param) if @tag %>
       <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @pseud.name) if @pseud %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>

@@ -7,7 +7,7 @@ env:
   - TEST_GROUP=tags_and_wrangling
   - TEST_GROUP=other
 rvm:
-  - "1.9.2-p320"
+  - "1.9.3"
 services:
   - elasticsearch
   - redis-server

@@ -93,7 +93,7 @@ Feature: Delete Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And 1 email should be delivered to "coauthor@example.org"
+      And 2 email should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
       And 1 email should be delivered to "recipient@example.org"
       And the email should contain "A gift story has been posted for you"
