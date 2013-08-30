@@ -17,8 +17,7 @@ end
 
 Given /^I have (?:a|the) hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   step %{I am logged in as "moderator"}
-  step %{I 
-    collection "#{title}" with name "#{name}"}
+  step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I check "This collection is unrevealed"}
   step %{I submit}
 

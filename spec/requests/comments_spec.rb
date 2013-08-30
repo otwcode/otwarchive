@@ -3,7 +3,7 @@ require 'spec_helper'
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works" do
     before do
-      @work2 = Factory.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "false" )
+      @work2 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "false" )
       @work2.index.refresh
       @comment2 = Comment.create(:comment)
       @work2.comments << @comment2
@@ -42,7 +42,7 @@ describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = Factory.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "true" )
+      @work1 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "true" )
       @work1.index.refresh
       @comment = Comment.create(:comment)
       @work1.comments << @comment
@@ -79,7 +79,7 @@ describe "Comments" do
   end
   context "logged in users" do
     before do
-      @user = Factory.create(:user)
+      @user = FactoryGirl.create(:user)
       visit login_path
       fill_in "User name",with: "#{@user.login}"
       fill_in "Password", with: "password"
@@ -92,7 +92,7 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = Factory.create(:work, :posted => true, :fandom_string => "Merlin (TV)", :anon_commenting_disabled => "true" )
+      @work = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", :anon_commenting_disabled => "true" )
       @work.index.refresh
       @comment = Comment.create(:comment)
       @work.comments << @comment

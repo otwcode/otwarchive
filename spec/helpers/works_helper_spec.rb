@@ -7,7 +7,7 @@ describe WorksHelper do
   describe '#tweet_text' do
 
     before(:each) do
-      @work = Factory.create(:work)
+      @work = FactoryGirl.create(:work)
     end
 
     context "for an unrevealed work" do

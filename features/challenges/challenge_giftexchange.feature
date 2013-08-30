@@ -164,8 +164,8 @@ Feature: Gift Exchange Challenge
     And 1 email should be delivered to "myname3"
     And 1 email should be delivered to "myname4"
     And the email should link to "Awesome Gift Exchange" collection's url
-      And the email should link to myname1's user url
-      And the email should link to the works tagged "Stargate Atlantis"
+    And the email should link to myname1's user url
+    And the email html body should link to the works tagged "Stargate Atlantis"
 
   Scenario: User signs up for two gift exchanges at once #'
 
