@@ -474,7 +474,7 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create, :show]
+  resources :kudos, :only => [:create]
 
   resources :skins do
     member do
