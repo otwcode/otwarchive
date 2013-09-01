@@ -9,7 +9,7 @@ class FandomsController < ApplicationController
         @medium = Media.find_by_name(params[:medium_id])
         @fandoms = @medium.fandoms.canonical if @medium
       end
-      @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").
+      @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").by_name.
                   for_collections_with_count([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
