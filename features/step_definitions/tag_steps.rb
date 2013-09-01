@@ -31,14 +31,14 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
-  char = Character.find_or_create_by_name_and_canonical(character)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  char = Character.find_or_create_by_name_and_canonical(character, true)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
   char.add_association(fand)
 end
 
 Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relationship, fandom|
-  rel = Relationship.find_or_create_by_name_and_canonical(relationship)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  rel = Relationship.find_or_create_by_name_and_canonical(relationship, true)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
   rel.add_association(fand)
 end
 
