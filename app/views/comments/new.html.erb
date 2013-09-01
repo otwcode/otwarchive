@@ -2,14 +2,24 @@
 <h2 class="heading"><%= ts("New comment on %{name}", :name => @name) %></h2>
 <%= error_messages_for :comment %>
 <!--/descriptions-->
-
 <!--main content-->
-<%= render :partial => 'comments/comment_form', :locals => {
-    :comment => @comment, 
+<% if @commentable.is_a?(Chapter) %>
+    <%= render :partial => 'comments/commentable', :locals => {
+            :comment => @comment,
+            :commentable => @commentable,
+            :button_name => ts("Comment")
+    }
+    %>
+    <% else %>
+
+<%= render :partial => 'comments/mobile_commentable', :locals => {
+    :comment => @comment,
     :commentable => @commentable,
     :button_name => ts("Comment")
-  } 
+  }
 %>
+    <% end %>
+
 <!--/content-->
 
 <!--subnav-->
