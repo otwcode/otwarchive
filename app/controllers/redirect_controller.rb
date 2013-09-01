@@ -24,17 +24,17 @@ class RedirectController < ApplicationController
 
   def do_redirect
     if @original_url.blank?
-      setflash; flash[:error] = ts("What url did you want to look up?")
+      flash[:error] = ts("What url did you want to look up?")
     else
       urls = [@original_url, @minimal_url, @no_www_url, @with_www_url, @encoded_url, @decoded_url]
       @work = Work.where(:imported_from_url => @original_url).first ||
           Work.where(:imported_from_url => [@minimal_url, @no_www_url, @with_www_url, @encoded_url, @decoded_url]).first ||
           Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{@encoded_url}%", "%#{@decoded_url}%").first
       if @work
-        setflash; flash[:notice] = ts("You have been redirected here from #{@original_url}. Please update the original link if possible!")
+        flash[:notice] = ts("You have been redirected here from #{@original_url}. Please update the original link if possible!")
         redirect_to work_path(@work) and return
       else
-        setflash; flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
+        flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
         if Rails.env.development?
           flash[:error] += " We checked all of the following URLs: #{urls.to_sentence}"
         end

@@ -33,26 +33,26 @@ class Admin::AdminUsersController < ApplicationController
     if params[:id]
       @user = User.find_by_login(params[:id])
       if @user.admin_update(params[:user])
-        setflash; flash[:notice] = ts('User was successfully updated.')
+        flash[:notice] = ts('User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
-        setflash; flash[:error] = ts('There was an error updating user %{name}', :name => params[:id])
+        flash[:error] = ts('There was an error updating user %{name}', :name => params[:id])
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       end
     elsif params[:admin_action]
       @user = User.find_by_login(params[:user_login])
       @admin_note = params[:admin_note]
       if @admin_note.blank?
-        setflash; flash[:error] = ts("You must include notes in order to perform this action")
+        flash[:error] = ts("You must include notes in order to perform this action")
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         if params[:admin_action] == 'warn'
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
-          setflash; flash[:notice] = ts("Warning was recorded")
+          flash[:notice] = ts("Warning was recorded")
           redirect_to(request.env["HTTP_REFERER"] || root_path)
         elsif params[:admin_action] == 'suspend'
           if params[:suspend_days].blank?
-            setflash; flash[:error] = ts("Please enter the number of days for which the user should be suspended.")
+            flash[:error] = ts("Please enter the number of days for which the user should be suspended.")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
             @user.suspended = true
@@ -60,10 +60,10 @@ class Admin::AdminUsersController < ApplicationController
             @user.suspended_until = @suspension_days.days.from_now
             if @user.save && @user.suspended? && !@user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
-              setflash; flash[:notice] = ts("User has been temporarily suspended")
+              flash[:notice] = ts("User has been temporarily suspended")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              setflash; flash[:error] = ts("User could not be suspended")
+              flash[:error] = ts("User could not be suspended")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           end
@@ -71,10 +71,10 @@ class Admin::AdminUsersController < ApplicationController
           @user.banned = true
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
-            setflash; flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
+            flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
-            setflash; flash[:error] = t('error_banned', :default => "User could not be permanently suspended")
+            flash[:error] = t('error_banned', :default => "User could not be permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unsuspend'
@@ -83,14 +83,14 @@ class Admin::AdminUsersController < ApplicationController
             @user.suspended_until = nil
             if @user.save && !@user.suspended? && @user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              setflash; flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
+              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              setflash; flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
+              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
-            setflash; flash[:notice] = t('not_suspended', :default => "User had not been suspended")
+            flash[:notice] = t('not_suspended', :default => "User had not been suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unban'
@@ -98,14 +98,14 @@ class Admin::AdminUsersController < ApplicationController
             @user.banned = false
             if @user.save && !@user.banned?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              setflash; flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
+              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              setflash; flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
+              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
-            setflash; flash[:notice] = t('not_banned', :default => "User had not been permanently suspended")
+            flash[:notice] = t('not_banned', :default => "User had not been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         end
@@ -146,12 +146,12 @@ class Admin::AdminUsersController < ApplicationController
     end
 
     if @users.nil? || @users.length == 0
-      setflash; flash[:error] = ts("Who did you want to notify?")
+      flash[:error] = ts("Who did you want to notify?")
       redirect_to :action => :notify and return
     end
 
     unless params[:subject] && !params[:subject].blank?
-      setflash; flash[:error] = ts("Please enter a subject.")
+      flash[:error] = ts("Please enter a subject.")
       redirect_to :action => :notify and return
     else
       @subject = params[:subject]
@@ -159,7 +159,7 @@ class Admin::AdminUsersController < ApplicationController
 
     # We need to use content because otherwise html will be stripped
     unless params[:content] && !params[:content].blank?
-      setflash; flash[:error] = ts("What message did you want to send?")
+      flash[:error] = ts("What message did you want to send?")
       redirect_to :action => :notify and return
     else
       @message = params[:content]
@@ -171,7 +171,7 @@ class Admin::AdminUsersController < ApplicationController
 
     AdminMailer.archive_notification(current_admin.login, @users.map(&:id), @subject, @message).deliver
 
-    setflash; flash[:notice] = ts("Notification sent to %{count} user(s).", :count => @users.size)
+    flash[:notice] = ts("Notification sent to %{count} user(s).", :count => @users.size)
     redirect_to :action => :notify
   end
 
@@ -180,10 +180,10 @@ class Admin::AdminUsersController < ApplicationController
     @user.activate
     if @user.active?
       @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE, :note => 'Manually Activated', :admin_id => current_admin.id})
-      setflash; flash[:notice] = t('activated', :default => "User Account Activated")
+      flash[:notice] = t('activated', :default => "User Account Activated")
       redirect_to :action => :show
     else
-      setflash; flash[:error] = t('activation_failed', :default => "Attempt to activate account failed.")
+      flash[:error] = t('activation_failed', :default => "Attempt to activate account failed.")
       redirect_to :action => :show
     end
   end
@@ -192,7 +192,7 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     # send synchronously to avoid getting caught in mail queue
     UserMailer.signup_notification(@user.id).deliver! 
-    setflash; flash[:notice] = t('activation_sent', :default => "Activation email sent")
+    flash[:notice] = t('activation_sent', :default => "Activation email sent")
     redirect_to :action => :show
   end
 

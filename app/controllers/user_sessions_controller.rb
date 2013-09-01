@@ -20,7 +20,7 @@ class UserSessionsController < ApplicationController
     if params[:user_session]
       @user_session = UserSession.new(params[:user_session])
       if @user_session.save
-        setflash; flash[:notice] = ts("Successfully logged in.")
+        flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
@@ -49,7 +49,7 @@ class UserSessionsController < ApplicationController
         else
           message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
         end
-        setflash; flash.now[:error] = message
+        flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
         render :action => 'new'
       end
@@ -60,7 +60,7 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.find
     if @user_session
       @user_session.destroy
-      setflash; flash[:notice] = ts("Successfully logged out.")
+      flash[:notice] = ts("Successfully logged out.")
     end
     redirect_back_or_default root_url
   end

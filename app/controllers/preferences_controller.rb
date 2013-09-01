@@ -28,10 +28,10 @@ class PreferencesController < ApplicationController
     end
     
     if @user.preference.save
-      setflash; flash[:notice] = ts('Your preferences were successfully updated.')
+      flash[:notice] = ts('Your preferences were successfully updated.')
       redirect_back_or_default(user_preferences_path(@user))
     else
-      setflash; flash[:error] = ts('Sorry, something went wrong. Please try that again.')
+      flash[:error] = ts('Sorry, something went wrong. Please try that again.')
       render :action => :index
     end
   end

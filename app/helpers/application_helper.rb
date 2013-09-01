@@ -196,9 +196,9 @@ module ApplicationHelper
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
-  #       setflash; flash[:error] = "OMG ERRORZ AIE"
+  #       flash[:error] = "OMG ERRORZ AIE"
   # or
-  #       setflash; flash.now[:error] = "OMG ERRORZ AIE"
+  #       flash.now[:error] = "OMG ERRORZ AIE"
   #
   # then that error will appear in the view where you have
   #       <%= flash_div :error %>
