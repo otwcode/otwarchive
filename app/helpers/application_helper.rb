@@ -29,7 +29,7 @@ module ApplicationHelper
   end
   
   def page_has_filters?
-    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections')
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
   # A more gracefully degrading link_to_remote.
