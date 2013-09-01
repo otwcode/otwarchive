@@ -86,7 +86,7 @@ class WorksController < ApplicationController
     @languages = Language.default_order
     options = params[:work_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
-    options[:show_restricted] = current_user.present?
+    options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearch.new(options)
     @page_subtitle = ts("Search Works")
     if params[:work_search].present? && params[:edit_search].blank?
@@ -114,7 +114,7 @@ class WorksController < ApplicationController
       options[:filter_ids] << tag.id
     end
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present?
+    options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
     
     if @owner.present?
@@ -159,7 +159,7 @@ class WorksController < ApplicationController
       options = {}
     end
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present?
+    options[:show_restricted] = current_user.present? || logged_in_as_admin?
     
     @user = User.find_by_login(params[:user_id])
     if @user.present?
