@@ -1,6 +1,13 @@
 <div class="removeme">
 <% index ||= 0 %>
 <div class="fields">
+
+
+
+
+
+
+
   <dt><%= form.label :question, ts("Question") %></dt>
   <dd><%= form.text_field :question, :id => "question" %>
     <%= live_validation_for_field('question', :failureMessage => ts("Please enter a Question")) %>
@@ -28,6 +35,7 @@
     <% linktext = ts("Remove This Question") %>
     <%= link_to_remove_section(linktext, form)%>
   </p>
+  <p></p>
   </dd>
 </div>
 </div>
