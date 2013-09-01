@@ -3,7 +3,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/modifier
 */
 
 .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
-  background: #e8e6ed;
+  background: #ededed;
     opacity: 0.95;
 }
 
