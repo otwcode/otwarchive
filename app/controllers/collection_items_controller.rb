@@ -44,7 +44,7 @@ class CollectionItemsController < ApplicationController
         @collection_items.unreviewed_by_user
       end
     else
-      setflash; flash[:error] = ts("You don't have permission to see that, sorry!")
+      flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
     end
     
@@ -86,11 +86,11 @@ class CollectionItemsController < ApplicationController
 
   def create
     unless params[:collection_names]
-      setflash; flash[:error] = ts("What collections did you want to add?")
+      flash[:error] = ts("What collections did you want to add?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     unless @item
-      setflash; flash[:error] = ts("What did you want to add to a collection?")
+      flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     # for each collection name
@@ -123,11 +123,11 @@ class CollectionItemsController < ApplicationController
 
     # messages to the user
     unless errors.empty?
-      setflash; flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
-    setflash; flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      setflash; flash[:notice] = ts("Added to collection(s): %{collections}.",
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
@@ -135,8 +135,8 @@ class CollectionItemsController < ApplicationController
         :moderated => unapproved_collections.collect(&:title).join(", "))
     end
 
-    setflash; flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-    setflash; flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     redirect_to(@item)
   end
@@ -151,12 +151,12 @@ class CollectionItemsController < ApplicationController
     #   not_allowed = not_allowed.where("collection_id != ?", @collection.id)
     # end
     # unless not_allowed.empty?
-    #   setflash; flash[:error] = ts("You are not allowed to modify that!")
+    #   flash[:error] = ts("You are not allowed to modify that!")
     #   redirect_to root_path and return
     # end
     @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
-      setflash; flash[:notice] = ts("Collection status updated!")
+      flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
     else
       render :action => "index"
@@ -167,7 +167,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    setflash; flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
+    flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

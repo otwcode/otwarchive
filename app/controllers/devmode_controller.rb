@@ -6,7 +6,7 @@ class DevmodeController < ApplicationController
   before_filter :development_only
   def development_only
     unless Rails.env == "development"
-      setflash; flash[:error] = "For development only"
+      flash[:error] = "For development only"
       redirect_to root_path
     end
   end
@@ -23,7 +23,7 @@ class DevmodeController < ApplicationController
           work.save false
         end
       end
-      setflash; flash[:info] = 'Successfully cleared URL associations'
+      flash[:info] = 'Successfully cleared URL associations'
     end
   end
 
@@ -335,7 +335,7 @@ class DevmodeController < ApplicationController
       end
 
       if errors.empty?
-        setflash; flash[:notice] = "Seeding successful from '#{user_name.call start}' to '#{user_name.call end_no}'"
+        flash[:notice] = "Seeding successful from '#{user_name.call start}' to '#{user_name.call end_no}'"
         redirect_to "/devmode"
       else
         @errors = "Errors: <ul>" + errors.map {|x| "<li>" + x.join("</li><li>") + "</li>"}.join("</ul><br /><ul>") + "</ul>"
@@ -690,7 +690,7 @@ class DevmodeController < ApplicationController
       end if errors.empty?
 
       if errors.empty?
-        setflash; flash[:notice] = "Seeding successful"
+        flash[:notice] = "Seeding successful"
         redirect_to "/devmode"
       else
         logger.warn("Error creating #{work_count} works. #{errors.join '\n'}")

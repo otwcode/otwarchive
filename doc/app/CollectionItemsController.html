@@ -977,7 +977,7 @@
   <span class="ruby-comment">#   not_allowed = not_allowed.where(&quot;collection_id != ?&quot;, @collection.id)</span>
   <span class="ruby-comment"># end</span>
   <span class="ruby-comment"># unless not_allowed.empty?</span>
-  <span class="ruby-comment">#   setflash; flash[:error] = ts(&quot;You are not allowed to modify that!&quot;)</span>
+  <span class="ruby-comment">#   flash[:error] = ts(&quot;You are not allowed to modify that!&quot;)</span>
   <span class="ruby-comment">#   redirect_to root_path and return</span>
   <span class="ruby-comment"># end</span>
   <span class="ruby-ivar">@collection_items</span> = <span class="ruby-constant">CollectionItem</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_items</span>].<span class="ruby-identifier">keys</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_items</span>].<span class="ruby-identifier">values</span>).<span class="ruby-identifier">reject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span> }
