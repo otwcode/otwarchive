@@ -122,7 +122,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", :type => "application/epub")
+    send_file("#{@work.download_basename}.epub", :type => "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
