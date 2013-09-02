@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 The following abuse report has been made:
   
 Email of the person who reported the abuse, if given: <%= @email %>
@@ -7,5 +7,5 @@ URL of the page the abuse is on: <%= @url %>
 
 Description of the abuse:
   
-"<%= @comment %>"
-<%- end -%>
+"<%= to_plain_text(@comment) %>"
+<% end %>

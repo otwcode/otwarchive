@@ -1,7 +1,7 @@
 module MailerHelper
 
   def style_bold(text)
-    ("<b style=\"color:#990000\">" + text + "</b>").html_safe
+    ("<b style=\"color:#990000\">" + "#{text}".html_safe + "</b>").html_safe
   end
   
   def style_link(body, url, html_options = {})
@@ -46,4 +46,23 @@ module MailerHelper
   def text_divider
     "--------------------"
   end
+  
+  # strip opening paragraph tags, and line breaks or close-pargraphs at the end of the string
+  # all other close-paragraphs become double line breaks
+  # line break tags become single line breaks
+  # bold text is wrapped in *
+  # italic text is wrapped in /
+  # underlined text is wrapped in _
+  # all other html tags are stripped
+  def to_plain_text(html)
+    strip_tags(
+      html.gsub(/<p>|<\/p>\z|<br( ?\/)?>\z/, "")
+        .gsub(/<\/p>/, "\n\n")
+        .gsub(/<br( ?\/)?>/, "\n")
+        .gsub(/<\/?(b|em|strong)>/, "*")
+        .gsub(/<\/?(i|cite)>/, "/")
+        .gsub(/<\/?u>/, "_")
+    )
+  end
+  
 end # end of MailerHelper

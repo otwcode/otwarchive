@@ -15,7 +15,7 @@ class Admin::SkinsController < ApplicationController
   end
 
   def update    
-    setflash; flash[:notice] = []
+    flash[:notice] = []
     modified_skin_titles = []
     %w(official rejected cached featured in_chooser).each do |action|
       skins_to_set = params["make_#{action}"] ? Skin.where(:id => params["make_#{action}"].map {|id| id.to_i}) : []
@@ -74,7 +74,7 @@ class Admin::SkinsController < ApplicationController
         @admin_setting.default_skin = skin
         @admin_setting.last_updated_by = params[:last_updated_by]
         unless @admin_setting.save
-          setflash; flash[:error] = ts("We couldn't save the default skin change.")
+          flash[:error] = ts("We couldn't save the default skin change.")
         else
           flash[:notice] << ts("Default skin changed to %{title}", skin.title)
         end

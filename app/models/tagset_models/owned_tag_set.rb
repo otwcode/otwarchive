@@ -58,7 +58,7 @@ class OwnedTagSet < ActiveRecord::Base
 
   after_update :cleanup_outdated_associations
   def cleanup_outdated_associations
-    tag_ids = SetTagging.where(:tag_set_id => self.tag_set.id)[:tag_id]
+    tag_ids = SetTagging.where(:tag_set_id => self.tag_set.id).collect(&:tag_id)
     TagSetAssociation.where(:owned_tag_set_id => self.id).where("tag_id NOT IN (?) OR parent_tag_id NOT IN (?)", tag_ids, tag_ids).delete_all
   end
 
@@ -72,7 +72,7 @@ class OwnedTagSet < ActiveRecord::Base
   
   def add_tagnames(tag_type, tagnames_to_add)
     self.tag_set.send("#{tag_type}_tagnames_to_add=", tagnames_to_add)
-    return false unless self.save
+    return false unless self.tag_set.save && self.save
 
     # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
     TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(:approved => true, :rejected => false)

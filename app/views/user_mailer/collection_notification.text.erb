@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 Dear Collection Maintainers!
 
 You have received a message about your collection "<%= @collection.title %>" (<%= collection_url(@collection) %>):
@@ -6,5 +6,5 @@ You have received a message about your collection "<%= @collection.title %>" (<%
 
 <%= raw @message %>"
 
-<%- end -%>
-<%- content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end -%>
+<% end %>
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

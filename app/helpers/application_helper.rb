@@ -29,7 +29,7 @@ module ApplicationHelper
   end
   
   def page_has_filters?
-    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections')
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
   # A more gracefully degrading link_to_remote.
@@ -170,6 +170,14 @@ module ApplicationHelper
       pseud.byline
   end
 
+   def link_to_modal(content="",options = {})   
+     options[:class] ||= ""
+     options[:for] ||= ""
+     options[:title] ||= options[:for]
+     
+     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}     
+     link_to content, options[:for], html_options
+   end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -182,15 +190,15 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
-  #       setflash; flash[:error] = "OMG ERRORZ AIE"
+  #       flash[:error] = "OMG ERRORZ AIE"
   # or
-  #       setflash; flash.now[:error] = "OMG ERRORZ AIE"
+  #       flash.now[:error] = "OMG ERRORZ AIE"
   #
   # then that error will appear in the view where you have
   #       <%= flash_div :error %>
@@ -275,7 +283,7 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
     content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
   
@@ -522,6 +530,21 @@ module ApplicationHelper
     
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
+  end
+  
+  # Cache fragments of a view if +condition+ is true
+  #
+  # <%= cache_if admin?, project do %>
+  # <b>All the topics on this project</b>
+  # <%= render project.topics %>
+  # <% end %>
+  def cache_if(condition, name = {}, options = nil, &block)
+    if condition
+      cache(name, options, &block)
+    else
+      yield
+    end
+    nil
   end
     
 end # end of ApplicationHelper

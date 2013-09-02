@@ -5,23 +5,23 @@ end
 When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type, name|
   case type
   when "author"
-    When %{I am logged in as "#{name}"}
-    And %{I am logged in as "#{user}"}
-    And %{I go to #{name}'s user page}
+    step %{I am logged in as "#{name}"}
+    step %{I am logged in as "#{user}"}
+    step %{I go to #{name}'s user page}
   when "work"
-    When %{I am logged in as "wip_author"}
-      And %{I post the work "#{name}"}
-      And %{I am logged in as "#{user}"}
-      And %{I go to wip_author's user page}
-      And %{I follow "#{name}"}
+    step %{I am logged in as "wip_author"}
+      step %{I post the work "#{name}"}
+      step %{I am logged in as "#{user}"}
+      step %{I go to wip_author's user page}
+      step %{I follow "#{name}"}
   when "series"
-    When %{I am logged in as "series_author"}
-      And %{I add the work "Blah" to series "#{name}"}
-      And %{I am logged in as "#{user}"}
-      And %{I view the series "#{name}"}
+    step %{I am logged in as "series_author"}
+      step %{I add the work "Blah" to series "#{name}"}
+      step %{I am logged in as "#{user}"}
+      step %{I view the series "#{name}"}
   end
-  When %{I press "Subscribe"}
-  Then %{I should see "You are now following #{name}"}
-  When %{I go to my subscriptions page}
-  Then %{I should find "Unsubscribe from #{name}"}
+  step %{I press "Subscribe"}
+  step %{I should see "You are now following #{name}"}
+  step %{I go to my subscriptions page}
+  step %{I should find "Unsubscribe from #{name}"}
 end

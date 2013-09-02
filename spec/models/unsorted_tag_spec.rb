@@ -26,7 +26,7 @@ describe UnsortedTag do
   describe "recategorize" do
     %w(Fandom Character Relationship Freeform).each do |new_type|
       it "should return a tag of type #{new_type}" do
-        tag = Factory.create(:unsorted_tag)
+        tag = FactoryGirl.create(:unsorted_tag)
         tag.recategorize(new_type).should be_a(new_type.constantize)
       end
     end

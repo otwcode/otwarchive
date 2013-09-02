@@ -3,7 +3,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/modifier
 */
 
 .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
-  background: #e8e6ed;
+  background: #ededed;
     opacity: 0.95;
 }
 
@@ -42,7 +42,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   font-weight: 700;
 }
 
-.hidden, body .hidden {
+.hidden, body .hidden, .actions .hidden {
   display: none;
 }
 
@@ -56,6 +56,16 @@ span.offered, .replied {
 
 span.offered.requested {
   color: #876714;
+}
+
+/* Arrows for the accordion widget */
+
+.collapsed:after { 
+  content: " \2191";
+}
+
+.expanded:after {
+  content: " \2193";
 }
 
 /*This is a helper for Back End and can be overridden contextually anywhere*/

@@ -1,35 +1,47 @@
 --- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://www.rbreu.de:80/otwtest/utf8_specified.html
+http_interactions: 
+- request: 
+    method: get
+    uri: http://www.rbreu.de/otwtest/utf8_specified.html
     body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - Ruby
+  response: 
+    status: 
       code: 200
       message: OK
     headers: 
       date: 
-      - Wed, 16 Feb 2011 12:54:33 GMT
+      - Wed, 19 Jun 2013 19:40:00 GMT
       server: 
-      - Apache/2.2.16
+      - Apache/2.2.22
       last-modified: 
       - Fri, 14 Jan 2011 09:00:19 GMT
       etag: 
-      - "\"16d804f-114-499caa9db2ec0\""
+      - "\"3ee03e8-114-499caa9db2ec0\""
       accept-ranges: 
       - bytes
       content-length: 
       - "276"
+      connection: 
+      - close
       content-type: 
       - text/html
-    body: "<html>\n\
-      <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <title>Das Ma\xC3\x9F aller Dinge</title>\n\
-      </head>\n\n\
-      <body>\n\
-      <p>This is utf-8 correctly specified encoding. Special characters follow:</p>\n\n\
-      <p>\xC3\x84 \xC3\x96 \xC3\x9C \xC3\xA9 \xC3\xA8 \xC3\x88 \xC3\x89 \xC3\xBC \xC3\xB6 \xC3\xA4 \xC3\x9F \xC3\xB1</p>\n\
-      </body>\n\
-      </html>\n"
+    body: 
+      encoding: ASCII-8BIT
+      string: "<html>\n\
+        <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <title>Das Ma\xC3\x9F aller Dinge</title>\n\
+        </head>\n\n\
+        <body>\n\
+        <p>This is utf-8 correctly specified encoding. Special characters follow:</p>\n\n\
+        <p>\xC3\x84 \xC3\x96 \xC3\x9C \xC3\xA9 \xC3\xA8 \xC3\x88 \xC3\x89 \xC3\xBC \xC3\xB6 \xC3\xA4 \xC3\x9F \xC3\xB1</p>\n\
+        </body>\n\
+        </html>\n"
     http_version: "1.1"
+  recorded_at: Wed, 19 Jun 2013 19:40:00 GMT
+recorded_with: VCR 2.5.0

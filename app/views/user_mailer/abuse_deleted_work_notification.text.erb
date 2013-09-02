@@ -1,4 +1,4 @@
-<%- content_for :message do -%>
+<% content_for :message do %>
 Dear <%= @user.default_pseud.byline %>,
 
 Your work "<%= @work.title.html_safe %>" was deleted from the Archive by our Abuse team.
@@ -6,4 +6,4 @@ Your work "<%= @work.title.html_safe %>" was deleted from the Archive by our Abu
 If you have questions regarding this action, please contact Abuse at <%= root_url + "abuse_reports/new" %>.
 
 Attached is a copy of your work for your reference.
-<%- end -%>
+<% end %>

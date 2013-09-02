@@ -87,6 +87,11 @@ a.cloud8 {
     box-shadow: 1px 1px 5px #aaa;
 }
 
+#outer.wrapper {
+  float: left;
+  width: 100%;
+}
+
 #outer.wrapper, #inner.wrapper {
     box-shadow: none;
 }
@@ -122,7 +127,7 @@ dl.index dd {
   margin: 0 0.25em 0.643em 2.5em;
   padding: 0.375em 0.15em 0.15em;
   overflow: visible;
-  background: #e8e6ed;
+  background: #ededed;
 }
 
 dl.index dd:after {

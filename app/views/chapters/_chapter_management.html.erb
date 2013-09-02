@@ -7,7 +7,8 @@
       <% end %>
     </li>
   <% end %>
-  <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
+  
+  <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>  
   <% if work.chapters.count > 1 %>
     <li><%= link_to ts('Delete Chapter'), [work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
   <% end %>

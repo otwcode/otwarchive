@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Work < ActiveRecord::Base
 
   include Taggable
@@ -23,7 +25,8 @@ class Work < ActiveRecord::Base
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
+  # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
+  has_many :chapters, conditions: "work_id IS NOT NULL"
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
@@ -44,7 +47,7 @@ class Work < ActiveRecord::Base
   has_many :challenge_claims, :as => :creation
   accepts_nested_attributes_for :challenge_claims
 
-  has_many :filter_taggings, :as => :filterable, :dependent => :destroy
+  has_many :filter_taggings, :as => :filterable
   has_many :filters, :through => :filter_taggings
   has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
   has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
@@ -52,20 +55,48 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating',
-    :before_remove => :remove_filter_tagging
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category',
-    :before_remove => :remove_filter_tagging
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning',
-    :before_remove => :remove_filter_tagging
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
-    :before_remove => :remove_filter_tagging
-  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship',
-    :before_remove => :remove_filter_tagging
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
-    :before_remove => :remove_filter_tagging
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
-    :before_remove => :remove_filter_tagging
+  has_many :ratings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Rating'"
+  has_many :categories, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Category'"
+  has_many :warnings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Warning'"
+  has_many :fandoms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Fandom'"
+  has_many :relationships, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_taggingg,
+    :conditions => "tags.type = 'Relationship'"
+  has_many :characters, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Character'"
+  has_many :freeforms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Freeform'"
 
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
@@ -193,7 +224,7 @@ class Work < ActiveRecord::Base
 
   before_save :post_first_chapter, :set_word_count
 
-  after_save :save_chapters, :save_parents
+  after_save :save_chapters, :save_parents, :save_new_recipients
   before_create :set_anon_unrevealed, :set_author_sorting
   before_update :set_author_sorting
 
@@ -209,6 +240,11 @@ class Work < ActiveRecord::Base
   after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
+  end
+
+  after_destroy :clean_up_filter_taggings
+  def clean_up_filter_taggings
+    FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
   end
   
   after_destroy :clean_up_assignments
@@ -349,32 +385,39 @@ class Work < ActiveRecord::Base
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.
-      select {|assign| (self.authors.collect(&:user) + self.users + [User.current_user]).include?(assign.offering_user)}
+      select {|assign| ((self.authors.blank? ? [] : self.authors.collect(&:user)) + (self.users + [User.current_user])).compact.include?(assign.offering_user)}
   end
 
   def recipients=(recipient_names)
-    new_gifts = []
+    new_recipients = [] # collect names of new recipients
+    gifts = [] # rebuild the list of associated gifts using the new list of names
     recipient_names.split(',').each do |name|
-      gift = self.gifts.for_name_or_byline(name.strip).first
-      if gift
-        new_gifts << gift
-      else
-        new_gifts << Gift.new(:recipient => name.strip)
-      end
+      name.strip!
+      gift = self.gifts.for_name_or_byline(name).first
+      new_recipients << name unless (gift && self.posted) # all recipients are new if work isn't posted
+      gifts << gift unless !gift # new gifts are added after saving, not now
     end
-    set_new_recipients(new_gifts)
-    self.gifts = new_gifts
-  end
-
-  def recipients
-    self.gifts.collect(&:recipient).join(",")
+    self.new_recipients = new_recipients.uniq.join(",")
+    self.gifts = gifts
   end
   
-  def set_new_recipients(gifts)
-    current_gifts = self.gifts.collect(&:recipient)
-    new_gifts = gifts.collect(&:recipient)
-    diff = new_gifts - current_gifts
-    self.new_recipients = diff.join(",")
+  def recipients
+    names = self.gifts.collect(&:recipient)
+    unless self.new_recipients.blank?
+      self.new_recipients.split(",").each do |name|
+        names << name unless names.include? name
+      end
+    end
+    names.join(",")
+  end
+  
+  def save_new_recipients
+    unless self.new_recipients.blank?
+      self.new_recipients.split(',').each do |name|
+        gift = self.gifts.for_name_or_byline(name).first
+        self.gifts << Gift.new(:recipient => name) unless gift
+      end
+    end
   end
   
   ########################################################################
@@ -412,6 +455,13 @@ class Work < ActiveRecord::Base
     # here we check if the story is in a currently-anonymous challenge
     #!self.collection_items.anonymous.empty?
     in_anon_collection?
+  end
+  
+  before_update :bust_anon_caching
+  def bust_anon_caching
+    if in_anon_collection_changed?
+      async(:poke_cached_creator_comments)
+    end
   end
   
   # This work's collections and parent collections
@@ -463,6 +513,20 @@ class Work < ActiveRecord::Base
   def published_at
     self.first_chapter.published_at
   end
+  
+  # ensure published_at date is correct: reset its value for non-backdated works
+  # "chapter" arg should be the unsaved session instance of the work's first chapter
+  def reset_published_at(chapter)
+    if !self.backdate
+      if self.backdate_changed? # work was backdated but now it's not
+        # so reset its date to our best guess at its original pub date:
+        chapter.published_at = self.created_at.to_date
+      else # pub date may have changed without user's explicitly setting backdate option
+        # so reset it to the previous value:
+        chapter.published_at = chapter.published_at_was || Date.today
+      end    
+    end
+  end
 
   def default_date
     backdate = first_chapter.try(:published_at) if self.backdate
@@ -508,6 +572,7 @@ class Work < ActiveRecord::Base
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
     if self.posted_changed?
+      self.chapters.first.published_at = Date.today unless self.backdate
       self.chapters.first.posted = self.posted
       self.chapters.first.save
     end
@@ -534,9 +599,15 @@ class Work < ActiveRecord::Base
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
-    unless self.comments.empty?
-      self.comments.each{ |c| c.touch }
-    end
+    async(:poke_cached_comments)
+  end
+  
+  def poke_cached_comments
+    self.comments.each { |c| c.touch }
+  end
+  
+  def poke_cached_creator_comments
+    self.creator_comments.each { |c| c.touch }
   end
 
   # Get the total number of chapters for a work
@@ -565,7 +636,11 @@ class Work < ActiveRecord::Base
 
   # Gets the current first chapter
   def first_chapter
-    self.chapters.order('position ASC').first || self.chapters.first
+    if self.new_record?
+      self.chapters.first || self.chapters.build
+    else
+      self.chapters.order('position ASC').first
+    end
   end
 
   # Gets the current last chapter
@@ -784,6 +859,12 @@ class Work < ActiveRecord::Base
       :commentable_type => 'Chapter', 
       :commentable_id => self.chapters.value_of(:id)
     )
+  end
+  
+  # All comments left by the creators of this work
+  def creator_comments
+    pseud_ids = Pseud.where(user_id: self.pseuds.value_of(:user_id)).value_of(:id)
+    find_all_comments.where(pseud_id: pseud_ids)
   end
   
   def guest_kudos_count

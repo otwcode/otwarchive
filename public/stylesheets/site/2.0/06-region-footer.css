@@ -4,19 +4,18 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 
 #footer {
   background: #900 url("/images/skins/textures/tiles/red-ao3.png");
-  clear: both;
   border-top: 2px solid;
+  color: #fff;
+  float: left;
   font-size: 0.75em;
   position: relative;
   padding: 0;
-  float: left;
   width: 100%;
 }
 
 #footer ul {
   border: 0;
   clear: both;
-  color: #fff;
   margin: 1.5em 0;
   padding: 1em 5%;
   float: left;
@@ -54,10 +53,8 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 }
 
 #footer .module {
-  float: left;
   max-width: 20%;
   padding: 0 2%;
-  min-height: 12em;
 }
 
 #footer .menu {
