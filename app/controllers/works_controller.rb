@@ -472,7 +472,7 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit_tags
     elsif params[:save_button]
-    	setflash; flash[:notice] = ts('Tags were successfully updated.')
+        setflash; flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else
       saved = true
