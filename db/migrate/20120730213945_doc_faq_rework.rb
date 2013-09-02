@@ -22,7 +22,7 @@ class DocFaqRework < ActiveRecord::Migration
 
   def self.down
     drop_table :questions
-    add_column :archive_faqs, :content
-    add_column :archive_faqs, :content_sanitizer_version
+    add_column :archive_faqs, :content, :text
+    add_column :archive_faqs, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
   end
 end
