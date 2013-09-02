@@ -1,23 +1,23 @@
 <!--Descriptive page name, messages and instructions-->
 <% if logged_in_as_admin? %>
-    <%= render :partial => "admin_index" %>
+  <%= render :partial => "admin_index" %>
 <% else %>
-<h2 class="heading"><%= ts("Archive FAQ") %></h2>
+  <h2 class="heading"><%= ts("Archive FAQ") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
-<div class="admin userstuff">
-  <p><%= ts("Some commonly asked questions about the Archive are answered here.
+  <div class="admin userstuff">
+    <p><%= ts("Some commonly asked questions about the Archive are answered here.
     Questions and answers about our Terms of Service can be found in the") %> <%= link_to ts("TOS FAQ"), tos_faq_path %>.
-    <%= ts("You may also like to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.
-    <%= ts("If you need more help, please submit a ") %><%= link_to ts("Support request"), feedbacks_path %>.</p>
+      <%= ts("You may also like to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.
+      <%= ts("If you need more help, please submit a ") %><%= link_to ts("Support request"), feedbacks_path %>.</p>
 
-  <% unless @archive_faqs.blank?  %>
-    <h3 id="categories" class="heading"><%= ts("Available Categories") %></h3>
+    <% unless @archive_faqs.blank?  %>
+      <h3 id="categories" class="heading"><%= ts("Available Categories") %></h3>
       <ol role="navigation" class="faq index group">
         <% for faq in @archive_faqs %>
           <li class="category">
-          <a href="javascript:void(0)" class="title"><%= faq.title %></a>
+            <a href="#" class="title"><%= faq.title %></a>
             <ul>
               <% for q in faq.questions %>
                 <li>
@@ -32,11 +32,16 @@
           </li>
         <% end %>
       </ol>
+    <% end %>
+  </div>
+  <%= content_for :footer_js do %>
+    <%= javascript_tag do %>
+      $j(document).ready(function() {
+        $j(".category").children(".title").click(function(e) {
+          $j(this).next().toggle();
+          e.preventDefault();
+        }).next().hide();
+      });
+    <% end %>
   <% end %>
-</div>
-<script type="text/javascript">
-    $j(document).ready(function() {
-        $j("div.admin.userstuff ol>li>a").click(function() { $j(this).next().toggle(); }).next().hide();
-    });
-</script>
 <% end %>
