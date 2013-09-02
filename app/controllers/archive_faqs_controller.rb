@@ -17,6 +17,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1.xml
   def show
     @archive_faq = ArchiveFaq.find(params[:id])
+    @page_subtitle = @archive_faq.title + ts(" FAQ")
 
     respond_to do |format|
       format.html # show.html.erb
