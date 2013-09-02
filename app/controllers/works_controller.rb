@@ -160,11 +160,7 @@ class WorksController < ApplicationController
     end
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
-<<<<<<< HEAD
 
-=======
-
->>>>>>> master
     @user = User.find_by_login(params[:user_id])
     if @user.present?
       if @admin_settings.disable_filtering?
@@ -478,11 +474,7 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit_tags
     elsif params[:save_button]
-<<<<<<< HEAD
         flash[:notice] = ts('Tags were successfully updated.')
-=======
-    	flash[:notice] = ts('Tags were successfully updated.')
->>>>>>> master
       redirect_to(@work)
     else
       saved = true
