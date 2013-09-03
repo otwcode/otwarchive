@@ -374,16 +374,12 @@ namespace :After do
       fandom.save
     end
   end
-<<<<<<< HEAD
  
   desc "Create new admin roles"
   task(:create_new_admin_roles => :environment) do
     Role.find_or_create_by_name("skins_admin")
   end
        
-=======
-
->>>>>>> master
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -392,16 +388,10 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 # NOTE: 
 desc "Run all current migrate tasks"
-<<<<<<< HEAD
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
-# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
+#task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
 #                 'skins:load_user_skins', 'After:remove_old_epubs']
 #task :After => ['After:update_download_directories']
 task :After => ['After:create_new_admin_roles']
-=======
-# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
-# 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => []
->>>>>>> master

@@ -22,7 +22,7 @@
   </li>
   <li><%= link_to ts("Settings"), admin_settings_path %></li>
   <li class="dropdown">
-    <%= link_to ts("Skins"), admin_skins_path %>
+    <%= link_to ts("Skins"), unapproved_skins_path %>
     <ul class="menu" role="menu">
       <li><%= span_if_current ts("Approval Queue"), unapproved_skins_path %></li>
       <li><%= span_if_current ts("Approved Skins"), approved_skins_path %></li>
