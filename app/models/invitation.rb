@@ -22,7 +22,7 @@ class Invitation < ActiveRecord::Base
   scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
 
   before_validation :generate_token, :on => :create
-  before_save :send_and_set_date
+  after_save :send_and_set_date
   after_save :adjust_user_invite_status
 
   #Create a certain number of invitations for all valid users

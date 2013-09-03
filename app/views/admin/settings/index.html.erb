@@ -9,6 +9,8 @@
     <dt><%= f.label :account_creation_enabled, "Account Creation Enabled (Can people create accounts without an invitation?)" %>
 </dt>
     <dd><%= f.check_box :account_creation_enabled %> </dd>
+    <dt><%= f.label :request_invite_enabled, "Users can request invitations?" %></dt>
+    <dd><%= f.check_box :request_invite_enabled %></dd>
     <dt><%= f.label :invite_from_queue_enabled, "Invite from Queue Enabled
 (Can people add themselves to the queue and are invitations sent out automatically?)" %>
 </dt>
@@ -17,8 +19,10 @@
     <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
     <dt><%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %></dt>
     <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
-    <dt><%= f.label :days_to_purge_unactivated, "How much time (in days) do you have for activating your account before we purge it:" %> </dt>
+    <dt><%= f.label :days_to_purge_unactivated, "How much time (in weeks) do you have for activating your account before we purge it:" %> </dt>
     <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+    <dt><%= f.label :disable_filtering, "Turn off filtering on index pages" %></dt>
+    <dd><%= f.check_box :disable_filtering %> </dd>
     <dt><%= f.label :suspend_filter_counts, "Suspend some filter tracking due to high posting volume" %></dt>
     <dd><%= f.check_box :suspend_filter_counts %> </dd>
     <dt><%= f.label :tag_wrangling_off, "Turn off tag wrangling for non-admins" %></dt>

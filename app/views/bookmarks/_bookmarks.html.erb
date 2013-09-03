@@ -10,7 +10,7 @@
 <% if params[:show_recent] %>
   <% # The javascript expanded view that shows more bookmarks for a particular work on an aggregated view %>  
   <% # because this isn't rendered inside the index view we need to put a ul around it %>
-  <ul class="recent index group">
+  <ul class="index group">
     <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
   </ul>
 

@@ -135,6 +135,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -149,23 +163,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -383,6 +391,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -461,6 +471,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -498,6 +510,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -553,6 +567,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -582,6 +600,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -850,7 +872,7 @@ been saved Can’t write to chapter.pseuds until the chapter has an id</p>
 
           
           <div class="method-source-code" id="commentable_name-source">
-            <pre><span class="ruby-comment"># File app/models/chapter.rb, line 196</span>
+            <pre><span class="ruby-comment"># File app/models/chapter.rb, line 188</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">commentable_name</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1034,18 +1056,10 @@ chapter content</p>
             <pre><span class="ruby-comment"># File app/models/chapter.rb, line 178</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_word_count</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">content_changed?</span>
-    <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
-    <span class="ruby-identifier">body</span> = <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">HTML</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">content</span>).<span class="ruby-identifier">xpath</span>(<span class="ruby-string">'//body'</span>).<span class="ruby-identifier">first</span>
-    <span class="ruby-identifier">body</span>.<span class="ruby-identifier">traverse</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">node</span><span class="ruby-operator">|</span>
-      <span class="ruby-comment"># only count actual text</span>
-      <span class="ruby-keyword">if</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">Text</span>
-        <span class="ruby-comment"># scan by word boundaries after stripping hyphens and apostrophes</span>
-        <span class="ruby-comment"># so one-word and one's will be counted as one word, not two.</span>
-        <span class="ruby-comment"># -- is replaced by — (emdash) before strip so one--two will count as 2</span>
-        <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r--/</span>, <span class="ruby-string">&quot;—&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r['’‘-]/</span>, <span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r[[:word:]]+/</span>).<span class="ruby-identifier">size</span>
-      <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span> = <span class="ruby-identifier">count</span>
+    <span class="ruby-identifier">counter</span> = <span class="ruby-constant">WordCounter</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">content</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span> = <span class="ruby-identifier">counter</span>.<span class="ruby-identifier">count</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- set_word_count-source -->
@@ -1146,7 +1160,7 @@ the first chapter, since that’s covered in the works model</p>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">published_at</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">published_at</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">published_at</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
-    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">t</span>(<span class="ruby-string">'no_future_dating'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Publication date can't be in the future.&quot;</span>))
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Publication date can't be in the future.&quot;</span>))
     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

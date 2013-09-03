@@ -8,8 +8,7 @@ class ChaptersController < ApplicationController
   before_filter :check_visibility, :only => [ :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
-  cache_sweeper :chapter_sweeper
-  cache_sweeper :work_sweeper
+  cache_sweeper :feed_sweeper
 
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
@@ -56,15 +55,8 @@ class ChaptersController < ApplicationController
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      if @work.unrevealed?
-        @tweet_text = ts("Mystery Work")
-      else
-        @tweet_text = @work.title + " by " +
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
-                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-        @tweet_text = @tweet_text.truncate(95)
-      end
-      
+      @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
                                                          :subscribable_type => 'Work').first ||
@@ -100,6 +92,14 @@ class ChaptersController < ApplicationController
     end
   end
 
+  def draft_flash_message(work)
+    delete_schedule = work.posted ? "" : " (unposted work drafts are automatically deleted one " +
+      "week after creation; this chapter's work is scheduled for deletion at " +
+      "#{view_context.date_in_user_time_zone(work.created_at + 1.week)})"
+      # "#{(work.created_at + 1.week).in_time_zone(User.current_user.preference.time_zone)})"
+    flash[:notice] = ts("This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted#{delete_schedule}.")
+  end
+
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
@@ -107,7 +107,7 @@ class ChaptersController < ApplicationController
     load_pseuds
 
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
+      @chapter.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:edit_button]
       render :new
     elsif params[:cancel_button]
@@ -126,7 +126,8 @@ class ChaptersController < ApplicationController
               redirect_to [@work, @chapter]
             end
         elsif @work.save
-          flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+          @preview_mode = true
+          draft_flash_message(@work)
           redirect_to [:preview, @work, @chapter]
         else
           render :new
@@ -145,17 +146,23 @@ class ChaptersController < ApplicationController
     load_pseuds
 
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
+      @chapter.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-      render :preview_edit
+      if @chapter.posted?
+        flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
+      else
+        draft_flash_message(@work)
+      end
+      render :preview
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')
     elsif params[:edit_button]
+      flash[:notice] = nil
       render :edit
     else
-      params[:chapter][:posted] = true if params[:post_button]
+      @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       @work.minor_version = @work.minor_version + 1
       if @chapter.save
         # @work.update_minor_version
@@ -225,11 +232,12 @@ class ChaptersController < ApplicationController
       flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_url(@work))
     else
+      was_draft = !@chapter.posted?
       if @chapter.destroy
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        flash[:notice] = ts("The chapter was successfully deleted.")
+        flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
       else
         flash[:error] = ts("Something went wrong. Please try again.")
       end

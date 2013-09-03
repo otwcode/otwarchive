@@ -101,6 +101,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -115,23 +129,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -349,6 +357,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -427,6 +437,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -464,6 +476,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -519,6 +533,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -548,6 +566,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -613,11 +635,11 @@
   <span class="ruby-comment"># destroys are done by the owner of the child, to remove links to the parent work which also removes the link back if it exists.</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@child</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.&quot;</span>)
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">user_related_works_path</span>(<span class="ruby-identifier">current_user</span>))
       <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that.&quot;</span>)
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
       <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
@@ -654,12 +676,12 @@
             <pre><span class="ruby-comment"># File app/controllers/related_works_controller.rb, line 6</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Whose related works were you looking for?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Whose related works were you looking for?&quot;</span>)
     <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">people_path</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">blank?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find that user&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find that user&quot;</span>)
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@translations_of_user</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">related_works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:translation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
@@ -729,11 +751,11 @@
   <span class="ruby-comment"># updates are done by the owner of the parent, to aprove or remove links on the parent work.</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@user</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@child</span>)
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that. Try removing the link from your own work.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that. Try removing the link from your own work.&quot;</span>)
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">user_related_works_path</span>(<span class="ruby-identifier">current_user</span>))
       <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, but you don't have permission to do that.&quot;</span>)
       <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
       <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">end</span>
@@ -743,10 +765,10 @@
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@related_work</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:reciprocal</span>, <span class="ruby-ivar">@related_work</span>.<span class="ruby-identifier">reciprocal</span>)
     <span class="ruby-identifier">notice</span> = <span class="ruby-ivar">@related_work</span>.<span class="ruby-identifier">reciprocal?</span> <span class="ruby-operator">?</span>  <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Link was successfully approved&quot;</span>) <span class="ruby-operator">:</span>
                                           <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Link was successfully removed&quot;</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">notice</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">notice</span>
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@related_work</span>.<span class="ruby-identifier">parent</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Sorry, something went wrong.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Sorry, something went wrong.'</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@related_work</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

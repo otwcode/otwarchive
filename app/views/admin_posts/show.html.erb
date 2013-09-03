@@ -6,6 +6,12 @@
     <div class="icon"></div>
     <!--subnav-->
     <ul class="navigation actions" role="navigation">
+      <% if @previous_admin_post %>
+        <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+      <% end %>
+      <% if @next_admin_post %>
+        <li><%= link_to("Next Post", @next_admin_post) %></li>
+      <% end %>
       <li><%= link_to_rss admin_posts_path(:rss) %></li>
     </ul>
     <!--/subnav-->

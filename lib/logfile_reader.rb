@@ -55,13 +55,13 @@ module LogfileReader
     # Process rows from a logfile into hashes 
     # Note: this discards requests which are in weird encodings or don't match the format on the theory
     # that we can tolerate a handful of lost stats rather than exhaustively try many encodings
-    def process_rows(rows, start_date = nil)
+    def process_rows(rows, logformat, start_date = nil)
       hashes = []
       rows.each do |row|
         begin
           row.force_encoding("UTF-8")
           row.force_encoding("ISO-8859-1") if !row.valid_encoding? # this catches almost all the bad ones -- usually old MSIE browsers or Windows desktops
-          matchdata = row.match(LOGFORMAT)
+          matchdata = row.match(logformat)
           next unless matchdata # skip rows that don't match
 
           # turn the match data into a hash with the fieldnames, put into UTF-8
@@ -86,10 +86,10 @@ module LogfileReader
 
     # Read in the web logs matching a given request pattern
     # returns an array of hashes containing the desired information 
-    def read_logfile_requests(request_pattern, omit_pattern = '', start_date = nil)
+    def read_logfile_requests(request_pattern, logformat, omit_pattern = '', start_date = nil)
       requests = []
       logfiles_to_read(start_date).each do |logfile|
-        requests += process_rows(rows_from_logfile(logfile, request_pattern, omit_pattern), start_date)
+        requests += process_rows(rows_from_logfile(logfile, request_pattern, omit_pattern), logformat, start_date)
       end      
       requests
     end
@@ -100,19 +100,26 @@ module LogfileReader
       request_pattern = 'GET /(?:works|chapters)/[0-9]+(?:/chapters/[0-9]+)?/?(?:\s|\?)'
       omit_pattern = ''
       work_id_pattern = Regexp.new('GET /(?:works|chapters)/([0-9]+)/?.*$')
+      logfile_requests = []
+      logformat = LOGFORMAT # Regexp.new(ArchiveConfig.DEFAULT_LOGFORMAT)
       
       # only need to check for statistics where we would need to change the request/omit/work_id patterns
       case statistic
       when :download_count
         request_pattern = "GET /downloads"
         work_id_pattern = Regexp.new('GET /downloads/[^/]+/(?:[^/]+/)?([0-9]+)/.*$')
+        # stats come from multiple logfiles
+        logfile_requests = read_logfile_requests(request_pattern, logformat, omit_pattern, start_date)
+        
       when :links
         omit_pattern = ArchiveConfig.APP_HOST
+      else
+        logfile_requests = read_logfile_requests(request_pattern, logformat, omit_pattern, start_date)        
       end
 
-      # get the data from the logfiles, group it by the work_id -- 
-      # tricky bit here: the do -- end is the block that determines what we group the rows by
-      logdata = read_logfile_requests(request_pattern, omit_pattern, start_date).group_by do |row| 
+      # group it by the work_id -- 
+      # tricky bit here: the do -- end is the block that determines what we group the rows by      
+      logdata = logfile_requests.group_by do |row| 
         id = row[:request].gsub(work_id_pattern, '\1')
         row[:request].match(/GET \/chapters\//) ? Chapter.find(id).work_id : id
       end

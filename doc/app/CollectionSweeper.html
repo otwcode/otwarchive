@@ -80,8 +80,6 @@
     
     <li><a href="#method-i-before_destroy">#before_destroy</a>
     
-    <li><a href="#method-i-before_update">#before_update</a>
-    
   </ul>
 </nav>
 
@@ -105,6 +103,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -119,23 +131,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -353,6 +359,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -431,6 +439,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -468,6 +478,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -523,6 +535,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -552,6 +568,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -642,7 +662,7 @@
 
           
           <div class="method-source-code" id="after_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 28</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_destroy</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">expire_collection_cache_for</span>(<span class="ruby-identifier">record</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -672,7 +692,7 @@
 
           
           <div class="method-source-code" id="after_save-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 20</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_save</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">expire_collection_cache_for</span>(<span class="ruby-identifier">record</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -702,9 +722,12 @@
 
           
           <div class="method-source-code" id="after_update-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 14</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_update</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:name</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:title</span>))
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">name_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">title_changed?</span>)
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Removing renamed collection from autocomplete: #{record.autocomplete_search_string_was}&quot;</span>
+    <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_stale_from_autocomplete</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Adding renamed collection to autocomplete: #{record.autocomplete_search_string}&quot;</span>
     <span class="ruby-identifier">record</span>.<span class="ruby-identifier">add_to_autocomplete</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -734,7 +757,7 @@
 
           
           <div class="method-source-code" id="before_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 24</span>
+            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">before_destroy</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_from_autocomplete</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -746,38 +769,6 @@
 
         
       </div><!-- before_destroy-method -->
-
-    
-      <div id="method-i-before_update" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">before_update</span><span
-            class="method-args">(record)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="before_update-source">
-            <pre><span class="ruby-comment"># File app/sweepers/collection_sweeper.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">before_update</span>(<span class="ruby-identifier">record</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Collection</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:name</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">changed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:title</span>))
-    <span class="ruby-identifier">record</span>.<span class="ruby-identifier">remove_from_autocomplete</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- before_update-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- before_update-method -->
 
     
     </section><!-- public-instance-method-details -->

@@ -115,6 +115,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -129,23 +143,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -363,6 +371,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -441,6 +451,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -478,6 +490,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -533,6 +547,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -562,6 +580,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -630,7 +652,7 @@
   <span class="ruby-ivar">@comment</span> = <span class="ruby-identifier">abuse_report</span>.<span class="ruby-identifier">comment</span>
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ABUSE_ADDRESS</span>,
-    <span class="ruby-value">:subject</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;Admin Abuse Report&quot;</span>
+    <span class="ruby-value">:subject</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_SHORT_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;Admin Abuse Report&quot;</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- abuse_report-source -->
@@ -671,7 +693,7 @@
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">WEBMASTER_ADDRESS</span>,
-    <span class="ruby-value">:subject</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;Admin Archive Notification Sent&quot;</span>
+    <span class="ruby-value">:subject</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_SHORT_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;Admin Archive Notification Sent&quot;</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- archive_notification-source -->
@@ -688,7 +710,7 @@
         
         <div class="method-heading">
           <span class="method-name">comment_notification</span><span
-            class="method-args">(admin_id, comment_id)</span>
+            class="method-args">(comment_id)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -701,12 +723,12 @@
           
           <div class="method-source-code" id="comment_notification-source">
             <pre><span class="ruby-comment"># File app/mailers/admin_mailer.rb, line 45</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">admin_id</span>, <span class="ruby-identifier">comment_id</span>)
-  <span class="ruby-identifier">admin</span> = <span class="ruby-constant">Admin</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">admin_id</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">comment_id</span>)
+  <span class="ruby-comment"># admin = Admin.find(admin_id)</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">comment_id</span>)
   <span class="ruby-identifier">mail</span>(
-    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">admin</span>.<span class="ruby-identifier">email</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_NAME}] Comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
+    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ADMIN_ADDRESS</span>,
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- comment_notification-source -->
@@ -723,7 +745,7 @@
         
         <div class="method-heading">
           <span class="method-name">edited_comment_notification</span><span
-            class="method-args">(admin_id, comment_id)</span>
+            class="method-args">(comment_id)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -736,12 +758,12 @@
           
           <div class="method-source-code" id="edited_comment_notification-source">
             <pre><span class="ruby-comment"># File app/mailers/admin_mailer.rb, line 55</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">admin_id</span>, <span class="ruby-identifier">comment_id</span>)
-  <span class="ruby-identifier">admin</span> = <span class="ruby-constant">Admin</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">admin_id</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">comment_id</span>)
+  <span class="ruby-comment"># admin = Admin.find(admin_id)</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">comment_id</span>)
   <span class="ruby-identifier">mail</span>(
-    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">admin</span>.<span class="ruby-identifier">email</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_NAME}] Edited comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
+    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ADMIN_ADDRESS</span>,
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edited_comment_notification-source -->
@@ -778,7 +800,7 @@
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:from</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">feedback</span>.<span class="ruby-identifier">email</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">RETURN_ADDRESS</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">feedback</span>.<span class="ruby-identifier">email</span>,
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">FEEDBACK_ADDRESS</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;: Support - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">feedback</span>.<span class="ruby-identifier">summary</span>,
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{ArchiveConfig.APP_SHORT_NAME}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;: Support - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">feedback</span>.<span class="ruby-identifier">summary</span>,
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- feedback-source -->

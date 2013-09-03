@@ -1,20 +1,60 @@
-<% if logged_in? %>
-  <div id="greeting">
-    <p class="icon">
-      <span class="landmark">Hi, <%= link_to current_user.login, user_path(current_user) %>!</span>
-    <%= icon_display(current_user) %>
-    </p>
-    <ul class="navigation actions" role="navigation">
-	    <li><%= link_to ts("post new"), new_work_path %></li>
-      <li> <%= link_to ts("log out"), logout_path %></li>
+<div id="greeting">
+  <% if logged_in? %>
+    <h3 class="landmark heading"><%= ts("User Navigation") %></h3>
+    <ul class="user navigation actions" role="navigation">
+      <li class="dropdown">
+        <%= link_to ts("Hi, %{current_user}!", :current_user => current_user.login), user_path(current_user) %>
+        <ul class="menu" role="menu">
+          <li><%= span_if_current ts("My Dashboard"), user_path(current_user) %></li>
+          <% if @current_user.subscriptions.count > 0 %>
+            <li><%= span_if_current ts("My Subscriptions (%{subscription_number})", :subscription_number => @current_user.subscriptions.count), user_subscriptions_path(current_user) %></li>
+          <% end %>
+          <% if @current_user.visible_work_count > 0 %>
+            <li><%= span_if_current ts("My Works (%{works_number})", :works_number => @current_user.visible_work_count), user_works_path(@current_user) %></li>
+          <% end %>
+          <% if @current_user.bookmarks.count > 0 %>
+            <li><%= span_if_current ts("My Bookmarks (%{bookmark_number})", :bookmark_number => @current_user.bookmarks.count), user_bookmarks_path(current_user) %></li>
+          <% end %>
+          <% if @current_user.owned_collections.count > 0 %>
+            <li><%= span_if_current ts("My Collections (%{coll_number})", :coll_number => @current_user.owned_collections.count), user_collections_path(current_user) %></li>
+          <% end %>
+          <% if @current_user.challenge_signups.count > 0 %>
+            <li><%= span_if_current ts("My Sign-ups (%{signup_number})", :signup_number => @current_user.challenge_signups.count), user_signups_path(current_user) %></li>
+          <% end %>
+          <% if (@current_user.offer_assignments.undefaulted.count || @current_user.pinch_hit_assignments.undefaulted.count) > 0 %>
+            <li><%= span_if_current ts("My Assignments (%{assignment_number})", :assignment_number => (@current_user.offer_assignments.undefaulted.count + @current_user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(current_user) %></li>
+          <% end %>
+          <% if @current_user.preference.try(:history_enabled?) %>
+            <li><%= span_if_current ts("My History"), user_readings_path(current_user) %></li>
+          <% end %>
+          <li><%= span_if_current ts("Preferences"), user_preferences_path(current_user) %></li>
+          <% if permit?('opendoors') %>
+            <li><%= span_if_current ts("Open Doors"), opendoors_tools_path %></li>
+          <% end %>
+          <% if current_user.is_tag_wrangler? %>
+            <li><%= span_if_current ts("Tag Wrangling"), tag_wrangler_path(current_user) %></li>
+          <% end %>
+          <% # one day, an if permit?('translator') || permit?("translation_admin") link will go here %>
+        </ul>
+      </li>
+      <li class="dropdown">
+      	<%= link_to ts("Post"), new_work_path %>
+      	<ul class="menu" role="menu">
+          <li><%= link_to ts("New Work"), new_work_path %></li>
+          <li><%= link_to(ts("Import Work"), new_work_path(:import => "true")) %></li>
+          <% if @current_user.unposted_works.size > 0 %>
+            <li><%= span_if_current ts("From Draft"), drafts_user_works_path(@current_user) %></li>
+          <% end %>
+      	</ul>
+      </li>
+      <li><%= link_to ts("Log Out"), logout_path %></li>
     </ul>
-  </div>
 
-<% elsif logged_in_as_admin? %>
-  <div id="greeting">
-	  <p class="icon"><%= icon_display(current_user) %></p>
-	  <ul class="navigation actions" role="navigation">
-      <li><span class="current">Admin</span></li>
-      <li><%= link_to ts("log out"), admin_logout_path %></li>
-  </div>
-<% end %>
+    <% elsif logged_in_as_admin? %>
+      <ul class="user navigation actions" role="navigation">
+        <li><span class="current"><%= ts("Admin") %></span></li>
+        <li><%= link_to ts("Log Out"), admin_logout_path %></li>
+      </ul>
+    <% end %>
+  <p class="icon"><%= icon_display(current_user) %></p>
+</div>

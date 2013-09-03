@@ -22,14 +22,8 @@ class WorkSkin < Skin
   end
 
   def self.model_name
-    name = "skin"
-    name.instance_eval do
-      def plural;   pluralize;   end
-      def singular; singularize; end
-      def human;    singularize; end # for Rails 3.0.0+
-      def i18n_key; singularize; end # for Rails 3.0.3+
-    end
-    return name
+    # re-use the model_name of the superclass (Skin)
+    self.superclass.model_name
   end
 
   def self.basic_formatting

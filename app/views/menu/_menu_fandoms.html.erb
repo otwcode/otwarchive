@@ -1,0 +1,8 @@
+<ul class="menu" role="menu">
+  <li><%= span_if_current ts("All Fandoms"), media_path %></li>
+  <% cache "menu-fandoms-version2" do %>
+    <% for medium in @menu_media %>
+      <li id="medium_<%= medium.id %>"><%= span_if_current medium.name, medium_fandoms_path(medium) %></li>
+    <% end %>
+  <% end %>
+</ul>

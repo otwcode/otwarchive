@@ -1,16 +1,21 @@
-<%=raw @summary %>
+<% content_for :message do %>
+  <p>
+    Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.
+  </p>
+  
+  <p>
+    In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.
+  </p>
+  
+  <p>
+    Here is a copy of your message for your reference:
+  </p>
+  
+  <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
 
-<p>
-  <%= ts("Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.") %> 
-  <%= ts("In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.") %> 
-  <%= ts("Here is a copy of your message for your reference.") %>
-</p>
+  <p>Love, the AO3 Support team.</p>
+<% end %>
 
-<%=raw @comment %>
-
-<p><%= ts("Love, the AO3 Support team") %></p>
-
-
-<p><%= ts("Sent at:") %>&nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
-
-
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>

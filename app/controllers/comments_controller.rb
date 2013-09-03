@@ -8,17 +8,48 @@ class CommentsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
+  before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access, :only => [:index, :show]
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
+  before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
 
   cache_sweeper :comment_sweeper
+
+
 
   def load_comment
     @comment = Comment.find(params[:id])
     @check_ownership_of = @comment
     @check_visibility_of = @comment
+  end
+
+  def find_parent
+    if @comment.present?
+      @comment.ultimate_parent
+    elsif @commentable.present? && @commentable.respond_to?(:work)
+      @commentable.work
+    else
+      @commentable
+    end
+  end
+
+  # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
+  def check_if_restricted
+    parent =  find_parent
+    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
+      redirect_to login_path(:restricted_commenting => true) and return
+    end
+  end
+
+  # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
+  def check_anonymous_comment_preference
+    parent =  find_parent
+    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      redirect_to work_path(parent)
+    end
   end
 
   def check_tag_wrangler_access
@@ -60,7 +91,7 @@ class CommentsController < ApplicationController
       @commentable = AdminPost.find(params[:admin_post_id])
     elsif params[:tag_id]
       @commentable = Tag.find_by_name(params[:tag_id])
-      @page_subtitle = @commentable.name
+      @page_subtitle = @commentable.try(:name)
     end
   end
 
@@ -134,10 +165,10 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save
         if @comment.approved?
-          # save user's name/email if not logged in
+          # save user's name/email if not logged in, truncated in case of something really long and wacky
           if @comment.pseud.nil?
-            session[:comment_name] = @comment.name
-            session[:comment_email] = @comment.email
+            cookies[:comment_name] = @comment.name[0..100]
+            cookies[:comment_email] = @comment.email[0..100]
           end
           flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
@@ -163,11 +194,6 @@ class CommentsController < ApplicationController
           redirect_back_or_default(root_path)
         end
       else
-        flash[:comment_error] = ts("There was a problem saving your comment:")
-        msg = @comment.errors.full_messages.map {|msg| "#{msg}"}.join
-        unless msg.blank?
-          flash[:comment_error] += "#{msg}"
-        end
         render :action => "new"
       end
     end

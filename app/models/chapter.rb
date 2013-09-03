@@ -13,22 +13,22 @@ class Chapter < ActiveRecord::Base
   has_many :kudos, :as => :commentable
 
   validates_length_of :title, :allow_blank => true, :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long => t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
   validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
   validates_length_of :endnotes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
 
   validates_presence_of :content
   validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN, 
-    :too_short => t('content_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN)
+    :too_short => ts("must be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN)
 
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
-    :too_long => t('content_too_long', :default => "cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+    :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
   
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
@@ -160,7 +160,7 @@ class Chapter < ActiveRecord::Base
   def validate_authors
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
-      errors.add(:base, t('needs_author', :default => "Chapter must have at least one author."))
+      errors.add(:base, ts("Chapter must have at least one author."))
       return false
     end
   end
@@ -170,29 +170,21 @@ class Chapter < ActiveRecord::Base
     if !self.published_at
       self.published_at = Date.today
     elsif self.published_at > Date.today
-      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, ts("Publication date can't be in the future."))
       return false
     end
-  end  
-  
+  end
+
   # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
     if self.new_record? || self.content_changed?
-      count = 0
-      body = Nokogiri::HTML(self.content).xpath('//body').first
-      body.traverse do |node|
-        # only count actual text
-        if node.is_a? Nokogiri::XML::Text
-          # scan by word boundaries after stripping hyphens and apostrophes
-          # so one-word and one's will be counted as one word, not two.
-          # -- is replaced by — (emdash) before strip so one--two will count as 2
-          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[[:word:]]+/).size
-        end
-      end
-      self.word_count = count
+      counter = WordCounter.new(self.content)
+      self.word_count = counter.count
+    else
+      self.word_count
     end
   end
-    
+
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title

@@ -1,4 +1,4 @@
-# This module is included by both the work and hit_counter models so they use the 
+# This module is included by both the work and stat_counter models so they use the 
 # same redis keys and can both access the data in redis
 module WorkStats  
   
@@ -30,7 +30,7 @@ module WorkStats
     end
 
     def get_database_stat(statistic, work_id)
-      HitCounter.where(:work_id => work_id).value_of(statistic).first || 0
+      StatCounter.where(:work_id => work_id).value_of(statistic).first || 0
     end
 
   end # ClassMethods
@@ -50,13 +50,28 @@ module WorkStats
     # skip if this is the same visitor as before or if the current user is the author of this work
     unless self.last_visitor == visitor || (User.current_user.is_a?(User) && User.current_user.is_author_of?(self))
       set_last_visitor(visitor)
-      key = redis_stat_key(:hit_count)
-      $redis.set(key, self.hits) unless $redis.exists(key)
-      $redis.incr(key)
+      add_to_hit_count(1)
       $redis.sadd(WORKS_TO_UPDATE_KEY, get_work_id)
     end
-    $redis.get(key)
+    $redis.get(redis_stat_key(:hit_count))
   end  
+
+  # add the given amount to the hit count in redis
+  def add_to_hit_count(amount)
+    key = redis_stat_key(:hit_count)
+    $redis.set(key, self.hits) unless $redis.exists(key)
+    $redis.incrby(key, amount)
+  end
+  
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.total_comments.not_deleted.count,
+      bookmarks_count: self.bookmarks.where(:private => false).count
+    )
+    RedisSearchIndexQueue.reindex(self, without_bookmarks: true)
+  end
 
   protected 
 

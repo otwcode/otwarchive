@@ -1,4 +1,4 @@
-class UserMailer < ActionMailer::Base
+class UserMailer < BulletproofMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -10,10 +10,12 @@ class UserMailer < ActionMailer::Base
   helper_method :logged_in_as_admin?
 
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :users
   helper :date
+  helper :series
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
@@ -26,7 +28,7 @@ class UserMailer < ActionMailer::Base
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
       :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Invitation"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
     )
   end
 
@@ -38,54 +40,54 @@ class UserMailer < ActionMailer::Base
     @token = @invitation.token
     mail(
       :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation To Claim Stories"
     )
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author_id, claimed_work_ids)
-    external_author = ExternalAuthor.find(external_author_id)
-    @external_email = external_author.email
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
+    if is_user
+      creator = User.find(creator_id)
+    else
+      creator = ExternalAuthor.find(creator_id)
+    end
+    @external_email = creator.email
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
-      :to => external_author.user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
-    )
-  end
-
-  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
-    user = User.find(user_id)
-    @subscription = Subscription.find(subscription_id)
-    @creation = creation_class_name.constantize.find(creation_id)
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] #{@subscription.subject_text(@creation)}"
+      :to => creator.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
     )
   end
 
   # Sends a batched subscription notification
-  def batch_subscription_notification(subscriber_id, subscriptions)
-    subscriber = User.find(subscriber_id)
-    subscription_hash = JSON.parse(subscriptions)
-    @subscriptions = []
-    @creations = {}
-    subscription_hash.each_pair do |subscription_id, creation_entries|
-      subscription = Subscription.find_by_id(subscription_id)
-      next unless subscription
-      @subscriptions << subscription
-      @creations[subscription.id] ||= []
-      # look up all the creations that have generated updates for this subscription
-      creation_entries.each do |creation_info|
-        creation_type, creation_id = creation_info.split("_")
-        creation = creation_type.constantize.find(creation_id)
-        next unless creation
-        @creations[subscription.id] << creation
-      end
+  def batch_subscription_notification(subscription_id, entries)
+    @subscription = Subscription.find(subscription_id)
+    creation_entries = JSON.parse(entries)
+    @creations = []
+    # look up all the creations that have generated updates for this subscription
+    creation_entries.each do |creation_info|
+      creation_type, creation_id = creation_info.split("_")
+      creation = creation_type.constantize.where(:id => creation_id).first
+      next unless creation && creation.try(:posted)
+      next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
+      @creations << creation
+    end
+    
+    # die if we haven't got any creations to notify about
+    # see lib/bulletproof_mailer.rb
+    abort_delivery if @creations.empty?
+
+    # make sure we only notify once per creation
+    @creations.uniq!
+    
+    subject = @subscription.subject_text(@creations.first)
+    if @creations.count > 1
+      subject += " and #{@creations.count - 1} more"
     end
     
     mail(
-      :to => subscriber.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Subscription Update"
+      :to => @subscription.user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
     )
   end
 
@@ -95,7 +97,18 @@ class UserMailer < ActionMailer::Base
     @total = total
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] New Invitations"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+    )
+  end
+
+  # Emails a user to say that their request for invitation codes has been declined
+  def invite_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
     )
   end
 
@@ -106,7 +119,7 @@ class UserMailer < ActionMailer::Base
     @admin_login = admin_login
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message #{subject}"
     )
   end
 
@@ -122,7 +135,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
       :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] #{subject}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
 
@@ -130,7 +143,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
       :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
     )
   end
 
@@ -141,7 +154,7 @@ class UserMailer < ActionMailer::Base
     @request = (assignment.request_signup || assignment.pinch_request_signup)
     mail(
       :to => @assigned_user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Your Assignment!"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your Assignment!"
     )
   end
 
@@ -150,7 +163,7 @@ class UserMailer < ActionMailer::Base
     @user = User.find(user_id)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Please activate your new account"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
     )
   end
 
@@ -159,7 +172,7 @@ class UserMailer < ActionMailer::Base
     @user = User.find(user_id)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Your account has been activated."
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your account has been activated."
     )
   end
 
@@ -169,7 +182,7 @@ class UserMailer < ActionMailer::Base
     @password = activation_code
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Generated password"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
     )
   end
 	
@@ -180,7 +193,7 @@ class UserMailer < ActionMailer::Base
 		@new_email= new_email
     mail(
       :to => @old_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Email changed"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
     )
   end
    
@@ -192,7 +205,7 @@ class UserMailer < ActionMailer::Base
     @creation = creation_class_name.constantize.find(creation_id)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Co-Author Notification"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
     )
   end
 
@@ -204,7 +217,7 @@ class UserMailer < ActionMailer::Base
     @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Related work notification"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
     )
   end
 
@@ -215,7 +228,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
@@ -227,7 +240,7 @@ class UserMailer < ActionMailer::Base
       user = User.find(claim.request_signup.pseud.user.id)
       mail(
         :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
+        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
       )
     end
   end
@@ -240,7 +253,7 @@ class UserMailer < ActionMailer::Base
     @work = work
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been updated"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been updated"
     )
   end
 
@@ -257,7 +270,24 @@ class UserMailer < ActionMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+    )
+  end
+
+  # Sends email to authors when a creation is deleted by abuse
+  # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
+  # TODO refactor to make it asynchronous by passing the content in the method
+  def abuse_deleted_work_notification(user, work)
+    @user = user
+    @work = work
+    work_copy = generate_attachment_content_from_work(work)
+    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
+    attachments["#{filename}.txt"] = {:content => work_copy}
+    attachments["#{filename}.html"] = {:content => work_copy}
+
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
     )
   end
   
@@ -271,7 +301,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
     )
   end
 
@@ -285,18 +315,18 @@ class UserMailer < ActionMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
-  def abuse_report(report_id)
-    report = AbuseReport.find(report_id)
-    setup_email_without_name(report.email)
-    @url = report.url
-    @comment = report.comment
+  def abuse_report(abuse_report_id)
+    abuse_report = AbuseReport.find(abuse_report_id)
+    @email = abuse_report.email
+    @url = abuse_report.url
+    @comment = abuse_report.comment
     mail(
-      :to => report.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Your abuse report"
+        :to => abuse_report.email,
+        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

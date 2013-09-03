@@ -1,0 +1,27 @@
+
+Archive of Our Own
+=========================================
+
+
+<% if content_for?(:message) then %><%= yield(:message) %><% end %>
+
+
+-----------------------------------------
+<% if content_for?(:footer_note) %>
+<%= yield(:footer_note) %>
+
+<% end %>
+If you've received this message in error, please contact Support at <%= root_url %>support.
+
+The Archive of Our Own is a fan-run and fan-supported archive that relies on your support.
+Donate at <%= donate_url %>.
+<% if content_for?(:sent_at) %>
+
+Sent at: <%= yield(:sent_at) %>.
+
+<% end %>
+<% if content_for?(:sent_by) %>
+
+Sent by: <%= yield(:sent_by) %>.
+
+<% end %>

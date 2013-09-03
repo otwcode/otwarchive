@@ -74,7 +74,7 @@
     
     <li><a href="#method-i-get_url_to_look_for">#get_url_to_look_for</a>
     
-    <li><a href="#method-i-index">#index</a>
+    <li><a href="#method-i-show">#show</a>
     
   </ul>
 </nav>
@@ -99,6 +99,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -113,23 +127,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -347,6 +355,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -425,6 +435,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -462,6 +474,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -517,6 +531,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -546,6 +564,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -606,19 +628,26 @@
 
           
           <div class="method-source-code" id="do_redirect-source">
-            <pre><span class="ruby-comment"># File app/controllers/redirect_controller.rb, line 12</span>
+            <pre><span class="ruby-comment"># File app/controllers/redirect_controller.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">do_redirect</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@original_url</span>.<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'redirect.none'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;What url did you want to look up?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What url did you want to look up?&quot;</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_by_imported_from_url</span>(<span class="ruby-ivar">@original_url</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;imported_from_url LIKE :url&quot;</span>, {<span class="ruby-value">:url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;%#{@minimal_url}%&quot;</span>}])
+    <span class="ruby-identifier">urls</span> = [<span class="ruby-ivar">@original_url</span>, <span class="ruby-ivar">@minimal_url</span>, <span class="ruby-ivar">@encoded_url</span>, <span class="ruby-ivar">@decoded_url</span>]
+    <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:imported_from_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@original_url</span>).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> 
+            <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:imported_from_url</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-ivar">@minimal_url</span>, <span class="ruby-ivar">@encoded_url</span>, <span class="ruby-ivar">@decoded_url</span>]).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span>
+            <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;imported_from_url LIKE ? OR imported_from_url LIKE ?&quot;</span>, <span class="ruby-node">&quot;%#{@encoded_url}%&quot;</span>, <span class="ruby-node">&quot;%#{@decoded_url}%&quot;</span>).<span class="ruby-identifier">first</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;You have been redirected here from #{@original_url}. Please update the original link if possible!&quot;</span>)
       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
     <span class="ruby-keyword">else</span> 
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'redirect.failed'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?&quot;</span>)
+      <span class="ruby-keyword">unless</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">production?</span>
+        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; We checked all of the following URLs: #{urls.to_sentence}&quot;</span> 
+      <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:index</span>
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">redirect_path</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- do_redirect-source -->
           
@@ -653,6 +682,10 @@
   <span class="ruby-comment"># strip it down to the most basic URL</span>
   <span class="ruby-ivar">@minimal_url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%r\?.*$/</span>, <span class="ruby-string">&quot;&quot;</span>)
   <span class="ruby-ivar">@minimal_url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%r\#.*$/</span>, <span class="ruby-string">&quot;&quot;</span>)
+  
+  <span class="ruby-comment"># get encoded and unencoded versions</span>
+  <span class="ruby-ivar">@encoded_url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-ivar">@minimal_url</span>)
+  <span class="ruby-ivar">@decoded_url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">decode</span>(<span class="ruby-ivar">@minimal_url</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- get_url_to_look_for-source -->
           
@@ -664,10 +697,10 @@
       </div><!-- get_url_to_look_for-method -->
 
     
-      <div id="method-i-index" class="method-detail ">
+      <div id="method-i-show" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">index</span><span
+          <span class="method-name">show</span><span
             class="method-args">()</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
@@ -679,21 +712,21 @@
           
 
           
-          <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/redirect_controller.rb, line 26</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+          <div class="method-source-code" id="show-source">
+            <pre><span class="ruby-comment"># File app/controllers/redirect_controller.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@original_url</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:do_redirect</span>, <span class="ruby-value">:original_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@original_url</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- index-source -->
+          </div><!-- show-source -->
           
         </div>
 
         
 
         
-      </div><!-- index-method -->
+      </div><!-- show-method -->
 
     
     </section><!-- public-instance-method-details -->

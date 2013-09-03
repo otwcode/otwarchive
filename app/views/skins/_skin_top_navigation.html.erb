@@ -32,8 +32,8 @@
       <% if params[:wizard] %>
         <li id="form-link">
            <%= link_to( ts('Write Custom CSS Instead?'),
-             {:url => {:controller => :skins, :action => controller.action_name, :wizard => false}},
-             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => false)) %>
+             {:url => {:controller => :skins, :action => controller.action_name}},
+             :href => url_for(:controller => :skins, :action => controller.action_name)) %>
         </li>
       <% else %>
         <li id="wizard-link">

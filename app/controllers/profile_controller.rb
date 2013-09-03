@@ -15,6 +15,7 @@ class ProfileController < ApplicationController
                                                        :subscribable_type => 'User').first ||
                       current_user.subscriptions.build(:subscribable => @user)
     end
+    @page_subtitle = ts("%{username} - Profile", username: @user.login)
   end
   
 end

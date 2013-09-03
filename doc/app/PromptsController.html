@@ -133,6 +133,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -147,23 +161,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -381,6 +389,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -459,6 +469,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -496,6 +508,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -551,6 +565,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -580,6 +598,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -740,10 +762,10 @@
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">valid?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That prompt would make your overall signup invalid, sorry.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That prompt would make your overall signup invalid, sorry.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_collection_signup_path</span>(<span class="ruby-ivar">@collection</span>, <span class="ruby-ivar">@challenge_signup</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Prompt was successfully added.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Prompt was successfully added.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_signup_path</span>(<span class="ruby-ivar">@collection</span>, <span class="ruby-ivar">@challenge_signup</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:new</span>
@@ -778,13 +800,13 @@
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 141</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">signup_open</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>))
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete a prompt after signups are closed. Please contact a moderator for help.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete a prompt after signups are closed. Please contact a moderator for help.&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">can_delete?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That would make your signup invalid, sorry! Please edit instead.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;That would make your signup invalid, sorry! Please edit instead.&quot;</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">destroy</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Prompt was deleted.&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Prompt was deleted.&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;PromptMeme&quot;</span>
@@ -1055,7 +1077,7 @@ end</pre>
           <div class="method-source-code" id="no_challenge-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_challenge</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What challenge did you want to sign up for?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What challenge did you want to sign up for?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1087,7 +1109,7 @@ end</pre>
           <div class="method-source-code" id="no_prompt-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_prompt</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What prompt did you want to work on?&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What prompt did you want to work on?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1119,7 +1141,7 @@ end</pre>
           <div class="method-source-code" id="no_signup-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_signup</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please submit a basic signup with the required fields first.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please submit a basic signup with the required fields first.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_collection_signup_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span> 
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1151,7 +1173,7 @@ end</pre>
           <div class="method-source-code" id="not_signup_owner-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">not_signup_owner</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't edit someone else's signup!&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't edit someone else's signup!&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1212,7 +1234,7 @@ end</pre>
           <div class="method-source-code" id="signup_closed-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">signup_closed</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup is currently closed: please contact a moderator for help.&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup is currently closed: please contact a moderator for help.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span> <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
   <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1275,7 +1297,7 @@ end</pre>
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Prompt was successfully updated.'</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Prompt was successfully updated.'</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_signup_path</span>(<span class="ruby-ivar">@collection</span>, <span class="ruby-ivar">@challenge_signup</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:edit</span>

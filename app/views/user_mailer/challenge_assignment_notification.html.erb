@@ -1,32 +1,70 @@
-<h2 class="heading">Your Assignment</h2>
+<% content_for :message do %>
+  <p>
+    You have been assigned the following request in the <%= style_link(@collection.title, collection_url(@collection)) %> challenge at the Archive of Our Own!
+  </p>
 
-<p>
-  You have been assigned the following request in the <%= link_to(h(@collection.title), collection_url(@collection)) %> challenge at the Archive of Our Own!
-</p>
+  <p>
+    <%= style_bold("Recipient:") %> <%= @request.nil? ? "None: contact a moderator for help!" : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
+  </p>
 
-<p>
-  This assignment is due at: <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>
-</p>
+  <%= style_bold("Prompts:") %>
+  
+  <% @request.requests.each_with_index do |prompt, index| %>
+    <% tag_groups = prompt.tag_groups %>
 
-<p>
-  Recipient: <%= @request.nil? ? "None: contact a moderator for help!" : link_to(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
-</p>
+    <% def styled_tag_list(tags) %>
+      <% return nil if !tags || tags.empty? %>
+      <% tags.map{|tag| style_link(tag.name, tag_works_url(tag))}.to_sentence.html_safe %>
+    <% end %>
 
-<%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @request} %>
+    <% fandoms = prompt.any_fandom ? "Any" : styled_tag_list(tag_groups["Fandom"]) %>
+    <% chars = prompt.any_character ? "Any" : styled_tag_list(tag_groups["Character"]) %>
+    <% ships = prompt.any_relationship ? "Any" : styled_tag_list(tag_groups["Relationship"]) %>
+    <% ratings = prompt.any_rating ? "Any" : get_title_string(tag_groups["Rating"]) %>
+    <% warnings = tag_groups["Warning"] ? get_title_string(tag_groups["Warning"]) : nil %>
+    <% categories = tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil %>
+    <% atags = styled_tag_list(tag_groups["Freeform"]) %>
+    <% otags = prompt.optional_tag_set ? styled_tag_list(prompt.optional_tag_set.tags) : nil %>
 
-<p>
-  You can look up this assignment from your archive dashboard at: 
-  <%= user_assignments_url(@assigned_user) %>
-</p>
+    <%= styled_divider %>
+    <%= index+1 %>. <%= style_bold(prompt.title) %>
 
-<% if @collection && !@collection.assignment_notification.blank? %>
-  <%= @collection.assignment_notification %>
+    <p>
+      <% if fandoms then %><%= style_bold("Fandom:") %> <%= fandoms %><br><% end %>      
+      <% if chars then %><%= style_bold("Characters:") %> <%= chars %><br><% end %>
+      <% if ships then %><%= style_bold("Relationships:") %> <%= ships %><br><% end %>
+      <% if ratings then %><%= style_bold("Rating:") %> <%= ratings %><br><% end %>
+      <% if warnings then %><%= style_bold("Warnings:") %> <%= warnings %><br><% end %>
+      <% if categories then %><%= style_bold("Category:") %> <%= categories %><br><% end %>
+      <% if atags then %><%= style_bold("Additional Tags:") %> <%= atags %><br><% end %>
+      <% if otags then %><%= style_bold("Optional Tags:") %> <%= otags %><br><% end %>
+      <% if prompt.url && !prompt.url.blank? then %><%= style_bold("Prompt URL:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
+      <% if prompt.description && !prompt.description.blank? %>
+        <%= style_bold("Description:") %>
+        <%= style_quote(prompt.description) %>
+      <% end %>
+    </p>
+  <% end %>
+  
+  <%= styled_divider %>
+
+  <p>
+    <%= style_bold("This assignment is due at:") %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
+  </p>
+
+  <p>
+    You can look up this assignment from <%= style_link("your archive dashboard", user_assignments_url(@assigned_user)) %>.
+  </p>
+
+  <% if @collection && !@collection.assignment_notification.blank? %>
+    <p><br><%= @collection.assignment_notification %></p>
+  <% end %>
 <% end %>
 
-<p>
-  Please note that you should only have received this message if you signed up for this challenge. 
-  For more information about this challenge and contact information for the moderators, please see
-  <%= collection_profile_url(@collection) %> 
-</p>
+<% content_for :footer_note do %>
+  You're receiving this email because you signed up for the <%= style_footer_link(@collection.title, collection_url(@collection)) %> challenge. For more information about this challenge and contact information for the moderators, please visit <%= style_footer_link("the challenge profile page", collection_profile_url(@collection)) %>.
+<% end %>
 
-<p><%=h "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>

@@ -1,25 +1,37 @@
-<%= link_to "Devmode top", devmode_path %>
-<h1><%= t('.seed_users', :default => "Seed users") %></h1>
+<%= link_to ts("Devmode top"), devmode_path %>
+<h1><%= ts("Seed Users") %></h1>
     <% if @errors %>
-      <div class="error" style="color: red">
+      <div class="error">
         <%= @errors %>
       </div>
     <% end %>
 <div class="form">
     <form name="seedusers" method="post" action="">
-      <p>Using this form, you may create many users quickly :).
-        <ul style="list-style-type: square">
-          <li style="list-style-type: square">{user_count} sequentially numbered users will be created, starting from {user_start}</li>
-          <li style="list-style-type: square">Usernames will be generated sequentially in the form "{user_prefix}{number}"</li>
-          <li style="list-style-type: square">E-mail addresses will be generated similarly in the form "{email_prefix}{number}{email_suffix}"</li>
-          <li style="list-style-type: square">Password will be set to {password}</li>
-          <li style="list-style-type: square">If you select the {prevalidate} option, then users will be activated automatically, and e-mail addresses can be falsified.
+      <p>Using this form, you may create many users quickly :).</p>
+        <ul class="devmode">
+          <li>{user_count} sequentially numbered users will be created, starting from {user_start}</li>
+          <li>Usernames will be generated sequentially in the form "{user_prefix}{number}"</li>
+          <li>E-mail addresses will be generated similarly in the form "{email_prefix}{number}{email_suffix}"</li>
+          <li>Password will be set to {password}</li>
+          <li>If you select the {prevalidate} option, then users will be activated automatically, and e-mail addresses can be falsified.</li>
         </ul>
-      </p>
-      <table>
-        <% for name, (type_name, default) in @params %>
-          <tr><td> <%= name %> </td><td><%= "<input name=\"#{name}\" type=\"#{type_name}\" value=\"#{default}\"/>"%></td></tr>
-        <% end %>
+
+      <table summary="<%= ts('Functions for generating seed users.') %>">
+        <caption><%= ts('Functions for Creating Seed Users') %></caption>
+        <thead>
+          <tr>
+            <th span="col"><%= ts("Function") %></th>
+            <th span="col"><%= ts("Generated HTML") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for name, (type_name, default) in @params %>
+            <tr>
+              <th span="row"> <%= name %> </th>
+              <td><%= "<input name=\"#{name}\" type=\"#{type_name}\" value=\"#{default}\"/>"%></td>
+            </tr>
+          <% end %>
+        </tbody>
       </table>
       <input type="submit" name="seed" value="Create seed users"/>
     </form>

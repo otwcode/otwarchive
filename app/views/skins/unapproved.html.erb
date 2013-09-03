@@ -1,3 +1,4 @@
+<div class="admin">
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Skin Approval Queue') %></h2>
 <!--/descriptions-->
@@ -17,18 +18,18 @@
     <h3 class="heading"><%= ts('Approval Queue') %></h3>
     
     <div class="wrapper">
-    <table id="unapproved" summary="">
-      <caption></caption>
+    <table id="unapproved_skins" summary="<%= ts('Details for skins awaiting approval, along with administrative notes and options.') %>">
+      <caption><%= ts('Approval Queue for Skins') %></caption>
       <thead>
         <tr>
-        <th scope="col">Skin</th>
-        <th scope="col">Type</th>
-        <th scope="col">Creator</th>
-        <th scope="col">Preview</th>
-        <th scope="col">Description</th>
-        <th scope="col">Admin Note</th>
-        <th scope="col">Approve</th>
-        <th scope="col">Reject</th>
+        <th scope="col"><%= ts('Skin') %></th>
+        <th scope="col"><%= ts('Type') %></th>
+        <th scope="col"><%= ts('Creator') %></th>
+        <th scope="col"><%= ts('Preview') %></th>
+        <th scope="col"><%= ts('Description') %></th>
+        <th scope="col"><%= ts('Admin Note') %></th>
+        <th scope="col"><%= ts('Approve') %></th>
+        <th scope="col"><%= ts('Reject') %></th>
       </tr>
     </thead>
       <tbody>
@@ -58,7 +59,7 @@
     </div>
   </fieldset>
 
-  <p class="submit actions"><%= submit_tag "Update" %></p>
+  <p class="submit"><%= submit_tag ts('Update') %></p>
 
 <% end %>
 
@@ -66,3 +67,4 @@
 
 <!--subnav-->
 <!--/subnav-->
+</div>

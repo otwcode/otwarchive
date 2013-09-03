@@ -1,34 +1,49 @@
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
-<% if @collection %>
-  <h2 class="heading"><%= authors_header @authors %> <%= "in" %> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] %>' <%= ts("in %{collection}", :collection => @collection.title) %></h2>
 
-<p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p> 
-<!--subnav-->
+<div class="pseud">
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
+  <% if @random %><%= ts("A Random Selection of ") %><% end %>
+  <% if @collection %>
+    <%= ts("Participants in %{collection}", :collection => @collection.title) %>
+  <% else %>
+    <%= ts("People in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
+  <% end %>
+</h2>
+<!--/descriptions-->
 
- <div class="alphabetical pagination navigation actions" role="navigation"><%= alpha_paginated_section @pseuds_alphabet %></div>
-  <%= paginated_section @authors do %>
-  <!--/subnav-->
- 
-<!--main content-->
-  <ol class="index group">
-    <% @authors.each do |author| %>
-      <%= render 'author_blurb', :author => author %>
+<!--Subnavigation, sorting and actions-->
+<ul class="navigation actions" role="navigation">
+  <li class="search" role="search">
+    <%= form_tag (@collection ? collection_people_path(@collection) : people_path), :class => "simple search", :method => :get do |form| %>
+      <fieldset>
+	      <%= text_field_tag :query, params[:query], :title => "search" %>
+        <%= submit_tag "Search" %>
+      </fieldset>
     <% end %>
-  </ol>
+  </li>
+  <% unless @collection %>
+    <li><%= link_to "Advanced People Search (Alpha)", search_people_path %></li>
   <% end %>
-  <!--/content-->
-  
-<!--subnav-->
-<div class="alphabetical pagination navigation actions" role="navigation">
-  <h3 class="landmark heading">Next Page Navigation</h3>
-<%= alpha_paginated_section @pseuds_alphabet %>
-</div>
+</ul>
 
+<% if @people.empty? %>
+  <p><%= ts("No matching people found.") %></p>
 <% else %>
-  <div class="alphabetical pagination navigation actions" role="navigation">
-  <% for character in @navigation %>
-    <a href="<%= person_path(character) %>"><%= character.char %></a>
+  <% if @query %>
+    <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
   <% end %>
-  </div>
-  <p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p>
+  
+  <%= @random ? "" : will_paginate(@people) %>
+  <!--main content-->
+  <h3 class="landmark heading">Listing People</h3>
+	<ul class="pseud index group">
+    <% for person in @people %>
+      <% unless person.nil? %>
+        <%= render 'people/author_blurb', :author => person %>
+      <% end %>
+    <% end %>
+  </ul>
+  <%= @random ? "" : will_paginate(@people) %>
 <% end %>
+</div>

@@ -1,24 +1,6 @@
 <!--SEARCHBROWSE-->
-<h2 class="heading"><%= ts("Bookmark Search: Beta") %></h2>
+<h2 class="heading"><%= ts("Bookmark Search") %></h2>
 
-<ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Work Search"), search_index_path(:query => @query) %></li>
-  <li><%= span_if_current ts("Tag Search"), search_tags_path %></li>
-  <li><%= span_if_current ts("Bookmark Search"), search_bookmarks_path %></li>
-  <li><%= span_if_current ts("People Search"), search_people_path %></li>
-</ul>
+<%= render 'shared/search_nav' %>
 
 <%= render :partial => 'bookmarks/search_form' %>
-
-<% if @bookmarks %>
-  <p><strong><%= @bookmarks.total_entries %> Found</strong><%= link_to_help "bookmark-search-results-help" %></p>
-  <h3 class="landmark heading">Bookmarks List</h3>
-  <ol class="bookmark index group">
-    <% for bookmark in @bookmarks %>
-      <% unless bookmark.nil? %>
-        <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
-      <% end %>
-    <% end %>
-  </ol>
-  <%= will_paginate @bookmarks %>
-<% end %>

@@ -107,6 +107,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -121,23 +135,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -355,6 +363,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -433,6 +443,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -470,6 +482,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -525,6 +539,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -554,6 +572,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -659,14 +681,7 @@ that user a notification email</p>
 
   <span class="ruby-comment"># send notification to the owner(s) of the ultimate parent, who can be users or admins</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">AdminPost</span>)
-    <span class="ruby-identifier">admins</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_owners</span>
-    <span class="ruby-identifier">admins</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">admin</span><span class="ruby-operator">|</span>
-      <span class="ruby-comment"># TODO: comments should be able to belong to an admin officially</span>
-      <span class="ruby-comment"># right now comment.comment_owner is nil for an admin, and going by email is not reliable</span>
-      <span class="ruby-comment"># unless admin == comment.comment_owner</span>
-        <span class="ruby-constant">AdminMailer</span>.<span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">admin</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
-      <span class="ruby-comment"># end</span>
-    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">AdminMailer</span>.<span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment"># at this point, users contains those who've already been notified</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">users</span>.<span class="ruby-identifier">empty?</span>
@@ -714,7 +729,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="after_update-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 78</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 71</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_update</span>(<span class="ruby-identifier">comment</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">edited_at_changed?</span>
     <span class="ruby-identifier">users</span> = []
@@ -755,12 +770,7 @@ that user a notification email</p>
 
     <span class="ruby-comment"># send notification to the owner(s) of the ultimate parent, who can be users or admins</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">AdminPost</span>)
-      <span class="ruby-identifier">admins</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_owners</span>
-      <span class="ruby-identifier">admins</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">admin</span><span class="ruby-operator">|</span>
-        <span class="ruby-comment"># TODO: comments should be able to belong to an admin officially</span>
-        <span class="ruby-comment"># unless admin == comment.comment_owner</span>
-        <span class="ruby-constant">AdminMailer</span>.<span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">admin</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
-      <span class="ruby-keyword">end</span>
+      <span class="ruby-constant">AdminMailer</span>.<span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-comment"># at this point, users contains those who've already been notified</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">users</span>.<span class="ruby-identifier">empty?</span>
@@ -815,7 +825,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="add_feedback_to_inbox-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 148</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 136</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_feedback_to_inbox</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">comment</span>)
   <span class="ruby-identifier">new_feedback</span> = <span class="ruby-identifier">user</span>.<span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">build</span>
   <span class="ruby-identifier">new_feedback</span>.<span class="ruby-identifier">feedback_comment_id</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>
@@ -854,7 +864,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="notify_user_by_email-3F-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 166</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 154</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_user_by_email?</span>(<span class="ruby-identifier">user</span>)
   <span class="ruby-identifier">user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span> ( <span class="ruby-identifier">user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:true</span> <span class="ruby-operator">:</span>
     <span class="ruby-operator">!</span>(<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">comment_emails_off?</span>) )
@@ -885,7 +895,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="notify_user_by_inbox-3F-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 171</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 159</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_user_by_inbox?</span>(<span class="ruby-identifier">user</span>)
   <span class="ruby-identifier">user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span>
     <span class="ruby-operator">!</span>(<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">comment_inbox_off?</span>)
@@ -916,7 +926,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="notify_user_of_own_comments-3F-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 176</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 164</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_user_of_own_comments?</span>(<span class="ruby-identifier">user</span>)
   <span class="ruby-identifier">user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span>
     <span class="ruby-operator">!</span>(<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">comment_copy_to_self_off?</span>)
@@ -947,7 +957,7 @@ that user a notification email</p>
 
           
           <div class="method-source-code" id="update_feedback_in_inbox-source">
-            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 154</span>
+            <pre><span class="ruby-comment"># File app/models/comment_observer.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_feedback_in_inbox</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">comment</span>)
   <span class="ruby-keyword">if</span> (<span class="ruby-identifier">edited_feedback</span> = <span class="ruby-identifier">user</span>.<span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">find_by_feedback_comment_id</span>(<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>))
     <span class="ruby-identifier">edited_feedback</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:read</span>, <span class="ruby-keyword">false</span>)

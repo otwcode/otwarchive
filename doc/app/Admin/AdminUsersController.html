@@ -111,6 +111,20 @@
 
   <ul class="link-list">
   
+    <li><a href="../Admin.html">Admin</a>
+  
+    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="../Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="../Static.html">Static</a>
   
     <li><a href="../Static/BaseController.html">Static::BaseController</a>
@@ -125,23 +139,17 @@
   
     <li><a href="../Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="../Admin.html">Admin</a>
-  
-    <li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="../Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="../Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="../Challenge.html">Challenge</a>
   
     <li><a href="../Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="../Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="../Opendoors.html">Opendoors</a>
+  
+    <li><a href="../Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="../Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="../StoryParser.html">StoryParser</a>
   
@@ -359,6 +367,8 @@
   
     <li><a href="../KudosController.html">KudosController</a>
   
+    <li><a href="../KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="../Language.html">Language</a>
   
     <li><a href="../LanguagesController.html">LanguagesController</a>
@@ -437,6 +447,8 @@
   
     <li><a href="../RedirectController.html">RedirectController</a>
   
+    <li><a href="../RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="../RelatedWork.html">RelatedWork</a>
   
     <li><a href="../RelatedWorksController.html">RelatedWorksController</a>
@@ -474,6 +486,8 @@
     <li><a href="../SkinsController.html">SkinsController</a>
   
     <li><a href="../SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="../StatCounter.html">StatCounter</a>
   
     <li><a href="../StaticSweeper.html">StaticSweeper</a>
   
@@ -529,6 +543,10 @@
   
     <li><a href="../TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="../UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="../UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="../UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="../UrlFormatValidator.html">UrlFormatValidator</a>
@@ -558,6 +576,10 @@
     <li><a href="../WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="../Work.html">Work</a>
+  
+    <li><a href="../WorkLink.html">WorkLink</a>
+  
+    <li><a href="../WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="../WorkObserver.html">WorkObserver</a>
   
@@ -624,10 +646,10 @@
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activate</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">active?</span>
     <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_ACTIVATE</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Manually Activated'</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>})
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activated'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User Account Activated&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activated'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User Account Activated&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activation_failed'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Attempt to activate account failed.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activation_failed'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Attempt to activate account failed.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -796,7 +818,7 @@
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-comment"># send synchronously to avoid getting caught in mail queue</span>
   <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver!</span> 
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activation_sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Activation email sent&quot;</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activation_sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Activation email sent&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- send_activation-source -->
@@ -841,12 +863,12 @@
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Who did you want to notify?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Who did you want to notify?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:notify</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:subject</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:subject</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please enter a subject.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please enter a subject.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:notify</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@subject</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:subject</span>]
@@ -854,7 +876,7 @@
 
   <span class="ruby-comment"># We need to use content because otherwise html will be stripped</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:content</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:content</span>].<span class="ruby-identifier">blank?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What message did you want to send?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What message did you want to send?&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:notify</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:content</span>]
@@ -866,7 +888,7 @@
 
   <span class="ruby-constant">AdminMailer</span>.<span class="ruby-identifier">archive_notification</span>(<span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">login</span>, <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:id</span>), <span class="ruby-ivar">@subject</span>, <span class="ruby-ivar">@message</span>).<span class="ruby-identifier">deliver</span>
 
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Notification sent to %{count} user(s).&quot;</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">size</span>)
+  <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Notification sent to %{count} user(s).&quot;</span>, <span class="ruby-value">:count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">size</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:notify</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- send_notification-source -->
@@ -935,26 +957,26 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">admin_update</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user</span>])
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'User was successfully updated.'</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'User was successfully updated.'</span>)
       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'There was an error updating user %{name}'</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'There was an error updating user %{name}'</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_action</span>]
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_login</span>])
     <span class="ruby-ivar">@admin_note</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_note</span>]
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@admin_note</span>.<span class="ruby-identifier">blank?</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You must include notes in order to perform this action&quot;</span>)
+      <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You must include notes in order to perform this action&quot;</span>)
       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'warn'</span>
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_WARN</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@admin_note</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>})
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Warning was recorded&quot;</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Warning was recorded&quot;</span>)
         <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
       <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'suspend'</span>
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:suspend_days</span>].<span class="ruby-identifier">blank?</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please enter the number of days for which the user should be suspended.&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please enter the number of days for which the user should be suspended.&quot;</span>)
           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
         <span class="ruby-keyword">else</span>
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended</span> = <span class="ruby-keyword">true</span>
@@ -962,10 +984,10 @@
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended_until</span> = <span class="ruby-ivar">@suspension_days</span>.<span class="ruby-identifier">days</span>.<span class="ruby-identifier">from_now</span>
           <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended_until</span>.<span class="ruby-identifier">blank?</span>
             <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_SUSPEND</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@admin_note</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">:enddate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended_until</span>})
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User has been temporarily suspended&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User has been temporarily suspended&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User could not be suspended&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;User could not be suspended&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
@@ -973,10 +995,10 @@
         <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">banned</span> = <span class="ruby-keyword">true</span>
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">banned?</span>
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_BAN</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@admin_note</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>})
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User has been permanently suspended&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User has been permanently suspended&quot;</span>)
           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
         <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User could not be permanently suspended&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User could not be permanently suspended&quot;</span>)
           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'unsuspend'</span>
@@ -985,14 +1007,14 @@
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended_until</span> = <span class="ruby-keyword">nil</span>
           <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">suspended_until</span>.<span class="ruby-identifier">blank?</span>
             <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_UNSUSPEND</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@admin_note</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>})
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension has been lifted&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension has been lifted&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension could not be lifted&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension could not be lifted&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'not_suspended'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User had not been suspended&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'not_suspended'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User had not been suspended&quot;</span>)
           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:admin_action</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'unban'</span>
@@ -1000,14 +1022,14 @@
           <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">banned</span> = <span class="ruby-keyword">false</span>
           <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">save</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@user</span>.<span class="ruby-identifier">banned?</span>
             <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_UNSUSPEND</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@admin_note</span>, <span class="ruby-value">:admin_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">id</span>})
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension has been lifted&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension has been lifted&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension could not be lifted&quot;</span>)
+            <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'error_unsuspend'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Suspension could not be lifted&quot;</span>)
             <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
           <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'not_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User had not been permanently suspended&quot;</span>)
+          <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'not_banned'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;User had not been permanently suspended&quot;</span>)
           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">end</span>

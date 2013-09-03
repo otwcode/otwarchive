@@ -9,6 +9,10 @@ class CollectionsController < ApplicationController
   
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
+    unless @collection
+      flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
+      redirect_to collections_path and return
+    end
   end
 
   def index
@@ -17,7 +21,7 @@ class CollectionsController < ApplicationController
     elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
       @collections = @collection.children.by_title.paginate(:page => params[:page])
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-      @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
+      @collections = @user.maintained_collections.by_title.paginate(:page => params[:page])
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
@@ -39,14 +43,18 @@ class CollectionsController < ApplicationController
   # display challenges that are currently taking signups
   def list_challenges
     @hide_dashboard = true
-    @challenge_collections = (Collection.ge_signups_open.unmoderated.not_closed.limit(15) + Collection.pm_signups_open.unmoderated.not_closed.limit(15))    
+    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))    
   end
-
+  
+  def list_ge_challenges
+    @challenge_collections = Collection.signup_open("GiftExchange").limit(15) 
+  end
+  
+  def list_pm_challenges
+    @challenge_collections = Collection.signup_open("PromptMeme").limit(15) 
+  end
+  
   def show
-    unless @collection
-  	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
-      redirect_to collections_path and return
-    end
     @page_subtitle = @collection.title
     
     if @collection.collection_preference.show_random? || params[:show_random]

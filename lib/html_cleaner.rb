@@ -33,6 +33,7 @@ module HtmlCleaner
   end
 
   class TagStack < Array
+    include HtmlCleaner
 
     def inside_paragraph?
       flatten.include?("p")
@@ -48,6 +49,7 @@ module HtmlCleaner
         tags.each do |tag, attributes|
           next if result == "" && tag != "p"
           next if ignore_tag?(tag)
+          result = "" if tag == "p"
           result += open_tag(tag, attributes)
         end
       end
@@ -163,8 +165,8 @@ module HtmlCleaner
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end   
-      value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(value)), 
-                             Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
+      value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(value), 
+                             Sanitize::Config::ARCHIVE.merge(:transformers => transformers)))
       doc = Nokogiri::HTML::Document.new
       doc.encoding = "UTF-8"
       value = doc.fragment(value).to_xhtml
@@ -284,6 +286,15 @@ module HtmlCleaner
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
       out_html += open_tag(node)
 
+      # If we are the root node, pre-emptively open a paragraph
+      if node.name == "myroot"
+        out_html += stack.add_p
+      end
+
+      if no_break_before_after_tag?(node.name) and !stack.last.include?("p")
+        out_html += stack.add_p
+      end
+
     else
       text = node.to_s
 
@@ -352,7 +363,7 @@ module HtmlCleaner
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
     # Remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
-    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)/, "")
+    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)|(\A<myroot\/>\Z)/, "")
     out_html
   end
 

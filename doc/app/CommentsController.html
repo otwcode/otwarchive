@@ -143,6 +143,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -157,23 +171,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -391,6 +399,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -469,6 +479,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -506,6 +518,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -561,6 +575,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -590,6 +608,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -650,7 +672,7 @@
 
           
           <div class="method-source-code" id="add_comment-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 249</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 245</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_comment</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -688,7 +710,7 @@
 
           
           <div class="method-source-code" id="add_comment_reply-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 261</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 257</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_comment_reply</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -737,7 +759,7 @@
 
           
           <div class="method-source-code" id="approve-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 210</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">approve</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">mark_as_ham!</span>
@@ -769,7 +791,7 @@
 
           
           <div class="method-source-code" id="cancel_comment-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 284</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 280</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
@@ -806,7 +828,7 @@
 
           
           <div class="method-source-code" id="cancel_comment_delete-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 326</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 322</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_delete</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -844,7 +866,7 @@
 
           
           <div class="method-source-code" id="cancel_comment_edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 306</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 302</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_edit</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -878,7 +900,7 @@
 
           
           <div class="method-source-code" id="cancel_comment_reply-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 295</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 291</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_reply</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
@@ -949,7 +971,7 @@ owned comments!</p>
             <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_permission_to_edit</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@comment</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">count_all_comments</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comments with replies cannot be edited'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comments with replies cannot be edited'</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;HTTP_REFERER&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1014,7 +1036,7 @@ owned comments!</p>
             <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 124</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to comment on?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to comment on?&quot;</span>)
     <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>])
@@ -1025,12 +1047,12 @@ owned comments!</p>
     <span class="ruby-comment"># First, try saving the comment</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">save</span>
       <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">approved?</span>
-        <span class="ruby-comment"># save user's name/email if not logged in</span>
+        <span class="ruby-comment"># save user's name/email if not logged in, truncated in case of something really long and wacky</span>
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">nil?</span>
-          <span class="ruby-identifier">session</span>[<span class="ruby-value">:comment_name</span>] = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">name</span>
-          <span class="ruby-identifier">session</span>[<span class="ruby-value">:comment_email</span>] = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">email</span>
+          <span class="ruby-identifier">cookies</span>[<span class="ruby-value">:comment_name</span>] = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>]
+          <span class="ruby-identifier">cookies</span>[<span class="ruby-value">:comment_email</span>] = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">email</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>]
         <span class="ruby-keyword">end</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comment created!'</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comment created!'</span>)
         <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
             <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rinbox/</span>)
@@ -1050,15 +1072,11 @@ owned comments!</p>
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">else</span>
         <span class="ruby-comment"># this shouldn't come up any more</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Sorry, but this comment looks like spam to us.'</span>)
+        <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Sorry, but this comment looks like spam to us.'</span>)
         <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">else</span>
-      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There was a problem saving your comment:&quot;</span>)
-      <span class="ruby-identifier">msg</span> = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">msg</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{msg}&quot;</span>}.<span class="ruby-identifier">join</span>
-      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">blank?</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{msg}&quot;</span>
-      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">setflash</span>
       <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new&quot;</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -1089,7 +1107,7 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="delete_comment-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 314</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 310</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_comment</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
@@ -1127,20 +1145,20 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 193</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 189</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">parent</span> = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>
   <span class="ruby-identifier">parent_comment</span> = <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">reply_comment?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">commentable</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">destroy_or_mark_deleted</span>
     <span class="ruby-comment"># something went wrong?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that comment.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't delete that comment.&quot;</span>)
     <span class="ruby-identifier">redirect_to_comment</span>(<span class="ruby-ivar">@comment</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">parent_comment</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comment deleted.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comment deleted.&quot;</span>)
     <span class="ruby-identifier">redirect_to_comment</span>(<span class="ruby-identifier">parent_comment</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comment deleted.&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comment deleted.&quot;</span>)
     <span class="ruby-identifier">redirect_to_all_comments</span>(<span class="ruby-identifier">parent</span>, {<span class="ruby-value">:show_comments</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1203,7 +1221,7 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="hide_comments-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 239</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 235</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_comments</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
@@ -1361,7 +1379,7 @@ owned comments!</p>
             <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to comment on?&quot;</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What did you want to comment on?&quot;</span>)
     <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">root_path</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">new</span>
@@ -1409,7 +1427,7 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="reject-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 216</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 212</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reject</span>
  <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
  <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">mark_as_spam!</span>
@@ -1474,7 +1492,7 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="show_comments-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 222</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 218</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_comments</span>
   <span class="ruby-ivar">@comments</span> = <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -1517,11 +1535,11 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 178</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 174</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>][<span class="ruby-value">:edited_at</span>] = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>])
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comment was successfully updated.'</span>)
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comment was successfully updated.'</span>)
     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to_comment</span>(<span class="ruby-ivar">@comment</span>) }
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> <span class="ruby-comment"># updating the comment in place</span>
@@ -1562,7 +1580,7 @@ owned comments!</p>
 
           
           <div class="method-source-code" id="redirect_to_all_comments-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 368</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 364</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect_to_all_comments</span>(<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">default_options</span> = {<span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;comments&quot;</span>}
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
@@ -1615,7 +1633,7 @@ necessary to display it</p>
 
           
           <div class="method-source-code" id="redirect_to_comment-source">
-            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 342</span>
+            <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 338</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect_to_comment</span>(<span class="ruby-identifier">comment</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">depth</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">COMMENT_THREAD_MAX_DEPTH</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)

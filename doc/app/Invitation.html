@@ -101,6 +101,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -115,23 +129,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -349,6 +357,8 @@
   
     <li><a href="./KudosController.html">KudosController</a>
   
+    <li><a href="./KudosSweeper.html">KudosSweeper</a>
+  
     <li><a href="./Language.html">Language</a>
   
     <li><a href="./LanguagesController.html">LanguagesController</a>
@@ -427,6 +437,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -464,6 +476,8 @@
     <li><a href="./SkinsController.html">SkinsController</a>
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StatCounter.html">StatCounter</a>
   
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
@@ -519,6 +533,10 @@
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
   
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
+  
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
     <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
@@ -548,6 +566,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -611,7 +633,7 @@ href="http://railscasts.com/episodes/124-beta-invitations">railscasts.com/episod
 
           
           <div class="method-source-code" id="grant_all-source">
-            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 25</span>
+            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">grant_all</span>(<span class="ruby-identifier">total</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">20</span>
   <span class="ruby-constant">User</span>.<span class="ruby-identifier">valid</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span><span class="ruby-operator">|</span>
@@ -648,7 +670,7 @@ href="http://railscasts.com/episodes/124-beta-invitations">railscasts.com/episod
 
           
           <div class="method-source-code" id="grant_empty-source">
-            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 37</span>
+            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">grant_empty</span>(<span class="ruby-identifier">total</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">total</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">20</span>
   <span class="ruby-constant">User</span>.<span class="ruby-identifier">valid</span>.<span class="ruby-identifier">out_of_invites</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span><span class="ruby-operator">|</span>
@@ -691,7 +713,7 @@ href="http://railscasts.com/episodes/124-beta-invitations">railscasts.com/episod
 
           
           <div class="method-source-code" id="mark_as_redeemed-source">
-            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 48</span>
+            <pre><span class="ruby-comment"># File app/models/invitation.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_as_redeemed</span>(<span class="ruby-identifier">user</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitee</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">redeemed_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
@@ -725,8 +747,9 @@ href="http://railscasts.com/episodes/124-beta-invitations">railscasts.com/episod
           <div class="method-source-code" id="recipient_is_not_registered-source">
             <pre><span class="ruby-comment"># File app/models/invitation.rb, line 9</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">recipient_is_not_registered</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitee_email</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitee_email</span>)
-    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:invitee_email</span>, <span class="ruby-identifier">t</span>(<span class="ruby-string">'already_registered'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'is already being used by an account holder.'</span>)
+  <span class="ruby-comment"># we allow invitations to be sent to existing users if the purpose is to claim an external author</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitee_email</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitee_email</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author</span>
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:invitee_email</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">'is already being used by an account holder.'</span>)
     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

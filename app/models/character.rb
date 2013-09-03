@@ -1,6 +1,7 @@
 class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
+  index_name Tag.index_name
 
   # Types of tags to which a character tag can belong via common taggings or meta taggings
   def parent_types
