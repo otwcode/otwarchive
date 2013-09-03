@@ -73,7 +73,7 @@ Given /^I am logged in as a Skins Admin$/ do
   Given "I am logged out"
   skinsadmin = User.find_by_login("skinsadmin")
   if skinsadmin.blank?
-    skinsadmin = Factory.create(:user, :login => "skinsadmin", :password => "skinsadmin", :email => "skinsadmin@example.org")
+    skinsadmin = FactoryGirl.create(:user, :login => "skinsadmin", :password => "skinsadmin", :email => "skinsadmin@example.org")
     skinsadmin.skins_admin = '1'
   end
   visit login_path
