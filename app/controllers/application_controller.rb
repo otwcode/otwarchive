@@ -343,7 +343,7 @@ public
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
       redirect_to login_path(:restricted => true)
     elsif @check_visibility_of.is_a? Skin
-      access_denied unless logged_in_as_admin? || current_user.is_skins_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
+      access_denied unless logged_in_as_admin? || permit?("skins_admin") || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
       is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) ||
                   (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
