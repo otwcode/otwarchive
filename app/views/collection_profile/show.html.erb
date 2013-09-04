@@ -19,20 +19,22 @@
         <dt><%= ts("Contact: ") %></dt>
         <dd><%= @collection.email %></dd>
       <% end %>
-      <% if @collection.challenge_type.present? && @collection.challenge_type == "GiftExchange" && !@collection.challenge.offer_restriction.owned_tag_sets.empty? %>
-        <dt><%= @collection.challenge.offer_restriction.owned_tag_sets.count > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
-        <dd>
-          <ul class="tag-sets commas">
-            <%= (@collection.challenge.offer_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
-          </ul>
-        </dd>
-      <% elsif @collection.challenge_type.present? && @collection.challenge_type == "PromptMeme" && !@collection.challenge.request_restriction.owned_tag_sets.empty? %>
-        <dt><%= @collection.challenge.request_restriction.owned_tag_sets.count > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
-        <dd>
-          <ul class="tag-sets commas">
-            <%= (@collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
-          </ul>
-        </dd>
+      <% if @collection.challenge_type.present? %>
+        <% if  @collection.challenge_type == "GiftExchange" && !@collection.challenge.offer_restriction.owned_tag_sets.empty? %>
+          <dt><%= @collection.challenge.offer_restriction.owned_tag_sets.count > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dd>
+            <ul class="commas">
+              <%= (@collection.challenge.offer_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
+            </ul>
+          </dd>
+        <% elsif @collection.challenge_type == "PromptMeme" && !@collection.challenge.request_restriction.owned_tag_sets.empty? %>
+          <dt><%= @collection.challenge.request_restriction.owned_tag_sets.count > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dd>
+            <ul class="commas">
+              <%= (@collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
+            </ul>
+          </dd>
+        <% end %>
       <% end %>
 
       <% if @collection.challenge %>
