@@ -264,6 +264,15 @@ Feature: Gift Exchange Challenge
   Then I should see "Tag sets:"
     And I should see "Standard Challenge Tags"
     And I should see "Angela Lansbury"
+  When I edit settings for "Cabbot Cove Remixes" challenge
+    And I check "Standard Challenge Tags"
+    And I check "Angela Lansbury"
+    And I press "Update"
+  Then I should not see "Tag sets:"
+    And I should not see "Tag set:"
+    And I should not see "Standard Challenge Tags"
+    And I should not see "Angela Lansbury"
+
 
 
 
