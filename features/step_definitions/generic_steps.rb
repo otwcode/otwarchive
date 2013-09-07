@@ -82,6 +82,10 @@ Then /^I should see a save error message$/ do
   step %{I should see "We couldn't save"}
 end
 
+Then /^I should see a success message$/ do
+  step %{I should see "success"}
+end
+
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.all(text)
