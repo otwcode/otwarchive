@@ -92,11 +92,13 @@ Feature: creating and editing tag sets
     And I nominate fandom "Foo [Bar]" and character "Yar [Bar]" in "Nominated Tags"
     And I review nominations for "Nominated Tags"
   When I check "fandom_approve_Foo__LBRACKETBar_RBRACKET"
-    And I check "character_approve_Yar__LBRACKETBar_RBRACKET"
+    And I check "character_reject_Yar__LBRACKETBar_RBRACKET"
     And I submit
-    And I go to the "Nominated Tags" tag set page
+  Then I should see "Successfully added to set: Foo [Bar]"
+    And I should see "Successfully rejected: Yar [Bar]"
+  When I go to the "Nominated Tags" tag set page
   Then I should see "Foo [Bar]"
-    And I should see "Yar [Bar]"
+    And I should not see "Yar [Bar]"
 
   Scenario: Tags with Unicode characters should work
   Given I nominate and approve tags with Unicode characters in "Nominated Tags"

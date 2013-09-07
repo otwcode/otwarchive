@@ -18,9 +18,9 @@
       <span class="yes">+</span>
         <%= check_box_tag "#{tag_type}_approve_#{tagname}", 1, params["#{tag_type}_approve_#{tagname}"] %>
       <% end %>
-      <%= label_tag "#{tag_type}_reject_#{nom.tagname}", :class => "action" do %>
+      <%= label_tag "#{tag_type}_reject_#{tagname}", :class => "action" do %>
         <span class="no">x</span>
-        <%= check_box_tag "#{tag_type}_reject_#{nom.tagname}", 1, params["#{tag_type}_reject_#{nom.tagname}"] %>
+        <%= check_box_tag "#{tag_type}_reject_#{tagname}", 1, params["#{tag_type}_reject_#{tagname}"] %>
       <% end %>
     </dd>
 
