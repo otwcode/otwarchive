@@ -80,6 +80,24 @@ Feature: Gift Exchange Challenge
   When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
   
+  
+  Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I edit settings for "Awesome Gift Exchange" challenge
+    And I check "Optional Tags?"
+    And I submit
+  When I am logged in as "myname1"
+    And I sign up for "Awesome Gift Exchange" with combination A
+    And I follow "Edit Sign-up"
+    fill_in("Optional Tags:", :with => "M/M, Mature")
+    And I submit
+  Then I should see "Mature"
+  When I follow "Edit Sign-up"
+  Then I should see "Mature"
+  When I submit
+  Then I should see "Mature"
+  
   Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
