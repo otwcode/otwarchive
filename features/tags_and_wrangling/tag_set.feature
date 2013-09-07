@@ -1,3 +1,4 @@
+# encoding: utf-8
 @tag_sets
 Feature: creating and editing tag sets
   
@@ -84,6 +85,24 @@ Feature: creating and editing tag sets
   Then I should see "Successfully rejected: Floobry"
     And I should not find "Floobry" within ".tagset"
     And I should not see "Barblah"
+    
+  Scenario: Tags with brackets should work with the replacement
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+    And I nominate fandom "Foo [Bar]" and character "Yar [Bar]" in "Nominated Tags"
+    And I review nominations for "Nominated Tags"
+  When I check "fandom_approve_Foo__LBRACKETBar_RBRACKET"
+    And I check "character_approve_Yar__LBRACKETBar_RBRACKET"
+    And I submit
+    And I go to the "Nominated Tags" tag set page
+  Then I should see "Foo [Bar]"
+    And I should see "Yar [Bar]"
+
+  Scenario: Tags with Unicode characters should work
+  Given I nominate and approve tags with Unicode characters in "Nominated Tags"
+    And I am logged in as "tagsetter"
+    And I go to the "Nominated Tags" tag set page
+  Then I should see the tags with Unicode characters
   
   # ASSOCIATIONS
   Scenario: If a nominated tag and its parent are approved they should appear on the associations page

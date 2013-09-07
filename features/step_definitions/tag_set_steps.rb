@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 When /^I follow the add new tag ?set link$/ do
   step %{I follow "New Tag Set"}
@@ -94,5 +95,29 @@ When /^I nominate and approve fandom "([^\"]*)" and character "([^\"]*)" in "([^
   step %{I should see "Successfully added to set: #{char}"}
 end
 
+When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |title|
+  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
+  step %{I am logged in as "tagsetter"}
+  step %{I set up the nominated tag set "#{title}" with 7 fandom noms and 0 character noms}
+  step %{I am logged in as "nominator"}
+  step %{I go to the "#{title}" tag set page}
+  step %{I follow "Nominate"}
+  tags.each_with_index do |tag, i|
+    fill_in("Fandom #{i+1}", :with => tag)
+  end
+  step %{I submit}
+  step %{I should see a success message}
+  step %{I review nominations for "#{title}"}
+  tags.each do |tag|
+    step %{I check "fandom_approve_#{tag}"}
+  end
+  step %{I submit}
+  step %{I should see "Successfully added to set"}
+end
 
-
+When /^I should see the tags with Unicode characters/ do
+  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
+  tags.each do |tag|
+    step %{I should see "#{tag}"}
+  end
+end
