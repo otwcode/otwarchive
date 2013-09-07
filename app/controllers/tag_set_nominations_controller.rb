@@ -288,6 +288,8 @@ class TagSetNominationsController < ApplicationController
         type = $1
         action = $2
         name = $3
+        # fix back the tagname if it has [] brackets -- see _review_individual_nom for details
+        name = name.gsub('#LBRACKET', '[').gsub('#RBRACKET', ']')
         if TagSet::TAG_TYPES_INITIALIZABLE.include?(type)
           # we're safe
           case action
