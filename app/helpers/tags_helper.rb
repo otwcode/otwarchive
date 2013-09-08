@@ -44,7 +44,7 @@ module TagsHelper
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
         sign_up_fandoms = tag.name
-      elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
+      elsif @tag.is_user_defined? && !tag.fandoms.blank?
         sign_up_fandoms = tag.fandoms.collect(&:name).join(', ')
       end
       link_to "Sign Up", tag_wranglers_path(:sign_up_fandoms => sign_up_fandoms)
@@ -92,7 +92,15 @@ module TagsHelper
 
   # Used on tag edit page
   def tag_category_name(tag_type)
-    tag_type == "Merger" ? "Synonyms" : tag_type.pluralize
+    if Kernel.const_defined?(tag_type)
+      # Singularize as the parameters are sometimes pluralized... 
+      # except Media.singularize = Medium in Ruby so that has to be handled manually
+      class_object = Kernel.const_get(tag_type.downcase=="media" ? "Media" : tag_type.singularize.titleize)
+      class_display_name = class_object::NAME
+    else
+      class_display_name = tag_type
+    end
+    tag_type == "Merger" ? "Synonyms" : class_display_name.pluralize
   end
 
   # Should the current user be able to access tag wrangling pages?
@@ -158,7 +166,7 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag_category_name(tag.type).singularize + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
       span.html_safe
     end
   end
