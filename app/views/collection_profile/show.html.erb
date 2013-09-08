@@ -20,7 +20,7 @@
         <dd><%= @collection.email %></dd>
       <% end %>
       <% if @collection.challenge.present? %>
-        <%= tag_sets_counted = tag_set_count(@collection) %>
+        <% tag_sets_counted = tag_set_count(@collection) %>
         <% if tag_sets_counted.present? %>
           <dt><%= tag_sets_counted > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
           <dd>
