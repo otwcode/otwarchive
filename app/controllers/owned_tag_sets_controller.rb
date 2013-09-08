@@ -44,7 +44,7 @@ class OwnedTagSetsController < ApplicationController
         @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
       else
         # show a random selection 
-        @tag_sets = @tag_sets.order("RAND()").limit(25)
+        @tag_sets = @tag_sets.order("created_at DESC")
       end
     end
     @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
