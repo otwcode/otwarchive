@@ -29,7 +29,8 @@ class OwnedTagSetsController < ApplicationController
   ### ACTIONS
 
   def index
-    if @user
+    if params[:user_id]
+      @user = User.find_by_login params[:user_id]
       @tag_sets = OwnedTagSet.owned_by(@user).visible
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
