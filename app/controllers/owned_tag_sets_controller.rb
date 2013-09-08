@@ -29,7 +29,8 @@ class OwnedTagSetsController < ApplicationController
   ### ACTIONS
 
   def index
-    if @user
+    if params[:user_id]
+      @user = User.find_by_login params[:user_id]
       @tag_sets = OwnedTagSet.owned_by(@user).visible
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
@@ -44,7 +45,7 @@ class OwnedTagSetsController < ApplicationController
         @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
       else
         # show a random selection 
-        @tag_sets = @tag_sets.order("RAND()").limit(25)
+        @tag_sets = @tag_sets.order("created_at DESC")
       end
     end
     @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
