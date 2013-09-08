@@ -21,6 +21,7 @@ Feature: Orphan work
     When I choose "Take my pseud off as well"
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
+      And I follow "Bookmarks (0)"
     When I follow "Works (0)"
     Then I should not see "Shenanigans"
     When I view the work "Shenanigans"
