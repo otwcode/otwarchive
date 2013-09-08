@@ -1,4 +1,4 @@
-DEFAULT_CSS = "\"#title { text-decoration: blink;}\""
+DEFAULT_CSS = "#title { text-decoration: blink;}"
 
 Given /^basic skins$/ do
   assert Skin.default
