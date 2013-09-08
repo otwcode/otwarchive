@@ -28,7 +28,7 @@ Then /^show me the sidebar$/ do
 end
 
 Then /^I should see errors/ do
-  assert find("div.error").node
+  assert find("div.error")
 end
 
 Then /^show me the form$/ do

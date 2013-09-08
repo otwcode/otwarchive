@@ -88,7 +88,7 @@ Feature: Reading count
     And I view the work "Testy"
   Then I should see "Mark for later"
   When I follow "Mark for later"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
@@ -96,7 +96,7 @@ Feature: Reading count
   When I view the work "Testy"
   Then I should see "Mark as read"
   When I follow "Mark as read"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
@@ -155,7 +155,7 @@ Feature: Reading count
     And I follow "Next Chapter"
   Then I should see "Second blah blah"
   When I follow "Mark for later"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
