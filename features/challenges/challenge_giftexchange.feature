@@ -87,16 +87,16 @@ Feature: Gift Exchange Challenge
     And I edit settings for "Awesome Gift Exchange" challenge
     And I check "Optional Tags?"
     And I submit
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "myname1"
     And I sign up for "Awesome Gift Exchange" with combination A
     And I follow "Edit Sign-up"
-    fill_in("Optional Tags:", :with => "M/M, Mature")
+    And I fill in "Optional Tags:" with "My extra tag, Something else weird" 
     And I submit
-  Then I should see "Mature"
+  Then I should see "Something else weird"
   When I follow "Edit Sign-up"
-  Then I should see "Mature"
-  When I submit
-  Then I should see "Mature"
+    And I submit
+  Then I should see "Something else weird"
   
   Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
