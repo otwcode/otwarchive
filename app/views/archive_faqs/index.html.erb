@@ -2,8 +2,16 @@
 <% if logged_in_as_admin? %>
   <%= render :partial => "admin_index" %>
 <% else %>
+  <div class="primary header module">
   <h2 class="heading"><%= ts("Archive FAQ") %></h2>
 <!--/descriptions-->
+
+    <!--subnav-->
+    <ul class="navigation actions" role="navigation">
+      <li><%= render 'filters' %></li>
+    </ul>
+    <!--/subnav-->
+  </div>
 
 <!--main content-->
   <div class="admin userstuff">
