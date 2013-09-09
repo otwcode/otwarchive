@@ -6,6 +6,8 @@ class ArchiveFaq < ActiveRecord::Base
 
   attr_protected :content_sanitizer_version
 
+  scope :non_translated, where('translated_faq_id IS NULL')
+
   def self.reorder(positions)
     SortableList.new(self.find(:all, :order => 'position ASC')).reorder_list(positions)
   end

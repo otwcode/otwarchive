@@ -7,6 +7,12 @@ class ArchiveFaqsController < ApplicationController
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
 
+    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
+      @archive_faqs = @archive_faqs.where(:language_id => @language.id)
+    else
+      @archive_faqs = @archive_faqs.non_translated
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @archive_faqs }
@@ -28,6 +34,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/new.xml
   def new
     @archive_faq = ArchiveFaq.new
+    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
     1.times { @archive_faq.questions.build}
     respond_to do |format|
       format.html # new.html.erb
@@ -38,6 +45,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1/edit
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
+    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
   end
 
   # GET /archive_faqs/manage
