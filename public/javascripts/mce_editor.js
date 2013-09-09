@@ -8,6 +8,7 @@ tinyMCE.init({
 	paste_insert_word_content_callback : "convertWord",
 	paste_auto_cleanup_on_paste : true,
     extended_valid_elements : "span[!class]",
+
     // TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
 	// because we're stripping those tags out.
 	inline_styles : false,
