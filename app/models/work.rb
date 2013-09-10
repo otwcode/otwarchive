@@ -55,45 +55,45 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :ratings, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Rating'"
-  has_many :categories,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :categories, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Category'"
-  has_many :warnings,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :warnings, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Warning'"
-  has_many :fandoms,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :fandoms, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Fandom'"
-  has_many :relationships,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :relationships, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Relationship'"
-  has_many :characters,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :characters, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Character'"
-  has_many :freeforms,
-    :through => :taggings,
-    :source => :tagger,
+  has_many :freeforms, 
+    :through => :taggings, 
+    :source => :tagger, 
     :source_type => 'Tag',
     :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Freeform'"
@@ -110,16 +110,16 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-
+  
   # statistics
-  has_many :work_links, :dependent => :destroy
+  has_many :work_links, :dependent => :destroy      
   has_one :stat_counter, :dependent => :destroy
   after_create :create_stat_counter
   def create_stat_counter
     counter = self.build_stat_counter
     counter.save
   end
-
+  
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -171,7 +171,7 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     end
   end
-
+  
   # Set the authors_to_sort_on value, which should be anon for anon works
   def set_author_sorting
     if self.anonymous?
@@ -236,7 +236,7 @@ class Work < ActiveRecord::Base
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
   end
-
+  
   after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
@@ -246,7 +246,7 @@ class Work < ActiveRecord::Base
   def clean_up_filter_taggings
     FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
   end
-
+  
   after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
@@ -258,11 +258,11 @@ class Work < ActiveRecord::Base
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
   end
-
+  
   ########################################################################
   # RESQUE
   ########################################################################
-
+  
   @queue = :utilities
   # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
@@ -480,7 +480,7 @@ class Work < ActiveRecord::Base
     self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
   end
-
+  
   def recipients
     names = self.gifts.collect(&:recipient)
     unless self.new_recipients.blank?
@@ -490,7 +490,7 @@ class Work < ActiveRecord::Base
     end
     names.join(",")
   end
-
+  
   def save_new_recipients
     unless self.new_recipients.blank?
       self.new_recipients.split(',').each do |name|
@@ -499,7 +499,7 @@ class Work < ActiveRecord::Base
       end
     end
   end
-
+  
   ########################################################################
   # VISIBILITY
   ########################################################################
@@ -536,14 +536,14 @@ class Work < ActiveRecord::Base
     #!self.collection_items.anonymous.empty?
     in_anon_collection?
   end
-
+  
   before_update :bust_anon_caching
   def bust_anon_caching
     if in_anon_collection_changed?
       async(:poke_cached_creator_comments)
     end
   end
-
+  
   # This work's collections and parent collections
   def all_collections
     Collection.where(id: self.collection_ids) || []
@@ -597,7 +597,7 @@ class Work < ActiveRecord::Base
   def published_at
     self.first_chapter.published_at
   end
-
+  
   # ensure published_at date is correct: reset its value for non-backdated works
   # "chapter" arg should be the unsaved session instance of the work's first chapter
   def reset_published_at(chapter)
@@ -608,7 +608,7 @@ class Work < ActiveRecord::Base
       else # pub date may have changed without user's explicitly setting backdate option
         # so reset it to the previous value:
         chapter.published_at = chapter.published_at_was || Date.today
-      end
+      end    
     end
   end
 
@@ -685,11 +685,11 @@ class Work < ActiveRecord::Base
     # so we need to expire them
     async(:poke_cached_comments)
   end
-
+  
   def poke_cached_comments
     self.comments.each { |c| c.touch }
   end
-
+  
   def poke_cached_creator_comments
     self.creator_comments.each { |c| c.touch }
   end
@@ -731,7 +731,7 @@ class Work < ActiveRecord::Base
   def last_chapter
     self.chapters.order('position DESC').first
   end
-
+  
   # Gets the current last posted chapter
   def last_posted_chapter
     self.chapters.posted.order('position DESC').first
@@ -784,7 +784,7 @@ class Work < ActiveRecord::Base
   def remove_outdated_downloads
     FileUtils.rm_rf(self.download_dir)
   end
-
+  
   # spread downloads out by first two letters of authorname
   def download_dir
     "#{Rails.public_path}/#{self.download_folder}"
@@ -792,10 +792,10 @@ class Work < ActiveRecord::Base
 
   # split out so we can use this in works_helper
   def download_folder
-    dl_authors = self.download_authors
+    dl_authors = self.download_authors    
     "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
   end
-
+  
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
     string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
@@ -924,13 +924,13 @@ class Work < ActiveRecord::Base
   # Gets all comments for all chapters in the work
   def find_all_comments
     Comment.where(
-      :parent_type => 'Chapter',
+      :parent_type => 'Chapter', 
       :parent_id => self.chapters.value_of(:id)
     )
   end
 
   # Returns number of comments
-  # Hidden and deleted comments are referenced in the view because of
+  # Hidden and deleted comments are referenced in the view because of 
   # the threading system - we don't necessarily need to
   # hide their existence from other users
   def count_all_comments
@@ -940,23 +940,23 @@ class Work < ActiveRecord::Base
   # returns the top-level comments for all chapters in the work
   def comments
     Comment.where(
-      :commentable_type => 'Chapter',
+      :commentable_type => 'Chapter', 
       :commentable_id => self.chapters.value_of(:id)
     )
   end
-
+  
   # All comments left by the creators of this work
   def creator_comments
     pseud_ids = Pseud.where(user_id: self.pseuds.value_of(:user_id)).value_of(:id)
     find_all_comments.where(pseud_id: pseud_ids)
   end
-
+  
   def guest_kudos_count
     Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
       kudos.by_guest.count
     end
   end
-
+  
   def all_kudos_count
     Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
       kudos.count
@@ -1116,8 +1116,8 @@ class Work < ActiveRecord::Base
   def self.visible(user=User.current_user)
     visible_to_user(user)
   end
-
-  scope :with_filter, lambda { |tag|
+  
+  scope :with_filter, lambda { |tag| 
     select("DISTINCT works.*").
     joins(:filter_taggings).
     where({:filter_taggings => {:filter_id => tag.id}})
@@ -1186,7 +1186,7 @@ class Work < ActiveRecord::Base
     where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
           [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
-
+  
   def self.in_series(series)
     joins(:series).
     where("series.id = ?", series.id)
@@ -1226,7 +1226,7 @@ class Work < ActiveRecord::Base
                 works = owner.filtered_works
               end
             end
-
+    
     # Need to support user + fandom and collection + tag pages
     if options[:fandom_id] || options[:filter_ids]
       id = options[:fandom_id] || options[:filter_ids].first
@@ -1235,7 +1235,7 @@ class Work < ActiveRecord::Base
         works = works.with_filter(tag)
       end
     end
-
+    
     if %w(Pseud User).include?(owner.class.to_s)
       works = works.where(:in_anon_collection => false)
     end
@@ -1286,8 +1286,8 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
-
-
+  
+  
   #############################################################################
   #
   # SEARCH INDEX
@@ -1301,28 +1301,28 @@ class Work < ActiveRecord::Base
     indexes :creator,             :boost => 15
     indexes :revised_at,          :type  => 'date'
   end
-
+  
   def to_indexed_json
     to_json(methods:
-      [ :rating_ids,
-        :warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
+      [ :rating_ids, 
+        :warning_ids, 
+        :category_ids, 
+        :fandom_ids, 
+        :character_ids, 
+        :relationship_ids, 
+        :freeform_ids, 
         :filter_ids,
-        :tag,
-        :pseud_ids,
-        :collection_ids,
-        :hits,
-        :comments_count,
-        :kudos_count,
-        :bookmarks_count,
+        :tag, 
+        :pseud_ids, 
+        :collection_ids, 
+        :hits, 
+        :comments_count, 
+        :kudos_count, 
+        :bookmarks_count, 
         :creator
       ])
   end
-
+  
   # Simple name to make it easier for people to use in full-text search
   def tag
     (tags + filters).uniq.map{ |t| t.name }
@@ -1389,6 +1389,6 @@ class Work < ActiveRecord::Base
       end
     end
     names
-  end
-
+  end  
+    
 end
