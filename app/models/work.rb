@@ -307,6 +307,73 @@ class Work < ActiveRecord::Base
   # end
 
   ########################################################################
+  # MERGE
+  ########################################################################
+  def merge(target_id)
+    equal_chapters = false
+    last_target_chapter_id = 0
+
+    #get target work object
+    target_work = Work.find_by_id(target_id)
+
+    #Loop through kudos for source work and assign them to target work
+    self.kudos.each { |k| k.commentable_id = target_id; k.save }
+
+    #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
+    if self.chapters.count != target_work.chapters.count {equal_chapters = true }
+      self.chapters.each {|c|
+
+        #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
+        target_chapter_id = targetwork.chapters.find_by_position(c.position)
+        c.comments.each { |chapter_comment|
+          chapter_comment.parent_id = target_chapter_id
+          chapter_comment.save
+        }
+      }
+    else
+      last_target_chapter_id = target_work.chapters.last.id
+      self.chapters.each {|c|
+        c.comments.each { |chapter_comment|
+          chapter_comment.parent_id = last_target_chapter_id
+          chapter_comment.content = "Comment for Chapter " + c.position + " " + c.title + " <br>" + chapter_comment.content
+          chapter_comment.save
+        }
+      }
+    end
+    #todo make ar friendly, need to tell it to make sure its a type of work too, in case we want things other then works in collections
+    #update collection_items to point to target work
+    # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
+    temp_collection_items = CollectionItem.find_all_by_item_id(self.id)
+    temp_collection_items.each { |ci|
+    ci.item_id = target_id
+    ci.save
+    }
+    # update readings replace source id with target id
+    temp_readings = Reading.find_by_work_id(self.id)
+    temp_readings.each { |r|
+    r.work_id = target_id
+    r.save }
+
+    #set redirect for source work to target work id
+    self.redirect_work_id = target_id
+
+    #remove creatorship for source
+    self.creatorships.each { |c| c.destroy }
+
+    #destroy chapters for source
+    self.chapters.each {|c| c.destroy }
+
+    #destroy taggings for source
+    self.taggings.each {|tag| tag.destroy }
+
+    #set work to admin hidden
+    self.hidden_by_admin=1
+
+    #save self
+    self.save
+
+  end
+  ########################################################################
   # AUTHORSHIP
   ########################################################################
 
