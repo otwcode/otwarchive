@@ -791,6 +791,12 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
+    #if redirect id > 0 (0 being default value) then get work specified instead
+    #ie. work was merged with another
+    if @work.redirect_work_id > 1
+      params[:id] = @work.redirect_work_id
+      @work = Work.find(@work.redirect_work_id)
+    end
     if @work.nil?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
