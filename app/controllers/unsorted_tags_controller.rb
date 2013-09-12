@@ -25,7 +25,7 @@ class UnsortedTagsController < ApplicationController
       end
       flash[:notice] = ts("Tags were successfully sorted.")
     end
-    redirect_to unsorted_tags_path
+    redirect_to unsorted_tags_path(page: params[:page])
   end
   	
 end
