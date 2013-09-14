@@ -234,6 +234,21 @@ class User < ActiveRecord::Base
     login
   end
 
+  # Parse a string of the "pseud.name (user.login)" format into a user
+  def self.parse_byline_login(byline, options = {})
+    pseud_name = ""
+    login = ""
+    begin
+      if byline.include?("(")
+        pseud_name, login = byline.split('(', 2)
+        pseud_name = pseud_name.strip
+        login = login.strip.chop
+        conditions = ['users.login = ?', login]
+      end
+      User.find(:all, :conditions => conditions)
+    rescue
+    end
+  end
 
   def self.for_claims(claims_ids)    
     joins(:request_claims).
