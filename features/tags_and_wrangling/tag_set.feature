@@ -86,19 +86,30 @@ Feature: creating and editing tag sets
     And I should not find "Floobry" within ".tagset"
     And I should not see "Barblah"
     
-  Scenario: Tags with brackets should work with the replacement
+  Scenario: Tags with brackets should work with replacement
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
-    And I nominate fandom "Foo [Bar]" and character "Yar [Bar]" in "Nominated Tags"
+    And I nominate fandoms "Foo [Bar], Bar [Foo]" and characters "Yar [Bar], Bat [Bar]" in "Nominated Tags"
     And I review nominations for "Nominated Tags"
   When I check "fandom_approve_Foo__LBRACKETBar_RBRACKET"
     And I check "character_reject_Yar__LBRACKETBar_RBRACKET"
+    And I check "fandom_approve_Bar__LBRACKETFoo_RBRACKET"
+    And I check "character_approve_Bat__LBRACKETBar_RBRACKET"
     And I submit
-  Then I should see "Successfully added to set: Foo [Bar]"
+  Then I should see "Successfully added to set: Bar [Foo], Foo [Bar]"
+    And I should see "Successfully added to set: Bat [Bar]"
     And I should see "Successfully rejected: Yar [Bar]"
   When I go to the "Nominated Tags" tag set page
   Then I should see "Foo [Bar]"
+    And I should see "Bar [Foo]"
     And I should not see "Yar [Bar]"
+  When I go to the "Nominated Tags" tag set page
+    And I follow "Review Associations"
+  Then I should see "Bat [Bar] → Bar [Foo]"
+  When I check "Bat [Bar] → Bar [Foo]"
+    And I submit
+  Then I should see "Nominated associations were added"
+    And I should not see "don't seem to be associated"
 
   Scenario: Tags with Unicode characters should work
   Given I nominate and approve tags with Unicode characters in "Nominated Tags"
@@ -128,5 +139,8 @@ Feature: creating and editing tag sets
     And I submit
   Then I should see "Nominated associations were added"
     And I should not see "don't seem to be associated"
+    
+  Scenario: Tags with brackets should work in associations
+  
   
     
