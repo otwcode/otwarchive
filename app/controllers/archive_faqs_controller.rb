@@ -46,6 +46,7 @@ class ArchiveFaqsController < ApplicationController
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
     @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
+
   end
 
   # GET /archive_faqs/manage
@@ -69,6 +70,9 @@ class ArchiveFaqsController < ApplicationController
         flash[:notice] = 'ArchiveFaq was successfully created.'
         format.html { redirect_to(@archive_faq) }
         format.xml  { render :xml => @archive_faq, :status => :created, :location => @archive_faq }
+        if @archive_faq.email_translations?
+          AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
+        end
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @archive_faq.errors, :status => :unprocessable_entity }
@@ -82,6 +86,9 @@ class ArchiveFaqsController < ApplicationController
     @archive_faq = ArchiveFaq.find(params[:id])
 
     respond_to do |format|
+      if @archive_faq.changed? && @archive_faq.email_translations?
+        AdminMailer.edited_faq(@archive_faq.id, current_admin.login).deliver
+      end
       if @archive_faq.update_attributes(params[:archive_faq])
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         format.html { redirect_to(@archive_faq) }

@@ -1,0 +1,30 @@
+<% content_for :message do %>
+  <p>
+    <%= style_bold("Dear Translation Committee:") %>
+  </p>
+  <p>
+    <%= style_bold(@admin) %> has edited the <%= style_bold(@archive_faq.title) %> Category.
+    Please take note of the changes below, and make the corresponding changes across the translated languages.
+  </p>
+
+  <p>
+    <% for q in @archive_faq.questions %>
+      <% if q.question_changed? || q.content_changed? %>
+        <h3>Old Question and Content</h3>
+        <p>
+          <%= style_bold("Question: "+ q.question_was) %>
+          <%= style_quote(raw sanitize_field(q, :content_was)) %>
+        <p>
+        <h3>New Question and Content</h3>
+        <p>
+          <%= style_bold("Question: "+ q.question) %>
+          <%= style_quote(raw sanitize_field(q, :content)) %>
+        </p>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>
