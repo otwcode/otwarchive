@@ -73,6 +73,8 @@ class User < ActiveRecord::Base
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
   has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
 
+  has_many :tag_set_ownerships, :dependent => :destroy
+  has_many :tag_sets, :through => :tag_set_ownerships
   before_create :create_default_associateds
 
   after_update :log_change_if_login_was_edited
