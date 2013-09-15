@@ -9,7 +9,7 @@ class ExternalWorksController < ApplicationController
     #added below pre-assignment per issue 3127, might consider having this be an archive wide variable, ie def language,
     # or alternatively have a default language preference per user, ie user preferences and use that, tho more complex
     # stephanie - 9/15/2013
-    @bookmarkable.language = "en"
+    @bookmarkable.language = Language.find_by_short("en")
 
   end
   
