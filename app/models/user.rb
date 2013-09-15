@@ -231,7 +231,7 @@ class User < ActiveRecord::Base
                           :allow_nil => false,
                           :message => ts('Sorry, you have to be over 13!'),
                           :if => :first_save?
-
+  #login
   def to_param
     login
   end
