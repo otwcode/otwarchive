@@ -80,6 +80,24 @@ Feature: Gift Exchange Challenge
   When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
   
+  
+  Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I edit settings for "Awesome Gift Exchange" challenge
+    And I check "Optional Tags?"
+    And I submit
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "myname1"
+    And I sign up for "Awesome Gift Exchange" with combination A
+    And I follow "Edit Sign-up"
+    And I fill in "Optional Tags:" with "My extra tag, Something else weird" 
+    And I submit
+  Then I should see "Something else weird"
+  When I follow "Edit Sign-up"
+    And I submit
+  Then I should see "Something else weird"
+  
   Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
@@ -246,6 +264,34 @@ Feature: Gift Exchange Challenge
     When I go to the "My Gift Exchange" signups page
     And I follow "Download (CSV)"
     Then I should get a file with ending and type csv
+
+  Scenario: Tagsets show up in Challenge metadata
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Cabbot Cove Remixes"
+    And I go to the tagsets page
+    And I follow the add new tagset link
+    And I fill in "Title" with "Angela Lansbury"
+    And I submit
+    And I go to "Cabbot Cove Remixes" collection's page
+    And I follow "Profile"
+    And I should see "Tag set:"
+    And I should see "Standard Challenge Tags"
+  When I edit settings for "Cabbot Cove Remixes" challenge
+    And I fill in "Tag Sets To Use:" with "Angela Lansbury"
+    And I press "Update"
+  Then I should see "Tag sets:"
+    And I should see "Standard Challenge Tags"
+    And I should see "Angela Lansbury"
+  When I edit settings for "Cabbot Cove Remixes" challenge
+    And I check "Standard Challenge Tags"
+    And I check "Angela Lansbury"
+    And I press "Update"
+  Then I should not see "Tag sets:"
+    And I should not see "Tag set:"
+    And I should not see "Standard Challenge Tags"
+    And I should not see "Angela Lansbury"
+
+
 
 
     

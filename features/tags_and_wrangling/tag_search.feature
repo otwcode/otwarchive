@@ -34,7 +34,7 @@ Feature: Search Tags
     And I should not see "Fandom: first fandom (0)"
   # test search with slash
     When I am on the search tags page
-    And I fill in "tag_search" with "first last/someone else"
+    And I fill in "tag_search" with "first last\/someone else"
     And I press "Search tags"
     Then I should see "1 Found"
     And I should see "first last/someone else (0)"

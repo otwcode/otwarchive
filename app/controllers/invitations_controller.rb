@@ -29,13 +29,13 @@ class InvitationsController < ApplicationController
     if !params[:invitee_email].blank?
       @invitation.invitee_email = params[:invitee_email]
       if @invitation.save
-        setflash; flash[:notice] = 'Invitation was successfully sent.'
+        flash[:notice] = 'Invitation was successfully sent.'
         redirect_to([@user, @invitation]) 
       else
         render :action => "show"
       end
     else
-      setflash; flash[:error] = "Please enter an email address."
+      flash[:error] = "Please enter an email address."
       render :action => "show" 
     end    
   end
@@ -46,7 +46,7 @@ class InvitationsController < ApplicationController
         @user.invitations.create
       end
     end
-    setflash; flash[:notice] = "Invitations were successfully created."
+    flash[:notice] = "Invitations were successfully created."
     redirect_to user_invitations_url(@user)
   end
   
@@ -54,14 +54,14 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.find(params[:id])
     @invitation.attributes = params[:invitation]
     if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
-      setflash; flash[:notice] = 'Invitation was successfully sent.'
+      flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
         redirect_to find_admin_invitations_url(:token => @invitation.token)
       else
         redirect_to([@user, @invitation])        
       end
     else
-      setflash; flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
+      flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
       render :action => "show"
     end
   end
@@ -70,9 +70,9 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.find(params[:id])
     @user = @invitation.creator
     if @invitation.destroy
-      setflash; flash[:notice] = "Invitation successfully destroyed"
+      flash[:notice] = "Invitation successfully destroyed"
     else
-      setflash; flash[:error] = "Invitation was not destroyed."
+      flash[:error] = "Invitation was not destroyed."
     end
     if @user.is_a?(User)
       redirect_to user_invitations_url(@user)

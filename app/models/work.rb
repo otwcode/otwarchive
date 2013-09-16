@@ -83,7 +83,7 @@ class Work < ActiveRecord::Base
     :through => :taggings, 
     :source => :tagger, 
     :source_type => 'Tag',
-    :before_remove => :remove_filter_taggingg,
+    :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Relationship'"
   has_many :characters, 
     :through => :taggings, 
@@ -253,7 +253,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size

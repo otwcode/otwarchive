@@ -904,7 +904,7 @@
           <p>def promptmeme_only</p>
 
 <pre>unless @collection.challenge_type == &quot;PromptMeme&quot;
-  setflash; flash[:error] = ts(&quot;Only available for prompt meme challenges, not gift exchanges&quot;)
+  flash[:error] = ts(&quot;Only available for prompt meme challenges, not gift exchanges&quot;)
   redirect_to collection_path(@collection) rescue redirect_to '/'
 end</pre>
 

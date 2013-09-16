@@ -83,6 +83,7 @@ When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
 end
 
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
+  name = title.gsub(/[^\w]/, '_') if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I submit}
 end

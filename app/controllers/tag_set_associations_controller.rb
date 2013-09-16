@@ -8,7 +8,7 @@ class TagSetAssociationsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])
     unless @tag_set
-      setflash; flash[:notice] = ts("What tag set did you want to look at?")
+      flash[:notice] = ts("What tag set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
@@ -29,6 +29,9 @@ class TagSetAssociationsController < ApplicationController
       if key.match(/^create_association_(\d+)_(.*?)$/)
         tag_id = $1
         parent_tagname = $2
+
+        # fix back the tagnames if they have [] brackets -- see _review_individual_nom for details
+        parent_tagname = parent_tagname.gsub('#LBRACKET', '[').gsub('#RBRACKET', ']')
         
         assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
         if assoc.valid?
@@ -40,10 +43,10 @@ class TagSetAssociationsController < ApplicationController
     end
     
     if @errors.empty?
-      setflash; flash[:notice] = ts("Nominated associations were added.")
+      flash[:notice] = ts("Nominated associations were added.")
       redirect_to tag_set_path(@tag_set)
     else
-      setflash; flash[:error] = ts("We couldn't add all of your specified associations. See more detailed errors below!")
+      flash[:error] = ts("We couldn't add all of your specified associations. See more detailed errors below!")
       get_tags_to_associate
       render :action => :index
     end
