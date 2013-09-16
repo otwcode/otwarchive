@@ -42,7 +42,7 @@ class ExternalWork < ActiveRecord::Base
     :through => :taggings, 
     :source => :tagger, 
     :source_type => 'Tag',
-    :before_remove => :remove_filter_taggingg,
+    :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Relationship'"
   has_many :characters, 
     :through => :taggings, 
