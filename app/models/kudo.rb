@@ -5,7 +5,7 @@ class Kudo < ActiveRecord::Base
 
   validates :commentable_type, inclusion: { in: %w(Work),
                                 message: "Kudos can only be left on Works." }
-  end
+
 
 
 validates_uniqueness_of :pseud_id,
