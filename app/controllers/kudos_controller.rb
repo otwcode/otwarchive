@@ -4,7 +4,14 @@ class KudosController < ApplicationController
   cache_sweeper :kudos_sweeper
 
   def create
-    @commentable = params[:kudo][:kudosable_type] == 'Work' ? Work.find(params[:kudo][:kudosable_id]) : Chapter.find(params[:kudo][:kudosable_id])
+    #below if block validates that kudos is only being left on a work, (Stephanie 9-17-2013)
+    if params[:kudo][:kudosable_type] == 'Work'
+      @commentable = Work.find(params[:kudo][:kudosable_id])
+    else
+      temp_chapter = Chapter.find(params[:kudo][:kudosable_id])
+      @commentable = temp_chapter.work
+    end
+
     unless @commentable
       flash[:error] = ts("What did you want to leave kudos on?")
       redirect_to root_path and return
