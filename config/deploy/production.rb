@@ -20,6 +20,12 @@ server "ao3-front01.ao3.org",  :app , :web , :primary
 #
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
 
+namespace :production_only do
+  desc "Set up production robots.txt file"
+  task :update_robots, :roles => :web do
+    run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
+  end
+end
 
 #before "deploy:update_code", "production_only:git_in_home"
 #after "deploy:update_code", "production_only:update_public", "production_only:update_tag_feeds", "production_only:update_configs"
@@ -27,6 +33,8 @@ server "ao3-front01.ao3.org",  :app , :web , :primary
 #before "deploy:migrate", "production_only:backup_db"
 
 #after "deploy:restart", "production_only:update_cron_email"
+
+after "deploy:update_code", "production_only:update_robots"
 after "deploy:restart", "production_only:notify_testers"
 
 # deploy from clean branch
