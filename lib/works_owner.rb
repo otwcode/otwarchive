@@ -13,9 +13,25 @@ module WorksOwner
   #   reindexed for those changes, in the RedisSearchIndexQueue, which will change the updated_at 
   #   dates on the works involved.   
   def works_index_cache_key(tag=nil, index_works=nil)
+    if tag.present?
+      key_for_tag(tag)
+    else
+      "works_index_for_#{self.class.name.underscore}_#{self.id}_#{works_index_timestamp}"
+    end
+  end
+  
+  def works_index_timestamp
+    $redis.get("#{self.class.to_s.downcase}_#{self.id}_windex")
+  end
+  
+  def update_works_index_timestamp!
+    $redis.set("#{self.class.to_s.downcase}_#{self.id}_windex", Time.now)
+  end
+  
+  # Using old method for this because it's more complicated
+  def key_for_tag(tag)
     cache_key = "works_index_for_#{self.class.name.underscore}_#{self.id}_"
     index_works ||= self.works.where(:posted => true)
-    if tag.present?
       cache_key << "tag_#{tag.id}_"
       if tag.canonical?
         index_works = index_works.joins(:filter_taggings).where("filter_taggings.filter_id = ?", tag.id)
@@ -27,6 +43,5 @@ module WorksOwner
     cache_key << "_"
     cache_key << index_works.order("updated_at DESC").limit(1).value_of(:updated_at).first.to_s
   end
-    
   
 end
