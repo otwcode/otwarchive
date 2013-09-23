@@ -628,7 +628,7 @@ class StoryParser
       title = @doc.css("title").inner_html.gsub /\s*on deviantart$/i, ""
 
       # Find the image (original size) if it's art
-      image_full = body.css("img#gmi-ResViewSizer_fullimg")
+      image_full = body.css("div.dev-view-deviation img.dev-content-full")
       unless image_full[0].nil?
         storytext = "<center><img src=\"#{image_full[0]["src"]}\"></center>"
       end
@@ -668,17 +668,17 @@ class StoryParser
       work_params.merge!(scan_text_for_meta(notes))
       work_params[:title] = title
 
-      body.css("div.gr-body div.gr div.hh h1 a").each do |node|
+      body.css("div.dev-title-container h1 a").each do |node|
         if node["class"] != "u"
           work_params[:title] = node.inner_html
         end
       end
 
       tags = []
-      @doc.css("td.dcats a.h").each { |node| tags << node.inner_html }
+      @doc.css("div.dev-about-cat-cc a.h").each { |node| tags << node.inner_html }
       work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
 
-      details = @doc.css("div.details-section span[ts]")
+      details = @doc.css("div.dev-right-bar-content span[title]")
       unless details[0].nil?
          work_params[:revised_at] = convert_revised_at(details[0].inner_text)
       end
