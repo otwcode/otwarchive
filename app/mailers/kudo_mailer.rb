@@ -10,10 +10,14 @@ class KudoMailer < ActionMailer::Base
     kudo = Kudo.find(kudo_id)
     @pseud = kudo.pseud
     @commentable = kudo.commentable
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
-    )
+    #If there actually is a commentable item
+    if @commentable != nil
+      mail(
+          :to => user.email,
+          :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      )
+    end
+
   end
   
   # send a batched-up notification 
@@ -31,10 +35,14 @@ class KudoMailer < ActionMailer::Base
       @commentables << commentable
       @kudo_givers[commentable_info] = kudo_givers
     end
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
-    )
+    #if there are actually commentable objects in the array
+    if @commentables != nil
+      mail(
+          :to => user.email,
+          :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
+      )
+    end
+
   end
 
 end

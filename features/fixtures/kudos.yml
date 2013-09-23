@@ -5,8 +5,8 @@ second:
   commentable_id: 1
   commentable_type: Work
 third:
-  commentable_id: 1
-  commentable_type: Work
+  commentable_id: 2
+  commentable_type: Chapter
 fourth:
   commentable_id: 1
   commentable_type: Work

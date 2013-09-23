@@ -1,8 +1,14 @@
 class Kudo < ActiveRecord::Base
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
+  validates :commentable, presence: true
 
-  validates_uniqueness_of :pseud_id, 
+  validates :commentable_type, inclusion: { in: %w(Work),
+                                message: "Kudos can only be left on Works." }
+
+
+
+validates_uniqueness_of :pseud_id,
     :scope => [:commentable_id, :commentable_type], 
     :message => ts("^You have already left kudos here. :)"), 
     :if => "!pseud.nil?"
