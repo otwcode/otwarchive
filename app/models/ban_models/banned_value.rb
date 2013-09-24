@@ -5,10 +5,12 @@ class BannedValue < ActiveRecord::Base
   attr_accessor(:type)
 
   def add_email(email)
-    banned_value = BannedValue.new
-    banned_value.name = email
-    banned_value.type = 1
-    banned_value.save
+    my_banned_value = BannedValue.new
+    my_banned_value.name = email
+    my_banned_value.type = 1
+    puts(my_banned_value.name)
+    puts(my_banned_value.type)
+    my_banned_value.save
   end
 
 
