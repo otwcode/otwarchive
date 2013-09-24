@@ -76,7 +76,8 @@ class TagSetNomination < ActiveRecord::Base
   end
 
   def self.owned_by(user = User.current_user)
-    return user.id
+    select("DISTINCT tag_set_nominations.*").
+    where("users.id = ?", user.id)
   end
 
   def self.for_tag_set(tag_set)

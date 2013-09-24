@@ -75,6 +75,9 @@ class User < ActiveRecord::Base
 
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
+  has_many :tag_set_nominations
+
+
   before_create :create_default_associateds
 
   after_update :log_change_if_login_was_edited
