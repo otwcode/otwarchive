@@ -153,6 +153,14 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
+    resources :bannedvalues, :controller => 'admin_banned_values' do
+      collection do
+        post :invite_from_queue
+        post :grant_invites_to_users
+        get :find
+      end
+    end
+
     resources :invitations, :controller => 'admin_invitations' do
       collection do
         post :invite_from_queue
