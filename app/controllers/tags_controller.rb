@@ -54,7 +54,7 @@ class TagsController < ApplicationController
   #       to the works controller)
   def show
     @page_subtitle = @tag.name
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(BannedTag) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
@@ -181,7 +181,7 @@ class TagsController < ApplicationController
 
   def edit
     @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(BannedTag) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end

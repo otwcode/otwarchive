@@ -215,6 +215,26 @@ class User < ActiveRecord::Base
 
   validates :email, :email_veracity => true
 
+
+
+  validate :is_username_banned
+    def is_username_banned
+      temp_value = BannedValue.find_by_name_and_ban_type(self.login,2)
+      if  temp_value != nil
+        errors.add(:base, ts("Registration of the chosen username has been forbidden. Please select another."))
+      end
+    end
+
+  validate :is_email_banned
+  def is_email_banned
+    temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
+    if  temp_value != nil
+      errors.add(:base, ts("This email address has been forbidden from creating an account. If you believe this is an error contact support."))
+    end
+  end
+
+
+
   # Virtual attribute for age check and terms of service
   attr_accessor :age_over_13
   attr_accessor :terms_of_service
