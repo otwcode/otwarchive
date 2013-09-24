@@ -26,7 +26,9 @@ class Comment < ActiveRecord::Base
 
   validate :is_email_banned
   def is_email_banned
-    if BannedValue.find_by_name_and_type(:email,1).exists?
+    temp_value = BannedValue.new
+    temp2_value = temp_value.find_by_name_and_type(:email,1).exists?
+    if  temp2 = true
       errors.add(:base, ts("This email address has been forbidden. If you believe this is an error contact support."))
     end
   end
