@@ -1,0 +1,24 @@
+<h1>Listing Banned Values</h1>
+
+<table>
+  <tr>
+    <th>Name or Value</th>
+    <th>Type</th>
+    <th>Edit</th>
+    <th>Delete</th>
+
+  </tr>
+   <% @banned_values =  @banned_values.sort! { |a,b| a.name <=> b.name } %>
+  <% @banned_values.each do |banned_value| %>
+      <tr>
+        <td><%= banned_value.name %></td>
+        <td><%= banned_value.ban_type %></td>
+        <td><%= link_to 'Edit', edit_banned_value_path(banned_value) %></td>
+        <td><%= link_to 'Delete', banned_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Banned value', new_banned_value_path %>

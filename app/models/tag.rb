@@ -851,7 +851,7 @@ class Tag < ActiveRecord::Base
   end
 
   def banned
-    self.is_a?(Banned)
+    self.is_a?(BannedTag)
   end
 
   def synonyms
