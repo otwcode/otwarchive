@@ -8,7 +8,9 @@ class Admin::AdminBannedValuesController < ApplicationController
   def new
     @banned_value = BannedValue.new
   end
-
+  def show
+    @banned_value = BannedValue.find(params[:id])
+  end
   def ban_email_address
     @banned_value = current_admin.banned_values.new(params[:banned_value])
     if @banned_value.name.blank?
