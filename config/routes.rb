@@ -155,8 +155,9 @@ Otwarchive::Application.routes.draw do
     end
     resources :bannedvalues, :controller => 'admin_banned_values' do
       collection do
-        post :invite_from_queue
-        post :grant_invites_to_users
+        post :ban_username
+        post :ban_email
+        post :ban_pseud
         get :find
       end
     end
