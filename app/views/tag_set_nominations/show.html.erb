@@ -75,9 +75,7 @@
 
 </div>
 
-<% # qTip is not compatible with the new version of jQuery so we need jQuery migrate to load with it for now; remove when qTip updates %>
 <%= content_for :footer_js do %>
-  <%= javascript_include_tag '/javascripts/jquery-migrate-1.0.0.min.js' %>
   <%= javascript_include_tag '/javascripts/jquery.qtip.min.js' %>
   <%= javascript_tag do %>
     $j(document).ready(function() {
