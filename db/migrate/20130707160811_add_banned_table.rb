@@ -1,8 +1,8 @@
 class AddBannedTable < ActiveRecord::Migration
   def change
-    create_table :banned_value do |t|
+    create_table :banned_values do |t|
       t.string :name
-      t.integer :type
+      t.integer :ban_type
       t.timestamps
     end
   end
