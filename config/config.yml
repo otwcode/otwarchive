@@ -63,7 +63,7 @@ INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
 INVITE_FROM_QUEUE_FREQUENCY: 7
 # this is whether or not people without invitations can create accounts
-ACCOUNT_CREATION_ENABLED: false
+ACCOUNT_CREATION_ENABLED: true
 DAYS_TO_PURGE_UNACTIVATED: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
