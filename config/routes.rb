@@ -153,11 +153,9 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
-    resources :bannedvalues, :controller => 'admin_banned_values' do
+    resources :banned_values, :controller => 'admin_banned_values' do
       collection do
-        post :ban_username
-        post :ban_email
-        post :ban_pseud
+
         get :find
       end
     end

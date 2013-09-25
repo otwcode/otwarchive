@@ -6,7 +6,7 @@
 </ul>
 <!--/subnav--> 
 <!--main content-->
-<%= form_tag :controller => 'admin/banned_values', :action => :create do %>
+<%= form_tag :controller => 'admin/admin_banned_values', :action => :create do %>
   <fieldset class="simple">
 	<h3 class="heading">Ban Something</h3>
   <p>Send an invite code to the following email address: 
@@ -18,7 +18,7 @@
   
 
 
- <%= form_tag url_for(:controller => 'admin/banned_values', :action => 'find'), :method => :get do %>
+ <%= form_tag url_for(:controller => 'admin/admin_banned_values', :action => 'find'), :method => :get do %>
         <fieldset>
 	<h3 class="heading"><%=h 'Track invitations' %></h3>
 <dl>
