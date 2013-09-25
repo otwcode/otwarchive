@@ -1,5 +1,6 @@
 class BannedValue < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:ban_type], :message => ts("^That tag already seems to be in this set.")
+  attr_accessible :name, :ban_type
 ### Add
 
   # Public Method, ban username

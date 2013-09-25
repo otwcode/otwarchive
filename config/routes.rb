@@ -1,5 +1,6 @@
 Otwarchive::Application.routes.draw do
-  
+  resources :banned_values
+
   #### ERRORS ####
   
   match '/403', :to => 'errors#403'
@@ -153,12 +154,7 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
-    resources :banned_values, :controller => 'admin_banned_values' do
-      collection do
-       post :ban_email_address
-        get :find
-      end
-    end
+
 
     resources :invitations, :controller => 'admin_invitations' do
       collection do
