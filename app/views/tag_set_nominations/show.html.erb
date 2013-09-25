@@ -28,7 +28,7 @@
             <%= ts("(may be edited or deleted)") %>
           <% end %>
         <% elsif @tag_set_nomination.reviewed? %>
-          <%= ts("Reviewed") %>
+          <%= ts("Reviewed (may not be edited or deleted)") %>
         <% else %>
           <%= ts("Partially Reviewed") %>
           <% if @tag_set.nominated %>
