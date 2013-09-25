@@ -250,6 +250,7 @@ Feature: Create Works
     Given basic tags
       And I am logged in
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural, Smallville"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
@@ -264,6 +265,7 @@ Feature: Create Works
     Given basic tags
     When I am logged in as "newbie" with password "password"
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "4 > 3 and 2 < 5"
       And I fill in "content" with "Bad things happen, etc."
