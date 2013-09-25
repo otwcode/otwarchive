@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for :bannedvalue, @bannedvalue, :url => { :controller => 'admin/admin_banned_values', :action => :create } do |f| %>
+<%= form_for :bannedvalue, @bannedvalue, :url => { :controller => 'admin/banned_values', :action => :create } do |f| %>
     <p><%= f.label :banned_value, t('.email_address', :default => "Email address") %> <%= f.text_field :banned_value %></p>
     <p class="submit actions"><%= f.submit t('.submit', :default => "Ban Email Address") %></p>
 <% end %>
