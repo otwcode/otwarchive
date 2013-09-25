@@ -320,3 +320,20 @@ Feature: Create Works
   Then I should see "Post New Work"
     And I should see "Rich text" within "a#richTextLink"
     And I should see "HTML" within "a#plainTextLink"
+      
+    Scenario: Users must set something as a warning and Author Chose Not To Use Archive Warnings should not be added automatically
+    Given basic tags
+      And I am logged in as "triggerfinger" with password "everyoneinthephonebook"
+    When I go to the new work page
+      And I fill in "Fandoms" with "Dallas"
+      And I fill in "Work Title" with "I Shot J.R.: Kristen's Story"
+      And I fill in "content" with "It wasn't my fault, you know."
+      And I press "Post Without Preview"
+    Then I should see "We couldn't save this Work"
+      And I should see "Please add all required tags. Warning is missing."
+    When I check "No Archive Warnings Apply"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully posted."
+      And I should see "No Archive Warnings Apply"
+      And I should not see "Author Chose Not To Use Archive Warnings"
+      And I should see "It wasn't my fault, you know."
