@@ -8,7 +8,19 @@ class Admin::AdminBannedValuesController < ApplicationController
   def new
     @banned_value = BannedValue.new
   end
-  
+
+  def ban_email_address
+    @banned_value = current_admin.banned_values.new(params[:banned_value])
+    if @banned_value.name.blank?
+      flash[:error] = t('no_email', :default => "Value Must Be Entered")
+      render :action => 'index'
+    elsif @banned_value.save
+      flash[:notice] = t('sent', :default => "An invitation was sent to %{email_address}", :email_address => @invitation.invitee_email)
+      redirect_to admin_invitations_url
+    else
+      render :action => 'index'
+    end
+  end
   def create
 
     @banned_value = current_admin.banned_values.new(params[:banned_value])
