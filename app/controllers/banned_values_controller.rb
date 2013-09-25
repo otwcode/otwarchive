@@ -1,4 +1,5 @@
 class BannedValuesController < ApplicationController
+  before_filter :admin_only
   # GET /banned_values
   # GET /banned_values.json
   def index
