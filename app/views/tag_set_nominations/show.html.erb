@@ -24,13 +24,16 @@
       <dd>
         <% if @tag_set_nomination.unreviewed? %> 
           <%= ts("Not Yet Reviewed") %>
+          <% if @tag_set.nominated %>
+            <%= ts("(may be edited or deleted)") %>
+          <% end %>
         <% elsif @tag_set_nomination.reviewed? %>
           <%= ts("Reviewed") %>
         <% else %>
           <%= ts("Partially Reviewed") %>
-        <% end %>
-        <% if @tag_set.nominated && !@tag_set_nomination.reviewed? %>
-          <%= ts("(unreviewed nominations may be edited or deleted)") %>
+          <% if @tag_set.nominated %>
+            <%= ts("(unreviewed nominations may be edited)") %>
+          <% end %>
         <% end %>
       </dd>
     </dl>
