@@ -229,8 +229,7 @@ class User < ActiveRecord::Base
   def is_email_banned
     temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
     if  temp_value != nil
-      error_str = "Creating an account with this email address has been restricted. Please choose another or <a href=\"http://archiveofourown.org/support\" >contact support </a>"
-      errors.add(:base, ts("#{error_str.html_safe}"))
+       errors.add(:base, ts("Creating an account with this email address has been restricted. Please choose another or contact support via the Support & Feedback form linked at the bottom of this page."))
     end
   end
 
