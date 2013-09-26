@@ -221,7 +221,7 @@ class User < ActiveRecord::Base
     def is_username_banned
       temp_value = BannedValue.find_by_name_and_ban_type(self.login,2)
       if  temp_value != nil
-        errors.add(:base, ts("Registration of the chosen username has been forbidden. Please select another."))
+        errors.add(:base, ts("The chosen nickname has been restricted. Please select another."))
       end
     end
 
@@ -229,7 +229,7 @@ class User < ActiveRecord::Base
   def is_email_banned
     temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
     if  temp_value != nil
-      errors.add(:base, ts("Creating an account with this email address has been restricted. Please choose another or contact support. http://archiveofourown.org/support."))
+      errors.add(:base, ts("Creating an account with this email address has been restricted. Please choose another or <a href=\"http://archiveofourown.org/support\" >contact support </a>))
     end
   end
 
