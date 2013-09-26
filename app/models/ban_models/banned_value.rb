@@ -40,7 +40,7 @@ class BannedValue < ActiveRecord::Base
      self.add_delete_value('delete',pseud,'pseud')
   end
 
-  private
+
   def add_delete_value(action,value,value_type)
     case value_type
       when 'email'
