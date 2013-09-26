@@ -28,7 +28,7 @@ class Comment < ActiveRecord::Base
   def is_email_banned
     temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
     if  temp_value != nil
-      errors.add(:base, ts("This email address has been forbidden for leaving comments. If you believe this is an error contact support."))
+      errors.add(:base, ts("The use of this email address for leaving guest comments has been restricted. Please sign in or contact support. http://archiveofourown.org/support "))
     end
   end
 
