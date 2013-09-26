@@ -8,7 +8,7 @@
     <th></th>
     <th></th>
   </tr>
-
+   <% @banned_values =  @banned_values.sort! { |a,b| a.name <=> b.name } %>
   <% @banned_values.each do |banned_value| %>
       <tr>
         <td><%= banned_value.name %></td>
