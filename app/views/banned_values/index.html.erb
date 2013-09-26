@@ -13,9 +13,8 @@
       <tr>
         <td><%= banned_value.name %></td>
         <td><%= banned_value.ban_type %></td>
-        <td><%= link_to 'Show', banned_value %></td>
         <td><%= link_to 'Edit', edit_banned_value_path(banned_value) %></td>
-        <td><%= link_to 'Destroy', banned_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Delete', banned_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
   <% end %>
 </table>
