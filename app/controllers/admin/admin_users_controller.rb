@@ -71,6 +71,8 @@ class Admin::AdminUsersController < ApplicationController
           @user.banned = true
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
+            #add email address to ban list so cant create a new account, stephanie 9-26-2013
+            BannedValue.ban_email(@user.email)
             flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else

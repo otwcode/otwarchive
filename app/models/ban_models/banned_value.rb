@@ -6,26 +6,26 @@ class BannedValue < ActiveRecord::Base
   # Public Method, ban username
   # @param [String] username
   def ban_username(username)
-    self.add_value('add',username,'username')
+    self.add_delete_value('add',username,'username')
   end
 
   # Public Method, ban email
   # @param [String] email
   def ban_email(email)
-    self.add_value('add',email,'email')
+    self.add_delete_value('add',email,'email')
   end
 
   # Public Method, ban pseud
   # @param [String] pseud
   def ban_pseud(pseud)
-    self.add_value('add',pseud,'pseud')
+    self.add_delete_value('add',pseud,'pseud')
   end
 ### Delete
 
   #Public Method, unban email
   # @param [String] email
   def unban_pseud(email)
-    add_delete_value('delete',email,'email')
+    self.add_delete_value('delete',email,'email')
   end
 
   # Public Method, unban username
@@ -37,7 +37,7 @@ class BannedValue < ActiveRecord::Base
 # Public Method, unban pseud
 # @param [String] pseud
   def unban_pseud(pseud)
-     add_delete_value('delete',pseud,'pseud')
+     self.add_delete_value('delete',pseud,'pseud')
   end
 
   private
