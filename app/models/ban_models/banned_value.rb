@@ -58,7 +58,7 @@ class BannedValue < ActiveRecord::Base
         self.name = value
         self.save
       when 'delete'
-        temp_value = BannedValue.find_by_ban_type_and_name(self.ban_type,value)
+        temp_value = BannedValue.find_by_ban_type_and_name(value_type,value)
         if temp_value != nil
           temp_value.delete
         end
