@@ -2,7 +2,7 @@
 <h2 class="heading"><%= ts("Create Account") %></h2>
 <% if @user.errors.any? %>
   <div class="error">
-     <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
+     <h4 class="heading"><%= ts("Oops, there seem to be some problems with the stuff you told us.") %></h4>
      <ul>
         <% @user.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
