@@ -24,7 +24,7 @@ class BannedValue < ActiveRecord::Base
 
   #Public Method, unban email
   # @param [String] email
-  def unban_pseud(email)
+  def unban_email(email)
     self.add_delete_value('delete',email,'email')
   end
 
