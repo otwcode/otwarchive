@@ -42,23 +42,24 @@ class BannedValue < ActiveRecord::Base
 
 
   def add_delete_value(action,value,value_type)
+    int_ban_type = 0
     case value_type
       when 'email'
-        self.ban_type = 1
+        int_ban_type = 1
       when 'username'
-        self.ban_type = 2
+        int_ban_type = 2
       when 'pseud'
-        self.ban_type = 3
+        int_ban_type = 3
       else
         #todo error
     end
-
+    self.ban_type = int_ban_type
     case action
       when 'add'
-        self.name = value
-        self.save
+        name = value
+        save
       when 'delete'
-        temp_value = BannedValue.find_by_ban_type_and_name(self.ban_type,value)
+        temp_value = BannedValue.find_by_ban_type_and_name(int_ban_type,value)
         if temp_value != nil
           temp_value.delete
         end
