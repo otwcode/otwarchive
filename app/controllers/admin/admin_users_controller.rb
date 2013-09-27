@@ -70,8 +70,14 @@ class Admin::AdminUsersController < ApplicationController
         elsif params[:admin_action] == 'ban'
           @user.banned = true
           #add email address to ban list so cant create a new account, stephanie 9-26-2013
-          banned_value = BannedValue.new
-          banned_value.ban_email(@user.email)
+          if @user != nil
+            my_banned_value = BannedValue.new
+            my_banned_value.name = @user.email
+            my_banned_value.ban_type = 1
+            my_banned_value.save
+          end
+
+
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
             flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
