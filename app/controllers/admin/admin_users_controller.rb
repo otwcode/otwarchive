@@ -69,20 +69,20 @@ class Admin::AdminUsersController < ApplicationController
           end
         elsif params[:admin_action] == 'ban'
           @user.banned = true
-
+          #add email address to ban list so cant create a new account, stephanie 9-26-2013
+          if @user != nil
+            my_banned_value = BannedValue.new
+            my_banned_value.name = @user.email
+            my_banned_value.ban_type = 1
+            my_banned_value.save
+          end
 
 
 
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
             flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
-            #add email address to ban list so cant create a new account, stephanie 9-26-2013
-            if @user != nil
-              my_banned_value = BannedValue.new
-              my_banned_value.name = @user.email
-              my_banned_value.ban_type = 1
-              my_banned_value.save
-            end
+
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
             flash[:error] = t('error_banned', :default => "User could not be permanently suspended")
