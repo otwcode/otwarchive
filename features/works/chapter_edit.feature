@@ -225,3 +225,30 @@ Feature: Edit chapters
     And I follow "Add Chapter"
     And I follow "Chapter title"
   Then I should see "You can add a chapter title"
+  
+  Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
+  Given basic tags
+    And I am logged in as "moose" with password "muffin"  
+  When I go to the new work page
+  Then I should see "Post New Work"
+    And I select "General Audiences" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "If You Give an X a Y"
+    And I fill in "Work Title" with "If You Give Users a Draft Feature"
+    And I fill in "content" with "They will expect it to work."  
+    And I press "Post Without Preview"
+  When I should see "Work was successfully posted."
+    And I should see "They will expect it to work."
+  When I follow "Add Chapter"
+    And I fill in "content" with "And then they will request more features for it."
+    And I press "Preview"
+  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+    And I should see "And then they will request more features for it."
+  When I press "Edit"
+    And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
+    And I press "Save Without Posting"
+  Then I should see "Chapter was successfully updated."
+    And I should see "This chapter is a draft and hasn't been posted yet!"
+    And I should see "Like the ability to save easily."
+
+    
