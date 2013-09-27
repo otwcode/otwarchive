@@ -99,7 +99,7 @@ class Admin::AdminUsersController < ApplicationController
         elsif params[:admin_action] == 'unban'
           if @user.banned?
             @user.banned = false
-            @banned_value =  @BannedValue.find_by_ban_type_and_name(1,@user.email)
+            @banned_value =  BannedValue.find_by_ban_type_and_name(1,@user.email)
             if @banned_value != nil
               @banned_value.destroy
             end
