@@ -99,8 +99,11 @@ class Admin::AdminUsersController < ApplicationController
         elsif params[:admin_action] == 'unban'
           if @user.banned?
             @user.banned = false
-            @banned_value = BannedValue.find_by_ban_type_and_name(1,@user.email)
-            @banned_value.destroy
+            @banned_value =  @BannedValue.find_by_ban_type_and_name(1,@user.email)
+            if @banned_value != nil
+              @banned_value.destroy
+            end
+
 
             if @user.save && !@user.banned?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
