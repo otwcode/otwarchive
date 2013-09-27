@@ -71,6 +71,16 @@ class Pseud < ActiveRecord::Base
 
   after_update :check_default_pseud
 
+
+  validate :is_pseud_banned
+  def is_pseud_banned
+    temp_value = BannedValue.find_by_name_and_ban_type(self.name,3)
+    if  temp_value != nil
+      errors.add(:base, ts("This pseud has been reserved. Please choose another. If you believe this is an error contact support."))
+    end
+  end
+
+
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
     joins(:works).
