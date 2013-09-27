@@ -69,11 +69,11 @@ class Admin::AdminUsersController < ApplicationController
           end
         elsif params[:admin_action] == 'ban'
           @user.banned = true
+          #add email address to ban list so cant create a new account, stephanie 9-26-2013
+          banned_value = BannedValue.new
+          banned_value.ban_email(@user.email)
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
-            #add email address to ban list so cant create a new account, stephanie 9-26-2013
-            new_banned_value = BannedValue.new
-            new_banned_value.ban_email(@user.email)
             flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
@@ -99,11 +99,13 @@ class Admin::AdminUsersController < ApplicationController
         elsif params[:admin_action] == 'unban'
           if @user.banned?
             @user.banned = false
+            @banned_value = BannedValue.find_by_ban_type_and_name(1,@user.email)
+            @banned_value.destroy
+
             if @user.save && !@user.banned?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+
               flash[:notice] = t('success_unsuspend', :default => "Permanent Suspension has been lifted")
-              temp_banned_value = BannedValue.new()
-              temp_banned_value.unban_email(@user.email)
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
               flash[:error] = t('error_unsuspend', :default => "Permanent Suspension could not be lifted")
