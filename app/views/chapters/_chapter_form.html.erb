@@ -1,6 +1,5 @@
 <div id="work-form" class="verbose post work chapter">
   <%= form_for([@work, chapter]) do |f| %>
-
     <fieldset id="chapter-ordering">
       <legend><%= ts("Name, Order and Date") %></legend>
       <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
@@ -28,8 +27,7 @@
     <fieldset>
       <legend><%= ts("Chapter Preface") %></legend>
       <h4 class="landmark heading"><%= ts("Preface") %></h4>
-      <dl>      
-
+      <dl>
         <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
         <dt class="summary"><%= f.label :summary, ts("Chapter summary") %></dt>
@@ -53,26 +51,28 @@
           <span id="richTextNotes" style="display: none">
             <%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %>
           </span>
+                    
           <span class="rtf-html-switch actions">
-            <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
-            <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
+            <span><a id="richTextLink" href="#richTextLink"><%= ts('Rich text') %></a></span>
+            <span><a id="plainTextLink" href="#plainTextLink"><%= ts('HTML') %></a></span>
             <%= content_for :footer_js do %>
               <%= javascript_tag do %>
                 $j(document).ready(function(){
+                  $j("#plainTextLink").addClass("current");
                   $j("#richTextLink").click(function(event){
                     addEditor('content');
-                    $j(this).toggle();
-                    $j('#plainTextLink').toggle();
+                    $j(this).addClass("current");
+                    $j("#plainTextLink").removeClass("current");
                     event.preventDefault();
                   });
-             
+
                   $j('#plainTextLink').click(function(event){
-                    removeEditor('content');
-                    $j(this).toggle();
-                    $j('#richTextLink').toggle();
+                    removeEditor('content')
+                    $j("#richTextLink").removeClass("current");
+                    $j(this).addClass("current");
                     event.preventDefault();
                   });
-                })            
+                })
               <% end %>
             <% end %>
  	        </span>
@@ -124,6 +124,6 @@
       });
     })
   <% end %>
-  
+
   <% use_tinymce %>
 <% end %>
