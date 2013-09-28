@@ -5,18 +5,25 @@ class WorkSkin < Skin
   # override parent's clean_css to append a prefix
   def clean_css
     return if self.css.blank?
-    prefix = "#workskin"
     scanner = StringScanner.new(self.css)
+    check = lambda {|ruleset, property, value|
+      if property == "position" && value == "fixed"
+        errors.add(:base, ts("The #{property} property in #{ruleset.selectors.join(', ')} cannot have the value #{value} in Work skins, sorry!"))
+        return false
+      end
+      return true
+    }
+    options = {:prefix => "#workskin", :caller_check => check}
     if !scanner.exist?(/\/\*/)
       # no comments, clean the whole thing
-      self.css = clean_css_code(self.css, prefix)
+      self.css = clean_css_code(self.css, options)
     else
       clean_code = []
       while (scanner.exist?(/\/\*/))
-        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/), prefix))
+        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/), options))
         clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
       end
-      clean_code << (clean = clean_css_code(scanner.rest, prefix))
+      clean_code << (clean = clean_css_code(scanner.rest, options))
       self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
     end
   end
@@ -38,6 +45,4 @@ class WorkSkin < Skin
     skin.save!
     skin
   end
-
-
 end
