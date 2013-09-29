@@ -14,11 +14,12 @@
 
   <fieldset>
     <legend><%= ts('Post Work') %></legend>
-    <p class="submit cancel actions">
-      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'update_button' %>
-      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
-    </p> 
+    <ul class="actions">
+      <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
+      <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
+      <li><%= submit_tag ts('Post Without Preview'), :name => 'update_button' %></li>
+      <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
+    </ul> 
   </fieldset>
 <% end %> <!-- end of form_for -->
 </div>
