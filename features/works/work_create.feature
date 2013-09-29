@@ -311,3 +311,11 @@ Feature: Create Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Chapter has been posted!"
       And I should not see "This is a preview"
+
+  Scenario: RTE and HTML buttons are separate
+  Given basic tags
+    And I am logged in as "newbie"
+  When I go to the new work page
+  Then I should see "Post New Work"
+    And I should see "Rich text" within "a#richTextLink"
+    And I should see "HTML" within "a#plainTextLink"
