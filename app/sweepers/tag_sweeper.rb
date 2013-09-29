@@ -6,6 +6,7 @@ class TagSweeper < ActionController::Caching::Sweeper
       tag.add_to_autocomplete
     end
     update_tag_nominations(tag)
+    tag.update_works_index_timestamp!
   end
 
   def after_update(tag)
@@ -31,6 +32,7 @@ class TagSweeper < ActionController::Caching::Sweeper
     end
 
     update_tag_nominations(tag)
+    tag.update_works_index_timestamp!
 
   end
 

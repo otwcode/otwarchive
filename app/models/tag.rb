@@ -3,6 +3,7 @@ class Tag < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include StringCleaner
+  include WorksOwner
 
   NAME = "Tag"
 
@@ -564,14 +565,6 @@ class Tag < ActiveRecord::Base
   end
 
   #### FILTERING ####
-  
-  include WorksOwner  
-  # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key(tag=nil, index_works=nil)
-    index_works ||= self.canonical? ? self.filtered_works : self.works
-    super(tag, index_works.where(:posted => true))
-  end
-    
 
   # Usage is either:
   # reindex_taggables

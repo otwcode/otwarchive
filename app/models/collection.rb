@@ -1,4 +1,6 @@
 class Collection < ActiveRecord::Base
+  
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
@@ -455,13 +457,5 @@ class Collection < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  include WorksOwner  
-  # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key(tag=nil, index_works=nil)
-    index_works ||= self.children.present? ? self.all_approved_works : self.approved_works
-    super(tag, index_works)
-  end
-
 
 end
