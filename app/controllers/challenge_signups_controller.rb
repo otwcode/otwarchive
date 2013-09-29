@@ -147,7 +147,7 @@ class ChallengeSignupsController < ApplicationController
       end
       num_existing = @challenge_signup.send(prompt_type).count
       num_existing.upto(num_to_build-1) do
-        @challenge_signup.send(prompt_type).build(anonymous: @collection.challenge.anonymous?)
+        @challenge_signup.send(prompt_type).build
       end
     end
     unless notice.blank?
