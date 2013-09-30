@@ -25,8 +25,6 @@
     <!-- %< use_tinymce %> -->
 
     <%= form.text_area :content, :id => "content" %>
-    <%= live_validation_for_field(field_id(form, "content").to_sym, :presence => false, :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN) %>
-    <%= generate_countdown_html(field_id(form, "content").to_sym, ArchiveConfig.CONTENT_MAX) %>
 
   <dt><%= form.label :screencast, ts("Screencast URL") %></dt>
   <dd><%= form.text_field :screencast, :id => "screencast" %>
