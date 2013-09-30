@@ -11,7 +11,7 @@ class ArchiveFaq < ActiveRecord::Base
   scope :non_translated, where('translated_faq_id IS NULL')
 
   # When we modify either a FAQs Category name or one of the Questions, we send an email to Translations.
-  after_update :notify_translations_committee
+  after_save :notify_translations_committee
   def notify_translations_committee
     # Check first to see if we are asked to send an email return if not
     unless !self.email_translations?
