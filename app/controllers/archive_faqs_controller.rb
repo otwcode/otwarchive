@@ -70,7 +70,7 @@ class ArchiveFaqsController < ApplicationController
         flash[:notice] = 'ArchiveFaq was successfully created.'
         format.html { redirect_to(@archive_faq) }
         format.xml  { render :xml => @archive_faq, :status => :created, :location => @archive_faq }
-        if @archive_faq.email_translations?
+        if @archive_faq.email_translations? && @archive_faq.new_record?
           AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
         end
       else
