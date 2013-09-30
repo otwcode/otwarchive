@@ -119,8 +119,10 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
+  fill_in("question", :with => "Number #{n} Question.")
   fill_in("content", :with => "Number #{n} posted FAQ, this is.")
   fill_in("title", :with => "Number #{n} FAQ")
+  fill_in("anchor", :with => "Number#{n}anchor")
   click_button("Post")
 end
 
