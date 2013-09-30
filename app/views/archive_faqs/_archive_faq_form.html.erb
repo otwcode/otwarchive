@@ -19,7 +19,7 @@
       <%= form.collection_select(:translated_faq_id, @translatable_faqs, :id, :title, {:prompt => true}) %>
     </dd>
     <dt>
-      <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ Section?")  %>
+      <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ Category?")  %>
     </dt>
     <dd>
       <%= form.check_box :notify_translations %>

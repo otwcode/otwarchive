@@ -19,7 +19,7 @@ class AdminMailer < ActionMailer::Base
   def created_faq(archive_faq_id, admin)
     @admin = admin
     @archive_faq = ArchiveFaq.find(archive_faq_id)
-    @email = "otw-testers@transformativeworks.org"
+    @email = "translation@transformativeworks.org"
     mail(
       :to => @email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
@@ -29,7 +29,7 @@ class AdminMailer < ActionMailer::Base
   def edited_faq(archive_faq_id, admin)
     @admin = admin
     @archive_faq = ArchiveFaq.find(archive_faq_id)
-    @email = "scottsds@gmail.com"
+    @email = "translation@transformativeworks.org"
     mail(
       :to => @email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",

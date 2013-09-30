@@ -84,11 +84,7 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1.xml
   def update
     @archive_faq = ArchiveFaq.find(params[:id])
-
     respond_to do |format|
-      if @archive_faq.changed? && @archive_faq.email_translations?
-        AdminMailer.edited_faq(@archive_faq.id, current_admin.login).deliver
-      end
       if @archive_faq.update_attributes(params[:archive_faq])
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         format.html { redirect_to(@archive_faq) }
