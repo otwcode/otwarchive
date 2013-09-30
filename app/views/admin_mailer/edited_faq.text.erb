@@ -1,0 +1,10 @@
+<% content_for :message do %>
+  Dear Translation Committee:
+
+  <%= @admin %> has edited the <%= @archive_faq.title.html_safe %> Category.
+
+  Please visit the Category (<%= archive_faq_url(@archive_faq) %>) to see the changes.
+
+<% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>
