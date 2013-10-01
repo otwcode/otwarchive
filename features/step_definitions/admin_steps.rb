@@ -146,7 +146,7 @@ When /^there are (\d+) Admin Posts$/ do |n|
   end
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|	
+When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
   end
