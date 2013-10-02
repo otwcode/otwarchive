@@ -323,4 +323,3 @@ DEPENDENCIES
   vcr (~> 2.5.0)
   whenever (~> 0.6.2)
   will_paginate (>= 3.0.2)
-
