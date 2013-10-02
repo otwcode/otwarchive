@@ -1,16 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
+<h2 class="heading"><%= ts("(Open Doors) Import New Work") %> <%= link_to_help 'work-import'%></h2>
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Imports from fanfiction.net are no longer available because of a block on their end.") %>
+    <%= ts("This form should only be used for authorized Open Doors Imports") %>
   </p>
-  <p>
-    <%= ts("If you have troubles importing from another site, ") %>
-    <%= link_to ts("please let us know"), new_feedback_report_path %>
-    <%= ts("so we can improve this tool!") %>
-  </p>
-  <p>You might find the <a href="http://archiveofourown.org/archive_faqs/9">Import <abbr title="frequently asked questions">FAQ</abbr></a> useful.</p>
+
 </div>
 
 <!--/descriptions-->
@@ -48,6 +43,9 @@
 	<dt>Preferences</dt>
 	<dd>
 	<ul>
+      <li><%= text_field_tag_original "e_name" %></li>
+      <li><%= text_field_tag_original "e_email" %></li>
+
 	<li><%= radio_button_tag "import_multiple", "works", true %>
     <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
     </li>
@@ -64,12 +62,8 @@
 
   <li>
     <%= check_box_tag "post_without_preview" %>
-    <% if current_user.archivist %>
-      <%= label_tag "post_without_preview", ts("Post without previewing (STRONGLY recommended if importing for others!)") %>
-    <% else %>
-      <%= label_tag "post_without_preview", ts("Post without previewing.") %>
-    <% end %>
-  </li>
+    <%= label_tag "post_without_preview", ts("Post without previewing (STRONGLY recommended if importing for others!)") %>
+   </li>
 
   <li>
     <%= check_box_tag "restricted" %>
