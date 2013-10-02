@@ -1,50 +1,58 @@
 require 'spec_helper'
 
 # This code block is used for logged out users and logged in users, on unrestricted works
-shared_examples_for "on unrestricted works" do
+shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "false" )
+      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "false" )
       @work2.index.refresh
-      @comment2 = Comment.create(:comment)
+      @comment2 = create(:comment)
       @work2.comments << @comment2
     end
+
+    #has been added
     it "should be creatable on a work" do
       visit "/works/#{@work2.id}/comments/new"
       should have_content("#{@work2.title}")
     end
+
     it "should be creatable on a work's chapter" do
       visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments/new"
       should have_content("#{@work2.title}")
     end
+
     it "should be readable on a work" do
       visit "/works/#{@work2.id}/comments"
       should have_content("#{@work2.title}")
     end
+
     it "should be readable on a work's chapter" do
       visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments"
       should have_content("#{@work2.title}")
     end
+
     it "should be directly readable on a work" do
       visit "/works/#{@work2.id}/comments/#{@comment2.id}"
       should have_content("#{@work2.title}")
     end
+
     it "should be directly readable on a chapter" do
       visit "/chapters/#{@work2.chapters.last.id}/comments/#{@comment2.id}"
       should have_content("#{@work2.title}")
     end
+
     it "should be directly readable on a work's chapter" do
       visit "/works/#{@work2.id}/chapters/#{@work2.chapters.last.id}/comments/#{@comment2.id}"
       should have_content("#{@work2.title}")
     end
 end
 
-describe "Comments" do
+describe "Comments", :pending do
     subject { page }
   context "on restricted works" do
-    before do
-      @work1 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "true" )
+    before do    a
+      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "true" )
       @work1.index.refresh
-      @comment = Comment.create(:comment)
+      @comment = create(:comment)
       @work1.comments << @comment
     end
 
@@ -79,7 +87,7 @@ describe "Comments" do
   end
   context "logged in users" do
     before do
-      @user = FactoryGirl.create(:user)
+      @user = create(:user)
       visit login_path
       fill_in "User name",with: "#{@user.login}"
       fill_in "Password", with: "password"
@@ -92,9 +100,9 @@ describe "Comments" do
 
   context "on works which have anonymous commenting disabled" do
     before do
-      @work = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", :anon_commenting_disabled => "true" )
+      @work = create(:work, posted: true, fandom_string: "Merlin (TV)", anon_commenting_disabled: "true" )
       @work.index.refresh
-      @comment = Comment.create(:comment)
+      @comment = create(:comment)
       @work.comments << @comment
     end
     it "should not be creatable by guests on a work" do
