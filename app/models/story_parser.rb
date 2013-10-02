@@ -209,7 +209,7 @@ class StoryParser
 
   # tries to create an external author for a given url
   def parse_author(location,e_name,e_email)
-    if new_email != nil
+    if e_email != nil
       return parse_author_common(e_email,e_name)
     else
       source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
