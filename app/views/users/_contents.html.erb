@@ -42,8 +42,14 @@
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
       <% end %>
     </ul>
-    <% if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-      <ul class="navigation actions" role="navigation"><li><%= @pseud ? print_pseud_works_link(@pseud) : print_works_link(@user) %></li></ul>
+    <% if @pseud %>
+      <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="navigation actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
+      <% end %>
+    <% else %>   
+      <% if @user.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="navigation actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
+      <% end %>
     <% end %>
   </div>
   <% end %>
