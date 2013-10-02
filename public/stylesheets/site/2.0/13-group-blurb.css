@@ -13,7 +13,7 @@ by overriding the rules in the marked off section.
 Perhaps we can make a wizard for this specific task.
 */
 
-.blurb ul li, .blurb dd ul li, .blurb ul.type {
+.blurb ul li, .blurb dd ul li {
   display: inline;
 }
 
