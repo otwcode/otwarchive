@@ -43,8 +43,12 @@
 	<dt>Preferences</dt>
 	<dd>
 	<ul>
-      <li><%= text_field_tag_original "e_name" %></li>
-      <li><%= text_field_tag_original "e_email" %></li>
+      <li><%= text_field_tag_original "e_name" %>
+        <%= label_tag "e_name", ts("Author Name") %>
+      </li>
+      <li><%= text_field_tag_original "e_email" %>
+        <%= label_tag "e_email", ts("Email Address") %>
+      </li>
 
 	<li><%= radio_button_tag "import_multiple", "works", true %>
     <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
