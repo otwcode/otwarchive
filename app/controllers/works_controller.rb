@@ -262,9 +262,6 @@ class WorksController < ApplicationController
     elsif params[:load_unposted]
       @work = @unposted
       render :edit and return
-    elsif params[:od_import]
-      @page_subtitle = ts("open doors import")
-      render :new_od_import and return
     else
       render :new and return
     end
@@ -540,6 +537,7 @@ class WorksController < ApplicationController
     end
   end
 
+=begin
   # POST /works/import
   def import
     # check to make sure we have some urls to work with
@@ -591,6 +589,7 @@ class WorksController < ApplicationController
     end
 
   end
+=end
 
 
   # POST /works/import
