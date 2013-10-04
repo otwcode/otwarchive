@@ -235,7 +235,7 @@ class StoryParser
 
       www_url = ""
       non_www_url = ""
-      if location.include("www")
+      if location.include? "www"
         www_url = location
         non_www_url = location.gsub("www.","")
       else
