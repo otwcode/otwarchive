@@ -212,7 +212,7 @@ class Pseud < ActiveRecord::Base
   # of [tag, count] arrays, limited by size if a limit is provided
   # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
   def most_popular_tags(options = {})
-    if all_tags == Tag.by_pseud(self).by_type(options[:categories]).canonical
+    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
       tags_with_count = {}
       all_tags.uniq.each do |tag|
         tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
