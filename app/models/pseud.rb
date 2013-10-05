@@ -119,6 +119,32 @@ class Pseud < ActiveRecord::Base
     group("pseuds.id").
     includes(:user)
   }
+  scope :public_work_count_for, lambda {|pseud_ids|
+    {
+        :select => "pseuds.id, count(pseuds.id) AS work_count",
+        :joins => :works,
+        :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}, :pseuds => {:id => pseud_ids}},
+        :group => 'pseuds.id'
+    }
+  }
+
+  scope :posted_work_count_for, lambda {|pseud_ids|
+    {
+        :select => "pseuds.id, count(pseuds.id) AS work_count",
+        :joins => :works,
+        :conditions => {:works => {:posted => true, :hidden_by_admin => false}, :pseuds => {:id => pseud_ids}},
+        :group => 'pseuds.id'
+    }
+  }
+
+  scope :public_rec_count_for, lambda {|pseud_ids|
+    {
+        :select => "pseuds.id, count(pseuds.id) AS rec_count",
+        :joins => :bookmarks,
+        :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}, :pseuds => {:id => pseud_ids}},
+        :group => 'pseuds.id'
+    }
+  }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -153,33 +179,6 @@ class Pseud < ActiveRecord::Base
     self.recs.is_public.size
   end
 
-  scope :public_work_count_for, lambda {|pseud_ids|
-    {
-      :select => "pseuds.id, count(pseuds.id) AS work_count",
-      :joins => :works,
-      :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
-    }
-  }
-
-  scope :posted_work_count_for, lambda {|pseud_ids|
-    {
-      :select => "pseuds.id, count(pseuds.id) AS work_count",
-      :joins => :works,
-      :conditions => {:works => {:posted => true, :hidden_by_admin => false}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
-    }
-  }
-
-  scope :public_rec_count_for, lambda {|pseud_ids|
-    {
-      :select => "pseuds.id, count(pseuds.id) AS rec_count",
-      :joins => :bookmarks,
-      :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}, :pseuds => {:id => pseud_ids}},
-      :group => 'pseuds.id'
-    }
-  }
-
   def self.rec_counts_for_pseuds(pseuds)
     if pseuds.blank?
       {}
@@ -213,7 +212,7 @@ class Pseud < ActiveRecord::Base
   # of [tag, count] arrays, limited by size if a limit is provided
   # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
   def most_popular_tags(options = {})
-    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
+    if all_tags == Tag.by_pseud(self).by_type(options[:categories]).canonical
       tags_with_count = {}
       all_tags.uniq.each do |tag|
         tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
@@ -226,7 +225,6 @@ class Pseud < ActiveRecord::Base
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
-
 
   # look up by byline
   scope :by_byline, lambda {|byline|
@@ -269,7 +267,7 @@ class Pseud < ActiveRecord::Base
   def self.parse_bylines(list, options = {})
     valid_pseuds, ambiguous_pseuds, failures = [], {}, []
     bylines = list.split ","
-    for byline in bylines
+    bylines.each { |byline|
       pseuds = Pseud.parse_byline(byline, options)
       if pseuds.length == 1
         valid_pseuds << pseuds.first
@@ -278,7 +276,7 @@ class Pseud < ActiveRecord::Base
       else
         failures << byline.strip
       end
-    end
+    }
     {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}
   end
   
@@ -318,13 +316,13 @@ class Pseud < ActiveRecord::Base
     if creation.is_a?(Work)
       creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
       unless options[:skip_series]
-        for series in creation.series
+        creation.series.each { |series|
           if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
             series.pseuds << pseud rescue nil
           else
             self.change_ownership(series, pseud)
           end
-        end
+        }
       end
       comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
       comments.each do |comment|
@@ -347,7 +345,6 @@ class Pseud < ActiveRecord::Base
   def change_challenge_participation
     ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
     ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
-    return
   end
 
   def change_gift_recipients
