@@ -212,6 +212,10 @@ class StoryParser
     #If e_email option value is present (archivist importing from somewhere not supported for auto autho grab)
     #will have value there, otherwise continue as usual. If filled, just pass values to create or find external author
     #Stephanie 8-1-2013
+    mystr = String.new(e_email)
+    if mystr.length < 1
+      e_email = nil
+    end
     if e_email != nil
       return parse_author_common(e_email,e_name)
     else
@@ -274,6 +278,7 @@ class StoryParser
       if options[:importing_for_others]
         #Changed the values passed to parse_author as the required values changed when modifying it.
         #Stephanie 10-1-2013
+
         external_author_names = options[:external_author_names] || parse_author(location,options[:e_name],options[:e_email])
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
         external_author_names.each do |external_author_name|
