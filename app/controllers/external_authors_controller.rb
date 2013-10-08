@@ -84,7 +84,7 @@ class ExternalAuthorsController < ApplicationController
     # go ahead and give the user the works
     @external_author.claim!(current_user)
     @invitation.mark_as_redeemed(current_user) if @invitation
-    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under %{email} to your account.", :email => @external_author.email)
+    flash[:notice] = ts("We have added the stories imported under %{email} to your account.", :email => @external_author.email)
     redirect_to user_external_authors_path(current_user)
   end
 

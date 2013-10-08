@@ -34,7 +34,7 @@ class LocalesController < ApplicationController
   def create   
     @locale = Locale.new(params[:locale])
     if @locale.save
-      flash[:notice] = t('successfully_added', :default => 'Locale was successfully added.')
+      flash[:notice] = ts("Locale was successfully added.")
       redirect_to locales_path
     else
       render :action => "new"

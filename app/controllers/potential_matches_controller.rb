@@ -15,7 +15,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -26,7 +26,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_assignment
-    flash[:error] = t('potential_match.no_match', :default => "What potential match did you want to work on?")
+    flash[:error] = ts("What potential match did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -36,7 +36,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def signup_open
-    flash[:error] = t('potential_match.signup_open', :default => "Signup is still open, you cannot determine potential matches now.")
+    flash[:error] = ts("Signup is still open, you cannot determine potential matches now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -46,7 +46,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def assignments_sent
-    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = ts("Assignments have already been sent! If necessary, you can purge them.")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
