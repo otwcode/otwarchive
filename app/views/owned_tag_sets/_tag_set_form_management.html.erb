@@ -11,7 +11,7 @@
     </ul>
   </dd>
   <dt><%= form.label :owner_changes, ts("Add/Remove Owners: ") %></dt>
-  <dd><%= form.text_field :owner_changes, autocomplete_options("pseud", :size => 80) %></dd>
+  <dd><%= form.text_field :owner_changes, autocomplete_options("user", :size => 80) %></dd>
 
   <dt><%= ts("Current Moderators") %></dt>
   <dd>
@@ -19,7 +19,7 @@
   </dd>
   
   <dt><%= form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
-  <dd><%= form.text_field :moderator_changes, autocomplete_options("pseud", :size => 80) %></dd>
+  <dd><%= form.text_field :moderator_changes, autocomplete_options("user", :size => 80) %></dd>
 </dl>   
 </fieldset>
 
