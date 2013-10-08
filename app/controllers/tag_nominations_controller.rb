@@ -11,5 +11,5 @@ class TagNominationsController < ApplicationController
       end
     end    
   end
-  
+
 end
