@@ -3,7 +3,7 @@
 <%= form_tag(@user, :method => 'delete') do %>
 <% unless @user.coauthors.blank? %>
 <fieldset>
-	<legend><%= t('.users.works_with_others', :default => "Works You Made With Others") %></legend>
+	<legend><%= ts("Works You Made With Others") %></legend>
 <p>
     <%= "You have #{@coauthored_works.size} work(s) co-authored with the following users: " + print_coauthors(@user)  + "." %>
 </p>
@@ -28,20 +28,20 @@
 
 <% unless @sole_authored_works.empty? && @sole_owned_collections.empty? %>
 <fieldset>
-	<legend><%= t('.users.by_self', :default => "Works and Collections You Made By Yourself") %></legend>
+	<legend><%= ts("Works and Collections You Made By Yourself") %></legend>
 <p>
   <% unless @sole_authored_works.empty? %>
-    <%= t('.users.sole_authored_works', :default => "You have %{num_sole_authored} work(s) under the following pseuds: %{pseuds}.", :num_sole_authored => @sole_authored_works.size, :pseuds => print_pseuds(@user)) %>
+    <%= ts("You have %{num_sole_authored} work(s) under the following pseuds: %{pseuds}.", :num_sole_authored => @sole_authored_works.size, :pseuds => print_pseuds(@user)) %>
   <% end %>
   <% unless @sole_owned_collections.empty? %>
     <% unless @sole_authored_works.empty? %><br /><% end %>
-    <%= t('.users.sole_owned_collections', :default => "You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.", 
+    <%= ts("You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.",
             :num_sole_collections => @sole_owned_collections.size, 
             :pseuds => @sole_owned_collections.collect(&:all_owners).flatten.uniq.collect(&:name).join(", ")) %>
   <% end %>
 </p>
 <p>
-    <%= t('.users.can_delete_sole_owned', :default => "You can delete them, but please consider orphaning them instead!") %>
+    <%= ts("You can delete them, but please consider orphaning them instead!") %>
 </p>
 <p>
     <%= radio_button_tag 'sole_author', "keep_pseud", true %>

@@ -11,9 +11,9 @@
 <!--/subnav-->
 
 <!--main content-->
-<p class="required"><%=h t('.required', :default => '* Required field') %></p>
+<p class="required"><%=h ts('* Required field') %></p>
 <h3 class="heading"><%=h @work.title.html_safe %></h3>
 
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('.forms.create', :default => "Create") } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => ts("Create") } %>
 <!--/content-->
 

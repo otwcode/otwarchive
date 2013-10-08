@@ -71,10 +71,10 @@ class Admin::AdminUsersController < ApplicationController
           @user.banned = true
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
-            flash[:notice] = t('success_banned', :default => "User has been permanently suspended")
+            flash[:notice] = ts("User has been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
-            flash[:error] = t('error_banned', :default => "User could not be permanently suspended")
+            flash[:error] = ts("User could not be permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unsuspend'
@@ -83,14 +83,14 @@ class Admin::AdminUsersController < ApplicationController
             @user.suspended_until = nil
             if @user.save && !@user.suspended? && @user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
+              flash[:notice] = ts("Suspension has been lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
+              flash[:error] = ts("Suspension could not be lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
-            flash[:notice] = t('not_suspended', :default => "User had not been suspended")
+            flash[:notice] = ts("User had not been suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unban'
@@ -98,14 +98,14 @@ class Admin::AdminUsersController < ApplicationController
             @user.banned = false
             if @user.save && !@user.banned?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted")
+              flash[:notice] = ts("Suspension has been lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted")
+              flash[:error] = ts("Suspension could not be lifted")
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
-            flash[:notice] = t('not_banned', :default => "User had not been permanently suspended")
+            flash[:notice] = ts("User had not been permanently suspended")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         end
@@ -180,10 +180,10 @@ class Admin::AdminUsersController < ApplicationController
     @user.activate
     if @user.active?
       @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE, :note => 'Manually Activated', :admin_id => current_admin.id})
-      flash[:notice] = t('activated', :default => "User Account Activated")
+      flash[:notice] = ts("User Account Activated")
       redirect_to :action => :show
     else
-      flash[:error] = t('activation_failed', :default => "Attempt to activate account failed.")
+      flash[:error] = ts("Attempt to activate account failed.")
       redirect_to :action => :show
     end
   end
@@ -192,7 +192,7 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     # send synchronously to avoid getting caught in mail queue
     UserMailer.signup_notification(@user.id).deliver! 
-    flash[:notice] = t('activation_sent', :default => "Activation email sent")
+    flash[:notice] = ts("Activation email sent")
     redirect_to :action => :show
   end
 

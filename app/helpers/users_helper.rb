@@ -131,7 +131,7 @@ module UsersHelper
   
 #  def print_pseud_drafts_link(pseud)
 #    total = pseud.unposted_works.size
-#    link_to_unless_current t('my_drafts', :default =>"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+#    link_to_unless_current ts("Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
 #  end
   
   def authors_header(collection, what = "People")
@@ -155,25 +155,25 @@ module UsersHelper
 
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
-      t('users_helper.log_validated', :default => 'Account Validated')
+      ts('Account Validated')
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('users_helper.log_role_added', :default => 'Role Added: ')
+      ts('Role Added: ')
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('users_helper.log_role_removed', :default => 'Role Removed: ')
+      ts('Role Removed: ')
     elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('users_helper.log_suspended', :default => 'Suspended until ')
+      ts('Suspended until ')
     elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('users_helper.log_lift_suspension', :default => 'Suspension Lifted')
+      ts('Suspension Lifted')
     elsif action == ArchiveConfig.ACTION_BAN
-      t('users_helper.log_ban', :default => 'Suspended Permanently')
+      ts('Suspended Permanently')
     elsif action == ArchiveConfig.ACTION_WARN
-      t('users_helper.log_warn', :default => 'Warned')
+      ts('Warned')
     elsif action == ArchiveConfig.ACTION_RENAME
-      t('users_helper.log_rename', :default => 'Username Changed')
+      ts('Username Changed')
 		elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
-      t('users_helper.log_password_change', :default => 'Password Changed')
+      ts('Password Changed')
 		elsif action == ArchiveConfig.ACTION_NEW_EMAIL
-      t('users_helper.log_email_change', :default => 'Email Changed')
+      ts('Email Changed')
     end
   end
   

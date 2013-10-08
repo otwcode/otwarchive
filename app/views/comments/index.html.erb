@@ -2,7 +2,7 @@
 <% if @commentable.nil? %>
   <!-- the most recent comments -->
   <% cache(logged_in? ? 'latest_comments' : 'latest_comments_public') do %>
-    <h2 class="heading"><%= t('.viewing_last', :default => "Viewing %{count} recent comments", :count => @comments.length) %></h2>
+    <h2 class="heading"><%= ts("Viewing %{count} recent comments", :count => @comments.length) %></h2>
     <ol class="comment index group">
       <% for comment in @comments %>
         <% if comment.approved or logged_in? %>

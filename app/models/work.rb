@@ -290,7 +290,7 @@ class Work < ActiveRecord::Base
   # def self.import_from_url(url)
   #   storyparser = StoryParser.new
   #   if Work.find_by_imported_from_url(url)
-  #     raise DuplicateWorkError(t('already_imported', :default => "Work already imported from this url."))
+  #     raise DuplicateWorkError(ts("Work already imported from this url."))
   #
   #   work = storyparser.download_and_parse_story(url)
   #   work.imported_from_url = url
