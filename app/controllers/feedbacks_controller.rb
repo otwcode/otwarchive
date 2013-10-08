@@ -29,7 +29,7 @@ class FeedbacksController < ApplicationController
         if !@feedback.email.blank?
           UserMailer.feedback(@feedback.id).deliver
         end
-        flash[:notice] = ts("Your message was sent to the Archive team - thank you!")
+        flash[:notice] = ts("Your message was sent to the archive team - thank you!")
         format.html { redirect_back_or_default(root_path) }
       else
         flash[:error] = ts("Sorry, your message could not be saved - please try again!")
