@@ -10,65 +10,18 @@
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />
     <meta name="author" content="Organization for Transformative Works" />
+    <meta http-equiv="refresh" content="300" />
     <title>
-      Archive of Our Own &raquo; Systems Status.
+      Systems Status | Archive of Our Own
     </title>
-<meta http-equiv="refresh" content="300">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/01-core.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/02-elements.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/03-region-header.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/04-region-dashboard.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/05-region-main.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/06-region-footer.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/07-interactions.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/08-actions.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/09-roles-states.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/10-types-groups.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/11-group-listbox.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/12-group-meta.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/13-group-blurb.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/14-group-preface.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/15-group-comments.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/16-zone-system.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/17-zone-home.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/18-zone-searchbrowse.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/19-zone-tags.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/20-zone-translation.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/21-userstuff.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/site/2.0/22-system-messages.css">
-<link rel="stylesheet" type="text/css" media="only screen and (max-width: 480px), handheld" href="/stylesheets/site/2.0/25-role-handheld.css">
-<link rel="stylesheet" type="text/css" media="speech" href="/stylesheets/site/2.0/26-role-aural.css">
-<link rel="stylesheet" type="text/css" media="print" href="/stylesheets/site/2.0/27-role-print.css">
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-<script src="/status/jquery.timeago.js" type="text/javascript"></script>
-<script>
- $(function() {
-$( "#tabs" ).tabs({
-beforeLoad: function( event, ui ) {
-ui.jqXHR.error(function() {
-ui.panel.html(
-"We are having issues loading this page." +
-'Follow <a href="http://twitter.com/ao3_status/">@AO3_Status</a> on Twitter for updates.' );
-});
-}
-});
-});
-</script>
- <script>
-$(function() {
-$( document ).tooltip();
-});
-</script>
-<style>
-label {
-display: inline-block;
-width: 5em;
-}
-</style>
-
-   <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_873_archive_2_0/1_site_screen_.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+    <style type="text/css">
+      label {
+        display: inline-block;
+        width: 5em;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_873_archive_2_0/1_site_screen_.css">
     <link rel="stylesheet" type="text/css" media="only screen and (max-width: 480px), handheld" href="/stylesheets/skins/skin_873_archive_2_0/4_site_maxwidth.handheld_.css">
     <link rel="stylesheet" type="text/css" media="speech" href="/stylesheets/skins/skin_873_archive_2_0/5_site_speech_.css">
     <link rel="stylesheet" type="text/css" media="print" href="/stylesheets/skins/skin_873_archive_2_0/6_site_print_.css">
@@ -77,7 +30,7 @@ width: 5em;
     <!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_873_archive_2_0/9_site_screen_IE6.css"><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_873_archive_2_0/10_site_screen_IE7.css"><![endif]-->  
 
-</head>
+  </head>
 
 	<body>
 		<ul id="skiplinks"><li><a href="#main">Main Content</a></li></ul>
@@ -203,5 +156,22 @@ ransformative Works">OTW</a></li>
     <script type="text/javascript">$j = jQuery.noConflict();</script>
     <script src="/javascripts/application.js" type="text/javascript"></script>
     <script src="/javascripts/bootstrap/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/jquery.timeago.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $j(document).ready(function(){
+        $j("#tabs").tabs({
+          beforeLoad: function(event, ui){
+            ui.jqXHR.error(function(){
+              ui.panel.html("We are having issues loading this page." + 'Follow <a href="http://twitter.com/ao3_status/">@AO3_Status</a> on Twitter for updates.');
+            });
+          }
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      $j(function(){
+        $j(document).tooltip();
+      });
+    </script>
   </body>
 </html>

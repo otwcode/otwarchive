@@ -548,6 +548,13 @@ class Tag < ActiveRecord::Base
     self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
+  # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
+  def recategorize(new_type)
+    self.update_attribute(:type, new_type)
+    # return a new instance of the tag, with the correct class
+    Tag.find(self.id)
+  end
+
   #### FILTERING ####
   
   include WorksOwner  
