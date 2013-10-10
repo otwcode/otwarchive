@@ -146,7 +146,8 @@ class OwnedTagSet < ActiveRecord::Base
   end
 
   def owner_changes=(user_list)
-    User.parse_byline_login(user_list)[:users].each do |user|
+    logins = user_list.split(',').map(&:strip)
+    User.where(login: logins).each do |user|
       if self.owners.include?(user)
         self.owners -= [user] if self.owners.count > 1
       else
@@ -157,7 +158,8 @@ class OwnedTagSet < ActiveRecord::Base
   end
 
   def moderator_changes=(user_list)
-    User.parse_byline_login(user_list)[:users].each do |user|
+    logins = user_list.split(',').map(&:strip)
+    User.where(login: logins).each do |user|
       if self.moderators.include?(user)
         self.moderators -= [user]
       else
