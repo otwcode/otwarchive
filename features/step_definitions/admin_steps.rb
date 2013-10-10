@@ -136,6 +136,12 @@ When /^(\d+) Archive FAQs? exists?$/ do |n|
   end
 end
 
+When /^(\d+) Admin Posts? exists?$/ do |n|
+  (1..n.to_i).each do |i|
+    FactoryGirl.create(:admin_post, id: i)
+  end
+end
+
 When /^the invite_from_queue_at is yesterday$/ do
   AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
 end
