@@ -372,14 +372,14 @@ class CommentsController < ApplicationController
            :controller => :comments,
            :action => :show,
            :id => comment.commentable.id,
-           :tag_id => comment.ultimate_parent,
+           :tag_id => comment.ultimate_parent.to_param,
            :anchor => "comment_#{comment.id}"
         }
       else
         default_options = {
            :controller => comment.commentable.class.to_s.underscore.pluralize,
            :action => :show,
-           :id => comment.commentable.id,
+           :id => (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
            :anchor => "comment_#{comment.id}"
         }
       end
@@ -394,8 +394,9 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
+
     if commentable.is_a?(Tag)
-      redirect_to comments_path(:tag_id => commentable.name,
+      redirect_to comments_path(:tag_id => commentable.to_param,
                   :add_comment => options[:add_comment],
                   :add_comment_reply_id => options[:add_comment_reply_id],
                   :delete_comment_id => options[:delete_comment_id],
