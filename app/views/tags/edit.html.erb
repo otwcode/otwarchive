@@ -62,7 +62,7 @@
     
       <dt><%= f.label :unwrangleable %></dt>
       <dd>
-        <%= f.check_box :unwrangleable %>&nbsp;
+        <%= f.check_box(:unwrangleable, :disabled => (@tag.class.name == "UnsortedTag")) %>&nbsp;
         <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
       </dd>
 
