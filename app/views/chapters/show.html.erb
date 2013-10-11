@@ -47,3 +47,9 @@
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
 <!-- END comment section -->
 <% end %>
+
+<% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>
+
