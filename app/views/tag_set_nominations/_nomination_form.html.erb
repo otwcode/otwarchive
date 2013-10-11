@@ -24,7 +24,7 @@
       <dd><%= f.hidden_field :owned_tag_set_id, :value => @tag_set_nomination.owned_tag_set.id %><%= link_to @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></dd>
         
       <dt><%= f.label :user_id, ts("User: ") %></dt>
-      <dd><%= f.select :user_id, current_user {|u| [u.login, u.id] } %></dd>
+      <dd><%= f.hidden_field :user_id, :value => current_user.id %></dd>
     </dl>
   </fieldset>
 <fieldset>
