@@ -15,7 +15,7 @@
 
   <dt><%= ts("Current Moderators") %></dt>
   <dd>
-    <ul class="mods commas"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join("\n").html_safe =%></ul>
+    <ul class="mods commas"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:login).sort.map {|mod| content_tag(:li, mod)}.join("\n").html_safe =%></ul>
   </dd>
   
   <dt><%= form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
