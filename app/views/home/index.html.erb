@@ -27,7 +27,7 @@
     <% if @admin_post %>
       <div class="news latest module">
         <h3 class="heading"><%= ts("News") %></h3>
-        <% @admin_post.each do |f| %>
+        <% @admin_posts.each do |f| %>
           <p><%= link_to f.title, f %></p>
         <% end %>
         <% if @admin_post_show_more %>
