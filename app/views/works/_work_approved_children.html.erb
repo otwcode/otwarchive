@@ -5,16 +5,21 @@
   <ul>
   <% for related_work in @work.approved_related_works %>
     <li>
-      <% if related_work.work.restricted? && !logged_in? %>
-          <%= ts("A [Restricted Work] by") %> <%= byline(related_work.work) %>.
-          <% if related_work.translation %>
-              <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>.
-          <% end %> <%= ts("Log in to view.") %>
-          <% else %>
-      <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
-      <% if related_work.translation %>
-        <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>
-      <% end %>
+      <% if related_work.work.is_a?(ExternalWork) %>
+        <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+        <% if related_work.translation %>
+          <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>
+        <% end %>
+      <% elsif related_work.work.restricted? && !logged_in? %>
+        <%= ts("A [Restricted Work] by") %> <%= byline(related_work.work) %>.
+        <% if related_work.translation %>
+          <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>.
+        <% end %> <%= ts("Log in to view.") %>
+      <% else %>
+        <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+        <% if related_work.translation %>
+          <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>
+        <% end %>
       <% end %>
     </li>
   <% end %>

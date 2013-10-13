@@ -21,9 +21,9 @@ http_interactions:
       content-type: 
       - text/html; charset=UTF-8
       date: 
-      - Wed, 19 Jun 2013 20:29:01 GMT
+      - Sun, 13 Oct 2013 20:34:57 GMT
       expires: 
-      - Fri, 19 Jul 2013 20:29:01 GMT
+      - Tue, 12 Nov 2013 20:34:57 GMT
       cache-control: 
       - public, max-age=2592000
       server: 
@@ -34,11 +34,13 @@ http_interactions:
       - 1; mode=block
       x-frame-options: 
       - SAMEORIGIN
+      alternate-protocol: 
+      - 80:quic
     body: 
       encoding: US-ASCII
       string: ""
     http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 20:29:01 GMT
+  recorded_at: Sun, 13 Oct 2013 20:34:51 GMT
 - request: 
     method: head
     uri: http://testarchive.transformativeworks.org/
@@ -58,7 +60,7 @@ http_interactions:
       server: 
       - nginx/1.4.1
       date: 
-      - Wed, 19 Jun 2013 20:29:04 GMT
+      - Sun, 13 Oct 2013 20:35:02 GMT
       content-type: 
       - text/html
       content-length: 
@@ -71,5 +73,5 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 20:29:04 GMT
+  recorded_at: Sun, 13 Oct 2013 20:34:56 GMT
 recorded_with: VCR 2.5.0
