@@ -43,6 +43,9 @@
         </li>
       <% end %>
     <% end %>
+    <% if logged_in_as_admin? || logged_in? && can_skin? %>
+      <li><%= span_if_current ts('Skins Admin'), unapproved_skins_path %></li>
+    <% end %>
   <% end %>
 </ul>
 <!--/subnav-->

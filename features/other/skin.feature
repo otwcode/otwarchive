@@ -101,18 +101,18 @@ Feature: creating and editing skins
     Then I should see "Sorry, you don't have permission"
   When I go to "public skin" edit skin page
     Then I should see "Sorry, you don't have permission"
-  When I go to admin's skins page
-    Then I should see "I'm sorry, only an admin can"
+  When I go to the skins admin page
+    Then I should see "I'm sorry, only an admin can look at that area"
 
-  Scenario: Users should not be able to see the admin skins page
+  Scenario: Users should not be able to see the skins admin page
   Given I am logged in as "skinner"
-  When I go to admin's skins page
+  When I go to the skins admin page
   Then I should see "I'm sorry, only an admin can look at that area"
 
-  Scenario: Admins should be able to see public skins in the admin skins page
+  Scenario: Admins should be able to see public skins in the skins admin page
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
-  When I go to admin's skins page
+  When I go to the skins admin page
   Then I should see "public skin" within "table#unapproved_skins"
 
   Scenario: Admins should not be able to edit unapproved skins
@@ -127,7 +127,7 @@ Feature: creating and editing skins
   Scenario: Admins should be able to approve public skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
-  When I go to admin's skins page
+  When I go to the skins admin page
     And I check "public skin"
     And I submit
   Then I should see "The following skins were updated: public skin"
@@ -148,6 +148,57 @@ Feature: creating and editing skins
     And I should see "(admin modified)"
     And I should see "#greeting.logged-in"
     And I should not see "#title"
+
+  Scenario: Skins Admins should be able to see public skins in the admin skins page
+  Given the unapproved public skin "public skin"
+    And I am logged in as a Skins Admin
+  When I go to the skins admin page
+  Then I should see "public skin" within "table#unapproved"
+
+  Scenario: Skins Admins should not be able to edit unapproved skins
+  Given the unapproved public skin "public skin"
+    And I am logged in as a Skins Admin
+  When I go to "public skin" skin page
+  Then I should not find "Edit"
+    And I should not find "Delete"
+  When I go to "public skin" edit skin page
+  Then I should see "Sorry, you don't have permission"
+
+  Scenario: Skins Admins should be able to approve public skins
+  Given the unapproved public skin "public skin"
+    And I am logged in as a Skins Admin
+  When I go to the skins admin page
+    And I check "public skin"
+    And I submit
+  Then I should see "The following skins were updated: public skin"
+  When I follow "Approved Skins"
+  Then I should see "public skin" within "table#approved"
+
+  Scenario: Skins Admins should be able to edit but not delete public approved skins
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as a Skins Admin
+  When I go to "public skin" skin page
+  Then I should see "Edit"
+    But I should not find "Delete"
+  When I follow "Edit"
+    And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
+    And I fill in "Description" with "Blinky love (admin modified)"
+    And I submit
+  Then I should see an update confirmation message
+    And I should see "(admin modified)"
+    And I should see "#greeting.logged-in"
+    And I should not see "#title"
+
+  Scenario: Skins Admins should be able to unapprove public skins, which should also remove them from preferences
+  Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I unapprove the skin "public skin" as a Skins Admin
+  Then I should see "The following skins were updated: public skin"
+    And I should see "public skin" within "table#unapproved"
+  When I am logged in as "skinuser"
+    And I am on skinuser's preferences page
+  Then "Default" should be selected within "preference_skin_id"
+    And I should not see "#title"
+    And I should not see "text-decoration: blink;"
 
   Scenario: Users should not be able to edit their public approved skins
   Given the approved public skin "public skin"

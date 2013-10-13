@@ -34,6 +34,9 @@
           <% if current_user.is_tag_wrangler? %>
             <li><%= span_if_current ts("Tag Wrangling"), tag_wrangler_path(current_user) %></li>
           <% end %>
+          <% if current_user.is_skins_admin? %>
+            <li><%= span_if_current ts("Skins Administration"), unapproved_skins_path %></li>
+          <% end %>
           <% # one day, an if permit?('translator') || permit?("translation_admin") link will go here %>
         </ul>
       </li>

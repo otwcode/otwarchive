@@ -4,13 +4,13 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render :partial => 'admin/skins/navigation' %>
+<%= render :partial => 'admin_navigation' %>
 <!--/subnav-->
 
 <!--main content-->
 <h3 class="landmark heading"><%= ts('Manage Skins') %></h3>
 
-<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
+<%=  form_tag url_for(:controller => 'skins', :action => "admin_update"), {:method => :put} do %>
 
   <!-- approval queue -->
   <fieldset>
