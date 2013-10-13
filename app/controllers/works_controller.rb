@@ -669,13 +669,14 @@ protected
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
     if !@collection.nil? && @collection.moderated?
-      flash[:notice] ||= ""
-      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+      if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
+        flash[:notice] ||= ""
+        flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+      end
     end
   end
 
 public
-
 
   def post_draft
     @user = current_user
