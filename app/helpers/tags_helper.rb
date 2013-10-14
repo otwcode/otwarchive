@@ -299,6 +299,9 @@ module TagsHelper
     elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
       # only one tag and it says choose not to warn
       "warning-choosenotto warnings"
+    elsif warning_tags.size == 2 && ((warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME))
+      # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
+      "warning-choosenotto warnings"
     else
       "warning-yes warnings"
     end

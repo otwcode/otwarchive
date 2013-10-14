@@ -52,4 +52,21 @@ Feature: Basic collection navigation
     And I follow "My Collection"
   Then I should not see "Settings"
 
+  Scenario: A Collection's Fandoms should be in alphabetical order
+  Given I have the collection "My ABCs" with name "my_abcs"
+    And a canonical fandom "A League of Their Own"
+    And a canonical fandom "Merlin"
+    And a canonical fandom "Teen Wolf"
+    And a canonical fandom "The Borgias"
+  When I am logged in as "Scott" with password "password"
+    And I post the work "Sesame Street" in the collection "My ABCs"
+    And I edit the work "Sesame Street"
+    And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
+    And I press "Post Without Preview"
+    And I go to "My ABCs" collection's page
+    And I follow "Fandoms ("
+  Then "The Borgias" should appear before "A League of Their Own"
+    And "A League of Their Own" should appear before "Merlin"
+    And "Merlin" should appear before "Teen Wolf"
+
 

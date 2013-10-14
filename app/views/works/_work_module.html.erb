@@ -15,7 +15,7 @@
       <%= byline(work) %>
 
 <% #### CACHE show/hide #### %>
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v2") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
   

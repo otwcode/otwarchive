@@ -16,19 +16,19 @@ Then /^show me the html$/ do
 end
 
 Then /^show me the main content$/ do
-  puts "\n" + find("#main").node.inner_html
+  puts "\n" + find("#main").native.inner_html
 end
 
 Then /^show me the errors$/ do 
-  puts "\n" + find("div.error").node.inner_html
+  puts "\n" + find("div.error").native.inner_html
 end
 
 Then /^show me the sidebar$/ do
-  puts "\n" + find("#dashboard").node.inner_html
+  puts "\n" + find("#dashboard").native.inner_html
 end
 
 Then /^I should see errors/ do
-  assert find("div.error").node
+  assert find("div.error")
 end
 
 Then /^show me the form$/ do
@@ -36,7 +36,7 @@ Then /^show me the form$/ do
 end
 
 Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
-  puts "\n" + page.all("#main form")[(index.to_i-1)].node.inner_html
+  puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
 
@@ -80,6 +80,10 @@ end
 
 Then /^I should see a save error message$/ do
   step %{I should see "We couldn't save"}
+end
+
+Then /^I should see a success message$/ do
+  step %{I should see "success"}
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|

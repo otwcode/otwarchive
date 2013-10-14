@@ -83,7 +83,7 @@ class Work < ActiveRecord::Base
     :through => :taggings, 
     :source => :tagger, 
     :source_type => 'Tag',
-    :before_remove => :remove_filter_taggingg,
+    :before_remove => :remove_filter_tagging,
     :conditions => "tags.type = 'Relationship'"
   has_many :characters, 
     :through => :taggings, 
@@ -253,7 +253,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
@@ -457,6 +457,13 @@ class Work < ActiveRecord::Base
     in_anon_collection?
   end
   
+  before_update :bust_anon_caching
+  def bust_anon_caching
+    if in_anon_collection_changed?
+      async(:poke_cached_creator_comments)
+    end
+  end
+  
   # This work's collections and parent collections
   def all_collections
     Collection.where(id: self.collection_ids) || []
@@ -592,9 +599,15 @@ class Work < ActiveRecord::Base
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
-    unless self.comments.empty?
-      self.comments.each{ |c| c.touch }
-    end
+    async(:poke_cached_comments)
+  end
+  
+  def poke_cached_comments
+    self.comments.each { |c| c.touch }
+  end
+  
+  def poke_cached_creator_comments
+    self.creator_comments.each { |c| c.touch }
   end
 
   # Get the total number of chapters for a work
@@ -846,6 +859,12 @@ class Work < ActiveRecord::Base
       :commentable_type => 'Chapter', 
       :commentable_id => self.chapters.value_of(:id)
     )
+  end
+  
+  # All comments left by the creators of this work
+  def creator_comments
+    pseud_ids = Pseud.where(user_id: self.pseuds.value_of(:user_id)).value_of(:id)
+    find_all_comments.where(pseud_id: pseud_ids)
   end
   
   def guest_kudos_count

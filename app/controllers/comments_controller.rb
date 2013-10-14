@@ -47,7 +47,7 @@ class CommentsController < ApplicationController
   def check_anonymous_comment_preference
     parent =  find_parent
     if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
-      setflash; flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
     end
   end
@@ -66,7 +66,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
-      setflash; flash[:error] = ts('Comments with replies cannot be edited')
+      flash[:error] = ts('Comments with replies cannot be edited')
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
   end
@@ -119,7 +119,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      setflash; flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new
@@ -154,7 +154,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      setflash; flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(params[:comment])
@@ -170,7 +170,7 @@ class CommentsController < ApplicationController
             cookies[:comment_name] = @comment.name[0..100]
             cookies[:comment_email] = @comment.email[0..100]
           end
-          setflash; flash[:comment_notice] = ts('Comment created!')
+          flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
@@ -190,11 +190,10 @@ class CommentsController < ApplicationController
           end
         else
           # this shouldn't come up any more
-          setflash; flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
+          flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
           redirect_back_or_default(root_path)
         end
       else
-        setflash
         render :action => "new"
       end
     end
@@ -205,7 +204,7 @@ class CommentsController < ApplicationController
   def update
     params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
-      setflash; flash[:comment_notice] = ts('Comment was successfully updated.')
+      flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html { redirect_to_comment(@comment) }
         format.js # updating the comment in place
@@ -223,13 +222,13 @@ class CommentsController < ApplicationController
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
-      setflash; flash[:comment_error] = ts("We couldn't delete that comment.")
+      flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
     elsif parent_comment
-      setflash; flash[:comment_notice] = ts("Comment deleted.")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
-      setflash; flash[:comment_notice] = ts("Comment deleted.")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {:show_comments => true})
     end
   end
