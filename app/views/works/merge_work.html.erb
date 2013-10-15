@@ -1,10 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Merge Work') %></h2>
 
-
 <!--/descriptions-->
-
-
 
 <!--main content-->
 <%= form_for(@work, :url => { :action => "merge_work", :user_id => @user }) do |f| %>
@@ -21,11 +18,8 @@
           <%= f.label :target_id, ts("Target Id") %>
         </li>
 
-
-
       </ul>
     </fieldset>
-
 
     <%= submit_fieldset(f) %>
 
