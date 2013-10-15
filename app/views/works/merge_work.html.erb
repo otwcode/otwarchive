@@ -4,24 +4,29 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for(@work, :url => { :action => "merge_work", :user_id => @user }) do |f| %>
-    <fieldset>
-      <legend><%= ts("Merge") %></legend>
-      <h4 class="heading"><%= ts("Merge") %></h4>
-      <ul>
-        <li>
-          <%= @work.title.to_s %>
-        </li>
 
-        <li>
-          <%= f.text_field :target_id %>
-          <%= f.label :target_id, ts("Target Id") %>
-        </li>
+<form id="mergeform"  method="put" action="merge_work">
+  <div class="form_description">
+    <h2>Test</h2>
 
-      </ul>
-    </fieldset>
+  </div>
+  <ul >
 
-    <%= submit_fieldset(f) %>
+    <li id="li_1" >
+      <label class="description" for="element_1">Text </label>
+      <div>
+        <input id="target_id" name="target_id" type="text" maxlength="255" value=""/>
+      </div>
+    </li>
+
+
+
+
+      <input id="domerge"  type="submit" name="submit" value="Submit" />
+    </li>
+  </ul>
+</form>
+
 
 <% end %>
 <!--/content-->
