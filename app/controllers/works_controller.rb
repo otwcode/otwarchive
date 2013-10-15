@@ -509,6 +509,17 @@ class WorksController < ApplicationController
     end
   end
 
+  def merge_work
+    @target_id = params[target_id]
+    if @target_id.nil?
+      setflash; flash.now[:error] = ts("You must select a destination work.")
+      render :merge_work and return
+    else
+      @work.merge(@target_id)
+    end
+
+
+  end
   # POST /works/import
   def import
     # check to make sure we have some urls to work with
