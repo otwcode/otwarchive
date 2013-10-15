@@ -509,7 +509,7 @@ class WorksController < ApplicationController
     end
   end
 
-  def merge_work
+  def merge_work(target_id)
     @target_id = params[target_id]
     if @target_id.nil?
       setflash; flash.now[:error] = ts("You must select a destination work.")
