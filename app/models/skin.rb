@@ -116,19 +116,7 @@ class Skin < ActiveRecord::Base
   validate :clean_css
   def clean_css
     return if self.css.blank?
-    scanner = StringScanner.new(self.css)
-    if !scanner.exist?(/\/\*/)
-      # no comments, clean the whole thing
-      self.css = clean_css_code(self.css)
-    else
-      clean_code = []
-      while (scanner.exist?(/\/\*/))
-        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/).chomp('/*')))
-        clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
-      end
-      clean_code << (clean = clean_css_code(scanner.rest))
-      self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
-    end
+    self.css = clean_css_code(self.css)
   end
 
   scope :public_skins, where(:public => true)

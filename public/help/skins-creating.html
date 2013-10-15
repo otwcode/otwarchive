@@ -1,12 +1,30 @@
 <dl id="help">
   <dt>You can create new skins for the archive using our wizard, or by writing your own CSS (cascading style sheets) code</dt>
-  <dd>Note that for security reasons, you can only use a limited set of CSS code.</dd>
+  <dd>Note that for security reasons, you can only use a limited set of CSS code: all other declarations and comments will be removed!</dd>
   
   <dt>Look at other public skins for examples</dt>
   <dd>
-    All approved public skins are visible and you can read their code and copy them to edit for 
+    <a href="/skins">All approved public skins</a> are visible and you can read their code and copy them to edit for 
     your own use. 
   </dd> 
+  
+  <dt>Use only one declaration per property per ruleset</dt>
+  <dd>
+    The CSS parser we use retains only one declaration for each property, meaning that rulesets like<br>
+    <code><pre>
+      .my-class {
+        background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
+        background: -o-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+        background: -webkit-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+      }
+    </pre></code>
+    will have all but the last <code>background</code> declaration removed (so your gradient would only show up in WebKit browsers). To avoid losing declarations with repeated properties, split each one into its own ruleset, like so:
+    <code><pre>
+      .my-class { background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%); }
+      .my-class { background: -o-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); }
+      .my-class { background: -webkit-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); }
+    </pre></code>
+  </dd>
 
   <dt>If you are new to CSS, here are the basics:</dt>
   <dd id="basics">
@@ -33,7 +51,7 @@
       Some useful CSS tutorials for more information:
       <ul>
         <li><a href="http://www.cssbasics.com/">CSS Basics tutorial</a></li>
-        <li><a href="http://www.w3schools.com/css/">CSS tutorial from W3schools</a></li>
+        <li><a href="http://developer.mozilla.org/docs/CSS/Getting_Started">Getting Started (CSS Tutorial) from MDN</a></li>
       </ul>
     </p>
   </dd>
