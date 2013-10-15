@@ -46,7 +46,7 @@ Feature: Edit Works
     Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
       And I should see "second chapter content"
     When I press "Post"
-    Then I should see "Chapter was successfully updated."
+    Then I should see "Chapter was successfully posted."
       And I should not see "first chapter content"
       And I should see "second chapter content"
     When I edit the work "First work"
@@ -106,8 +106,19 @@ Feature: Edit Works
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
       And I press "Post Without Preview"
-      And I should see "Work was successfully posted"
-    Then I should not see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."
-
-
-
+      And I should see "Work was successfully updated"
+    Then I should not see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."      
+      
+  Scenario: Editing a work you created today should not bump its revised-at date
+    Given I am logged in as "testuser" with password "testuser"
+      And I post the work "Don't Bump Me"
+      And I post the work "This One Stays On Top"
+      And I edit the work "Don't Bump Me"
+      And I press "Post Without Preview"
+    When I go to the works page
+    Then "This One Stays On Top" should appear before "Don't Bump Me"
+    When I edit the work "Don't Bump Me"
+      And I press "Preview"
+      And I press "Update"
+      And I go to the works page
+    Then "This One Stays On Top" should appear before "Don't Bump Me"
