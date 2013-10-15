@@ -310,12 +310,24 @@ class Work < ActiveRecord::Base
   # MERGE
   ########################################################################
   def merge(target_id)
-    equal_chapters = false
-    last_target_chapter_id = 0
 
     #get target work object
     target_work = Work.find_by_id(target_id)
 
+    current_user = User.current_user
+    if current_user.is_author_of?(target_id)
+      perform_merge(target_work)
+    else
+      #raise error
+    end
+  end
+
+  private
+  def perform_merge(target)
+    equal_chapters = false
+    last_target_chapter_id = 0
+
+    target_work = target
     #Loop through kudos for source work and assign them to target work
     self.kudos.each { |k| k.commentable_id = target_id; k.save }
 
@@ -340,22 +352,22 @@ class Work < ActiveRecord::Base
         }
       }
     end
-    #todo make ar friendly, need to tell it to make sure its a type of work too, in case we want things other then works in collections
+
     #update collection_items to point to target work
     # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
     temp_collection_items = CollectionItem.find_all_by_item_id(self.id)
     temp_collection_items.each { |ci|
-    ci.item_id = target_id
-    ci.save
+      ci.item_id = target_id
+      ci.save
     }
     # update readings replace source id with target id
     temp_readings = Reading.find_by_work_id(self.id)
     temp_readings.each { |r|
-    r.work_id = target_id
-    r.save }
+      r.work_id = target_id
+      r.save }
 
     #set redirect for source work to target work id
-    self.redirect_work_id = target_id
+    self.redirect_work_id = target_work.id
 
     #remove creatorship for source
     self.creatorships.each { |c| c.destroy }
@@ -371,6 +383,7 @@ class Work < ActiveRecord::Base
 
     #save self
     self.save
+
 
   end
   ########################################################################
