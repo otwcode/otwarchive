@@ -509,6 +509,9 @@ class WorksController < ApplicationController
     end
   end
 
+  def merge_work_page
+    render :merge_work and return
+  end
   def merge_work(target_id)
     @target_id = params[target_id]
     if @target_id.nil?
