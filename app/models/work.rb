@@ -253,7 +253,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
@@ -306,86 +306,6 @@ class Work < ActiveRecord::Base
   #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
   # end
 
-  ########################################################################
-  # MERGE
-  ########################################################################
-  def merge(target_id)
-
-    #get target work object
-    target_work = Work.find_by_id(target_id)
-
-    current_user = User.current_user
-    if current_user.is_author_of?(target_id)
-      perform_merge(target_work)
-    else
-      #raise error
-    end
-  end
-
-  private
-  def perform_merge(target)
-    equal_chapters = false
-    last_target_chapter_id = 0
-
-    target_work = target
-    #Loop through kudos for source work and assign them to target work
-    self.kudos.each { |k| k.commentable_id = target_id; k.save }
-
-    #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
-    if self.chapters.count != target_work.chapters.count {equal_chapters = true }
-      self.chapters.each {|c|
-
-        #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter_id = targetwork.chapters.find_by_position(c.position)
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = target_chapter_id
-          chapter_comment.save
-        }
-      }
-    else
-      last_target_chapter_id = target_work.chapters.last.id
-      self.chapters.each {|c|
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = last_target_chapter_id
-          chapter_comment.content = "Comment for Chapter " + c.position + " " + c.title + " <br>" + chapter_comment.content
-          chapter_comment.save
-        }
-      }
-    end
-
-    #update collection_items to point to target work
-    # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
-    temp_collection_items = CollectionItem.find_all_by_item_id(self.id)
-    temp_collection_items.each { |ci|
-      ci.item_id = target_id
-      ci.save
-    }
-    # update readings replace source id with target id
-    temp_readings = Reading.find_by_work_id(self.id)
-    temp_readings.each { |r|
-      r.work_id = target_id
-      r.save }
-
-    #set redirect for source work to target work id
-    self.redirect_work_id = target_work.id
-
-    #remove creatorship for source
-    self.creatorships.each { |c| c.destroy }
-
-    #destroy chapters for source
-    self.chapters.each {|c| c.destroy }
-
-    #destroy taggings for source
-    self.taggings.each {|tag| tag.destroy }
-
-    #set work to admin hidden
-    self.hidden_by_admin=1
-
-    #save self
-    self.save
-
-
-  end
   ########################################################################
   # AUTHORSHIP
   ########################################################################
@@ -537,13 +457,6 @@ class Work < ActiveRecord::Base
     in_anon_collection?
   end
   
-  before_update :bust_anon_caching
-  def bust_anon_caching
-    if in_anon_collection_changed?
-      async(:poke_cached_creator_comments)
-    end
-  end
-  
   # This work's collections and parent collections
   def all_collections
     Collection.where(id: self.collection_ids) || []
@@ -679,15 +592,9 @@ class Work < ActiveRecord::Base
     SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
     # We're caching the chapter positions in the comment blurbs
     # so we need to expire them
-    async(:poke_cached_comments)
-  end
-  
-  def poke_cached_comments
-    self.comments.each { |c| c.touch }
-  end
-  
-  def poke_cached_creator_comments
-    self.creator_comments.each { |c| c.touch }
+    unless self.comments.empty?
+      self.comments.each{ |c| c.touch }
+    end
   end
 
   # Get the total number of chapters for a work
@@ -939,12 +846,6 @@ class Work < ActiveRecord::Base
       :commentable_type => 'Chapter', 
       :commentable_id => self.chapters.value_of(:id)
     )
-  end
-  
-  # All comments left by the creators of this work
-  def creator_comments
-    pseud_ids = Pseud.where(user_id: self.pseuds.value_of(:user_id)).value_of(:id)
-    find_all_comments.where(pseud_id: pseud_ids)
   end
   
   def guest_kudos_count
