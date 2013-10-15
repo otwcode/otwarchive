@@ -125,7 +125,7 @@ class BookmarksController < ApplicationController
     end
     if @bookmark.errors.empty?
       if @bookmarkable.save && @bookmark.save
-        setflash; flash[:notice] = ts('Bookmark was successfully created.')
+        flash[:notice] = ts('Bookmark was successfully created.')
         redirect_to(@bookmark) and return
       end
     end
