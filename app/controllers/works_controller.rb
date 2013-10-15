@@ -201,7 +201,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-    
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -210,8 +210,8 @@ class WorksController < ApplicationController
     end
 
     # Users must explicitly okay viewing of entire work
-    if @work.number_of_posted_chapters > 1
-      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+    if @work.chaptered?
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
