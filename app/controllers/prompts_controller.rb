@@ -9,7 +9,6 @@ class PromptsController < ApplicationController
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  #before_filter :allowed_to_see, :only => [:show]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
