@@ -1,5 +1,5 @@
 <% # expects "work" %>
-<% if work.redirect_work_id == nil %>
+<% if work.redirect_work_id == 0 %>
 <% if work.unrevealed? && !is_author_of?(work) %>
   <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
 
