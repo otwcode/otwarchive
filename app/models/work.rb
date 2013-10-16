@@ -312,7 +312,7 @@ class Work < ActiveRecord::Base
   def merge(target_id)
 
     #get target work object
-    target_work = Work.find_by_id(target_id)
+    @target_work = Work.find_by_id(target_id)
 
     current_user = User.current_user
     if current_user.is_author_of?(target_id)
@@ -332,18 +332,18 @@ class Work < ActiveRecord::Base
     self.kudos.each { |k| k.commentable_id = target_id; k.save }
 
     #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
-    if self.chapters.count != target_work.chapters.count {equal_chapters = true }
+    if self.chapters.count != @target_work.chapters.count {equal_chapters = true }
       self.chapters.each {|c|
 
         #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter_id = targetwork.chapters.find_by_position(c.position)
+        target_chapter_id = @targetwork.chapters.find_by_position(c.position)
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = target_chapter_id
           chapter_comment.save
         }
       }
     else
-      last_target_chapter_id = target_work.chapters.last.id
+      last_target_chapter_id = @target_work.chapters.last.id
       self.chapters.each {|c|
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = last_target_chapter_id
