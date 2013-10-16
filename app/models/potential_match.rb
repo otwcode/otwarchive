@@ -56,21 +56,106 @@ public
   def self.generate_in_background(collection)
     PotentialMatch.clear!(collection)
     settings = collection.challenge.potential_match_settings
-    collection.signups.order_by_pseud.includes(:pseud, :requests => [{:tag_set => :tags}]).each do |request_signup|
+
+    # start by collecting the ids of all the tag sets of the offers/requests in this collection
+    collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+
+    # the topmost tags required for matching
+    required_types = settings.required_types.map {|t| t.classify}
+
+    # treat each signup as a request signup first
+    collection.signups.find_each do |signup|
       break if PotentialMatch.canceled?(collection)
-      PotentialMatch.generate_for_signup(collection, request_signup, settings)
+      $redis.set progress_key(collection), signup.pseud.byline
+      PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
     end
+    
+    # TODO: for any signups with no potential matches try regenerating?
+    
     PotentialMatch.finish_generation(collection)
   end
+  
+  # Generate potential matches for a signup in the general process
+  def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
+    # only check the signups that have any overlap
+    match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)                                                     
 
-  def self.generate_for_signup(collection, request_signup, settings)
-    $redis.set progress_key(collection), request_signup.pseud.byline
-    collection.signups.includes(:pseud, :offers => [{:tag_set => :tags}]).each do |offer_signup|
-      next if request_signup == offer_signup
-      potential_match = request_signup.match(offer_signup, settings)
-      potential_match.save if potential_match && potential_match.valid?
+    potential_match_count = 0
+    match_signup_ids.sort_by {rand}.each do |other_signup_id|
+      break if potential_match_count > ArchiveConfig.POTENTIAL_MATCHES_MAX
+      next if signup.id == other_signup_id
+      other_signup = ChallengeSignup.find(other_signup_id)
+      
+      # Here is where we actually look for a match -- ChallengeSignup's match method creates a potential match object
+      potential_match = (prompt_type == "request") ? signup.match(other_signup, settings) : other_signup.match(signup, settings)
+      if potential_match && potential_match.valid?
+        potential_match.save 
+        potential_match_count += 1
+      end
+    end
+    
+  end
+
+  # Get a random set of signups to examine
+  def self.random_signup_ids(collection)
+    collection.signups.order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:id)
+  end
+  
+  # Get the ids of all signups with some required overlap
+  def self.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type = "request")
+    if required_types.empty?
+      # nothing is required
+      return random_signup_ids
+    end
+
+    matching_signup_ids = []
+
+    # get the tagsets used in the signup we are trying to match
+    signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    
+    # get the ids of all the tags of the required type in the signup's tagsets
+    signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
+
+    if signup_tags.empty? 
+      # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
+      return random_signup_ids
+    else
+      # otherwise find all the tagsets in the collection that share the original signup's tags
+      match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
+    
+      # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
+      # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
+      # looking for requests with the same tag.
+      matching_signup_ids = (prompt_type == "request" ? "Offer" : "Request").constantize.
+                         where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
+                         value_of(:challenge_signup_id).compact.uniq
+
+      # now add "any" matches for the topmost tag
+      condition = "any_#{required_types.first.downcase} = 1"
+      matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id).uniq
+    end
+    
+    return matching_signup_ids    
+  end
+
+  # Regenerate the potential matches for a given signup
+  def self.regenerate_for_signup(collection, signup)
+
+    # Get all the data
+    settings = collection.challenge.potential_match_settings
+    collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    required_types = settings.required_types.map {|t| t.classify}
+
+    # clear the existing potential matches for this signup
+    signup.offer_potential_matches.destroy_all
+    signup.request_potential_matches.destroy_all
+
+    # We check the signup in both directions -- as a request signup and as an offer signup
+    %w(request offer).each do |prompt_type|
+      PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type)
     end
   end
+
 
   def self.finish_generation(collection)
     $redis.del progress_key(collection)
@@ -112,7 +197,7 @@ public
     progress = ($redis.zrank(key, current_byline)/$redis.zcount(key, 0, "+inf")) * 100
   end
 
-  # sorting routine for potential matches
+  # sorting routine -- this gets used to rank the relative goodness of potential matches
   include Comparable
   def <=>(other)
     return 0 if self.id == other.id
