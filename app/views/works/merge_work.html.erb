@@ -5,30 +5,15 @@
 
 <!--main content-->
 
-<form id="mergeform"  method="put" action="merge_work">
-  <div class="form_description">
-    <h2>Test</h2>
-
-  </div>
-  <ul >
-
-    <li id="li_1" >
-      <label class="description" for="element_1">Text </label>
-      <div>
-        <input id="target_id" name="target_id" type="text" maxlength="255" value=""/>
-      </div>
-    </li>
+<% form_tag '/works/merge_work' do %>
+    <%=label_tag 'target_id' %>
+    <%=text_field_tag 'target_id'%>
 
 
-
-
-      <input id="domerge"  type="submit" name="submit" value="Submit" />
-    </li>
-  </ul>
-</form>
-
-
+    <div><%= submit_tag 'Merge' %></div>
 <% end %>
+
+
 <!--/content-->
 
 
