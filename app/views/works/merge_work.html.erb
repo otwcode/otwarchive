@@ -8,7 +8,7 @@
 <%=form_tag :url => merge_work_path(@work), :method => 'put' %>
     <%=label_tag 'target_id' %>
     <%=text_field_tag 'target_id'%>
-<%= f.hidden_field :source_id, :value =>  params[:id] %>
+
 
     <div><%= submit_tag 'Merge' %></div>
 <% end %>
