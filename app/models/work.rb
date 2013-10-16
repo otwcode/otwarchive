@@ -253,7 +253,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
@@ -310,24 +310,12 @@ class Work < ActiveRecord::Base
   # MERGE
   ########################################################################
   def merge(target_id)
+    equal_chapters = false
+    last_target_chapter_id = 0
 
     #get target work object
     @target_work = Work.find_by_id(target_id)
 
-    current_user = User.current_user
-    if current_user.is_author_of?(target_id)
-      perform_merge(target_work)
-    else
-      #raise error
-    end
-  end
-
-  private
-  def perform_merge(target)
-    equal_chapters = false
-    last_target_chapter_id = 0
-
-    target_work = target
     #Loop through kudos for source work and assign them to target work
     self.kudos.each { |k| k.commentable_id = target_id; k.save }
 
@@ -352,22 +340,25 @@ class Work < ActiveRecord::Base
         }
       }
     end
-
+    #todo make ar friendly, need to tell it to make sure its a type of work too, in case we want things other then works in collections
     #update collection_items to point to target work
     # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
     temp_collection_items = CollectionItem.find_all_by_item_id(self.id)
     temp_collection_items.each { |ci|
-      ci.item_id = target_id
-      ci.save
+    ci.item_id = target_id
+    ci.save
     }
     # update readings replace source id with target id
     temp_readings = Reading.find_by_work_id(self.id)
-    temp_readings.each { |r|
-      r.work_id = target_id
-      r.save }
+    if temp_readings != nil
+      temp_readings.each { |r|
+        r.work_id = target_id
+        r.save }
+    end
+
 
     #set redirect for source work to target work id
-    self.redirect_work_id = target_work.id
+    self.redirect_work_id = target_id
 
     #remove creatorship for source
     self.creatorships.each { |c| c.destroy }
@@ -383,7 +374,6 @@ class Work < ActiveRecord::Base
 
     #save self
     self.save
-
 
   end
   ########################################################################
@@ -565,33 +555,29 @@ class Work < ActiveRecord::Base
   end
 
   def set_revised_at(date=nil)
-    date ||= self.chapters.where(:posted => true).maximum('published_at') || 
-        self.revised_at || self.created_at
-    date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
-    self.revised_at = date
-  end
-  
-  def set_revised_at_by_chapter(chapter)
-    return if !chapter.posted
-    if chapter.posted_changed? && chapter.published_at == Date.today
-      self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? || 
-        chapter.published_at > self.revised_at.to_date || 
-        chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
-      # revised_at should be (re)evaluated to reflect the chapter's pub date
-      max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
-      max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
-      self.set_revised_at(max_date)
-    # else 
-      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't 
-      # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
-      # work's position in date-sorted indexes, so don't do it unnecessarily.
+    if date # if we pass a date, we want to set it to that (or current datetime if it's today)
+      date == Date.today ? value = Time.now : value = DateTime::jd(date.jd, 12, 0, 0)
+      self.revised_at = value
+    else # we want to find the most recent @chapter.published_at date
+      recent_date = self.chapters.maximum('published_at')
+      # if recent_date is today and revised_at is today, we don't want to update revised_at at all
+      # because we'd overwrite with an inaccurate time; if revised_at is not already today, best we can
+      # do is update with current time
+      if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
+        return self.revised_at
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
+        self.revised_at = Time.now
+      else
+        self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
+      end
     end
   end
 
   # Just to catch any cases that haven't gone through set_revised_at
   def ensure_revised_at
-    self.set_revised_at if self.revised_at.nil?
+    if self.revised_at.nil?
+      self.revised_at = Time.now
+    end
   end
 
   def published_at
