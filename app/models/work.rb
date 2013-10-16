@@ -350,9 +350,12 @@ class Work < ActiveRecord::Base
     }
     # update readings replace source id with target id
     temp_readings = Reading.find_by_work_id(self.id)
-    temp_readings.each { |r|
-    r.work_id = target_id
-    r.save }
+    if temp_readings != nil
+      temp_readings.each { |r|
+        r.work_id = target_id
+        r.save }
+    end
+
 
     #set redirect for source work to target work id
     self.redirect_work_id = target_id
