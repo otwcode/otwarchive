@@ -125,6 +125,19 @@ Feature: Gift Exchange Challenge
       And I should see "myname1" within "#main"
       And I should see "Something else weird"
       And I should see "Alternate Universe - Historical"
+    
+  Scenario: Mod can search signups by pseud
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to "Awesome Gift Exchange" collection's page
+    And I follow "Sign-ups"
+    And I fill in "query" with "3"
+    And I press "Search By Pseud"
+  Then I should see "myname3" within "#main"
+    And I should not see "myname4" within "#main"
 
   Scenario: Cannot generate matches while signup is open
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
