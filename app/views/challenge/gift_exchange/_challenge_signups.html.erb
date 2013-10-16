@@ -1,6 +1,20 @@
-<h2 class="heading"><%= ts("Sign-ups for %{collection}", :collection => @collection.title) %></h2>
-  
+<h2 class="heading">
+  <% if @query %>
+    <%= search_header @challenge_signups, nil, "Signup" %>
+  <% else %>
+    <%= ts("Sign-ups for %{collection}", :collection => @collection.title) %>
+  <% end %>
+</h2>
+
 <ul class="navigation actions" role="menu">
+  <li class="search" role="search">
+      <%= form_tag collection_signups_path(@collection), :class => "simple search", :method => :get do |form| %>
+      <fieldset>
+              <%= text_field_tag "query", @query, :title => "search" %>
+        <%= submit_tag "Search By Pseud" %>
+      </fieldset>
+    <% end %>
+  </li>
   <li class="action">
     <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %> 
     <%= link_to_help "csv-download"%>
