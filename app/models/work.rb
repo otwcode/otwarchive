@@ -336,7 +336,7 @@ class Work < ActiveRecord::Base
       self.chapters.each {|c|
 
         #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter_id = @targetwork.chapters.find_by_position(c.position)
+        target_chapter_id = @target_work.chapters.find_by_position(c.position)
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = target_chapter_id
           chapter_comment.save
