@@ -1,0 +1,31 @@
+<% if @assignments_with_no_potential_requests.present? %>
+  <%= render "no_potential_recipients" %>
+<% end %>
+
+<% if @assignments_with_no_potential_offers.present? %>
+  <%= render "no_potential_authors" %>
+<% end %>
+
+<!-- list all the requesters with their potential matches -->
+<%= form_tag set_collection_assignments_path, :method => :put do %>
+
+  <%= render "match_navigation", :top => true %>
+
+  <% # the people with no one to write for - this is the hardest problem to solve %>
+  <% if @assignments_with_no_recipient.present? %>
+    <%= render "no_assigned_recipient" %>
+  <% end %>
+
+  <% # the people with no-one writing for them -- these people also get listed in the assignments section below %>
+  <% if @assignments_with_no_giver.present? %>
+    <%= render "no_assigned_giver" %>
+  <% end %>
+      
+  <% # the successful assignments %>
+  <% if @successful_assignments.present? %>
+    <%= render "successful_assignments" %>
+  <% end %>
+
+  <%= render "match_navigation", :top => false %>
+
+<% end %>
