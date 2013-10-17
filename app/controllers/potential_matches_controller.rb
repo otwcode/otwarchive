@@ -61,17 +61,15 @@ class PotentialMatchesController < ApplicationController
     else
       # we have potential_matches and assignments      
       
-      # index the potential matches by request_signup
-      @assignments_with_no_offer = @collection.assignments.with_request.with_no_offer.sort
-      @assignments_with_no_request = @collection.assignments.with_offer.with_no_request.sort
+      @assignments_with_no_giver = @collection.assignments.with_request.with_no_offer
+      @assignments_with_no_recipient = @collection.assignments.with_offer.with_no_request
 
-      @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
+      @assignments_with_no_potential_recipients = @assignments_with_no_recipient.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
+      @assignments_with_no_potential_givers = @assignments_with_no_giver.select {|assignment| assignment.request_signup.request_potential_matches.empty?}
       
-      unless (@assignments_with_no_potential_requests.size > 0)
-        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
-
-        @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
-      end
+      # index the potential matches by request_signup
+      @successful_assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+      @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
     end
   end
 
@@ -93,6 +91,19 @@ class PotentialMatchesController < ApplicationController
     redirect_to collection_potential_matches_path(@collection)
   end
   
+  # Regenerate matches for one signup
+  def regenerate
+    if params[:signup_id].blank? || (@signup = ChallengeSignup.where(:id => params[:signup_id]).first).nil?
+      flash[:error] = ts("What signup did you want to regenerate matches for?")
+    else
+      PotentialMatch.regenerate_for_signup(@collection, @signup)
+      flash[:notice] = ts("Matches have been regenerated for ") + @signup.pseud.byline +
+        ts(". You will want to regenerate assignments if they have been created.")
+    end
+    # redirect to index
+    redirect_to collection_potential_matches_path(@collection)
+  end
+  
   def cancel_generate
     if !PotentialMatch.in_progress?(@collection)
       flash[:error] = ts("Potential matches are not currently being generated for this challenge.")
@@ -107,13 +118,6 @@ class PotentialMatchesController < ApplicationController
   end
   
   def show
-  end
-
-  def generate_progress
-    if PotentialMatch.in_progress?(@collection)
-      @current_position = PotentialMatch.position(@collection)
-      @progress = PotentialMatch.progress(@collection)
-    end
   end
 
 end
