@@ -69,7 +69,9 @@ class PotentialMatchesController < ApplicationController
       
       # index the potential matches by request_signup
       @successful_assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
-      @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
+
+      # pick out the people who have no assigned giver
+      # @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
     end
   end
 
@@ -92,13 +94,13 @@ class PotentialMatchesController < ApplicationController
   end
   
   # Regenerate matches for one signup
-  def regenerate
+  def regenerate_for_signup
     if params[:signup_id].blank? || (@signup = ChallengeSignup.where(:id => params[:signup_id]).first).nil?
       flash[:error] = ts("What signup did you want to regenerate matches for?")
     else
-      PotentialMatch.regenerate_for_signup(@collection, @signup)
-      flash[:notice] = ts("Matches have been regenerated for ") + @signup.pseud.byline +
-        ts(". You will want to regenerate assignments if they have been created.")
+      PotentialMatch.regenerate_for_signup(@signup)
+      flash[:notice] = ts("Matches are being regenerated for ") + @signup.pseud.byline +
+        ts(". Please allow some time for this to complete before refreshing the page.")
     end
     # redirect to index
     redirect_to collection_potential_matches_path(@collection)

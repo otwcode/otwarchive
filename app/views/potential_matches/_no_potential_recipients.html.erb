@@ -8,17 +8,16 @@
   </p>
 
   <dl class="index group">
-    <% @assignments_with_no_potential_requests.each do |assignment| %>
+    <% @assignments_with_no_potential_recipients.each do |assignment| %>
       <dt class="byline" title="<%= ts("pseud") %>"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
       <dd>
         <ul class="actions" role="menu">
           <li title="<%= ts("email") %>"><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></li>
           <li><%= link_to ts("Edit"), edit_collection_signup_path(@collection, assignment.offer_signup) %></li>
-          <li role="button"><%= link_to ts("Regenerate Potential Matches"), regenerate_potential_matches_path(:signup_id => assignment.offer_signup.id) %></li>
+          <li role="button"><%= link_to ts("Regenerate Potential Matches"), regenerate_for_signup_collection_potential_matches_path(@collection, :signup_id => assignment.offer_signup.id) %></li>
           <li role="button"><%= link_to ts("Delete"), 
               collection_signup_path(@collection, assignment.offer_signup), :confirm => ts('Are you sure?'), :method => :delete %></li></ul>
       </dd>
     <% end %>
   </dl>
-  <p class="navigation actions" role="button"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
 </div>
