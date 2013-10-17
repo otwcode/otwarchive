@@ -331,8 +331,8 @@ class Work < ActiveRecord::Base
         }
       }
     else
-      t_chapter = Chapter.find_by_sql ["select id from chapters where work_id = ? order by position desc limit 1", target_id ]
-      last_target_chapter_id = t_chapter[0]
+
+      last_target_chapter_id = Chapter.select(:id).where(work_id: target_id).order('position DESC').first
       self.chapters.each {|c|
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = last_target_chapter_id
