@@ -40,7 +40,7 @@ class ExternalWorksController < ApplicationController
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = params[:work]
     if @external_work.update_attributes(params[:external_work])
-      setflash; flash[:notice] = t('successfully_updated', :default => 'External work was successfully updated.')
+      flash[:notice] = t('successfully_updated', :default => 'External work was successfully updated.')
       redirect_to(@external_work)
     else
       render :action => "edit"
@@ -58,9 +58,9 @@ class ExternalWorksController < ApplicationController
       @external_work = ExternalWork.find(params[:merger_id])
       external_works = ExternalWork.find(params[:to_merge])
       if @external_work.merge_similar(external_works)
-        setflash; flash[:notice] = "The external works were successfully merged."
+        flash[:notice] = "The external works were successfully merged."
       else
-        setflash; flash[:error] = "Sorry, the system was unable to complete the merge."
+        flash[:error] = "Sorry, the system was unable to complete the merge."
       end
       redirect_to compare_external_works_path(:external_work_url => @external_work.url)
     else

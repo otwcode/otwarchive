@@ -137,9 +137,11 @@
 /* WORK MARGINS */
 
 #workskin {
-  max-width: 72em;
-  margin: auto;
   font-size: 1.08em;
+  margin: auto;
+  max-width: 72em;
+  overflow: hidden;
+  position: relative;
 }
 
 #workskin .module {

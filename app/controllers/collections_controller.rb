@@ -1,16 +1,16 @@
 class CollectionsController < ApplicationController
-  
+
   before_filter :users_only, :only => [:new, :edit, :create, :update]
   before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
-  
+
   cache_sweeper :collection_sweeper
-  cache_sweeper :static_sweeper  
-  
+  cache_sweeper :static_sweeper
+
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
     unless @collection
-      setflash; flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
   end
@@ -25,38 +25,41 @@ class CollectionsController < ApplicationController
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
-        setflash; flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
+        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
       elsif params[:collection_id]
-        setflash; flash.now[:error] = ts("We couldn't find a collection by that name.")
+        flash.now[:error] = ts("We couldn't find a collection by that name.")
       elsif params[:work_id]
-        setflash; flash.now[:error] = ts("We couldn't find that work.")
+        flash.now[:error] = ts("We couldn't find that work.")
       end
       @sort_and_filter = true
       params[:collection_filters] ||= {}
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]      
+      sort = params[:sort_column] + " " + params[:sort_direction]
       @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
   end
-  
+
   # display challenges that are currently taking signups
   def list_challenges
+    @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))    
+    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
   end
-  
+
   def list_ge_challenges
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15) 
+    @page_subtitle = "Open Gift Exchange Challenges"
+    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
   end
-  
+
   def list_pm_challenges
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15) 
+    @page_subtitle = "Open Prompt Meme Challenges"
+    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
   end
-  
+
   def show
     @page_subtitle = @collection.title
-    
+
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -94,9 +97,9 @@ class CollectionsController < ApplicationController
       owner_attributes << {:pseud => pseud, :participant_role => CollectionParticipant::OWNER} if pseud
     end
     @collection.collection_participants.build(owner_attributes)
-    
+
     if @collection.save
-      setflash; flash[:notice] = 'Collection was successfully created.'
+      flash[:notice] = 'Collection was successfully created.'
       unless params[:challenge_type].blank?
         # This is a challenge collection
         redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
@@ -111,16 +114,16 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update_attributes(params[:collection])
-      setflash; flash[:notice] = 'Collection was successfully updated.'
+      flash[:notice] = 'Collection was successfully updated.'
       if params[:challenge_type].blank?
         if @collection.challenge
           # trying to destroy an existing challenge
-          setflash; flash[:error] = "Note: if you want to delete an existing challenge, please do so on the challenge page."
+          flash[:error] = "Note: if you want to delete an existing challenge, please do so on the challenge page."
         end
       else
         if @collection.challenge
           if @collection.challenge.class.name != params[:challenge_type]
-            setflash; flash[:error] = "Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page."
+            flash[:error] = "Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page."
           else
             # editing existing challenge
             redirect_to eval("edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
@@ -141,7 +144,7 @@ class CollectionsController < ApplicationController
     @collection = Collection.find_by_name(params[:id])
     @collection.destroy
 
-    redirect_to(collections_url) 
+    redirect_to(collections_url)
   end
-  
+
 end

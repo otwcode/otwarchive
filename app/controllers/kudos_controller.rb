@@ -9,13 +9,14 @@ class KudosController < ApplicationController
     else
       @kudo.ip_address = request.remote_ip
     end
+
     respond_to do |format|
       format.html do
         if @kudo.save
-          setflash; flash[:comment_notice] = ts("Thank you for leaving kudos!")
+          flash[:comment_notice] = ts("Thank you for leaving kudos!")
         else
           msg = @kudo.dup? ? "You have already left kudos here. :)" : "We couldn't save your kudos, sorry!"
-          setflash; flash[:comment_error] = ts(msg)
+          flash[:comment_error] = ts(msg)
         end
         redirect_to request.referer
       end

@@ -49,7 +49,8 @@
     </div>
 <!--/chapter-->
     
-    <% if !@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank? %>
+    <% inspired_by = get_inspired_by(@work) %>
+    <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
     <!--afterword-->
     <div class="afterword preface group" role="complementary">
       <% unless @work.endnotes.blank? %>
@@ -58,8 +59,8 @@
       <% unless @work.series.blank? %>
         <%= render :partial => 'works/work_series_links' %>
       <% end %>
-      <% unless @work.approved_children.blank? %>
-        <%= render :partial => 'works/work_approved_children' %>
+      <% unless inspired_by.empty? %>
+        <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
       <% end %>
     </div>
     <!--/afterword-->
@@ -74,3 +75,8 @@
 <!-- END comment section -->
 <% end %>
 <!-- END revealed -->
+
+<% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>

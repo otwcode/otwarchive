@@ -9,7 +9,7 @@ class FandomsController < ApplicationController
         @medium = Media.find_by_name(params[:medium_id])
         @fandoms = @medium.fandoms.canonical if @medium
       end
-      @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").
+      @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").by_name.
                   for_collections_with_count([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
@@ -32,7 +32,7 @@ class FandomsController < ApplicationController
   def show
     @fandom = Fandom.find_by_name(params[:id])
     if @fandom.nil?
-      setflash; flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
+      flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
       redirect_to media_path and return
     end
     @characters = @fandom.characters.canonical.by_name

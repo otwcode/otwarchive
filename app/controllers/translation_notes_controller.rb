@@ -47,7 +47,7 @@ class TranslationNotesController < ApplicationController
     @translation_note.user = current_user
     @translation_note.locale = @locale
     if @translation_note.save
-      setflash; flash[:notice] = 'Translation note was successfully created.'
+      flash[:notice] = 'Translation note was successfully created.'
       redirect_to translation_notes_path(:namespace => @translation_note.namespace)
     else
       render :action => "new"
@@ -59,7 +59,7 @@ class TranslationNotesController < ApplicationController
   def update
     @translation_note = TranslationNote.find(params[:id])
     if @translation_note.update_attributes(params[:translation_note])
-      setflash; flash[:notice] = 'Translation note was successfully updated.'
+      flash[:notice] = 'Translation note was successfully updated.'
       redirect_to(@translation_note)
     else
       render :action => "edit"

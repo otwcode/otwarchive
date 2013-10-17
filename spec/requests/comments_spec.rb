@@ -46,6 +46,8 @@ describe "Comments" do
       @work1.index.refresh
       @comment = Comment.create(:comment)
       @work1.comments << @comment
+      @user = Factory.create(:user)
+      @user.activate
     end
 
     it "should not be creatable by guests on a work" do

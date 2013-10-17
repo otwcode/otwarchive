@@ -1,3 +1,8 @@
 <ul class="index group"><%= render 'bookmark_blurb', :bookmark => @bookmark %></ul>
 
 <p class="navigation actions" role="navigation"><%= link_to ts("Back to Bookmarks"), user_bookmarks_path(@bookmark.pseud.user) %></p>
+
+<% # FRONT END NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>

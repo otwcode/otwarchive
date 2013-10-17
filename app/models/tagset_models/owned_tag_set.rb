@@ -72,7 +72,7 @@ class OwnedTagSet < ActiveRecord::Base
   
   def add_tagnames(tag_type, tagnames_to_add)
     self.tag_set.send("#{tag_type}_tagnames_to_add=", tagnames_to_add)
-    return false unless self.save
+    return false unless self.tag_set.save && self.save
 
     # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
     TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(:approved => true, :rejected => false)
