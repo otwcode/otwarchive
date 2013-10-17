@@ -35,7 +35,7 @@ public
   end
 
   def self.set_up_generating(collection)
-    $redis.set progress_key(collection), collection.signups.order_by_pseud.pseud_only.first.pseud.byline
+    $redis.set progress_key(collection), collection.signups.first.pseud.byline
   end
 
   def self.cancel_generation(collection)
@@ -93,7 +93,6 @@ public
         potential_match_count += 1
       end
     end
-    
   end
 
   # Get a random set of signups to examine
@@ -105,7 +104,7 @@ public
   def self.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type = "request")
     if required_types.empty?
       # nothing is required
-      return random_signup_ids
+      return PotentialMatch.random_signup_ids
     end
 
     matching_signup_ids = []
@@ -116,9 +115,9 @@ public
     # get the ids of all the tags of the required type in the signup's tagsets
     signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
 
-    if signup_tags.empty? 
+    if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
-      return random_signup_ids
+      return PotentialMatch.random_signup_ids
     else
       # otherwise find all the tagsets in the collection that share the original signup's tags
       match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
@@ -156,7 +155,7 @@ public
     end
   end
 
-
+  # Finish off the potential match generation
   def self.finish_generation(collection)
     $redis.del progress_key(collection)
     $redis.del byline_key(collection)
@@ -186,15 +185,15 @@ public
   def self.progress(collection)
     # the index of our current signup person in the full index of signup participants
     current_byline = $redis.get(progress_key(collection))
-    key = byline_key(collection)
-    unless $redis.exists(key)
+    collection_byline_key = byline_key(collection)
+    unless $redis.exists(collection_byline_key)
       score = 0
-      collection.signups.order_by_pseud.pseud_only.each do |pseud|
-        $redis.zadd key, score, pseud.byline
+      collection.signups.pseud_only.find_each do |pseud|
+        $redis.zadd collection_byline_key, score, pseud.byline
         score += 1
       end
     end
-    progress = ($redis.zrank(key, current_byline)/$redis.zcount(key, 0, "+inf")) * 100
+    progress = ($redis.zrank(collection_byline_key, current_byline)  * 100)/$redis.zcount(collection_byline_key, 0, "+inf")
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
