@@ -336,7 +336,7 @@ class Work < ActiveRecord::Base
       self.chapters.each {|c|
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = last_target_chapter_id
-          chapter_comment.content = "Comment for Chapter " + c.position + " " + c.title + " <br>" + chapter_comment.content
+          chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
           chapter_comment.save!
         }
       }
