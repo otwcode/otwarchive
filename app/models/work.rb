@@ -361,13 +361,13 @@ class Work < ActiveRecord::Base
     self.redirect_work_id = target_id
 
     #remove creatorship for source
-    self.creatorships.each { |c| c.destroy }
+    #self.creatorships.each { |c| c.destroy }
 
     #destroy chapters for source
-    self.chapters.each {|c| c.destroy }
+   # self.chapters.each {|c| c.destroy }
 
     #destroy taggings for source
-    self.taggings.each {|tag| tag.destroy }
+    #self.taggings.each {|tag| tag.destroy }
 
     #set work to admin hidden
     self.hidden_by_admin=1
