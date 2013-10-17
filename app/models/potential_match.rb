@@ -47,13 +47,24 @@ public
   end
 
   @queue = :collection
+  
+  # This only works on class methods
+  def self.perform(method, *args)
+    self.send(method, *args)
+  end
+  
   def self.generate(collection)
-    Resque.enqueue(self, collection.id)
+    Resque.enqueue(self, :generate_in_background, collection.id)
   end
-  def self.perform(collection_id)
-     self.generate_in_background(Collection.find(collection_id))
+  
+  # Regenerate the potential matches for a given signup
+  def self.regenerate_for_signup(signup)
+    Resque.enqueue(self, :regenerate_for_signup_in_background, signup.id)
   end
-  def self.generate_in_background(collection)
+  
+  # The actual method that generates the potential matches for an entire collection
+  def self.generate_in_background(collection_id)
+    collection = Collection.find(collection_id)
     PotentialMatch.clear!(collection)
     settings = collection.challenge.potential_match_settings
 
@@ -137,9 +148,10 @@ public
     return matching_signup_ids    
   end
 
-  # Regenerate the potential matches for a given signup
-  def self.regenerate_for_signup(collection, signup)
-
+  def self.regenerate_for_signup_in_background(signup_id)
+    signup = ChallengeSignup.find(signup_id)
+    collection = signup.collection
+    
     # Get all the data
     settings = collection.challenge.potential_match_settings
     collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
