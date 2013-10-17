@@ -1,0 +1,24 @@
+<div class="matching listbox group">  
+  <h3 class="heading"><%= ts("Participants with No Potential Givers") %></h3>
+  <p class="caution note">
+    <strong><%= ts("Warning!") %></strong> <%= ts("No one has offered anything that matches what these people have requested.") %>
+  </p>
+  <p class="note">
+    <%= ts("You may want to edit their sign-ups (or delete them). Then regenerate their potential matches.") %>
+    <%= ts("Alternatively, you can just assign them a pinch hitter by hand below and they will disappear from this listing") %>
+  </p>
+
+  <dl class="index group">
+    <% @assignments_with_no_potential_givers.each do |assignment| %>
+      <dt class="byline" title="<%= ts("pseud") %>"><%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request_signup) %></dd>
+      <dd>
+        <ul class="actions" role="menu">
+          <li title="<%= ts("email") %>"><%= mailto_link assignment.request_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></li>
+          <li><%= link_to ts("Edit"), edit_collection_signup_path(@collection, assignment.request_signup) %></li>
+          <li role="button"><%= link_to ts("Regenerate Potential Matches"), regenerate_potential_matches_path(:signup_id => assignment.request_signup.id) %></li>
+          <li role="button"><%= link_to ts("Delete"), 
+              collection_signup_path(@collection, assignment.request_signup), :confirm => ts('Are you sure?'), :method => :delete %></li></ul>
+      </dd>
+    <% end %>
+  </dl>
+</div>
