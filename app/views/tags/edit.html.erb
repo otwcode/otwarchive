@@ -60,11 +60,7 @@
         <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
       <% end %>
     
-      <dt><%= f.label :unwrangleable %></dt>
-      <dd>
-        <%= f.check_box :unwrangleable %>&nbsp;
-        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
-      </dd>
+
 
       <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
       <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
@@ -78,6 +74,12 @@
         <% end %>
       </dd>
       <% end %>
+
+      <dt><%= f.label :unwrangleable %></dt>
+      <dd>
+        <%= f.check_box :unwrangleable %>&nbsp;
+        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
+      </dd>
     </dl>
   </fieldset>
 
