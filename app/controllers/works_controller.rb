@@ -526,20 +526,25 @@ class WorksController < ApplicationController
     end
   end
   def merge_work
-
     @work = Work.find(params[:id])
-
-    @target_id = params[:target_id]
-    @target_work = Work.find(@target_id)
     if @target_id.nil?
       setflash; flash.now[:error] = ts("You must select a destination work.")
       render :merge_work and return
+    else
+      @target_id = params[:target_id]
     end
-    if @target_work == nil
+
+    begin
+      @target_work = Work.find(@target_id)
+    rescue
       setflash; flash.now[:error] = ts("We can not find the work with id #{target_id}. Please Check your input and try again.")
       render :merge_work and return
     end
 
+    if @target_work == nil
+      setflash; flash.now[:error] = ts("We can not find the work with id #{target_id}. Please Check your input and try again.")
+      render :merge_work and return
+    end
 
     if _check_merge_ownership(@work,@target_work)
       @work.merge(@target_id)
