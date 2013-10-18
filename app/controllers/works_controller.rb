@@ -527,7 +527,7 @@ class WorksController < ApplicationController
   end
   def merge_work
     @work = Work.find(params[:id])
-    if params[:target_id].nil?
+    if params[:target_id].nil? || params[:target_id].blank?
       setflash; flash.now[:error] = ts("You must select a destination work.")
       render :merge_work and return
     else
