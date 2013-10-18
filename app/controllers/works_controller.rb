@@ -528,7 +528,7 @@ class WorksController < ApplicationController
   def merge_work
     @work = Work.find(params[:id])
     if params[:target_id].nil? || params[:target_id].blank?
-      setflash; flash.now[:error] = ts("You must provide a destionation work id. ")
+      setflash; flash.now[:error] = ts("You must provide a target work id. ")
       render :merge_work and return
     else
       @target_id = params[:target_id]
