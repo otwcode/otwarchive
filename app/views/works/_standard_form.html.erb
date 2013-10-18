@@ -244,33 +244,13 @@
         <!-- Work text field (chapter_attributes_content) -->
         <fieldset class="work text" role="article">
           <legend class="required"><%= ts('Work Text *') %></legend>
-          <p id="toggleText" role="menu">
-            <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-            <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-            <span class="rtf-html-switch actions">
-              <span><a id="richTextLink" href="#richTextLink"><%= ts('Rich text') %></a></span>
-              <span><a id="plainTextLink" href="#plainTextLink"><%= ts('HTML') %></a></span>
-              <%= content_for :footer_js do %>
-                <%= javascript_tag do %>
-                  $j(document).ready(function(){
-                    $j("#plainTextLink").addClass("current");
-                    $j("#richTextLink").click(function(event){
-                      addEditor('content');
-                      $j(this).addClass("current");
-                      $j("#plainTextLink").removeClass("current");
-                      event.preventDefault();
-                    });
-
-                    $j("#plainTextLink").click(function(event){
-                      removeEditor('content');
-                      $j("#richTextLink").removeClass("current");
-                      $j(this).addClass("current");
-                      event.preventDefault();
-                    });
-                  })
-                <% end %>
-              <% end %>
-            </span>
+          <ul class="hidden rtf-html-switch actions" role="menu">
+            <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+            <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+          </ul>
+          <p class="rtf-html-instructions note">
+            <span class="html-notes"><%= allowed_html_instructions %></span>
+            <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %></span>
           </p>
 
           <% use_tinymce %>

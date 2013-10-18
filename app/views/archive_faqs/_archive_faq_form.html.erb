@@ -1,4 +1,4 @@
-<div id="work-form" class="post create faq">
+<div id="faq-form" class="post create faq">
   <%= form_for(@archive_faq) do |f| %>
     <%= error_messages_for @archive_faq %>
 <dl class="text">
@@ -7,14 +7,15 @@
         <%= live_validation_for_field('title', :failureMessage => ts("Please enter a title.")) %>
       </dd>
 <dt><%= f.label :content, ts("FAQ Subsection") %></dt>
-<dd>  <p id="toggleText">
-    <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-    <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-    <span class="rtf-html-switch actions">
-      <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
-      <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
-    <span>
-  </p>
+<dd>
+      <ul class="hidden rtf-html-switch actions" role="menu">
+        <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+        <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+      </ul>
+      <p class="rtf-html-instructions note">
+        <span class="html-notes"><%= allowed_html_instructions %></span>
+        <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %></span>
+      </p>
       <% use_tinymce %>
       <div class="rtf-html-field">
         <%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content" %>
