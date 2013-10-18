@@ -534,20 +534,24 @@ class WorksController < ApplicationController
     if @target_id.nil?
       setflash; flash.now[:error] = ts("You must select a destination work.")
       render :merge_work and return
-    else
-
-
-      if _check_merge_ownership(@work,@target_work)
-        @work.merge(@target_id)
-      else
-        setflash; flash.now[:error] = ts("Sorry You do not own the target work")
-        render :merge_work and return
-      end
-
+    end
+    if @target_work == nil
+      setflash; flash.now[:error] = ts("We can not find the work with id #{target_id}. Please Check your input and try again.")
+      render :merge_work and return
     end
 
 
+    if _check_merge_ownership(@work,@target_work)
+      @work.merge(@target_id)
+    else
+      setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
+      render :merge_work and return
+    end
+
   end
+
+
+
   # POST /works/import
   def import
     # check to make sure we have some urls to work with
