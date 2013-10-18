@@ -379,7 +379,7 @@ class Work < ActiveRecord::Base
     end
 
     works_self_related_to = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
-    if works_self_related_to nil
+    if works_self_related_to != nil
       works_self_related_to.each { |wsrt|
         wsrt.parent_id = target_id
         wsrt.save!
