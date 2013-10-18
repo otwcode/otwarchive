@@ -333,7 +333,7 @@ class Work < ActiveRecord::Base
     self.redirect_work_id = target_id
 
     #remove creatorship for source
-    #self.creatorships.each { |c| c.destroy }
+    self.creatorships.each { |c| c.destroy }
 
     #destroy chapters for source
     # self.chapters.each {|c| c.destroy }
