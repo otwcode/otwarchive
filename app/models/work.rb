@@ -19,7 +19,7 @@ class Work < ActiveRecord::Base
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
-
+  has_many :readings
   has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
   has_many :archivists, :through => :external_creatorships
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
@@ -315,41 +315,16 @@ class Work < ActiveRecord::Base
 
     #Loop through kudos for source work and assign them to target work
     self.kudos.each { |k| k.commentable_id = target_id; k.save! }
-
-    #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
-    if self.chapters.count == @target_work.chapters.count
-      self.chapters.each {|c|
-        #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter = @target_work.chapters.find_by_position(c.position)
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = target_chapter.id
-          chapter_comment.save!
-        }
-      }
-    else
-      last_target_chapter = Chapter.select(:id).where(work_id: target_id).order('position DESC').first
-      self.chapters.each {|c|
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = last_target_chapter.id
-          chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
-          chapter_comment.save!
-        }
-      }
-    end
-
-    #update collection_items to point to target work
-    # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
-    _merge_collection_items(target_id)
-
-    # update readings replace source id with target id
+    self.bookmarks.each { |b| b.bookmarkable_id = target_id; b.save! }
+    self.subscriptions.each { |s| s.subscribable_id = target_id; s.save! }
+    self.collection_items.each { |ci| ci.item_id = target_id; ci.save! }
+    self.challenge_assignments.each { |ca| ca.item_id = target_id; ca.save! }
+    self.challenge_claims.each { |cc| cc.item_id = target_id; cc.save! }
+    self.serial_works.each { |sw| sw.work_id = target_id; sw.save! }
+    self.gifts.each { |g| g.work_id = target_id; g.save! }
+    _merge_related_works(target_id,'Work')
     _merge_readings(target_id)
-
-    #update subscriptions
-    _merge_subscriptions(target_id)
-    #update challenge assignments
-
-    #update bookmarks
-    _merge_bookmarks(target_id)
+    _merge_chapters(@target_work)
 
     #set redirect for source work to target work id
     self.redirect_work_id = target_id
@@ -358,18 +333,59 @@ class Work < ActiveRecord::Base
     #self.creatorships.each { |c| c.destroy }
 
     #destroy chapters for source
-   # self.chapters.each {|c| c.destroy }
+    # self.chapters.each {|c| c.destroy }
 
     #destroy taggings for source
     #self.taggings.each {|tag| tag.destroy }
 
     #set work to admin hidden
-    self.hidden_by_admin=1
+    #self.hidden_by_admin=1
 
     #save self
     self.save!
 
   end
+
+  def _merge_chapters(target_work)
+    #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
+    if self.chapters.count == target_work.chapters.count
+      self.chapters.each {|c|
+        #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
+        target_chapter = target_work.chapters.find_by_position(c.position)
+        c.comments.each { |chapter_comment|
+          chapter_comment.parent_id = target_chapter.id
+          chapter_comment.save!
+        }
+      }
+    else
+      last_target_chapter = Chapter.select(:id).where(work_id: target_work.id).order('position DESC').first
+      self.chapters.each {|c|
+        c.comments.each { |chapter_comment|
+          chapter_comment.parent_id = last_target_chapter.id
+          chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
+          chapter_comment.save!
+        }
+      }
+    end
+  end
+
+  def _merge_related_works(target_id,target_type)
+    works_related_to_self = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
+    if works_related_to_self != nil
+      works_related_to_self.each { |wrts|
+        wrts.parent_id = target_id
+        wrts.save!
+      }
+    end
+
+    works_self_related_to = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
+    if works_self_related_to nil
+      works_self_related_to.each { |wsrt|
+        wsrt.parent_id = target_id
+        wsrt.save!
+      }
+    end
+   end
 
   def _merge_readings(target_id)
     temp_readings = Reading.find_by_work_id(self.id)
@@ -380,31 +396,8 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def _merge_bookmarks(target_id)
-    temp_bookmarks = Bookmark.find_by_bookmarkable_type_and_bookmarkable_id('Work',self.id)
-    if temp_bookmarks != nil
-      temp_bookmarks.each { |b|
-        b.bookmarkable.id = target_id
-        b.save! }
-    end
-  end
 
-  def _merge_collection_items(target_id)
-    temp_collection_items = CollectionItem.find_by_item_id_and_item_type(self.id,'Work')
-    temp_collection_items.each { |ci|
-     ci.item_id = target_id
-     ci.save!
-    }
-  end
 
-  def _merge_subscriptions(target_id)
-    temp_subscriptions = Subscription.find_by_subscribable_type_and_subscribable_id('Work',self.id)
-    if temp_subscriptions != nil
-      temp_subscriptions.each { |s|
-        s.subscribable.id = target_id
-        s.save! }
-    end
-  end
 
   ########################################################################
   # AUTHORSHIP
