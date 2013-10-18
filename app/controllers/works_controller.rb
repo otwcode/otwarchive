@@ -513,14 +513,30 @@ class WorksController < ApplicationController
 
     render :merge_work and return
   end
+  def _check_merge_ownership(work_a,work_b)
+    if work_a.creatorships.pseud.user_id == work_b.creatorships.pseud.user_id
+      return true
+    else
+      return false
+    end
+  end
   def merge_work
+
     @work = Work.find(params[:id])
+    @target_work.find(:target_id)
     @target_id = params[:target_id]
+
     if @target_id.nil?
       setflash; flash.now[:error] = ts("You must select a destination work.")
       render :merge_work and return
     else
-      @work.merge(@target_id)
+      if _check_merge_ownership(@work,@target_Work)
+        @work.merge(@target_id)
+      else
+        setflash; flash.now[:error] = ts("Sorry You do not own the target work")
+        render :merge_work and return
+      end
+
     end
 
 
