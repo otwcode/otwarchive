@@ -537,12 +537,12 @@ class WorksController < ApplicationController
     begin
       @target_work = Work.find(@target_id)
     rescue
-      setflash; flash.now[:error] = ts("We can not find the work with id #{target_id}. Please Check your input and try again.")
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
       render :merge_work and return
     end
 
     if @target_work == nil
-      setflash; flash.now[:error] = ts("We can not find the work with id #{target_id}. Please Check your input and try again.")
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
       render :merge_work and return
     end
 
