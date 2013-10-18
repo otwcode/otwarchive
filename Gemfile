@@ -83,6 +83,7 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'copycopter_client', '~> 2.0.1'
 end
 
 # Deploy with Capistrano
@@ -94,5 +95,3 @@ group :production do
   gem 'unicorn', :require => false
   gem "memcache-client"
 end
-
-
