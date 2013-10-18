@@ -546,7 +546,7 @@ class WorksController < ApplicationController
     create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
     create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
     pseud_a =  Pseud.find(create_a.pseud_id)
-    pseud_b =   Pseud.find(create_b.pseud_id)
+    pseud_b =  Pseud.find(create_b.pseud_id)
 
     if pseud_a.user.id == pseud_b.user.id
       return true
@@ -554,6 +554,7 @@ class WorksController < ApplicationController
       return false
     end
   end
+
   def merge_work
     @work = Work.find(params[:id])
     if params[:target_id].nil? || params[:target_id].blank?
@@ -575,6 +576,7 @@ class WorksController < ApplicationController
       render :merge_work and return
     end
 
+    #Check Ownership
     if _check_merge_ownership(@work,@target_work)
       @work.merge(@target_id)
     else
