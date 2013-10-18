@@ -310,9 +310,6 @@ class Work < ActiveRecord::Base
   # MERGE
   ########################################################################
   def merge(target_id)
-    equal_chapters = false
-    last_target_chapter_id = 0
-
     #get target work object
     @target_work = Work.find_by_id(target_id)
 
@@ -322,40 +319,37 @@ class Work < ActiveRecord::Base
     #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
     if self.chapters.count == @target_work.chapters.count
       self.chapters.each {|c|
-
         #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter_id = @target_work.chapters.find_by_position(c.position)
+        target_chapter = @target_work.chapters.find_by_position(c.position)
         c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = target_chapter_id
+          chapter_comment.parent_id = target_chapter.id
           chapter_comment.save!
         }
       }
     else
-
-      last_target_chapter_id = Chapter.select(:id).where(work_id: target_id).order('position DESC').first
+      last_target_chapter = Chapter.select(:id).where(work_id: target_id).order('position DESC').first
       self.chapters.each {|c|
         c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = last_target_chapter_id
+          chapter_comment.parent_id = last_target_chapter.id
           chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
           chapter_comment.save!
         }
       }
     end
+
     #update collection_items to point to target work
     # Update collection_items set item_id = target_id where item_id = self.id and item_type = "Work"
-    temp_collection_items = CollectionItem.find_all_by_item_id(self.id)
-    temp_collection_items.each { |ci|
-    ci.item_id = target_id
-    ci.save!
-    }
-    # update readings replace source id with target id
-    temp_readings = Reading.find_by_work_id(self.id)
-    if temp_readings != nil
-      temp_readings.each { |r|
-        r.work_id = target_id
-        r.save! }
-    end
+    _merge_collection_items(target_id)
 
+    # update readings replace source id with target id
+    _merge_readings(target_id)
+
+    #update subscriptions
+    _merge_subscriptions(target_id)
+    #update challenge assignments
+
+    #update bookmarks
+    _merge_bookmarks(target_id)
 
     #set redirect for source work to target work id
     self.redirect_work_id = target_id
@@ -376,6 +370,42 @@ class Work < ActiveRecord::Base
     self.save!
 
   end
+
+  def _merge_readings(target_id)
+    temp_readings = Reading.find_by_work_id(self.id)
+    if temp_readings != nil
+      temp_readings.each { |r|
+        r.work_id = target_id
+        r.save! }
+    end
+  end
+
+  def _merge_bookmarks(target_id)
+    temp_bookmarks = Bookmark.find_by_bookmarkable_type_and_bookmarkable_id('Work',self.id)
+    if temp_bookmarks != nil
+      temp_bookmarks.each { |b|
+        b.bookmarkable.id = target_id
+        b.save! }
+    end
+  end
+
+  def _merge_collection_items(target_id)
+    temp_collection_items = CollectionItem.find_by_item_id_and_item_type(self.id,'Work')
+    temp_collection_items.each { |ci|
+     ci.item_id = target_id
+     ci.save!
+    }
+  end
+
+  def _merge_subscriptions(target_id)
+    temp_subscriptions = Subscription.find_by_subscribable_type_and_subscribable_id('Work',self.id)
+    if temp_subscriptions != nil
+      temp_subscriptions.each { |s|
+        s.subscribable.id = target_id
+        s.save! }
+    end
+  end
+
   ########################################################################
   # AUTHORSHIP
   ########################################################################
