@@ -346,7 +346,7 @@ class Work < ActiveRecord::Base
 
     #save self
     self.save!
-
+    self.tire.index.remove
   end
 
   def _merge_chapters(target_work)
