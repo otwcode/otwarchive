@@ -309,9 +309,12 @@ class Work < ActiveRecord::Base
   ########################################################################
   # MERGE
   ########################################################################
+
+
   def merge(target_id)
     #get target work object
     @target_work = Work.find_by_id(target_id)
+
 
     #Loop through kudos for source work and assign them to target work
     self.kudos.each { |k| k.commentable_id = target_id; k.save! }
