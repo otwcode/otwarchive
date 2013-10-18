@@ -537,7 +537,7 @@ class WorksController < ApplicationController
     else
 
 
-      if _check_merge_ownership(@work,@target_Work)
+      if _check_merge_ownership(@work,@target_work)
         @work.merge(@target_id)
       else
         setflash; flash.now[:error] = ts("Sorry You do not own the target work")
