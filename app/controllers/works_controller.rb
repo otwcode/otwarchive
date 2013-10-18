@@ -514,7 +514,7 @@ class WorksController < ApplicationController
     render :merge_work and return
   end
   def _check_merge_ownership(work_a,work_b)
-    if work_a.creatorships.pseud.user_id == work_b.creatorships.pseud.user_id
+    if work_a.creatorships.pseuds.user_id == work_b.creatorships.pseuds.user_id
       return true
     else
       return false
