@@ -7,7 +7,7 @@
       <h4><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
       <%= f.text_field :title, :title =>"title" %></h4>
       <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
-      <ul class="hidden rtf-html-switch actions">
+      <ul class="hidden rtf-html-switch actions" role="menu">
         <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
         <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
       </ul>
