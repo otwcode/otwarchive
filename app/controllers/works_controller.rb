@@ -523,7 +523,7 @@ class WorksController < ApplicationController
   def merge_work
 
     @work = Work.find(params[:id])
-    @target_work.find(:target_id)
+    @target_work = Work.find(:target_id)
     @target_id = params[:target_id]
 
     if @target_id.nil?
