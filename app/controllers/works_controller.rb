@@ -523,9 +523,9 @@ class WorksController < ApplicationController
   def merge_work
 
     @work = Work.find(params[:id])
-    @target_work = Work.find(:target_id)
-    @target_id = params[:target_id]
 
+    @target_id = params[:target_id]
+    @target_work = Work.find(@target_id)
     if @target_id.nil?
       setflash; flash.now[:error] = ts("You must select a destination work.")
       render :merge_work and return
