@@ -154,12 +154,13 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
-Scenario: Adding bookmarks to closed collections (Issue 3083)
+Scenario: A*sdding bookmarks to closed collections (Issue 3083)
   Given I have a closed collection "Unsolved Mysteries" with name "unsolved_mysteries"
     And I have a closed collection "Rescue 911" with name "rescue_911"
     And I am logged in as "moderator"
     And I post the work "Hooray for Homicide"
     And I post the work "Sing a Song of Murder"
+    And I go to "Unsolved Mysteries" collection's page
   Then I view the work "Hooray for Homicide"
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "unsolved_mysteries"
