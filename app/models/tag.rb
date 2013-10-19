@@ -101,6 +101,10 @@ class Tag < ActiveRecord::Base
     if unwrangleable? && (canonical? || merger_id.present?)
       self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
     end
+
+    if unwrangleable? && is_a?(UnsortedTag)
+      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
+    end
   end
 
   before_update :remove_index_for_type_change, if: :type_changed?
