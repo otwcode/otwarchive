@@ -4,6 +4,7 @@
 
 #header {
   z-index: 200;
+  zoom: 1;
 }
 
 #header .logo {
