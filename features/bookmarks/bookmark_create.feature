@@ -1,4 +1,4 @@
-@bookmarks  @no-txn
+@bookmarks
 Feature: Create bookmarks
   In order to have an archive full of bookmarks
   As a humble user
