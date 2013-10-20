@@ -317,5 +317,5 @@ Feature: Create Works
     And I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
-    And I should see "Rich text" within "a#richTextLink"
-    And I should see "HTML" within "a#plainTextLink"
+    And I should see "Rich Text" within "a.rtf-link"
+    And I should see "HTML" within "a.html-link"
