@@ -4,6 +4,7 @@ As a tag wrangler
 I'd like to comment on a tag'
 
   Scenario: Comment on a tag and get taken to right page and see right date
+
     Given the following activated tag wranglers exist
         | login     |
         | dizmo     |
@@ -14,9 +15,9 @@ I'd like to comment on a tag'
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis" via web
     Then I should see "Shouldn't this be a metatag with Stargate?"
       And I should see Posted nowish
-      
-    Scenario: Edit a comment on a tag
-    
+
+  Scenario: Edit a comment on a tag
+
     Given the following activated tag wranglers exist
         | login     |
         | dizmo     |
@@ -34,9 +35,9 @@ I'd like to comment on a tag'
       And I should see Last Edited nowish
     When I view the tag "Stargate Atlantis"
     Then I should see "1 comment"
-    
-    Scenario: Multiple comments on a tag increment correctly
-    
+
+  Scenario: Multiple comments on a tag increment correctly
+
     Given the following activated tag wranglers exist
         | login     |
         | dizmo     |
@@ -47,9 +48,9 @@ I'd like to comment on a tag'
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
-      
+
   Scenario: Multiple comments on a tag show on discussion page
-    
+
     Given the following activated tag wranglers exist
         | login     |
         | dizmo     |
@@ -64,9 +65,9 @@ I'd like to comment on a tag'
     Then I should see "Tag Wrangling Discussion"
       And I should see "Yep, we should have a Stargate franchise metatag."
       And I should see "Important policy decision"
-      
+
   Scenario: Unedited tag does not show on discussion page
-  
+
     Given the following activated tag wranglers exist
           | login     |
           | dizmo     |
@@ -85,9 +86,9 @@ I'd like to comment on a tag'
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
     When I view the tag "Stargate Atlantis"
     Then I should see "1 comment"
-  
+
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
-  
+
     Given the following activated tag wranglers exist
         | login       | password      | email             |
         | dizmo       | wrangulator   | dizmo@example.org |
@@ -178,3 +179,29 @@ I'd like to comment on a tag'
     When I am logged in as "dizmo" with password "wrangulator"
       And I post the comment "Heads up" on the tag "Dr Who"
     Then 1 email should be delivered to "enigel@example.org"
+
+  Scenario: Comments pagination for a regular tag
+
+    Given a tag "No Punctuation Here" with 34 comments
+      And I am logged in as a tag wrangler
+    When I view the tag "No Punctuation Here"
+    # link to comments should exist
+    Then I should see "34 comments"
+    When I follow "34 comments"
+    # link to the next page of comments should exist
+    Then I should see "Next" within ".pagination"
+    When I follow "Next" within ".pagination"
+      And I post a comment "Checking redirect after commenting on a tag"
+    # should redirect to the same page you were on before commenting
+    Then I should see "Comment created"
+      And I should see "Checking redirect after commenting on a tag"
+
+  Scenario: Comments pagination for a tag with slashes and periods in the name
+
+    Given a tag "hack/sign.me" with 34 comments
+      And I am logged in as a tag wrangler
+    When I post the comment "And now things should not break!" on the tag "hack/sign.me"
+    Then I should see "Comment created"
+    # all it checks is that the pagination links aren't broken
+    When I follow "Next" within ".pagination"
+    Then I should see "And now things should not break!"
