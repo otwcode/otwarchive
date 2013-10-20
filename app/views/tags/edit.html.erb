@@ -59,12 +59,6 @@
         <dt><%= f.label :adult, ts('Adult') %></dt>
         <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
       <% end %>
-    
-      <dt><%= f.label :unwrangleable %></dt>
-      <dd>
-        <%= f.check_box :unwrangleable %>&nbsp;
-        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
-      </dd>
 
       <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
       <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
@@ -78,6 +72,12 @@
         <% end %>
       </dd>
       <% end %>
+
+      <dt><%= f.label :unwrangleable %></dt>
+      <dd>
+        <%= f.check_box(:unwrangleable, :disabled => (@tag.class.name == "UnsortedTag")) %>&nbsp;
+        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
+      </dd>
     </dl>
   </fieldset>
 
@@ -156,7 +156,7 @@
         </dl>
       </fieldset>
     <% end %>
-    
+
   <% elsif @tag.is_a?(Media) %>
     <p class="navigation actions" role="navigation"><%= link_to ts('See all fandoms'), {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
   <% end %>
