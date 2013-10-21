@@ -283,4 +283,30 @@ Feature: creating and editing skins
   Then I should see a create confirmation message
   When I check "add_site_parents"
     And I submit
-  Then I should see errors
+  Then I should see errors  
+
+  Scenario: Vendor-prefixed properties should be allowed
+    Given basic skins
+      And I am logged in as "skinner"
+    When I am on skin's new page
+      And I fill in "Title" with "skin with prefixed property"
+      And I fill in "CSS" with ".myclass { -moz-box-sizing: border-box; -webkit-transition: opacity 2s; }"
+      And I submit
+    Then I should see "Skin was successfully created"
+    
+  Scenario: #workskin selector prefixing
+    Given basic skins
+      And I am logged in as "skinner"
+    When I am on skin's new page
+      And I select "Work Skin" from "skin_type"
+      And I fill in "Title" with "#worksin prefixing"
+      And I fill in "CSS" with "#workskin, #workskin a, #workskin:hover, #workskin *, .prefixme, .prefixme:hover, * .prefixme { color: red; }"
+      And I submit
+    Then I should not see "#workskin #workskin,"
+      And I should not see "#workskin #workskin a"
+      And I should see ", #workskin a,"
+      And I should not see "#workskin #workskin:hover"
+      And I should see "#workskin .prefixme,"
+      And I should see "#workskin .prefixme:hover"
+      And I should see "#workskin * .prefixme"
+      
