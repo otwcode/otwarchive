@@ -69,7 +69,7 @@ Feature: User dashboard
 
   Scenario: When a user has more works, series, or bookmarks than the maximum displayed on dashboards (5), the "Recent" listbox for that type of item should contain a link to that user's page for that type of item (e.g. Works (6), Bookmarks (10)). The link should go to the user's works, series, or bookmarks page. That link should not exist for any pseuds belonging to that user until the pseud has 5 or more works/series/bookmarks, and then the pseud's link should go to the works/series/bookmarks page for that pseud.
   
-  Given I am logged in as "testy" with password "t3st1ng"
+  Given I am logged in as "meatloaf" with password "parad1s3"
     And I add the work "Oldest Work" to series "Oldest Series"
     And I add the work "Work 2" to series "Series 2"
     And I add the work "Work 3" to series "Series 3"
@@ -78,29 +78,29 @@ Feature: User dashboard
     And I add the work "Newest Work" to series "Newest Series"
   
   # Check the Works link for the user
-  When I go to testy's user page
+  When I go to meatloaf's user page
   Then I should see "Recent works"
     And I should see "Newest Work"
     And I should not see "Oldest Work"
     And I should see "Works (6)" within "#user-works"
   When I follow "Works (6)" within "#user-works"
-  Then I should see "6 Works by testy"
+  Then I should see "6 Works by meatloaf"
     And I should see "Oldest Work"
     And I should see "Newest Work"
   
   # Check the Series link for the user
-  When I go to testy's user page
+  When I go to meatloaf's user page
   Then I should see "Recent series"
     And I should see "Newest Series"
     And I should not see "Oldest Series"
     And I should see "Series (6)" within "#user-series"
   When I follow "Series (6)" within "#user-series"
-  Then I should see "testy's Series"
+  Then I should see "meatloaf's Series"
     And I should see "Oldest Series"
     And I should see "Newest Series"
   
   # Create a pseud
-  When "testy" creates the pseud "tester"
+  When "meatloaf" creates the pseud "tester"
   Then I should see "You don't have anything posted under this name yet."
   
   # Create a work and series for the pseud and make sure the user's work count doesn't carry over
@@ -115,7 +115,7 @@ Feature: User dashboard
     And I fill in "content" with "This is a work for the pseud."
     And I press "Post Without Preview"
   Then I should see "Work was successfully posted."
-  When I go to testy's user page
+  When I go to meatloaf's user page
     And I follow "tester" within ".pseud .expandable li"
   Then I should see "Recent works"
     And I should see "Pseud's Work 1"
@@ -188,14 +188,14 @@ Feature: User dashboard
   Then I should see "Work was successfully posted."
   
   # Check the Works link for the pseud
-  When I go to testy's user page
+  When I go to meatloaf's user page
     And I follow "tester" within ".pseud .expandable li"
   Then I should see "Recent works"
     And I should see "Pseud's Work 7"
     And I should not see "Pseud's Work 1"
     And I should see "Works (7)" within "#user-works"
   When I follow "Works (7)" within "#user-works"
-  Then I should see "7 Works by tester (testy)"
+  Then I should see "7 Works by tester (meatloaf)"
     And I should see "Pseud's Work 1"
     And I should see "Pseud's Work 7"
     
@@ -216,37 +216,37 @@ Feature: User dashboard
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 2"
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 3"
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 4"
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 5"
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 6"
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "tester (testy)"
+  When I follow "tester (meatloaf)"
     And I follow "Works (7)"
     And I follow "Pseud's Work 7"
     And I follow "Bookmark"
@@ -254,53 +254,53 @@ Feature: User dashboard
   Then I should see "Bookmark was successfully created."
 
   # Check the Bookmarks link for the user
-  When I go to testy's user page
+  When I go to meatloaf's user page
   Then I should see "Recent bookmarks"
     And I should see "Bookmarks (7)" within "#user-bookmarks"
   When I follow "Bookmarks (7)" within "#user-bookmarks"
-  Then I should see "7 Bookmarks by testy"
+  Then I should see "7 Bookmarks by meatloaf"
 
   # Create a bookmark for the pseud and make sure the user's bookmark count doesn't carry over
-  When I go to testy's user page
+  When I go to meatloaf's user page
     And I follow "Works (13)"
   When I follow "Oldest Work"
     And I follow "Bookmark"
     And I select "tester" from "bookmark_pseud_id"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "testy"
+  When I follow "meatloaf"
     And I follow "tester" within ".pseud .expandable li"
   Then I should see "Recent bookmarks"
     And I should see "Oldest Work"
     And I should not see "Bookmarks (" within "#user-bookmarks"
 
   # Create 5 more bookmarks for the pseud
-  When I go to testy's user page
+  When I go to meatloaf's user page
     And I follow "Works (13)"
     And I follow "Work 2"
     And I follow "Bookmark"
     And I select "tester" from "bookmark_pseud_id"
     And I press "Create"
   Then I should see "Bookmark was successfully created."
-  When I follow "testy"
+  When I follow "meatloaf"
     And I follow "Works (13)"
     And I follow "Work 3"
     And I follow "Bookmark"
     And I select "tester" from "bookmark_pseud_id"
     And I press "Create"
-  When I follow "testy"
+  When I follow "meatloaf"
     And I follow "Works (13)"
     And I follow "Work 4"
     And I follow "Bookmark"
     And I select "tester" from "bookmark_pseud_id"
     And I press "Create"
-  When I follow "testy"
+  When I follow "meatloaf"
     And I follow "Works (13)"
     And I follow "Work 5"
     And I follow "Bookmark"
     And I select "tester" from "bookmark_pseud_id"
     And I press "Create"
-  When I follow "testy"
+  When I follow "meatloaf"
     And I follow "Works (13)"
     And I follow "Newest Work"
     And I follow "Bookmark"
@@ -309,7 +309,7 @@ Feature: User dashboard
   Then I should see "Bookmark was successfully created."
 
   # Check the Bookmarks link for the pseud
-  When I go to testy's user page
+  When I go to meatloaf's user page
     And I follow "tester" within ".pseud .expandable li"
   Then I should see "Recent bookmarks"
     And I should see "Bookmarks (6)" within "#user-bookmarks"
