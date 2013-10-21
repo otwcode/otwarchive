@@ -23,11 +23,13 @@
         <% end %>
       </p>
     </div>
-    
-    <% if @admin_post %>
+
+    <% if @admin_posts %>
       <div class="news latest module">
         <h3 class="heading"><%= ts("News") %></h3>
-        <p><%= link_to @admin_post.title, @admin_post %></p>
+        <% @admin_posts.each do |f| %>
+          <p><%= link_to f.title, f %></p>
+        <% end %>
         <% if @admin_post_show_more %>
           <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
         <% end %>
