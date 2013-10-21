@@ -548,11 +548,7 @@ class WorksController < ApplicationController
     pseud_a =  Pseud.find(create_a.pseud_id)
     pseud_b =  Pseud.find(create_b.pseud_id)
 
-    if pseud_a.user.id == pseud_b.user.id
-      return true
-    else
-      return false
-    end
+    pseud_a.user.id == pseud_b.user.id
   end
 
   def merge_work
