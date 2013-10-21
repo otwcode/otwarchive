@@ -12,7 +12,11 @@
       <% if related_work.translation %>
         <li>
           <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
-          <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>.
+          <% if related_work.work.restricted? && !logged_in? %>
+            <%= ts("[Restricted Work] by ") %><%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
+          <% else %>
+            <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+          <% end %>
         </li>
       <% else %>
         <% related_works_link ||= link_to ts("other works inspired by this one"), get_related_works_url %>
@@ -28,7 +32,14 @@
           <% else %>
             <%= ts('Inspired by') %>
           <% end %>
-          <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+
+          <% if related_work.parent.is_a?(ExternalWork) %>
+            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+          <% elsif related_work.parent.restricted? && !logged_in? %>
+            <%= ts("a [Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
+          <% else %>
+            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+          <% end %>
         </li>
       <% end %>
     <% end %>
