@@ -510,16 +510,13 @@ class WorksController < ApplicationController
   end
 
   def merge_work_page
-
-    render :merge_work and return
+  o   render :merge_work and return
   end
+
   def _check_merge_ownership(work_a,work_b)
     create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
     create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
-    pseud_a =  Pseud.find(create_a.pseud_id)
-    pseud_b =  Pseud.find(create_b.pseud_id)
-
-    pseud_a.user.id == pseud_b.user.id
+    create_a.pseud_a.user_id == create_b.pseud_b.user_id
   end
 
   def merge_work
