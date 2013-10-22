@@ -159,6 +159,7 @@ class UsersController < ApplicationController
                 p.save!
 
               end
+              flash[:notice] = ts("This gets called now!2.")
             end
           end
           @user.login = @new_login
@@ -173,7 +174,7 @@ class UsersController < ApplicationController
             elsif old_pseud
               # change the old pseud to match
               old_pseud.update_attribute(:name, @new_login)
-              flash[:error] = ts("This gets called now!.")
+              flash[:notice] = ts("This gets called now!.")
             else
               # shouldn't be able to get here, but just in case
               Pseud.create(:name => @new_login, :user_id => @user.id)
