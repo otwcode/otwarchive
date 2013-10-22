@@ -314,3 +314,29 @@ Scenario: External work language
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
+
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+  Given I have related works setup
+    When I post a related work
+    And I approve a related work
+    And I am logged in as "remixer"
+    And I edit the work "Followup"
+    And I check "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Worldbuilding"
+  Then I should see "A [Restricted Work] by remixer"
+    And I am logged in as "remixer"
+    And I edit the work "Followup"
+    And I uncheck "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Followup"
+    And I should see "Inspired by Worldbuilding by inspiration"
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I check "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Followup"
+  Then I should see "Inspired by a [Restricted Work] by inspiration"
