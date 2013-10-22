@@ -155,7 +155,7 @@ class UsersController < ApplicationController
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name was changed")
-            if old_login == @new_login
+            if old_login.downcase == @new_login.downcase
               @user.pseuds.each { |p|
                 if p.name == old_login
                   p.name == @user.login
