@@ -160,6 +160,15 @@ class UsersController < ApplicationController
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
             if new_pseud
               # do nothing - they already have the matching pseud
+              if old_login == @new_login
+                @user.pseuds.each { |p|
+                if p.name == old_login
+                 p.name == @user.login
+                 p.save!
+
+                end
+                }
+              end
             elsif old_pseud
               # change the old pseud to match
               old_pseud.update_attribute(:name, @new_login)
