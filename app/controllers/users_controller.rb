@@ -152,14 +152,14 @@ class UsersController < ApplicationController
           flash[:error] = ts("User name already taken.")
         else
           old_login = @user.login
-          flash[:notice] = ts("This gets called now!a.")
-          if old_login.downcase == @new_login.downcase
-            @user.pseuds.each do |p|
-              if p.name == old_login
-                p.name == @user.login
-                p.save!
+          old_lower_login = "#{@user.login}".downcase
+          new_lower_login = "#{@new_login}".downcase
 
-              end
+
+          if old_lower_login == new_lower_login
+            old_pseud = Pseud.find_by_name_and_user_id(old_login,@user.id)
+            old_pseud.name = @new_login
+            old_pseud.save!
               flash[:notice] = ts("This gets called now!2.")
             end
           end
