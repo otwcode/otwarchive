@@ -162,7 +162,7 @@ class UsersController < ApplicationController
             old_pseud.save!
               flash[:notice] = ts("This gets called now!2.")
             end
-          end
+
           @user.login = @new_login
           if @user.save
             #flash[:notice] = ts("Your user name was changed")
