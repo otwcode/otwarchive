@@ -160,13 +160,14 @@ class UsersController < ApplicationController
             old_pseud = Pseud.find_by_name_and_user_id(old_login,@user.id)
             old_pseud.name = @new_login
             old_pseud.save!
-              flash[:notice] = ts("This gets called now!2.")
+
             end
 
           @user.login = @new_login
           if @user.save
-            #flash[:notice] = ts("Your user name was changed")
+            flash[:notice] = ts("Your user name was changed")
 
+=begin
             new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
             if new_pseud
@@ -180,6 +181,7 @@ class UsersController < ApplicationController
               # shouldn't be able to get here, but just in case
               Pseud.create(:name => @new_login, :user_id => @user.id)
             end
+=end
 
             redirect_to @user and return
           else
