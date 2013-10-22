@@ -152,18 +152,19 @@ class UsersController < ApplicationController
           flash[:error] = ts("User name already taken.")
         else
           old_login = @user.login
+          if old_login.downcase == @new_login.downcase
+            @user.pseuds.each do |p|
+              if p.name == old_login
+                p.name == @user.login
+                p.save!
+
+              end
+            end
+          end
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name was changed")
-            if old_login.downcase == @new_login.downcase
-              @user.pseuds.each { |p|
-                if p.name == old_login
-                  p.name == @user.login
-                  p.save!
 
-                end
-              }
-            end
             new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
             if new_pseud
