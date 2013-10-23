@@ -310,7 +310,8 @@ class Work < ActiveRecord::Base
   # MERGE
   ########################################################################
 
-
+  # merge
+  # params (target_id) target work id
   def merge(target_id)
     #get target work object
     @target_work = Work.find_by_id(target_id)
@@ -325,7 +326,7 @@ class Work < ActiveRecord::Base
     self.challenge_claims.each { |cc| cc.item_id = target_id; cc.save! }
     self.serial_works.each { |sw| sw.work_id = target_id; sw.save! }
     self.gifts.each { |g| g.work_id = target_id; g.save! }
-    _merge_related_works(target_id,'Work')
+    _merge_related_works(target_id)
     _merge_readings(target_id)
     _merge_chapters(@target_work)
 
@@ -336,20 +337,21 @@ class Work < ActiveRecord::Base
     self.creatorships.each { |c| c.destroy }
 
     #destroy chapters for source
-    # self.chapters.each {|c| c.destroy }
-
-    #destroy taggings for source
-    #self.taggings.each {|tag| tag.destroy }
-
-    #set work to admin hidden
-    #self.hidden_by_admin=1
+     self.chapters.each do |c|
+       c.posted = 0
+       c.save!
+     end
 
     #save self
     self.save!
 
   end
 
-  def _merge_chapters(target_work)
+  #merge chapter comments
+  #if chapter numbers are different comments will go to the last chapter.
+  #if the version in archive already has less stories then the imported one it should be the source and the
+  #imported should be target, might want to mention that in help somewhere.
+  def _merge_chapter_comments(target_work)
     #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
     if self.chapters.count == target_work.chapters.count
       self.chapters.each {|c|
@@ -372,7 +374,10 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def _merge_related_works(target_id,target_type)
+  # merge works helper, related works
+  # params (target_id) target work id
+  def _merge_related_works(target_id)
+    #update related works listed on target story
     works_related_to_self = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
     if works_related_to_self != nil
       works_related_to_self.each { |wrts|
@@ -381,6 +386,7 @@ class Work < ActiveRecord::Base
       }
     end
 
+    #update related works that list source so they point to target
     works_self_related_to = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
     if works_self_related_to != nil
       works_self_related_to.each { |wsrt|
@@ -390,6 +396,9 @@ class Work < ActiveRecord::Base
     end
    end
 
+  # merge works helper, readings
+  # params (target_id) target work id
+  # note: not using relationship because not properly established, could be updated and coded as others.
   def _merge_readings(target_id)
     temp_readings = Reading.find_by_work_id(self.id)
     if temp_readings != nil
@@ -398,9 +407,6 @@ class Work < ActiveRecord::Base
         r.save! }
     end
   end
-
-
-
 
   ########################################################################
   # AUTHORSHIP
