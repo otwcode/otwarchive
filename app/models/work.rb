@@ -345,7 +345,7 @@ class Work < ActiveRecord::Base
 
 
     #save self
-    self.save!
+    self.save!(options={validate: false})
 
   end
 
