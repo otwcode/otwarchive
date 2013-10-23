@@ -328,7 +328,7 @@ class Work < ActiveRecord::Base
     self.gifts.each { |g| g.work_id = target_id; g.save! }
     _merge_related_works(target_id)
     _merge_readings(target_id)
-    _merge_chapters(@target_work)
+    _merge_chapter_comments(@target_work)
 
     #set redirect for source work to target work id
     self.redirect_work_id = target_id
@@ -351,6 +351,7 @@ class Work < ActiveRecord::Base
   #if chapter numbers are different comments will go to the last chapter.
   #if the version in archive already has less stories then the imported one it should be the source and the
   #imported should be target, might want to mention that in help somewhere.
+  #params(target_work) work object
   def _merge_chapter_comments(target_work)
     #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
     if self.chapters.count == target_work.chapters.count
