@@ -545,7 +545,7 @@ class WorksController < ApplicationController
   def _check_merge_ownership(work_a,work_b)
     create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
     create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
-    create_a.pseud_a.user_id == create_b.pseud_b.user_id
+    create_a.pseud.user_id == create_b.pseud.user_id
   end
 
   def merge_work
