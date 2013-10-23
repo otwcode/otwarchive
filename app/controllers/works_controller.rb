@@ -539,7 +539,7 @@ class WorksController < ApplicationController
   end
 
   def merge_work_page
-  o   render :merge_work and return
+    render :merge_work and return
   end
 
   def _check_merge_ownership(work_a,work_b)
