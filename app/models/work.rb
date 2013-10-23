@@ -333,20 +333,25 @@ class Work < ActiveRecord::Base
     #set redirect for source work to target work id
     self.redirect_work_id = target_id
 
-    #destroy chapters for source
-    self.chapters.each do |c|
-      c.posted = false
+    #set chapters not posted and thin them
+    self._merge_thin_chapters
 
-      c.save!
-    end
+    #update work id
+    self.update_column("redirect_work_id",target_id)
+
     #remove creatorship for source
     self.creatorships.each { |c| c.destroy }
 
+  end
 
-
-    #save self
-    self.save!(options={validate: false})
-
+  def _merge_thin_chapters
+    self.chapters.each do |c|
+      c.posted = false
+      c.content = "0000"
+      c.notes = ""
+      c.summary = ""
+      c.endnotes = ""
+    end
   end
 
   #merge chapter comments
