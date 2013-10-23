@@ -1086,12 +1086,13 @@ class Work < ActiveRecord::Base
   scope :unposted, where(:posted => false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
+  scope :non_redirect, where(:redirect_work_id == 0)
   scope :hidden, where(:hidden_by_admin => true)
   scope :unhidden, where(:hidden_by_admin => false)
-  scope :visible_to_all, posted.unrestricted.unhidden
-  scope :visible_to_registered_user, posted.unhidden
-  scope :visible_to_admin, posted
-  scope :visible_to_owner, posted
+  scope :visible_to_all, posted.unrestricted.unhidden.non_redirect
+  scope :visible_to_registered_user, posted.unhidden.non_redirect
+  scope :visible_to_admin, posted.non_redirect
+  scope :visible_to_owner, posted.non_redirect
   scope :all_with_tags, includes(:tags)
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
@@ -1101,6 +1102,7 @@ class Work < ActiveRecord::Base
   scope :revealed, where(:in_unrevealed_collection => false)
   scope :latest, visible_to_all.
                  revealed.
+
                  order("revised_at DESC").
                  limit(ArchiveConfig.ITEMS_PER_PAGE)
 
