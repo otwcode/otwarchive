@@ -40,7 +40,17 @@ class ChaptersController < ApplicationController
       @chapters = @chapters.select(&:posted)
     end
     if !@chapters.include?(@chapter)
-      access_denied
+      if !@work.nil?
+        if @work.redirect_work_id != 0
+          redirect_to work_path(@work.redirect_work_id)
+        elsif @chapters.length > 0
+          redirect_to work_path(@work.id)
+        else
+          access_denied
+        end
+      end
+
+
     else
       if @chapters.length > 1
         chapter_position = @chapters.index(@chapter)
