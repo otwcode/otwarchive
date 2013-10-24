@@ -573,6 +573,7 @@ class WorksController < ApplicationController
     if _check_merge_ownership(@work,@target_work)
       @work.merge(@target_id)
       Work.tire.index.remove @work
+      redirect_to work_path(@target_id)
     else
       setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
       render :merge_work and return
