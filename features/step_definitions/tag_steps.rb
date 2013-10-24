@@ -96,6 +96,17 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   click_button "Assign"
 end
 
+Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
+  tag = Fandom.find_or_create_by_name(tagname)
+  step %{I am logged out}
+  n_comments ||= 3
+  n_comments.to_i.times do |i|
+    step %{I am logged in as a tag wrangler}
+    step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
+    step %{I am logged out}
+  end
+end
+
 ### WHEN
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
