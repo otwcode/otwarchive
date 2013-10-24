@@ -508,6 +508,96 @@ class WorksController < ApplicationController
       redirect_to user_works_path(current_user)
     end
   end
+  #test
+  def merge_work_page
+    render :merge_work and return
+  end
+
+  def _check_merge_ownership(work_a,work_b)
+    create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
+    create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
+    create_a.pseud.user_id == create_b.pseud.user_id
+  end
+
+  def merge_work
+    @work = Work.find(params[:id])
+    if params[:target_id].nil? || params[:target_id].blank?
+      setflash; flash.now[:error] = ts("You must provide a target work id. ")
+      render :merge_work and return
+    else
+      @target_id = params[:target_id]
+    end
+
+    begin
+      @target_work = Work.find(@target_id)
+    rescue
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
+      render :merge_work and return
+    end
+
+    if @target_work == nil
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
+      render :merge_work and return
+    end
+
+    #Check Ownership
+    if _check_merge_ownership(@work,@target_work)
+      @work.merge(@target_id)
+      Work.tire.index.remove @work
+      redirect_to work_path(@target_id)
+    else
+      setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
+      render :merge_work and return
+    end
+
+  end
+
+
+
+  def merge_work_page
+    render :merge_work and return
+  end
+
+  def _check_merge_ownership(work_a,work_b)
+    create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
+    create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
+    create_a.pseud.user_id == create_b.pseud.user_id
+  end
+
+  def merge_work
+    @work = Work.find(params[:id])
+    if params[:target_id].nil? || params[:target_id].blank?
+      setflash; flash.now[:error] = ts("You must provide a target work id. ")
+      render :merge_work and return
+    else
+      @target_id = params[:target_id]
+    end
+
+    begin
+      @target_work = Work.find(@target_id)
+    rescue
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
+      render :merge_work and return
+    end
+
+    if @target_work == nil
+      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
+      render :merge_work and return
+    end
+
+    #Check Ownership
+    if _check_merge_ownership(@work,@target_work)
+      @work.merge(@target_id)
+      Work.tire.index.remove @work
+      redirect_to work_path(@target_id)
+    else
+      setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
+      render :merge_work and return
+    end
+
+  end
+
+
 
   # POST /works/import
   def import
@@ -791,11 +881,20 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
+
     if @work.nil?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
-      redirect_to @work and return
+      #if redirect id > 0 (0 being default value) then get work specified instead
+      #ie. work was merged with another
+      if @work.redirect_work_id > 1
+        params[:id] = @work.redirect_work_id
+        @work = Work.find(@work.redirect_work_id)
+      else
+        redirect_to @work and return
+      end
+
     end
     @check_ownership_of = @work
     @check_visibility_of = @work
