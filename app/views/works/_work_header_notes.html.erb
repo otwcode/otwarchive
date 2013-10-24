@@ -36,7 +36,7 @@
           <% if related_work.parent.is_a?(ExternalWork) %>
             <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
           <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= ts("a [Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
+            <%= ts("[Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
           <% else %>
             <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
           <% end %>

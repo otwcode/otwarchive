@@ -339,4 +339,4 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I press "Post Without Preview"
     And I am logged out
     And I view the work "Followup"
-  Then I should see "Inspired by a [Restricted Work] by inspiration"
+  Then I should see "Inspired by [Restricted Work] by inspiration"
