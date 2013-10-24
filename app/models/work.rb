@@ -367,6 +367,7 @@ class Work < ActiveRecord::Base
         target_chapter = target_work.chapters.find_by_position(c.position)
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = target_chapter.id
+          chapter_comment.commentable_id = target_chapter.id
           chapter_comment.save!(options={validate: false})
         }
       }
@@ -375,6 +376,7 @@ class Work < ActiveRecord::Base
       self.chapters.each {|c|
         c.comments.each { |chapter_comment|
           chapter_comment.parent_id = last_target_chapter.id
+          chapter_comment.commentable_id = last_target_chapter.id
           chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
           chapter_comment.save!(options={validate: false})
         }
