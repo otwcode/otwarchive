@@ -508,7 +508,7 @@ class WorksController < ApplicationController
       redirect_to user_works_path(current_user)
     end
   end
-
+  #test
   def merge_work_page
     render :merge_work and return
   end
