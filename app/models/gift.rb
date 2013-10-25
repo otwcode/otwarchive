@@ -2,7 +2,7 @@ class Gift < ActiveRecord::Base
   NAME_LENGTH_MAX = 100
 
   belongs_to :work
-  belongs_to :user
+  belongs_to :pseud
   
   validates_length_of :recipient_name,
     :maximum => NAME_LENGTH_MAX,
@@ -14,9 +14,9 @@ class Gift < ActiveRecord::Base
     :with => /[a-zA-Z0-9]/,
     :allow_blank => true
     
-  validate :has_name_or_user
+  validate :has_name_or_pseud
   def has_name_or_pseud
-    unless self.user || !self.recipient_name.blank?
+    unless self.pseud || !self.recipient_name.blank?
       errors.add(:base, ts("A gift must have a recipient specified."))
     end
   end

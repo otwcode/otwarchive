@@ -67,10 +67,6 @@ gem 'newrelic-redis'
 # for generating graphs
 gem "google_visualr", ">= 2.1"
 
-# Copycopter to aid translation
-gem 'copycopter_client', '~> 2.0.1'
-
-
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
@@ -98,3 +94,5 @@ group :production do
   gem 'unicorn', :require => false
   gem "memcache-client"
 end
+
+

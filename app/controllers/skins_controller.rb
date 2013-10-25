@@ -59,7 +59,6 @@ class SkinsController < ApplicationController
   #### ACTIONS
   
   def index
-    is_work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin"
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
     end
@@ -69,7 +68,7 @@ class SkinsController < ApplicationController
         flash[:error] = "You can only browse your own skins and approved public skins." 
         redirect_to skins_path and return
       end
-      if is_work_skin
+      if params[:work_skins]
         @skins = @user.work_skins.sort_by_recent
         @title = ts('My Work Skins')
       else
@@ -77,7 +76,7 @@ class SkinsController < ApplicationController
         @title = ts('My Site Skins')
       end
     else
-      if is_work_skin
+      if params[:work_skins]
         @skins = WorkSkin.approved_skins.sort_by_recent_featured
         @title = ts('Public Work Skins')
       else

@@ -10,8 +10,7 @@ module CssCleaner
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
-  PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
-  
+
   FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotate|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
@@ -40,7 +39,7 @@ module CssCleaner
     parser = CssParser::Parser.new
     parser.add_block!(css_code)
     
-    prefix = options[:prefix] || ''
+    prefix = options[:prefix] ? options[:prefix] + " " : ""
     caller_check = options[:caller_check]
 
     if parser.to_s.blank?
@@ -53,7 +52,7 @@ module CssCleaner
             next
           end
           sel = selector.gsub(/\n/, '').strip
-          (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
+          sel = sel.match(/^\s*#{prefix}[^\w]/) ? sel : prefix + sel
         end
         clean_declarations = ""
         rs.each_declaration do |property, value, is_important|
@@ -79,19 +78,15 @@ module CssCleaner
     end
     return clean_css
   end
-  
-  def is_legal_property(property)
-    ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
-      property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
-  end
-  
-  def is_legal_shorthand_property(property)
-    property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
-  end
 
   def sanitize_css_property(property)
-    return (is_legal_property(property) || is_legal_shorthand_property(property)) ? property : ""
+    if ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) ||
+      property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
+        return property
+    end
+    return ""
   end
+
 
   # A declaration must match the format:   property: value;
   # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES,
@@ -111,9 +106,9 @@ module CssCleaner
     elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
-    elsif is_legal_shorthand_property(property)
+    elsif property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
       clean = tokenize_and_sanitize_css_value(value)
-    elsif is_legal_property(property)
+    elsif ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property)
       clean = sanitize_css_value(value)
     end
     clean.strip

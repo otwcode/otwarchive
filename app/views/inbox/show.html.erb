@@ -9,7 +9,7 @@
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user, :filters => params[:filters]), :method => :put, :id => 'inbox-form' do %>
+  <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
@@ -113,52 +113,40 @@
     <dl class="filters" role="menu">
       <dt><%= ts("Filter by read") %></dt>
       <dd>
-        <ul>
-          <li>
-            <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
-            <%= label_tag 'filters_read_all', ts("Show all") %>
-          </li>
-          <li>
-            <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
-            <%= label_tag 'filters_read_false', ts("Show unread") %>
-          </li>
-          <li>
-            <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
-            <%= label_tag 'filters_read_true', ts("Show read") %>
-          </li>
-        </ul>
+        <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
+        <%= label_tag 'filters_read_all', ts("Show all") %>
+      </dd>
+      <dd>
+        <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
+        <%= label_tag 'filters_read_false', ts("Show unread") %>
+      </dd>
+      <dd>
+        <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
+        <%= label_tag 'filters_read_true', ts("Show read") %>
       </dd>
 
       <dt><%= ts("Filter by replied to") %></dt>
       <dd>
-        <ul>
-          <li>
-            <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
-            <%= label_tag 'filters_replied_to_all', ts("Show all") %>
-          </li>
-          <li>
-            <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
-            <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
-          </li>
-          <li>
-            <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
-            <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
-          </li>
-        </ul>
+        <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
+        <%= label_tag 'filters_replied_to_all', ts("Show all") %>
+      </dd>
+      <dd>
+        <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
+        <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
+      </dd>
+      <dd>
+        <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
+        <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
       </dd>
 
       <dt><%= ts("Sort by date") %></dt>
       <dd>
-        <ul>
-          <li>
-            <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
-            <%= label_tag 'filters_date_desc', ts("Newest first") %>
-          </li>
-          <li>
-            <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
-            <%= label_tag 'filters_date_asc', ts("Oldest first") %>
-          </li>
-        </ul>
+        <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
+        <%= label_tag 'filters_date_desc', ts("Newest first") %>
+      </dd>
+      <dd>
+        <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
+        <%= label_tag 'filters_date_asc', ts("Oldest first") %>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>

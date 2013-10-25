@@ -46,7 +46,7 @@ Feature: Edit Works
     Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
       And I should see "second chapter content"
     When I press "Post"
-    Then I should see "Chapter was successfully posted."
+    Then I should see "Chapter was successfully updated."
       And I should not see "first chapter content"
       And I should see "second chapter content"
     When I edit the work "First work"
@@ -73,52 +73,3 @@ Feature: Edit Works
       And I press "Post Without Preview"
     Then I should see "testy"
       And I should not see "testuser,"
-
-  Scenario: Editing a work in a moderated collection
-    # TODO: Find a way to appove works without using this hack method I have here
-    Given the following activated users exist
-      | login          | password   |
-      | Scott          | password   |
-      And I have a moderated collection "Digital Hoarders 2013" with name "digital_hoarders_2013"
-      And I am logged out
-    When I am logged in as "Scott" with password "password"
-      And I post the work "Murder in Milan" in the collection "Digital Hoarders 2013"
-    Then I should see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."
-      And I am logged out
-      And I am logged in as "moderator"
-      And I go to "Digital Hoarders 2013" collection's page
-      And I follow "Collection Settings"
-      And I uncheck "This collection is moderated"
-      And I press "Update"
-    Then I should see "Collection was successfully updated"
-      And I am logged out
-    When I am logged in as "Scott"
-      And I post the work "Murder by Numbers" in the collection "Digital Hoarders 2013"
-    Then I should see "Work was successfully posted"
-      And I am logged out
-    When I am logged in as "moderator"
-      And I go to "Digital Hoarders 2013" collection's page
-      And I follow "Collection Settings"
-      And I check "This collection is moderated"
-      And I press "Update"
-    Then I should see "Collection was successfully updated"
-      And I am logged out
-    When I am logged in as "Scott"
-      And I edit the work "Murder by Numbers"
-      And I press "Post Without Preview"
-      And I should see "Work was successfully updated"
-    Then I should not see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."      
-      
-  Scenario: Editing a work you created today should not bump its revised-at date
-    Given I am logged in as "testuser" with password "testuser"
-      And I post the work "Don't Bump Me"
-      And I post the work "This One Stays On Top"
-      And I edit the work "Don't Bump Me"
-      And I press "Post Without Preview"
-    When I go to the works page
-    Then "This One Stays On Top" should appear before "Don't Bump Me"
-    When I edit the work "Don't Bump Me"
-      And I press "Preview"
-      And I press "Update"
-      And I go to the works page
-    Then "This One Stays On Top" should appear before "Don't Bump Me"

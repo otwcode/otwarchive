@@ -284,11 +284,9 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
-      
-      @work.set_revised_at_by_chapter(@chapter)
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
 
-      if valid && @work.set_challenge_info && @work.save
+      if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
@@ -376,10 +374,37 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit
     else
-      @work.set_revised_at_by_chapter(@chapter)
       saved = @chapter.save
       @work.has_required_tags? || saved = false
       if saved
+        # Setting the @work.revised_at datetime if appropriate
+        # if @chapter.published_at has been changed or work is being posted
+        if params[:post_button] || (defined?(@previous_published_at) && @previous_published_at != @chapter.published_at)
+          # if work has only one chapter - so we don't need to take any other chapter dates into account,
+          # OR the date is set to today AND the backdating setting has not been changed
+          if @work.number_of_chapters == 1 || (@chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate)
+            @work.set_revised_at(@chapter.published_at)
+          # work has more than one chapter and the published_at date for this chapter is not today
+          # so we can't tell if there is a later date than this one elsewhere, and need to grab all
+          # OR the date is today but the backdate setting has changed
+          else
+            # if backdate has been changed to positive
+            if defined?(@previous_backdate_setting) && @previous_backdate_setting == false && @work.backdate
+              @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
+            # if backdate has been changed to negative
+            # OR there is no change in the backdate setting but the date isn't today
+            else
+              @work.set_revised_at
+            end
+          end
+        # elsif the date hasn't been changed, but the backdate setting has
+        elsif defined?(@previous_backdate_setting) && @previous_backdate_setting != @work.backdate
+          if @previous_backdate_setting == false && @work.backdate  # if backdate has been changed to positive
+            @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
+          else # if backdate has been changed to negative, grab most recent chapter date
+            @work.set_revised_at
+          end
+        end
         if !@work.challenge_claims.empty?
           @included = 0
           @work.challenge_claims.each do |claim|
@@ -395,14 +420,18 @@ class WorksController < ApplicationController
           end
         end
         @work.posted = true if params[:post_button]
-        posted_changed = @work.posted_changed?
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
       end
       if saved
-        flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
-        in_moderated_collection
+        if params[:post_button]
+          flash[:notice] = ts('Work was successfully posted.')
+          in_moderated_collection
+        elsif params[:update_button]
+          flash[:notice] = ts('Work was successfully updated.')
+          in_moderated_collection
+        end
         redirect_to(@work)
       else
         unless @chapter.valid?
@@ -508,96 +537,6 @@ class WorksController < ApplicationController
       redirect_to user_works_path(current_user)
     end
   end
-  #test
-  def merge_work_page
-    render :merge_work and return
-  end
-
-  def _check_merge_ownership(work_a,work_b)
-    create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
-    create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
-    create_a.pseud.user_id == create_b.pseud.user_id
-  end
-
-  def merge_work
-    @work = Work.find(params[:id])
-    if params[:target_id].nil? || params[:target_id].blank?
-      setflash; flash.now[:error] = ts("You must provide a target work id. ")
-      render :merge_work and return
-    else
-      @target_id = params[:target_id]
-    end
-
-    begin
-      @target_work = Work.find(@target_id)
-    rescue
-      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
-      render :merge_work and return
-    end
-
-    if @target_work == nil
-      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
-      render :merge_work and return
-    end
-
-    #Check Ownership
-    if _check_merge_ownership(@work,@target_work)
-      @work.merge(@target_id)
-      Work.tire.index.remove @work
-      redirect_to work_path(@target_id)
-    else
-      setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
-      render :merge_work and return
-    end
-
-  end
-
-
-
-  def merge_work_page
-    render :merge_work and return
-  end
-
-  def _check_merge_ownership(work_a,work_b)
-    create_a = Creatorship.find_by_creation_id_and_creation_type(work_a.id,'Work')
-    create_b = Creatorship.find_by_creation_id_and_creation_type(work_b.id,'Work')
-    create_a.pseud.user_id == create_b.pseud.user_id
-  end
-
-  def merge_work
-    @work = Work.find(params[:id])
-    if params[:target_id].nil? || params[:target_id].blank?
-      setflash; flash.now[:error] = ts("You must provide a target work id. ")
-      render :merge_work and return
-    else
-      @target_id = params[:target_id]
-    end
-
-    begin
-      @target_work = Work.find(@target_id)
-    rescue
-      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
-      render :merge_work and return
-    end
-
-    if @target_work == nil
-      setflash; flash.now[:error] = ts("We can not find the work with id #{@target_id}. Please Check your input and try again.")
-      render :merge_work and return
-    end
-
-    #Check Ownership
-    if _check_merge_ownership(@work,@target_work)
-      @work.merge(@target_id)
-      Work.tire.index.remove @work
-      redirect_to work_path(@target_id)
-    else
-      setflash; flash.now[:error] = ts("Sorry you do not own the target work. You can only merge works you own.")
-      render :merge_work and return
-    end
-
-  end
-
-
 
   # POST /works/import
   def import
@@ -730,14 +669,13 @@ protected
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
     if !@collection.nil? && @collection.moderated?
-      if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
-        flash[:notice] ||= ""
-        flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
-      end
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
     end
   end
 
 public
+
 
   def post_draft
     @user = current_user
@@ -881,20 +819,11 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
-
     if @work.nil?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
-      #if redirect id > 0 (0 being default value) then get work specified instead
-      #ie. work was merged with another
-      if @work.redirect_work_id > 1
-        params[:id] = @work.redirect_work_id
-        @work = Work.find(@work.redirect_work_id)
-      else
-        redirect_to @work and return
-      end
-
+      redirect_to @work and return
     end
     @check_ownership_of = @work
     @check_visibility_of = @work
@@ -905,6 +834,8 @@ public
   def set_instance_variables
     if params[:id] # edit, update, preview, manage_chapters
       @work ||= Work.find(params[:id])
+      @previous_published_at = @work.first_chapter.published_at
+      @previous_backdate_setting = @work.backdate
       if params[:work]  # editing, save our changes
         if params[:preview_button] || params[:cancel_button]
           @work.preview_mode = true

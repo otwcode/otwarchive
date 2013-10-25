@@ -65,12 +65,4 @@ div.afterword .series h3, div.afterword .children h3 {
   border-bottom: none;
 }
 
-.module.notes li:last-child {
-  margin-bottom: 1.5em;
-}
-
-.module.notes blockquote + p:last-child {
-  margin-top: 1.5em;
-}
-
 /*END== */

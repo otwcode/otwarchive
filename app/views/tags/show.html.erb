@@ -3,18 +3,16 @@
   <div class="primary header module">
     <h2 class="heading"><%= @tag.name %></h2>
     <div class="icon"></div>
-    <% if @tag.canonical || @tag.merger || can_wrangle? %>
-      <ul class="navigation actions" role="navigation">
-        <% if @tag.canonical || @tag.merger %>
-          <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
-          <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
-        <% end %>
-    	  <% if can_wrangle? %>
-      	  <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
-      	  <li><%= tag_comment_link(@tag) %></li>
-        <% end %>
-      </ul>
-    <% end %>
+    <ul class="navigation actions" role="navigation">
+      <% if @tag.canonical %>
+        <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
+        <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+      <% end %>
+    	<% if can_wrangle? %>
+      	<li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
+      	<li><%= tag_comment_link(@tag) %></li>
+      <% end %>
+    </ul>
   </div>
 
   <%= error_messages_for :tag %>
@@ -54,8 +52,8 @@
 
   <% if @tag.merger %>
   <div class="merger module">
-    <h3 class="heading"><%= ts("Mergers") %></h3>
-    <p><%= ts("%{tag_name} has been merged into %{tag_merger} for filtering. Works and bookmarks tagged with %{tag_name} will show up in %{tag_merger}'s filter.", :tag_name => @tag.name, :tag_merger => @tag.merger.name) %></p>
+    <h3 class="heading">Mergers</h3>
+    <p><%= @tag.name %> <%= ts('has been merged into') %> <%= link_to_tag @tag.merger %> <%=h 'for filtering.' %> <%= ts('Works and bookmarks tagged with') %> <%= @tag.name %> <%= ts('will show up in') %> <%= link_to @tag.merger.name + "'s", {:controller => :works, :action => :index, :tag_id => @tag.merger} %> <%=h 'filter.' %></p>
   </div>
   <% end %>
 

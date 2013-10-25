@@ -30,22 +30,6 @@ describe Tag do
     @tag.errors[:name].join.should =~ /restricted characters/
   end
 
-  context "unwrangleable" do
-    it "should not be valid as canonical and unwrangleable" do
-      tag = Freeform.create(:name => "wrangled", :canonical => true)
-
-      tag.unwrangleable = true
-      tag.should_not be_valid
-    end
-
-    it "should not be valid as unsorted and unwrangleable" do
-      tag = FactoryGirl.create(:unsorted_tag)
-
-      tag.unwrangleable = true
-      tag.should_not be_valid
-    end
-  end
-
   context "when checking for synonym/name change" do
 
     context "when logged in as a regular user" do
@@ -431,7 +415,12 @@ describe Tag do
           @canonical_tag.all_bookmark_ids.should  =~ [@direct_bm.id, @syn_bm.id, @sub_bm.id]
         end
       end
+      
     end
+    
   end
- 
+
+  
 end
+
+

@@ -18,7 +18,7 @@
     <% end %>
     
     <% if @next_chapter %>
-      <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li class="chapter next"><%= link_to (ts("Next Chapter") + " &#8594;").html_safe, [@work, @next_chapter] %></li>
     <% end %>
     
     <li class="chapter" aria-haspopup="true">

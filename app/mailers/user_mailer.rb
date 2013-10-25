@@ -274,10 +274,10 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Sends email to authors when a creation is deleted by an Admin
+  # Sends email to authors when a creation is deleted by abuse
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def admin_deleted_work_notification(user, work)
+  def abuse_deleted_work_notification(user, work)
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
@@ -287,7 +287,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
     )
   end
   

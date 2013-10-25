@@ -1,8 +1,7 @@
 <% # expects "work" %>
-<% if work.redirect_work_id == 0 %>
+
 <% if work.unrevealed? && !is_author_of?(work) %>
   <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-
 <% else %>
 
   <!--title, author, fandom-->
@@ -106,5 +105,4 @@
 
   </dl>
 
-<% end %>
 <% end %>

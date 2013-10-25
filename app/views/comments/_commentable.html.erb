@@ -10,7 +10,7 @@
       <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter] %></li>
     <% end %>
     <% if @work && @next_chapter %>
-      <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li><%= link_to (ts('Next Chapter') + ' &#8594;').html_safe, [@work, @next_chapter] %></li>
     <% end %>
     <% if @previous_admin_post %>
       <li><%= link_to("Previous Post", @previous_admin_post) %></li>
@@ -23,10 +23,16 @@
     <% end %>
     <% if @work && !is_author_of?(@work) %>
       <li>
-        <%= form_for Kudo.new, html: { :'data-type' => :json }, remote: true do |kudo_form| %>
-          <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
-          <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
-          <%= kudo_form.submit ts("Kudos ♥"), :id => 'kudo_submit' %>
+        <%= form_for Kudo.new do |kudo_form| %>
+          <%= kudo_form.hidden_field :kudosable_id, :value => @work.id %>
+          <%= kudo_form.hidden_field :kudosable_type, :value => 'Work' %>
+            <% # here come the hacks: need to know whether to redirect to [full] work or chapter %>
+            <% # commentable is whatever the user is reading - chapter or work; kudosable is the object that can have kudos - the work %>
+            <%= hidden_field_tag :commentable_controller, controller.controller_name %>
+            <%= hidden_field_tag :commentable_id, params[:id] %>
+            <%= hidden_field_tag :view_full_work, params[:view_full_work] if params[:view_full_work] %>
+            <%= hidden_field_tag :page, params[:page] %>
+          <%= kudo_form.submit ts("Kudos ♥"), id: 'kudo_submit' %>
         <% end %>
       </li>
     <% end %>
@@ -50,8 +56,6 @@
         <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
     <% end %>
   </ul>
-  
-  <div id="kudos_message"></div>
 
   <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
 

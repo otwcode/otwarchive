@@ -21,4 +21,4 @@ You wrote:
 
 <%= to_plain_text(raw @comment.sanitized_content) %>
 
-<%= render 'comment_notification_footer', formats: [:text] %><% end %>
+<%= render :partial => 'comment_notification_footer.text.erb' %><% end %>

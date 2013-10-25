@@ -19,7 +19,7 @@ class Work < ActiveRecord::Base
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
-  has_many :readings
+
   has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
   has_many :archivists, :through => :external_creatorships
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
@@ -253,7 +253,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
@@ -305,118 +305,6 @@ class Work < ActiveRecord::Base
   #
   #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
   # end
-
-  ########################################################################
-  # MERGE
-  ########################################################################
-
-  # merge
-  # params (target_id) target work id
-  def merge(target_id)
-    #get target work object
-    @target_work = Work.find_by_id(target_id)
-
-
-    #Loop through kudos for source work and assign them to target work
-    self.kudos.each { |k| k.commentable_id = target_id; k.save! }
-    self.bookmarks.each { |b| b.bookmarkable_id = target_id; b.save! }
-    self.subscriptions.each { |s| s.subscribable_id = target_id; s.save! }
-    self.collection_items.each { |ci| ci.item_id = target_id; ci.save! }
-    self.challenge_assignments.each { |ca| ca.item_id = target_id; ca.save! }
-    self.challenge_claims.each { |cc| cc.item_id = target_id; cc.save! }
-    self.serial_works.each { |sw| sw.work_id = target_id; sw.save! }
-    self.gifts.each { |g| g.work_id = target_id; g.save! }
-    _merge_related_works(target_id)
-    _merge_readings(target_id)
-    _merge_chapter_comments(@target_work)
-
-    #set redirect for source work to target work id
-    self.redirect_work_id = target_id
-
-    #set chapters not posted and thin them
-    self._merge_thin_chapters
-
-    #update work id
-    self.update_column("redirect_work_id",target_id)
-
-    #remove creatorship for source
-    self.creatorships.each { |c| c.destroy }
-
-  end
-
-  def _merge_thin_chapters
-    self.chapters.each do |c|
-      c.posted = false
-      c.content = "0000"
-      c.notes = ""
-      c.summary = ""
-      c.endnotes = ""
-    end
-  end
-
-  #merge chapter comments
-  #if chapter numbers are different comments will go to the last chapter.
-  #if the version in archive already has less stories then the imported one it should be the source and the
-  #imported should be target, might want to mention that in help somewhere.
-  #params(target_work) work object
-  def _merge_chapter_comments(target_work)
-    #Check if same number of chapters (possibly display warning if not, if not same puts comments at last chapter)
-    if self.chapters.count == target_work.chapters.count
-      self.chapters.each {|c|
-        #Todo This is likely incorrect, trying to do a select to return a chapter object that is a member of target_work and in specified position
-        target_chapter = target_work.chapters.find_by_position(c.position)
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = target_chapter.id
-          chapter_comment.commentable_id = target_chapter.id
-          chapter_comment.save!(options={validate: false})
-        }
-      }
-    else
-      last_target_chapter = Chapter.select(:id).where(work_id: target_work.id).order('position DESC').first
-      self.chapters.each {|c|
-        c.comments.each { |chapter_comment|
-          chapter_comment.parent_id = last_target_chapter.id
-          chapter_comment.commentable_id = last_target_chapter.id
-          chapter_comment.content = "Comment for Chapter #{c.position} #{c.title}  <br> #{chapter_comment.content}"
-          chapter_comment.save!(options={validate: false})
-        }
-      }
-    end
-  end
-
-  # merge works helper, related works
-  # params (target_id) target work id
-  def _merge_related_works(target_id)
-    #update related works listed on target story
-    works_related_to_self = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
-    if works_related_to_self != nil
-      works_related_to_self.each { |wrts|
-        wrts.parent_id = target_id
-        wrts.save!
-      }
-    end
-
-    #update related works that list source so they point to target
-    works_self_related_to = RelatedWork.find_by_parent_type_and_parent_id('Work',self.id)
-    if works_self_related_to != nil
-      works_self_related_to.each { |wsrt|
-        wsrt.parent_id = target_id
-        wsrt.save!
-      }
-    end
-   end
-
-  # merge works helper, readings
-  # params (target_id) target work id
-  # note: not using relationship because not properly established, could be updated and coded as others.
-  def _merge_readings(target_id)
-    temp_readings = Reading.find_by_work_id(self.id)
-    if temp_readings != nil
-      temp_readings.each { |r|
-        r.work_id = target_id
-        r.save! }
-    end
-  end
 
   ########################################################################
   # AUTHORSHIP
@@ -1102,13 +990,12 @@ class Work < ActiveRecord::Base
   scope :unposted, where(:posted => false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
-  scope :non_redirect, where(:redirect_work_id == 0)
   scope :hidden, where(:hidden_by_admin => true)
   scope :unhidden, where(:hidden_by_admin => false)
-  scope :visible_to_all, posted.unrestricted.unhidden.non_redirect
-  scope :visible_to_registered_user, posted.unhidden.non_redirect
-  scope :visible_to_admin, posted.non_redirect
-  scope :visible_to_owner, posted.non_redirect
+  scope :visible_to_all, posted.unrestricted.unhidden
+  scope :visible_to_registered_user, posted.unhidden
+  scope :visible_to_admin, posted
+  scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
@@ -1118,7 +1005,6 @@ class Work < ActiveRecord::Base
   scope :revealed, where(:in_unrevealed_collection => false)
   scope :latest, visible_to_all.
                  revealed.
-
                  order("revised_at DESC").
                  limit(ArchiveConfig.ITEMS_PER_PAGE)
 

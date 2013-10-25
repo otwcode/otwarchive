@@ -1,13 +1,11 @@
-<% work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin" %>
-
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
 	<li>
-    <% if work_skin %>
-      <%= link_to ts("Site Skins"), url_for(:skin_type => "Skin") %>
+    <% if params[:work_skins] %>
+      <%= link_to ts("Site Skins"), url_for(:work_skins => false) %>
     <% else %>
-      <%= link_to ts("Work Skins"), url_for(:skin_type => "WorkSkin") %>
+      <%= link_to ts("Work Skins"), url_for(:work_skins => true) %>
     <% end %>
   </li>
   <li><%= span_if_current ts('Public Skins'), skins_path %></li>
@@ -26,7 +24,7 @@
 	
     <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to ts('Create Skin'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %></li>
+      <li><%= link_to ts('Create Skin'), new_skin_path %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->

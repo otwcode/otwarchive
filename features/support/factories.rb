@@ -20,15 +20,6 @@ FactoryGirl.define do
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
   end
 
-  factory :admin_post do |f|
-    f.sequence(:title) { |n| "Amazing News #{n}"}
-    f.sequence(:content) {|n| "This is the content for the #{n} Admin Post"}
-
-    after(:build) do |admin_post|
-      admin_post.admin_id = [FactoryGirl.build(:admin).id] if admin_post.admin_id.blank?
-    end
-  end
-
   factory :archive_faq do |f|
     f.sequence(:title) { |n| "The #{n} FAQ" }
     f.sequence(:content) { |n| "This is the #{n} FAQ" }

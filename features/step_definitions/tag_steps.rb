@@ -54,15 +54,6 @@ Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
   t.save
 end
 
-Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
-  merger = Tag.find_by_name(merger)
-  merger_type = merger.type
-
-  synonym = merger_type.classify.constantize.find_or_create_by_name(synonym)
-  synonym.merger = merger
-  synonym.save
-end
-
 Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"

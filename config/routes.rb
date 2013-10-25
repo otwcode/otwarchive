@@ -255,7 +255,6 @@ Otwarchive::Application.routes.draw do
       collection do
         get :drafts
         get :collected
-
         get :show_multiple
         post :edit_multiple
         put :update_multiple
@@ -273,8 +272,6 @@ Otwarchive::Application.routes.draw do
       get :search
     end
     member do
-      put :merge_work
-      get :merge_work_page
       get :preview
       post :post
       put :post_draft
@@ -477,7 +474,7 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create]
+  resources :kudos, :only => [:create, :show]
 
   resources :skins do
     member do

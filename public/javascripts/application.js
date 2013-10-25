@@ -24,11 +24,9 @@ $j(document).ready(function() {
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
-
+    
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
-
-    handleKudosSubmission();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -382,19 +380,5 @@ function setupAccordion() {
       e.preventDefault();
     }
     expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-  });
-}
-
-function handleKudosSubmission() {
-  $j("#new_kudo").on("ajax:success", function(e, data, status, xhr){
-    $j('#kudos_message').addClass('notice').html('<p>Thank you for leaving kudos!</p>');
-  });
-  $j("#new_kudo").on("ajax:error", function(e, xhr, status, error){
-    var msg = 'Sorry, we were unable to save your kudos';
-    var data = $j.parseJSON(xhr.responseText);
-    if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-      msg = "You've already left kudos here";
-    }
-    $j('#kudos_message').addClass('error').html('<p>' + msg + '</p>');
   });
 }

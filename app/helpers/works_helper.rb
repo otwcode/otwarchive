@@ -108,17 +108,8 @@ module WorksHelper
     current_page?(:controller => 'chapters', :action => 'show') ?
       chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
       "#work_endnotes"
-  end
-  
-  def get_related_works_url
-    current_page?(:controller => 'chapters', :action => 'show') ?
-      chapter_path(@work.last_chapter.id, :anchor => 'children') :
-      "#children"
-  end
-  
-  def get_inspired_by(work)
-    work.approved_related_works.where(translation: false)
-  end
+  end      
+    
 
   def download_url_for_work(work, format)
     url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')

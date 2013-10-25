@@ -102,39 +102,3 @@ Feature: Admin posts
     Then I should see "Admin Post was successfully created."
       And I should see "toaster" within "div.admin.home"
       And I should see "futurama" within ".tags"
-
-  Scenario: Check AdminPost links on home page with only 3 total posts
-
-    Given I have no users
-      And the following admin exists
-        | login      | password |
-        | Scott      | secret   |
-
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Scott"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    When there are 3 Admin Posts
-      And I go to the home page
-    Then I should see "Amazing News 1"
-      And I should see "Amazing News 2"
-      And I should see "Amazing News 3"
-      And I should not see "More news"
-
-  Scenario: Check AdminPost links on home page with 4 total posts
-
-    Given I have no users
-    And the following admin exists
-      | login      | password |
-      | Scott      | secret   |
-
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Scott"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    When there are 4 Admin Posts
-      And I go to the home page
-    Then I should see "More news"
-      And I should see "Amazing News 4"
-      And I should see "Amazing News 3"
-      And I should see "Amazing News 2"

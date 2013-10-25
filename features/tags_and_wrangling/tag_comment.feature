@@ -65,26 +65,26 @@ I'd like to comment on a tag'
       And I should see "Yep, we should have a Stargate franchise metatag."
       And I should see "Important policy decision"
       
-  Scenario: Unedited tag does not show on discussion page
+  Scenario: Unedited tag doesn't show on discussion page
   
-    Given the following activated tag wranglers exist
-          | login     |
-          | dizmo     |
-          | Enigel    |
-        And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I view the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should not see "Stargate Atlantis"
-    
-    Scenario: admin can also comment on tags, issue 1428
-    
-    Given a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
-    When I view the tag "Stargate Atlantis"
-    Then I should see "1 comment"
+  Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
+        | Enigel    |
+      And a fandom exists with name: "Stargate Atlantis", canonical: true
+  When I am logged in as "Enigel"
+  When I view the tag "Stargate Atlantis"
+  When I am logged in as "dizmo"
+  When I view tag wrangling discussions
+  Then I should not see "Stargate Atlantis"
+  
+  Scenario: admin can also comment on tags, issue 1428
+  
+  Given a fandom exists with name: "Stargate Atlantis", canonical: true
+  When I am logged in as an admin
+  When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
+  When I view the tag "Stargate Atlantis"
+  Then I should see "1 comment"
   
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
   
@@ -157,6 +157,7 @@ I'd like to comment on a tag'
       And I fill in "Comment" with "really clever stuff"
       And I press "Comment"
     Then I should see "Comment created"
+      And show me the emails
       And 1 email should be delivered to "cesy@example.org"
       And 1 email should be delivered to "dizmo@example.org"
       And 1 email should be delivered to "enigel@example.org"
@@ -165,16 +166,4 @@ I'd like to comment on a tag'
       And I press "Update"
     Then I should see "Comment was successfully updated"
       And 3 emails should be delivered
-
-  Scenario: comments on synonym fandoms should be received by the wrangler of the canonical merger
-
-    Given the following activated tag wranglers exist
-        | login       | password      | email             |
-        | dizmo       | wrangulator   | dizmo@example.org |
-        | Enigel      | wrangulator   | enigel@example.org|
-      And a fandom exists with name: "Doctor Who", canonical: true
-      And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
-      And a synonym "Dr Who" of the tag "Doctor Who"
-    When I am logged in as "dizmo" with password "wrangulator"
-      And I post the comment "Heads up" on the tag "Dr Who"
-    Then 1 email should be delivered to "enigel@example.org"
+      
