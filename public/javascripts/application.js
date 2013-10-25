@@ -16,10 +16,16 @@ $j(document).ready(function() {
     });
     setupDropdown();
 
-    // replace all GET delete links with their AJAXified equivalent
+    // I THINK THIS IS ONLY FOR WORKS -- CAN WE JUST DELETE AND USE RAILS.JS?
+    // replace all GET delete links with their AJAXified equivalent and add a confirmation message if none has been defined in the backend
     $j('a[href$="/confirm_delete"]').each(function(){
         this.href = this.href.replace(/\/confirm_delete$/, "");
-        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+        $j(this).attr("data-method", "delete");
+        if ($j(this).is("[data-confirm]")) {
+          return;
+        } else {
+          $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+        };
     });
 
     // remove final comma from comma lists in older browsers
