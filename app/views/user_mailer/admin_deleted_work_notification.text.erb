@@ -3,9 +3,9 @@ Dear <%= @user.default_pseud.byline %>,
 
 Your work "<%= @work.title.html_safe %>" was deleted from the Archive by a site admin.
 
-If you work was part of an import project managed by our Open Doors team, please <%= link_to("contact Open Doors", "http://opendoors.transformativeworks.org/contact/open%20doors") %>.
+If your work was part of an import project managed by our Open Doors team, please <%= link_to("contact Open Doors", "http://opendoors.transformativeworks.org/contact/open%20doors") %> with any further questions.
 
-If it's possible your work violated the Archive's Terms of Service, please <%= link_to("contact our Abuse Commmittee", "#{root_url}abuse_reports/new") %>.
+If it's possible your work violated the Archive's Terms of Service, please <%= link_to("contact our Abuse Committee", "#{root_url}abuse_reports/new") %>.
 
 Attached is a copy of your work for your reference.
 <% end %>
