@@ -2,11 +2,11 @@ class BookmarksController < ApplicationController
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
-  before_filter :users_only, :only => [:new, :create, :edit, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
+  before_filter :users_only, :only => [:new, :create, :edit, :update, :confirm_delete]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :confirm_delete]
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
   before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
   # get the parent
   def load_bookmarkable
@@ -141,6 +141,9 @@ class BookmarksController < ApplicationController
       @bookmarkable = @bookmark.bookmarkable
       render :action => :edit
     end
+  end
+
+  def confirm_delete
   end
 
   # DELETE /bookmarks/1
