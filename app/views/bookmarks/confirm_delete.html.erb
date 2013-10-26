@@ -1,0 +1,11 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Delete Bookmark") %></h2>
+
+<!--main content-->
+<%= form_for(@bookmark, :url => bookmark_path(@bookmark), :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
+  <p><%= ts("Are you sure you want to delete your bookmark of %{bookmarkable}?", :bookmarkable => link_to(@bookmark.bookmarkable.title, @bookmark.bookmarkable)).html_safe %></p>
+  <p>
+    <%= f.submit ts("Yes, Delete Bookmark") %>
+  </p>
+<% end %>
+<!--/content-->
