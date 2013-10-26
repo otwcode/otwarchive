@@ -346,6 +346,9 @@ Otwarchive::Application.routes.draw do
       get :list_ge_challenges
       get :list_pm_challenges
     end
+    member do
+      get :confirm_delete
+    end
     resource  :profile, :controller => "collection_profile"
     resources :collections
     resources :works
