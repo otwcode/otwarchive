@@ -86,7 +86,10 @@ Feature: Work Drafts
         And I should see "Post Draft" within "#main .own.work.blurb .navigation"
         And I should see "Delete Draft" within "#main .own.work.blurb .navigation"
       When I follow "Delete Draft"
-        And I press "Yes, Delete Work"
+        Then I should see "Are you sure you want to delete the draft"
+        And I should not see "All bookmarks, comments, and kudos will be lost."
+        And I should not see "Orphan Work Instead"
+        And I press "Yes, Delete Draft"
       Then I should see "Drafts (0)"
         And I should see "Your work draft to delete was deleted"
         
