@@ -1,0 +1,11 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Delete Series") %></h2>
+
+<!--main content-->
+<%= form_for(@series, :url => series_path(@series), :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
+  <p><%= ts("Are you sure you want to delete the series %{series_title}? This will not delete the individual works.", :series_title => link_to(@series.title, @series)).html_safe %></p>
+  <p>
+    <%= f.submit ts("Yes, Delete Series") %>
+  </p>
+<% end %>
+<!--/content-->
