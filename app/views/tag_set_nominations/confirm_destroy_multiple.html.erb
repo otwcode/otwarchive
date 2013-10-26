@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 id="heading"><%= ts("Clear all Tag Set Nominations?") %></h2>
+<h2 class="heading"><%= ts("Clear all Tag Set Nominations?") %></h2>
 
 <!--main content-->
 <%= form_for(@tag_set, :url => tag_set_nominations_path(@tag_set), :html => {:action => :destroy_multiple}) do |f| %>
