@@ -1,7 +1,7 @@
 <div class="notes module" role="complementary">
   <h3 class="heading"><%= ts("Notes:") %></h3>
 
-  <ul>
+  <ul class="associations">
     <% # dedication %>
     <% unless @work.recipients.blank? %>
       <li><%= ts("For") %> <%= recipients_link(@work) %>.</li>
@@ -68,10 +68,10 @@
 
   <% endnotes_link = link_to (@work.notes.blank? ? ts("notes") : ts("more notes")), get_endnotes_link %>
   <% if !@work.endnotes.blank? && related_works_link %>
-    <p>(<%= ts("See the end of the work for ") %><%= endnotes_link %><%= ts(" and ") %><%= related_works_link %>.)</p>
+    <p class="jump">(<%= ts("See the end of the work for ") %><%= endnotes_link %><%= ts(" and ") %><%= related_works_link %>.)</p>
   <% elsif !@work.endnotes.blank? %>
-    <p>(<%= ts("See the end of the work for ") %><%= endnotes_link %>.)</p>
+    <p class="jump">(<%= ts("See the end of the work for ") %><%= endnotes_link %>.)</p>
   <% elsif related_works_link %>
-    <p>(<%= ts("See the end of the work for ") %><%= related_works_link %>.)</p>
+    <p class="jump">(<%= ts("See the end of the work for ") %><%= related_works_link %>.)</p>
   <% end %>
 </div>
