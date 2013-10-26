@@ -54,6 +54,14 @@ div.preface .series ul, div.preface .children ul {
   padding: 0 0.643em;
 }
 
+div.preface .associations {
+  margin-bottom: 1.5em;
+}
+
+div.preface .jump {
+  margin-top: 1.5em;
+}
+
 /* mod: afterword
 the preface that appears at the bottom of a work page */
 
@@ -63,14 +71,6 @@ div.afterword {
 
 div.afterword .series h3, div.afterword .children h3 {
   border-bottom: none;
-}
-
-.module.notes li:last-child {
-  margin-bottom: 1.5em;
-}
-
-.module.notes blockquote + p:last-child {
-  margin-top: 1.5em;
 }
 
 /*END== */
