@@ -201,4 +201,13 @@ Scenario: Series index for maaany series
   Then I should see "penguins30"
   When I follow "Next"
   Then I should see "penguins0"
-
+  
+Scenario: Delete a series
+  Given I am logged in as "cereal" with password "yumyummy"
+    And I add the work "Snap" to series "Krispies"
+  When I view the series "Krispies"
+    And I follow "Delete Series"
+  Then I should see "Are you sure you want to delete"
+    And I should see "Krispies"
+  When I press "Yes, Delete Series"
+  Then I should see "Series was successfully deleted."

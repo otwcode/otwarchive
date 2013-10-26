@@ -1,7 +1,7 @@
 class SeriesController < ApplicationController 
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy ] 
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ] 
+  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy, :confirm_delete ] 
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ] 
   before_filter :check_visibility, :only => [:show]
   
   def load_series
@@ -146,6 +146,9 @@ class SeriesController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+  
   # DELETE /series/1
   # DELETE /series/1.xml
   def destroy
