@@ -1,8 +1,8 @@
 class CollectionsController < ApplicationController
 
   before_filter :users_only, :only => [:new, :edit, :create, :update]
-  before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy]
-  before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
+  before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :collection_owners_only, :only => [:edit, :update, :destroy, :confirm_delete]
 
   cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
@@ -139,11 +139,18 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+  
   def destroy
     @hide_dashboard = true
     @collection = Collection.find_by_name(params[:id])
-    @collection.destroy
-
+    begin
+      @collection.destroy
+      flash[:notice] = ts("Collection was successfully deleted.")
+    rescue
+      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
+    end
     redirect_to(collections_url)
   end
 
