@@ -1,13 +1,19 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 id="work-form-heading"><%= ts("Delete Work?") %></h2>
+<h2 class="heading"><%= ts("Delete") + " " + (@work.posted? ? ts("Work") : ts("Draft")) %></h2>
 
 <!--main content-->
-<%= form_for(@work, :html => {:method => :delete}) do |f| %>
-  <p><%= ts("Are you sure you want to delete the work %{work_title} PERMANENTLY? This CANNOT BE UNDONE and all bookmarks, comments, and kudos will be lost. If you just want to remove your association with the work, you could Orphan it instead.", :work_title => @work.title).html_safe %></p>
+<%= form_for(@work, :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
   <p>
-      <%= f.submit ts("Yes, Delete Work") %>
+    <%= ts("Are you sure you want to delete the") %> <%= @work.posted? ? ts("work") : ts("draft") %> <%= link_to(@work.title, @work) %> <%= ts(" <strong>permanently</strong>? This <strong>cannot be undone</strong>.").html_safe %>
+    <% if @work.posted? %>
+      <%= ts("All bookmarks, comments, and kudos will be lost. If you just want to remove your association with the work, you could Orphan it instead.") %>
+    <% end %>
+  </p>
+  <p>
+    <%= f.submit ts("Yes, Delete") + " " + (@work.posted? ? ts("Work") : ts("Draft")) %>
+    <% if @work.posted? %>
       <%= link_to ts("Orphan Work Instead"), new_orphan_path(:work_id => @work.id) %>
-      <%= link_to ts("Back to the work"), @work %>
+    <% end %>
   </p>
 <% end %>
 <!--/content-->
