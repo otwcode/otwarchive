@@ -24,4 +24,7 @@ class Kudo < ActiveRecord::Base
     end
   end
   
+  def dup?
+    errors.values.to_s.match /already left kudos/
+  end
 end
