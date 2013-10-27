@@ -350,6 +350,7 @@ class Work < ActiveRecord::Base
       c.notes = ""
       c.summary = ""
       c.endnotes = ""
+      c.save!
     end
   end
 
