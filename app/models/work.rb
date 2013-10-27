@@ -382,7 +382,7 @@ class Work < ActiveRecord::Base
       }
     end
   end
-
+   #
   # merge works helper, related works
   # params (target_id) target work id
   def _merge_related_works(target_id)
