@@ -95,9 +95,9 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        put :update_multiple
+        put  :update_multiple
         post :destroy_multiple
-        get :confirm_destroy_multiple
+        get  :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
