@@ -601,7 +601,7 @@ class Work < ActiveRecord::Base
         self.revised_at || self.created_at
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
-      end
+  end
 
   def set_revised_at_by_chapter(chapter)
     return if !chapter.posted
@@ -624,9 +624,8 @@ class Work < ActiveRecord::Base
   # Just to catch any cases that haven't gone through set_revised_at
   def ensure_revised_at
     self.set_revised_at if self.revised_at.nil?
-      self.revised_at = Time.now
-    end
   end
+
 
   def published_at
     self.first_chapter.published_at
