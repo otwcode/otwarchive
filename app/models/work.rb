@@ -346,7 +346,6 @@ class Work < ActiveRecord::Base
   def _merge_thin_chapters
     self.chapters.each do |c|
       c.posted = false
-      c.content = "0000"
       c.notes = ""
       c.summary = ""
       c.endnotes = ""
