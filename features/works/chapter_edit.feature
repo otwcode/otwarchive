@@ -71,6 +71,7 @@ Feature: Edit chapters
   When I follow "Edit"
     And I follow "2"
     And I follow "Delete Chapter"
+    And I press "Yes, Delete Chapter"
   Then I should see "The chapter was successfully deleted."
     And I should see "3/17"
     And I should see "Words:14"
