@@ -221,39 +221,38 @@ class Work < ActiveRecord::Base
   # consistency and that associated variables are updated.
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
-
-  before_save :post_first_chapter, :set_word_count
+  before_save :post_first_chapter, :set_word_count, :check_for_invalid_tags
 
   after_save :save_chapters, :save_parents, :save_new_recipients
   before_create :set_anon_unrevealed, :set_author_sorting
-  before_update :set_author_sorting
-
-  before_save :check_for_invalid_tags
-  before_update :validate_tags
+  before_update :set_author_sorting, :validate_tags
   after_update :adjust_series_restriction
 
-  after_destroy :destroy_chapters_in_reverse
+  after_destroy :destroy_chapters_in_reverse, :clean_up_creatorships, :clean_up_filter_taggings
+  after_destroy :clean_up_assignments, :destroy_redirects
+
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
   end
-  
-  after_destroy :clean_up_creatorships
+
+  def destroy_redirects
+    redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
+  end
+
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
   end
 
-  after_destroy :clean_up_filter_taggings
   def clean_up_filter_taggings
     FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
   end
-  
-  after_destroy :clean_up_assignments
+
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
   def self.purge_old_drafts
-    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
     Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
     Work.where(:id => draft_ids).map(&:destroy)
     draft_ids.size
@@ -347,10 +346,10 @@ class Work < ActiveRecord::Base
   def _merge_thin_chapters
     self.chapters.each do |c|
       c.posted = false
-      c.content = "0000"
       c.notes = ""
       c.summary = ""
       c.endnotes = ""
+      c.save!
     end
   end
 
@@ -383,7 +382,7 @@ class Work < ActiveRecord::Base
       }
     end
   end
-
+   #
   # merge works helper, related works
   # params (target_id) target work id
   def _merge_related_works(target_id)
@@ -597,30 +596,35 @@ class Work < ActiveRecord::Base
   end
 
   def set_revised_at(date=nil)
-    if date # if we pass a date, we want to set it to that (or current datetime if it's today)
-      date == Date.today ? value = Time.now : value = DateTime::jd(date.jd, 12, 0, 0)
-      self.revised_at = value
-    else # we want to find the most recent @chapter.published_at date
-      recent_date = self.chapters.maximum('published_at')
-      # if recent_date is today and revised_at is today, we don't want to update revised_at at all
-      # because we'd overwrite with an inaccurate time; if revised_at is not already today, best we can
-      # do is update with current time
-      if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
-        return self.revised_at
-      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
-        self.revised_at = Time.now
-      else
-        self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
-      end
+    date ||= self.chapters.where(:posted => true).maximum('published_at') ||
+        self.revised_at || self.created_at
+    date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
+    self.revised_at = date
+  end
+
+  def set_revised_at_by_chapter(chapter)
+    return if !chapter.posted
+    if chapter.posted_changed? && chapter.published_at == Date.today
+      self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
+    elsif self.revised_at.nil? ||
+        chapter.published_at > self.revised_at.to_date ||
+        chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
+      # revised_at should be (re)evaluated to reflect the chapter's pub date
+      max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
+      max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
+      self.set_revised_at(max_date)
+    # else
+      # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't
+      # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
+      # work's position in date-sorted indexes, so don't do it unnecessarily.
     end
   end
 
   # Just to catch any cases that haven't gone through set_revised_at
   def ensure_revised_at
-    if self.revised_at.nil?
-      self.revised_at = Time.now
-    end
-  end
+    self.set_revised_at if self.revised_at.nil?
+
+end
 
   def published_at
     self.first_chapter.published_at
