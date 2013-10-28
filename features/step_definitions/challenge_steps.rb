@@ -130,6 +130,7 @@ When /^I delete my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "My Prompts"}
   step %{I follow "Delete Sign-up"}
+  step %{I press "Yes, Delete Sign-up"}
   step %{I should see "Challenge sign-up was deleted."}
 end
 
