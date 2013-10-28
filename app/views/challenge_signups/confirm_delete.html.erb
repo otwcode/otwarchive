@@ -3,7 +3,7 @@
 
 <!--main content-->
 <%= form_for(@challenge_signup, :url => collection_signup_path(@collection, @challenge_signup), :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
-  <p><%= ts("Are you sure you want to delete %{person}'s sign-up?", :person => @challenge_signup.pseud.byline) %>
+  <p><%= ts("Are you sure you want to delete the sign-up for %{person}?", :person => @challenge_signup.pseud.byline) %>
   <% if  @collection.potential_matches.count == 0 %>
     <%= ts("All prompts in this sign-up will be lost.") %>
   <% else %>
