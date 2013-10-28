@@ -225,7 +225,5 @@ Feature: Create and Edit Series
       And I add the work "Snap" to series "Krispies"
     When I view the series "Krispies"
       And I follow "Delete Series"
-    Then I should see "Are you sure you want to delete"
-      And I should see "Krispies"
-    When I press "Yes, Delete Series"
+      And I press "Yes, Delete Series"
     Then I should see "Series was successfully deleted."
