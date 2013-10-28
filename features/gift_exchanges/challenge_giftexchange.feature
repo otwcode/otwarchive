@@ -291,8 +291,24 @@ Feature: Gift Exchange Challenge
     And I should not see "Standard Challenge Tags"
     And I should not see "Angela Lansbury"
 
-
-
-
-    
-
+  Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to "Awesome Gift Exchange" collection's page
+    And I follow "Sign-ups" within "#dashboard"
+  Then I should see "Sign-ups for Awesome Gift Exchange"
+    And I follow "myname1"
+    And I follow "Delete Sign-up"
+    And I press "Yes, Delete Sign-up"
+  Then I should see "Challenge sign-up was deleted." 
+  When I am logged in as "myname2"
+    And I go to my user page
+    And I follow "Sign-ups"
+  Then I should see "Awesome Gift Exchange"
+  When I follow "Delete Sign-up"
+    And I press "Yes, Delete Sign-up"
+  Then I should see "Challenge sign-up was deleted."
+  

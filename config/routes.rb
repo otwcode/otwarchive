@@ -370,6 +370,9 @@ Otwarchive::Application.routes.draw do
       collection do
         get :summary
       end
+      member do
+        get :confirm_delete
+      end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
