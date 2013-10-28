@@ -3,8 +3,8 @@
 
 <!--main content-->
 <%= form_for(@collection, :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
-  <p><%= ts("Are you sure you want to delete the collection %{collection_name}? All collection settings will be lost. (Works will not be deleted.)", :collection_name => link_to(@collection.title, @collection)).html_safe %></p>
-  <p>
+  <p class="caution notice"><%= ts("Are you sure you want to <strong><em>delete</em></strong> the collection %{collection_name}? All collection settings will be lost. (Works will not be deleted.)", :collection_name => @collection.title).html_safe %></p>
+  <p class="actions">
     <%= f.submit ts("Yes, Delete Collection") %>
   </p>
 <% end %>
