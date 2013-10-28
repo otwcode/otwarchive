@@ -3,8 +3,8 @@
 
 <!--main content-->
 <%= form_for(@series, :html => {:method => :delete, :class => "simple destroy"}) do |f| %>
-  <p><%= ts("Are you sure you want to delete the series %{series_title}? This will not delete the individual works.", :series_title => link_to(@series.title, @series)).html_safe %></p>
-  <p>
+  <p class="caution notice"><%= ts('Are you sure you want to <strong><em>delete</em></strong> the series "%{series_title}"? This will not delete the individual works.', :series_title => @series.title).html_safe %></p>
+  <p class="actions">
     <%= f.submit ts("Yes, Delete Series") %>
   </p>
 <% end %>

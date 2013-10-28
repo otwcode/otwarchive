@@ -146,6 +146,7 @@ class SeriesController < ApplicationController
     end
   end
 
+  # GET /series/1/confirm_delete
   def confirm_delete
   end
   
