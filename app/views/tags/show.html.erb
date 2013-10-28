@@ -55,7 +55,7 @@
   <% if @tag.merger %>
   <div class="merger module">
     <h3 class="heading"><%= ts("Mergers") %></h3>
-    <p><%= ts("%{tag_name} has been merged into %{tag_merger} for filtering. Works and bookmarks tagged with %{tag_name} will show up in %{tag_merger}'s filter.", :tag_name => @tag.name, :tag_merger => @tag.merger.name) %></p>
+    <p><%= ts("%{tag_name} has been made a synonym of %{tag_synonym_link}. Works and bookmarks tagged with %{tag_name} will show up in %{tag_synonym}'s filter.", :tag_name => @tag.name, :tag_synonym_link => (link_to_tag @tag.merger), :tag_synonym => @tag.merger.name).html_safe %></p>
   </div>
   <% end %>
 
