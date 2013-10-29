@@ -51,6 +51,10 @@ SUBSECTIONS:
   padding: 0 0.75em;
 }
 
+.splash .count {
+  font-weight: 700;
+}
+
 .splash #signup {
   width: 100%;
     text-shadow: -1px -2px 3px #fff;
