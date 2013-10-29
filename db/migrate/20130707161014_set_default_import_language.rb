@@ -3,11 +3,11 @@
 # Updated 9/15/2013 - Stephanie
 class SetDefaultImportLanguage < ActiveRecord::Migration
   def self.up
-   change_column(:external_works, :language_id, :integer, :default => 1)
+   change_column(:works, :language_id, :integer, :default => 1)
   end
 
   def self.down
-    change_column(:external_works, :language_id, :integer, :default => nil)
+    change_column(:works, :language_id, :integer, :default => nil)
   end
 
 end
