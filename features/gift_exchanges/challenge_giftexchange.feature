@@ -297,18 +297,10 @@ Feature: Gift Exchange Challenge
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
-    And I go to "Awesome Gift Exchange" collection's page
-    And I follow "Sign-ups" within "#dashboard"
-  Then I should see "Sign-ups for Awesome Gift Exchange"
-    And I follow "myname1"
-    And I follow "Delete Sign-up"
-    And I press "Yes, Delete Sign-up"
+    And I go to the "Awesome Gift Exchange" signups page
+    And I delete the signup by "myname1"
   Then I should see "Challenge sign-up was deleted." 
   When I am logged in as "myname2"
-    And I go to my user page
-    And I follow "Sign-ups"
-  Then I should see "Awesome Gift Exchange"
-  When I follow "Delete Sign-up"
-    And I press "Yes, Delete Sign-up"
+    And I delete my signup for the gift exchange "Awesome Gift Exchange"
   Then I should see "Challenge sign-up was deleted."
   
