@@ -254,23 +254,26 @@ class Work < ActiveRecord::Base
 
   after_destroy :destroy_redirects
   def destroy_redirects
-    redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
-    if !redirects.nil?
-      if redirects.kind_of?(Array)
-        redirects.each do |r|
-          if r.redirect_work_id != 0
+    if self.redirect_work_id != 0
+      redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
+      if !redirects.nil?
+        if redirects.kind_of?(Array)
+          redirects.each do |r|
+            if r.redirect_work_id != 0
+              r.destroy
+            end
+          end
+        else
+          if r.redirect_work_id !=0
             r.destroy
           end
-        end
-      else
-        if r.redirect_work_id !=0
-          r.destroy
+
         end
 
       end
-
     end
   end
+
 
   def self.purge_old_drafts
     draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.month.ago).value_of(:id)
