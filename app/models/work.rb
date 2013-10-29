@@ -221,34 +221,41 @@ class Work < ActiveRecord::Base
   # consistency and that associated variables are updated.
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
-  before_save :post_first_chapter, :set_word_count, :check_for_invalid_tags
+
+  before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents, :save_new_recipients
   before_create :set_anon_unrevealed, :set_author_sorting
-  before_update :set_author_sorting, :validate_tags
+  before_update :set_author_sorting
+
+  before_save :check_for_invalid_tags
+  before_update :validate_tags
   after_update :adjust_series_restriction
 
-  after_destroy :destroy_chapters_in_reverse, :clean_up_creatorships, :clean_up_filter_taggings
-  after_destroy :clean_up_assignments, :destroy_redirects
-
+  after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
   end
 
-  def destroy_redirects
-    redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
-  end
-
+  after_destroy :clean_up_creatorships
   def clean_up_creatorships
     self.creatorships.each{ |c| c.destroy }
   end
 
+  after_destroy :clean_up_filter_taggings
   def clean_up_filter_taggings
     FilterTagging.destroy_all("filterable_type = 'Work' AND filterable_id = #{self.id}")
   end
 
+  after_destroy :clean_up_assignments
   def clean_up_assignments
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
+  end
+
+  after_destroy :destroy_redirects
+  def destroy_redirects
+    redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
+    redirects.each  {|r| r.destroy}
   end
 
   def self.purge_old_drafts
@@ -1122,7 +1129,6 @@ end
   scope :revealed, where(:in_unrevealed_collection => false)
   scope :latest, visible_to_all.
                  revealed.
-
                  order("revised_at DESC").
                  limit(ArchiveConfig.ITEMS_PER_PAGE)
 

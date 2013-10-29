@@ -285,9 +285,9 @@ class WorksController < ApplicationController
         @chapter.posted = true
       end
       
-      @work.set_revised_at_by_chapter(@chapter)
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
 
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+      @work.set_revised_at_by_chapter(@chapter)
       if valid && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
