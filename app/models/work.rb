@@ -255,10 +255,20 @@ class Work < ActiveRecord::Base
   after_destroy :destroy_redirects
   def destroy_redirects
     redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
-    if !redirects.nil? && redirects != 0 && redirects.kind_of?(Array)
-      redirects.each  {|r| r.destroy}
-    else
-      redirects.destroy
+    if !redirects.nil?
+      if redirects.kind_of?(Array)
+        redirects.each do |r|
+          if r.redirect_work_id != 0
+            r.destroy
+          end
+        end
+      else
+        if r.redirect_work_id !=0
+          r.destroy
+        end
+
+      end
+
     end
   end
 
