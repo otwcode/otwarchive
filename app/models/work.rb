@@ -255,7 +255,10 @@ class Work < ActiveRecord::Base
   after_destroy :destroy_redirects
   def destroy_redirects
     redirects = Work.find_by_redirect_work_id(self.redirect_work_id)
-    redirects.each  {|r| r.destroy}
+    if redirects != nil
+      redirects.each  {|r| r.destroy}
+    end
+
   end
 
   def self.purge_old_drafts
