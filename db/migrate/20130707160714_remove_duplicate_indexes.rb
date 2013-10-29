@@ -1,5 +1,5 @@
 ## Database Changes in reference to issue 3428
-## Last Updated 9-15-2013 - Stephanie
+## Last Updated 10-29-2013 - Stephanie
 class RemoveDuplicateIndexes < ActiveRecord::Migration
   def self.up
     remove_index(:challenge_claims , :name => 'index_challenge_claims_on_creation_id')
