@@ -160,6 +160,41 @@ Feature: Gift Exchange Challenge
     And I wait 3 seconds
   When I reload the page
   Then I should see "Main Assignments"
+  
+  Scenario: Matches can be regenerated for a single signup
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+    And I am logged in as "Mismatch"
+    And I sign up for "Awesome Gift Exchange" with a mismatched combination
+  When I am logged in as "mod1"
+    And I have generated matches for "Awesome Gift Exchange"
+  Then I should see "No Potential Givers"
+    And I should see "No Potential Recipients"
+    And I should see "Regenerate Matches For Mismatch"
+  When I follow "Edit"
+    And I check the 1st checkbox with the value "Stargate Atlantis"
+    And I uncheck the 1st checkbox with the value "Bad Choice"
+    And I check the 2nd checkbox with the value "Stargate Atlantis"
+    And I uncheck the 2nd checkbox with the value "Bad Choice"
+    And I submit
+    And I follow "Matching"
+    And I follow "Regenerate Matches For Mismatch"
+  Then I should see "Matches are being regenerated for Mismatch"
+  When the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should not see "No Potential Givers"
+    And I should not see "No Potential Recipients"
+  When I follow "Regenerate Assignments"
+    And the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should not see "No Potential Givers"
+    And I should not see "No Potential Recipients"
+    And I should see "Main Assignments"
+
 
   Scenario: Assignments can be sent
 
