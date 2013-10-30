@@ -26,12 +26,13 @@ Given /^I have standard challenge tags set ?up$/ do
     step "basic tags"
     step %{a canonical fandom "Stargate Atlantis"}
     step %{a canonical fandom "Stargate SG-1"}
+    step %{a canonical fandom "Bad Choice"}
     step %{a canonical character "John Sheppard"}
     step %{a canonical freeform "Alternate Universe - Historical"}
     step %{a canonical freeform "Alternate Universe - High School"}
     step %{a canonical freeform "Something else weird"}
     step %{a canonical freeform "My extra tag"}
-    step %{I set up the tag set "Standard Challenge Tags" with the fandom tags "Stargate Atlantis, Stargate SG-1", the character tag "John Sheppard"}
+    step %{I set up the tag set "Standard Challenge Tags" with the fandom tags "Stargate Atlantis, Stargate SG-1, Bad Choice", the character tag "John Sheppard"}
 end
 
 Given /^I have Yuletide challenge tags set ?up$/ do
@@ -427,6 +428,15 @@ When /^I sign up for "([^\"]*)" with combination D$/ do |title|
     step %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     click_button "Submit"
 end
+
+When /^I sign up for "([^\"]*)" with a mismatched combination$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Sign Up"}
+    step %{I check the 1st checkbox with the value "Bad Choice"}
+    step %{I check the 2nd checkbox with the value "Bad Choice"}
+    click_button "Submit"
+end
+  
 
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   visit collection_path(Collection.find_by_title(title))

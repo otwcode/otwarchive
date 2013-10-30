@@ -18,8 +18,6 @@
 <!-- list all the requesters with their potential matches -->
 <%= form_tag set_collection_assignments_path, :method => :put do %>
 
-  <%= render "match_navigation", :top => true %>
-
   <% # the people with no one to write for - this is the hardest problem to solve %>
   <% if @assignments_with_no_recipient.present? %>
     <%= render "no_assigned_recipient" %>
@@ -33,6 +31,8 @@
   <% if @assignments_with_no_potential_recipients.blank? && @assignments_with_no_potential_givers.blank? %>  
     <% # the successful assignments %>
     <% if @successful_assignments.present? %>
+      <%= render "match_navigation", :top => true %>
+
       <%= render "successful_assignments" %>
     <% end %>
   <% end %>
