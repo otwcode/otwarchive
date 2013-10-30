@@ -1,12 +1,5 @@
 <div class="matching listbox group">  
-  <h3 class="heading"><%= ts("Participants with No Potential Recipients") %></h3>
-  <p class="caution note">
-    <strong><%= ts("Warning!") %></strong> <%= ts("No one has requested anything that matches what these people have offered.") %>
-  </p>
-  <p class="note">
-    <%= ts("Everyone needs at least one potential recipient. Either edit your match settings or edit their sign-ups (or delete them). Then regenerate their potential matches to continue.") %>
-  </p>
-
+  <h3 class="heading"><%= ts("Participants with No Potential Recipients") %> <%= link_to_help "challenge-matching" %></h3>
   <dl class="index group">
     <% @assignments_with_no_potential_recipients.each do |assignment| %>
       <dt class="byline" title="<%= ts("pseud") %>"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
