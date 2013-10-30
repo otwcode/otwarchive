@@ -173,7 +173,9 @@ public
     $redis.del byline_key(collection)
     if PotentialMatch.canceled?(collection)
       $redis.del interrupt_key(collection)
-      # PotentialMatch.clear!(collection)
+      # eventually we'll want to be able to pick up where we left off, 
+      # but not there yet
+      PotentialMatch.clear!(collection)
     else
       ChallengeAssignment.delayed_generate(collection.id)
     end
