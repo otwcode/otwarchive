@@ -47,8 +47,10 @@
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
-    <li class="bookmark"><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
-    <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
+    <li class="bookmark">
+      <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+      <%= link_to ts("Cancel Bookmark"), "#", :class => "hidden bookmark_form_placement_close" %>
+    </li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
       <li class="mark"><%= marktoread_link(@work) %></li>
