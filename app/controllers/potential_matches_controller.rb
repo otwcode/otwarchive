@@ -59,8 +59,7 @@ class PotentialMatchesController < ApplicationController
       @current_position = PotentialMatch.position(@collection)
       @progress = PotentialMatch.progress(@collection)
     else
-      # we have potential_matches and assignments      
-      
+      # we have potential_matches and assignments     
       @assignments_with_no_giver = @collection.assignments.with_request.with_no_offer
       @assignments_with_no_recipient = @collection.assignments.with_offer.with_no_request
 
@@ -69,9 +68,6 @@ class PotentialMatchesController < ApplicationController
       
       # index the potential matches by request_signup
       @successful_assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
-
-      # pick out the people who have no assigned giver
-      # @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
     end
   end
 
