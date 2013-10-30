@@ -1,10 +1,5 @@
 <div class="matching listbox group">
-  <h3 class="heading"><%= ts("Participants with No Assigned Recipients") %></h3>
-  <p class="note">
-    <%= ts("These people haven't been assigned a recipient. Try shuffling the assigned givers in the") %>
-    <a href="#main-assignments"><%= ts("main assignments") %></a> <%= ts("(the newly matched will disappear from this section after you update), 
-    or  manually assign a pinch recipient.") %> <%= link_to_help "challenge-pinch-recipient" %>
-  </p>
+  <h3 class="heading"><%= ts("Participants with No Assigned Recipients") %> <%= link_to_help "challenge-matching" %></h3>
   <dl class="index group">
   <% @assignments_with_no_recipient.each do |assignment| %>
     <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
