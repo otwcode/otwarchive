@@ -1,9 +1,5 @@
 <div class="matching listbox group">
-  <h3 class="heading"><%= ts("Participants with No Assigned Givers") %></h3>
-  <p class="note">
-    <%= ts("These people could not be assigned a giver. You can shuffle the") %> <a href="#main-assignments"><%= ts("main assignments") %></a> <%= ts("to free someone up, or you can assign a pinch hitter. 
-    (Note: the form") %> <em><%= ts("will") %></em> <%= ts("allow you to double-assign people, but remember to make sure they can write two assignments first!)") %>
-  </p>
+  <h3 class="heading"><%= ts("Participants with No Assigned Givers") %> <%= link_to_help "challenge-matching" %></h3>
 
   <!--TABLEWATCH!!-->
   <table summary="<%= ts("Lists assignments with no giver and provides information and options for assigning a pinch hitter.") %>">
