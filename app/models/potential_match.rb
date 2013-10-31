@@ -88,21 +88,27 @@ public
   
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
+    potential_match_count = 0
+
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)                                                     
 
-    potential_match_count = 0
+    # We randomize the signup ids to make sure potential matches are distributed across all the participants
     match_signup_ids.sort_by {rand}.each do |other_signup_id|
-      break if potential_match_count > ArchiveConfig.POTENTIAL_MATCHES_MAX
       next if signup.id == other_signup_id
       other_signup = ChallengeSignup.find(other_signup_id)
       
-      # Here is where we actually look for a match -- ChallengeSignup's match method creates a potential match object
+      # The "match" method of ChallengeSignup creates and returns a new (unsaved) potential match object
+      # It assumes the signup that is calling is the requesting signup, so if this is meant to be an offering signup
+      #  instead, we call it from the other signup 
       potential_match = (prompt_type == "request") ? signup.match(other_signup, settings) : other_signup.match(signup, settings)
       if potential_match && potential_match.valid?
         potential_match.save 
         potential_match_count += 1
       end
+      
+      # Stop looking if we've hit the max
+      break if potential_match_count == ArchiveConfig.POTENTIAL_MATCHES_MAX
     end
   end
 
@@ -111,26 +117,26 @@ public
     collection.signups.order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:id)
   end
   
-  # Get the ids of all signups with some required overlap
+  # Get the ids of all signups that have some overlap in the tag types required for matching
   def self.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type = "request")
+    matching_signup_ids = []
+
     if required_types.empty?
-      # nothing is required
+      # nothing is required, so any signup can match -- check a random selection
       return PotentialMatch.random_signup_ids
     end
-
-    matching_signup_ids = []
 
     # get the tagsets used in the signup we are trying to match
     signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
     
-    # get the ids of all the tags of the required type in the signup's tagsets
+    # get the ids of all the tags of the required types in the signup's tagsets
     signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
       return PotentialMatch.random_signup_ids
     else
-      # otherwise find all the tagsets in the collection that share the original signup's tags
+      # now find all the tagsets in the collection that share the original signup's tags
       match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
     
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
@@ -140,7 +146,7 @@ public
                          where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
                          value_of(:challenge_signup_id).compact.uniq
 
-      # now add "any" matches for the topmost tag
+      # now add on "any" matches for the required types
       condition = "any_#{required_types.first.downcase} = 1"
       matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id).uniq
     end
@@ -148,6 +154,10 @@ public
     return matching_signup_ids    
   end
 
+  # Regenerate potential matches for a single signup within a challenge where (presumably)
+  # the other signups already have matches generated. 
+  # To do this, we have to regenerate its potential matches both as a request and as an offer
+  # (instead of just generating them as a request as we do when generating ALL potential matches) 
   def self.regenerate_for_signup_in_background(signup_id)
     signup = ChallengeSignup.find(signup_id)
     collection = signup.collection
@@ -157,7 +167,7 @@ public
     collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
     required_types = settings.required_types.map {|t| t.classify}
 
-    # clear the existing potential matches for this signup
+    # clear the existing potential matches for this signup in each direction
     signup.offer_potential_matches.destroy_all
     signup.request_potential_matches.destroy_all
 
