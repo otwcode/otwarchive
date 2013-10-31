@@ -16,8 +16,8 @@ Feature: Collection
     | myname4        | password   |
     | pinchhitter    | password    |
     And I am logged in as "mod1"
+    And I have no collections
     And I have Yuletide challenge tags setup
-    And I have no challenge assignments
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
     And I add the fandom "Starsky & Hutch" to the character "John Sheppard"
     And I add the fandom "Tiny fandom" to the character "John Sheppard"
@@ -160,15 +160,23 @@ Feature: Collection
     And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
+  
+  
   # now fill in correctly
+  # We have six participants who sign up as follows:
+  
+  # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
+  #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
+  # (is the only person who can write for myname2 and should therefore be assigned to them)
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
     And I uncheck the 2nd checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person"
     And I uncheck the 3rd checkbox with the value "Care Bears"
     And I check the 3rd checkbox with the value "Tiny fandom"
     And I uncheck the 4th checkbox with the value "Care Bears"
-    And I check the 4th checkbox with the value "Starsky & Hutch"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
+    And I check the 4th checkbox with the value "Yuletide Hippos RPF"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with ""
+    And I check "challenge_signup_offers_attributes_1_any_character"
     And I press "Submit"
   Then I should see "Sign-up was successfully created"
     And I should see "Sign-up for myname1"
@@ -187,14 +195,40 @@ Feature: Collection
   # before signing up, you can check who else has already signed up
   Then I should see "Signed up:" within ".collection .meta"
     And I should see "1" within ".collection .meta"
+
+  # myname2 requests: Unoffered (no chars), Hippos (no chars)
+  #         offers: S&H (JS, TE), SGA (JS, TE)
+  # can only get from myname1 
   When I follow "Sign Up"
+    And I check the 1st checkbox with value "Unoffered"
+    And I check the 2nd checkbox with value "Yuletide Hippos RPF"
+    And I check the 3rd checkbox with value "Starsky & Hutch"
+    And I check the 4th checkbox with value "Stargate Atlantis"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I press "Submit"
+  Then I should see a save error message
+    And I should see a not-in-fandom error message for "Any" in "Unoffered"
+  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
+    And I press "Submit"
+  Then I should see "Sign-up was successfully created"
+
+  # and a third person signs up
+  # myname3 requests: S&H (JS), Tiny fandom; 
+  #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
+  When I log out
+    And I am logged in as "myname3"
+  When I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Sign Up"
   When I check the 1st checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I check the 2nd checkbox with the value "Tiny fandom"
     And I check the 3rd checkbox with the value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I check the 4th checkbox with the value "Yuletide Hippos RPF"
-    And I check "challenge_signup_offers_attributes_1_any_character"
+    And I check the 4th checkbox with the value "Starsky & Hutch"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is
     # a workaround because otherwise it would display a duplicate number
     # These three commented out so it can run on the command-line
@@ -204,27 +238,9 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Sign-up was successfully created"
 
-  # and a third person signs up
-  When I log out
-    And I am logged in as "myname3"
-  When I go to the collections page
-    And I follow "Yuletide"
-    And I follow "Sign Up"
-    And I check the 1st checkbox with value "Starsky & Hutch"
-    And I check the 2nd checkbox with value "Tiny fandom"
-    And I check the 3rd checkbox with value "Starsky & Hutch"
-    And I check the 4th checkbox with value "Stargate Atlantis"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
-    And I press "Submit"
-  Then I should see a save error message
-    And I should see a not-in-fandom error message for "Any" in "Starsky & Hutch"
-  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
-    And I press "Submit"
-  Then I should see "Sign-up was successfully created"
-
   # fourth person signs up
+  # myname4 requests SGA, S&H (JS, TE)
+  #     offers Tiny (Obscure, JS), S&H (Foo, JS)
   When I log out
     And I am logged in as "myname4"
   When I go to the collections page
@@ -250,6 +266,8 @@ Feature: Collection
     And I should not see "Stargate Atlantis"
 
   # fifth person signs up
+  # myname5 requests SGA, S&H
+  #   offers Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname5"
   When I go to the collections page
@@ -272,11 +290,13 @@ Feature: Collection
   When I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch 4 3"
+    And I should see "Starsky & Hutch 3 3"
     And I should see "Stargate Atlantis 3 3"
-    And I should see "Tiny fandom 3 3"
+    And I should see "Tiny fandom 2 3"
 
   # signup summary changes when another person signs up
+  # myname6 requests: SGA, S&H
+  #    offers: Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname6"
   When I go to the collections page
@@ -295,9 +315,9 @@ Feature: Collection
     And I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch 5 3"
+    And I should see "Starsky & Hutch 4 3"
     And I should see "Stargate Atlantis 4 4"
-    And I should see "Tiny fandom 3 4"
+    And I should see "Tiny fandom 2 4"
 
   # mod can view signups
   When I log out
@@ -326,7 +346,7 @@ Feature: Collection
   When I follow "Matching"
   Then I should see "Matching for Yuletide"
     And I should see "Generate Potential Matches"
-    And I should see "No potential matches generated yet!"
+    And I should see "No potential matches generated"
   When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
@@ -337,7 +357,7 @@ Feature: Collection
     And I should not see "Missing Recipients"
     And I should not see "Missing Givers"
     And I should see "Regenerate Assignments"
-    And I should see "Regenerate Potential Matches"
+    And I should see "Regenerate All Potential Matches"
     And I should see "Send Assignments"
     And 1 email should be delivered
 

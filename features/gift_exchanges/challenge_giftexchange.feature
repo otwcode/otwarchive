@@ -10,14 +10,14 @@ Feature: Gift Exchange Challenge
   When I set up the collection "My Gift Exchange"
     And I select "Gift Exchange" from "challenge_type"
     And I submit
-  Then My Gift Exchange gift exchange should be correctly created
+  Then "My Gift Exchange" gift exchange should be correctly created
 
   Scenario: Enter settings for a gift exchange
   Given I am logged in as "mod1"
     And I have set up the gift exchange "My Gift Exchange"
   When I fill in gift exchange challenge options
     And I submit
-  Then My Gift Exchange gift exchange should be fully created
+  Then "My Gift Exchange" gift exchange should be fully created
 
   Scenario: Open signup in a gift exchange
   Given I am logged in as "mod1"
@@ -64,7 +64,7 @@ Feature: Gift Exchange Challenge
     | comod   |
     And I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
   When I go to "Awesome Gift Exchange" collection's page
     And I follow "Membership"
     And I fill in "participants_to_invite" with "comod"
@@ -75,7 +75,7 @@ Feature: Gift Exchange Challenge
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
@@ -87,7 +87,7 @@ Feature: Gift Exchange Challenge
     And I edit settings for "Awesome Gift Exchange" challenge
     And I check "Optional Tags?"
     And I submit
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
     And I sign up for "Awesome Gift Exchange" with combination A
     And I follow "Edit Sign-up"
@@ -101,7 +101,7 @@ Feature: Gift Exchange Challenge
   Scenario: Sign-ups can be seen in the dashboard
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
@@ -112,7 +112,7 @@ Feature: Gift Exchange Challenge
   Scenario: Ordinary users cannot see other signups
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   When I go to the collections page
@@ -123,7 +123,7 @@ Feature: Gift Exchange Challenge
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -139,7 +139,7 @@ Feature: Gift Exchange Challenge
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -150,7 +150,7 @@ Feature: Gift Exchange Challenge
   Scenario: Matches can be generated
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I close signups for "Awesome Gift Exchange"
   When I follow "Matching"
@@ -164,7 +164,7 @@ Feature: Gift Exchange Challenge
   Scenario: Matches can be regenerated for a single signup
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
     And I am logged in as "Mismatch"
     And I sign up for "Awesome Gift Exchange" with a mismatched combination
@@ -194,13 +194,16 @@ Feature: Gift Exchange Challenge
   Then I should not see "No Potential Givers"
     And I should not see "No Potential Recipients"
     And I should see "Main Assignments"
+    
+  Scenario: Correct potential matches are generated
+  
 
 
   Scenario: Assignments can be sent
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
     And I have generated matches for "Awesome Gift Exchange"
   When I follow "Send Assignments"
@@ -224,12 +227,12 @@ Feature: Gift Exchange Challenge
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
     And I have generated matches for "Awesome Gift Exchange"
     And I have sent assignments for "Awesome Gift Exchange"
   Given I have created the gift exchange "Second Challenge" with name "testcoll2"
-    And I have opened signup for the gift exchange "Second Challenge"
+    And I open signups for "Second Challenge"
     And everyone has signed up for the gift exchange "Second Challenge"
     And I have generated matches for "Second Challenge"
     And I have sent assignments for "Second Challenge"
@@ -245,9 +248,9 @@ Feature: Gift Exchange Challenge
   Given "myname1" has the pseud "othername"
   Given I am logged in as "mod1"
     And I have created the gift exchange "Sensitive Gift Exchange"
-    And I have opened signup for the gift exchange "Sensitive Gift Exchange"
+    And I open signups for "Sensitive Gift Exchange"
   When I am logged in as "myname1"
-  When I start to sign up for "Sensitive Gift Exchange" gift exchange
+  When I start to sign up for "Sensitive Gift Exchange"
   Then I should see "othername"
 
   Scenario: User tries to change pseud on a challenge signup and should not be able to, as it would break matching
@@ -255,7 +258,7 @@ Feature: Gift Exchange Challenge
   Given "myname1" has the pseud "othername"
   Given I am logged in as "mod1"
     And I have created the gift exchange "Sensitive Gift Exchange"
-    And I have opened signup for the gift exchange "Sensitive Gift Exchange"
+    And I open signups for "Sensitive Gift Exchange"
   When I am logged in as "myname1"
   When I sign up for "Sensitive Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
@@ -267,7 +270,7 @@ Feature: Gift Exchange Challenge
 
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
     And I have generated matches for "Awesome Gift Exchange"
     And I have sent assignments for "Awesome Gift Exchange"
@@ -280,7 +283,7 @@ Feature: Gift Exchange Challenge
   
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
     And I have generated matches for "Awesome Gift Exchange"
     And I have sent assignments for "Awesome Gift Exchange"
