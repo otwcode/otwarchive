@@ -12,21 +12,21 @@ class GiftsController < ApplicationController
     end
     if @user
       if current_user.nil?
-        @works = @user.gift_works.visible_to_all
+        @works = @user.gift_works.visible_to_all_ordered_date_desc
       else
-        @works = @user.gift_works.visible_to_registered_user
+        @works = @user.gift_works.visible_to_registered_user_ordered_date_desc
       end
     else
       pseud = Pseud.parse_byline(@recipient_name, :assume_matching_login => true).first
       if pseud
         if current_user.nil?
-          @works = pseud.gift_works.visible_to_all
+          @works = pseud.gift_works.visible_to_all_ordered_date_desc
         else
-          @works = pseud.gift_works.visible_to_registered_user
+          @works = pseud.gift_works.visible_to_registered_user_ordered_date_desc
         end
       else
         if current_user.nil?
-          @works = Work.giftworks_for_recipient_name(@recipient_name).visible_to_all
+          @works = Work.giftworks_for_recipient_name(@recipient_name).visible_to_all_ordered_date_desc
         else
           @works = Work.giftworks_for_recipient_name(@recipient_name).visible_to_registered_user
         end
