@@ -21,9 +21,9 @@
       <dd>
         <%= render "challenge_signups/signup_controls", :challenge_signup => signup %>
         <ul class="actions" role="menu">
-          <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
+          <li><%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
           <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", :class => "requests_#{signup.id}_close" %></li>
-          <%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", :class => "offers_#{signup.id}_open" %>
+          <li><%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", :class => "offers_#{signup.id}_open" %>
           <%= link_to h(ts("Close Offers")) + ' &#8593;'.html_safe, "#", :class => "offers_#{signup.id}_close" %></li>
         </ul>
         <div class="toggled" id="<%= "requests_#{signup.id}" %>">
