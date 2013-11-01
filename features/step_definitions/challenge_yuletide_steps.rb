@@ -4,7 +4,7 @@ When /^"([^"]*)" posts the fulfilling draft "([^"]*)" in "([^"]*)"$/ do |name, t
   step %{I go to #{name}'s user page}
   step %{I follow "Assignments"}
   step %{I follow "Fulfill"}
-  step %{I fill in "Work Title" with "Fulfilling Story"}
+  step %{I fill in "Work Title" with "#{title}"}
   step %{I fill in "Fandoms" with "#{fandom}"}
   step %{I select "Not Rated" from "Rating"}
   step %{I check "No Archive Warnings Apply"}
