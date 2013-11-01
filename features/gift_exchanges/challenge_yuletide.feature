@@ -391,6 +391,25 @@ Feature: Collection
       # 6 users and the mod should get emails :)
       And 7 emails should be delivered
 
+
+  # Notes for understanding the matching here:
+  #
+  # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
+  #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
+  # myname2 requests: Unoffered (no chars), Hippos (no chars)
+  #         offers: S&H (JS, TE), SGA (JS, TE)
+  # myname3 requests: S&H (JS), Tiny fandom; 
+  #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
+  # myname4 requests SGA, S&H (JS, TE)
+  #     offers Tiny (Obscure, JS), S&H (Foo, JS)
+  # myname5 requests SGA, S&H
+  #   offers Tiny (Foo, Obscure), SGA (JS, TE)
+  # myname6 requests: SGA, S&H
+  #    offers: Tiny (Foo, Obscure), SGA (JS, TE)
+  #
+  # so myname1 is the only person who can write for myname2 and therefore myname2 should be their assignment
+  #
+  
   # first user starts posting
   When I log out
     And I am logged in as "myname1"
@@ -486,78 +505,11 @@ Feature: Collection
   # Then I should see "Work was successfully updated"
 
   # post works for all the assignments
-  When I am logged in as "myname2"
-    And I go to myname2's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 2"
-    And I fill in "Fandoms" with "Stargate Atlantis"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about Atlantis"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  When I am logged in as "myname3"
-    And I go to myname3's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 3"
-    And I fill in "Fandoms" with "Tiny Fandom"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about a tiny little group of people"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  When I am logged in as "myname4"
-    And I go to myname4's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 4"
-    And I fill in "Fandoms" with "Starsky & Hutch, Tiny Fandom"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "I am not good at inventing stories"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  # user leaves it as a draft
-  When I am logged in as "myname5"
-    And I go to myname5's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Draft Story"
-    And I fill in "Fandoms" with "Starsky & Hutch"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "Coding late at night is bad for the brain."
-    And I press "Preview"
-  Then I should not see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-  When I log out
+  When "myname2" posts the fulfilling story "Fulfilling Story 2" in "Stargate Atlantis"
+    And "myname3" posts the fulfilling story "Fulfilling Story 3" in "Tiny Fandom"
+    And "myname4" posts the fulfilling story "Fulfilling Story 4" in "Starsky & Hutch, Tiny Fandom"
+    And "myname5" posts the fulfilling draft "Fulfilling Story 5" in "Starsky & Hutch"
+    And I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
@@ -588,19 +540,8 @@ Feature: Collection
   Then I should see "pinchhitter"
 
   # pinch hitter writes story
-  When I am logged in as "pinchhitter"
-    And I go to pinchhitter's user page
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story pinch"
-    And I fill in "Fandoms" with "Starsky & Hutch"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "Coding late at night is bad for the brain."
-    And I press "Post Without Preview"
-  Then I should see "Work was successfully posted"
-  
-  When I am logged in as "mod1"
+  When "pinchhitter" posts the fulfilling story "Fulfilling Story pinch" in "Starsky & Hutch"
+    And I am logged in as "mod1"
     And I go to "Yuletide" collection's page
     And I follow "Assignments"
     And I follow "Pinch Hits"
@@ -633,18 +574,6 @@ Feature: Collection
     And the email should not contain "by myname4"
     And the email should not contain "by myname5"
     And the email should not contain "by myname6"
-
-  # someone views the story they wrote and it is anonymous
-  # When I am logged in as "myname1"
-  #   And I go to myname1's user page
-  #   #'
-  # Then I should see "Fulfilling Story 1"
-  #   And I should see "Anonymous"
-  # When I follow "Fulfilling Story 1"
-  # Then I should see "For myname"
-  #   And I should see "Collections:"
-  #   And I should see "Yuletide" within ".meta"
-  #   And I should see "Anonymous"
 
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
@@ -683,7 +612,7 @@ Feature: Collection
     And I press "Update"
   Then I should see "Collection was successfully updated"
 
-  # someone can now see their writer: will fail intermittently until pinch hitting is fixed above
+  # someone can now see their writer
   When I log out
     And I am logged in as "myname1"
     And the system processes jobs

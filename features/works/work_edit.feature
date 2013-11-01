@@ -112,10 +112,14 @@ Feature: Edit Works
   Scenario: Editing a work you created today should not bump its revised-at date
     Given I am logged in as "testuser" with password "testuser"
       And I post the work "Don't Bump Me"
-      And I post the work "This One Stays On Top"
-      And I edit the work "Don't Bump Me"
+    Then I should see "Works (1)"
+      And I should see "Don't Bump Me"
+    When I post the work "This One Stays On Top"
+    Then I should see "Works (2)"
+      And I should see "This One Stays On Top"
+    When I edit the work "Don't Bump Me"
       And I press "Post Without Preview"
-    When I go to the works page
+      And I go to the works page
     Then "This One Stays On Top" should appear before "Don't Bump Me"
     When I edit the work "Don't Bump Me"
       And I press "Preview"
