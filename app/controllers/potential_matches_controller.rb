@@ -36,7 +36,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def signup_open
-    flash[:error] = ts("Signup is still open, you cannot determine potential matches now.")
+    flash[:error] = ts("Sign-up is still open, you cannot determine potential matches now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -92,7 +92,7 @@ class PotentialMatchesController < ApplicationController
   # Regenerate matches for one signup
   def regenerate_for_signup
     if params[:signup_id].blank? || (@signup = ChallengeSignup.where(:id => params[:signup_id]).first).nil?
-      flash[:error] = ts("What signup did you want to regenerate matches for?")
+      flash[:error] = ts("What sign-up did you want to regenerate matches for?")
     else
       PotentialMatch.regenerate_for_signup(@signup)
       flash[:notice] = ts("Matches are being regenerated for ") + @signup.pseud.byline +
