@@ -2,6 +2,8 @@ class KudosController < ApplicationController
   
   cache_sweeper :kudos_sweeper
 
+  skip_before_filter :store_location
+
   def create
     @kudo = Kudo.new(params[:kudo])
     if current_user.present?
@@ -18,13 +20,15 @@ class KudosController < ApplicationController
           msg = @kudo.dup? ? "You have already left kudos here. :)" : "We couldn't save your kudos, sorry!"
           flash[:comment_error] = ts(msg)
         end
+
         redirect_to request.referer
       end
+
       format.js do
         if @kudo.save
           render json: @kudo, status: :created
         else
-          render json: { errors: @kudo.errors }
+          render json: { errors: @kudo.errors }, status: :unprocessable_entity
         end
       end
     end
