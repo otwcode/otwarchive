@@ -30,7 +30,7 @@
 
     <% if @work && !is_author_of?(@work) %>
       <li>
-        <%= form_for(:kudo, url: kudos_path, html: { :'data-type' => :json, method: 'post', id: 'new_kudo' }, remote: true) do |kudo_form| %>
+        <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
           <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
           <%= kudo_form.submit ts("Kudos ♥"), :id => 'kudo_submit' %>
