@@ -28,7 +28,7 @@ $j(document).ready(function() {
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
-    handleKudosSubmission();
+    // handleKudosSubmission();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -384,7 +384,7 @@ function setupAccordion() {
     expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
   });
 }
-
+/*
 function handleKudosSubmission() {
   $j("#new_kudo").on("ajax:success", function(e, data, status, xhr) {
     $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
@@ -401,3 +401,4 @@ function handleKudosSubmission() {
     $j('#kudos_message').addClass('comment_error').text(msg);
   });
 }
+*/
