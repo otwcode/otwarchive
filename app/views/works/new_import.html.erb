@@ -80,12 +80,18 @@
     <%= check_box_tag "override_tags" %>
     <%= label_tag "override_tags", ts("Set the following tags on all stories, overriding whatever the importer finds.") %>
   </li>
+  <li>
+    <%= check_box_tag "enforce_blanks" %>
+    <%= label_tag "enforce_blanks", ts("If you wish to tag the work with the information entered here, leaving anything not filled out blank, check me.") %>
+  </li>
 </ul>
 </dd>
 </dl>
 </fieldset>
 
 <%= render :partial => 'work_form_tags', :locals => {:include_blank => true} %>
+<%= render :partial => 'work_import_associations', :locals => {:include_blank => true} %>
+<%= render 'work_form_tags', :include_blank => false %>
 
 <fieldset>
   <legend><%= "Submit" %></legend>
