@@ -7,8 +7,7 @@
       <%= label_tag :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-collectible-to-collection" %>
     </dt>
     <dd class="collection" title="post to collection">
-      <%= text_field_tag :collection_names, autocomplete_options("open_collection_names") %>
-    </dd>
+      <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names") %>    </dd>
 
     <!-- Inspiration / remix -->
     <dt class="parent">
