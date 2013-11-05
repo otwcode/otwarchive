@@ -108,3 +108,13 @@
         </dd>
 
 </fieldset>
+<%= content_for :footer_js do %>
+    <%= javascript_tag do %>
+        $j(document).ready(function(){
+        $j(".toggle_formfield").click(function() {
+        var targetId = $j(this).attr("id").replace("-show", "");
+        toggleFormField(targetId);
+        });
+        })
+    <% end %>
+<% end %>
