@@ -33,27 +33,36 @@
 
 
   
-<div class="import work post">
-<%= form_tag url_for(:controller => :works, :action => :import) do %>
-<fieldset>
+  <%= form_tag url_for(:controller => :works, :action => :import), :class => "verbose import work post" do %>
+    <p class="required notice"><%= ts('* Required information') %></p>
+
+    <fieldset>
   <legend><%= ts("Works URLs") %></legend>
   <dl>
-    <dt class="required"><%= label_tag "urls", ts("URLs") %></dt>
+    <dt class="required"><%= label_tag "urls", ts("URLs*") %></dt>
    <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
 	<p class="footnote">URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line</strong>.</p>
   </dd>
+    <dt>URL Type</dt>
+    <dd>
+     <ul>
+       <li><%= radio_button_tag "import_multiple", "works", true %>
+         <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
+       </li>
+       <li><%= radio_button_tag "import_multiple", "chapters" %>
+         <%= label_tag "import_multiple_chapters", ts("Chapters in a single work (limit of %{max})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
+       </li>
+       </ul>
+    </dd>
+
    <dt>
+
     <%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
     <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
 	<dt>Preferences</dt>
 	<dd>
 	<ul>
-	<li><%= radio_button_tag "import_multiple", "works", true %>
-    <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
-    </li>
-    <li><%= radio_button_tag "import_multiple", "chapters" %>
-    <%= label_tag "import_multiple_chapters", ts("Chapters in a single work (limit of %{max})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
-  </li>
+
   
   <% if current_user.archivist %>
   <li>
@@ -100,4 +109,4 @@
 </fieldset>
 
 <% end %>
-</div>
+
