@@ -214,6 +214,7 @@ class StoryParser
     #Stephanie 8-1-2013
     if e_email != nil
       return parse_author_common(e_email,e_name)
+
     else
       source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
       if !source.nil?
@@ -275,6 +276,9 @@ class StoryParser
         #Changed the values passed to parse_author as the required values changed when modifying it.
         #Stephanie 10-1-2013
         external_author_names = options[:external_author_names] || parse_author(location,options[:e_name],options[:e_email])
+        if options[:ec_name] != nil
+          external_author_names << parse_author(location,options[:ec_name],options[:ec_email])
+        end
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
         external_author_names.each do |external_author_name|
           if external_author_name && external_author_name.external_author
