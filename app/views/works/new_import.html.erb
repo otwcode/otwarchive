@@ -1,6 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
 <%= error_messages_for :work %>
+<!--subnav-->
+<ul class="actions" role="menu">
+  <% if @unposted %>
+      <li id='restore-link'>
+        <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
+      </li>
+  <% end %>
+  <li id="form-link">
+    <%= link_to( ts("Post New Work Instead?"),
+                 {:url => {:controller => :works, :action => :new, :import => false}},
+                 :href => url_for(:controller => :works, :action => :new, :import => false)) %>
+  </li>
+</ul>
+
 <div class="notice">
   <p class="important">
     <%= ts("Please note! Imports from fanfiction.net are no longer available because of a block on their end.") %>
@@ -15,19 +29,7 @@
 
 <!--/descriptions-->
 
-<!--subnav-->
-<ul class="actions" role="menu">
-  <% if @unposted %>
-    <li id='restore-link'>
-      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
-    </li>
-  <% end %>
-  <li id="form-link">
-     <%= link_to( ts("Post New Work Instead?"),
-       {:url => {:controller => :works, :action => :new, :import => false}},
-       :href => url_for(:controller => :works, :action => :new, :import => false)) %>
-  </li>
-</ul>
+
 
 <!-- This partial renders a form for importing a work from an existing URL -->
 
@@ -37,10 +39,10 @@
     <p class="required notice"><%= ts('* Required information') %></p>
 
     <fieldset>
-  <legend><%= ts("Works URLs") %></legend>
+  <legend><%= ts("Import Options") %></legend>
   <dl>
     <dt class="required"><%= label_tag "urls", ts("URLs*") %></dt>
-   <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
+   <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 10, :cols => 90 %>
 	<p class="footnote">URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line</strong>.</p>
   </dd>
     <dt>URL Type</dt>
