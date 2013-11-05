@@ -27,8 +27,6 @@ $j(document).ready(function() {
 
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
-
-    handleKudosSubmission();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -382,22 +380,5 @@ function setupAccordion() {
       e.preventDefault();
     }
     expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
-  });
-}
-
-function handleKudosSubmission() {
-  $j("#new_kudo").on("ajax:success", function(e, data, status, xhr) {
-    $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
-  });
-
-  $j("#new_kudo").on("ajax:error", function(e, xhr, status, error) {
-    var msg = 'Sorry, we were unable to save your kudos',
-        data = $j.parseJSON(xhr.responseText);
-
-    if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-      msg = "You have already left kudos here. :)";
-    }
-
-    $j('#kudos_message').addClass('comment_error').text(msg);
   });
 }
