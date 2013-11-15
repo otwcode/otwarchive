@@ -2,7 +2,7 @@
   <h3 class="heading"><%= ts("Notes:") %></h3>
 
   <% # This is awful, but we don't want the ul tag hanging around when it's empty (i.e. when there are no recipients, parent works, or claims) but we can't skip this entire section because line 25 generates the link to child works that appear under any notes. We repeat this logic on line 63 to close the ul. %>
-  <% unless @work.recipients.blank? && @work.parent_work_relationships.blank? && @work.challenge_claims.blank? %>
+  <% if @work.recipients || @work.approved_related_works.where(translation: true).exists? || @work.parent_work_relationships || @work.challenge_claims %>
     <ul class="associations">
   <% end %>
     <% # dedication %>
@@ -60,7 +60,7 @@
         </li>
       <% end %>
     <% end %>
-  <% unless @work.recipients.blank? && @work.parent_work_relationships.blank? && @work.challenge_claims.blank? %>
+  <% if @work.recipients || @work.approved_related_works.where(translation: true).exists? || @work.parent_work_relationships || @work.challenge_claims %>
     </ul>
   <% end %>
 
