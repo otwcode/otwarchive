@@ -54,6 +54,14 @@ div.preface .series ul, div.preface .children ul {
   padding: 0 0.643em;
 }
 
+div.preface .associations {
+  margin-bottom: 1.5em;
+}
+
+div.preface .jump {
+  margin-top: 1.5em;
+}
+
 /* mod: afterword
 the preface that appears at the bottom of a work page */
 

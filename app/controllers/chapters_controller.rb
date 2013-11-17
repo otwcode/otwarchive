@@ -112,25 +112,17 @@ class ChaptersController < ApplicationController
       render :new
     elsif params[:cancel_button]
       redirect_back_or_default('/')
-    else  # :preview or :cancel_coauthor_button
-       @work.major_version = @work.major_version + 1
-      if @chapter.save
-        # @work.update_major_version
-        if @chapter.published_at > @work.revised_at.to_date || @chapter.published_at == Date.today
-          @work.set_revised_at(@chapter.published_at)
-        end
-        if params[:post_without_preview_button]
-          @chapter.posted = true
-            if @chapter.save && @work.save
-              post_chapter
-              redirect_to [@work, @chapter]
-            end
-        elsif @work.save
-          @preview_mode = true
+    else  # :post_without_preview, :preview or :cancel_coauthor_button
+      @work.major_version = @work.major_version + 1
+      @chapter.posted = true if params[:post_without_preview_button] 
+      @work.set_revised_at_by_chapter(@chapter)
+      if @chapter.save && @work.save
+        if @chapter.posted
+          post_chapter
+          redirect_to [@work, @chapter]
+        else
           draft_flash_message(@work)
           redirect_to [:preview, @work, @chapter]
-        else
-          render :new
         end
       else
         render :new
@@ -162,23 +154,13 @@ class ChaptersController < ApplicationController
       flash[:notice] = nil
       render :edit
     else
-      @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       @work.minor_version = @work.minor_version + 1
-      if @chapter.save
-        # @work.update_minor_version
-        if defined?(@previous_published_at) && @previous_published_at != @chapter.published_at #if published_at has changed
-          if @chapter.published_at == Date.today # if today, set revised_at to this date
-            @work.set_revised_at(@chapter.published_at)
-          else # if p_at date not today, tell model to find most recent chapter date
-            @work.set_revised_at
-          end
-        end
-        if @work.save
-          flash[:notice] = ts('Chapter was successfully updated.')
-          redirect_to [@work, @chapter]
-        else
-          render :edit
-        end
+      @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
+      posted_changed = @chapter.posted_changed?
+      @work.set_revised_at_by_chapter(@chapter)
+      if @chapter.save && @work.save
+        flash[:notice] = ts("Chapter was successfully #{posted_changed ? 'posted' : 'updated'}.")
+        redirect_to [@work, @chapter]
       else
         render :edit
       end
@@ -215,6 +197,7 @@ class ChaptersController < ApplicationController
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
+      @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
         post_chapter
         redirect_to(@work)
@@ -277,7 +260,6 @@ class ChaptersController < ApplicationController
 
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
-      @previous_published_at = @chapter.published_at
       if params[:chapter]  # editing, save our changes
         @chapter.attributes = params[:chapter]
       end
