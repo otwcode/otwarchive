@@ -1,9 +1,9 @@
-<div id="known-issues-form" class="post create issue">
+<div id="known-issues" class="post create issue">
   <%= form_for(@known_issue) do |f| %>
     <%= error_messages_for @known_issue %>
     <dl class="text">
       <dt><%= f.label :title, ts("Beta Revision"), :class => "required" %></dt>
-      <dd><%= f.text_field :title %></dd>
+        <dd><%= f.text_field :title %></dd>
       <dt><%= f.label :content, ts("Recent Known Issues") %></dt>
       <dd>
         <ul class="hidden rtf-html-switch actions" role="menu">
