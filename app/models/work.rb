@@ -1000,11 +1000,6 @@ class Work < ActiveRecord::Base
   scope :visible_to_registered_user, posted.unhidden
   scope :visible_to_admin, posted
   scope :visible_to_owner, posted
-  scope :visible_to_all_ordered_date_desc, posted.unrestricted.unhidden.ordered_by_date_desc
-  scope :visible_to_registered_user_ordered_date_desc, posted.unhidden.ordered_by_date_desc
-  scope :visible_to_owner_ordered_date_desc, posted.ordered_by_date_desc
-
-
   scope :all_with_tags, includes(:tags)
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
