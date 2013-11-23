@@ -1,6 +1,6 @@
-<p class="required note">All news posts need a title and some content.</p>
-<div id="work-form" class="post news">
+<div id="admin-post-form" class="post news">
   <%= form_for(@admin_post) do |f| %>
+    <p class="required notice"><%= ts("All news posts need a title and some content.") %></p>
     <%= error_messages_for @admin_post %>
     <fieldset class="text">
       <legend><%= ts("Post News") %></legend>
@@ -29,7 +29,7 @@
     </fieldset>
     <fieldset>
       <legend><%= ts("Set Preferences") %></legend>
-      <h3 class="landmark heading">Set Prefs</h3>
+      <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
       <dl>
         <dt><%= f.label :tag_list, ts("Tags") %></dt>
         <dd><%= f.text_field :tag_list %></dd>
@@ -52,7 +52,7 @@
 
     <fieldset>
       <legend><%= ts('Post') %></legend>
-      <h3 class="landmark heading">Post</h3>
+      <h3 class="landmark heading"><%= ts("Post") %></h3>
       <p class="submit actions">
         <%= submit_tag ts('Post'), :name => 'post_button' %>
       </p>
