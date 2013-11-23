@@ -97,3 +97,28 @@ function convertWord (type, content) {
     }
     return content;
 }
+
+// Toggle between the links
+$j(document).ready(function(){
+  $j(".rtf-html-switch").removeClass('hidden');
+  
+  $j(".html-link").addClass('current'); 
+  
+  $j(".rtf-link").click(function(event){
+    addEditor('content');
+    $j(this).addClass('current');
+    $j('.rtf-notes').removeClass('hidden');
+    $j('.html-link').removeClass('current');
+    $j('.html-notes').addClass('hidden');
+    event.preventDefault();
+  });            
+  
+  $j('.html-link').click(function(event){
+    removeEditor('content');
+    $j(this).addClass('current');
+    $j('.html-notes').removeClass('hidden');
+    $j('.rtf-link').removeClass('current');
+    $j('.rtf-notes').addClass('hidden');
+    event.preventDefault();
+  });
+})      
