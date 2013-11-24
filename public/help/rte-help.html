@@ -1,0 +1,38 @@
+<h2>Rich Text</h2>
+
+<h3>Strikethrough and Underline</h3>
+
+<p>
+  Pasting text with strikethrough or underline formatting into the Rich Text Editor (<abbr>RTE</abbr>) only works if it is copied from a source that uses <code>strike</code>, <code>del</code>, or <code>u</code> elements instead of inline styling. This means pasting from most text editing programs won't retain strikethrough or underline formatting, but pasting from some many pages will.
+</p>
+
+<h3>Google Drive</h3>
+
+<p>
+  In addition to strikethrough and underline, text alignment and bold and italic formatting are also lost when pasting from Google Drive documents, and all elements have a <code>dir</code> attribute added. Pressing <kbd>Enter</kbd> between paragraphs to insert a blank line between paragraphs in Google Drive results in extra blank paragraphs. Structural formatting such as headings, lists, links, and tables is retained.
+</p>
+  
+<p>
+  Pasting into the RTE from Google Drive also has a number of browser-specific quirks.
+  <ul>
+    <li>The iPhone does not copy any formatting from Google Drive documents.</li>
+    <li>Opera will often activate the bold option when pasting from Google Drive.</li>
+    <li>Firefox appears to preserve alignment; however, this is due to its use of the <code>style</code> attribute, which our sanitizer removes.</li>
+  </ul>
+</p>
+
+<h3>LibreOffice</h3>
+
+<p>
+  Pressing <kbd>Enter</kbd> between paragraphs to insert a blank line between paragraphs in LibreOffice results in extra blank paragraphs. In tables, <code>tr</code> has a <code>valign</code> attribute set (it will be removed by our sanitizer) and <code>th</code> and <code>td</code> have the <code>width</code> attribute set.
+</p>
+
+<h3>Scrivener</h3>
+
+<p>
+  Skipping a line between paragraphs (i.e. pressing Return twice) results in extra paragraph tags. In tables, <code>td</code> has a <code>valign</code> attribute set (it will be removed by our sanitizer). In addition to strikethrough and underline, center alignment and blockquotes are lost.
+</p>
+
+<p>
+  Using Scrivener's "Copy as HTML" option and pasting into the HTML editor tends to produce better results than copying and pasting into the RTE. While "Copy as HTML" includes many <code>style</code> attributes, they will be removed by our sanitizer.
+</p>
