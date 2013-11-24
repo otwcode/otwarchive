@@ -1,7 +1,7 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-  plugins: "media directionality image link paste tabfocus",
+  plugins: "media directionality image legacyoutput link paste tabfocus",
   menubar: false,
   toolbar: "bold italic underline strikethrough | link unlink image media | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
@@ -17,22 +17,10 @@ tinyMCE.init({
 	tabfocus_elements: "tinymce",
 	
 	// Add HTML tags the editor will accept
-	// - span when it contains a class attribute
-	// - strike for strikethrough formatting
-	extended_valid_elements: "span[!class|!dir], strike",
-	
-	// Override the default method of styling
-	// - align$value: align="$value" attribute replaces style="text-align: $value"
-	// - underline: u tag replaces span style="text-decoration:underline"
-	// - strikethrough: strike tag replaces span style="text-decoration:line-through" -- must add strike to extended_valid_elements
-	formats: {
-		alignleft: {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', attributes: {align: 'left'}},
-    aligncenter: {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', attributes: {align: 'center'}},
-    alignright: {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', attributes: {align: 'right'}},
-    alignjustify: {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', attributes: {align: 'justify'}},
-    underline: {inline: 'u', exact: true},
-    strikethrough: {inline: 'strike', exact: true}
-  }
+	// - b so it doesn't convert back and forth between b and strong when toggling editors due to the legacyoutput plugin
+	// - i so it doesn't convert back and forth between i and em when toggling editors due to the legacyoutput plugin
+	// - span when it contains a class or dir attribute
+	extended_valid_elements: "b,i,span[!class|!dir]"
   
 });
 
