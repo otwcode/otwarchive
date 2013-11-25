@@ -62,13 +62,17 @@ class ExternalAuthor < ActiveRecord::Base
       external_author_name.external_work_creatorships.each do |external_creatorship|
         work = external_creatorship.creation
         # if previously claimed, don't do it again
+
+        pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
+
         unless work.users.include?(claiming_user)
           # remove archivist as owner if still on the work -- might not be if another coauthor already claimed, add user as owner
           archivist = external_creatorship.archivist
-          pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud
           work.change_ownership(archivist, claiming_user, pseud_to_add)
+
           claimed_works << work.id
         end
+          _claim_helper(external_creatorship,pseud_to_add)
       end
     end
 
@@ -78,6 +82,19 @@ class ExternalAuthor < ActiveRecord::Base
     notify_user_of_claim(claimed_works)
   end
 
+  def _claim_helper(external_creatorship,pseud_to_add)
+    current_creatorship = Creatorship.find_by_creation_id_and_creation_type(external_creatorship.creation.id,"Work")
+    if current_creatorship.nil?
+      new_creatorship = Creatorship.new
+      new_creatorship.pseud = pseud_to_add
+      new_creatorship.creation = external_creatorship.creation
+      new_creatorship.save!
+    end
+    external_creatorship.delete
+  end
+
+
+  #leave in care of archivist
   def unclaim!
     return false unless self.is_claimed
 
@@ -86,6 +103,8 @@ class ExternalAuthor < ActiveRecord::Base
       archivist = external_creatorship.archivist
       work = external_creatorship.creation
       work.change_ownership(user, archivist)
+      new_pseud = User.orphan_account.pseuds.find_or_create_by_name(external_author_name.name)
+
     end
 
     self.user = nil
@@ -102,6 +121,7 @@ class ExternalAuthor < ActiveRecord::Base
         archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
         orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(external_author_name.name)
         work.change_ownership(archivist, User.orphan_account, orphan_pseud)
+        _claim_helper(external_creatorship,orphan_pseud)
       end
     end
   end
@@ -109,7 +129,14 @@ class ExternalAuthor < ActiveRecord::Base
   def delete_works
     self.external_work_creatorships.each do |external_creatorship|
       work = external_creatorship.creation
+
+
+      work.chapters.each do |c|
+      c.creatorship.delete
+
+    end
       work.destroy
+      external_creatorship.delete
     end
   end
 

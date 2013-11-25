@@ -24,13 +24,14 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def new
-    flash[:notice] = "Coming soon!"
-    redirect_to :action => :index
-    # @external_author = ExternalAuthor.new
-    # @external_author.external_author_names.build
+    #flash[:notice] = "Coming soon!"
+    #redirect_to :action => :index
+     @external_author = ExternalAuthor.new
+     @external_author.external_author_names.build
   end
 
   def create
+
     # we need to confirm email addresses before we hand them over
     flash[:notice] = "Coming soon!"
     redirect_to :action => :index
@@ -69,8 +70,23 @@ class ExternalAuthorsController < ApplicationController
       flash[:error] = ts("You need an invitation to do that.")
       redirect_to root_path and return
     end
-      
+    external_work_count = 0
     @external_author = @invitation.external_author
+    @external_author.external_author_names.each do |name|
+      external_works = ExternalCreatorship.find_all_by_external_author_name_id(name.id)
+      external_work_count += external_works.count
+    end
+
+    if external_work_count == 0
+      if logged_in?
+        flash[:error] = ts("There are no stories to be claimed.")
+        redirect_to user_work_path and return
+      else
+        flash[:error] = ts("There are no stories to be claimed.")
+        redirect_to root_path and return
+      end
+
+    end
     unless @external_author
       flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
       redirect_to signup_path(@invitation.token) and return
