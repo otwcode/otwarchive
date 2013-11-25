@@ -38,6 +38,7 @@ class UserSessionsController < ApplicationController
             end
           elsif user.active?
             if @user_session.being_brute_force_protected? 
+           	  LogItem.create( {:user_id => user.id, :action => ArchiveConfig.ACTION_SUSPEND, :note => "5 minutes: [" + request.remote_ip + "]"} )
            
               message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
             else
