@@ -73,13 +73,15 @@ class UserSessionsController < ApplicationController
 			  message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
 			end
 		  end
-		  flash.now[:error] = message
-		  @user_session = UserSession.new(params[:user_session])
-		  if @user_session.save
-		    return
-	      end
-		  render :action => 'new'
+		  
 		end
+    flash.now[:error] = message
+	@user_session = UserSession.new(params[:user_session])
+	if @user_session.save
+	  return
+	end
+	render :action => 'new'
+	
 	end
   end
 
