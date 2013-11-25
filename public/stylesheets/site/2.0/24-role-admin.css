@@ -6,7 +6,7 @@ This shows the archive when logged in as admin, and overrides with admin styles,
 }
 
 #footer {
-  background: #066;
+  background: #9B005D;
 }
 
 #footer .beta {
@@ -14,7 +14,7 @@ This shows the archive when logged in as admin, and overrides with admin styles,
 }
 
 #header .admin {
-  background: #066;
+  background: #9B005D;
   border-top: 1px solid #fff;
     box-shadow: none;
 }
@@ -32,7 +32,7 @@ div.admin + h3.landmark {
 }
 
 .admin .navigation a {
-  border-bottom: 3px solid #066;
+  border-bottom: 3px solid #9B005D;
 }
 
 .admin .abuse.comment {
@@ -58,7 +58,7 @@ table, thead td {
 }
 
 #admin_users_table th a:hover {
-  color: #066;
+  color: #9B005D;
 }
 
 /*END== */

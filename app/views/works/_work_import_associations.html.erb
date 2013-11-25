@@ -1,0 +1,111 @@
+<fieldset id="associations" role="article">
+  <legend><%= ts('Associations') %></legend>
+  <h3 class="landmark heading"><%= ts('Associations') %></h3>
+  <dl>
+    <!-- Add collection -->
+    <dt class="collection">
+      <%= label_tag :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-collectible-to-collection" %>
+    </dt>
+    <dd class="collection" title="post to collection">
+      <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names") %>    </dd>
+
+    <!-- Inspiration / remix -->
+    <dt class="parent">
+      <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
+    </dt>
+    <dd class="parent">
+      <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %>
+      <%= link_to_help "parent-works-help" %>
+
+      <!-- Toggles on with parent checkbox -->
+      <fieldset id="parent-options">
+        <dl>
+          <%= fields_for "work[parent_attributes]" do |p| %>
+              <dt><%= p.label :url %></dt>
+              <dd>
+                <%= p.text_field :url, :value => work_parent_value(:url) %>
+                <p class="important">For a work in the archive, only the url is required.</p>
+              </dd>
+
+              <dt><%= p.label :title %></dt>
+              <dd><%= p.text_field :title, :value => work_parent_value(:title) %></dd>
+
+              <dt><%= p.label :author %></dt>
+              <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
+
+              <dt><%= p.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+              <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
+
+              <dt class="translation"><%= p.check_box :translation %></dt>
+              <dd class="translation">
+                <%= p.label :translation, ts("This is a translation") %>
+                <%= link_to_help "translation-link" %>
+              </dd>
+
+          <% end %>
+
+          <% unless @work.parent_work_relationships.blank? %>
+              <dt><%= ts('Current parent works') %></dt>
+              <% for related_work in @work.parent_work_relationships %>
+                  <% if related_work.parent %>
+                      <dd>
+                        <ul class="navigation actions" role="navigation">
+                          <li><%= link_to related_work.parent.title, related_work.parent %></li>
+                          <li><%= link_to ts('Remove'), related_work, :confirm => ts('Are you sure you want to delete the connection to this work?'), :method => :delete %></li>
+                        </ul>
+                      </dd>
+                  <% end %>
+              <% end %>
+          <% end %>
+        </dl>
+      </fieldset>
+    </dd>
+
+    <!-- Series checkbox (storyseriescheck) -->
+    <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
+    <dt class="serial">
+      <%= check_box_tag "series-options-show", "1", !@work.series.blank?, :class => "toggle_formfield" %>
+    </dt>
+    <dd class="serial">
+      <%= label_tag 'series-options-show', ts("This work is part of a series") %>
+      <%= link_to_help "choosing-series" %>
+
+      <!-- Toggles on with series checkbox -->
+      <fieldset id="series-options">
+        <dl>
+          <%= fields_for "work[series_attributes]" do |s| %>
+              <dt><%= s.label 'id', ts('Choose one of your existing series:') %></dt>
+              <dd>
+                <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+              </dd>
+              <dt><%= s.label :title, "Or create and use a new one:" %></dt>
+              <dd><%= s.text_field :title %></dd>
+          <% end %>
+
+          <% unless @serial_works.blank? %>
+              <dt><%= ts('Current Series') %></dt>
+              <% for serial in @serial_works %>
+                  <dd>
+                    <ul class="navigation actions" role="navigation">
+                      <li><%= link_to serial.series.title, serial.series %></li>
+                      <li><%= link_to ts('Remove'), serial_work_path(serial), :method => :delete %></li>
+                      <li><%= link_to ts('Delete'), serial.series, :confirm => ts('Delete series from all works?'), :method => :delete %></li>
+                    </ul>
+                  </dd>
+              <% end %>
+          <% end %>
+        </dl>
+      </fieldset>
+    </dd>
+
+        <dt class="language">
+          <%= label_tag :language_id, ts("Choose a language") %> <%= link_to_help "languages-help" %>
+        </dt>
+        <dd class="language">
+          <select id="work_language_id" name="work[language_id]">
+            <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
+          </select>
+        </dd>
+
+</fieldset>
+

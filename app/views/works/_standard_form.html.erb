@@ -3,7 +3,6 @@
 <%= form_for(@work) do |f| %>
 
   <p class="required notice"><%= ts('* Required information') %></p>
-  <%= render 'work_form_tags', :include_blank => false %>
   <fieldset class="preface" role="article">
     <legend><%= ts('Preface') %></legend>
     <h3 class="landmark heading"><%= ts('Preface') %></h3>
@@ -39,7 +38,10 @@
     </dl>
   </fieldset>
 
-  <fieldset id="associations" role="article">
+    <!-- Tags Partial Include-->
+    <%= render 'work_form_tags', :include_blank => false %>
+
+    <fieldset id="associations" role="article">
     <legend><%= ts('Associations') %></legend>
     <h3 class="landmark heading"><%= ts('Associations') %></h3>
     <dl>
