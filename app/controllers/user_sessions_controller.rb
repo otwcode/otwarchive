@@ -18,42 +18,69 @@ class UserSessionsController < ApplicationController
 
   def create
     if params[:user_session]
-      @user_session = UserSession.new(params[:user_session])
-      if @user_session.save
-        flash[:notice] = ts("Successfully logged in.")
-        @current_user = @user_session.record
-        redirect_back_or_default(@current_user)
-      else
-        if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
-          # we have a user
-          if user.recently_reset? && params[:user_session][:password] == user.activation_code
-            if user.updated_at > 1.week.ago
-              # we sent out a generated password and they're using it
-              # log them in
-              @current_user = UserSession.create(user, params[:remember_me]).record
-              # and tell them to change their password
-              redirect_to change_password_user_path(@current_user) and return
-            else
-              message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
-            end
-          elsif user.active?
-            if @user_session.being_brute_force_protected? 
-           
-              message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
-            else
-              message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
-            end
-          else
-            message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
-          end
-        else
-          message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
-        end
-        flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
-        render :action => 'new'
-      end
-    end
+		if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
+		  # we have a user
+		  if user.suspended
+			log = LogItem.where("user_id = ?", user.id).last
+			if log != nil
+			  passed = (Time.now.to_f - log.created_at.to_f)
+		
+			  if passed < 300
+				secs = 300 - (Time.now.to_f - log.created_at.to_f).to_i
+			
+				if secs <= 60
+				  message = ts("Account suspended for another " + secs.to_s + " seconds")
+				else
+				  message = ts("Account suspended for another " + (secs / 60).to_s + " minutes")
+				end
+			  else
+				user.suspended = false;
+				user.save
+			  end
+			end
+		  end
+	  
+		  if !user.suspended && @user_session.save
+			flash[:notice] = ts("Successfully logged in.")
+			@current_user = @user_session.record
+			redirect_back_or_default(@current_user) and return
+		  end
+
+		  if !user.suspended
+			if user.recently_reset? && params[:user_session][:password] == user.activation_code
+			  if user.updated_at > 1.week.ago
+				# we sent out a generated password and they're using it
+				# log them in
+				@current_user = UserSession.create(user, params[:remember_me]).record
+				# and tell them to change their password
+				redirect_to change_password_user_path(@current_user) and return
+			  else
+				message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
+			  end
+			elsif user.active?
+			  if @user_session.being_brute_force_protected? 
+				LogItem.create( {:user_id => user.id, :action => ArchiveConfig.ACTION_SUSPEND, :note => "5 minutes: [" + request.remote_ip + "]"} )
+		
+				user.suspended = true
+				user.save
+	   
+				message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
+			  else
+				message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+			  end
+			else
+			  message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
+			end
+		  end
+		  flash.now[:error] = message
+		  @user_session = UserSession.new(params[:user_session])
+		  if @user_session.save
+		    return
+	      end
+		  render :action => 'new'
+		end
+	end
   end
 
   def destroy
