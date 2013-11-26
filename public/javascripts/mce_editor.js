@@ -1,11 +1,14 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-  plugins: "media directionality image legacyoutput link paste tabfocus",
+  plugins: "directionality image link media paste tabfocus",
   menubar: false,
   toolbar: "bold italic underline strikethrough | link unlink image media | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
   browser_spellcheck: true,
+  
+  // Disable inline styles, partly because our sanitizer strips them but mostly because strike and u won't work otherwise
+  inline_styles: false,
   
   // Restore URLs to their original correct value instead of using shortened broken versions some browsers produce 
   convert_urls: false,
@@ -17,10 +20,42 @@ tinyMCE.init({
 	tabfocus_elements: "tinymce",
 	
 	// Add HTML tags the editor will accept
-	// - b so it doesn't convert back and forth between b and strong when toggling editors due to the legacyoutput plugin
-	// - i so it doesn't convert back and forth between i and em when toggling editors due to the legacyoutput plugin
+	// - b so it doesn't convert to strong
+	// - i so it doesn't convert to em
 	// - span when it contains a class or dir attribute
-	extended_valid_elements: "b,i,span[!class|!dir]"
+	extended_valid_elements: "b, i, span[!class|!dir], strike, u",
+	
+	// Add HTML tags for the editor to remove, either for cleanup or to make the what-you-see aspect of the editor line up better with the what-you-get-after-the-sanitizer-runs aspect
+	invalid_elements: "font",
+	
+	// Override the default method of styling
+	// - align$value: align="$value" attribute replaces style="text-align: $value"
+	// - underline: u tag instead of span style="text-decoration:underline"
+	// - strikethrough: strike tag instead of span style="text-decoration:line-through"
+	// -- strikethrough should also remove del tag
+	formats: {
+		alignleft: {
+		  selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+		  attributes: { align: 'left' }
+		},
+    aligncenter: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'center' }
+    },
+    alignright: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+      attributes: { align: 'right' }
+    },
+    alignjustify: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+      attributes: { align: 'justify' }
+    },
+    underline: { inline: 'u', exact: true },
+    strikethrough: [
+      { inline: 'strike', exact: true },
+      { inline: 'del', remove: "all" },
+    ]
+  }
   
 });
 
