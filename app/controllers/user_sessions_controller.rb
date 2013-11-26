@@ -45,9 +45,7 @@ class UserSessionsController < ApplicationController
 			flash[:notice] = ts("Successfully logged in.")
 			@current_user = @user_session.record
 			redirect_back_or_default(@current_user) and return
-		  end
-
-		  if !user.suspended
+		  elsif !user.suspended
 			if user.recently_reset? && params[:user_session][:password] == user.activation_code
 			  if user.updated_at > 1.week.ago
 				# we sent out a generated password and they're using it
@@ -73,15 +71,14 @@ class UserSessionsController < ApplicationController
 			  message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
 			end
 		  end
-		  
+		else
+		  message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
 		end
     flash.now[:error] = message
-	@user_session = UserSession.new(params[:user_session])
-	if @user_session.save
-	  return
+    #@user_session = UserSession.new(params[:user_session])
+	if !@user_session.save
+	  render :action => 'new'
 	end
-	render :action => 'new'
-	
 	end
   end
 
