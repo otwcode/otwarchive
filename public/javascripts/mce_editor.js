@@ -53,7 +53,8 @@ tinyMCE.init({
     underline: { inline: 'u', exact: true },
     strikethrough: [
       { inline: 'strike', exact: true },
-      { inline: 'del', remove: "all" },
+      { inline: 's', remove: "all" },
+      { inline: 'del', remove: "all" }
     ]
   }
   
