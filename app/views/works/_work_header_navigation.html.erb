@@ -57,9 +57,21 @@
     <% end %>
   <% end %>
 
-  <li class="comments"><%= link_to ts("Comments"), (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
-
-<!-- allow user to disable style on work if it has been customized -->
+  <li class="comments" id="show_comments_link_top">    
+    <% if @previous_chapter || @next_chapter %>
+      <% if @chapter.count_visible_comments > 0 %>
+        <%= show_hide_comments_link(@chapter) %>
+      <% else %>
+        <%= link_to ts("Comments"), "#comments" %>
+      <% end %>
+    <% elsif @work.count_visible_comments > 0 %>
+      <%= show_hide_comments_link(@work) %>
+    <% else %>
+      <%= link_to ts("Comments"), "#comments" %>
+    <% end %>
+  </li>
+  
+  <% # allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
     <li class="style">
       <% if Preference.disable_work_skin?(params[:style]) %>
@@ -96,6 +108,12 @@
 <!-- END navigation -->
 
 <% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
-<% content_for :footer_js do %>
+<%= content_for :footer_js do %>
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+  <%= javascript_tag do %>
+    // Scroll to the top of the comments section when loading comments via AJAX
+    $j("#show_comments_link_top").find('a[data-remote]').livequery('click.rails', function(e){
+      $j.scrollTo('#comments_placeholder');
+    });
+  <% end %>
 <% end %>
