@@ -57,15 +57,11 @@
     <% end %>
   <% end %>
 
-  <li class="comments" id="show_comments_link_top">    
-    <% if @previous_chapter || @next_chapter %>
-      <% if @chapter.count_visible_comments > 0 %>
-        <%= show_hide_comments_link(@chapter) %>
-      <% else %>
-        <%= link_to ts("Comments"), "#comments" %>
-      <% end %>
-    <% elsif @work.count_visible_comments > 0 %>
-      <%= show_hide_comments_link(@work) %>
+  <li class="comments" id="show_comments_link_top">
+    <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
+    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %> 
+    <% if commentable.count_visible_comments > 0 %>
+      <%= show_hide_comments_link(commentable) %>
     <% else %>
       <%= link_to ts("Comments"), "#comments" %>
     <% end %>
