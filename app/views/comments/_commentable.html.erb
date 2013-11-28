@@ -86,7 +86,7 @@
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
-  <div id="comments_placeholder">
+  <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
       <% @comments = commentable.comments.paginate(:page => params[:page]) %>
       <%= will_paginate @comments %>
@@ -123,5 +123,6 @@
     $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
       $j.scrollTo('#comments_placeholder');
     });
+    
   <% end %>
 <% end %>
