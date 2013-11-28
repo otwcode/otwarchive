@@ -319,3 +319,23 @@ Feature: Create Works
   Then I should see "Post New Work"
     And I should see "Rich text" within "a#richTextLink"
     And I should see "HTML" within "a#plainTextLink"
+    
+  Scenario: posting a backdated work
+  Given I am logged in as "testuser" with password "testuser"
+    And I post the work "This One Stays On Top"
+    And I go to the new work page
+    And I fill in "Work Title" with "Backdated"
+    And I fill in "content" with "This work is backdated and shouldn't be at the top"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Testing"
+    And I check "backdate-options-show"
+    And I select "1" from "work_chapter_attributes_published_at_3i"
+    And I select "January" from "work_chapter_attributes_published_at_2i"
+    And I select "1990" from "work_chapter_attributes_published_at_1i"
+    And I press "Preview"
+  When I press "Post"
+  Then I should see "Published:1990-01-01"
+  When I go to the works page
+  Then "This One Stays On Top" should appear before "Backdated"
+  

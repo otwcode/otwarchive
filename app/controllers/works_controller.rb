@@ -376,6 +376,8 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit
     else
+      @work.posted = @chapter.posted = true if params[:post_button]
+      posted_changed = @work.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
       saved = @chapter.save
       @work.has_required_tags? || saved = false
@@ -394,8 +396,6 @@ class WorksController < ApplicationController
             @included = 0
           end
         end
-        @work.posted = true if params[:post_button]
-        posted_changed = @work.posted_changed?
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
