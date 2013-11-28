@@ -58,7 +58,7 @@
     <% end %>
 
     <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
-        <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
+        <li id="show_comments_link"><%= show_hide_comments_link(commentable, :show_count => true) %></li>
     <% end %>
   </ul>
 
