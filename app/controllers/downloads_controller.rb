@@ -101,7 +101,7 @@ protected
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
+    send_file("#{@work.download_basename}.mobi", :type => "application/x-mobipocket-ebook")
   end
 
   def download_epub
