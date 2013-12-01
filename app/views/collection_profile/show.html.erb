@@ -19,7 +19,17 @@
         <dt><%= ts("Contact: ") %></dt>
         <dd><%= @collection.email %></dd>
       <% end %>
-
+      <% if @collection.challenge.present? %>
+        <% tag_sets_counted = tag_set_count(@collection) %>
+        <% if tag_sets_counted.present? %>
+          <dt><%= tag_sets_counted > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dd>
+            <ul class="commas">
+            <%= (@collection.challenge_type == "GiftExchange" ? @collection.challenge.offer_restriction.owned_tag_sets : @collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
+            </ul>
+          </dd>
+        <% end %>
+      <% end %>
       <% if @collection.challenge %>
       <!-- challenge information -->
         <%= render "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>

@@ -1,11 +1,13 @@
+<% work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin" %>
+
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
 	<li>
-    <% if params[:work_skins] %>
-      <%= link_to ts("Site Skins"), url_for(:work_skins => false) %>
+    <% if work_skin %>
+      <%= link_to ts("Site Skins"), url_for(:skin_type => "Skin") %>
     <% else %>
-      <%= link_to ts("Work Skins"), url_for(:work_skins => true) %>
+      <%= link_to ts("Work Skins"), url_for(:skin_type => "WorkSkin") %>
     <% end %>
   </li>
   <li><%= span_if_current ts('Public Skins'), skins_path %></li>
@@ -24,7 +26,7 @@
 	
     <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to ts('Create Skin'), new_skin_path %></li>
+      <li><%= link_to ts('Create Skin'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->
@@ -32,8 +34,8 @@
       <% if params[:wizard] %>
         <li id="form-link">
            <%= link_to( ts('Write Custom CSS Instead?'),
-             {:url => {:controller => :skins, :action => controller.action_name, :wizard => false}},
-             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => false)) %>
+             {:url => {:controller => :skins, :action => controller.action_name}},
+             :href => url_for(:controller => :skins, :action => controller.action_name)) %>
         </li>
       <% else %>
         <li id="wizard-link">

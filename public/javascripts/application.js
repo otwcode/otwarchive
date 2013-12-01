@@ -24,6 +24,9 @@ $j(document).ready(function() {
 
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
+
+    // make Share buttons on works and own bookmarks visible
+    $j('.actions').children('.share').removeClass('hidden');
 });
 
 ///////////////////////////////////////////////////////////////////

@@ -17,6 +17,9 @@ Otwarchive::Application.configure do
 
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
+  
+  # Disable IP spoofing protection
+  config.action_dispatch.ip_spoofing_check = false
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
@@ -25,7 +28,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, 'mem.ao3.org'
+  config.cache_store = :mem_cache_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL']
   require 'memcache'
 
   # Disable Rails's static asset server

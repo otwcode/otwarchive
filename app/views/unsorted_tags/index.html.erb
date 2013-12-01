@@ -6,7 +6,7 @@
 
   <%= will_paginate @tags %>
 
-  <% form_tag mass_update_unsorted_tags_path do %>
+  <%= form_tag mass_update_unsorted_tags_path do %>
 
   <p class="submit"><%= submit_tag ts("Update") %></p>
 

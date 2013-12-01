@@ -1,12 +1,18 @@
 --- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :head
-    uri: http://google.com:80/
+http_interactions: 
+- request: 
+    method: head
+    uri: http://google.com/
     body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - Ruby
+  response: 
+    status: 
       code: 301
       message: Moved Permanently
     headers: 
@@ -15,9 +21,9 @@
       content-type: 
       - text/html; charset=UTF-8
       date: 
-      - Tue, 15 Feb 2011 22:05:29 GMT
+      - Sun, 13 Oct 2013 20:34:57 GMT
       expires: 
-      - Thu, 17 Mar 2011 22:05:29 GMT
+      - Tue, 12 Nov 2013 20:34:57 GMT
       cache-control: 
       - public, max-age=2592000
       server: 
@@ -26,38 +32,46 @@
       - "219"
       x-xss-protection: 
       - 1; mode=block
+      x-frame-options: 
+      - SAMEORIGIN
+      alternate-protocol: 
+      - 80:quic
     body: 
+      encoding: US-ASCII
+      string: ""
     http_version: "1.1"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :head
-    uri: http://testarchive.transformativeworks.org:80/
+  recorded_at: Sun, 13 Oct 2013 20:34:51 GMT
+- request: 
+    method: head
+    uri: http://testarchive.transformativeworks.org/
     body: 
+      encoding: US-ASCII
+      string: ""
     headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
-      code: 200
-      message: OK
+      accept: 
+      - "*/*"
+      user-agent: 
+      - Ruby
+  response: 
+    status: 
+      code: 302
+      message: Moved Temporarily
     headers: 
       server: 
-      - nginx/0.8.53
+      - nginx/1.4.1
       date: 
-      - Tue, 15 Feb 2011 22:05:33 GMT
+      - Sun, 13 Oct 2013 20:35:02 GMT
       content-type: 
-      - text/html; charset=utf-8
+      - text/html
+      content-length: 
+      - "160"
       connection: 
       - keep-alive
-      status: 
-      - 200 OK
-      etag: 
-      - "\"94b1220e430b2939fd1b3cdba12c28be\""
-      cache-control: 
-      - max-age=0, private, must-revalidate
-      x-ua-compatible: 
-      - IE=Edge,chrome=1
-      set-cookie: 
-      - _otwarchive_session=BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlMWUyZTMxNzE1MTRkZWY1MDAxMGNmMjU5N2U4NDY1OTZJIg5yZXR1cm5fdG8GOwBGIgYvSSIQX2NzcmZfdG9rZW4GOwBGSSIxbkhRa1llNDA3bTJ4TjhqZGVyY0FSWHVYT3FhYVJnZWY4ZkJXdXN2TzZPVT0GOwBG--b141e748c8335e2ce46e30f33abacfa24f17a0ab; path=/; HttpOnly
-      x-runtime: 
-      - "0.803206"
+      location: 
+      - http://test.archiveofourown.org/
     body: 
+      encoding: US-ASCII
+      string: ""
     http_version: "1.1"
+  recorded_at: Sun, 13 Oct 2013 20:34:56 GMT
+recorded_with: VCR 2.5.0
