@@ -107,6 +107,12 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
+Given /^the unsorted tags setup$/ do
+  30.times do |i|
+    UnsortedTag.find_or_create_by_name("unsorted tag #{i}")
+  end
+end
+
 ### WHEN
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
