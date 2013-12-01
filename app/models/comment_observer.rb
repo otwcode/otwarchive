@@ -18,13 +18,12 @@ class CommentObserver < ActiveRecord::Observer
     end
 
     if comment.reply_comment?
-      # send notification to the owner of the original comment if not
-      # the commenter
+      # send notification to the owner of the original comment if they're not the same as the commenter
       parent_comment = comment.commentable
       parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
       if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
           (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
-        if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
+        if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || comment.ultimate_parent.is_a?(Tag)
           CommentMailer.comment_reply_notification(parent_comment.id, comment.id).deliver
         end
         if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
@@ -56,7 +55,7 @@ class CommentObserver < ActiveRecord::Observer
       end
       users.each do |user|
         unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user)
+          if notify_user_by_email?(user) || comment.ultimate_parent.is_a?(Tag)
             CommentMailer.comment_notification(user.id, comment.id).deliver
           end
           if notify_user_by_inbox?(user)
@@ -87,7 +86,7 @@ class CommentObserver < ActiveRecord::Observer
         parent_comment_owner = parent_comment.comment_owner # will be nil if not a user
         if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
             (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
-          if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
+          if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || comment.ultimate_parent.is_a?(Tag)
             CommentMailer.edited_comment_reply_notification(parent_comment.id, comment.id).deliver
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
@@ -119,7 +118,7 @@ class CommentObserver < ActiveRecord::Observer
         end
         users.each do |user|
           unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-            if notify_user_by_email?(user)
+            if notify_user_by_email?(user) || comment.ultimate_parent.is_a?(Tag)
               CommentMailer.edited_comment_notification(user.id, comment.id).deliver
             end
             if notify_user_by_inbox?(user)
