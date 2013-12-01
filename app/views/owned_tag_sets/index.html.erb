@@ -7,7 +7,7 @@
   <% elsif @restriction %>
     <%= ts("Tag Sets Used In This Challenge") %>
   <% elsif @query %>
-    <%= search_header @tag_sets, @query, "Tag Set" %> <%= link_to_help 'tagset-about' %>
+    <%= search_header @tag_sets, nil, "Tag Set" %> <%= link_to_help 'tagset-about' %>
   <% else %>
     <%= ts("Tag Sets") %> <%= link_to_help 'tagset-about' %> <%= ts("in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
   <% end %>
@@ -33,7 +33,9 @@
 <% if @tag_sets.empty? %>
   <p><%= ts("No tag sets found.") %></p>
 <% else %>
-  <%= will_paginate @tag_sets %>
+  <% if @tag_sets.respond_to?(:total_pages) %>
+    <%= will_paginate @tag_sets %>
+  <% end %>
 
 <!--main content-->
   <h3 class="landmark heading">Listing Tag Sets</h3>
@@ -43,6 +45,8 @@
     <% end %>
   </ul>
 
-  <%= will_paginate @tag_sets %>
+  <% if @tag_sets.respond_to?(:total_pages) %>
+    <%= will_paginate @tag_sets %>
+  <% end %>
 <% end %>
 </div>

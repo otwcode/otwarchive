@@ -40,11 +40,11 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in "Synonym of" with "Hoban Washburne/Zoe Washburne"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    And I should see "Hoban Washburne" within ".tags"
-    And I should see "Zoe Washburne" within ".tags"
+    And I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
   When I follow "Hoban Washburne/Zoe Washburne"
-  Then I should see "Hoban Washburne" within ".tags"
-    And I should see "Zoe Washburne" within ".tags"
+  Then I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And the "tag_canonical" checkbox should be checked
@@ -59,8 +59,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And I should see "Hoban Washburne/Zoe Washburne"
-    And I should see "Hoban Washburne" within ".tags"
-    And I should see "Zoe Washburne" within ".tags"
+    And I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
   
@@ -93,8 +93,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   
   # adding a non-canonical synonym to a canonical, fandom should be copied
   When I follow "Jack Harkness/Ianto Jones"
-  Then I should see "Jack Harkness" within ".tags"
-    And I should see "Ianto Jones" within ".tags"
+  Then I should see "Jack Harkness" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Ianto Jones" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Torchwood"
     And I should see "Jack/Ianto"
     And the "tag_canonical" checkbox should be disabled
@@ -150,7 +150,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Jack Harkness/Male Character"
     And I should see "Janto"
     And I should see "Jack/Ianto"
-    And I should see "Jack Harkness/Ianto Jones" within ".tags"
+    And I should see "Jack Harkness/Ianto Jones" within "div#child_Merger_associations_to_remove_checkboxes"
     
   # trying to syn a non-canonical to another non-canonical
   When I follow "New Tag"
@@ -193,7 +193,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Tag was updated"
   
   When I edit the tag "Testing McTestypants/Testing McTestySkirt"
-    And I uncheck "tag_canonical"
+    # I'm not sure how the line below was ever passing? The checkbox is disabled, and from what I can gather from
+    # some wranglers, it is expected behavior.
+    # And I uncheck "tag_canonical"
     And I press "Save changes"
   Then I should see "Tag was updated"
 
@@ -206,8 +208,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   
   When I go to Enigel's works page
   Then I should see "Testypants/Testyskirt"
-    # line below commented out because of filter removal
-    # And I should see "Testing McTestypants/Testing McTestySkirt"
+     And I should see "Testing McTestypants/Testing McTestySkirt"
   When I view the tag "Testing"
   Then I should see "Testing McTestypants/Testing McTestySkirt"
     And I should see "Testypants/Testyskirt"
@@ -263,15 +264,15 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in "Characters" with "Testing McTestypants, Testing McTestySkirt"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    And I should see "Testing McTestypants" within ".tags"
-    And I should see "Testing McTestySkirt" within ".tags"
-    And I should see "Up with Testing" within ".tags"
-    And I should see "Coding" within ".tags"
+    And I should see "Testing McTestypants" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Testing McTestySkirt" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Up with Testing" within "div#parent_Fandom_associations_to_remove_checkboxes"
+    And I should see "Coding" within "div#parent_Fandom_associations_to_remove_checkboxes"
   When I follow "Testing McTestypants/Testing McTestySkirt"
-  Then I should see "Testing McTestypants" within ".tags"
-    And I should see "Testing McTestySkirt" within ".tags"
-    And I should see "Up with Testing" within ".tags"
-    And I should see "Coding" within ".tags"
+  Then I should see "Testing McTestypants" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Testing McTestySkirt" within "div#parent_Character_associations_to_remove_checkboxes"
+    And I should see "Up with Testing" within "div#parent_Fandom_associations_to_remove_checkboxes"
+    And I should see "Coding" within "div#parent_Fandom_associations_to_remove_checkboxes"
     And I should see "Testypants/Testyskirt"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled

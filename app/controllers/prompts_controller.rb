@@ -9,11 +9,10 @@ class PromptsController < ApplicationController
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :allowed_to_see, :only => [:show]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
-  #     setflash; flash[:error] = ts("Only available for prompt meme challenges, not gift exchanges")
+  #     flash[:error] = ts("Only available for prompt meme challenges, not gift exchanges")
   #     redirect_to collection_path(@collection) rescue redirect_to '/'
   #   end
   # end
@@ -24,7 +23,7 @@ class PromptsController < ApplicationController
   end
 
   def no_challenge
-    setflash; flash[:error] = ts("What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -37,7 +36,7 @@ class PromptsController < ApplicationController
   end
   
   def no_signup
-    setflash; flash[:error] = ts("Please submit a basic signup with the required fields first.")
+    flash[:error] = ts("Please submit a basic signup with the required fields first.")
     redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' 
     false
   end
@@ -47,7 +46,7 @@ class PromptsController < ApplicationController
   end
 
   def signup_closed
-    setflash; flash[:error] = ts("Signup is currently closed: please contact a moderator for help.")
+    flash[:error] = ts("Signup is currently closed: please contact a moderator for help.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -61,17 +60,13 @@ class PromptsController < ApplicationController
   end
 
   def not_signup_owner
-    setflash; flash[:error] = ts("You can't edit someone else's sign-up!")
+    flash[:error] = ts("You can't edit someone else's sign-up!")
     redirect_to @collection
     false
   end
 
   def allowed_to_destroy
     @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
-  end
-
-  def allowed_to_see
-    @challenge.user_allowed_to_see_prompt?(current_user, @prompt) || not_allowed(@collection)
   end
 
   def load_prompt_from_id
@@ -81,7 +76,7 @@ class PromptsController < ApplicationController
   end
 
   def no_prompt
-    setflash; flash[:error] = ts("What prompt did you want to work on?")
+    flash[:error] = ts("What prompt did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -119,10 +114,10 @@ class PromptsController < ApplicationController
     end
     
     if !@challenge_signup.valid?
-      setflash; flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
+      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     elsif @prompt.save
-      setflash; flash[:notice] = ts("Prompt was successfully added.")
+      flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :new
@@ -131,7 +126,7 @@ class PromptsController < ApplicationController
 
   def update
     if @prompt.update_attributes(params[:prompt])
-      setflash; flash[:notice] = 'Prompt was successfully updated.'
+      flash[:notice] = 'Prompt was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :edit
@@ -140,13 +135,13 @@ class PromptsController < ApplicationController
 
   def destroy
     if !(@challenge.signup_open || @collection.user_is_maintainer?(current_user))
-      setflash; flash[:error] = ts("You cannot delete a prompt after sign-ups are closed. Please contact a moderator for help.")
+      flash[:error] = ts("You cannot delete a prompt after sign-ups are closed. Please contact a moderator for help.")
     else
       if !@prompt.can_delete?
-        setflash; flash[:error] = ts("That would make your sign-up invalid, sorry! Please edit instead.")
+        flash[:error] = ts("That would make your sign-up invalid, sorry! Please edit instead.")
       else
         @prompt.destroy
-        setflash; flash[:notice] = ts("Prompt was deleted.")
+        flash[:notice] = ts("Prompt was deleted.")
       end
     end
     if @collection.user_is_maintainer?(current_user) && @collection.challenge_type == "PromptMeme"

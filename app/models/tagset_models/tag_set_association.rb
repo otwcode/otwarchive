@@ -6,14 +6,6 @@ class TagSetAssociation < ActiveRecord::Base
   validates_uniqueness_of :tag_id, :scope => [:owned_tag_set_id, :parent_tag_id], :message => ts("^You have already associated those tags in your set.")
   validates_presence_of :tag_id, :parent_tag_id, :owned_tag_set_id
 
-  validate :not_existing
-  def not_existing
-    # not already existing 
-    if parent_tag && parent_tag.children.where(:id => tag.id).exists?
-      errors.add(:base, "^The tags #{tag.name} and #{parent_tag.name} are already canonically associated.")
-    end
-  end
-  
   attr_accessor :create_association
   
   def to_s

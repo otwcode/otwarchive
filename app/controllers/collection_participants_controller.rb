@@ -10,13 +10,13 @@ class CollectionParticipantsController < ApplicationController
   cache_sweeper :collection_sweeper
 
   def owners_required
-    setflash; flash[:error] = t('collection_participants.owners_required', :default => "You can't remove the only owner!")
+    flash[:error] = t('collection_participants.owners_required', :default => "You can't remove the only owner!")
     redirect_to collection_participants_path(@collection)
     false
   end
   
   def no_participant
-    setflash; flash[:error] = t('no_participant', :default => "Which participant did you want to work with?")
+    flash[:error] = t('no_participant', :default => "Which participant did you want to work with?")
     redirect_to root_path
   end
   
@@ -49,7 +49,7 @@ class CollectionParticipantsController < ApplicationController
 
   def join
     unless @collection
-      setflash; flash[:error] = t('no_collection', :default => "Which collection did you want to join?")
+      flash[:error] = t('no_collection', :default => "Which collection did you want to join?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
@@ -57,17 +57,17 @@ class CollectionParticipantsController < ApplicationController
       @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud, 
                         :participant_role => CollectionParticipant::NONE)
       @participant.save
-      setflash; flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join %{collection}.", :collection => @collection.title)
+      flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join %{collection}.", :collection => @collection.title)
     else
       participants.each do |participant|
         if participant.is_invited?
           participant approve_membership!
-          setflash; flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of %{collection}.", :collection => @collection.title)
+          flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of %{collection}.", :collection => @collection.title)
           redirect_to(request.env["HTTP_REFERER"] || root_path) and return
         end
       end
       
-      setflash; flash[:notice] = t('collection_participants.no_invitation', :default => "You have already joined (or applied to) this collection.")
+      flash[:notice] = t('collection_participants.no_invitation', :default => "You have already joined (or applied to) this collection.")
     end
     
     redirect_to(request.env["HTTP_REFERER"] || root_path)
@@ -79,16 +79,16 @@ class CollectionParticipantsController < ApplicationController
   
   def update
     if @participant.update_attributes(params[:collection_participant])
-      setflash; flash[:notice] = t('collection_participants.update_success', :default => "Updated %{participant}.", :participant => @participant.pseud.name)
+      flash[:notice] = t('collection_participants.update_success', :default => "Updated %{participant}.", :participant => @participant.pseud.name)
     else
-      setflash; flash[:error] = t('collection_participants.update_failure', :default => "Couldn't update %{participant}.", :participant => @participant.pseud.name)
+      flash[:error] = t('collection_participants.update_failure', :default => "Couldn't update %{participant}.", :participant => @participant.pseud.name)
     end
     redirect_to collection_participants_path(@collection)
   end
   
   def destroy    
     @participant.destroy
-    setflash; flash[:notice] = t('collection_participants.destroy', :default => "Removed %{participant} from collection.", :participant => @participant.pseud.name)
+    flash[:notice] = t('collection_participants.destroy', :default => "Removed %{participant} from collection.", :participant => @participant.pseud.name)
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -109,9 +109,9 @@ class CollectionParticipantsController < ApplicationController
     end
     
     if @participants_invited.empty? && @participants_added.empty?
-      setflash; flash[:error] = ts("We couldn't find anyone new by that name to add.")
+      flash[:error] = ts("We couldn't find anyone new by that name to add.")
     else
-      setflash; flash[:notice] = ""
+      flash[:notice] = ""
     end
     
     unless @participants_invited.empty?

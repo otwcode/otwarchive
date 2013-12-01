@@ -12,7 +12,7 @@ class InviteRequestsController < ApplicationController
   def show
     @invite_request = InviteRequest.find_by_email(params[:email])
     unless (request.xml_http_request?) || @invite_request
-      setflash; flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
+      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
       redirect_to invite_requests_url and return
     end
     respond_to do |format|
@@ -26,7 +26,7 @@ class InviteRequestsController < ApplicationController
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
-      setflash; flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
+      flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
     else
       render :action => :index
@@ -39,9 +39,9 @@ class InviteRequestsController < ApplicationController
   
   def reorder
     if InviteRequest.reset_order
-      setflash; flash[:notice] = "The queue has been successfully updated."
+      flash[:notice] = "The queue has been successfully updated."
     else
-      setflash; flash[:error] = "Something went wrong. Please try that again."
+      flash[:error] = "Something went wrong. Please try that again."
     end
     redirect_to manage_invite_requests_url
   end
@@ -49,9 +49,9 @@ class InviteRequestsController < ApplicationController
   def destroy
     @invite_request = InviteRequest.find(params[:id])
     if @invite_request.destroy
-      setflash; flash[:notice] = "Request was removed from the queue."
+      flash[:notice] = "Request was removed from the queue."
     else
-      setflash; flash[:error] = "Request could not be removed. Please try again."
+      flash[:error] = "Request could not be removed. Please try again."
     end
     redirect_to manage_invite_requests_url
   end

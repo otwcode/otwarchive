@@ -262,8 +262,9 @@ When /^I fill in prompt meme challenge options$/ do
 end
 
 When /^I fill in gift exchange challenge options$/ do
-  step %{I fill in "Sign-up opens" with "2010-09-20 12:40AM"}
-    step %{I fill in "Sign-up closes" with "2013-09-20 12:40AM"}
+  current_date = DateTime.current
+  fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
+    fill_in("Sign-up closes", :with => "#{current_date.years_since(1)}")
     select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
     fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
@@ -298,7 +299,7 @@ end
 
 When /^I view open challenges$/ do
   step "I go to the collections page"
-  step %{I follow "See Open Challenges"}
+  step %{I follow "Open Challenges"}
 end
 
 ### WHEN sign up
@@ -726,7 +727,7 @@ Then /^I should be editing the challenge settings$/ do
 end
 
 Then /^signup should be open$/ do
-  step %{I should see "Profile" within ".collection .navigation"}
+  step %{I should see "Profile" within "div#main .collection .navigation"}
   step %{I should see "Sign-up: Open" within ".collection .meta"}
     step %{I should see "Sign-up closes:"}
 end

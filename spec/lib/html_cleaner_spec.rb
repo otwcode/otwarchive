@@ -191,6 +191,20 @@ describe HtmlCleaner do
         doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip.should == "foobar"
       end
 
+      it "should allow RTL content in p" do
+        html = '<p dir="rtl">This is RTL content</p>'
+        result = sanitize_value(:content, html)
+        result.should == html
+      end
+
+      it "should allow RTL content in div" do
+        html = '<div dir="rtl"><p>This is RTL content</p></div>'
+        result = sanitize_value(:content, html)
+        # Yes, this is ugly. We should maybe try to figure out why our parser
+        # wants to wrap All The Things in <p> tags.
+        result.to_s.squish.should == '<p></p><div dir="rtl"> <p>This is RTL content</p> </div>'
+      end
+
       it "should allow youtube embeds" do
         html = '<iframe width="560" height="315" src="http://www.youtube.com/embed/123" frameborder="0"></iframe>'
         result = sanitize_value(:content, html)

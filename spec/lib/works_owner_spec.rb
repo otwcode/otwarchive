@@ -21,14 +21,14 @@ describe WorksOwner do
     
     shared_examples_for "an owner tag" do
       it "should change after a new work is created" do
-        new_work = Factory.create(:work, :fandom_string => @owner.name, :posted => true)
+        new_work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
       end
     end  
     
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
-        new_work = Factory.create(:work, :collection_names => @owner.name, :posted => true)
+        new_work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
@@ -38,7 +38,7 @@ describe WorksOwner do
     shared_examples_for "an owner user" do 
       it "should change after a new work is created" do
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
-        new_work = Factory.create(:work, :authors => [author], :posted => true)
+        new_work = FactoryGirl.create(:work, :authors => [author], :posted => true)
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
       end
       
@@ -51,8 +51,8 @@ describe WorksOwner do
     
     describe "for a noncanonical tag" do
       before do
-        @owner = Factory.create(:fandom, :canonical => false)
-        @work = Factory.create(:work, :fandom_string => @owner.name, :posted => true)
+        @owner = FactoryGirl.create(:fandom, :canonical => false)
+        @work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
         @original_cache_key = @owner.works_index_cache_key
       end
       it_should_behave_like "an owner"
@@ -61,8 +61,8 @@ describe WorksOwner do
         
     describe "for a canonical tag" do
       before do
-        @owner = Factory.create(:fandom, :canonical => true)
-        @work = Factory.create(:work, :fandom_string => @owner.name, :posted => true)
+        @owner = FactoryGirl.create(:fandom, :canonical => true)
+        @work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
         @original_cache_key = @owner.works_index_cache_key
       end
       it_should_behave_like "an owner"
@@ -70,18 +70,18 @@ describe WorksOwner do
       
       describe "with a synonym" do
         before do
-          @syn_tag = Factory.create(:fandom, :canonical => false)
+          @syn_tag = FactoryGirl.create(:fandom, :canonical => false)
           @syn_tag.syn_string = @owner.name
           @syn_tag.save
           @work2 = @work
-          @work = Factory.create(:work, :fandom_string => @syn_tag.name, :posted => true)
+          @work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
           @original_cache_key = @owner.works_index_cache_key
         end
         it_should_behave_like "an owner"
         it_should_behave_like "an owner tag"
         
         it "should change after a new work is created in the synonym" do
-          new_work = Factory.create(:work, :fandom_string => @syn_tag.name, :posted => true)
+          new_work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
           @original_cache_key.should_not eq(@owner.works_index_cache_key)
         end
         
@@ -90,8 +90,8 @@ describe WorksOwner do
     
     describe "for a collection" do
       before do
-        @owner = Factory.create(:collection)
-        @work = Factory.create(:work, :collection_names => @owner.name, :posted => true)
+        @owner = FactoryGirl.create(:collection)
+        @work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
 
         # we have to approve the collection items before we get a change in
         # the cache key, since it uses approved works
@@ -106,11 +106,11 @@ describe WorksOwner do
         before do
           # Stub out User.current_user to get past the collection needing to be owned by same person as parent
           User.stub!(:current_user).and_return(@owner.owners.first.user)
-          @child = Factory.create(:collection, :parent_name => @owner.name)
+          @child = FactoryGirl.create(:collection, :parent_name => @owner.name)
           # reload the parent collection
           @owner.reload
           @work1 = @work
-          @work = Factory.create(:work, :collection_names => @child.name, :posted => true)
+          @work = FactoryGirl.create(:work, :collection_names => @child.name, :posted => true)
           @child.collection_items.each {|ci| ci.approve(nil); ci.save}
           @original_cache_key = @owner.works_index_cache_key
         end
@@ -120,7 +120,7 @@ describe WorksOwner do
       
       describe "with a subtag" do
         before do
-          @fandom = Factory.create(:fandom)
+          @fandom = FactoryGirl.create(:fandom)
           @work.fandom_string = @fandom.name
           @work.save
           @original_cache_key = @owner.works_index_cache_key(@fandom)
@@ -134,7 +134,7 @@ describe WorksOwner do
         describe "when a new work is added with that tag" do
           before do
             Delorean.time_travel_to "1 second from now"
-            @work2 = Factory.create(:work, :fandom_string => @fandom.name, :collection_names => @owner.name, :posted => true)
+            @work2 = FactoryGirl.create(:work, :fandom_string => @fandom.name, :collection_names => @owner.name, :posted => true)
             @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             Delorean.back_to_the_present
           end
@@ -147,9 +147,9 @@ describe WorksOwner do
         
         describe "when a new work is added without that tag" do
           before do
-            @fandom2 = Factory.create(:fandom)
+            @fandom2 = FactoryGirl.create(:fandom)
             Delorean.time_travel_to "1 second from now"
-            @work2 = Factory.create(:work, :fandom_string => @fandom2.name, :collection_names => @owner.name, :posted => true)
+            @work2 = FactoryGirl.create(:work, :fandom_string => @fandom2.name, :collection_names => @owner.name, :posted => true)
             @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             Delorean.back_to_the_present
           end
@@ -170,8 +170,8 @@ describe WorksOwner do
 
     describe "for a user" do
       before do
-        @owner = Factory.create(:user)
-        @work = Factory.create(:work, :authors => [@owner.default_pseud], :posted => true)        
+        @owner = FactoryGirl.create(:user)
+        @work = FactoryGirl.create(:work, :authors => [@owner.default_pseud], :posted => true)        
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"
@@ -179,9 +179,9 @@ describe WorksOwner do
     
     describe "for a pseud" do
       before do
-        user = Factory.create(:user)
-        @owner = Factory.create(:pseud, :user => user)
-        @work = Factory.create(:work, :authors => [@owner], :posted => true)
+        user = FactoryGirl.create(:user)
+        @owner = FactoryGirl.create(:pseud, :user => user)
+        @work = FactoryGirl.create(:work, :authors => [@owner], :posted => true)
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"

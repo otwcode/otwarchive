@@ -1,0 +1,35 @@
+<div id="share<% if shareable.is_a?(Bookmark) %>_<%= bookmark.id %><% end %>">
+
+  <p class="note"><%= ts("Copy and paste the following code to link back to this work (") %><kbd><%= ts("CTRL A")%></kbd><%= ts("/") %><kbd><%= ts("CMD A")%></kbd><%= ts(" will select all), or use the Tweet or Tumblr links to share the work on your Twitter or Tumblr account.") %></p>
+  
+  <% # HTML share code %>
+  <p>
+    <textarea cols="50" rows="4" id="<%= shareable.is_a?(Bookmark) ? "embed_code_#{bookmark.id}" : "embed_code" %>"><%= shareable.is_a?(Bookmark) ? get_bookmark_embed_link(bookmark) : get_embed_link(@work) %></textarea>
+  </p>
+  
+  <% # Share buttons unless disabled %>
+  <% if !shareable.is_a?(Bookmark) && @work.users.all? {|u| u.preference.disable_share_links?} %>
+    <p><%= ts("This user has chosen to disable share buttons on their works.") %></p>
+  <% else %>
+    <ul>
+    
+      <% # Twitter share %>
+      <li>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-size="large" data-via="ao3org" data-text="<%= shareable.is_a?(Bookmark)? get_tweet_text_for_bookmark(bookmark) : get_tweet_text(@work) %>" data-url="<%= shareable.is_a?(Bookmark)? bookmark_url(bookmark) : work_url(@work) %>">
+          <%= ts('Tweet') %>
+        </a>
+      </li>
+      
+      <% # Tumblr share %>
+      <li>
+        <a href="http://www.tumblr.com/share/link?url=<%=u shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>&name=<%=u shareable.is_a?(Bookmark) ? get_tumblr_embed_link_title(bookmark.bookmarkable) : get_tumblr_embed_link_title(@work) %>&description=<%=u shareable.is_a?(Bookmark) ? get_tumblr_bookmark_embed_link(bookmark) : get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+          <%= ts('Share on Tumblr') %>
+        </a>
+      </li>
+      
+    </ul>
+  <% end %>
+  
+</div>
+
+<% # FRONT END NOTE: Twitter widget JavaScript is included separately in bookmarks/index, bookmarks/show, and works/show to ensure it is only loaded once per page %>

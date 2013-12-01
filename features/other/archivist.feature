@@ -57,8 +57,8 @@ Feature: Archivist bulk imports
   
   Scenario: Importing sends an email with the right messages
   
-  Given I have an archivist "elynross"
-    When I am logged in as "elynross"
+  Given I have an archivist "alice_ttlg"
+    When I am logged in as "alice_ttlg"
       And I go to the import page
     When I check "Import for others ONLY with permission"
       And I fill in "urls" with "http://yuletidetreasure.org/archive/84/thatshall.html"
@@ -68,7 +68,7 @@ Feature: Archivist bulk imports
       And I should see "That Shall Achieve The Sword"
     Given the system processes jobs
     Then 1 email should be delivered to "shalott@intimations.org"
-      And the email should contain invitation warnings from "elynross" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
+      And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
  
   Scenario: Importing only sends one email even if there are many works
   
@@ -104,14 +104,14 @@ Feature: Archivist bulk imports
 
   Scenario: Importing sends a backup email to open doors if it can't find the author
 
-  Given I have an archivist "elynross"
-    When I am logged in as "elynross"
+  Given I have an archivist "alice_ttlg"
+    When I am logged in as "alice_ttlg"
       And I import the work "http://jennyst.dreamwidth.org/556.html"
     Then I should see import confirmation
       And I should see "Name change"
     Given the system processes jobs
     Then 1 email should be delivered to "jennyst@dreamwidth.org"
-      And the email should contain invitation warnings from "elynross" for work "Name change" in fandom "No Fandom"
+      And the email should contain invitation warnings from "alice ttlg" for work "Name change" in fandom "No Fandom"
   #    And 1 email should be delivered to "opendoors@transformativeworks.org"
   # TODO
 

@@ -57,7 +57,7 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
   When I press "Post"
   Then I should see "Part 2 of the Antiholidays series"
     And I should not see the "title" text "Restricted"
-    And I should see "«" within "dd"
+    And I should see "«" within "dd.series"
   When I am logged out
     And I view the series "Antiholidays"
   Then I should see "Antivalentine"

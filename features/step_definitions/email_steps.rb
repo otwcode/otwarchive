@@ -12,6 +12,7 @@ end
 # Clear the deliveries array, useful if your background sends email that you want to ignore
 Given(/^all emails? (?:have|has) been delivered$/) do
   ActionMailer::Base.deliveries.clear
+  ActionMailer::Base.deliveries.should be_empty # Sanity check, ftw
 end
 
 Given(/^(\d)+ emails? should be delivered$/) do |count|
@@ -56,11 +57,24 @@ Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
 end
 
 Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|
-  email(email_ref).body.should_not =~ /#{text}/
+  if email(email_ref).multipart?
+    email(email_ref).text_part.body.should_not =~ /#{text}/
+    email(email_ref).html_part.body.should_not =~ /#{text}/
+  else
+    email(email_ref).body.should_not =~ /#{text}/
+  end
 end
 
 Then(/^#{capture_email} should link to (.+)$/) do |email_ref, page|
-  email(email_ref).body.should =~ /#{path_to(page)}/
+  if email(email_ref).multipart?
+    email(email_ref).text_part.body.should =~ /#{path_to(page)}/
+    email(email_ref).html_part.body.should =~ /#{path_to(page)}/
+  else
+    email(email_ref).body.should =~ /#{path_to(page)}/
+  end
+end
+Then (/^#{capture_email} html body should link to (.+)$/) do |email_ref, page|
+  email(email_ref).html_part.body.should =~ /#{path_to(page)}/
 end
 
 Then(/^show me the emails?$/) do
