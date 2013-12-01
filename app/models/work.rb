@@ -486,7 +486,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(:posted => true).maximum('published_at') || 
-        self.revised_at || self.created_at
+        self.revised_at || self.created_at || Time.now
     date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
     self.revised_at = date
   end
