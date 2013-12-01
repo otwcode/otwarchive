@@ -48,12 +48,8 @@ Then /^I should see import confirmation$/ do
 end
 
 Then /^the email should contain invitation warnings from "([^\"]*)" for work "([^\"]*)" in fandom "([^\"]*)"$/ do |name, work, fandom|
-  step %{the email should contain "has recently been imported by"}
+  step %{the email should contain "has recently been imported"}
   step %{the email should contain "Open Doors"}
-  step %{the email should contain "we believe that the following fanworks belong to you"}
-  step %{the email should contain "the archivist #{name} has decided to move"}
-  step %{the email should contain "your works will only be readable by logged-in users"}
-  step %{the email should contain "Claim or remove your works"}
   step %{the email should contain "#{work}"}
   step %{the email should contain "#{fandom}"}
 end

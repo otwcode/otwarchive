@@ -1,7 +1,9 @@
+<% work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin" %>
+
 <h2 class="heading"><%= @title %></h2>
 
 <p class="notes">
-  <% if params[:work_skins] %>
+  <% if work_skin %>
     With work skins you can customize the way your own works are shown to others. 
   <% else %>
     With site skins you can customize <abbr title="Archive Of Our Own">AO3</abbr> for your own browser.
@@ -15,8 +17,8 @@
 
 <% if @skins.empty? %>
   <p>
-    No <%= params[:work_skins] ? "work" : "site" %> skins here yet! 
-    <% if logged_in? %>Why not try <%= link_to ts('making one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
+    No <%= work_skin ? "work" : "site" %> skins here yet! 
+    <% if logged_in? %>Why not try <%= link_to ts('making one'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %>?<% end %>
   </p>
 <% else %>
   <ul class="index group">

@@ -1,0 +1,37 @@
+env:
+  - TEST_GROUP=importing
+  - TEST_GROUP=gift_exchanges
+  - TEST_GROUP=prompt_memes
+  - TEST_GROUP=collections
+  - TEST_GROUP=users
+  - TEST_GROUP=works
+  - TEST_GROUP=tags_and_wrangling
+  - TEST_GROUP=other
+rvm:
+  - "1.9.3"
+services:
+  - elasticsearch
+  - redis-server
+  - memcache
+script:
+  - bundle exec rake db:create:all --trace
+  - bundle exec rake db:schema:load --trace
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec cucumber -f progress -r features features/$TEST_GROUP -b
+before_script:
+  - mysql -e 'create database otwarchive_test;'
+  - cp config/database.travis.yml config/database.yml
+  - cp config/newrelic.example config/newrelic.yml
+  - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
+  - cp config/redis.travis.example config/redis.yml
+notifications:
+  email:
+    recipients:
+      - otw-coders@transformativeworks.org
+    on_success: change
+    on_failure: always
+  irc:
+   channels:
+     - "irc.freenode.org#otw-dev"
+   on_success: always
+   on_failure: always

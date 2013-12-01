@@ -10,6 +10,7 @@ Feature: Invite queue management
   When I am on the homepage
   Then I should not see "Get an Invite"
     And I should see "Archive of Our Own"
+    And This is the end of the scenario
   
   Scenario: Can turn queue on and it displays as on
   
@@ -142,6 +143,8 @@ Feature: Invite queue management
       And I press "Create Account"
     Then I should see "Email does not seem to be a valid address."
     When I fill in "user_email" with "test@archiveofourown.org"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
       And all emails have been delivered
     When I press "Create Account"
     Then I should see "Account Created!"

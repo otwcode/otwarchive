@@ -5,7 +5,7 @@ Scenario: pseud creation and playing with the default pseud
 
   Given I am logged in as "myself" with password "password"
     And I go to myself's pseuds page
-  Then I should see "Default Pseud" within ".navigation"
+  Then I should see "Default Pseud" within "div#main.pseuds-index"
   When I follow "Edit"
   Then I should see "cannot change your fallback pseud"
     And the "pseud_is_default" checkbox should be checked

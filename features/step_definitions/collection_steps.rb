@@ -12,13 +12,11 @@ end
 Given /^I have (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   step %{I am logged in as "moderator"}
   step %{I create the collection "#{title}" with name "#{name}"}
-  step %{I am logged out}
 end
 
 Given /^I have (?:a|the) hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   step %{I am logged in as "moderator"}
-  step %{I 
-    collection "#{title}" with name "#{name}"}
+  step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I check "This collection is unrevealed"}
   step %{I submit}
 
@@ -84,6 +82,7 @@ When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
 end
 
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
+  name = title.gsub(/[^\w]/, '_') if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I submit}
 end

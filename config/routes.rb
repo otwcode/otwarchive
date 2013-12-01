@@ -1,4 +1,11 @@
 Otwarchive::Application.routes.draw do
+  
+  #### ERRORS ####
+  
+  match '/403', :to => 'errors#403'
+  match '/404', :to => 'errors#404'
+  match '/422', :to => 'errors#422'
+  match '/500', :to => 'errors#500'
 
   #### DOWNLOADS ####
 
@@ -467,7 +474,7 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create, :show]
+  resources :kudos, :only => [:create]
 
   resources :skins do
     member do
@@ -507,6 +514,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'

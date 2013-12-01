@@ -29,10 +29,10 @@ class FeedbacksController < ApplicationController
         if !@feedback.email.blank?
           UserMailer.feedback(@feedback.id).deliver
         end
-        setflash; flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
+        flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_back_or_default(root_path) }
       else
-        setflash; flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
+        flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
         format.html { render :action => "new" }
       end
     end

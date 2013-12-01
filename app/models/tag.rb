@@ -25,9 +25,13 @@ class Tag < ActiveRecord::Base
   def commentable_name
     self.name
   end
+
+  # For a tag, the commentable owners are the wranglers of the fandom(s)
   def commentable_owners
+    # if the tag is a fandom, grab its wranglers or the wranglers of its canonical merger
     if self.is_a?(Fandom)
-      self.wranglers
+      self.canonical? ? self.wranglers : (self.merger_id ? self.merger.wranglers : [])
+    # if the tag is any other tag, try to grab all the wranglers of all its parent fandoms, if applicable
     else
       begin
         self.fandoms.collect {|f| f.wranglers}.compact.flatten.uniq
@@ -96,6 +100,10 @@ class Tag < ActiveRecord::Base
   def unwrangleable_status
     if unwrangleable? && (canonical? || merger_id.present?)
       self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
+    end
+
+    if unwrangleable? && is_a?(UnsortedTag)
+      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
     end
   end
 
@@ -546,6 +554,13 @@ class Tag < ActiveRecord::Base
   # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
   def can_change_type?
     self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+  end
+
+  # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
+  def recategorize(new_type)
+    self.update_attribute(:type, new_type)
+    # return a new instance of the tag, with the correct class
+    Tag.find(self.id)
   end
 
   #### FILTERING ####
