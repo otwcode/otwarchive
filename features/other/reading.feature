@@ -63,6 +63,7 @@ Feature: Reading count
       And I follow "second work"
       And I am on testuser2's works page
       And I follow "fifth"
+      And I should see "fifth by testuser2"
       And I follow "Proceed"
       And the reading rake task is run
     When I go to fandomer's reading page

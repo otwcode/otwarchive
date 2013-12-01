@@ -80,7 +80,7 @@
         %>
         <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
         <dd>
-          <%= form.check_box :anonymous, :checked => form.object.new_record? ? @collection.challenge.anonymous? : form.object.anonymous %>
+          <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? true : form.object.anonymous %>
   	      <p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p>
   	    </dd>
       <% end %>     

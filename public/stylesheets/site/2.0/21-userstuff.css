@@ -1,5 +1,9 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
+.userstuff {
+    word-wrap: break-word;
+}
+
 .userstuff p {
   margin: 1.286em auto;
   padding: 0;
@@ -137,9 +141,11 @@
 /* WORK MARGINS */
 
 #workskin {
-  max-width: 72em;
-  margin: auto;
   font-size: 1.08em;
+  margin: auto;
+  max-width: 72em;
+  overflow: hidden;
+  position: relative;
 }
 
 #workskin .module {

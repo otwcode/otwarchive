@@ -40,4 +40,15 @@ Scenario: Pseud and collection autocompletes should work
     And the gift recipient autocomplete field should list matching users
     And the collection item autocomplete field should list matching collections
 
+Scenario: Collection autocomplete shows Collection Title and Name
+  Given I have the collection "Issue" with name "jb_fletcher"
+    And I have the collection "Issue" with name "robert_stack"
+    And I am logged in as "Scott" with password "password"
+    And I post the work "All The Nice Things"
+    And I view the work "All The Nice Things"
+    And I follow "Add To Collections"
+    And I fill in "collection_names" with "Issue"
+  Then I should see "jb_fletcher" in the autocomplete
+    And I should see "robert_stack" in the autocomplete
+
 	

@@ -273,10 +273,16 @@ When /^I set the publication date to today$/ do
   today = Time.new
   month = today.strftime("%B")
   
-  check("backdate-options-show")
-  select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
-  select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
-  select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+  if page.has_selector?("#backdate-options-show")
+    check("backdate-options-show") if page.find("#backdate-options-show")
+    select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
+    select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
+    select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+  else
+    select("#{today.day}", :from => "chapter[published_at(3i)]")
+    select("#{month}", :from => "chapter[published_at(2i)]")
+    select("#{today.year}", :from => "chapter[published_at(1i)]")
+  end
 end
 
 When /^I browse the "([^"]+)" works$/ do |tagname|
@@ -334,5 +340,15 @@ end
 Then /^I should not see Updated today$/ do
   today = Date.today.to_s
   step "I should not see \"Updated:#{today}\""
+end
+
+Then /^I should see Completed today$/ do
+  today = Time.zone.today.to_s
+  step "I should see \"Completed:#{today}\""
+end
+
+Then /^I should not see Completed today$/ do
+  today = Date.today.to_s
+  step "I should not see \"Completed:#{today}\""
 end
 

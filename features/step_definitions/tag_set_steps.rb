@@ -61,12 +61,21 @@ When /^I have (?:a|the) nominated tag ?set "([^\"]*)"/ do |title|
   step %{I should see a success message}
 end
 
-When /^I nominate fandom "([^\"]*)" and character "([^\"]*)" in "([^\"]*)"/ do |fandom, char, title|
+When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"/ do |fandom, char, title|
   step %{I am logged in as "nominator"}
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
-  fill_in("Fandom 1", :with => fandom)
-  fill_in("tag_set_nomination_fandom_nominations_attributes_0_character_nominations_attributes_0_tagname", :with => char)
+  @fandoms = fandom.split(/, ?/)
+  @chars = char.split(/, ?/)
+  char_index = 0
+  chars_per_fandom = @chars.size/@fandoms.size
+  1.upto(@fandoms.size) do |i|
+    fill_in("Fandom #{i}", :with => @fandoms[i-1])
+    0.upto(chars_per_fandom - 1) do |j|
+      fill_in("tag_set_nomination_fandom_nominations_attributes_#{i-1}_character_nominations_attributes_#{j}_tagname", :with => @chars[char_index])
+      char_index += 1
+    end
+  end
   step %{I submit}
   step %{I should see a success message}
 end

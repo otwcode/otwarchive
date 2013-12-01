@@ -72,7 +72,9 @@ class BookmarksController < ApplicationController
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
-          Bookmark.latest.to_a
+          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          results = search.search_results
+          @bookmarks = search.search_results.to_a
         end
       else
         @bookmarks = Bookmark.latest.to_a

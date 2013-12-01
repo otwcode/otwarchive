@@ -29,6 +29,9 @@ class TagSetAssociationsController < ApplicationController
       if key.match(/^create_association_(\d+)_(.*?)$/)
         tag_id = $1
         parent_tagname = $2
+
+        # fix back the tagnames if they have [] brackets -- see _review_individual_nom for details
+        parent_tagname = parent_tagname.gsub('#LBRACKET', '[').gsub('#RBRACKET', ']')
         
         assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
         if assoc.valid?

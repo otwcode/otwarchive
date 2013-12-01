@@ -210,12 +210,17 @@ class TagsController < ApplicationController
     # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
-    @tag.attributes = params[:tag]
+    new_tag_type = params[:tag].delete(:type)
+
     # Limiting the conditions under which you can update the tag type
-    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(params[:tag][:type])
-      @tag.type = params[:tag][:type]
+    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
+      @tag = @tag.recategorize(new_tag_type)
     end
+
+    @tag.attributes = params[:tag]
+
     @tag.syn_string = syn_string if @tag.save
+
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
       if params[:commit] == "Wrangle"

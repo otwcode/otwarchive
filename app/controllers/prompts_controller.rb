@@ -9,7 +9,6 @@ class PromptsController < ApplicationController
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
-  before_filter :allowed_to_see, :only => [:show]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -68,10 +67,6 @@ class PromptsController < ApplicationController
 
   def allowed_to_destroy
     @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
-  end
-
-  def allowed_to_see
-    @challenge.user_allowed_to_see_prompt?(current_user, @prompt) || not_allowed(@collection)
   end
 
   def load_prompt_from_id
