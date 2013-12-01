@@ -167,6 +167,20 @@ I'd like to comment on a tag'
     Then I should see "Comment was successfully updated"
       And 3 emails should be delivered
 
+  Scenario: Email notifications for tag comments should ignore work comments settings
+
+    Given the following activated tag wranglers exist
+        | login       | password      | email             |
+        | dizmo       | wrangulator   | dizmo@example.org |
+        | Enigel      | wrangulator   | enigel@example.org|
+      And a fandom exists with name: "Doctor Who", canonical: true
+      And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
+      And I am logged in as "Enigel"
+      And I set my preferences to turn off notification emails for comments
+    When I am logged in as "dizmo" with password "wrangulator"
+      And I post the comment "Heads up" on the tag "Doctor Who"
+    Then 1 email should be delivered to "enigel@example.org"
+
   Scenario: comments on synonym fandoms should be received by the wrangler of the canonical merger
 
     Given the following activated tag wranglers exist
