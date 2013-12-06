@@ -492,7 +492,8 @@ class Work < ActiveRecord::Base
   end
   
   def set_revised_at_by_chapter(chapter)
-    if (chapter.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
+    return if self.posted? && !chapter.posted?
+    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? || 
         chapter.published_at > self.revised_at.to_date || 
