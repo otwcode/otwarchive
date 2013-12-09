@@ -64,12 +64,12 @@
       <li>
         <%= hidden_field_tag :invitation_token, @invitation.token %>
         <%= radio_button_tag "imported_stories", "orphan" %>
-        <%= label_tag "imported_stories_orphan", ts("Orphan my works and take my email address off them. ") %>
+        <%= label_tag "imported_stories_orphan", ts("Orphan my works and take my email address off them, but keep my name.") %>
         <%= link_to ts("View orphaning FAQ"), archive_faqs_path + "/17" %>
         <ul>
           <li>
             <%= check_box_tag "remove_pseud" %>
-            <%= label_tag "remove_pseud", ts("Assign my works to the AO3 orphan_account.") %>
+            <%= label_tag "remove_pseud", ts("Assign my works to the AO3 orphan_account, removing both my name and email address.") %>
           </li>
         </ul>
       </li>
@@ -91,8 +91,7 @@
 
     </ul>
     <p class="important message">
-      <%= ts("Important: If you don't block importing, but do turn off email notification, works from this email account
-       may still be imported and you won't be told.") %>
+      <%= ts("IImportant: If you tick \"Do not email me in future\" but do not tick \"Do not import works\", works may be imported without you being told. If that's not what you want, turn off importing as well as emails.") %>
       <a href="#notimport"><%= ts("If that's not what you want, turn off importing") %></a>.
     </p>
   <%= submit_fieldset(f) %>
@@ -111,7 +110,7 @@
     <li><%= ts("You can create an account and claim your works (if you already have an account, log in to claim them)") %></li>
   <% end %>
   <li><%= ts("You can also choose to delete or orphan your works.") %></li>
-  <li><%= ts("Orphaning keeps them in the archive so future readers can still enjoy them, but with your contact information and/or your name removed.") %></li>
+  <li><%= ts("Orphaning keeps them in the archive so future fans can still enjoy them, but with your contact information and/or your name removed.") %></li>
   <li><%= ts("You can also tell us not to email you or import works with this email address in the future.") %></li>
 </ul>
 </div>
