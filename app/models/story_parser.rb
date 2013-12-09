@@ -208,12 +208,26 @@ class StoryParser
   end
 
   # tries to create an external author for a given url
-  def parse_author(location)
-    source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
-    if !source.nil?
-      return eval("parse_author_from_#{source.downcase}(location)")
+  def parse_author(location,e_name,e_email)
+    #If e_email option value is present (archivist importing from somewhere not supported for auto autho grab)
+    #will have value there, otherwise continue as usual. If filled, just pass values to create or find external author
+    #Stephanie 8-1-2013
+    mystr = String.new(e_email)
+    if mystr.length < 1
+      e_email = nil
     end
-    return parse_author_from_unknown(location)
+    if e_email != nil
+      return parse_author_common(e_email,e_name)
+
+    else
+      source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
+      if !source.nil?
+        return eval("parse_author_from_#{source.downcase}(location)")
+      end
+      return parse_author_from_unknown(location)
+
+    end
+
   end
 
 
@@ -263,7 +277,13 @@ class StoryParser
       # handle importing works for others
       # build an external creatorship for each author
       if options[:importing_for_others]
-        external_author_names = options[:external_author_names] || parse_author(location)
+        #Changed the values passed to parse_author as the required values changed when modifying it.
+        #Stephanie 10-1-2013
+
+        external_author_names = options[:external_author_names] || parse_author(location,options[:e_name],options[:e_email])
+        if options[:ec_name] != nil
+          external_author_names << parse_author(location,options[:ec_name],options[:ec_email])
+        end
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
         external_author_names.each do |external_author_name|
           if external_author_name && external_author_name.external_author
