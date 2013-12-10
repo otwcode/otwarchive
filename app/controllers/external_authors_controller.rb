@@ -24,10 +24,10 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def new
-    #flash[:notice] = "Coming soon!"
-    #redirect_to :action => :index
-     @external_author = ExternalAuthor.new
-     @external_author.external_author_names.build
+    flash[:notice] = "Coming soon!"
+    redirect_to :action => :index
+     #@external_author = ExternalAuthor.new
+     #@external_author.external_author_names.build
   end
 
   def create
