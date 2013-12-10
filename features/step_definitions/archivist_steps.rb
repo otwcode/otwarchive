@@ -21,10 +21,12 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
     step(%{I press "Update"})
 end
 
-When /^I import the work "([^\"]*)"$/ do |url|
+When /^I import the work "([^\"]*)"$/ do |url,external_author_name,external_author_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
     step(%{I fill in "urls" with "#{url}"})
+  step(%{I fill in "external_author_name" with "#{external_author_name}"})
+  step(%{I fill in "external_author_email" with "#{external_author_email}"})
     step(%{I check "Post without previewing"})
     step(%{I press "Import"})
 end
