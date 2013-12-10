@@ -280,9 +280,9 @@ class StoryParser
         #Changed the values passed to parse_author as the required values changed when modifying it.
         #Stephanie 10-1-2013
 
-        external_author_names = options[:external_author_names] || parse_author(location,options[:e_name],options[:e_email])
-        if options[:ec_name] != nil
-          external_author_names << parse_author(location,options[:ec_name],options[:ec_email])
+        external_author_names = options[:external_author_names] || parse_author(location,options[:external_author_name],options[:external_author_email])
+        if options[:external_coauthor_name] != nil
+          external_author_names << parse_author(location,options[:external_coauthor_name],options[:external_coauthor_email])
         end
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
         external_author_names.each do |external_author_name|

@@ -633,8 +633,8 @@ class WorksController < ApplicationController
                :category => params[:work][:category_string],
                :freeform => params[:work][:freeform_string],
                :encoding => params[:encoding],
-               :e_name => params[:e_name],
-               :e_email => params[:e_email]
+               :external_author_name => params[:external_author_name],
+               :external_author_email => params[:external_author_email]
     }
 
     # now let's do the import
