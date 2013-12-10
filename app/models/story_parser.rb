@@ -208,16 +208,14 @@ class StoryParser
   end
 
   # tries to create an external author for a given url
-  def parse_author(location,e_name,e_email)
+  def parse_author(location,external_author_name,external_author_email)
     #If e_email option value is present (archivist importing from somewhere not supported for auto autho grab)
     #will have value there, otherwise continue as usual. If filled, just pass values to create or find external author
     #Stephanie 8-1-2013
-    mystr = String.new(e_email)
-    if mystr.length < 1
-      e_email = nil
-    end
-    if e_email != nil
-      return parse_author_common(e_email,e_name)
+
+    #might want to add check for external author name also here, steph 12/10/2013
+    if external_author_email.present?
+      return parse_author_common(external_author_email,external_author_name)
 
     else
       source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
