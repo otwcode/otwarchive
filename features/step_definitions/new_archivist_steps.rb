@@ -1,5 +1,6 @@
 ### GIVEN
 
+=begin
 Given /^I have an archivist "([^\"]*)"$/ do |name|
   step(%{I have pre-archivist setup for "#{name}"})
   step(%{I am logged in as an admin})
@@ -59,3 +60,4 @@ end
 Then /^the email should contain claim information$/ do
   step %{the email should contain "automatically added to your AO3 account"}
 end
+=end
