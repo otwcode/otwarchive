@@ -2,7 +2,7 @@
 <h2 class="heading">Request an invite</h2>
 
 <p>To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
-<%= InviteRequest.count %> people on the waiting list. We currently send out <%= AdminSetting.invite_from_queue_number.to_s %> invitations per day.</p>
+<%= InviteRequest.count %> people on the waiting list. <% if AdminSetting.invite_from_queue_enabled? %> We currently send out <%= AdminSetting.invite_from_queue_number.to_s %> invitations per day.<% end %></p>
 <!--/descriptions-->
 
 <!--main content-->
