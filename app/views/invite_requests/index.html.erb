@@ -1,8 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">Request an invite</h2>
 
-<p>To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
-<%= InviteRequest.count %> people on the waiting list. <% if AdminSetting.invite_from_queue_enabled? %> We currently send out <%= AdminSetting.invite_from_queue_number.to_s %> invitations per day.<% end %></p>
+<p>ts("To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
+<%= InviteRequest.count %> people on the waiting list.") <% if AdminSetting.invite_from_queue_enabled? %> ts("We are sending out <%= AdminSetting.invite_from_queue_number.to_s %> invitations per day.")<% end %></p>
 <!--/descriptions-->
 
 <!--main content-->
@@ -17,7 +17,7 @@
         <%= f.label :email %>
         <%= f.text_field :email %>
         <span class="submit actions">
-          <%= f.submit 'Add me to the list' %>
+          <%= f.submit ts("Add me to the list") %>
         </span>
       </p>
     </fieldset>
