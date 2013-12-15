@@ -236,6 +236,7 @@ class WorkSearch < Search
   
   def escape_slashes(word)
     word.gsub!('/', '\\/')
+    word
   end
   
   def escape_reserved_characters(word)
