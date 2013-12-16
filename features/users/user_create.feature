@@ -3,16 +3,31 @@ Feature: Sign Up for a new account
   As an unregistered user.
   I want to be able to create a new account.
 
-  Scenario: The user should not be able to sign up without a valid password.
-    When I use an invitation to sign up
-      And I fill in "user_password" with "pass"
+  Background:
+    Given I am a visitor
+    And I use an invitation to sign up
+
+  Scenario Outline: The user should see validation errors when signing up with invalid data.
+    When I fill in "<field>" with "<value>"
       And I press "Create Account"
-    Then I should see "Password is too short (minimum is 6 characters)"
+    Then I should see "<error>"
       And I should not see "Account Created!"
+    Examples:
+      | field		      | value  | error								     |	
+      | user_login                 | xx     | Login is too short (minimum is 3 characters)		     |
+      | user_password         | pass   | Password is too short (minimum is 6 characters)   		     |
+
+  Scenario Outline: The user should see validation erros when signing up without filling in required fields.
+    When I press "Create Account"
+    Then I should see "<error>"
+      And I should not see "Account Created!"   
+    Examples:
+      | field		      | error								    |
+      | user_age_over_13      | Sorry, you have to be over 13!					    |
+      | user_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up. |
 
   Scenario: The user should not be able to sign up without a matching password confirmation
-    When I use an invitation to sign up
-      And I fill in "user_password" with "password1"
+    When I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password2"
       And I press "Create Account"
     Then I should see "Password doesn't match confirmation"
@@ -22,27 +37,15 @@ Feature: Sign Up for a new account
     Given the following users exist
       | login | password |
       | user1 | password |
-    When I use an invitation to sign up
-      And I fill in "user_login" with "user1"
+    When I fill in "user_login" with "user1"
       And I fill in "user_password" with "password"
       And I fill in "user_password_confirmation" with "password"
       And I press "Create Account"
     Then I should see "Login has already been taken"
       And I should not see "Account Created!"
-
-  Scenario: The user should not be able to sign up until they accept the Terms of Service
-    When I use an invitation to sign up
-      And I fill in "user_login" with "newuser"
-      And I fill in "user_password" with "password"
-      And I fill in "user_password_confirmation" with "password"
-      And I press "Create Account"
-   Then I should see "Sorry, you need to accept the Terms of Service in order to sign up."
-      And I should see "Sorry, you have to be over 13!"
-      And I should not see "Account Created!"
     
   Scenario: The user should not be able to sign up without a valid email address
-    When I use an invitation to sign up
-      And I fill in "user_login" with "newuser"
+    When I fill in "user_login" with "newuser"
       And I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password1"
       And I check "user_age_over_13"
@@ -57,8 +60,7 @@ Feature: Sign Up for a new account
       And I should not see "Account Created!"
 
   Scenario: The user should be able to create a new account with a valid email and password
-    When I use an invitation to sign up
-      And I fill in "user_login" with "newuser"
+    When I fill in "user_login" with "newuser"
       And I fill in "user_email" with "test@archiveofourown.org"
       And I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password1"
