@@ -1,6 +1,8 @@
 DEFAULT_USER = "testuser"
 DEFAULT_PASSWORD = "password"
 
+# GIVEN
+
 Given /^I have no users$/ do
   User.delete_all
 end
@@ -52,13 +54,6 @@ Given /^I am logged in$/ do
   step(%{I am logged in as "#{DEFAULT_USER}"})
 end
 
-When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
-  # " '
-  user = User.find_by_login(login)
-  fill_in "Password", :with => user.activation_code
-end
-
-
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
@@ -83,28 +78,11 @@ Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
-When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
-  fill_in "Name", :with => newpseud
-  click_button "Create"
-end
-
 Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
   step (%{I am logged in as "#{username}"})
   step(%{"#{username}" creates the pseud "#{pseud}"})
   step("I am logged out")
 end
-
-When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
-  fill_in "Name", :with => newpseud
-  # TODO: this isn't currently working
-  check "Make this name default"
-  click_button "Create"
-end
-
 
 Given /^"([^\"]*)" deletes their account/ do |username|
   visit user_path(username)
@@ -119,6 +97,32 @@ end
 Given /^I view the people page$/ do
   visit people_path
 end
+
+# WHEN
+
+When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  # TODO: this isn't currently working
+  check "Make this name default"
+  click_button "Create"
+end
+
+When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
+  # " '
+  user = User.find_by_login(login)
+  fill_in "Password", :with => user.activation_code
+end
+
+When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  click_button "Create"
+end
+
+# THEN
 
 Then /^I should get the error message for wrong username or password$/ do
   step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
