@@ -3,27 +3,46 @@ Feature: Sign Up for a new account
   As an unregistered user.
   I want to be able to create a new account.
 
-  Scenario: The user should not be able to sign up when there are errors.
-    # TODO -- setup is excessive; fix it so we're only initializing what we need
-    Given I have no users
-      And I have an AdminSetting
-      And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
-      And the following users exist
+  Scenario: The user should not be able to sign up without a valid password.
+    When I use an invitation to sign up
+      And I fill in "user_password" with "pass"
+      And I press "Create Account"
+    Then I should see "Password is too short (minimum is 6 characters)"
+      And I should not see "Account Created!"
+
+  Scenario: The user should not be able to sign up without a matching password confirmation
+    When I use an invitation to sign up
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password2"
+      And I press "Create Account"
+    Then I should see "Password doesn't match confirmation"
+      And I should not see "Account Created!"
+  
+  Scenario: The user should not be able to sign up with a login that is already in use
+    Given the following users exist
       | login | password |
       | user1 | password |
     When I use an invitation to sign up
       And I fill in "user_login" with "user1"
-      And I fill in "user_password" with "pass"
+      And I fill in "user_password" with "password"
+      And I fill in "user_password_confirmation" with "password"
       And I press "Create Account"
     Then I should see "Login has already been taken"
-      And I should see "Password is too short (minimum is 6 characters)"
-      And I should see "Password doesn't match confirmation"
-      And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should not see "Account Created!"
+
+  Scenario: The user should not be able to sign up until they accept the Terms of Service
+    When I use an invitation to sign up
+      And I fill in "user_login" with "newuser"
+      And I fill in "user_password" with "password"
+      And I fill in "user_password_confirmation" with "password"
+      And I press "Create Account"
+   Then I should see "Sorry, you need to accept the Terms of Service in order to sign up."
       And I should see "Sorry, you have to be over 13!"
-      And I should not see "Email address is too short"
-    When I fill in "user_login" with "newuser"
+      And I should not see "Account Created!"
+    
+  Scenario: The user should not be able to sign up without a valid email address
+    When I use an invitation to sign up
+      And I fill in "user_login" with "newuser"
       And I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password1"
       And I check "user_age_over_13"
@@ -31,10 +50,12 @@ Feature: Sign Up for a new account
       And I fill in "user_email" with ""
       And I press "Create Account"
     Then I should see "Email does not seem to be a valid address."
+      And I should not see "Account Created!"
     When I fill in "user_email" with "fake@fake@fake"
       And I press "Create Account"
     Then I should see "Email does not seem to be a valid address."
-    
+      And I should not see "Account Created!"
+
   Scenario: The user should be able to create a new account with a valid email and password
     When I use an invitation to sign up
       And I fill in "user_login" with "newuser"
