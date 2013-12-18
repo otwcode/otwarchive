@@ -1,0 +1,25 @@
+<%= form_for(@banned_value) do |f| %>
+    <% if @banned_value.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@banned_value.errors.count, "error") %> prohibited this value from being saved:</h2>
+
+          <ul>
+            <% @banned_value.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :ban_type %><br />
+      <%= f.select(:ban_type, options_for_select([['Email Address',1],['Username',2],['Pseud',3]])) %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
