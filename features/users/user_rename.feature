@@ -4,6 +4,14 @@ Feature:
   As a registered user
   I should be able to change my user name
 
+  Scenario: The user should not be able to change username without a password
+    Given I am logged in as "testuser" with password "password"
+    When I go to testuser's user page
+      And I follow "Preferences"
+      And I follow "Change My User Name"
+      And I press "Change"
+   # Then I should not see "Your password was incorrect"
+
 Scenario: Changing my user name
   Given I have no users
     And the following activated user exists
@@ -24,8 +32,8 @@ Scenario: Changing my user name
   When I fill in "New User Name" with "DownThemAll"
     And I fill in "Re-enter Your Password" with "password"
     And I press "Change"
-  Then I should see "Your user name was changed"
-    And I should see "Hi, DownThemAll"
+  Then I should get confirmation that I changed my username
+    And I should see "Hi, DownThemAll!"
   When I follow "Preferences"
     And I follow "Change My User Name"
     And I fill in "New User Name" with "Down_Them_All"
@@ -36,8 +44,8 @@ Scenario: Changing my user name
   # and the error message should be clearer
   When I fill in "Re-enter Your Password" with "password"
     And I press "Change"
-  Then I should see "Your user name was changed"
-    And I should see "Hi, Down_Them_All"
+  Then I should get confirmation that I changed my username
+    And I should see "Hi, Down_Them_All!"
 
 Scenario: Changing my user name with one pseud changes that pseud
   Given I have no users
@@ -48,7 +56,7 @@ Scenario: Changing my user name with one pseud changes that pseud
     And I fill in "New User Name" with "newusername"
     And I fill in "Re-enter Your Password" with "password"
     And I press "Change"
-  Then I should see "Your user name was changed"
+  Then I should get confirmation that I changed my username
     And I should see "Hi, newusername"
   When I go to my pseuds page
     Then I should not see "oldusername"
@@ -70,7 +78,7 @@ Scenario: Changing my user name with two pseuds, one same as new, doesn't change
     And I fill in "New User Name" with "newusername"
     And I fill in "Re-enter Your Password" with "secret"
     And I press "Change"
-  Then I should see "Your user name was changed"
+  Then I should get confirmation that I changed my username
     And I should see "Hi, newusername"
   When I follow "Pseuds (2)"
     Then I should see "Edit oldusername"

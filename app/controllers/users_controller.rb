@@ -154,8 +154,9 @@ class UsersController < ApplicationController
           old_login = @user.login
           @user.login = @new_login
           if @user.save
-            flash[:notice] = ts("Your user name was changed")
-
+            flash[:notice] = ts("Your
+username has been successfully updated. You may now wish to edit your pseud
+to match.")
             new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
             if new_pseud
