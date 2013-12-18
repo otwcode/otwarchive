@@ -96,9 +96,15 @@ module NavigationHelpers
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
+<<<<<<< HEAD
       skins_path(:skin_type => "WorkSkin")
+    when /^(.*)'s skin page/
+      skins_path(:user_id => $1)
+=======
+      skins_path(:work_skins => true)
     when /the skins admin page/
       unapproved_skins_path
+>>>>>>> Talvalin/issue_3064_create_skin_admin_role
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/

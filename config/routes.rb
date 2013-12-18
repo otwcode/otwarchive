@@ -140,12 +140,6 @@ Otwarchive::Application.routes.draw do
   namespace :admin do
     resources :activities, :only => [:index, :show]
     resources :settings
-    resources :skins do
-      collection do
-        get :index_rejected
-        get :index_approved
-      end
-    end
     resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
@@ -255,7 +249,7 @@ Otwarchive::Application.routes.draw do
       resources :serial_works
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
-    resources :skins, :only => [:index]
+    resources :skins, :only => [:index] 
     resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
     resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
@@ -499,6 +493,10 @@ Otwarchive::Application.routes.draw do
     end
     collection do
       get :unset
+      get :unapproved
+      get :rejected
+      get :approved
+      put :admin_update
     end
   end
   resources :known_issues

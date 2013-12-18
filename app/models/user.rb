@@ -383,6 +383,10 @@ class User < ActiveRecord::Base
 
   private
 
+  ########################################################################
+  # ROLES
+  ########################################################################
+  
   # Set the roles for this user
   def set_roles(role_list)
     if role_list
@@ -434,6 +438,20 @@ class User < ActiveRecord::Base
   # Set archivist role for this user and log change
   def archivist=(should_be_archivist)
     set_role('archivist', should_be_archivist == '1')
+  end
+  
+  # Is this user an authorized skins admin?
+  def skins_admin
+    self.is_skins_admin?
+  end
+  
+  def is_skins_admin?
+    has_role?(:skins_admin)
+  end
+  
+  # Set skins admin role for this user and log change
+  def skins_admin=(should_be_skins_admin)
+    set_role('skins_admin', should_be_skins_admin == '1')
   end
 
   # Creates log item tracking changes to user

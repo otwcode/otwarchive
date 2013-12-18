@@ -4,11 +4,11 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render :partial => 'admin/skins/navigation' %>
+<%= render :partial => 'admin_navigation' %>
 <!--/subnav-->
 
 <!--main content-->
-<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
+<%=  form_tag url_for(:controller => 'skins', :action => 'admin_update'), {:method => :put} do %>
   <!-- review of rejected skins -->
   <fieldset>
     <legend><%= ts('Rejected Skins') %></legend>
