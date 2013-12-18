@@ -1384,6 +1384,13 @@ Feature: Prompt Meme Challenge
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 
+  Scenario: Prompt meme signup errors show on specific prompt
+  Given I have Battle 12 prompt meme fully set up
+    And I start to sign up for "Battle 12"
+    And I press "Submit"
+    And I should see "There were some problems with this submission. Please correct the mistakes below."
+    And I should see "Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request."
+
   Scenario: Validation error doesn't cause semi-anon ticky to lose state (Issue 2617)
   Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
     And I am logged in as "Scott" with password "password"
