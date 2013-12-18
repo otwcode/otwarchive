@@ -52,10 +52,6 @@ div.comment, li.comment {
   clear: none;
 }
 
-.comment ul {
-  margin-top: -1.286em;
-}
-
 .thread .thread {
   margin-left: 3em;
 }
@@ -65,10 +61,14 @@ div.comment, li.comment {
   margin: 0;
 }
 
-fieldset.comments, .comment blockquote.userstuff {
+fieldset.comments {
   background: transparent;
   border: none;
     box-shadow: none;
+}
+
+.comment .userstuff {
+  margin-top: 1em;
 }
 
 .comment fieldset {
@@ -76,7 +76,7 @@ fieldset.comments, .comment blockquote.userstuff {
 }
 
 .comment .datetime {
-  margin: 0 11em 0 1.286em;
+  margin: 1.286em 0.643em 0;
 }
 
 /*END== */

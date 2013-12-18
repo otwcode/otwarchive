@@ -54,7 +54,8 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   float: none;
   margin: auto;
   width: auto;
-  padding: 0 1.5em 3.5em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 
 #dashboard, #main.dashboard .index, .dashboard form.filters, #main .filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
@@ -140,4 +141,26 @@ dl.stats + h6 + .actions {
 
 .dashboard .landmark {
   clear: both;
+}
+
+/* comments */
+#feedback {
+  margin: 0 0 auto;
+}
+
+.thread .thread {
+  margin-left: 1em;
+}
+
+.comment .icon {
+  height: 50px;
+  width: 50px;
+}
+
+.comment .icon .visitor {
+  background: url(/images/imageset.png) no-repeat 0px -525px transparent;
+}
+
+.comment h4.byline {
+  padding: 0.25em 0.25em 0.25em 58px;
 }
