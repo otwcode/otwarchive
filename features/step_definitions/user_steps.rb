@@ -149,6 +149,10 @@ end
 
 When(/^I try to delete my account$/) do
   step (%{I try to delete my account as #{DEFAULT_USER}})
+
+When(/^I visit the change username page for (.*)$/) do |login|
+  user = User.find_by_login(login)
+  visit change_username_user_path(user) 
 end
 
 # THEN

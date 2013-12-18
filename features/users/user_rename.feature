@@ -6,11 +6,9 @@ Feature:
 
   Scenario: The user should not be able to change username without a password
     Given I am logged in as "testuser" with password "password"
-    When I go to testuser's user page
-      And I follow "Preferences"
-      And I follow "Change My User Name"
+    When I visit the change username page for testuser
       And I press "Change"
-   # Then I should not see "Your password was incorrect"
+    Then I should see "Your password was incorrect"
 
 Scenario: Changing my user name
   Given I have no users
@@ -18,9 +16,7 @@ Scenario: Changing my user name
     | login       | password |
     | otheruser   | secret   |
     And I am logged in as "downthemall" with password "password"
-  When I go to downthemall's user page
-    And I follow "Preferences"
-    And I follow "Change My User Name"
+  When I visit the change username page for downthemall
     And I fill in "New User Name" with "otheruser"
     And I fill in "Re-enter Your Password" with "password"
   When I press "Change"
@@ -50,9 +46,7 @@ Scenario: Changing my user name
 Scenario: Changing my user name with one pseud changes that pseud
   Given I have no users
     And I am logged in as "oldusername" with password "password"
-  When I go to oldusername's user page
-    And I follow "Preferences"
-    And I follow "Change My User Name"
+  When I visit the change username page for oldusername
     And I fill in "New User Name" with "newusername"
     And I fill in "Re-enter Your Password" with "password"
     And I press "Change"
@@ -72,9 +66,7 @@ Scenario: Changing my user name with two pseuds, one same as new, doesn't change
     | oldusername   | secret   | 1  |
     And a pseud exists with name: "newusername", user_id: 1
     And I am logged in as "oldusername" with password "secret"
-  When I go to oldusername's user page
-    And I follow "Preferences"
-    And I follow "Change My User Name"
+  When I visit the change username page for oldusername
     And I fill in "New User Name" with "newusername"
     And I fill in "Re-enter Your Password" with "secret"
     And I press "Change"
