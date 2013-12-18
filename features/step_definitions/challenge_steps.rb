@@ -641,11 +641,16 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   step %{I should see an update confirmation message}
 end
 
-When /^I delete my signup for "([^\"]*)"$/ do |title|
+When /^I delete my signup for the prompt meme "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "My Prompts"}
-  step %{I follow "Delete Sign-up"}
-  step %{I should see "Challenge sign-up was deleted."}
+  step %{I delete the signup}
+end
+
+When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "My Sign-up"}
+  step %{I delete the signup}
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
@@ -671,6 +676,17 @@ When /^I edit the first prompt$/ do
   # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
   # Prompt Meme challenges
   #step %{I follow "Edit Prompt"}
+end
+
+When /^I delete the signup by "([^\"]*)"$/ do |participant|
+  click_link("#{participant}")
+  step %{I delete the signup}
+end
+
+When /^I delete the signup$/ do
+  step %{I follow "Delete Sign-up"}
+  step %{I press "Yes, Delete Sign-up"}
+  step %{I should see "Challenge sign-up was deleted."}
 end
 
 When /^I edit the prompt by "([^\"]*)"$/ do |participant|
