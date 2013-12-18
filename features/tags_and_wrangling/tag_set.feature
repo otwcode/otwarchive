@@ -116,7 +116,23 @@ Feature: creating and editing tag sets
     And I am logged in as "tagsetter"
     And I go to the "Nominated Tags" tag set page
   Then I should see the tags with Unicode characters
-  
+
+  # Note this is now testing the non-JS method for deleting your own nominations
+  Scenario: You should be able to delete your nominations
+    Given I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+    Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
+      And I submit
+    When I should see "Your nominations were successfully submitted"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+      And I should see "My Nominations For Nominated Tags"
+      And I follow "Delete"
+      And I should see "Delete Tag Set Nomination?"
+    When I press "Yes, Delete Tag Set Nominations"
+    Then I should see "Your nominations were deleted."
+
+
   # ASSOCIATIONS
   Scenario: If a nominated tag and its parent are approved they should appear on the associations page
   Given I nominate and approve fandom "Floobry" and character "Zarrr" in "Nominated Tags"

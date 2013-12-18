@@ -3,51 +3,90 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
+<%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "verbose manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
-  <dl>
-    <dt><%= f.label :account_creation_enabled, "Account Creation Enabled (Can people create accounts without an invitation?)" %>
-</dt>
-    <dd><%= f.check_box :account_creation_enabled %> </dd>
-    <dt><%= f.label :request_invite_enabled, "Users can request invitations?" %></dt>
-    <dd><%= f.check_box :request_invite_enabled %></dd>
-    <dt><%= f.label :invite_from_queue_enabled, "Invite from Queue Enabled
-(Can people add themselves to the queue and are invitations sent out automatically?)" %>
-</dt>
-    <dd><%= f.check_box :invite_from_queue_enabled %></dd>
-    <dt><%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> </dt>
-    <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
-    <dt><%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %></dt>
-    <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
-    <dt><%= f.label :days_to_purge_unactivated, "How much time (in weeks) do you have for activating your account before we purge it:" %> </dt>
-    <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
-    <dt><%= f.label :disable_filtering, "Turn off filtering on index pages" %></dt>
-    <dd><%= f.check_box :disable_filtering %> </dd>
-    <dt><%= f.label :suspend_filter_counts, "Suspend some filter tracking due to high posting volume" %></dt>
-    <dd><%= f.check_box :suspend_filter_counts %> </dd>
-    <dt><%= f.label :tag_wrangling_off, "Turn off tag wrangling for non-admins" %></dt>
-    <dd><%= f.check_box :tag_wrangling_off %></dd>
-    <dt><%= f.label :guest_downloading_off, "Turn off downloading for guests" %></dt>
-    <dd><%= f.check_box :guest_downloading_off %></dd>
-    <dt><%= f.label :enable_test_caching, "Turn on caching (currently experimental)" %></dt>
-    <dd><%= f.check_box :enable_test_caching %> </dd>
-    <dt><%= f.label :cache_expiration, "How often (in minutes) should we refresh caching:" %></dt>
-    <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
-    <dt><%= f.label :banner_text, "Banner notice:" %></dt>
-    <dd><%= f.text_field :banner_text %></dd>
+  
+  <fieldset>
+    <legend><%= ts("Accounts and Invitations") %></legend>
+    <h3 class="landmark heading"><%= ts("Accounts and Invitations") %></h3>
+    <dl>
+  
+      <dt><%= f.check_box :account_creation_enabled %></dt>
+      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled (People can create accounts without an invitation)") %></dd>
 
-</dl>
-    <p><%= f.hidden_field :last_updated_by, :value => current_admin.id %></p>
-    <p class="submit actions"><%= f.submit 'Update' %></p>
+      <dt><%= f.check_box :request_invite_enabled %></dt>
+      <dd><%= f.label :request_invite_enabled, ts("Users can request invitations") %></dd>
+    
+      <dt><%= f.check_box :invite_from_queue_enabled %></dt>
+      <dd><%= f.label :invite_from_queue_enabled, ts("Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)") %></dd>
+
+      <dt><%= f.label :invite_from_queue_number, ts("Number of people to invite from the queue at once") %></dt>
+      <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
+    
+      <dt><%= f.label :invite_from_queue_frequency, ts("How often (in days) should we invite people from the queue") %></dt>
+      <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
+    
+      <dt><%= f.label :days_to_purge_unactivated, ts("How many weeks you have to activate your account before we purge it") %></dt>
+      <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend><%= ts("Performance") %></legend>
+    <h3 class="landmark heading"><%= ts("Performance") %></h3>
+    <dl>
+        
+      <dt><%= f.check_box :disable_filtering %></dt>
+      <dd><%= f.label :disable_filtering, ts("Turn off filtering on index pages") %></dd>
+    
+      <dt><%= f.check_box :suspend_filter_counts %></dt>
+      <dd><%= f.label :suspend_filter_counts, ts("Suspend some filter tracking due to high posting volume") %></dd>
+    
+      <dt><%= f.check_box :tag_wrangling_off %></dt>
+      <dd><%= f.label :tag_wrangling_off, ts("Turn off tag wrangling for non-admins") %></dd>
+    
+      <dt><%= f.check_box :guest_downloading_off %></dt>
+      <dd><%= f.label :guest_downloading_off, ts("Turn off downloading for guests") %></dd>
+    
+      <dt><%= f.check_box :enable_test_caching %></dt>
+      <dd><%= f.label :enable_test_caching, ts("Turn on caching (currently experimental)") %></dd>
+    
+      <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
+      <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend><%= ts("Admin Banner") %></legend>
+    <h3 class="landmark heading"><%= ts("Admin Banner") %></h3>
+    <dl>
+  
+      <dt><%= f.label :banner_text, ts("Banner notice") %></dt>
+      <dd>
+        <p><%= allowed_html_instructions %></p>
+        <%= f.text_area :banner_text %>
+      </dd>
+
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend><%= ts("Actions") %></legend>
+    <h3 class="landmark heading"><%= ts("Actions") %></h3>
+    
+    <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
+    <p class="submit actions"><%= f.submit ts('Update') %></p>
+  </fieldset>
+
 <% end %>
-<hr class="clear" />
-  <% if @admin_setting.invite_from_queue_enabled? %>
-  <p><%= @admin_setting.invite_from_queue_number %> people are scheduled to be sent invitations on
-  <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p>
 
-  <p>(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's.
-  Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)</p>
-  <% end %>
+<% if @admin_setting.invite_from_queue_enabled? %>
+  <p><%= ts("%{number} people are scheduled to be sent invitations on %{date}.", :number => @admin_setting.invite_from_queue_number, :date =>
+  l(@admin_setting.invite_from_queue_at.to_date, :format => :long)) %></p>
 
-<p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>
+  <p><%= ts("(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's.
+  Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)") %></p>
+<% end %>
+
+<p><%= ts("Last updated on %{updated_at} by %{admin_name}.", :updated_at => @admin_setting.updated_at, :admin_name => @admin_setting.last_updated ? @admin_setting.last_updated.login : "---") %></p>
 <!--/content-->
