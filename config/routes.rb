@@ -1,5 +1,6 @@
 Otwarchive::Application.routes.draw do
-  
+  resources :banned_values
+
   #### ERRORS ####
   
   match '/403', :to => 'errors#403'
@@ -158,6 +159,8 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
+
+
     resources :invitations, :controller => 'admin_invitations' do
       collection do
         post :invite_from_queue
@@ -333,6 +336,7 @@ Otwarchive::Application.routes.draw do
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
