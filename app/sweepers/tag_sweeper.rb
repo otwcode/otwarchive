@@ -35,7 +35,7 @@ class TagSweeper < ActionController::Caching::Sweeper
   end
 
   def before_destroy(tag)
-    if Tag::USER_DEFINED.include?(tag.type) && tag.canonical
+    if tag.canonical && tag.type.is_user_defined?
       tag.remove_from_autocomplete
     end
     update_tag_nominations(tag, deleted=true)

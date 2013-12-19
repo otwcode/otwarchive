@@ -15,7 +15,7 @@
     <dl>
       <dt><%= f.label :name, ts('Name') %></dt>
       <dd>
-        <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
+        <% if (@tag.is_user_defined?) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
           <%= f.text_field :name, :size => (@tag.name.length + 5) %>
           <% unless logged_in_as_admin? %>
             <p><%= ts("Only changes to capitalization and diacritic marks are permitted.") %></p>
@@ -35,7 +35,7 @@
       <dt><%= ts('Category') %></dt>
       <dd>
         <% if @tag.can_change_type? %>
-          <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
+          <%= f.select :type, options_for_select(Tag::USER_DEFINED + ["UnsortedTag"], @tag.type.to_s) %>
         <% else %>
           <strong><%= @tag.type %></strong>
         <% end %>  
@@ -48,9 +48,9 @@
 
       <dt><%= f.label :canonical, ts('Canonical') %></dt>
       <dd>
-        <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
-        <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
-        <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
+        <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || @tag.is_user_defined?) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
+        <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class_display_name) %></p>
+        <% if @tag.is_user_defined? && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
           <p class="navigation actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
         <% end %>
       </dd>
@@ -60,7 +60,7 @@
         <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
       <% end %>
 
-      <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
+      <% if @tag.is_user_defined? %>
       <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
       <dd>
         <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
@@ -81,7 +81,7 @@
     </dl>
   </fieldset>
 
-  <% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
+  <% if (@tag.is_user_defined? || @tag[:type]=='Media') %>
     <fieldset>
       <legend><%= ts("Parent tags") %>:</legend>
       <dl>

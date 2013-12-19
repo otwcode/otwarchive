@@ -27,10 +27,18 @@
         <% types = Tag::USER_DEFINED %>
       <% end %>
       <ul>
-		<% types.each do |type| %>
-        <li><%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %></li>
-	</ul>
-      <% end %>
+        <% types.each do |type| %>
+          <li>
+            <% if type.kind_of?(Array) %>
+              <%= f.radio_button("type", type[1]) %>
+              <%= f.label("type_#{type[1].downcase}", type[0])  %>
+            <% else %>
+              <%= f.radio_button("type", type[1]) %>
+              <%= f.label("type_#{type.downcase}", type) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     </dd>
   </dl>
 

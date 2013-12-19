@@ -42,10 +42,10 @@ module ApplicationHelper
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
-  def span_if_current(link_to_default_text, path, condition=nil)
+  def span_if_current(link_to_default_text, path, condition=nil, title="")
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
-    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
+    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path, :title => title)
   end
   
   def link_to_rss(link_to_feed)

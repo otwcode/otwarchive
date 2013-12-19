@@ -11,10 +11,18 @@
 <!--main content-->
 <%
   showing_header = ""
-  if params[:show] && params[:status]
-    showing_header = "Showing " + params[:status] + " " + params[:show]
-  elsif params[:show]
-    showing_header = "Showing " + params[:show]
+  
+  if params[:show]
+    cleaned_show_param = params[:show].singularize.titleize.gsub(' ', '')
+    class_display_name = tag_category_name(cleaned_show_param).pluralize
+    
+    if params[:status]
+      showing_header = ts("Showing %{param_text}", :param_text => params[:status] + " " + class_display_name)
+    else
+      showing_header = ts("Showing %{param_text}", :param_text => class_display_name)
+    end
+  else
+    showing_header = ts("")
   end
 %>
 <% unless showing_header.blank? %>
@@ -27,9 +35,10 @@
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <fieldset>
-    <h3 class="heading"><%= ts('Add new') %> <%= params[:show] %></h3>
+    <h3 class="heading"><%= ts('Add new') %> <%= class_display_name %></h3>
     <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
       <div title="<%= ts('add new') %>">
+        <!-- Note: here we do want the actual class name (eg: "Freeform") -->
         <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
         <%= hidden_field_tag :show, params[:show] %>
         <%= hidden_field_tag :sort_column, params[:sort_column] %>
@@ -42,16 +51,15 @@
   </fieldset>
 <% end %>
 
-<% # BACK END: Can we make these span_if_current? Front End suspects it would help the wranglers know what they're looking at %>
 <% if params[:show] %>
   <ul class="navigation actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
-    <li><%= link_to ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
-    <li><%= link_to ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
-    <li><%= link_to ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
-    <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
-    <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
-    <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>
+    <li><%= span_if_current ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
+    <li><%= span_if_current ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
+    <li><%= span_if_current ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
+    <li><%= span_if_current ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), nil, ts("non-canonical tags without synonyms") %></li>
+    <li><%= span_if_current ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), nil, ts("tags which were used on the same works but haven't been wrangled yet") %></li>
+    <li><%= span_if_current ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), nil, ts("tags marked unwrangleable") %></li>
   </ul>
 <% end %>
 
