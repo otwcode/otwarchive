@@ -137,6 +137,23 @@ FactoryGirl.define do
     f.subscribable_id { FactoryGirl.create(:series).id }
   end
 
+  factory :comment do |f|
+    f.sequence(:content) {|n| "Comment content #{n}"}
+    f.sequence(:name) {|o| "GuestName#{o}"}
+    f.sequence(:email)  {|p| "guest#{p}email@example.org"}
+
+    f.after_build do |comment|
+      comment.commentable_type = "Work"
+      comment.commentable_id = Factory.create(:work).id
+    end
+  end
+
+  factory :kudo do |f|
+    f.commentable_id { Factory.create(:work).id }
+    f.commentable_type  "Work"
+end
+
+
   factory :owned_tag_set do |f|
     f.sequence(:title) {|n| "Owned Tag Set #{n}"}
     f.nominated true
