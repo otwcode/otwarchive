@@ -6,9 +6,11 @@
 # 
 
 server "ao3-app01.ao3.org",  :app , :db
-server "ao3-app02.ao3.org",  :app 
+server "ao3-app02.ao3.org",  :app , :primary
 server "ao3-app03.ao3.org",  :app
-server "ao3-front01.ao3.org",  :app , :web , :primary
+server "ao3-app98.ao3.org",  :app
+server "ao3-app99.ao3.org",  :app
+server "ao3-front01.ao3.org", :web
 
 
 # ORDER OF EVENTS
