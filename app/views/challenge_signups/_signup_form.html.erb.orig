@@ -23,14 +23,18 @@
 
 
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
-
-  <p class="required notice"><%= ts('* Required information') %></p>
-  
+<<<<<<< HEAD
   <% unless @challenge_signup.errors.empty? %>
     <div class="error">
       <h4 class="heading"><%= ts("There were some problems with this submission. Please correct the mistakes below.") %></h4>
     </div>
   <% end %>
+=======
+
+  <p class="required notice"><%= ts('* Required information') %></p>
+  
+  <%= error_messages_for @challenge_signup %>
+>>>>>>> sarken2/issue_3381
 
   <%= render "signup_form_general_information", :form => signup_form %>
 

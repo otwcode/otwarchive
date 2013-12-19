@@ -72,4 +72,18 @@ module PromptRestrictionsHelper
     content_tag(:dd, fields.html_safe, :title => ts("#{tag_type.pluralize}")) + "\n".html_safe
   end  
 
+
+  # generate the string to use for the labels on sign-up forms
+  def challenge_signup_label(tag_name, num_allowed, num_required)
+	  if num_required > 0 && (num_allowed > num_required)
+	   "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required} - #{num_allowed}): *"
+	  elsif num_required > 0 && (num_allowed == num_required)
+		  "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required}): *"
+		elsif num_allowed > 0
+		  "#{((num_allowed > 1) ? tag_name.pluralize : tag_name).titleize} (#{num_required} - #{num_allowed}):"
+	  else
+		  "#{tag_name.titleize}:"
+	  end
+  end
+  
 end
