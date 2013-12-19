@@ -2,9 +2,14 @@
 <h2 class="heading"><%= ts("Orphan Series") %></h2>
 
 <p class="caution">
+<<<<<<< HEAD
+  <%= ts('Are you sure you want to <strong>permanently</strong> remove all identifying data from your series "%{title}", its works and chapters, and any feedback replies you may have left on them?', 
+:title => series.title).html_safe %>
+=======
 <%= ts('Are you sure you want to <strong>permanently</strong> remove all
 identifying data from your series "%{title}", its works and chapters, and any feedback replies you may have left on them?',
 :title => series.title).html_safe%>
+>>>>>>> scottsds/issue_2764
 </p>
 <!--/descriptions-->
 
