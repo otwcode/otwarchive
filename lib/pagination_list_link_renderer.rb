@@ -48,7 +48,7 @@ class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
       if page
         tag(:li, link(text, page, {:"data-remote" => remote}), :class => classname, :title => classname)
       else
-        tag(:li, text, :class => classname + ' disabled', :title => classname)
+        tag(:li, tag(:span, text, :class => "disabled"), :class => classname, :title => classname)
       end
     end
 
