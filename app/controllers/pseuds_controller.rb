@@ -112,6 +112,14 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1.xml
   def update
     @pseud = @user.pseuds.find_by_name(params[:id])
+    
+    # in case of update failure we're going to need the previous pseud
+    if @pseud
+      @old_pseud = params[:id]
+    elsif !params[:old_pseud_name].empty?
+      @pseud = @user.pseuds.find_by_name(params[:old_pseud_name])
+    end   
+     
     default = @user.default_pseud
     if @pseud.update_attributes(params[:pseud])
       # if setting this one as default, unset the attribute of the current default pseud
