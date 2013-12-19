@@ -2,6 +2,7 @@ env:
   - TEST_GROUP=importing
   - TEST_GROUP=gift_exchanges
   - TEST_GROUP=prompt_memes
+  - TEST_GROUP=bookmarks
   - TEST_GROUP=collections
   - TEST_GROUP=users
   - TEST_GROUP=works

@@ -286,3 +286,66 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
 
+Scenario: Adding bookmarks to closed collections (Issue 3083)
+  Given I am logged in as "moderator" with password "password"
+    And I have a closed collection "Unsolved Mysteries" with name "unsolved_mysteries"
+    And I have a closed collection "Rescue 911" with name "rescue_911"
+    And I am logged in as "moderator" with password "password"
+    And I post the work "Hooray for Homicide"
+    And I post the work "Sing a Song of Murder"
+    And I go to "Unsolved Mysteries" collection's page
+  Then I view the work "Hooray for Homicide"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "unsolved_mysteries"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+  Then I view the work "Sing a Song of Murder"
+    And I follow "Bookmark"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+    And I follow "Add To Collection"
+    And I fill in "collection_names" with "unsolved_mysteries"
+    And I press "Add"
+    And I should see "Added to collection(s): Unsolved Mysteries"
+  When I follow "Edit"
+    And I fill in "bookmark_notes" with "This is my edited bookmark"
+    And I press "Update"
+  Then I should see "Bookmark was successfully updated."
+    And I am logged out
+  Then I am logged in as "RobertStack" with password "password"
+    And I view the work "Sing a Song of Murder"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "rescue_911"
+    And I press "Create"
+    And I should see "Sorry! We couldn't save this Bookmark because:"
+    And I should see "The collection rescue_911 is not currently open."
+  Then I view the work "Hooray for Homicide"
+    And I follow "Bookmark"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+    And I follow "Add To Collection"
+    And I fill in "collection_names" with "rescue_911"
+    And I press "Add"
+    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+    And I am logged out
+  # Create a collection, put a bookmark in it, close the collection, then try
+  # to edit that bookmark
+  Then I open the collection with the title "Rescue 911"
+    And I am logged out
+  Then I am logged in as "Scott" with password "password"
+    And I view the work "Sing a Song of Murder"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "rescue_911"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+    And I am logged out
+  When I close the collection with the title "Rescue 911"
+    And I am logged in as "Scott" with password "password"
+    And I view the work "Sing a Song of Murder"
+    And I follow "Edit Bookmark"
+    And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
+    And I press "Edit"
+  Then I should see "Bookmark was successfully updated."
+
+
+
