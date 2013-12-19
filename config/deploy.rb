@@ -121,8 +121,8 @@ end
 #before "deploy:symlink", "deploy:web:enable_new"
 #after "deploy:symlink", "extras:update_revision"
 
-after "deploy:restart", "extras:update_cron"
-after "deploy:restart", "deploy:web:update_cron_web"
+after "deploy:restart", "deploy:update_cron"
+after "deploy:restart", "deploy:update_cron_web"
 #after "deploy:restart", "extras:restart_delayed_jobs"
 #after "deploy:restart", "deploy:cleanup"
 
