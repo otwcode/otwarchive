@@ -14,15 +14,7 @@ if (typeof jQuery == 'undefined')
 </script>
 
 <script type="text/javascript">$j = jQuery.noConflict();</script>
-<%= javascript_include_tag 'jquery.livequery.min.js' %>
-<%= javascript_include_tag 'rails' %>
-<%= javascript_include_tag 'application' %>
-<%= javascript_include_tag "bootstrap/bootstrap-dropdown.js" %>
-<%= javascript_include_tag 'jquery-shuffle.js' %>
-<%= javascript_include_tag 'jquery.tokeninput.js' %>
-<%= javascript_include_tag 'jquery.trap.min.js' %>
-<%= javascript_include_tag 'ao3modal.min.js' %>
-<%= javascript_include_tag "jquery.cookie" %>
+<%= javascript_include_tag "jquery.livequery.min", "rails", "application", "bootstrap/bootstrap-dropdown.js", "jquery-shuffle", "jquery.tokeninput", "jquery.trap.min", "ao3modal.min", "jquery.cookie", :cache => "otwarchive" %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
