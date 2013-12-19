@@ -59,11 +59,21 @@ Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
+Given /^I have created the tagless gift exchange "([^\"]*)"$/ do |challengename|
+  step %{I have created the tagless gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+end
+
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   step "I fill in gift exchange challenge options"
-    step "I submit"
-  step %{I should see "Challenge was successfully created"}  
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
+end
+
+Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
@@ -461,6 +471,14 @@ end
 When /^I start to sign up for "([^\"]*)" gift exchange$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "Sign Up"}
+end
+
+When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Sign Up"}
+  step %{I fill in "Description" with "random text"}
+  step %{I press "Submit"}
+  step %{I should see "Sign-up was successfully created"}
 end
 
 ### WHEN editing signups
