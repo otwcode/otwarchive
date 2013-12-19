@@ -603,7 +603,7 @@ class Tag < ActiveRecord::Base
     if work_ids.empty? 
       work_ids = all_filtered_work_ids
     end
-    RedisSearchIndexQueue.queue_works(work_ids)
+    RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
   end
 
   # In the case of works, the filter_taggings table already collects all the things tagged
@@ -620,7 +620,7 @@ class Tag < ActiveRecord::Base
     if bookmark_ids.empty?
       bookmark_ids = all_bookmark_ids
     end
-    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
+    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
   end
   
   # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
@@ -818,7 +818,7 @@ class Tag < ActiveRecord::Base
     self.filtered_works.each do |work|        
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
-        RedisSearchIndexQueue.reindex(work)
+        RedisSearchIndexQueue.reindex(work, priority: :low)
       end
     end
   end
@@ -945,7 +945,7 @@ class Tag < ActiveRecord::Base
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filters.delete(tag)
-            RedisSearchIndexQueue.reindex(work)
+            RedisSearchIndexQueue.reindex(work, priority: :low)
           end
         end
       end
