@@ -1396,7 +1396,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "Scott" with password "password"
     And I go to "Scotts Prompt" collection's page
     And I follow "Prompt Form"
-    And I check "Semi-anonymous prompt"
+    And I check "Semi-anonymous Prompt"
     And I press "Submit"
   Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
-    And the "Semi-anonymous prompt" checkbox should be checked
+    And the "Semi-anonymous Prompt" checkbox should be checked

@@ -44,15 +44,15 @@
           <% end %>
         </div>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
-        <p class="datetime">
-          <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
-        </p>
-        <% unless single_comment.edited_at.blank? %>
-          <p class="datetime edited">
-            <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
-          </p>
-        <% end %>
       <% end %><!-- end caching -->
+      <p class="datetime">
+        <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
+      </p>
+      <% unless single_comment.edited_at.blank? %>
+        <p class="datetime edited">
+          <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
+        </p>
+      <% end %>
       <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
       <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
