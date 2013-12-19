@@ -38,11 +38,11 @@
 
 
   <li class="dropdown">
-    <%= link_to ts("Skins"), admin_skins_path %>
+    <%= link_to ts("Skins"), unapproved_skins_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Approval Queue"), admin_skins_path %></li>
-      <li><%= span_if_current ts("Approved Skins"), index_approved_admin_skins_path %></li>
-      <li><%= span_if_current ts("Rejected Skins"), index_rejected_admin_skins_path %></li>
+      <li><%= span_if_current ts("Approval Queue"), unapproved_skins_path %></li>
+      <li><%= span_if_current ts("Approved Skins"), approved_skins_path %></li>
+      <li><%= span_if_current ts("Rejected Skins"), rejected_skins_path %></li>
     </ul>
   </li>
   <li><%= link_to ts("Tag Wrangling"), tag_wranglings_path %></li>

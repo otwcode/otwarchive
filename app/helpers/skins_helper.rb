@@ -53,5 +53,10 @@ module SkinsHelper
         skin.unusable? ||
         !skin.skin_parents.empty?)
   end
+  
+  # Should the current user be able to access skins admin pages?
+  def can_skin?
+    logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_skins_admin?)
+  end
 
 end

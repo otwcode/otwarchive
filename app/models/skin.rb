@@ -165,7 +165,7 @@ class Skin < ActiveRecord::Base
     if self.filename.present?
       return false
     elsif self.official && self.public
-      return true if User.current_user.is_a? Admin
+      return true if User.current_user.is_a? Admin || User.current_user.is_skins_admin?
     elsif self.author == User.current_user
       return true
     else
