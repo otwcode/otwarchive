@@ -8,6 +8,7 @@
       <%= f.text_field :name, :class => "observe_textlength" %>
     <% end %>
     <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
+    <%= hidden_field_tag :old_pseud_name, @old_pseud %>
   </dd>
   
   <dt><%= f.label :is_default, 'Make this name default' %></dt>

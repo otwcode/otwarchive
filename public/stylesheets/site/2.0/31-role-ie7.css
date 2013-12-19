@@ -79,3 +79,26 @@ http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_ma
 .group, .ui-sortable {
   zoom: 1;
 }
+
+/* symbols */
+
+a .symbol { 
+  display: none;
+}
+
+a.help .landmark, a.email .landmark, .restricted .landmark, .flagged .landmark {
+  font-size: 75%;
+  color: #0000CD;
+  height: auto;
+  opacity: 1.0;
+  vertical-align: super;
+  line-height: 1.125em;
+}
+
+.restricted .landmark, .flagged .landmark {
+  vertical-align: baseline;
+}
+
+a.email .landmark, .flagged .landmark {
+  color: #900;
+}

@@ -57,7 +57,7 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("is too long (maximum is %{max} characters)", :max => NAME_LENGTH_MAX)
   validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
   validates_format_of :name,
-    :message => ts('can contain letters, numbers, spaces, underscores, and dashes.'),
+    :message => ts('should only contain letters, numbers, spaces, underscores, and dashes.'),
     :with => /\A[\p{Word} -]+\Z/u
   validates_format_of :name,
     :message => ts('must contain at least one letter or number.'),
