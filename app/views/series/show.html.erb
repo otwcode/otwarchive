@@ -19,10 +19,10 @@
 	<dl class="series meta group">
 
 	  <% if @series.pseuds.many?%>
-      <dt><%= ts('Authors:') %></dt>
+      <dt><%= ts('Creators:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% else %>
-      <dt><%= ts('Author:') %></dt>
+      <dt><%= ts('Creator:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% end %>
 
