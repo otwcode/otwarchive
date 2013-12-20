@@ -509,6 +509,9 @@ class WorksController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
+=begin
+=======
   def merge_work_page
     render :merge_work and return
   end
@@ -554,7 +557,7 @@ class WorksController < ApplicationController
 
 
 
-=begin
+>>>>>>> backupmergetool
   # POST /works/import
   def import
     # check to make sure we have some urls to work with

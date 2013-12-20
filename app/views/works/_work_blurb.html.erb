@@ -1,5 +1,7 @@
 <% # expects "work" %>
+<% if work.redirect_work_id == 0 %>
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb group" id="work_<%= work.id %>" role="article">
+
   <%= render 'works/work_module', :work => work %>
   <% if is_author_of?(work) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
@@ -16,3 +18,4 @@
     </ul>
   <% end %>
 </li>
+<% end %>
