@@ -56,5 +56,7 @@ VCR.cucumber_tags do |t|
 
   t.tags '@work_external_parent'
   t.tags '@work_external_language'
+
+  t.tags '@collection_header_url', :record => :all
 end
 
