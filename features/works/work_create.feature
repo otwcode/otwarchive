@@ -233,7 +233,7 @@ Feature: Create Works
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see a save error message
+    Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
     # Collections are now parsed by collectible.rb which only shows the first failing collection and nothing else
     # And I should see a collection not found message for "collection2"
