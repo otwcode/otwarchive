@@ -47,6 +47,9 @@ class GiftExchange < ActiveRecord::Base
     end
   end
 
+  # make sure that challenge sign-up / close / open dates aren't contradictory
+  validate :validate_signup_dates
+
   #FIXME hack because time zones are being html encoded. couldn't figure out why.
   before_save :fix_time_zone
   
