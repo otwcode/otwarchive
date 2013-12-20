@@ -174,6 +174,11 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  before_update :update_taggings_count
+  def update_taggings_count
+    self.taggings_count = self.taggings.count
+  end
+
   scope :id_only, select("tags.id")
 
   scope :canonical, where(:canonical => true)
