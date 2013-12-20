@@ -30,6 +30,8 @@ class PromptMeme < ActiveRecord::Base
   end
 
   before_validation :update_allowed_values, :update_allowed_prompts
+  # make sure that challenge sign-up / close / open dates aren't contradictory
+  validate :validate_signup_dates
 
   def update_allowed_prompts
     required = self.requests_num_required

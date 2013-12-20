@@ -265,6 +265,36 @@ Feature: Gift Exchange Challenge
     And I follow "Download (CSV)"
     Then I should get a file with ending and type csv
 
+  Scenario: View a signup summary with no tags
+  Given the following activated users exist
+  | login   | password |
+  | user1   | password |
+  | user2   | password |
+  | user3   | password |
+  | user4   | password |
+  | user5   | password |
+  | user6   | password |
+  When I am logged in as "mod1"
+    And I have created the tagless gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
+  When I am logged in as "user1" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user2" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user3" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user4" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user5" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user6" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "mod1"
+    And I go to "My Gift Exchange" collection's page
+    And I follow "Sign-up Summary"
+  Then I should not see "Summary does not appear until at least"
+    And I should see "Tags were not used in this Challenge, so there is no summary to display here."
+
   Scenario: Tagsets show up in Challenge metadata
   Given I am logged in as "mod1"
     And I have created the gift exchange "Cabbot Cove Remixes"
@@ -292,7 +322,18 @@ Feature: Gift Exchange Challenge
     And I should not see "Angela Lansbury"
 
 
-
-
     
 
+  Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to the "Awesome Gift Exchange" signups page
+    And I delete the signup by "myname1"
+  Then I should see "Challenge sign-up was deleted." 
+  When I am logged in as "myname2"
+    And I delete my signup for the gift exchange "Awesome Gift Exchange"
+  Then I should see "Challenge sign-up was deleted."
+  

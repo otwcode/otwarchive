@@ -1,5 +1,6 @@
 Otwarchive::Application.routes.draw do
-  
+  resources :banned_values
+
   #### ERRORS ####
   
   match '/403', :to => 'errors#403'
@@ -92,21 +93,26 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
-  resources :tag_sets, :controller => 'owned_tag_sets' do 
+  resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        put :update_multiple
+        put  :update_multiple
         post :destroy_multiple
+        get  :confirm_destroy_multiple
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :associations, :controller => 'tag_set_associations', :only => [:index] do
       collection do
         put :update_multiple
       end
-    end      
+    end
     member do
       get :batch_load
       put :do_batch_load
+      get :confirm_delete
     end
     collection do
       get :show_options
@@ -134,12 +140,6 @@ Otwarchive::Application.routes.draw do
   namespace :admin do
     resources :activities, :only => [:index, :show]
     resources :settings
-    resources :skins do
-      collection do
-        get :index_rejected
-        get :index_approved
-      end
-    end
     resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
@@ -153,6 +153,8 @@ Otwarchive::Application.routes.draw do
         post :update_user
       end
     end
+
+
     resources :invitations, :controller => 'admin_invitations' do
       collection do
         post :invite_from_queue
@@ -247,10 +249,10 @@ Otwarchive::Application.routes.draw do
       resources :serial_works
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
-    resources :skins, :only => [:index]
+    resources :skins, :only => [:index] 
     resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
-    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
     resources :works do
       collection do
         get :drafts
@@ -268,6 +270,7 @@ Otwarchive::Application.routes.draw do
 
   resources :works do
     collection do
+
       post :import
       get :search
     end
@@ -291,6 +294,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :preview
         post :post
+        get :confirm_delete
       end
       resources :comments
     end
@@ -327,6 +331,7 @@ Otwarchive::Application.routes.draw do
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
@@ -342,6 +347,9 @@ Otwarchive::Application.routes.draw do
       get :list_challenges
       get :list_ge_challenges
       get :list_pm_challenges
+    end
+    member do
+      get :confirm_delete
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections
@@ -369,6 +377,9 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
@@ -471,6 +482,9 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    member do
+      get :confirm_delete
+    end
     resources :collection_items
   end
 
@@ -483,6 +497,10 @@ Otwarchive::Application.routes.draw do
     end
     collection do
       get :unset
+      get :unapproved
+      get :rejected
+      get :approved
+      put :admin_update
     end
   end
   resources :known_issues

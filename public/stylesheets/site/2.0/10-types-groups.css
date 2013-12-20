@@ -1,5 +1,5 @@
 /*==TYPES OF DATA, GROUPS OF DATA 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes.html
 */
 
 /*TYPE: TAGS */
@@ -106,7 +106,7 @@ a.cloud8 {
   width: 100%;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/patterns/pattern-index.html*/
+/*http://otwcode.github.com/docs/front_end_coding/patterns/pattern-index.html*/
 
 dl.index {
   margin: 0.643em 0;
@@ -149,11 +149,6 @@ dl.index dd .userstuff p {
 
 /*TYPES*/
 
-a.rss span {
-  background: url("/images/imageset.png") no-repeat -150px -275px;
-  padding-left: 16px;
-}
-
 a.work {
   font: 100 1.143em/1.125 Georgia, serif;
   margin: 0.5em 0;
@@ -186,8 +181,27 @@ li.relationships {
   margin: 0;
 }
 
-.icon a {
+a.email, a.help, .icon a {
   border: 0;
+}
+
+a.rss, a.help, a.email, .symbol { 
+  display: inline-block; 
+  font-style: normal; 
+  font-variant: normal; 
+  font-weight: normal;
+}
+
+.help .symbol, .restricted .symbol { 
+  color: #0000CD;
+}
+
+.flagged .symbol, .email .symbol {
+  color: #900;
+}
+
+.rss .symbol {
+  color: #FF4500;
 }
 
 .mods li, dl.stats dt, dl.stats dd {
@@ -201,9 +215,9 @@ li.relationships {
 }
 
 dl.stats {
-  text-align: right;
   background: none;
-  margin-top: 0.643em;
+  float: right;
+  margin: 0.813em 0 0.25em;
     box-shadow: none;
 }
 

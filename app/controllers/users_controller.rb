@@ -250,7 +250,7 @@ class UsersController < ApplicationController
     @user.profile.update_attributes(params[:profile_attributes])
     if @user.profile.save
       flash[:notice] = ts("Your profile has been successfully updated")
-      redirect_to edit_user_path(@user)
+      redirect_to user_preferences_path(@user)
     else
       render :edit
     end

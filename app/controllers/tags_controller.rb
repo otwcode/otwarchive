@@ -54,7 +54,7 @@ class TagsController < ApplicationController
   #       to the works controller)
   def show
     @page_subtitle = @tag.name
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(BannedTag) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
@@ -181,7 +181,7 @@ class TagsController < ApplicationController
 
   def edit
     @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(BannedTag) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
@@ -252,11 +252,12 @@ class TagsController < ApplicationController
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      if sort.include?('suggested')
+      # add a secondary sorting key when the main one is not discerning enough
+      if sort.include?('suggested') || sort.include?('taggings_count')
         sort = sort + ", name ASC"
       end
       # this makes sure params[:status] is safe
-      if %w(unfilterable canonical noncanonical unwrangleable).include?(params[:status])
+      if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
         @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)

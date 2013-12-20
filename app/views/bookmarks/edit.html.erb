@@ -15,7 +15,7 @@
 <% if params[:existing] && @bookmark.bookmarkable %>
   <li><%= link_to_user_bookmarkable_bookmarks(@bookmark.bookmarkable) %></li>
 <% end %>
-  <li><%= link_to ts("Show"), @bookmark %></li>
+  <li><%= link_to ts("Show"), bookmark_path(@bookmark) %></li>
   <li><%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %></li>
 </ul>
 <!--/subnav-->

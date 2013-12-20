@@ -1,6 +1,6 @@
 /*  IE_CONDITION: IE6 */
 
-/*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
+/*http://otwcode.github.com/docs/front_end_coding/debugging-ie.html*/
 
 #header {
   z-index: 200;
@@ -261,4 +261,27 @@ span.replied. span.unreviewed, .actions a, .action, .symbol {
 
 .group {
   zoom: 1;
+}
+
+/* symbols */
+
+a .symbol { 
+  display: none;
+}
+
+a.help .landmark, a.email .landmark, .restricted .landmark, .flagged .landmark {
+  font-size: 75%;
+  color: #0000CD;
+  height: auto;
+  opacity: 1.0;
+  vertical-align: super;
+  line-height: 1.125em;
+}
+
+.restricted .landmark, .flagged .landmark {
+  vertical-align: baseline;
+}
+
+a.email .landmark, .flagged .landmark {
+  color: #900;
 }

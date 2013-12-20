@@ -1,9 +1,9 @@
 /*==REGION: FOOTER is #4 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes.html
 */
 
 #footer {
-  background: #900 url("/images/skins/textures/tiles/red-ao3.png");
+  background: #1F0099;
   border-top: 2px solid;
   color: #fff;
   float: left;

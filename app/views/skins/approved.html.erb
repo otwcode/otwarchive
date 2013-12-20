@@ -4,11 +4,11 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render :partial => 'admin/skins/navigation' %>
+<%= render :partial => 'admin_navigation' %>
 <!--/subnav-->
 
 <!--main content-->
-<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
+<%=  form_tag url_for(:controller => 'skins', :action => 'admin_update'), {:method => :put} do %>
 
   <!-- review of approved skins -->
   <fieldset>
@@ -80,6 +80,7 @@
     </table>
   </fieldset>
   
+  <% if logged_in_as_admin? %>
   <fieldset>
     <legend><%= ts("Set Default Archive Skin") %></legend>
     <h3 class="heading"><%= ts("Set Default Archive Skin") %></h3>
@@ -87,9 +88,10 @@
     <p>
       <%= label_tag "set_default", ts("Default Skin Title: ") %>
       <%= text_field_tag "set_default", AdminSetting.default_skin.try(:title), autocomplete_options("site_skins", :autocomplete_token_limit => 1) %>
-      <%= hidden_field_tag :last_updated_by, current_admin.id %>
+   	  <%= hidden_field_tag :last_updated_by, current_admin.id %>
     </p>
   </fieldset>
+  <% end %>
 
   <p class="submit"><%= submit_tag ts("Update") %></p>
 

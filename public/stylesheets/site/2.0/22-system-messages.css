@@ -1,6 +1,6 @@
 /* ==SYSTEM MESSAGES 
 System messages use the following colours:
-* notice => blue: success,messages,additional information, no action needed, can proceed
+* notice => blue: success, messages, additional information, no action needed, can proceed
 * caution => yellow: user may wish to change their mind, action optional, can proceed
 * error => red: mistake, go back and fix this problem, action needed before you can proceed
 */
@@ -71,48 +71,6 @@ ul.notes li, .error ul li {
 
 span.error {
   display: block;
-}
-
-/* SYMBOLS (mostly help button, arguably an action but hey ho); 
-IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot*/
-
-span.symbol {
-  color: #2a547c;
-  font-family: Georgia, serif;
-  border: 1px solid;
-  vertical-align: super;
-    border-radius: 0.75em;
-}
-
-span.symbol span {
-  padding: 0.425em;
-}
-
-.symbols a, .symbol a {
-  text-decoration: none;
-  border: none;
-}
-
-.question a:hover {
-  background: #2a547c;
-  border-color: #d1e1ef;
-  color: #fff;
-  cursor: help;
-}
-
-span.question {
-  background: #d1e1ef;
-  border-color: #2a547c;
-    box-shadow: -1px -1px 2px rgba(0,0,0,0.25);
-}
-
-a.question {
-  border: 0;
-  font-weight: bold;
-}
-
-.heading a.question {
-  font-size: 0.75em;
 }
 
 /*SYMBOLS KEY (help content) */

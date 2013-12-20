@@ -1,29 +1,36 @@
 <% types = @challenge.class::PROMPT_TYPES.select {|t| @challenge.allowed(t) > @challenge.required(t)} %>
 <% unless types.empty? %>
   <noscript>
-    <fieldset>
-      <legend><%= ts("Add Prompts") %></legend>
-      <h3 class="heading"><%= ts("Add Prompts") %></h3>
-      <p class="notes">
-        <%= ts("Since you don't have Javascript turned on, please tell us how many #{types.to_sentence} you want to submit: ") %>
-      </p>
-      <%= form_tag({}, {:method => :get}) do %>
-       <dl>
+    <%= form_tag({}, {:method => :get}) do %>
+      <fieldset>
+        <legend><%= ts("Add Prompts") %></legend>
+        <h3 class="heading"><%= ts("Add Prompts") %></h3>
+        <p class="notes">
+          <%= ts("Since you don't have JavaScript turned on, please tell us how many #{types.to_sentence} you want to submit: ") %>
+        </p>
+        <dl>
           <% types.each do |type| %>
             <dt><%= label_tag "num_#{type}", ts("#{type.classify.pluralize} (Up to %{allowed}):", :allowed => @challenge.allowed(type)) %></dt>
             <dd><%= text_field_tag "num_#{type}", params["num_#{type}"] || @challenge.required(type), :class => "number" %></dd>
           <% end %>
-        <dt class="landmark"><%= ts("Submit") %></dt>
-        <dd class="submit"><%= submit_tag ts('Update Form') %></dd>
-      </dl>
-      <% end %>
-    </fieldset>
+          <dt class="landmark"><%= ts("Submit") %></dt>
+          <dd class="submit"><%= submit_tag ts('Update Form') %></dd>
+        </dl>
+      </fieldset>
+    <% end %>
   </noscript>
 <% end %>
 
 
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
-  <%= error_messages_for @challenge_signup %>
+
+  <p class="required notice"><%= ts('* Required information') %></p>
+  
+  <% unless @challenge_signup.errors.empty? %>
+    <div class="error">
+      <h4 class="heading"><%= ts("There were some problems with this submission. Please correct the mistakes below.") %></h4>
+    </div>
+  <% end %>
 
   <%= render "signup_form_general_information", :form => signup_form %>
 
@@ -39,6 +46,7 @@
     </blockquote>
     
   <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
+      <%= error_messages_for prompt %>
     <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
       <%= render "prompts/prompt_form", :form => prompt_form, :index => index, :required => (index < @challenge.required(prompt_type)) %>
     <% end %>

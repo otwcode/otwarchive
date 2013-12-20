@@ -12,14 +12,13 @@
   	  <% end %>
   	<% end %>
     <% if @tag_set.user_is_owner?(current_user) %>
-      <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
-        :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect the tags already in your set, but it will clear the history of rejected tags and users will be able to nominate again.)'),
+      <li><%= link_to ts("Clear Nominations"), confirm_destroy_multiple_tag_set_nominations_path(@tag_set),
+        :confirm => ts("Are you certain you want to clear nominations for this Tag Set? (This will NOT affect the tags already in your set, but it will clear the history of rejected tags and users will be able to nominate again.)"),
         :method => :post %></li>
       <li><%= span_if_current ts("Batch Load"), batch_load_tag_set_path(@tag_set) %></li>
       <li><%= span_if_current ts("Edit"), edit_tag_set_path(@tag_set) %></li>
-      <li role="button"><%= link_to ts("Delete"), tag_set_path(@tag_set),
-        :confirm => ts('Are you certain you want to delete this tag set? This will delete all nominations and tag set associations as well!'),
-        :method => :delete %></li>
+      <li role="button"><%= link_to ts("Delete"), confirm_delete_tag_set_path(@tag_set),
+        :confirm => ts('Are you certain you want to delete this Tag Set? This will delete all nominations and tag set associations as well!') %></li>
     <% end %>
     <% unless current_page?(tag_set_path(@tag_set)) %>
       <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>  

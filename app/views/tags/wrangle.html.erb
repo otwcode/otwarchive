@@ -11,25 +11,34 @@
 <!--main content-->
 <%
   showing_header = ""
-  if params[:show] && params[:status]
-    showing_header = "Showing " + params[:status] + " " + params[:show]
-  elsif params[:show]
-    showing_header = "Showing " + params[:show]
+  
+  if params[:show]
+    cleaned_show_param = params[:show].singularize.titleize.gsub(' ', '')
+    class_display_name = tag_category_name(cleaned_show_param).pluralize
+    
+    if params[:status]
+      showing_header = ts("Showing %{param_text}", :param_text => params[:status] + " " + class_display_name)
+    else
+      showing_header = ts("Showing %{param_text}", :param_text => class_display_name)
+    end
+  else
+    showing_header = ts("")
   end
 %>
 <% unless showing_header.blank? %>
-<h3 class="heading"><%= showing_header %></h3>
+  <h3 class="heading"><%= showing_header %></h3>
 <% end %>
 
 <% if @tag.is_a?(Fandom) && params[:show] == "relationships" %>
-<p><%= link_to ts('wrangle relationships to characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
+  <p><%= link_to ts('wrangle relationships to characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
 <% end %>
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <fieldset>
-    <h3 class="heading"><%= ts('Add new') %> <%= params[:show] %></h3>
+    <h3 class="heading"><%= ts('Add new') %> <%= class_display_name %></h3>
     <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
       <div title="<%= ts('add new') %>">
+        <!-- Note: here we do want the actual class name (eg: "Freeform") -->
         <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
         <%= hidden_field_tag :show, params[:show] %>
         <%= hidden_field_tag :sort_column, params[:sort_column] %>
@@ -42,16 +51,16 @@
   </fieldset>
 <% end %>
 
-<% # BACK END: Can we make these span_if_current? Front End suspects it would help the wranglers know what they're looking at %>
 <% if params[:show] %>
   <ul class="navigation actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
-    <li><%= link_to ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
-    <li><%= link_to ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
-    <li><%= link_to ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
-    <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
-    <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
-    <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>
+    <li><%= span_if_current ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
+    <li><%= span_if_current ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
+    <li><%= span_if_current ts('synonymous'), url_for(:show => params[:show], :status => 'synonymous'), nil, ts("non-canonical tags that are synonyms") %></li>
+    <li><%= span_if_current ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
+    <li><%= span_if_current ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), nil, ts("non-canonical tags without synonyms") %></li>
+    <li><%= span_if_current ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), nil, ts("tags which were used on the same works but haven't been wrangled yet") %></li>
+    <li><%= span_if_current ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), nil, ts("tags marked unwrangleable") %></li>
   </ul>
 <% end %>
 
@@ -69,84 +78,84 @@
       <caption><%= ts('Tags to Wrangle') %></caption>
       <thead>
         <tr>
-        <th scope="col">
-          <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
-        </th>
-        <% if params[:show] == "relationships" %>
-        <th scope="col"><%= ts('Characters') %></th>
-        <% end %>
-        <th scope="col"><%= ts('Canonical') %></th>
-        <% if params[:status] == "canonical" %>
-        <th scope="col"><%= ts('Metatag') %></th>
-        <% else %>
-        <th scope="col"><%= ts('Synonym') %></th>
-        <% end %>
-        <th scope="col">
-          <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
-        </th>
-        <th scope="col">
-          <%= sort_link ts('Taggings'), :taggings_count, {:desc_default => true} %>
-        </th>
-        <th scope="col"><%= ts('Manage') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for tag in @tags %>
-      <tr>
-        <th scope="row" title="<%= ts('tag') %>">
-          <%= label_tag "canonicals_#{tag.id}", tag.name %>
-        </th>
-
-        <% if params[:show] == "relationships" %>
-        <td title="<%= ts('characters') %>">
-          <% unless !tag.canonical? || tag.characters.empty? %>
-          <ul><%= tag_link_list(tag.characters) %></ul>
+          <th scope="col">
+            <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
+          </th>
+          <% if params[:show] == "relationships" %>
+            <th scope="col"><%= ts('Characters') %></th>
           <% end %>
-        </td>
-        <% end %>
-        <td title="<%= ts('canonical?') %>">
-          <% if tag.canonical? %>
-            <%= ts('Yes') %>
-          <% elsif tag.unwrangleable? %>
-            <%= ts('Unwrangleable') %>
+          <th scope="col"><%= ts('Canonical') %></th>
+          <% if params[:status] == "canonical" %>
+            <th scope="col"><%= ts('Metatag') %></th>
           <% else %>
-            <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
+            <th scope="col"><%= ts('Synonym') %></th>
           <% end %>
-        </td>
-        <td title="<%= ts('metatag or synonym') %>">
-        <% if params[:status] == "canonical" %>
-          <% unless tag.direct_meta_tags.blank? %><%= tag_link_list(tag.direct_meta_tags) %><% end %>
-        <% else %>
-          <% if tag.merger %><%= link_to_tag(tag.merger) %><% end %>
-        <% end %>
-        </td>
-        <td title="<%= ts('created') %>"><%= tag.created_at.to_date %></td>
-        <td title="<%= ts('taggings') %>"><%= tag.taggings_count %></td>
-        <td>
-          <ul class="actions" role="menu">
-            <% unless params[:status] == "unwrangled" %>
-              <li>
-                <label for="remove_associated_<%= tag.id %>">
-                  <%= ts("remove") %>
-                  <%= check_box_tag "remove_associated[]", tag.id, false, :id => "remove_associated_#{tag.id}" %>
-                </label>
-              </li>
+          <th scope="col">
+            <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
+          </th>
+          <th scope="col">
+            <%= sort_link ts('Taggings'), :taggings_count, {:desc_default => true} %>
+          </th>
+          <th scope="col"><%= ts('Manage') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for tag in @tags %>
+          <tr>
+            <th scope="row" title="<%= ts('tag') %>">
+              <%= label_tag "canonicals_#{tag.id}", tag.name %>
+            </th>
+
+            <% if params[:show] == "relationships" %>
+              <td title="<%= ts('characters') %>">
+                <% unless !tag.canonical? || tag.characters.empty? %>
+                  <ul><%= tag_link_list(tag.characters) %></ul>
+                <% end %>
+              </td>
             <% end %>
-            <li><%= link_to ts('edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
-            <li><%= link_to ts('wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
-            <li><%= link_to ts('works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
-          </ul>
-        </td>
-      </tr>
-      <% end %>
-    </tbody>
+            <td title="<%= ts('canonical?') %>">
+              <% if tag.canonical? %>
+                <%= ts('Yes') %>
+              <% elsif tag.unwrangleable? %>
+                <%= ts('Unwrangleable') %>
+              <% else %>
+                <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
+              <% end %>
+            </td>
+            <td title="<%= ts('metatag or synonym') %>">
+              <% if params[:status] == "canonical" %>
+                <% unless tag.direct_meta_tags.blank? %><%= tag_link_list(tag.direct_meta_tags) %><% end %>
+              <% else %>
+                <% if tag.merger %><%= link_to_tag(tag.merger) %><% end %>
+              <% end %>
+            </td>
+            <td title="<%= ts('created') %>"><%= tag.created_at.to_date %></td>
+            <td title="<%= ts('taggings') %>"><%= tag.taggings_count %></td>
+            <td>
+              <ul class="actions" role="menu">
+                <% unless params[:status] == "unwrangled" %>
+                  <li>
+                    <label for="remove_associated_<%= tag.id %>">
+                      <%= ts("remove") %>
+                      <%= check_box_tag "remove_associated[]", tag.id, false, :id => "remove_associated_#{tag.id}" %>
+                    </label>
+                  </li>
+                <% end %>
+                <li><%= link_to ts('edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
+                <li><%= link_to ts('wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+                <li><%= link_to ts('works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
     </table>
     <div>
-    <%= hidden_field_tag :show, params[:show] %>
-    <%= hidden_field_tag :sort_column, params[:sort_column] %>
-    <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
-    <%= hidden_field_tag :page, params[:page] %>
-    <%= hidden_field_tag :status, params[:status] %>
+      <%= hidden_field_tag :show, params[:show] %>
+      <%= hidden_field_tag :sort_column, params[:sort_column] %>
+      <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
+      <%= hidden_field_tag :page, params[:page] %>
+      <%= hidden_field_tag :status, params[:status] %>
     </div>
     <p class="submit actions"><%= submit_tag ts("Wrangle") %></p>
   <% end %>

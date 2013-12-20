@@ -42,14 +42,14 @@ module ApplicationHelper
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
-  def span_if_current(link_to_default_text, path, condition=nil)
+  def span_if_current(link_to_default_text, path, condition=nil, title="")
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
-    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
+    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path, :title => title)
   end
   
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
+    link_to((content_tag(:span, '', :class => "symbol", :'aria-hidden' => "true", :'data-icon' => "\ue0b1") + ts("Subscribe to Feed")), link_to_feed, :class => "rss") 
   end
   
   #1: default shows just the link to help
@@ -124,7 +124,7 @@ module ApplicationHelper
     if @downloading
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
   
@@ -180,7 +180,7 @@ module ApplicationHelper
    end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
-  def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
+  def link_to_help(help_entry, link = '<span class="symbol" aria-hidden="true" data-icon="&#xe0a3;" title="Help"></span><span class="landmark">Help</span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
@@ -358,8 +358,9 @@ module ApplicationHelper
   end
   
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
-      <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"email\">
+      <span class=\"symbol\" aria-hidden=\"true\" data-icon=\"\ue0ce\" title=\"Email #{h(user.login)}\"></span>
+      <span class=\"landmark\">Email #{h(user.login)}</span>
     </a>".html_safe
   end
 

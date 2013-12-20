@@ -1,8 +1,5 @@
 DEFAULT_USER = "testuser"
 DEFAULT_PASSWORD = "password"
-NEW_USER = "newuser"
-
-# GIVEN
 
 Given /^I have no users$/ do
   User.delete_all
@@ -55,6 +52,13 @@ Given /^I am logged in$/ do
   step(%{I am logged in as "#{DEFAULT_USER}"})
 end
 
+When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
+  # " '
+  user = User.find_by_login(login)
+  fill_in "Password", :with => user.activation_code
+end
+
+
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
@@ -79,11 +83,28 @@ Given /^I log out$/ do
   step(%{I follow "Log Out"})
 end
 
+When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  click_button "Create"
+end
+
 Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
   step (%{I am logged in as "#{username}"})
   step(%{"#{username}" creates the pseud "#{pseud}"})
   step("I am logged out")
 end
+
+When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  # TODO: this isn't currently working
+  check "Make this name default"
+  click_button "Create"
+end
+
 
 Given /^"([^\"]*)" deletes their account/ do |username|
   visit user_path(username)
@@ -99,62 +120,6 @@ Given /^I view the people page$/ do
   visit people_path
 end
 
-# WHEN
-
-When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
-  fill_in "Name", :with => newpseud
-  # TODO: this isn't currently working
-  check "Make this name default"
-  click_button "Create"
-end
-
-When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
-  # " '
-  user = User.find_by_login(login)
-  fill_in "Password", :with => user.activation_code
-end
-
-When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
-  fill_in "Name", :with => newpseud
-  click_button "Create"
-end
-
-When(/^I fill in the sign up form with valid data$/) do
-  step(%{I fill in "user_login" with "#{NEW_USER}"})
-  step(%{I fill in "user_email" with "test@archiveofourown.org"})
-  step(%{I fill in "user_password" with "password1"})
-  step(%{I fill in "user_password_confirmation" with "password1"})
-  step(%{I check "user_age_over_13"})
-  step(%{I check "user_terms_of_service"})
-end
-
-# THEN
-
 Then /^I should get the error message for wrong username or password$/ do
   step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
 end
-
-Then (/^I should get an activation email for "(.*?)"$/) do |login|
-  step(%{1 email should be delivered})
-  step(%{the email should contain "Welcome to the Archive of Our Own,"})
-  step(%{the email should contain "#{login}"})
-  step(%{the email should contain "Please activate your account"})
-end
-
-Then (/^I should get a new user activation email$/) do
-  step(%{I should get an activation email for "#{NEW_USER}"})
-end
-
-Then(/^a user account should exist for "(.*?)"$/) do |login|
-   user = User.find_by_login(login)
-   assert !user.blank?
-end
-
-Then(/^a new user account should exist$/) do
-  step(%{a user account should exist for "#{NEW_USER}"})
-end
-

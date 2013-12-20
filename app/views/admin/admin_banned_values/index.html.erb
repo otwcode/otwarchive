@@ -1,0 +1,36 @@
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h ts("Manage Banned Values") %></h2>
+<!--/descriptions-->
+<!--subnav-->
+<ul class="navigation actions" role="navigation">
+
+</ul>
+<!--/subnav--> 
+<!--main content-->
+<%= form_tag :controller => 'admin/admin_banned_values', :action => :create do %>
+  <fieldset class="simple">
+	<h3 class="heading">Ban Something</h3>
+  <p>Send an invite code to the following email address: 
+    <%= text_field_tag "invitation[invitee_email]", (@invitation.try(:invitee_email) || ""), :title => ts("invite by email") %>
+    <span class="submit actions"><%= submit_tag ts('Ban Something')  %></span>
+  </p>
+</fieldset>
+<% end %>
+  
+
+
+ <%= form_tag url_for(:controller => 'admin/admin_banned_values', :action => 'find'), :method => :get do %>
+        <fieldset>
+	<h3 class="heading"><%=h 'Track invitations' %></h3>
+<dl>
+      <dt><%= label_tag :user_name, ts('Enter a banned user name') %>:</dt>
+      <dd><%= text_field_tag :user_name  %></dd>
+      <dt><%= label_tag :pseud, ts('Enter an banned pseud') %>:</dt>
+      <dd><%= text_field_tag :token  %></dd>
+      <dt><%= label_tag :email, ts('Enter a banned email address') %>:</dt>
+      <dd><%= text_field_tag :email  %></dd>
+    <dt class="landmark">Submit</dt>
+    <dd class="submit actions"><%= submit_tag "Go" %></dd>
+</dl>
+</fieldset>
+  <% end %>
+<!--/content-->

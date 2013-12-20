@@ -8,8 +8,17 @@
   <div class="header module">
 
     <h4 class="heading" title="title">
-      <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
-      <%= ts('by') %>
+      <% if (work.unrevealed? || work.anonymous?) && is_author_of?(work) %>
+        <span class="status">
+          <% if work.unrevealed? %>
+            <%= ts("Unrevealed:") %>
+          <% elsif work.anonymous? %>
+            <%= ts("Anonymous:") %>
+          <% end %>
+        <% end %>
+      </span>
+  	  <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
+   		<%= ts('by') %>
         
       <!-- do not cache -->
       <%= byline(work) %>
@@ -22,8 +31,18 @@
       <% unless work.recipients.blank? %>
         <%= ts("for") %> <%= recipients_link(work) %>
       <% end %>
-      <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-      <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <% if work.restricted %>
+        <span class="restricted">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+          <span class="landmark"><%= ts("Restricted") %></span>
+        </span>
+      <% end %>
+      <% if work.hidden_by_admin %>
+        <span class="flagged">
+          <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+          <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+        </span>
+      <% end %>
     </h4>
 
   	<h5 class="fandoms heading" title="fandom">

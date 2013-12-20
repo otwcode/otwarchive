@@ -1,13 +1,18 @@
 class SeriesController < ApplicationController 
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy ] 
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ] 
+  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy, :confirm_delete ] 
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ] 
   before_filter :check_visibility, :only => [:show]
   
   def load_series
+    if Series.find_by_id(params[:id]).nil?
+    setflash; flash[:error] = ts("We're sorry, but that series does not exist.")
+    redirect_back_or_default works_path and return
+    else
     @series = Series.find(params[:id])
     @check_ownership_of = @series
-    @check_visibility_of = @series  
+    @check_visibility_of = @series
+    end
   end
   
   # GET /series
@@ -146,6 +151,10 @@ class SeriesController < ApplicationController
     end
   end
 
+  # GET /series/1/confirm_delete
+  def confirm_delete
+  end
+  
   # DELETE /series/1
   # DELETE /series/1.xml
   def destroy

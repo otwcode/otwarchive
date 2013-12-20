@@ -1,5 +1,5 @@
 /*==ACTIONS: buttons!
-http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
+http://otwcode.github.com/docs/front_end_coding/patterns/actions.html
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -10,7 +10,7 @@ input[type="submit"], button
 }
 
 ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
-  padding: 0.429em 0.25em 0.25em 0;
+  padding: 0.5em 0.25em 0.25em 0;
   float: right;
   text-align: center;
 }
@@ -141,10 +141,7 @@ th .actions, td .actions {
 
 dl.stats + h6 + .actions {
   float: left;
-}
-
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {

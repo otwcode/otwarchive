@@ -1,5 +1,5 @@
 /*==REGION: DASHBOARD is #2 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes.html
 */
 
 #dashboard {
@@ -49,8 +49,8 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 
 #dashboard.own {
   background: transparent;
-  border-top: 15px solid #900;
-  border-bottom: 15px solid #900;
+  border-top: 15px solid #4A4AFA;
+  border-bottom: 15px solid #4A4AFA;
     opacity: 1.0;
     border-radius: 0.25em;
 }

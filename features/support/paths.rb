@@ -22,6 +22,8 @@ module NavigationHelpers
     when /^the search people page$/i
       Pseud.tire.index.refresh
       search_people_path
+    when /^the bookmarks page$/i
+      bookmarks_path
 
     # the following are examples using path_to_pickle
 
@@ -59,6 +61,8 @@ module NavigationHelpers
       user_bookmarks_path(:user_id => $1)
     when /^(.*)'s pseuds page$/i
       user_pseuds_path(:user_id => $1)
+    when /^(.*)'s invitations page$/i
+      user_invitations_path(:user_id => $1)
     when /^(.*)'s reading page$/i
       user_readings_path(:user_id => $1)
     when /^(.*)'s series page$/i
@@ -93,8 +97,8 @@ module NavigationHelpers
       new_work_path(:import => 'true')
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
-    when /^(.*)'s skin page/
-      skins_path(:user_id => $1)
+    when /the skins admin page/
+      unapproved_skins_path
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/

@@ -57,7 +57,7 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("is too long (maximum is %{max} characters)", :max => NAME_LENGTH_MAX)
   validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
   validates_format_of :name,
-    :message => ts('can contain letters, numbers, spaces, underscores, and dashes.'),
+    :message => ts('should only contain letters, numbers, spaces, underscores, and dashes.'),
     :with => /\A[\p{Word} -]+\Z/u
   validates_format_of :name,
     :message => ts('must contain at least one letter or number.'),
@@ -70,6 +70,16 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
+
+
+  validate :is_pseud_banned
+  def is_pseud_banned
+    temp_value = BannedValue.find_by_name_and_ban_type(self.name,3)
+    if  temp_value != nil
+      errors.add(:base, ts("This pseud has been reserved. Please choose another. If you believe this is an error contact support."))
+    end
+  end
+
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").

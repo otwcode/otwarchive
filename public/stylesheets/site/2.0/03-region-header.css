@@ -1,5 +1,5 @@
 /*==REGION: HEADER is #1 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes.html
 notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
 
 #header input, #header #search>*, #header #search .submit {
@@ -139,7 +139,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 }
 
 #header .user a:hover, #header .user a:focus, #header .user .current {
-  color: #900;
+  color: #00008B;
     border-radius: 0.25em;
 }
 
@@ -226,7 +226,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 /* primary navigation */
 
 #header .primary {
-  background: #900 url(/images/skins/textures/tiles/red-ao3.png);
+  background: #1F0099;
   padding: 0 0;
   width: 100%;
     box-shadow: inset 0 -6px 10px rgba(0, 0, 0, 0.35),

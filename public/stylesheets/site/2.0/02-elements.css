@@ -92,7 +92,7 @@ h5 {
 
 h6 {
   font-size: 0.875em;
-  font-weight: 900;
+  font-weight: 4A4AFA;
   line-height: 1.5;
   margin: 1.5em 0;
 }
@@ -183,7 +183,7 @@ sup {
   line-height: 0;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/accessible-tables.html*/
+/*http://otwcode.github.com/docs/front_end_coding/accessible-tables.html*/
 
 table {
   background: #ddd;

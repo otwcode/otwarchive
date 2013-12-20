@@ -1,5 +1,5 @@
 /*==GROUP: COMMENTS
-http://media.transformativeworks.org/training/front_end_coding/patterns/comments
+http://otwcode.github.com/docs/front_end_coding/patterns/comments.html
 
 Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list. 
 The comment form generally belongs to the class "post".
@@ -52,10 +52,6 @@ div.comment, li.comment {
   clear: none;
 }
 
-.comment ul {
-  margin-top: -1.286em;
-}
-
 .thread .thread {
   margin-left: 3em;
 }
@@ -65,10 +61,14 @@ div.comment, li.comment {
   margin: 0;
 }
 
-fieldset.comments, .comment blockquote.userstuff {
+fieldset.comments {
   background: transparent;
   border: none;
     box-shadow: none;
+}
+
+.comment .userstuff {
+  margin-top: 1em;
 }
 
 .comment fieldset {
@@ -76,7 +76,7 @@ fieldset.comments, .comment blockquote.userstuff {
 }
 
 .comment .datetime {
-  margin: 0 11em 0 1.286em;
+  margin: 1.286em 0.643em 0;
 }
 
 /*END== */

@@ -3,7 +3,7 @@
 <%= render "users/header_navigation" %>
 
 <p class="caution">
-  Your edits will be applied to <strong>all</strong> of the following works:
+  <%= ts("Your edits will be applied to") %> <strong><%= ts("all") %></strong> <%= ts("of the following works:") %>
 </p>
 
 <%= render "works/work_abbreviated_list", :works => @works %>
@@ -21,8 +21,8 @@
   </div>
   
   <fieldset>
-    <legend>Associations</legend>
-    <h3 class="landmark">Associations</h3>
+    <legend><%= ts("Associations") %></legend>
+    <h3 class="landmark heading"><%= ts("Associations") %></h3>
     <dl>
       <%= render "works/work_form_pseuds", :form => form, :works => @works %>
 
@@ -32,8 +32,8 @@
   </fieldset>
   
   <fieldset>
-    <legend>Settings</legend>
-    <h3 class="landmark">Settings</h3>
+    <legend><%= ts("Settings") %></legend>
+    <h3 class="landmark heading"><%= ts("Settings") %></h3>
     <dl>
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
@@ -60,7 +60,7 @@
         <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
       </dd>
 
-      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dt><%= form.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, 
             {:include_blank => true} %>
@@ -69,8 +69,8 @@
   </fieldset>
   
   <p class="caution">
-    Your edits will <strong>replace</strong> the existing values!
-    (If you leave a field blank it will remain unchanged.)
+    <%= ts("Your edits will") %> <strong><%= ts("replace") %></strong> <%= ts("the existing values!
+    (If you leave a field blank it will remain unchanged.)") %>
   </p>
   
   <p class="submit actions"><%= submit_tag ts("Update All Works"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>

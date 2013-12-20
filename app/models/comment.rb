@@ -23,7 +23,15 @@ class Comment < ActiveRecord::Base
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
-  
+
+  validate :is_email_banned
+  def is_email_banned
+    temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
+    if  temp_value != nil
+      errors.add(:base, ts("The use of this email address for leaving guest comments has been restricted. Please sign in or contact Support via the Support & Feedback form linked at the bottom of this page"))
+    end
+  end
+
   validates :content, :uniqueness => {:scope => [:commentable_id, :commentable_type, :name, :email, :pseud_id], :message => ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")}
 
   scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }

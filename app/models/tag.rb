@@ -19,7 +19,10 @@ class Tag < ActiveRecord::Base
 
   # these are tags which have been created by users
   # the order is important, and it is the order in which they appear in the tag wrangling interface
-  USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
+  # note: need two-item arrays to allow for display names that are not identical to the class name (eg: "Additional tag" instead of "Freeform")
+  # warning: the constant string is the actual class name and mustn't be translated
+  # TODO: Find out why putting Fandom into an array like the other items results in catastrophic failures /o\
+  USER_DEFINED = ['Fandom', [Character::NAME, 'Character'], [Relationship::NAME, 'Relationship'], [Freeform::NAME, 'Freeform']]
 
   acts_as_commentable
   def commentable_name
@@ -171,11 +174,17 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  before_update :update_taggings_count
+  def update_taggings_count
+    self.taggings_count = self.taggings.count
+  end
+
   scope :id_only, select("tags.id")
 
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
   scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
   scope :unwrangleable, where(:unwrangleable => true)
 
@@ -542,8 +551,16 @@ class Tag < ActiveRecord::Base
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
+  def class_display_name
+    self.class::NAME
+  end
+
   def unwrangled?
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
+  end
+
+  def is_user_defined?
+    Tag::USER_DEFINED.include?(self.class.name) || Tag::USER_DEFINED.rassoc(self.class.name)!=nil
   end
 
   # sort tags by name
@@ -603,7 +620,7 @@ class Tag < ActiveRecord::Base
     if work_ids.empty? 
       work_ids = all_filtered_work_ids
     end
-    RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
+    RedisSearchIndexQueue.queue_works(work_ids)
   end
 
   # In the case of works, the filter_taggings table already collects all the things tagged
@@ -620,7 +637,7 @@ class Tag < ActiveRecord::Base
     if bookmark_ids.empty?
       bookmark_ids = all_bookmark_ids
     end
-    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
+    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
   end
   
   # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
@@ -818,7 +835,7 @@ class Tag < ActiveRecord::Base
     self.filtered_works.each do |work|        
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
-        RedisSearchIndexQueue.reindex(work, priority: :low)
+        RedisSearchIndexQueue.reindex(work)
       end
     end
   end
@@ -829,7 +846,8 @@ class Tag < ActiveRecord::Base
       current_filter = self.filter
       # we only need to cache values for user-defined tags
       # because they're the only ones we access
-      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+      # note: is_user_defined? unfortunately doesn't work here
+      if current_filter && Tag::USER_DEFINED.include?(current_filter.class.to_s)
         attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
           :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
         if current_filter.filter_count
@@ -866,7 +884,7 @@ class Tag < ActiveRecord::Base
   end
 
   def banned
-    self.is_a?(Banned)
+    self.is_a?(BannedTag)
   end
 
   def synonyms
@@ -945,7 +963,7 @@ class Tag < ActiveRecord::Base
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
             work.filters.delete(tag)
-            RedisSearchIndexQueue.reindex(work, priority: :low)
+            RedisSearchIndexQueue.reindex(work)
           end
         end
       end

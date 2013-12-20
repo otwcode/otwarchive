@@ -215,6 +215,26 @@ class User < ActiveRecord::Base
 
   validates :email, :email_veracity => true
 
+
+
+  validate :is_username_banned
+    def is_username_banned
+      temp_value = BannedValue.find_by_name_and_ban_type(self.login,2)
+      if  temp_value != nil
+        errors.add(:base, ts("The chosen nickname has been restricted. Please select another."))
+      end
+    end
+
+  validate :is_email_banned
+  def is_email_banned
+    temp_value = BannedValue.find_by_name_and_ban_type(self.email,1)
+    if  temp_value != nil
+       errors.add(:base, ts("Creating an account with this email address has been restricted. Please choose another or contact support via the Support & Feedback form linked at the bottom of this page."))
+    end
+  end
+
+
+
   # Virtual attribute for age check and terms of service
   attr_accessor :age_over_13
   attr_accessor :terms_of_service
@@ -363,6 +383,10 @@ class User < ActiveRecord::Base
 
   private
 
+  ########################################################################
+  # ROLES
+  ########################################################################
+  
   # Set the roles for this user
   def set_roles(role_list)
     if role_list
@@ -414,6 +438,20 @@ class User < ActiveRecord::Base
   # Set archivist role for this user and log change
   def archivist=(should_be_archivist)
     set_role('archivist', should_be_archivist == '1')
+  end
+  
+  # Is this user an authorized skins admin?
+  def skins_admin
+    self.is_skins_admin?
+  end
+  
+  def is_skins_admin?
+    has_role?(:skins_admin)
+  end
+  
+  # Set skins admin role for this user and log change
+  def skins_admin=(should_be_skins_admin)
+    set_role('skins_admin', should_be_skins_admin == '1')
   end
 
   # Creates log item tracking changes to user

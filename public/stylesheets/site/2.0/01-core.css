@@ -1,5 +1,17 @@
 /*==CORE:basic functional layout
-http://media.transformativeworks.org/training/front_end_coding/css-shorthand.html */
+http://otwcode.github.com/docs/front_end_coding/css-shorthand.html */
+
+@font-face {
+	font-family: 'Entypo-for-Archive-of-Our-Own';
+	src:url('/fonts/Entypo/fonts/Entypo-for-Archive-of-Our-Own.eot');
+	src:url('/fonts/Entypo/fonts/Entypo-for-Archive-of-Our-Own.eot?#iefix') format('embedded-opentype'),
+	  url('/fonts/Entypo/Entypo-for-Archive-of-Our-Own.svg#Entypo-for-Archive-of-Our-Own') format('svg'),
+		url('/fonts/Entypo/fonts/Entypo-for-Archive-of-Our-Own.woff') format('woff'),
+		url('/fonts/Entypo/fonts/Entypo-for-Archive-of-Our-Own.ttf') format('truetype');
+	font-style: normal;
+	font-variant: normal;
+  font-weight: normal;
+}
 
 body, .toggled form, .dynamic form, .secondary, .dropdown {
   background: #fff;

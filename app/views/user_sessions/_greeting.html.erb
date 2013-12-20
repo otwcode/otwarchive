@@ -7,7 +7,7 @@
         <ul class="menu" role="menu">
           <li><%= span_if_current ts("My Dashboard"), user_path(current_user) %></li>
           <% if @current_user.subscriptions.count > 0 %>
-            <li><%= span_if_current ts("My Subscriptions (%{subscription_number})", :subscription_number => @current_user.subscriptions.count), user_subscriptions_path(current_user) %></li>
+            <li><%= span_if_current ts("My Subscriptions"), user_subscriptions_path(current_user) %></li>
           <% end %>
           <% if @current_user.visible_work_count > 0 %>
             <li><%= span_if_current ts("My Works (%{works_number})", :works_number => @current_user.visible_work_count), user_works_path(@current_user) %></li>
@@ -27,12 +27,15 @@
           <% if @current_user.preference.try(:history_enabled?) %>
             <li><%= span_if_current ts("My History"), user_readings_path(current_user) %></li>
           <% end %>
-          <li><%= span_if_current ts("Preferences"), user_preferences_path(current_user) %></li>
+          <li><%= span_if_current ts("My Preferences"), user_preferences_path(current_user) %></li>
           <% if permit?('opendoors') %>
             <li><%= span_if_current ts("Open Doors"), opendoors_tools_path %></li>
           <% end %>
           <% if current_user.is_tag_wrangler? %>
             <li><%= span_if_current ts("Tag Wrangling"), tag_wrangler_path(current_user) %></li>
+          <% end %>
+          <% if current_user.is_skins_admin? %>
+            <li><%= span_if_current ts("Skins Administration"), unapproved_skins_path %></li>
           <% end %>
           <% # one day, an if permit?('translator') || permit?("translation_admin") link will go here %>
         </ul>

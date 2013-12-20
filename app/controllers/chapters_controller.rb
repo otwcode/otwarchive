@@ -1,10 +1,10 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  before_filter :users_only, :except => [ :index, :show, :destroy, :confirm_delete ]
   before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
@@ -42,8 +42,8 @@ class ChaptersController < ApplicationController
     if !@chapters.include?(@chapter)
       access_denied
     else
+      chapter_position = @chapters.index(@chapter)
       if @chapters.length > 1
-        chapter_position = @chapters.index(@chapter)
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
@@ -207,6 +207,10 @@ class ChaptersController < ApplicationController
     end
   end
 
+  # GET /work/:work_id/chapters/1/confirm_delete
+  def confirm_delete
+  end
+  
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy

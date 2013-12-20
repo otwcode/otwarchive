@@ -2,66 +2,58 @@
 <h2 class="heading">
 	<%= @series.title %>
 	<% if @series.restricted %>
-		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+	  <span class="restricted">
+      <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+      <span class="landmark"><%= ts("Restricted") %></span>
+    </span>
 	<% end %>
+	<% if @series.hidden_by_admin %>
+    <span class="flagged">
+      <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+      <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+    </span>
+  <% end %>
 </h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <% if logged_in? %>
-<ul class="navigation actions" role="navigation">
-  <% if @subscription %>
-    <li>
-      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
-    </li>
-  <% end %>
-  <% @bookmark ||= bookmark_if_exists(@series) %>
-  <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
-  <% if is_author_of?(@series) %>
-    <li><%= link_to ts("Edit"), edit_series_path(@series) %></li>
-    <li><%= link_to ts('Delete Series'), @series, :confirm => ts('Are you sure you want to delete this series? This will NOT delete the individual works.'), :method => :delete %></li>
-    <li><%= link_to ts("Reorder Series"), manage_series_path(@series) %></li>
-    <li><%= link_to ts('Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>    	
-    <% unless (@series.pseuds - current_user.pseuds).empty? %>
-      <li><%= link_to ts('Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) %></li>
-    <% end %>
-  <% end %>
-</ul>
+  <%= render "series/series_navigation" %>
 <% end %>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading">Series Metadata</h3>
+<h3 class="landmark heading"><%= ts("Series Metadata") %></h3>
 <div class="wrapper">
 	<dl class="series meta group">
-    <dt><%= 'Series begun:' %></dt>
+    <dt><%= ts("Series Begun:") %></dt>
     <dd><%= @series.published_at.to_date %></dd>
-    <dt><%= 'Series updated: ' %></dt>
+    <dt><%= ts("Series Updated:") %></dt>
     <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
 
-    <dt><%= 'Works included:' %></dt>
+    <dt><%= ts("Works Included:") %></dt>
     <dd><%= @series.visible_work_count %></dd>
 
-    <dt><%= 'Complete:' %></dt>
-    <dd><%= @series.complete? ? "Yes" : "No" %></dd>
+    <dt><%= ts("Complete:") %></dt>
+    <dd><%= @series.complete? ? ts("Yes") : ts("No") %></dd>
 
-    <dt><%= 'Word count:' %></dt>
+    <dt><%= ts("Word Count:") %></dt>
     <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
 
     <% if @series.pseuds.many?%>
-      <dt><%= 'Authors:' %></dt>
+      <dt><%= ts("Authors:") %></dt>
       <dd><%= byline(@series) %></dd>
     <% else %>
-      <dt><%= 'Author:' %></dt>
+      <dt><%= ts("Author:") %></dt>
       <dd><%= byline(@series) %></dd>
     <% end %>
 
   <% unless @series.summary.blank? %>
-      <dt><%= 'Description:' %></dt>
+      <dt><%= ts("Description:") %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
 	<% end %>
 	<% unless @series.notes.blank? %>
-      <dt><%= 'Notes:' %></dt>
+      <dt><%= ts("Notes:") %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
 	<% end %>
 </dl>
@@ -81,7 +73,7 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>
 
-<h3 class="landmark heading">Listing Series</h3>
+<h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
   <% for serial in @serial_works %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>

@@ -201,7 +201,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-    
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -210,8 +210,8 @@ class WorksController < ApplicationController
     end
 
     # Users must explicitly okay viewing of entire work
-    if @work.number_of_posted_chapters > 1
-      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+    if @work.chaptered?
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
@@ -509,6 +509,7 @@ class WorksController < ApplicationController
     end
   end
 
+=begin
   # POST /works/import
   def import
     # check to make sure we have some urls to work with
@@ -550,6 +551,62 @@ class WorksController < ApplicationController
       :category => params[:work][:category_string],
       :freeform => params[:work][:freeform_string],
       :encoding => params[:encoding]
+    }
+
+    # now let's do the import
+    if params[:import_multiple] == "works" && @urls.length > 1
+      import_multiple(@urls, options)
+    else # a single work possibly with multiple chapters
+      import_single(@urls, options)
+    end
+
+  end
+=end
+
+
+  # POST /works/import
+  def import
+    # check to make sure we have some urls to work with
+    @urls = params[:urls].split
+    unless @urls.length > 0
+      flash.now[:error] = ts("Did you want to enter a URL?")
+      render :new_import and return
+    end
+
+    # is this an archivist importing?
+    if params[:importing_for_others] && !current_user.archivist
+      flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
+      render :new_import and return
+    end
+
+    # make sure we're not importing too many at once
+    if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
+      flash.now[:error] = ts("You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+      render :new_import and return
+    elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
+      flash.now[:error] = ts("You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
+      render :new_import and return
+    end
+
+    # otherwise let's build the options
+    if params[:pseuds_to_apply]
+      pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
+    end
+    options = {:pseuds => pseuds_to_apply,
+               :post_without_preview => params[:post_without_preview],
+               :importing_for_others => params[:importing_for_others],
+               :restricted => params[:restricted],
+               :override_tags => params[:override_tags],
+               :fandom => params[:work][:fandom_string],
+               :warning => params[:work][:warning_strings],
+               :character => params[:work][:character_string],
+               :rating => params[:work][:rating_string],
+               :relationship => params[:work][:relationship_string],
+               :category => params[:work][:category_string],
+               :freeform => params[:work][:freeform_string],
+               :encoding => params[:encoding],
+               :external_author_name => params[:external_author_name],
+               :external_author_email => params[:external_author_email]
     }
 
     # now let's do the import

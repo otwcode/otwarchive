@@ -1,5 +1,5 @@
 /*==GROUP: BLURB
-http://media.transformativeworks.org/training/front_end_coding/blurb.html
+http://otwcode.github.com/docs/front_end_coding/patterns/blurb.html
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -67,6 +67,10 @@ li.blurb:after {
 
 .blurb .heading {
   display: block;
+}
+
+.blurb dl.stats + .heading.landmark { 
+  display: inline;
 }
 
 /* ==START icon block rules*/
@@ -221,10 +225,6 @@ li.blurb:after {
   text-align: justify;
 }
 
-.blurb.own dl.stats {
-  padding-left: 12.15em;
-}
-
 /*modification: PICTURE 
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
@@ -288,6 +288,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
+  z-index: 1;
 }
 
 .bookmark .status span, .bookmark .status a {

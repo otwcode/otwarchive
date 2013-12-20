@@ -10,23 +10,39 @@
       <li><%= span_if_current ts("Manage Queue"), manage_invite_requests_path %></li>
     </ul>
   </li>
+
+
+
+
+
+
+
   <li><%= link_to ts("Abuse Reports"), abuse_reports_path %></li>
   <li class="dropdown">
     <%= link_to ts("Admin Posts"), admin_posts_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("AO3 News"), admin_posts_path %>
+      <li><%= span_if_current ts("AO3 News"), admin_posts_path %></li>
       <li><%= span_if_current ts("Post AO3 News"), new_admin_post_path %></li>
       <li><%= span_if_current ts("Archive FAQ"), archive_faqs_path %></li>
       <li><%= span_if_current ts("Known Issues"), known_issues_path %></li>
     </ul>
   </li>
-  <li><%= link_to ts("Settings"), admin_settings_path %></li>
+
   <li class="dropdown">
-    <%= link_to ts("Skins"), admin_skins_path %>
+    <%= link_to ts("Settings"), admin_settings_path %>
     <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Approval Queue"), admin_skins_path %></li>
-      <li><%= span_if_current ts("Approved Skins"), index_approved_admin_skins_path %></li>
-      <li><%= span_if_current ts("Rejected Skins"), index_rejected_admin_skins_path %></li>
+      <li><%= span_if_current ts("Archive Settings"), admin_settings_path %></li>
+      <li><%= span_if_current ts("Banned Values"), banned_values_path %></li>
+     </ul>
+  </li>
+
+
+  <li class="dropdown">
+    <%= link_to ts("Skins"), unapproved_skins_path %>
+    <ul class="menu" role="menu">
+      <li><%= span_if_current ts("Approval Queue"), unapproved_skins_path %></li>
+      <li><%= span_if_current ts("Approved Skins"), approved_skins_path %></li>
+      <li><%= span_if_current ts("Rejected Skins"), rejected_skins_path %></li>
     </ul>
   </li>
   <li><%= link_to ts("Tag Wrangling"), tag_wranglings_path %></li>

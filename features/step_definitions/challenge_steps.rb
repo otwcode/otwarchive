@@ -59,11 +59,21 @@ Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
+Given /^I have created the tagless gift exchange "([^\"]*)"$/ do |challengename|
+  step %{I have created the tagless gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+end
+
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   step "I fill in gift exchange challenge options"
-    step "I submit"
-  step %{I should see "Challenge was successfully created"}  
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
+end
+
+Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
@@ -463,6 +473,14 @@ When /^I start to sign up for "([^\"]*)" gift exchange$/ do |title|
   step %{I follow "Sign Up"}
 end
 
+When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Sign Up"}
+  step %{I fill in "Description" with "random text"}
+  step %{I press "Submit"}
+  step %{I should see "Sign-up was successfully created"}
+end
+
 ### WHEN editing signups
 
 When /^I add prompt (\d+)$/ do |number|
@@ -641,11 +659,16 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   step %{I should see an update confirmation message}
 end
 
-When /^I delete my signup for "([^\"]*)"$/ do |title|
+When /^I delete my signup for the prompt meme "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "My Prompts"}
-  step %{I follow "Delete Sign-up"}
-  step %{I should see "Challenge sign-up was deleted."}
+  step %{I delete the signup}
+end
+
+When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "My Sign-up"}
+  step %{I delete the signup}
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
@@ -673,6 +696,17 @@ When /^I edit the first prompt$/ do
   #step %{I follow "Edit Prompt"}
 end
 
+When /^I delete the signup by "([^\"]*)"$/ do |participant|
+  click_link("#{participant}")
+  step %{I delete the signup}
+end
+
+When /^I delete the signup$/ do
+  step %{I follow "Delete Sign-up"}
+  step %{I press "Yes, Delete Sign-up"}
+  step %{I should see "Challenge sign-up was deleted."}
+end
+
 When /^I edit the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   step %{I follow "Prompts ("}
@@ -687,6 +721,16 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
     step %{I uncheck "This collection is unrevealed"}
     step %{I press "Update"}
 end
+
+When /^I approve the first item in the collection "([^\"]*)"$/ do |collection|
+  collection = Collection.find_by_title(collection)
+  collection_item = collection.collection_items.first.id
+  visit collection_path(collection)
+  step %{I follow "Manage Items"}
+  step %{I select "Approved" from "collection_items_#{collection_item}_collection_approval_status"}
+  step %{I press "Submit"}
+end
+
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
