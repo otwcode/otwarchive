@@ -4,7 +4,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes.html
 
 /*TYPE: TAGS */
 
-a.tag, .tags a {
+a.tag {
   color: #111;
   line-height: 1.5;
   text-decoration: none;
