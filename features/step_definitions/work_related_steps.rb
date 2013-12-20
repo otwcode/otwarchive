@@ -50,6 +50,7 @@ end
 
 When /^I draft a translation$/ do
   step %{I go to the new work page}
+    step %{I check "No Archive Warnings Apply"}
     step %{I fill in "Fandoms" with "Stargate"}
     step %{I fill in "Work Title" with "Worldbuilding Translated"}
     step %{I fill in "content" with "That could be an amusing crossover."}
