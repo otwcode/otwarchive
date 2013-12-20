@@ -1,4 +1,4 @@
-<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"  
+<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"
 is verbose-->
 <% if is_offer %>
   <% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
@@ -32,13 +32,18 @@ is verbose-->
     	<p class="note">
     	  <%= ts('If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
     	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!') %>
-    	</p> 
+    	</p>
     <% end %>
     <dl>
+      <% if @challenge.new_record? || !@challenge.collection.prompts.exists? %>
+        <p class="notice"><%= ts("These settings can only be changed until prompts are added.") %></p>
+      <% elsif %>
+        <p class="notice"><%= ts("Prompts have been added so these settings can no longer be changed.") %></p>
+      <% end %>
       <% if type == "gift_exchange" %>
-        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true) %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true,  (@challenge.new_record? || !@challenge.collection.prompts.exists?)) %>
       <% else %>
-        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false) %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false,  (@challenge.new_record? || !@challenge.collection.prompts.exists?)) %>
       <% end %>
     </dl>
   </fieldset>
@@ -50,7 +55,7 @@ is verbose-->
       <p class="note">
      <%= link_to(ts("Tag sets"), tag_sets_path) %> <%= ts("show what tags can be used in
         your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.") %>
-      </p> 
+      </p>
       <dl>
         <% unless restriction.owned_tag_sets.empty? %>
           <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets:") %></dt>

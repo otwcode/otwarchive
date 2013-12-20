@@ -306,14 +306,11 @@ class WorksController < ApplicationController
           render :_choose_coauthor
         else
           unless @work.has_required_tags?
-            error_message = "Please add all required tags."
             if @work.fandoms.blank?
-              error_message << " Fandom is missing."
+              @work.errors.add(:base, "Please add all required tags. Fandom is missing.")
+            else
+              @work.errors.add(:base, "Required tags are missing.")
             end
-            if @work.warnings.blank?
-              error_message << " Warning is missing."
-            end
-            @work.errors.add(:base, error_message)           
           end
           render :new
         end
@@ -512,6 +509,9 @@ class WorksController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
+=begin
+=======
   def merge_work_page
     render :merge_work and return
   end
@@ -557,7 +557,7 @@ class WorksController < ApplicationController
 
 
 
-=begin
+>>>>>>> backupmergetool
   # POST /works/import
   def import
     # check to make sure we have some urls to work with
