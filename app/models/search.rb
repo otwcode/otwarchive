@@ -108,4 +108,24 @@ class Search < ActiveRecord::Base
     { gte: a, lte: a2 }
   end
   
+  def escape_slashes(word)
+    word.gsub!('/', '\\/')
+    word
+  end
+  
+  def escape_reserved_characters(word)
+    word.gsub!('/', '\\/')
+    word.gsub!('!', '\\!')
+    word.gsub!('+', '\\+')
+    word.gsub!('-', '\\-')
+    word.gsub!('?', '\\?')
+    word.gsub!("~", '\\~')
+    word.gsub!("(", '\\(')
+    word.gsub!(")", '\\)')
+    word.gsub!("[", '\\[')
+    word.gsub!("]", '\\]')
+    word.gsub!(':', '\\:')
+    word
+  end
+  
 end

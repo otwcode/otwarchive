@@ -234,25 +234,6 @@ class WorkSearch < Search
     end
   end
   
-  def escape_slashes(word)
-    word.gsub!('/', '\\/')
-    word
-  end
-  
-  def escape_reserved_characters(word)
-    word.gsub!('!', '\\!')
-    word.gsub!('+', '\\+')
-    word.gsub!('-', '\\-')
-    word.gsub!('?', '\\?')
-    word.gsub!("~", '\\~')
-    word.gsub!("(", '\\(')
-    word.gsub!(")", '\\)')
-    word.gsub!("[", '\\[')
-    word.gsub!("]", '\\]')
-    word.gsub!(':', '\\:')
-    word
-  end
-  
   def summary
     summary = []
     if options[:query].present?
