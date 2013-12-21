@@ -78,14 +78,14 @@ namespace :deploy do
   
   desc "Update the web-related whenever tasks"
   task :update_cron_web, :roles => :web do
-    run "whenever --update-crontab web -f config/schedule_web.rb"
+    run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
   end
 
 
   # This should only be one machine 
   desc "update the crontab for whatever machine should run the scheduled tasks"
   task :update_cron, :roles => :app, :only => {:primary => true} do
-    run "whenever --update-crontab #{application}"
+    run "bundle exec whenever --update-crontab #{application}"
   end
 end
 

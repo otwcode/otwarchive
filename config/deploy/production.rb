@@ -30,7 +30,7 @@ namespace :production_only do
   
   desc "Update the crontab on the primary app machine "
   task :update_cron_email, :roles => :app, :only => {:primary => true} do
-    run "whenever --update-crontab production -f config/schedule_production.rb"
+    run "bundle exec whenever --update-crontab production -f config/schedule_production.rb"
   end
 end
 
