@@ -75,6 +75,18 @@ namespace :deploy do
   task :update_configs, :roles => :app do
     run "/home/ao3app/bin/create_links_on_install"
   end
+  
+  desc "Update the web-related whenever tasks"
+  task :update_cron_web, :roles => :web do
+    run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
+  end
+
+
+  # This should only be one machine 
+  desc "update the crontab for whatever machine should run the scheduled tasks"
+  task :update_cron, :roles => :app, :only => {:primary => true} do
+    run "bundle exec whenever --update-crontab #{application}"
+  end
 end
 
 # our tasks which are staging specific
@@ -109,8 +121,8 @@ end
 #before "deploy:symlink", "deploy:web:enable_new"
 #after "deploy:symlink", "extras:update_revision"
 
-#after "deploy:restart", "extras:update_cron"
-#after "deploy:restart", "deploy:web:update_cron_web"
+after "deploy:restart", "deploy:update_cron"
+after "deploy:restart", "deploy:update_cron_web"
 #after "deploy:restart", "extras:restart_delayed_jobs"
 #after "deploy:restart", "deploy:cleanup"
 
