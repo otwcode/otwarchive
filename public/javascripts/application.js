@@ -394,4 +394,3 @@ function prepareDeleteLinks() {
     };
   });
 }
->>>>>>> 3817 Move and comment function for JS deletion
