@@ -16,11 +16,13 @@
 </ul>
 <!--/subnav-->
 
+<!--main content-->
+<ul class="bookmark index group">
+  <%= render 'bookmark_blurb', :bookmark => @bookmark %>
+</ul>
+<!--/content-->
+
 <% # FRONT END NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
 <% content_for :footer_js do %>
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 <% end %>
-
-<!--main content-->
-<ul class="index group"><%= render 'bookmark_blurb', :bookmark => @bookmark %></ul>
-<!--/content-->
