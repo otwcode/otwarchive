@@ -34,7 +34,7 @@ Scenario: If a user chooses "Delete Completely" when removing their account,  de
   When I go to the works page
   Then I should not see "To be deleted"
 
-Scenario: delete a user and orphan the works
+Scenario: Allow a user to orphan their works when deleting their account
   Given I have an orphan account
   When I am logged in as "orphaner" with password "secret"
     And all emails have been delivered
@@ -55,7 +55,7 @@ Scenario: delete a user and orphan the works
     And I should see "orphan_account"
     And I should not see "orphaner"
 
-Scenario: delete a user with a collection
+Scenario: Delete a user with a collection
   Given I have an orphan account
   When I am logged in as "moderator" with password "password"
     And all emails have been delivered
@@ -75,3 +75,21 @@ Scenario: delete a user with a collection
   Then I should see "fake"
     And I should see "orphan_account"
     And I should not see "moderator"
+
+Scenario: Delete a user who has coauthored a work
+  Given  the following activated users exist
+    | login     | password |
+    | otheruser | password |
+    And I am logged in as "testuser"
+    And I have coauthored a work as "testuser" with "otheruser"
+  When I try to delete my account
+  Then I should see "What do you want to do with your works?"
+  When I choose "Remove me completely as co-author"
+    And I press "Save"
+  Then I should see "You have successfully deleted your account"
+    And a user account should not exist for "testuser"
+    And I should be logged out
+  # TODO - make this confirmation step better
+  When I go to the works page
+  Then I should see "otheruser"
+    And I should not see "testuser"
