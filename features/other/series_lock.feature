@@ -46,7 +46,11 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
   Then I should see "Draft was successfully created."
     And I should see "Part 2 of the Antiholidays series"
   When I view the series "Antiholidays"
+<<<<<<< HEAD
   Then I should see "Works Included: 1"
+=======
+  Then I should see "Works: 1"
+>>>>>>> 3369 Look for work count in the test
     And I should not see "Antivalentine"
   When I view the work "Humbug"
   Then I should not see "»" within "dd"
@@ -69,7 +73,11 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
     And I go to fandomer's series page
   Then I should see "Antiholidays"
   When I view the series "Antiholidays"
+<<<<<<< HEAD
   Then I should see "Works Included: 2"
+=======
+  Then I should see "Works: 2"
+>>>>>>> 3369 Look for work count in the test
     And I should see "Humbug"
     And I should see "Antivalentine"
 
