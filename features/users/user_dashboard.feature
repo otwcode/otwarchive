@@ -118,6 +118,10 @@ Feature: User dashboard
   When I go to meatloaf's user page
   Then I should see "Recent series"
     And I should see "Newest Series" within "#user-series"
+    And I should see "Series 2" within "#user-series"
+    And I should see "Series 3" within "#user-series"
+    And I should see "Series 4" within "#user-series"
+    And I should see "Series 5" within "#user-series"
     And I should not see "Oldest Series" within "#user-series"
     And I should see "Series (6)" within "#user-series"
   When I follow "Series (6)" within "#user-series"
