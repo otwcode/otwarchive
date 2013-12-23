@@ -15,9 +15,16 @@ form {
   clear: right;
 }
 
+<<<<<<< HEAD
+form > fieldset {
+  width: 98%;
+  padding: 0.643em 1%;
+  margin: 0.643em 0;
+=======
 /* wrap long text in Opera, Safari, and Chrome */
 fieldset {
   min-width: 0;
+>>>>>>> 40c7c0ac23423ed5d4adb7cea68304ceb6253ebf
 }
 
 /*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 

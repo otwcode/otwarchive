@@ -206,7 +206,11 @@ class WorkSearch < Search
   
   # Search within text fields: general, titles, creator names, and partial tag names
   def generate_search_text
+<<<<<<< HEAD
+    search_text = self.query.present? ? escape_reserved_characters(self.query.dup) : ""
+=======
     search_text = self.query.present? ? escape_slashes(self.query.dup) : ""
+>>>>>>> 40c7c0ac23423ed5d4adb7cea68304ceb6253ebf
     [:title, :creator, :tag].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
@@ -234,6 +238,24 @@ class WorkSearch < Search
     end
   end
   
+<<<<<<< HEAD
+  def escape_reserved_characters(word)
+    word.gsub!('/', '\\/')
+    word.gsub!('!', '\\!')
+    word.gsub!('+', '\\+')
+    word.gsub!('-', '\\-')
+    word.gsub!('?', '\\?')
+    word.gsub!("~", '\\~')
+    word.gsub!("(", '\\(')
+    word.gsub!(")", '\\)')
+    word.gsub!("[", '\\[')
+    word.gsub!("]", '\\]')
+    word.gsub!(':', '\\:')
+    word
+  end
+  
+=======
+>>>>>>> 40c7c0ac23423ed5d4adb7cea68304ceb6253ebf
   def summary
     summary = []
     if options[:query].present?
