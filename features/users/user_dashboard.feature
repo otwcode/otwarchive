@@ -119,6 +119,7 @@ Feature: User dashboard
   Then I should see "Recent series"
     And I should see "Newest Series" within "#user-series"
     And I should not find "Oldest Series" within "#user-series"
+    And I should see "Series (6)" within "#user-series"
   When I follow "Series (6)" within "#user-series"
   Then I should see "meatloaf's Series"
     And I should see "Oldest Series"
