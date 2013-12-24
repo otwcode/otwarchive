@@ -221,6 +221,6 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
 end
 
 Then /^I should get confirmation that I changed my username$/ do
-  step(%{I should see "Your username has been successfully updated. You may now wish to edit your pseud
+  step(%{I should see "Your user name has been successfully updated. You may now wish to edit your pseud
 to match."})
 end
