@@ -26,6 +26,8 @@
     <legend><%= ts("Prompts") %></legend>
     <h3 class="landmark heading"><%= ts("Prompts") %></h3>
     <dl>
+      <dt><%= f.label :disable_anon_prompts, ts("Disable anonymous prompts?") %><%= link_to_help("allow-anonymous-prompts")%></dt>
+      <dd><%= f.check_box :disable_anon_prompts %></dd>
       <dt><%= f.label :anonymous, ts("Prompts anonymous by default?") %></dt>
       <dd><%= f.check_box :anonymous %>
       <p class="note">(Participants can override)</p>
