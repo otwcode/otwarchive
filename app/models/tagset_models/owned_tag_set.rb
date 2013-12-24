@@ -28,8 +28,8 @@ class OwnedTagSet < ActiveRecord::Base
   attr_protected :featured
 
   has_many :tag_set_ownerships, :dependent => :destroy
-  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', false]
-  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+  has_many :moderators, :through => :tag_set_ownerships, :source => :user, :conditions => ['tag_set_ownerships.owner = ?', false]
+  has_many :owners, :through => :tag_set_ownerships, :source => :user, :conditions => ['tag_set_ownerships.owner = ?', true]
   
   has_many :owned_set_taggings, :dependent => :destroy
   has_many :set_taggables, :through => :owned_set_taggings
@@ -97,20 +97,16 @@ class OwnedTagSet < ActiveRecord::Base
   def self.owned_by(user = User.current_user)
     if user.is_a?(User)
       select("DISTINCT owned_tag_sets.*").
-      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
-             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
-             INNER JOIN users ON pseuds.user_id = users.id").
-      where("users.id = ?", user.id)
+          joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id").
+          where("tag_set_ownerships.user_id = ?", user.id)
     end
   end
 
   def self.visible(user = User.current_user)
     if user.is_a?(User)
       select("DISTINCT owned_tag_sets.*").
-      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
-             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
-             INNER JOIN users ON pseuds.user_id = users.id").
-      where("owned_tag_sets.visible = true OR users.id = ?", user.id)
+          joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id").
+          where("owned_tag_sets.visible = true OR tag_set_ownerships.user_id = ?", user.id)
     else
       where("owned_tag_sets.visible = true")
     end
@@ -118,11 +114,8 @@ class OwnedTagSet < ActiveRecord::Base
   
   def self.usable(user = User.current_user)
     if user.is_a?(User)
-      select("DISTINCT owned_tag_sets.*").
-      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
-             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
-             INNER JOIN users ON pseuds.user_id = users.id").
-      where("owned_tag_sets.usable = true OR users.id = ?", user.id)
+      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id").
+          where("owned_tag_sets.usable = true OR owned_tag_sets.user_id = ?", user.id)
     else
       where("owned_tag_sets.usable = true")
     end
@@ -137,38 +130,40 @@ class OwnedTagSet < ActiveRecord::Base
   #### MODERATOR/OWNER
 
   def user_is_owner?(user)
-    user.is_a?(User) && !(owners & user.pseuds).empty?
+    user.is_a?(User) && !(owners).empty?
   end
   
   def user_is_moderator?(user)
-    user.is_a?(User) && (user_is_owner?(user) || !(moderators & user.pseuds).empty?)
+    user.is_a?(User) && (user_is_owner?(user) || !(moderators).empty?)
   end
   
-  def add_owner(pseud)
-    tag_set_ownerships.build({:pseud => pseud, :owner => true})
+  def add_owner(user)
+    tag_set_ownerships.build({:user => user, :owner => true})
   end
-  
-  def add_moderator(pseud)    
-    tag_set_ownerships.build({:pseud => pseud, :owner => false}) 
+
+  def add_moderator(user)
+    tag_set_ownerships.build({:user => user, :owner => false})
   end
-  
-  def owner_changes=(pseud_list)
-    Pseud.parse_bylines(pseud_list)[:pseuds].each do |pseud|
-      if self.owners.include?(pseud)
-        self.owners -= [pseud] if self.owners.count > 1
+
+  def owner_changes=(user_list)
+    logins = user_list.split(',').map(&:strip)
+    User.where(login: logins).each do |user|
+      if self.owners.include?(user)
+        self.owners -= [user] if self.owners.count > 1
       else
-        self.moderators -= [pseud] if self.moderators.include?(pseud)
-        add_owner(pseud)
+        self.moderators -= [user] if self.moderators.include?(user)
+        add_owner(user)
       end
     end
   end
-  
-  def moderator_changes=(pseud_list)
-    Pseud.parse_bylines(pseud_list)[:pseuds].each do |pseud|
-      if self.moderators.include?(pseud)
-        self.moderators -= [pseud]
+
+  def moderator_changes=(user_list)
+    logins = user_list.split(',').map(&:strip)
+    User.where(login: logins).each do |user|
+      if self.moderators.include?(user)
+        self.moderators -= [user]
       else
-        add_moderator(pseud) unless self.owners.include?(pseud)
+        add_moderator(user) unless self.owners.include?(user)
       end
     end
   end

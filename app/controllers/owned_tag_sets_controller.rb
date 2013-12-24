@@ -142,7 +142,7 @@ class OwnedTagSetsController < ApplicationController
 
   def create
     @tag_set = OwnedTagSet.new(params[:owned_tag_set])
-    @tag_set.add_owner(current_user.default_pseud)
+    @tag_set.add_owner(current_user)
     if @tag_set.save
       flash[:notice] = ts('Tag Set was successfully created.')
       redirect_to tag_set_path(@tag_set)
