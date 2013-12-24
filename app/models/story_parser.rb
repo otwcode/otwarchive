@@ -243,7 +243,20 @@ class StoryParser
     end
 
     def check_for_previous_import(location)
-      work = Work.find_by_imported_from_url(location)
+      #Modified to check for both www and non www version, Stephanie 10-4-2013
+
+      www_url = ""
+      non_www_url = ""
+      if location.include? "www"
+        www_url = location
+        non_www_url = location.gsub("www.","")
+      else
+        www_url =  location.gsub("http://","http://www.")
+        non_www_url = location
+      end
+
+      work = Work.where(imported_from_url: [www_url,non_www_url])
+
       if work
         raise Error, "A work has already been imported from #{location}."
       end
