@@ -25,6 +25,14 @@
         :method => :delete %>
     </li>
     <% end %>
+    <% # Moderators should be able to delete entire sign-ups from the /requests page in PromptMemes.  %>
+    <% if collection.user_is_maintainer?(current_user) && collection.challenge_type == "PromptMeme" %>
+      <li><%= link_to ts("Delete Sign-up"),
+                  collection_signup_path(collection, challenge_signup),
+                  :confirm => ts("Are you sure? All prompts in this sign-up will be lost."),
+                  :method => :delete %>
+      </li>
+    <% end %>
     
     <% # The claiming and fulfilling options should show up if the prompt is claimable %>
     <% if prompt.claimable? %>
