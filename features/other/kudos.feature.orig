@@ -53,6 +53,18 @@ Feature: Leave kudos
       Then I should not see "Kudos ♥"
 
   Scenario: kudos on a multi-chapter work
+<<<<<<< HEAD
+  When I am logged in as "myname1"
+    And I post the chaptered work "Epic Saga"
+    And a draft chapter is added to "Epic Saga"
+  When I am logged in as "myname3"
+    And I view the work "Epic Saga"
+    And I press "Kudos ♥"
+  Then I should see kudos on every chapter
+  When I am logged in as "myname1"
+    And I view the work "Epic Saga"
+  Then I should see kudos on every chapter but the draft
+=======
     Given I am logged in as "myname1"
       And I post the chaptered work "Epic Saga"
       And I follow "Add Chapter"
@@ -65,6 +77,7 @@ Feature: Leave kudos
     When I am logged in as "myname1"
       And I view the work "Epic Saga"
     Then I should see kudos on every chapter but the draft
+>>>>>>> ec79d8faec0d21c9b9b2fcc28487186b031dee06
 
   Scenario: deleting pseud and user after creating kudos should orphan them
 

@@ -1008,13 +1008,13 @@ end
   end
   
   def guest_kudos_count
-    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/guest_kudos_count" do
       kudos.by_guest.count
     end
   end
   
   def all_kudos_count
-    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/kudos_count" do
       kudos.count
     end
   end
