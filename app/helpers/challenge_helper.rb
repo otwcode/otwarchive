@@ -24,4 +24,12 @@ module ChallengeHelper
       end
     end
   end
+  
+  # Generate a links for moderators to email a participant or view the participant's sign-up. The email link is an envelope icon and the sign-up link is the participant's name.
+  def email_and_signup_link(byline, signup)
+    email_link = mailto_link signup.pseud.user, :subject => ts("[#{h(@collection.title)}] Message from Collection Maintainer")
+    signup_link = link_to byline, collection_signup_path(@collection, signup)
+    email_link + signup_link
+  end
+    
 end

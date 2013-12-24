@@ -64,7 +64,12 @@ Feature: Create and Edit Series
     When I follow "»"
     Then I should see "Starsong"
     When I view the series "Ponies"
+<<<<<<< HEAD
       And I follow "Edit Series"
+      And I fill in "Series Title" with "Many a Pony"
+=======
+      And I follow "Edit"
+>>>>>>> ec79d8faec0d21c9b9b2fcc28487186b031dee06
       And I fill in "Series Description" with "This is a series about ponies. Of course"
       And I fill in "Series Notes" with "I wrote this under the influence of coffee! And pink chocolate."
       And I press "Update"
@@ -153,7 +158,12 @@ Feature: Create and Edit Series
     When I follow "»"
     Then I should see "Starsong"
     When I view the series "Ponies"
+<<<<<<< HEAD
       And I follow "Edit Series"
+      And I fill in "Series Title" with "Many a Pony"
+=======
+      And I follow "Edit"
+>>>>>>> ec79d8faec0d21c9b9b2fcc28487186b031dee06
       And I fill in "Series Description" with "This is a series about ponies. Of course"
       And I fill in "Series Notes" with "I wrote this under the influence of coffee! And pink chocolate."
       And I press "Update"
@@ -204,6 +214,23 @@ Feature: Create and Edit Series
 
   Scenario: View user's series index
 
+<<<<<<< HEAD
+Scenario: Series index for maaany series
+  Given I am logged in as "whoever" with password "whatever"  
+    And I add the work "grumble" to "32" series "penguins"
+  When I go to whoever's series page
+  Then I should see "penguins30"
+  When I follow "Next"
+  Then I should see "penguins0"
+  
+Scenario: Delete a series
+  Given I am logged in as "cereal" with password "yumyummy"
+    And I add the work "Snap" to series "Krispies"
+  When I view the series "Krispies"
+    And I follow "Delete Series"
+    And I press "Yes, Delete Series"
+  Then I should see "Series was successfully deleted."
+=======
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "grumble" to series "polarbears"
     When I go to whoever's series page
@@ -217,3 +244,4 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
+>>>>>>> ec79d8faec0d21c9b9b2fcc28487186b031dee06
