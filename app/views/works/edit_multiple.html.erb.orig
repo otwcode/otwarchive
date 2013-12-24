@@ -64,6 +64,7 @@
           <%= form.check_box :anon_commenting_disabled %>
         </label>
       </dd>
+<<<<<<< HEAD
  
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>
@@ -75,6 +76,8 @@
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, 
             {:include_blank => true} %>
       </dd>
+=======
+>>>>>>> e37462e0c726de2d032fb2f52a8edf603f3e0eaa
     </dl>
   </fieldset>
 

@@ -53,7 +53,7 @@ class TagSetNominationsController < ApplicationController
             
   def index
     if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
+      @user = current_user
       if @user != current_user
         flash[:error] = ts("You can only view your own nominations, sorry.")
         redirect_to tag_sets_path and return
@@ -81,7 +81,7 @@ class TagSetNominationsController < ApplicationController
     if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first
       redirect_to edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else      
-      @tag_set_nomination = TagSetNomination.new(:pseud => current_user.default_pseud, :owned_tag_set => @tag_set)
+      @tag_set_nomination = TagSetNomination.new(:user => current_user, :owned_tag_set => @tag_set)
       build_nominations
     end
   end
