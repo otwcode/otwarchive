@@ -102,11 +102,9 @@ end
 # WHEN
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
+  visit new_user_pseud_path(username)
   fill_in "Name", :with => newpseud
-  # TODO: this isn't currently working
-  check "Make this name default"
+  check("pseud_is_default")
   click_button "Create"
 end
 
@@ -117,8 +115,13 @@ When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
-  visit user_pseuds_path(username)
-  click_link("New Pseud")
+  visit new_user_pseud_path(username)
+  fill_in "Name", :with => newpseud
+  click_button "Create"
+end
+
+When /^I create the pseud "([^\"]*)"$/ do |newpseud|
+  visit new_user_pseud_path(User.current_user)
   fill_in "Name", :with => newpseud
   click_button "Create"
 end
