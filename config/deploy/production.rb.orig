@@ -6,7 +6,11 @@
 # 
 
 server "ao3-app01.ao3.org",  :app , :db
+<<<<<<< HEAD
+server "ao3-app02.ao3.org",  :app 
+=======
 server "ao3-app02.ao3.org",  :app , :primary => true
+>>>>>>> a564ebc416ce854172b86d6b7502c3508cfd34b3
 server "ao3-app03.ao3.org",  :app
 server "ao3-front01.ao3.org",  :app , :web , :primary
 
@@ -25,11 +29,14 @@ namespace :production_only do
   task :update_robots, :roles => :web do
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
+<<<<<<< HEAD
+=======
   
   desc "Update the crontab on the primary app machine "
   task :update_cron_email, :roles => :app, :only => {:primary => true} do
     run "bundle exec whenever --update-crontab production -f config/schedule_production.rb"
   end
+>>>>>>> a564ebc416ce854172b86d6b7502c3508cfd34b3
 end
 
 #before "deploy:update_code", "production_only:git_in_home"
