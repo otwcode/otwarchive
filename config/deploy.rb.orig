@@ -75,6 +75,8 @@ namespace :deploy do
   task :update_configs, :roles => :app do
     run "/home/ao3app/bin/create_links_on_install"
   end
+<<<<<<< HEAD
+=======
   
   desc "Update the web-related whenever tasks"
   task :update_cron_web, :roles => :web do
@@ -87,6 +89,7 @@ namespace :deploy do
   task :update_cron, :roles => :app, :only => {:primary => true} do
     run "bundle exec whenever --update-crontab #{application}"
   end
+>>>>>>> a564ebc416ce854172b86d6b7502c3508cfd34b3
 end
 
 # our tasks which are staging specific

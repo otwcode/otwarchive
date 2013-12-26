@@ -23,7 +23,14 @@
     <dt id="passwd"><%= label_tag :password, ts("Password") %></dt>
     <dd id="passwd"><%= password_field_tag :password %></dd>
     <dt><%= ts("Current User Name") %></dt>
+<<<<<<< HEAD
     <dd><span class="important"><%= @user.login %></span></dd>
+    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+    <dd><%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %></dd>
+    <dt class="landmark"><%= ts("Submit") %></dt>
+	  <dd class="submit actions"><%= submit_tag ts("Change") %></dd>
+=======
+    <dd><strong><%= @user.login %></strong></dd>
     <dt><%= label_tag :new_login, ts("New User Name") %></dt>
     <dd>
       <%= text_field_tag :new_login, @new_login %>
@@ -37,6 +44,7 @@
     <dd id="passwd"><%= password_field_tag :password %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions"><%= submit_tag "Change" %></dd>
+>>>>>>> 60c44ac23f50fc465b97998ac168d9947caa6481
   </dl>
 <% end %>
 <% if @wrong_password %>

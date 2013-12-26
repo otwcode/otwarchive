@@ -8,7 +8,7 @@
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
 
 server "test-app01.transformativeworks.org",  :app , :db
-server "test-front01.transformativeworks.org",  :app , :web , :primary
+server "test-front01.transformativeworks.org",  :app , :web , :primary => true
 
 set :rails_env, 'staging'
 
