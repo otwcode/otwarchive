@@ -45,7 +45,7 @@
     <% if @limit[:fandom] > 0 && (@limit[:character] > 0 || @limit[:relationship] > 0) %>
       <% # group fandom, char, rel together %>
       <% @tag_set_nomination.fandom_nominations.each do |fandom_nom| %>
-        <li class="fandom listbox group<%= cycle :odd, :even %>">
+        <li class="fandom listbox group">
           <h4 class="heading"><%= render "show_tag_status", :tag => fandom_nom %>: </h4>
           <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
             <% if @limit[tag_type] > 0 %>
