@@ -32,6 +32,28 @@
         <%= label_tag "collection_filters_moderated_", ts("Either") %></li>
         </ul>   
       </dd>
+      <dt><%= ts("Collection Type") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= radio_button_tag "collection_filters[challenge_type]", "gift_exchange", params[:collection_filters][:challenge_type] == "gift_exchange" %>
+            <%= label_tag "collection_filters_challenge_type_gift_exchange", ts("Gift Exchange Challenge") %>
+          </li>    
+          <li>
+            <%= radio_button_tag "collection_filters[challenge_type]", "prompt_meme", params[:collection_filters][:challenge_type] == "prompt_meme" %>
+            <%= label_tag "collection_filters_challenge_type_prompt_meme", ts("Prompt Meme Challenge") %>
+          </li>
+          <li>
+            <%= radio_button_tag "collection_filters[challenge_type]", "no_challenge", params[:collection_filters][:challenge_type] == "no_challenge" %>
+            <%= label_tag "collection_filters_challenge_type_no_challenge", ts("No Challenge") %>
+          </li>
+          <li>
+            <%= radio_button_tag "collection_filters[challenge_type]", '', params[:collection_filters][:challenge_type] == "" %>
+            <%= label_tag "collection_filters_challenge_type_", ts("All Collections") %>
+          </li>
+        </ul>   
+      </dd>
+
     <dt class="landmark"><%= ts('Submit') %></dt>
     <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
   </dl>
