@@ -64,7 +64,7 @@
       </h5>
       <ul class="index">
         <% @works[fandom].each do |work| %>
-          <li class="<%= cycle 'odd', 'even', :name => "tigerstriping" %>">
+          <li>
             <dl>
               <dt>
                 <%= link_to work.title, work_path(:id => work.id) %> 
@@ -95,6 +95,5 @@
         <% end %>
       </ul>
     </li>
-    <% reset_cycle("tigerstriping") %>
   <% end %>
 </ul>
