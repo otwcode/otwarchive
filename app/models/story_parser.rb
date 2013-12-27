@@ -243,10 +243,16 @@ class StoryParser
         non_www_url = location
       end
 
-      work = Work.where(imported_from_url: [www_url,non_www_url])
+      work = Work.find_imported_from_url(non_www_url)
 
       if work
         raise Error, "A work has already been imported from #{location}."
+      else
+      work = Work.find_imported_from_url(www_url)
+        if work
+          raise Error, "A work has already been imported from #{location}."
+        end
+
       end
     end
 
