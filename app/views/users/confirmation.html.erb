@@ -1,20 +1,20 @@
-		<h2 class="heading"><%=h t('.account_created', :default => "Account Created!") %></h2>
+		<h2 class="heading"><%= ts("Account Created!") %></h2>
 <!-- Boilerplate text for account creation confirmation -->
 		<p>
-			<%=h t('.should_receive', :default => "In just a few minutes, you should receive an email at the address you gave us.") %>
-			<%=h t('.verify_account', :default =>"This will have the URL you need to go to in order to verify your account and complete the account creation process.") %>
-			<%=h t('.want_to_add', :default =>"You might want to add") %>
+			<%= ts("Within 24 hours, you should receive an email at the address you gave us.") %>
+			<%= ts("This will have the URL you need to go to in order to verify your account and complete the account creation process.") %>
+			<%= ts("You might want to add") %>
 			<strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong> 
-			<%=h t('.address_book', :default =>"to your address book to make sure you get the mail.") %>
+			<%= ts("to your address book to make sure you get the mail.") %>
 		</p>
 		<p>
-			<%=h t('.do_not_hear', :default =>"If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at") %>
+			<%= ts("If you don't hear from us within 24 hours, and you don't find our email in your spam filter, please drop us a line at") %>
 			<%= "Support (http://archiveofourown.org/support)" %>.
 		</p>
 		<p>
-			<strong><%=h t('.important', :default =>"Important!") %></strong>
-			<%=h t('.must_verify', :default =>"You must verify your account within 14 days, or your registration will expire.") %>
+			<strong><%= ts("Important!") %></strong>
+			<%= ts("You must verify your account within 14 days, or your registration will expire.") %>
 		</p>
 		<p>
-			<%= link_to t('.back_to_archive', :default => 'Return to archive front page'), root_path %>
+			<%= link_to ts('Return to archive front page'), root_path %>
 		</p>
