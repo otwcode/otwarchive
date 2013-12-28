@@ -43,7 +43,7 @@ class TagsController < ApplicationController
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options.merge!(:page => params[:page] || 1)
-      @tags = Tag.search(options)
+      @tags = TagSearch.search(options)
     end
   end
 
