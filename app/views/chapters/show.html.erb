@@ -22,7 +22,8 @@
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
   </div>
   
-  <% if @chapter == @work.last_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank?) %>
+  <% inspired_by = get_inspired_by(@work) %>
+  <% if @chapter == @work.last_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty?) %>
   <!--afterword-->
   <div class="afterword preface group" role="complementary">  
     <% if !@work.endnotes.blank? %>
@@ -31,8 +32,8 @@
     <% unless @preview_mode || @work.series.blank? %>
       <%= render :partial => 'works/work_series_links' %>
     <% end %>
-    <% unless @work.approved_children.blank? %>
-      <%= render :partial => 'works/work_approved_children' %>
+    <% unless inspired_by.empty? %>
+      <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
     <% end %>
   </div>
   <!--/afterword-->

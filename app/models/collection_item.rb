@@ -110,9 +110,11 @@ class CollectionItem < ActiveRecord::Base
   end
 
   after_create :notify_of_association
+  # TODO: make this work for bookmarks instead of skipping them
   def notify_of_association
+    self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
     if self.collection.collection_preference.email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(self.work.id, self.collection.id).deliver
+      CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
     end
   end
 

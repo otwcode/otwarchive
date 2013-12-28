@@ -13,7 +13,7 @@ class AutocompleteController < ApplicationController
   # 
   # def require_term
   #   if params[:term].blank?
-  #     setflash; flash[:error] = ts("What were you trying to autocomplete?")
+  #     flash[:error] = ts("What were you trying to autocomplete?")
   #     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   #   end
   # end
@@ -119,7 +119,7 @@ class AutocompleteController < ApplicationController
   def open_collection_names
     # in this case we want different ids from names so we can display the title but only put in the name
     results = Collection.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_collection_open").map do |str| 
-      {:id => Collection.name_from_autocomplete(str), :name => Collection.title_from_autocomplete(str)}
+      {:id => (whole_name = Collection.name_from_autocomplete(str)), :name => Collection.title_from_autocomplete(str) + " (#{whole_name})" }
     end
     respond_with(results)
   end

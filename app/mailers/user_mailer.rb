@@ -45,12 +45,16 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author_id, claimed_work_ids)
-    external_author = ExternalAuthor.find(external_author_id)
-    @external_email = external_author.email
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
+    if is_user
+      creator = User.find(creator_id)
+    else
+      creator = ExternalAuthor.find(creator_id)
+    end
+    @external_email = creator.email
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
-      :to => external_author.user.email,
+      :to => creator.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
     )
   end
@@ -270,10 +274,10 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Sends email to authors when a creation is deleted by abuse
+  # Sends email to authors when a creation is deleted by an Admin
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def abuse_deleted_work_notification(user, work)
+  def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
@@ -283,7 +287,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
     )
   end
   

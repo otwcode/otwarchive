@@ -13,7 +13,7 @@ class Sanitize
 
       # see in the Transformers section for what classes we strip
       :attributes => {
-        :all => ['align', 'title', 'class'],
+        :all => ['align', 'title', 'class', 'dir'],
         'a' => ['href', 'name'],
         'blockquote' => ['cite'],
         'col' => ['span', 'width'],

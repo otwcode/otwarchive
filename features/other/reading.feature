@@ -8,9 +8,9 @@ Feature: Reading count
   When I am logged in as "second_reader"
     And I go to first_reader's reading page
     Then I should see "Sorry, you don't have permission"
-    And I should not see "History" within "#dashboard .navigation li"
+    And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-    Then I should see "History" within "#dashboard .navigation li"
+    Then I should see "History" within "div#dashboard"
 
   Scenario: disable reading history
     also issue 1691
@@ -63,17 +63,18 @@ Feature: Reading count
       And I follow "second work"
       And I am on testuser2's works page
       And I follow "fifth"
+      And I should see "fifth by testuser2"
       And I follow "Proceed"
       And the reading rake task is run
     When I go to fandomer's reading page
-    Then I should see "History" within "#dashboard .navigation li"
+    Then I should see "History" within "div#dashboard"
       And I should see "First work"
       And I should see "second work"
       And I should see "fifth"
       But I should not see "fourth"
     When I follow "Clear History"
       Then I should see "Your history is now cleared"
-      And I should see "History" within "#dashboard .navigation li"
+      And I should see "History" within "div#dashboard"
       But I should not see "First work"
       And I should not see "second work"
       And I should not see "fifth"
@@ -88,7 +89,7 @@ Feature: Reading count
     And I view the work "Testy"
   Then I should see "Mark for later"
   When I follow "Mark for later"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
@@ -96,7 +97,7 @@ Feature: Reading count
   When I view the work "Testy"
   Then I should see "Mark as read"
   When I follow "Mark as read"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
@@ -155,7 +156,7 @@ Feature: Reading count
     And I follow "Next Chapter"
   Then I should see "Second blah blah"
   When I follow "Mark for later"
-  Then I should see "This work was marked to read later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"

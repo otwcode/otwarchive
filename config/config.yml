@@ -49,6 +49,8 @@ ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
+ELASTICSEARCH_URL: 'http://localhost:9200'
+MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -226,14 +228,14 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # We use this list for properties which can take shorthand values and also have subproperties or variants 
 # (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "column", "cue", "font", "layer-background",
-  "layout-grid", "list-style", "margin", "marker",
-  "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background", 
+"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause", 
+"scrollbar", "text", "transform", "transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source", 
   "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
   "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
-  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
   "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
   "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
   "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
@@ -247,7 +249,7 @@ SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source",
   "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
   "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
   "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
-  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", 
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select", 
   "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
   "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
 
