@@ -1,15 +1,25 @@
 <p class="caution">
-<%= ts('This work could have adult content. If you proceed you have agreed that you are willing to see such content.') %>
+  <%= ts('This work could have adult content. If you proceed you have agreed that you are willing to see such content.') %>
 </p>
 
 <ul class="navigation actions" role="navigation">
-<li><%= link_to ts('Proceed'), url_for(params.merge :view_adult => true, :anchor => params[:anchor]) %></li>
-<li><%= link_to ts('Go Back'), :back %></li>
-<% if logged_in? %>
-<li><%= link_to ts('Set your preferences now'), user_preferences_path(current_user) %></li>
-<% end %> 
+  <li>
+    <%= link_to ts('Proceed'), url_for(params.merge :view_adult => true, :anchor => params[:anchor]) %>
+  </li>
+  <li>
+    <%= link_to ts('Go Back'), :back %>
+  </li>
+  <% if logged_in? %>
+    <li>
+      <%= link_to ts('Set your preferences now'), user_preferences_path(current_user) %>
+    </li>
+  <% end %> 
 </ul>
 
 <p class="message footnote">
-<%= ts('If you accept cookies from our site and you choose "Proceed", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.') %></p>
+  <%= ts('If you accept cookies from our site and you choose "Proceed", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.') %>
+</p>
 
+<div class="clear"></div>
+
+<%= render 'works/work_blurb', :work => @work %>

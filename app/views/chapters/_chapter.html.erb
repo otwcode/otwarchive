@@ -9,7 +9,7 @@
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work} %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{chapter.cache_key}-show") do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show") do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">

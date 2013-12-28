@@ -14,7 +14,7 @@ feedback needed from realuse (is it annoying having the announcement on every ce
 <div class="assigned module">
 	<h3 class="heading"><%= ts('Assigned Fandoms') %></h3>
 	<% if @fandoms.empty? %>
-	  <p><%= ts("Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the") %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %><%= ts(".")%></p>
+	  <p><%= ts("Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the") %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>.</p>
 	<% else %>
     <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of
   unwrangled tags which were used on works in the given fandom.') %></p>

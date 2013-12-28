@@ -2,7 +2,7 @@
   <% # signups for a given challenge %>
 
   <% # render differently based on the challenge %>
-  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups.html" %>
+  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups" %>
   
 <% elsif @user %>
   <% # view in user dashboard %>

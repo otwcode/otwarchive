@@ -37,7 +37,7 @@ class InboxController < ApplicationController
         @inbox_comments.each { |i| i.destroy }
       end    
     rescue
-      setflash; flash[:caution] = ts("Please select something first")
+      flash[:caution] = ts("Please select something first")
     end
     redirect_to user_inbox_path(@user, :filters => params[:filters])
   end
