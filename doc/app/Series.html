@@ -505,6 +505,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -558,6 +560,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -686,7 +692,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="adjust_restricted-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">adjust_restricted</span>
         <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted?</span> <span class="ruby-operator">==</span> <span class="ruby-operator">!</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>).<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
           <span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted</span> = <span class="ruby-operator">!</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>).<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
@@ -719,7 +725,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="allfandoms-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 166</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 168</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allfandoms</span>
   <span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:fandoms</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>
 <span class="ruby-keyword">end</span></pre>
@@ -749,7 +755,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="allpseuds-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 123</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 125</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allpseuds</span>
   <span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>
 <span class="ruby-keyword">end</span></pre>
@@ -779,7 +785,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="anonymous-3F-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 100</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">anonymous?</span>
   <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">anonymous?</span> }.<span class="ruby-identifier">empty?</span>    
 <span class="ruby-keyword">end</span></pre>
@@ -809,7 +815,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="author_attributes-3D-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 133</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 135</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">author_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-identifier">selected_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">attributes</span>[<span class="ruby-value">:ids</span>])
   (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span> <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">selected_pseuds</span>
@@ -854,7 +860,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="author_tags-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 170</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 172</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">author_tags</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_tags</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Relationship&quot;</span>}.<span class="ruby-identifier">sort</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_tags</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Character&quot;</span>}.<span class="ruby-identifier">sort</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_tags</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Freeform&quot;</span>}.<span class="ruby-identifier">sort</span>
 <span class="ruby-keyword">end</span></pre>
@@ -884,7 +890,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="owners-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 128</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 130</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">owners</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:user</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -914,7 +920,7 @@ the series includes no unrestricted works, restricted should be true</p>
 
           
           <div class="method-source-code" id="posted_works-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 62</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">posted_works</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>
 <span class="ruby-keyword">end</span></pre>
@@ -946,7 +952,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="published_at-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 179</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 181</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">published_at</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">created_at</span>
@@ -980,7 +986,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="remove_author-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 153</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 155</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_author</span>(<span class="ruby-identifier">author_to_remove</span>)
   <span class="ruby-identifier">pseuds_with_author_removed</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">author_to_remove</span>.<span class="ruby-identifier">pseuds</span>
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;Sorry, we can't remove all authors of a series.&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">pseuds_with_author_removed</span>.<span class="ruby-identifier">empty?</span>
@@ -1018,7 +1024,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="reorder-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 118</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">positions</span>)
   <span class="ruby-constant">SortableList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">serial_works</span>.<span class="ruby-identifier">in_order</span>).<span class="ruby-identifier">reorder_list</span>(<span class="ruby-identifier">positions</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1048,7 +1054,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="revised_at-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 187</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 189</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">revised_at</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">updated_at</span>   
@@ -1082,7 +1088,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="tag_groups-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 174</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_groups</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_tags</span>.<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -1112,7 +1118,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="unrevealed-3F-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 104</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 106</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unrevealed?</span>
   <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">unrevealed?</span> }.<span class="ruby-identifier">empty?</span>    
 <span class="ruby-keyword">end</span></pre>
@@ -1142,7 +1148,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="visible-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 67</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible</span>(<span class="ruby-identifier">current_user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">||</span> (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-keyword">self</span>))
     <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
@@ -1178,7 +1184,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="visible-3F-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 77</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-identifier">user</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1208,7 +1214,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="visible_word_count-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 89</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 91</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_word_count</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-comment"># visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)</span>
@@ -1245,7 +1251,7 @@ visible works in the series</p>
 
           
           <div class="method-source-code" id="visible_work_count-source">
-            <pre><span class="ruby-comment"># File app/models/series.rb, line 81</span>
+            <pre><span class="ruby-comment"># File app/models/series.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_work_count</span>
   <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unrestricted</span>.<span class="ruby-identifier">count</span>      

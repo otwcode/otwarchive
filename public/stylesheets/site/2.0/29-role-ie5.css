@@ -2,6 +2,47 @@
 
 /*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
 
+#header {
+  z-index: 200;
+}
+
+#header .logo {
+  float: none;
+}
+
+#header .navigation .dropdown, #header .navigation .dropdown .menu li {
+  border: none;
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#header .primary li:first-child {
+  margin-left: 0;
+}
+
+#header #greeting .navigation .dropdown:hover .menu, #header #greeting .open .menu {
+  left: auto;
+  right: 0;
+  top: 1.715em;
+}
+
+#header .navigation .dropdown:hover .menu, #header .open .menu {
+  position: absolute;
+  top: 2.13em;
+  left: 0;
+}
+
+#header .navigation .dropdown .menu li {
+  border-bottom: 1px solid #888;
+  float: none;
+}
+
+#main {
+  z-index: 198;
+}
+
 /*emphasis */
 
 h1, h2, h3, h4, h5, h6, #header .navigation a {
@@ -10,6 +51,19 @@ h1, h2, h3, h4, h5, h6, #header .navigation a {
 
 #header .primary .current {
   background: #fff;
+}
+
+/*ie6 links not buttons */
+
+.actions a:hover {
+  background: #eee;
+  border: 0;
+  border-bottom: 1px solid;
+}
+
+#header .actions a {
+  color: #fff;
+  background: #900;
 }
 
 /* stacking */
@@ -26,20 +80,7 @@ form.filters {
   z-index: 20;
 }
 
-/*ie6 links not buttons */
-
-.actions a:hover {
-  background: #eee;
-  border: 0;
-  border-bottom: 1px solid;
-}
-
-#header .actions a {
-  color: #fff;
-  background: #900;
-}
-
-/*inheritance (may need to move up */
+/*inheritance */
 
 form dl.meta {
   width: 100%;
@@ -61,22 +102,19 @@ form .meta dd {
 
 /*margin/padding quirks */
 
-#header #greeting {
-  background: #900;
-}
-
-#header #greeting ul.navigation {
+span.question {
+  font-size: 90%;
   padding: 0;
-  top: 105px;
+  vertical-align: baseline;
 }
 
-/*hasLayout*/
+/*hL*/
 
 form.filters {
   position: relative;
 }
 
-.index .user, .index .blurb .heading, .actions a, li.blurb, li.comment, #main, .header, ul.media {
+.index .user, .index .blurb .heading, .actions a, li.blurb, li.comment, #main, .header, ul.media, form fieldset.preface dl, textarea {
   zoom: 1;
 }
 
@@ -86,23 +124,20 @@ form.filters {
   background: url("/images/legacy/kudos-legacy.png") top left no-repeat;
 }
 
-#header h1 img {
-  display: none;
+/*NOTE: at some point please swap this image into the a so it's clickable */
+
+
+#outer .landmark {
+  color: #900;
 }
 
-#header h1 {
-  width: 123px;
-  height: 84px;
-  background: url("/images/legacy/logo-stroke-legacy.gif") top left no-repeat;
-}
-
-.landmark {
+#inner .landmark {
   color: #fff;
 }
 
 /*min-height */
 
-#header, .home .primary {
+.home .primary {
   height: 120px;
 }
 
@@ -120,6 +155,10 @@ form.filters {
 
 textarea {
   height: 12em;
+}
+
+#main media-index li.medium {
+  height: 17.5em;
 }
 
 /*baseline*/
@@ -150,6 +189,10 @@ form .preface {
 
 .dashboard .sorting ul, .dashboard .sorting ul li {
   float: left;
+}
+
+form .preface dd {
+  display: inline;
 }
 
 /*linearise dashboard */
@@ -195,12 +238,11 @@ form .preface {
   overflow: visible;
 }
 
-ul.media, li.medium .index {
+ul.media, li.medium .index, .alphabet .listbox li {
   float: none !important;
 }
 
-#inner .media-index ul.media li.medium {
-  height: 17.5em;
+#main li.medium, #main .alphabet .index li {
   width: auto !important;
   float: none !important;
   clear: none;
@@ -214,8 +256,8 @@ span.replied. span.unreviewed, .actions a, .action, .symbol {
 }
 
 /*hL clearfixes
-        test note: these were put in last minute so might need redoing
-        http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html*/
+                test note: these were put in last minute so might need redoing
+                http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html*/
 
 .group {
   zoom: 1;

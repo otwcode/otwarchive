@@ -29,9 +29,9 @@ module TagSetsHelper
     
     if limit[:freeform] > 0
       if message.blank?
-        message = ts("You can nominate up to %{ff} freeform tags.", :ff => limit[:freeform])
+        message = ts("You can nominate up to %{ff} additional tags.", :ff => limit[:freeform])
       else
-        message += ts(" You can also nominate up to %{ff} freeform tags.", :ff => limit[:freeform])
+        message += ts(" You can also nominate up to %{ff} additional tags.", :ff => limit[:freeform])
       end
     end
     

@@ -1,25 +1,8 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
-<h2 class="heading"><%= search_header @works, @query, "Work" %>
-  <% if @collection %>
-   <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
-  <% elsif @user %>
-    <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
-  <% elsif @tag %>
-    <%= ts("in %{tag_name}", :tag_name => @tag.name) %>
-<% end %>
+<h2 class="heading">
+  <%= search_header @works, @search, "Work", @owner %>
 </h2>
-
-<% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
-<p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
-<% end %>
-
-<% if @too_many %>
-  <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
-<% end %>
 <!-- /end descriptions-->
-
-<%= will_paginate @works %>
 
 <div class="navigation actions module">
 
@@ -31,35 +14,35 @@
   <% end %>
 
   <!--user role subnav-->
-  <% if params[:tag_id] || (@user && @user == current_user) %>
+  <% if @tag || @user %>
     <ul class="user navigation actions" role="navigation">
-      <% if @user && @user == current_user %>
-        <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+      <% if @user %>
+        <% if @user == current_user %>
+          <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+        <% end %>
+        <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
+        <li><%= span_if_current ts('Works'), user_works_path(@user) %></li>
       <% end %>
-      <% if params[:tag_id] %>
-        <%= taggable_list(params[:tag_id], "works") %>
+      <% if @tag %>
+        <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
+        <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+      <% end %>
+      <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+        <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
       <% end %>
     </ul>
   <% end %>
-
-  <!--sorting subnav-->
-  <ul class="sorting actions" role="menu">
-    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-    <% unless @query.blank? %>
-      <li><%= sort_link ts('Relevance') %></li>
-    <% end %>
-    <li><%= sort_link ts('Author'), :author %></li>
-    <li><%= sort_link ts('Title'), :title %></li>
-    <li><%= sort_link ts('Date Updated'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
-    <li><%= sort_link ts('Date Added'), :created_at, {:desc_default => true} %></li>
-    <li><%= sort_link ts('Word Count'), :word_count, {:desc_default => true} %></li>
-    <% unless logged_in? && current_user.preference.try(:hide_all_hit_counts) %>
-      <li><%= sort_link ts('Hits'), :hit_count, {:desc_default => true} %></li>
-    <% end %>
-  </ul>
   
 </div>
 <!---/subnav-->
+
+<% unless @owner.present? %>
+  <p><%= ts("These are some of the latest works posted to the archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
+<% end %>
+
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @works %>
+<% end %>
 
 <!--main content-->
 <h3 class="landmark heading">Listing Works</h3>
@@ -72,10 +55,14 @@
 <!--/content-->
 
 <!--filters subnav-->
-<%= render :partial => 'filters' %>
+<% if @facets.present? %>
+  <%= render :partial => 'filters' %>
+<% end %>
 <!---/subnav-->
 
-<%= will_paginate @works %>
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @works %>
+<% end %>
 
 
 

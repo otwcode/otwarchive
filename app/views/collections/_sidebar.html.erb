@@ -50,7 +50,7 @@
         <% if @collection.challenge %>
           <li><%= span_if_current ts("Challenge Settings"), eval("edit_collection_#{challenge_class_name(@collection)}_path(@collection)") %></li>
       	<% end %>
-    	  <li><%= span_if_current ts("Settings"), edit_collection_path(@collection) %></li>
+    	  <li><%= span_if_current ts("Collection Settings"), edit_collection_path(@collection) %></li>
       <% end %>
     </ul>
   <% end %>

@@ -7,8 +7,6 @@ Otwarchive::Application.configure do
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
   config.cache_store = :memory_store
-  require 'openid/store/memory'
-  config.middleware.use 'Rack::OpenID', OpenID::Store::Memory.new
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true

@@ -1,6 +1,6 @@
 --- 
 work_00082: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -225,7 +225,7 @@ work_00062:
   hidden_by_admin: false
   authors_to_sort_on: cal
 work_00083: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -325,7 +325,7 @@ work_00063:
   hidden_by_admin: false
   authors_to_sort_on: cal
 work_00084: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -375,7 +375,7 @@ work_00042:
   hidden_by_admin: false
   authors_to_sort_on: non-default pseud,  non-default pseud
 work_00085: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -600,7 +600,7 @@ work_00065:
   hidden_by_admin: false
   authors_to_sort_on: cal
 work_00086: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -892,7 +892,7 @@ work_00067:
   hidden_by_admin: false
   authors_to_sort_on: dawningstar
 work_00088: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -1134,7 +1134,7 @@ work_00048:
   hidden_by_admin: false
   authors_to_sort_on: testuser3
 work_00071: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -1417,7 +1417,7 @@ work_00051:
   hidden_by_admin: false
   authors_to_sort_on: testuser2
 work_00072: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -1567,7 +1567,7 @@ work_00029:
   hidden_by_admin: false
   authors_to_sort_on: some other fucking pseud
 work_00073: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -1670,7 +1670,7 @@ work_00009:
   hidden_by_admin: false
   authors_to_sort_on: chaucer
 work_00074: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -1826,7 +1826,7 @@ work_00096:
   hidden_by_admin: false
   authors_to_sort_on: tassos
 work_00075: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2035,7 +2035,7 @@ work_00013:
   hidden_by_admin: false
   authors_to_sort_on: jessica
 work_00076: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2135,7 +2135,7 @@ work_00014:
   hidden_by_admin: false
   authors_to_sort_on: uriel
 work_00077: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2216,7 +2216,7 @@ work_00099:
   hidden_by_admin: false
   authors_to_sort_on: tassos
 work_00078: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2316,7 +2316,7 @@ work_00057:
   hidden_by_admin: false
   authors_to_sort_on: parenthetical
 work_00080: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2341,7 +2341,7 @@ work_00080:
   hidden_by_admin: false
   authors_to_sort_on: llwyden
 work_00079: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1
@@ -2366,7 +2366,7 @@ work_00079:
   hidden_by_admin: false
   authors_to_sort_on: llwyden
 work_00081: 
-  restricted: 
+  restricted: false
   posted: false
   major_version: 1
   expected_number_of_chapters: 1

@@ -19,7 +19,17 @@
         <dt><%= ts("Contact: ") %></dt>
         <dd><%= @collection.email %></dd>
       <% end %>
-
+      <% if @collection.challenge.present? %>
+        <% tag_sets_counted = tag_set_count(@collection) %>
+        <% if tag_sets_counted.present? %>
+          <dt><%= tag_sets_counted > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dd>
+            <ul class="commas">
+            <%= (@collection.challenge_type == "GiftExchange" ? @collection.challenge.offer_restriction.owned_tag_sets : @collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
+            </ul>
+          </dd>
+        <% end %>
+      <% end %>
       <% if @collection.challenge %>
       <!-- challenge information -->
         <%= render "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>
@@ -78,16 +88,18 @@
     <% end %>
 
     <% if @collection.user_is_owner?(current_user) %>
-      <li><%= link_to ts("Settings"), edit_collection_path(@collection) %></li>
-      <li><%= link_to ts("Delete"), collection_path(@collection),
-        :confirm => ts('Are you certain you want to delete this collection? All collection settings will be lost. (Works will not be deleted.)'),
-        :method => :delete %></li>
+      <li><%= link_to ts("Collection Settings"), edit_collection_path(@collection) %></li>
+
       <% if @collection.challenge %>
         <li><%= link_to ts("Delete Challenge"), 
                         eval("collection_#{challenge_class_name(@collection)}_path(@collection)"),
                         :confirm => ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
                         :method => :delete %></li>
+
       <% end %>
+        <li><%= link_to ts("Delete Collection"), collection_path(@collection),
+                        :confirm => ts('Are you certain you want to delete this collection? All collection settings will be lost. (Works will not be deleted.)'),
+                        :method => :delete %></li>
     <% end %>
   </ul>
   <% end %>

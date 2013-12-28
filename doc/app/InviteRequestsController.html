@@ -481,6 +481,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -534,6 +536,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -732,7 +738,7 @@
           <div class="method-source-code" id="manage-source">
             <pre><span class="ruby-comment"># File app/controllers/invite_requests_controller.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">manage</span>
-  <span class="ruby-ivar">@invite_requests</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:position</span>)
+  <span class="ruby-ivar">@invite_requests</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:position</span>).<span class="ruby-identifier">page</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
           </div><!-- manage-source -->
           

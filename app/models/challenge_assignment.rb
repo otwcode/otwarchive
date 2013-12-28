@@ -19,6 +19,7 @@ class ChallengeAssignment < ActiveRecord::Base
   scope :undefaulted, where("defaulted_at IS NULL")
   scope :uncovered, where("covered_at IS NULL")
   scope :covered, where("covered_at IS NOT NULL")
+  scope :sent, where("sent_at IS NOT NULL")
   
   scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
 
@@ -113,6 +114,10 @@ class ChallengeAssignment < ActiveRecord::Base
     return nil unless self.creation
     CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
+  
+  def started?
+    !self.creation.nil?
+  end
 
   def fulfilled?
     self.posted? && (item = get_collection_item) && item.approved?
@@ -133,6 +138,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def defaulted
     !self.defaulted_at.nil?
   end
+  alias_method :defaulted?, :defaulted
   
   include Comparable
   # sort in order that puts assignments with no request ahead of assignments with no offer,

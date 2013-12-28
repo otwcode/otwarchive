@@ -191,6 +191,20 @@ describe HtmlCleaner do
         doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip.should == "foobar"
       end
 
+      it "should allow RTL content in p" do
+        html = '<p dir="rtl">This is RTL content</p>'
+        result = sanitize_value(:content, html)
+        result.should == html
+      end
+
+      it "should allow RTL content in div" do
+        html = '<div dir="rtl"><p>This is RTL content</p></div>'
+        result = sanitize_value(:content, html)
+        # Yes, this is ugly. We should maybe try to figure out why our parser
+        # wants to wrap All The Things in <p> tags.
+        result.to_s.squish.should == '<p></p><div dir="rtl"> <p>This is RTL content</p> </div>'
+      end
+
       it "should allow youtube embeds" do
         html = '<iframe width="560" height="315" src="http://www.youtube.com/embed/123" frameborder="0"></iframe>'
         result = sanitize_value(:content, html)
@@ -473,6 +487,15 @@ describe HtmlCleaner do
   
   describe "add_paragraphs_to_text" do
 
+    %w(a abbr acronym address).each do |tag|
+      it "should not add extraneous paragraph breaks after #{tag} tags" do
+        result = add_paragraphs_to_text("<#{tag}>quack</#{tag}> quack")
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath(".//p").size.should == 1
+        doc.xpath(".//br").should be_empty
+      end
+    end
+
     it "should not convert linebreaks after p tags" do
       result = add_paragraphs_to_text("<p>A</p>\n<p>B</p>\n\n<p>C</p>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
@@ -493,7 +516,7 @@ describe HtmlCleaner do
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
         doc = Nokogiri::HTML.fragment(result)
-        doc.xpath(".//p").size.should == 3
+        doc.xpath(".//p").size.should == 4
         doc.xpath(".//br").should be_empty
       end
     end

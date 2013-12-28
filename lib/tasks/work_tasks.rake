@@ -6,11 +6,11 @@ namespace :work do
   end
 
   desc "create missing hit counters"
-  task(:missing_hit_counters => :environment) do
+  task(:missing_stat_counters => :environment) do
     Work.find_each do |work|
-      counter = work.hit_counter
+      counter = work.stat_counter
       unless counter
-        counter = HitCounter.create(:work=>work, :hit_count => 1)
+        counter = StatCounter.create(:work=>work, :hit_count => 1)
       end
     end
   end

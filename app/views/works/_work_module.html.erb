@@ -1,27 +1,21 @@
 <% # expects "work" %>
 
-<% is_unrevealed ||= (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
-<% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
-<% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
-  <% if is_unrevealed %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-  <% elsif is_anonymous %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
-  <% end %>
+<% if work.unrevealed? && !is_author_of?(work) %>
+  <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
 <% else %>
 
   <!--title, author, fandom-->
   <div class="header module">
 
     <h4 class="heading" title="title">
-  	  <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
-   		 <%= ts('by') %>
+      <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
+      <%= ts('by') %>
         
       <!-- do not cache -->
       <%= byline(work) %>
 
-<!-- caching -->
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<% #### CACHE show/hide #### %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v2") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
   
@@ -43,7 +37,6 @@
   	<p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
 	  
-	<!-- do not cache -->
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading">Tags</h6>
   <ul class="tags commas">
@@ -77,7 +70,9 @@
   	<dd><%= work.chapter_total_display %></dd>
 
 <% end %>
-<!-- end cached section -->
+<% #### END CACHE show/hide %>
+
+<% #### CACHE stats #### %>
 <% cache("#{work.cache_key}/stats", :expires_in => 1.hour) do %>
   <% unless work.approved_collections.empty? %>
     <dt><%= ts('Collections')  %>:</dt>
@@ -106,21 +101,8 @@
     <dd><%= work.hits %></dd>
   <% end %>
 <% end %>
-  </dl>
+<% #### END CACHE stats #### %>
 
-  <% if is_author_of?(work) %>
-    <h6 class="landmark heading">Author Actions</h6>
-  	<ul class="navigation actions" role="navigation">
-      <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
-  	  <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
-      <% if work.is_wip %>
-        <li><%= link_to ts('Add Chapter'), new_work_chapter_path(work) %></li>
-      <% end %>
-      <% if !work.posted? %>
-        <li><%= link_to ts('Post Draft'), post_draft_work_path(work), :method => :put %></li>
-        <li role="button"><%= link_to ts("Delete Draft"), work, :confirm => "Are you sure?", :method => :delete %></li>
-      <% end %>
-    </ul>
-  <% end %>
+  </dl>
 
 <% end %>

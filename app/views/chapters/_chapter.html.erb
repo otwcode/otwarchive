@@ -1,17 +1,17 @@
 <!-- This partial requires local variable 'chapter' -->
 <% chapter_id = "chapter-#{chapter.position.to_s}" %>
-<div class="chapter<%= ' draft' unless chapter.posted? %>" id="<%= chapter_id %>">
+<div class="chapter<%= ' draft' if (!chapter.posted? || @preview_mode) %>" id="<%= chapter_id %>">
   <% unless chapter.posted? || @preview_mode %>
     <p class="draft-chapter notice"><%= ts("This chapter is a draft and hasn't been posted yet!") %></p>
   <% end %>
 <!-- chapter management -->  
-  <% if is_author_of?(@work) && !@downloading %>
-    <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
+  <% if is_author_of?(@work) && !@downloading && !@preview_mode%>
+    <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work} %>
   <% end %>
 
-<% cache("#{chapter.cache_key}-show") do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show") do %>
 
-  <div class="chapter preface group" role="complementary">
+  <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">
       <% if current_page?(:controller => 'chapters', :action => 'show') %><%= link_to chapter.chapter_header, [chapter.work, chapter] %><% else %><%= chapter.chapter_header %><% end %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
     </h3>

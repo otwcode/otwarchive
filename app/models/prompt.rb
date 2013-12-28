@@ -8,6 +8,8 @@ class Prompt < ActiveRecord::Base
 
   # maximum number of options to allow to be shown via checkboxes
   MAX_OPTIONS_FOR_CHECKBOXES = 10
+  
+  # ASSOCIATIONS
 
   belongs_to :collection
   belongs_to :pseud
@@ -25,7 +27,20 @@ class Prompt < ActiveRecord::Base
   
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
   
+  # SCOPES
+  
   scope :claimed, joins("INNER JOIN challenge_claims on prompts.id = challenge_claims.request_prompt_id")
+  
+  scope :in_collection, lambda {|collection| where(collection_id: collection.id) }
+  
+  scope :unused, {:conditions => {:used_up => false}}
+  
+  scope :with_tag, lambda { |tag| 
+    joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
+    where("set_taggings.tag_id = ?", tag.id) 
+  }
+  
+  # CALLBACKS
 
   before_destroy :clear_claims
   def clear_claims
@@ -33,7 +48,8 @@ class Prompt < ActiveRecord::Base
     request_claims.each {|claim| claim.destroy}
   end
 
-  # VALIDATION
+  # VALIDATIONS
+  
   attr_protected :description_sanitizer_version
 
   validates_presence_of :collection_id
@@ -57,6 +73,9 @@ class Prompt < ActiveRecord::Base
   def description_required?
     (restriction = get_prompt_restriction) && restriction.description_required
   end
+  validates_length_of :description,
+    :maximum => ArchiveConfig.NOTES_MAX,
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
   def title_required?
     (restriction = get_prompt_restriction) && restriction.title_required
   end
@@ -99,14 +118,14 @@ class Prompt < ActiveRecord::Base
               ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, ts("^#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
-                                 :taglist => taglist_string))
+            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} cannot include any #{tag_type} tags, but you have included %{taglist}.",
+              :taglist => taglist_string))
           elsif required == allowed
-            errors.add(:base, ts("^#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
-              :required => required, :taglist => taglist_string))
+            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} must include exactly %{required} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+              :required => required))
           else
-            errors.add(:base, ts("^#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.",
-              :required => required, :allowed => allowed, :taglist => taglist_string))
+            errors.add(:base, ts("^#{prompt_type}: your #{prompt_type} must include between %{required} and %{allowed} #{tag_type} tags, but you have included #{tag_count} #{tag_type} tags in your current #{prompt_type}.",
+              :required => required, :allowed => allowed))
           end
         end
       end
@@ -135,7 +154,7 @@ class Prompt < ActiveRecord::Base
         else
           noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
-            errors.add(:base, ts("These %{tag_type} tags in your %{prompt_type} are not canonical and can't be used unless the moderator adds them: %{taglist}",
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please contact your challenge moderator who can then log a request with Support for the tags to be made canonical if appropriate.",
               :tag_type => tag_type,
               :prompt_type => self.class.name.downcase,
               :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
@@ -167,6 +186,8 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
+  
+  # INSTANCE METHODS
       
   # make sure we are not blank
   def blank?
@@ -188,10 +209,6 @@ class Prompt < ActiveRecord::Base
       true
     end
   end
-
-  scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
-
-  scope :unused, {:conditions => {:used_up => false}}
   
   def unfulfilled_claims
     self.request_claims.unfulfilled_in_collection(self.collection)

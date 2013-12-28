@@ -22,12 +22,25 @@
       <% if params[:page] %>
         <%= hidden_field_tag :page, params[:page] %>
       <% end %>
-
       <% if logged_in? %>
+          <% # The following two notices show on the top-level comment box on either a: Work (full view) or Chapter by Chapter page %>
+          <% if commentable.is_a?(Work) && current_user.is_author_of?(commentable) && commentable.anonymous? %>
+            <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+          <% elsif commentable.is_a?(Chapter) && current_user.is_author_of?(commentable) && commentable.work.anonymous? %>
+            <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+          <% end %>
+        <% # When the thing that we are commenting on is a comment (read: replying to) then we use this statement. Shows in user Inbox and nested reply %>
+        <% if commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent) %>
+          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+        <% end %>
         <% if current_user.pseuds.count > 1 %>
           <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>
-              <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
+              <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
+                <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
+              <% else %>
+                <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
+              <% end %>
             <% end %>
             (<%= allowed_html_instructions(show_list=false) %>)
           </h4>
@@ -35,7 +48,11 @@
           <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
             <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}", :id => "comment_pseud_id_for_#{commentable.id}" %>
             <% if controller.controller_name == "inbox" %>
-              <span>to <%= get_commenter_pseud_or_name(commentable) %> on <%= commentable_description_link(commentable) %></span>
+              <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
+                <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
+              <% else %>
+                <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
+              <% end %>
             <% end %>
           </h4>
           <p class="footnote">(<%= allowed_html_instructions %>)</p>
@@ -92,7 +109,7 @@
               :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
       <p class="submit actions">
-        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}" %>
+        <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", :disable_with => ts("Please wait...") %>
         <% if controller.controller_name == 'inbox' %>
           <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
         <% elsif commentable.class.name == "Comment" || !comment.new_record? %>

@@ -7,11 +7,8 @@
       <% end %>
     </li>
   <% end %>
-  <% if preview_mode == true %>
-    <li><%= link_to ts('Revert To Saved'), [:edit, work, chapter] %></li>
-  <% else %>
-    <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>
-  <% end %>
+  
+  <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>  
   <% if work.chapters.count > 1 %>
     <li><%= link_to ts('Delete Chapter'), [work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
   <% end %>

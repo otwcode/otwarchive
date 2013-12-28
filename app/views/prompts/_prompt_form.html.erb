@@ -55,7 +55,10 @@
           <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
           <%= form.label :description, (desc_label.blank? ? ts("Description: ") : desc_label) %>
         </dt>
-        <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
+        <dd><%= form.text_area :description, :rows => 6, :cols => 50, :class => "observe_textlength" %>
+        <%= live_validation_for_field(field_id(form, "description").to_sym, :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
+        <%= generate_countdown_html(field_id(form, "description").to_sym, ArchiveConfig.NOTES_MAX) %>
+        </dd>
       <% end %>
     
       <% if restriction.optional_tags_allowed %>
@@ -65,7 +68,7 @@
             <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
           </dt>
           <dd>
-            <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag?type=all") %>
+            <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag?type=all", :value => form.object.optional_tag_set.tagnames) %>
           </dd>
         <% end %>
       <% end %>
@@ -77,7 +80,7 @@
         %>
         <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
         <dd>
-          <%= form.check_box :anonymous, :checked => form.object.new_record? ? @collection.challenge.anonymous? : form.object.anonymous %>
+          <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? true : form.object.anonymous %>
   	      <p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p>
   	    </dd>
       <% end %>     

@@ -7,17 +7,31 @@ class TagSweeper < ActionController::Caching::Sweeper
     end
     update_tag_nominations(tag)
   end
-  
+
   def after_update(tag)
     if tag.canonical_changed?
       if tag.canonical
         # newly canonical tag
         tag.add_to_autocomplete
       else
+        # decanonicalised tag
         tag.remove_from_autocomplete
       end
+    elsif tag.canonical
+      # clean up the autocomplete
+      tag.remove_stale_from_autocomplete
+      tag.add_to_autocomplete
     end
+
+    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
+    if tag.type_changed?
+      tag.parents.each do |parent_tag|
+        expire_fragment("views/tags/#{parent_tag.id}/children")
+      end
+    end
+
     update_tag_nominations(tag)
+
   end
 
   def before_destroy(tag)

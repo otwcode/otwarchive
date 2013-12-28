@@ -12,7 +12,6 @@ user_00025:
   suspended: false
   suspended_until: 
   login: badjuju
-  identity_url: 
   out_of_invites: true
   email: mjsunbound@gmail.com
   banned: false
@@ -29,7 +28,6 @@ user_00014:
   suspended: false
   suspended_until: 
   login: Uriel
-  identity_url: 
   out_of_invites: true
   email: Uriel@example.com
   banned: false
@@ -46,7 +44,6 @@ user_00003:
   suspended: false
   suspended_until: 
   login: testuser3
-  identity_url: 
   out_of_invites: true
   email: user3@example.com
   banned: false
@@ -63,7 +60,6 @@ user_00004:
   suspended: false
   suspended_until: 
   login: testuser4
-  identity_url: 
   out_of_invites: true
   email: user4@example.com
   banned: false
@@ -80,7 +76,6 @@ user_00015:
   suspended: false
   suspended_until: 
   login: parenthetical
-  identity_url: 
   out_of_invites: true
   email: sarkymoocow@example.com
   banned: false
@@ -97,7 +92,6 @@ user_00026:
   suspended: false
   suspended_until: 
   login: DawningStar
-  identity_url: 
   out_of_invites: true
   email: dawn@ccaonline.com
   banned: false
@@ -114,7 +108,6 @@ user_00027:
   suspended: false
   suspended_until: 
   login: yulechatismadeofawesome
-  identity_url: 
   out_of_invites: true
   email: attempt-unique@yahoo.com
   banned: false
@@ -131,7 +124,6 @@ user_00016:
   suspended: false
   suspended_until: 
   login: cal
-  identity_url: 
   out_of_invites: true
   email: cal@example.com
   banned: false
@@ -148,7 +140,6 @@ user_00005:
   suspended: false
   suspended_until: 
   login: Ash
-  identity_url: 
   out_of_invites: true
   email: ash@example.com
   banned: false
@@ -165,7 +156,6 @@ user_00006:
   suspended: false
   suspended_until: 
   login: orphan_account
-  identity_url: 
   out_of_invites: true
   email: 
   banned: false
@@ -182,7 +172,6 @@ user_00017:
   suspended: false
   suspended_until: 
   login: reccer
-  identity_url: 
   out_of_invites: true
   email: reccer@example.com
   banned: false
@@ -199,7 +188,6 @@ user_00028:
   suspended: false
   suspended_until: 
   login: Shusu
-  identity_url: 
   out_of_invites: true
   email: boo@moog.com
   banned: false
@@ -216,7 +204,6 @@ user_00029:
   suspended: false
   suspended_until: 
   login: whetherwoman
-  identity_url: 
   out_of_invites: true
   email: marina@nbtsc.org
   banned: false
@@ -233,7 +220,6 @@ user_00007:
   suspended: false
   suspended_until: 
   login: Boccaccio
-  identity_url: 
   out_of_invites: true
   email: boccaccio@example.org
   banned: false
@@ -250,7 +236,6 @@ user_00030:
   suspended: false
   suspended_until: 
   login: Lizifer
-  identity_url: 
   out_of_invites: true
   email: elmiller00@gmail.com
   banned: false
@@ -267,7 +252,6 @@ user_00031:
   suspended: false
   suspended_until: 
   login: tassos
-  identity_url: 
   out_of_invites: true
   email: savyln7@gmail.com
   banned: false
@@ -284,7 +268,6 @@ user_00019:
   suspended: false
   suspended_until: 
   login: Zee
-  identity_url: http://zooey-glass04.livejournal.com/
   out_of_invites: true
   email: zooey.glass04@gmail.com
   banned: false
@@ -301,7 +284,6 @@ user_00008:
   suspended: false
   suspended_until: 
   login: Chaucer
-  identity_url: 
   out_of_invites: true
   email: chaucer@example.com
   banned: false
@@ -318,7 +300,6 @@ user_00020:
   suspended: false
   suspended_until: 
   login: hh_ook
-  identity_url: 
   out_of_invites: true
   email: hh-ook@gmail.com
   banned: false
@@ -335,7 +316,6 @@ user_00021:
   suspended: false
   suspended_until: 
   login: yulechatrulesall
-  identity_url: 
   out_of_invites: true
   email: sdfsdf@gmail.com
   banned: false
@@ -352,7 +332,6 @@ user_00010:
   suspended: false
   suspended_until: 
   login: Sam
-  identity_url: 
   out_of_invites: true
   email: Sam@example.com
   banned: false
@@ -369,7 +348,6 @@ user_00009:
   suspended: false
   suspended_until: 
   login: Dean
-  identity_url: 
   out_of_invites: true
   email: Dean@example.com
   banned: false
@@ -386,7 +364,6 @@ user_00032:
   suspended: false
   suspended_until: 
   login: Enigel
-  identity_url: 
   out_of_invites: true
   email: enigel@gmail.com
   banned: false
@@ -403,7 +380,6 @@ user_00033:
   suspended: false
   suspended_until: 
   login: invitest
-  identity_url: 
   out_of_invites: true
   email: liminimail@googlemail.com
   banned: false
@@ -420,7 +396,6 @@ user_00011:
   suspended: false
   suspended_until: 
   login: Ellen
-  identity_url: 
   out_of_invites: true
   email: Ellen@example.com
   banned: false
@@ -437,7 +412,6 @@ user_00022:
   suspended: false
   suspended_until: 
   login: Jenn_Calaelen
-  identity_url: 
   out_of_invites: true
   email: jenn.calaelen@googlemail.com
   banned: false
@@ -454,7 +428,6 @@ user_00023:
   suspended: false
   suspended_until: 
   login: Llwyden
-  identity_url: 
   out_of_invites: true
   email: llwyden@trickster.org
   banned: false
@@ -471,7 +444,6 @@ user_00012:
   suspended: false
   suspended_until: 
   login: Zooey_Glass
-  identity_url: 
   out_of_invites: true
   email: zooey@example.com
   banned: false
@@ -488,7 +460,6 @@ user_00001:
   suspended: false
   suspended_until: 
   login: testuser
-  identity_url: 
   out_of_invites: true
   email: user1@example.com
   banned: false
@@ -505,7 +476,6 @@ user_00002:
   suspended: false
   suspended_until: 
   login: testuser2
-  identity_url: 
   out_of_invites: true
   email: user2@example.com
   banned: false
@@ -522,7 +492,6 @@ user_00013:
   suspended: false
   suspended_until: 
   login: Jessica
-  identity_url: 
   out_of_invites: true
   email: Jessica@example.com
   banned: false
@@ -539,7 +508,6 @@ user_00024:
   suspended: false
   suspended_until: 
   login: moriann
-  identity_url: 
   out_of_invites: true
   email: aaa@bbb.com
   banned: false

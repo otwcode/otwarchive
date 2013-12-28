@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t('.add_new_translator', :default => 'Add new translators:') %></h2>
+<h2 class="heading"><%= ts('Add New Translators') %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,33 +8,28 @@
 <!--main content-->
 <%= form_tag url_for({:controller => :translators, :action => 'create', :method => :post}) do %>
 
-<table summary="">
-	<caption>Add new translators</caption>
+<table summary="<%= ts('Form table for adding new translators and setting their locales.') %>">
+	<caption><%= ts('Add New Translators') %></caption>
 	<thead>
-  		<tr>
-    		<th scope="col"><%= t('.translator_email', :default => 'Email Address') %></th>
-    		<th scope="col"><%= t('.translator_locale', :default => 'Locale') %></th>
-  		</tr>
+  	<tr>
+    	<th scope="col"><%= ts('Email Address') %></th>
+    	<th scope="col"><%= ts('Locale') %></th>
+  	</tr>
 	</thead>
 	<tbody>
-  <% 5.times do |i| %>
-    	<tr>
-      		<td><%= text_field_tag "translators[#{i}][email]" %></td>
-      		<td>
-        		<select id='translators_<%= i %>_locale_id' name='translators[<%= i %>][locale_id]' >
-          <%= options_from_collection_for_select(@locales, :id, :name, @locale_id) %>
-        		</select>
-      		</td>
-    	</tr>
-  <% end %>
+    <% 5.times do |i| %>
+      <tr>
+        <td><%= text_field_tag "translators[#{i}][email]" %></td>
+        <td>
+          <select id='translators_<%= i %>_locale_id' name='translators[<%= i %>][locale_id]' >
+            <%= options_from_collection_for_select(@locales, :id, :name, @locale_id) %>
+          </select>
+        </td>
+      </tr>
+    <% end %>
 	</tbody>
-	<tfoot>
-  		<tr>
-			<th scope="row">Add translator</th>
-			<td><%= submit_tag t('.forms.submit', :default => "Submit") %></td>
-		</tr>
-	<tfoot>
-</table>  
+</table>
+<p class="submit"><%= submit_tag ts('Submit') %></p>
 
 <% end %>
 <!--/content-->

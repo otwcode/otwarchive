@@ -1,12 +1,11 @@
-<p>
-  Your work <cite><%= link_to(@related_work.parent.title.html_safe, @related_parent_link) %></cite> 
-  was listed as the inspiration of <cite><%= link_to(@related_work.work.title.html_safe, @related_child_link) %></cite> 
-  <% if @related_work.work.anonymous? %>  
-    by an anonymous author
-  <% else %>
-    by <%= @related_work.work.pseuds.collect(&:name).join(", ") %>
-  <% end %>
-</p>
+<% content_for :message do %>
+  <p>
+    Your work <i><b><%= style_link(@related_work.parent.title.html_safe, @related_parent_link) %></b></i> was listed as the inspiration of <i><b><%= style_link(@related_work.work.title.html_safe, @related_child_link) %></b></i> by <%= @related_work.work.anonymous? ? "an anonymous author" : (@related_work.work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>.
+  </p>
 
-<p><%= link_to("Approve relationship and link back to this work from your work", related_work_url(@related_work)) %></p>
-<p><%= "(You can come back to this page if you change your mind.)" %></p> 
+  <p>
+    <%= style_link("Approve relationship and link back to this work from your work", related_work_url(@related_work)) %>
+  </p>
+  
+  <p>(You can come back to this page if you change your mind.)</p>
+<% end %>

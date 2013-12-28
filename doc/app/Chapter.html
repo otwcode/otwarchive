@@ -511,6 +511,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -564,6 +566,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -866,7 +872,7 @@ been saved Can’t write to chapter.pseuds until the chapter has an id</p>
 
           
           <div class="method-source-code" id="commentable_name-source">
-            <pre><span class="ruby-comment"># File app/models/chapter.rb, line 198</span>
+            <pre><span class="ruby-comment"># File app/models/chapter.rb, line 188</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">commentable_name</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1050,18 +1056,8 @@ chapter content</p>
             <pre><span class="ruby-comment"># File app/models/chapter.rb, line 178</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_word_count</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">content_changed?</span>
-    <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
-    <span class="ruby-identifier">body</span> = <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">HTML</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">content</span>).<span class="ruby-identifier">xpath</span>(<span class="ruby-string">'//body'</span>).<span class="ruby-identifier">first</span>
-    <span class="ruby-identifier">body</span>.<span class="ruby-identifier">traverse</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">node</span><span class="ruby-operator">|</span>
-      <span class="ruby-comment"># only count actual text</span>
-      <span class="ruby-keyword">if</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">Text</span>
-        <span class="ruby-comment"># scan by word boundaries after stripping hyphens and apostrophes</span>
-        <span class="ruby-comment"># so one-word and one's will be counted as one word, not two.</span>
-        <span class="ruby-comment"># -- is replaced by — (emdash) before strip so one--two will count as 2</span>
-        <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r--/</span>, <span class="ruby-string">&quot;—&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r['’‘-]/</span>, <span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r[[:word:]]+/</span>).<span class="ruby-identifier">size</span>
-      <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span> = <span class="ruby-identifier">count</span>
+    <span class="ruby-identifier">counter</span> = <span class="ruby-constant">WordCounter</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">content</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span> = <span class="ruby-identifier">counter</span>.<span class="ruby-identifier">count</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span>
   <span class="ruby-keyword">end</span>

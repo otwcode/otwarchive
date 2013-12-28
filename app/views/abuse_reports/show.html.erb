@@ -1,40 +1,24 @@
-<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
+<div class="admin">
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%= ts("Abuse Report") %> <%= @abuse_report.id %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-	<li><%= link_to ts("All abuse reports"), abuse_reports_path %></li>
+	<li><%= link_to ts("All Abuse Reports"), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<!--FRONT END, should this be a table or should it be an inbox?
-need to see some realdata to know, suspect inbox-->
-<div class="wrapper">
-	<table id="abuse_report_table" summary="">
-		<caption><%=ts("Detailed abuse report") %></caption>
-		<tr>
-			<th scope="row"><%=ts("From") %></th>
-			<td><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %></td>
-		</tr>
-		<tr>
-			<th scope="row"><%=ts("Regarding") %></th>
-			<td><%= link_to @abuse_report.url, @abuse_report.url %></td>
-		</tr>
-		<tr>
-			<th scope="row"><%=ts("Reported") %></th>
-			<td><%= time_ago_in_words @abuse_report.created_at %></td>
-		</tr>
-		<tr>
-			<th scope="row"><%=ts("Statement") %></th>
-			<td class="userstuff"><%=raw sanitize_field(@abuse_report, :comment) %></td>
-		</tr>
-	</table>
+<div class="abuse comment group" role="article">
+  <h4 class="heading byline"><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %> <%= ts("regarding") %> <%= link_to @abuse_report.url, @abuse_report.url %></h4>
+  <blockquote class="userstuff"><%=raw sanitize_field(@abuse_report, :comment) %></blockquote>
+  <p class="datetime"><%= ts("Reported") %> <%= time_ago_in_words @abuse_report.created_at %></p>
 </div>
 <!--/content-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-	<li><%= link_to ts("All abuse reports"), abuse_reports_path %></li>
+	<li><%= link_to ts("All Abuse Reports"), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->
+</div>

@@ -19,7 +19,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_challenge
-    setflash; flash[:error] = ts("What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -29,7 +29,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def signup_closed
-    setflash; flash[:error] = ts("Signup is currently closed: please contact a moderator for help.")
+    flash[:error] = ts("Sign-up is currently closed: please contact a moderator for help.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -43,7 +43,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def not_signup_owner
-    setflash; flash[:error] = ts("You can't edit someone else's signup!")
+    flash[:error] = ts("You can't edit someone else's sign-up!")
     redirect_to @collection
     false
   end
@@ -58,7 +58,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_signup
-    setflash; flash[:error] = ts("What signup did you want to work on?")
+    flash[:error] = ts("What sign-up did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -71,7 +71,7 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signups = @user.challenge_signups.order_by_date
         render :action => :index and return
       else
-        setflash; flash[:error] = ts("You aren't allowed to see that user's signups.")
+        flash[:error] = ts("You aren't allowed to see that user's sign-ups.")
         redirect_to '/' and return
       end
     else
@@ -97,7 +97,7 @@ class ChallengeSignupsController < ApplicationController
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           export_csv
         else
-          setflash; flash[:error] = ts("You aren't allowed to see the CSV summary.")
+          flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to '/' and return
         end
       }
@@ -106,7 +106,7 @@ class ChallengeSignupsController < ApplicationController
 
   def summary
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      setflash; flash.now[:notice] = ts("Summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} sign-ups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
@@ -151,14 +151,14 @@ class ChallengeSignupsController < ApplicationController
       end
     end
     unless notice.blank?
-      setflash; flash[:notice] = notice
+      flash[:notice] = notice
     end
   end
 
   public
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      setflash; flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
+      flash[:notice] = ts("You are already signed up for this challenge. You can edit your sign-up below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
@@ -176,7 +176,7 @@ class ChallengeSignupsController < ApplicationController
     @challenge_signup.collection = @collection
     # we check validity first to prevent saving tag sets if invalid
     if @challenge_signup.valid? && @challenge_signup.save
-      setflash; flash[:notice] = 'Signup was successfully created.'
+      flash[:notice] = 'Sign-up was successfully created.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :new
@@ -185,7 +185,7 @@ class ChallengeSignupsController < ApplicationController
 
   def update
     if @challenge_signup.update_attributes(params[:challenge_signup])
-      setflash; flash[:notice] = 'Signup was successfully updated.'
+      flash[:notice] = 'Sign-up was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :edit
@@ -194,10 +194,10 @@ class ChallengeSignupsController < ApplicationController
 
   def destroy
     unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
-      setflash; flash[:error] = ts("You cannot delete your signup after signups are closed. Please contact a moderator for help.")
+      flash[:error] = ts("You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.")
     else
       @challenge_signup.destroy
-      setflash; flash[:notice] = ts("Challenge signup was deleted.")
+      flash[:notice] = ts("Challenge sign-up was deleted.")
     end
     if @collection.user_is_maintainer?(current_user) && !@collection.prompt_meme?
       redirect_to collection_signups_path(@collection)
@@ -239,7 +239,7 @@ protected
   
 
   def gift_exchange_to_csv
-    header = ["Pseud", "Email", "Signup URL"]
+    header = ["Pseud", "Email", "Sign-up URL"]
 
     ["request", "offer"].each do |type|
       @challenge.send("#{type.pluralize}_num_allowed").times do |i|
@@ -274,7 +274,7 @@ protected
 
   
   def prompt_meme_to_csv
-    header = ["Pseud", "Email", "Signup URL", "Tags"]
+    header = ["Pseud", "Email", "Sign-up URL", "Tags"]
     header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
     header << "Description" if @challenge.request_restriction.description_allowed
     header << "URL" if @challenge.request_restriction.url_allowed

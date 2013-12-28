@@ -1,0 +1,7 @@
+<% content_for :message do %>
+Dear Collection Maintainers!
+
+We have finished generating potential assignments for your challenge collection "<%= @collection.title %>" (<%= collection_url(@collection) %>).
+
+You can see the potential matches and set assignments at:
+<%= collection_potential_matches_url(@collection) %>.<% end %><% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

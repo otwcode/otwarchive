@@ -1,0 +1,9 @@
+<% content_for :message do %>
+Dear <%= @user.default_pseud.byline %>,
+  
+Your story "<%= @work.title.html_safe %>" was deleted at <%= (@work.pseuds.count > 1 && @user != User.current_user) ? "the request of " + text_pseud(User.current_user.default_pseud) : "your request" %>.
+  
+If you have questions, please contact Support at <%= root_url %>support.
+  
+Attached is a copy of your work for your reference.
+<% end %>

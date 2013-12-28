@@ -48,7 +48,7 @@ describe User do
     end
 
     it "should not save user when login exists already" do
-      user2 = Factory.create(:user)
+      user2 = FactoryGirl.create(:user)
       @user.login = user2.login
       @user.save.should be_false
       @user.errors[:login].should_not be_empty
@@ -70,7 +70,7 @@ describe User do
     end
 
     it "should not save user when email exists already" do
-      user2 = Factory.create(:user)
+      user2 = FactoryGirl.create(:user)
       @user.email = user2.email
       @user.save.should be_false
       @user.errors[:email].should_not be_empty
@@ -91,10 +91,10 @@ describe User do
   describe "most_popular_tags" do
     
     before(:each) do
-      @user = Factory.create(:user)
-      @fandom1 = Factory.create(:fandom)
-      @fandom2 = Factory.create(:fandom)
-      @character = Factory.create(:character)
+      @user = FactoryGirl.create(:user)
+      @fandom1 = FactoryGirl.create(:fandom)
+      @fandom2 = FactoryGirl.create(:fandom)
+      @character = FactoryGirl.create(:character)
     end
 
     it "should be empty when user has no works" do
@@ -102,18 +102,18 @@ describe User do
     end
 
     it "should find one fandom for one work" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1] })
+                       :fandom_string => @fandom1.name })
 
       @user.most_popular_tags.should == [@fandom1]
       @user.most_popular_tags.first.taggings_count.should == 1
     end
     
     it "should find two fandoms for one work" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1, @fandom2] })
+                       :fandom_string => "#{@fandom1.name}, #{@fandom2.name}" })
 
       @user.most_popular_tags.should =~ [@fandom1, @fandom2]
       @user.most_popular_tags.first.taggings_count.should == 1
@@ -121,13 +121,13 @@ describe User do
     end
 
     it "should find two fandoms for two works" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1] })
+                       :fandom_string => @fandom1.name })
 
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom2] })
+                       :fandom_string => @fandom2.name })
 
       @user.most_popular_tags.should =~ [@fandom1, @fandom2]
       @user.most_popular_tags.first.taggings_count.should == 1
@@ -135,13 +135,13 @@ describe User do
     end
 
     it "should count duplicated fandoms" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1] })
+                       :fandom_string => @fandom1.name })
 
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1, @fandom2] })
+                       :fandom_string => "#{@fandom1.name}, #{@fandom2.name}" })
 
       @user.most_popular_tags.should == [@fandom1, @fandom2]
       @user.most_popular_tags.first.taggings_count.should == 2
@@ -149,9 +149,9 @@ describe User do
     end
 
     it "should find different kinds of tags" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1],
+                       :fandom_string => @fandom1.name,
                        :characters => [@character]})
       
       @user.most_popular_tags.should =~ [@fandom1, @character]
@@ -160,9 +160,9 @@ describe User do
     end
 
     it "should limit to one kind of tags" do
-     Factory.create(:work,
+     FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1],
+                       :fandom_string => @fandom1.name,
                        :characters => [@character]})
       
       @user.most_popular_tags(:categories => ["Character"]).should == [@character]
@@ -170,13 +170,13 @@ describe User do
 
   
     it "should limit length of returned collection" do
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1] })
+                       :fandom_string => @fandom1.name })
 
-      Factory.create(:work,
+      FactoryGirl.create(:work,
                      { :authors => [@user.pseuds.first],
-                       :fandoms => [@fandom1, @fandom2] })
+                       :fandom_string => "#{@fandom1.name}, #{@fandom2.name}" })
 
       @user.most_popular_tags(:limit => 1).should == [@fandom1]
     end

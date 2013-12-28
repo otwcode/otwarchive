@@ -1,12 +1,3 @@
-<h2 class="heading"><%= ts("Sign Up For %{title}", :title => @collection.title) %></h2>
-
-<!-- descriptions-->
-<!-- /descriptions-->
-<!--subnavigation, sorting and actions-->
-<!--/subnav-->
-
-<!--main content-->
-
 <% types = @challenge.class::PROMPT_TYPES.select {|t| @challenge.allowed(t) > @challenge.required(t)} %>
 <% unless types.empty? %>
   <noscript>
@@ -17,13 +8,12 @@
         <%= ts("Since you don't have Javascript turned on, please tell us how many #{types.to_sentence} you want to submit: ") %>
       </p>
       <%= form_tag({}, {:method => :get}) do %>
-       <!--BACK END how many types could this have? could this be a p instead?--> 
        <dl>
           <% types.each do |type| %>
-            <dt><%= label_tag "num_#{type}", ts("#{type.classify.pluralize} (Up to %{allowed})", :allowed => @challenge.allowed(type)) %></dt>
+            <dt><%= label_tag "num_#{type}", ts("#{type.classify.pluralize} (Up to %{allowed}):", :allowed => @challenge.allowed(type)) %></dt>
             <dd><%= text_field_tag "num_#{type}", params["num_#{type}"] || @challenge.required(type), :class => "number" %></dd>
           <% end %>
-        <dt class="landmark">Submit</dt>
+        <dt class="landmark"><%= ts("Submit") %></dt>
         <dd class="submit"><%= submit_tag ts('Update Form') %></dd>
       </dl>
       <% end %>
@@ -67,11 +57,3 @@
   <%= submit_fieldset signup_form %>
 
 <% end %>
-
-<!--/content-->
-
-<!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to 'Back', @collection %></li>
-</ul>
-<!--/subnav-->

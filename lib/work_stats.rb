@@ -1,4 +1,4 @@
-# This module is included by both the work and hit_counter models so they use the 
+# This module is included by both the work and stat_counter models so they use the 
 # same redis keys and can both access the data in redis
 module WorkStats  
   
@@ -30,7 +30,7 @@ module WorkStats
     end
 
     def get_database_stat(statistic, work_id)
-      HitCounter.where(:work_id => work_id).value_of(statistic).first || 0
+      StatCounter.where(:work_id => work_id).value_of(statistic).first || 0
     end
 
   end # ClassMethods
@@ -61,6 +61,16 @@ module WorkStats
     key = redis_stat_key(:hit_count)
     $redis.set(key, self.hits) unless $redis.exists(key)
     $redis.incrby(key, amount)
+  end
+  
+  def update_stat_counter
+    counter = self.stat_counter || self.create_stat_counter
+    counter.update_attributes(
+      kudos_count: self.kudos.count,
+      comments_count: self.total_comments.not_deleted.count,
+      bookmarks_count: self.bookmarks.where(:private => false).count
+    )
+    RedisSearchIndexQueue.reindex(self, without_bookmarks: true)
   end
 
   protected 

@@ -1,12 +1,21 @@
-<h2 class="heading"><%=ts("Here's some user feedback on the archive!") %></h2>
+<% content_for :message do %>
 
-<%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + ts("Archive revision: (rev. %{revision})", :revision => ArchiveConfig.REVISION) + "</p>" %>
+  <p><%= style_bold("Here's some user feedback on the archive!") %></p>
+  
+  <% unless ArchiveConfig.REVISION.blank? %>
+    <p>
+      Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+    </p>
+  <% end %>
 
-<h3 class="heading"><%=ts("Feedback") %>:</h3>
+  Feedback:  
+  <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
 
-<%=raw @summary %>
-<%=raw @comment %>
+<% end %>
 
-<p><%=ts("Sent at") %>: &nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>
+
 
 

@@ -14,24 +14,24 @@ is verbose-->
 
     <% if is_offer %>
       <!-- skip the notes -->
-    	<legend>Offer Settings</legend>
-    	<h3 class-"landmark">Offer Settings</h3>
+    	<legend><%= ts("Offer Settings") %></legend>
+    	<h3 class="landmark"><%= ts("Offer Settings") %></h3>
     	<p class="note">
-    	  These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!
+    	  <%= ts("These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!") %>
     	</p>
     <% else %>
-    	<legend>Request Settings</legend>
-    	<h3 class-"landmark">Request Settings</h3>
+    	<legend><%= ts("Request Settings") %></legend>
+    	<h3 class="landmark"><%= ts("Request Settings") %></h3>
     	<p class="note">
-    	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
-    	  <% unless type == "prompt_meme" %>If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.<% end %>
+    	  <%= ts("These settings determine what each separate request can contain, and in particular how many different tags of each kind.") %>
+    	  <% unless type == "prompt_meme" %><%= ts("If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.") %><% end %>
     	</p>
     	<% unless type == "prompt_meme" %><p class="note">
-    	  Checking "Allow Any?" allows users to select "Any" for that field; this means they will match <em>anything</em> put in that field. This option is safer for offers than requests!
+    	  <%= ts('Checking "Allow Any?" allows users to select "Any" for that field; this means they will match') %> <em><%= ts("anything") %></em> <%= ts("put in that field. This option is safer for offers than requests!") %>
     	</p><% end %>
     	<p class="note">
-    	  If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
-    	  for all three prompts&#8212;no overlap allowed. Please explain this in your signup instructions!
+    	  <%= ts('If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
+    	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!') %>
     	</p> 
     <% end %>
     <dl>
@@ -46,25 +46,25 @@ is verbose-->
   <% if show_tag_options %>
     <fieldset>
       <legend><%= ts("Tag Options") %></legend>
-      <h3 class-"landmark"><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
+      <h3 class="landmark"><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
       <p class="note">
-     <%= link_to(ts("Tag sets"), tag_sets_path) %> show what tags can be used in
-        your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.
+     <%= link_to(ts("Tag sets"), tag_sets_path) %> <%= ts("show what tags can be used in
+        your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.") %>
       </p> 
       <dl>
         <% unless restriction.owned_tag_sets.empty? %>
           <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets:") %></dt>
           <dd>
             <fieldset class="listbox">
-              <h4 class="heading">Check to remove</h4>
-            <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
-          </fieldset>
+              <h4 class="heading"><%= ts("Check to remove") %></h4>
+              <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
+            </fieldset>
           </dd>
         <% end %>
-        <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use: ") %></dt>
-        <dd title="tag sets to use"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
+        <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use:") %></dt>
+        <dd title="<%= ts('tag sets to use') %>"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
-          <dt><%= ts("#{tag_type.classify} Settings") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
+          <dt><%= ts("#{tag_type.classify} Settings:") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
           <dd>
             <ul>
               <li>

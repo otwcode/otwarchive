@@ -160,7 +160,7 @@ class Chapter < ActiveRecord::Base
   def validate_authors
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
-      errors.add(:base, t('needs_author', :default => "Chapter must have at least one author."))
+      errors.add(:base, ts("Chapter must have at least one author."))
       return false
     end
   end
@@ -178,18 +178,8 @@ class Chapter < ActiveRecord::Base
   # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
     if self.new_record? || self.content_changed?
-      count = 0
-      body = Nokogiri::HTML(self.content).xpath('//body').first
-      body.traverse do |node|
-        # only count actual text
-        if node.is_a? Nokogiri::XML::Text
-          # scan by word boundaries after stripping hyphens and apostrophes
-          # so one-word and one's will be counted as one word, not two.
-          # -- is replaced by — (emdash) before strip so one--two will count as 2
-          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[[:word:]]+/).size
-        end
-      end
-      self.word_count = count
+      counter = WordCounter.new(self.content)
+      self.word_count = counter.count
     else
       self.word_count
     end

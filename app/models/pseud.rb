@@ -1,13 +1,17 @@
 class Pseud < ActiveRecord::Base
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
   has_attached_file :icon,
     :styles => { :standard => "100x100>" },
-    :path => Rails.env.production? ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
-    :storage => Rails.env.production? ? :s3 : :filesystem,
+    :path => %w(staging production).include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
-    :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+    :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     :default_url => "/images/skins/iconsets/default/icon_user.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
@@ -18,17 +22,18 @@ class Pseud < ActiveRecord::Base
   DESCRIPTION_MAX = 500
 
   belongs_to :user
+  delegate :login, :to => :user, :prefix => true
   has_many :kudos
   has_many :bookmarks, :dependent => :destroy
   has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
   has_many :comments
   has_many :creatorships
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :readonly => false
   has_many :tags, :through => :works
   has_many :filters, :through => :works
   has_many :direct_filters, :through => :works
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :readonly => false
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :readonly => false
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
   has_many :tag_set_ownerships, :dependent => :destroy
@@ -79,8 +84,8 @@ class Pseud < ActiveRecord::Base
     group(:id).
     order(:name)
 
-  scope :with_posted_works, with_works & Work.visible_to_registered_user
-  scope :with_public_works, with_works & Work.visible_to_all
+  scope :with_posted_works, with_works.merge(Work.visible_to_registered_user)
+  scope :with_public_works, with_works.merge(Work.visible_to_all)
 
   scope :with_bookmarks,
     select("pseuds.*, count(pseuds.id) AS bookmark_count").
@@ -89,14 +94,14 @@ class Pseud < ActiveRecord::Base
     order(:name)
 
   # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
-  scope :with_public_bookmarks, with_bookmarks & Bookmark.is_public
+  scope :with_public_bookmarks, with_bookmarks.merge(Bookmark.is_public)
 
   scope :with_public_recs,
     select("pseuds.*, count(pseuds.id) AS rec_count").
     joins(:bookmarks).
     group(:id).
-    order(:name) &
-    Bookmark.is_public.recs
+    order(:name).
+    merge(Bookmark.is_public.recs)
 
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
@@ -242,12 +247,12 @@ class Pseud < ActiveRecord::Base
   # Parse a string of the "pseud.name (user.login)" format into a pseud
   def self.parse_byline(byline, options = {})
     pseud_name = ""
-    user_login = ""
+    login = ""
     if byline.include?("(")
-      pseud_name, user_login = byline.split('(', 2)
+      pseud_name, login = byline.split('(', 2)
       pseud_name = pseud_name.strip
-      user_login = user_login.strip.chop
-      conditions = ['users.login = ? AND pseuds.name = ?', user_login, pseud_name]
+      login = login.strip.chop
+      conditions = ['users.login = ? AND pseuds.name = ?', login, pseud_name]
     else
       pseud_name = byline.strip
       if options[:assume_matching_login]
@@ -321,11 +326,15 @@ class Pseud < ActiveRecord::Base
           end
         end
       end
-      comment_ids = creation.find_all_comments.collect(&:id).join(",")
-      Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+      comments = creation.total_comments.where("comments.pseud_id = ?", self.id)
+      comments.each do |comment|
+        comment.update_attribute(:pseud_id, pseud.id)
+      end
     elsif creation.is_a?(Series) && options[:skip_series]
       creation.works.each {|work| self.change_ownership(work, pseud)}
     end
+    # make sure changes affect caching/search/author fields
+    creation.save rescue nil
   end
 
   def change_membership(collection, new_pseud)
@@ -373,29 +382,33 @@ class Pseud < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes :name
-    indexes :description
-    indexes :icon_alt_text
-
-    # associations
-    indexes user(:login), :as => 'user'
-#    indexes works(:id), :as => 'work_id'
-#    indexes tags(:name), :as => 'tag'
-
-    # attributes
-    has bookmarks(:id), :as => :bookmarks_ids
-    has "COUNT(bookmarks.id)", :as => 'bookmark_count', :type => :integer
-
-#    has creatorship.creation(:id), :as => :creation_ids
-#    has "COUNT(works.id)", :as => 'work_count', :type => :integer
-
-    # properties
-#    set_property :delta => :delayed
+  
+  #################################
+  ## SEARCH #######################
+  #################################
+  
+  mapping do
+    indexes :name, boost: 20
+  end
+  
+  def collection_ids
+    collections.value_of(:id)
+  end
+  
+  self.include_root_in_json = false
+  def to_indexed_json
+    to_json(methods: [:user_login, :collection_ids])
+  end
+  
+  def self.search(options={})
+    tire.search(page: options[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE, load: true) do
+      query do
+        boolean do
+          must { string options[:query], default_operator: "AND" } if options[:query].present?
+          must { term :collection_ids, options[:collection_id] } if options[:collection_id].present?
+        end
+      end
+    end
   end
 
 end

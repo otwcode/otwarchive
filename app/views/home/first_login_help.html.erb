@@ -23,10 +23,6 @@
 <h3 id="logging_in">Logging In</h3>
 <p>To log in, locate and fill in the log in link (located at the top of the screen for those using a visual browser, and as indicated by your screenreader if you're using one). If you're on the <%= link_to "main page", root_path %>, then there'll be a log in area at the very top of the page; there's a log in link there everywhere else on the Archive as well. If you forget your password, then select <%= link_to "forgot your password", new_password_path %>.</p>
 
-<p>If you're using OpenID, no password is necessary&#8212;the archive software will talk to your OpenID provider behind the scenes. To switch to OpenID login, just click on the eye-like logo next to the password input box.</p>
-
-<p><strong>Note:</strong> You'll have to have created an account already, and to have linked it with your OpenID in your Profile (<%= link_to "edit your profile", edit_user_path(current_user) %>) before you can log in with OpenID.</p>
-
 <h3 id="pseuds">Pseuds</h3>
 <p>While you were making your profile all nice and pretty, you may have noticed our "pseuds" page. Pseuds are basically pen names. If you've written Buffyfic under the name "spikefan92", but you switched to calling yourself "Ariana" when you discovered <acronym title="Stargate: Atlantis">SGA</acronym>, you can use the pseuds function to post each fic under the appropriate name&#8212;but still manage them using the same account. You can <%= link_to "manage your pseuds", user_pseuds_path(current_user) %> through your profile page. </p>
 

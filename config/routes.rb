@@ -1,4 +1,11 @@
 Otwarchive::Application.routes.draw do
+  
+  #### ERRORS ####
+  
+  match '/403', :to => 'errors#403'
+  match '/404', :to => 'errors#404'
+  match '/422', :to => 'errors#422'
+  match '/500', :to => 'errors#500'
 
   #### DOWNLOADS ####
 
@@ -64,6 +71,11 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :tag_wranglers
+  resources :unsorted_tags do
+    collection do
+      post :mass_update
+    end
+  end
   resources :tags do
     member do
       get :feed
@@ -120,6 +132,7 @@ Otwarchive::Application.routes.draw do
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
+    resources :activities, :only => [:index, :show]
     resources :settings
     resources :skins do
       collection do
@@ -166,8 +179,6 @@ Otwarchive::Application.routes.draw do
       get :browse
       get :change_email
       post :change_email
-      get :change_openid
-      post :change_openid
       get :change_password
       post :change_password
       get :change_username
@@ -243,6 +254,7 @@ Otwarchive::Application.routes.draw do
     resources :works do
       collection do
         get :drafts
+        get :collected
         get :show_multiple
         post :edit_multiple
         put :update_multiple
@@ -328,6 +340,8 @@ Otwarchive::Application.routes.draw do
   resources :collections do
     collection do
       get :list_challenges
+      get :list_ge_challenges
+      get :list_pm_challenges
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections
@@ -426,9 +440,7 @@ Otwarchive::Application.routes.draw do
 
   resources :user_sessions, :only => [:new, :create, :destroy] do
     collection do
-      get :openid_small
       get :passwd_small
-      get :openid
       get :passwd
     end
   end
@@ -462,7 +474,7 @@ Otwarchive::Application.routes.draw do
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create, :show]
+  resources :kudos, :only => [:create]
 
   resources :skins do
     member do
@@ -496,13 +508,13 @@ Otwarchive::Application.routes.draw do
       get :about
     end
   end
-  resources :search, :only => :index
 
-  match 'search' => 'search#index'
+  match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
@@ -510,6 +522,11 @@ Otwarchive::Application.routes.draw do
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
+  match 'about' => 'home#about'
+	match 'menu/browse' => 'menu#browse'
+	match 'menu/fandoms' => 'menu#fandoms'
+	match 'menu/search' => 'menu#search'	
+	match 'menu/about' => 'menu#about'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

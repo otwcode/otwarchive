@@ -1,3 +1,5 @@
+require 'iconv'
+
 class DownloadsController < ApplicationController
 
   include XhtmlSplitter
@@ -21,13 +23,14 @@ class DownloadsController < ApplicationController
     @check_visibility_of = @work
     
     if @work.unrevealed?
-      setflash; flash[:error] = ts("Sorry, you can't download an unrevealed work")
+      flash[:error] = ts("Sorry, you can't download an unrevealed work")
       redirect_back_or_default works_path and return
     end
 
     Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(:posted => true)
+    create_work_html
 
     respond_to do |format|
       format.html {download_html}
@@ -60,7 +63,7 @@ protected
 
     # send as PDF, if file exists, or flash error and redirect
     unless check_for_file("pdf")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
     send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
@@ -96,10 +99,10 @@ protected
     
     # send as mobi, if file exists, or flash error and redirect
     unless check_for_file("mobi")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
+    send_file("#{@work.download_basename}.mobi", :type => "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -117,10 +120,10 @@ protected
 
     # send as epub, if file exists, or flash error and redirect
     unless check_for_file("epub")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", :type => "application/epub")
+    send_file("#{@work.download_basename}.epub", :type => "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from

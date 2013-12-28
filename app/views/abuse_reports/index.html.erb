@@ -1,5 +1,6 @@
+<div class="admin">
 <!--Descriptive page names, messages and instructions-->
-<h2 class="heading"><%=ts("All Abuse Reports") %>:</h2>
+<h2 class="heading"><%=ts("All Abuse Reports") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,8 +8,8 @@
 
 <!--main content-->
 <div class="wrapper">
-<table id="abuse_reports_table" summary="">
-<caption><%=ts("Listing all the abuse reports made on the archive.") %></caption>
+<table id="abuse_reports_table" summary="<%= ts("Overview of all abuse reports, as well as links to view each detailed report.") %>">
+<caption><%=ts("All Abuse Reports") %></caption>
 <colgroup>
 <col class="name" />
 <col />
@@ -35,3 +36,4 @@
 <!--subnav-->
 	  <%= will_paginate @abuse_reports %>
 <!--/subnav-->
+</div>

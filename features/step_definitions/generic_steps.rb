@@ -16,27 +16,27 @@ Then /^show me the html$/ do
 end
 
 Then /^show me the main content$/ do
-  puts "\n" + find("#main").node.inner_html
+  puts "\n" + find("#main").native.inner_html
 end
 
 Then /^show me the errors$/ do 
-  puts "\n" + find("div.error").node.inner_html
+  puts "\n" + find("div.error").native.inner_html
 end
 
 Then /^show me the sidebar$/ do
-  puts "\n" + find("#dashboard").node.inner_html
+  puts "\n" + find("#dashboard").native.inner_html
 end
 
 Then /^I should see errors/ do
-  assert find("div.error").node
+  assert find("div.error")
 end
 
 Then /^show me the form$/ do
-  Then %{show me the 1st form}
+  step %{show me the 1st form}
 end
 
 Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
-  puts "\n" + page.all("#main form")[(index.to_i-1)].node.inner_html
+  puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
 
@@ -55,7 +55,7 @@ end
 
 Then /^I should see Posted now$/ do
 	now = Time.zone.now.to_s
-  Given "I should see \"Posted #{now}\""
+  step "I should see \"Posted #{now}\""
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
@@ -71,37 +71,36 @@ When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
 end
 
 Then /^I should see a create confirmation message$/ do
-  page.find('was successfully created')
+  page.should have_content('was successfully created')
 end
 
 Then /^I should see an update confirmation message$/ do
-  page.find('was successfully updated')
+  page.should have_content('was successfully updated')
 end
 
 Then /^I should see a save error message$/ do
-  Then %{I should see "We couldn't save"}
+  step %{I should see "We couldn't save"}
+end
+
+Then /^I should see a success message$/ do
+  step %{I should see "success"}
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.find(text)
+    page.all(text)
   end
 end
 
 Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.find(text)
+    page.all(text)
   end
 end
 
 Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    begin
-      wait_until do
-        page.find(text)
-      end
-    rescue Capybara::TimeoutError
-    end
+    page.all(text)
   end
 end
 
@@ -118,7 +117,8 @@ Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
-  find_field(field).node.xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
+  page.has_select?(field, :selected => value).should == true
+  #find_field(field).xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
@@ -131,7 +131,7 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label)['disabled']
+    field_disabled = find_field(label, :disabled => true)
     if field_disabled.respond_to? :should
       field_disabled.should be_true
     else
@@ -161,23 +161,23 @@ end
 
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
-  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+  check(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
 end
 
 When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, suffix, value|
-  When %{I check the #{index}#{suffix} checkbox with the value "#{value}"}
+  step %{I check the #{index}#{suffix} checkbox with the value "#{value}"}
 end
 
 When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
-  uncheck(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+  uncheck(page.all("input[type='checkbox']").select {|el| el['value'] == value}[(index.to_i-1)]['id'])
 end
 
 When /^I check the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, id_string|
-  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'])
+  check(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'], :with => value)
+  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
 end
 
 
@@ -197,7 +197,7 @@ end
 
 # This will submit the first submit button in a page by default
 When /^I submit$/ do
-  When %{I submit with the 1st button}
+  step %{I submit with the 1st button}
 end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them

@@ -1,4 +1,6 @@
-<!--Descriptive page name, messages and instructions--><h2 class="heading"><%= ts("Find users") %></h2>
+<div class="admin">
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Find Users") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -18,17 +20,15 @@
       <%= label_tag "inactive", ts("Not yet activated") %>
     </dd>
   </dl>
-  <p class="submit actions"><%= submit_tag ts("Find") %></p>
+  <p class="submit"><%= submit_tag ts("Find") %></p>
 <% end %>
-
-<div class="clear"><!--presentational, phase me out--></div>
 
 <% if @users %>
   <h3 class="heading"><%= ts("#{pluralize(@users.total_entries, 'user')} found") %></h3>
   <% if @users.size > 0 %>
     <div class="wrapper">
-      <table id="admin_users_table">
-        <caption><%= ts("List of users") %></caption>
+      <table id="admin_users_table" summary="<%= ts("Users matching your search criteria, as well as options for updating the user's roles and viewing more information.") %>">
+        <caption><%= ts("List of Users") %></caption>
         <colgroup>
           <col class="name"/>
           <col span="6" />
@@ -57,3 +57,4 @@
   <%= will_paginate @users %>
 <% end %>
 <!--/content-->
+</div>

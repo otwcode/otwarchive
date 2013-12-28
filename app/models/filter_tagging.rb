@@ -2,6 +2,8 @@
 # except with all works connected to canonical tags instead of their synonyms for
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
 class FilterTagging < ActiveRecord::Base
+  self.primary_key = 'id'
+  
   belongs_to :filter, :class_name => 'Tag'
   belongs_to :filterable, :polymorphic => true
 

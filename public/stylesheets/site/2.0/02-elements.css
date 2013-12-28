@@ -128,13 +128,13 @@ blockquote p:last-child {
   margin-bottom: 0;
 }
 
-kbd, tt, code, var, pre {
+kbd, tt, code, var, pre, samp {
   font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
   margin: auto;
 }
 
 pre {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 strong, b {

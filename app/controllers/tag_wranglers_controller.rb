@@ -41,7 +41,7 @@ class TagWranglersController < ApplicationController
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
     end
   end
-  
+
   def create
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
@@ -68,15 +68,15 @@ class TagWranglersController < ApplicationController
           end
         end        
       end
-      setflash; flash[:notice] = "Wranglers were successfully assigned!"
+      flash[:notice] = "Wranglers were successfully assigned!"
     end
-    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])    
+    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
   end
   
   def destroy
     wrangler = User.find_by_login(params[:id])
     assignment = WranglingAssignment.find(:first, :conditions => {:user_id => wrangler.id, :fandom_id => params[:fandom_id]})
     assignment.destroy
-    redirect_to tag_wranglers_path    
+    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])
   end
 end

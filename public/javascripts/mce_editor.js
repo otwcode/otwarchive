@@ -4,23 +4,24 @@ tinyMCE.init({
 	theme:"advanced",
 	mode:"none",
 	editor_selector:"mce-editor",
-	plugins : "paste",
+	plugins : "paste, directionality",
 	paste_insert_word_content_callback : "convertWord",
 	paste_auto_cleanup_on_paste : true,
-	extended_valid_elements : "span[!class]",
-	// TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
+    extended_valid_elements : "span[!class]",
+
+    // TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
 	// because we're stripping those tags out.
 	inline_styles : false,
 
 	// Theme options - using the advanced theme for now and just limiting the buttons used - we may want to create a custom theme in future.
-	theme_advanced_buttons1 : "pasteword,|,bold,italic,underline,strikethrough,|,link,unlink,image,|,blockquote,|,hr,|,bullist,numlist,|,justifyleft,justifycenter,|,undo,redo",
+	theme_advanced_buttons1 : "pasteword,|,bold,italic,underline,strikethrough,|,link,unlink,image,|,blockquote,|,hr,|,bullist,numlist,|,justifyleft,justifycenter,|,undo,redo, | ltr, rtl",
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	theme_advanced_toolbar_location : "top",
 	theme_advanced_toolbar_align : "left",
 	theme_advanced_resizing : true,
 	
-	content_css : "css/custom_content.css",
+	//content_css : "css/custom_content.css",
 	theme_advanced_font_sizes: "10px,12px,13px,14px,16px,18px,20px",
 	font_size_style_values : "10px,12px,13px,14px,16px,18px,20px",
 
@@ -96,7 +97,3 @@ function convertWord (type, content) {
     }
     return content;
 }
-
-
-
-

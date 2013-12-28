@@ -18,46 +18,61 @@ SUBSECTIONS:
 
 /*1. ZONE: SYSTEM: SPLASH PAGE*/
 
-.system .intro {
-  font: 1.5em Georgia, serif;
-  margin: 0 auto 2.5em;
-  max-width: 39em;
-  float: none;
+.splash .intro {
+  background: #ededed;
+  font: 1.571em Georgia, serif;
+  float: left;
+  max-width: 68%;
+  margin: 1em auto 1.5em 1%;
   overflow: hidden;
+    border-radius: 1em;
+    box-shadow: 1px 1px 3px #bbb;
+    background-image: -moz-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
+    background-image: -webkit-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
+    background-image: -o-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
+    background-image: linear-gradient(135deg, #ededed 0%, #f6f6f6 100%);
+
 }
 
-.system .module h2 {
-  font: bold oblique 2.5em Georgia, serif;
-  margin-bottom: -0.25em;
+.splash .intro a, .splash .intro h2, .splash .intro em {
+  font-style: oblique;
+  font-weight: 700;
 }
 
-.system .intro a, .system .intro em {
-  font: bold oblique 100% Georgia, serif;
+.splash .intro h2 {
+  display: block;
+  font-size: 1.45em;
+  line-height: 1.75;
+  text-align: center;
+    text-shadow: none;
 }
 
-.system p#signup {
+.splash .intro p {
+  padding: 0 0.75em;
+}
+
+.splash .count {
+  font-weight: 700;
+}
+
+.splash #signup {
   width: 100%;
-  text-indent: 0;
-  font-style: normal;
     text-shadow: -1px -2px 3px #fff;
 }
 
-.system .latest, .system div.news {
-  width: 49%;
-  float: left;
-  margin: auto auto 3.5em auto;
-}
-
-.system .latest h3, .system div.news h3 {
-  text-align: center;
+.splash .module h3  {
   color: #900;
   border-bottom: 1px solid #c8c8c8;
-  font: bold 2.5em Georgia, serif;
+  font-size: 1.75em;
+  font-weight: 700;
 }
 
-.system .latest dl {
-  margin-left: 2em;
+.splash .latest {
+  float: left;
+  margin: 1.571em 1% 1.571em 5%;
+  width: 25%;
 }
+
 
 /* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
 
@@ -104,7 +119,6 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
 
 /*5. ZONE: SYSTEM: SUPPORT*/
 
-
 .feedbacks h3 {
   clear: right;
   padding-top: 1.929em;
@@ -118,4 +132,10 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
   margin: 0.643em;
 }
 
+/*6. ZONE: SYSTEM: ERROR PAGES*/
+
+.error .tweet_list {
+  padding: 0.5em;
+}
+		
 /*END== */

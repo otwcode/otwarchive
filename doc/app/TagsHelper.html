@@ -529,6 +529,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -582,6 +584,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -1428,7 +1434,7 @@ wrangler request, can be changed to different label as desired</p>
             <pre><span class="ruby-comment"># File app/helpers/tags_helper.rb, line 166</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_wrangling_dashboard</span>
   <span class="ruby-identifier">can_wrangle?</span> <span class="ruby-operator">&amp;&amp;</span> 
-  (<span class="ruby-node">%w(tags tag_wranglings tag_wranglers tag_wrangling_requests)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span>) <span class="ruby-operator">||</span>
+  (<span class="ruby-node">%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span>) <span class="ruby-operator">||</span>
   (<span class="ruby-ivar">@tag</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">'comments'</span>))
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show_wrangling_dashboard-source -->

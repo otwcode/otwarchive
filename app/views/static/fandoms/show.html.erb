@@ -11,9 +11,9 @@
 <!--title, author and fandom-->
           <h4 class="heading" title="title">
       	    <%= link_to work.title.html_safe, static_collection_work_path(@collection, work) %>
-       		  by <%= byline(work, :visibility => 'public') %>
+       		  <%= ts("by") %> <%= byline(work, :visibility => 'public') %>
             <% unless work.recipients.blank? %>
-            for <%= recipients_link(work) %>
+            <%= ts("for") %> <%= recipients_link(work) %>
             <% end %>
           </h4>
 
@@ -24,7 +24,7 @@
         </div>
 
 <!--tags-->	  
-      	<h6 class="landmark heading">Tags</h6>
+      	<h6 class="landmark heading"><%= ts("Tags") %></h6>
       	<p class="tags">
       	  <% tags = (tag_groups['Rating'] || []) + 
       	            (tag_groups['Warning'] || []) + 
@@ -37,7 +37,7 @@
 
 <!--summary-->	
       	<% unless work.summary.blank? %>
-      		<h6 class="landmark heading">Summary</h6>
+      		<h6 class="landmark heading"><%= ts("Summary") %></h6>
       		<blockquote class="userstuff summary" title="summary">
       		  <%=raw strip_images(sanitize_field(work, :summary)) %>
       		</blockquote>
@@ -45,9 +45,9 @@
 
 <!--stats-->
       	<dl class="stats" title="stats">
-      		<dt>Words: </dt>
+      		<dt><%= ts("Words") %>: </dt>
       		<dd><%= number_with_delimiter(work.word_count) %></dd>
-      		<dt>Chapters: </dt>
+      		<dt><%= ts("Chapters") %>: </dt>
       		<dd><%= work.chapter_total_display %></dd>
       	</dl>
       </li>

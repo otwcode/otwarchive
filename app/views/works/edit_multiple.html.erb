@@ -26,7 +26,7 @@
     <dl>
       <%= render "works/work_form_pseuds", :form => form, :works => @works %>
 
-      <%= render "works/work_form_collections", :form => form, :works => @works %>
+      <%= render "collectibles/collectible_form", :form => form, :collectibles => @works %>
 
     </dl>
   </fieldset>
@@ -44,6 +44,14 @@
         <label for="work_unrestricted">
           <%= ts("Show to all") %>
           <%= form.check_box :unrestricted %>
+        </label>
+      </dd>
+
+      <dt><%= ts("Comment Settings") %><%= link_to_help "anonymous-commenting" %></dt>
+      <dd>
+        <label for="work_anon_commenting_disabled">
+          <%= ts("Anonymous commenting disabled") %>
+          <%= form.check_box :anon_commenting_disabled %>
         </label>
       </dd>
  

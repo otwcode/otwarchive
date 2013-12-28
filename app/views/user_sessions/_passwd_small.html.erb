@@ -1,21 +1,25 @@
 <% @user_session = UserSession.new unless @user_session %>
 <%= form_for @user_session do |f| %>
-	<p>
-    <%= f.label :login, ts("User name:") %>
-    <%= f.text_field :login, :class => 'text', :size => nil %>
-    <%= f.label :password, ts("Password:") %>
-    <%= f.password_field :password, :class => 'text', :size => nil %>
-  </p>
-  <!--BACK END: could pos have this as label action like in tagsets?-->
-  <p><span class="action">
-	<%= f.check_box :remember_me %>
-    <%= f.label 'remember_me', ts("Remember me") %>
-  </span></p>
+	<dl>
+    <dt><%= f.label :login, ts("User name:") %></dt>
+    <dd><%= f.text_field :login, :class => 'text', :size => nil %></dd>
+    <dt><%= f.label :password, ts("Password:") %></dt>
+    <dd><%= f.password_field :password, :class => 'text', :size => nil %></dd>
+  </dl>
   <p class="submit actions">
-    <%= f.submit ts("Log in") %>
-  </p>
-    
-  <p class="footnote actions"><%= link_to ts("forgot password?"), new_password_path %></p>
-  <p class="footnote actions"><%= link_to 'openid login', {:controller => :user_sessions, :action => 'openid_small'}, :remote => true,
-        :class => 'footnote' %></p>
+    <label for="user_session_remember_me" class="action"><%= check_box_tag "user_session[remember_me]", 1, false, :id => 'user_session_remember_me' %><%= ts('Remember Me') %></label>
+    <%= f.submit ts("Log In") %>
+  </p>    
+  <ul class="footnote actions">
+  	<li><%= link_to ts("Forgot password?"), new_password_path %></li>
+  	<% if @admin_settings.account_creation_enabled? %>
+      <li>
+        <%= link_to ts("Sign Up"), new_user_path %>
+      </li>
+    <% elsif @admin_settings.invite_from_queue_enabled? %>
+      <li>
+        <%= link_to ts('Get Invite'), invite_requests_path %>
+      </li>
+    <% end %>
+  </ul>
 <% end %>

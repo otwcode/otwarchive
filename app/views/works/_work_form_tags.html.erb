@@ -1,7 +1,7 @@
 <fieldset class="work meta">
   <legend><%= ts("Tags") %></legend>
   <h3 class="landmark">Tags</h3>
- <p class="note"><%= h t('.tags', :default =>"Tags are comma separated, %{max} characters per tag.", :max => ArchiveConfig.TAG_MAX) %> <%= link_to_help "tagging-help" %></p>
+ <p class="note"><%= ts("Tags are comma separated, %{max} characters per tag.", :max => ArchiveConfig.TAG_MAX) %></p>
 
   <dl>
     <dt class="rating required">
@@ -29,7 +29,7 @@
     </dd>
 
     <dt class="fandom required">
-      <label for="work_fandom" title="fandom"><%= Fandom::NAME.pluralize %>*</label>
+      <label for="work_fandom" title="fandom"><%= Fandom::NAME.pluralize %>* <%= link_to_help "fandom-help" %></label>
     </dt>
     <dd class="fandom required" title="fandom">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
@@ -40,7 +40,7 @@
     
 
     <dt class="category">
-      <label><%= Category::NAME %></label>
+      <label><%= Category::NAME %>  <%= link_to_help "categories-help" %></label>
     </dt>
     <dd class="category">
       <fieldset>
@@ -56,9 +56,9 @@
     </dd>
 
     <dt class="relationship">
-      <label for="work_relationship"><%= Relationship::NAME.pluralize %></label>
+      <label for="work_relationship"><%= Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %></label>
     </dt>
-    <dd class="relationship" title="relationship">
+    <dd class="relationship" title="relationships">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
                            :id => "work_relationship",
@@ -67,18 +67,18 @@
     </dd>
 
     <dt class="character">
-      <label for="work_character"><%= Character::NAME.pluralize %></label>
+      <label for="work_character"><%= Character::NAME.pluralize %> <%= link_to_help "characters-help" %></label>
     </dt>
-    <dd class="character" title="character">
+    <dd class="character" title="characters">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
                           :id => "work_character", :title => "character", :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="freeform">
-      <label for="work_freeform"><%= Freeform::NAME %></label>
+      <label for="work_freeform"><%= Freeform::NAME %> <%=	 link_to_help "additional-tags-help" %></label>
     </dt>
-    <dd class="freeform" title="freeform">
+    <dd class="freeform" title="additional tags">
       <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform', :id => "work_freeform", :title => "freeform") %>
     </dd>
 

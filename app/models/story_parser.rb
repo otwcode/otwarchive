@@ -56,7 +56,7 @@ class StoryParser
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
   SOURCE_DW = 'dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
-  SOURCE_FFNET = 'fanfiction\.net'
+  SOURCE_FFNET = '(^|[^A-Za-z0-9-])fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
@@ -561,7 +561,7 @@ class StoryParser
       # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
-      storytext = body.css("div.b-singlepost-body").inner_html
+      storytext = body.css("article.b-singlepost-body").inner_html
       storytext = body.inner_html if storytext.empty?
 
       # cleanup the text
@@ -585,11 +585,11 @@ class StoryParser
       work_params = {:chapter_attributes => {}}
 
       body = @doc.css("body")
-      content_divs = body.css("div#entry")
+      content_divs = body.css("div.contents")
       
       unless content_divs[0].nil?
         # Get rid of the DW metadata table
-        content_divs[0].css("table.currents, div#entrysubj").each do |node|
+        content_divs[0].css("div.currents, ul.entry-management-links, div.header.inner, span.restrictions, h3.entry-title").each do |node|
           node.remove
         end
         storytext = content_divs[0].inner_html
@@ -613,7 +613,7 @@ class StoryParser
       end
 
       # get the date
-      date = @doc.css("span.time").inner_text
+      date = @doc.css("span.date").inner_text
       work_params[:revised_at] = convert_revised_at(date)
 
       return work_params
@@ -628,13 +628,13 @@ class StoryParser
       title = @doc.css("title").inner_html.gsub /\s*on deviantart$/i, ""
 
       # Find the image (original size) if it's art
-      image_full = body.css("img#gmi-ResViewSizer_fullimg")
+      image_full = body.css("div.dev-view-deviation img.dev-content-full")
       unless image_full[0].nil?
         storytext = "<center><img src=\"#{image_full[0]["src"]}\"></center>"
       end
 
       # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
-      text_table = body.css("#gmi-ResViewContainer table.f td.f div.text")[0]
+      text_table = body.css(".grf-indent > div:nth-child(1)")[0]
       unless text_table.nil?
         # Try to remove some metadata (title and author) from the work's text, if possible
         # Try to remove the title: if it exists, and if it's the same as the browser title
@@ -668,17 +668,17 @@ class StoryParser
       work_params.merge!(scan_text_for_meta(notes))
       work_params[:title] = title
 
-      body.css("div.gr-body div.gr div.hh h1 a").each do |node|
+      body.css("div.dev-title-container h1 a").each do |node|
         if node["class"] != "u"
           work_params[:title] = node.inner_html
         end
       end
 
       tags = []
-      @doc.css("td.dcats a.h").each { |node| tags << node.inner_html }
+      @doc.css("div.dev-about-cat-cc a.h").each { |node| tags << node.inner_html }
       work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
 
-      details = @doc.css("div.details-section span[ts]")
+      details = @doc.css("div.dev-right-bar-content span[title]")
       unless details[0].nil?
          work_params[:revised_at] = convert_revised_at(details[0].inner_text)
       end

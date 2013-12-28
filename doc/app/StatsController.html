@@ -473,6 +473,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -526,6 +528,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -669,7 +675,7 @@
   
   <span class="ruby-comment"># group by fandom or flat view</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:flat_view</span>]
-    <span class="ruby-ivar">@works</span> = {<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All Fandoms&quot;</span>) =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">works</span>}
+    <span class="ruby-ivar">@works</span> = {<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;All Fandoms&quot;</span>) =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">works</span>.<span class="ruby-identifier">uniq</span>}
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@works</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">group_by</span>(&amp;<span class="ruby-value">:fandom</span>)
   <span class="ruby-keyword">end</span>
@@ -679,21 +685,21 @@
   (<span class="ruby-identifier">sort_options</span> <span class="ruby-operator">-</span> [<span class="ruby-string">&quot;date&quot;</span>]).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
     <span class="ruby-comment"># see explanation above about the eval here</span>
     <span class="ruby-comment"># the inject is used to collect the sum in the &quot;result&quot; variable as we iterate over all the works</span>
-    <span class="ruby-ivar">@totals</span>[<span class="ruby-identifier">value</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;.&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">result</span>, <span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;work.#{value}&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span>)} <span class="ruby-comment"># sum the works</span>
+    <span class="ruby-ivar">@totals</span>[<span class="ruby-identifier">value</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;.&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">result</span>, <span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;work.#{value}&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span>)} <span class="ruby-comment"># sum the works</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@totals</span>[<span class="ruby-value">:author_subscriptions</span>] = <span class="ruby-constant">Subscription</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:subscribable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">:subscribable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'User'</span>).<span class="ruby-identifier">count</span>
 
   <span class="ruby-comment"># graph top 5 works</span>
   <span class="ruby-ivar">@chart_data</span> = <span class="ruby-constant">GoogleVisualr</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTable</span>.<span class="ruby-identifier">new</span>    
   <span class="ruby-ivar">@chart_data</span>.<span class="ruby-identifier">new_column</span>(<span class="ruby-string">'string'</span>, <span class="ruby-string">'Title'</span>)
-  <span class="ruby-identifier">chart_col</span> = <span class="ruby-ivar">@sort</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;date&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;hits&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@sort</span> 
-  <span class="ruby-identifier">chart_col_title</span> = <span class="ruby-identifier">chart_col</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;.&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">titleize</span>
+  <span class="ruby-identifier">chart_col</span> = <span class="ruby-ivar">@sort</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;date&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;hits&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@sort</span>
+  <span class="ruby-identifier">chart_col_title</span> = <span class="ruby-identifier">chart_col</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;.&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">titleize</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Comments&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comment Threads&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">chart_col</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;.&quot;</span>)[<span class="ruby-value">0</span>].<span class="ruby-identifier">titleize</span>
   <span class="ruby-identifier">chart_title</span> = <span class="ruby-ivar">@sort</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;date&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Most Recent&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;Top Five By #{chart_col_title}&quot;</span>)
   <span class="ruby-ivar">@chart_data</span>.<span class="ruby-identifier">new_column</span>(<span class="ruby-string">'number'</span>, <span class="ruby-identifier">chart_col_title</span>)
     
   <span class="ruby-comment"># Add Rows and Values </span>
   <span class="ruby-comment"># see explanation above about the eval here</span>
-  <span class="ruby-ivar">@chart_data</span>.<span class="ruby-identifier">add_rows</span>(<span class="ruby-identifier">works</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">4</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">w</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;w.#{chart_col}&quot;</span>)]})
+  <span class="ruby-ivar">@chart_data</span>.<span class="ruby-identifier">add_rows</span>(<span class="ruby-identifier">works</span>.<span class="ruby-identifier">uniq</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">4</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">w</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;w.#{chart_col}&quot;</span>)]})
 
   <span class="ruby-comment"># image version of bar chart</span>
   <span class="ruby-comment"># opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html</span>

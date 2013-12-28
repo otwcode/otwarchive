@@ -49,6 +49,8 @@ ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
+ELASTICSEARCH_URL: 'http://localhost:9200'
+MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -63,6 +65,8 @@ INVITE_FROM_QUEUE_FREQUENCY: 7
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
+# number of invites users can request
+MAX_USER_INVITE_REQUEST: 10
 
 # this determines how long we keep processed results like tag set nominations in redis
 DAYS_TO_SAVE_PROCESSED: 56
@@ -106,6 +110,7 @@ NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
 TAGS_IN_CLOUD: 200
+TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
@@ -113,12 +118,6 @@ MAX_OPTIONS_TO_SHOW: 500
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
-
-# maximum number of records retrieved by sphinx.
-# http://www.sphinxsearch.com/docs/current.html#conf-max-matches
-# edit max_matches in config/sphinx.yml to match
-# edit public/help/work-search-results-help.html to match
-SEARCH_RESULTS_MAX: 1000
 
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
@@ -161,7 +160,10 @@ BANNED_CATEGORY_NAME: 'Banned'
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
 
 # SEARCH TIPS
-SEARCH_TIPS: ['tag: arthur/merlin, words: >1000', 'words: 100', 'tag: buffy gen teen "no archive warnings"', 'tag: lex slash (mature|explicit)', '"cerulean orbs"']
+SEARCH_TIPS: ['arthur merlin words>1000 sort:hits', 'words:100', 'buffy gen teen AND "no archive warnings apply"', 'lex m/m (mature OR explicit)', 
+    'hetalia f/f sort:kudos', '"sherlock (tv)" m/m NOT "sherlock holmes/john watson"', 'austen words:10000-50000 sort:title',
+    'katekyou "alternate universe" sort:>words', '"uchiha sasuke/uzumaki naruto" angst kudos>10'
+]
 
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to
@@ -184,7 +186,7 @@ NONZERO_INTEGER_PARAMETERS:
   per_page: 25
 
 # These fields are query fields and are allowed to contain "less than" values
-FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date"]
+FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmarkable_date", "word_count", "bookmarks_count", "comments_count", "kudos_count", "revised_at"]
 
 
 # Only the following fields are allowed to have HTML. In all others,
@@ -226,14 +228,14 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # We use this list for properties which can take shorthand values and also have subproperties or variants 
 # (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "column", "cue", "font", "layer-background",
-  "layout-grid", "list-style", "margin", "marker",
-  "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background", 
+"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause", 
+"scrollbar", "text", "transform", "transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source", 
   "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
   "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
-  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
   "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
   "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
   "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
@@ -247,7 +249,7 @@ SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source",
   "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
   "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
   "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
-  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", 
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select", 
   "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
   "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
 
@@ -278,9 +280,6 @@ DEFAULT_LANGUAGE_NAME: 'English'
 DEFAULT_LOCALE_ISO: 'en'
 DEFAULT_LOCALE_NAME: 'English (US)'
 
-#Allow OpenID Authentication
-USE_OPENID: true
-
 # Allow orphaninig
 ORPHANING_ALLOWED: true
 
@@ -292,15 +291,15 @@ HELP_DIRECTORY: '/help'
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"
 
-# turn delta indexes on and off
-USE_DELTA_INDEXING: false
-
 # production caching
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
-# how long we cache search results in minutes
+# how long we cache autocomplete search results in minutes
 AUTOCOMPLETE_EXPIRATION_TIME: 10
+
+# how many cache pages to expire for a tag/collection/pseud when a work is updated or deleted
+PAGES_TO_CACHE: 5
 
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true
@@ -317,4 +316,39 @@ ACTION_WARN: 6
 ACTION_RENAME: 7
 ACTION_PASSWORD_RESET: 8
 ACTION_NEW_EMAIL: 9
+
+
+##### For dumping the seed database and NOT clearing emails on stage
+
+# users who have webdavs or asked to be added
+# or who have problematic works which need testing
+DUMP_SEEDS: [
+          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
+          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
+          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
+          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
+          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
+          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
+          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
+          "Zooey_Glass", "zlabya", "zz9pzza"
+]
+
+# seeds who want their email address preserved for testing
+DUMP_EMAIL: [ 
+          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
+          "admin-kielix", "admin-shalott", "admin-sidra",
+          "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
+          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
+          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" , 
+          "zz9pzza"
+]
+
+# a bunch of bigger collections (>250 works)
+# probably would be scooped up anyway, but just in case
+DUMP_COLLECTION_SEEDS: [
+          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
+          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
+          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
+          "Remix2011", "PornBattleXII"
+]
 

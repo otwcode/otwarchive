@@ -1,22 +1,23 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Edit Work Tags for ') + @work.title.html_safe %></h2>
-<p class="navigation actions"><%= link_to t('.back_to_work', :default => 'Return to work'), @work %></p>
+
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
 <div id="work-form" class="edit work post">
 <%= form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| %> 
+<p class="required notice"><%= ts('* Required information') %></p>
 
 <!--main content-->					
 <%= render :partial => 'work_form_tags', :locals => {:include_blank => false} %>
 <!--/content--> 
 
   <fieldset>
-    <legend><%= 'Post Work' %></legend>
+    <legend><%= ts('Post Work') %></legend>
     <p class="submit cancel actions">
-      <%= submit_tag t('.forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-      <%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
-      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
+      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
+      <%= submit_tag ts('Post Without Preview'), :name => 'update_button' %>
+      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p> 
   </fieldset>
 <% end %> <!-- end of form_for -->
