@@ -166,10 +166,8 @@ class Collection < ActiveRecord::Base
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
   scope :no_challenge, where(:challenge_id => nil)
-  scope :gift_exchange,
-  where(challenge_type: 'GiftExchange')
-  scope :prompt_meme,
-  where(challenge_type: 'PromptMeme')
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
