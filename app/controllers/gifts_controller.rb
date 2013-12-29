@@ -33,7 +33,7 @@ class GiftsController < ApplicationController
       end
     end
     @works = (@works & @collection.approved_works) if @collection && (@user || @recipient_name)
-    @works = @works.order('revised_at DESC')
+    @works = @works.sort_by{ |a| a[:revised_at]}.reverse
   end
   
 end
