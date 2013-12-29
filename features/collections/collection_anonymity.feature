@@ -385,3 +385,19 @@ Feature: Collection
   #When I view the work "New Snippet 2"
   #Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
   #  And I should not see "Purim Day 2"
+
+  Scenario: Create an anon collection, add chaptered work. Add co-author to one chapter, should still be anonymous
+    Given I have an anonymous collection "Various Penguins" with name "Various_Penguins"
+      And I am logged in as "Amos"
+      And I am logged in as "Jessica"
+      And I post the chaptered work "Cone of Silence"
+    When I add my work to the collection
+    Then I should see "Added"
+      And I edit the work "Cone of Silence"
+      And I follow "2" within "div#main.works-edit.region"
+      And I check "Add co-authors?"
+      And I fill in "pseud_byline" with "Amos"
+      And I press "Update Without Preview"
+      And I follow "Entire Work"
+    Then I should not see "Jessica"
+      And I should not see "Amos"
