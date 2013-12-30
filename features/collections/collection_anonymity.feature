@@ -399,5 +399,5 @@ Feature: Collection
       And I fill in "pseud_byline" with "Amos"
       And I press "Update Without Preview"
       And I follow "Entire Work"
-    Then I should not see "Jessica"
-      And I should not see "Amos"
+    Then I should not see "Jessica" within "div.preface"
+      And I should not see "Amos" within "div.preface"
