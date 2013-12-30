@@ -4,44 +4,109 @@ Feature: Collection
   As a humble user
   I want to browse an existing collection
 
-  Scenario: Filter collections index, first to prompt meme; then to gift exchange; then by adding moderated to the gift exchange filter; and then by either moderated or not, closed, and no challenge
+  Scenario: Filter collections index to only show prompt memes
   
   Given I have loaded the fixtures
-    And I am logged in as "testuser" with password "testuser"
   When I go to the collections page
     And I choose "Prompt Meme Challenge"
     And I press "Filter"
   Then I should see "On Demand"
     And I should not see "Some Test Collection"
-    And I should not see "Some Other Test Collection"
+    And I should not see "Some Other Collection"
     And I should not see "Another Plain Collection"
     And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
-  When I choose "Gift Exchange Challenge"
+    
+  Scenario: Filter collections index to only show gift exchanges
+  
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "Gift Exchange Challenge"
     And I press "Filter"
   Then I should see "Surprise Presents"
     And I should see "Another Gift Swap"
     And I should not see "On Demand"
     And I should not see "Some Test Collection"
-    And I should not see "Some Other Test Collection"
+    And I should not see "Some Other Collection"
     And I should not see "Another Plain Collection"
-  When I choose "collection_filters_moderated_true"
-    And I choose "Gift Exchange Challenge"
+    
+  Scenario: Filter collections index to only show non-challenge collections
+  
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "No Challenge"
     And I press "Filter"
-  Then I should see "Surprise Presents"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Another Plain Collection"
+    And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
-    And I should not see "Some Test Collection"
-    And I should not see "Some Other Test Collection"
-    And I should not see "Another Plain Collection"
-  When I choose "collection_filters_moderated_"
-    And I choose "No Challenge"
+  
+  Scenario: Filter collections index to only show closed collections
+  
+  Given I have loaded the fixtures
+  When I go to the collections page
     And I choose "collection_filters_closed_true"
     And I press "Filter"
   Then I should see "Another Plain Collection"
+    And I should see "On Demand"
     And I should not see "Some Test Collection"
-    And I should not see "Some Other Test Collection"
+    And I should not see "Some Other Collection"
     And I should not see "Surprise Presents"
+    And I should not see "Another Gift Swap"
+  
+  Scenario: Filter collections index to only show open collections
+    
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "collection_filters_closed_false"
+    And I press "Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Surprise Presents"
+    And I should see "Another Gift Swap"
+    And I should not see "Another Plain Collection"
+    And I should not see "On Demand"
+
+  Scenario: Filter collections index to only show moderated collections
+
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "collection_filters_moderated_true"
+    And I press "Filter"
+  Then I should see "Surprise Presents"
+    And I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
+    And I should not see "Another Gift Swap"
+    And I should not see "On Demand"
+    
+  Scenario: Filter collections index to only show unmoderated collections
+  
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "collection_filters_moderated_false"
+    And I press "Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Another Plain Collection"
+    And I should see "Another Gift Swap"
+    And I should see "On Demand"
+    And I should not see "Surprise Presents"
+    
+  Scenario: Filter collections index to show open, moderated gift exchanges
+  
+  Given I have loaded the fixtures
+  When I go to the collections page
+    And I choose "collection_filters_closed_false"
+    And I choose "collection_filters_moderated_true"
+    And I choose "Gift Exchange Challenge"
+    And I press "Filter"
+  Then I should see "Surprise Presents"
+    And I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
