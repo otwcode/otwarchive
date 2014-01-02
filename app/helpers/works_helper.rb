@@ -21,6 +21,10 @@ module WorksHelper
     end
     list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 
+    if (language = work.language.name).present?
+      list.concat([[ts('Language:'), language]])
+    end
+
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
       latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date

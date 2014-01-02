@@ -100,6 +100,10 @@
     <dt><%= ts("Hits") %>:</dt>
     <dd><%= work.hits %></dd>
   <% end %>
+  <% if work.language.name.present? %>
+    <dt><%= ts("Language:") %></dt>
+    <dd><%= work.language.name %></dd>
+  <% end %>
 <% end %>
 <% #### END CACHE stats #### %>
 
