@@ -31,7 +31,6 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def create
-
     # we need to confirm email addresses before we hand them over
     flash[:notice] = "Coming soon!"
     redirect_to :action => :index
