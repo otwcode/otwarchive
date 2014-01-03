@@ -21,73 +21,33 @@ Feature: Archivist bulk imports
     And I go to the import page
     Then I should see "Import for others ONLY with permission"
 
-  Scenario: Import a single work as an archivist
+  Scenario: Import a single work as an archivist and send the right email
   
-  Given I have an archivist "elynross"
-    When I am logged in as "elynross"
-      And I go to the import page
-    When I check "Import for others ONLY with permission"
-      And I fill in "urls" with 
-      """
-      http://cesy.dreamwidth.org/154770.html
-      """
-      And I check "Post without previewing"
-      And I press "Import"
-    Then I should not see multi-story import messages
-      And I should see "Welcome"
-      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
+  Given I have an archivist "alice_ttlg"
+    When I am logged in as "alice_ttlg"
+      And I import the work "http://yuletidetreasure.org/archive/84/thatshall.html"
+    Then I should see "We have notified the author(s) you imported stories for"
+      And I should see "That Shall Achieve The Sword"
+    When the system processes jobs
+    Then 1 email should be delivered to "shalott@intimations.org"
+      And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
       
   Scenario: Import multiple works as an archivist
   
   Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I go to the import page
-    When I check "Import for others ONLY with permission"
-      And I fill in "urls" with 
-      """
-      http://cesy.dreamwidth.org/154770.html
-      http://cesy.dreamwidth.org/394320.html
-      """
-      And I check "Post without previewing"
-      And I press "Import"
+      And I import the works "http://cesy.dreamwidth.org/154770.html, http://cesy.dreamwidth.org/394320.html"
     Then I should see multi-story import messages
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
       And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
-  
-  Scenario: Importing sends an email with the right messages
-  
-  Given I have an archivist "alice_ttlg"
-    When I am logged in as "alice_ttlg"
-      And I go to the import page
-    When I check "Import for others ONLY with permission"
-      And I fill in "urls" with "http://yuletidetreasure.org/archive/84/thatshall.html"
-      And I check "Post without previewing"
-      And I press "Import"
-    Then I should see "We have notified the author(s) you imported stories for"
-      And I should see "That Shall Achieve The Sword"
-    Given the system processes jobs
-    Then 1 email should be delivered to "shalott@intimations.org"
-      And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
- 
+   
   Scenario: Importing only sends one email even if there are many works
   
     Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I go to the import page
-    When I check "Import for others ONLY with permission"
-      And I fill in "urls" with
-        """
-        http://cesy.dreamwidth.org/154770.html
-        http://cesy.dreamwidth.org/394320.html
-        """
-      And I check "Post without previewing"
-      And I press "Import"
-    Then I should see multi-story import messages
-      And I should see "Welcome"
-      And I should see "OTW Meetup in London"
-      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
-    Given the system processes jobs
+      And I import the works "http://cesy.dreamwidth.org/154770.html, http://cesy.dreamwidth.org/394320.html"
+      And the system processes jobs
     Then 1 email should be delivered to "cesy@dreamwidth.org"
 
   Scenario: Importing sends a different email if you're already an author on the archive
@@ -114,6 +74,19 @@ Feature: Archivist bulk imports
       And the email should contain invitation warnings from "alice ttlg" for work "Name change" in fandom "No Fandom"
   #    And 1 email should be delivered to "opendoors@transformativeworks.org"
   # TODO
+
+  Scenario: Import a single work as an archivist specifying author
+
+    Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+    Then I should not see multi-story import messages
+      And I should see "Welcome"
+      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
+    When the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+
 
   Scenario: Claim a work and create a new account in response to an invite
   # TODO
