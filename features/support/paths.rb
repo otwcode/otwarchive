@@ -63,6 +63,8 @@ module NavigationHelpers
       user_readings_path(:user_id => $1)
     when /^(.*)'s series page$/i
       user_series_index_path(:user_id => $1)
+    when /^(.*)'s stats page$/i
+      user_stats_path(:user_id => $1)
     when /^(.*)'s preferences page$/i
       user_preferences_path(:user_id => $1)
     when /^the subscriptions page for "(.*)"$/i
@@ -82,7 +84,9 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(User.current_user)
     when /my subscriptions page/
-      user_subscriptions_path(User.current_user)      
+      user_subscriptions_path(User.current_user)   
+    when /my stats page/
+      user_stats_path(User.current_user)   
     when /my profile page/
       user_profile_path(User.current_user)
     when /my claims page/
