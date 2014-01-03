@@ -49,8 +49,8 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 
 #dashboard.own {
   background: transparent;
-  border-top: 15px solid #4A4AFA;
-  border-bottom: 15px solid #4A4AFA;
+  border-top: 15px solid #900;
+  border-bottom: 15px solid #900;
     opacity: 1.0;
     border-radius: 0.25em;
 }
