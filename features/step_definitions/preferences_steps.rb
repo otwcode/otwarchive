@@ -39,3 +39,9 @@ When /^I set my preferences to hide hit counts on my works$/ do
   user.preference.hide_private_hit_count = true
   user.preference.save
 end
+
+When /^I set my preferences to hide the share buttons on my work$/ do
+  user = User.current_user
+  user.preference.disable_share_links = true
+  user.preference.save
+end
