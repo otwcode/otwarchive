@@ -144,6 +144,8 @@ Feature: Invite queue management
       And I press "Create Account"
     Then I should see "Email does not seem to be a valid address."
     When I fill in "user_email" with "test@archiveofourown.org"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
       And all emails have been delivered
     When I press "Create Account"
     Then I should see "Account Created!"

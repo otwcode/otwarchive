@@ -35,11 +35,11 @@ class UsersController < ApplicationController
       flash[:error] = ts("You are already logged in!")
       redirect_to root_path and return
     end
-    if !@admin_settings.account_creation_enabled?
+    token = params[:invitation_token]
+    if !@admin_settings.account_creation_enabled? && token.blank?
       flash[:error] = ts("Account creation is suspended at the moment. Please check back with us later.")
       redirect_to root_path and return
     elsif @admin_settings.creation_requires_invite?
-      token = params[:invitation_token]
       if token.blank?
         if !@admin_settings.invite_from_queue_enabled?
           flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")

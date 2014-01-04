@@ -366,5 +366,5 @@ Feature: Admin tasks
   When I am logged out as an admin
     And I go to account creation page
   Then I should be on the home page
-    And I should see "Account creation currently requires an invitation. We are unable to give out new invitations at present, but existing invitations can still be used to create an account."
+    And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
 
