@@ -10,7 +10,6 @@ Feature: Invite queue management
   When I am on the homepage
   Then I should not see "Get an Invite"
     And I should see "Archive of Our Own"
-    And This is the end of the scenario
   
   Scenario: Can turn queue on and it displays as on
   
@@ -77,6 +76,8 @@ Feature: Invite queue management
   
     Given I have no users
       And I have an AdminSetting
+      And account creation requires invitation
+      And account creation is enabled
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
