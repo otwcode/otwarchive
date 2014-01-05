@@ -87,6 +87,11 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'pry'
+end
+
+group :development do
+  gem 'pry'
 end
 
 # Deploy with Capistrano
