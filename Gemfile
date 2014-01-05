@@ -83,7 +83,7 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
-  gem 'fakeweb'
+  gem 'typhoeus'
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
