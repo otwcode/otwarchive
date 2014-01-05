@@ -185,3 +185,33 @@ end
 Then(/^I should be logged out$/) do
   assert !UserSession.find
 end
+
+def get_work_name(age, classname, name)
+  klass = classname.classify.constantize
+  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  if age == "most recent"
+    owner.works.order("revised_at DESC").first.title
+  elsif age == "oldest"
+    owner.works.order("revised_at DESC").last.title
+  end
+end
+
+def get_series_name(age, classname, name)
+  klass = classname.classify.constantize
+  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  if age == "most recent"
+    owner.series.order("updated_at DESC").first.title
+  elsif age == "oldest"
+    owner.series.order("updated_at DESC").last.title
+  end
+end
+  
+Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+  title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
+  step %{I should see "#{title}"}
+end
+
+Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+  title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
+  step %{I should not see "#{title}"}
+end
