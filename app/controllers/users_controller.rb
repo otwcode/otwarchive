@@ -31,31 +31,39 @@ class UsersController < ApplicationController
   end
 
   def check_account_creation_status
+    Rails.logger.debug "WE ARE AT CHECK ACCOUNT CREATION STATUS"
     if is_registered_user?
+      Rails.logger.debug "IS THIS PERSON REGISTERED"
       flash[:error] = ts("You are already logged in!")
       redirect_to root_path and return
     end
     token = params[:invitation_token]
-    if !@admin_settings.account_creation_enabled? && token.blank?
+    Rails.logger.debug "THE TOKEN IS: #{token}"
+    Rails.logger.debug "ACCOUNT CREATION IS: #{@admin_settings.account_creation_enabled?}"
+    Rails.logger.debug "CREATION REQUIRES INVITE: #{@admin_settings.creation_requires_invite?}"
+    if !@admin_settings.account_creation_enabled?
       flash[:error] = ts("Account creation is suspended at the moment. Please check back with us later.")
       redirect_to root_path and return
-    elsif @admin_settings.creation_requires_invite?
-      if token.blank?
-        if !@admin_settings.invite_from_queue_enabled?
-          flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")
-          redirect_to root_path and return
+    else
+      if @admin_settings.creation_requires_invite?
+        if token.blank?
+          if !@admin_settings.invite_from_queue_enabled?
+            flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")
+            redirect_to root_path and return
+          else
+            flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
+            redirect_to invite_requests_path and return
+          end
         else
-          flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-          redirect_to invite_requests_path and return
-        end
-      else
-        invitation = Invitation.find_by_token(token)
-        if !invitation
-          flash[:error] = ts("There was an error with your invitation token, please contact support")
-          redirect_to new_feedback_report_path and return
-        elsif invitation.redeemed_at && invitation.invitee
-          flash[:error] = ts("This invitation has already been used to create an account, sorry!")
-          redirect_to root_path and return
+          Rails.logger.debug "MADE IT TO INVITATION SECTION"
+          invitation = Invitation.find_by_token(token)
+          if !invitation
+            flash[:error] = ts("There was an error with your invitation token, please contact support")
+            redirect_to new_feedback_report_path and return
+          elsif invitation.redeemed_at && invitation.invitee
+            flash[:error] = ts("This invitation has already been used to create an account, sorry!")
+            redirect_to root_path and return
+          end
         end
       end
     end

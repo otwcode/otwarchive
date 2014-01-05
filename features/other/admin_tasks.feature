@@ -57,6 +57,7 @@ Feature: Admin tasks
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
     When I follow "New FAQ Section"
+      And show me the page
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
       And I fill in "title" with "New subsection"
     When I press "Post"
