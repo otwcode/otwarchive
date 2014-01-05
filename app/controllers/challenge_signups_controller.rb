@@ -1,5 +1,4 @@
 # For exporting to Excel CSV format
-require 'iconv'
 require 'csv'
 
 class ChallengeSignupsController < ApplicationController
@@ -307,7 +306,7 @@ protected
     filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
 
     byte_order_mark = "\uFEFF"
-    csv_data = Iconv.conv("utf-16le", "utf-8", byte_order_mark + csv_data)
+    csv_data = (byte_order_mark + csv_data).encode("utf-16le", "utf-8", :invalid => :replace, :undef => :replace, :replace => "")
     send_data(csv_data, :filename => filename, :type => :csv)
   end
   
