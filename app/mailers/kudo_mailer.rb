@@ -10,7 +10,7 @@ class KudoMailer < ActionMailer::Base
     kudo = Kudo.find(kudo_id)
     @pseud = kudo.pseud
     @commentable = kudo.commentable
-    #If there actually is a commentable item
+    #Steph - If there actually is a commentable item
     if @commentable != nil
       mail(
           :to => user.email,
@@ -35,7 +35,7 @@ class KudoMailer < ActionMailer::Base
       @commentables << commentable
       @kudo_givers[commentable_info] = kudo_givers
     end
-    #if there are actually commentable objects in the array
+    #steph if there are actually commentable objects in the array
     if @commentables != nil
       mail(
           :to => user.email,
