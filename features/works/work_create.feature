@@ -313,12 +313,11 @@ Feature: Create Works
       And I should not see "This is a preview"
 
   Scenario: RTE and HTML buttons are separate
-  Given basic tags
-    And I am logged in as "newbie"
+  Given I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
-    And I should see "Rich text" within "a#richTextLink"
-    And I should see "HTML" within "a#plainTextLink"
+    And I should see "Rich Text" within ".rtf-html-switch"
+    And I should see "HTML" within ".rtf-html-switch"
     
   Scenario: posting a backdated work
   Given I am logged in as "testuser" with password "testuser"
