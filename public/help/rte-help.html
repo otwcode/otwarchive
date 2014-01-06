@@ -1,42 +1,40 @@
 <h2>Rich Text</h2>
 
-<h3>Strikethrough and Underline</h3>
+<p>While the exact behavior of the Rich Text Editor (<abbr title="Rich Text Editor">RTE</abbr>) varies depending on your device, browser, and operating system as well as the source you're pasting from, starting with a well-formatted document will help you get the most out of the <abbr>RTE</abbr>. Here are some general tips for ensuring as much of your formatting as possible will be retained:</p>
 
-<p>
-  Pasting text with strikethrough or underline formatting into the Rich Text Editor (<abbr>RTE</abbr>) only works if it is copied from a source that uses <code>strike</code>, <code>del</code>, or <code>u</code> elements instead of inline styling. This means pasting from most text editing programs won't retain strikethrough or underline formatting, but pasting from some many pages will.
-</p>
+<ul>
+  <li><strong>Press <kbd>Enter</kbd> <em>once</em> between paragraphs.</strong> Pressing <kbd>Enter</kbd> twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the <abbr>RTE</abbr>. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra <code>&lt;p&gt;</code> tags.</li>
+  <li><strong>Use preset styles for headings, quotations, code, and so on.</strong> The Styles option generally found in a text editor's Format menu will often translate into <abbr title="HyperText Markup Language">HTML</abbr> tags when pasting into the <abbr>RTE</abbr>. Simply changing the font size, font name, or text indent will always fail.</li>
+</ul>
 
-<h3>Google Drive</h3>
+<h3>Pasting from Specific Text Editors</h3>
 
-<p>
-  In addition to strikethrough and underline, text alignment and bold and italic formatting are also lost when pasting from Google Drive documents, and all elements have a <code>dir</code> attribute added. Pressing <kbd>Enter</kbd> between paragraphs to insert a blank line between paragraphs in Google Drive results in extra blank paragraphs. Structural formatting such as headings, lists, links, and tables is retained.
-</p>
-  
-<p>
-  Pasting into the RTE from Google Drive also has a number of browser-specific quirks.
-  <ul>
-    <li>The iPhone does not copy any formatting from Google Drive documents.</li>
-    <li>Opera will often activate the bold option when pasting from Google Drive.</li>
-    <li>Firefox appears to preserve alignment; however, this is due to its use of the <code>style</code> attribute, which our sanitizer removes.</li>
-  </ul>
-</p>
+<h4>Google Drive</h4>
 
-<h3>LibreOffice</h3>
+<p>Google Drive uses inline <abbr title="Cascading Style Sheets">CSS</abbr> rather than <abbr>HTML</abbr> to produce bold, italic, underline, and strike-through formatting; it also uses <abbr>CSS</abbr> to change the alignment of text. Unfortunately, we cannot allow this method of formatting on the Archive, so only pure <abbr>HTML</abbr> formatting such as headings, lists, links, and tables is retained.</p>
 
-<p>
-  Pressing <kbd>Enter</kbd> between paragraphs to insert a blank line between paragraphs in LibreOffice results in extra blank paragraphs. In tables, <code>tr</code> has a <code>valign</code> attribute set (it will be removed by our sanitizer) and <code>th</code> and <code>td</code> have the <code>width</code> attribute set.
-</p>
+<p>In some browsers, the formatting may appear to be preserved upon pasting into the <abbr>RTE</abbr>, but it will be stripped by our <abbr>HTML</abbr> sanitizer upon previewing or posting your work.</p>
 
-<h3>Scrivener</h3>
+<h4>Scrivener</h4>
 
-<p>
-  Skipping a line between paragraphs (i.e. pressing Return twice) results in extra paragraph tags. In tables, <code>td</code> has a <code>valign</code> attribute set (it will be removed by our sanitizer). In addition to strikethrough and underline, center alignment and blockquotes are lost.
-</p>
+<p>Scrivener users will typically get the best results by going to Scrivener's Edit menu and selecting "Copy as HTML" or "Copy as HTML (Basic, using &lt;p&gt; and &lt;span&gt;)" from the Copy Special submenu and pasting into the <abbr>HTML</abbr> editor rather than doing a standard copy and paste into the <abbr>RTE</abbr>.</p>
 
-<p>
-  In Firefox, skipping a line between paragraphs results in two <code>br</code> tags instead of one extra <code>p</code> tag.
-</p>
+<h3>Pasting Specific Types of Formatting</h3>
 
-<p>
-  Using Scrivener's "Copy as HTML" option and pasting into the HTML editor tends to produce better results than copying and pasting into the RTE. While "Copy as HTML" includes many <code>style</code> attributes, they will be removed by our sanitizer.
-</p>
+<h4>Underline and Strikethrough</h4>
+
+<p>Underline and strikethrough formatting are now often achieved with <abbr>CSS</abbr>. Because the Archive does not allow the use of inline <abbr>CSS</abbr>, these text styles are often lost when pasting. (Pasting from web pages that use <code>&lt;u&gt;</code>, <code>&lt;del&gt;</code>, <code>&lt;strike&gt;</code>, or <code>&lt;s&gt; tags will work.)</p>
+
+<h4>Alignment</h4>
+
+<p>Text alignment is now generally achieved with <abbr>CSS</abbr>, and because the Archive does not allow inline <abbr>CSS</abbr>, text alignment will often be lost when pasting text.</p>
+
+<p>While pasting from sources that use the deprecated <code>align</code> attribute and <code>&lt;center&gt;</code> element will keep the formatting intact, please note that the alignment buttons in the <abbr>RTE</abbr> cannot be used to modify center alignment achieved using the <code>&lt;center&gt;</code> tag.</p>
+
+<h4>Headings</h4>
+
+<p>Text editors apply many different appearances to their preset heading styles. For example, selecting Heading 4 in OpenOffice produces italicized sans-serif text. Even when successfully pasting a heading into the <abbr>RTE</abbr>, this specific visual formatting is <em>not</em> preserved – only the <code>&lt;h4&gt;</code> tag is. This is not a bug. <abbr>HTML</abbr> is designed to tell the browser what text means (e.g. "This is a heading") rather than how it should be displayed (e.g. "This should be in Arial"). If you wish to modify the visual display of a heading or any other portion of your work, please use a Work Skin.</p>
+
+<h4>Indented Text</h4>
+
+<p>Indented text is a purely visual effect with no <abbr>HTML</abbr> equivalent and will not be preserved. Please use a Work Skin to indent text.</p>
