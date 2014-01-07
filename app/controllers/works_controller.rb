@@ -482,6 +482,8 @@ class WorksController < ApplicationController
   def preview
     @preview_mode = true
     load_pseuds
+    @series = current_user.series.uniq
+    @collection = Collection.find_by_name(params[:work][:collection_names])
   end
 
   def preview_tags
