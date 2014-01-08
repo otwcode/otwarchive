@@ -2,14 +2,25 @@
 Feature: Collection
   In order to have an archive full of collections
   As a humble user
-  I want to browse an existing collection
+  I want to locate and browse an existing collection
+  
+  Scenario: Collections index should have different links for logged in and logged out users
+  
+  Given I am logged in as "onlooker"
+  When I go to the collections page
+  Then I should see "Open Challenges"
+    And I should see "New Collection"
+  When I log out
+    And I go to the collections page
+  Then I should see "Open Challenges"
+    And I should not see "New Collection"
 
   Scenario: Filter collections index to only show prompt memes
   
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "Prompt Meme Challenge"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "On Demand"
     And I should not see "Some Test Collection"
     And I should not see "Some Other Collection"
@@ -22,7 +33,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "Gift Exchange Challenge"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Surprise Presents"
     And I should see "Another Gift Swap"
     And I should not see "On Demand"
@@ -35,7 +46,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "No Challenge"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
     And I should see "Another Plain Collection"
@@ -48,7 +59,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_closed_true"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Another Plain Collection"
     And I should see "On Demand"
     And I should not see "Some Test Collection"
@@ -61,7 +72,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_closed_false"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
     And I should see "Surprise Presents"
@@ -74,7 +85,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_moderated_true"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Surprise Presents"
     And I should not see "Some Test Collection"
     And I should not see "Some Other Collection"
@@ -87,7 +98,7 @@ Feature: Collection
   Given I have loaded the fixtures
   When I go to the collections page
     And I choose "collection_filters_moderated_false"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
     And I should see "Another Plain Collection"
@@ -102,7 +113,7 @@ Feature: Collection
     And I choose "collection_filters_closed_false"
     And I choose "collection_filters_moderated_true"
     And I choose "Gift Exchange Challenge"
-    And I press "Filter"
+    And I press "Sort and Filter"
   Then I should see "Surprise Presents"
     And I should not see "Some Test Collection"
     And I should not see "Some Other Collection"
