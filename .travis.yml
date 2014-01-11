@@ -1,12 +1,12 @@
 env:
-  - TEST_GROUP=bundle exec cucumber -f progress features/importing
-  - TEST_GROUP=bundle exec cucumber -f progress features/gift_exchanges
-  - TEST_GROUP=bundle exec cucumber -f progress features/prompt_memes
-  - TEST_GROUP=bundle exec cucumber -f progress features/collections
-  - TEST_GROUP=bundle exec cucumber -f progress features/users
-  - TEST_GROUP=bundle exec cucumber -f progress features/works
-  - TEST_GROUP=bundle exec cucumber -f progress features/tags_and_wrangling
-  - TEST_GROUP=bundle exec cucumber -f progress features/other
+  - TEST_GROUP=bundle exec cucumber features/importing
+  - TEST_GROUP=bundle exec cucumber features/gift_exchanges
+  - TEST_GROUP=bundle exec cucumber features/prompt_memes
+  - TEST_GROUP=bundle exec cucumber features/collections
+  - TEST_GROUP=bundle exec cucumber features/users
+  - TEST_GROUP=bundle exec cucumber features/works
+  - TEST_GROUP=bundle exec cucumber features/tags_and_wrangling
+  - TEST_GROUP=bundle exec cucumber features/other
   - TEST_GROUP=bundle exec rspec spec
 rvm:
   - "1.9.3"
