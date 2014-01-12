@@ -482,6 +482,7 @@ class WorksController < ApplicationController
   def preview
     @preview_mode = true
     load_pseuds
+
   end
 
   def preview_tags
@@ -511,6 +512,9 @@ class WorksController < ApplicationController
 
   # POST /works/import
   def import
+    @series = current_user.series.uniq
+    @collection = Collection.find_by_name(params[:work][:collection_names])
+
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0

@@ -295,14 +295,23 @@ class StoryParser
       # lock to registered users if specified or importing for others
       work.restricted = options[:restricted] || options[:importing_for_others] || false
 
+
       # set default values for required tags for any works that don't have them
       work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
       work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
       work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
       work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
-      work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
-      work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
-      work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
+
+      #if enforcing blanks
+      if options[:enforce_blanks]
+        work.character_string = options[:character]
+        work.relationship_string = options[:relationship]
+        work.freeform_string = options[:freeform]
+      else
+        work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
+        work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
+        work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
+      end
 
       # set default value for title
       work.title = "Untitled Imported Work" if work.title.blank?
