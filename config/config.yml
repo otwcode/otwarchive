@@ -88,6 +88,13 @@ INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+PSEUD_NAME_MAX: 40
+PSEUD_NAME_MIN: 1
+USER_LOGIN_MIN: 3
+USER_LOGIN_MAX: 40
+USER_PASSWORD_MIN: 6
+USER_PASSWORD_MAX: 40
+
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching

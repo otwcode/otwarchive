@@ -17,8 +17,8 @@ class Pseud < ActiveRecord::Base
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
 
-  NAME_LENGTH_MIN = 1
-  NAME_LENGTH_MAX = 40
+  NAME_LENGTH_MIN = ArchiveConfig.PSEUD_NAME_MIN
+  NAME_LENGTH_MAX = ArchiveConfig.PSEUD_NAME_MAX
   DESCRIPTION_MAX = 500
 
   belongs_to :user
