@@ -1,5 +1,4 @@
 language: ruby
-cache: bundler
 env:
   - TEST_GROUP="rspec spec"
   - TEST_GROUP="cucumber -f progress -r features features/importing"
@@ -36,5 +35,5 @@ notifications:
   irc:
    channels:
      - "irc.freenode.org#otw-dev"
-   on_success: change
+   on_success: always
    on_failure: always
