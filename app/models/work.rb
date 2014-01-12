@@ -1,5 +1,3 @@
-require 'iconv'
-
 class Work < ActiveRecord::Base
 
   include Taggable
@@ -7,6 +5,7 @@ class Work < ActiveRecord::Base
   include Bookmarkable
   include Pseudable
   include WorkStats
+  include Downloadable
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
@@ -726,47 +725,6 @@ class Work < ActiveRecord::Base
     else
       self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id, :posted => true).first.work_word_count
     end
-  end
-
-  after_update :remove_outdated_downloads
-  def remove_outdated_downloads
-    FileUtils.rm_rf(self.download_dir)
-  end
-
-  # spread downloads out by first two letters of authorname
-  def download_dir
-    "#{Rails.public_path}/#{self.download_folder}"
-  end
-
-  # split out so we can use this in works_helper
-  def download_folder
-    dl_authors = self.download_authors
-    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
-  end
-
-  def download_fandoms
-    string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
-    string.gsub(/[^[\w _-]]+/, '')
-  end
-  def display_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
-  end
-  # need the next two to be filesystem safe and not overly long
-  def download_authors
-    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
-    string = string.gsub(/[^[\w _-]]+/, '')
-    string.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-  def download_title
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
-    string = string.gsub(/[^[\w _-]]+/, '')
-    string = "Work by " + download_authors if string.blank?
-    string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
-  end
-  def download_basename
-    "#{self.download_dir}/#{self.download_title}"
   end
 
   #######################################################################
