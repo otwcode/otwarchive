@@ -18,7 +18,7 @@ script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bunel exec $TEST_GROUP
+  - bundle exec $TEST_GROUP
 before_script:
   - mysql -e 'create database otwarchive_test;'
   - cp config/database.travis.yml config/database.yml
