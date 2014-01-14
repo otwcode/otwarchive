@@ -56,10 +56,26 @@
   </li>
   
   <% if current_user.archivist %>
-  <li>
-    <%= check_box_tag "importing_for_others" %>
-    <%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %>
-  </li>
+    <li>
+      <%= check_box_tag "importing_for_others" %>
+      <%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %>
+    </li>
+    <li>
+      <%= text_field_tag_original "external_author_name" %>
+      <%= label_tag "external_author_name", ts("Author Name") %>
+    </li>
+    <li>
+      <%= text_field_tag_original "external_author_email" %>
+      <%= label_tag "external_author_email", ts("Author Email Address") %>
+    </li>
+    <li>
+      <%= text_field_tag_original "external_coauthor_name" %>
+      <%= label_tag "external_coauthor_name", ts("Co-Author Name") %>
+    </li>
+    <li>
+      <%= text_field_tag_original "external_coauthor_email" %>
+      <%= label_tag "external_coauthor_email", ts("Co-Author Email Address") %>
+    </li>
   <% end %>
 
   <li>
