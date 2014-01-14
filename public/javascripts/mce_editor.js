@@ -1,99 +1,96 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-	theme:"advanced",
-	mode:"none",
-	editor_selector:"mce-editor",
-	plugins : "paste, directionality",
-	paste_insert_word_content_callback : "convertWord",
-	paste_auto_cleanup_on_paste : true,
-    extended_valid_elements : "span[!class]",
-
-    // TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
-	// because we're stripping those tags out.
-	inline_styles : false,
-
-	// Theme options - using the advanced theme for now and just limiting the buttons used - we may want to create a custom theme in future.
-	theme_advanced_buttons1 : "pasteword,|,bold,italic,underline,strikethrough,|,link,unlink,image,|,blockquote,|,hr,|,bullist,numlist,|,justifyleft,justifycenter,|,undo,redo, | ltr, rtl",
-	theme_advanced_buttons2 : "",
-	theme_advanced_buttons3 : "",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_resizing : true,
-	
-	//content_css : "css/custom_content.css",
-	theme_advanced_font_sizes: "10px,12px,13px,14px,16px,18px,20px",
-	font_size_style_values : "10px,12px,13px,14px,16px,18px,20px",
-
-	formats : {
-		aligncenter : {block : 'center', exact : true},
-        underline : {inline : 'u', exact : true},
-        strikethrough : {inline : 'strike', exact : true}
-        }
-
-});
- 
-//Changes the labels and info at the top to Story Text section in _works_form and _chapter_form
+  plugins: "directionality image link paste tabfocus",
+  menubar: false,
+  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
-  //function toggle() {
-  //    var ele = document.getElementById("toggleText");
-  //    var text = document.getElementById("displayText");
-  //    if(ele.style.display == "block") {
-  //  		ele.style.display = "none";
-  //    text.innerHTML = "Rich text";
-  //    }
-  //    else {
-  //    ele.style.display = "block";
-  //    text.innerHTML = "Rich text";
-  //    }
-  //  }
-
-  function toggle() {
-    var elems = new Array();
-    elems[0] = document.getElementById("richTextLink");
-    elems[1] = document.getElementById("plainTextLink");
-    elems[2] = document.getElementById("richTextNotes");
-    elems[3] = document.getElementById("plainTextNotes");
-    for (i=0; i<elems.length; i++) {
-        if (elems[i].style.display == "block" || elems[i].style.display == "inline") {
-            elems[i].style.display = "none";
-        }
-        else {
-            if (elems[i].parentNode.className == "rtf-html-switch" ) {
-                elems[i].style.display = "inline";
-            }
-            else {
-                elems[i].style.display = "block";
-            }
-        }
-    }
+  browser_spellcheck: true,
+  
+  // Disable inline styles, partly because our sanitizer strips them but mostly because strike and u won't work otherwise
+  inline_styles: false,
+  
+  // Restore URLs to their original correct value instead of using shortened broken versions some browsers produce 
+  convert_urls: false,
+  
+  // Add a custom stylesheet with cache busting to override the way text displays in the editor
+  content_css: "/stylesheets/tiny_mce_custom.css?" + new Date().getTime(),
+  
+  // Put the keyboard focus on the text input area rather than the first button when tabbing into the editor (requires tabfocus plugin)
+	tabfocus_elements: "tinymce",
+	
+	// Add HTML tags the editor will accept
+	// - b so it doesn't convert to strong
+	// - i so it doesn't convert to em
+	// - span when it contains a class or dir attribute
+	extended_valid_elements: "b, i, span[!class|!dir], strike, u",
+	
+	// Add HTML tags for the editor to remove, either for cleanup or to make the what-you-see aspect of the editor line up better with the what-you-get-after-the-sanitizer-runs aspect
+	invalid_elements: "font",
+	
+	// Override the default method of styling
+	// - align$value: align="$value" attribute replaces style="text-align: $value"
+	// - underline: u tag instead of span style="text-decoration:underline"
+	// - strikethrough: strike tag instead of span style="text-decoration:line-through"
+	// -- strikethrough should also remove del tag
+	formats: {
+		alignleft: {
+		  selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+		  attributes: { align: 'left' }
+		},
+    aligncenter: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'center' }
+    },
+    alignright: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+      attributes: { align: 'right' }
+    },
+    alignjustify: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li', 
+      attributes: { align: 'justify' }
+    },
+    underline: { inline: 'u', exact: true },
+    strikethrough: [
+      { inline: 'strike', exact: true },
+      { inline: 's', remove: "all" },
+      { inline: 'del', remove: "all" }
+    ]
   }
+  
+});
 
-    
-//Allows the user to turn the rich text editor off and on. 
-  function addEditor(id) {
-    tinyMCE.execCommand('mceAddControl', false, id)
-  }
-        
-  function removeEditor(id) {
-		tinyMCE.execCommand('mceRemoveControl', false,  id)
-  }
-
-
-function convertWord (type, content) {
-    switch (type) {
-        // Gets executed before the built in logic performs it's cleanups
-        case "before":
-            //content = content.toLowerCase(); // Some dummy logic
-            //alert(content);
-            break;
-        // Gets executed after the built in logic performs it's cleanups
-        case "after":
-            //alert(content);
-            content = content.replace(/<!(?:--[\s\S]*?--\s*)?>\s*/g,'');
-            //content = content.toLowerCase(); // Some dummy logic
-            //alert(content);
-            break;
-    }
-    return content;
+// Require the user to turn the RTE on instead of loading automatically using selector option 
+function addEditor(id) {
+  tinyMCE.execCommand('mceAddEditor', false, id)
 }
+ 
+// Let the user turn the RTE back off        
+function removeEditor(id) {
+	tinyMCE.execCommand('mceRemoveEditor', false, id)
+}
+
+// Toggle between the links
+$j(document).ready(function(){
+  $j(".rtf-html-switch").removeClass('hidden');
+  
+  $j(".html-link").addClass('current'); 
+  
+  $j(".rtf-link").click(function(event){
+    addEditor('content');
+    $j(this).addClass('current');
+    $j('.rtf-notes').removeClass('hidden');
+    $j('.html-link').removeClass('current');
+    $j('.html-notes').addClass('hidden');
+    event.preventDefault();
+  });            
+  
+  $j('.html-link').click(function(event){
+    removeEditor('content');
+    $j(this).addClass('current');
+    $j('.html-notes').removeClass('hidden');
+    $j('.rtf-link').removeClass('current');
+    $j('.rtf-notes').addClass('hidden');
+    event.preventDefault();
+  });
+})      
