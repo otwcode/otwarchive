@@ -305,6 +305,13 @@ class Work < ActiveRecord::Base
   #
   #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
   # end
+  
+  def self.find_by_url(url)
+    url = UrlFormatter.new(url)
+    Work.where(:imported_from_url => url.original).first ||
+      Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+  end
 
   ########################################################################
   # AUTHORSHIP
