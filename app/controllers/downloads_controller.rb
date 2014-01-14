@@ -55,9 +55,9 @@ protected
     create_work_html
 
     # convert to PDF
-    # double quotes in title need to be escaped
-    title = @work.title.gsub(/"/, '\"')
-    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title "#{title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
+    # title needs to be escaped
+    title = Shellwords.escape(@work.title)
+    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title #{title} "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
@@ -71,9 +71,10 @@ protected
 
   def download_mobi
      cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
-     # double quotes in title need to be escaped
-     title = @work.title.gsub(/"/, '\"')
-     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{title}" --author "#{@work.display_authors}" }
+     # metadata needs to be escaped for command line
+     title = Shellwords.escape(@work.title)
+     author = Shellwords.escape(@work.display_authors)
+     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
 
     # if only one chapter can use same file as html and pdf versions
     if @chapters.size == 1
