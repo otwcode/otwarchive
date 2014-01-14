@@ -99,6 +99,12 @@ Given /^I view the people page$/ do
   visit people_path
 end
 
+Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
+  author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
+  author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
+  work = FactoryGirl.create(:work, :authors => [author1, author2], :posted => true)
+end
+
 # WHEN
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
@@ -135,6 +141,16 @@ When(/^I fill in the sign up form with valid data$/) do
   step(%{I check "user_terms_of_service"})
 end
 
+When(/^I try to delete my account as (.*)$/) do |login|
+  step (%{I go to #{login}\'s user page})
+  step (%{I follow "Profile"})
+  step (%{I follow "Delete My Account"})
+end
+
+When(/^I try to delete my account$/) do
+  step (%{I try to delete my account as #{DEFAULT_USER}})
+end
+
 # THEN
 
 Then /^I should get the error message for wrong username or password$/ do
@@ -157,7 +173,45 @@ Then(/^a user account should exist for "(.*?)"$/) do |login|
    assert !user.blank?
 end
 
+Then(/^a user account should not exist for "(.*)"$/) do |login|
+  user = User.find_by_login(login)
+  assert user.blank?
+end
+
 Then(/^a new user account should exist$/) do
   step(%{a user account should exist for "#{NEW_USER}"})
 end
 
+Then(/^I should be logged out$/) do
+  assert !UserSession.find
+end
+
+def get_work_name(age, classname, name)
+  klass = classname.classify.constantize
+  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  if age == "most recent"
+    owner.works.order("revised_at DESC").first.title
+  elsif age == "oldest"
+    owner.works.order("revised_at DESC").last.title
+  end
+end
+
+def get_series_name(age, classname, name)
+  klass = classname.classify.constantize
+  owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
+  if age == "most recent"
+    owner.series.order("updated_at DESC").first.title
+  elsif age == "oldest"
+    owner.series.order("updated_at DESC").last.title
+  end
+end
+  
+Then /^I should see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+  title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
+  step %{I should see "#{title}"}
+end
+
+Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
+  title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
+  step %{I should not see "#{title}"}
+end

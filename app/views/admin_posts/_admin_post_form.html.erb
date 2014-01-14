@@ -1,19 +1,19 @@
-<p class="required note">All news posts need a title and some content.</p>
-<div id="work-form" class="post news">
+<div id="admin-post-form" class="post news">
   <%= form_for(@admin_post) do |f| %>
+    <p class="required notice"><%= ts("All news posts need a title and some content.") %></p>
     <%= error_messages_for @admin_post %>
     <fieldset class="text">
       <legend><%= ts("Post News") %></legend>
       <h4><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
       <%= f.text_field :title, :title =>"title" %></h4>
       <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
-      <p id="toggleText">
-        <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-        <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-        <span class="rtf-html-switch actions">
-          <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
-          <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
-        <span>
+      <ul class="hidden rtf-html-switch actions" role="menu">
+        <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+        <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+      </ul>
+      <p class="rtf-html-instructions note">
+        <span class="html-notes"><%= allowed_html_instructions %></span>
+        <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
       </p>
       <% use_tinymce %>
       <div class="rtf-html-field">
@@ -29,7 +29,7 @@
     </fieldset>
     <fieldset>
       <legend><%= ts("Set Preferences") %></legend>
-      <h3 class="landmark heading">Set Prefs</h3>
+      <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
       <dl>
         <dt><%= f.label :tag_list, ts("Tags") %></dt>
         <dd><%= f.text_field :tag_list %></dd>
@@ -52,7 +52,7 @@
 
     <fieldset>
       <legend><%= ts('Post') %></legend>
-      <h3 class="landmark heading">Post</h3>
+      <h3 class="landmark heading"><%= ts("Post") %></h3>
       <p class="submit actions">
         <%= submit_tag ts('Post'), :name => 'post_button' %>
       </p>
