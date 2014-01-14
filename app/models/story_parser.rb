@@ -230,15 +230,15 @@ class StoryParser
       return parse_chapters_into_story(location, chapter_contents, options)
     end
 
+
+    #Updated as elz suggested now getting www and non www, Stephanie 1-11-2014
     def check_for_previous_import(location)
-      #Updated as elz suggested now getting www and non www, Stephanie 1-11-2014
-      def check_for_previous_import(location)
-        urls = [location, location.gsub('www.', '')].uniq
-        if Work.where(imported_from_url: urls).exists?
-          raise Error, "A work has already been imported from #{location}."
-        end
+      urls = [location, location.gsub('www.', '')].uniq
+      if Work.where(imported_from_url: urls).exists?
+        raise Error, "A work has already been imported from #{location}."
       end
     end
+
 
     def set_chapter_attributes(work, chapter, location, options = {})
       chapter.position = work.chapters.length + 1
