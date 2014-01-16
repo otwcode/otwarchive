@@ -943,6 +943,7 @@ class Tag < ActiveRecord::Base
         end
       end
     end
+    meta_tag.update_works_index_timestamp!
   end
 
   def remove_sub_filters(sub_tag)

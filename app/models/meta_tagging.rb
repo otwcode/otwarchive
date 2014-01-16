@@ -8,6 +8,7 @@ class MetaTagging < ActiveRecord::Base
   validates_uniqueness_of :meta_tag_id, :scope => :sub_tag_id 
   
   before_create :add_filters, :inherit_meta_tags
+  after_create :expire_caching
   
   validate :meta_tag_validation
   def meta_tag_validation
@@ -57,5 +58,9 @@ class MetaTagging < ActiveRecord::Base
         end
       end
     end
+  end
+  
+  def expire_caching
+    self.meta_tag.update_works_index_timestamp!
   end
 end

@@ -165,6 +165,13 @@ class CollectionItem < ActiveRecord::Base
       notify_of_author_reveal
     end
   end
+  
+  after_save :expire_caching
+  before_destroy :expire_caching
+  
+  def expire_caching
+    self.collection.update_works_index_timestamp!
+  end
 
   def check_gift_received(has_received)
     item_creator_pseuds.map {|pseud|
