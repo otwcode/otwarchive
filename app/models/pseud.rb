@@ -3,6 +3,7 @@ class Pseud < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include WorksOwner
+  include DownloadableOwner
 
   attr_protected :description_sanitizer_version
 
@@ -314,6 +315,8 @@ class Pseud < ActiveRecord::Base
   # Options: skip_series -- if you begin by changing ownership of the series, you don't
   # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
+    # we have to remove downloads FIRST so long as download dir is based on author name
+    creation.remove_outdated_downloads if creation.respond_to?(:remove_outdated_downloads)
     creation.pseuds.delete(self)
     creation.pseuds << pseud rescue nil
     if creation.is_a?(Work)

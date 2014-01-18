@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 
   include WorksOwner
+  include DownloadableOwner
 
 #### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
