@@ -27,8 +27,8 @@ class FeedSweeper < ActionController::Caching::Sweeper
     work = record.work if record.is_a?(Chapter)
     
     work.pseuds.each do |pseud|
-      pseud.update_work_index_timestamp!
-      pseud.user.update_work_index_timestamp!
+      pseud.update_works_index_timestamp!
+      pseud.user.update_works_index_timestamp!
     end
     
     work.approved_collections.each do |collection|
@@ -37,7 +37,7 @@ class FeedSweeper < ActionController::Caching::Sweeper
 
     work.filters.each do |tag|
       # expire the index cache
-      tag.update_work_index_timestamp!
+      tag.update_works_index_timestamp!
       # expire the atom feed page for the tags on the work and the corresponding filter tags
       expire_page :controller => 'tags',
                   :action => 'feed',
