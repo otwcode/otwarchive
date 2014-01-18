@@ -799,6 +799,7 @@ class Work < ActiveRecord::Base
           if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
             self.filters.delete(filter_to_remove)
             filter_to_remove.reset_filter_count
+            filter_to_remove.update_works_index_timestamp!
           else # we should keep filter_to_remove, but check if inheritence needs to be updated
             direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
             if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly

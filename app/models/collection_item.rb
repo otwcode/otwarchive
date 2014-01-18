@@ -170,7 +170,16 @@ class CollectionItem < ActiveRecord::Base
   before_destroy :expire_caching
   
   def expire_caching
-    self.collection.update_works_index_timestamp!
+    if self.item.is_a?(Work)
+      self.collection.update_works_index_timestamp!
+      self.item.pseuds.each do |pseud|
+        pseud.update_works_index_timestamp!
+        pseud.user.update_works_index_timestamp!
+      end
+      self.item.filters.each do |tag|
+        tag.update_works_index_timestamp!
+      end
+    end
   end
 
   def check_gift_received(has_received)

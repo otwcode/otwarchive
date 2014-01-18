@@ -399,13 +399,11 @@ class Collection < ActiveRecord::Base
   def reveal_collection_items
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
-    self.collection.update_works_index_timestamp!
   end
   
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
     send_author_reveal_notifications
-    self.collection.update_works_index_timestamp!
   end
   
   def send_reveal_notifications
