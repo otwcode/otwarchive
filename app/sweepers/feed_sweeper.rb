@@ -26,6 +26,8 @@ class FeedSweeper < ActionController::Caching::Sweeper
     work = record
     work = record.work if record.is_a?(Chapter)
     
+    return unless work.present?
+    
     work.pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
