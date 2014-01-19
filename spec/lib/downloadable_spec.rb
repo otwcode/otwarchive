@@ -16,7 +16,7 @@ describe Downloadable do
     end
     
     it "will have special characters stripped" do
-      work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "Not! Safe../    Title")
+      work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "Not! Safe../    Title?@!#\\'*&^$")
       expect(work.download_title).to eq("Not Safe Title")
     end
     
@@ -57,33 +57,32 @@ describe Downloadable do
     end
   end
 
-  describe "#download_dir" do
-    it "will be createable" do
-      work = FactoryGirl.create(:work, authors: [@author.pseuds.first])
-      FileUtils.mkdir_p work.download_dir
-      expect(File.exists?(work.download_dir)).to be_true
-    end
-  end
-  
-  describe "#download_basename" do
+  describe "the download files" do
     before(:each) do
       @work = FactoryGirl.create(:work, authors: [@author.pseuds.first])
       FileUtils.mkdir_p @work.download_dir
       @filename = @work.download_basename + ".mobi"
       FileUtils.touch(@filename)
     end
-    
-    it "will be createable once the download directory is created" do
-      expect(File.exists?(@filename)).to be_true
-    end
-    
-    it "will be cleaned up when object is changed" do
-      @work.title = "New Title"
-      @work.save
-      expect(File.exists?(@filename)).to be_false
-      expect(File.exists?(@work.download_dir)).to be_false
-    end
-  end
 
+    describe "#download_dir" do
+      it "will be createable" do
+        expect(File.exists?(@work.download_dir)).to be_true
+      end
+
+      it "will be cleaned up when object is changed" do
+        @work.title = "New Title"
+        @work.save
+        expect(File.exists?(@work.download_dir)).to be_false
+      end
+    end
+    
+    describe "#download_basename" do
+      it "will be createable once the download directory is created" do
+        expect(File.exists?(@filename)).to be_true
+      end
+    end
+  end    
 
 end
+
