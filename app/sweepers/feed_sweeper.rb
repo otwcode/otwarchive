@@ -22,6 +22,9 @@ class FeedSweeper < ActionController::Caching::Sweeper
 
   private
 
+  # When a chapter or work is created, updated or destroyed, expire:
+  # - the cached feed page for each of its canonical tags
+  # - the works index caches for its canonical tags, pseuds, users and collections
   def expire_caches(record)
     work = record
     work = record.work if record.is_a?(Chapter)

@@ -3,6 +3,8 @@
 module WorksOwner
   
   # Used in works_controller to determine whether to expire the cache for this object's works index page
+  # The timestamp should reflect the last update that would cause the list to need refreshing
+  # When both a collection and a tag are given, include both in the key and use the tag's timestamp
   def works_index_cache_key(tag=nil)
     key = "works_index_for_#{self.class.name.underscore}_#{self.id}_"
     if tag.present?
