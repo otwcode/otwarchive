@@ -165,6 +165,22 @@ class CollectionItem < ActiveRecord::Base
       notify_of_author_reveal
     end
   end
+  
+  after_save :expire_caching
+  before_destroy :expire_caching
+  
+  def expire_caching
+    if self.item.is_a?(Work)
+      self.collection.update_works_index_timestamp!
+      self.item.pseuds.each do |pseud|
+        pseud.update_works_index_timestamp!
+        pseud.user.update_works_index_timestamp!
+      end
+      self.item.filters.each do |tag|
+        tag.update_works_index_timestamp!
+      end
+    end
+  end
 
   def check_gift_received(has_received)
     item_creator_pseuds.map {|pseud|

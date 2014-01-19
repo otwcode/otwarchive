@@ -1,4 +1,6 @@
 class Collection < ActiveRecord::Base
+  
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
@@ -388,20 +390,20 @@ class Collection < ActiveRecord::Base
   
   def reveal!
     async(:reveal_collection_items)
-    async(:send_reveal_notifications)
   end
 
   def reveal_authors!
     async(:reveal_collection_item_authors)
-    async(:send_author_reveal_notifications)
   end
   
   def reveal_collection_items
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+    send_reveal_notifications
   end
   
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
+    send_author_reveal_notifications
   end
   
   def send_reveal_notifications
@@ -455,13 +457,5 @@ class Collection < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  include WorksOwner  
-  # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key(tag=nil, index_works=nil)
-    index_works ||= self.children.present? ? self.all_approved_works : self.approved_works
-    super(tag, index_works)
-  end
-
 
 end
