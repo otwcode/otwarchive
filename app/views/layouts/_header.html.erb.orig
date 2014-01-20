@@ -20,7 +20,10 @@
 <% end %>
 
 <div id="header" class="region<% if @collection %> collection<% end %>">
+<<<<<<< HEAD
+=======
   <!--NOTE: have removed role="banner" for now due to user feedback-->
+>>>>>>> faf5f74757194f31a7c8b131458be015491da567
 
   <!--# include virtual="/frak/login" -->
   <h1 class="heading">
