@@ -1,7 +1,4 @@
-<% # expects either instance vars or local vars %>
-<% @work ||= work %>
-<% @chapters ||= chapters %>
-<% @page_title ||= page_title %>
+<% # expects instance vars @work, @chapters, @page_title %>
 <%= render 'downloads/download_preface', :formats => [:html] %>
 
 <div id="chapters" class="userstuff">

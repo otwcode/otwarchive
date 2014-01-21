@@ -16,7 +16,7 @@ describe Downloadable do
     end
     
     it "will have special characters stripped" do
-      work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "Not! Safe../    Title?@!#\\'*&^$")
+      work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "Not! Safe../    Title?@!#\\'*&^$`\"")
       expect(work.download_title).to eq("Not Safe Title")
     end
     
