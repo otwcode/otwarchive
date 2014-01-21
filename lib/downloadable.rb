@@ -1,3 +1,5 @@
+require 'open3'
+
 module Downloadable
 
   def self.included(downloadable)
@@ -13,7 +15,7 @@ module Downloadable
       FileUtils.rm_rf download_dir
     end
   end
-
+  
   # called to get rid of old downloads folder
   # actual deletion occurs asynchronously but we need to provide the download dir immediately
   def remove_outdated_downloads
@@ -109,9 +111,11 @@ module Downloadable
       # set up instance variables needed by template
       page_title = [self.download_title, self.download_authors, self.download_fandoms].join(" - ")
       chapters = self.chapters.order('position ASC').where(:posted => true)
-      # render the download template
+
+
       # sneaking around MVC division, but the rendering of downloads belongs in this module IMO and not
       # in the controller
+      # set this to handle host lookups
       Otwarchive::Application.routes.default_url_options = { :host => ArchiveConfig.APP_HOST }
       view = ActionView::Base.new(ActionController::Base.view_paths, {})
       view.class_eval do
@@ -119,12 +123,13 @@ module Downloadable
         include ApplicationHelper
         include TagsHelper
         def current_user
-          puts "being called for current user"
-          User.current_user
+          nil
         end
-      end
-      @html = view.render(:template => "/downloads/show", :formats => [:html], :layout => '/layouts/barebones.html', :locals => {:work => self, :page_title => page_title, :chapters => chapters})
+      end      
+      @html = view.render(:template => "/downloads/show", :formats => [:html], :layout => '/layouts/barebones.html', :locals => {:@work => self, :@page_title => page_title, :@chapters => chapters})
     end
+    # reset back so tests don't get confused
+    Otwarchive::Application.routes.default_url_options = {}    
         
     # write to file
     File.open(html_filename, 'w:UTF-8') {|f| f.write(@html)}
@@ -134,8 +139,12 @@ module Downloadable
   def generate_ebook_download(format)
     cmd = (format == "pdf" ? get_pdf_command : get_calibre_command(format))
 
-    result = system(*cmd)
-    unless result
+    # Make sure the command is sanitary, and use popen3 in order to
+    # capture and discard the stdin/out info
+    # See http://stackoverflow.com/a/5970819/469544 for details
+    exit_status = nil
+    Open3.popen3(*cmd) {|stdin, stdout, stderr, wait_thread| exit_status = wait_thread.value}
+    unless exit_status
       Rails.logger.debug "Download generation failed: " + cmd.to_s
     end
   end
