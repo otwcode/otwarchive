@@ -2,8 +2,6 @@ require 'mime/types'
 
 class DownloadsController < ApplicationController
 
-  include XhtmlSplitter
-
   skip_before_filter :store_location, :only => :show
   before_filter :guest_downloading_off, :only => :show
   before_filter :check_visibility, :only => :show
