@@ -75,6 +75,12 @@ describe Downloadable do
         @work.save
         expect(File.exists?(@work.download_dir)).to be_false
       end
+      
+      it "will be cleaned up when object is destroyed" do
+        @work.destroy
+        expect(File.exists?(@work.download_dir)).to be_false
+      end
+      
     end
     
     describe "#download_basename" do

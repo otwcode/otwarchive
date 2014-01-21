@@ -4,7 +4,8 @@ module Downloadable
 
   def self.included(downloadable)
     downloadable.class_eval do
-      after_update :remove_outdated_downloads
+      before_update :remove_outdated_downloads
+      before_destroy :remove_outdated_downloads
     end
   end
   
