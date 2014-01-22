@@ -80,7 +80,6 @@ describe Downloadable do
         @work.destroy
         expect(File.exists?(@work.download_dir)).to be_false
       end
-      
     end
     
     describe "#download_basename" do

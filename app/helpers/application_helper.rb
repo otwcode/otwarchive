@@ -86,7 +86,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+      if !options[:visibility] == 'public' && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
       return anon_byline

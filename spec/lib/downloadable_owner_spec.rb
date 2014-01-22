@@ -28,4 +28,10 @@ describe DownloadableOwner do
     expect(File.exists?(@work.download_dir)).to be_false
   end
 
+  it "will clean up downloads when a coauthor is added" do
+    @author2 = FactoryGirl.create(:user, login: "someone_new", email: "someone_new@somewhere.com")
+    @work.pseuds << @author2.pseuds.first
+    expect(File.exists?(@work.download_dir)).to be_false
+  end
+
 end

@@ -167,7 +167,7 @@ module Downloadable
     # Add info about first series if any
     series = []
     unless self.series.empty?
-      series = ['--series', self.series.first.title, '--series-index', SerialWork.where(:work_id => self.id, :series_id => self.series.first.id).value_of(:position).first]
+      series = ['--series', self.series.first.title, '--series-index', "#{SerialWork.where(:work_id => self.id, :series_id => self.series.first.id).value_of(:position).first}"]
     end
 
     ### Format-specific options
