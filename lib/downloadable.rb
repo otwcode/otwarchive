@@ -42,6 +42,8 @@ module Downloadable
   # strip all alphanumeric
   # truncate to 24 chars at a word boundary
   def make_filesystem_safe(string)
+    # get rid of any HTML entities to avoid things like "amp" showing up in titles
+    string = string.gsub(/\&(\w+)\;/, '')
     string = ActiveSupport::Inflector.transliterate(string)
     string = string.encode("us-ascii", "utf-8")
     string = string.gsub(/[^[\w _-]]+/, '')

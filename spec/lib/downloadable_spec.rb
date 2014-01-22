@@ -15,6 +15,11 @@ describe Downloadable do
       expect(work.download_title).to eq(work.title)
     end
     
+    it "will have html entities stripped completely" do
+      work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "&lt;This &amp; That&gt;")
+      expect(work.download_title).to eq("This That")
+    end
+    
     it "will have special characters stripped" do
       work = FactoryGirl.create(:work, authors: [@author.pseuds.first], title: "Not! Safe../    Title?@!#\\'*&^$`\"")
       expect(work.download_title).to eq("Not Safe Title")
