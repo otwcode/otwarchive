@@ -62,19 +62,6 @@ Feature: Download a work
   Then I should be able to download all versions of "Epic Novel"
   
     
-  Scenario: disable guest download
-    
-  Given I am logged in as "author"
-    And I post the work "NaNoWriMo"
-    And guest downloading is off
-    And I am logged out as an admin
-  When I view the work "NaNoWriMo"
-    And I follow "PDF"
-  Then I should see "Due to current high load"
-  When I am logged in as a random user
-  Then I should be able to download all versions of "NaNoWriMo"
-    And I should not see "Due to current high load"
-  
   Scenario: downloads expire after chapters are added
   
   Given I am logged in as "author"
@@ -92,7 +79,7 @@ Feature: Download a work
   Then the mobi version of "NaNoWriMo" should exist
   When I add "NaNoWriMo" to the series "Whatever"
   Then the mobi version of "NaNoWriMo" should not exist
-
+  
   Scenario: downloads do not expire after a different work is added to the same series
   
   Given I am logged in as "author"
@@ -118,3 +105,24 @@ Feature: Download a work
   Then I should not be able to manually download the foobar version of "Whatever"
     And I should see "don't support that format"
     
+  Scenario: graceful error message when file can't be generated
+  
+  Given I am logged in as "author"
+    And I post the work "Whatever"
+    And I try and fail to download the mobi version of "Whatever"
+  Then I should see "Please try again"
+  
+  Scenario: disable guest download
+    
+  Given I am logged in as "author"
+    And I post the work "NaNoWriMo"
+    And guest downloading is off
+    And I am logged out as an admin
+  When I view the work "NaNoWriMo"
+    And I follow "PDF"
+  Then I should see "Due to current high load"
+  When I am logged in as a random user
+  Then I should be able to download all versions of "NaNoWriMo"
+    And I should not see "Due to current high load"
+  
+  

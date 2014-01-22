@@ -138,8 +138,11 @@ module Downloadable
     File.open(html_filename, 'w:UTF-8') {|f| f.write(@html)}
   end
 
-  # transform HTML version into ebook version, check for file's existence and send
+  # transform HTML version into ebook version
   def generate_ebook_download(format)
+    ebook_filename = "#{self.download_basename}.#{format}"
+    return if File.exists?(ebook_filename)
+    
     cmd = (format == "pdf" ? get_pdf_command : get_calibre_command(format))
 
     # Make sure the command is sanitary, and use popen3 in order to

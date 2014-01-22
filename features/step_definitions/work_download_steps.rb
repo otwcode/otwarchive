@@ -30,9 +30,9 @@ end
 
 Then /^I should not be able to manually download the (\w+) version of "(.*)"$/ do |filetype, title|
   work = Work.find_by_title(title)
-  url = "#{ArchiveConfig.APP_URL}/#{work.download_folder}/#{work.download_title}.#{filetype}"
+  download_url = "#{ArchiveConfig.APP_URL}/#{work.download_folder}/#{work.download_title}.#{filetype}"
   filename = "#{work.download_basename}.#{filetype}" # the full path of the download file we expect to exist
-  visit url
+  visit download_url
   page.driver.response.headers['Content-Disposition'].should_not =~ /filename=\"#{File.basename(filename)}\"/
   page.response_headers['Content-Type'].should_not == MIME::Types.type_for(filename).first
 end
@@ -49,3 +49,11 @@ Then /^the (.*) version of "([^"]*)" should not exist$/ do |filetype, title|
   assert !File.exists?(filename)
 end
 
+When /^I try and fail to download the (\w+) version of "(.*)"$/ do |filetype, title|
+  work = Work.find_by_title(title)
+  download_url = "#{ArchiveConfig.APP_URL}/#{work.download_folder}/#{work.download_title}.#{filetype}?dont_generate_download=1"
+  visit download_url
+  filename = "#{work.download_basename}.#{filetype}" # the full path of the download file we expect to exist
+  page.driver.response.headers['Content-Disposition'].should_not =~ /filename=\"#{File.basename(filename)}\"/
+  page.response_headers['Content-Type'].should_not == MIME::Types.type_for(filename).first
+end
