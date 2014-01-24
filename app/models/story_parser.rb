@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction_nonprintable efiction_exceptions efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -61,6 +61,8 @@ class StoryParser
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
   SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
+  SOURCE_EFICTION_EXCEPTIONS = '(the\-archive\.net)'
+  SOURCE_EFICTION_NONPRINTABLE = '(thehexfiles\.net)'
   SOURCE_EFICTION = 'viewstory\.php'
 
   # time out if we can't download fast enough
@@ -432,14 +434,6 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      # clean up any erroneously included string terminator (Issue 785)
-      story = story.gsub("\000", "")
-      
-      #story = fix_bad_characters(story)
-      # ^ This eats ALL special characters. I don't think we need it at all
-      # so I'm taking it out. If we want it back, it should be the last
-      # thing we do with the parsed bits after Nokogiri has parsed the content
-      # and worked it's magic with encoding --rebecca
       return story
     end
 
@@ -490,24 +484,47 @@ class StoryParser
       # end
       # return @chapter_contents
     end
-
+    
+    # this is an efiction archive but it doesn't handle chapters normally
+    # best way to handle is to get the full story printable version
+    def download_chaptered_from_efiction_exceptions(location)
+      if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
+        location = "#{$1}/viewstory.php?action=printable&psid=#{$2}"
+      end
+      @chapter_contents = []
+      body = download_with_timeout(location)
+      @chapter_contents << body unless body.nil?
+      return @chapter_contents
+    end
+     
+    # this is an efiction archive with broken printable, do our best with the main body
+    def download_chaptered_from_efiction_nonprintable(location)
+      efiction_download(location, printable=false)
+    end
 
     # grab all the chapters of a story from an efiction-based site
     def download_chaptered_from_efiction(location)
+      efiction_download(location)
+    end
+      
+    # handle efiction downloads
+    def efiction_download(location, printable=true)
       @chapter_contents = []
       if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
         site = $1
         storyid = $2        
         chapnum = 1
+        last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
-            url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
+            url = "#{site}/viewstory.php?#{printable ? 'action=printable&' : ''}sid=#{storyid}&chapter=#{chapnum}"            
             body = download_with_timeout(url)
-            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+            if body.nil? || body == last_body || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
               break
             end
             
             @chapter_contents << body
+            last_body = body            
             chapnum = chapnum + 1
           end
         }
@@ -534,6 +551,16 @@ class StoryParser
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
 
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
+      
+      # Convert all relative links to absolute
+      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location      
+      if base.present?
+        @doc.css('a').each do |link|
+          if link['href'].present?
+            link['href'] = URI.join(base, link['href'])
+          end
+        end
+      end
 
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
         params = eval("parse_story_from_#{source.downcase}(story)")
@@ -1018,9 +1045,13 @@ class StoryParser
       if story.blank?
         raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
+      
+      # clean up any erroneously included string terminator (Issue 785)
+      story.gsub!("\000", "")
+      
       story
     end
-
+    
     def get_last_modified(location)
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         resp = open(location)
