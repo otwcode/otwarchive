@@ -205,10 +205,10 @@ describe HtmlCleaner do
         result.to_s.squish.should == '<p></p><div dir="rtl"> <p>This is RTL content</p> </div>'
       end
 
-      %w{youtube.com player.vimeo.com blip.tv static.ning.com dailymotion.com viddler.com metacafe.com
-          vidders.net criticalcommons.org google.com archiveofourown.org podfic.com embed.spotify.com 
-          8tracks.com w.soundcloud.com}.each do |source|
-            
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com 
+          viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com 
+          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|  
+                      
             it "should allow embeds from #{source}" do
               html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
               result = sanitize_value(:content, html)
