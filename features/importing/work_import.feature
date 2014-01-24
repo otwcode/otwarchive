@@ -10,7 +10,7 @@ Feature: Import Works
 
   @work_import_minimal_valid
   Scenario: Creating a new minimally valid work
-    When I start importing
+    When I set up importing
     Then I should see "Import New Work"
     When I fill in "urls" with "http://cesy.dreamwidth.org"
       And I press "Import"

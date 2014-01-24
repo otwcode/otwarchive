@@ -552,12 +552,17 @@ class StoryParser
 
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
       
-      # Convert all relative links to absolute
+      # Try to convert all relative links to absolute
       base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location      
       if base.present?
         @doc.css('a').each do |link|
           if link['href'].present?
-            link['href'] = URI.join(base, link['href'])
+            begin
+              query = link['href'].match(/(\?.*)$/) ? $1 : ''
+              link['href'].gsub!(/(\?.*)$/, '')
+              link['href'] = URI.join(base, link['href']).to_s + query
+            rescue
+            end
           end
         end
       end
