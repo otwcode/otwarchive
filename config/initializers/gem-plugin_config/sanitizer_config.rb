@@ -78,35 +78,35 @@ class Sanitize
       
       # Verify that the video URL is actually a valid video URL from a site we trust.
       source = case url
-      when /^http:\/\/(?:www\.)?youtube\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?youtube\.com\//
         then "youtube"
-      when /^http:\/\/(?:www\.|player\.)?vimeo\.com\//
+      when /^(?:http:)?\/\/(?:www\.|player\.)?vimeo\.com\//
         then "vimeo"
-      when /^http:\/\/(?:www\.)?blip\.tv\//
+      when /^(?:http:)?\/\/(?:www\.)?blip\.tv\//
         then "blip"
-      when /^http:\/\/(?:www\.|static\.)?ning\.com\//
+      when /^(?:http:)?\/\/(?:www\.|static\.)?ning\.com\//
         then "ning"
-      when /^http:\/\/(?:www\.)?dailymotion\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?dailymotion\.com\//
         then "dailymotion"
-      when /^http:\/\/(?:www\.)?viddler\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?viddler\.com\//
         then "viddler"
-      when /^http:\/\/(?:www\.)?metacafe\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?metacafe\.com\//
         then "metacafe"
-      when /^http:\/\/(?:www\.)?vidders\.net\//
+      when /^(?:http:)?\/\/(?:www\.)?vidders\.net\//
         then "vidders.net"
-      when /^http:\/\/(?:www\.)?criticalcommons\.org\//
+      when /^(?:http:)?\/\/(?:www\.)?criticalcommons\.org\//
         then "criticalcommons"
-      when /^http:\/\/(?:www\.)?google\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?google\.com\//
         then "google"
-      when /^http:\/\/(?:www\.)?archiveofourown\.org\//
+      when /^(?:http:)?\/\/(?:www\.)?archiveofourown\.org\//
         then "archiveofourown"
-      when /^http:\/\/(?:www\.)?podfic\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?podfic\.com\//
         then "podfic"
       when /^https:\/\/(?:embed\.)?spotify\.com\//
         then "spotify"
-      when /^http:\/\/(?:www\.)?8tracks\.com\//
+      when /^(?:http:)?\/\/(?:www\.)?8tracks\.com\//
         then "8tracks"
-      when /^https:\/\/(?:w\.)?soundcloud\.com\//
+      when /^(?:https:)?\/\/(?:w\.)?soundcloud\.com\//
         then "soundcloud"
       else
         nil

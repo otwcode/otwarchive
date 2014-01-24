@@ -152,7 +152,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, value)
         doc = Nokogiri::HTML.fragment(result)
         doc.xpath(".//em").children.to_s.strip.should == "hello"
-        doc.xpath(".//blockquote").children.to_s.strip.should == "world"
+        doc.xpath(".//blockquote").children.to_s.strip.should == "<p>world</p>"
       end
 
       it "should keep valid unicode chars as is" do
@@ -206,9 +206,9 @@ describe HtmlCleaner do
       end
 
       it "should allow youtube embeds" do
-        html = '<iframe width="560" height="315" src="http://www.youtube.com/embed/123" frameborder="0"></iframe>'
+        html = '<iframe width="560" height="315" src="//www.youtube.com/embed/123" frameborder="0"></iframe>'
         result = sanitize_value(:content, html)
-        result.should == html
+        expect(result).to include(html)
       end
 
       it "should not allow iframes with unknown source" do
@@ -220,7 +220,7 @@ describe HtmlCleaner do
       it "should allow google player embeds" do
         html = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
         result = sanitize_value(:content, html)
-        result.should == html
+        expect(result).to include(html)
       end
 
       it "should not allow embeds with unknown source" do
