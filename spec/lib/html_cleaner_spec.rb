@@ -205,16 +205,15 @@ describe HtmlCleaner do
         result.to_s.squish.should == '<p></p><div dir="rtl"> <p>This is RTL content</p> </div>'
       end
 
-      it "should allow youtube embeds" do
-        html = '<iframe width="560" height="315" src="//www.youtube.com/embed/123" frameborder="0"></iframe>'
-        result = sanitize_value(:content, html)
-        expect(result).to include(html)
-      end
-
-      it "should not allow iframes with unknown source" do
-        html = '<iframe src="http://www.evil.org"></iframe>'
-        result = sanitize_value(:content, html)
-        result.should be_empty
+      %w{youtube.com player.vimeo.com blip.tv static.ning.com dailymotion.com viddler.com metacafe.com
+          vidders.net criticalcommons.org google.com archiveofourown.org podfic.com embed.spotify.com 
+          8tracks.com w.soundcloud.com}.each do |source|
+            
+            it "should allow embeds from #{source}" do
+              html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
+              result = sanitize_value(:content, html)
+              expect(result).to include(html)
+            end
       end
 
       xit "should allow google player embeds" do
@@ -222,13 +221,19 @@ describe HtmlCleaner do
         result = sanitize_value(:content, html)
         expect(result).to include(html)
       end
-
+      
       it "should not allow embeds with unknown source" do
         html = '<embed src="http://www.evil.org"></embed>'
         result = sanitize_value(:content, html)
         result.should be_empty
       end
 
+      it "should not allow iframes with unknown source" do
+        html = '<iframe src="http://www.evil.org"></iframe>'
+        result = sanitize_value(:content, html)
+        result.should be_empty
+      end
+      
       ["'';!--\"<XSS>=&{()}",
        '<XSS STYLE="behavior: url(xss.htc);">'
       ].each do |value|
