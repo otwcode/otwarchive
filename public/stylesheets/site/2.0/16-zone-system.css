@@ -92,6 +92,12 @@ SUBSECTIONS:
   min-width: 0;
 }
 
+ #tos-partial #tos {
+
+  height: 36em;
+  overflow: scroll;
+}
+
 /*3. ZONE: SYSTEM: DOCS 
 For practicality, /home .docs have been given the .userstuff class as well, to save doubling up that sheet or confusing end users. We will just cope with the inconsistency.*/
 
