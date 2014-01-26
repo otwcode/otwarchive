@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) 
+[![Coverage Status](https://coveralls.io/repos/otwcode/otwarchive/badge.png)](https://coveralls.io/r/otwcode/otwarchive)
 
 ## About OTW-Archive
 
