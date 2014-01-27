@@ -92,10 +92,9 @@ SUBSECTIONS:
   min-width: 0;
 }
 
- #tos-partial #tos {
-
+ #tos-partial {
   height: 36em;
-  overflow: scroll;
+  overflow: auto;
 }
 
 /*3. ZONE: SYSTEM: DOCS 
