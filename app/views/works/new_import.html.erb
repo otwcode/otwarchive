@@ -38,7 +38,7 @@
 <fieldset>
   <legend><%= ts("Works URLs") %></legend>
   <dl>
-    <dt class="required"><%= label_tag "urls", ts("URLs") %></dt>
+    <dt class="required"><%= label_tag "urls", ts("URLs*") %></dt>
    <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
 	<p class="footnote">URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line</strong>.</p>
   </dd>
@@ -60,13 +60,13 @@
       <%= check_box_tag "importing_for_others" %>
       <%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %>
     </li>
-    <li>
+    <li class="required">
       <%= text_field_tag_original "external_author_name" %>
-      <%= label_tag "external_author_name", ts("Author Name") %>
+      <%= label_tag "external_author_name", ts("Author Name") + "*" %>
     </li>
-    <li>
+    <li class="required">
       <%= text_field_tag_original "external_author_email" %>
-      <%= label_tag "external_author_email", ts("Author Email Address") %>
+      <%= label_tag "external_author_email", ts("Author Email Address") + "*" %>
     </li>
     <li>
       <%= text_field_tag_original "external_coauthor_name" %>
