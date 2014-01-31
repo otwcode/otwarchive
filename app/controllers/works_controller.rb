@@ -753,8 +753,18 @@ public
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
-    flash[:notice] = ts("This work was marked for later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
+    if marked_for_later?(@work)
+      flash[:notice] = ts("This work was <strong>removed</strong> from your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    else
+      flash[:notice] = ts("This work was <strong>added</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
+
+  def marked_for_later?(work)
+    return unless current_user
+    reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+    reading && reading.toread?
   end
 
   protected
