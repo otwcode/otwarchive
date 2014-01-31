@@ -75,7 +75,7 @@
     
       <dt><%= ts("Preferences") %></dt>
 	    <dd>
-	      <ul>
+        <ul>
           <li>
             <%= check_box_tag "post_without_preview" %>
             <% if current_user.archivist %>
@@ -93,7 +93,7 @@
             <%= label_tag "override_tags", ts("Set the following tags on all stories, overriding whatever the importer finds.") %>
           </li>
         </ul>
-	    </dd>
+      </dd>
     </dl>
   </fieldset>
 
