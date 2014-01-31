@@ -10,7 +10,7 @@
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
   </p>
-  <p><%= ts("You might find the") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
 </div>
 
 <!--/descriptions-->
@@ -37,7 +37,7 @@
     <dl>
       <dt class="required"><%= label_tag "urls", ts("URLs") + "*" %></dt>
       <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
-  	    <p class="footnote"><%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong>.</p>
+  	    <p class="footnote"><%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong></p>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
       <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
