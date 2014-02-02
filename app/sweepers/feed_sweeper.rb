@@ -9,7 +9,7 @@ class FeedSweeper < ActionController::Caching::Sweeper
   end
 
   def after_update(record)
-    if record.posted? && (record.posted_changed? || (record.is_a?(Work) && record.revised_at_changed?))
+    if record.posted?
       expire_caches(record)
     end
   end
