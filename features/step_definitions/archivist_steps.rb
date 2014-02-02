@@ -57,7 +57,7 @@ Then /^I should see multi-story import messages$/ do
 end
 
 Then /^I should see import confirmation$/ do
-  step %{I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."}
+  step %{I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."}
 end
 
 Then /^the email should contain invitation warnings from "([^\"]*)" for work "([^\"]*)" in fandom "([^\"]*)"$/ do |name, work, fandom|

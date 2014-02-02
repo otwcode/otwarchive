@@ -26,7 +26,7 @@ Feature: Archivist bulk imports
   Given I have an archivist "alice_ttlg"
     When I am logged in as "alice_ttlg"
       And I import the work "http://yuletidetreasure.org/archive/84/thatshall.html"
-    Then I should see "We have notified the author(s) you imported stories for"
+    Then I should see "We have notified the author(s) you imported works for"
       And I should see "That Shall Achieve The Sword"
     When the system processes jobs
     Then 1 email should be delivered to "shalott@intimations.org"
@@ -40,7 +40,7 @@ Feature: Archivist bulk imports
     Then I should see multi-story import messages
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
-      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
+      And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
    
   Scenario: Importing only sends one email even if there are many works
   
@@ -83,7 +83,7 @@ Feature: Archivist bulk imports
       And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
     Then I should not see multi-story import messages
       And I should see "Welcome"
-      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
+      And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When the system processes jobs
     Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
 
