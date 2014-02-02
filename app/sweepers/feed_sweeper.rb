@@ -36,7 +36,7 @@ class FeedSweeper < ActionController::Caching::Sweeper
       pseud.user.update_works_index_timestamp!
     end
     
-    work.approved_collections.each do |collection|
+    work.all_collections.each do |collection|
       collection.update_works_index_timestamp!
     end
 
