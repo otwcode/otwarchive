@@ -67,7 +67,7 @@
             <% @fandom_tag_id += "_checkboxes" if tag_type == 'fandom' %>
 
             <% # create a scrollable checkboxes section to wrap the tags, see application_helper %>
-            <dd class="<%= ts("#{tag_type}") %> listbox group">
+            <dd class="<%= ts("#{tag_type}") %> listbox group" title="<%= ts("choose #{tag_name.pluralize.downcase}") %>">
               <h4 class="heading"><%= ts("#{tag_name}") %></h4>
               <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", restriction.tags(tag_type).by_name_without_articles.value_of(:name),
                   :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
