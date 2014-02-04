@@ -488,7 +488,7 @@ module ApplicationHelper
     checkboxes_ul = content_tag(:ul, checkboxes, :class => css_class)
 
     toggle = "".html_safe
-    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW) # RETURN ME TO OPTIONS * 6
+    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
       toggle = checkbox_section_toggle(checkboxes_id, size)
     end
       
