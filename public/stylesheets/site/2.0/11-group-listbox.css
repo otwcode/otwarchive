@@ -16,7 +16,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
   display: inline-block;
 }
 
-.listbox li.blurb, .listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots ul li, .listbox .all ul li {
+.listbox li.blurb, .listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots li, .listbox .all li {
   display: block;
 }
 
@@ -71,13 +71,16 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
 
 /*INTERACTION context (show many/more/lots)*/
 
+.listbox .options {
+  overflow: auto;
+}
+
 .listbox .all {
   height: auto;
 }
 
-.listbox .many ul {
-  overflow: auto;
-  max-height: 10em;
+.listbox .many {
+  max-height: 12em;
 }
 
 /*END== */

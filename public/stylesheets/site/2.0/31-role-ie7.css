@@ -62,7 +62,7 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 /* scrolling listbox list item containment */
 
-.listbox .many ul {
+.listbox .many {
   position: relative;
 }
 
