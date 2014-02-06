@@ -6,19 +6,59 @@
 <!--/subnav-->
 
 <!--main content-->
-<dl class="subscription index group">
-<% @subscriptions.each do |subscription| %>
-  <dt>
-    <%= link_to(subscription.name, subscription.subscribable) %>
-    (<%= subscription.subscribable_type %>)
-    <% if %w(Work Series).include?(subscription.subscribable_type) %>
-      <%= ts("by %{names}", :names => byline(subscription.subscribable)).html_safe %>
-    <% end %>
-  </dt>
-  <dd>
-    <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-      <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
-    <% end %>
-  </dd>
+<% if @sub_users.present? %>
+    <div class="users listbox group" id="subscription-users">
+        <h3 class="heading"><%= ts("Users") %></h3>
+        <dl class="users subscription index group">
+        <% @sub_users.each do |subscription| %>
+          <dt>
+            <%= link_to(subscription.name, subscription.subscribable) %>
+          </dt>
+          <dd>
+            <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+              <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
+            <% end %>
+          </dd>
+        <% end %>
+        </dl>
+    </div>
 <% end %>
-</dl>
+
+<% if @sub_series.present? %>
+    <div class="series listbox group" id="subscription-series">
+        <h3 class="heading"><%= ts("Series") %></h3>
+        <dl class="series subscription index group">
+        <% @sub_series.each do |subscription| %>
+          <dt>
+            <%= link_to(subscription.name, subscription.subscribable) %>
+          </dt>
+          <dd>
+            <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+              <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
+            <% end %>
+          </dd>
+        <% end %>
+        </dl>
+    </div>
+<% end %>
+
+<% if @sub_works.present? %>
+    <div class="works listbox group" id="subscription-works">
+        <h3 class="heading"><%= ts("Works") %></h3>
+        <dl class="works subscription index group">
+        <% @sub_works.each do |subscription| %>
+          <dt>
+            <%= link_to(subscription.name, subscription.subscribable) %>
+            <% if %w(Work Series).include?(subscription.subscribable_type) %>
+              <%= ts("by %{names}", :names => byline(subscription.subscribable)).html_safe %>
+            <% end %>
+          </dt>
+          <dd>
+            <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+              <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
+            <% end %>
+          </dd>
+        <% end %>
+        </dl>
+    </div>
+<% end %>
