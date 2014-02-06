@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction_nonprintable efiction_exceptions efiction)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet thearchive_net efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -61,13 +61,16 @@ class StoryParser
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
   SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
-  SOURCE_EFICTION_EXCEPTIONS = '(the\-archive\.net)'
-  SOURCE_EFICTION_NONPRINTABLE = '(thehexfiles\.net)'
+  SOURCE_THEARCHIVE_NET = 'the\-archive\.net'
   SOURCE_EFICTION = 'viewstory\.php'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
   MAX_CHAPTER_COUNT = 200
+  
+  # To check for duplicate chapters, take a slice this long out of the story
+  # (in characters)
+  DUPLICATE_CHAPTER_LENGTH = 10000
 
 
   # Import many stories
@@ -487,28 +490,28 @@ class StoryParser
     
     # this is an efiction archive but it doesn't handle chapters normally
     # best way to handle is to get the full story printable version
-    def download_chaptered_from_efiction_exceptions(location)
-      if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
+    # We have to make it a download-chaptered because otherwise it gets sent to the
+    #  generic efiction version since chaptered sources are checked first
+    def download_chaptered_from_thearchive_net(location)
+      if location.match(/^(.*)\/.*viewstory\.php.*[^p]sid=(\d+)($|&)/i)
         location = "#{$1}/viewstory.php?action=printable&psid=#{$2}"
       end
-      @chapter_contents = []
-      body = download_with_timeout(location)
-      @chapter_contents << body unless body.nil?
-      return @chapter_contents
+      text = download_with_timeout(location)
+      text.sub!('</style>', '</style></head>') unless text.match('</head>')  
+      return [text]
     end
-     
-    # this is an efiction archive with broken printable, do our best with the main body
-    def download_chaptered_from_efiction_nonprintable(location)
-      efiction_download(location, printable=false)
-    end
-
+    
     # grab all the chapters of a story from an efiction-based site
     def download_chaptered_from_efiction(location)
       efiction_download(location)
     end
       
     # handle efiction downloads
-    def efiction_download(location, printable=true)
+    # url_format is a string with STORYID, and CHAPNUM. To handle a weird efiction site just
+    #  pass in a different string and those two variables will be changed to get the story 
+    #  in question.
+    # STORYID_INCR increments the storyid for each new chapter instead
+    def efiction_download(location, url_format="action=printable&sid=STORYID&chapter=CHAPNUM")
       @chapter_contents = []
       if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
         site = $1
@@ -517,14 +520,19 @@ class StoryParser
         last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
-            url = "#{site}/viewstory.php?#{printable ? 'action=printable&' : ''}sid=#{storyid}&chapter=#{chapnum}"            
-            body = download_with_timeout(url)
-            if body.nil? || body == last_body || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+            url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
+            body = download_with_timeout(url)   
+            # get a section to check that this isn't a duplicate of previous chapter
+            body_to_check = body.slice(10,DUPLICATE_CHAPTER_LENGTH)
+            if body.nil? || body_to_check == last_body || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
               break
             end
+            # save the value to check for duplicate chapter
+            last_body = body_to_check       
             
+            # clean up the broken head in many efiction printable sites
+            body.sub!('</style>', '</style></head>') unless body.match('</head>')            
             @chapter_contents << body
-            last_body = body            
             chapnum = chapnum + 1
           end
         }
@@ -553,14 +561,13 @@ class StoryParser
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
       
       # Try to convert all relative links to absolute
-      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location      
+      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first      
       if base.present?
         @doc.css('a').each do |link|
           if link['href'].present?
             begin
               query = link['href'].match(/(\?.*)$/) ? $1 : ''
-              link['href'].gsub!(/(\?.*)$/, '')
-              link['href'] = URI.join(base, link['href']).to_s + query
+              link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
             rescue
             end
           end
@@ -830,6 +837,7 @@ class StoryParser
       if !divs[0].nil?
         divs[0].remove
       end
+
       storytext = clean_storytext(storytext.inner_html)
 
       work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)

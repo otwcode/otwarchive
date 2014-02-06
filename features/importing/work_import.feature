@@ -51,7 +51,7 @@ Feature: Import Works
 
   @work_import_multi_tags_backdate
   Scenario: Importing multiple works with backdating
-    When I import
+    When I import the urls
         """
         http://www.intimations.org/fanfic/idol/Huddling.html
         http://www.intimations.org/fanfic/idol/Stardust.html
@@ -77,7 +77,6 @@ Feature: Import Works
   @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
-    When I press "Import"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
@@ -112,7 +111,7 @@ Feature: Import Works
 
   @work_import_nul_character
   Scenario: Import a work with the illegal 00 character (string terminator) and from an efiction exception site
-    When I import "http://www.the-archive.net/viewstory.php?sid=1910"
+    When I import "http://www.the-archive.net/viewstory.php?sid=1909"
     Then I should see "Preview"
       And I should see "When I get out of here"
 
@@ -120,7 +119,7 @@ Feature: Import Works
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
-    And I should see "Chapters: 1/4"
+    And I should see "Chapters: 4"
   When I press "Post"
     And I follow "Next Chapter →"
   Then I should see "Chapter 2"
@@ -129,5 +128,5 @@ Feature: Import Works
   Scenario: Import a work from an efiction site which keeps giving identical chapters and has a broken printable format
   When I import "http://thehexfiles.net/viewstory.php?sid=15563"
   Then I should see "Preview"
-    And I should see "Chapters: 1/1"
+    And I should see "Chapters:1/1"
   

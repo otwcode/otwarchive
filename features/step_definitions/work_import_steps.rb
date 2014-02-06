@@ -9,14 +9,13 @@ When /^I start importing "(.*)"$/ do |url|
   step %{I fill in "urls" with "#{url}"}
 end
 
-When /^I start importing/ do |urls|
-  step %{I set up importing}
-  step %{I fill in "urls" with "#{urls}"}
-end
-  
 When /^I import "(.*)"$/ do |url|
   step %{I start importing "#{url}"}
   step %{I press "Import"}
 end
-
-
+  
+When /^I import the urls$/ do |urls|
+  step %{I set up importing}
+  step %{I fill in "urls" with "#{urls}"}
+  step %{I press "Import"}
+end
