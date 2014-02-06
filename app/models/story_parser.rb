@@ -503,15 +503,6 @@ class StoryParser
     
     # grab all the chapters of a story from an efiction-based site
     def download_chaptered_from_efiction(location)
-      efiction_download(location)
-    end
-      
-    # handle efiction downloads
-    # url_format is a string with STORYID, and CHAPNUM. To handle a weird efiction site just
-    #  pass in a different string and those two variables will be changed to get the story 
-    #  in question.
-    # STORYID_INCR increments the storyid for each new chapter instead
-    def efiction_download(location, url_format="action=printable&sid=STORYID&chapter=CHAPNUM")
       @chapter_contents = []
       if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
         site = $1
