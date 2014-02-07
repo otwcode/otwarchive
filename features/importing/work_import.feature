@@ -10,12 +10,10 @@ Feature: Import Works
 
   @work_import_minimal_valid
   Scenario: Creating a new minimally valid work
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
+    When I set up importing
     Then I should see "Import New Work"
-      And I fill in "urls" with "http://cesy.dreamwidth.org"
-    When I press "Import"
+    When I fill in "urls" with "http://cesy.dreamwidth.org"
+      And I press "Import"
     Then I should see "Preview"
       And I should see "Welcome"
       And I should not see "A work has already been imported from http://cesy.dreamwidth.org"
@@ -29,11 +27,7 @@ Feature: Import Works
 
   @work_import_tags
   Scenario: Creating a new work with tags
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-    Then I should see "Import New Work"
-      And I fill in "urls" with "http://astolat.dreamwidth.org/220479.html"
+    When I start importing "http://astolat.dreamwidth.org/220479.html"
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Idol RPF"
@@ -57,16 +51,11 @@ Feature: Import Works
 
   @work_import_multi_tags_backdate
   Scenario: Importing multiple works with backdating
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-    Then I should see "Import New Work"
-      And I fill in "urls" with
+    When I import the urls
         """
         http://www.intimations.org/fanfic/idol/Huddling.html
         http://www.intimations.org/fanfic/idol/Stardust.html
         """
-    When I press "Import"
     Then I should see "Imported Works"
       And I should see "We were able to successfully upload"
       And I should see "Huddling"
@@ -80,31 +69,21 @@ Feature: Import Works
 
   @work_import_special_characters_auto_utf
   Scenario: Import a work with special characters (UTF-8, autodetect from page encoding)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_specified.html"
-    When I press "Import"
+    When I import "http://www.rbreu.de/otwtest/utf8_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
   @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_specified.html"
-    When I press "Import"
+    When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
   @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_notspecified.html"
+    When I start importing "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
     When I press "Import"
     Then I should see "Preview"
@@ -113,10 +92,7 @@ Feature: Import Works
 
   @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://rbreu.de/otwtest/cp1252.txt"
+    When I start importing "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
     When I press "Import"
     Then I should see "Preview"
@@ -126,10 +102,7 @@ Feature: Import Works
 
   @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_notspecified.html"
+    When I start importing "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"
     When I press "Import"
     Then I should see "Preview"
@@ -137,11 +110,23 @@ Feature: Import Works
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
   @work_import_nul_character
-  Scenario: Import a work with the illegal 00 character (string terminator)
-    Given basic tags
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://www.the-archive.net/viewstory.php?sid=1910"
-    When I press "Import"
+  Scenario: Import a work with the illegal 00 character (string terminator) and from an efiction exception site
+    When I import "http://www.the-archive.net/viewstory.php?sid=1909"
     Then I should see "Preview"
       And I should see "When I get out of here"
+
+  @work_import_efiction
+  Scenario: Import a chaptered work from an efiction site
+  When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+  Then I should see "Preview"
+    And I should see "Chapters: 4"
+  When I press "Post"
+    And I follow "Next Chapter →"
+  Then I should see "Chapter 2"
+
+  @work_import_efiction_nonprintable
+  Scenario: Import a work from an efiction site which keeps giving identical chapters and has a broken printable format
+  When I import "http://thehexfiles.net/viewstory.php?sid=15563"
+  Then I should see "Preview"
+    And I should see "Chapters:1/1"
+  
