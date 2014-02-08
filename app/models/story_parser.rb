@@ -248,10 +248,9 @@ class StoryParser
     end
 
 
-    #Updated as elz suggested now getting www and non www, Stephanie 1-11-2014
+    # our custom url finder checks for previously imported URL in almost any format it may have been presented
     def check_for_previous_import(location)
-      urls = [location, location.gsub('www.', '')].uniq
-      if Work.where(imported_from_url: urls).exists?
+      if Work.find_by_url(location).present?
         raise Error, "A work has already been imported from #{location}."
       end
     end
