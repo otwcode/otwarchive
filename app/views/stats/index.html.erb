@@ -1,8 +1,13 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Statistics") %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
 <%= render "stats/navigation" %>
+<!--subnav-->
 
+<!--main content-->
 <ol class="year actions">
   <% @years.each do |year| %>
     <li>
@@ -99,3 +104,4 @@
     <% reset_cycle("tigerstriping") %>
   <% end %>
 </ul>
+<!--/content-->
