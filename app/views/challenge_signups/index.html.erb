@@ -22,7 +22,7 @@
         <%= ts("As") %> <%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup), :class => "byline" %>
         
         <!--menu of actions-->
-        <%= render "signup_controls", :challenge_signup => challenge_signup %>
+        <%= render "signup_controls", :challenge_signup => challenge_signup, :subnav => false %>
       </dd>
     <% end %>
   </dl>
