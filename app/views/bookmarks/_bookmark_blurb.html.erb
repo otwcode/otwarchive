@@ -15,9 +15,9 @@
   	<!--bookmark item module-->
   	<%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
 		
-    <!--navigation and actions-->
+    <!--actions-->
     <% if (bookmark_count > 1 && (params[:tag_id] || @most_recent_bookmarks)) || (logged_in? && !is_author_of?(bookmark)) %>
-    	<ul class="navigation actions" role="navigation">
+    	<ul class="actions" role="menu">
       	<% # let the user reading this bookmark save a copy for themselves %>
       	<% if logged_in? && !is_author_of?(bookmark) %>
         	<li>
