@@ -1,5 +1,6 @@
 <% work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin" %>
 
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= @title %></h2>
 
 <p class="notes">
@@ -10,9 +11,13 @@
   <% end %>
   <%= link_to_help "skins-basics" %>
 </p>
+<!--/descriptions-->
 
+<!--subnav-->
 <%= render :partial => "skin_top_navigation" %>
+<!--/subnav-->
 
+<!--main content-->
 <h3 class="landmark heading">List of Skins</h3>
 
 <% if @skins.empty? %>
@@ -57,3 +62,4 @@
   <% end %>
   </ul>
 <% end %>
+<!--/content-->
