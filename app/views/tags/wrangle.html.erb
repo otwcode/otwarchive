@@ -3,7 +3,7 @@
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts('edit tag and parent associations'), {:controller => :tags, :action => :edit, :id => @tag} %></li>
+  <li><%= link_to ts('Edit Tag and Parent Associations'), {:controller => :tags, :action => :edit, :id => @tag} %></li>
   <li><%= tag_comment_link(@tag) %></li>
 </ul>
 <!--/subnav-->
@@ -44,14 +44,14 @@
 
 <% # BACK END: Can we make these span_if_current? Front End suspects it would help the wranglers know what they're looking at %>
 <% if params[:show] %>
-  <ul class="navigation actions" role="navigation">
+  <ul class="actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
-    <li><%= link_to ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
-    <li><%= link_to ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
-    <li><%= link_to ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
-    <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
-    <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
-    <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>
+    <li><%= link_to ts('All'), url_for(:show => params[:show], :status => 'all') %></li>
+    <li><%= link_to ts('Canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
+    <li><%= link_to ts('Non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
+    <li><%= link_to ts('Unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
+    <li><%= link_to ts('Unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
+    <li><%= link_to ts('Unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>
   </ul>
 <% end %>
 
@@ -127,14 +127,14 @@
             <% unless params[:status] == "unwrangled" %>
               <li>
                 <label for="remove_associated_<%= tag.id %>">
-                  <%= ts("remove") %>
+                  <%= ts("Remove") %>
                   <%= check_box_tag "remove_associated[]", tag.id, false, :id => "remove_associated_#{tag.id}" %>
                 </label>
               </li>
             <% end %>
-            <li><%= link_to ts('edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
-            <li><%= link_to ts('wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
-            <li><%= link_to ts('works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
+            <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
+            <li><%= link_to ts('Wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+            <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
           </ul>
         </td>
       </tr>

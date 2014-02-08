@@ -136,10 +136,10 @@
           </td>
           <td title="<%= ts("taggings") %>"><%= tag.taggings_count %></td>
           <td>
-            <ul class="navigation actions" role="navigation">
-              <li><%= link_to ts('edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
-              <li><%= link_to ts('wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
-              <li><%= link_to ts('works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
+            <ul class="actions" role="navigation">
+              <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => tag} %></li>
+              <li><%= link_to ts('Wrangle'), {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+              <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => tag} %></li>
             </ul>
           </td>
         </tr>

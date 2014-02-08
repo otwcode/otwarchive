@@ -51,7 +51,7 @@
         <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
         <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
         <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
-          <p class="navigation actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
+          <p class="actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
         <% end %>
       </dd>
 
@@ -66,7 +66,7 @@
         <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
         <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
         <% if @tag.merger %>
-          <p class="navigation actions" role="navigation"><%= ts("Edit") %> <%= link_to_edit_tag(@tag.merger) %></p>
+          <p class="actions" role="navigation"><%= ts("Edit") %> <%= link_to_edit_tag(@tag.merger) %></p>
         <% elsif @tag.canonical? %>
           <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
         <% end %>
@@ -125,7 +125,7 @@
     <% if @tag.canonical? %>
       <fieldset>
         <legend><%= ts("Child tags") %>:</legend>
-        <p class="navigation actions" role="navigation"><%= link_to ts('wrangle all child tags'), {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
+        <p class="actions" role="navigation"><%= link_to ts('Wrangle All Child Tags'), {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
         <dl>
           <% @tag.child_types.each do |tag_type| %>
             <dt><%= tag_category_name(tag_type) %></dt>
@@ -137,7 +137,7 @@
                   <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
                         :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
                   <% if @children[tag_type].length > 20 %>
-                    <p class="navigation actions" role="navigation">
+                    <p class="actions" role="navigation">
                       <%= link_to ts("See all (%{children_count})", :children_count => @tag.send(tag_type.underscore.pluralize).count), {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %>
                     </p>
                   <% end %>
@@ -158,7 +158,7 @@
     <% end %>
 
   <% elsif @tag.is_a?(Media) %>
-    <p class="navigation actions" role="navigation"><%= link_to ts('See all fandoms'), {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
+    <p class="actions" role="navigation"><%= link_to ts('See all fandoms'), {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
   <% end %>
 
   <fieldset>
