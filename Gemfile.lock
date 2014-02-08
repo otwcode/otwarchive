@@ -154,7 +154,7 @@ GEM
     newrelic-redis (1.4.0)
       newrelic_rpm (~> 3.0)
       redis (< 4.0)
-    newrelic_rpm (3.6.5.130)
+    newrelic_rpm (3.7.2.192)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     ntlm-http (0.1.1)
@@ -327,7 +327,7 @@ DEPENDENCIES
   memcache-client
   mysql2
   newrelic-redis
-  newrelic_rpm (>= 3.5.3.25)
+  newrelic_rpm (= 3.7.2.192)
   nokogiri (>= 1.4.2)
   paperclip
   permit_yo
