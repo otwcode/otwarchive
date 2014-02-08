@@ -238,8 +238,9 @@ Feature: Edit preferences
   Then I should see "Scary tag"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-    And I should not see "Bookmarks" within "#main .navigation li"
-    And I should not see "Works" within "#main .navigation li"
+    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
+    # And I should not see "Bookmarks" within "#main .navigation li"
+    # And I should not see "Works" within "#main .navigation li"
   When I follow "My new series"
   Then I should see "This work has warnings and tags"
     And I should not see "This also has warnings and tags"
@@ -303,8 +304,9 @@ Feature: Edit preferences
   Then I should not see "Scary tag"
     And I should see "Scarier"
     And I should see "Show additional tags"
-    And I should not see "Bookmarks" within "#main .navigation li"
-    And I should not see "Works" within "#main .navigation li"
+    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
+    # And I should not see "Bookmarks" within "#main .navigation li"
+    # And I should not see "Works" within "#main .navigation li"
   Then I should see "This work has warnings and tags"
   When I follow "My new series"
   Then I should see "This work has warnings and tags"
