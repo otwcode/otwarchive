@@ -12,7 +12,7 @@ module AlphabetHelper
     previous_letter = alphabet[active_letter_index-1]
     next_letter = alphabet[active_letter_index+1]
 
-    block = '<ol class="navigation pagination actions" role="navigation">'
+    block = '<ol class="pagination actions" role="navigation">'
     # if there is no "previous" page, don't link
     unless active_letter_index == 0
       block << '<li class="previous">'
