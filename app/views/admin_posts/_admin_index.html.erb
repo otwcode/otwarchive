@@ -13,7 +13,7 @@
   <dt><%= link_to admin_post.title, admin_post %></dt>
     <dd>
       <p class="datetime">Created at <%= admin_post.created_at %> and updated at <%= admin_post.updated_at %></p>
-      <ul class="navigation actions">
+      <ul class="actions">
 	      <li><%= link_to ts("Show"), admin_post %></li>
 			  <li><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></li>
     	  <li><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></li>
