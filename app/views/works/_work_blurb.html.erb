@@ -3,7 +3,7 @@
   <%= render 'works/work_module', :work => work %>
   <% if is_author_of?(work) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
-  	<ul class="navigation actions" role="navigation">
+  	<ul class="actions" role="navigation">
       <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
   	  <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
       <% if work.is_wip %>
