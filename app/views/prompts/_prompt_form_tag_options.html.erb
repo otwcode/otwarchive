@@ -79,7 +79,7 @@
                     autocomplete_options("tags_in_sets?tag_type=#{tag_type}&tag_set=#{restriction.tag_set_ids.join(',')}", :autocomplete_token_limit => num_allowed) %>
               </div>
     
-              <p class="navigation actions" role="button">
+              <p class="actions" role="button">
                 <% # TODO: would be nice to improve this for the case of multiple tag sets, currently it links to just an index of all the tag sets for this challenge %>
                 <%= link_to( ts("(See %{taglist_size} options)", :taglist_size => restriction.tags(tag_type).count), 
                           show_options_tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
