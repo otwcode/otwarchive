@@ -55,7 +55,7 @@
       <% end %><!-- end caching -->
       <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-      <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
+      <ul class="actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
         <% unless single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anon_commenting_disabled && !logged_in? %>
           <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
         <% end %>
