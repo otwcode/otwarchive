@@ -2,7 +2,7 @@
 
 <p class="message">
   <%= ts("An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd
-   like us to do with them. If you do nothing, the archivist will keep watch over the work(s).") %>
+   like us to do with them. If you do nothing, the work(s) will remain attached to the archivist account.") %>
 </p>
 
 <p class="message">
@@ -92,7 +92,6 @@
     </ul>
     <p class="important message">
       <%= ts("Important: If you tick \"Do not email me in future\" but do not tick \"Do not import works\", works may be imported without you being told. If that's not what you want, turn off importing as well as emails.") %>
-      <a href="#notimport"><%= ts("If that's not what you want, turn off importing") %></a>.
     </p>
   <%= submit_fieldset(f) %>
   </fieldset>
@@ -101,9 +100,7 @@
 
 <div class="notes module">
 <h3><%= ts("Wait, wait, go over this again?") %></h3>
-<ul class="notes">
-  <!--BACK END PLS LINKIFY-->
-  <li><%= ts("If you do nothing, the archivist will keep watch over the works.")%></li>
+<ul class="notes">  <li><%= ts("If you do nothing, the work(s) will remain attached to the archivist account.")%></li>
   <% if logged_in? %>
     <li><%= ts("You can claim your works.")%></li>
   <% else %>
