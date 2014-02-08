@@ -87,21 +87,21 @@ Feature: Reading count
   When I am logged out
     And I am logged in as "reader"
     And I view the work "Testy"
-  Then I should see "Mark for later"
-  When I follow "Mark for later"
-  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "Mark for Later"
+  When I follow "Mark for Later"
+  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
-    And I should see "(Marked for later.)"
+    And I should see "(Marked for Later.)"
   When I view the work "Testy"
-  Then I should see "Mark as read"
-  When I follow "Mark as read"
-  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
+  Then I should see "Mark as Read"
+  When I follow "Mark as Read"
+  Then I should see "This work was removed from your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
     And I go to reader's reading page
   Then I should see "Testy"
-    And I should not see "(Marked for later.)"
+    And I should not see "(Marked for Later.)"
 
   Scenario: You can't mark a story to read later if you're not logged in or the author
 
@@ -109,12 +109,12 @@ Feature: Reading count
   When I post the work "Testy"
   Then I should see "Work was successfully posted"
   When I view the work "Testy"
-  Then I should not see "Mark for later"
-    And I should not see "Mark as read"
+  Then I should not see "Mark for Later"
+    And I should not see "Mark as Read"
   When I am logged out
     And I view the work "Testy"
-  Then I should not see "Mark for later"
-    And I should not see "Mark as read"
+  Then I should not see "Mark for Later"
+    And I should not see "Mark as Read"
 
   Scenario: Read a multi-chapter work
 
@@ -155,10 +155,10 @@ Feature: Reading count
     And I follow "some work"
     And I follow "Next Chapter"
   Then I should see "Second blah blah"
-  When I follow "Mark for later"
-  Then I should see "This work was marked for later. You can find it in your history. (The work may take a short while to show up there.)"
+  When I follow "Mark for Later"
+  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Viewed 3 times"
-    And I should see "(Marked for later.)"
+    And I should see "(Marked for Later.)"

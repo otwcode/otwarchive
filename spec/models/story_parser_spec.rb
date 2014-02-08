@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe StoryParser do
-  
+
   before(:each) do
     @sp = StoryParser.new
   end
@@ -94,7 +94,7 @@ describe StoryParser do
       #   @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
       # end
     end
-    
+
     # TODO: KNOWN_STORY_PARSERS
   end
 
@@ -112,6 +112,28 @@ describe StoryParser do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+    end
+  end
+
+  describe "#parse_common" do
+    it "should convert relative to absolute links" do
+      # This one doesn't work because the sanitizer is converting the & to &amp;
+      # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
+      {      
+       ['http://foo.com/bar.html', 'thisdir.html'] => 'http://foo.com/thisdir.html',
+       ['http://foo.com/bar.html?hello=foo', 'thisdir.html'] => 'http://foo.com/thisdir.html',
+       ['http://foo.com/bar.html', './thisdir.html'] => 'http://foo.com/thisdir.html',
+       ['http://foo.com/bar.html', 'img.jpg'] => 'http://foo.com/img.jpg',
+       ['http://foo.com/bat/bar.html', '../updir.html'] => 'http://foo.com/updir.html',
+       ['http://foo.com/bar.html', 'http://bar.com/foo.html'] => 'http://bar.com/foo.html',
+       ['http://foo.com/bar.html', 'search.php?hereis=aquery'] => 'http://foo.com/search.php?hereis=aquery',
+      }.each_pair do |input, output|
+        location, href = input
+        story_in = '<html><body><p>here is <a href="' + href + '">a link</a>.</p></body></html>'
+        story_out = 'here is <a href="' + output + '">a link</a>.'
+        results = @sp.parse_common(story_in, location)
+        expect(results[:chapter_attributes][:content]).to include(story_out)
+      end
     end
   end
 end

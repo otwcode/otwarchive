@@ -427,6 +427,10 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def marked_for_later?(user)
+    Reading.where(work_id: self.id, user_id: user.id, toread: true).exists?
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
