@@ -1,6 +1,6 @@
 class TagWranglingsController < ApplicationController
-  cache_sweeper :tag_sweeper 
-  
+  cache_sweeper :tag_sweeper
+
   before_filter :check_user_status
 	before_filter :check_permission_to_wrangle
 
@@ -32,7 +32,7 @@ class TagWranglingsController < ApplicationController
       end
     end
   end
-  
+
   def wrangle
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
@@ -69,13 +69,13 @@ class TagWranglingsController < ApplicationController
         @tags.each { |tag| tag.add_association(@fandom) }
       else
         flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
-        redirect_to tag_wranglings_path(options) and return     
+        redirect_to tag_wranglings_path(options) and return
       end
     end
     flash[:notice] = "Tags were successfully wrangled!"
-    redirect_to tag_wranglings_path(options)            
+    redirect_to tag_wranglings_path(options)
   end
-  
+
   def discuss
     @comments = Comment.where(:commentable_type => 'Tag').order('updated_at DESC').paginate(:page => params[:page])
   end

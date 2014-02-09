@@ -15,7 +15,6 @@ class TagsController < ApplicationController
     end
   end
 
-
   # GET /tags
   # GET /tags.xml
   def index
@@ -273,7 +272,7 @@ class TagsController < ApplicationController
 
     saved = []
     not_saved = []
-    
+
     # make tags canonical
     unless params[:canonicals].blank?
       params[:canonicals].each do |tag_id|
@@ -287,7 +286,7 @@ class TagsController < ApplicationController
     end
 
     # remove associated tags
-    unless params[:remove_associated].blank?      
+    unless params[:remove_associated].blank?
       params[:remove_associated].each do |tag_id|
         tag_to_remove = Tag.find(tag_id)
         if tag_to_remove
@@ -302,5 +301,5 @@ class TagsController < ApplicationController
 
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end
-  
+
 end
