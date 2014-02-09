@@ -51,14 +51,6 @@ module ApplicationHelper
     is_current ? span_tag.html_safe : link_code
   end
   
-  # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" when we also have a title attribute
-  def span_if_current_with_title(link_to_default_text, path, condition=nil, title_attribute)
-    is_current = condition.nil? ? current_page?(path) : condition
-    text = ts(link_to_default_text)
-    title_text = ts(title_attribute)
-    is_current ? "<span class=\"current\" title=\"#{title_text}\">#{text}</span>".html_safe : link_to(text, path, title: "#{title_text}")
-  end
-  
   def link_to_rss(link_to_feed)
     link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
   end
