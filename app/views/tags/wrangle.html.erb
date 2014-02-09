@@ -22,7 +22,7 @@
 <% end %>
 
 <% if @tag.is_a?(Fandom) && params[:show] == "relationships" %>
-  <p><%= link_to ts('wrangle relationships to characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
+  <p><%= link_to ts('Wrangle Relationships to Characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
 <% end %>
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
