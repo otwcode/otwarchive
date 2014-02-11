@@ -2,6 +2,7 @@ class Creatorship < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :creation, :polymorphic => true
   
+  after_create :expire_caches
   before_destroy :expire_caches
 
   # Change authorship of works or series from a particular pseud to the orphan account
