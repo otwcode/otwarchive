@@ -12,17 +12,25 @@ class UrlFormatter
     url
   end
   
-  # Remove anchors and query parameters
+  # Remove anchors and query parameters, preserve sid parameter for eFiction sites
   def minimal
-    url.gsub(/\?.*$/, "").gsub(/\#.*$/, "")
+    uri = URI(url)
+    queries = CGI::parse(uri.query) unless uri.query.nil?
+    if queries.nil?
+      return url.gsub(/(\?|#).*$/, '')
+    else
+      queries.keep_if { |k,v| ['sid'].include? k }
+      querystring = ('?' + URI.encode_www_form(queries)) unless queries.empty?
+      return url.gsub(/(\?|#).*$/, '') << querystring.to_s
+    end
   end
   
   def no_www
-    url.gsub(/http:\/\/www\./, "http://")
+    minimal.gsub(/http:\/\/www\./, "http://")
   end
   
   def with_www
-    url.gsub(/http:\/\//, "http://www.")
+    minimal.gsub(/http:\/\//, "http://www.")
   end
   
   def encoded
