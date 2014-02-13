@@ -8,8 +8,13 @@ module Collectible
       has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-      has_many :collections, :through => :collection_items, :after_add => :set_visibility, :after_remove => :update_visibility
-      has_many :approved_collections, :through => :collection_items, :source => :collection,
+      has_many :collections, 
+        :through => :collection_items, 
+        :after_add => [:set_visibility, :expire_item_caches],
+        :after_remove => [:update_visibility, :expire_item_caches]
+      has_many :approved_collections, 
+        :through => :collection_items, 
+        :source => :collection,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
     end
   end
@@ -46,7 +51,7 @@ module Collectible
 
   def remove_from_collection(collection)
     if collection && self.collections.include?(collection)
-      self.collection_items.where(collection_id: collection.id).destroy_all
+      self.collections -= [collection]
     end
   end
   
@@ -117,6 +122,10 @@ module Collectible
   def update_visibility(collection)
     set_anon_unrevealed!
     return true
+  end
+  
+  def expire_item_caches(collection)
+    self.expire_caches if self.respond_to?(:expire_caches)
   end
   
   
