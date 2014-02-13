@@ -40,7 +40,8 @@ module Collectible
 
   def add_to_collection(collection)
     if collection && !self.collections.include?(collection)
-      self.collection_items.create(collection_id: collection.id)
+      collection_item = self.collection_items.build(collection_id: collection.id)
+      collection_item.save unless self.new_record?
     end
   end
 
