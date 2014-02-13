@@ -8,7 +8,7 @@ module Collectible
       has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-      has_many :collections, :through => :collection_items, :after_add => :set_visibility, :after_remove => :update_visibility
+      has_many :collections, :through => :collection_items
       has_many :approved_collections, :through => :collection_items, :source => :collection,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
     end
@@ -40,13 +40,13 @@ module Collectible
 
   def add_to_collection(collection)
     if collection && !self.collections.include?(collection)
-      self.collections << collection
+      self.collection_items.create(collection_id: collection.id)
     end
   end
 
   def remove_from_collection(collection)
     if collection && self.collections.include?(collection)
-      self.collections -= [collection]
+      self.collection_items.where(collection_id: collection.id).destroy_all
     end
   end
   
