@@ -86,7 +86,7 @@ class CollectionItem < ActiveRecord::Base
   after_save :update_work
   after_save :expire_caches
   after_destroy :update_work
-  before_destroy :expire_caches
+  after_destroy :expire_caches
   
   # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
