@@ -1,4 +1,5 @@
 require 'uri'
+require 'cgi'
 
 class UrlFormatter
   
@@ -13,15 +14,15 @@ class UrlFormatter
   end
   
   # Remove anchors and query parameters, preserve sid parameter for eFiction sites
-  def minimal
-    uri = URI(url)
+  def minimal (input = url)
+    uri = URI(input)
     queries = CGI::parse(uri.query) unless uri.query.nil?
     if queries.nil?
-      return url.gsub(/(\?|#).*$/, '')
+      return input.gsub(/(\?|#).*$/, '')
     else
       queries.keep_if { |k,v| ['sid'].include? k }
       querystring = ('?' + URI.encode_www_form(queries)) unless queries.empty?
-      return url.gsub(/(\?|#).*$/, '') << querystring.to_s
+      return input.gsub(/(\?|#).*$/, '') << querystring.to_s
     end
   end
   
@@ -34,7 +35,7 @@ class UrlFormatter
   end
   
   def encoded
-    URI.encode(minimal)
+    minimal URI.encode(url)
   end
   
   def decoded
