@@ -1,5 +1,6 @@
 require 'uri'
 require 'cgi'
+require 'addressable/uri'
 
 class UrlFormatter
   
@@ -15,7 +16,7 @@ class UrlFormatter
   
   # Remove anchors and query parameters, preserve sid parameter for eFiction sites
   def minimal (input = url)
-    uri = URI(input)
+    uri = Addressable::URI.parse(input)
     queries = CGI::parse(uri.query) unless uri.query.nil?
     if queries.nil?
       return input.gsub(/(\?|#).*$/, '')

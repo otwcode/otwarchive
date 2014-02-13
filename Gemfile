@@ -76,6 +76,9 @@ gem 'coveralls', require: false
 gem 'newrelic_rpm', "3.7.2.192"
 gem 'newrelic-redis'
 
+# For URL mangling
+gem 'addressable'
+
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
