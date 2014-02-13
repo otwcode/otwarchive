@@ -785,7 +785,7 @@ class Tag < ActiveRecord::Base
               # instead we add the new merger of self (if there is one) as the relevant one to check
               remaining_tags += [self.merger] unless self.merger.nil?
               if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-                work.filters.delete(filter_to_remove)
+                work.filter_taggings.where(filter_id: filter_to_remove).destroy_all
                 filter_to_remove.reset_filter_count
               else # we should keep filter_to_remove, but check if inheritence needs to be updated
                 direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
@@ -937,7 +937,7 @@ class Tag < ActiveRecord::Base
       to_remove.each do |tag|
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filters.delete(tag)
+            work.filter_taggings.where(filter_id: tag.id).destroy_all
             RedisSearchIndexQueue.reindex(work, priority: :low)
           end
         end

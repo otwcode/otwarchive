@@ -46,7 +46,7 @@ module Collectible
 
   def remove_from_collection(collection)
     if collection && self.collections.include?(collection)
-      self.collections -= [collection]
+      self.collection_items.where(collection_id: collection.id).destroy_all
     end
   end
   
