@@ -84,9 +84,10 @@ class CollectionItem < ActiveRecord::Base
   end
   
   after_save :update_work
-  after_save :expire_caches
-  after_destroy :update_work
-  after_destroy :expire_caches
+  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
+  #  this is a has-many-through relationship!!!
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # itself -- see collectible.rb
   
   # Set associated works to anonymous or unrevealed as appropriate
   # Check for chapters to avoid work association creation order shenanigans
@@ -97,12 +98,6 @@ class CollectionItem < ActiveRecord::Base
       work.set_anon_unrevealed!
     else
       work.update_anon_unrevealed!
-    end
-  end
-  
-  def expire_caches
-    if self.item && self.item.respond_to?(:expire_caches)
-      self.item.expire_caches
     end
   end
 
@@ -171,19 +166,12 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
-  after_save :expire_caching
-  before_destroy :expire_caching
+  after_save :expire_caches
+  after_destroy :expire_caches
   
-  def expire_caching
-    if self.item.is_a?(Work)
-      self.collection.update_works_index_timestamp!
-      self.item.pseuds.each do |pseud|
-        pseud.update_works_index_timestamp!
-        pseud.user.update_works_index_timestamp!
-      end
-      self.item.filters.each do |tag|
-        tag.update_works_index_timestamp!
-      end
+  def expire_caches
+    if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
     end
   end
 
