@@ -105,7 +105,10 @@ GEM
       i18n (~> 0.5)
     fastimage (1.4.0)
     ffi (1.9.3)
+    ffi (1.9.3-x86-mingw32)
     gherkin (2.12.0)
+      multi_json (~> 1.3)
+    gherkin (2.12.0-x86-mingw32)
       multi_json (~> 1.3)
     google_visualr (2.1.7)
     hashr (0.0.22)
@@ -142,6 +145,7 @@ GEM
     mono_logger (1.1.0)
     multi_json (1.7.7)
     mysql2 (0.3.11)
+    mysql2 (0.3.11-x86-mingw32)
     net-http-digest_auth (1.3)
     net-http-persistent (2.8)
     net-scp (1.1.1)
@@ -156,6 +160,8 @@ GEM
       redis (< 4.0)
     newrelic_rpm (3.7.2.192)
     nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
+    nokogiri (1.6.0-x86-mingw32)
       mini_portile (~> 0.5.0)
     ntlm-http (0.1.1)
     paperclip (3.4.2)
@@ -174,6 +180,11 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry (0.9.12.4-x86-mingw32)
+      coderay (~> 1.0)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+      win32console (~> 1.3)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -278,6 +289,7 @@ GEM
     unf (0.1.1)
       unf_ext
     unf_ext (0.0.6)
+    unf_ext (0.0.6-x86-mingw32)
     unicorn (4.6.3)
       kgio (~> 2.6)
       rack
@@ -293,14 +305,17 @@ GEM
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
     will_paginate (3.0.4)
+    win32console (1.3.2-x86-mingw32)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   acts_as_list
+  addressable
   akismetor
   authlogic
   aws-sdk
