@@ -1,0 +1,44 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts('Saved Works') %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<% if @saved_works.present? %>
+<ul class="navigation actions" role="navigation">
+  <li>
+    <%= span_if_current ts("Sort by date added"), user_saved_works_path(@user) %>
+  </li>
+  <li>
+    <%= span_if_current ts("Sort by date updated"), user_saved_works_path(@user, sort: 'updated') %>
+  </li>
+</ul>
+<% end %>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark heading"><%= ts("List of Saved Works") %></h3>
+<% if @saved_works.present? %>
+  <ol class="works index">
+    <% @saved_works.each do |saved_work| %>
+      <li id="work_<%= saved_work.work_id %>" class="work blurb group" role="article">
+        <%= render 'works/work_module', :work => saved_work.work %>
+        <div class="user module group">
+          <h4 class="viewed heading">
+            <span><%= ts("Saved:") %></span> <%= set_format_for_date(saved_work.created_at) %>
+          </h4>
+
+          <ul class="navigation actions" role="menu">
+            <li>
+              <%= link_to ts("Remove"), user_saved_work_path(current_user, saved_work), :confirm => ts('Are you sure?'), :method => :delete %>
+              </li>
+          </ul>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+<% end %>
+<!--/content-->
+
+<!--subnav-->
+	  <%= will_paginate @works %>
+<!--/subnav-->

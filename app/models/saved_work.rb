@@ -5,7 +5,9 @@ class SavedWork < ActiveRecord::Base
   validates :user_id, presence: true
   validates :work_id, presence: true, uniqueness: { scope: :user_id }
   
-  def works_for_user(user)
-    Work.joins(:saved_works).where(user_id: user.id).order('created_at DESC')
+  scope :order_by_updates, joins(:work).order("works.revised_at DESC")
+  
+  def self.ordered(sort)
+    sort == 'updated' ? self.order_by_updates : self.order('created_at DESC')
   end
 end

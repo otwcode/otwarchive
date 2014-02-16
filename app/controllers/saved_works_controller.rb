@@ -8,7 +8,7 @@ class SavedWorksController < ApplicationController
   respond_to :html, :json
   
   def index
-    @works = SavedWork.works_for_user(current_user).page(params[:page])
+    @saved_works = current_user.saved_works.ordered(params[:sort]).page(params[:page])
   end
   
   def create
