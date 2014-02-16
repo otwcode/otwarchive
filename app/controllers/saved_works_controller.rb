@@ -12,11 +12,28 @@ class SavedWorksController < ApplicationController
   end
   
   def create
-    respond_with current_user.saved_works.create(work_id: params[:work_id])
+    @saved_work = current_user.saved_works.build(params[:saved_work])
+    @saved_work.save!
+    respond_to do |format|
+      format.html { redirect_to @saved_work.work }
+      format.json { render json: { saved_work_id: @saved_work.id }, status: :created }
+    end
   end
   
   def destroy
-    respond_with SavedWork.find(params[:id]).destroy
+    @saved_work = SavedWork.find(params[:id])
+    @saved_work.destroy
+    respond_to do |format|
+      format.html { redirect_to @saved_work.work }
+      format.json { render json: {}, status: :ok }
+    end
+  end
+  
+  private
+  
+  def load_user
+    @user = User.find_by_login(params[:user_id])
+    @check_ownership_of = @user
   end
   
 end

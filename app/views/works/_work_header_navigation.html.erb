@@ -50,8 +50,10 @@
     <li class="bookmark"><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
     <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
 
-    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
-      <li class="mark"><%= marktoread_link(@work) %></li>
+    <% unless current_user.is_author_of?(@work) %>
+      <li class="mark">
+        <%= render 'saved_works/form', saved_work: @work_display.saved_work %>
+      </li>
     <% end %>
   <% end %>
 
