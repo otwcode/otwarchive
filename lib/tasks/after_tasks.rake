@@ -374,6 +374,13 @@ namespace :After do
       fandom.save
     end
   end
+  
+  desc "Migrate marked for later to new table"
+  task(:move_marked_for_later => :environment) do
+    Reading.where(markedtoread: true).find_each do |r|
+      SavedWork.create(user_id: r.user_id, work_id: r.work_id, created_at: r.created_at)
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 

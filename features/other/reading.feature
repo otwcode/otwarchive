@@ -79,43 +79,6 @@ Feature: Reading count
       And I should not see "second work"
       And I should not see "fifth"
 
-  Scenario: Mark a story to read later
-
-  Given I am logged in as "writer"
-  When I post the work "Testy"
-  Then I should see "Work was successfully posted"
-  When I am logged out
-    And I am logged in as "reader"
-    And I view the work "Testy"
-  Then I should see "Mark for Later"
-  When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
-    And I go to reader's reading page
-  Then I should see "Testy"
-    And I should see "(Marked for Later.)"
-  When I view the work "Testy"
-  Then I should see "Mark as Read"
-  When I follow "Mark as Read"
-  Then I should see "This work was removed from your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
-    And I go to reader's reading page
-  Then I should see "Testy"
-    And I should not see "(Marked for Later.)"
-
-  Scenario: You can't mark a story to read later if you're not logged in or the author
-
-  Given I am logged in as "writer"
-  When I post the work "Testy"
-  Then I should see "Work was successfully posted"
-  When I view the work "Testy"
-  Then I should not see "Mark for Later"
-    And I should not see "Mark as Read"
-  When I am logged out
-    And I view the work "Testy"
-  Then I should not see "Mark for Later"
-    And I should not see "Mark as Read"
-
   Scenario: Read a multi-chapter work
 
   Given I am logged in as "writer"
@@ -151,10 +114,7 @@ Feature: Reading count
     And I follow "some work"
     And I follow "Next Chapter"
   Then I should see "la la la la la la la la la la la"
-  When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Viewed 3 times"
-    And I should see "(Marked for Later.)"
