@@ -6,6 +6,8 @@ class StoryParser
   require 'nokogiri'
   require 'mechanize'
   require 'open-uri'
+  require 'nori'
+  include Hashie
   include HtmlCleaner
 
   META_PATTERNS = {:title => 'Title',
@@ -72,6 +74,72 @@ class StoryParser
   # (in characters)
   DUPLICATE_CHAPTER_LENGTH = 10000
 
+  #Returns an external author from work mash
+  def external_author_from_work_mash(iw_mash)
+    e = ExternalAuthor.create(:email => iw_mash.author.email.to_s)
+    parse_author_common(iw_mash.author.email,iw_mash.author.name)
+  end
+
+  #check collection ownership
+  def check_if_own_collection(collection)
+    owner = false
+    User.current_user.pseuds.each do |p|
+      if collection.owners.include?(p)
+        owner = true
+        return owner
+      else
+        owner = false
+      end
+    end
+  end
+
+
+  def import_many_xml(options={})
+    hashed_works = parse_xml_to_hash(options[:xml_string],options)
+    mashed_works = Hashie::Mash.new(hashed_works)
+    works = []
+    failed_urls = []
+    errors = []
+    url = "nothing"
+    #loop through each work
+    mashed_works.importworks.importwork.each do |import_work|
+      #create the external author
+      external_author_from_work_mash(import_work)
+
+      begin
+        work_mash = Hashie::Mash.new(Hash[*import_work.flatten])
+        work = download_and_parse_story(work_mash, options)
+        #if have work object and work save success
+        if work && work.save
+          work.chapters.each { |chapter| chapter.save }
+          #Add to Collection if specified
+          if import_work.collection
+            #check ownership
+            collection = Collection.find_by_name(import_work.collection.to_s)
+            if check_if_own_collection(collection)
+              work.add_to_collection(collection)
+            end
+          end
+          works << work
+          #if work save failed
+        else
+          failed_urls << url
+          errors << work.errors.values.join(", ")
+          work.delete if work
+        end
+
+      rescue Timeout::Error
+        failed_urls << url
+        errors << "Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site."
+        work.delete if work
+      rescue Error => exception
+        failed_urls << url
+        errors << "We couldn't successfully import that work, sorry: #{exception.message}"
+        work.delete if work
+      end
+    end
+
+  end
 
   # Import many stories
   def import_from_urls(urls, options = {})
@@ -150,16 +218,41 @@ class StoryParser
   # to get a nice and consistent post format), it will pre-process the url
   # according to the rules for that site.
   def download_and_parse_story(location, options = {})
-    check_for_previous_import(location)
+    mash = nil
     work = nil
-    source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
+    source = nil
+    if options[:source] == "file"
+      mash = location
+      location = mash.work.source_url
+      source = "file"
+    end
+
+    check_for_previous_import(location)
+    unless source == "file"
+      source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
+    end
+
     if source.nil?
       story = download_text(location)
       work = parse_story(story, location, options)
     else
-      work = download_and_parse_chaptered_story(source, location, options)
+      if source == "file"
+        work = parse_story(mash,location,options)
+      else
+        work = download_and_parse_chaptered_story(source, location, options)
+      end
     end
     return work
+  end
+
+  #parse xml string to hash
+  # @param [string] xml_string
+  # @param [hash] options
+  # @return [hash]
+  def parse_xml_to_hash(xml_string, options = {})
+    parser = Nori.new(:convert_tags_to => lambda { |tag| tag.downcase.to_sym })
+    import_hash = parser.parse(xml_string)
+    return import_hash
   end
 
   # download and add a new chapter to the end of a work
@@ -183,24 +276,74 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
-    work_params = parse_common(story, location, options[:encoding])
+    work_params = parse_common(story, location, options)
 
     # move any attributes from work to chapter if necessary
-    return set_work_attributes(Work.new(work_params), location, options)
+    if options[:source] == "file"
+      return set_work_attributes(Work.new(work_params),story,options)
+    else
+      return set_work_attributes(Work.new(work_params), location, options)
+    end
+
   end
 
   # parses and adds a new chapter to the end of the work
   def parse_chapter_of_work(work, chapter_content, location, options = {})
-    tmp_work_params = parse_common(chapter_content, location, options[:encoding])
+    tmp_work_params = parse_common(chapter_content, location, options)
     chapter = get_chapter_from_work_params(tmp_work_params)
     work.chapters << set_chapter_attributes(work, chapter, location, options)
     return work
   end
 
+  #set chapter content, position, notes, summary, title
+  #parse mash of chapter to chapter object
+  # @param [Hashie::Mash] chapter_mash
+  # @return [Chapter]
+  def parse_chapter_mash_to_chapter(chapter_mash)
+    my_chapter = Chapter.new
+    my_chapter.content = clean_storytext(chapter_mash.content)
+    my_chapter.position = chapter_mash.position
+
+    if chapter_mash.notes
+      my_chapter.notes = clean_storytext(chapter_mash.note)
+    end
+
+    if chapter_mash.summary
+      my_chapter.summary = clean_storytext(chapter_mash.summary)
+    end
+
+    if chapter_mash.title
+      my_chapter.title = chapter_mash.title
+    else
+      my_chapter.title = "Untitled Chapter"
+    end
+
+    return my_chapter
+  end
+
+  # parse mash chapters return work
+  # @param [Work] work
+  # @param [String] location
+  # @param [Hashie::Mash] mash
+  # @param [Hash] options
+  # @return [Work]
+  def parse_mash_chapters_into_story(work, location,mash,options = {})
+    mash.work.chapter.each do |chapter|
+      if chapter.position.to_i != 1
+        new_chapter = parse_chapter_mash_to_chapter(chapter)
+        work.chapters << set_chapter_attributes(work, new_chapter, location, options)
+      end
+    end
+    return work
+  end
+
+  # @param [string] location
+  # @param [array] chapter_contents
+  # @param [hash] options
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
     chapter_contents.each do |content|
-      work_params = parse_common(content, location, options[:encoding])
+      work_params = parse_common(content, location, options)
       if work.nil?
         # create the new work
         work = Work.new(work_params)
@@ -262,42 +405,105 @@ class StoryParser
       return chapter
     end
 
+  #return options hash with authors added from xml
+  def xml_hash_to_mash_assign_authors(mash)
+    options = {}
+    if mash.author.class.to_s == "Array"
+      options[:external_author_name] = mash.author[0].name
+      options[:external_author_email] = mash.author[0].email
+      options[:external_coauthor_name] = mash.authors.author[1].name
+      options[:external_coauthor_email] = mash.authors.author[1].email
+    else
+      options[:external_author_name] = mash.author.name
+      options[:external_author_email] = mash.author.email
+    end
+    return options
+  end
+
+  #set work authors
+  # @param [Work] work
+  # @param [String] location
+  # @param [Hash] options
+  def set_work_authors(work,location, options = {})
+    # set authors for the works
+    pseuds = []
+    pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
+    pseuds << options[:archivist].default_pseud if options[:archivist]
+    pseuds += options[:pseuds] if options[:pseuds]
+    pseuds = pseuds.uniq
+    raise Error, "A work must have at least one author specified" if pseuds.empty?
+    pseuds.each do |pseud|
+      work.pseuds << pseud unless work.pseuds.include?(pseud)
+      work.chapters.each { |chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud) }
+    end
+
+    # handle importing works for others
+    # build an external creatorship for each author
+    if options[:importing_for_others]
+      external_author_names = nil
+      if options[:external_author_names]
+        external_author_names = option[:external_author_names]
+      else
+        external_author_names = [parse_author(location, options[:external_author_name], options[:external_author_email])]
+      end
+
+
+      # convert to an array if not already one
+      external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+      if options[:external_coauthor_name] != nil
+        external_author_names << parse_author(location, options[:external_coauthor_name], options[:external_coauthor_email])
+      end
+      external_author_names.each do |external_author_name|
+        if external_author_name && external_author_name.external_author
+          if external_author_name.external_author.do_not_import
+            # we're not allowed to import works from this address
+            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+          end
+          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
+        end
+      end
+    end
+    return work
+  end
+
+  # @param [Work] work
+  # @param [String or Hashie::Mash] location
+  # @param [Hash] options
     def set_work_attributes(work, location="", options = {})
       raise Error, "Work could not be downloaded" if work.nil?
-      work.imported_from_url = location
-      work.expected_number_of_chapters = work.chapters.length
 
-      # set authors for the works
-      pseuds = []
-      pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
-      pseuds << options[:archivist].default_pseud if options[:archivist]
-      pseuds += options[:pseuds] if options[:pseuds]
-      pseuds = pseuds.uniq
-      raise Error, "A work must have at least one author specified" if pseuds.empty?
-      pseuds.each do |pseud|
-        work.pseuds << pseud unless work.pseuds.include?(pseud)
-        work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
+
+    mash = nil
+      if options[:source] == "file"
+        mash = location
+        url =  String.try_convert(mash.work.source_url)
+        work.imported_from_url = url
+        if mash.work.chapter.class.to_s == "Array"
+          work.expected_number_of_chapters = mash.work.chapter.length
+          work = parse_mash_chapters_into_story(work,work.imported_from_url,mash,options)
+        else
+          work.expected_number_of_chapters = 1
+        end
+
+        work.restricted = options[:restricted] || options[:importing_for_others] || mash.work.restricted
+        work.posted = true if options[:post_without_preview] || location.work.posted || options[:importing_for_others]
+
+        #set options from mash
+        options = options.merge(options_from_mash(mash))
+
+        if options[:importing_for_others]
+          options = options.merge(xml_hash_to_mash_assign_authors(mash))
+        end
+      else
+        work.imported_from_url = location
+        work.expected_number_of_chapters = work.chapters.length
+        work.restricted = options[:restricted] || options[:importing_for_others]
+        work.posted = true if options[:post_without_preview]
       end
 
-      # handle importing works for others
-      # build an external creatorship for each author
-      if options[:importing_for_others]
-        external_author_names = options[:external_author_names] || parse_author(location,options[:external_author_name],options[:external_author_email])
-        # convert to an array if not already one
-        external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
-        if options[:external_coauthor_name] != nil
-          external_author_names << parse_author(location,options[:external_coauthor_name],options[:external_coauthor_email])
-        end
-        external_author_names.each do |external_author_name|
-          if external_author_name && external_author_name.external_author
-            if external_author_name.external_author.do_not_import
-              # we're not allowed to import works from this address
-              raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
-            end
-            ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
-          end
-        end
-      end
+
+
+
 
       # lock to registered users if specified or importing for others
       work.restricted = options[:restricted] || options[:importing_for_others] || false
@@ -314,7 +520,9 @@ class StoryParser
       # set default value for title
       work.title = "Untitled Imported Work" if work.title.blank?
 
-      work.posted = true if options[:post_without_preview]
+      #assign authors
+      work = set_work_authors(work, work.imported_from_url, options)
+
       work.chapters.each do |chapter|
         if chapter.content.length > ArchiveConfig.CONTENT_MAX
           # TODO: eventually: insert a new chapter
@@ -878,8 +1086,131 @@ class StoryParser
       work_params[:fandom_string] = "Twilight"      
       return work_params      
     end
-    
-    def parse_story_from_modified_efiction(story, site = "")
+
+  # @param [Hashie::Mash] mash
+  def parse_story_from_mash(mash)
+    m = mash
+    work_params = {:chapter_attributes => {}}
+    if m.work.chapter.class.to_s == "Array"
+      work_params[:chapter_attributes][:content] = m.work.chapter[0].content
+      work_params[:chapter_attributes][:title] = m.work.chapter[0].title
+    else
+      work_params[:chapter_attributes][:content] = m.work.chapter.content.to_s
+      work_params[:chapter_attributes][:title] = m.work.chapter.title.to_s
+    end
+
+    work_params[:title] = m.work.title
+    work_params[:summary] = clean_storytext(m.work.summary)
+
+    return work_params
+  end
+
+  def fix_tag_string(s)
+    s.gsub /"/, ''
+  end
+
+  def options_from_mash(mash,options={})
+    #stings to hold comma delimited values
+    fandoms = nil
+    characters = nil
+    freeforms = nil
+    warnings = nil
+    relationships = nil
+    categories = nil
+
+    #famdoms to comma string
+    if mash.work.tags.fandom.class.to_s == "Array"
+      fandoms = mash.work.tags.fandom.map(&:inspect).join(', ')
+    else
+      fandoms = mash.work.tags.fandom
+    end
+
+    #freeforms to comma string
+    if mash.work.tags.freeform.class.to_s == "Array"
+      freeforms = mash.work.tags.freeform.map(&:inspect).join(', ')
+    else
+      freeforms = mash.work.tags.freeform
+    end
+
+    #characters to comma string
+    if mash.work.tags.character.class.to_s == "Array"
+      characters = mash.work.tags.character.map(&:inspect).join(', ')
+    else
+      characters = mash.work.tags.character
+    end
+
+    #warnings to comma string
+    if mash.work.tags.warning.class.to_s == "Array"
+      warnings = mash.work.tags.warning.map(&:inspect).join(', ')
+    else
+      warnings = mash.work.tags.warning
+    end
+
+    #relationships to comma string
+    if mash.work.tags.relationship.class.to_s == "Array"
+      relationships = mash.work.tags.relationship.map(&:inspect).join(', ')
+    else
+      relationships = mash.work.tags.relationship
+    end
+
+    #categories to comma string
+    if mash.work.tags.category.class.to_s == "Array"
+      categories = mash.work.tags.category.map(&:inspect).join(', ')
+    else
+      categories = mash.work.tags.category
+    end
+
+    #ratings to string
+    rating = mash.work.tags.rating
+
+
+    if rating
+      options[:rating] = convert_rating(rating)
+    else
+      options[:rating] = ArchiveConfig.RATING_DEFAULT_TAG
+    end
+
+    if fandoms
+      options[:fandom]  = fix_tag_string(clean_tags(fandoms))
+    else
+      options[:fandom] = ArchiveConfig.FANDOM_NO_TAG_NAME
+    end
+
+
+    if categories
+      options[:category]  = fix_tag_string(clean_tags(categories))
+    else
+      categories = "Gen"
+    end
+
+    if warnings
+      options[:warning] = fix_tag_string(clean_tags(warnings))
+    else
+      options[:warning] = ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+    end
+
+    if characters
+      options[:character]  = fix_tag_string(clean_tags(characters))
+    end
+
+    if relationships
+      options[:relationship]  = fix_tag_string(clean_tags(relationships))
+    end
+
+    if freeforms
+      options[:freeform] = fix_tag_string(clean_tags(freeforms))
+    end
+
+    #work_params[:notes] = clean_storytext(mash.work.note)
+    #work_params[:revised_at] = mash.work.date_updated
+    # work_params[:completed] = mash.work.completed
+
+
+    return options
+  end
+
+
+  def parse_story_from_modified_efiction(story, site = "")
       work_params = {:chapter_attributes => {}}
       storytext = @doc.css("div.chapter").inner_html
       storytext = clean_storytext(storytext)
