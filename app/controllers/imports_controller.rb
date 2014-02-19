@@ -135,7 +135,7 @@
       # if EVERYTHING failed, boo. :( Go back to the import form.
       if @works.empty?
         if options[:xml_string]
-          render :new_multi_import and return
+          render :new_import_multiple and return
         else
           render :new_import and return
         end
