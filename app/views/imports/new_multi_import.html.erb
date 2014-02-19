@@ -1,0 +1,60 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Import Multiple Works") %> <%= link_to_help 'work-import-multi'%></h2>
+<%= error_messages_for :work %>
+<div class="notice">
+  <p><%= ts("You might find the ") %><%= link_to ts("Import Multi FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
+</div>
+
+<!--/descriptions-->
+
+
+
+<!-- This partial renders a form for importing a work from an existing URL -->
+<div class="import work post">
+  <%= form_tag(url_for(:controller => :imports, :action => :import_multiple), multipart: true) do %>
+  <fieldset>
+    <dl>
+      <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt>
+      <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
+      <dt><%= ts("Import as") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= radio_button_tag "import_multiple", "works", true %>
+            <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
+          </li>
+          <li>
+            <%= label_tag "import_file_name", ts("Select the file to import from") %>
+            <%= file_field_tag 'xml_data' %>
+
+          </li>
+        </ul>
+      </dd>
+      <%= hidden_field_tag("importing_for_others", true) %>
+      <%= hidden_field_tag("post_without_preview",true) %>
+      <dt><%= ts("Preferences") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= check_box_tag "restricted" %>
+            <%= label_tag "restricted", ts("Lock all imports to registered users only.") %>
+          </li>
+          <li>
+            <%= check_box_tag "override_tags" %>
+            <%= label_tag "override_tags", ts("Set the following tags on all works, overriding whatever the importer finds.") %>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <%= render :partial => 'work_form_tags', :locals => {:include_blank => true} %>
+
+  <fieldset>
+    <legend><%= ts("Submit") %></legend>
+    <p class="submit actions">
+      <%= submit_tag ts("Import") %>
+    </p>
+  </fieldset>
+
+  <% end %>
