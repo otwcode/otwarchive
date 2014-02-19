@@ -36,7 +36,8 @@ gem 'resque_mailer'
 gem 'tire'
 gem 'aws-sdk'
 gem 'css_parser'
-
+gem 'nori'
+gem 'hashie'
 gem 'cocaine'
 gem 'paperclip'
 
