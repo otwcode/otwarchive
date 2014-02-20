@@ -8,7 +8,7 @@
 
 <%= render "works/work_abbreviated_list", :works => @works %>
 
-<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %> 
+<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
   <p class="required message">
     <%= ts("* Required information") %>
     <% @works.each do |work| %>
@@ -19,7 +19,7 @@
   <div id="work-form" class="edit work post">
     <%= render 'work_form_tags', :include_blank => true %>
   </div>
-  
+
   <fieldset>
     <legend>Associations</legend>
     <h3 class="landmark">Associations</h3>
@@ -30,11 +30,21 @@
 
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend>Settings</legend>
     <h3 class="landmark">Settings</h3>
     <dl>
+      <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+      <dd>
+        <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
+      </dd>
+
+      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dd>
+        <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
+            {:include_blank => true} %>
+      </dd>
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <label for="work_restricted">
@@ -54,25 +64,14 @@
           <%= form.check_box :anon_commenting_disabled %>
         </label>
       </dd>
- 
-      <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
-      <dd>
-        <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
-      </dd>
-
-      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
-      <dd>
-        <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, 
-            {:include_blank => true} %>
-      </dd>
     </dl>
   </fieldset>
-  
+
   <p class="caution">
     Your edits will <strong>replace</strong> the existing values!
     (If you leave a field blank it will remain unchanged.)
   </p>
-  
+
   <p class="submit actions"><%= submit_tag ts("Update All Works"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>
 
 <% end %>
