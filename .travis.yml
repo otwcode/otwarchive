@@ -12,7 +12,7 @@ rvm:
 services:
   - elasticsearch
   - redis-server
-  - memcache
+  - memcached
 script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace

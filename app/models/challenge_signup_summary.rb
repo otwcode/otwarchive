@@ -25,7 +25,7 @@ class ChallengeSignupSummary
   # All of the tags of the desired type that have been
   # used in requests or offers for this challenge
   def tags
-    @tags ||= tag_class.in_challenge(collection).group(:id)
+    @tags ||= tag_class.in_challenge(collection).uniq
   end
   
   def tag_summary(tag)
