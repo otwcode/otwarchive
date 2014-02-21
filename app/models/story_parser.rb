@@ -753,30 +753,36 @@ class StoryParser
     # parse_common then calls sanitize_params (which would also be called on the standard work upload
     # form results) and returns the final sanitized hash.
     #
-    def parse_common(story, location = nil, encoding = nil)
+    def parse_common(story, location = nil, options={})
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
+      encoding = options[:encoding]
 
-      @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
-      
-      # Try to convert all relative links to absolute
-      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first      
-      if base.present?
-        @doc.css('a').each do |link|
-          if link['href'].present?
-            begin
-              query = link['href'].match(/(\?.*)$/) ? $1 : ''
-              link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
-            rescue
+      if options[:source] == "file"
+        params = parse_story_from_mash(story)
+        work_params.merge!(params)
+      else
+        @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
+
+        # Try to convert all relative links to absolute
+        base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first
+        if base.present?
+          @doc.css('a').each do |link|
+            if link['href'].present?
+              begin
+                query = link['href'].match(/(\?.*)$/) ? $1 : ''
+                link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
+              rescue
+              end
             end
           end
         end
-      end
 
-      if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
-        params = eval("parse_story_from_#{source.downcase}(story)")
-        work_params.merge!(params)
-      else
-        work_params.merge!(parse_story_from_unknown(story))
+        if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
+          params = eval("parse_story_from_#{source.downcase}(story)")
+          work_params.merge!(params)
+        else
+          work_params.merge!(parse_story_from_unknown(story))
+        end
       end
 
       return shift_chapter_attributes(sanitize_params(work_params))
