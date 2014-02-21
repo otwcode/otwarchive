@@ -118,6 +118,8 @@
 
     # import multiple works
     def import_multiple_works(urls, options)
+      Rails.logger.info "================IN IMPORT MULTIPLE works"
+
       # try a multiple import
       storyparser = StoryParser.new
       if options[:xml_string].to_s.length > 100
@@ -188,7 +190,7 @@
           :source => "file",
           :xml_string => params[:xml_data].read
       }
-      logger.info "IN IMPORT MULTIPLE"
+      Rails.logger.info "IN IMPORT MULTIPLE"
       import_multiple_works(nil, options)
     end
 
