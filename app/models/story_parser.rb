@@ -138,7 +138,7 @@ class StoryParser
         work.delete if work
       end
     end
-
+    return [works, failed_urls, errors]
   end
 
   # Import many stories
