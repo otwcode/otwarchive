@@ -21,7 +21,7 @@
 
       # is this an archivist importing?
       if params[:importing_for_others]
-        unless !current_user.archivist
+        unless current_user.archivist
           flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
           render :new_import and return
         end
@@ -66,19 +66,11 @@
           :source => "web"
 
       }
-
-
-
-      # now let's do the import
-
-      if params[:import_multiple] == "works" && options[:xml_string]
+     # now let's do the import
+      if params[:import_multiple] == "works" && @urls.length > 1
         import_multiple_works(@urls, options)
-      else
-        if params[:import_multiple] == "works" && @urls.length > 1
-          import_multiple_works(@urls, options)
-        else # a single work possibly with multiple chapters
-          import_single(@urls, options)
-        end
+      else # a single work possibly with multiple chapters
+        import_single(@urls, options)
       end
 
     end
@@ -141,7 +133,7 @@
 
       # if EVERYTHING failed, boo. :( Go back to the import form.
       if @works.empty?
-        if options[:xml_string]
+        if options[:source] == "file"
           render :new_import_multiple and return
         else
           render :new_import and return
@@ -156,27 +148,11 @@
       # fall through to import template
     end
 
-    # if we are importing for others, we need to send invitations
-    def send_external_invites(works)
-=begin
-    if params[:importing_for_others]
-      @external_authors = works.collect(&:external_authors).flatten.uniq
-      if !@external_authors.empty?
-        @external_authors.each do |external_author|
-          external_author.find_or_invite(current_user)
-        end
-        message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
-        flash[:notice] ? flash[:notice] += message : flash[:notice] = message
-      end
-    end
-=end
-    end
 
     #POST /imports/import_multiple
     def import_multiple
 
       # is this an archivist importing?
-      Rails.logger.info "IN IMPORT MULTIPLE"
       if params[:importing_for_others] && !current_user.archivist
         flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
         render :new_import and return
@@ -189,8 +165,21 @@
           :source => "file",
           :xml_string => params[:xml_data].read
       }
-      Rails.logger.info "IN IMPORT MULTIPLE"
       import_multiple_works(nil, options)
     end
 
+
+    # if we are importing for others, we need to send invitations
+    def send_external_invites(works)
+      if params[:importing_for_others]
+        @external_authors = works.collect(&:external_authors).flatten.uniq
+        if !@external_authors.empty?
+          @external_authors.each do |external_author|
+            external_author.find_or_invite(current_user)
+          end
+          message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+          flash[:notice] ? flash[:notice] += message : flash[:notice] = message
+        end
+      end
+    end
   end
