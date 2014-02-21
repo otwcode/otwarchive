@@ -524,17 +524,14 @@ class WorksController < ApplicationController
         flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
         render :new_import and return
       end
-      unless params[:external_author_email]
-        flash.now[:error] = ts("You must provide an email address when importing for others.")
+      unless params[:external_author_email] && params[:external_author_name]
+        flash.now[:error] = ts("You must provide both a name and email address when importing for others.")
         render :new_import and return
       end
-      unless params[:external_author_name]
-        flash.now[:error] = ts("You must provide a name when importing for others.")
-        render :new_import and return
-      end
-      if params[:external_coauthor_name]
-        unless params[:external_coauthor_email]
-          flash.now[:error] = ts("You must provide an email address for a co author if specifying one.")
+
+      if params[:external_coauthor_name] || params[:external_coauthor_email]
+        unless params[:external_coauthor_email] && params[:external_coauthor_name]
+          flash.now[:error] = ts("You must provide both a name and email address for a co author if specifying one.")
           render :new_import and return
         end
       end
