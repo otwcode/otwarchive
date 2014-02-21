@@ -78,7 +78,7 @@
 
     end
 
-    protected
+
 
     # import a single work (possibly with multiple chapters)
     def import_single(urls, options)
@@ -170,13 +170,7 @@
 
     #POST /imports/import_multiple
     def import_multiple
-=begin
-    @xml_data = params[:xml_data]
-    unless @xml_data
-      flash.now[:error] = ts("No data found")
-      render :new_multi_import and return
-    end
-=end
+
       # is this an archivist importing?
       Rails.logger.info "IN IMPORT MULTIPLE"
       if params[:importing_for_others] && !current_user.archivist
@@ -184,7 +178,7 @@
         render :new_import and return
       end
       options = {
-          :pseuds => pseuds_to_apply,
+          :pseuds => nil,
           :importing_for_others => params[:importing_for_others],
           :restricted => params[:restricted],
           :encoding => params[:encoding],
