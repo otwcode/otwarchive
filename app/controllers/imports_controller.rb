@@ -12,7 +12,6 @@
 
 # POST /import/import
     def import
-      Rails.logger.info "=====================Processing the request..."
       # check to make sure we have some urls to work with
       @urls = params[:urls].split
       unless @urls.length > 0
@@ -21,9 +20,15 @@
       end
 
       # is this an archivist importing?
-      if params[:importing_for_others] && !current_user.archivist
-        flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
-        render :new_import and return
+      if params[:importing_for_others]
+        unless !current_user.archivist
+          flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
+          render :new_import and return
+        end
+        unless params[:external_author_email]
+          flash.now[:error] = ts("You must provide an email address when importing for others.")
+          render :new_import and return
+        end
       end
 
       # make sure we're not importing too many at once
@@ -118,7 +123,6 @@
 
     # import multiple works
     def import_multiple_works(urls, options)
-      Rails.logger.info "================IN IMPORT MULTIPLE works"
 
       # try a multiple import
       storyparser = StoryParser.new
@@ -131,7 +135,6 @@
 
       # collect the errors neatly, matching each error to the failed url
       unless failed_urls.empty?
-        Rails.logger.info pp failed_urls
         error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
         flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
       end
