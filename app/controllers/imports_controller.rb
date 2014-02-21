@@ -178,6 +178,7 @@
     end
 =end
       # is this an archivist importing?
+      Rails.logger.info "IN IMPORT MULTIPLE"
       if params[:importing_for_others] && !current_user.archivist
         flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
         render :new_import and return
