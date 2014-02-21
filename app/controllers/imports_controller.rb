@@ -12,7 +12,7 @@
 
 # POST /import/import
     def import
-      logger.info "=====================Processing the request..."
+      Rails.logger.info "=====================Processing the request..."
       # check to make sure we have some urls to work with
       @urls = params[:urls].split
       unless @urls.length > 0
