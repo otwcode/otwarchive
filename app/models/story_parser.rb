@@ -95,6 +95,7 @@ class StoryParser
 
 
   def import_many_xml(options={})
+    logger.info "Arrived in import_many"
     hashed_works = parse_xml_to_hash(options[:xml_string],options)
     mashed_works = Hashie::Mash.new(hashed_works)
     works = []
