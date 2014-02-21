@@ -187,7 +187,7 @@
           :source => "file",
           :xml_string => params[:xml_data].read
       }
-
+      logger.info "IN IMPORT MULTIPLE"
       import_multiple_works(nil, options)
     end
 
