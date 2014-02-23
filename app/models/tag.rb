@@ -316,7 +316,7 @@ class Tag < ActiveRecord::Base
 
       tags = self.joins(join).where("challenge_signups.collection_id = ?", collection.id)
       tags = tags.where("prompts.type = ?", prompt_type) if prompt_type.present?
-    }.flatten
+    }.flatten.compact.uniq
   end
 
   scope :requested_in_challenge, lambda {|collection|
