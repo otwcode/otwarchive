@@ -2,6 +2,13 @@ When /^I view the series "([^\"]*)"$/ do |series|
   visit series_url(Series.find_by_title!(series))
 end
 
+When /^I reorder the first two stories in the series "([^\"]*)"/ do |series|
+  visit manage_series_url(Series.find_by_title(series))
+  fill_in("serial_0", :with => "2")
+  fill_in("serial_1", :with => "1")
+  click_button("Update Positions")
+end
+
 When /^I add (?:the work )?"([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
   if pseud.present?
     step %{I create the pseud "#{pseud}"}

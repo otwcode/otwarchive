@@ -22,4 +22,13 @@ class SerialWork < ActiveRecord::Base
     end
   end
   
+  # Expire the downloads for works after this one in the series
+  after_create :expire_downloads
+  after_update :expire_downloads
+  def expire_downloads
+    SerialWork.where("series_id = ? AND position > ?", self.series_id, self.position).each do |serial_work|
+      serial_work.work.remove_outdated_downloads
+    end
+  end
+
 end

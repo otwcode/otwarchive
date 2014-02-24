@@ -80,7 +80,7 @@ Feature: Download a work
   When I add "NaNoWriMo" to the series "Whatever"
   Then the mobi version of "NaNoWriMo" should not exist
   
-  Scenario: downloads do not expire after a different work is added to the same series
+  Scenario: downloads expire after a different work is added to the same series but only if upstream 
   
   Given I am logged in as "author"
     And I add "Something" to the series "Whatever"
@@ -88,6 +88,8 @@ Feature: Download a work
   Then the mobi version of "Something" should exist
   When I add "Another Series Story" to the series "Whatever"
   Then the mobi version of "Something" should exist
+  When I reorder the first two stories in the series "Whatever"
+  Then the mobi version of "Something" should not exist
   
   Scenario: works cannot be downloaded if unrevealed
   
