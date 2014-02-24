@@ -303,9 +303,6 @@ HELP_DIRECTORY: '/help'
 PRODUCTION_CACHE: "memcache"
 
 ### Downloads 
-# location of calibre tool for ebook conversion
-EBOOK_CONVERT: "/opt/calibre/ebook-convert"
-
 # the main download formats (listed in the top level menu)
 DOWNLOAD_FORMATS_COMMON: ['mobi', 'epub', 'pdf', 'html']
 

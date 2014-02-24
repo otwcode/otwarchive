@@ -179,7 +179,7 @@ module Downloadable
     mobi = format == "mobi" ? ['--mobi-ignore-margins'] : []
 
     ### 
-    ebook_convert_command = [ArchiveConfig.EBOOK_CONVERT, "#{self.download_basename}.html", "#{self.download_basename}.#{format}", '--input-encoding', 'utf-8', '--use-auto-toc', 
+    ebook_convert_command = ['ebook-convert', "#{self.download_basename}.html", "#{self.download_basename}.#{format}", '--input-encoding', 'utf-8', '--use-auto-toc', 
       '--title', self.title, '--authors', authors, '--comments', self.summary,
       '--tags', tags, '--pubdate', pubdate] + series + mobi
   end
