@@ -14,7 +14,7 @@ Then /^I (?:should be able to )?download the (\w+) version of "(.*)"$/ do |filet
   visit work_url(work)
   step %{I follow "#{filetype.upcase}"}
   filename = "#{work.download_basename}.#{filetype}" # the full path of the download file we expect to exist
-  assert File.exists?(filename)
+  assert File.exists?(filename), "#{filename} does not exist"
   page.driver.response.headers['Content-Disposition'].should =~ /filename=\"#{File.basename(filename)}\"/
   page.response_headers['Content-Type'].should == MIME::Types.type_for(filename).first
 end
@@ -40,13 +40,13 @@ end
 Then /^the (.*) version of "([^"]*)" should exist$/ do |filetype, title|
   work = Work.find_by_title(title)
   filename = "#{work.download_basename}.#{filetype}" # the full path of the download file we expect to exist
-  assert File.exists?(filename)
+  assert File.exists?(filename), "#{filename} does not exist"
 end
 
 Then /^the (.*) version of "([^"]*)" should not exist$/ do |filetype, title|
   work = Work.find_by_title(title)
   filename = "#{work.download_basename}.#{filetype}" # the full path of the download file we expect to exist
-  assert !File.exists?(filename)
+  assert !File.exists?(filename), "#{filename} does exist"
 end
 
 When /^I try and fail to download the (\w+) version of "(.*)"$/ do |filetype, title|
