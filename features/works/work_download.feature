@@ -45,6 +45,8 @@ Feature: Download a work
   Then I should be able to download all versions of "à ø something"
   When I post the work "流亡在阿尔比恩"
   Then I should be able to download all versions of "流亡在阿尔比恩"
+  When I post the work "-dash in title-"
+  Then I should be able to download all versions of "-dash in title-"
   
   
   Scenario: Download of chaptered works includes chapters
