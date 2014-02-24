@@ -29,11 +29,10 @@ module Downloadable
   end
 
   # The subfolder within the public path where downloads of this object will be saved
-  # We spread downloads out by the first two letters of the author name(s) in order to 
-  # avoid any single folder becoming too large
+  # To spread downloads out, we hash the id, then take slices, to avoid any single folder becoming too large
   def download_folder
-    dl_authors = self.download_authors
-    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
+    hashed_id = Digest::MD5.hexdigest(self.id.to_s)
+    "downloads/#{hashed_id.slice(0,2)}/#{hashed_id.slice(2,2)}/#{hashed_id.slice(4,2)}/#{hashed_id.slice(6,2)}/#{hashed_id.slice(8,2)}/#{self.id}"
   end
   
   # make filesystem-safe

@@ -10,8 +10,8 @@ class DownloadsController < ApplicationController
 
   # named route: download_path
   # Note: only :id and :format need to be correct,
-  # the other two are derived and are there for nginx's benefit
-  # GET /downloads/:download_prefix/:download_authors/:id/:download_title.:format
+  # the others are derived from a hash of the id and are there to spread the downloads around
+  # GET /downloads/:download_slice1/:download_slice2/:download_slice3/:download_slice4/:download_slice5/:id/:download_title.:format
   def show
     # Generate the download
     # the dont_generate_download option is here to facilitate testing for the error message

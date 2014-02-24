@@ -9,7 +9,7 @@ Otwarchive::Application.routes.draw do
 
   #### DOWNLOADS ####
 
-  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
+  match 'downloads/:download_slice1/:download_slice2/:download_slice3/:download_slice4/:download_slice5/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
   #### STATIC CACHED COLLECTIONS ####
 
