@@ -95,10 +95,9 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
-  gem 'pry'
 end
 
-group :development do
+group :test, :development do
   gem 'pry'
 end
 
