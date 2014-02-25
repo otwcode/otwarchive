@@ -114,8 +114,7 @@ module Downloadable
       page_title = [self.download_title, self.download_authors, self.download_fandoms].join(" - ")
       chapters = self.chapters.order('position ASC').where(:posted => true)
 
-
-      # sneaking around MVC division, but the rendering of downloads belongs in this module IMO and not
+      # sneaking around MVC division, but the rendering of downloads belongs in a module IMO and not
       # in the controller
       # set this to handle host lookups
       Otwarchive::Application.routes.default_url_options = { :host => ArchiveConfig.APP_HOST }
