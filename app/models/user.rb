@@ -1,19 +1,19 @@
 class User < ActiveRecord::Base
 
   include WorksOwner
+  include DownloadableOwner
 
 #### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
-## TODO move to ArchiveConfig
-  LOGIN_LENGTH_MIN = 3
-  LOGIN_LENGTH_MAX = 40
+  LOGIN_LENGTH_MIN = ArchiveConfig.USER_LOGIN_MIN
+  LOGIN_LENGTH_MAX = ArchiveConfig.USER_LOGIN_MAX
 
   validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
     :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => LOGIN_LENGTH_MIN),
     :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => LOGIN_LENGTH_MAX)
 
-  PASSWORD_LENGTH_MIN = 6
-  PASSWORD_LENGTH_MAX = 40
+  PASSWORD_LENGTH_MIN = ArchiveConfig.USER_PASSWORD_MIN
+  PASSWORD_LENGTH_MAX = ArchiveConfig.USER_PASSWORD_MAX
 
   # allow nil so can save existing users
   validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,

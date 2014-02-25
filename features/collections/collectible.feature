@@ -8,7 +8,7 @@ Feature: Collectible items
     Given I have a collection "Various Penguins"
       And I am logged in as a random user
       And I post the work "Blabla"
-    When I add my work to the collection
+    When I add my work to the collection "Various Penguins"
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
     Then I should see "Works (1)"
@@ -18,7 +18,7 @@ Feature: Collectible items
     Given I have a collection "Various Penguins"
       And I am logged in as a random user
       And I post the chaptered work "Blabla"
-    When I add my work to the collection
+    When I add my work to the collection "Various Penguins"
     Then I should see "Added"
     When I go to "Various Penguins" collection's page
     Then I should see "Works (1)"
@@ -28,7 +28,7 @@ Feature: Collectible items
     Given I have a moderated collection "Various Penguins"
       And I am logged in as a random user
       And I post the work "Blabla"
-    When I add my work to the collection
+    When I add my work to the collection "Various Penguins"
     Then I should see "will have to be approved"
     When I go to "Various Penguins" collection's page
     Then I should see "Works (0)"
@@ -38,7 +38,7 @@ Feature: Collectible items
     Given I have a closed collection "Various Penguins"
       And I am logged in as a random user
       And I post the work "Blabla"
-    When I add my work to the collection
+    When I add my work to the collection "Various Penguins"
     Then I should see "is closed"
     When I go to "Various Penguins" collection's page
     Then I should see "Works (0)"

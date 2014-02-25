@@ -87,6 +87,20 @@ When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
   step %{I submit}
 end
 
+When /^I create (?:a|the) unrevealed collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
+  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I set up the collection "#{title}" with name "#{name}"}
+  check "This collection is unrevealed"
+  step %{I submit}
+end
+
+When /^I create (?:a|the) anonymous collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
+  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I set up the collection "#{title}" with name "#{name}"}
+  check "This collection is anonymous"
+  step %{I submit}
+end
+
 When /^I sort by fandom$/ do
   within(:xpath, "//li[a[contains(@title,'Sort')]]") do
     step %{I follow "Fandom 1"}
