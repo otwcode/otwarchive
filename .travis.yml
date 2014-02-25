@@ -9,7 +9,12 @@ env:
   - TEST_GROUP=other
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq calibre wkhtmltopdf
+  - sudo apt-get install -qq calibre
+  - wget https://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-i386.tar.bz2
+  - tar -vxf wkhtmltopdf-0.11.0_rc1-static-i386.tar.bz2
+  - mv wkhtmltopdf-i386 wkhtmltopdf
+  - chmod a+x wkhtmltopdf
+  - sudo mv wkhtmltopdf /usr/bin
   - mkdir -p public/downloads/11/22/33/44/55/12345/
   - echo "<html><head><title>Foo</title></head><body><p>Here is a test work</p></body></html>" > public/downloads/11/22/33/44/55/12345/test.html
   - wkhtmltopdf /home/travis/build/otwcode/otwarchive/public/downloads/11/22/33/44/55/12345/test.html /home/travis/build/otwcode/otwarchive/public/downloads/11/22/33/44/55/12345/test.pdf
