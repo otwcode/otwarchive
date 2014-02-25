@@ -94,7 +94,7 @@ describe Skin do
                 background:linear-gradient(top,#fafafa,#ddd);
                 color:#555 }"
     }.each_pair do |condition, css|
-      it condition do 
+      xit condition do 
         @skin.css = css
         @skin.save.should be_true
       end
