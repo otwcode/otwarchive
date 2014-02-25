@@ -9,17 +9,12 @@ env:
   - TEST_GROUP=other
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq calibre openssl build-essential xorg libssl-dev
+  - sudo apt-get install -qq calibre
   - wget https://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2
   - tar -vxf wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2
   - mv wkhtmltopdf-amd64 wkhtmltopdf
   - sudo mv wkhtmltopdf /usr/bin
   - sudo chmod a+x /usr/bin/wkhtmltopdf
-  - ls -l /usr/bin/wkhtmltopdf
-  - wkhtmltopdf
-  - mkdir -p public/downloads/11/22/33/44/55/12345/
-  - echo "<html><head><title>Foo</title></head><body><p>Here is a test work</p></body></html>" > public/downloads/11/22/33/44/55/12345/test.html
-  - wkhtmltopdf /home/travis/build/otwcode/otwarchive/public/downloads/11/22/33/44/55/12345/test.html /home/travis/build/otwcode/otwarchive/public/downloads/11/22/33/44/55/12345/test.pdf
 rvm:
   - "1.9.3"
 services:
