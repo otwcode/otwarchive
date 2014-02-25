@@ -123,6 +123,8 @@ module NavigationHelpers
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+    when /^the tag comments? page for "(.*)"$/i
+      tag_comments_path(Tag.find_by_name($1))
     when /^the admin-posts page$/i
       admin_posts_path
     when /^the admin-settings page$/i
@@ -131,6 +133,10 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
+    when /^the tos page$/i
+      tos_path
+    when /^the faq page$/i
+      archive_faqs_path
     when /^the support page$/i
       new_feedback_report_path
     when /^the new tag ?set page$/i
