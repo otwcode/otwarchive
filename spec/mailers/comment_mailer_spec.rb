@@ -4,7 +4,7 @@ describe CommentMailer do
   describe "basic comment emails" do
 
     before(:each) do
-      @comment = Factory.create(:comment)
+      @comment = FactoryGirl.create(:comment)
     end
 
     let(:email) { CommentMailer.comment_sent_notification(@comment.id).deliver }

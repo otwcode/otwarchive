@@ -142,14 +142,14 @@ FactoryGirl.define do
     f.sequence(:name) {|o| "GuestName#{o}"}
     f.sequence(:email)  {|p| "guest#{p}email@example.org"}
 
-    f.after_build do |comment|
+    after(:build) do |comment|
       comment.commentable_type = "Work"
-      comment.commentable_id = Factory.create(:work).id
+      comment.commentable_id = FactoryGirl.create(:work).id
     end
   end
 
   factory :kudo do |f|
-    f.commentable_id { Factory.create(:work).id }
+    f.commentable_id { FactoryGirl.create(:work).id }
     f.commentable_type  "Work"
 end
 
