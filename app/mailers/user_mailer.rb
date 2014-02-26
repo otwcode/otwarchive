@@ -40,7 +40,7 @@ class UserMailer < BulletproofMailer::Base
     @token = @invitation.token
     mail(
       :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation To Claim Stories"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
     )
   end
 
@@ -55,7 +55,7 @@ class UserMailer < BulletproofMailer::Base
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
       :to => creator.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
     )
   end
 
