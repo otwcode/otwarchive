@@ -181,7 +181,7 @@
           @external_authors.each do |external_author|
             external_author.find_or_invite(current_user)
           end
-          message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+          message = " " + ts("We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually.")
           flash[:notice] ? flash[:notice] += message : flash[:notice] = message
         end
       end
