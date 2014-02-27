@@ -1,4 +1,8 @@
   class ImportsController < ApplicationController
+    before_filter :users_only
+    before_filter :check_user_status
+
+
     def new
       if params[:single]
         @page_subtitle = ts("Import Work")
