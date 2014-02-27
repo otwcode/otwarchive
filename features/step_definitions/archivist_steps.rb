@@ -40,7 +40,20 @@ When /^I import the works "([^\"]*)"$/ do |urls|
   step(%{I fill in "urls" with "#{urls}"})
   step(%{I check "Post without previewing"})
   step(%{I press "Import"})
-end  
+end
+
+When /^I import the works from file "([^\"]*)"$/ do |xml_data|
+  file_path = "#{::Rails.root.to_s}/features/importing/test8.xml"
+  xml_data = Rack::Test::UploadedFile.new(file_path, mime_type)
+  mime_type = "text/xml"
+  params = { :import_multiple => "works", :xml_data => xml_data, :importing_for_others => true,
+             :encoding =>"", :post_without_preview => true, :restricted => 1,
+             :work=>{:rating_string =>"", :fandom_string =>"",:relationship_string => "", :character_string =>"",
+                     :freeform_string =>""}
+  }
+  visit new_import_path(:multiple => "true"), :post, params
+end
+
 
 ### THEN
 

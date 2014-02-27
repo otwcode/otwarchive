@@ -91,6 +91,8 @@ module NavigationHelpers
       user_signups_path(User.current_user)
     when /the import page/
       new_import_path(:single => "true")
+    when /the file import page/
+      new_import_path(:multiple => "true")
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
     when /^(.*)'s skin page/
