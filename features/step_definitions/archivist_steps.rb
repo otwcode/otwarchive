@@ -51,7 +51,7 @@ When /^I import the works from file "([^\"]*)"$/ do |xml_data|
              :work=>{:rating_string =>"", :fandom_string =>"",:relationship_string => "", :character_string =>"",
                      :freeform_string =>""}
   }
-  visit new_import_path(:multiple => "true"), :post, params
+  page.driver.post('/imports/import_multiple',  params)
 end
 
 
