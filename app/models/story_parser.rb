@@ -93,7 +93,6 @@ class StoryParser
     end
   end
 
-
   def import_many_xml(options={})
     hashed_works = parse_xml_to_hash(options[:xml_string],options)
     mashed_works = Hashie::Mash.new(hashed_works)
