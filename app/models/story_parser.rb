@@ -92,6 +92,22 @@ class StoryParser
     end
   end
 
+  def find_or_create_collection(name)
+    collection = Collection.find_or_initialize_by_name(name)
+    if c.new_record?
+      collection.title = name
+    end
+    # add the user as an owner if not already one
+    unless collection.owners.include?(u.default_pseud)
+      p = collection.collection_participants.where(:pseud_id => current_user.default_pseud.id).first || collection.collection_participants.build(:pseud => current_user.default_pseud)
+      p.participant_role = "Owner"
+      collection.save
+      p.save
+    end
+    collection.save
+    return collection
+  end
+
   def import_many_xml(options={})
     hashed_works = parse_xml_to_hash(options[:xml_string],options)
     mashed_works = Hashie::Mash.new(hashed_works)
@@ -107,15 +123,18 @@ class StoryParser
       begin
         work_mash = Hashie::Mash.new(Hash[*import_work.flatten])
         work = download_and_parse_story(work_mash, options)
+        @collection = nil
         #if have work object and work save success
         if work && work.save
           work.chapters.each { |chapter| chapter.save }
           #Add to Collection if specified
           if import_work.collection
+            #check that collection exists
+            @collection = find_or_create_collection(import_work.collection.to_s)
+
             #check ownership
-            collection = Collection.find_by_name(import_work.collection.to_s)
-            if check_if_own_collection(collection)
-              work.add_to_collection(collection)
+            if check_if_own_collection(@collection)
+              work.add_to_collection(@collection)
             end
           end
           works << work
