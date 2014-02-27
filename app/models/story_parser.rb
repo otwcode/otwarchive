@@ -98,7 +98,7 @@ class StoryParser
       collection.title = name
     end
     # add the user as an owner if not already one
-    unless collection.owners.include?(u.default_pseud)
+    unless collection.owners.include?(current_user.default_pseud)
       p = collection.collection_participants.where(:pseud_id => current_user.default_pseud.id).first || collection.collection_participants.build(:pseud => current_user.default_pseud)
       p.participant_role = "Owner"
       collection.save
