@@ -38,8 +38,8 @@ Feature: Archivist bulk imports
     When I am logged in as "elynross"
     And I import the works from file "test8.xml"
     Then I should see multi-story import messages
-    And I should see "Welcome"
-    And I should see "OTW Meetup in London"
+    And I should see "Teaching Lessons"
+    And I should see "Strategic Planning"
     And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
   Scenario: Import multiple works as an archivist
