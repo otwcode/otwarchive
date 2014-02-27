@@ -20,7 +20,6 @@ class StoryParser
                    :revised_at => 'Date|Posted|Posted on|Posted at'
                    }
 
-
   # Use this for raising custom error messages
   # (so that we can distinguish them from unexpected exceptions due to
   # faulty code)
@@ -375,12 +374,8 @@ class StoryParser
 
   end
 
-
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
-
-  #protected
-
 
     # download an entire story from an archive type where we know how to parse multi-chaptered works
     # this should only be called from download_and_parse_story
