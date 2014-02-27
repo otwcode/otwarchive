@@ -11,7 +11,7 @@ server "ao3-app04.ao3.org",  :app
 server "ao3-app05.ao3.org",  :app
 server "ao3-app06.ao3.org",  :app
 server "ao3-app07.ao3.org",  :app
-server "ao3-app08.ao3.org",  :app
+server "ao3-app08.ao3.org",  :app , :workers
 server "ao3-app98.ao3.org",  :app , :workers
 server "ao3-app99.ao3.org",  :app , :workers
 server "ao3-front01.ao3.org", :web
