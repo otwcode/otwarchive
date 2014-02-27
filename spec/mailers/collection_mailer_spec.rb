@@ -4,11 +4,13 @@ describe CollectionMailer do
   describe "basic collection emails" do
 
     before(:each) do
-      @collection = Collection.new
-      @work = Work.new
+      @collection = FactoryGirl.create(:collection)
+      @collection.email = "test@testing.com"
+      @collection.save
+      @work = FactoryGirl.create(:work)
     end
 
-    let(:email) { CollectionMailer.item_added_notificationn(@work,@collection).deliver }
+    let(:email) { CollectionMailer.item_added_notification(@work,@collection, "Work").deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
