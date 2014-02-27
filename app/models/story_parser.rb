@@ -94,7 +94,7 @@ class StoryParser
 
   def find_or_create_collection(name)
     collection = Collection.find_or_initialize_by_name(name)
-    if c.new_record?
+    if collection.new_record?
       collection.title = name
     end
     # add the user as an owner if not already one
