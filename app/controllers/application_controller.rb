@@ -137,7 +137,7 @@ public
   end
 
   def not_found_error(item,param1 = nil, param2 = nil)
-    if param1 == nil && param2 = nil
+    if param1 == nil && param2 == nil
       flash[:error] = ts("The specified " + item + " was unable to be located.")
       redirect_to(default) and return
     else

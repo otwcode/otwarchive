@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   #converted unfound tag to soft error
   #stephanie 2-28-2014
   def load_tag
-    Begin
+    begin
       @tag = Tag.find_by_name(params[:id])
       unless @tag && @tag.is_a?(Tag)
         not_found_error("tag","name",params[:id])
