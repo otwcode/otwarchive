@@ -149,6 +149,10 @@ end
 
 When(/^I try to delete my account$/) do
   step (%{I try to delete my account as #{DEFAULT_USER}})
+
+When(/^I visit the change username page for (.*)$/) do |login|
+  user = User.find_by_login(login)
+  visit change_username_user_path(user) 
 end
 
 # THEN
@@ -214,4 +218,9 @@ end
 Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should not see "#{title}"}
+end
+
+Then /^I should get confirmation that I changed my username$/ do
+  step(%{I should see "Your user name has been successfully updated. You may now wish to edit your pseud
+to match."})
 end

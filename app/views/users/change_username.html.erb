@@ -25,8 +25,10 @@
       <dd><%= text_field_tag :new_login, @new_login %></dd>
       <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
       <dd id="passwd"><%= password_field_tag :password %></dd>
-  <dt class="landmark"><%= ts("Submit") %></dt>
-	<dd class="submit actions"><%= submit_tag "Change" %></dd>
+      <dt class="landmark"><%= ts("Submit") %></dt>
+      <dd class="submit actions">
+	<%= submit_tag ts("Change"), data: { confirm: ts("Are you sure you want to change your user name?") } %>
+      </dd>
 </dl>
 <% end %>
 <% if @wrong_password %>
