@@ -7,17 +7,38 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
-  
+
+
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]
-      @bookmarkable = Work.find(params[:work_id])
+      begin
+        @bookmarkable = Work.find(params[:work_id])
+      rescue
+         not_found_error("work")
+      end
+
     elsif params[:chapter_id]
-      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
+      begin
+        @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
+      rescue
+        not_found_error("chapter")
+      end
+
     elsif params[:external_work_id]
-      @bookmarkable = ExternalWork.find(params[:external_work_id])
+      begin
+        @bookmarkable = ExternalWork.find(params[:external_work_id])
+      rescue
+        not_found_error("external work")
+      end
+
     elsif params[:series_id]
-      @bookmarkable = Series.find(params[:series_id])
+      begin
+        @bookmarkable = Series.find(params[:series_id])
+      rescue
+        not_found_error("series")
+      end
     end
   end  
 
