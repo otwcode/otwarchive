@@ -66,7 +66,7 @@ gem 'rpm_contrib'
 gem "google_visualr", ">= 2.1"
 
 # Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
+gem 'copycopter_client', '~> 2.0.1'
 
 # Coveralls for code test coverage
 gem 'coveralls', require: false
