@@ -108,13 +108,23 @@ class StoryParser
     return collection
   end
 
+
   def import_many_xml(options={})
-    hashed_works = parse_xml_to_hash(options[:xml_string],options)
-    mashed_works = Hashie::Mash.new(hashed_works)
+
     works = []
     failed_urls = []
     errors = []
     url = "nothing"
+
+    begin
+      hashed_works = parse_xml_to_hash(options[:xml_string],options)
+    rescue
+      errors << "The file provided was unable to be parsed. Please check the format and try again."
+      return [works, failed_urls, errors]
+    end
+
+    mashed_works = Hashie::Mash.new(hashed_works)
+
     #loop through each work
     mashed_works.importworks.importwork.each do |import_work|
       #create the external author

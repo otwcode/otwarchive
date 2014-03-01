@@ -14,7 +14,7 @@
       end
     end
 
-# POST /import/import
+    # POST /import/import
     def import
       # check to make sure we have some urls to work with
       @urls = params[:urls].split
@@ -79,7 +79,39 @@
 
     end
 
+    #POST /imports/import_multiple
+    def import_multiple
+      # is this an archivist importing?
+      is_archivist = User.current_user.archivist
 
+      #user isn't an archivist, again likely didnt use the form
+      if params[:importing_for_others] && !is_archivist
+        flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
+        render :new_import and return
+      end
+
+      #didn't use the form
+      if is_archivist && !params[:importing_for_others]
+        flash.now[:error] = ts("You may not import multiple works for you self with this method. Also, you should not be attempting to manipulate form post variables... Authorities have been notified of your attempted transgression.")
+        render :new_import and return
+      end
+
+      #no file provided
+      unless params[:xml_data]
+        flash.now[:error] = ts("No file was specified. You must provide a file of works to import.")
+        render :new_import_multiple and return
+      end
+
+      options = {
+          :pseuds => nil,
+          :importing_for_others => params[:importing_for_others],
+          :restricted => params[:restricted],
+          :encoding => params[:encoding],
+          :source => "file",
+          :xml_string => params[:xml_data].read
+      }
+      import_multiple_works(nil, options)
+    end
 
     # import a single work (possibly with multiple chapters)
     def import_single(urls, options)
@@ -128,11 +160,17 @@
         @works, failed_urls, errors = storyparser.import_from_urls(urls, options)
       end
 
-
       # collect the errors neatly, matching each error to the failed url
       unless failed_urls.empty?
         error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
         flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+      end
+
+      #if we have errors and no works meaning something happened before we even started
+      if works.empty? && !errors.empty?
+        errors.each do |e|
+          flash.now[:error] = e.to_s
+        end
       end
 
       # if EVERYTHING failed, boo. :( Go back to the import form.
@@ -142,7 +180,6 @@
         else
           render :new_import and return
         end
-
       end
 
       # if we got here, we have at least some successfully imported works
@@ -151,27 +188,6 @@
 
       # fall through to import template
     end
-
-
-    #POST /imports/import_multiple
-    def import_multiple
-
-      # is this an archivist importing?
-      if params[:importing_for_others] && !current_user.archivist
-        flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
-        render :new_import and return
-      end
-      options = {
-          :pseuds => nil,
-          :importing_for_others => params[:importing_for_others],
-          :restricted => params[:restricted],
-          :encoding => params[:encoding],
-          :source => "file",
-          :xml_string => params[:xml_data].read
-      }
-      import_multiple_works(nil, options)
-    end
-
 
     # if we are importing for others, we need to send invitations
     def send_external_invites(works)
