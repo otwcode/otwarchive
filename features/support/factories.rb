@@ -1,16 +1,20 @@
 FactoryGirl.define do
   factory :user do |f|
-    f.sequence(:login) { |n| "testuser#{n}" }
+    f.login { "testuser#{rand(1000).to_s}" }
     f.password "password"
     f.age_over_13 '1'
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
-    f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+    f.email { "foo#{rand(1000).to_s}@archiveofourown.org" }
   end
 
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
     f.association :user
+  end
+
+  factory :invitation do |f|
+    f.sequence(:invitee_email) { |n| "invitation#{n}@archiveofourown.org" }
   end
 
   factory :admin do |f|
@@ -45,7 +49,7 @@ FactoryGirl.define do
 
   factory :fandom do |f|
     f.canonical true
-    f.sequence(:name) { |n| "The #{n} Fandom" }
+    f.sequence(:name) { "The #{rand(1000).to_s} Fandom" }
   end
 
   factory :character do |f|
@@ -107,6 +111,19 @@ FactoryGirl.define do
     after(:build) do |work|
       work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
     end
+  end
+
+  factory :external_author do |f|
+    f.email { "foo#{rand(1000).to_s}@external.com" }
+  end
+
+  factory :external_author_name do |f|
+    f.association :external_author
+  end
+
+  factory :external_creatorship do |f|
+    f.creation_type 'Work'
+    f.association :external_author_name
   end
 
   factory :collection_participant do |f|
