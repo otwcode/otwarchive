@@ -8,7 +8,7 @@ class CollectionMailer < ActionMailer::Base
   helper :series
 
   layout 'mailer'
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
   
   def item_added_notification(creation_id, collection_id, item_type)
     @item_type = item_type
