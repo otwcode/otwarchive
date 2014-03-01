@@ -167,7 +167,7 @@
       end
 
       #if we have errors and no works meaning something happened before we even started
-      if works.empty? && !errors.empty?
+      if @works.empty? && !errors.empty?
         errors.each do |e|
           flash.now[:error] = e.to_s
         end
