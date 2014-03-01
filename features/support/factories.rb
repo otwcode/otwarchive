@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :user do |f|
-    f.login { "testuser#{rand(1000).to_s}" }
+    f.sequence(:login) { |n| "testuser#{n}" }
     f.password "password"
     f.age_over_13 '1'
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
-    f.email { "foo#{rand(1000).to_s}@archiveofourown.org" }
+    f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
   end
 
   factory :pseud do |f|
@@ -49,7 +49,7 @@ FactoryGirl.define do
 
   factory :fandom do |f|
     f.canonical true
-    f.sequence(:name) { "The #{rand(1000).to_s} Fandom" }
+    f.sequence(:name) { |n| "The #{n} Fandom" }
   end
 
   factory :character do |f|
@@ -114,7 +114,7 @@ FactoryGirl.define do
   end
 
   factory :external_author do |f|
-    f.email { "foo#{rand(1000).to_s}@external.com" }
+    f.sequence(:email) { |n| "foo#{n}@external.com" }
   end
 
   factory :external_author_name do |f|
