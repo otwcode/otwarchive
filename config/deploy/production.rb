@@ -4,6 +4,8 @@
 #
 # The :primary attribute is used for tasks we only want to run on one machine
 # 
+require 'capistrano/gitflow_version'
+
 
 server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app02.ao3.org",  :app , :primary => true
