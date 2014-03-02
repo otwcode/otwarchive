@@ -560,7 +560,7 @@ div.dynamic {
 
 /* CONTEXT: dashboard*/
 
-.dashboard .post {
+.dashboard > form {
   float: left;
   width: 100%;
 }
