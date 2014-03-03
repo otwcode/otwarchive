@@ -370,18 +370,20 @@ Feature: Collection
     And I follow "Approved"
   Then I should see "Items in Hidden Treasury"
     And I should see "first_user"
-  # TODO: Fix a way of referring to these buttons
-  #When I check "unreveal_15261"
-  #  And I press "submit_15261"
-  When "Issue 2241" is fixed
-  # Then 1 email should be delivered
+    And I should see "New Snippet"
+  # Works are in reverse date order, so unchecking the second checkbox will reveal work 1
+  When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
+    And I submit
+  # Issue 2243: emails don't get sent for individual reveals
+  When "Issue 2243" is fixed
+    #Then 1 email should be delivered
     
   # first fic now visible, second still not
-  #When I log out
-  #  And I am logged in as "third_user"
-  #When I view the work "New Snippet"
-  #Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-  #  And I should see "Purim Day 1"
-  #When I view the work "New Snippet 2"
-  #Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-  #  And I should not see "Purim Day 2"
+  When I log out
+    And I am logged in as "third_user"
+  When I view the work "New Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should see "Purim Day 1"
+  When I view the work "New Snippet 2"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should not see "Purim Day 2"
