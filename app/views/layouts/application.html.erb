@@ -15,6 +15,12 @@
       <meta name="googlebot" content="noindex" />
     <% end %>
   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+        <script>
+           window.PHRASE_CONFIG = {
+            autoLowercase: false
+          }
+        </script>
+        <%= phrase_javascript(Phrase.auth_token) %>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>

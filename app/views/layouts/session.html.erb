@@ -3,6 +3,12 @@
   <head>
     <meta name="generator" content="HTML Tidy, see www.w3.org" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <script>
+    window.PHRASE_CONFIG = {
+    autoLowercase: false
+    }
+   </script>
+   <%= phrase_javascript(Phrase.auth_token) %>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>
