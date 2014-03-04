@@ -152,7 +152,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, value)
         doc = Nokogiri::HTML.fragment(result)
         doc.xpath(".//em").children.to_s.strip.should == "hello"
-        doc.xpath(".//blockquote").children.to_s.strip.should == "world"
+        doc.xpath(".//blockquote").children.to_s.strip.should == "<p>world</p>"
       end
 
       it "should keep valid unicode chars as is" do
@@ -216,7 +216,7 @@ describe HtmlCleaner do
             end
       end
 
-      xit "should allow google player embeds" do
+      it "should allow google player embeds" do
         html = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
         result = sanitize_value(:content, html)
         expect(result).to include(html)
