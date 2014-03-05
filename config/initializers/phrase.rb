@@ -1,6 +1,10 @@
 Phrase.configure do |config|
   # Enable or disable the PhraseApp context editor in general
-  config.enabled = true
+  if ENV['AO3_PHRASEAPP'] == "1" then
+    config.enabled = true 
+  else 
+    config.enabled = false 
+  end
 
   # Fetch your project auth token after creating your first project
   # in the PhraseApp translation center.
