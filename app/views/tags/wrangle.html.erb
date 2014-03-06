@@ -47,7 +47,7 @@
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
     <li><%= span_if_current ts('All'), url_for(:show => params[:show], :status => nil) %></li>
     <li><%= span_if_current ts('Canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
-    <li><%= link_to ts('Synonymous'), url_for(:show => params[:show], :status => 'synonymous'), nil, ts("non-canonical tags that are synonyms") %></li>
+    <li><%= span_if_current ts('Synonymous'), url_for(:show => params[:show], :status => 'synonymous'), nil, ts("non-canonical tags that are synonyms") %></li>
     <li><%= span_if_current ts('Unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), nil, ts("non-canonical tags without synonyms") %></li>
     <li><%= span_if_current ts('Unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), nil, ts("tags which were used on the same works but haven't been wrangled yet") %></li>
     <li><%= span_if_current ts('Unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), nil, ts("tags marked unwrangleable") %></li>
