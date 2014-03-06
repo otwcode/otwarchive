@@ -301,7 +301,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 

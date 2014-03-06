@@ -15,7 +15,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -26,7 +26,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def no_assignment
-    flash[:error] = t('potential_match.no_match', :default => "What potential match did you want to work on?")
+    flash[:error] = ts("What potential match did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -36,7 +36,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def signup_open
-    flash[:error] = t('potential_match.signup_open', :default => "Signup is still open, you cannot determine potential matches now.")
+    flash[:error] = ts("Sign-up is still open, you cannot determine potential matches now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -46,7 +46,7 @@ class PotentialMatchesController < ApplicationController
   end
 
   def assignments_sent
-    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = ts("Assignments have already been sent! If necessary, you can purge them.")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
@@ -59,19 +59,15 @@ class PotentialMatchesController < ApplicationController
       @current_position = PotentialMatch.position(@collection)
       @progress = PotentialMatch.progress(@collection)
     else
-      # we have potential_matches and assignments      
+      # we have potential_matches and assignments     
+      @assignments_with_no_giver = @collection.assignments.with_request.with_no_offer
+      @assignments_with_no_recipient = @collection.assignments.with_offer.with_no_request
+
+      @assignments_with_no_potential_recipients = @assignments_with_no_recipient.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
+      @assignments_with_no_potential_givers = @assignments_with_no_giver.select {|assignment| assignment.request_signup.request_potential_matches.empty?}
       
       # index the potential matches by request_signup
-      @assignments_with_no_offer = @collection.assignments.with_request.with_no_offer.sort
-      @assignments_with_no_request = @collection.assignments.with_offer.with_no_request.sort
-
-      @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
-      
-      unless (@assignments_with_no_potential_requests.size > 0)
-        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
-
-        @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
-      end
+      @successful_assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
     end
   end
 
@@ -93,6 +89,19 @@ class PotentialMatchesController < ApplicationController
     redirect_to collection_potential_matches_path(@collection)
   end
   
+  # Regenerate matches for one signup
+  def regenerate_for_signup
+    if params[:signup_id].blank? || (@signup = ChallengeSignup.where(:id => params[:signup_id]).first).nil?
+      flash[:error] = ts("What sign-up did you want to regenerate matches for?")
+    else
+      PotentialMatch.regenerate_for_signup(@signup)
+      flash[:notice] = ts("Matches are being regenerated for ") + @signup.pseud.byline +
+        ts(". Please allow at least 5 minutes for this process to complete before refreshing the page.")
+    end
+    # redirect to index
+    redirect_to collection_potential_matches_path(@collection)
+  end
+  
   def cancel_generate
     if !PotentialMatch.in_progress?(@collection)
       flash[:error] = ts("Potential matches are not currently being generated for this challenge.")
@@ -107,13 +116,6 @@ class PotentialMatchesController < ApplicationController
   end
   
   def show
-  end
-
-  def generate_progress
-    if PotentialMatch.in_progress?(@collection)
-      @current_position = PotentialMatch.position(@collection)
-      @progress = PotentialMatch.progress(@collection)
-    end
   end
 
 end

@@ -23,7 +23,7 @@
         <li><%= submit_tag ts("Save Assignment Changes") %></li>
         <li><%= link_to ts("Regenerate Assignments"), generate_collection_assignments_path(@collection),
                 :confirm => ts("Are you sure? This will delete all current assignments.") %></li>
-        <li><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection),
+        <li><%= link_to ts("Regenerate All Potential Matches"), generate_collection_potential_matches_path(@collection),
                  :confirm => ts("Are you sure? This will delete all current assignments and potential matches.") %></li>
       <% end %>
     </ul>  
