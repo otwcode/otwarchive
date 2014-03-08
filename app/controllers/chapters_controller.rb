@@ -239,8 +239,14 @@ class ChaptersController < ApplicationController
   end
 
   # fetch work these chapters belong to from db
+  # catches errors to trap as soft error instead of sending as hard ie to newrelic, returns user to home page with error. stephanie 2-28-2014
   def load_work
-    @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
+    begin
+      @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
+    rescue
+      flash[:error] = ts("The specified work was unable to be located.")
+      redirect_to(default) and return
+    end
     @check_ownership_of = @work
     @check_visibility_of = @work
   end

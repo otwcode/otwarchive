@@ -136,6 +136,23 @@ public
     end
   end
 
+  def not_found_error(item,param1 = nil, param2 = nil)
+    if param1 == nil && param2 == nil
+      flash[:error] = ts("The specified " + item + " was unable to be located.")
+      redirect_to(default) and return
+    else
+      if param2 == nil
+        flash[:error] = ts(item + " " + param1 + " was unable to be located.")
+        redirect_to(default) and return
+      else
+        flash[:error] = ts(item + " with " + param1 + " = " + param2 + " was unable to be located.")
+        redirect_to(default) and return
+
+      end
+    end
+
+  end
+
   # Filter method - keeps users out of admin areas
   def admin_only
     logged_in_as_admin? || admin_only_access_denied

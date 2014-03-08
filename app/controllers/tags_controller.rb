@@ -8,10 +8,18 @@ class TagsController < ApplicationController
 
   cache_sweeper :tag_sweeper
 
+  #converted unfound tag to soft error
+  #stephanie 2-28-2014
   def load_tag
-    @tag = Tag.find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
+    begin
+      @tag = Tag.find_by_name(params[:id])
+      unless @tag && @tag.is_a?(Tag)
+        not_found_error("tag","name",params[:id])
+        redirect_to(default) and return
+      end
+    rescue
+      not_found_error("tag","name",params[:id])
+      redirect_to(default) and return
     end
   end
 
