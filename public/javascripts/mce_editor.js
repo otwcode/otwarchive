@@ -64,6 +64,7 @@ tinyMCE.init({
   paste_word_valid_elements: "@[align],-strong/b,-em/i,-u,-span,-p,-ol,-ul,-li,-h1,-h2,-h3,-h4,-h5,-h6,-table,-tr,-td[colspan|rowspan],-th,-thead,-tfoot,-tbody,-a[href|name],sub,sup,strike,br",
   
   // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
+  // Note: TinyMCE versions <4.0.13 have a bug where the "None" option is included even when this option is set. When updating to 4.0.13 or later, add it back: { title: 'None', value: '' }
   target_list: []
 });
 
