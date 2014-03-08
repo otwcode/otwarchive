@@ -31,7 +31,17 @@ Feature: Archivist bulk imports
     When the system processes jobs
     Then 1 email should be delivered to "shalott@intimations.org"
       And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
-      
+
+  Scenario: Import multiple works from file as an archivist
+
+    Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+    And I import the works from file "test8.xml"
+    Then I should see multi-story import messages
+    And I should see "Teaching Lessons"
+    And I should see "Strategic Planning"
+    And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
+
   Scenario: Import multiple works as an archivist
   
   Given I have an archivist "elynross"

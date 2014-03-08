@@ -41,7 +41,10 @@
       	<%= link_to ts("Post"), new_work_path %>
       	<ul class="menu" role="menu">
           <li><%= link_to ts("New Work"), new_work_path %></li>
-          <li><%= link_to(ts("Import Work"), new_work_path(:import => "true")) %></li>
+          <li><%= link_to(ts("Import Work"), new_import_path(:single => "true")) %></li>
+          <% if @current_user.archivist %>
+              <li><%= link_to ts("Import Multiple from File"), new_import_path(:multiple => "true") %></li>
+          <% end %>
           <% if @current_user.unposted_works.size > 0 %>
             <li><%= span_if_current ts("From Draft"), drafts_user_works_path(@current_user) %></li>
           <% end %>
