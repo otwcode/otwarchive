@@ -138,6 +138,15 @@ class UserMailer < BulletproofMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Signups Found"
+    )
+  end
 
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
