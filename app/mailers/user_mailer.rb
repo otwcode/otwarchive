@@ -144,7 +144,7 @@ class UserMailer < BulletproofMailer::Base
     @invalid_signups = invalid_signup_ids
     mail(
       :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Signups Found"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
