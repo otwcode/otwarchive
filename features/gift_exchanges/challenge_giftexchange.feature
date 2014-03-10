@@ -79,7 +79,7 @@ Feature: Gift Exchange Challenge
   # Invalid signup should warn the user
   When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
     And I reload the page
-  Then I should see "signup is invalid"  
+  Then I should see "sign-up is invalid"  
   
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
   Given the gift exchange "Awesome Gift Exchange" is ready for signups
@@ -155,7 +155,7 @@ Feature: Gift Exchange Challenge
     And the system processes jobs
     And I wait 3 seconds
   Then 1 email should be delivered to "mod1"
-    And the email should contain "invalid signup"
+    And the email should contain "invalid sign-up"
   When I reload the page
     Then I should see "Generate Potential Matches"
   
