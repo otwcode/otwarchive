@@ -79,8 +79,7 @@ Feature: Gift Exchange Challenge
   # Invalid signup should warn the user
   When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
     And I reload the page
-  Then I should see "WARNING"
-    And I should see "signup is invalid"  
+  Then I should see "signup is invalid"  
   
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
   Given the gift exchange "Awesome Gift Exchange" is ready for signups
