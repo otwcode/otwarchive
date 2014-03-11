@@ -4,7 +4,7 @@
 class FilterTagging < ActiveRecord::Base
   self.primary_key = 'id'
   
-  belongs_to :filter, :class_name => 'Tag'
+  belongs_to :filter, :class_name => 'Tag', :dependent => :destroy
   belongs_to :filterable, :polymorphic => true
 
   validates_presence_of :filter, :filterable
@@ -20,7 +20,7 @@ class FilterTagging < ActiveRecord::Base
   end
   
   def expire_caches
-    self.filter.update_works_index_timestamp!
+    self.filter.update_works_index_timestamp! unless self.filter.blank?
   end
 
   # Is this a valid filter tagging that should actually exist?
