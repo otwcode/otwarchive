@@ -3,12 +3,12 @@
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
 class FilterTagging < ActiveRecord::Base
   self.primary_key = 'id'
-  
+
   belongs_to :filter, :class_name => 'Tag', :dependent => :destroy
   belongs_to :filterable, :polymorphic => true
 
   validates_presence_of :filter, :filterable
-  
+
   after_create :expire_caches
   before_destroy :expire_caches
 
@@ -18,7 +18,7 @@ class FilterTagging < ActiveRecord::Base
   def self.find_by_id(id)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
-  
+
   def expire_caches
     self.filter.update_works_index_timestamp! unless self.filter.blank?
   end
@@ -32,10 +32,10 @@ class FilterTagging < ActiveRecord::Base
 
   # Remove all invalid filter taggings
   def self.remove_invalid
-    i = self.count
+    i = filter_tagging_count = self.count
     self.find_each do |filter_tagging|
       begin
-        puts "Checking #{i}"
+        puts "Checking #{i} of #{filter_tagging_count}"
         unless filter_tagging.should_exist?
           filter_tagging.destroy
         end
@@ -48,7 +48,7 @@ class FilterTagging < ActiveRecord::Base
 
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
-    Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|
+    Tagging.where(taggable_type: 'Work').each do |tagging|
       print "." if tagging.id.modulo(10) == 0; STDOUT.flush
       if tagging.tagger && tagging.taggable
         tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger
