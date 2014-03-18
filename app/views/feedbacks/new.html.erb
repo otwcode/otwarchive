@@ -43,7 +43,7 @@
       <dt class="required"><%= f.label :summary, "Brief summary (required)" %>: </dt>
       <dd>
         <%= f.text_field :summary, :size => 60, :class => "observe_textlength" %>
-        <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
+        <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
         <p>
           <%= live_validation_for_field('feedback_summary', :failureMessage => ts("Please enter a brief summary of your message")) %>
         </p>
