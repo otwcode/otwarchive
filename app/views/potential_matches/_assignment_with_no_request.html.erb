@@ -5,6 +5,10 @@
     <dd>
       <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
       <%= assignment_form.hidden_field :offer_signup_id, :value => assignment.offer_signup.id %>
+      <% # offer an autocomplete of potential matches %>
+      <%= assignment_form.text_field :pinch_request_signup_id, autocomplete_options("potential_requests?signup_id=#{offer_signup.id}", 
+        :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+      
       <%= assignment_form.collection_select :pinch_request_signup_id, assignment.offer_signup.offer_potential_matches.sort.reverse.collect(&:request_signup), :id, :byline, :include_blank => "Please select a potential match as pinch recipient" %>
     </dd>
 <% end %>

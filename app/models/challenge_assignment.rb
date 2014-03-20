@@ -154,6 +154,15 @@ class ChallengeAssignment < ActiveRecord::Base
     self.offer_byline.downcase <=> other.offer_byline.downcase
   end
 
+  def offer_signup_pseud=(pseud_byline)
+    pseuds = Pseud.parse_byline(pseud_byline)
+    if pseuds.size == 1
+      pseud = pseuds.first
+      signup = ChallengeSignup.in_collection(self.collection).by_user(pseud.user).first
+      self.offer_signup = signup if signup
+    end  
+  end
+
   def title
     "#{self.collection.title} (#{self.request_byline})"
   end

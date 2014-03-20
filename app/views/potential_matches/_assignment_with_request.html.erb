@@ -13,7 +13,11 @@
       <%= render "list_recipients_for_pseud", :request_signup => request_signup %>
     </td>
     
-    <%= render "list_potential_giver_select", :assignment_form => assignment_form, :request_signup => request_signup%>
+    <td>
+      <% # offer an autocomplete of potential matches %>
+      <%= assignment_form.text_field :offer_signup_id, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
+        :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+    </td>
     
     <td><!--BACK END this td should probably be titled, but what with?-->
       <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
