@@ -4,7 +4,7 @@
 class FilterTagging < ActiveRecord::Base
   self.primary_key = 'id'
 
-  belongs_to :filter, :class_name => 'Tag', :dependent => :destroy
+  belongs_to :filter, :class_name => 'Tag' # , :dependent => :destroy # TODO: poke this separately
   belongs_to :filterable, :polymorphic => true
 
   validates_presence_of :filter, :filterable
