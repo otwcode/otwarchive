@@ -65,22 +65,31 @@ public
   # The actual method that generates the potential matches for an entire collection
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
-    PotentialMatch.clear!(collection)
-    settings = collection.challenge.potential_match_settings
-
-    # start by collecting the ids of all the tag sets of the offers/requests in this collection
-    collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
-
-    # the topmost tags required for matching
-    required_types = settings.required_types.map {|t| t.classify}
-
-    # treat each signup as a request signup first
-    collection.signups.find_each do |signup|
-      break if PotentialMatch.canceled?(collection)
-      $redis.set progress_key(collection), signup.pseud.byline
-      PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
-    end
     
+    # First, make sure there are no invalid signups
+    invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
+    unless invalid_signup_ids.empty?
+      UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids).deliver
+      PotentialMatch.cancel_generation(collection)
+    else
+    
+      PotentialMatch.clear!(collection)
+      settings = collection.challenge.potential_match_settings
+
+      # start by collecting the ids of all the tag sets of the offers/requests in this collection
+      collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+
+      # the topmost tags required for matching
+      required_types = settings.required_types.map {|t| t.classify}
+
+      # treat each signup as a request signup first
+      collection.signups.find_each do |signup|
+        break if PotentialMatch.canceled?(collection)
+        $redis.set progress_key(collection), signup.pseud.byline
+        PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
+      end
+
+    end
     # TODO: for any signups with no potential matches try regenerating?
     
     PotentialMatch.finish_generation(collection)

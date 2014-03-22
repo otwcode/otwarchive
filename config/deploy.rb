@@ -31,8 +31,10 @@ require 'new_relic/recipes'
 require 'bundler/capistrano'
 
 # deploy to different environments with tags
+require 'capistrano/ext/multistage'
+set :stages, ["staging", "production","i18n"]
 set :default_stage, "staging"
-require 'capistrano/gitflow_version'
+#require 'capistrano/gitflow_version'
 
 # use rvm
 require "rvm/capistrano"    

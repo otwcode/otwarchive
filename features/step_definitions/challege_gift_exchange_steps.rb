@@ -62,6 +62,12 @@ Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
   step %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
 end
 
+Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
+  step %{I am logged in as "mod1"}
+  step %{I have created the gift exchange "Awesome Gift Exchange"}
+  step %{I open signups for "Awesome Gift Exchange"}
+end
+
 ## Signing up
 
 When /^I sign up for "([^\"]*)" with combination A$/ do |title|
@@ -136,6 +142,18 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
 end
 
 ## Matching
+
+Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
+  step %{the gift exchange "#{title}" is ready for signups}
+  step %{everyone has signed up for the gift exchange "#{title}"}
+end
+
+Given /^I create an invalid signup in the gift exchange "([^\"]*)"$/ do |challengename|
+  collection = Collection.find_by_title(challengename)
+  # create an invalid signup by deleting the first one's offers,
+  # bypassing the validation checks
+  collection.signups.first.offers.delete_all
+end  
 
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}

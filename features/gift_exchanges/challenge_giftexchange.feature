@@ -72,22 +72,20 @@ Feature: Gift Exchange Challenge
   Then I should see "New members invited: comod"
 
   Scenario: Sign up for a gift exchange
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-  When I am logged in as "myname1"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    And I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
-  
+  # Invalid signup should warn the user
+  When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+    And I reload the page
+  Then I should see "sign-up is invalid"  
   
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And I edit settings for "Awesome Gift Exchange" challenge
     And I check "Optional Tags?"
     And I submit
-    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
     And I sign up for "Awesome Gift Exchange" with combination A
     And I follow "Edit Sign-up"
@@ -99,31 +97,24 @@ Feature: Gift Exchange Challenge
   Then I should see "Something else weird"
   
   Scenario: Sign-ups can be seen in the dashboard
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
   When I am logged in as "myname1"
-  When I sign up for "Awesome Gift Exchange" with combination A
+    And I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
   Then I should see "Sign-ups (1)"
   When I follow "Sign-ups (1)"
   Then I should see "Awesome Gift Exchange"
 
   Scenario: Ordinary users cannot see other signups
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-  When I am logged in as "myname1"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    And I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
-  When I go to the collections page
+    And I go to the collections page
     And I follow "Awesome Gift Exchange"
   Then I should not see "Sign-ups" within "#dashboard"
   
   Scenario: Mod can view signups
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -136,10 +127,7 @@ Feature: Gift Exchange Challenge
     And I should see "Alternate Universe - Historical"
 
   Scenario: Cannot generate matches while signup is open
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -148,24 +136,31 @@ Feature: Gift Exchange Challenge
     And I should not see "Generate Potential Matches"
 
   Scenario: Matches can be generated
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-  When I close signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I close signups for "Awesome Gift Exchange"
   When I follow "Matching"
-  When I follow "Generate Potential Matches"
+    And I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
   Then I should see "Main Assignments"
   
+  Scenario: Invalid signups are caught before generation
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+  When I close signups for "Awesome Gift Exchange"
+    And I follow "Matching"
+    And I follow "Generate Potential Matches"
+    And the system processes jobs
+    And I wait 3 seconds
+  Then 1 email should be delivered to "mod1"
+    And the email should contain "invalid sign-up"
+  When I reload the page
+    Then I should see "Generate Potential Matches"
+  
   Scenario: Matches can be regenerated for a single signup
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I am logged in as "Mismatch"
     And I sign up for "Awesome Gift Exchange" with a mismatched combination
   When I am logged in as "mod1"
@@ -201,10 +196,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: Assignments can be sent
 
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I have generated matches for "Awesome Gift Exchange"
   When I follow "Send Assignments"
   Then I should see "Assignments are now being sent out"
