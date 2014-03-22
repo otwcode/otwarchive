@@ -19,7 +19,7 @@ Feature: Work Drafts
     And I fill in "Work Title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."  
     And I press "Preview"
-  Then I should see "Draft was successfully created."
+  Then I should see "Draft was successfully created. It will be deleted on"
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
