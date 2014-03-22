@@ -32,7 +32,12 @@
       <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
       <dl>
         <dt><%= f.label :tag_list, ts("Tags") %></dt>
-        <dd><%= f.text_field :tag_list %></dd>
+        <dd>
+          <%= f.text_field :tag_list, autocomplete_options('admin_post_tags') %>
+          <p class="character_counter">
+            <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
+          </p>
+        </dd>
         <dt>
           <%= f.label :language_id, ts("Choose a language") %>
         </dt>
