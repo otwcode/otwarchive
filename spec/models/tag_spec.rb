@@ -433,5 +433,8 @@ describe Tag do
       end
     end
   end
- 
+
+  describe "update_taggings_count" do
+    it "should reflect the actual number of uses"
+  end
 end
