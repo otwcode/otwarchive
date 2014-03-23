@@ -7,6 +7,7 @@ namespace :Tag do
     end
     puts "Common tags reset."
   end
+
   desc "Reset tag count"
   task(:reset_count => :environment) do
     Tag.find(:all).each do |t|
@@ -15,6 +16,18 @@ namespace :Tag do
     end
     puts "Tag count reset."
   end
+
+  desc "Reset taggings count for obviously wrong taggings_count"
+  task(:fix_taggings_count => :environment) do
+    tag_scope = Tag.where("taggings_count < 0")
+    tag_count = tag_scope.count
+    tag_scope.each_with_index do |tag, index|
+      puts "#{index} / #{tag_count}"
+      Tag.reset_counters(tag.id, :taggings)
+    end
+    puts "Taggings count for less-than-zero counts has been reset."
+  end
+
   desc "Update relationship has_characters"
   task(:update_has_characters => :environment) do
     Relationship.all.each do |relationship|
