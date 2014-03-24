@@ -152,20 +152,24 @@ class AutocompleteController < ApplicationController
 
   # the pseuds of the potential matches who could fulfill the requests in the given signup
   def potential_offers
-    search_param = params[:term]
-    signup_id = params[:signup_id]
-    request_signup = ChallengeSignup.find(signup_id)
-    pmatches = request_signup.request_potential_matches
-    render_output(pmatches.map {|pm| {id: pm.offer_signup.id, name:pm.offer_signup.pseud.byline}})
+    potential_matches(false)
   end
 
   # the pseuds of the potential matches who want the offers in the given signup
   def potential_requests
+    potential_matches(true)
+  end
+
+  # Return matching potential requests or offers
+  def potential_matches(return_requests=true)
     search_param = params[:term]
     signup_id = params[:signup_id] 
-    offer_signup = ChalengeSignup.find(signup_id)
-    pmatches = offer_signup.offer_potential_matches
-    render_output(pmatches.map {|pm| {id: pm.request_signup.id, name:pm.request_signup.pseud.byline}})
+    signup = ChallengeSignup.find(signup_id)
+    pmatches = return_requests ? 
+      signup.offer_potential_matches.map {|pm| pm.request_signup.pseud.byline} :
+      signup.request_potential_matches.map {|pm| pm.offer_signup.pseud.byline}
+    pmatches.select! {|pm| pm.match(/#{search_param}/)} if search_param.present?
+    render_output(pmatches)
   end
 
   # owned tag sets that are usable by all

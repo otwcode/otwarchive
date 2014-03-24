@@ -8,48 +8,28 @@
   <% if @assignments_with_no_potential_givers.present? %>
     <li><%= span_if_current ts("No Potential Givers"), collection_potential_matches_path(@collection, no_potential_givers: true)%></li>
   <% end %>
-  <% if @assignments_with_no_recipient.present? %>
-    <li><%= span_if_current ts("No Assignment"), collection_potential_matches_path(@collection, no_recipient: true) %></li>
+  <% if @collection.assignments.with_offer.with_no_request.count > 0 %>
+    <li><%= span_if_current ts("No Recipient Assigned"), collection_potential_matches_path(@collection, no_recipient: true) %></li>
   <% end %>
-  <% if @assignments_with_no_giver.present? %>
-    <li><%= span_if_current ts("No One Assigned"), collection_potential_matches_path(@collection, no_giver: true) %></li>
+  <% if @collection.assignments.with_request.with_no_offer.count > 0 %>
+    <li><%= span_if_current ts("No Giver Assigned"), collection_potential_matches_path(@collection, no_giver: true) %></li>
   <% end %>
-  <% if @successful_assignments.present? %>
-    <li><%= span_if_current ts("Complete Assignments"), collection_potential_matches_path(@collection, assigned: true) %></li>
+  <% if ChallengeAssignment.duplicate_givers(@collection).count > 0 %>
+    <li><%= span_if_current ts("Duplicate Givers"), collection_potential_matches_path(@collection, dup_giver: true) %></li>
+  <% end %>
+  <% if ChallengeAssignment.duplicate_recipients(@collection).count > 0 %>
+    <li><%= span_if_current ts("Duplicate Recipients"), collection_potential_matches_path(@collection, dup_recipient: true) %></li>
+  <% end %>
+  <% if @collection.assignments.with_request.with_offer.count > 0 %>
+    <li><%= span_if_current ts("Complete Assignments"), collection_potential_matches_path(@collection, complete: true) %></li>
   <% end %>
 </ul>
 <!--/subnav-->
-
-<% unless params[:no_potential_recipients] || params[:no_potential_givers] || params[:no_recipient] || params[:no_giver] || params[:assigned] %>
-  <p><%= ts("Please select from the assignment issues above to review.")%></p>
-<% end %>
 
 <% if params[:no_potential_recipients] %>
   <%= render "no_potential_recipients" %>
 <% elsif params[:no_potential_givers] %>
   <%= render "no_potential_givers" %>
-<% end %>
-
-<% # otherwise, list the assignments %>
-<% if params[:no_recipient] || params[:no_giver] || params[:assigned] %>
-  <!-- list all the requesters with their potential matches -->
-  <%= form_tag set_collection_assignments_path, :method => :put do %>
-  
-    <% # the people with no one assigned to write for -- solve with pinch recipients %>
-    <% if params[:no_recipient] %>
-      <%= render "no_assigned_recipient" %>
-    <% end %>
-
-    <% # the people with no-one writing for them -- these people also get listed in the assignments section below %>
-    <% if params[:no_giver] %>
-      <%= render "no_assigned_giver" %>
-    <% end %>
-
-    <% if params[:assigned] %>  
-      <% # the successful assignments %>
-      <%= render "successful_assignments" %>
-    <% end %>
-
-    <%= render "match_navigation", :top => false %>
-  <% end %>
+<% else %>
+  <%= render "successful_assignments" %>
 <% end %>

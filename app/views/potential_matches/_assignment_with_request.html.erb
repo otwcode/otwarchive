@@ -1,22 +1,30 @@
 <!-- expects local "assignment" -->
 <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <% request_signup = assignment.request_signup %>
+  <% offer_signup = assignment.offer_signup %>
   <tr>
     <th scope="row">
-      <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
-      <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) %>
-    </th>
-
-    <td>
       <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-      <%= assignment_form.hidden_field :request_signup_id, :value => request_signup.id %>
-      <%= render "list_recipients_for_pseud", :request_signup => request_signup %>
+      <%= link_to assignment.id, collection_assignment_path(@collection, assignment) %>
+    </th>
+    <td>
+      <% if offer_signup %>
+        <% # offer an autocomplete of potential matches %>
+        <%= assignment_form.text_field :request_signup_pseud, autocomplete_options("potential_requests?signup_id=#{offer_signup.id}", 
+          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+      <% else %>
+        <%= request_signup.pseud.byline %>
+      <% end %>
     </td>
     
     <td>
-      <% # offer an autocomplete of potential matches %>
-      <%= assignment_form.text_field :offer_signup_id, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
-        :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+      <% if request_signup %>
+        <% # offer an autocomplete of potential matches %>
+        <%= assignment_form.text_field :offer_signup_pseud, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
+          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+      <% else %>
+        <%= offer_signup.pseud.byline %>
+      <% end %>
     </td>
     
     <td><!--BACK END this td should probably be titled, but what with?-->

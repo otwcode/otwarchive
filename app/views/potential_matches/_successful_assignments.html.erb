@@ -1,24 +1,28 @@
-<% if @successful_assignments.present? %>
+<%= form_tag set_collection_assignments_path, :method => :put do %>
   <%= render "match_navigation", :top => true %>
-  <!--TABLEWATCH!!-->   
-  <table summary="<%= ts("Lists assignments with giver and provides options to reassign.") %>">
-    <caption><%= ts("Assignments with an Assigned Giver") %></caption>
-    <thead>
-      <tr>
-        <th scope="col"><%= ts("Pseud") %></th>
-        <th scope="col"><%= ts("Assigned Recipient") %></th>
-        <th scope="col"><%= ts("Assigned Giver") %></th>
-        <th scope="col"><%= ts("Potential Givers") %> <%= link_to_help "challenge-potential-giver" %></th>
-        <th scope="col"><%= ts("Write-In Pinch Hitter") %> <%= link_to_help "challenge-pinch-hitter" %></th>
-      </tr>
-    </thead>
+  <% if @assignments.empty? %>
+    <p><%= ts("None here! Please check the other tabs.") %></p>
+  <% else %>
 
-    <% @successful_assignments.each do |assignment| %>
-      <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
-    <% end %>
-  </table>
+    <!-- list all the requesters with their potential matches -->
+    <!--TABLEWATCH!!-->   
+    <table summary="<%= ts("Lists assignments and provides options to reassign.") %>">
+      <caption><%= ts("Assignments") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= ts("Assignment ID") %></th>
+          <th scope="col"><%= ts("Recipient") %></th>
+          <th scope="col"><%= ts("Giver") %> <%= link_to_help "challenge-potential-giver" %></th>
+          <th scope="col"><%= ts("Write-In Giver") %> <%= link_to_help "challenge-pinch-hitter" %></th>
+        </tr>
+      </thead>
 
-  <%= will_paginate @successful_assignments %>
-<% else %>
-  <p><%= ts("There are no complete assignments! Please check the other tabs for issues.") %></p>  
+      <% @assignments.each do |assignment| %>
+        <%= render "assignment_with_request", :assignment => assignment %>
+      <% end %>
+    </table>
+
+    <%= will_paginate @assignments %>
+    <%= render "match_navigation", :top => false %>
+  <% end %>
 <% end %>

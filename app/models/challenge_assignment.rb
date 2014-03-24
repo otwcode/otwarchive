@@ -81,7 +81,17 @@ class ChallengeAssignment < ActiveRecord::Base
     posted_ids = ChallengeAssignment.in_collection(collection).posted.value_of(:id)
     posted_ids.empty? ? in_collection(collection) : in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
   end    
-    
+  
+  def self.duplicate_givers(collection)
+    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").value_of(:offer_signup_id)
+    ChallengeAssignment.where(:offer_signup_id => ids)
+  end
+  
+  def self.duplicate_recipients(collection)
+    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").value_of(:request_signup_id)
+    ChallengeAssignment.where(:request_signup_id => ids)
+  end
+
   # has to be a left join to get assignments that don't have a collection item
   scope :unfulfilled,
     joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
@@ -155,12 +165,38 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   def offer_signup_pseud=(pseud_byline)
-    pseuds = Pseud.parse_byline(pseud_byline)
-    if pseuds.size == 1
-      pseud = pseuds.first
-      signup = ChallengeSignup.in_collection(self.collection).by_user(pseud.user).first
-      self.offer_signup = signup if signup
-    end  
+    if pseud_byline.blank?
+      self.offer_signup = nil
+    else
+      pseuds = Pseud.parse_byline(pseud_byline)
+      if pseuds.size == 1
+        pseud = pseuds.first
+        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        self.offer_signup = signup if signup
+      end  
+    end
+  end
+  
+  def offer_signup_pseud
+    self.offer_signup.try(:pseud).try(:byline) || ""
+  end
+    
+  def request_signup_pseud=(pseud_byline)
+    if pseud_byline.blank?
+      self.request_signup = nil
+    else
+      pseuds = Pseud.parse_byline(pseud_byline)
+      if pseuds.size == 1
+        pseud = pseuds.first
+        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        # If there's an existing assignment then this is a pinch recipient
+        self.request_signup = signup if signup
+      end
+    end
+  end
+
+  def request_signup_pseud
+    self.request_signup.try(:pseud).try(:byline) || ""
   end
 
   def title
@@ -178,6 +214,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def requesting_pseud
     request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
   end
+  
 
   def offer_byline
     offer_signup && offer_signup.pseud ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
@@ -410,23 +447,32 @@ class ChallengeAssignment < ActiveRecord::Base
   # (this is for after manual updates have left some users without an
   # assignment)
   def self.update_placeholder_assignments!(collection)
+    # delete any assignments that have neither an offer nor a request associated
+    collection.assignments.each do |assignment|
+      assignment.destroy if assignment.offer_signup.blank? && assignment.request_signup.blank?
+    end
+    
     collection.signups.each do |signup|
+      # if this signup has at least one giver now, get rid of any leftover placeholders
       if signup.request_assignments.count > 1
-        # get rid of empty placeholders no longer needed
         signup.request_assignments.each do |assignment|
           assignment.destroy if assignment.offer_signup.blank?
         end
       end
-      if signup.request_assignments.empty?
-        # not assigned to giver anymore! :(
-        assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
-        assignment.save
-      end
+      # if this signup has at least one recipient now, get rid of any leftover placeholders
       if signup.offer_assignments.count > 1
         signup.offer_assignments.each do |assignment|
           assignment.destroy if assignment.request_signup.blank?
         end
       end
+      
+      # if this signup doesn't have any giver now, create a placeholder
+      if signup.request_assignments.empty?
+        assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
+        assignment.save
+      end
+      
+      # if this signup doesn't have any recipient now, create a placeholder
       if signup.offer_assignments.empty?
         assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => signup)
         assignment.save

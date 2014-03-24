@@ -60,14 +60,30 @@ class PotentialMatchesController < ApplicationController
       @progress = PotentialMatch.progress(@collection)
     else
       # we have potential_matches and assignments     
-      @assignments_with_no_giver = @collection.assignments.with_request.with_no_offer
-      @assignments_with_no_recipient = @collection.assignments.with_offer.with_no_request
-
-      @assignments_with_no_potential_recipients = @assignments_with_no_recipient.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
-      @assignments_with_no_potential_givers = @assignments_with_no_giver.select {|assignment| assignment.request_signup.request_potential_matches.empty?}
       
-      # index the potential matches by request_signup
-      @successful_assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+      ### find assignments with no potential recipients
+      # first get signups with no offer potential matches
+      no_opms = ChallengeSignup.in_collection(@collection).no_potential_offers.value_of(:id)
+      @assignments_with_no_potential_recipients = @collection.assignments.where(:offer_signup_id => no_opms)
+      
+      ### find assignments with no potential giver
+      # first get signups with no request potential matches
+      no_rpms = ChallengeSignup.in_collection(@collection).no_potential_requests.value_of(:id)
+      @assignments_with_no_potential_givers = @collection.assignments.where(:request_signup_id => no_rpms)
+      
+      # list the assignments by requester
+      if params[:no_giver]
+        @assignments = @collection.assignments.with_request.with_no_offer.order_by_requesting_pseud
+      elsif params[:no_recipient]
+        @assignments = @collection.assignments.with_offer.with_no_request.order_by_offering_pseud
+      elsif params[:dup_giver]
+        @assignments = ChallengeAssignment.duplicate_givers(@collection).order_by_offering_pseud
+      elsif params[:dup_recipient]
+        @assignments = ChallengeAssignment.duplicate_recipients(@collection).order_by_requesting_pseud
+      else
+        @assignments = @collection.assignments.with_request.with_offer.order_by_requesting_pseud
+      end
+      @assignments = @assignments.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
     end
   end
 
