@@ -83,12 +83,12 @@ class ChallengeAssignment < ActiveRecord::Base
   end    
   
   def self.duplicate_givers(collection)
-    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").value_of(:offer_signup_id)
+    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").value_of(:offer_signup_id).compact
     ChallengeAssignment.where(:offer_signup_id => ids)
   end
   
   def self.duplicate_recipients(collection)
-    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").value_of(:request_signup_id)
+    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").value_of(:request_signup_id).compact
     ChallengeAssignment.where(:request_signup_id => ids)
   end
 
@@ -301,13 +301,23 @@ class ChallengeAssignment < ActiveRecord::Base
   # generate automatic match for a collection
   # this requires potential matches to already be generated
   def self.generate(collection)
+    $redis.set(progress_key(collection), 1)
     Resque.enqueue(ChallengeAssignment, :delayed_generate, collection.id)
   end
 
+  def self.progress_key(collection)
+    "challenge_assignment_in_progress_for_#{collection.id}"
+  end
+
+  def self.in_progress?(collection)
+    $redis.get(progress_key(collection)) ? true : false
+  end
+  
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
     settings = collection.challenge.potential_match_settings
 
+    $redis.set(progress_key(collection), 1)
     ChallengeAssignment.clear!(collection)
 
     # we sort signups into buckets based on how many potential matches they have
@@ -336,8 +346,8 @@ class ChallengeAssignment < ActiveRecord::Base
 
     # now that we have the buckets, we go through assigning people in order
     # of people with the fewest options first.
-    # if someone has no potential matches they still get an assignment, just with no
-    # match.
+    # (if someone has no potential matches they get a placeholder assignment with no
+    # matches.)
     0.upto(@max_match_count) do |count|
       if @request_match_buckets[count]
         @request_match_buckets[count].sort_by {rand}.each do |request_signup|
@@ -356,6 +366,7 @@ class ChallengeAssignment < ActiveRecord::Base
         end
       end
     end
+    $redis.del(progress_key(collection))
     UserMailer.potential_match_generation_notification(collection.id).deliver
   end
 

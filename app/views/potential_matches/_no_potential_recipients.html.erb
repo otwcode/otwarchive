@@ -1,8 +1,6 @@
 <% if @assignments_with_no_potential_recipients.present? %>
-  <h3><%= ts("Potential Matching Incomplete") %></h3>
-  <p><%= ts("Some participants have no potential recipients, which means they can't be assigned to anyone.") %></p>
   <div class="matching listbox group">  
-    <h3 class="heading"><%= ts("Participants with No Potential Recipients") %> <%= link_to_help "challenge-matching" %></h3>
+    <h3 class="heading"><%= ts("Participants with No Potential Recipients") %></h3>
     <dl class="index group">
       <% @assignments_with_no_potential_recipients.each do |assignment| %>
         <dt class="byline" title="<%= ts("pseud") %>"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>

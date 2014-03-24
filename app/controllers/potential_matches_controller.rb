@@ -54,11 +54,17 @@ class PotentialMatchesController < ApplicationController
   def index
     @settings = @collection.challenge.potential_match_settings
     
-    if PotentialMatch.in_progress?(@collection)
+    if (invalid_ids = PotentialMatch.invalid_signups_for(@collection)).present?
+      # there are invalid signups
+      @invalid_signups = ChallengeSignup.where(:id => invalid_ids)
+    elsif PotentialMatch.in_progress?(@collection)
+      # we're generating
       @in_progress = true
       @current_position = PotentialMatch.position(@collection)
       @progress = PotentialMatch.progress(@collection)
-    else
+    elsif ChallengeAssignment.in_progress?(@collection)
+      @assignment_in_progress = true
+    elsif @collection.potential_matches.count > 0
       # we have potential_matches and assignments     
       
       ### find assignments with no potential recipients
