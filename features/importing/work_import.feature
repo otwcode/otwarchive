@@ -109,12 +109,6 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-  @work_import_nul_character
-  Scenario: Import a work with the illegal 00 character (string terminator) and from an efiction exception site
-    When I import "http://www.the-archive.net/viewstory.php?sid=1909"
-    Then I should see "Preview"
-      And I should see "When I get out of here"
-
   @work_import_efiction
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"

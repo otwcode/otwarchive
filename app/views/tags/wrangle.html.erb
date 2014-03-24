@@ -48,7 +48,7 @@
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
     <li><%= link_to ts('all'), url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to ts('canonical'), url_for(:show => params[:show], :status => 'canonical') %></li>
-    <li><%= link_to ts('non-canonical'), url_for(:show => params[:show], :status => 'noncanonical') %></li>
+    <li><%= link_to ts('synonymous'), url_for(:show => params[:show], :status => 'synonymous'), :title => ts("non-canonical tags that are synonyms") %></li>
     <li><%= link_to ts('unfilterable'), url_for(:show => params[:show], :status => 'unfilterable'), :title => ts("non-canonical tags without synonyms") %></li>
     <li><%= link_to ts('unwrangled'), url_for(:show => params[:show], :status => 'unwrangled'), :title => ts("tags which were used on the same works but haven't been wrangled yet") %></li>
     <li><%= link_to ts('unwrangleable'), url_for(:show => params[:show], :status => 'unwrangleable'), :title => ts("tags marked unwrangleable") %></li>

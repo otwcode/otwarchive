@@ -1,4 +1,6 @@
 require 'uri'
+require 'cgi'
+require 'addressable/uri'
 
 class UrlFormatter
   
@@ -12,21 +14,29 @@ class UrlFormatter
     url
   end
   
-  # Remove anchors and query parameters
-  def minimal
-    url.gsub(/\?.*$/, "").gsub(/\#.*$/, "")
+  # Remove anchors and query parameters, preserve sid parameter for eFiction sites
+  def minimal (input = url)
+    uri = Addressable::URI.parse(input)
+    queries = CGI::parse(uri.query) unless uri.query.nil?
+    if queries.nil?
+      return input.gsub(/(\?|#).*$/, '')
+    else
+      queries.keep_if { |k,v| ['sid'].include? k }
+      querystring = ('?' + URI.encode_www_form(queries)) unless queries.empty?
+      return input.gsub(/(\?|#).*$/, '') << querystring.to_s
+    end
   end
   
   def no_www
-    url.gsub(/http:\/\/www\./, "http://")
+    minimal.gsub(/http:\/\/www\./, "http://")
   end
   
   def with_www
-    url.gsub(/http:\/\//, "http://www.")
+    minimal.gsub(/http:\/\//, "http://www.")
   end
   
   def encoded
-    URI.encode(minimal)
+    minimal URI.encode(url)
   end
   
   def decoded

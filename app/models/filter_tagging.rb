@@ -8,12 +8,19 @@ class FilterTagging < ActiveRecord::Base
   belongs_to :filterable, :polymorphic => true
 
   validates_presence_of :filter, :filterable
+  
+  after_create :expire_caches
+  before_destroy :expire_caches
 
   def self.find(*args)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
   def self.find_by_id(id)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
+  end
+  
+  def expire_caches
+    self.filter.update_works_index_timestamp!
   end
 
   # Is this a valid filter tagging that should actually exist?

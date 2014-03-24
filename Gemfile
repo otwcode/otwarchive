@@ -76,6 +76,9 @@ gem 'coveralls', require: false
 gem 'newrelic_rpm', "3.7.2.192"
 gem 'newrelic-redis'
 
+# For URL mangling
+gem 'addressable'
+
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
@@ -92,10 +95,9 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
-  gem 'pry'
 end
 
-group :development do
+group :test, :development do
   gem 'pry'
 end
 

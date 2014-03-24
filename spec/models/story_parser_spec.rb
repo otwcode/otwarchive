@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe StoryParser do
-  
+
   before(:each) do
     @sp = StoryParser.new
   end
@@ -94,10 +94,27 @@ describe StoryParser do
       #   @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
       # end
     end
-    
+
     # TODO: KNOWN_STORY_PARSERS
   end
-  
+
+  describe "check_for_previous_import" do
+    let(:location_with_www) { "http://www.testme.org/welcome_to_test_vale.html" }
+    let(:location_no_www)   { "http://testme.org/welcome_to_test_vale.html" }
+
+    it "should recognise previously imported www. works" do
+      @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
+
+      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception
+    end
+
+    it "should recognise previously imported non-www. works" do
+      @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
+
+      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+    end
+  end
+
   describe "#parse_common" do
     it "should convert relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
@@ -119,5 +136,4 @@ describe StoryParser do
       end
     end
   end
-    
 end
