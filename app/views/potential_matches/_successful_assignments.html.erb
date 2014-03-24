@@ -1,5 +1,4 @@
 <%= form_tag set_collection_assignments_path, :method => :put do %>
-  <%= render "match_navigation", :top => true %>
   <% if @assignments.empty? %>
     <p><%= ts("None here! Please check the other tabs.") %></p>
   <% else %>

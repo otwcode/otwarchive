@@ -2,6 +2,7 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
+  <li><h4 class="heading"><%= ts("Assignments:") %></h4></li> 
   <% if @assignments_with_no_potential_recipients.present? %>
     <li><%= span_if_current ts("No Potential Recipients"), collection_potential_matches_path(@collection, no_potential_recipients: true) %></li>
   <% end %>
@@ -9,10 +10,10 @@
     <li><%= span_if_current ts("No Potential Givers"), collection_potential_matches_path(@collection, no_potential_givers: true)%></li>
   <% end %>
   <% if @collection.assignments.with_offer.with_no_request.count > 0 %>
-    <li><%= span_if_current ts("No Recipient Assigned"), collection_potential_matches_path(@collection, no_recipient: true) %></li>
+    <li><%= span_if_current ts("No Recipient"), collection_potential_matches_path(@collection, no_recipient: true) %></li>
   <% end %>
   <% if @collection.assignments.with_request.with_no_offer.count > 0 %>
-    <li><%= span_if_current ts("No Giver Assigned"), collection_potential_matches_path(@collection, no_giver: true) %></li>
+    <li><%= span_if_current ts("No Giver"), collection_potential_matches_path(@collection, no_giver: true) %></li>
   <% end %>
   <% if ChallengeAssignment.duplicate_givers(@collection).count > 0 %>
     <li><%= span_if_current ts("Duplicate Givers"), collection_potential_matches_path(@collection, dup_giver: true) %></li>
@@ -21,7 +22,7 @@
     <li><%= span_if_current ts("Duplicate Recipients"), collection_potential_matches_path(@collection, dup_recipient: true) %></li>
   <% end %>
   <% if @collection.assignments.with_request.with_offer.count > 0 %>
-    <li><%= span_if_current ts("Complete Assignments"), collection_potential_matches_path(@collection, complete: true) %></li>
+    <li><%= span_if_current ts("Complete"), collection_potential_matches_path(@collection, complete: true) %></li>
   <% end %>
 </ul>
 <!--/subnav-->
