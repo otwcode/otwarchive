@@ -346,16 +346,17 @@ Feature: Collection
   When I follow "Matching"
   Then I should see "Matching for Yuletide"
     And I should see "Generate Potential Matches"
-    And I should see "No potential matches generated"
+    And I should see "No potential matches yet"
   When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
-    And I should not see "Missing Recipients"
-    And I should not see "Missing Givers"
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    And I should not see "No Recipient"
+    And I should not see "No Giver"
     And I should see "Regenerate Assignments"
     And I should see "Regenerate All Potential Matches"
     And I should see "Send Assignments"
@@ -368,9 +369,9 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
-    And I should not see "Missing Recipients"
-    And I should not see "Missing Givers"
+  Then I should see "Complete"
+    And I should not see "No Recipient"
+    And I should not see "No Giver"
     And 1 email should be delivered
 
   # mod sends assignments out
