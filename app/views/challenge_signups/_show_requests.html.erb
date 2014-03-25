@@ -4,7 +4,11 @@
   <div class="requests listbox group">
     <h3 class="heading">
       <%= ts("Requests") %>
-      <% if @challenge_assignment %> <%= ts("by %{requester}", :requester => @challenge_assignment.request_byline) %><% end %>
+      <% if @challenge_assignment %>
+        <%= ts("by %{requester}", :requester => @challenge_assignment.request_byline) %>
+        <% user = @challenge_assignment.try(:request_signup).try(:pseud).try(:user) %>
+        <% if user %><%= mailto_link user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %><% end %>
+      <% end %>
     </h3>
     <ol class="index group">
       <% challenge_signup.requests.each_with_index do |request, index| %>

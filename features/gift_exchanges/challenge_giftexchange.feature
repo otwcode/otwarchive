@@ -144,7 +144,8 @@ Feature: Gift Exchange Challenge
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
   
   Scenario: Invalid signups are caught before generation
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
@@ -167,7 +168,8 @@ Feature: Gift Exchange Challenge
     And I have generated matches for "Awesome Gift Exchange"
   Then I should see "No Potential Givers"
     And I should see "No Potential Recipients"
-    And I should see "Regenerate Matches For Mismatch"
+  When I follow "No Potential Givers"
+    Then I should see "Regenerate Matches For Mismatch"
   When I follow "Edit"
     And I check the 1st checkbox with the value "Stargate Atlantis"
     And I uncheck the 1st checkbox with the value "Bad Choice"
@@ -175,6 +177,7 @@ Feature: Gift Exchange Challenge
     And I uncheck the 2nd checkbox with the value "Bad Choice"
     And I submit
     And I follow "Matching"
+    And I follow "No Potential Recipients"
     And I follow "Regenerate Matches For Mismatch"
   Then I should see "Matches are being regenerated for Mismatch"
   When the system processes jobs
@@ -188,7 +191,7 @@ Feature: Gift Exchange Challenge
     And I reload the page
   Then I should not see "No Potential Givers"
     And I should not see "No Potential Recipients"
-    And I should see "Main Assignments"
+    And I should see "Complete"
     
   Scenario: Correct potential matches are generated
   
