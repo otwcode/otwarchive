@@ -5,9 +5,9 @@ class Question < ActiveRecord::Base
   attr_protected :content_sanitizer_version
   attr_protected :screencast_sanitizer_version
 
-  validates_presence_of :question
-  validates_presence_of :anchor
-  validates_presence_of :content
+  validates_presence_of :question, :before => :create
+  validates_presence_of :anchor, :before => :create
+  validates_presence_of :content, :before => :create
 
   validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN,
                       :too_short => ts("must be at least %{min} letters long.", :min => ArchiveConfig.CONTENT_MIN)
