@@ -1,6 +1,11 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
+  before_filter :get_faq_translations, :only => [:new, :create, :edit, :update, :update_positions]
+
+  def get_faq_translations
+    @translatable_faqs = ArchiveFaq.non_translated.order("created_at ASC")
+  end
 
   # GET /archive_faqs
   # GET /archive_faqs.xml
@@ -34,7 +39,6 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/new.xml
   def new
     @archive_faq = ArchiveFaq.new
-    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
     1.times { @archive_faq.questions.build}
     respond_to do |format|
       format.html # new.html.erb
@@ -64,7 +68,6 @@ class ArchiveFaqsController < ApplicationController
   # POST /archive_faqs.xml
   def create
     @archive_faq = ArchiveFaq.new(params[:archive_faq])
-    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
     respond_to do |format|
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
@@ -84,7 +87,6 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1.xml
   def update
     @archive_faq = ArchiveFaq.find(params[:id])
-    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
     respond_to do |format|
       if @archive_faq.update_attributes(params[:archive_faq])
         flash[:notice] = 'ArchiveFaq was successfully updated.'
@@ -101,7 +103,6 @@ class ArchiveFaqsController < ApplicationController
   def update_positions
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])
-      @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
