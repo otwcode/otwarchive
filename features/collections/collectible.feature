@@ -50,7 +50,9 @@ Feature: Collectible items
       And I have a bookmark for "Tundra penguins"
     When I add my bookmark to the collection
     Then I should see "Added"
-    When I follow "Various Penguins"
+    # caching prevents the link from showing up immediately
+    # When I follow "Various Penguins"
+    When I go to "Various Penguins" collection's page
     Then I should see "Bookmarks (1)" within "#dashboard"
       And I should see "Tundra penguins"
 

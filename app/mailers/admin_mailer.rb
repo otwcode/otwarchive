@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)

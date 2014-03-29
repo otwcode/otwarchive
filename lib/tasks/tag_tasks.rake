@@ -21,6 +21,7 @@ namespace :Tag do
       relationship.update_attribute(:has_characters, true) unless relationship.characters.blank?
     end
   end
+
   desc "Delete unused tags"
   task(:delete_unused => :environment) do
     deleted_names = []
@@ -35,6 +36,12 @@ namespace :Tag do
       puts deleted_names.join(", ")
     end
   end
+  
+  desc "Delete unused admin post tags"
+  task(:delete_unused_admin_post_tags => :environment) do
+    AdminPostTag.joins("LEFT JOIN `admin_post_taggings` ON admin_post_taggings.admin_post_tag_id = admin_post_tags.id").where("admin_post_taggings.id IS NULL").destroy_all
+  end
+
   desc "Clean up orphaned taggings"
   task(:clean_up_taggings => :environment) do
     Tagging.find_each {|t| t.destroy if t.taggable.nil?}

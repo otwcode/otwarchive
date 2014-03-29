@@ -86,7 +86,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %>
+        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, a podfic, or was inspired by another work") %> 
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -213,7 +213,7 @@
           <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
         </select>
       </dd>
-      <dt class="skin"><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dt class="skin"><%= f.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
         <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
     </dl>
