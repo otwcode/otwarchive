@@ -37,7 +37,6 @@ public
   def self.clear!(collection)
     # destroy all potential matches in this collection
     PotentialMatch.destroy_all(["collection_id = ?", collection.id])
-    PotentialMatch.clear_invalid_signups(collection)
   end
 
   def self.set_up_generating(collection)
@@ -81,6 +80,7 @@ public
     collection = Collection.find(collection_id)
     
     # check for invalid signups
+    PotentialMatch.clear_invalid_signups(collection)    
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
     unless invalid_signup_ids.empty?
       invalid_signup_ids.each {|sid| $redis.sadd invalid_signup_key(collection), sid}
@@ -106,7 +106,6 @@ public
 
     end
     # TODO: for any signups with no potential matches try regenerating?
-    
     PotentialMatch.finish_generation(collection)
   end
   
