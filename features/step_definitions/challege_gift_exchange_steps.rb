@@ -153,7 +153,26 @@ Given /^I create an invalid signup in the gift exchange "([^\"]*)"$/ do |challen
   # create an invalid signup by deleting the first one's offers,
   # bypassing the validation checks
   collection.signups.first.offers.delete_all
-end  
+end
+
+When /^I remove a recipient$/ do
+  step %{I fill in the 1st field with id matching "_request_signup_pseud" with ""}
+end
+
+When /^I assign a recipient to herself$/ do
+  first_recip_field = page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/_request_signup_pseud/)}[0]
+  recip = first_recip_field['value']
+  id = first_recip_field['id']
+  if id.match(/assignments_(\d+)_request/)
+    num = $1
+    fill_in "challenge_assignments_#{num}_offer_signup_pseud", :with => recip
+  end
+end
+
+When /^I manually destroy the assignments for "([^\"]*)"$/ do |title|
+  collection = Collection.find_by_title(title)
+  collection.assignments.destroy_all
+end
 
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}
