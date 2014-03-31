@@ -157,9 +157,51 @@ Feature: Gift Exchange Challenge
     And I wait 3 seconds
   Then 1 email should be delivered to "mod1"
     And the email should contain "invalid sign-up"
-  When I reload the page
-    Then I should see "Generate Potential Matches"
+  When I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Generate Potential Matches"
+    And I should see "invalid sign-ups"
+    
+  Scenario: Assignments can be updated and cannot be sent out until everyone is assigned
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I remove a recipient
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should see "No Recipient"
+    And I should see "No Giver"
+  When I follow "Send Assignments"
+  Then I should see "aren't assigned"
+  When I follow "No Giver"
+    And I assign a pinch hitter
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should not see "No Giver"
+  When I follow "No Recipient"
+    And I assign a pinch recipient
+    And I press "Save Assignment Changes"
+    And I should not see "No Recipient"
+  When I follow "Send Assignments"
+  Then I should see "Assignments are now being sent out"
   
+  Scenario: Issues with assignments
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I assign a recipient to herself
+    And I press "Save Assignment Changes"
+  Then I should not see "Assignments updated"
+    And I should see "do not match"  
+  When I manually destroy the assignments for "Awesome Gift Exchange"
+    And I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Regenerate Assignments"
+    And I should see "Regenerate All Potential Matches"
+    And I should see "try regenerating assignments"
+  When I follow "Regenerate Assignments"
+    And the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    
   Scenario: Matches can be regenerated for a single signup
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I am logged in as "Mismatch"
@@ -193,10 +235,6 @@ Feature: Gift Exchange Challenge
     And I should not see "No Potential Recipients"
     And I should see "Complete"
     
-  Scenario: Correct potential matches are generated
-  
-
-
   Scenario: Assignments can be sent
 
   Given the gift exchange "Awesome Gift Exchange" is ready for matching

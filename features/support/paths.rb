@@ -109,6 +109,8 @@ module NavigationHelpers
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by_title($1))
+    when /^"(.*)" gift exchange matching page$/i
+      collection_potential_matches_path(Collection.find_by_title($1))
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)"$/i
