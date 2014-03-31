@@ -179,7 +179,6 @@ When /^I assign a pinch hitter$/ do
 end
 
 When /^I assign a pinch recipient$/ do
-  binding.pry
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
   pseud = Pseud.find_by_name(name)
   request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
