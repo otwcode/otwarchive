@@ -174,6 +174,18 @@ When /^I manually destroy the assignments for "([^\"]*)"$/ do |title|
   collection.assignments.destroy_all
 end
 
+When /^I assign a pinch hitter$/ do
+  step %{I fill in the 1st field with id matching "pinch_hitter_byline" with "mod1"}
+end
+
+When /^I assign a pinch recipient$/ do
+  binding.pry
+  name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
+  pseud = Pseud.find_by_name(name)
+  request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
+end
+
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}
   step %{I sign up for "#{challengename}" with combination A}

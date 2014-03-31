@@ -171,6 +171,21 @@ Feature: Gift Exchange Challenge
     And I should see "No Giver"
   When I follow "Send Assignments"
   Then I should see "aren't assigned"
+  When I follow "No Giver"
+    And I assign a pinch hitter
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should not see "No Giver"
+  When I follow "No Recipient"
+    And I assign a pinch recipient
+    And I press "Save Assignment Changes"
+    And I should not see "No Recipient"
+  When I follow "Send Assignments"
+  Then I should see "Assignments are now being sent out"
+  
+  Scenario: Issues with assignments
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
   When I assign a recipient to herself
     And I press "Save Assignment Changes"
   Then I should not see "Assignments updated"
@@ -180,7 +195,13 @@ Feature: Gift Exchange Challenge
   Then I should see "Regenerate Assignments"
     And I should see "Regenerate All Potential Matches"
     And I should see "try regenerating assignments"
-  
+  When I follow "Regenerate Assignments"
+    And the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    
   Scenario: Matches can be regenerated for a single signup
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I am logged in as "Mismatch"

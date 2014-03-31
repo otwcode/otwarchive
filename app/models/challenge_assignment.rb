@@ -35,10 +35,10 @@ class ChallengeAssignment < ActiveRecord::Base
   
   scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
 
-  scope :with_offer, where("offer_signup_id IS NOT NULL")
+  scope :with_offer, where("offer_signup_id IS NOT NULL OR pinch_hitter_id IS NOT NULL")
   scope :with_request, where("request_signup_id IS NOT NULL")
   scope :with_no_request, where("request_signup_id IS NULL")
-  scope :with_no_offer, where("offer_signup_id IS NULL")
+  scope :with_no_offer, where("offer_signup_id IS NULL AND pinch_hitter_id IS NULL")
 
   # sorting by request/offer
   

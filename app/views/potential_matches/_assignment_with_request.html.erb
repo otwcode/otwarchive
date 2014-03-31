@@ -7,7 +7,7 @@
       <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
       <%= link_to assignment.id, collection_assignment_path(@collection, assignment) %>
     </th>
-    <td>
+    <td id="request_signup_for_<%= assignment.id %>">
       <% if offer_signup %>
         <% # offer an autocomplete of potential matches %>
         <%= assignment_form.text_field :request_signup_pseud, autocomplete_options("potential_requests?signup_id=#{offer_signup.id}", 
@@ -17,7 +17,7 @@
       <% end %>
     </td>
     
-    <td>
+    <td id="offer_signup_for_<%= assignment.id %>">
       <% if request_signup %>
         <% # offer an autocomplete of potential matches %>
         <%= assignment_form.text_field :offer_signup_pseud, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
