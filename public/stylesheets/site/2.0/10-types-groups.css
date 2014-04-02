@@ -130,6 +130,15 @@ dl.index dd {
   background: #ededed;
 }
 
+dl.index dd:after {
+  content: " ";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+
 dl.index dd p, dl.index dd .heading, dl.index ul {
   display: inline-block;
 }
