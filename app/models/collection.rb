@@ -130,7 +130,7 @@ class Collection < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => ts('must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
