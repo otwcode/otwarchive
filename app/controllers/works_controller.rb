@@ -696,7 +696,7 @@ public
     end
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
+      select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
   end
 
   def edit_multiple
