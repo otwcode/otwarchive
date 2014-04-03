@@ -144,7 +144,7 @@
   font-size: 1.08em;
   margin: auto;
   max-width: 72em;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 }
 
