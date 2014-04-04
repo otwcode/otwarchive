@@ -292,7 +292,7 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created.')
+          flash[:notice] = ts('Draft was successfully created. It will be deleted on %{deletion_date}', :deletion_date => view_context.date_in_user_time_zone(@work.created_at + 1.month))
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
@@ -356,7 +356,7 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created.')
+        flash[:notice] = ts('Draft was successfully created. It will be deleted on %{deletion_date}', :deletion_date => view_context.date_in_user_time_zone(@work.created_at + 1.month))
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
