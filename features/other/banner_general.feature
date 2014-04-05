@@ -4,9 +4,9 @@ Feature: General notice banner
 Scenario: Banner is blank until admin sets it
 
   When I am on the home page
-  Then I should not see "Hide this banner"
+  Then I should not see "×"
   When I am logged in as "newname"
-  Then I should not see "Hide this banner"
+  Then I should not see "×"
 
 Scenario: Admin can set banner
 
@@ -34,22 +34,13 @@ Scenario: User can follow a link in the banner
   When I follow "OTWtest"
   Then I should see "Support and Feedback"
 
-Scenario: User can turn off banner using words
+Scenario: User can turn off banner using button
 
   When an admin sets a custom banner notice
   When I am logged in as "newname"
   When I am on my user page
-  When I press "Hide this banner"
+  When I press "×"
   Then I should not see "Custom notice words"
-
-Scenario: User can turn off banner using X button
-
-  When an admin sets a custom banner notice
-  When I am logged in as "newname"
-  When I am on my user page
-  When I follow "x" within "#notice-banner .submit"
-  #Cucumber apparently doesn't like Javascript
-  #Then I should not see "Custom notice words"
 
 Scenario: Banner stays off when logging out and in again
   
@@ -66,24 +57,15 @@ Scenario: logged out user can also see banner
   When an admin sets a custom banner notice
   Then the banner notice for a logged-out user should be set to "Custom notice"
   
-Scenario: logged out user hides banner using words
+Scenario: logged out user hides banner
 
   When an admin sets a custom banner notice
   When I am logged out
   When I am on the works page
-  When I follow "Hide this banner"
+  When I follow "×"
   Then I should not see "Custom notice words"
-  
-Scenario: logged out user hides banner using X
-
-  When an admin sets a custom banner notice
-  When I am logged out
-  When I am on the works page
-  When I follow "x" within "#notice-banner .submit"
-  #Cucumber apparently doesn't like Javascript
-  #Then I should not see "Custom notice words"
-  
-Scenario: User can turn off banner in preferences if they don't have Javascript
+   
+Scenario: User can turn off banner in preferences
 
   When an admin sets a custom banner notice
   When I am logged in as "newname"

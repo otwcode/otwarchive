@@ -61,10 +61,19 @@
     <h3 class="landmark heading"><%= ts("Admin Banner") %></h3>
     <dl>
   
-      <dt><%= f.label :banner_text, ts("Banner notice") %></dt>
+      <dt><%= f.label :banner_text, ts("Banner text") %></dt>
       <dd>
         <p><%= allowed_html_instructions %></p>
         <%= f.text_area :banner_text %>
+        <p class="footnote"><%= ts("To turn the admin banner off, delete the banner text.") %></p>
+      </dd>
+      <dt>Banner type</dt>
+      <dd>
+        <ul>
+          <li><input type="radio">Default</li>
+          <li><input type="radio">Event (For membership drives, celebrations, etc)</li> 
+          <li><input type="radio">Alert (For bugs, important changes, expected downtime, etc)</li>
+        </ul>
       </dd>
 
     </dl>
