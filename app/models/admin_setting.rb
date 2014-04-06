@@ -9,7 +9,7 @@ class AdminSetting < ActiveRecord::Base
   before_update :check_filter_status
   after_save :expire_cached_settings
   
-  attr_protected :banner_text_sanitizer_version
+  #attr_protected :banner_text_sanitizer_version
   
   belongs_to :default_skin, :class_name => 'Skin'
 
@@ -77,9 +77,9 @@ class AdminSetting < ActiveRecord::Base
   end
   
   # update admin banner setting for all users when banner notice is changed
-  def self.banner_on
-    Preference.update_all("banner_seen = false")
-  end
+  #def self.banner_on
+    #Preference.update_all("banner_seen = false")
+  #end
     
   def self.set_stats_updated_at(time)
     if self.first 
@@ -93,7 +93,7 @@ class AdminSetting < ActiveRecord::Base
   def expire_cached_settings
     unless Rails.env.development?
       Rails.cache.delete("admin_settings")
-      Rails.cache.delete("banner_text")
+      #Rails.cache.delete("banner_text")
     end
   end
 

@@ -20,7 +20,13 @@
       <li><%= span_if_current ts("Known Issues"), known_issues_path %></li>
     </ul>
   </li>
-  <li><%= link_to ts("Settings"), admin_settings_path %></li>
+  <li class="dropdown">
+    <%= link_to ts("Settings"), admin_settings_path %>
+    <ul class="menu" role="menu">
+      <li><%= span_if_current ts("Settings"), admin_settings_path %></li>
+      <li><%= span_if_current ts("Banners"), admin_banners_path %></li>
+    </ul>
+  </li>
   <li class="dropdown">
     <%= link_to ts("Skins"), admin_skins_path %>
     <ul class="menu" role="menu">
