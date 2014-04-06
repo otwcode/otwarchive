@@ -42,8 +42,8 @@ class ChaptersController < ApplicationController
     if !@chapters.include?(@chapter)
       access_denied
     else
+      chapter_position = @chapters.index(@chapter)
       if @chapters.length > 1
-        chapter_position = @chapters.index(@chapter)
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
