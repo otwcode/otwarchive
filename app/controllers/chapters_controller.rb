@@ -93,11 +93,10 @@ class ChaptersController < ApplicationController
   end
 
   def draft_flash_message(work)
-    delete_schedule = work.posted ? "" : " (unposted work drafts are automatically deleted one " +
-      "month after creation; this chapter's work is scheduled for deletion at " +
-      "#{view_context.date_in_user_time_zone(work.created_at + 1.month)})"
-      # "#{(work.created_at + 1.week).in_time_zone(User.current_user.preference.time_zone)})"
-    flash[:notice] = ts("This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted#{delete_schedule}.")
+    delete_schedule = work.posted ? "" : " (unposted work drafts are <strong>automatically deleted</strong> one " +
+      "month after creation; this chapter's work is scheduled for deletion on " +
+      "#{view_context.time_in_zone(work.created_at + 1.month)})"
+    flash[:notice] = ts("This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted#{delete_schedule}.").html_safe
   end
 
   # POST /work/:work_id/chapters
