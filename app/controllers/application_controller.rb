@@ -117,20 +117,8 @@ public
     end
   end
   
-  before_filter :fetch_admin_banner
-  def fetch_admin_banner
-    if Rails.env.development?
-      @admin_banner = AdminBanner.first
-      # When I first run the migration, I get the error "undefined method `banner_text' for nil:NilClass." If I add @admin_banner.nil? to the unless statement, that error goes away, but then http://sarken.archiveofourown.org/admin/banners gives an error that "No route matches {:action=>"show", :controller=>"admin/banners", :id=>nil}."
-      unless @admin_banner.banner_text.blank?
-        @bannertext = sanitize_field(@admin_banner, :banner_text).html_safe
-      end
-    else
-      @admin_banner = Rails.cache.fetch("banner_text"){AdminBanner.first}
-      unless @admin_banner.banner_text.blank?
-        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_banner, :banner_text).html_safe}
-      end
-    end
+  def load_admin_banner
+    @admin_banner = AdminBanner.active
   end
 
   # store previous page in session to make redirecting back possible

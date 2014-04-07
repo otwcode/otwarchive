@@ -133,7 +133,11 @@ Otwarchive::Application.routes.draw do
 
   namespace :admin do
     resources :activities, :only => [:index, :show]
-    resources :banners
+    resources :banners do
+      member do
+        get :confirm_delete
+      end
+    end
     resources :settings
     resources :skins do
       collection do

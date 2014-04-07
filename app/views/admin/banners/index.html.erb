@@ -1,50 +1,33 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('Admin Banner') %></h2>
-<!--/descriptions-->
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= ts('Banners') %></h2>
+  <!--/descriptions-->
 
-<!--main content-->
-<%= form_for @admin_banner, :url => admin_banner_path(@admin_banner), html: { method: "put", class: "manage" } do |f| %>
-  <%= error_messages_for @admin_banner %>
-  
-  <fieldset>
-    <legend><%= ts("Admin Banner") %></legend>
-    <h3 class="landmark heading"><%= ts("Admin Banner") %></h3>
-    <dl>
-  
-      <dt><%= f.label :banner_text, ts("Banner text") %></dt>
-      <dd>
-        <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :banner_text %>
-        <p class="footnote"><%= ts("To turn the admin banner off, delete the banner text.") %></p>
-      </dd>
-      <dt><%= f.label :banner_type, ts("Banner type") %></dt>
-      <dd>
-        <ul>
+  <!--subnav-->
+  <%= render 'navigation' %>
+  <!--/subnav-->
+
+  <!--main content-->
+  <ul class="banners index group">
+    <% for admin_banner in @admin_banners %>
+      <li class="blurb">
+        <% # Before the announcement class, put in the type string. %>
+        <div class="<%= admin_banner.type.to_s %> announcement group">
+          <blockquote class="userstuff">
+            <%=raw sanitize_field(admin_banner, :content) %>
+          </blockquote>
+        </div>
+        <ul class="actions">
           <li>
-            <%= f.radio_button :banner_type, "", :checked => true %>
-            <%= f.label :banner_type, ts("Default") %>
+            <span class="active current"><%= ts("Active") %></span>
+            <span class="inactive"><%= ts("Inactive") %></span>
           </li>
-          <li>
-            <%= f.radio_button :banner_type, "event" %>
-            <%= f.label :banner_type_event, ts("Event (For membership drives, celebrations, etc.)") %>
-          </li>
-          <li>
-            <%= f.radio_button :banner_type, "alert" %>
-            <%= f.label :banner_type_alert, ts("Alert (For bugs, important changes, expected downtime, etc.)") %>
-          </li>
+          <li><%= link_to ts("Edit"), edit_admin_banner_path(admin_banner) %></li>
+          <li><%= link_to ts("Delete"), confirm_delete_admin_banner_path(admin_banner), :confirm => ts("Are you sure you want to delete this banner?") %></li>
         </ul>
-      </dd>
+      </li>
+    <% end %>
+  </ul>
 
-    </dl>
-  </fieldset>
-  
-  <fieldset>
-    <legend><%= ts("Actions") %></legend>
-    <h3 class="landmark heading"><%= ts("Actions") %></h3>
-    
-    <p class="submit actions"><%= f.submit ts('Update') %></p>
-  </fieldset>
-
-<% end %>
-
-<!--/content-->
+  <!--/content-->
+</div>

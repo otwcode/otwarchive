@@ -374,15 +374,6 @@ namespace :After do
       fandom.save
     end
   end
-  
-  # Do I need to do this?
-  desc "Migrate admin banner to new table"
-  task(:move_admin_banner => :environment) do
-    # What should this be?
-    AdminSetting.first do |as|
-      AdminBanner.create(text: as.banner_text, text_sanitizer_version: as.banner_text_sanitizer_version)
-    end  
-  end
 
 end # this is the end that you have to put new tasks above
 
