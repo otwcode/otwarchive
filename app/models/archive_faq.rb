@@ -21,7 +21,7 @@ class ArchiveFaq < ActiveRecord::Base
           (@changed_questions ||= []) << question
         end
       end
-      # A Question could have changed, or the Title of the FAQ Category
+      # A Question or the Title of the FAQ Category could have changed
       if @changed_questions.present? || self.title_changed?
         AdminMailer.edited_faq(self.id, User.current_user.login).deliver
       end
