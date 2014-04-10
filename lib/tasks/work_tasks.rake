@@ -2,7 +2,7 @@ namespace :work do
   desc "Purge drafts created more than a week ago"
   task(:purge_old_drafts => :environment) do
      count = Work.purge_old_drafts
-     puts "Unposted works (#{count}) created more than one week ago have been purged"
+     puts "Unposted works (#{count}) created more than one month ago have been purged"
   end
 
   desc "create missing hit counters"
