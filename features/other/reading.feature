@@ -150,7 +150,7 @@ Feature: Reading count
   When I go to the works page
     And I follow "some work"
     And I follow "Next Chapter"
-  Then I should see "Second blah blah"
+  Then I should see "la la la la la la la la la la la"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
