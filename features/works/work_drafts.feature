@@ -42,7 +42,7 @@ Feature: Work Drafts
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"
     And I press "Preview"
-  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted (unposted work drafts are automatically deleted one month after creation; this chapter's work is scheduled for deletion on"
+  Then I should see "This is a draft chapter in an unposted work. The work will be automatically deleted on"
 
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
