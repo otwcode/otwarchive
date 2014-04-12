@@ -85,6 +85,7 @@ Feature: Create and Edit Series
     # TODO fix issue 3461 (manifests when perform_caching: true)
       # And I should see "Part 1 of the Black Beauty series" within "dd.series"
     When I press "Update"
+      And all search indexes are updated
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "div#series"
