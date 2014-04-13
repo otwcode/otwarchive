@@ -69,7 +69,7 @@ gem "google_visualr", ">= 2.1"
 # gem 'copycopter_client', '~> 2.0.1'
 
 # Coveralls for code test coverage
-gem 'coveralls', require: false
+gem 'coveralls', :require => false
 
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
@@ -86,7 +86,7 @@ group :test do
   gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails', :require => false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
