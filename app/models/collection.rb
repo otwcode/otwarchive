@@ -167,6 +167,9 @@ class Collection < ActiveRecord::Base
   scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
+  scope :no_challenge, where(challenge_type: nil)
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
@@ -430,6 +433,15 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
+    if filters[:challenge_type].present?
+      if filters[:challenge_type] == "gift_exchange"
+        query = query.gift_exchange
+      elsif filters[:challenge_type] == "prompt_meme"
+        query = query.prompt_meme
+      elsif filters[:challenge_type] == "no_challenge"
+        query = query.no_challenge
+      end
+    end
     query = query.order(sort)
 
     if !filters[:fandom].blank?
