@@ -104,11 +104,11 @@ For practicality, /home .docs have been given the .userstuff class as well, to s
   padding: 0 1.5em;
 }
 
-.docs .userstuff .toc li {
+.docs .userstuff .toc li, .faq .toc li {
   list-style-type: upper-roman;
 }
 
-.docs .userstuff .toc {
+.docs .userstuff .toc, .faq .toc {
   margin: 3.215em auto;
 }
 
