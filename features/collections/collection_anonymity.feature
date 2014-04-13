@@ -27,6 +27,7 @@ Feature: Collection
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I press "Post Without Preview"
+    And all search indexes are updated
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
     And I should see "Old Snippet"

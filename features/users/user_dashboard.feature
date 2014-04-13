@@ -164,6 +164,7 @@ Feature: User dashboard
 
   # Check the Bookmarks link for the user
   When I go to meatloaf's user page
+    And all search indexes are updated
   Then I should see "Recent bookmarks"
     And I should see "Bookmarks (7)" within "#user-bookmarks"
   When I follow "Bookmarks (7)" within "#user-bookmarks"
