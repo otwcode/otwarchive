@@ -21,7 +21,8 @@ module WorksHelper
     end
     list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 
-    if (language = work.language.name).present?
+    if work.language.present?
+      language = work.language.name
       list.concat([[ts('Language:'), language]])
     end
 
