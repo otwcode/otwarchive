@@ -50,6 +50,10 @@ class CollectionSweeper < ActionController::Caching::Sweeper
       # expire the collection blurb and dashboard and profile
       expire_fragment("collection-blurb-#{collection.id}")
       expire_fragment("collection-profile-#{collection.id}")
+
+    end
+    if record.is_a?(CollectionItem) && record.item_type == "Bookmark"
+      expire_fragment("bookmark-blurb-#{record.id}")
     end
   end
 
