@@ -1,5 +1,5 @@
 <%= form_tag set_collection_assignments_path, :method => :put do %>
-  <% if @assignments.empty? %>
+  <% if @assignments.blank? %>
     <p><%= ts("None here! Please check the other tabs.") %></p>
   <% else %>
 
@@ -19,11 +19,14 @@
       </thead>
 
       <% @assignments.each do |assignment| %>
-        <%= render "assignment_with_request", :assignment => assignment %>
+        <%= render "potential_matches/assignment_with_request", :assignment => assignment %>
       <% end %>
     </table>
 
-    <%= will_paginate @assignments %>
-    <%= render "match_navigation", :top => false %>
+    <% unless @assignments.is_a?(Array) %>
+      <% # if these are bad assignments with errors then it's an array and can't be paginated %>
+      <%= will_paginate @assignments %>
+    <% end %>
   <% end %>
+  <%= render "potential_matches/match_navigation" %>
 <% end %>

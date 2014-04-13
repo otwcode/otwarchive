@@ -42,8 +42,8 @@ class ChaptersController < ApplicationController
     if !@chapters.include?(@chapter)
       access_denied
     else
+      chapter_position = @chapters.index(@chapter)
       if @chapters.length > 1
-        chapter_position = @chapters.index(@chapter)
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
@@ -93,11 +93,7 @@ class ChaptersController < ApplicationController
   end
 
   def draft_flash_message(work)
-    delete_schedule = work.posted ? "" : " (unposted work drafts are automatically deleted one " +
-      "month after creation; this chapter's work is scheduled for deletion at " +
-      "#{view_context.date_in_user_time_zone(work.created_at + 1.month)})"
-      # "#{(work.created_at + 1.week).in_time_zone(User.current_user.preference.time_zone)})"
-    flash[:notice] = ts("This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted#{delete_schedule}.")
+    flash[:notice] = work.posted ? ts("This is a draft chapter in a posted work. It will be kept unless the work is deleted.") : ts("This is a draft chapter in an unposted work. The work will be <strong>automatically deleted</strong> on #{view_context.time_in_zone(work.created_at + 1.month)}.").html_safe
   end
 
   # POST /work/:work_id/chapters

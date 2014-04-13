@@ -122,7 +122,7 @@ class TagsController < ApplicationController
         end
       else
         if %w(warnings freeforms).include?(params[:tag_type])
-          @display_tags = @display_creation.send(params[:tag_type]).sort
+          @display_tags = @display_creation.send(params[:tag_type])
         end
       end
       @display_category = @display_tags.first.class.name.downcase.pluralize

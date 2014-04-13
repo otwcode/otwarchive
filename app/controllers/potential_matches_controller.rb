@@ -64,6 +64,8 @@ class PotentialMatchesController < ApplicationController
       @progress = PotentialMatch.progress(@collection)
     elsif ChallengeAssignment.in_progress?(@collection)
       @assignment_in_progress = true
+    elsif @collection.potential_matches.count > 0 && @collection.assignments.count == 0
+      flash[:error] = ts("There has been an error in the potential matching. Please first try regenerating assignments, and if that doesn't work, all potential matches. If the problem persists, please contact Support.")
     elsif @collection.potential_matches.count > 0
       # we have potential_matches and assignments     
       
