@@ -7,7 +7,9 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
-  
+
+  cache_sweeper :bookmark_sweeper
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]

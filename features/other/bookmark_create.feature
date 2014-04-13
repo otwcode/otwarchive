@@ -225,29 +225,31 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I am logged in as "bookmarker" with password "password"
     And I view the work "The Murder of Sherlock Holmes"
     And I follow "Edit Bookmark"
-    And I fill in "bookmark_collection_names" with "mrs_pots"
-    And I press "bookmark_submit"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,mrs_pots"
+    And I press "Edit" within "div#bookmark-form"
     And all search indexes are updated
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
   When I go to bookmarker's bookmarks page
     Then I should see "The Murder of Sherlock Holmes"
-    And I should see "Bookmarker's Collections: JBs Greatest, Mrs. Pots"
+    And I should see "JBs Greatest" within "ul.meta"
+    And I should see "Mrs. Pots" within "ul.meta"
     And I should see "The collection JBs Greatest is currently moderated."
   When I go to the bookmarks page
     Then I should see "The Murder of Sherlock Holmes"
-    And I should see "Bookmarker's Collections: JBs Greatest, Mrs. Pots"
+    And I should see "JBs Greatest" within "ul.meta"
+    And I should see "Mrs. Pots" within "ul.meta"
     And I should see "The collection JBs Greatest is currently moderated."
   When I log out
     And I am logged in as "otheruser" with password "password"
     And I go to bookmarker's bookmarks page
   Then I should see "The Murder of Sherlock Holmes"
-    And I should not see "Bookmarker's Collections: JBs Greatest, Mrs. Pots"
+    And I should not see "JBs Greatest" within "ul.meta"
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
   When I go to the bookmarks page
     Then I should see "The Murder of Sherlock Holmes"
-    And I should not see "Bookmarker's Collections: JBs Greatest, Mrs. Pots"
+    And I should not see "JBs Greatest" within "ul.meta"
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
 

@@ -1,6 +1,7 @@
 <% # expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
-  <% cache("bookmark-blurb-#{bookmark.id}") do %>
+  <% is_author_of?(bookmark) ? temp = "bookmark-owner-blurb-#{bookmark.id}"  : temp = "bookmark-blurb-#{bookmark.id}" %>
+    <% cache(temp) do %>
     <!--bookmarker, time-->
     <h5 class="byline heading">
       <%= ts("Bookmarked by ") %>
@@ -29,13 +30,19 @@
     <% unless bookmark.approved_collections.empty? && !is_author_of?(bookmark) %>
       <h6 class="meta heading"><%= ts("Bookmarker's Collections:") %></h6>
     <% end %>
-    <ul class="meta commas">
-      <% bookmark.collections.each do |coll| %>
-        <% unless coll.moderated? && !is_author_of?(bookmark) %>
-          <li><%= link_to coll.title, collection_path(coll) %></li>
+    <% unless bookmark.approved_collections.empty? && !is_author_of?(bookmark) %>
+      <ul class="meta commas">
+        <% if is_author_of?(bookmark) || logged_in_as_admin? %>
+          <% bookmark.collections.each do |coll| %>
+            <li><%= link_to coll.title, collection_path(coll) %></li>
+          <% end %>
+        <% else %>
+          <% bookmark.approved_collections.each do |coll| %>
+            <li><%= link_to coll.title, collection_path(coll) %></li>
+          <% end %>
         <% end %>
-      <% end %>
-    </ul>
+      </ul>
+    <% end %>
   <% end %>
 
     <!--notes-->
