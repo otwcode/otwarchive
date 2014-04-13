@@ -20,8 +20,8 @@
 <%= form_tag change_username_user_path(@user) do %>  
   <dl>
     <% # The password field is up here to stop Firefox from autofilling the user name field when the user attempts to change its capitalization and to match the Change Email form %>
-    <dt id="passwd"><%= label_tag :password, ts("Password") %></dt>
-    <dd id="passwd"><%= password_field_tag :password %></dd>
+    <dt><%= label_tag :password, ts("Password") %></dt>
+    <dd><%= password_field_tag :password %></dd>
     <dt><%= ts("Current User Name") %></dt>
     <dd><span class="important"><%= @user.login %></span></dd>
     <dt><%= label_tag :new_login, ts("New User Name") %></dt>
