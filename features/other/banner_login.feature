@@ -56,14 +56,14 @@ Feature: First login help banner
   
   Given I am logged in as "newname2"
   When I am on newname2's user page
-  When I follow "x" within ".submit"
+  When I follow "x" within "div#main"
   #Then I should not see the first login banner
   
   Scenario: Banner comes back if turned off using X
   
   Given I am logged in as "newname2"
   When I am on newname2's user page
-  When I follow "x" within ".submit"
+  When I follow "x" within "div#main"
   When I am logged out
     And I am logged in as "newname2"
     And I am on my user page

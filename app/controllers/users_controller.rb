@@ -32,22 +32,22 @@ class UsersController < ApplicationController
 
   def check_account_creation_status
     if is_registered_user?
-      setflash; flash[:error] = ts("You are already logged in!")
+      flash[:error] = ts("You are already logged in!")
       redirect_to root_path and return
     end
     token = params[:invitation_token]
     if token.blank?
       if !@admin_settings.account_creation_enabled?
-        setflash; flash[:error] = ts("You need an invitation to sign up.")
+        flash[:error] = ts("You need an invitation to sign up.")
         redirect_to invite_requests_path and return
       end
     else
       invitation = Invitation.find_by_token(token)
       if !invitation
-        setflash; flash[:error] = ts("There was an error with your invitation token, please contact support")
+        flash[:error] = ts("There was an error with your invitation token, please contact support")
         redirect_to new_feedback_report_path and return
       elsif invitation.redeemed_at && invitation.invitee
-        setflash; flash[:error] = ts("This invitation has already been used to create an account, sorry!")
+        flash[:error] = ts("This invitation has already been used to create an account, sorry!")
         redirect_to root_path and return
       end
     end
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     if @user.blank?
-      setflash; flash[:error] = ts("Sorry, could not find this user.")
+      flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
     @page_subtitle = @user.login
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
       @user.password_confirmation = params[:password_confirmation]
       @user.recently_reset = false
       if @user.save
-        setflash; flash[:notice] = ts("Your password has been changed")
+        flash[:notice] = ts("Your password has been changed")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
@@ -145,16 +145,16 @@ class UsersController < ApplicationController
       @new_login = params[:new_login]
       session = UserSession.new(:login => @user.login, :password => params[:password])
       if !session.valid?
-        setflash; flash[:error] = ts("Your password was incorrect")
+        flash[:error] = ts("Your password was incorrect")
       else
         user = User.find_by_login(@new_login)
         if user && (user != @user)
-          setflash; flash[:error] = ts("User name already taken.")
+          flash[:error] = ts("User name already taken.")
         else
           old_login = @user.login
           @user.login = @new_login
           if @user.save
-            setflash; flash[:notice] = ts("Your user name was changed")
+            flash[:notice] = ts("Your user name was changed")
 
             new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
@@ -172,7 +172,7 @@ class UsersController < ApplicationController
           else
             @user.errors.clear
             @user.reload
-            setflash; flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
+            flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
           end
         end
       end
@@ -206,25 +206,25 @@ class UsersController < ApplicationController
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
     UserMailer.signup_notification(@user.id).deliver! 
-    setflash; flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
+    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
     render "confirmation"
   end
 
   def activate
     if params[:id].blank?
-      setflash; flash[:error] = ts("Your activation key is missing.")
+      flash[:error] = ts("Your activation key is missing.")
       redirect_to ''
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
         if @user.active?
-          setflash; flash.now[:error] = ts("Your account has already been activated.")
+          flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
         # this is just a confirmation and it's ok if it gets delayed
         @user.activate && UserMailer.activation(@user.id).deliver
-        setflash; flash[:notice] = ts("Signup complete! Please log in.")
+        flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user
         external_authors = []
@@ -240,7 +240,7 @@ class UsersController < ApplicationController
         end
         redirect_to(login_path)
       else
-        setflash; flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
         redirect_to ''
       end
     end
@@ -249,7 +249,7 @@ class UsersController < ApplicationController
   def update
     @user.profile.update_attributes(params[:profile_attributes])
     if @user.profile.save
-      setflash; flash[:notice] = ts("Your profile has been successfully updated")
+      flash[:notice] = ts("Your profile has been successfully updated")
       redirect_to edit_user_path(@user)
     else
       render :edit
@@ -268,11 +268,11 @@ class UsersController < ApplicationController
         @new_email = params[:new_email]
         @confirm_email = params[:email_confirmation]
         if @new_email == @confirm_email && @user.save
-          setflash; flash[:notice] = ts("Your email has been successfully updated")
+          flash[:notice] = ts("Your email has been successfully updated")
           UserMailer.change_email(@user.id, @old_email, @new_email).deliver
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
         else
-          setflash; flash[:error] = ts("Email addresses don't match! Please retype and try again")
+          flash[:error] = ts("Email addresses don't match! Please retype and try again")
           render :change_email and return
         end
       end
@@ -291,7 +291,7 @@ class UsersController < ApplicationController
         @user.wipeout_unposted_works
       end
       @user.destroy
-      setflash; flash[:notice] = ts('You have successfully deleted your account.')
+      flash[:notice] = ts('You have successfully deleted your account.')
      redirect_to(delete_confirmation_path)
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
@@ -301,7 +301,7 @@ class UsersController < ApplicationController
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
       if params[:cancel_button]
-        setflash; flash[:notice] = ts("Account deletion canceled.")
+        flash[:notice] = ts("Account deletion canceled.")
        redirect_to user_profile_path(@user)
       else
         # Orphans co-authored works, keeps the user's pseud on the orphan account
@@ -359,10 +359,10 @@ class UsersController < ApplicationController
             @user.wipeout_unposted_works
           end
           @user.destroy
-          setflash; flash[:notice] = ts('You have successfully deleted your account.')
+          flash[:notice] = ts('You have successfully deleted your account.')
           redirect_to(delete_confirmation_path)
         else
-          setflash; flash[:error] = ts("Sorry, something went wrong! Please try again.")
+          flash[:error] = ts("Sorry, something went wrong! Please try again.")
           redirect_to(@user)
         end
       end
@@ -409,18 +409,18 @@ class UsersController < ApplicationController
         return true
       else
         if params[:new_email]
-          setflash; flash.now[:error] = ts("Your password was incorrect")
+          flash.now[:error] = ts("Your password was incorrect")
         else
-          setflash; flash.now[:error] = ts("Your old password was incorrect")
+          flash.now[:error] = ts("Your old password was incorrect")
         end
         @wrong_password = true
         return false
       end
     else
       if params[:new_email]
-        setflash; flash.now[:error] = ts("You must enter your password")
+        flash.now[:error] = ts("You must enter your password")
       else
-        setflash; flash.now[:error] = ts("You must enter your old password")
+        flash.now[:error] = ts("You must enter your old password")
       end
       @wrong_password = true
       return false

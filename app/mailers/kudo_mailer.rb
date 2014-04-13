@@ -3,7 +3,7 @@ class KudoMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def kudo_notification(user_id, kudo_id)
     user = User.find(user_id)

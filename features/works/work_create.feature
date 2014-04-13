@@ -117,7 +117,7 @@ Feature: Create Works
     Then I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And 1 email should be delivered to "coauthor@example.org"
+      And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
        And 1 email should be delivered to "recipient@example.org"
        And the email should contain "A gift story has been posted for you"
@@ -311,3 +311,30 @@ Feature: Create Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Chapter has been posted!"
       And I should not see "This is a preview"
+
+  Scenario: RTE and HTML buttons are separate
+  Given I am logged in as "newbie"
+  When I go to the new work page
+  Then I should see "Post New Work"
+    And I should see "Rich Text" within ".rtf-html-switch"
+    And I should see "HTML" within ".rtf-html-switch"
+    
+  Scenario: posting a backdated work
+  Given I am logged in as "testuser" with password "testuser"
+    And I post the work "This One Stays On Top"
+    And I go to the new work page
+    And I fill in "Work Title" with "Backdated"
+    And I fill in "content" with "This work is backdated and shouldn't be at the top"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Testing"
+    And I check "backdate-options-show"
+    And I select "1" from "work_chapter_attributes_published_at_3i"
+    And I select "January" from "work_chapter_attributes_published_at_2i"
+    And I select "1990" from "work_chapter_attributes_published_at_1i"
+    And I press "Preview"
+  When I press "Post"
+  Then I should see "Published:1990-01-01"
+  When I go to the works page
+  Then "This One Stays On Top" should appear before "Backdated"
+  

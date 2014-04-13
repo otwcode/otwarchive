@@ -46,7 +46,7 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
   Then I should see "Draft was successfully created."
     And I should see "Part 2 of the Antiholidays series"
   When I view the series "Antiholidays"
-  Then I should see "Works included: 1"
+  Then I should see "Works Included: 1"
     And I should not see "Antivalentine"
   When I view the work "Humbug"
   Then I should not see "»" within "dd"
@@ -57,7 +57,7 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
   When I press "Post"
   Then I should see "Part 2 of the Antiholidays series"
     And I should not see the "title" text "Restricted"
-    And I should see "«" within "dd"
+    And I should see "«" within "dd.series"
   When I am logged out
     And I view the series "Antiholidays"
   Then I should see "Antivalentine"
@@ -69,7 +69,7 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
     And I go to fandomer's series page
   Then I should see "Antiholidays"
   When I view the series "Antiholidays"
-  Then I should see "Works included: 2"
+  Then I should see "Works Included: 2"
     And I should see "Humbug"
     And I should see "Antivalentine"
 

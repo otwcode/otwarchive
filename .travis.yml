@@ -1,22 +1,25 @@
+language: ruby
 env:
-  - TEST_GROUP=importing
-  - TEST_GROUP=challenges
-  - TEST_GROUP=collections
-  - TEST_GROUP=users
-  - TEST_GROUP=works
-  - TEST_GROUP=tags_and_wrangling
-  - TEST_GROUP=other
+  - TEST_GROUP="rspec spec"
+  - TEST_GROUP="cucumber -f progress -r features features/importing"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
+  - TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
+  - TEST_GROUP="cucumber -f progress -r features features/collections"
+  - TEST_GROUP="cucumber -f progress -r features features/users"
+  - TEST_GROUP="cucumber -f progress -r features features/works"
+  - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
+  - TEST_GROUP="cucumber -f progress -r features features/other"
 rvm:
-  - "1.9.2-p320"
+  - "1.9.3"
 services:
   - elasticsearch
   - redis-server
-  - memcache
+  - memcached
 script:
   - bundle exec rake db:create:all --trace
   - bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec cucumber -f progress -r features features/$TEST_GROUP
+  - bundle exec $TEST_GROUP
 before_script:
   - mysql -e 'create database otwarchive_test;'
   - cp config/database.travis.yml config/database.yml

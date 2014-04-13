@@ -9,7 +9,7 @@ Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_url
   fill_in("Title", :with => skin_name)
   fill_in("Description", :with => "Random description")
-  fill_in("CSS", :with => DEFAULT_CSS)
+  fill_in("CSS", :with => "#title { text-decoration: blink;}")
 end
 
 Given /^I set up the skin "([^"]*)" with css$/ do |skin_name, css|

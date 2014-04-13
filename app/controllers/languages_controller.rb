@@ -21,7 +21,7 @@ class LanguagesController < ApplicationController
   def create   
     @language = Language.new(params[:language])
     if @language.save
-      setflash; flash[:notice] = t('successfully_added', :default => 'Language was successfully added.')
+      flash[:notice] = t('successfully_added', :default => 'Language was successfully added.')
       redirect_to languages_path
     else
       render :action => "new"

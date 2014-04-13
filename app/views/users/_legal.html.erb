@@ -9,7 +9,7 @@
   <!-- Terms of Service -->
   <p>
      <%= ts("And - really important - we need you to agree to our") %> 
-     <%= link_to "Terms of Service", tos_path %>:
+     <%= link_to "Terms of Service (opens new window)", tos_path, :target => '_blank' %>:
   </p>
   <fieldset name="<%= tos_field_name %>"id="tos-partial">
     <%= render(:partial => 'home/tos') %>
