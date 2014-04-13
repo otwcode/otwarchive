@@ -10,7 +10,6 @@ dl.meta {
 }
 
 .meta dt {
-  text-align: left;
   min-width: 10.5em;
   width: 25%;
   float: left;
@@ -34,7 +33,6 @@ dl.meta {
 .meta p {
   display: block;
   margin-top: 0;
-  text-align: left;
 }
 
 .meta dd ul li {
