@@ -3,7 +3,7 @@
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts('edit tag and parent associations'), {:controller => :tags, :action => :edit, :id => @tag} %></li>
+  <li><%= link_to ts('Edit %{current_tag_type} Tag & Associations', :current_tag_type => @tag.type.to_s), {:controller => :tags, :action => :edit, :id => @tag} %></li>
   <li><%= tag_comment_link(@tag) %></li>
 </ul>
 <!--/subnav-->
@@ -12,9 +12,9 @@
 <%
   showing_header = ""
   if params[:show] && params[:status]
-    showing_header = "Showing " + params[:status] + " " + params[:show]
+    showing_header = ts("Showing %{status} %{tag_type} Tags", :status => params[:status].to_s.capitalize, :tag_type => params[:show].to_s.titleize.singularize)
   elsif params[:show]
-    showing_header = "Showing " + params[:show]
+    showing_header = ts("Showing All %{tag_type} Tags", :tag_type => params[:show].to_s.titleize.singularize)
   end
 %>
 <% unless showing_header.blank? %>
