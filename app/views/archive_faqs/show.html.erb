@@ -9,14 +9,20 @@
 <!--main content-->
 <div class="admin" role="article">
   <% if logged_in_as_admin? %>
-    <div class="header">
-      <h3 class="heading">
-        Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
-      </h3>
-    </div>
+      <div class="header">
+        <h3 class="heading">
+          Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
+        </h3>
+      </div>
   <% end %>
   <div class="userstuff">
-    <%=raw sanitize_field(@archive_faq, :content) %>
+    <% for q in @archive_faq.questions %>
+        <h3 id="<%= q.anchor %>"><%= q.question %></h3>
+        <%= raw sanitize_field(q, :content) %>
+        <% unless q.screencast.to_s == "" %>
+            <%= raw sanitize_field(q, :screencast) %>
+        <% end %>
+    <% end %>
   </div>
 </div>
 <!--/content-->

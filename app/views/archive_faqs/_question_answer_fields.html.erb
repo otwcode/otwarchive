@@ -1,0 +1,40 @@
+<div class="removeme">
+<% index ||= 0 %>
+<div class="fields">
+
+
+
+
+
+
+
+  <dt><%= form.label :question, ts("Question") %></dt>
+  <dd><%= form.text_field :question, :id => "question" %>
+    <%= live_validation_for_field('question', :failureMessage => ts("Please enter a Question")) %>
+  </dd>
+  <dt><%= form.label :anchor, ts("Anchor name") %></dt>
+  <dd><%= form.text_field :anchor, :id => "anchor" %>
+    <%= live_validation_for_field('anchor', :failureMessage => ts("Please enter an Anchor name.")) %>
+  </dd>
+  <!-- The Answer -->
+  <dt><%= form.label :content, ts("Answer") %></dt>
+  <dd>
+    <p id="toggleText">
+      <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+    </p>
+    <!-- %< use_tinymce %> -->
+
+    <%= form.text_area :content, :id => "content" %>
+
+  <dt><%= form.label :screencast, ts("Screencast URL") %></dt>
+  <dd><%= form.text_field :screencast, :id => "screencast" %>
+  </dd>
+  <p class="actions" role="button">
+    <% linktext = ts("Remove This Question") %>
+    <%= link_to_remove_section(linktext, form)%>
+  </p>
+  <p></p>
+  </dd>
+</div>
+</div>
+<div class="last_id" style="display:none;"><%= index.is_a?(String) ? index : index+1 %></div>
