@@ -1,6 +1,6 @@
-<h3 class="landmark">Filters</h3>
+<h3 class="landmark"><%= ts("Filters") %></h3>
 <%= form_tag archive_faqs_path, :method => :get do %>
-    <%= label_tag ts("Language:") %>
-    <%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %>
-    <%= submit_tag ts('Go') %></p>
+  <p><%= label_tag ts("Language:") %>
+  <%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %>
+  <%= submit_tag ts('Go') %></p>
 <% end %>
