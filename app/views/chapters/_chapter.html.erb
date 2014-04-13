@@ -17,7 +17,7 @@
     </h3>
 
     <!-- only display byline if different from the main byline -->
-    <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds)) || @preview_mode %>
+    <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) || @preview_mode %>
       <h4 class="heading byline"><%= ts('Chapter by') %> <%= byline(chapter) %></h4>
     <% end %>
 
