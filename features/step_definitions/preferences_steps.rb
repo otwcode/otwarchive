@@ -27,3 +27,15 @@ When /^I set my preferences to hide warnings$/ do
   user.preference.hide_warnings = true
   user.preference.save
 end
+
+When /^I set my preferences to hide all hit counts$/ do
+  user = User.current_user
+  user.preference.hide_all_hit_counts = true
+  user.preference.save
+end
+
+When /^I set my preferences to hide hit counts on my works$/ do
+  user = User.current_user
+  user.preference.hide_private_hit_count = true
+  user.preference.save
+end

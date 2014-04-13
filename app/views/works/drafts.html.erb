@@ -1,15 +1,14 @@
 <h2 class="heading"><%= ts("Unposted Drafts") %></h2>
 
-<p>
+<p class="caution notice">
   <strong><%= ts("Please note:") %></strong>
   <%= ts("Unposted drafts are only saved for a month from the day they are first created, and then deleted from the Archive.") %>
 </p>
 
-<!--BACK END, can we just remove this laquo etc-->
-<%= paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+<%= paginated_section @works, {:previous_label => 'Previous', :next_label => 'Next'} do %>
   <ul class="work index group">
-     <% for work in @works %>
-        <%= render 'work_blurb', :work => work %>
-     <% end %>
-   </ul>
+    <% for work in @works %>
+      <%= render 'work_blurb', :work => work %>
+    <% end %>
+  </ul>
 <% end %>

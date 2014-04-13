@@ -4,12 +4,18 @@
 #
 # The :primary attribute is used for tasks we only want to run on one machine
 # 
+require 'capistrano/gitflow_version'
+
 
 server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app02.ao3.org",  :app , :primary => true
-server "ao3-app03.ao3.org",  :app
-server "ao3-app98.ao3.org",  :app
-server "ao3-app99.ao3.org",  :app
+server "ao3-app04.ao3.org",  :app
+server "ao3-app05.ao3.org",  :app
+server "ao3-app06.ao3.org",  :app
+server "ao3-app07.ao3.org",  :app
+server "ao3-app08.ao3.org",  :app , :workers
+server "ao3-app98.ao3.org",  :app , :workers
+server "ao3-app99.ao3.org",  :app , :workers
 server "ao3-front01.ao3.org", :web
 
 
@@ -30,8 +36,9 @@ namespace :production_only do
   
   desc "Update the crontab on the primary app machine "
   task :update_cron_email, :roles => :app, :only => {:primary => true} do
-    run "bundle exec whenever --update-crontab production -f config/schedule_production.rb"
+#    run "bundle exec whenever --update-crontab production -f config/schedule_production.rb"
   end
+
 end
 
 #before "deploy:update_code", "production_only:git_in_home"
@@ -43,6 +50,8 @@ after "deploy:restart", "production_only:update_cron_email"
 
 after "deploy:update_code", "production_only:update_robots"
 after "deploy:restart", "production_only:notify_testers"
+after "deploy:restart", "production_only:rebalance_unicorns"
+
 
 # deploy from clean branch
 set :branch, "deploy"
