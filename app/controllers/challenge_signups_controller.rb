@@ -127,7 +127,10 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
-  def show
+  def show    
+    unless @challenge_signup.valid?
+      flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
+    end
   end
 
   protected

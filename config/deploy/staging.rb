@@ -6,9 +6,11 @@
 #   deploy:restart
 #
 # Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
+require 'capistrano/gitflow_version'
+
 
 server "test-app01.transformativeworks.org",  :app , :db
-server "test-front01.transformativeworks.org",  :app , :web , :primary => true
+server "test-front01.transformativeworks.org",  :app , :web , :workers , :primary => true
 
 set :rails_env, 'staging'
 
