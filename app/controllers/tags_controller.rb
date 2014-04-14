@@ -43,7 +43,7 @@ class TagsController < ApplicationController
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
       options.merge!(:page => params[:page] || 1)
-      @tags = Tag.search(options)
+      @tags = TagSearch.search(options)
     end
   end
 
@@ -123,7 +123,7 @@ class TagsController < ApplicationController
         end
       else
         if %w(warnings freeforms).include?(params[:tag_type])
-          @display_tags = @display_creation.send(params[:tag_type]).sort
+          @display_tags = @display_creation.send(params[:tag_type])
         end
       end
       @display_category = @display_tags.first.class.name.downcase.pluralize
@@ -252,11 +252,12 @@ class TagsController < ApplicationController
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      if sort.include?('suggested')
+      # add a secondary sorting key when the main one is not discerning enough
+      if sort.include?('suggested') || sort.include?('taggings_count')
         sort = sort + ", name ASC"
       end
       # this makes sure params[:status] is safe
-      if %w(unfilterable canonical noncanonical unwrangleable).include?(params[:status])
+      if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
         @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)

@@ -94,7 +94,8 @@ Scenario: Related works links appear in the right places
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
     And I press "Post Without Preview"
-  Then I should see "Work was successfully"
+    And a chapter is added to "Worldbuilding"
+    And a draft chapter is added to "Worldbuilding"
   When I post a related work
     And I approve a related work
     And I post a translation
@@ -103,7 +104,8 @@ Scenario: Related works links appear in the right places
     And I should see "Worldbuilding Translated" within ".preface .notes"
     And I should see "Inspired by Parent Work by testuser" within ".preface .notes"
     And I should see "(See the end of the work for other works inspired by this one.)" within ".preface .notes"
-    And I should see "Works inspired by this one:" within ".afterword .children"
+  When I follow "other works inspired by this one"
+  Then I should see "Works inspired by this one:" within ".afterword .children"
     And I should see "Followup by remixer" within ".afterword .children"
     And I should not see "Worldbuilding Translated" within ".afterword .children"
 
@@ -224,12 +226,12 @@ Scenario: Translate your own work
   Then approving the related work should succeed
 
 Scenario: Draft works should not show up on related works
-  # Given I have related works setup
-  #   And I am logged in as "translator"
-  #   And I draft a translation
-  # When I am logged in as "inspiration"
-  #   And I view my related works
-  # Then I should not see "Worldbuilding Translated"
+  Given I have related works setup
+    And I am logged in as "translator"
+    And I draft a translation
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should not see "Worldbuilding Translated"
 
 @work_external_parent
 Scenario: Listing external works as inspirations

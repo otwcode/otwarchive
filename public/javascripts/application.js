@@ -16,19 +16,13 @@ $j(document).ready(function() {
     });
     setupDropdown();
 
-    // replace all GET delete links with their AJAXified equivalent
-    $j('a[href$="/confirm_delete"]').each(function(){
-        this.href = this.href.replace(/\/confirm_delete$/, "");
-        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    });
-
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
 
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
-    handleKudosSubmission();
+    prepareDeleteLinks();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -385,16 +379,18 @@ function setupAccordion() {
   });
 }
 
-function handleKudosSubmission() {
-  $j("#new_kudo").on("ajax:success", function(e, data, status, xhr){
-    $j('#kudos_message').addClass('notice').html('<p>Thank you for leaving kudos!</p>');
-  });
-  $j("#new_kudo").on("ajax:error", function(e, xhr, status, error){
-    var msg = 'Sorry, we were unable to save your kudos';
-    var data = $j.parseJSON(xhr.responseText);
-    if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-      msg = "You've already left kudos here";
-    }
-    $j('#kudos_message').addClass('error').html('<p>' + msg + '</p>');
+// Remove the /confirm_delete portion of delete links so user who have JS enabled will
+// be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
+// form page. Also add a confirmation message if one was not set in the back end using
+// :confirm => "message" 
+function prepareDeleteLinks() {
+  $j('a[href$="/confirm_delete"]').each(function(){
+    this.href = this.href.replace(/\/confirm_delete$/, "");
+    $j(this).attr("data-method", "delete");
+    if ($j(this).is("[data-confirm]")) {
+      return;
+    } else {
+      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+    };
   });
 }

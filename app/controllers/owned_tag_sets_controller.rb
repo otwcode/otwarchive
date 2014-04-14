@@ -31,15 +31,15 @@ class OwnedTagSetsController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login params[:user_id]
-      @tag_sets = OwnedTagSet.owned_by(@user).visible
+      @tag_sets = OwnedTagSet.owned_by(@user)
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
-      @tag_sets = OwnedTagSet.visible.in_prompt_restriction(@restriction)
+      @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
       if @tag_sets.count == 1
         redirect_to tag_set_path(@tag_sets.first, :tag_type => (params[:tag_type] || "fandom")) and return
       end
     else
-      @tag_sets = OwnedTagSet.visible
+      @tag_sets = OwnedTagSet
       if params[:query]
         @query = params[:query]
         @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
