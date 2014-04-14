@@ -68,17 +68,15 @@ Scenario: Can approve a relationship
     And I should see "Works inspired by this one:"
     And I should see "Followup by remixer"
 
-  Scenario: Can approve a translation
+Scenario: Approve a translation and see it linked in the preface
 
   Given I have related works setup
   When I post a translation
   When I approve a related work
   Then I should see "Link was successfully approved"
-    And I should see "Translation into Deutsch available:" within ".notes"
-    And I should see "Worldbuilding Translated by translator" within ".notes"
-    And I should see "Works inspired by this one:"
-    And I should see "Worldbuilding Translated by translator" within "li"
-
+    And I should see "Translation into Deutsch available:" within ".preface .notes"
+    And I should not see "Works inspired by this one:"
+    
 Scenario: Approved work appears
 
   Given I have related works setup
@@ -86,6 +84,30 @@ Scenario: Approved work appears
   When I approve a related work
   When I view the work "Worldbuilding"
   Then I should see "Translated"
+    
+Scenario: Related works links appear in the right places
+
+  Given I have related works setup
+    And I am logged in as "testuser"
+    And I post the work "Parent Work"
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I list the work "Parent Work" as inspiration
+    And I press "Post Without Preview"
+    And a chapter is added to "Worldbuilding"
+    And a draft chapter is added to "Worldbuilding"
+  When I post a related work
+    And I approve a related work
+    And I post a translation
+    And I approve a related work
+  Then I should see "Translation into Deutsch available:" within ".preface .notes"
+    And I should see "Worldbuilding Translated" within ".preface .notes"
+    And I should see "Inspired by Parent Work by testuser" within ".preface .notes"
+    And I should see "(See the end of the work for other works inspired by this one.)" within ".preface .notes"
+  When I follow "other works inspired by this one"
+  Then I should see "Works inspired by this one:" within ".afterword .children"
+    And I should see "Followup by remixer" within ".afterword .children"
+    And I should not see "Worldbuilding Translated" within ".afterword .children"
 
 Scenario: See approved and unapproved relationships on the related works page as an author
 
@@ -204,12 +226,12 @@ Scenario: Translate your own work
   Then approving the related work should succeed
 
 Scenario: Draft works should not show up on related works
-  # Given I have related works setup
-  #   And I am logged in as "translator"
-  #   And I draft a translation
-  # When I am logged in as "inspiration"
-  #   And I view my related works
-  # Then I should not see "Worldbuilding Translated"
+  Given I have related works setup
+    And I am logged in as "translator"
+    And I draft a translation
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should not see "Worldbuilding Translated"
 
 @work_external_parent
 Scenario: Listing external works as inspirations
@@ -294,3 +316,29 @@ Scenario: External work language
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
+
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+  Given I have related works setup
+    When I post a related work
+    And I approve a related work
+    And I am logged in as "remixer"
+    And I edit the work "Followup"
+    And I check "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Worldbuilding"
+  Then I should see "A [Restricted Work] by remixer"
+    And I am logged in as "remixer"
+    And I edit the work "Followup"
+    And I uncheck "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Followup"
+    And I should see "Inspired by Worldbuilding by inspiration"
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I check "work_restricted"
+    And I press "Post Without Preview"
+    And I am logged out
+    And I view the work "Followup"
+  Then I should see "Inspired by [Restricted Work] by inspiration"

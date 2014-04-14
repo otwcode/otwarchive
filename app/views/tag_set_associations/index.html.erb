@@ -20,12 +20,15 @@
   <% else %>
     <fieldset class="tagset listbox group">
       <legend>Approve Nominated Associations</legend>
-        <h3 class="heading"><%= ts("Approve Nominated Associations") %></h3>
-        <%= check_all_none %>
-        <ul id="nominated_associations_to_add" class="options many index group">
-          <% @tags_to_associate.each do |tag| %>
+      <h3 class="heading"><%= ts("Approve Nominated Associations") %></h3>
+      <%= check_all_none %>
+      <ul id="nominated_associations_to_add" class="options many index group">
+        <% @tags_to_associate.each do |tag| %>
+          <% # this is necessary or else rails thinks the [] characters represent a sub-model! %>
+          <% tagname = tag.name.gsub('[', '#LBRACKET').gsub(']', '#RBRACKET') %>
+          <% parent_tagname = tag.parent_tagname.gsub('[', '#LBRACKET').gsub(']', '#RBRACKET') %>
           <li>
-            <% fieldname = "create_association_#{tag.id}_#{tag.parent_tagname}" %>
+            <% fieldname = "create_association_#{tag.id}_#{parent_tagname}" %>
             <label class="action" for="<%= name_to_id(fieldname) %>">
               <%= tag.name %> &#8594; <%= tag.parent_tagname %>
               <%= check_box_tag fieldname %>

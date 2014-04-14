@@ -18,7 +18,6 @@ end
 When /^I add an icon to the collection$/ do
   step %{I am logged in as "moderator"}
     step %{I am on "Pretty" collection's page}
-    #' cancelling highlighting
     step %{I follow "Settings"}
     step %{I attach the file "test/fixtures/icon.gif" to "collection_icon"}
     step %{I press "Update"}

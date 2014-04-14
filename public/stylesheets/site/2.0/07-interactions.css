@@ -15,6 +15,11 @@ form {
   clear: right;
 }
 
+/* wrap long text in Opera, Safari, and Chrome */
+fieldset {
+  min-width: 0;
+}
+
 /*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
 but it's probably not complete. */
@@ -555,12 +560,13 @@ div.dynamic {
 
 /* CONTEXT: dashboard*/
 
-.dashboard fieldset {
-  clear: right;
+.dashboard > form {
+  float: left;
+  width: 100%;
 }
 
-.dashboard .filters dt {
-  width: auto;
+.dashboard fieldset {
+  clear: right;
 }
 
 /*END== */

@@ -9,10 +9,10 @@ class AdminSessionsController < ApplicationController
   def create
     @admin_session = AdminSession.new(params[:admin_session])  
     if @admin_session.save  
-      setflash; flash[:notice] = "Successfully logged in."  
+      flash[:notice] = "Successfully logged in."  
       redirect_to admin_users_path  
     else  
-      setflash; flash[:error] = "Authentication failed."
+      flash[:error] = "Authentication failed."
       # redirect instead of render because otherwise you get hints as to whether it was the name or password which failed
       redirect_to :action => 'new'
     end
@@ -22,7 +22,7 @@ class AdminSessionsController < ApplicationController
     admin_session = AdminSession.find
     if admin_session
       admin_session.destroy  
-      setflash; flash[:notice] = "Successfully logged out as admin."
+      flash[:notice] = "Successfully logged out as admin."
     end
     redirect_to root_path
   end
