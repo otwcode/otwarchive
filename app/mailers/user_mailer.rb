@@ -18,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Send an email letting authors know their work has been added to a collection
   def added_to_collection_notification(user_id, work_id, collection_id)
@@ -159,6 +159,15 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @collection.get_maintainers_email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+    )
+  end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
@@ -324,7 +333,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 
