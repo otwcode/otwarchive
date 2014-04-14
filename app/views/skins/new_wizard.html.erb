@@ -3,7 +3,7 @@
 
 <%= error_messages_for :skin %>
 
-<p class="note"><%= ts("This wizard only creates site skins. You can also %{link} which can be used to add styling to works that you post.", :link => link_to(ts("create a work skin"), url_for(:work_skins => true))).html_safe %></p>
+<p class="note"><%= ts("This wizard only creates site skins. You can also %{link} which can be used to add styling to works that you post.", :link => link_to(ts("create a work skin"), url_for(:skin_type => 'WorkSkin'))).html_safe %></p>
 
 <%= render :partial => "skin_top_navigation" %>
 
