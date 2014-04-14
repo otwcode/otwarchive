@@ -1385,14 +1385,6 @@ Feature: Prompt Meme Challenge
   Then I should not see "Download (CSV)"
 
 
-  Scenario: Prompt meme signup errors show on specific prompt
-  Given I have Battle 12 prompt meme fully set up
-    And I start to sign up for "Battle 12"
-    And I press "Submit"
-    And I should see "There were some problems with this submission. Please correct the mistakes below."
-    And I should see "Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request."
-
-
   Scenario: Validation error doesn't cause semi-anon ticky to lose state (Issue 2617)
   Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
     And I am logged in as "Scott" with password "password"
@@ -1400,6 +1392,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompt Form"
     And I check "Semi-anonymous prompt"
     And I press "Submit"
-  Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
+  Then I should see "There were some problems with this submission. Please correct the mistakes below."
+    And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
     And the "Semi-anonymous prompt" checkbox should be checked
 
