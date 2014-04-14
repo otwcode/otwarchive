@@ -4,7 +4,7 @@ class CollectionItemsController < ApplicationController
   before_filter :load_collectible_item, :only => [ :new, :create ]
   before_filter :allowed_to_destroy, :only => [:destroy]
 
-  cache_sweeper :collection_sweeper, :bookmark_sweeper
+  cache_sweeper :collection_sweeper
 
   def load_item_and_collection
     if params[:collection_item]

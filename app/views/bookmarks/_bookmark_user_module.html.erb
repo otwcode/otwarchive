@@ -1,6 +1,6 @@
 <% # expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
-  <% is_author_of?(bookmark) ? temp = "bookmark-owner-blurb-#{bookmark.id}"  : temp = "bookmark-blurb-#{bookmark.id}" %>
+  <% is_author_of?(bookmark) ? temp = "bookmark-owner-blurb-#{bookmark.cache_key}"  : temp = "bookmark-blurb-#{bookmark.cache_key}" %>
     <% cache(temp) do %>
     <!--bookmarker, time-->
     <h5 class="byline heading">

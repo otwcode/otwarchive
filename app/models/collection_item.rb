@@ -14,9 +14,10 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[REJECTED], REJECTED] ]
 
   belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
+  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
+  #belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, :touch => :true
 
   has_many :approved_collections, :through => :collection_items, :source => :collection,
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
