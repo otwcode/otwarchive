@@ -55,9 +55,7 @@ Feature: Leave kudos
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
       And I post the chaptered work "Epic Saga"
-      And I follow "Add Chapter"
-      And I fill in "content" with "third chapter is a draft"
-      And I press "Preview"
+      And a draft chapter is added to "Epic Saga"
     When I am logged in as "myname3"
       And I view the work "Epic Saga"
       And I press "Kudos ♥"

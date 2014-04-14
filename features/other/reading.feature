@@ -120,11 +120,7 @@ Feature: Reading count
 
   Given I am logged in as "writer"
     And I post the work "some work"
-  When I view the work "some work"
-    And I follow "Add Chapter"
-    And I fill in "content" with "Second blah blah"
-    And I press "Preview"
-    And I press "Post"
+    And a chapter is added to "some work"
   Then I should see "some work"
   When I am logged out
     And I am logged in as "fandomer"
@@ -138,7 +134,7 @@ Feature: Reading count
   Then I should see "Work deleted from your history."
   When I go to the works page
     And I follow "some work"
-  Then I should not see "Second blah blah"
+  Then I should not see "la la la la la la la la la la la"
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
@@ -146,7 +142,7 @@ Feature: Reading count
   When I go to the works page
     And I follow "some work"
     And I follow "Next Chapter"
-  Then I should see "Second blah blah"
+  Then I should see "la la la la la la la la la la la"
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
@@ -154,7 +150,7 @@ Feature: Reading count
   When I go to the works page
     And I follow "some work"
     And I follow "Next Chapter"
-  Then I should see "Second blah blah"
+  Then I should see "la la la la la la la la la la la"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
