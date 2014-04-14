@@ -327,6 +327,7 @@ Otwarchive::Application.routes.draw do
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
