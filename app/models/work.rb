@@ -231,6 +231,23 @@ class Work < ActiveRecord::Base
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
+  
+  after_save :expire_caches
+  
+  def expire_caches
+    self.pseuds.each do |pseud|
+      pseud.update_works_index_timestamp!
+      pseud.user.update_works_index_timestamp!
+    end
+    
+    self.all_collections.each do |collection|
+      collection.update_works_index_timestamp!
+    end
+
+    self.filters.each do |tag|
+      tag.update_works_index_timestamp!
+    end
+  end
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
@@ -305,6 +322,13 @@ class Work < ActiveRecord::Base
   #
   #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
   # end
+  
+  def self.find_by_url(url)
+    url = UrlFormatter.new(url)
+    Work.where(:imported_from_url => url.original).first ||
+      Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+  end
 
   ########################################################################
   # AUTHORSHIP
@@ -420,6 +444,10 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def marked_for_later?(user)
+    Reading.where(work_id: self.id, user_id: user.id, toread: true).exists?
+  end
+
   ########################################################################
   # VISIBILITY
   ########################################################################
@@ -492,8 +520,8 @@ class Work < ActiveRecord::Base
   end
   
   def set_revised_at_by_chapter(chapter)
-    return if !chapter.posted
-    if chapter.posted_changed? && chapter.published_at == Date.today
+    return if self.posted? && !chapter.posted?
+    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
     elsif self.revised_at.nil? || 
         chapter.published_at > self.revised_at.to_date || 
@@ -797,8 +825,9 @@ class Work < ActiveRecord::Base
           all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
           remaining_tags = self.tags - [tag]
           if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-            self.filters.delete(filter_to_remove)
+            self.filter_taggings.where(filter_id: filter_to_remove.id).destroy_all
             filter_to_remove.reset_filter_count
+            filter_to_remove.update_works_index_timestamp!
           else # we should keep filter_to_remove, but check if inheritence needs to be updated
             direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
             if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
@@ -872,13 +901,13 @@ class Work < ActiveRecord::Base
   end
 
   def guest_kudos_count
-    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/guest_kudos_count" do
       kudos.by_guest.count
     end
   end
 
   def all_kudos_count
-    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/kudos_count" do
       kudos.count
     end
   end

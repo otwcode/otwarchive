@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet thearchive_net efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -61,11 +61,16 @@ class StoryParser
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
   SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
+  SOURCE_THEARCHIVE_NET = 'the\-archive\.net'
   SOURCE_EFICTION = 'viewstory\.php'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
   MAX_CHAPTER_COUNT = 200
+  
+  # To check for duplicate chapters, take a slice this long out of the story
+  # (in characters)
+  DUPLICATE_CHAPTER_LENGTH = 10000
 
 
   # Import many stories
@@ -208,12 +213,24 @@ class StoryParser
   end
 
   # tries to create an external author for a given url
-  def parse_author(location)
-    source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
-    if !source.nil?
-      return eval("parse_author_from_#{source.downcase}(location)")
+  def parse_author(location,external_author_name,external_author_email)
+    #If e_email option value is present (archivist importing from somewhere not supported for auto autho grab)
+    #will have value there, otherwise continue as usual. If filled, just pass values to create or find external author
+    #Stephanie 8-1-2013
+
+    #might want to add check for external author name also here, steph 12/10/2013
+    if external_author_email.present?
+      return parse_author_common(external_author_email,external_author_name)
+
+    else
+      source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
+      if !source.nil?
+        return eval("parse_author_from_#{source.downcase}(location)")
+      end
+      return parse_author_from_unknown(location)
+
     end
-    return parse_author_from_unknown(location)
+
   end
 
 
@@ -230,12 +247,14 @@ class StoryParser
       return parse_chapters_into_story(location, chapter_contents, options)
     end
 
+
+    # our custom url finder checks for previously imported URL in almost any format it may have been presented
     def check_for_previous_import(location)
-      work = Work.find_by_imported_from_url(location)
-      if work
+      if Work.find_by_url(location).present?
         raise Error, "A work has already been imported from #{location}."
       end
     end
+
 
     def set_chapter_attributes(work, chapter, location, options = {})
       chapter.position = work.chapters.length + 1
@@ -263,8 +282,12 @@ class StoryParser
       # handle importing works for others
       # build an external creatorship for each author
       if options[:importing_for_others]
-        external_author_names = options[:external_author_names] || parse_author(location)
+        external_author_names = options[:external_author_names] || parse_author(location,options[:external_author_name],options[:external_author_email])
+        # convert to an array if not already one
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+        if options[:external_coauthor_name] != nil
+          external_author_names << parse_author(location,options[:external_coauthor_name],options[:external_coauthor_email])
+        end
         external_author_names.each do |external_author_name|
           if external_author_name && external_author_name.external_author
             if external_author_name.external_author.do_not_import
@@ -413,14 +436,6 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      # clean up any erroneously included string terminator (Issue 785)
-      story = story.gsub("\000", "")
-      
-      #story = fix_bad_characters(story)
-      # ^ This eats ALL special characters. I don't think we need it at all
-      # so I'm taking it out. If we want it back, it should be the last
-      # thing we do with the parsed bits after Nokogiri has parsed the content
-      # and worked it's magic with encoding --rebecca
       return story
     end
 
@@ -471,8 +486,20 @@ class StoryParser
       # end
       # return @chapter_contents
     end
-
-
+    
+    # this is an efiction archive but it doesn't handle chapters normally
+    # best way to handle is to get the full story printable version
+    # We have to make it a download-chaptered because otherwise it gets sent to the
+    #  generic efiction version since chaptered sources are checked first
+    def download_chaptered_from_thearchive_net(location)
+      if location.match(/^(.*)\/.*viewstory\.php.*[^p]sid=(\d+)($|&)/i)
+        location = "#{$1}/viewstory.php?action=printable&psid=#{$2}"
+      end
+      text = download_with_timeout(location)
+      text.sub!('</style>', '</style></head>') unless text.match('</head>')  
+      return [text]
+    end
+    
     # grab all the chapters of a story from an efiction-based site
     def download_chaptered_from_efiction(location)
       @chapter_contents = []
@@ -480,14 +507,21 @@ class StoryParser
         site = $1
         storyid = $2        
         chapnum = 1
+        last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
             url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
-            body = download_with_timeout(url)
-            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+            body = download_with_timeout(url)   
+            # get a section to check that this isn't a duplicate of previous chapter
+            body_to_check = body.slice(10,DUPLICATE_CHAPTER_LENGTH)
+            if body.nil? || body_to_check == last_body || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
               break
             end
+            # save the value to check for duplicate chapter
+            last_body = body_to_check       
             
+            # clean up the broken head in many efiction printable sites
+            body.sub!('</style>', '</style></head>') unless body.match('</head>')            
             @chapter_contents << body
             chapnum = chapnum + 1
           end
@@ -515,6 +549,20 @@ class StoryParser
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
 
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
+      
+      # Try to convert all relative links to absolute
+      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first      
+      if base.present?
+        @doc.css('a').each do |link|
+          if link['href'].present?
+            begin
+              query = link['href'].match(/(\?.*)$/) ? $1 : ''
+              link['href'] = URI.join(base, link['href'].gsub(/(\?.*)$/, '')).to_s + query
+            rescue
+            end
+          end
+        end
+      end
 
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
         params = eval("parse_story_from_#{source.downcase}(story)")
@@ -779,6 +827,7 @@ class StoryParser
       if !divs[0].nil?
         divs[0].remove
       end
+
       storytext = clean_storytext(storytext.inner_html)
 
       work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)
@@ -999,9 +1048,13 @@ class StoryParser
       if story.blank?
         raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
+      
+      # clean up any erroneously included string terminator (Issue 785)
+      story.gsub!("\000", "")
+      
       story
     end
-
+    
     def get_last_modified(location)
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         resp = open(location)

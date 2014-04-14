@@ -12,7 +12,7 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id)
+    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(posted: true)
     work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom, 

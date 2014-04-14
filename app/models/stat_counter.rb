@@ -40,7 +40,7 @@ class StatCounter < ActiveRecord::Base
     
     # queue the works for reindexing
     # we might have to reduce the frequency of this -- will see!
-    RedisSearchIndexQueue.queue_works(work_ids, without_bookmarks: true)
+    # RedisSearchIndexQueue.queue_works(work_ids, without_bookmarks: true)
   end
   
   # Update stat counters and search indexes for works with new kudos, comments, or bookmarks.

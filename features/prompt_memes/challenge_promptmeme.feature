@@ -817,12 +817,12 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 14" many-fandom prompt meme
   When I am on my user page
     And I follow "Sign-ups"
-  # Then 14 should be the last signup in the table
+  # TODO
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
@@ -851,7 +851,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"

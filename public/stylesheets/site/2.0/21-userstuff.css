@@ -1,5 +1,9 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
+.userstuff {
+    word-wrap: break-word;
+}
+
 .userstuff p {
   margin: 1.286em auto;
   padding: 0;
@@ -140,7 +144,7 @@
   font-size: 1.08em;
   margin: auto;
   max-width: 72em;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 }
 

@@ -35,6 +35,14 @@ module MailerHelper
   def support_link(text)
     style_link(text, root_url + "support")
   end
+
+  def abuse_link(text)
+    style_link(text, root_url + "abuse_reports/new")
+  end
+
+  def opendoors_link(text)
+    style_link(text, "http://opendoors.transformativeworks.org/contact/open%20doors")
+  end
   
   def styled_divider
     ("<div style=\"line-height:0.5em;\">" +

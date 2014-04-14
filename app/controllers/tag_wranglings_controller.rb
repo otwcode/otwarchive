@@ -10,9 +10,10 @@ class TagWranglingsController < ApplicationController
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
     end
     unless params[:show].blank?
-      params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
+      params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction] 
+      sort = params[:sort_column] + " " + params[:sort_direction]
+      sort = sort + ", name ASC" if sort.include?('taggings_count')
       if params[:show] == "fandoms"
         @media_names = Media.by_name.value_of(:name)
         @page_subtitle = ts("fandoms")
