@@ -1,12 +1,10 @@
-<!-- note to FRONT END: this form is crap and is going to be tossed and redone! don't bother fixing for now. -NN -->
-<!-- note to BACK END: FIXME, says the form; it currently ends within the dt, so the cuke to add a moderator fails, even though the browser somehow figures it out -->
+
+
 <% if participant %>
-<dt id="participant_<%= participant.id %>">
+<li id="participant_<%= participant.id %>">
   <%= form_for(participant, :as => :collection_participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| %>
     <span class="byline"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></span>
-</dt>
 
-<dd>
   <ul class="actions" role="menu">
       <li title="select role"><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS, {}, :id => participant.pseud.user.login + "_role") %></li>
       <li><%= form.submit ts("Update"), :id => participant.pseud.user.login + "_submit" %></li>
@@ -17,5 +15,5 @@
               :method => :delete %>
       </li>
   </ul>
-</dd>
+</li>
 <% end %>

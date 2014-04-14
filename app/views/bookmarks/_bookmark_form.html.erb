@@ -15,6 +15,7 @@
     <legend><%= ts("Bookmark") %></legend>
     <% in_page ||= false %>
     <% dynamic ||= false %>
+    <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmarkable.id}" : "") %>
     <% if in_page %>
       <p class="close actions">
         <% if dynamic %>
@@ -55,14 +56,14 @@
       <fieldset>
         <legend><%= ts("Write Comments") %></legend>
         <dl>
-          <dt><%= f.label :notes, ts("Notes") %></dt>
+          <dt><%= f.label :notes, ts("Notes"), :for => notes_id %></dt>
           <dd>
             <p class="footnote">
               <% if bookmarkable.class != ExternalWork %><%= ts("The author's summary is added automatically.") %><% end %>
               <%= allowed_html_instructions(show_list=false) %>
             </p>
-            <%= f.text_area :notes, :rows => 4, :class => "observe_textlength" %>
-            <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
+            <%= f.text_area :notes, :rows => 4, :id => notes_id, :class => "observe_textlength" %>
+            <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
           </dd>
 
           <dt><%= f.label :tag_string, ts("Your Tags") %></dt>

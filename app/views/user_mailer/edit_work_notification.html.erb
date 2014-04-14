@@ -1,3 +1,5 @@
-<p><%=h 'You successfully edited the following story:' %> </p>
-
-<h3 class="heading"><%=@work.title.html_safe %></h3>
+<% content_for :message do %>
+  <p>You successfully edited the following story:</p>
+  
+  <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i>
+<% end %>

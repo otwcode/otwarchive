@@ -3,7 +3,7 @@
     <% if current_user.is_a?(User) %>
     <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
     <% end %>
-    <li><%= span_if_current('Mass Wrangling', tag_wranglings_path) %></li>
+    <li><%= span_if_current('Wrangling Tools', tag_wranglings_path) %></li>
     <li><%= span_if_current('Wranglers', tag_wranglers_path) %></li>
     <li><%= span_if_current('Discussion', discuss_tag_wranglings_path) %></li>
     <li><%= span_if_current('Search Tags', search_tags_path) %></li>
@@ -34,7 +34,6 @@
       <li><%= span_if_current "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
       <li><%= span_if_current "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
       <li><%= span_if_current "Relationships by fandom (#{@counts[:relationships]})", tag_wranglings_path(:show => "relationships") %></li>
-      <li><%= span_if_current "Relationships by character", tag_wranglings_path(:show => "character_relationships") %></li>
       <li><%= span_if_current "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
       <% end %>
     <% end %>

@@ -1,5 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%=h t('.chapters.edit.edit_chapter', :default => 'Edit Chapter') %></h2>
+
+<% title = ts("Edit " + (@chapter.posted? ? "" : "New ") + "Chapter") %>
+<% content_for :title, title %>
+<h2 class="heading"><%= title %></h2>
 
 <%= error_messages_for :chapter %>
 

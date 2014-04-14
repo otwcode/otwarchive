@@ -1,18 +1,24 @@
-<% if kudos.length > 0 || guest_kudos_count > 0 %>
-  <% cache "#{commentable.cache_key}/kudos" do %>
-    <p class="kudos">
-      <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
-            to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(" and ")).
-            html_safe %>
-      <% if kudos.length > 0 && guest_kudos_count > 0 %>
-        <%= ts(" as well as ") %>
-      <% end %>
-      <% if guest_kudos_count > 1 %>
-        <%= ts("%{count} guests", :count => guest_kudos_count) %>
-      <% elsif guest_kudos_count == 1 %>
-        <%= ts("a guest") %>
-      <% end %>
-      <%= ts(" left kudos on this work!") %>
-    </p>
+<% # expects local variables kudos, guest_kudos_count, commentable %>
+<div id="kudos">
+  <% if kudos.length > 0 || guest_kudos_count > 0 %>
+    <% cache "#{commentable.cache_key}/kudos" do %>
+      <p class="kudos">
+        <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+              to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(" and ")).
+              html_safe %>
+
+        <% if kudos.length > 0 && guest_kudos_count > 0 %>
+          <%= ts(" as well as ") %>
+        <% end %>
+
+        <% if guest_kudos_count > 1 %>
+          <%= ts("%{count} guests", :count => guest_kudos_count) %>
+        <% elsif guest_kudos_count == 1 %>
+          <%= ts("a guest") %>
+        <% end %>
+
+        <%= ts(" left kudos on this work!") %>
+      </p>
+    <% end %>
   <% end %>
-<% end %>
+</div>

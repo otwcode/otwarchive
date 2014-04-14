@@ -8,27 +8,21 @@ $j(document).ready(function() {
     hideHideMe();
     showShowMe();
     handlePopUps();
-    generateCharacterCounters();
-    $j('#expandable-link').click(function(e){
-          e.preventDefault();
-          expandList();
-          return false;
-      });
-    $j('#hide-notice-banner').click(function (e) {
+    attachCharacterCounters();
+    setupAccordion();
+    $j('#hide-notice-banner').click(function(e){
       $j('#notice-banner').hide();
       e.preventDefault();
     });
     setupDropdown();
 
-    // replace all GET delete links with their AJAXified equivalent
-    $j('a[href$="/confirm_delete"]').each(function(){
-        this.href = this.href.replace(/\/confirm_delete$/, "");
-        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    });
+    // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
 
-    // Set things up to scroll to the top of the comments section when loading additional pages in comment pagination.
-    $j('#comments_placeholder .pagination a[data-remote], .actions.work .comments a').on('click.rails', function(e){ $j.scrollTo('#comments_placeholder'); });
+    // make Share buttons on works and own bookmarks visible
+    $j('.actions').children('.share').removeClass('hidden');
+
+    prepareDeleteLinks();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -51,19 +45,22 @@ function get_token_input_options(self) {
 
 // Look for autocomplete_options in application helper and throughout the views to
 // see how to use this!
-jQuery(function($) {
-  $('input.autocomplete').livequery(function(){
-    var self = $(this);
-    var token_input_options = get_token_input_options(self);
-    var method;
-    try {
-        method = $.parseJSON(self.attr('autocomplete_method'));
-    } catch (err) {
-        method = self.attr('autocomplete_method');
-    }
-    self.tokenInput(method, token_input_options);
+var input = $j('input.autocomplete');
+if (input.livequery) {
+  jQuery(function($) {
+    $('input.autocomplete').livequery(function(){
+      var self = $(this);
+      var token_input_options = get_token_input_options(self);
+      var method;
+      try {
+          method = $.parseJSON(self.attr('autocomplete_method'));
+      } catch (err) {
+          method = self.attr('autocomplete_method');
+      }
+      self.tokenInput(method, token_input_options);
+    });
   });
-});
+}
 
 ///////////////////////////////////////////////////////////////////
 
@@ -196,6 +193,7 @@ jQuery(function($){
 // - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
 // - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
 //   (and you can then add an alternative link for them using <noscript>)
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
@@ -271,7 +269,7 @@ function toggleFormField(element_id) {
     }
     else {
         $j('#' + element_id).addClass('hidden');
-        if (element_id != 'chapters-options') {
+        if (element_id != 'chapters-options' && element_id != 'backdate-options') {
             $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
                 if ($j(d).attr('type') == "checkbox") {$j(d).attr('checked', false);}
                 else {$j(d).val('');}
@@ -304,23 +302,38 @@ function hideField(id) {
   $j('#' + id).toggle();
 }
 
-function updateCharacterCounter(counter) {
-    var input_id = '#' + $j(counter).attr('id');
-    var maxlength = $j(input_id + '_counter').attr('data-maxlength');
-    var input_value = $j(input_id).val();
-    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n');
-    var remaining_characters = maxlength - input_value.length;
-    $j(input_id + '_counter').html(remaining_characters);
-    $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);
-}
+function attachCharacterCounters() {
+    var countFn = function() {
+        var counter = (function(input) {
+                /* Character-counted inputs do not always have the same hierarchical relationship
+                to their associated counter elements in the DOM, and some cc-inputs have
+                duplicate ids. So search for the input's associated counter element first by id,
+                then by checking the input's siblings, then by checking its cousins. */
+                var cc = $j('.character_counter [id='+input.attr('id')+'_counter]');
+                if (cc.length === 1) { return cc; } // id search, use attribute selector rather 
+                // than # to check for duplicate ids
 
-function generateCharacterCounters() {
-  $j(".observe_textlength").each(function(){
-      updateCharacterCounter(this);
-  });
-  $j(".observe_textlength").on("keyup keydown mouseup mousedown change", function(){
-      updateCharacterCounter(this);
-  });
+                cc = input.nextAll('.character_counter').first().find('.value'); // sibling search
+                if (cc.length) { return cc; } 
+
+                var parent = input.parent(); // 2 level cousin search
+                for (var i = 0; i < 2; i++) {
+                    cc = parent.nextAll('.character_counter').find('.value');                    
+                    if (cc.length) { return cc; }
+                    parent = parent.parent();
+                }
+
+                return $j(); // return empty jquery element if search found nothing
+            })($j(this)),
+            max = parseInt(counter.attr('data-maxlength'), 10),
+            val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
+            remaining = max - val.length;
+
+        counter.html(remaining).attr("aria-valuenow", remaining);
+    };
+
+    $j(document).on('keyup keydown mouseup mousedown change', '.observe_textlength', countFn);
+    $j('.observe_textlength').each(countFn);
 }
 
 // prevent double submission for JS enabled
@@ -335,14 +348,49 @@ jQuery.fn.preventDoubleSubmit = function() {
 
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
-  $j('#header .dropdown').attr({
-    'aria-haspopup': true
-  });
+  $j('#header .dropdown').attr("aria-haspopup", true);
   $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
     'class': 'dropdown-toggle',
     'data-toggle': 'dropdown',
     'data-target': '#'
-  });  
-  $j('.dropdown ul').addClass("dropdown-menu");  
+  });
+  $j('.dropdown .menu').addClass("dropdown-menu");
+  $j('.dropdown .menu li').attr("role", "menu-item");
 }
 
+// Accordion-style collapsible widgets
+// The pane element can be showen or hidden using the expander (link)
+// Apply hidden to the pane element if it shouldn't be visible when JavaScript is disabled
+// Typical set up:
+// <li aria-haspopup="true">
+//  <a href="#">Expander</a>
+//  <div class="expandable">
+//    foo!
+//  </div>
+// </li>
+function setupAccordion() {
+  var panes = $j(".expandable");
+  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
+    var expander = $j(this);
+    if (expander.attr('href') == '#') {
+      e.preventDefault();
+    }
+    expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+  });
+}
+
+// Remove the /confirm_delete portion of delete links so user who have JS enabled will
+// be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
+// form page. Also add a confirmation message if one was not set in the back end using
+// :confirm => "message" 
+function prepareDeleteLinks() {
+  $j('a[href$="/confirm_delete"]').each(function(){
+    this.href = this.href.replace(/\/confirm_delete$/, "");
+    $j(this).attr("data-method", "delete");
+    if ($j(this).is("[data-confirm]")) {
+      return;
+    } else {
+      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+    };
+  });
+}

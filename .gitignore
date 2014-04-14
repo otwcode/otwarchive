@@ -1,5 +1,7 @@
+*.swp
 .DS_Store
 .bundle
+.idea
 # /
 /*.tmproj
 /sphinx

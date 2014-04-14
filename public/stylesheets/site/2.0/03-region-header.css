@@ -71,23 +71,23 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 
 #header .logo {
   float: left;
-  height: 1.75em;
+  height: 42px;
 }
 
 /*ACTION: dropdown*/
 
 #header .menu, #small_login, #header .dropdown:hover .current + .menu {
-  background-color: #ddd;
+  background: #ddd;
   display: none;
   padding: 0.25em 0;
   position: absolute;
   width: 20em;
   z-index: 55;
     box-shadow: 1px 1px 3px -1px #444;
-    background: -moz-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
-    background: -webkit-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
-    background: -o-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
-    background: linear-gradient(to bottom, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
+    background-image: -moz-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
+    background-image: -webkit-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
+    background-image: -o-linear-gradient(top, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
+    background-image: linear-gradient(to bottom, rgba(221, 221, 221, 0.98) 0%, rgba(204, 204, 204, 0.98) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fadddddd', endColorstr='#facccccc',GradientType=0);
 }
 
@@ -208,7 +208,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   padding: 0.375em 0 0;
 }
 
-#small_login p {
+#small_login .actions {
   float: none;
   text-align: left;
 }
@@ -238,7 +238,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   margin-left: 2em;
 }
 
-#header .primary a, #header .primary .current {
+#header .primary a {
   padding: 0.429em 0.75em;
 }
 

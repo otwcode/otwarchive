@@ -3,14 +3,18 @@
   <div class="primary header module">
     <h2 class="heading"><%= @tag.name %></h2>
     <div class="icon"></div>
-    <ul class="navigation actions" role="navigation">
-      <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
-      <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
-    	<% if can_wrangle? %>
-      	<li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
-      	<li><%= tag_comment_link(@tag) %></li>
-      <% end %>
-    </ul>
+    <% if @tag.canonical || @tag.merger || can_wrangle? %>
+      <ul class="navigation actions" role="navigation">
+        <% if @tag.canonical || @tag.merger %>
+          <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
+          <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+        <% end %>
+    	  <% if can_wrangle? %>
+      	  <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
+      	  <li><%= tag_comment_link(@tag) %></li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 
   <%= error_messages_for :tag %>
@@ -50,8 +54,8 @@
 
   <% if @tag.merger %>
   <div class="merger module">
-    <h3 class="heading">Mergers</h3>
-    <p><%= @tag.name %> <%= ts('has been merged into') %> <%= link_to_tag @tag.merger %> <%=h 'for filtering.' %> <%= ts('Works and bookmarks tagged with') %> <%= @tag.name %> <%= ts('will show up in') %> <%= link_to @tag.merger.name + "'s", {:controller => :works, :action => :index, :tag_id => @tag.merger} %> <%=h 'filter.' %></p>
+    <h3 class="heading"><%= ts("Mergers") %></h3>
+    <p><%= ts("%{tag_name} has been made a synonym of %{tag_synonym_link}. Works and bookmarks tagged with %{tag_name} will show up in %{tag_synonym}'s filter.", :tag_name => @tag.name, :tag_synonym_link => (link_to_tag @tag.merger), :tag_synonym => @tag.merger.name).html_safe %></p>
   </div>
   <% end %>
 

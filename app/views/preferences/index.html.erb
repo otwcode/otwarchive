@@ -17,77 +17,80 @@
 <!--main content-->
 <%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
 <fieldset>
-	<legend><%= ts("Privacy") %></legend>
-	<h4 class="heading"><%= ts("Privacy") %></h4>
+  <legend><%= ts("Privacy") %></legend>
+  <h4 class="heading"><%= ts("Privacy") %> <%= link_to_help "privacy-preferences" %></h4>
   <ul>
-  	<li>
-   	  <%= f.check_box :email_visible %>
-   	  <%= f.label :email_visible, ts("Show my email address to other people.") %>
-   	</li>
-
-  	<li>
-    	  <%= f.check_box :date_of_birth_visible %>
-    	  <%= f.label :date_of_birth_visible, ts("Show my date of birth to other people.") %>
-  	</li>
-
-  	<li>
-   	  <%= f.check_box :minimize_search_engines %>
-   	  <%= f.label :minimize_search_engines, ts("Hide my work from search engines when possible.") %>
-   	</li>
-   	
-  	<li>
-   	  <%= f.check_box :disable_share_links %>
-   	  <%= f.label :disable_share_links, ts("Hide the share buttons on my work.") %> <%= link_to_help 'disable-share-buttons' %>
-   	</li>
-   	
-   	
-  </ul>
-  </fieldset>
-  <fieldset>
-	<legend><%= ts("Display") %></legend><h4 class="heading"><%= ts("Display") %></h4>
-  <ul>
-  	<li>
-    	  <%= f.check_box :adult %>
-    	  <%= f.label :adult, ts("Show me adult content without checking.") %>
-  	</li>
-
-  	<li>
-    	  <%= f.check_box :view_full_works %>
-    	  <%= f.label :view_full_works, ts("Show the whole work by default.") %>
-  	</li>
-
-  	<li>
-    	  <%= f.check_box :hide_warnings %>
-    	  <%= f.label :hide_warnings, ts("Hide warnings (you can still choose to show them).")  %>
-  	</li>
-
-  	<li>
-  	  <%= f.check_box :hide_freeform %>
-  	  <%= f.label :hide_freeform, ts("Hide additional tags (you can still choose to show them).")  %>
-	  </li>
+    <li>
+      <%= f.check_box :email_visible %>
+      <%= f.label :email_visible, ts("Show my email address to other people.") %>
+    </li>
 
     <li>
-    	<%= f.check_box :disable_work_skins %>
-    	<%= f.label :disable_work_skins, ts("Hide other people's work skins.")  %> <%= link_to_help "skins-basics" %>
+      <%= f.check_box :date_of_birth_visible %>
+      <%= f.label :date_of_birth_visible, ts("Show my date of birth to other people.") %>
     </li>
-</ul>
-    <fieldset>
-      <dl>
-      <dt><%= f.label :skin_id, ts("Your site skin")%>:</dt> 
-      <dd><span class="navigation actions"><%= link_to ts('Public skins'), skins_path %></span>
-      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %></dd>
+
+    <li>
+      <%= f.check_box :minimize_search_engines %>
+      <%= f.label :minimize_search_engines, ts("Hide my work from search engines when possible.") %>
+    </li>
+
+    <li>
+      <%= f.check_box :disable_share_links %>
+      <%= f.label :disable_share_links, ts("Hide the share buttons on my work.") %>
+    </li>
+  </ul>
+</fieldset>
+<fieldset>
+  <legend><%= ts("Display") %></legend><h4 class="heading"><%= ts("Display") %> <%= link_to_help "display-preferences" %></h4>
+  <ul>
+    <li>
+      <%= f.check_box :adult %>
+      <%= f.label :adult, ts("Show me adult content without checking.") %>
+    </li>
+
+    <li>
+      <%= f.check_box :view_full_works %>
+      <%= f.label :view_full_works, ts("Show the whole work by default.") %>
+    </li>
+
+    <li>
+      <%= f.check_box :hide_warnings %>
+      <%= f.label :hide_warnings, ts("Hide warnings (you can still choose to show them).")  %>
+    </li>
+
+    <li>
+      <%= f.check_box :hide_freeform %>
+      <%= f.label :hide_freeform, ts("Hide additional tags (you can still choose to show them).")  %>
+    </li>
+
+    <li>
+      <%= f.check_box :disable_work_skins %>
+      <%= f.label :disable_work_skins, ts("Hide other people's work skins.")  %> <%= link_to_help "skins-basics" %>
+    </li>
+  </ul>
+
+  <fieldset>
+    <dl>
+      <dt><%= f.label :skin_id, ts("Your site skin")%> <%= link_to_help "skins-basics" %>:</dt>
+      <dd>
+        <span class="navigation actions"><%= link_to ts('Public skins'), skins_path %></span>
+        <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
+      </dd>
 
       <dt><%= f.label :time_zone, ts("Your time zone: ")%></dt>
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-
-      <dt><%= f.label :work_title_format, ts("Browser page title format")  %> 	<%= link_to_help "work_title_format" %>:</dt>
-    	<dd><%= f.text_field :work_title_format %></dd>
+      
+      <dt><%= f.label :work_title_format, ts("Browser page title format")  %> <%= link_to_help "work_title_format" %>:</dt>
+      <dd><%= f.text_field :work_title_format %></dd>
     </dl>
+  </fieldset>
 </fieldset>
-</fieldset>
+
 <fieldset>
-	<legend><%= ts("Statistics") %></legend> 
-  <h4 class="heading"><%= ts("Statistics") %></h4>
+  <legend><%= ts("Statistics") %></legend> 
+
+  <h4 class="heading"><%= ts("Statistics") %> <%= link_to_help "statistics-preferences" %></h4>
   <ul>
     <li>
       <%= f.check_box :hide_all_hit_counts %>
@@ -107,7 +110,7 @@
 </fieldset>
 <fieldset>
 	<legend><%= ts("Comments") %></legend>  
-  <h4 class="heading"><%= ts("Comments") %></h4>
+  <h4 class="heading"><%= ts("Comments") %> <%= link_to_help "comment-preferences" %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :comment_emails_off %>
@@ -137,7 +140,7 @@
 </fieldset>
 <fieldset>
 	<legend><%= ts("Collections, Challenges and Gifts") %></legend>  
-  <h4 class="heading"><%= ts("Collections, Challenges and Gifts") %></h4>
+  <h4 class="heading"><%= ts("Collections, Challenges and Gifts") %> <%= link_to_help "collection-preferences" %></h4>
   <ul>
   	<li>
   	  <%= f.check_box :automatically_approve_collections %>
@@ -163,7 +166,7 @@
 
 <fieldset>
 	<legend><%= ts("Misc") %></legend>
-	  <h4 class="heading"><%= ts("Misc") %></h4>
+	  <h4 class="heading"><%= ts("Misc") %> <%= link_to_help "misc-preferences" %></h4>
   <ul>
   	<li>
   	  <%= f.check_box :history_enabled %>
@@ -184,5 +187,3 @@
 
 <% end %>
 <!--/content-->
-
-

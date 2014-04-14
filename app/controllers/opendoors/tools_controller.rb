@@ -19,7 +19,7 @@ class Opendoors::ToolsController < ApplicationController
       @work = Work.find(work_id)
     end
     unless @work
-      setflash; flash[:error] = ts("We couldn't find that work on the archive. Have you put in the full url?")
+      flash[:error] = ts("We couldn't find that work on the archive. Have you put in the full url?")
       redirect_to :action => :index and return
     end
 
@@ -43,16 +43,16 @@ class Opendoors::ToolsController < ApplicationController
     end
     
     if @imported_from_url.blank?
-      setflash; flash[:error] = ts("The imported-from url you are trying to set doesn't seem valid.")
+      flash[:error] = ts("The imported-from url you are trying to set doesn't seem valid.")
     else
       # check for any other works 
       works = Work.where(:imported_from_url => @imported_from_url)
       if works.count > 0 
-        setflash; flash[:error] = ts("There is already a work imported from the url #{@imported_from_url}.")
+        flash[:error] = ts("There is already a work imported from the url #{@imported_from_url}.")
       else
         # ok let's try to update
         @work.update_attribute(:imported_from_url, @imported_from_url)
-        setflash; flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
+        flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
       end
     end    
     redirect_to :action => :index, :imported_from_url => @imported_from_url and return

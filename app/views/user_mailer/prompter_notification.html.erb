@@ -1,25 +1,29 @@
-<p>
-<%= ts("A response to your prompt has been posted") %>
-<%= @collection ? " in the #{@collection.title} collection" : "" %> at the Archive of Our Own!
-</p>
+<% content_for :message do %>
+  <p>
+    A response to your prompt has been posted <% if @collection then %>in the <i><%= @collection.title %></i> collection <% end %>at the Archive of Our Own!
+  </p>
 
-<p>
-  <% if @collection.nil? %>
-    <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
-    by <%= @work.anonymous? ? "an anonymous responder" : @work.pseuds.collect(&:byline).join(", ") %><br />
-    <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
-  <% else %>
-    <%= link_to @work.title.html_safe, collection_work_url(@collection, @work) %><%= "(#{@work.word_count} words)" %><br />
-    by <%= @work.anonymous? ? "an anonymous responder" : @work.pseuds.collect(&:byline).join(", ") %><br />
-    <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
-  <% end %>
+  <p>
+    <% if @collection.nil? %>
+      <i><b><%= style_link(@work.title.html_safe, work_url(@work)) %></b></i> %> (<%= @work.word_count %> words)
+    <% else %>
+      <i><b><%= style_link(@work.title.html_safe, collection_work_url(@collection, @work)) %></b></i> (<%= @work.word_count %> words)
+    <% end %>
+    <br>
+    by <%= @work.anonymous? ? style_bold("an anonymous responder") : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
+    <br>
+    <% unless @work.fandom_string.blank? %>
+      <%= style_bold("Fandom:") %> <%= @work.fandom_string %>
+    <% end %>
+  </p>
+  
   <% unless @work.summary.blank? %>
-    Summary: 
-    <blockquote>
-      <%=raw sanitize_field(@work, :summary) %>
-    </blockquote>
+    <%= style_bold("Summary:") %>
+    <%= style_quote(raw sanitize_field(@work, :summary)) %>
   <% end %>
+  
   <% if @collection && !@collection.gift_notification.blank? %>
-    <%= @collection.gift_notification %>
+    <p><%= @collection.gift_notification %></p>
   <% end %>
-</p>
+  
+<% end %>

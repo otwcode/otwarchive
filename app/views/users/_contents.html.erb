@@ -2,16 +2,14 @@
 <!-- expects @fandoms, @works, @series, @bookmarks -->
   <% unless @fandoms.empty? %>
   <div class="fandom listbox group" id="user-fandoms">
-    <!--NOTE TO BACK END, can this be regularised to one list and make expandable?-->
     <h3 class="heading"><%= ts("Fandoms") %></h3>
     <ol class="index group">
-      <% @fandoms.each_with_index do |fandom, i| %>        
-        <% if i == ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-          </ol>
-          <h4 class="landmark heading"><%= ts("Listing More Fandoms") %></h4>
-          <ol id="fandom_full_list" class="index toggled<%= params[:expand_fandoms] ? '' : ' hidden' %>">
+      <% @fandoms.each_with_index do |fandom, i| %>
+        <% if i>= ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD && !params[:expand_fandoms] %>
+          <li class="more hidden">
+        <% else %>
+          <li>
         <% end %>
-        <li>
           <% if fandom.merger %>
             <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :fandom_id => fandom.merger.id} %> (<%= fandom.work_count %>)
           <% else %>
@@ -20,17 +18,17 @@
         </li>
      <% end %>
     </ol>
-    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
-            <%= link_to ts("Hide full list"), [@user, @pseud] %>
+            <%= link_to ts("Collapse Fandoms List"), [@user, @pseud] %>
           <% else %>
-            <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
+            <%= link_to ts("Expand Fandoms List"), url_for(:expand_fandoms => true) %>
           <% end %>
         </noscript>
-        <a class="fandom_full_list_open hidden" href="#"><%= ts("Expand full list") %></a>
-        <a class="fandom_full_list_close hidden" href="#"><%= ts("Hide full list") %></a>
+        <a class="hidden" id="expand-fandoms" href="#"><%= ts("Expand Fandoms List") %></a>
+        <a class="hidden" id="collapse-fandoms" href="#"><%= ts("Collapse Fandoms List") %></a>
       </p>
     <% end %>
   </div>
@@ -44,8 +42,14 @@
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
       <% end %>
     </ul>
-    <% if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-      <ul class="navigation actions" role="navigation"><li><%= @pseud ? print_pseud_works_link(@pseud) : print_works_link(@user) %></li></ul>
+    <% if @pseud %>
+      <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="navigation actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
+      <% end %>
+    <% else %>   
+      <% if @user.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="navigation actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
+      <% end %>
     <% end %>
   </div>
   <% end %>
@@ -106,3 +110,21 @@
   <% end %>
 <% end %>
 <!--/content-->
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      $j("#expand-fandoms").removeClass("hidden").click(function(e) {
+        e.preventDefault();
+        $j(".more").toggleClass("hidden");
+        $j("#collapse-fandoms").toggleClass("hidden");
+        $j(this).toggleClass("hidden");
+      });
+      $j("#collapse-fandoms").click(function(e) {
+        e.preventDefault();
+        $j(".more").toggleClass("hidden");
+        $j("#expand-fandoms").toggleClass("hidden");
+        $j(this).toggleClass("hidden");
+      });          
+    });
+  <% end %>
+<% end %>

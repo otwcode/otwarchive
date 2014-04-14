@@ -29,7 +29,7 @@ module ApplicationHelper
   end
   
   def page_has_filters?
-    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections')
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
   # A more gracefully degrading link_to_remote.
@@ -41,11 +41,14 @@ module ApplicationHelper
     link_to_function(name, remote_function(options), html_options)
   end
 
-  # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
-  def span_if_current(link_to_default_text, path, condition=nil)
+  # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
+  def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
-    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
+    title_text = ts(title_attribute_default_text)
+    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{text}</span>" : "<span class=\"current\" title=\"#{title_text}\">#{text}</span>"
+    link_code = title_attribute_default_text.nil? ? link_to(text, path) : link_to(text, path, title: "#{title_text}")
+    is_current ? span_tag.html_safe : link_code
   end
   
   def link_to_rss(link_to_feed)
@@ -59,8 +62,8 @@ module ApplicationHelper
     (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
-      col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
-      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
+      col, colgroup, dd, del, dfn, [dir], div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
+      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
   end
   
@@ -170,6 +173,14 @@ module ApplicationHelper
       pseud.byline
   end
 
+   def link_to_modal(content="",options = {})   
+     options[:class] ||= ""
+     options[:for] ||= ""
+     options[:title] ||= options[:for]
+     
+     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}     
+     link_to content, options[:for], html_options
+   end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -182,15 +193,15 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
-  #       setflash; flash[:error] = "OMG ERRORZ AIE"
+  #       flash[:error] = "OMG ERRORZ AIE"
   # or
-  #       setflash; flash.now[:error] = "OMG ERRORZ AIE"
+  #       flash.now[:error] = "OMG ERRORZ AIE"
   #
   # then that error will appear in the view where you have
   #       <%= flash_div :error %>
@@ -254,11 +265,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = "" 
     content_for :tinymce do
-      javascript_include_tag "tiny_mce/tiny_mce"
+      javascript_include_tag "tinymce/tinymce.min.js"
     end
     @content_for_tinymce_init = "" 
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor"
+      javascript_include_tag "mce_editor.min.js"
     end
   end  
   
@@ -275,7 +286,7 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
     content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
   
@@ -522,6 +533,21 @@ module ApplicationHelper
     
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
+  end
+  
+  # Cache fragments of a view if +condition+ is true
+  #
+  # <%= cache_if admin?, project do %>
+  # <b>All the topics on this project</b>
+  # <%= render project.topics %>
+  # <% end %>
+  def cache_if(condition, name = {}, options = nil, &block)
+    if condition
+      cache(name, options, &block)
+    else
+      yield
+    end
+    nil
   end
     
 end # end of ApplicationHelper

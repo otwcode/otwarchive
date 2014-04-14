@@ -1,608 +1,485 @@
-<div class="notice">
-	<p class="important"><strong>While the Archive is in beta, it's important for users to be aware of what that means:</strong>
-    </p>
-    <p>We are making every effort to make the archive stable and useful. However, part of that effort is testing the archive, and your contributions are part of the test. Therefore, be advised: the archive or parts of the archive may break! Content may be lost! Features may not work! Administrators will just be getting the hang of administration! Please report bugs, and don't use the beta version of the archive as your only place to store your stories.
-    </p>
-	<p>This is a work in progress. We appreciate your forbearance and your willingness to be a part of the Archive at this early stage. Thank you!
-    </p>
+﻿<div class="notice">
+	<p class="important"><strong>While the Archive is in beta, it's important for users to be aware of what that means:</strong></p>
+  <p>We are making every effort to make the archive stable and useful. However, part of that effort is testing the archive, and your contributions are part of the test. Therefore, be advised: the archive or parts of the archive may break! Content may be lost! Features may not work! Administrators will just be getting the hang of administration! Please report bugs, and don't use the beta version of the archive as your only place to store your stories.</p>
+	<p>This is a work in progress. We appreciate your forbearance and your willingness to be a part of the Archive at this early stage. Thank you!</p>
 </div>
-    
-    <div id="tos" class="userstuff">
-      <h2 class="heading">The Archive of Our Own is a place for fanworks, including fan fiction based on books, TV, movies, comics, other media, and real-person fiction (<acronym>RPF</acronym>).
-      </h2>
-      <h3 class="heading">What We Believe</h3>
-      <ol>
+
+<div id="tos" class="userstuff">
+  <h2 class="heading">The Archive of Our Own is a place for fanworks, including fan fiction based on books, TV, movies, comics, other media, and real-person fiction (<abbr>RPF</abbr>).</h2>
+
+  <h3 class="heading">What We Believe</h3>
+  <ol>
+    <li>Our goal is maximum inclusiveness (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'max_inclusiveness') %>) of content. Our software is <a href="http://code.google.com/p/otwarchive/">open-source and available</a> for others to use if they wish to implement the code elsewhere.</li>
+    <li>We are committed to defending fanworks against legal challenges. Our position on transformative fanworks is detailed in the <a href="http://transformativeworks.org/faq-page"><acronym title="Organization for Transformative Works">OTW</acronym> <acronym title="Frequently Asked Questions">FAQ</acronym></a>. We have legal resources and alliances on which we will draw. However, that is not a guarantee that the organization can or will fight each battle. The Board will take into account a variety of factors, both legal and otherwise, in responding to a legal challenge. Further information is available <a href="http://transformativeworks.org/projects/legal">on the <acronym title="Organization for Transformative Works">OTW</acronym> site</a>.</li>
+    <li>We strive to make the Terms of Service (<abbr title="Terms of Service">ToS</abbr>) readable. We have tried to provide explanations for the more unusual legal terms. If you have terminology questions not covered here, Law.com's glossary may help, though we cannot vouch for the accuracy of outside sources, including those referenced in the <abbr title="Terms of Service">ToS</abbr>.</li>
+  </ol>
       
-        <li>Our goal is maximum inclusiveness (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'max_inclusiveness') %>) of content. Our software is <a href="http://code.google.com/p/otwarchive/">open-source and available</a> for others to use if they wish to implement the code elsewhere.
-        </li>
-        <li>We are committed to defending fanworks against legal challenges. Our position on transformative fanworks is detailed in the <a href="http://transformativeworks.org/faq/legal"><acronym title="Organization for Transformative Works">OTW</acronym> <acronym title="Frequently Asked Questions">FAQ</acronym></a>. We have legal resources and alliances on which we will draw. However, that is not a guarantee that the organization can or will fight each battle. The Board will take into account a variety of factors, both legal and otherwise, in responding to a legal challenge. Further information is available <a href="http://transformativeworks.org/projects/legal">on the <acronym title="Organization for Transformative Works">OTW</acronym> site</a>.
-        </li>
-        
-        <li>We strive to make the Terms of Service (<acronym title="Terms of Service">ToS</acronym>) readable. We have tried to provide explanations for the more unusual legal terms. If you have terminology questions not covered here, Law.com's glossary may help, though we cannot vouch for the accuracy of outside sources, including those referenced in the <acronym title="Terms of Service">ToS</acronym>.
-        </li>
-      </ol>
-      <h3 class="heading">There are five parts to the Terms of Service (<acronym title="Terms of Service">ToS</acronym>):</h3>
-      <ol class="toc" role="navigation">
-        <li><a href="#general">General Principles</a></li>
-        <li><a href="#age">Age Policy</a></li>
-        <li><a href="#privacy">Privacy Policy</a></li>
-        <li><a href="#content">Content and Abuse Policies</a></li>
-        <li><a href="#assorted">Assorted Specialized Policies</a></li>
-      </ol>
-      <h4 class="heading"><a name="general" id="general">I. General Principles</a></h4>
-      <h5 class="heading"><a name="I.A.">A. The legalese: including where a lawsuit would be filed, when, and under what law</a></h5>
-      <p>The <acronym title="Terms of Service">ToS</acronym> constitute the entire agreement between you and the Organization for Transformative Works (<acronym title="Organization for Transformative Works">OTW</acronym>) and govern your use of the Service (the Archive of Our Own).
-      </p>
-      <p>The <acronym title="Terms of Service">ToS</acronym> and the relationship between you and the <acronym title="Organization for Transformative Works">OTW</acronym> shall be governed by the laws of the United States state of New York (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'ny_law') %>), without regard to its conflict of law provisions.
-      </p>
+  <h3 class="heading">There are five parts to the Terms of Service (<abbr title="Terms of Service">ToS</abbr>):</h3>
+  <ol class="toc" role="navigation">
+    <li><a href="#general">General Principles</a></li>
+    <li><a href="#age">Age Policy</a></li>
+    <li><a href="#privacy">Privacy Policy</a></li>
+    <li><a href="#content">Content and Abuse Policies</a></li>
+    <li><a href="#assorted">Assorted Specialized Policies</a></li>
+  </ol>
       
-      <p>You and the <acronym title="Organization for Transformative Works">OTW</acronym> agree to submit to the personal and exclusive jurisdiction of the courts located within New York County (Manhattan), New York.
-      </p>
-      <p>The <acronym title="Organization for Transformative Works">OTW</acronym>'s failure to enforce any part of the <acronym title="Terms of Service">ToS</acronym> will not waive the <acronym title="Organization for Transformative Works">OTW</acronym>'s ability to enforce it, and any waiver with regard to a specific instance shall not constitute a waiver of any other breaches of the <acronym title="Terms of Service">ToS</acronym>, even with regard to the same user.
-      </p>
-      <p>If any provision of the <acronym title="Terms of Service">ToS</acronym> is found by a court of competent jurisdiction to be invalid, you agree that the court should give effect to the parties' intentions as reflected in the provision, and the other provisions of the <acronym title="Terms of Service">ToS</acronym> remain in full force and effect.
-      </p>
-      <p>You agree that, regardless of any statute or law to the contrary, any claim or cause of action arising out of or related to use of the Archive or the <acronym title="Terms of Service">ToS</acronym> must be filed within one (1) year after such claim or cause of action arose or be forever barred.
-      </p>
-      <h5 class="heading"><a name="I.B.">B. You agree to the Terms of Service</a></h5>
+  <h4 class="heading"><a name="general" id="general">I. General Principles</a></h4>
+  
+  <h5 class="heading"><a name="I.A.">A. The legalese: including where a lawsuit would be filed, when, and under what law</a></h5>
+  <p>The <abbr title="Terms of Service">ToS</abbr> constitute the entire agreement between you and the Organization for Transformative Works (<abbr title="Organization for Transformative Works">OTW</abbr>) and govern your use of the Service (the Archive of Our Own). It takes the place of all prior agreements between you and the OTW.</p>
+  <p>The <abbr title="Terms of Service">ToS</abbr> and the relationship between you and the <abbr title="Organization for Transformative Works">OTW</abbr>, and all disputes arising out of or related to it, shall be governed by the laws of the United States state of New York (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'ny_law') %>), without regard to its conflict of law provisions.</p>
+
+  <p>You and the <abbr title="Organization for Transformative Works">OTW</abbr> agree to submit to the personal and exclusive jurisdiction of the courts located within New York County (Manhattan), New York, and to waive any objection to the laying of venue there.</p>
+  <p>The <abbr title="Organization for Transformative Works">OTW</abbr>'s failure to enforce any part of the <abbr title="Terms of Service">ToS</abbr> will not waive the <abbr title="Organization for Transformative Works">OTW</abbr>'s ability to enforce it, and any waiver with regard to a specific instance shall not constitute a waiver of any other breaches of the <abbr title="Terms of Service">ToS</abbr>, even with regard to the same user.</p>
+  <p>If any provision of the <abbr title="Terms of Service">ToS</abbr> is found by a court of competent jurisdiction to be invalid, you agree that the court should give effect to the parties' intentions as reflected in the provision, and that the other provisions of the <abbr title="Terms of Service">ToS</abbr> remain in full force and effect.</p>
+  <p>You agree that, regardless of any statute or law to the contrary, any claim or cause of action arising out of or related to use of the Archive or the <abbr title="Terms of Service">ToS</abbr> must be filed within one (1) year after such claim or cause of action arose or be forever barred.</p>
+  
+  <h5 class="heading"><a name="I.B.">B. You agree to the Terms of Service</a></h5>
+  <ol>
+    <li>
+      <p>By submitting a story, comment, image, item of information, tag, or any other form of content ("Content") to the Archive, you state that you agree to comply with the <abbr title="Terms of Service">ToS</abbr>.</p>
+    </li>
+    <li>
+      <p>We may update the <abbr title="Terms of Service">ToS</abbr> as necessary. If the <abbr title="Terms of Service">ToS</abbr> change in the future, this is how the process will work: Changes in the <abbr title="Terms of Service">ToS</abbr> may be proposed at any time by or to the <abbr title="Organization for Transformative Works">OTW</abbr> Board. Proposed changes will be prominently disclosed on the <a href="http://transformativeworks.org">OTW website</a>, and we will offer at least a two-week comment period for proposed changes. At the end of the comment period, proposed changes will be voted on by the Board. If the Board votes in favor, the changes will become effective at that time. You can learn about changes in the <abbr title="Terms of Service">ToS</abbr> by visiting the <a href="http://transformativeworks.org">OTW website</a> or subscribing to our <a href="http://transformativeworks.org/node/type/news/feed">RSS feed</a>.</p>
+      <p>Subject to amendments of the update process by the OTW Board, this is the only means by which the Terms of Service may be altered.   The Terms of Service cannot be changed by, e.g., emails or oral communications with you.</p>
+    </li>
+  </ol>
+
+  <h5 class="heading"><a name="I.C.">C. Potential problems with the Service</a></h5>
+  <ol>
+    <li>
+      <p>The <abbr title="Organization for Transformative Works">OTW</abbr> provides services, including the Archive of Our Own, on an "as is" and "as available" basis. The <abbr title="Organization for Transformative Works">OTW</abbr> does not warrant (that is, does not make a legally binding promise) that our services will meet your requirements; that our services will be uninterrupted, timely, secure, or error-free; or that the results you get from using the services will be accurate, reliable, or satisfactory to you. We will endeavor to provide the best possible service to users of the site, but many things (e.g., possible outages, hackings, etc.) are not within our control and we cannot provide for all eventualities.</p>
+    </li>
+    <li>
+      <p>Any material you download, view, or otherwise access through <abbr title="Organization for Transformative Works">OTW</abbr> services or sites is at your own risk. You will be solely responsible for any damage or loss of data that results from the download of any such material.</p>
+    </li>
+    <li>
+      <p>The <abbr title="Organization for Transformative Works">OTW</abbr> expressly disclaims all warranties of any kind, whether express or implied, including, but not limited to, the <%= link_to 'implied warranties of merchantability', tos_faq_path(:anchor => 'merchantability') %>, fitness for a particular purpose and non-infringement. The <abbr title="Terms of Service">ToS</abbr> govern your use of the <abbr title="Organization for Transformative Works">OTW</abbr>'s services, and therefore no communication from anyone associated with the <abbr title="Organization for Transformative Works">OTW</abbr> will create any warranty that isn't expressly stated in the <abbr title="Terms of Service">ToS</abbr>.</p>
+    </li>
+    <li>
+      <p>You expressly agree that the <abbr title="Organization for Transformative Works">OTW</abbr> shall not be liable to you for any damages of any kind (even if the <abbr title="Organization for Transformative Works">OTW</abbr> has been advised of the possibility of such damages) resulting from the services, including but not limited to your use of or inability to use the services; unauthorized access to or changes in Content or information you submit; and the acts and statements of third parties who use the services.</p>
+    </li>
+    <li>
+      <p>You agree that the <abbr title="Organization for Transformative Works">OTW</abbr> shall not be liable to you or any third party for any termination of or limitation on your access to <abbr title="Organization for Transformative Works">OTW</abbr> services. The <abbr title="Organization for Transformative Works">OTW</abbr> may change, end, or put on hiatus services or parts of services at any time.</p>
+    </li>
+    <li>
+      <p>You agree that the <abbr title="Organization for Transformative Works">OTW</abbr> shall not be liable to you for any claim arising out of Content you make available, your use of the Service, your connection to the Service, your use of the <abbr title="Terms of Service">ToS</abbr>, or your violation of any rights of another.</p>
+      <p>In other words, the <abbr title="Organization for Transformative Works">OTW</abbr> is not liable to you for allowing you to post Content, download Content, or do other things with <abbr title="Organization for Transformative Works">OTW</abbr> services. The <abbr title="Organization for Transformative Works">OTW</abbr> does not assume whatever legal risks you face by posting, viewing, or doing other things with Content.</p>
+    </li>
+  </ol>
       
-      <ol>
-      <li><p>By submitting a story, comment, image, item of information, tag, or any other form of content ("Content") to the Archive, you state that you agree to comply with the <acronym title="Terms of Service">ToS</acronym>.
-      </p>
-      </li>
-      <li><p>We may update the <acronym title="Terms of Service">ToS</acronym> as necessary. If the <acronym title="Terms of Service">ToS</acronym> change in the future, this is how the process will work: Changes in the <acronym title="Terms of Service">ToS</acronym> may be proposed at any time by or to the <acronym title="Organization for Transformative Works">OTW</acronym> Board. Proposed changes will be prominently disclosed on the <a href="http://transformativeworks.org">OTW website</a>, and we will offer at least a two-week comment period for proposed changes. At the end of the comment period, proposed changes will be voted on by the Board. If the Board votes in favor, the changes will become effective at that time. You can learn about changes in the <acronym title="Terms of Service">ToS</acronym> by visiting the <a href="http://transformativeworks.org">OTW website</a> or subscribing to our <a href="http://transformativeworks.org/node/type/news/feed">RSS feed</a>.
-      </p>
-      </li>
-      </ol>
+  <h5 class="heading"><a name="I.D.">D. What you can't do:</a></h5>
+  <p>You agree not to use the <abbr title="Organization for Transformative Works">OTW</abbr> services (including the e-mail addresses and <abbr title="Uniform Resource Locator">URL</abbr>s of <abbr title="Organization for Transformative Works">OTW</abbr> sites):</p>
+  <ol>
+    <li>
+      <p>to make available any Content that violates the <a href="#content">Content Policy</a>;</p>
+    </li>
+    <li>
+      <p>to impersonate any person or entity, including, but not limited to, an <abbr title="Organization for Transformative Works">OTW</abbr> representative, or falsely state or otherwise misrepresent your affiliation with a person or entity (fiction marked as such, including real-person fiction in first-person format, is not subject to this policy);</p>
+    </li>
+    <li>
+      <p>to forge headers or otherwise manipulate identifiers in order to disguise the origin of any Content transmitted to or through the <abbr title="Organization for Transformative Works">OTW</abbr> services (headers and identifiers are defined as information actually used or intended to be used to route or authenticate Content, and do not include Content that simulates identifiers as part of a story, such as a fictional e-mail exchange);</p>
+    </li>
+    <li>
+      <p>to make available any Content that a court has ruled constitutes patent, trademark, trade secret or copyright infringement (please be aware of the <abbr title="Organization for Transformative Works">OTW</abbr>'s <a href="http://transformativeworks.org/faq-page">position on fanwork legality</a>);</p>
+    </li>
+    <li>
+      <p>to make available <a href="#IV.B.">any unsolicited or unauthorized advertising</a> (defined as solicitations for direct or indirect commercial advantage), junk mail, spam, chain letters, pyramid schemes, or any other form of solicitation;</p>
+    </li>
+    <li>
+      <p>to make available any material that contains software viruses or any other computer code, files or programs designed to interrupt, destroy or limit the functionality of any computer or hardware or telecommunications equipment;</p>
+    </li>
+    <li>
+      <p>to interfere with or disrupt <abbr title="Organization for Transformative Works">OTW</abbr> sites or servers or networks connected to <abbr title="Organization for Transformative Works">OTW</abbr> sites;</p>
+    </li>
+    <li>
+      <p>to create an account if you are a resident or national of any country to which the U.S. has prohibited transactions by mandating a trade embargo, as detailed further by <a href="http://www.pmddtc.state.gov/embargoed_countries/">the State Department</a>; or</p>
+    </li>
+    <li>
+      <p>to use <abbr title="Organization for Transformative Works">OTW</abbr> services to break any law that applies to you, including any rules or regulations having the force of law. Just by way of example, do not use the services to disseminate restricted technologies or violate laws governing the export of technical data. This provision is not intended to deal with matters subject to the <a href="#content">Content Policy</a>, but the Content Policy cannot cover every law in every country. As a general matter, the Archive follows US law. Content that is alleged to violate the law of a relevant jurisdiction will be dealt with according to the procedures established in the <a href="#content">Abuse Policy</a>.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="I.E.">E. Content you see through use of the Service:</a></h5>
+  <ol>
+    <li>
+      <p>The <abbr title="Organization for Transformative Works">OTW</abbr> or users of its services may provide links to other sites. The <abbr title="Organization for Transformative Works">OTW</abbr> has no control over such sites, and you agree that the <abbr title="Organization for Transformative Works">OTW</abbr> is not responsible for and does not endorse their content or availability. (Please do report dead links to the OTW webmasters or to Archive administrators.)</p>
+    </li>
+    <li id="exposure">
+      <p>You understand that the <abbr title="Organization for Transformative Works">OTW</abbr> does not prescreen Content or review it for purposes of compliance with the <abbr title="Terms of Service">ToS</abbr>. This includes but is not limited to story information, story content, text, graphics, comments, or any other material. Content is the sole responsibility of the people who submitted it. You understand that using the Archive may expose you to material that is offensive, triggering, erroneous, sexually explicit, indecent, blasphemous, objectionable, grammatically incorrect, or badly spelled.</p>
+    </li>
+    <li>
+      <p>You recognize that the <abbr title="Organization for Transformative Works">OTW</abbr> does not endorse Content on the Archive in any way, except when material appears as an official statement of the <abbr title="Organization for Transformative Works">OTW</abbr>. No committee members, officers, or directors of the <abbr title="Organization for Transformative Works">OTW</abbr> are acting in an official capacity when they post fanwork, commentary, or other Content of the type generally provided by site users.</p>
+    </li>
+    <li>
+      <p>The <abbr title="Organization for Transformative Works">OTW</abbr> is not liable to you for any Content to which you are exposed on or because of the Archive.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="I.F.">F. Valid e-mail address:</a></h5>
+  <ol>
+    <li>
+      <p>As part of your registration, you agree to provide an accurate and current e-mail address and to update the address as necessary. If your e-mail address is inaccurate or not current, the Archive may <%= link_to 'suspend your account', tos_faq_path(:anchor => 'out_of_date') %>. Unless there are other circumstances, such as voluntary deletion by a user, Content provided by suspended accounts before the suspension will not be removed.</p>
+    </li>
+    <li>
+      <p>By registering or otherwise using an e-mail address in connection with the Archive, you assert that the e-mail address is not listed on any child protection registry. (There are child protection registries in Michigan and Utah, and our policy applies to any others that exist or may be adopted, whether local, state, or national, including any outside the U.S.)</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="I.G.">G. What we do with your content:</a></h5>
+  <p>The <abbr title="Organization for Transformative Works">OTW</abbr> does not claim any ownership or copyright in your Content. <strong>Repeat: we do not own your Content</strong>. Nothing in this agreement changes that in any way. Running the Archive, however, requires us to make copies, and backup copies, on servers that may be located anywhere around the world.</p>
+  <ol>
+    <li>
+      <p>You agree that we can make those copies and show your Content to other people, subject to your privacy settings. Specifically, by submitting Content, you grant the <abbr title="Organization for Transformative Works">OTW</abbr> a world-wide, royalty-free, nonexclusive license to make your Content available. "Making available" includes distributing, reproducing, performing, displaying, compiling, and modifying or adapting (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'worldwide_nonexclusive') %>).</p>
+      <p>Modifying and adapting here refer strictly to how your work is displayed&#8212;not how it is written, drawn, or otherwise created. But because your Content may be transmitted over various networks, we may have to make changes to the formatting or display of your Content in order to adapt to the technical requirements of different networks or devices. Multimedia content may not display properly on all devices. In some circumstances, we may make changes to improve accessibility. For example, we may automatically convert html tags to our standard forms (e.g., changing "bold" html to "strong"). Or we may make special provisions for accessibility, such as allowing you to use nonstandard fonts but also providing an alternate format for those who cannot read such fonts. We may use an internal search engine whose results display relevant snippets from your Content.</p>
+      <p>User-provided tags are subject to organization, which is a process we call tag wrangling; for a full explanation of tag wrangling, <%= link_to "refer to the ToS FAQ", tos_faq_path(:anchor => "tag_wrangling") %>.</p>
+    </li>
+    <li>
+      <p>Subject to the next paragraph of this policy, this license exists only for as long as you choose to continue to include such Content on the Archive and will terminate within a reasonable time after you remove or the <abbr title="Organization for Transformative Works">OTW</abbr> removes such Content from the Archive. We will always strive to make your Content unavailable to users as soon as possible should you choose to remove it. Though removed Content will not be publicly available, for legal and disaster recovery purposes we may retain backup copies for longer periods.</p>
+    </li>
+    <li>
+      <p>You may provide Content to a part of the Archive that you do not completely control. For example, you may decide to participate in a challenge run by another user. Or you may provide Content to a part of the Archive where your Content can be deleted by other users, for example a comments page. Where this is the case, by submitting Content to those parts of the site, you agree to the rules for removing and retaining such Content on those parts of the site.</p>
+    </li>
+    <li>
+      <p>You acknowledge and agree that the <abbr title="Organization for Transformative Works">OTW</abbr> may preserve Content and may disclose Content if required to do so by law or in the good faith belief that such preservation or disclosure is reasonably necessary to: comply with legal process; enforce the <abbr title="Terms of Service">ToS</abbr>; respond to claims that any Content violates the rights of third parties; or protect the rights, property, or personal safety of the <abbr title="Organization for Transformative Works">OTW</abbr> services' users and the public.</p>
+    </li>
+  </ol>
+  
+  <h4 class="heading"><a name="age" id="age">II. Archive Age Policy</a></h4>
+  <p>This Age Policy covers the Archive's treatment of users under the age of thirteen (13).</p>
+  <p>In compliance with United States regulations regarding online privacy for children, the Archive does not knowingly solicit or collect information from children under the age of thirteen (13). Children under the age of thirteen (13) are therefore not permitted to have an account or upload Content of any type to the Archive. By submitting Content to the Archive, you thereby confirm that you are thirteen (13) years old or older (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'age_faq') %>).</p>
+  <p>Asking a parent or legal guardian to upload Content does not constitute submitting Content under this policy. If you are under the age of thirteen (13), your parent or legal guardian may upload your Content through their account.</p>
+  
+  <h4 class="heading"><a name="privacy" id="privacy">III. Archive Privacy Policy</a></h4>
+  <h5 class="heading"><a name="III.A.">A. Who runs the Archive</a></h5>
+  <p>The Archive is a project of the Organization for Transformative Works (<abbr title="Organization for Transformative Works">OTW</abbr>), which is committed to fan privacy. For more information about how you can support the <abbr title="Organization for Transformative Works">OTW</abbr>, please see the <a href="http://transformativeworks.org/"><abbr title="Organization for Transformative Works">OTW</abbr> Website</a>. This Privacy Policy governs the Archive.</p>
       
-      <h5 class="heading"><a name="I.C.">C. Potential problems with the Service</a></h5>
+  <h5 class="heading"><a name="III.B.">B. The TOS applies only to the Archive</a></h5>
+  <p>This Privacy Policy covers the Archive's treatment of personally identifying information submitted to us and which we collect when you use our services in the course of ordinary communications. If you follow links off the Archive, you should review those sites' privacy policies, which may be different, and for which the Archive takes no responsibility.</p>
+  
+  <h5 class="heading"><a name="III.C.">C. About possible changes:</a></h5>
+  <p>If this policy changes at any point in the future, we will post the policy changes to the <%= link_to 'Archive of Our Own', tos_path %>. Such changes will be used only for information provided by those who have visited, used, or accessed the site after the effective date of such policy changes. If you are concerned about how your information is used, you should check back at the Archive site periodically.</p>
+  
+  <h5 class="heading"><a name="III.D.">D. Archive adherence to the TOS:</a></h5>
+  <p>If you feel that this site is not following its stated information policy, please contact Archive administrators.</p>
+      
+  <h5 class="heading"><a name="III.E.">E. What we will do:</a></h5>
+  <ol>
+    <li>
+      <p>We may collect personally identifying information when you register for a user account with the Archive, visit any of the Archive sites, or use any of the Archive services. We may use third-party services to store, process, or transmit data, or perform other technical functions related to operating the site.  These services may include spam detectors, backup services, icon hosting, and e-mail services.  We endeavor to use only services with comprehensive privacy policies but cannot guarantee their performance.</p>
+    </li>
+    <li>
+      <p>We will use your e-mail address internally, and if you make it public on the site, anyone can access it and use it for any purpose. We may occasionally send e-mails to you from the Archive. We reserve the right to send you notice of violations or suspensions of the Terms of Service, as well as to reply to any e-mail message you send to the Archive.</p>
+    </li>
+    <li>
+      <p>We may retain:</p>
       <ol>
-        <li>
-          <p>The <acronym title="Organization for Transformative Works">OTW</acronym> provides services, including the Archive of Our Own, on an "as is" and "as available" basis. The <acronym title="Organization for Transformative Works">OTW</acronym> does not warrant (that is, does not make a legally binding promise) that our services will meet your requirements; that our services will be uninterrupted, timely, secure, or error-free; or that the results you get from using the services will be accurate, reliable, or satisfactory to you. We will endeavor to provide the best possible service to users of the site, but many things (e.g. possible outages, hackings, etc.) are not within our control and we cannot provide for all eventualities.
-          </p>
-        </li>
-        <li>
-          <p>Any material you download, view, or otherwise access through <acronym title="Organization for Transformative Works">OTW</acronym> services or sites is at your own risk. You will be solely responsible for any damage or loss of data that results from the download of any such material.
-          </p>
-        </li>
-        <li>
-          <p>The <acronym title="Organization for Transformative Works">OTW</acronym> expressly disclaims all warranties of any kind, whether express or implied, including, but not limited to, the 
-            <%= link_to 'implied warranties of merchantability', tos_faq_path(:anchor => 'merchantability') %>, fitness for a particular purpose and non-infringement. The <acronym title="Terms of Service">ToS</acronym> govern your use of the <acronym title="Organization for Transformative Works">OTW</acronym>'s services, and therefore no communication from anyone associated with the <acronym title="Organization for Transformative Works">OTW</acronym> will create any warranty that isn't expressly stated in the <acronym title="Terms of Service">ToS</acronym>.
-          </p>
-        </li>
-        <li>
-          <p>You expressly agree that the <acronym title="Organization for Transformative Works">OTW</acronym> shall not be liable to you for any damages of any kind (even if the <acronym title="Organization for Transformative Works">OTW</acronym> has been advised of the possibility of such damages) resulting from the services, including but not limited to your use of or inability to use the services; unauthorized access to or changes in Content or information you submit; and the acts and statements of third parties who use the services.
-          </p>
-        </li>
-        <li>
-          <p>You agree that the <acronym title="Organization for Transformative Works">OTW</acronym> shall not be liable to you or any third party for any termination of or limitation on your access to <acronym title="Organization for Transformative Works">OTW</acronym> services. The <acronym title="Organization for Transformative Works">OTW</acronym> may change, end, or put services or parts of services on hiatus at any time.
-          </p>
-        </li>
-        <li>
-          <p>You agree that the <acronym title="Organization for Transformative Works">OTW</acronym> shall not be liable to you for any claim arising out of Content you make available, your use of the Service, your connection to the Service, your use of the <acronym title="Terms of Service">ToS</acronym>, or your violation of any rights of another.
-          </p>
-          <p>In other words, the <acronym title="Organization for Transformative Works">OTW</acronym> is not liable to you for allowing you to post Content, download Content, or do other things with <acronym title="Organization for Transformative Works">OTW</acronym> services. The <acronym title="Organization for Transformative Works">OTW</acronym> does not assume whatever legal risks you face by posting, viewing, or doing other things with Content.
-          </p>
-        </li>
+        <li>the e-mail addresses of those who communicate with us via e-mail;</li>
+        <li>user-specific information about what pages users access or visit;</li>
+        <li>the IP address of each visitor to our sites;</li>
+        <li>any information that a person sends to <abbr title="Organization for Transformative Works">OTW</abbr> or Archive e-mail addresses (i.e., any e-mail to an administrator or other official address).</li>
       </ol>
-      <h5 class="heading"><a name="I.D.">D. What you can't do:</a></h5>
-      <p>You agree to not use the <acronym title="Organization for Transformative Works">OTW</acronym> services (including the e-mail addresses and <acronym title="Uniform Resource Locator">URL</acronym>s of <acronym title="Organization for Transformative Works">OTW</acronym> sites):
-      </p>
-      <ol>
-        <li>
-          <p>to make available any Content that violates the <a href="#content">Content Policy</a>;</p>
-        </li>
-        <li>
-          <p>to impersonate any person or entity, including, but not limited to, an <acronym title="Organization for Transformative Works">OTW</acronym> representative, or falsely state or otherwise misrepresent your affiliation with a person or entity (fiction marked as such, including real-person fiction in first-person format, is not subject to this policy);
-          </p>
-        </li>
-        <li>
-          <p>to forge headers or otherwise manipulate identifiers in order to disguise the origin of any Content transmitted to or through the <acronym title="Organization for Transformative Works">OTW</acronym> services (headers and identifiers are defined as information actually used or intended to be used to route or authenticate Content, and do not include Content that simulates identifiers as part of a story, such as a fictional e-mail exchange);
-          </p>
-        </li>
-        <li>
-          <p>to make available any Content that a court has ruled constitutes patent, trademark, trade secret or copyright infringement (please be aware of the <acronym title="Organization for Transformative Works">OTW</acronym>'s <a href="http://transformativeworks.org/faq/legal">position on fanwork legality</a>);
-          </p>
-        </li>
-        <li>
-          <p>to make available <a href="#IV.B.">any unsolicited or unauthorized advertising</a> (defined as solicitations for direct or indirect commercial advantage), junk mail, spam, chain letters, pyramid schemes, or any other form of solicitation;
-          </p>
-        </li>
-        <li>
-          <p>to make available any material that contains software viruses or any other computer code, files or programs designed to interrupt, destroy or limit the functionality of any computer or hardware or telecommunications equipment;
-          </p>
-        </li>
-        <li>
-          <p>to interfere with or disrupt <acronym title="Organization for Transformative Works">OTW</acronym> sites or servers or networks connected to <acronym title="Organization for Transformative Works">OTW</acronym> sites;
-          </p>
-        </li>
-        <li>
-          <p>to create an account if you are a resident or national of any country to which the U.S. has prohibited transactions by mandating a trade embargo, as detailed further by <a href="http://www.ustreas.gov/offices/enforcement/ofac/programs/">the State Department</a>; or
-          </p>
-        </li>
-        <li>
-          <p>to use <acronym title="Organization for Transformative Works">OTW</acronym> services to break any law that applies to you, including any rules or regulations having the force of law. Just by way of example, do not use the services to disseminate restricted technologies or violate laws governing the export of technical data. This provision is not intended to deal with matters subject to the <a href="#content">Content Policy</a>, but the Content Policy cannot cover every law in every country. As a general matter, the Archive follows US law. Content that is alleged to violate the law of a relevant jurisdiction will be dealt with according to the procedures established in the <a href="#content">Abuse Policy</a>.
-          </p>
-        </li>
+    </li>
+    <li>
+      <p>We use cookies to store visitors' preferences; customize web page content based on visitors' browser type or other information that the visitor sends; and record activity at our sites in order to provide better service when visitors return to our site. Cookies must be enabled for the site to function properly with your computer. The Archive has no access to cookies set by other sites.</p>
+    </li>
+    <li>
+      <p>If for any reason you terminate your user account with us, we will destroy active records containing your identifying information as soon as reasonably possible. "Reasonably" here means no more than seven business days from the termination of the account; however, we may have to retain some information for a longer period as legal records. If we terminate your service, we may retain enough information to prevent you from signing up for the service in the future.</p>
+    </li>
+    <li>
+      <p>If we receive a complaint about a violation of someone's intellectual property rights, we will disclose the information provided by the rightsholder or the rightsholder's representative to the subject of the complaint. If we receive a complaint about other matters, such as plagiarism or harassment, we will follow the <a href="#content">Abuse Policy</a>, which explains what information provided by the complainant may be disclosed to the subject of the complaint.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="III.F.">F. What we will not do:</a></h5>
+  <ol>
+    <li>
+      <p>The Archive will not give out any of your personal information or any of the information we collect, except as provided under this policy. We will not use your personally identifying information to market third party products and services to you. We will not sell, trade, or rent your personally identifying information.</p>
+    </li>
+    <li>
+      <p>We will not disclose your personally identifying information to any third party without your prior consent unless we (1) are legally compelled to do so, (2) have a good-faith belief that such action is necessary to comply with a current judicial proceeding, a court order, or legal process served on the <abbr title="Organization for Transformative Works">OTW</abbr>, or (3) are cooperating with law enforcement authorities. As to (3), we will cooperate with all investigations conducted by law enforcement authorities of the United States of America when legally required to do so. Cooperation with law enforcement authorities from other countries and cooperation when it is not legally required are at our sole discretion. Our discretion looks favorably on freedom and justice, and unfavorably on oppression and violence.</p>
+    </li>
+    <li>
+      <p>Unless legally prohibited, we will attempt to notify you any time we disclose your personally identifying information. In some cases, the information we have, such as an IP address, may be insufficient for us to notify you.</p>
+    </li>
+  </ol>
+  
+  <h4 class="heading"><a name="content" id="content">IV. Content and Abuse Policies</a></h4>
+  <p>We recognize that there is no such thing as a popular abuse policy. By their nature, abuse complaints are unpleasant at best. And policy needs to be applied by people, which always complicates matters. We have tried to set out clear procedures to minimize and channel the inevitable conflicts.</p>
+  <p>The Content and Abuse policy covers <a href="#IV.A.">procedures</a>, <a href="#IV.B.">spam and commercial promotion</a>, <a href="#IV.C.">threatening the technical integrity of the site</a>, <a href="#IV.D.">copyright</a>, <a href="#IV.E.">plagiarism</a>, <a href="#IV.F.">personal information and fannish identities</a>, <a href="#IV.G.">harassment</a>, <a href="#IV.H.">illegal and non-fanwork content</a>, and <a href="#IV.K.">ratings and warnings</a>. We have developed a <abbr>FAQ</abbr> page to answer additional questions about Content and Abuse (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'content_faq') %>).</p>
+  <p>The Archive does not prescreen for content. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.</p>
+  
+  <h5 class="heading"><a name="IV.A.">A. Procedures</a></h5>
+  <ol style="list-style-type:decimal;">
+    <li>Submitting a complaint
+      <p>Complaints may be submitted to our abuse team. Except in the case of <a href="#IV.D.">copyright complaints</a>, a complainant may submit a complaint via <%= link_to 'the web form', new_abuse_report_path %>, which does not require identifying information. Depending on the nature of the complaint, however, anonymity may hinder our ability to verify the complaint or affect the credibility of the complaint. In order for the abuse team to follow up on any allegation, the exact location (<abbr title="Uniform Resource Locator">URL</abbr>) and nature of the alleged violation must be supplied in the original complaint. Repeated unverified abuse complaints from the same source may be subject to summary rejection.</p>
+    </li>
+    <li>Treatment and investigation of complaints
+      <p>Only people who need to know about a complaint will be informed about it. The details of any individual complaint are confidential and must be used only in resolving that complaint.</p>
+      <p>The subject of a complaint may also be among those who need to know about it. Only information provided in the complaint will be passed on. The complainant has complete control over what information is submitted to Abuse, and can submit the complaint anonymously. (Legal names and other information sufficient to identify a person in the physical world will never be disclosed as part of a standard abuse complaint. For further clarification, please refer to <a href="http://transformativeworks.org/privacy">our privacy policy</a>.)</p>
+      <p>In general, the abuse team will only communicate with the subject of a complaint if there appears to be a violation of the abuse policy, or if the abuse team needs more information to resolve the issue.</p>
+      <p>The abuse team records the IP address from which each anonymous complaint is submitted, to prevent misuse of the abuse system.</p>
+      <p>Subject to obligations of confidentiality about specific complaints, the abuse team may release statistics about general trends, such as the number of plagiarism complaints made and the actions taken by the abuse team, in public or to other <abbr title="Organization for Transformative Works">OTW</abbr> committees, to facilitate discussions of policies, procedures, and trends in abuse complaints.</p>
+      <p>Complaints will be reviewed by two members from the volunteer abuse team. If they agree on an action, that action will be taken. If they disagree, a third member will review the complaint, and the team will proceed by majority vote.</p>
+      <p>When the abuse team determines that content needs to be removed, if contact information is available, the abuse team will notify the original poster (the complaint subject), identify the nature of the problem with the content, and set a deadline for voluntary removal of the content.  An administrator may also hide content from other users where appropriate. If the original poster does not remove the content within the deadline, the Archive will remove the content. In addition, we may remove content immediately, without waiting for a response, if we are contacted by a legitimate law enforcement agency or if we determine that the content is threatening to an individual or reveals an individual's personal information without consent. In such cases we will inform the original poster as soon as possible. The original poster will then have the option to resubmit with the violating content removed.</p>
+      <p>The abuse team may also determine that tags need to be added to or edited in an item of content. For more information, please see the <a href="#IV.K.">ratings/warnings section</a>.</p>
+      <p>If content violating the <abbr title="Terms of Service">ToS</abbr> is posted anonymously or with invalid contact information, it will be removed without prior notice.</p>
+      <p>If the complainant requests notification of the resolution of the complaint and provides contact information, we will notify them.</p>
+    </li>
+    <li>Submitting an appeal
+      <p>The complainant or the original poster may appeal a decision to the abuse team as a whole. During the appeal, the original decision will remain in effect. We will attempt to resolve appeals as speedily as possible, but please remember that we are all volunteers. The abuse team's decisions are final unless overturned by the Board at the Board's sole discretion. There is no right of appeal to the Board. The abuse team, however, may consult with the Board or with committee members authorized by the Board if the abuse team decides that consultation would help resolve an issue.</p>
+    </li>
+    <li>Account statuses
+      <p>"Account status" refers to the existence of warnings on an account and whether that account has been suspended, temporarily or permanently (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'account_status') %>).</p>
+      <p>The abuse team may issue warnings when it determines that a violation of the <abbr title="Terms of Service">ToS</abbr> was minor or unintentional. More serious, intentional, or repeated violations of the <abbr title="Terms of Service">ToS</abbr> will trigger suspensions. A suspension will generally be for a defined period of time, such as a month. The abuse team may also permanently suspend users when it determines that such action is justified. Permanent suspensions for violations other than spam or threatening the technical integrity of the site require a majority vote of the abuse team. The abuse team's discretion will be informed by the nature of the violation and the response of the user, including the user's decision to voluntarily remove the content that violates the <abbr title="Terms of Service">ToS</abbr>.</p>
+      <p>A user whose account has been permanently suspended may not rejoin under another identity.</p>
+      <p>Where possible, we encourage users to try mediating disputes before contacting Abuse. We provide tools for registered users to control Content that is uploaded in their own spaces. For example, users are able to delete comments on their own stories. If you are unable to resolve the problem on your own, you can file a complaint with the volunteer abuse team.</p>
+      <p>In some cases, objectionable content may have already been deleted before the abuse team acts. We appreciate good faith attempts to resolve disputes, and in most such cases will close the abuse complaint with no further action. However, we reserve the right to consider individual circumstances, including whether the poster has engaged in a pattern of such conduct. In such cases, if we verify that the original content violated the <abbr title="Terms of Service">ToS</abbr>, we may still decide to warn or suspend the original poster.</p>
+      <p>Penalties apply to users, not to screen names/pseudonyms. Penalties are not retroactive: a suspended user's nonobjectionable content will not be automatically removed. Suspended users retain the right to delete or orphan their fanworks by contacting Archive adminstrators.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="IV.B.">B. Spam and commercial promotion</a></h5>
+  <p>Promotion of commercial products or activities is not allowed. Repeated identical or nearly identical posts in multiple places, e.g., a large number of identical comments promoting a website, will also be considered spam regardless of commercial content.</p>
+  <p>Anything we determine is spam will be removed immediately. Deletion and suspension decisions will not be subject to the two-person review process described above. Users may be permanently suspended for spam the first time they post spam content.</p>
+  <p>In general, unsolicited commercial activity is not permitted on the Archive. The abuse team has discretion to decide that a fan-related offer was mistakenly disseminated and issue a warning instead of a suspension.</p>
+  <p>Any spam- or commercial activity-related penalties may be appealed using the ordinary appeal process.</p>
+  <p>We may use automated means to filter out spam. If you submit content that is erroneously caught in a spam filter, please notify Archive administrators.</p>
+  
+  <h5 class="heading"><a name="IV.C.">C. Threatening the technical integrity of the site</a></h5>
+  <p>Conduct that threatens the technical integrity of the Archive, e.g. attempts to hack the site or spread viruses through it, will result in an immediate account suspension and deletion of any content that is hazardous to the operation of the site or to users' computers. Threats to the technical integrity of the Archive will not be subject to the two-person review process described above. Users may be permanently suspended for threatening the technical integrity of the Archive the first time they do so. Such suspensions may be appealed using the ordinary appeal process.</p>
+  <p>Uploading technically misnamed content&#8212;e.g., non-text files with a text file extension name, used to disguise their actual format&#8212;constitutes a threat to the technical integrity of the site.</p>
+  
+  <h5 class="heading"><a name="IV.D.">D. Copyright and Trademark</a></h5>
+  <p>Please be aware that the <abbr title="Organization for Transformative Works">OTW</abbr> believes that transformative fanworks are legal; therefore, complaints based merely on the existence of fanwork based on copyrighted content or mentioning trademarks will not be pursued.</p>
+  <p>If you believe that your content has been reproduced in whole or in part, without transformative use (transformative use is defined by the <abbr title="Organization for Transformative Works">OTW</abbr> as adding something new, with a further purpose or different character, altering the source with new expression, meaning, or message), please follow our procedures for reporting copyright infringement.</p>
+  <p>The report must clearly and specifically indicate the exact location (<abbr title="Uniform Resource Locator">URL</abbr>), nature, and extent of each instance of allegedly infringing content, as well as the exact copyrighted material that is being infringed, as well as full and complete contact information for the copyright holder and/or an authorized agent.</p>
+  <p>Epigraphs and short quotations, including quotations from song lyrics and poetry, are allowed. Content that is set within or draws on an existing work is allowed. Reproductions of entire copyrighted works&#8212;whether songs, poems, transcripts, or other material&#8212;are not allowed without the consent of the copyright owner.</p>
+  
+  <h5 class="heading"><a name="IV.E.">E. Plagiarism</a></h5>
+  <p>Plagiarism is an often-contested and fuzzy concept, and no definition will satisfy everyone. Our aim is to be transparent and fair in resolving disputes.</p>
+  <p>Plagiarism is the use of someone else's words or concepts without properly attributing those words or concepts to their original source. Simply finding and replacing names, substituting synonyms, or rearranging a few words is not enough to make the work original to you. Deliberately writing a work using the same general idea as another work is not plagiarism, but citation is always appreciated. Generally, quotes from the source material (canon) on which the content is based will not constitute plagiarism, nor will obvious allusions ("Use the Force, Luke!"). However, when in doubt, cite. Be  aware that the abuse team may decide that your citation is not sufficient to render the work your own; a mere nod to another author whose work you are presenting as your own may result in a judgment of plagiarism.</p>
+  <p>Plagiarism is a violation of the <abbr title="Terms of Service">ToS</abbr> and will incur the penalties described in the abuse policy. As with all content that violates the <abbr title="Terms of Service">ToS</abbr>, plagiarized content must be removed. Depending on the type and amount of plagiarized content, this might entail removing an entire piece of content, removing only the plagiarized portions from a longer work while leaving the original material, or adding citations.</p>
+  <p>If you believe a fanwork posted on the Archive plagiarizes another work, please report the work to <%= link_to 'the abuse team', new_abuse_report_path %>. In order to allow us to investigate, please provide a link to the work on the Archive, relevant excerpts, and a specific citation of the original material (for example, a <abbr title="Uniform Resource Locator">URL</abbr> or a book edition and page number).</p>
+  
+  <h5 class="heading"><a name="IV.F.">F. Personal information and fannish identities</a></h5>
+  <p>The <abbr title="Organization for Transformative Works">OTW</abbr> is committed to protecting the privacy of our users, including the separation many fans choose to keep between their legal, "real life" names and their fannish pseudonyms. Unauthorized disclosure of a fan's personal information is a violation of the Terms of Service. For these purposes, "personal information" may include legal names and other information sufficient to identify a person in the physical world that they have not voluntarily shared on the Archive itself. "Personal information" may also include the identity of the creator of an orphaned fanwork.
+  </p>
+  
+  <h5 class="heading"><a name="IV.G.">G. Harassment</a></h5>
+  <p>Harassment is any behavior that produces a generally hostile environment for its target. This includes activities such as bullying and hazing by groups of people as well as personal attacks by individuals. Not everyone agrees about what is offensive and unacceptable. Individual users are encouraged to try to resolve problems on their own before contacting the abuse team.</p>
+  <p>Harassment is not allowed. Users engaging in this behavior may be warned, suspended, or permanently suspended as described in the general abuse procedure.</p>
+  <p>When judging whether a specific incident constitutes harassment, the abuse team will consider factors such as whether the behavior was repeated, whether it was repeated after the offender was asked to stop, whether the behavior was targeted at a specific person, whether that target could have easily avoided encountering the behavior, whether the behavior would be considered unacceptable according to normal community standards, etc. Additionally, making complaints that are both (a) repeated and (b) baseless, particularly those targeting a specific user, can be considered harassing behavior and may be deemed a violation of the <abbr title="Terms of Service">ToS</abbr>.</p>
+  <p>While these complaints will be reviewed on a case by case basis, in general, threatening content will be considered harassment, while content that is merely annoying will be allowed. Please note that most statements like "X is a terrible actor and should die!" are not death threats. Writing a story where X dies as part of the plot is also not usually a death threat. Content that is harder to avoid (such as comments on the target's fanworks) will be judged more strictly than content that is easily avoidable (such as stories).</p>
+  <p>The behavior of the original poster (the complaint subject) may also affect the abuse team's determination. If the original poster repeatedly contacts the subject of the content about the content after being told to stop, harasses the subject, or requests that others harass the subject, the content may be considered part of a general pattern of harassment and be removed. Please use your best judgment both when producing content of this type and when reporting it.</p>
+  
+  <h6 class="heading">A special note on <abbr title="real-person fiction">RPF</abbr> (real-person fiction):</h6>
+  <p>Writing <abbr>RPF</abbr> (real-person fiction) never constitutes harassment in and of itself. However, content that advocates specific, real harmful actions towards real people is not allowed. This includes, but is not limited to, death threats and requests for readers to harass specific people. If you find content that you believe contains harassing or threatening material, please <%= link_to 'contact the abuse team', new_abuse_report_path %>.</p>
+  
+  <h5 class="heading"><a name="IV.H.">H. Illegal and inappropriate content</a></h5>
+  <p>The Archive of Our Own is a place for fanworks. Content may not be uploaded to <abbr title="Organization for Transformative Works">OTW</abbr>'s servers if it contains or links to child pornography (images of real children); warez, cracks, hacks or other executable files and their associated utilities; trade secrets, restricted technologies, or classified information; or if it consists entirely of actual instruction manuals, technical data, recipes, or other non-fanwork content, including non-fanwork creative work (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'original_fiction') %>). Uploading such content is a violation of the <abbr title="Terms of Service">ToS</abbr>.</p>
+  <p>We may determine that we need to remove content to resolve a threatened or pending lawsuit. If so, we will remove the content. Unless it otherwise violates the <abbr title="Terms of Service">ToS</abbr>, removal for this reason will not lead to a suspension.</p>
+  <p>If you believe content violates a specific law, you may report it to us. Please, however, read our offensive content policy below.</p>
+  
+  <h5 class="heading"><a name="IV.I.">I. Offensive content</a></h5>
+  <p>As provided in part <a href="#exposure">I.E.2</a> of the Terms of Service, the <abbr title="Organization for Transformative Works">OTW</abbr> is not liable to you for any Content to which you are exposed on or because of the <abbr title="Organization for Transformative Works">OTW</abbr> sites.</p>
+  <p>Unless it violates some other policy, we will not remove Content for offensiveness, no matter how awful, repugnant, or badly spelled we may personally find that content to be.
+  </p>
+  
+  <h5 class="heading"><a name="IV.J.">J. User Icons</a></h5>
+  <p>User icons should be appropriate for general audiences. They should not contain depictions of genital nudity or explicit sexual activity. For more information, please <%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'icon_policy') %>.</p>
+  
+  <h5 class="heading"><a name="IV.K.">K. Tags</a></h5>
+  <ol style="list-style-type:decimal;">
+    <li> <a name="IV.K.1">Introduction</a>
+      <ol style="list-style-type:lower-alpha;">
+        <li><strong>We will not require specific ratings or warnings. However, a creator who chooses not to use ratings or warnings on a fanwork must signal this choice </strong> (<a href="/tos_faq#ratings_and_warnings">refer to the ToS FAQ</a>). </li>
+        <li>By default, all users will see the archive warnings and tags the creator has selected. Any logged-in user who wishes to avoid archive warnings and tags may set preferences to hide them by default. Logged-in users who set their preferences to hide information are proceeding at their own risk and may be exposed to content they would otherwise wish to avoid. Such users may change their preferences, or reveal information for specific stories, at any time. </li>
+        <li>Logged-in users may set their preferences to indicate that they are willing to see mature or explicit content. </li>
+        <li>Other users, including users who are not registered users of the site, who follow a link to a fanwork rated mature, explicit, or "not rated," will be asked to agree to see mature, explicit, or unrated content. The Archive software will remember a non-registered user's choice during that user's visit, but will not retain the setting for future visits. </li>
       </ol>
-      <h5 class="heading"><a name="I.E.">E. Content you see through use of the Service:</a></h5>
-      <ol>
+    </li>
+    <li> <a name="IV.K.2">Ratings</a>
+      <ol style="list-style-type=:lower-alpha;">
         <li>
-          <p>The <acronym title="Organization for Transformative Works">OTW</acronym> or users of its services may provide links to other sites. The <acronym title="Organization for Transformative Works">OTW</acronym> has no control over such sites, and you agree that the <acronym title="Organization for Transformative Works">OTW</acronym> is not responsible for and does not endorse their content or availability. (Please do report dead links to the OTW webmasters or to Archive administrators.)
-          </p>
-        </li>
-        <li id="exposure">
-          <p>You understand that the <acronym title="Organization for Transformative Works">OTW</acronym> does not prescreen Content or review it for purposes of compliance with the <acronym title="Terms of Service">ToS</acronym>. This includes but is not limited to story information, story content, text, graphics, comments, or any other material. Content is the sole responsibility of the people who submitted it. You understand that using the Archive may expose you to material that is offensive, erroneous, sexually explicit, indecent, blasphemous, objectionable, or badly spelled.
-          </p>
-        </li>
-        <li>
-          <p>You recognize that the <acronym title="Organization for Transformative Works">OTW</acronym> does not endorse Content on the Archive in any way, except when material appears as an official statement of the <acronym title="Organization for Transformative Works">OTW</acronym>. No committee members, officers, or directors of the <acronym title="Organization for Transformative Works">OTW</acronym> are acting in an official capacity when they post fanwork, commentary, or other Content of the type generally provided by site users. Official announcements can be found on the <a href="http://transformativeworks.org/">OTW Website</a>.
-          </p>
-        </li>
-        <li>
-          <p>The <acronym title="Organization for Transformative Works">OTW</acronym> is not liable to you for any Content to which you are exposed on or because of the Archive.
-          </p>
-        </li>
-      </ol>
-      <h5 class="heading"><a name="I.F.">F. Valid e-mail address:</a></h5>
-      <ol>
-        <li>
-          <p>As part of your registration, you agree to provide an accurate and current e-mail address and to update the address as necessary. If your e-mail address is inaccurate or not current, the Archive may <%= link_to 'suspend your account', tos_faq_path(:anchor => 'out_of_date') %>. Unless there are other circumstances, such as voluntary deletion by a user, Content provided by suspended accounts before the suspension will not be removed.
-          </p>
-        </li>
-        <li>
-          <p>By registering or otherwise using an e-mail address in connection with the Archive, you assert that the e-mail address is not listed on any child protection registry. (There are child protection registries in Michigan and Utah, and our policy applies to any others that exist or may be adopted, whether local, state, or national, including any outside the U.S.)
-          </p>
-        </li>
-      </ol>
-      <h5 class="heading"><a name="I.G.">G. What we do with your content:</a></h5>
-      <p>The <acronym title="Organization for Transformative Works">OTW</acronym> does not claim any ownership or copyright in your Content. Repeat: we do not own your content. Nothing in this agreement changes that in any way. Running the Archive, however, requires us to make copies, and backup copies, on servers that may be located anywhere around the world.
-      </p>
-      <ol>
-        <li>
-          <p>You agree that we can make those copies and show your Content to other people, subject to your privacy settings. Specifically, by submitting Content, you grant the <acronym title="Organization for Transformative Works">OTW</acronym> a world-wide, royalty-free, nonexclusive license to make your Content available. "Making available" includes distributing, reproducing, performing, displaying, compiling, and modifying or adapting (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'worldwide_nonexclusive') %>).
-          </p>
-          <p>Modifying and adapting here refer strictly to how your work is displayed&#8212;not how it is written. We will never change the wording of your story. But because your Content may be transmitted over various networks, we may have to make changes to the formatting or display of your Content in order to adapt to the technical requirements of different networks or devices. Multimedia content may not display properly on all devices. In some circumstances, we may make changes to improve accessibility. For example, we may automatically convert html tags to our standard forms (e.g., changing "bold" html to "strong"). Or we may make special provisions for accessibility, such as allowing you to use nonstandard fonts but also providing an alternate format for those who cannot read such fonts. We may use an internal search engine whose results display relevant snippets from your Content.
-          </p>
-          <p>User-provided tags are subject to organization, which is a process we call tag wrangling; for a full explanation of tag wrangling, <%= link_to "refer to the ToS FAQ", tos_faq_path(:anchor => "tag_wrangling") %>.
-          </p>
-        </li>
-        <li>
-          <p>Subject to the next paragraph of this policy, this license exists only for as long as you choose to continue to include such Content on the Archive and will terminate within a reasonable time after you remove or the <acronym title="Organization for Transformative Works">OTW</acronym> removes such Content from the Archive. We will always strive to make your Content unavailable to users as soon as possible should you choose to remove it. Though removed Content will not be publicly available, for legal and disaster recovery purposes we may retain backup copies for longer periods.
-          </p>
-        </li>
-        <li>
-          <p>You may provide Content to a part of the Archive that you do not completely control. For example, you may decide to participate in a challenge run by another user. Or you may provide Content to a part of the Archive where your Content can be deleted by other users, for example a comments page. Where this is the case, by submitting Content to those parts of the site you agree to the rules for removing and retaining such Content on those parts of the site.
-          </p>
-        </li>
-        <li>
-          <p>You acknowledge and agree that the <acronym title="Organization for Transformative Works">OTW</acronym> may preserve Content and may disclose Content if required to do so by law or in the good faith belief that such preservation or disclosure is reasonably necessary to: comply with legal process; enforce the <acronym title="Terms of Service">ToS</acronym>; respond to claims that any Content violates the rights of third parties; or protect the rights, property, or personal safety of the <acronym title="Organization for Transformative Works">OTW</acronym> services' users and the public.
-          </p>
-        </li>
-      </ol>
-      <h4 class="heading"><a name="age" id="age">II. Archive Age Policy</a></h4>
-      <p>This Age Policy covers the Archive's treatment of users under the age of thirteen (13).</p>
-      <p>In compliance with United States regulations regarding online privacy for children, the Archive does not knowingly solicit or collect information from children under the age of thirteen (13). Children under the age of thirteen (13) are therefore not permitted to have an account or upload Content of any type to the Archive. By submitting Content to the Archive, you thereby confirm that you are thirteen (13) years old or older (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'age_faq') %>).
-      </p>
-      <p>Asking a parent or legal guardian to upload Content does not constitute submitting Content under this policy. If you are under the age of thirteen (13), your parent or legal guardian may upload your Content through his or her account.
-      </p>
-      <h4 class="heading"><a name="privacy" id="privacy">III. Archive Privacy Policy</a></h4>
-      <h5 class="heading"><a name="III.A.">A. Who runs the Archive</a></h5>
-      <p>The Archive is a project of the Organization for Transformative Works (<acronym title="Organization for Transformative Works">OTW</acronym>), which is committed to fan privacy. For more information about how you can support the <acronym title="Organization for Transformative Works">OTW</acronym>, please see the <a href="http://transformativeworks.org/"><acronym title="Organization for Transformative Works">OTW</acronym> Website</a>. This Privacy Policy governs the Archive.
-      </p>
-      <h5 class="heading"><a name="III.B.">B. The TOS applies only to the Archive</a></h5>
-      <p>This Privacy Policy covers the Archive's treatment of personally identifying information submitted to us and which we collect when you use our services in the course of ordinary communications. If you follow links off the Archive, you should review those sites' privacy policies, which may be different, and for which the Archive takes no responsibility.
-      </p>
-      <h5 class="heading"><a name="III.C.">C. About possible changes:</a></h5>
-      <p>If this policy changes at any point in the future, we will post the policy changes to the <%= link_to 'Archive of Our Own', tos_path %>. Such changes will be used only for information provided by those who have visited, used, or accessed the site after the effective date of such policy changes. If you are concerned about how your information is used, you should check back at the Archive site periodically.
-      </p>
-      <h5 class="heading"><a name="III.D.">D. Archive adherence to the TOS:</a></h5>
-      <p>If you feel that this site is not following its stated information policy, please contact Archive administrators.
-      </p>
-      <h5 class="heading"><a name="III.E.">E. What we will do:</a></h5>
-      <ol>
-        <li>
-          <p>We may collect personally identifying information when you register for a user account with the Archive, visit any of the Archive sites, or use any of the Archive services.
-          </p>
-        </li>
-        <li>
-          <p>We will use your e-mail address internally, and if you make it public on the site, anyone can access it and use it for any purpose. We may occasionally send e-mails to you from the Archive. We reserve the right to send you notice of violations or suspensions of the Terms of Service, as well as to reply to any e-mail message you send to the Archive.
-          </p>
-        </li>
-        <li>
-          <p>We may retain:
-          </p>
-          <ol>
-            <li>the e-mail addresses of those who communicate with us via e-mail;
-            </li>
-            <li>user-specific information about what pages users access or visit;
-            </li>
-            <li>the IP address of each visitor to our sites;
-            </li>
-            <li>any information that a person sends to <acronym title="Organization for Transformative Works">OTW</acronym> or Archive e-mail addresses (i.e., any e-mail to an administrator or other official address).
-            </li>
+          <p>The Archive uses the following ratings, or the equivalent text as specified on the creator upload form:</p>
+          <ol style="list-style-type:lower-roman;">
+            <li>General audiences.</li>
+            <li>Teen and up audiences.</li>
+            <li>Mature.</li>
+            <li>Explicit.</li>
+            <li>Not rated.</li>
           </ol>
         </li>
         <li>
-          <p>We use cookies to store visitors' preferences; customize web page content based on visitors' browser type or other information that the visitor sends; and record activity at our sites in order to provide better service when visitors return to our site. Cookies must be enabled for the site to function properly with your computer. The Archive has no access to cookies set by other sites.
-          </p>
+          <p>As a rule, the creator controls the rating.</p>
+          <p>In response to a complaint, the abuse team may decide that a "general" or "teen" rating is misleading. In such cases, the creator may be required to change the rating. If the creator declines or fails to respond, the abuse team may hide the work, set the rating at "not rated," or take any other appropriate action, but it will not add any other rating. </p>
         </li>
         <li>
-          <p>If for any reason you terminate your user account with us, we will destroy active records containing your identifying information as soon as reasonably possible. "Reasonably" here means no more than seven business days from the termination of the account, but we may have to retain some information for legal records. If we terminate your service, we may retain enough information to prevent you from signing up for the service in the future.
-          </p>
-        </li>
-        <li>
-          <p>If we receive a complaint about a violation of someone's intellectual property rights, we will disclose the information provided by the rightsholder or the rightsholder's representative to the subject of the complaint. If we receive a complaint about other matters, such as plagiarism or harassment, we will follow the <a href="#content">Abuse Policy</a>, which explains what information provided by the complainant may be disclosed to the subject of the complaint.
-          </p>
+          <p>The meaning of "not rated":</p>
+          <p>Fanworks labeled "not rated" may be treated, for purposes of searching, screening, and other Archive functions, like "explicit"-rated fanworks. Thus, users may be asked to agree that they have chosen to access the fanwork before proceeding to the fanwork. </p>
         </li>
       </ol>
-      <h5 class="heading"><a name="III.F.">F. What we will not do:</a></h5>
+    </li>
+    <li> <a name="IV.K.3">Warnings and Archive Warnings</a>
+      <ol style="list-style-type:lower-alpha;">
+        <li>
+          <p>General description:</p>
+          <p>There are two components to warnings on the Archive.</p>
+          <ol style="list-style-type:lower-roman;">
+            <li>Archive warnings: Creators can select from a <%= link_to 'list of archive warnings', tos_faq_path(:anchor => 'tags') %>. The list also allows creators to select "choose not to use archive warnings" and "none of these warnings apply," or equivalent text as specified on the creator upload form.</li>
+            <li>Secondary (optional or additional) tags, including warnings: Creators can define their own tags, as seriously or as humorously as they like. These can include specific content warnings. The warnings policy only covers <%= link_to 'archive warnings', tos_faq_path(:anchor => 'tags') %>.</li>
+          </ol>
+        </li>
+        <li>
+          <p>As a rule, the creator controls the warnings.</p>
+          <p>Selecting "choose not to use archive warnings," or the equivalent text as specified on the creator upload form, satisfies a creator's obligation under the warnings policy. If a fanwork uses this option, we will not sustain any failure-to-warn complaints. If the abuse team receives a failure-to-warn complaint in other circumstances, the abuse team may decide the absence of a specific archive warning is misleading.  In such cases, the creator may be asked to add a warning or to select the choose not to warn option. If the creator declines or fails to respond, the abuse team may hide the work, set the warning to indicate that the creator has chosen not to warn, or take any other appropriate action, but it will not select any other warning.</p>
+        </li>
+        <li>
+          <p>The meaning of "choose not to use archive warnings" or equivalent text:</p>
+          <p>The fanwork may or may not contain any of the subject matter on the archive list. Users who wish to avoid specific elements entirely should not access fanworks marked with "choose not to use archive warnings." A creator can select both "choose not to use archive warnings" and one of the archive warnings in order to warn for some but not all of the archive warnings.</p>
+        </li>
+      </ol>
+    </li>
+    <li> <a name="IV.K.4">Consequence of failure to use an appropriate rating or archive warning</a>
+      <p>In general, failure to use an appropriate rating or archive warning is not a violation of the abuse policy.</p>
+      <p>It is our policy to defer to creators' categorizations, but we reserve the right to recategorize a fanwork in the situations described above.</p>
+      <p>A recategorization decision is appealable through the ordinary abuse appeals process.</p>
+      <p>A recategorization of a fanwork will not result in suspension of a user's account, unless it is a repeated pattern for a single user, in which case it may be treated as grounds for a suspension. Moreover, if a creator unilaterally reverses a recategorization, without agreement from the abuse team, that will be treated as grounds for a suspension.</p>
+    </li>
+    <li> <a name="IV.K.5">Fanwork types</a>
+      <p>It is our policy to defer to creators' categorizations, but we reserve the right to recategorize a fanwork type.</p>
+      <p>A manual recategorization decision made by the abuse team is appealable through the ordinary abuse appeals process.</p>
+      <p>A manual recategorization of a fanwork will not result in suspension of a user's account, unless it is a repeated pattern for a single user, in which case it may be treated as grounds for a suspension. Moreover, if a creator unilaterally reverses a manual recategorization, without agreement from the abuse team, that will be treated as grounds for a suspension.</p>
+    </li>
+    <li> <a name="IV.K.6">General tags</a>
+      <p>Some tags may be automatically applied to a work.  It is our policy to defer to creators' categorizations, but we reserve the right to manually recategorize language and other Archive tags, including fandom tags. A manual recategorization or removal of a tag will not result in suspension of a user's account, unless it is a repeated pattern for a single user, in which case it may be treated as grounds for a suspension. Moreover, if a creator unilaterally reverses a manual recategorization or removal, without agreement from the abuse team, that will be treated as grounds for a suspension.</p>
+    </li>
+  </ol>
+  
+  <h4 class="heading"><a name="assorted" id="assorted">V. Assorted Policies</a></h4>
+  <h5 class="heading"><a name="V.A.">A. Collections, Challenges, and Exchanges</a></h5>
+  <ol>
+    <li>
+      <p>Archive users may create collections and encourage other users to submit fanworks to those collections.  The collection maintainer can set any constraints they want on the collection, including rules about anonymous works (see A.4 below) but must otherwise follow the content policy (e.g., if the collection content is explicit, it should be marked as "explicit" or "choose not to rate").  The collection maintainer may be able to ask users for suggestions for new fanworks ("prompts"), collect prompts, match participants with prompts (including contacting them via the contact information provided to the Archive or to the collection maintainer), and show the prompts on the Archive, following the general rules governing works on the Archive.  Where collection rules allow, prompts may be anonymous or limited-visibility, as detailed in A.4 and A.5 below.</p>
+    </li>
+    <li>
+      <p>To be part of a collection, the fanwork creator has to affirmatively submit the fanwork to the collection. The collection maintainer will be able to remove the fanwork from the collection, but not from the Archive.</p>
+    </li>
+    <li>
+      <p>If the collection maintainer has specified in advance in the collection rules that submissions cannot later be removed from the collection, the user who submitted the fanwork will not be able to delete it, but will be able to orphan it so that the user’s identity is no longer associated with the fanwork.</p>
+    </li>
+    <li>
+      <p>In order to implement certain types of collections, the Archive may allow works to be posted without making the creator generally visible (which we call anonymous works).</p>
+      <ol style="list-style-type:lower-alpha;">
+        <li>Anonymous works are not orphan works, though they can be orphaned.</li>
+        <li>The creator’s pseudonym will not be publicly associated with the story while the anonymity is in place.  For non-orphaned works, the creator’s pseudonym will be visible to administrators (including members of the abuse team for purposes of resolving complaints), co-creators (if any), and the maintainers of any collection of which the work is a part.</li>
+        <li>If the collection of which a work is a part specifies rules regarding anonymity, such as a designated time for revealing authorship, the collection maintainer may be able to control the work’s anonymity consistent with those rules.  In other situations, creators may be able to choose anonymity.</li>
+      </ol>
+    </li>
+    <li>
+      <p>In order to implement certain types of collections, the Archive may allow works to be posted which will not be generally visible until a time set by the collection maintainer.</p>
+      <ol style="list-style-type:lower-alpha;">
+        <li>Once posted, the work will be visible to administrators (including members of the abuse team for purposes of resolving complaints), co-creators (if any), and the maintainers of any collection of which the work is a part.</li>
+        <li>If the collection of which a work is a part specifies rules regarding time of general visibility, the collection maintainer may be able to control the time at which a work becomes generally visible to archive users.</li>
+      </ol>
+    </li>
+    <li>
+      <p>In the absence of an independent violation of the abuse policy, the Archive will not intervene in decisions by the collection maintainer.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="V.B.">B. Fannish next-of-kin</a></h5>
+  <p>Registered archive users may designate a fannish next-of-kin. A next-of-kin agreement allows the transfer of content maintenance in the case of a user’s permanent incapacitation or death.</p>
+  <p>Both parties to the agreement must be registered users of the Archive.</p>
+  <p>The Archive’s role in this agreement is only to act as a facilitator. If the person designated as the fannish next-of-kin activates the agreement by sending a message to the Archive, the Archive will not do any independent investigation to confirm the necessity for the transfer.</p>
+  <p>A fannish next-of-kin agreement is confidential and accessible only by designated members of the archive team, who may only use it for purposes of implementing the agreement.</p>
+  
+  <h5 class="heading"><a name="V.C.">C. Orphaning Works</a></h5>
+  <ol style="list-style-type:decimal;">
+    <li>Definition of orphaning
+      <p>One of the goals of the OTW and the Archive is to provide a permanent long-term home for fanworks. We also understand that circumstances can arise in which creators wish to remove their stories from the internet or otherwise dissociate themselves from their work. Our archive software gives creators the ability to anonymize or “orphan” fanworks along with the option of deleting them from the archive. For a more detailed description of orphaning, please see <%= link_to 'About Orphaning', about_orphans_path %>.</p>
+    </li>
+    <li>User-controlled orphaning
+      <p>Users will have the ability to delete or orphan their works themselves as long as they have a valid account. Users are responsible for saving their account passwords and keeping their e-mail addresses up to date. Users will be able to have passwords e-mailed to them and to change the e-mail addresses associated with accounts. However, a user who has lost a password and has no access to the e-mail associated with the account may be unable to access the account for any purpose, including orphaning or deletion, unless the user can verify identity in some other way, as described below.</p>
+    </li>
+    <li>Caution: orphaning may be difficult or impossible to reverse
+      <p>If a user affirmatively orphans a work, any connection between the user and the work will be removed. It therefore may be difficult or even impossible to restore the link between an orphaned work and a user.</p>
+    </li>
+    <li>Linking an author with an orphaned work
+      <p>As part of the OTW’s commitment to <%= link_to 'privacy', tos_path(:anchor => 'privacy') %>, users are not allowed to use comments or tags to publicly identify the creator of an orphaned work after the work has been orphaned. Users who add public identifying tags or comments after a work has been orphaned violate the Archive’s Terms of Service. Additionally, identifying tags or comments will be removed.</p>
+    </li>
+    <li>
+      <p>If the creator has an account, it is the creator’s responsibility to delete any identifying comments associated with the work prior to orphaning it, and to inform the abuse team of any identifying tags that should be deleted. If the creator does not have an account, it is the creator’s responsibility to identify any comments and/or tags that should be deleted as part of a request for orphaning (see “Policy on unverified identities and orphaning or deletion” below).</p>
+    </li>
+    <li>Policy on unverified identities and orphaning or deletion
+      <p>Our policy is that creators should be able to orphan or delete a work, and they should also be protected against claims by non-creators. We will provide creators with several alternative methods of confirming source, including using the e-mail address associated with the fanwork; using information from a creator’s own site or journal; or using an e-mail address or other form of contact associated with a different copy of the fanwork, including on the <a href="http://www.archive.org/index.php">Internet Archive</a>. We will also consult with the maintainer of any collection of which the fanwork is a part and take any other actions that seem likely to help with verification.</p>
+      <p>If the source of the request is confirmed, we will comply with the request. When the link between the source of the request and the fanwork’s creator cannot be confirmed, and attempts to contact the fanwork’s creator through any existing contact information receive no response, we will orphan the fanwork.</p>
+    </li>
+  </ol>
+  
+  <h5 class="heading"><a name="V.D.">D. Open Doors</a></h5>
+  <p>Please note: these terms are designed for agreements between the OTW and archive owners.</p>
+  <p>The Open Doors project of the Organization for Transformative Works is dedicated to preserving fanworks for the future.</p>
+  <p>We are happy to help maintainers of typical fanfic archives preserve or back up their collections by transferring the contents of their archive into the Archive of Our Own. Other fannish projects that cannot be integrated into the Archive may also be preserved as special collections, resources permitting. Both kinds of projects may be featured on the Open Doors page.</p>
+  
+  <h6 class="heading">ToS for Open Doors projects</h6>
+  <ol style="list-style-type:decimal;">
+    <li>Maintainer Consent
+      <p>The OTW will only preserve collections with the full consent of the maintainer of the collection. The current maintainer of the project must agree to the Open Doors ToS and agree to grant us access to a copy of the current contents of the collection. The maintainer must also transfer ownership of the domain name (if any) if they want URL redirects, and if such redirects are possible. (Domain name transfer is not necessary if the maintainer is merely backing up an archive within the Archive of Our Own.)</p>
+    </li>
+    <li>Transfer of Project
+      <p>When the board of the OTW and the current owner of the collection have decided to bring on an archive or a special collection under the Open Doors project, the current owner will provide a copy of the current contents (either manually or by giving Systems access to the existing site) and transfer ownership of the existing domain name to the OTW (if they want redirects; again, domain name transfer is not necessary if the maintainer is merely backing up the archive within the Archive of Our Own).</p>
+      <p>Typically, fanfiction archives will be transferred into the Archive of Our Own, and individual stories will be tagged with the name of the archive from which they came to preserve the archive’s history as a collection. In the case of projects that are structurally difficult to integrate, we may either preserve whatever software is currently being used to maintain the project, or choose different software in consultation with the original maintainer. Systems will not be required to install any software on the OTW servers which they are not prepared to maintain, and the software and content must pass a security review before they are added.</p>
+    </li>
+    <li>URLs for Open Doors Project
+      <p>For collections not hosted on the Archive itself, the special collection or project may be available under one or more URLs like the following:</p>
+      <p>A subdomain of transformativeworks.org: http://foresmutters.transformativeworks.org</p>
+      <p>A subdirectory of opendoors.transformativeworks.org: http://opendoors.transformativeworks.org/foresmutters</p>
+      <p>We may also preserve the original project’s domain name, if any: http://www.foresmutters.org/</p>
+      <p>In addition, the collection will be linked from the Open Doors gallery: http://opendoors.transformativeworks.org/</p>
+      <p>Archives that have been integrated into the Archive of Our Own will also be listed in the Open Doors gallery.</p>
+    </li>
+    <li>Role of Original Maintainer
+      <p>The original maintainer of the archive special collection will be invited to continue working on the collection for as long as they wish, so long as they are willing to abide by OTW’s general policies for its volunteers (including but not limited to the conflict of interest policy and administrative access policies). The OTW will try to find volunteers to provide maintainers with what assistance they need for as long as they work with us.</p>
+      <p>In the case of an archive that has been preserved within the Archive of Our Own, the maintainer will be invited to moderate their archive’s collection within the Archive of Our Own with all the powers that a collection moderator in the Archive usually has; so, for instance, to decide whether a new story fulfills her collection’s rules, or should be removed from the collection.</p>
+      <p>If the collection’s maintainer no longer wants to work on the collection, the OTW will find someone else in the organization to keep the collection up and running, and potentially growing into the future.</p>
+    </li>
+    <li>Collection Policy
+      <p>Where possible, the existing policies of the collection will be preserved, even if they differ from the policies of the Archive of Our Own. Specifically, collections (whether integrated into the Archive of Our Own or preserved as special collections) can have limits on fandom, subject matter, sexual content, etc. that do not apply to archive content generally. Open Doors collections may be mixed fan and non-fanworks; when we accept a mixed collection, the entire collection will be added to the Archive, and the standard prohibition on non-fanworks will not apply to the collection. However, the OTW retains the right to remove content from its servers if the Board deems removal necessary for specific legal reasons, or if the content violates the Content Policy (other than the prohibition on non-fanwork content).</p>
+      <p>Control over individual fanworks contained within a collection rests with their creators. If the creator of any individual fanwork contained within a collection requests its removal or alteration, the OTW will always comply with such a request. We will also provide mechanisms allowing creators to claim their fanworks from such a collection and if desired to attach them to a new or existing Archive of Our Own account.</p>
+    </li>
+    <li>Parting from the OTW
+      <p>As noted in section e., control over individual fanworks contained within a collection always rests with their creators. This section applies to collections as a whole. If the collection’s original maintainer decides that they no longer want to be affiliated with the OTW, or the OTW board decides they no longer wish to work with the original maintainer, the following procedures for dissolution will apply:</p>
       <ol>
         <li>
-          <p>The Archive will not give out any of your personal information or any of the information we collect, except as provided under this policy. We will not use your personally identifying information to market third party products and services to you. We will not sell, trade, or rent your personally identifying information.
-          </p>
+          <p>OTW will keep the content currently on the OTW server(s), whether in the Archive of Our Own or in a special collection.</p>
         </li>
         <li>
-          <p>We will not disclose your personally identifying information to any third party without your prior consent unless we (1) are legally compelled to do so, (2) have a good-faith belief that such action is necessary to comply with a current judicial proceeding, a court order, or legal process served on the <acronym title="Organization for Transformative Works">OTW</acronym>, or (3) are cooperating with law enforcement authorities. As to (3), we will cooperate with all investigations conducted by law enforcement authorities of the United States of America when legally required to do so. Cooperation with law enforcement authorities from other countries and cooperation when it is not legally required are at our sole discretion. Our discretion looks favorably on freedom and justice, and unfavorably on oppression and violence.
-          </p>
+          <p>OTW will keep the subdomain (e.g., foresmutters.transformativeworks.org) and subdirectory (e.g, opendoors.transformativeworks.org/foresmutters) URLs of special projects, pointing to the content currently on the OTW servers.</p>
         </li>
         <li>
-          <p>Unless legally prohibited, we will attempt to notify you any time we disclose your personally identifying information. In some cases, the information we have, such as an IP address, may be insufficient for us to notify you.
-          </p>
+          <p>OTW will give the original maintainer back the original domain name, if any (e.g., www.foresmutters.org) or the archive or special project, as well as a copy of the current contents of the project (or all stories under the archive tag in the Archive of Our Own).</p>
+        </li>
+        <li>
+          <p>OTW will not be responsible for helping the maintainer set up elsewhere, only for giving them the content and transferring back domain ownership.</p>
+        </li>
+        <li>
+          <p>OTW will place a prominent announcement on the Open Doors page indicating that the original maintainer has moved to a new location, with a link to the new location if provided by the maintainer.</p>
+        </li>
+        <li>
+          <p>OTW may choose to continue work on the collection on the OTW servers.</p>
+        </li>
+        <li>
+          <p>These ToS are written assuming a single maintainer. If there are multiple active maintainers of a collection, they must all agree before the OTW will bring the collection into Open Doors. If some but not all of the maintainers later wish to part from the OTW, those who wish to do so can continue to work with the collection on the OTW servers, while the OTW will follow provisions d. and e. for any maintainers who wish to move the collection elsewhere. However, the OTW will retransfer domain names only to maintainers who were registered owners of the domain names at issue. For active collections, maintainers can use whatever dispute resolution procedure they work out between themselves, provided that they otherwise comply with OTW policies.</p>
         </li>
       </ol>
-      <h4 class="heading"><a name="content" id="content">IV. Content and Abuse Policies</a></h4>
-      <p>We recognize that there is no such thing as a popular abuse policy. By their nature, abuse complaints are unpleasant at best. And policy needs to be applied by people, which always complicates matters. We have tried to set out clear procedures to minimize and channel the inevitable conflicts.
-      </p>
-      <p>The Content and Abuse policy covers <a href="#IV.A.">procedures</a>, <a href="#IV.B.">spam and commercial promotion</a>, <a href="#IV.C.">threatening the technical integrity of the site</a>, <a href="#IV.D.">copyright</a>, <a href="#IV.E.">plagiarism</a>, <a href="#IV.F.">personal information and fannish identities</a>, <a href="#IV.G.">harassment</a>, <a href="#IV.H.">illegal and non-fanwork content</a>, and <a href="#IV.K.">ratings and warnings</a>. We have developed a <acronym>FAQ</acronym> page to answer additional questions about Content and Abuse (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'content_faq') %>).
-      </p>
-      <p>The Archive does not prescreen for content. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.
-      </p>
-      <h5 class="heading"><a name="IV.A.">A. Procedures</a></h5>
-      <ol style="list-style-type:decimal;">
-        <li>Submitting a complaint
-          <p>Complaints may be submitted to our abuse team. Except in the case of <a href="#IV.D.">copyright complaints</a>, a complainant may submit a complaint via <%= link_to 'the web form', new_abuse_report_path %>, which does not require identifying information. Depending on the nature of the complaint, however, anonymity may hinder our ability to verify the complaint or affect the credibility of the complaint. In order for the abuse team to follow up on any allegation, the exact location (<acronym title="Uniform Resource Locator">URL</acronym>) and nature of the alleged violation must be supplied in the original complaint. Repeated unverified abuse complaints from the same source may be subject to summary rejection.
-          </p>
-        </li>
-        <li>Treatment and investigation of complaints
-          <p>Only people who need to know about a complaint will be informed about it. The details of any individual complaint are confidential and must be used only in resolving that complaint.
-          </p>
-          <p>The subject of a complaint may also be among those who need to know about it. Only information provided in the complaint will be passed on. The complainant has complete control over what information is submitted to Abuse, and can submit the complaint anonymously. (Legal names and other information sufficient to identify a person in the physical world will never be disclosed as part of a standard abuse complaint. For further clarification, please refer to <a href="http://transformativeworks.org/privacy">our privacy policy</a>.)
-          </p>
-          <p>In general, the abuse team will only communicate with the subject of a complaint if there appears to be a violation of the abuse policy, or if the abuse team needs more information to resolve the issue.
-          </p>
-          <p>The abuse team records the IP address from which each anonymous complaint is submitted, to prevent abuse of the abuse system.
-          </p>
-          <p>Subject to obligations of confidentiality about specific complaints, the abuse team may release statistics about general trends, such as the number of plagiarism complaints made and the actions taken by the abuse team, in public or to other <acronym title="Organization for Transformative Works">OTW</acronym> committees, to facilitate discussions of policies, procedures, and trends in abuse complaints.
-          </p>
-          <p>Complaints will be reviewed by two members from the volunteer abuse team. If they agree on an action, that action will be taken. If they disagree, a third member will review the complaint, and the team will proceed by majority vote.
-          </p>
-          <p>When the abuse team determines that content needs to be removed, if contact information is available, the abuse team will notify the original poster (the complaint subject), identify the nature of the problem with the content, and set a deadline for voluntary removal of the content. If the original poster does not remove the content within the deadline, the Archive will remove the content. In addition, we may remove content immediately, without waiting for a response, if we are contacted by a legitimate law enforcement agency or if we determine that the content is threatening to an individual or reveals an individual's personal information without consent. In such cases we will inform the original poster as soon as possible. The original poster will then have the option to resubmit with the violating content removed.
-          </p>
-          <p>The abuse team may also determine that tags need to be added to or edited in an item of content. For more information, please see the <a href="#IV.K.">ratings/warnings section</a>.
-          </p>
-          <p>If content violating the <acronym title="Terms of Service">ToS</acronym> is posted anonymously or with invalid contact information, it will be removed without prior notice.
-          </p>
-          <p>If the complainant requests notification of the resolution of the complaint and provides contact information, we will notify him or her.
-          </p>
-        </li>
-        <li>Submitting an appeal
-          <p>The complainant or the original poster may appeal a decision to the abuse team as a whole. During the appeal, the original decision will remain in effect. We will attempt to resolve appeals as speedily as possible, but please remember that we are all volunteers. The abuse team's decisions are final unless overturned by the Board at the Board's sole discretion. There is no right of appeal to the Board. The abuse team, however, may consult with the Board or with committee members authorized by the Board if the abuse team decides that consultation would help resolve an issue.
-          </p>
-        </li>
-        <li>Account statuses
-          <p>"Account status" refers to the existence of warnings on an account and whether that account has been suspended, temporarily or permanently (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'account_status') %>).
-          </p>
-          <p>The abuse team may issue warnings when it determines that a violation of the <acronym title="Terms of Service">ToS</acronym> was minor or unintentional. More serious, intentional, or repeated violations of the <acronym title="Terms of Service">ToS</acronym> will trigger suspensions. A suspension will generally be for a period of time, such as a month. The abuse team may also permanently suspend users when it determines that permanent suspension is justified. Permanent suspensions for violations other than spam or threatening the technical integrity of the site require a majority vote of the abuse team. The abuse team's discretion will be informed by the nature of the violation and the response of the user, including the user's decision to voluntarily remove the content that violates the <acronym title="Terms of Service">ToS</acronym>.
-          </p>
-          <p>A user whose account has been permanently suspended may not rejoin under another identity.
-          </p>
-          <p>Where possible, we encourage users to try mediating disputes before contacting Abuse. We provide tools for registered users to control Content that is uploaded in their own spaces. For example, users are able to delete comments on their own stories. If you are unable to resolve the problem on your own, you can file a complaint with the volunteer abuse team.
-          </p>
-          <p>In some cases, objectionable content may have already been deleted before the abuse team acts. We appreciate good faith attempts to resolve disputes, and in most such cases will close the abuse complaint with no further action. However, we reserve the right to consider individual circumstances, including whether the poster has engaged in a pattern of such conduct. In such cases, if we verify that the original content violated the <acronym title="Terms of Service">ToS</acronym>, we may still decide to warn or suspend the original poster.
-          </p>
-          <p>Penalties apply to users, not to screen names/pseudonyms. Penalties are not retroactive: a suspended user's nonobjectionable content will not be automatically removed. Suspended users retain the right to delete or orphan their fanworks by contacting Archive adminstrators.
-          </p>
-        </li>
-      </ol>
-      <h5 class="heading"><a name="IV.B.">B. Spam and commercial promotion</a></h5>
-      <p>Promotion of commercial products or activities is not allowed. Repeated identical posts in multiple places, e.g., a large number of identical comments promoting a website, will also be considered spam regardless of commercial content.
-      </p>
-      <p>Anything we determine is spam will be removed immediately. Deletion and suspension decisions will not be subject to the two-person review process described above. Users may be permanently suspended for spam the first time they post spam content.
-      </p>
-      <p>In general, unsolicited commercial activity is not permitted on the Archive. The abuse team has discretion to decide that a fan-related offer was mistakenly disseminated and issue a warning instead of a suspension.
-      </p>
-      <p>Any spam- or commercial activity-related penalties may be appealed using the ordinary appeal process.
-      </p>
-      <p>We may use automated means to filter out spam. If you submit content that is erroneously caught in a spam filter, please notify Archive administrators.
-      </p>
-      <h5 class="heading"><a name="IV.C.">C. Threatening the technical integrity of the site</a></h5>
-      <p>Conduct that threatens the technical integrity of the Archive, e.g. attempts to hack the site or spread viruses through it, will result in an immediate account suspension and deletion of any content that is hazardous to the operation of the site or to users' computers. Threats to the technical integrity of the Archive will not be subject to the two-person review process described above. Users may be permanently suspended for threatening the technical integrity of the Archive the first time they do so. Such suspensions may be appealed using the ordinary appeal process.
-      </p>
-      <p>Uploading technically misnamed content&#8212;e.g., non-text files with a text file extension name, used to disguise their actual format&#8212;constitutes a threat to the technical integrity of the site.
-      </p>
-      <h5 class="heading"><a name="IV.D.">D. Copyright and Trademark</a></h5>
-      <p>Please be aware that the <acronym title="Organization for Transformative Works">OTW</acronym> believes that transformative fanworks are legal; therefore, complaints based merely on the existence of fanwork based on copyrighted content or mentioning trademarks will not be pursued.
-      </p>
-      <p>If you believe that your content has been reproduced in whole or in part, without transformative use (transformative use is defined by the <acronym title="Organization for Transformative Works">OTW</acronym> as adding something new, with a further purpose or different character, altering the source with new expression, meaning, or message), please follow our procedures for reporting copyright infringement.
-      </p>
-      <p>The report must clearly and specifically indicate the exact location (<acronym title="Uniform Resource Locator">URL</acronym>), nature, and extent of each instance of allegedly infringing content, as well as the exact copyrighted material that is being infringed, as well as full and complete contact information for the copyright holder and/or an authorized agent.
-      </p>
-      <p>Epigraphs and short quotations, including quotations from song lyrics and poetry, are allowed. Content that is set within or draws on an existing work is allowed. Reproductions of entire copyrighted works&#8212;whether songs, poems, transcripts, or other material&#8212;are not allowed without the consent of the copyright owner.
-      </p>
-      <p>Please note that the first version of the Archive will only host text and user icons. Future policies will focus on other media.
-      </p>
-      <h5 class="heading"><a name="IV.E.">E. Plagiarism</a></h5>
-      <p>Plagiarism is an often-contested and fuzzy concept, and no definition will satisfy everyone. Our aim is to be transparent and fair in resolving disputes.
-      </p>
-      <p>Plagiarism is the use of someone else's words or concepts without properly attributing those words or concepts to their original source. Simply finding and replacing names, substituting synonyms, or rearranging a few words is not enough to make the work original to you. Deliberately writing a work using the same general idea as another work is not plagiarism, but citation is always appreciated. Generally, quotes from the source material (canon) on which the content is based will not constitute plagiarism, nor will obvious allusions ("Use the Force, Luke!"). However, when in doubt, cite.
-      </p>
-      <p>Plagiarism is a violation of the <acronym title="Terms of Service">ToS</acronym> and will incur the penalties described in the abuse policy. As with all content that violates the <acronym title="Terms of Service">ToS</acronym>, plagiarized content must be removed. Depending on the type and amount of plagiarized content, this might entail removing an entire piece of content, removing only the plagiarized portions from a longer work while leaving the original material, or adding citations.
-      </p>
-      <p>If you believe a fanwork posted on the Archive plagiarizes another work, please report the work to <%= link_to 'the abuse team', new_abuse_report_path %>. In order to allow us to investigate, please provide a link to the work on the Archive, relevant excerpts, and a specific citation of the original material (for example, a <acronym title="Uniform Resource Locator">URL</acronym> or a book edition and page number).
-      </p>
-      <h5 class="heading"><a name="IV.F.">F. Personal information and fannish identities</a></h5>
-      <p>The <acronym title="Organization for Transformative Works">OTW</acronym> is committed to protecting the privacy of our users, including the separation many fans choose to keep between their legal, "real life" names and their fannish pseudonyms. Unauthorized disclosure of a fan's personal information is a violation of the Terms of Service. For these purposes, "personal information" may include legal names and other information sufficient to identify a person in the physical world that he or she has not voluntarily shared on the Archive itself. "Personal information" may also include the identity of the creator of an orphaned fanwork.
-      </p>
-      <h5 class="heading"><a name="IV.G.">G. Harassment</a></h5>
-      <p>Harassment is any behavior that produces a generally hostile environment for its target. This includes activities such as bullying and hazing by groups of people as well as personal attacks by individuals. Not everyone agrees about what is offensive and unacceptable. Individual users are encouraged to try to resolve problems on their own before contacting the abuse team.
-      </p>
-      <p>Harassment is not allowed. Users engaging in this behavior may be warned, suspended, or permanently suspended as described in the general abuse procedure.
-      </p>
-      <p>When judging whether a specific incident constitutes harassment, the abuse team will consider factors such as whether the behavior was repeated, whether it was repeated after the offender was asked to stop, whether the behavior was targeted at a specific person, whether that target could have easily avoided encountering the behavior, whether the behavior would be considered unacceptable according to normal community standards, etc. Additionally, making complaints that are both (a) repeated and (b) baseless, particularly those targeting a specific user, can be considered harassing behavior and may be deemed a violation of the <acronym title="Terms of Service">ToS</acronym>.
-      </p>
-      <p>While these complaints will be reviewed on a case by case basis, in general, threatening content will be considered harassment, while content that is merely annoying will be allowed. Please note that most statements like "X is a terrible actor and should die!" are not death threats. Writing a story where X dies as part of the plot is also not usually a death threat. Content that is harder to avoid (such as comments on the target's fanworks) will be judged more strictly than content that is easily avoidable (such as stories).
-      </p>
-      <p>The behavior of the original poster (the complaint subject) may also affect the abuse team's determination. If the original poster repeatedly contacts the subject of the content about the content after being told to stop, harasses the subject, or requests that others harass the subject, the content may be considered part of a general pattern of harassment and be removed. Please use your best judgment both when producing content of this type and when reporting it.
-      </p>
-      <h6 class="heading">A special note on <acronym title="real-person fiction">RPF</acronym> (real-person fiction):</h6>
-      <p>Writing <acronym>RPF</acronym> (real-person fiction) never constitutes harassment in and of itself. However, content that advocates specific, real harmful actions towards real people is not allowed. This includes, but is not limited to, death threats and requests for readers to harass specific people. If you find content that you believe contains harassing or threatening material, please <%= link_to 'contact the abuse team', new_abuse_report_path %>.
-      </p>
-      <h5 class="heading"><a name="IV.H.">H. Illegal and inappropriate content</a></h5>
-      <p>The Archive of Our Own is a place for fanworks. Content may not be uploaded to <acronym title="Organization for Transformative Works">OTW</acronym>'s servers if it contains or links to child pornography (images of real children); warez, cracks, hacks or other executable files and their associated utilities; trade secrets, restricted technologies, or classified information; or if it consists entirely of actual instruction manuals, technical data, recipes, or other non-fanwork content, including non-fanwork creative work (<%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'original_fiction') %>). Uploading such content is a violation of the <acronym title="Terms of Service">ToS</acronym>.
-      </p>
-      <p>We may determine that we need to remove content to resolve a threatened or pending lawsuit. If so, we will remove the content. Unless it otherwise violates the <acronym title="Terms of Service">ToS</acronym>, removal for this reason will not lead to a suspension.
-      </p>
-      <p>If you believe content violates a specific law, you may report it to us. Please, however, read our offensive content policy below.
-      </p>
-      <h5 class="heading"><a name="IV.I.">I. Offensive content</a></h5>
-      <p>As provided in part <a href="#exposure">I.E.2</a> of the Terms of Service, the <acronym title="Organization for Transformative Works">OTW</acronym> is not liable to you for any Content to which you are exposed on or because of the <acronym title="Organization for Transformative Works">OTW</acronym> sites.
-      </p>
-      <p>Unless it violates some other policy, we will not remove Content for offensiveness, no matter how awful, repugnant, or badly spelled we may personally find that content to be.
-      </p>
-      <h5 class="heading"><a name="IV.J.">J. User Icons</a></h5>
-      <p>User icons should be appropriate for general audiences. They should not contain depictions of genital nudity or explicit sexual activity. For more information, please <%= link_to 'refer to the ToS FAQ', tos_faq_path(:anchor => 'icon_policy') %>.
-      </p>
-        <h5 class="heading"><a name="IV.K.">K. Ratings and Warnings</a></h5>
-        <ol style="list-style-type:decimal;">
-        <li> <a name="IV.K.1">Introduction</a>
-          <ol style="list-style-type:lower-alpha;">
-            <li><strong>We will not require specific ratings or warnings. However, a creator who chooses not to use ratings or warnings on a fanwork must signal this choice </strong> (<a href="/tos_faq#ratings_and_warnings">refer to the ToS FAQ</a>). </li>
-            <li>By default, all users will see the archive warnings and tags the creator has selected. Any logged-in user who wishes to avoid archive warnings and tags may set preferences to hide them by default. Logged-in users who set their preferences to hide information are proceeding at their own risk and may be exposed to content they would otherwise wish to avoid. Such users may change their preferences, or reveal information for specific stories, at any time. </li>
-            <li>Logged-in users may set their preferences to indicate that they are willing to see mature or explicit content. </li>
-            <li>Other users, including users who are not registered users of the site, who follow a link to a fanwork rated mature, explicit, or "not rated," will be asked to agree to see mature, explicit, or unrated content. The Archive software will remember a non-registered user's choice during that user's visit, but will not retain the setting for future visits. </li>
-          </ol>
-        </li>
-        <li> <a name="IV.K.2">Ratings</a>
-          <ol style="list-style-type=:lower-alpha;">
-            <li>
-              <p>The Archive uses the following ratings:</p>
-              <ol style="list-style-type:lower-roman;">
-                <li>General audiences.</li>
-                <li>Teen and up audiences.</li>
-                <li>Mature.</li>
-                <li>Explicit.</li>
-                <li>Not rated.</li>
-              </ol>
-            </li>
-            <li>
-              <p>As a rule, the creator controls the rating.</p>
-              <p>In response to a complaint, the abuse team may decide that a "general" or "teen" rating is misleading. In such cases, the creator may be required to change the rating. If the creator declines or fails to respond, the abuse team may set the rating at "not rated." The abuse team's authority extends only to changing a rating to "not rated," not to selecting any other rating. </p>
-            </li>
-            <li>
-              <p>The meaning of "not rated":</p>
-              <p>Fanworks labeled "not rated" may be treated, for purposes of searching, screening, and other Archive functions, like "explicit"-rated fanworks. Thus, users may be asked to agree that they have chosen to access the fanwork before proceeding to the fanwork. </p>
-            </li>
-          </ol>
-        </li>
-        <li> <a name="IV.K.3">Warnings and Archive Warnings</a>
-          <ol style="list-style-type:lower-alpha;">
-            <li>
-              <p>General description:</p>
-              <p>There are two components to warnings on the Archive.</p>
-              <ol style="list-style-type:lower-roman;">
-                <li>Archive warnings: Creators can select from a
-                  <%= link_to 'list of archive warnings', tos_faq_path(:anchor => 'tags') %>. The list also allows creators to select "choose not to use archive warnings" and "none of these warnings apply," or equivalent text as specified on the creator upload form.
-                </li>
-                <li>Secondary (optional) tags, including warnings: Creators can define their own tags, as seriously or as humorously as they like. These can include specific content warnings. The warnings policy only covers
-                  <%= link_to 'archive warnings', tos_faq_path(:anchor => 'tags') %>.
-                </li>
-              </ol>
-            </li>
-            <li>
-              <p>As a rule, the creator controls the warnings.</p>
-              <p>Selecting "choose not to use archive warnings," or the equivalent text as specified on the creator upload form, satisfies a creator's obligation under the warnings policy. If a fanwork uses this option, we will not sustain any failure-to-warn complaints. If the abuse team receives a failure-to-warn complaint in other circumstances, the abuse team may decide the absence of a specific archive warning is misleading.  In such cases, the creator may be asked to add a warning or to select the choose not to warn option. If the creator declines or fails to respond, the abuse team may set the warning to indicate that the creator has chosen not to warn. The abuse team's authority extends only to changing a warning to "choose not to use archive warnings" or equivalent text, not to selecting any other warning.
-              </p>
-            </li>
-            <li>
-              <p>The meaning of "choose not to use archive warnings" or equivalent text:</p>
-              <p>The fanwork may contain any of the subject matter on the archive list. Users who wish to avoid specific elements entirely should not access fanworks marked with "choose not to use archive warnings." A creator can select both "choose not to use archive warnings" and one of the archive warnings in order to warn for some but not all of the archive warnings.
-              </p>
-            </li>
-          </ol>
-        </li> 
-        <li> <a name="IV.K.4">Consequence of failure to use an appropriate rating or archive warning</a>
-          <p>In general, failure to use an appropriate rating or archive warning is not a violation of the abuse policy.</p>
-          <p>It is our policy to defer to creators' categorizations, but we reserve the right to recategorize a fanwork in two situations. (1) When we determine that a complaint about a "general" or "teen and up" rating is valid, we may change the rating to "not rated." (2) When we determine that a complaint about a failure to warn for content on the archive warning list is valid, we may add "choose not to use archive warnings" or equivalent text. The abuse team will not pick a more specific rating or warning for a fanwork.
-          </p>
-          <p>A recategorization decision is appealable through the ordinary abuse appeals process.</p>
-          <p>A recategorization of a fanwork will not result in suspension of a user's account, unless it is a repeated pattern for a single user, in which case it may be treated as grounds for a suspension. Moreover, if a creator unilaterally reverses a recategorization, without agreement from the abuse team, that will be treated as grounds for a suspension.
-          </p>
-        </li>
-      </ol>
-      <h4 class="heading"><a name="assorted" id="assorted">V. Assorted Policies</a></h4>
-      <h5 class="heading"><a name="V.A.">A. Collections, Challenges, and Exchanges</a></h5>
-      <ol>
-        <li>
-          <p>Archive users may create collections and encourage other users to submit fanworks to those collections.  The collection maintainer can set any constraints she or he wants on the collection, including rules about anonymous works (see A.4 below) but must otherwise follow the content policy (e.g., if the collection content is explicit, it should be marked as "explicit" or "choose not to rate").  The collection maintainer may be able to ask users for suggestions for new fanworks ("prompts"), collect prompts, match participants with prompts (including contacting them via the contact information provided to the Archive or to the collection maintainer), and show the prompts on the Archive, following the general rules governing works on the Archive.  Where collection rules allow, prompts may be anonymous or limited-visibility, as detailed in A.4 and A.5 below.
-          </p>
-        </li>
-        <li>
-          <p>To be part of a collection, the fanwork creator has to affirmatively submit the fanwork to the collection. The collection maintainer will be able to remove the fanwork from the collection, but not from the Archive. 
-          </p>
-        </li>
-        <li>
-          <p>If the collection maintainer has specified in advance in the collection rules that submissions cannot later be removed from the collection, the user who submitted the fanwork will not be able to delete it, but will be able to orphan it so that the user’s identity is no longer associated with the fanwork. 
-          </p>
-        </li>
-        <li>
-          <p>In order to implement certain types of collections, the Archive may allow works to be posted without making the creator generally visible (which we call anonymous works).  
-          </p>
-            <ol style="list-style-type:lower-alpha;">
-              <li>Anonymous works are not orphan works, though they can be orphaned.</li>
-              <li>The creator’s pseudonym will not be publicly associated with the story while the anonymity is in place.  For non-orphaned works, the creator’s pseudonym will be visible to administrators (including members of the abuse team for purposes of resolving complaints), co-creators (if any), and the maintainers of any collection of which the work is a part.</li>
-              <li>If the collection of which a work is a part specifies rules regarding anonymity, such as a designated time for revealing authorship, the collection maintainer may be able to control the work’s anonymity consistent with those rules.  In other situations, creators may be able to choose anonymity.</li>
-            </ol>
-        </li>
-        <li>
-          <p>In order to implement certain types of collections, the Archive may allow works to be posted which will not be generally visible until a time set by the collection maintainer.
-          </p>
-            <ol style="list-style-type:lower-alpha;">
-              <li>Once posted, the work will be visible to administrators (including members of the abuse team for purposes of resolving complaints), co-creators (if any), and the maintainers of any collection of which the work is a part.</li>
-              <li>If the collection of which a work is a part specifies rules regarding time of general visibility, the collection maintainer may be able to control the time at which a work becomes generally visible to archive users.</li>
-            </ol>
-        </li>
-        <li>
-          <p>In the absence of an independent violation of the abuse policy, the Archive will not intervene in decisions by the collection maintainer.
-          </p>
-        </li>
-      </ol>
-      <h5 class="heading"><a name="V.B.">B. Fannish next-of-kin</a></h5>
-        <p>Registered archive users may designate a fannish next-of-kin. A next-of-kin agreement allows the transfer of content maintenance in the case of a user’s permanent incapacitation or death.
-        </p>
-        <p>Both parties to the agreement must be registered users of the Archive.
-        </p>
-        <p>The Archive’s role in this agreement is only to act as a facilitator. If the person designated as the fannish next-of-kin activates the agreement by sending a message to the Archive, the Archive will not do any independent investigation to confirm the necessity for the transfer.
-        </p>
-        <p>A fannish next-of-kin agreement is confidential and accessible only by designated members of the archive team, who may only use it for purposes of implementing the agreement.
-        </p>
-      <h5 class="heading"><a name="V.C.">C. Orphaning Works</a></h5>
-      <ol style="list-style-type:decimal;">
-        <li>Definition of orphaning
-          <p>One of the goals of the OTW and the Archive is to provide a permanent long-term home for fanworks. We also understand that circumstances can arise in which creators wish to remove their stories from the internet or otherwise dissociate themselves from their work. Our archive software gives creators the ability to anonymize or “orphan” fanworks along with the option of deleting them from the archive. For a more detailed description of orphaning, please see <%= link_to 'About Orphaning', about_orphans_path %>.
-          </p>
-        </li>
-        <li>User-controlled orphaning
-          <p>Users will have the ability to delete or orphan their works themselves as long as they have a valid account. Users are responsible for saving their account passwords and keeping their e-mail addresses up to date. Users will be able to have passwords e-mailed to them and to change the e-mail addresses associated with accounts. However, a user who has lost a password and has no access to the e-mail associated with the account may be unable to access the account for any purpose, including orphaning or deletion, unless the user can verify identity in some other way, as described below.
-          </p>
-        </li>
-        <li>3. Caution: orphaning may be difficult or impossible to reverse
-          <p>If a user affirmatively orphans a work, any connection between the user and the work will be removed. It therefore may be difficult or even impossible to restore the link between an orphaned work and a user.
-          </p>
-        </li>
-        <li>Linking an author with an orphaned work
-          <p>As part of the OTW’s commitment to <%= link_to 'privacy', tos_path(:anchor => 'privacy') %>, users are not allowed to use comments or tags to publicly identify the creator of an orphaned work after the work has been orphaned. Users who add public identifying tags or comments after a work has been orphaned violate the Archive’s Terms of Service. Additionally, identifying tags or comments will be removed.
-          </p>
-        </li>
-        <li>
-          <p>If the creator has an account, it is the creator’s responsibility to delete any identifying comments associated with the work prior to orphaning it, and to inform the abuse team of any identifying tags that should be deleted. If the creator does not have an account, it is the creator’s responsibility to identify any comments and/or tags that should be deleted as part of a request for orphaning (see “Policy on unverified identities and orphaning or deletion” below).
-          </p>
-        </li>
-        <li>Policy on unverified identities and orphaning or deletion
-          <p>Our policy is that creators should be able to orphan or delete a work, and they should also be protected against claims by non-creators. We will provide creators with several alternative methods of confirming source, including using the e-mail address associated with the fanwork; using information from a creator’s own site or journal; or using an e-mail address or other form of contact associated with a different copy of the fanwork, including on the <a href="http://www.archive.org/index.php">Internet Archive</a>. We will also consult with the maintainer of any collection of which the fanwork is a part and take any other actions that seem likely to help with verification.
-          </p>
-          <p>If the source of the request is confirmed, we will comply with the request. When the link between the source of the request and the fanwork’s creator cannot be confirmed, and attempts to contact the fanwork’s creator through any existing contact information receive no response, we will orphan the fanwork.
-          </p>
-        </li>
-      </ol>
-      <h5 class="heading"><a name="V.D.">D. Open Doors</a></h5>
-        <p>Please note: these terms are designed for agreements between the OTW and archive owners.
-        </p>
-        <p>The Open Doors project of the Organization for Transformative Works is dedicated to preserving fanworks for the future.
-        </p>
-        <p>Once the Archive of Our Own is up and running, we will be happy to help maintainers of typical fanfic archives preserve or back up their collections by transferring the contents of their archive into the Archive of Our Own. We plan to collect these stories under the name of the archive from which they came, as well as to set up automatic redirecting from the original URLs if desired and whenever possible. Other fannish projects that cannot be integrated into the Archive may also be preserved as special collections, resources permitting. Both kinds of projects will be featured on the Open Doors page.
-        </p>
-      <h6 class="heading">ToS for Open Doors projects</h6>
-      <ol style="list-style-type:decimal;">
-        <li>Maintainer Consent
-          <p>The OTW will only preserve collections with the full consent of the maintainer of the collection. The current maintainer of the project must agree to the Open Doors ToS and agree to grant us access to a copy of the current contents of the collection. The maintainer must also transfer ownership of the domain name (if any) if she or he wants URL redirects, and if such redirects are possible. (Domain name transfer is not necessary if the maintainer is merely backing up an archive within the Archive of Our Own.)
-          </p>
-        </li>
-        <li>Transfer of Project
-          <p>When the board of the OTW and the current owner of the collection have decided to bring on an archive or a special collection under the Open Doors project, the current owner will provide a copy of the current contents (either manually or by giving Systems access to the existing site) and transfer ownership of the existing domain name to the OTW (if he or she wants redirects; again, domain name transfer is not necessary if the maintainer is merely backing up the archive within the Archive of Our Own.)
-          </p>
-          <p>Typically, fanfiction archives will be transferred into the Archive of Our Own, and individual stories will be tagged with the name of the archive from which they came to preserve the archive’s history as a collection. In the case of projects that are structurally difficult to integrate, we may either preserve whatever software is currently being used to maintain the project, or choose different software in consultation with the original maintainer. Systems will not be required to install any software on the OTW servers which they are not prepared to maintain, and the software and content must pass a security review before they are added.
-          </p>
-        </li>
-        <li>URLs for Open Doors Project
-          <p>The special collection or project will be available under one or more URLs like the following:
-          </p>
-          <p>A subdomain of transformativeworks.org: http://foresmutters.transformativeworks.org
-          </p>
-          <p>A subdirectory of opendoors.transformativeworks.org: http://opendoors.transformativeworks.org/foresmutters
-          </p>
-          <p>We may also preserve the original project’s domain name, if any: http://www.foresmutters.org/
-          </p>
-          <p>In addition, the collection will be linked from the Open Doors gallery: http://opendoors.transformativeworks.org/
-          </p>
-          <p>Archives that have been integrated into the Archive of Our Own will also be listed in the Open Doors gallery.
-          </p>
-        </li>
-        <li>Role of Original Maintainer
-          <p>The original maintainer of the archive special collection will be invited to continue working on the collection for as long as she or he wishes, so long as she or he is willing to abide by OTW’s general policies for its volunteers (including but not limited to the conflict of interest policy and admin access policies). The OTW will try to find volunteers to provide maintainers with what assistance they need for as long as they work with us.
-          </p>
-          <p>In the case of an archive that has been preserved within the Archive of Our Own, the maintainer will be invited to moderate her or his archive’s collection within the Archive of Our Own with all the powers that a collection moderator in the Archive usually has; so, for instance, to decide whether a new story fulfills her collection’s rules, or should be removed from the collection.
-          </p>
-          <p>If the collection’s maintainer no longer wants to work on the collection, the OTW will find someone else in the organization to keep the collection up and running, and potentially growing into the future.
-          </p>
-        </li>
-        <li>Collection Policy
-          <p>Where possible, the existing policies of the collection will be preserved, even if they differ from the policies of the Archive of Our Own. Specifically, collections (whether integrated into the Archive of Our Own or preserved as special collections) can have limits on fandom, subject matter, sexual content, etc. that do not apply to archive content generally. Open Doors collections may be mixed fan and non-fanworks; when we accept a mixed collection, the entire collection will be added to the Archive, and the standard prohibition on non-fanworks will not apply to the collection. However, the OTW retains the right to remove content from its servers if the Board deems removal necessary for specific legal reasons, or if the content violates the Content Policy (other than the prohibition on non-fanwork content).
-          </p>
-          <p>Control over individual fanworks contained within a collection rests with their creators. If the creator of any individual fanwork contained within a collection requests its removal or alteration, the OTW will always comply with such a request. We will also provide mechanisms allowing creators to claim their fanworks from such a collection and if desired to attach them to a new or existing Archive of Our Own account.
-          </p>
-        </li>
-        <li>Parting from the OTW
-          <p>As noted in section e., control over individual fanworks contained within a collection always rests with their creators. This section applies to collections as a whole. If the collection’s original maintainer decides that he or she no longer wants to be affiliated with the OTW, or the OTW board decides they no longer wish to work with the original maintainer, the following procedures for dissolution will apply:
-          </p>
-          <ol>
-            <li>
-              <p>OTW will keep the content currently on the OTW server(s), whether in the Archive of Our Own or in a special collection.
-              </p>
-            </li>
-            <li>
-              <p>OTW will keep the subdomain (e.g., foresmutters.transformativeworks.org) and subdirectory (e.g, opendoors.transformativeworks.org/foresmutters) URLs of special projects, pointing to the content currently on the OTW servers.
-              </p>
-            </li>
-            <li>
-              <p>OTW will give the original maintainer back the original domain name if any (e.g., www.foresmutters.org) or the archive or special project, as well as a copy of the current contents of the project (or all stories under the archive tag in the Archive of Our Own).
-              </p>
-            </li>
-            <li>
-              <p>OTW will not be responsible for helping the maintainer set up elsewhere, only for giving him or her the content and transferring back domain ownership.
-              </p>
-            </li>
-            <li>
-              <p>OTW will place a prominent announcement on the Open Doors page indicating that the original maintainer has moved to a new location, with a link to the new location if provided by the maintainer.
-              </p>
-            </li>
-            <li>
-              <p>OTW may choose to continue work on the collection on the OTW servers.
-              </p>
-            </li>
-            <li>
-              <p>These ToS are written assuming a single maintainer. If there are multiple active maintainers of a collection, they must all agree before the OTW will bring the collection into Open Doors. If some but not all of the maintainers later wish to part from the OTW, those who wish to do so can continue to work with the collection on the OTW servers, while the OTW will follow provisions d. and e. for any maintainers who wish to move the collection elsewhere. The OTW will retransfer domain names only to maintainers who were registered owners of the domain names at issue. For active collections, maintainers can use whatever dispute resolution procedure they work out between themselves, provided that they otherwise comply with OTW policies.
-              </p>
-            </li>
-          </ol>
-          <p>The goal of these rules is to be clear about how special collections and other extant fannish projects might come under the OTW umbrella while still preserving the autonomy both of the original maintainer and of the OTW. We want to provide a permanent home to projects, and preserve the results of our efforts, without the original maintainer feeling like she or he is giving up all control.
-          </p>
-        </li>
-        <li>General provisions
-          <p>Matters not specifically addressed in this agreement will be governed by the general Terms of Service.
-          </p>
-        </li>
-      </ol>
-      <hr />
-      <p>Material in this draft has been drawn from Slashcity, NearlyFreeSpeech.Net, Vox Populli, imeem.</p>
-    </div>
+      <p>The goal of these rules is to be clear about how special collections and other extant fannish projects might come under the OTW umbrella while still preserving the autonomy both of the original maintainer and of the OTW. We want to provide a permanent home to projects, and preserve the results of our efforts, without the original maintainer feeling like they are giving up all control.</p>
+    </li>
+    <li>General provisions
+      <p>Matters not specifically addressed in this agreement will be governed by the general Terms of Service.</p>
+    </li>
+  </ol>
+  <hr />
+  <p>Material in this draft has been drawn from Slashcity, NearlyFreeSpeech.Net, Vox Populli, imeem.</p>
+</div>
