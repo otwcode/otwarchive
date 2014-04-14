@@ -106,14 +106,6 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   step %{I follow "Sign Up"}
 end
 
-When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-  step %{I follow "Sign Up"}
-  step %{I fill in "Description" with "random text"}
-  step %{I press "Submit"}
-  step %{I should see "Sign-up was successfully created"}
-end
-
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
