@@ -1,0 +1,12 @@
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("Edit My Profile"), edit_user_path(@user) %></li>
+  <li><%= span_if_current ts("Edit Default Pseud and Icon"), [:edit, @user, @user.default_pseud] %></li>
+  <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
+  <li>
+    <% if @user.crypted_password %>
+      <%= span_if_current ts("Change Password"), change_password_user_path(@user) %>
+    <% else %>
+      <%= link_to ts("Add a Password"), change_password_user_path(@user) %>
+    <% end %>
+  </li>
+</ul> 
