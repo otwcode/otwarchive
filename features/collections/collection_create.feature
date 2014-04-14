@@ -108,7 +108,7 @@ Scenario: Fill out new collection form with faulty data
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
 
-@collection_header_url
+
 Scenario: Create a collection with a malformed header URL
 
 Given I have the collection "Scotts Collection" with name "scotts_collection"
