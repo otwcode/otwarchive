@@ -1,13 +1,18 @@
 require 'vcr'
 
-VCR.config do |c|
+VCR.configure do |c|
+  c.ignore_localhost = true
   c.cassette_library_dir     = 'features/cassette_library'
-  c.stub_with                :fakeweb
-  c.ignore_localhost         = true
+  c.hook_into                :typhoeus
+  c.allow_http_connections_when_no_cassette = true
+
   #use this after setup...
-  c.default_cassette_options = { :record => :none }
+  # Cassettes are now deleted and re-recorded after 30 days. This will ensure
+  # that LJ/DW/DA don't update their HTML and break our story parser without us
+  # knowing about it.
+  c.default_cassette_options = { :record => :none, :re_record_interval => 30.days }
   #use this for setup...
-  #c.default_cassette_options = { :record => :new_episodes }
+  #c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 30.days }
 end
 
 VCR.cucumber_tags do |t|

@@ -57,7 +57,7 @@ Scenario: Post to collection from the collection home page
     And I should see "collection_thing" in the "Post to Collections / Challenges" input
   When I fill in the basic work information for "My Collected Work"
     And I press "Preview"
-  Then I should see "My Collection Thing" within ".collections"
+  Then I should see "My Collection Thing" within "dd.collections"
   When I press "Post"
   Then I should see "My Collected Work"
     And I should see "Collections: My Collection Thing" 

@@ -81,14 +81,14 @@
   <thead role="navigation">
     <tr>
       <th scope="col">
-      	<%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
+      	<%= sort_link ts('Tag Name'), :name %>
 	     	<ul class="actions" role="menu">
         	<li><a id="wrangle_all_select" title="select"><%= ts("All") %></a></li>
         	<li><a id="wrangle_all_deselect" title="select"><%= ts("None") %></a></li>
       	</ul>        
       </th>
       <th scope="col" title="sort by">
-        <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
+        <%= sort_link ts('Created'), :created_at, {:sort_default => true} %>
       </th>
       <% if params[:show] == 'character_relationships' %>
         <th scope="col"><%= ts("Characters") %></th>

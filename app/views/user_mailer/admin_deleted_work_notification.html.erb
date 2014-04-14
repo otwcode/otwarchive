@@ -1,0 +1,11 @@
+<% content_for :message do %>
+  <p>Dear <%= @user.default_pseud.byline %>,</p>
+  
+  <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> was deleted from the Archive by a site admin.</p>
+  
+  <p>If your work was part of an import project managed by our Open Doors team, please <%= opendoors_link("contact Open Doors") %> with any further questions.</p>
+ 
+  <p>If it's possible your work violated the Archive's Terms of Service, please <%= abuse_link("contact our Abuse Committee") %>.</p>
+  
+  <p>Attached is a copy of your work for your reference.</p>
+<% end %>

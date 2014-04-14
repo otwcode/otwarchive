@@ -3,12 +3,14 @@
 #
 # We also add the css class "text" to all text input fields because we need a class on them to be
 # able to target them in ie6, alas. 
-module ActionView::Helpers::InstanceTagMethods
-  remove_const :DEFAULT_TEXT_AREA_OPTIONS
-  DEFAULT_TEXT_AREA_OPTIONS = { }
+module ActionView::Helpers
+  class InstanceTag
+    remove_const :DEFAULT_TEXT_AREA_OPTIONS
+    DEFAULT_TEXT_AREA_OPTIONS = { }
 
-  remove_const :DEFAULT_FIELD_OPTIONS
-  DEFAULT_FIELD_OPTIONS = { "class" => "text" }
+    remove_const :DEFAULT_FIELD_OPTIONS
+    DEFAULT_FIELD_OPTIONS = { "class" => "text" }
+  end
 end
 
 

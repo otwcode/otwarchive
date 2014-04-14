@@ -36,6 +36,8 @@ class RedisMailQueue
         user_kudos["#{commentable_type}_#{commentable_id}"] = names
       end
       
+      next if user_kudos.blank?
+      
       # queue the notification for delivery
       begin
         # don't die if we hit one deleted user      

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe Subscription do
-  let(:subscription) { Factory.build(:subscription) }
+  let(:subscription) { FactoryGirl.build(:subscription) }
 
   context "to a work" do
     before(:each) do
-      subscription.subscribable = Factory.create(:work)
+      subscription.subscribable = FactoryGirl.create(:work)
       subscription.save!
     end
 
@@ -15,14 +15,14 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end
 
   context "to a series" do
     before(:each) do
-      subscription.subscribable = Factory.create(:series)
+      subscription.subscribable = FactoryGirl.create(:series)
       subscription.save!
     end
 
@@ -32,14 +32,14 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end
 
   context "to a user" do
     before(:each) do
-      subscription.subscribable = Factory.create(:user)
+      subscription.subscribable = FactoryGirl.create(:user)
       subscription.save!
     end
 
@@ -49,7 +49,7 @@ describe Subscription do
       end
 
       it "should be destroyed" do
-        expect { subscription.reload }.should raise_error
+        expect { subscription.reload }.to raise_error
       end
     end
   end

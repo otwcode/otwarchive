@@ -1,4 +1,6 @@
 class Collection < ActiveRecord::Base
+  
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
@@ -128,7 +130,7 @@ class Collection < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => ts('must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
@@ -165,6 +167,9 @@ class Collection < ActiveRecord::Base
   scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
+  scope :no_challenge, where(challenge_type: nil)
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
@@ -393,20 +398,20 @@ class Collection < ActiveRecord::Base
   
   def reveal!
     async(:reveal_collection_items)
-    async(:send_reveal_notifications)
   end
 
   def reveal_authors!
     async(:reveal_collection_item_authors)
-    async(:send_author_reveal_notifications)
   end
   
   def reveal_collection_items
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+    send_reveal_notifications
   end
   
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
+    send_author_reveal_notifications
   end
   
   def send_reveal_notifications
@@ -433,6 +438,15 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
+    if filters[:challenge_type].present?
+      if filters[:challenge_type] == "gift_exchange"
+        query = query.gift_exchange
+      elsif filters[:challenge_type] == "prompt_meme"
+        query = query.prompt_meme
+      elsif filters[:challenge_type] == "no_challenge"
+        query = query.no_challenge
+      end
+    end
     query = query.order(sort)
 
     if !filters[:fandom].blank?
@@ -460,13 +474,5 @@ class Collection < ActiveRecord::Base
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
-  include WorksOwner  
-  # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key(tag=nil, index_works=nil)
-    index_works ||= self.children.present? ? self.all_approved_works : self.approved_works
-    super(tag, index_works)
-  end
-
 
 end

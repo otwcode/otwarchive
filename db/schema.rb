@@ -429,7 +429,7 @@ ActiveRecord::Schema.define(:version => 20121129192353) do
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
-  create_table "filter_taggings", :id => false, :force => true do |t|
+  create_table "filter_taggings", :force => true do |t|
     t.integer  "id",                                                :null => false
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
