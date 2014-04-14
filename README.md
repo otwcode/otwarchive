@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/otwcode/otwarchive.png)](https://travis-ci.org/otwcode/otwarchive) 
+[![Coverage Status](https://coveralls.io/repos/otwcode/otwarchive/badge.png)](https://coveralls.io/r/otwcode/otwarchive)
 
 ## About OTW-Archive
 
@@ -45,4 +46,5 @@ public
 
 db
   The overall archive database layout can be found in the file schema.rb.
+
 

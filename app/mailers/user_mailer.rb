@@ -18,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
@@ -136,6 +136,15 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @collection.get_maintainers_email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+    )
+  end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
@@ -274,10 +283,10 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Sends email to authors when a creation is deleted by abuse
+  # Sends email to authors when a creation is deleted by an Admin
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def abuse_deleted_work_notification(user, work)
+  def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
@@ -287,7 +296,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
     )
   end
   
@@ -301,7 +310,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 

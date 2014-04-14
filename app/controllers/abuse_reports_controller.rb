@@ -34,7 +34,7 @@ class AbuseReportsController < ApplicationController
         if @abuse_report.email_copy?
           UserMailer.abuse_report(@abuse_report.id).deliver
         end
-        setflash; flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
+        flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
         format.html { redirect_to '' }
       else
         format.html { render :action => "new" }

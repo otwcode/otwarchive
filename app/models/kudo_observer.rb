@@ -13,7 +13,7 @@ class KudoObserver < ActiveRecord::Observer
 
   protected
     def notify_user_by_email?(user)
-      user.nil? ? false : ( user.is_a?(Admin) ? :true :
+      user.nil? ? false : ( user.is_a?(Admin) ? true :
         !(user == User.orphan_account || user.preference.kudos_emails_off?) )
     end
 
