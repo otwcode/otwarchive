@@ -5,18 +5,18 @@ class RelatedWorksController < ApplicationController
 
   def index
     if params[:user_id].blank?
-      setflash; flash[:error] = ts("Whose related works were you looking for?")
+      flash[:error] = ts("Whose related works were you looking for?")
       redirect_back_or_default(people_path)
     else
       @user = User.find_by_login(params[:user_id])
       if @user.blank?
-        setflash; flash[:error] = ts("Sorry, we couldn't find that user")
+        flash[:error] = ts("Sorry, we couldn't find that user")
         redirect_back_or_default(root_path)
       else
-        @translations_of_user = @user.related_works.find(:all, :conditions => {:translation => true})
-        @remixes_of_user = @user.related_works.find(:all, :conditions => {:translation => false})
-        @translations_by_user = @user.parent_work_relationships.find(:all, :conditions => {:translation => true})
-        @remixes_by_user = @user.parent_work_relationships.find(:all, :conditions => {:translation => false})
+        @translations_of_user = @user.related_works.posted.where(translation: true)
+        @remixes_of_user = @user.related_works.posted.where(translation: false)
+        @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
+        @remixes_by_user = @user.parent_work_relationships.posted.where(translation: false)
       end
     end
   end
@@ -30,11 +30,11 @@ class RelatedWorksController < ApplicationController
     # updates are done by the owner of the parent, to aprove or remove links on the parent work.
     unless @user
       if current_user_owns?(@child)
-        setflash; flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
+        flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
         redirect_back_or_default(user_related_works_path(current_user))
         return
       else
-        setflash; flash[:error] = ts("Sorry, but you don't have permission to do that.")
+        flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_back_or_default(root_path)
         return
       end
@@ -44,10 +44,10 @@ class RelatedWorksController < ApplicationController
     if @related_work.update_attribute(:reciprocal, @related_work.reciprocal)
       notice = @related_work.reciprocal? ?  ts("Link was successfully approved") :
                                             ts("Link was successfully removed")
-      setflash; flash[:notice] = notice
+      flash[:notice] = notice
       redirect_to(@related_work.parent)
     else
-      setflash; flash[:error] = ts('Sorry, something went wrong.')
+      flash[:error] = ts('Sorry, something went wrong.')
       redirect_to(@related_work)
     end
   end
@@ -56,11 +56,11 @@ class RelatedWorksController < ApplicationController
     # destroys are done by the owner of the child, to remove links to the parent work which also removes the link back if it exists.
     unless current_user_owns?(@child)
       if @user
-        setflash; flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
+        flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
         redirect_back_or_default(user_related_works_path(current_user))
         return
       else
-        setflash; flash[:error] = ts("Sorry, but you don't have permission to do that.")
+        flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_back_or_default(root_path)
         return
       end

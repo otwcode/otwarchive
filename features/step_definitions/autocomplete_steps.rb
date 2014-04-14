@@ -28,7 +28,7 @@ end
 # by Nokogiri in the typical find
 # note: this might only work for the first autocomplete in a page D:
 Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
-  string == page.find("input.autocomplete").node['value']
+  string == page.find("input.autocomplete")['value']
 end
 
 # Define all values to be entered here depending on the fieldname
@@ -144,8 +144,7 @@ Then /^the tag autocomplete fields should list only matching canonical tags$/ do
 	step %{I should only see matching canonical character tags in the autocomplete}
 	step %{I enter text in the relationship autocomplete field}
 	step %{I should only see matching canonical relationship tags in the autocomplete}
-	if page.find("Additional Tags")
-	  puts "Testing freeform field"
+	if page.body =~ /Additional Tags/
 	  step %{I enter text in the freeform autocomplete field}
 	  step %{I should only see matching canonical freeform tags in the autocomplete}
 	end
@@ -169,7 +168,7 @@ end
 
 Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
-    user = Factory.create(:user, {:login => username, :password => DEFAULT_PASSWORD})
+    user = FactoryGirl.create(:user, {:login => username, :password => DEFAULT_PASSWORD})
     user.activate
   end
 end

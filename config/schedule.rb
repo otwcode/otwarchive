@@ -73,16 +73,6 @@ every 10.minutes do
   rake "readings:to_database"
 end
 
-# Reindex works
-every 7.minutes do
-  rake "search:reindex_works"
-end
-
-# Reindex bookmarks
-every 13.minutes do
-  rake "search:reindex_bookmarks"
-end
-
 # Rerun redis jobs
 every 10.minutes do
   rake "resque:run_failures"

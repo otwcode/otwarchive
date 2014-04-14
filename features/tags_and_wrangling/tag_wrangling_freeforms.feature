@@ -84,7 +84,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    But I should not see "Alternate Universe" within ".tags"
+    But I should not see "Alternate Universe" within "fieldset.tags"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"
@@ -99,7 +99,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should see "No Fandom"
     And the "tag_canonical" checkbox should be checked
   When I follow "Alternate Universe Pirates"
-  Then I should see "Alternate Universe" within ".tags"
+  Then I should see "Alternate Universe" within "div#parent_MetaTag_associations_to_remove_checkboxes"
   When I edit the tag "Alternate Universe Space Pirates"
     And I fill in "MetaTags" with "Alternate Universe P"
     And I should find "Alternate Universe Pirates" within ".autocomplete"

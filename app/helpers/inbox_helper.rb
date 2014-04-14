@@ -2,6 +2,8 @@ module InboxHelper
   # Describes commentable - used on inbox show page
   def commentable_description_link(comment)
     commentable = comment.ultimate_parent
+    return ts("Deleted Object") if commentable.blank?
+
     if commentable.is_a?(Tag)
       link_to commentable.name, tag_comment_path(commentable, comment)
     elsif commentable.is_a?(AdminPost)
