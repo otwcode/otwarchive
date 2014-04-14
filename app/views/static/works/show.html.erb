@@ -15,14 +15,12 @@
 
   <div class="kudos">
     <%= form_for Kudo.new do |kudo_form| %>
-      <%= kudo_form.hidden_field :kudosable_id, :value => @work.id %>
-      <%= kudo_form.hidden_field :kudosable_type, :value => 'Work' %>
+      <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
+      <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
       <% # need to know whether to redirect to work or chapter in the kudos controller %>
-      <% # commentable is whatever the user is reading - chapter or work; kudosable is the object that can have kudos - the work %>
       <%= hidden_field_tag :commentable_controller, controller.controller_name %>
       <%= hidden_field_tag :commentable_id, params[:id] %>
-      <%= kudo_form.submit ts("Kudos ♥") %>
+      <%= kudo_form.submit ts("Kudos ♥"), :id => 'kudo_submit' %>
     <% end %>
   </div>
-
 </div>

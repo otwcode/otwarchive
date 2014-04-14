@@ -1,13 +1,22 @@
 require 'spec_helper'
 
+def comment_attributes_guest
+  { content: "Body text of the comment", email: "donotreply@ao3.org", name: "guest" }
+end
+
+def comment_attributes_user
+  { content: "Body text of the comment", pseud_id: FactoryGirl.create(:pseud).id }
+end
+
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works" do
     before do
       @work2 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "false" )
       @work2.index.refresh
-      @comment2 = Comment.create(:comment)
-      @work2.comments << @comment2
+      @comment2 = Comment.create(comment_attributes_guest.merge(commentable_id: @work2.chapters.first.id, commentable_type: 'Chapter'))
+      # @work2.comments << @comment2
     end
+
     it "should be creatable on a work" do
       visit "/works/#{@work2.id}/comments/new"
       should have_content("#{@work2.title}")
@@ -44,8 +53,10 @@ describe "Comments" do
     before do
       @work1 = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", restricted: "true" )
       @work1.index.refresh
-      @comment = Comment.create(:comment)
-      @work1.comments << @comment
+      @comment = Comment.create(comment_attributes_user.merge(commentable_id: @work1.chapters.first.id, commentable_type: 'Chapter'))
+      # @work1.comments << @comment
+      @user = FactoryGirl.create(:user)
+      @user.activate
     end
 
     it "should not be creatable by guests on a work" do
@@ -73,19 +84,22 @@ describe "Comments" do
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
   end
+
   context "guests" do
     it_behaves_like "on unrestricted works" do
     end
   end
+
   context "logged in users" do
     before do
       @user = FactoryGirl.create(:user)
-      visit login_path
+      visit logout_path
       fill_in "User name",with: "#{@user.login}"
       fill_in "Password", with: "password"
-      check "Remember me"
+      check "Remember Me"
       click_button "Log In"
     end
+
     it_behaves_like "on unrestricted works" do
     end
   end
@@ -94,9 +108,10 @@ describe "Comments" do
     before do
       @work = FactoryGirl.create(:work, :posted => true, :fandom_string => "Merlin (TV)", :anon_commenting_disabled => "true" )
       @work.index.refresh
-      @comment = Comment.create(:comment)
+      @comment = Comment.create(comment_attributes_user.merge(commentable_id: @work.chapters.first.id, commentable_type: 'Chapter'))
       @work.comments << @comment
     end
+
     it "should not be creatable by guests on a work" do
       visit "/works/#{@work.id}/comments/new"
       should have_content("Sorry, this work doesn't allow non-Archive users to comment.")
@@ -111,12 +126,10 @@ describe "Comments" do
     end
     it "should not be able to be replied to by guests on a work" do
       visit "/works/#{@work.id}/comments/#{@comment.id}"
-      should have_content("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!")
       should_not have_button "Reply"
     end
     it "should not be able to be replied to by guests on a work's chapter" do
       visit "/works/#{@work.id}/chapters/#{@work.chapters.last.id}/comments/#{@comment.id}"
-      should have_content("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!")
       should_not have_button "Reply"
     end
   end

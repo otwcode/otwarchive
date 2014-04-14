@@ -10,7 +10,7 @@ class Admin::UserCreationsController < ApplicationController
     creation.save(:validate => false)
     action = creation.hidden_by_admin? ? "hide" : "unhide"
     AdminActivity.log_action(current_admin, creation, action: action)
-    setflash; flash[:notice] = creation.hidden_by_admin? ? 
+    flash[:notice] = creation.hidden_by_admin? ? 
                         ts('Item has been hidden.') :
                         ts('Item is no longer hidden.')
     if creation_class == Comment 
@@ -27,7 +27,7 @@ class Admin::UserCreationsController < ApplicationController
     creation = creation_class.find(params[:id])
     AdminActivity.log_action(current_admin, creation, action: 'destroy', summary: creation.inspect)
     creation.destroy
-    setflash; flash[:notice] = ts('Item was successfully deleted.')
+    flash[:notice] = ts('Item was successfully deleted.')
     if creation_class == Comment 
       redirect_to(creation.ultimate_parent) 
     elsif creation_class == ExternalWork

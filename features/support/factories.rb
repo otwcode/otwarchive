@@ -20,6 +20,15 @@ FactoryGirl.define do
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
   end
 
+  factory :admin_post do |f|
+    f.sequence(:title) { |n| "Amazing News #{n}"}
+    f.sequence(:content) {|n| "This is the content for the #{n} Admin Post"}
+
+    after(:build) do |admin_post|
+      admin_post.admin_id = [FactoryGirl.build(:admin).id] if admin_post.admin_id.blank?
+    end
+  end
+
   factory :archive_faq do |f|
     f.sequence(:title) { |n| "The #{n} FAQ" }
     f.sequence(:content) { |n| "This is the #{n} FAQ" }
@@ -127,6 +136,23 @@ FactoryGirl.define do
     f.subscribable_type "Series"
     f.subscribable_id { FactoryGirl.create(:series).id }
   end
+
+  factory :comment do |f|
+    f.sequence(:content) {|n| "Comment content #{n}"}
+    f.sequence(:name) {|o| "GuestName#{o}"}
+    f.sequence(:email)  {|p| "guest#{p}email@example.org"}
+
+    after(:build) do |comment|
+      comment.commentable_type = "Work"
+      comment.commentable_id = FactoryGirl.create(:work).id
+    end
+  end
+
+  factory :kudo do |f|
+    f.commentable_id { FactoryGirl.create(:work).id }
+    f.commentable_type  "Work"
+end
+
 
   factory :owned_tag_set do |f|
     f.sequence(:title) {|n| "Owned Tag Set #{n}"}

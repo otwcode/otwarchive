@@ -7,13 +7,7 @@ Feature: Delete Works
       And I post the work "All Hell Breaks Loose"
     When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
-      And "newbie" should be emailed
-      # TODO: Figure out why these steps aren't working even though the feature is fine (multipart email?)
-      # And the email should contain "All Hell Breaks Loose"
-      # And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
-      # And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
-      # And the email should contain "Attached is a copy of your work for your reference."
-      # And the email should contain "Bad things happen, etc."
+      And "newbie" should be notified by email about the deletion of "All Hell Breaks Loose"
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page

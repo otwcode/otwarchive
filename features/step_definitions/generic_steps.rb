@@ -3,8 +3,11 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  breakpoint
-  0
+  binding.pry
+end
+
+Then /^tell me I got (.*)$/ do |spot|
+  puts "got #{spot}"
 end
 
 Then /^show me the response$/ do
@@ -16,19 +19,19 @@ Then /^show me the html$/ do
 end
 
 Then /^show me the main content$/ do
-  puts "\n" + find("#main").node.inner_html
+  puts "\n" + find("#main").native.inner_html
 end
 
 Then /^show me the errors$/ do 
-  puts "\n" + find("div.error").node.inner_html
+  puts "\n" + find("div.error").native.inner_html
 end
 
 Then /^show me the sidebar$/ do
-  puts "\n" + find("#dashboard").node.inner_html
+  puts "\n" + find("#dashboard").native.inner_html
 end
 
 Then /^I should see errors/ do
-  assert find("div.error").node
+  assert find("div.error")
 end
 
 Then /^show me the form$/ do
@@ -36,7 +39,7 @@ Then /^show me the form$/ do
 end
 
 Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
-  puts "\n" + page.all("#main form")[(index.to_i-1)].node.inner_html
+  puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
 
@@ -80,6 +83,10 @@ end
 
 Then /^I should see a save error message$/ do
   step %{I should see "We couldn't save"}
+end
+
+Then /^I should see a success message$/ do
+  step %{I should see "success"}
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
@@ -172,6 +179,10 @@ When /^I check the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do
   check(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
 end
 
+When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, id_string|
+  uncheck(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
+end
+
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
   fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
 end
@@ -215,10 +226,6 @@ Then /^I should see the page title "(.*)"$/ do |text|
   end
 end
 
-Given /^I have no prompts$/ do
-  Prompt.delete_all
-end
-
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should
@@ -233,3 +240,8 @@ Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{text}/m
 end
+
+When /^I want to search for exactly one term$/ do
+  Capybara.exact = true
+end
+

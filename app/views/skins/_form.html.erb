@@ -3,12 +3,12 @@
   <h3 class="landmark heading">About</h3>
   <dl>      
     <dt><%= label_tag "skin_type", ts('Type') %> <%= link_to_help "skins-basics" %></dt>
-    <% if @skin.type %>
-      <% # don't let the user change the skin type after the fact! %>
-      <dd><%= @skin.type == 'WorkSkin' ? ts("Work Skin") : ts("Site Skin") %></dd>
+    <% if @skin.id %>
+      <% # don't let user change the type of an already-created skin %>
+      <dd><%= (@skin.type && @skin.type == 'WorkSkin') ? ts("Work Skin") : ts("Site Skin") %></dd>
     <% else %>      
       <dd>
-        <%= select_tag "skin_type", options_for_select(Skin::TYPE_OPTIONS, params[:skin_type]), 
+        <%= select_tag "skin_type", options_for_select(Skin::TYPE_OPTIONS, @skin.type || params[:skin_type] ), 
           :onchange => 'if ($j(this).val() == "WorkSkin") {$j(".verbose").hide();} else {$j(".verbose").show();}' %>
       </dd>
     <% end %>
