@@ -11,7 +11,7 @@ Feature: Tag wrangling
       | dizmo       |
       And I have loaded the "roles" fixture
     When I am logged in as "dizmo"
-    Then I should not see "Tag Wrangling"
+    Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as an admin
       And I fill in "query" with "dizmo"
       And I press "Find"
@@ -24,7 +24,7 @@ Feature: Tag wrangling
     
     # accessing wrangling pages
     When I am logged in as "dizmo"
-      And I follow "Tag Wrangling"
+      And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
@@ -40,7 +40,7 @@ Feature: Tag wrangling
       | dizmo       |
       And a media exists with name: "TV Shows", canonical: true
     When I am logged in as "dizmo"
-    When I follow "Tag Wrangling"
+    When I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should not see "Stargate SG-1"
     When I follow "Wranglers"
@@ -64,7 +64,7 @@ Feature: Tag wrangling
       Then I should see "Work was successfully posted."
     
     # mass wrangling
-    When I follow "Tag Wrangling"
+    When I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
       And I should see "Fandoms by media (3)"
@@ -85,7 +85,7 @@ Feature: Tag wrangling
       And I fill in "tag_media_string" with "TV Shows"
       And I press "Save changes"
     Then I should see "Tag was updated"
-    When I follow "Tag Wrangling"
+    When I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should not see "Stargate SG-1"
     When I follow "Wranglers"
@@ -132,7 +132,7 @@ Feature: Tag wrangling
       And I should see "Jack O'Neill"
       
     # creating a new non-canonical fandom tag
-    When I follow "Tag Wrangling"
+    When I follow "Tag Wrangling" within "#header"
       And I follow "New Tag"
       And I fill in "Name" with "Stargate Atlantis"
       And I choose "Fandom"

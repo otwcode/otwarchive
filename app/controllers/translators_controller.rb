@@ -32,13 +32,13 @@ class TranslatorsController < ApplicationController
         if user
           user.is_translator_for locale
         else
-          setflash; flash[:error] = t('user_not_found', :default => "Sorry, we couldn't find a user with the email address: %{email}", :email => attributes[:email])
+          flash[:error] = t('user_not_found', :default => "Sorry, we couldn't find a user with the email address: %{email}", :email => attributes[:email])
           redirect_to new_locale_translator_path(locale)
           return
         end
       end
     end 
-    setflash; flash[:notice] = t('translators_added', :default => "Translators were added!")
+    flash[:notice] = t('translators_added', :default => "Translators were added!")
     redirect_to translators_path      
   end
   

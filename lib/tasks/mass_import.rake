@@ -601,22 +601,6 @@ namespace :massimport do
       work_params[:author] = work_params.delete(:author).split(/,\s*/)[0] + " and others"
     end
   
-    # get email address from the story file if necessary
-    email_regex = /<a href=(?:['"]?)(?!http|'http|"http)(?:mailto:|&#109;&#97;&#105;&#108;&#116;&#111;&#58;)?(.+?@[^'"\?>]+?)(?:\?.+?)?(?:">|'>|>)(.+?)<\/a>/mi
-    if work_params[:email].blank?
-      if story.match(email_regex)
-  
-        # there are mailto in the format <a href="mailto:email_1, email_2"> so we just want the first one
-        work_params[:email] = $1.split(',')[0]
-      end
-    end
-    #work_params[:email] = "astele@astele.co.uk"
-    message("Email set to " + work_params[:email])
-  
-    # strip mailto: links to avoid spam
-    story.gsub!(email_regex, '\2')
-  
-  
     category_string = "" ; warning_strings = "" ;  freeform_string = ","; relationship_string = ""
   
     # clean up existing freeforms
@@ -693,6 +677,23 @@ namespace :massimport do
   
     # TODO: check how the story HTML is organised and process it to produce a decent result in AO3
     @doc = Nokogiri::HTML.parse(story) rescue ""
+
+    # Use Nokogiri to grab emails and remove mailto links
+    mailtos = @doc.xpath('//a[starts-with(@href,"mailto:")]')
+    if mailtos.present?
+      emails = mailtos.first.attributes['href'].value
+      emails.gsub!("mailto:", "")
+
+      # there are mailto in the format <a href="mailto:email_1, email_2"> so we just want the first one
+      work_params[:email] = emails.split(',').first
+      message("Email set to " + work_params[:email])
+
+      # strip mailto: links to avoid spam
+      mailtos.each do |m|
+        m.replace(m.children.first)
+      end
+    end
+
     content = (@doc/"body").inner_html
     @storyparser ||= StoryParser.new
     content = @storyparser.clean_storytext(content)

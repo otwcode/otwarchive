@@ -3,7 +3,7 @@
 @works
 
 Feature: Download a work
-
+  @wip
   Scenario: Download an ordinary work
   
   Given basic tags
@@ -25,7 +25,8 @@ Feature: Download a work
     Then I should see "Tittle with doubble letters"
   When I go to the work page with title Tittle with doubble letters
   When I follow "EPUB"
-
+  
+  @wip
   Scenario: Download works with funky titles doesn't bomb
 
   Given basic tags
@@ -100,6 +101,7 @@ Feature: Download a work
   When I go to the work page with title "Hàs curly’d quotes"
   When I follow "EPUB"
 
+  @wip
   Scenario: disable guest download
 
   Given I am logged in as "author"
@@ -122,6 +124,7 @@ Feature: Download a work
   When I follow "MOBI"
   Then I should not see "Due to current high load"
 
+  @wip
  Scenario: download chaptered works doesn't bomb
  
   Given I am logged in as "author"
@@ -141,6 +144,7 @@ Feature: Download a work
   When I view the work "Epic Novel"
     And I follow "EPUB"
 
+  @wip
   Scenario: issue 1957
 
   Given basic tags

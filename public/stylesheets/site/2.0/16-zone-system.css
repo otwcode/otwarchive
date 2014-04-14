@@ -18,12 +18,12 @@ SUBSECTIONS:
 
 /*1. ZONE: SYSTEM: SPLASH PAGE*/
 
-.system .intro {
+.splash .intro {
   background: #ededed;
   font: 1.571em Georgia, serif;
-  margin: 1em auto 2.5em 1%;
-  max-width: 68%;
   float: left;
+  max-width: 68%;
+  margin: 1em auto 1.5em 1%;
   overflow: hidden;
     border-radius: 1em;
     box-shadow: 1px 1px 3px #bbb;
@@ -31,76 +31,48 @@ SUBSECTIONS:
     background-image: -webkit-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
     background-image: -o-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
     background-image: linear-gradient(135deg, #ededed 0%, #f6f6f6 100%);
+
 }
 
-.system .module h2 {
-  font: bold oblique 1.45em Georgia, serif;
-  line-height: 1.75;
+.splash .intro a, .splash .intro h2, .splash .intro em {
+  font-style: oblique;
+  font-weight: 700;
+}
+
+.splash .intro h2 {
   display: block;
+  font-size: 1.45em;
+  line-height: 1.75;
   text-align: center;
     text-shadow: none;
 }
 
-.system .intro p {
+.splash .intro p {
   padding: 0 0.75em;
 }
 
-.system .intro a, .system .intro em {
-  font: bold oblique 100% Georgia, serif;
+.splash .count {
+  font-weight: 700;
 }
 
-.system p#signup {
+.splash #signup {
   width: 100%;
-  text-indent: 0;
-  font-style: normal;
     text-shadow: -1px -2px 3px #fff;
 }
 
-.system .latest, .system div.news {
-  width: 25%;
-  float: left;
-  margin: 1.571em 1% 1.571em 5%;
-}
-
-.system .tweets {
-  width: 100%;
-}
-
-.system .latest h3, .system div.news h3, .system .tweets h3 {
+.splash .module h3  {
   color: #900;
   border-bottom: 1px solid #c8c8c8;
-  font: bold 1.75em Georgia, serif;
+  font-size: 1.75em;
+  font-weight: 700;
 }
 
-.system .tweet_list {
-  background: #eee;
-    border-radius: 0.571em;
+.splash .latest {
+  float: left;
+  margin: 1.571em 1% 1.571em 5%;
+  width: 25%;
 }
 
-.system .tweet_list li {
-  padding: 0.571em;
-  margin: 0;
-}
-
-.system .tweet_list li:nth-child(even) {
-  background: #ddd;
-}
-
-.system .tweet_time {
-  font-family: monospace;
-}
-
-.system .tweets p {
-  margin-bottom: 0;
-}
-
-.system .tweets .tweet {
-  margin: 1.25em 0.5em 0; 
-}
-
-.system .tweets .time {
-  font-family: monospace;
-}
 
 /* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
 
@@ -160,10 +132,13 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
   margin: 0.643em;
 }
 
-/*6. ZONE: SYSTEM: ERROR PAGES*/
+/* 6. ZONE: SYSTEM: FAQS */
 
-.error .tweet_list {
-  padding: 0.5em;
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .example { 
+  margin: 0.643em 3.858em; 
+  padding: 0.643em;
+} 
+
+.faq .example {
+  border: 1px solid #c2d2df;
 }
-		
-/*END== */

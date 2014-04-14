@@ -45,17 +45,12 @@ class Series < ActiveRecord::Base
   scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'series.updated_at DESC'}
   scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'series.updated_at DESC'}
   
-  #TODO: figure out why select distinct gets clobbered
   scope :exclude_anonymous, 
-    select("DISTINCT series.*").
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
-           INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
-           LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'").
+           INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`)").
     group("series.id").
-    having("(MAX(collection_items.anonymous) IS NULL OR MAX(collection_items.anonymous) = 0) AND (MAX(collection_items.unrevealed) IS NULL OR MAX(collection_items.unrevealed) = 0)")
+    having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   
-  # Needed to keep the normal pseud.series association from eating the exclude_anonymous selects  
-  # Oct 5 2010 - As of Rails 3, this is no longer needed! -- NN
   scope :for_pseuds, lambda {|pseuds|
     joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id)) 
