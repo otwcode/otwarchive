@@ -3,7 +3,6 @@
 
 [![Codeship Status](https://www.codeship.io/projects/1f7468f0-7e15-0131-c059-7a8d26daf885/status?branch=master)](https://www.codeship.io/projects/14476)
 
-
 ## About OTW-Archive
 
 The OTW-Archive software is an open-source web application intended for hosting archives
