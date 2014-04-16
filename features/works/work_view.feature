@@ -21,6 +21,5 @@ Feature: View a work with various options
   Given I am logged in as a random user
     And I view a deleted work
   Then I am on the homepage
-    #And I should see "Sorry, we couldn't find the work you were looking for."
 
 
