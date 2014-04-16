@@ -60,7 +60,7 @@
         </li>
       <% end %>
     <% end %>
-  <% if @work.recipients || @work.approved_related_works.where(translation: true).exists? || @work.parent_work_relationships || @work.challenge_claims %>
+  <% if show_associations?(@work) %>
     </ul>
   <% end %>
 
