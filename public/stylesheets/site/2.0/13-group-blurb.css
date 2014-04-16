@@ -1,5 +1,5 @@
 /*==GROUP: BLURB
-http://media.transformativeworks.org/training/front_end_coding/blurb.html
+http://otwcode.github.com/docs/front_end_coding/patterns/blurb
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -166,6 +166,10 @@ li.blurb:after {
   background: url("/images/imageset.png") -125px 0px;
 }
 
+.required-tags .complete-abandoned {
+  background: url("/images/imageset.png") -100px -250px;
+}
+
 .required-tags .complete-no {
   background: url("/images/imageset.png") -100px -25px;
 }
@@ -174,15 +178,7 @@ li.blurb:after {
   background: url("/images/imageset.png") -175px -25px;
 }
 
-<<<<<<< HEAD
 .required-tags .warning-yes {
-=======
-.blurb .abandoned {
-  background: url("/images/imageset.png") -175px -275px;
-}
-
-.blurb .warning-yes {
->>>>>>> c5ad515a341e996a6d89d2a095f8bed6e9fc7e45
   background: url("/images/imageset.png") -150px -25px;
 }
 
@@ -296,7 +292,6 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
-  z-index: 1;
 }
 
 .bookmark .status span, .bookmark .status a {
