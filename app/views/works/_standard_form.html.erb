@@ -186,18 +186,18 @@
             <dt><%= ts('Chapter Title:') %></dt>
             <dd><%= c.text_field :title, :value => @chapter.title %></dd>
 			
-			      <!--status checkbox-->
-			      <% if @work.check_status == "wip" || @work.check_status == "abandoned" || @work.check_status == nil %>
-				      <dt class="status"><%= ts('Status:') %></dt>
-				      <dd>
-					      <ul>
-						      <li><%= f.radio_button 'status', "wip" %><%= label_tag "work_status_wip", ts("Work in Progress") %></label></li>
-						      <li><%= f.radio_button 'status', "abandoned" %><%= label_tag "work_status_abandoned", ts("Abandoned") %></label></li>
-					      </ul>
-				      </dd> 
-			      <% end %>
-			      <!--end of status checkbox-->
-		      </dl>
+            <!--status checkbox-->
+            <% if @work.check_status == "wip" || @work.check_status == "abandoned" || @work.check_status == nil %>
+              <dt class="status"><%= ts('Status:') %></dt>
+              <dd>
+                <ul>
+                  <li><%= f.radio_button 'status', "wip" %><%= label_tag "work_status_wip", ts("Work in Progress") %></label></li>
+                  <li><%= f.radio_button 'status', "abandoned" %><%= label_tag "work_status_abandoned", ts("Abandoned") %></label></li>
+                </ul>
+              </dd> 
+            <% end %>
+            <!--end of status checkbox-->
+          </dl>
         </fieldset>
       </dd>
 	      
