@@ -174,7 +174,15 @@ li.blurb:after {
   background: url("/images/imageset.png") -175px -25px;
 }
 
+<<<<<<< HEAD
 .required-tags .warning-yes {
+=======
+.blurb .abandoned {
+  background: url("/images/imageset.png") -175px -275px;
+}
+
+.blurb .warning-yes {
+>>>>>>> c5ad515a341e996a6d89d2a095f8bed6e9fc7e45
   background: url("/images/imageset.png") -150px -25px;
 }
 

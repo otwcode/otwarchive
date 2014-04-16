@@ -705,14 +705,48 @@ class Work < ActiveRecord::Base
 
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters 
   end
-
+  
+  def abandoned?
+	self.status == "abandoned"
+  end
+  
+  #checks status
+  def check_status
+	return self.status
+  end
+   
   # Returns true if a work is complete
   def is_complete
     return !self.is_wip
   end
-
+  
+  #if user fails to specify value for status for a multichaptered work, set this to "wip" as default
+  before_save :set_status_to_wip
+  def set_status_to_wip
+	if (self.is_wip || self.status.nil?) && !self.abandoned?
+		self.status = "wip"
+	end
+  end
+  
+  #if user posts a oneshot, status automatically sets to complete
+  before_save :set_status_to_complete
+  def set_status_to_complete
+	if self.status == "wip" && self.expected_number_of_chapters == 1
+		self.status = "complete"
+	end
+  end
+  
+ #updates status attribute from the boolean & from comparing chapter counts
+ #this takes an extra save in order to work. 
+  before_save :change_status_to_complete
+  def change_status_to_complete 
+	if self.is_complete || self.chapters.posted.count == expected_number_of_chapters
+		self.status = "complete"
+	end
+  end
+  
   # 1/1, 2/3, 5/?, etc.
   def chapter_total_display
     current = self.posted? ? self.number_of_posted_chapters : 1
@@ -990,8 +1024,6 @@ class Work < ActiveRecord::Base
   VISIBLE_TO_USER_CONDITIONS = {:posted => true, :hidden_by_admin => false}
 
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
-
-
 
 
   #################################################################################

@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20121129192353) do
+=======
+ActiveRecord::Schema.define(:version => 20121008003319) do
+>>>>>>> c5ad515a341e996a6d89d2a095f8bed6e9fc7e45
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -75,7 +79,10 @@ ActiveRecord::Schema.define(:version => 20121129192353) do
     t.integer  "default_skin_id"
     t.datetime "stats_updated_at"
     t.boolean  "disable_filtering",                          :default => false,                 :null => false
+<<<<<<< HEAD
     t.boolean  "request_invite_enabled",                     :default => false,                 :null => false
+=======
+>>>>>>> c5ad515a341e996a6d89d2a095f8bed6e9fc7e45
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -429,7 +436,11 @@ ActiveRecord::Schema.define(:version => 20121129192353) do
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
+<<<<<<< HEAD
   create_table "filter_taggings", :force => true do |t|
+=======
+  create_table "filter_taggings", :id => false, :force => true do |t|
+>>>>>>> c5ad515a341e996a6d89d2a095f8bed6e9fc7e45
     t.integer  "id",                                                :null => false
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
@@ -1176,6 +1187,7 @@ ActiveRecord::Schema.define(:version => 20121129192353) do
     t.integer  "work_skin_id"
     t.boolean  "in_anon_collection",                       :default => false, :null => false
     t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
+    t.string   "status"
   end
 
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"
