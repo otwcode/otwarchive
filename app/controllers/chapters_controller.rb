@@ -242,7 +242,7 @@ class ChaptersController < ApplicationController
   def load_work
     @work = params[:work_id] ? Work.find_by_id(params[:work_id]) : Chapter.find_by_id(params[:id]).work
     unless @work.present?
-      setflash; flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     end
     @check_ownership_of = @work
