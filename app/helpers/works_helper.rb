@@ -21,21 +21,20 @@ module WorksHelper
     end
     list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 	
-	if work.chaptered? && work.revised_at
-			prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
-			latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
-			list.insert(1, [prefix, localize(latest_date)])		
-	end 
+    if work.chaptered? && work.revised_at
+      prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
+      latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
+      list.insert(1, [prefix, localize(latest_date)])		
+    end 
 	
-	if work.abandoned? || work.is_complete
-		list.concat([[ts("Status: "), work.status.capitalize ]])
-	elsif work.is_wip
-		list.concat([[ts("Status: "), work.status.upcase ]])
-	#fix the complete thingy before you can stick complete up there! self, stop being lazy and hacking stuff.
-	#this doesn't work, anyway! hmph.
+    if work.abandoned? || work.is_complete
+      list.concat([[ts("Status: "), work.status.capitalize ]])
+    elsif work.is_wip
+      list.concat([[ts("Status: "), work.status.upcase ]])
+      #fix the complete thingy before you can stick complete up there! self, stop being lazy and hacking stuff.
+      #this doesn't work, anyway! hmph.
     end
-	
-	
+
     list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe
     content_tag(:dl, list.to_s, :class => "stats").html_safe
   end
