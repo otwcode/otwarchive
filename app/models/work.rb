@@ -705,7 +705,7 @@ class Work < ActiveRecord::Base
 
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters 
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
   
   def abandoned?
