@@ -11,7 +11,7 @@ class LocalesController < ApplicationController
     end
     # Temporary message for non-default locales for launch of open beta
     unless params[:locale_id] == ArchiveConfig.DEFAULT_LOCALE_ISO
-      setflash; flash[:notice] = "We're working on making the <a href='http://archiveofourown.org/archive_faqs#locales'>AO3 
+      flash[:notice] = "We're working on making the <a href='http://archiveofourown.org/archive_faqs#locales'>AO3 
       available in your language</a>, too! \\o/ If you want to help us add more languages, 
       <a href='http://transformativeworks.org/node/540'>please consider volunteering</a>."
     end
@@ -34,7 +34,7 @@ class LocalesController < ApplicationController
   def create   
     @locale = Locale.new(params[:locale])
     if @locale.save
-      setflash; flash[:notice] = t('successfully_added', :default => 'Locale was successfully added.')
+      flash[:notice] = t('successfully_added', :default => 'Locale was successfully added.')
       redirect_to locales_path
     else
       render :action => "new"

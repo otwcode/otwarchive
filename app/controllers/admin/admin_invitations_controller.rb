@@ -12,10 +12,10 @@ class Admin::AdminInvitationsController < ApplicationController
   def create
     @invitation = current_admin.invitations.new(params[:invitation])
     if @invitation.invitee_email.blank?
-      setflash; flash[:error] = t('no_email', :default => "Please enter an email address.")
+      flash[:error] = t('no_email', :default => "Please enter an email address.")
       render :action => 'index'      
     elsif @invitation.save
-      setflash; flash[:notice] = t('sent', :default => "An invitation was sent to %{email_address}", :email_address => @invitation.invitee_email)
+      flash[:notice] = t('sent', :default => "An invitation was sent to %{email_address}", :email_address => @invitation.invitee_email)
       redirect_to admin_invitations_url
     else
       render :action => 'index'
@@ -27,7 +27,7 @@ class Admin::AdminInvitationsController < ApplicationController
       request.invite_and_remove(current_admin)
     end
     InviteRequest.reset_order  
-    setflash; flash[:notice] = t('invited_from_queue', :default => "%{count} people from the invite queue were invited.", :count => params[:invite_from_queue].to_i)
+    flash[:notice] = t('invited_from_queue', :default => "%{count} people from the invite queue were invited.", :count => params[:invite_from_queue].to_i)
     redirect_to admin_invitations_url
   end
   
@@ -37,7 +37,7 @@ class Admin::AdminInvitationsController < ApplicationController
     else
       Invitation.grant_empty(params[:number_of_invites].to_i)
     end
-    setflash; flash[:notice] = t('invites_created', :default => 'Invitations successfully created.')
+    flash[:notice] = t('invites_created', :default => 'Invitations successfully created.')
     redirect_to admin_invitations_url
   end
   
@@ -54,7 +54,7 @@ class Admin::AdminInvitationsController < ApplicationController
       @invitation = @invitations.first if @invitations.length == 1
     end
     unless @user || @invitation || @invitations
-      setflash; flash.now[:error] = t('user_not_found', :default => "No results were found. Try another search.")
+      flash.now[:error] = t('user_not_found', :default => "No results were found. Try another search.")
     end
   end
 

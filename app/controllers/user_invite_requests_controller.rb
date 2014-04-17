@@ -15,11 +15,11 @@ class UserInviteRequestsController < ApplicationController
         @user = current_user
         @user_invite_request = @user.user_invite_requests.build
       else
-        setflash; flash[:error] = ts("Please log in.")
+        flash[:error] = ts("Please log in.")
         redirect_to login_path
      end
     else
-      setflash; flash[:error] = ts("Sorry, new invitations are temporarily unavailable. If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_url}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact/open doors\">Open Doors</a>".html_safe)
+      flash[:error] = ts("Sorry, new invitations are temporarily unavailable. If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_url}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact/open doors\">Open Doors</a>".html_safe)
       redirect_to root_path
     end
   end
@@ -31,17 +31,17 @@ class UserInviteRequestsController < ApplicationController
         @user = current_user
         @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
       else
-        setflash; flash[:error] = "Please log in."
+        flash[:error] = "Please log in."
         redirect_to login_path
       end
       if @user_invite_request.save
-        setflash; flash[:notice] = 'Request was successfully created.'
+        flash[:notice] = 'Request was successfully created.'
         redirect_to(@user)
       else
         render :action => "new"
       end
     else
-      setflash; flash[:error] = ts("Sorry, new invitations are temporarily unavailable. If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_url}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact/open doors\">Open Doors</a>".html_safe)
+      flash[:error] = ts("Sorry, new invitations are temporarily unavailable. If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_url}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact/open doors\">Open Doors</a>".html_safe)
       redirect_to root_path
     end
   end
@@ -59,7 +59,7 @@ class UserInviteRequestsController < ApplicationController
           UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver
         end
       end
-      setflash; flash[:notice] = 'All Requests were declined.'
+      flash[:notice] = 'All Requests were declined.'
       redirect_to user_invite_requests_url and return
     end
     params[:requests].each_pair do |id, quantity|
@@ -69,7 +69,7 @@ class UserInviteRequestsController < ApplicationController
         request.save!
       end
     end
-    setflash; flash[:notice] = ts("Requests were successfully updated.")
+    flash[:notice] = ts("Requests were successfully updated.")
     redirect_to user_invite_requests_url
   end
 end

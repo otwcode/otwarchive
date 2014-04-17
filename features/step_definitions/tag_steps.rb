@@ -31,14 +31,14 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
-  char = Character.find_or_create_by_name_and_canonical(character)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  char = Character.find_or_create_by_name_and_canonical(character, true)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
   char.add_association(fand)
 end
 
 Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relationship, fandom|
-  rel = Relationship.find_or_create_by_name_and_canonical(relationship)
-  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  rel = Relationship.find_or_create_by_name_and_canonical(relationship, true)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom, true)
   rel.add_association(fand)
 end
 
@@ -54,6 +54,15 @@ Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
   t.save
 end
 
+Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
+  merger = Tag.find_by_name(merger)
+  merger_type = merger.type
+
+  synonym = merger_type.classify.constantize.find_or_create_by_name(synonym)
+  synonym.merger = merger
+  synonym.save
+end
+
 Given /^I am logged in as a tag wrangler$/ do
   step "I am logged out"
   username = "wrangler"
@@ -65,7 +74,7 @@ end
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
   tw = User.find_by_login(user)
   if tw.blank?
-    tw = Factory.create(:user, {:login => user, :password => password})
+    tw = FactoryGirl.create(:user, {:login => user, :password => password})
     tw.activate
   else
     tw.password = password
@@ -85,6 +94,23 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   visit tag_wranglers_url
   fill_in "tag_fandom_string", :with => fandomname
   click_button "Assign"
+end
+
+Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
+  tag = Fandom.find_or_create_by_name(tagname)
+  step %{I am logged out}
+  n_comments ||= 3
+  n_comments.to_i.times do |i|
+    step %{I am logged in as a tag wrangler}
+    step %{I post the comment "Comment number #{i}" on the tag "#{tagname}"}
+    step %{I am logged out}
+  end
+end
+
+Given /^the unsorted tags setup$/ do
+  30.times do |i|
+    UnsortedTag.find_or_create_by_name("unsorted tag #{i}")
+  end
 end
 
 ### WHEN
@@ -137,5 +163,5 @@ end
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
-  step %{I should see "wrangler" within ".tag_edit"}
+  step %{I should see "wrangler" within "fieldset dl"}
 end

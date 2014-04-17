@@ -10,10 +10,11 @@ module CssCleaner
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
+  PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
   
   FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotate|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
-  
+
   RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
   COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s)
   COLOR_STOP_FUNCTION_REGEX = Regexp.new('color-stop\s*\(' + NUMBER_WITH_UNIT_REGEX.to_s + '\s*\,?\s*' + COLOR_REGEX.to_s + '\s*\)', Regexp::IGNORECASE)
@@ -25,21 +26,23 @@ module CssCleaner
   URI_REGEX = Regexp.new(DOMAIN_OR_IMAGES_REGEX.to_s + '/[\w\-\.\/]*[\w\-]\.(' + ArchiveConfig.SUPPORTED_EXTERNAL_URLS.join('|') + ')')
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
-  
+
   VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}")
 
 
-  # For use in ActiveRecord models 
+  # For use in ActiveRecord models
   # We parse and clean the CSS line by line in order to provide more helpful error messages.
-  # The prefix is used if you want to make sure a particular prefix appears on all the selectors in 
+  # The prefix is used if you want to make sure a particular prefix appears on all the selectors in
   # this block of css, eg ".userstuff p" instead of just "p"
-  def clean_css_code(css_code, prefix = "")
+  def clean_css_code(css_code, options = {})
     return "" if !css_code.match(/\w/) # only spaces of various kinds
     clean_css = ""
     parser = CssParser::Parser.new
     parser.add_block!(css_code)
-    prefix = prefix + " " unless prefix.blank?
     
+    prefix = options[:prefix] || ''
+    caller_check = options[:caller_check]
+
     if parser.to_s.blank?
       errors.add(:base, ts("We couldn't find any valid CSS rules in that code."))
     else
@@ -50,7 +53,7 @@ module CssCleaner
             next
           end
           sel = selector.gsub(/\n/, '').strip
-          sel = sel.match(/^\s*#{prefix}/) ? sel : prefix + sel
+          (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
         end
         clean_declarations = ""
         rs.each_declaration do |property, value, is_important|
@@ -60,7 +63,7 @@ module CssCleaner
             errors.add(:base, ts("We don't currently allow the CSS property #{property} -- please notify support if you think this is an error."))
           elsif (cleanval = sanitize_css_declaration_value(property, value)).blank?
             errors.add(:base, ts("The #{property} property in #{rs.selectors.join(', ')} cannot have the value #{value}, sorry!"))
-          else
+          elsif (!caller_check || caller_check.call(rs, property, value))
             clean_declarations += "  #{property}: #{cleanval}#{is_important ? ' !important' : ''};\n"
           end
         end
@@ -77,17 +80,21 @@ module CssCleaner
     return clean_css
   end
   
-  def sanitize_css_property(property)
-    if ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) ||
-      property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
-        return property
-    end
-    return ""
+  def is_legal_property(property)
+    ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
+      property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
   end
   
-  
+  def is_legal_shorthand_property(property)
+    property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
+  end
+
+  def sanitize_css_property(property)
+    return (is_legal_property(property) || is_legal_shorthand_property(property)) ? property : ""
+  end
+
   # A declaration must match the format:   property: value;
-  # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES, 
+  # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES,
   # or that property and its value will be omitted.
   # All values are sanitized. If any values in a declaration are invalid, the value will be blanked out and an
   #   empty property returned.
@@ -104,9 +111,9 @@ module CssCleaner
     elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
-    elsif property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
+    elsif is_legal_shorthand_property(property)
       clean = tokenize_and_sanitize_css_value(value)
-    elsif ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property)
+    elsif is_legal_property(property)
       clean = sanitize_css_value(value)
     end
     clean.strip
@@ -116,7 +123,7 @@ module CssCleaner
   def tokenize_and_sanitize_css_value(value)
     cleanval = ""
     scanner = StringScanner.new(value)
-    
+
     # we scan until we find either a space, a comma, or an open parenthesis
     while scanner.exist?(/\s+|,|\(/)
       # we have some tokens left to break up
@@ -139,26 +146,26 @@ module CssCleaner
           return ""
         end
       end
-      
+
       # we now have a single token
       separator = token.match(/(\s|,)$/) || ""
-      token.strip! 
+      token.strip!
       token.chomp!(',')
       cleantoken = sanitize_css_token(token)
       return "" if cleantoken.blank?
       cleanval += cleantoken + separator.to_s
     end
-    
+
     token = scanner.rest
     if token && !token.blank?
       cleantoken = sanitize_css_token(token)
       return "" if cleantoken.blank?
       cleanval += cleantoken
     end
-    
+
     return cleanval
   end
-      
+
   def sanitize_css_token(token)
     cleantoken = ""
     if token.match(/gradient/)
@@ -183,9 +190,9 @@ module CssCleaner
     end
     return ""
   end
-  
 
-  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be 
+
+  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be
   # rgba(), hex (#), or numeric values, or a comma-separated list of same
   def sanitize_css_value(value)
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
@@ -202,15 +209,15 @@ module CssCleaner
 
   def sanitize_css_content(value)
     # For now we only allow a single completely quoted string
-    return value if value =~ /^\'([^\']*)\'$/      
+    return value if value =~ /^\'([^\']*)\'$/
     return value if value =~ /^\"([^\"]*)\"$/
-    
+
     # or a valid img url
     return value if value.match(URL_FUNCTION_REGEX)
-    
+
     # or "none"
     return value if value == "none"
-    
+
     return ""
   end
 
@@ -223,6 +230,7 @@ module CssCleaner
     else
       return ""
     end
-  end 
+  end
   
+
 end

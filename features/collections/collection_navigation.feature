@@ -14,7 +14,7 @@ Feature: Basic collection navigation
   Given basic tags
     And I have a canonical "TV Shows" fandom tag named "New Fandom"
     And a freeform exists with name: "Free", canonical: true
-  When I follow "New Work" within "#greeting .dropdown li"
+  When I follow "New Work" within "ul.user.navigation.actions"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
@@ -34,16 +34,17 @@ Feature: Basic collection navigation
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
+    And all search indexes are updated
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"
   Then I should see "0 Bookmarks"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
-  When I follow "People" within "#dashboard .navigation li"
+  When I follow "People" within "div#dashboard"
     Then I should see "A Random Selection of Participants in My Collection"
     And I should see "mod"
-  When I follow "Tags" within "#dashboard .navigation li"
+  When I follow "Tags" within "div#dashboard"
     Then I should see "Free"
   When I follow "Collection Settings"
     Then I should see "Edit Collection"
@@ -51,5 +52,22 @@ Feature: Basic collection navigation
     And I am on the collections page
     And I follow "My Collection"
   Then I should not see "Settings"
+
+  Scenario: A Collection's Fandoms should be in alphabetical order
+  Given I have the collection "My ABCs" with name "my_abcs"
+    And a canonical fandom "A League of Their Own"
+    And a canonical fandom "Merlin"
+    And a canonical fandom "Teen Wolf"
+    And a canonical fandom "The Borgias"
+  When I am logged in as "Scott" with password "password"
+    And I post the work "Sesame Street" in the collection "My ABCs"
+    And I edit the work "Sesame Street"
+    And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
+    And I press "Post Without Preview"
+    And I go to "My ABCs" collection's page
+    And I follow "Fandoms ("
+  Then "The Borgias" should appear before "A League of Their Own"
+    And "A League of Their Own" should appear before "Merlin"
+    And "Merlin" should appear before "Teen Wolf"
 
 

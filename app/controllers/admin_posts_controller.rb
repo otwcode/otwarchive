@@ -69,7 +69,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.save
-        setflash; flash[:notice] = ts("Admin Post was successfully created.")
+        flash[:notice] = ts("Admin Post was successfully created.")
         format.html { redirect_to(@admin_post) }
         format.xml  { render :xml => @admin_post, :status => :created, :location => @admin_post }
       else
@@ -86,7 +86,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.update_attributes(params[:admin_post])
-        setflash; flash[:notice] = ts("Admin Post was successfully updated.")
+        flash[:notice] = ts("Admin Post was successfully updated.")
         format.html { redirect_to(@admin_post) }
         format.xml  { head :ok }
       else

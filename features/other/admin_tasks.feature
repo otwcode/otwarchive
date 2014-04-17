@@ -283,3 +283,14 @@ Feature: Admin tasks
   Given I have posted known issues
   When I edit known issues
   Then I should see "KnownIssue was successfully updated"
+
+  Scenario: Admin can set invite from queue number to a number greater than or equal to 1
+
+    Given I am logged in as an admin
+    And I go to the admin-settings page
+    And I fill in "admin_setting_invite_from_queue_number" with "0"
+    And I press "Update"
+    Then I should see "Invite from queue number must be greater than 0. To disable invites, uncheck the appropriate setting."
+    When I fill in "admin_setting_invite_from_queue_number" with "1"
+    And I press "Update"
+    Then I should not see "Invite from queue number must be greater than 0."

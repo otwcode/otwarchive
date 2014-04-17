@@ -184,12 +184,12 @@ Feature: creating and editing skins
   Given basic skins
     And I am logged in as "skinner"
   When I am on skin's new page
-  Then I should see "CSS" within "form"
+  Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard Instead?"
   Then I should see "Archive Skin Wizard"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS" within "form"
+  Then I should see "CSS"
   When I follow "Use Wizard Instead?"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
@@ -284,3 +284,54 @@ Feature: creating and editing skins
   When I check "add_site_parents"
     And I submit
   Then I should see errors
+
+  Scenario: Vendor-prefixed properties should be allowed
+    Given basic skins
+      And I am logged in as "skinner"
+    When I am on skin's new page
+      And I fill in "Title" with "skin with prefixed property"
+      And I fill in "CSS" with ".myclass { -moz-box-sizing: border-box; -webkit-transition: opacity 2s; }"
+      And I submit
+    Then I should see "Skin was successfully created"
+
+  Scenario: #workskin selector prefixing
+    Given basic skins
+      And I am logged in as "skinner"
+    When I am on skin's new page
+      And I select "Work Skin" from "skin_type"
+      And I fill in "Title" with "#worksin prefixing"
+      And I fill in "CSS" with "#workskin, #workskin a, #workskin:hover, #workskin *, .prefixme, .prefixme:hover, * .prefixme { color: red; }"
+      And I submit
+    Then I should not see "#workskin #workskin,"
+      And I should not see "#workskin #workskin a"
+      And I should see ", #workskin a,"
+      And I should not see "#workskin #workskin:hover"
+      And I should see "#workskin .prefixme,"
+      And I should see "#workskin .prefixme:hover"
+      And I should see "#workskin * .prefixme"
+
+  Scenario: New skin form should have the correct skin type pre-selected
+    Given I am logged in as "skinner"
+    When I am on the skins page
+      And I follow "Create Skin"
+    Then "Site Skin" should be selected within "skin_type"
+    When I am on the skins page
+      And I follow "Work Skins"
+      And I follow "Create Skin"
+    Then "Work Skin" should be selected within "skin_type"
+
+  Scenario: Skin type should persist and remain selectable if you encounter errors during creation
+    Given I am logged in as "skinner"
+    When I am on the skins page
+      And I follow "Work Skins"
+      And I follow "Create Skin"
+      And I fill in "Title" with "invalid skin"
+      And I fill in "CSS" with "this is invalid css"
+      And I submit
+    Then I should see errors
+      And "Work Skin" should be selected within "skin_type"
+    When I select "Site Skin" from "skin_type"
+      And I fill in "CSS" with "still invalid css"
+      And I submit
+    Then I should see errors
+      And "Site Skin" should be selected within "skin_type"
