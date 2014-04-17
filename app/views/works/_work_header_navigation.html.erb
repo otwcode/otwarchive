@@ -77,9 +77,9 @@
     <%= render 'share/share', :shareable => @work %>
   </li>
 
-  <% if current_user && @subscription %>
+  <% if current_user && @work_display.subscription %>
     <li class="subscribe">
-      <%= render 'subscriptions/form', :subscription => @subscription %>
+      <%= render 'subscriptions/form', :subscription => @work_display.subscription %>
     </li>
   <% end %>
 
