@@ -23,7 +23,13 @@ set :rails_env, 'staging'
 #after "db:reset_on_stage", "stage_only:reindex_elasticsearch"
 #after "db:reset_on_stage", "deploy:web:enable"
 
+  # Needs to run on web servers but they must also have rails 
+  desc "Re-caches the site skins and puts the new versions into the static files area"
+  task :reload_site_skins, :roles => :web do
+    run "cd ~/app/current ; RAILS_ENV=staging  bundle exec rake skins:load_site_skins"
+  end
+
 # reload the site skins after each deploy since there may have been CSS changes
-#after "deploy:restart", "extras:reload_site_skins"
+after "deploy:restart", "reload_site_skins"
 after "deploy:restart", "stage_only:notify_testers"
 
