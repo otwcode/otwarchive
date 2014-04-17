@@ -268,7 +268,7 @@ module TagsHelper
     if [Work, Series].include?(item.class)
       if item.complete?
         symbol_block << get_symbol_link( "complete-yes iswip" , "Complete #{item.class.to_s}")
-      elsif item.abandoned?
+      elsif item.class == Work && item.abandoned?
         symbol_block << get_symbol_link( "complete-abandoned iswip", "Abandoned #{item.class.to_s}" )
       else
         symbol_block << get_symbol_link( "complete-no iswip", "#{item.class.to_s} in Progress" )
