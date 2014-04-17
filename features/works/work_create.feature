@@ -365,6 +365,7 @@ Feature: Create Works
     And I fill in "Fandoms" with "Testing"
     And I fill in "Work Title" with "You Complete Me"
     And I check "chapters-options-show"
+    And I fill in "work_wip_length" with "?"
     And I choose "work_status_abandoned"
     And I fill in "content" with "But you're gone and I'll never be complete."  
     And I press "Post Without Preview"
@@ -372,6 +373,7 @@ Feature: Create Works
     And I should see "Chapters: 1/?"
   When I go to my works page
   Then I should see "Abandoned Work"
+    And I should see "Chapters: 1/?"
   
   Scenario: Post a work in progress and it will show its status in the meta and the blurb
   Given basic tags
@@ -383,9 +385,12 @@ Feature: Create Works
     And I fill in "Fandoms" with "Testing"
     And I fill in "Work Title" with "Chain Gang"
     And I check "chapters-options-show"
+    And I fill in "work_wip_length" with "5"
     And I choose "work_status_wip"
     And I fill in "content" with "That's the sound of the men."  
     And I press "Post Without Preview"
   Then I should see "Status: WIP"
+    And I should see "Chapters: 1/5"
   When I go to my works page
   Then I should see "Work in Progress"
+    And I should see "Chapters: 1/5"
