@@ -63,3 +63,10 @@ features/cassette_library/cucumber_tags/work_import_special_characters_auto_lati
 features/cassette_library/cucumber_tags/work_import_special_characters_man_cp.yml
 features/cassette_library/cucumber_tags/work_import_special_characters_man_latin.yml
 features/cassette_library/cucumber_tags/import_lj_comm.yml
+
+spec/results.html
+features_report.html
+coverage
+
+.simplecov
+.rspec

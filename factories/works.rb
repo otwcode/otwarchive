@@ -1,0 +1,36 @@
+require 'faker'
+FactoryGirl.define do
+
+  factory :work do
+    title "My title"
+    fandom_string "Testing"
+    rating_string "Not Rated"
+    warning_string "No Archive Warnings Apply"
+    chapter_info = { content: "This is some chapter content for my work." }
+    chapter_attributes chapter_info
+
+    after(:build) do |work|
+      work.authors = [FactoryGirl.build(:pseud)] if work.authors.blank?
+    end
+
+    factory :no_authors do
+      after(:build) do |work|
+        work.authors = []
+      end
+    end
+
+    factory :custom_work_skin do
+      work_skin_id 1
+    end
+  end
+
+  factory :external_work do
+    title "An External Work"
+    author "An Author"
+    url "http://www.example.org"
+
+    after(:build) do |work|
+      work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
+    end
+  end
+end

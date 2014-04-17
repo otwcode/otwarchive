@@ -3,8 +3,8 @@ require 'spec_helper'
 describe ChallengeAssignment do
 
   describe "a challenge assignment" do
-    before do      
-      @assignment = FactoryGirl.create(:challenge_assignment)
+    before do
+      @assignment = create(:challenge_assignment)
       @collection = @assignment.collection
     end
 
@@ -34,7 +34,7 @@ describe ChallengeAssignment do
       before do
         @assignment.send_out
         @author = @assignment.offer_signup.pseud
-        @work = FactoryGirl.create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
+        @work = create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
         @assignment.reload
       end
       
