@@ -166,6 +166,10 @@ li.blurb:after {
   background: url("/images/imageset.png") -125px 0px;
 }
 
+.required-tags .complete-abandoned {
+  background: url("/images/imageset.png") -100px -350px;
+}
+
 .required-tags .complete-no {
   background: url("/images/imageset.png") -100px -25px;
 }
@@ -235,15 +239,15 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 .index .skins .icon {
-  background: url("/images/imageset.png") 0px -580px;
+  background: url("/images/imageset.png") 0px -430px;
 }
 
 .index .mystery .icon {
-  background: url("/images/imageset.png") -110px -525px;
+  background: url("/images/imageset.png") -110px -375px;
 }
 
 .index .tag .icon, .index .tagset .icon {
-  background: url("/images/imageset.png") -55px -580px;
+  background: url("/images/imageset.png") -55px -430px;
 }
 
 .picture .icon img, .index .picture .icon {

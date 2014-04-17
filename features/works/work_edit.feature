@@ -132,3 +132,32 @@ Feature: Edit Works
     When I edit the work "Load of Typos"
       And I press "Preview"
     Then I should not see "draft"
+
+  Scenario: Do not show work status options if work is complete
+  Given I am logged in as "editor"
+    And I post the work "All Done"
+  When I edit the work "All Done"
+    And I check "chapters-options-show"
+  Then I should not see "Work in Progress"
+    And I should not see "Abandoned"
+
+  Scenario: Update work status from Complete to WIP in the meta and the blurb after a complete work is changed to 1/?. The next time I edit the work, show the Abandoned and Work in Progress statuses on the form and correctly update the meta and blurb when I change the work to Abandoned.
+  Given I am logged in as "billy"
+    And I post the work "But Wait"
+  When I edit the work "But Wait"
+    And I check "chapters-options-show"
+  Then I should not see "Work in Progress"
+    And I should not see "Abandoned"
+  When I fill in "work_wip_length" with "?"
+    And I press "Post Without Preview"
+  Then I should see "Status: WIP"
+  When I go to my works page
+  Then I should see "Work in Progress"
+  When I edit the work "But Wait"
+  Then I should see "Work in Progress"
+    And I should see "Abandoned"
+  When I choose "work_status_abandoned"
+    And I press "Post Without Preview"
+  Then I should see "Status: Abandoned"
+  When I go to my works page
+  Then I should see "Abandoned Work"
