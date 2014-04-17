@@ -1176,7 +1176,6 @@ ActiveRecord::Schema.define(:version => 20121129192353) do
     t.integer  "work_skin_id"
     t.boolean  "in_anon_collection",                       :default => false, :null => false
     t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
-    t.string   "status"
   end
 
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"
