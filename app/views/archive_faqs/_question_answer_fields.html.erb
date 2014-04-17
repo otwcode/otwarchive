@@ -1,26 +1,36 @@
 <div class="removeme">
-<% index ||= 0 %>
-<div class="fields">
-  <dt class="required"><%= form.label :question, ts("Question") + "*" %></dt>
-  <dd class="required">
-    <%= form.text_field :question, :id => "question" %>
-    <%= live_validation_for_field('question', :failureMessage => ts("Please enter a question.")) %>
-  </dd>
-  <dt class="required"><%= form.label :anchor, ts("Anchor name") + "*" %></dt>
-  <dd>
-    <%= form.text_field :anchor, :id => "anchor" %>
-    <%= live_validation_for_field('anchor', :failureMessage => ts("Please enter an anchor name.")) %>
-  </dd>
-  <dt class="required"><%= form.label :content, ts("Answer") + "*" %></dt>
-  <dd class="required">
-    <%= form.text_area :content, :id => "content" %>
-  </dd>
-  <dt><%= form.label :screencast, ts("Screencast URL") %></dt>
-  <dd><%= form.text_field :screencast, :id => "screencast" %></dd>
-  <p class="actions" role="button">
-    <% linktext = ts("Remove This Question") %>
-    <%= link_to_remove_section(linktext, form)%>
-  </p>
-</div>
+  <% index ||= 0 %>
+  <fieldset>
+    <legend>QUESTION LEGEND</legend>
+    <h3 class="heading">QUESTION HEADING</h3>
+
+    <dl>
+      <dt class="required"><%= form.label :question, ts("Question") + "*" %></dt>
+      <dd class="required">
+        <%= form.text_field :question, :id => "question" %>
+        <%= live_validation_for_field('question', :failureMessage => ts("Please enter a question.")) %>
+      </dd>
+      
+      <dt class="required"><%= form.label :anchor, ts("Anchor name") + "*" %></dt>
+      <dd>
+        <%= form.text_field :anchor, :id => "anchor" %>
+        <%= live_validation_for_field('anchor', :failureMessage => ts("Please enter an anchor name.")) %>
+      </dd>
+      
+      <dt class="required"><%= form.label :content, ts("Answer") + "*" %></dt>
+      <dd class="required">
+        <%= form.text_area :content, :id => "content" %>
+      </dd>
+      
+      <dt><%= form.label :screencast, ts("Screencast URL") %></dt>
+      <dd><%= form.text_field :screencast, :id => "screencast" %></dd>
+    </dl>
+    
+    <p class="actions" role="button">
+      <% linktext = ts("Remove This Question") %>
+      <%= link_to_remove_section(linktext, form)%>
+    </p>
+    
+  </fieldset>
 </div>
 <div class="last_id" style="display:none;"><%= index.is_a?(String) ? index : index+1 %></div>

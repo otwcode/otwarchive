@@ -53,15 +53,16 @@
   <fieldset>
     <legend><%= ts("Questions") %></legend>
     <h3 class="landmark heading"><%= ts("Questions") %></h3>
-    <dl>
-
-    </dl>
+    
+    <% # SHOW ONE QUESTION SLOT BY DEFAULT %>
     <%= form.fields_for :questions do |builder| %>
       <%= render 'question_answer_fields', :form => builder %>
     <% end %>
+    
     <p class="actions" role="button">
-      <%= link_to_add_section("Add another question?", form, :questions, "question_answer_fields", :required => false) %>
+      <%= link_to_add_section("Add Another Question?", form, :questions, "question_answer_fields", :required => false) %>
     </p>
+    
   </fieldset>
   <fieldset>
     <legend><%= ts("Submit") %></legend>
