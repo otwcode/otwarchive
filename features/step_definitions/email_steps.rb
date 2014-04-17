@@ -47,7 +47,7 @@ Then(/^#{capture_email} should have #{capture_fields}$/) do |email_ref, fields|
   email(email_ref, fields).should_not be_nil
 end
 
-Then(/^#{capture_email} should have "(.*)" in the subject$/) do |email_ref, text|
+Then(/^#{capture_email} should have "(.*?)" in the subject$/) do |email_ref, text|
   email(email_ref).subject.should =~ /#{text}/
 end
 
