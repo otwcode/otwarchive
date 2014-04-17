@@ -5,14 +5,11 @@
 
 <!--subnav-->
 <% if @saved_works.present? %>
-<ul class="navigation actions" role="navigation">
-  <li>
-    <%= span_if_current ts("Sort by date added"), user_saved_works_path(@user) %>
-  </li>
-  <li>
-    <%= span_if_current ts("Sort by date updated"), user_saved_works_path(@user, sort: 'updated') %>
-  </li>
-</ul>
+  <ul class="sorting navigation actions" role="navigation">
+    <li><h4 class="heading"><%= ts("Sort By") %></h4></li>
+    <li><%= span_if_current ts("Date Added"), user_saved_works_path(@user, sort: 'added'), params[:sort] != 'updated' %></li>
+    <li><%= span_if_current ts("Date Updated"), user_saved_works_path(@user, sort: 'updated') %></li>
+  </ul>
 <% end %>
 <!--/subnav-->
 
