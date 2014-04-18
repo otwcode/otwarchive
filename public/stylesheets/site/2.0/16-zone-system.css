@@ -135,6 +135,25 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
 /* 6. ZONE: SYSTEM: FAQS
 For practicality, /archive_faqs are also .docs and .support and have the .userstuff class on category pages */
 
+.faq .categories {
+  margin: 0 auto;
+  max-width: 72em;
+  float: none;
+}
+
+.faq .categories h3 {
+  border-bottom: 0.25em double #333;
+  margin-top: 1.929em;
+}
+
+.faq .categories li {
+  padding: 0;
+}
+
+.faq .categories .questions li {
+  list-style-type: circle;
+}
+
 .faq .userstuff .notice, .faq .userstuff .caution, .faq .example { 
   margin: 0.643em 3.858em; 
   padding: 0.643em;
