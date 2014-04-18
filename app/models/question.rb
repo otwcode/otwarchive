@@ -1,6 +1,8 @@
 class Question < ActiveRecord::Base
   acts_as_list
 
+  translates :question, :content
+
   belongs_to :archive_faq
   attr_protected :content_sanitizer_version
   attr_protected :screencast_sanitizer_version
