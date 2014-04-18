@@ -33,8 +33,7 @@
       <ul class="faq index group" role="navigation">
         <% for faq in @archive_faqs %>
           <li class="category">
-            <% # TODO: MAKE THIS A LINK TO THE CATEGORY %>
-            <a href="#"><%= faq.title %></a>
+            <%= link_to faq.title, archive_faq_path(faq) %>
             <ul class="questions">
               <% if faq.questions.blank? %>
                 <li><%= ts("There are no questions in this category yet.") %></li>
