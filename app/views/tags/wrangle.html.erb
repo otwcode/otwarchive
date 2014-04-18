@@ -47,9 +47,11 @@
     <% if @tag.is_a?(Fandom) %>
       <fieldset>
         <legend><%= ts("Assign and Mass Select") %></legend>
+
         <dl>
           <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom(s)") %></dt>
           <dd title="<%= ts("wrangle to fandom(s)") %>"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom") %></dd>
+
           <dt class="landmark"><%= ts("Submit") %></dt>
           <dd class="submit"><%= submit_tag ts("Wrangle") %></dd>
         </dl>
@@ -57,11 +59,14 @@
     <% end %>
 
     <p class="submit actions"><%= submit_tag ts("Wrangle") %></p>
+
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
+
     <!--TEST NOTE: titled these cells as on other wrangle tables, to expose to screenreaders that don't support scope
     need feedback from realuser on whether this is useful or annoying-->
     <table summary="<%= ts('Information and management options for tags.') %>">
       <caption><%= ts('Tags to Wrangle') %></caption>
+
       <thead>
         <tr>
           <th scope="col">

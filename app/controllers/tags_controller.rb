@@ -297,6 +297,20 @@ class TagsController < ApplicationController
       end
     end
 
+    if params[:fandom_string] && !params[:selected_tags].blank?
+      options.merge!(:fandom_string => params[:fandom_string])
+      @fandom = Fandom.find_by_name(params[:fandom_string])
+
+      if @fandom && @fandom.canonical?
+        @tags = Tag.find(params[:selected_tags])
+        @tags.each { |tag| tag.add_association(@fandom) }
+      else
+        flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
+
+        # redirect_to tag_wranglings_path(options) and return
+      end
+    end
+
     flash[:notice] = ts("The following tags were successfully updated: %{tags_saved}", :tags_saved => saved.collect(&:name).join(', ')) if !saved.empty?
     flash[:error] = ts("The following tags weren't saved: %{tags_not_saved}", :tags_not_saved => not_saved.collect(&:name).join(', ')) if !not_saved.empty?
 

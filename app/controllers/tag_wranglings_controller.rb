@@ -39,12 +39,14 @@ class TagWranglingsController < ApplicationController
     params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
     options = {:show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction]}
+
     unless params[:canonicals].blank?
       canonicals = Tag.find(params[:canonicals])
       canonicals.each do |tag|
         tag.update_attributes(:canonical => true)
       end
     end
+
     if params[:media] && !params[:selected_tags].blank?
       options.merge!(:media => params[:media])
       @media = Media.find_by_name(params[:media])
@@ -53,26 +55,32 @@ class TagWranglingsController < ApplicationController
     elsif params[:character_string] && !params[:selected_tags].blank?
       options.merge!(:character_string => params[:character_string], :fandom_string => params[:fandom_string])
       @character = Character.find_by_name(params[:character_string])
+
       if @character && @character.canonical?
         @tags = Tag.find(params[:selected_tags])
         @tags.each { |tag| tag.add_association(@character) }
         flash[:notice] = "#{@tags.length} relationships were wrangled to #{params[:character_string]}."
+
         redirect_to tag_wranglings_path(options) and return        
       else
         flash[:error] = "#{params[:character_string]} is not a canonical character."
+
         redirect_to tag_wranglings_path(options) and return     
       end
     elsif params[:fandom_string] && !params[:selected_tags].blank?
       options.merge!(:fandom_string => params[:fandom_string])
       @fandom = Fandom.find_by_name(params[:fandom_string])
+
       if @fandom && @fandom.canonical?
         @tags = Tag.find(params[:selected_tags])
         @tags.each { |tag| tag.add_association(@fandom) }
       else
         flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
+
         redirect_to tag_wranglings_path(options) and return
       end
     end
+
     flash[:notice] = "Tags were successfully wrangled!"
     redirect_to tag_wranglings_path(options)
   end
