@@ -15,6 +15,7 @@
   <% end %>
 </noscript>
 
+<% # TODO: STOP ERRORS IF ALL QUESTION FIELDS AREN'T FILLED IN %>
 <%= form_for(@archive_faq, :html => {:class => "create faq"}) do |form| %>
   <%= error_messages_for @archive_faq %>
   <p class="required notice"><%= ts('* Required information') %></p>
@@ -54,13 +55,13 @@
     <h3 class="landmark heading"><%= ts("Questions") %></h3>
   
     <% form.object.questions.each_with_index do |question, index| %>
-    <%= form.fields_for :questions, question do |question_form| %>
-      <%= render 'question_answer_fields', :form => question_form, :index => index %>
-    <% end %>
+      <%= form.fields_for :questions, question do |question_form| %>
+        <%= render 'question_answer_fields', :form => question_form, :index => index %>
+      <% end %>
     <% end %>
     
     <p class="actions" role="button">
-      <%= link_to_add_section("Add Another Question", form, :questions, "question_answer_fields", :required => false) %>
+      <%= link_to_add_section("Add Question", form, :questions, "question_answer_fields", :required => false) %>
     </p>
     
   </fieldset>

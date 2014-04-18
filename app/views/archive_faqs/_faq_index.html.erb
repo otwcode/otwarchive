@@ -22,6 +22,7 @@
   <div class="categories">
 
     <h3 class="heading"><%= ts("Available Categories") %>
+      <% # TODO: HIDE THIS WHEN JAVASCRIPT IS DISABLED %>
       <ul class="actions">
         <li id="expand_all"><a href="#"><%= ts("Expand Categories") %></a></li>
         <li id="collapse_all"><a href="#"><%= ts("Collapse Categories") %></a></li>
@@ -32,6 +33,7 @@
       <ul class="faq index group" role="navigation">
         <% for faq in @archive_faqs %>
           <li class="category">
+            <% # TODO: MAKE THIS A LINK TO THE CATEGORY %>
             <a href="#"><%= faq.title %></a>
             <ul class="questions">
               <% if faq.questions.blank? %>
