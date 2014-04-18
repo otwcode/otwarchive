@@ -35,11 +35,32 @@ class ArchiveFaqsController < ApplicationController
     end
   end
 
+  protected
+  def build_questions
+    notice = ""
+    num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count + 1
+    if num_to_build < @archive_faq.questions.count + 1
+      notice += ts("There are already %{num} questions. You can only submit a greater number than %{num}. ", :num => @archive_faq.questions.count)
+      num_to_build = @archive_faq.questions.count + 1
+    elsif params["num_questions"]
+      notice += ts("Set up %{num} questions. ", :num => num_to_build)
+    end
+    num_existing = @archive_faq.questions.count
+    num_existing.upto(num_to_build-1) do
+      @archive_faq.questions.build
+    end
+    unless notice.blank?
+      flash[:notice] = notice
+    end
+  end
+
+  public
   # GET /archive_faqs/new
   # GET /archive_faqs/new.xml
   def new
     @archive_faq = ArchiveFaq.new
-    1.times { @archive_faq.questions.build}
+    build_questions
+    # 1.times { @archive_faq.questions.build}
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @archive_faq }
@@ -50,7 +71,7 @@ class ArchiveFaqsController < ApplicationController
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
     @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
-
+    build_questions
   end
 
   # GET /archive_faqs/manage

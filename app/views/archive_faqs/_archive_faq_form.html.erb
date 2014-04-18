@@ -1,11 +1,10 @@
-<% # NOW MAKE THIS DO SHIT %>
 <noscript>
   <%= form_tag({}, {:method => :get}) do %>
     <fieldset>
       <legend><%= ts("Add Questions") %></legend>
       <h3 class="landmark heading"><%= ts("Add Questions") %></h3>
       <p class="notes">
-        <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have: ") %>
+        <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", :num => @archive_faq.questions.count) %>
       </p>
       <p>
         <%= label_tag "num_questions", ts("Questions:") %>
@@ -16,7 +15,7 @@
   <% end %>
 </noscript>
 
-<%= form_for(@archive_faq,  :html => {:class => "create faq"}) do |form| %>
+<%= form_for(@archive_faq, :html => {:class => "create faq"}) do |form| %>
   <%= error_messages_for @archive_faq %>
   <p class="required notice"><%= ts('* Required information') %></p>
   <fieldset>
@@ -53,14 +52,15 @@
   <fieldset>
     <legend><%= ts("Questions") %></legend>
     <h3 class="landmark heading"><%= ts("Questions") %></h3>
-    
-    <% # SHOW ONE QUESTION SLOT BY DEFAULT %>
-    <%= form.fields_for :questions do |builder| %>
-      <%= render 'question_answer_fields', :form => builder %>
+  
+    <% form.object.questions.each_with_index do |question, index| %>
+    <%= form.fields_for :questions, question do |question_form| %>
+      <%= render 'question_answer_fields', :form => question_form, :index => index %>
+    <% end %>
     <% end %>
     
     <p class="actions" role="button">
-      <%= link_to_add_section("Add Another Question?", form, :questions, "question_answer_fields", :required => false) %>
+      <%= link_to_add_section("Add Another Question", form, :questions, "question_answer_fields", :required => false) %>
     </p>
     
   </fieldset>

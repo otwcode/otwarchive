@@ -1,8 +1,13 @@
 <div class="removeme">
   <% index ||= 0 %>
   <fieldset>
-    <legend>QUESTION LEGEND</legend>
-    <h3 class="heading">QUESTION HEADING</h3>
+    <% if index.is_a? String %>
+      <% question_label = ts("Question #{index}") %>
+    <% else %>
+      <% question_label = ts("Question #{(index + 1)}") %>
+    <% end %>
+    <legend><%= question_label %></legend>
+    <h3 class="heading"><%= question_label %></h3>
 
     <dl>
       <dt class="required"><%= form.label :question, ts("Question") + "*" %></dt>
