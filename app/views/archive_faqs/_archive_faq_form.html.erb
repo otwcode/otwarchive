@@ -23,9 +23,12 @@
     <legend><%= ts("Set Preferences") %></legend>
     <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
     <dl>
-      <dt class="required"><%= form.label :title, ts("Category name") + "*" %></dt>
-      <dd class="required"><%= form.text_field :title, :id => "title" %>
-        <%= live_validation_for_field('title', :failureMessage => ts("Please enter a category name.")) %>
+      <dt class="required">
+        <%= form.label :title, ts("Category name") + "*" %>
+      </dt>
+      <dd class="required">
+        <%= form.text_field :title %>
+        <%= live_validation_for_field(field_id(form, "title").to_sym, :failureMessage => ts("Please enter a category name.")) %>
       </dd>
       <dt class="required">
         <%= form.label :language_id, ts("Language") + "*" %>
