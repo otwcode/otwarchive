@@ -746,7 +746,7 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF-8", string)
     string.gsub(/[^[\w _-]]+/, '')
   end
   def display_authors
@@ -755,12 +755,12 @@ class Work < ActiveRecord::Base
   # need the next two to be filesystem safe and not overly long
   def download_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF-8", string)
     string = string.gsub(/[^[\w _-]]+/, '')
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
   def download_title
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF-8", self.title)
     string = string.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
