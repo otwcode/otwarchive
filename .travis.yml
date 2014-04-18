@@ -1,6 +1,7 @@
 language: ruby
 env:
   - TEST_GROUP="rspec spec"
+  - TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"
   - TEST_GROUP="cucumber -f progress -r features features/importing"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
   - TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
@@ -16,9 +17,9 @@ services:
   - redis-server
   - memcached
 script:
-  - bundle exec rake db:create:all --trace
-  - bundle exec rake db:schema:load --trace
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:create:all
+  - bundle exec rake db:schema:load
+  - RAILS_ENV=test bundle exec rake db:migrate
   - bundle exec $TEST_GROUP
 before_script:
   - mysql -e 'create database otwarchive_test;'
