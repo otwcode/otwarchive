@@ -20,20 +20,28 @@
   <% else %>
     <div class="userstuff">
 
-      <h3 id="categories" class="heading"><%= ts("Table of Contents for #{@archive_faq.title}") %></h3>
-      <ol class="toc" role="navigation">
-        <% for q in @archive_faq.questions %>
-          <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
-        <% end %>
-      </ol>
+      <div id="toc" class="toc" role="navigation">
+        <h3 class="heading">
+          <%= ts("Questions in the #{@archive_faq.title} Category") %>
+        </h3>
+        <ul role="navigation">
+          <% for q in @archive_faq.questions %>
+            <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+          <% end %>
+        </ul>
+      </div>
 
-      <% for q in @archive_faq.questions %>
-        <h3 id="<%= q.anchor %>"><%= q.question %></h3>
-        <%= raw sanitize_field(q, :content) %>
-        <% unless q.screencast.to_s == "" %>
-          <%= raw sanitize_field(q, :screencast) %>
+      <div id="faq">
+        <% for q in @archive_faq.questions %>
+          <h3 id="<%= q.anchor %>">
+            <%= q.question %>
+          </h3>
+          <%= raw sanitize_field(q, :content) %>
+          <% unless q.screencast.to_s == "" %>
+            <%= raw sanitize_field(q, :screencast) %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
       
     </div>
   <% end %>
