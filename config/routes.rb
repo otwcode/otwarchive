@@ -396,6 +396,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :generate
         get :cancel_generate
+        get :regenerate_for_signup
       end
     end
     resources :requests, :controller => "challenge_requests"
@@ -487,6 +488,9 @@ Otwarchive::Application.routes.draw do
   end
   resources :known_issues
   resources :archive_faqs do
+    member do
+      get :confirm_delete
+    end
     collection do
       get :manage
       post :reorder

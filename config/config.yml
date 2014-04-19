@@ -93,10 +93,14 @@ ICON_COMMENT_MAX: 50
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
 
+# max number of potential matches to generate
+POTENTIAL_MATCHES_MAX: 50
+
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
 # max for prompt memes (can be much higher than for gift exchanges, as there is no matching)
 PROMPT_MEME_PROMPTS_MAX: 50
+
 
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25

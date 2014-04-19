@@ -16,11 +16,11 @@
     <% if @previous_chapter %>
       <li class="chapter previous"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
     <% end %>
-    
+
     <% if @next_chapter %>
       <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
-    
+
     <li class="chapter" aria-haspopup="true">
       <noscript>
         <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
@@ -39,7 +39,7 @@
         <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
       </ul>
     </li>
-  <% elsif @chapters %>
+  <% elsif @chapters && @chapters.length > 1 %>
     <li class="chapter bychapter"><%= link_to ts("View chapter by chapter"), [@work, @chapter] %></li>
   <% end %>
 
@@ -74,7 +74,7 @@
     <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
     <%= render 'share/share', :shareable => @work %>
   </li>
-  
+
   <% if current_user && @subscription %>
     <li class="subscribe">
       <%= render 'subscriptions/form', :subscription => @subscription %>
@@ -92,3 +92,8 @@
   </li>
 </ul>
 <!-- END navigation -->
+
+<% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>

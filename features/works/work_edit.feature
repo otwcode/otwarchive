@@ -45,7 +45,7 @@ Feature: Edit Works
       And I follow "Add Chapter"
       And I fill in "content" with "second chapter content"
       And I press "Preview"
-    Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+    Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
       And I should see "second chapter content"
     When I press "Post"
     Then I should see "Chapter was successfully posted."

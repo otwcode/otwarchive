@@ -3,43 +3,49 @@
 <!--/descriptions-->
 
 <!--subnav-->
-
-<% if @archive_faq.questions.blank?  %>
-  <h3 class="heading"><%= ts("We're sorry, there are currently no entries in this Category.") %></h3>
-<% else %>
-  <h3 id="categories" class="heading"><%= ts("Category TOC") %></h3>
-  <ul role="navigation" class="faq index group">
-    <li class="category">
-      <strong><%= ts("#{@archive_faq.title}") %></strong>
-        <ul>
-          <% for q in @archive_faq.questions %>
-            <li>
-              <%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %>
-            </li>
-          <% end %>
-        </ul>
-    </li>
-  </ul>
-<% end %>
 <!--/subnav-->
 
 <!--main content-->
 <div class="admin" role="article">
   <% if logged_in_as_admin? %>
-      <div class="header">
-        <h3 class="heading">
-          Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
-        </h3>
-      </div>
+    <div class="header">
+      <h3 class="heading">
+        Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
+      </h3>
+    </div>
   <% end %>
-  <div class="userstuff">
-    <% for q in @archive_faq.questions %>
-        <h3 id="<%= q.anchor %>"><%= q.question %></h3>
-        <%= raw sanitize_field(q, :content) %>
-        <% unless q.screencast.to_s == "" %>
-            <%= raw sanitize_field(q, :screencast) %>
+  
+  <% if @archive_faq.questions.blank?  %>
+    <p class="notice"><%= ts("We're sorry, there are currently no entries in this category.") %></p>
+  <% else %>
+    <div class="userstuff">
+
+      <div id="toc" class="toc" role="navigation">
+        <h3 class="heading">
+          <%= ts("Questions in the #{@archive_faq.title} Category") %>
+        </h3>
+        <ul role="navigation">
+          <% for q in @archive_faq.questions %>
+            <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div id="faq">
+        <% for q in @archive_faq.questions %>
+          <h3 id="<%= q.anchor %>">
+            <%= q.question %>
+          </h3>
+          <% unless q.screencast.to_s == "" %>
+            <p class="screencast">
+              <span class="label"><%= ts("Screencast") %>:</span> <%= link_to q.question, q.screencast.to_s %>
+            </p>
+          <% end %>
+          <%= raw sanitize_field(q, :content) %>
         <% end %>
-    <% end %>
-  </div>
+      </div>
+      
+    </div>
+  <% end %>
 </div>
 <!--/content-->

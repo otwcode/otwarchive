@@ -1,40 +1,62 @@
 <div class="removeme">
-<% index ||= 0 %>
-<div class="fields">
+  <% index ||= 0 %>
+  <fieldset>
+    <% if index.is_a? String %>
+      <% question_label = ts("Question #{index}") %>
+    <% else %>
+      <% question_label = ts("Question #{(index + 1)}") %>
+    <% end %>
+    <legend><%= question_label %></legend>
+    <h3 class="heading"><%= question_label %></h3>
 
+    <dl>
+      <dt class="required">
+        <%= form.label :question, ts("Question") + "*" %>
+      </dt>
+      <dd class="required">
+        <%= form.text_field :question %>
+        <%= live_validation_for_field(field_id(form, "question").to_sym, :failureMessage => ts("Please enter a question.")) %>
+      </dd>
+      
+      <dt class="required">
+        <%= form.label :anchor, ts("Anchor name") + "*" %>
+      </dt>
+      <dd>
+        <%= form.text_field :anchor %>
+        <%= live_validation_for_field(field_id(form, "anchor").to_sym, :failureMessage => ts("Please enter an anchor name.")) %>
+      </dd>
+      
+      <dt class="required">
+        <%= form.label :content, ts("Answer") + "*" %>
+      </dt>
+      <dd class="required">
+        <%= form.text_area :content %>
+        <%= live_validation_for_field(field_id(form, "content").to_sym,
+        :minimum_length => ArchiveConfig.CONTENT_MIN,
+        :failureMessage => ts("Please enter an answer that is at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN.to_s)) %>
+      </dd>
+      
+      <dt>
+        <%= form.label :screencast, ts("Screencast URL") %>
+      </dt>
+      <dd>
+        <%= form.text_field :screencast %>
+      </dd>
+    </dl>
 
-
-
-
-
-
-  <dt><%= form.label :question, ts("Question") %></dt>
-  <dd><%= form.text_field :question, :id => "question" %>
-    <%= live_validation_for_field('question', :failureMessage => ts("Please enter a Question")) %>
-  </dd>
-  <dt><%= form.label :anchor, ts("Anchor name") %></dt>
-  <dd><%= form.text_field :anchor, :id => "anchor" %>
-    <%= live_validation_for_field('anchor', :failureMessage => ts("Please enter an Anchor name.")) %>
-  </dd>
-  <!-- The Answer -->
-  <dt><%= form.label :content, ts("Answer") %></dt>
-  <dd>
-    <p id="toggleText">
-      <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+    <% # TODO: DELETE A QUESTION %>
+    <p class="actions" role="button">
+      <% removetext = ts("Remove Question") %>
+      <%= link_to_remove_section(removetext, form) %>
+      <% # TODO: DELETE QUESTION WITHOUT JAVASCRIPT %>
+      <noscript>
+        <label for="<%= field_id(form, '_destroy').to_sym %>">
+          <%= form.check_box "_destroy" %>
+          <%= removetext %>
+        </label>
+      </noscript>
     </p>
-    <!-- %< use_tinymce %> -->
-
-    <%= form.text_area :content, :id => "content" %>
-
-  <dt><%= form.label :screencast, ts("Screencast URL") %></dt>
-  <dd><%= form.text_field :screencast, :id => "screencast" %>
-  </dd>
-  <p class="actions" role="button">
-    <% linktext = ts("Remove This Question") %>
-    <%= link_to_remove_section(linktext, form)%>
-  </p>
-  <p></p>
-  </dd>
-</div>
+    
+  </fieldset>
 </div>
 <div class="last_id" style="display:none;"><%= index.is_a?(String) ? index : index+1 %></div>
