@@ -96,6 +96,10 @@ When /^I edit the work "([^\"]*)"$/ do |work|
   visit edit_work_url(work)
 end
 
+When /^I edit the draft "([^\"]*)"$/ do |draft|
+  step %{I edit the work "#{draft}"}
+end
+
 When /^I post the chaptered work "([^\"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
