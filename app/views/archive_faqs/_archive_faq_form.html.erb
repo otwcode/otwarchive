@@ -29,20 +29,6 @@
         <%= form.text_field :title %>
         <%= live_validation_for_field(field_id(form, "title").to_sym, :failureMessage => ts("Please enter a category name.")) %>
       </dd>
-      <dt class="required">
-        <%= form.label :language_id, ts("Language") + "*" %>
-      </dt>
-      <dd class="required">
-        <select id="archive_faq_language_id" name="archive_faq[language_id]">
-          <%= options_from_collection_for_select(Language.default_order, :id, :name, @archive_faq.language_id || Language.default.id) %>
-        </select>
-      </dd>
-      <dt>
-        <%= form.label :translated_faq_id, ts("Is this a translation of another FAQ?") %>
-      </dt>
-      <dd>
-        <%= form.collection_select(:translated_faq_id, @translatable_faqs, :id, :title, {:prompt => true}) %>
-      </dd>
       <dt>
         <%= form.check_box :notify_translations %>
       </dt>
