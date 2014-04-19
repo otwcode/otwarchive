@@ -22,7 +22,7 @@
         <span class="actions">
           <noscript>
             <% if params[:expand_kudos] %>
-              <%= link_to ts("Hide full list"), [@user, @author] %>
+              <%= link_to ts("Hide full list"), url_for(:expand_kudos => nil) %>
             <% else %>
               <%= link_to ts("Expand full list"), url_for(:expand_kudos => true) %>
             <% end %>
