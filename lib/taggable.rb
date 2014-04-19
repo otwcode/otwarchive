@@ -173,7 +173,13 @@ module Taggable
     tags = []
     self.invalid_tags ||= []
     klass_symbol = klass.to_s.downcase.pluralize.to_sym
-    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT) : incoming_tags
+    if incoming_tags.is_a?(String)
+      # Replace unicode full-width commas
+      incoming_tags.gsub!(/\uff0c/, ',')
+      tag_array = incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+    else
+      tag_array = incoming_tags
+    end
     tag_array.each do |string|
       string.strip!
       unless string.blank?
