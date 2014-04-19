@@ -38,10 +38,10 @@ class ArchiveFaqsController < ApplicationController
   protected
   def build_questions
     notice = ""
-    num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count + 1
-    if num_to_build < @archive_faq.questions.count + 1
-      notice += ts("There are already %{num} questions. You can only submit a greater number than %{num}. ", :num => @archive_faq.questions.count)
-      num_to_build = @archive_faq.questions.count + 1
+    num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
+    if num_to_build < @archive_faq.questions.count
+      notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", :num => @archive_faq.questions.count)
+      num_to_build = @archive_faq.questions.count
     elsif params["num_questions"]
       notice += ts("Set up %{num} questions. ", :num => num_to_build)
     end
@@ -59,8 +59,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/new.xml
   def new
     @archive_faq = ArchiveFaq.new
-    build_questions
-    # 1.times { @archive_faq.questions.build}
+    1.times { @archive_faq.questions.build}
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @archive_faq }
