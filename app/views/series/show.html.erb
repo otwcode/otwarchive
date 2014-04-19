@@ -16,9 +16,9 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("Series Metadata") %></h3>
 <div class="wrapper">
-	<dl class="series meta group">
+  <dl class="series meta group">
 
-	  <% if @series.pseuds.many?%>
+    <% if @series.pseuds.many?%>
       <dt><%= ts('Creators:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% else %>
