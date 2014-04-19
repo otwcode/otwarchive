@@ -22,17 +22,16 @@
   <div class="categories">
 
     <h3 class="heading"><%= ts("Available Categories") %>
-      <% # TODO: HIDE THIS WHEN JAVASCRIPT IS DISABLED %>
-      <ul class="actions">
-        <li id="expand_all"><a href="#"><%= ts("Expand Categories") %></a></li>
-        <li id="collapse_all"><a href="#"><%= ts("Collapse Categories") %></a></li>
+      <ul class="showme hidden actions">
+        <li id="expand-categories"><%= link_to ts("Expand Categories"), "#" %></li>
+        <li id="collapse-categories"><%= link_to ts("Collapse Categories"), "#" %></li>
       </ul>
     </h3>
 
     <div class="userstuff">
       <ul class="faq index group" role="navigation">
         <% for faq in @archive_faqs %>
-          <li class="category">
+          <li class="category" aria-haspopup="true">
             <%= link_to faq.title, archive_faq_path(faq) %>
             <ul class="questions">
               <% if faq.questions.blank? %>
@@ -66,12 +65,12 @@
           e.preventDefault();
         }).next().hide();
  
-        $j("#expand_all").find("a").click(function(e) {
+        $j("#expand-categories").find("a").click(function(e) {
           $j(".category").children("ul").show();
           e.preventDefault();
         });
 
-        $j("#collapse_all").find("a").click(function(e) {
+        $j("#collapse-categories").find("a").click(function(e) {
           $j(".category").children("ul").hide();
           e.preventDefault();
         });
