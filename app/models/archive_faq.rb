@@ -1,6 +1,6 @@
 class ArchiveFaq < ActiveRecord::Base
   acts_as_list
-
+  translates :title
 
   has_many :questions, :dependent => :destroy
   accepts_nested_attributes_for :questions
@@ -8,8 +8,8 @@ class ArchiveFaq < ActiveRecord::Base
 
   attr_protected :content_sanitizer_version
   attr_accessor :notify_translations
-
-  scope :non_translated, where('translated_faq_id IS NULL')
+  #skip_callback :save, :before, :update_sanitizer_version
+ # scope :non_translated, where('translated_faq_id IS NULL')
 
   # When we modify either a FAQs Category name or one of the Questions, we send an email to Translations.
   after_save :notify_translations_committee

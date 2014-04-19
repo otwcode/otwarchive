@@ -1,32 +1,6 @@
 <%= form_for(@archive_faq,  :html => {:class => "create faq"}) do |form| %>
   <%= error_messages_for @archive_faq %>
   <fieldset>
-  <legend><%= ts("Set Preferences") %></legend>
-  <h3 class="landmark heading">Set Prefs</h3>
-  <dl>
-    <dt>
-      <%= form.label :language_id, ts("Choose a language") %>
-    </dt>
-    <dd>
-      <select id="archive_faq_language_id" name="archive_faq[language_id]">
-        <%= options_from_collection_for_select(Language.default_order, :id, :name, @archive_faq.language_id || Language.default.id) %>
-      </select>
-    </dd>
-    <dt>
-      <%= form.label :translated_faq_id, ts("Is this a translation of another FAQ?") %>
-    </dt>
-    <dd>
-      <%= form.collection_select(:translated_faq_id, @translatable_faqs, :id, :title, {:prompt => true}) %>
-    </dd>
-    <dt>
-      <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ Category?")  %>
-    </dt>
-    <dd>
-      <%= form.check_box :notify_translations %>
-    </dd>
-  </dl>
-  </fieldset>
-  <fieldset>
     <dl class="text">
       <dt><%= form.label :title, ts("Category Name") %></dt>
       <dd><%= form.text_field :title, :id => "title" %>

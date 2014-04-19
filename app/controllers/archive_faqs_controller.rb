@@ -1,22 +1,22 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
-  before_filter :get_faq_translations, :only => [:new, :create, :edit, :update, :update_positions]
+  #before_filter :get_faq_translations, :only => [:new, :create, :edit, :update, :update_positions]
 
-  def get_faq_translations
-    @translatable_faqs = ArchiveFaq.non_translated.order("created_at ASC")
-  end
+  #def get_faq_translations
+  #  @translatable_faqs = ArchiveFaq.non_translated.order("created_at ASC")
+  #end
 
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
 
-    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-      @archive_faqs = @archive_faqs.where(:language_id => @language.id)
-    else
-      @archive_faqs = @archive_faqs.non_translated
-    end
+    #if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
+    #  @archive_faqs = @archive_faqs.where(:language_id => @language.id)
+    #else
+    #  @archive_faqs = @archive_faqs.non_translated
+    #end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -49,7 +49,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1/edit
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
-    @translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
+    #@translatable_faqs = ArchiveFaq.non_translated.order("created_at DESC")
 
   end
 
@@ -57,11 +57,11 @@ class ArchiveFaqsController < ApplicationController
   def manage
     @archive_faqs = ArchiveFaq.order('position ASC')
 
-    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-      @archive_faqs = @archive_faqs.where(:language_id => @language.id)
-    else
-      @archive_faqs = @archive_faqs.non_translated
-    end
+    #if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
+     # @archive_faqs = @archive_faqs.where(:language_id => @language.id)
+    #else
+    #  @archive_faqs = @archive_faqs.non_translated
+    #end
   end
 
   # POST /archive_faqs

@@ -2,7 +2,8 @@ class Question < ActiveRecord::Base
   acts_as_list
 
   translates :question, :content
-
+  #def update_sanitizer_version; end
+  skip_callback :save, :before, :update_sanitizer_version
   belongs_to :archive_faq
   attr_protected :content_sanitizer_version
   attr_protected :screencast_sanitizer_version
