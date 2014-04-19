@@ -41,9 +41,8 @@
                   <li>
                     <%= link_to q.question, archive_faq_path(faq, :anchor => q.anchor) %>
                     <% unless q.screencast.to_s.empty? %>
-                      <br/>
                       <span class="screencast">
-                        <%= ts("Screencast:") %> <%= raw sanitize_field(q, :screencast) %>
+                        <%= ts("(Screencast available)") %>
                       </span>
                     <% end %>
                   </li>

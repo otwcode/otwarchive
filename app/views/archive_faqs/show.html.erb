@@ -36,10 +36,12 @@
           <h3 id="<%= q.anchor %>">
             <%= q.question %>
           </h3>
-          <%= raw sanitize_field(q, :content) %>
           <% unless q.screencast.to_s == "" %>
-            <%= raw sanitize_field(q, :screencast) %>
+            <p class="screencast">
+              <span class="label"><%= ts("Screencast") %>:</span> <%= link_to q.question, q.screencast.to_s %>
+            </p>
           <% end %>
+          <%= raw sanitize_field(q, :content) %>
         <% end %>
       </div>
       

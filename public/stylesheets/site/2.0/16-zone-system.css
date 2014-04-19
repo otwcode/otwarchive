@@ -154,6 +154,10 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   list-style-type: circle;
 }
 
+.faq .screencast .label {
+  font-weight: 700;
+}
+
 .faq .userstuff .notice, .faq .userstuff .caution, .faq .example { 
   margin: 0.643em 3.858em; 
   padding: 0.643em;
