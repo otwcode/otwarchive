@@ -143,20 +143,6 @@ When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
   step %{I follow "Prompts ("}
 end
 
-When /^I delete the prompt by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  step %{I follow "Delete Prompt"}
-end
-
-When /^I edit the first prompt$/ do
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  step %{I follow "Prompts ("}
-  # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
-  # Prompt Meme challenges
-  #step %{I follow "Edit Prompt"}
-end
-
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   click_link("#{participant}")
   step %{I delete the signup}
