@@ -46,8 +46,8 @@
     
     <p class="actions" role="button">
       <% linktext = ts("Remove Question") %>
-      <% # TODO: DELETE QUESTION WITHOUT JAVASCRIPT %>
       <%= link_to_remove_section(linktext, form)%>
+      <% # TODO: DELETE QUESTION WITHOUT JAVASCRIPT %>
       <noscript>
         <label for="<%= field_id(form, '_destroy') %>">
           <%= form.check_box "_destroy" %>

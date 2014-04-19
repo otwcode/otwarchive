@@ -136,6 +136,11 @@ class ArchiveFaqsController < ApplicationController
       format.js { render :nothing => true }
     end
   end
+  
+  # GET /archive_faqs/1/confirm_delete
+  def confirm_delete
+    @archive_faq = ArchiveFaq.find(params[:id])
+  end
 
   # DELETE /archive_faqs/1
   # DELETE /archive_faqs/1.xml
