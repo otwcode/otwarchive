@@ -43,15 +43,16 @@
         <%= form.text_field :screencast %>
       </dd>
     </dl>
-    
+
+    <% # TODO: DELETE A QUESTION %>
     <p class="actions" role="button">
-      <% linktext = ts("Remove Question") %>
-      <%= link_to_remove_section(linktext, form)%>
+      <% removetext = ts("Remove Question") %>
+      <%= link_to_remove_section(removetext, form) %>
       <% # TODO: DELETE QUESTION WITHOUT JAVASCRIPT %>
       <noscript>
-        <label for="<%= field_id(form, '_destroy') %>">
+        <label for="<%= field_id(form, '_destroy').to_sym %>">
           <%= form.check_box "_destroy" %>
-          <%= ts("Remove Question") %>
+          <%= removetext %>
         </label>
       </noscript>
     </p>
