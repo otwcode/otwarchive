@@ -298,7 +298,7 @@ class TagsController < ApplicationController
     end
 
     if params[:fandom_string] && !params[:selected_tags].blank?
-      options.merge!(:fandom_string => params[:fandom_string])
+      # options.merge!(:fandom_string => params[:fandom_string])
       @fandom = Fandom.find_by_name(params[:fandom_string])
 
       if @fandom && @fandom.canonical?
