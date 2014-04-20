@@ -365,7 +365,7 @@ Feature: Gift Exchange Challenge
   Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to the "Awesome Gift Exchange" signups page
