@@ -400,8 +400,14 @@ $j(document).ready(function() {
   $j('a#kudos_summary').click(function(e) {
     e.preventDefault();
     $j('a#kudos_summary').hide();
-    $j('#kudos_full_list').show();
-  })
+    $j('.kudos_expanded').show();
+  });
+
+  $j('.kudos_expanded a').click(function(e) {
+    e.preventDefault();
+    $j('a#kudos_summary').show();
+    $j('.kudos_expanded').hide();
+  });
 
   $j('#kudo_submit').on("click", function(event) {
     event.preventDefault();
@@ -431,4 +437,3 @@ $j(document).ready(function() {
     $j.scrollTo('#comments_placeholder');
   });
 });
-  

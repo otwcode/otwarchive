@@ -14,7 +14,7 @@
           <%= link_to work_kudos_path(commentable), :id => "kudos_summary" do %>
             <%= ts(" and %{collapsed_count} more users", :collapsed_count => kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW) %>
           <% end %>
-          <span id="kudos_full_list" class='hidden'>
+          <span class="kudos_expanded hidden">
             <%= kudos[ArchiveConfig.MAX_KUDOS_TO_SHOW..-1].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
                 to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(" and ")).
                 html_safe %>
@@ -25,6 +25,9 @@
         <% end %>
         <%= ts(pluralize(guest_kudos_count, 'guest')) %>
         <%= ts(" left kudos on this work!") %>
+        <span class='kudos_expanded hidden'>
+          <%= link_to ts('(collapse)'), '#' %>
+        </span>
       </p>
     <% end %>
   <% end %>
