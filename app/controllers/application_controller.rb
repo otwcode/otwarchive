@@ -267,8 +267,20 @@ public
 
 #  I18n.backend = I18nDB::Backend::DBBased.new
 #  I18n.record_missing_keys = false # if you want to record missing translations
-
   protected
+
+  # Use our custom Language selector to set the user's :locale
+  before_filter :set_locale
+  def set_locale
+    I18n.locale = params[:language_id] if params[:language_id].present?
+  end
+
+  # The ?language_id=somelanguage needs to persist thorough URL changes
+  def default_url_options(options={})
+    #logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    { language_id: I18n.locale }
+  end
+
 
   def load_locales
     @loaded_locales ||= Locale.order(:iso)
