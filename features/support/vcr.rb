@@ -1,9 +1,11 @@
 require 'vcr'
 
 VCR.configure do |c|
-  c.cassette_library_dir     = 'features/cassette_library'
-  c.hook_into                :fakeweb
   c.ignore_localhost = true
+  c.cassette_library_dir     = 'features/cassette_library'
+  c.hook_into                :typhoeus
+  c.allow_http_connections_when_no_cassette = true
+
   #use this after setup...
   # Cassettes are now deleted and re-recorded after 30 days. This will ensure
   # that LJ/DW/DA don't update their HTML and break our story parser without us
@@ -56,5 +58,6 @@ VCR.cucumber_tags do |t|
 
   t.tags '@work_external_parent'
   t.tags '@work_external_language'
+
 end
 

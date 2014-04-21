@@ -291,6 +291,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :preview
         post :post
+        get :confirm_delete
       end
       resources :comments
     end
@@ -327,6 +328,7 @@ Otwarchive::Application.routes.draw do
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
@@ -370,6 +372,9 @@ Otwarchive::Application.routes.draw do
       collection do
         get :summary
       end
+      member do
+        get :confirm_delete
+      end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
@@ -396,6 +401,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :generate
         get :cancel_generate
+        get :regenerate_for_signup
       end
     end
     resources :requests, :controller => "challenge_requests"
@@ -470,6 +476,9 @@ Otwarchive::Application.routes.draw do
   resources :bookmarks do
     collection do
       get :search
+    end
+    member do
+      get :confirm_delete
     end
     resources :collection_items
   end

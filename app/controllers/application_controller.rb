@@ -12,6 +12,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  
+  # Title helpers
+  helper_method :process_title
 
   # clear out the flash-being-set
   before_filter :clear_flash_cookie
@@ -77,6 +80,15 @@ protected
   
   def guest?
     !(logged_in? || logged_in_as_admin?)
+  end
+  
+  def process_title(string)
+  	string = string.humanize.titleize
+  
+  	string = string.sub("Faq", "FAQ")
+  	string = string.sub("Tos", "TOS")
+  	
+  	return string
   end
 
 public

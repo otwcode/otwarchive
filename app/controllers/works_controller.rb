@@ -201,7 +201,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-    
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -210,8 +210,8 @@ class WorksController < ApplicationController
     end
 
     # Users must explicitly okay viewing of entire work
-    if @work.number_of_posted_chapters > 1
-      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+    if @work.chaptered?
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
@@ -292,7 +292,7 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created.')
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
@@ -356,7 +356,7 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created.')
+        flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
@@ -537,7 +537,8 @@ class WorksController < ApplicationController
     if params[:pseuds_to_apply]
       pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
     end
-    options = {:pseuds => pseuds_to_apply,
+    options = {
+      :pseuds => pseuds_to_apply,
       :post_without_preview => params[:post_without_preview],
       :importing_for_others => params[:importing_for_others],
       :restricted => params[:restricted],
@@ -549,7 +550,11 @@ class WorksController < ApplicationController
       :relationship => params[:work][:relationship_string],
       :category => params[:work][:category_string],
       :freeform => params[:work][:freeform_string],
-      :encoding => params[:encoding]
+      :encoding => params[:encoding],
+      :external_author_name => params[:external_author_name],
+      :external_author_email => params[:external_author_email],
+      :external_coauthor_name => params[:external_coauthor_name],
+      :external_coauthor_email => params[:external_coauthor_email]
     }
 
     # now let's do the import
@@ -631,7 +636,7 @@ protected
         @external_authors.each do |external_author|
           external_author.find_or_invite(current_user)
         end
-        message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+        message = " " + ts("We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually.")
         flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
     end
@@ -748,7 +753,11 @@ public
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
-    flash[:notice] = ts("This work was marked for later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
+    if @work.marked_for_later?(current_user)
+      flash[:notice] = ts("This work was <strong>removed</strong> from your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    else
+      flash[:notice] = ts("This work was <strong>added</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 

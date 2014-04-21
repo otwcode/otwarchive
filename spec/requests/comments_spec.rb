@@ -126,12 +126,10 @@ describe "Comments" do
     end
     it "should not be able to be replied to by guests on a work" do
       visit "/works/#{@work.id}/comments/#{@comment.id}"
-      should have_content("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!")
       should_not have_button "Reply"
     end
     it "should not be able to be replied to by guests on a work's chapter" do
       visit "/works/#{@work.id}/chapters/#{@work.chapters.last.id}/comments/#{@comment.id}"
-      should have_content("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!")
       should_not have_button "Reply"
     end
   end
