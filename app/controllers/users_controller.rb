@@ -152,21 +152,36 @@ class UsersController < ApplicationController
           flash[:error] = ts("User name already taken.")
         else
           old_login = @user.login
+          old_lower_login = "#{@user.login}".downcase
+          new_lower_login = "#{@new_login}".downcase
+
+
+          if old_lower_login == new_lower_login
+            old_pseud = Pseud.find_by_name_and_user_id(old_login,@user.id)
+            old_pseud.name = @new_login
+            old_pseud.save!
+
+            end
+
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name was changed")
 
+=begin
             new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
             old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
             if new_pseud
               # do nothing - they already have the matching pseud
+
             elsif old_pseud
               # change the old pseud to match
               old_pseud.update_attribute(:name, @new_login)
+              flash[:notice] = ts("This gets called now!.")
             else
               # shouldn't be able to get here, but just in case
               Pseud.create(:name => @new_login, :user_id => @user.id)
             end
+=end
 
             redirect_to @user and return
           else
