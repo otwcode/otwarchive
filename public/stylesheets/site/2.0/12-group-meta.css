@@ -22,6 +22,11 @@ dl.meta {
   margin: 0 0 0.643em;
 }
 
+.meta .stats dl {
+  float: left;
+  margin-top: 0;
+}
+
 .meta .stats dl dd, .meta .stats dl dt {
   margin: 0 0.375em auto 0;
   width: auto;
