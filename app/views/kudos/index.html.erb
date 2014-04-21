@@ -1,6 +1,6 @@
-<h3 class="heading">
+<h2 class="heading">
   <%= ts("Kudos on %{work_link}", work_link: link_to(@work.title, @work)).html_safe %>
-</h3>
+</h2>
 
 <div id="kudos">
   <% if @kudos.length > 0 || @guest_kudos_count > 0 %>
