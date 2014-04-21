@@ -93,6 +93,14 @@ Scenario: Create a bookmark
       And I fill in "Your Tags" with "WIP"
       And I press "Update"
     Then I should see "Bookmark was successfully updated"
+    
+    # delete external bookmark
+    When I follow "Delete"
+    Then I should see "Are you sure you want to delete"
+      And I should see "Stuck with You"
+    When I press "Yes, Delete Bookmark"
+    Then I should see "Bookmark was successfully deleted."
+      And I should not see "Stuck with You"
       
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
@@ -153,4 +161,28 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I fill in "Your Tags" with "Good tag, ,, also good tag, "
     And I press "Create"
   Then I should see "created"
-
+  
+Scenario: Delete bookmarks of a work and a series
+  Given the following activated users exist
+    | login           | password   |
+    | wahlly   | password   |
+    | markymark   | password   |
+    And I am logged in as "wahlly"
+    And I add the work "A Mighty Duck" to series "The Funky Bunch"
+  When I log out
+    And I am logged in as "markymark"
+    And I view the work "A Mighty Duck"
+    And I follow "Bookmark"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created."
+    And I should see "Delete"
+  When I follow "Delete"
+    And I press "Yes, Delete Bookmark"
+  Then I should see "Bookmark was successfully deleted."
+  When I view the series "The Funky Bunch"
+    And I follow "Bookmark Series"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created."
+  When I follow "Delete"
+    And I press "Yes, Delete Bookmark"
+  Then I should see "Bookmark was successfully deleted."
