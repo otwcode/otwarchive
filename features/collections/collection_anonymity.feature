@@ -27,6 +27,7 @@ Feature: Collection
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I press "Post Without Preview"
+    And all search indexes are updated
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
     And I should see "Old Snippet"
@@ -379,11 +380,27 @@ Feature: Collection
     #Then 1 email should be delivered
     
   # first fic now visible, second still not
-  When I log out
-    And I am logged in as "third_user"
-  When I view the work "New Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Purim Day 1"
-  When I view the work "New Snippet 2"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should not see "Purim Day 2"
+    When I log out
+      And I am logged in as "third_user"
+    When I view the work "New Snippet"
+    Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+      And I should see "Purim Day 1"
+    When I view the work "New Snippet 2"
+    Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+      And I should not see "Purim Day 2"
+
+  Scenario: Create an anon collection, add chaptered work. Add co-author to one chapter, should still be anonymous
+    Given I have an anonymous collection "Various Penguins" with name "Various_Penguins"
+      And I am logged in as "Amos"
+      And I am logged in as "Jessica"
+      And I post the chaptered work "Cone of Silence"
+    When I add my work to the collection
+    Then I should see "Added"
+      And I edit the work "Cone of Silence"
+      And I follow "2" within "div#main.works-edit.region"
+      And I check "Add co-authors?"
+      And I fill in "pseud_byline" with "Amos"
+      And I press "Update Without Preview"
+      And I follow "Entire Work"
+    Then I should not see "Jessica" within "div.preface"
+      And I should not see "Amos" within "div.preface"

@@ -6,6 +6,7 @@ class PotentialMatch < ActiveRecord::Base
   CACHE_PROGRESS_KEY = "potential_match_status_for_"
   CACHE_BYLINE_KEY = "potential_match_bylines_for_"
   CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
+  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_"
 
   belongs_to :collection
   belongs_to :offer_signup, :class_name => "ChallengeSignup"
@@ -25,6 +26,10 @@ protected
 
   def self.interrupt_key(collection)
     CACHE_INTERRUPT_KEY + "#{collection.id}"
+  end
+  
+  def self.invalid_signup_key(collection)
+    CACHE_INVALID_SIGNUP_KEY + "#{collection.id}"
   end
 
 public
@@ -62,13 +67,23 @@ public
     Resque.enqueue(self, :regenerate_for_signup_in_background, signup.id)
   end
   
+  def self.invalid_signups_for(collection)
+    $redis.smembers(invalid_signup_key(collection))
+  end
+  
+  def self.clear_invalid_signups(collection)
+    $redis.del invalid_signup_key(collection)
+  end
+  
   # The actual method that generates the potential matches for an entire collection
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
     
-    # First, make sure there are no invalid signups
+    # check for invalid signups
+    PotentialMatch.clear_invalid_signups(collection)    
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
     unless invalid_signup_ids.empty?
+      invalid_signup_ids.each {|sid| $redis.sadd invalid_signup_key(collection), sid}
       UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids).deliver
       PotentialMatch.cancel_generation(collection)
     else
@@ -91,7 +106,6 @@ public
 
     end
     # TODO: for any signups with no potential matches try regenerating?
-    
     PotentialMatch.finish_generation(collection)
   end
   

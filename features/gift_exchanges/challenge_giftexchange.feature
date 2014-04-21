@@ -144,7 +144,8 @@ Feature: Gift Exchange Challenge
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
   
   Scenario: Invalid signups are caught before generation
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
@@ -156,9 +157,51 @@ Feature: Gift Exchange Challenge
     And I wait 3 seconds
   Then 1 email should be delivered to "mod1"
     And the email should contain "invalid sign-up"
-  When I reload the page
-    Then I should see "Generate Potential Matches"
+  When I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Generate Potential Matches"
+    And I should see "invalid sign-ups"
+    
+  Scenario: Assignments can be updated and cannot be sent out until everyone is assigned
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I remove a recipient
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should see "No Recipient"
+    And I should see "No Giver"
+  When I follow "Send Assignments"
+  Then I should see "aren't assigned"
+  When I follow "No Giver"
+    And I assign a pinch hitter
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should not see "No Giver"
+  When I follow "No Recipient"
+    And I assign a pinch recipient
+    And I press "Save Assignment Changes"
+    And I should not see "No Recipient"
+  When I follow "Send Assignments"
+  Then I should see "Assignments are now being sent out"
   
+  Scenario: Issues with assignments
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I assign a recipient to herself
+    And I press "Save Assignment Changes"
+  Then I should not see "Assignments updated"
+    And I should see "do not match"  
+  When I manually destroy the assignments for "Awesome Gift Exchange"
+    And I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Regenerate Assignments"
+    And I should see "Regenerate All Potential Matches"
+    And I should see "try regenerating assignments"
+  When I follow "Regenerate Assignments"
+    And the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    
   Scenario: Matches can be regenerated for a single signup
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I am logged in as "Mismatch"
@@ -167,7 +210,8 @@ Feature: Gift Exchange Challenge
     And I have generated matches for "Awesome Gift Exchange"
   Then I should see "No Potential Givers"
     And I should see "No Potential Recipients"
-    And I should see "Regenerate Matches For Mismatch"
+  When I follow "No Potential Givers"
+    Then I should see "Regenerate Matches For Mismatch"
   When I follow "Edit"
     And I check the 1st checkbox with the value "Stargate Atlantis"
     And I uncheck the 1st checkbox with the value "Bad Choice"
@@ -175,6 +219,7 @@ Feature: Gift Exchange Challenge
     And I uncheck the 2nd checkbox with the value "Bad Choice"
     And I submit
     And I follow "Matching"
+    And I follow "No Potential Recipients"
     And I follow "Regenerate Matches For Mismatch"
   Then I should see "Matches are being regenerated for Mismatch"
   When the system processes jobs
@@ -188,12 +233,8 @@ Feature: Gift Exchange Challenge
     And I reload the page
   Then I should not see "No Potential Givers"
     And I should not see "No Potential Recipients"
-    And I should see "Main Assignments"
+    And I should see "Complete"
     
-  Scenario: Correct potential matches are generated
-  
-
-
   Scenario: Assignments can be sent
 
   Given the gift exchange "Awesome Gift Exchange" is ready for matching
@@ -321,8 +362,16 @@ Feature: Gift Exchange Challenge
     And I should not see "Standard Challenge Tags"
     And I should not see "Angela Lansbury"
 
-
-
-
-    
-
+  Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to the "Awesome Gift Exchange" signups page
+    And I delete the signup by "myname1"
+  Then I should see "Challenge sign-up was deleted." 
+  When I am logged in as "myname2"
+    And I delete my signup for the gift exchange "Awesome Gift Exchange"
+  Then I should see "Challenge sign-up was deleted."
+  

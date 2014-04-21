@@ -1,8 +1,0 @@
-<div class="matching listbox group">
-  <h3 class="heading"><%= ts("Participants with No Assigned Recipients") %> <%= link_to_help "challenge-matching" %></h3>
-  <dl class="index group">
-  <% @assignments_with_no_recipient.each do |assignment| %>
-    <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
-  <% end %>
-  </dl>
-</div>    
