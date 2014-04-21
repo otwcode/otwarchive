@@ -473,6 +473,9 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    member do
+      get :confirm_delete
+    end
     resources :collection_items
   end
 
