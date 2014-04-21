@@ -194,12 +194,14 @@ Feature: Admin tasks
     And the email should contain "enigel"
   When the system processes jobs
   # confirmation email to admin, and to one user
-  Then 1 email should be delivered to e@e.org
+      Then 1 email should be delivered to e@e.org
     # Hack for HTML emails. 'Enigel' is a link in the new mailers, tests not catching that
     And the email should contain "Dear"
     And the email should contain "enigel"
-    And the email should have "Hey, we did stuff" in the subject
+    And the email should have "\[AO3\] Admin Message - Hey, we did stuff" in the subject
     And the email should contain "And it was awesome"
+  Then 1 email should be delivered to webmaster@example.org
+    And the email should have "\[AO3\] Admin Archive Notification Sent - Hey, we did stuff" in the subject
 
   Scenario: Mark a comment as spam
 
