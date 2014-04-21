@@ -152,6 +152,11 @@ class Collection < ActiveRecord::Base
       title.match(/\,/)
   end
 
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
