@@ -237,7 +237,7 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
