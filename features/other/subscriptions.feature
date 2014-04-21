@@ -66,7 +66,7 @@
   When I am logged in as "second_user"
     And I go to first_user's profile page
     And I press "Subscribe"
-  Then I should see "You are now following first_user. If you'd like to stop receiving email updates, you can unsubscribe from your Subscription page."
+  Then I should see "You are now following first_user. If you'd like to stop receiving email updates, you can unsubscribe from your Subscriptions page."
   When I press "Unsubscribe"
   Then I should see "successfully unsubscribed"
 
