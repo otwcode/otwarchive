@@ -298,16 +298,28 @@ class TagsController < ApplicationController
     end
 
     if params[:fandom_string] && !params[:selected_tags].blank?
-      # options.merge!(:fandom_string => params[:fandom_string])
-      @fandom = Fandom.find_by_name(params[:fandom_string])
+      canonical_fandoms, noncanonical_fandom_names = [], []
+      fandom_names = params[:fandom_string].split(',').map(&:squish)
+      fandom_names.each do |fandom_name|
+        if (fandom = Fandom.find_by_name(fandom_name)).try(:canonical?)
+          canonical_fandoms << fandom
+        else
+          noncanonical_fandom_names << fandom_name
+        end
+      end
 
-      if @fandom && @fandom.canonical?
-        @tags = Tag.find(params[:selected_tags])
-        @tags.each { |tag| tag.add_association(@fandom) }
-      else
-        flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
+      if canonical_fandoms.present?
+        saved = Tag.find_by_id(params[:selected_tags])
+        saved = [saved] if saved.is_a?(Tag)
+        saved.each do |tag|
+          canonical_fandoms.each do |fandom|
+            tag.add_association(fandom)
+          end
+        end
+      end
 
-        # redirect_to tag_wranglings_path(options) and return
+      if noncanonical_fandom_names.present?
+        flash[:error] = ts("The following names are not canonical fandoms: %{noncanonical_fandom_names}.", noncanonical_fandom_names: noncanonical_fandom_names)
       end
     end
 
@@ -316,5 +328,4 @@ class TagsController < ApplicationController
 
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end
-
 end
