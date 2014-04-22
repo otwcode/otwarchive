@@ -20,10 +20,12 @@
                 html_safe %>
           </span>
         <% end %>
-        <% if kudos.length > 0 && guest_kudos_count > 0 %>
-          <%= ts(" as well as ") %>
+        <% if guest_kudos_count > 0 %>
+          <% if kudos.length > 0 %>
+            <%= ts(" as well as ") %>
+          <% end %>
+          <%= ts(pluralize(guest_kudos_count, 'guest')) %>
         <% end %>
-        <%= ts(pluralize(guest_kudos_count, 'guest')) %>
         <%= ts(" left kudos on this work!") %>
         <span class='kudos_expanded hidden'>
           <%= link_to ts('(collapse)'), '#' %>
