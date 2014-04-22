@@ -20,31 +20,8 @@
     <h3 class="heading"><%= ts("Mass Wrangle New/Unwrangled Tags") %></h3>
   <% end %>
 
-  <% if params[:show] == "character_relationships" %>
-    <h3 class="heading"><%= ts("First, choose a canonical fandom:") %></h3>
-    <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do %>
-      <fieldset>
-        <legend><%= ts("Choose fandom") %></legend>
-        <dl>
-          <dt title="<%= ts("fandom") %>">
-            <%= label_tag :fandom_string, ts("Fandom:") %>
-          <dt>
-          <dd>
-            <%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
-          </dd>
-          <dt class="landmark"><%= ts("Submit") %></dt>
-          <dd class="submit actions"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag ts("Go") %></dd>
-        </dl>
-      </fieldset>
-    <% end %>
-  <% end %>
-
   <% if @tags && @tags.empty? %>
-    <% if params[:show] == "character_relationships" %>
-      <p><%= ts("There are no canonical relationships in this fandom at the moment.") %></p>
-    <% else %>
-      <p><%= ts("There are no unwrangled tags in this category at the moment.") %></p>
-    <% end %>
+    <p><%= ts("There are no unwrangled tags in this category at the moment.") %></p>
   <% elsif @tags %>
     <%= will_paginate @tags %>
     <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do %>
@@ -55,9 +32,6 @@
           <% if params[:show] == "fandoms" %>
             <dt><%= label_tag :media, ts("Wrangle to Media") %></dt>
             <dd><%= select_tag :media, options_for_select(@media_names) %></dd>
-          <% elsif params[:show] == "character_relationships" %>
-            <dt><%= label_tag :character_string, ts("Wrangle to Character") %></dt>
-            <dd title="<%= ts("wrangle to character") %>"><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
           <% else %>
             <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
             <dd title="<%= ts("wrangle to fandom") %>"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
@@ -90,9 +64,6 @@
                 <th scope="col" title="sort by">
                   <%= sort_link ts('Created'), :created_at, {:sort_default => true} %>
                 </th>
-                <% if params[:show] == 'character_relationships' %>
-                  <th scope="col"><%= ts("Characters") %></th>
-                <% end %>
                 <th scope="col">
                   <%= ts("Canonical") %>
                   <ul class="actions" role="menu">
@@ -124,14 +95,6 @@
 
                   <td title="<%= ts("created") %>"><%= l(tag.created_at.to_date) %></td>
 
-                  <% if params[:show] == 'character_relationships' %>
-                    <td title="<%= ts("characters") %>">
-                      <% unless tag.characters.empty? %>
-                        <ul><%= tag_link_list(tag.characters) %></ul>
-                      <% end %>
-                    </td>
-                  <% end %>
-
                   <td title="<%= ts("canonical?") %>">
                     <% if tag.canonical? %>
                       <%= ts("Yes") %>
@@ -161,7 +124,7 @@
         <%= hidden_field_tag :sort_column, params[:sort_column] %>
         <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
         <%= hidden_field_tag :page, params[:page] %>
-        <%= hidden_field_tag(:fandom_string, params[:fandom_string]) if params[:fandom_string] && params[:show] == "character_relationships" %>
+        <%= hidden_field_tag(:fandom_string, params[:fandom_string]) if params[:fandom_string] %>
       </p>
     <% end %>
     <!--/content-->

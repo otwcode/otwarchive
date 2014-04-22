@@ -18,15 +18,6 @@ class TagWranglingsController < ApplicationController
         @media_names = Media.by_name.value_of(:name)
         @page_subtitle = ts("fandoms")
         @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
-      elsif params[:show] == "character_relationships"
-        if params[:fandom_string]
-          @fandom = Fandom.find_by_name(params[:fandom_string])
-          if @fandom && @fandom.canonical?
-            @tags = @fandom.children.by_type("Relationship").canonical.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
-          else
-            flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
-          end
-        end
       else # by fandom
         klass = params[:show].classify.constantize        
         @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)               

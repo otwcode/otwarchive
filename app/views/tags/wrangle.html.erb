@@ -21,10 +21,6 @@
   <h3 class="heading"><%= showing_header %></h3>
 <% end %>
 
-<% if @tag.is_a?(Fandom) && params[:show] == "relationships" %>
-  <p><%= link_to ts('Wrangle Relationships to Characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
-<% end %>
-
 <% if params[:show] %>
   <ul class="actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
