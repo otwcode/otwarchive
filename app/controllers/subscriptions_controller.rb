@@ -25,7 +25,7 @@ class SubscriptionsController < ApplicationController
     respond_to do |format|
       if @subscription.save
         format.html {
-          flash[:notice] = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can return to this page and click 'Unsubscribe'.", :name => @subscription.name)
+          flash[:notice] = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_url}\">your Subscriptions page</a>.", :name => @subscription.name).html_safe
           # redirect_back_or_default(@subscription.subscribable) # it always returns to subscriptions rather than the subscribable
           redirect_to(@subscription.subscribable)
         }
