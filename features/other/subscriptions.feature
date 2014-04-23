@@ -82,6 +82,17 @@
     And the email should contain "wip_author"
     And the email should contain "posted"
     And the email should contain "Chapter 2"
+
+  Scenario: subscribe to individual work with HTML title
+
+  Given I have loaded the fixtures
+    # Note: this is the author
+    When I am logged in as "testuser2" with password "testuser2"
+    And I view the work "Title with & >"
+  When I press "Subscribe"
+    Then I should see "You are now following Title with & >. If you'd like to stop receiving email updates, you can unsubscribe from your Subscriptions page."
+  When I press "Unsubscribe"
+    Then I should see "You have successfully unsubscribed from Title with & >."
     
   Scenario: subscribe to series
   

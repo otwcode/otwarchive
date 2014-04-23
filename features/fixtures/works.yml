@@ -42,7 +42,7 @@ fourth:
 fifth:
   id: 5
   posted: true
-  title: fifth
+  title: Title with & >
   word_count: 1000
   title_to_sort_on: fifth work
   language: english
