@@ -16,7 +16,7 @@
   <ul>
   <% @claimed_works.each do |work| %>
     <li><%= work.title.html_safe %>
-    <%= link_to work_url(work), work_url(work) %></li>
+    <%= style_link work_url(work), work_url(work) %></li>
   <% end %>
   </ul>
 
