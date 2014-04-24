@@ -22,3 +22,7 @@ work5:
   pseud_id: 6
   creation_id: 5
   creation_type: Work
+work6:
+  pseud_id: 6
+  creation_id: 6
+  creation_type: Work

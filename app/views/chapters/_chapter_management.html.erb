@@ -1,15 +1,15 @@
-<h3 class="landmark heading">Chapter Management</h3>
+<h3 class="landmark heading"><%= ts("Chapter Management") %></h3>
 <ul class="chapter navigation actions" role="menu">
   <% unless chapter.posted? %>
     <li>
       <%= form_tag post_work_chapter_path(work, chapter) do %>
-      <%= submit_tag 'Post Chapter' %>
+      <%= submit_tag ts('Post Chapter') %>
       <% end %>
     </li>
   <% end %>
   
   <li><%= link_to ts('Edit Chapter'), [:edit, work, chapter] %></li>  
   <% if work.chapters.count > 1 %>
-    <li><%= link_to ts('Delete Chapter'), [work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
+    <li><%= link_to ts('Delete Chapter'), [:confirm_delete, work, chapter], :confirm => ts('Are you sure you want to delete this chapter?') %></li>
   <% end %>
 </ul>

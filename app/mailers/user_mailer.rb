@@ -119,7 +119,7 @@ class UserMailer < BulletproofMailer::Base
     @admin_login = admin_login
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message #{subject}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
     )
   end
 
@@ -136,6 +136,15 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @collection.get_maintainers_email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+    )
+  end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
@@ -228,7 +237,7 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
@@ -301,7 +310,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 
