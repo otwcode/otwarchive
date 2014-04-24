@@ -44,7 +44,7 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = ts("You have successfully unsubscribed from %{name}.", :name => @subscription.name)
+        flash[:notice] = ts("You have successfully unsubscribed from %{name}.", :name => @subscription.name).html_safe
         redirect_back_or_default(@subscribable)
       }
     end
