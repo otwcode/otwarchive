@@ -1,3 +1,4 @@
+  # encoding: UTF-8
   Feature: Subscriptions
   In order to follow an author I like
   As a reader
@@ -83,16 +84,28 @@
     And the email should contain "posted"
     And the email should contain "Chapter 2"
 
-  Scenario: subscribe to individual work with HTML title
+  Scenario: subscribe to an individual work with an the & and < and > entitites in the title
 
   Given I have loaded the fixtures
-    # Note: this is the author
-    When I am logged in as "testuser2" with password "testuser2"
-    And I view the work "Title with & >"
+    And the following activated users exist
+    | login          | password   | email           |
+    | subscriber     | password   | subscriber@foo.com |
+  When I am logged in as "subscriber" with password "password"
+    And I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I press "Subscribe"
-    Then I should see "You are now following Title with & >. If you'd like to stop receiving email updates, you can unsubscribe from your Subscriptions page."
-  When I press "Unsubscribe"
-    Then I should see "You have successfully unsubscribed from Title with & >."
+  Then I should see "You are now following I am <strong>er Than Yesterday & Other Lies. If you'd like to stop receiving email updates, you can unsubscribe from your Subscriptions page."
+  When I am logged in as "testuser2" with password "testuser2"
+    And a chapter is added to "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
+  When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
+  When subscription notifications are sent
+  Then 1 email should be delivered to "subscriber@foo.com"
+  When "The problem with ampersands and angle brackets in email bodies and subjects" is fixed
+    #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
+    #And the email should contain "I am <strong>er Than Yesterday & Other Lies"
+  When I am logged in as "subscriber" with password "password"
+    And I go to my subscriptions page
+    And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
+  Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"
     
   Scenario: subscribe to series
   
