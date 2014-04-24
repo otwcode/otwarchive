@@ -1,6 +1,7 @@
 language: ruby
 env:
   - TEST_GROUP="rspec spec"
+  - TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"
   - TEST_GROUP="cucumber -f progress -r features features/importing"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
   - TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
