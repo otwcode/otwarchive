@@ -1,4 +1,3 @@
-  # encoding: UTF-8
   Feature: Subscriptions
   In order to follow an author I like
   As a reader
