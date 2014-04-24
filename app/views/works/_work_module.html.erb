@@ -63,7 +63,12 @@
   <% end %>
 
   <!--stats-->
+
   <dl class="stats" title="stats">
+    <% if work.language.present? %>
+      <dt><%= ts("Language") %>:</dt>
+      <dd><%= work.language.name %></dd>
+    <% end %>
   	<dt><%= ts('Words') %>:</dt>
   	<dd><%= number_with_delimiter(work.word_count) %></dd>
   	<dt><%= ts('Chapters') %>:</dt>
@@ -99,10 +104,6 @@
   <% if show_hit_count_to_public?(work) %>
     <dt><%= ts("Hits") %>:</dt>
     <dd><%= work.hits %></dd>
-  <% end %>
-  <% if work.language.present? %>
-    <dt><%= ts("Language") %>:</dt>
-    <dd><%= work.language.name %></dd>
   <% end %>
 <% end %>
 <% #### END CACHE stats #### %>
