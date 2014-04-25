@@ -1,9 +1,18 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-	<%= @series.title %>
-	<% if @series.restricted %>
-		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
-	<% end %>
+  <%= @series.title %>
+  <% if @series.restricted %>
+    <span class="restricted">
+      <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+      <span class="landmark"><%= ts("Restricted") %></span>
+    </span>
+  <% end %>
+  <% if @series.hidden_by_admin %>
+    <span class="flagged">
+      <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+      <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+    </span>
+  <% end %>
 </h2>
 <!--/descriptions-->
 

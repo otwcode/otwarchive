@@ -2,18 +2,24 @@
 
 <!--title etc-->
 <div class="header module">
-	<h4 class="heading" title="<%= ts('Series Title') %>">
-		<%= link_to series.title, series %>
-		<%= ts('by') %>
-		<%= byline(series) %>
-		<% if series.restricted %>
-			<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
-		<% end %>
-		<% if series.hidden_by_admin %>
-			<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
-		<% end %>
-	</h4>
-	<h5 class="heading" title="<%= ts('fandoms') %>">
+  <h4 class="heading" title="<%= ts('Series Title') %>">
+    <%= link_to series.title, series %>
+    <%= ts('by') %>
+    <%= byline(series) %>
+    <% if series.restricted %>
+      <span class="restricted">
+        <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
+        <span class="landmark"><%= ts("Restricted") %></span>
+      </span>
+    <% end %>
+    <% if series.hidden_by_admin %>
+      <span class="flagged">
+        <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
+        <span class="landmark"><%= ts("Hidden by Administrator") %></span>
+      </span>
+    <% end %>
+  </h4>
+  <h5 class="heading" title="<%= ts('fandoms') %>">
     <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>

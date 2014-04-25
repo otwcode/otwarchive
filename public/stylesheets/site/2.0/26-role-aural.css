@@ -71,6 +71,10 @@ code, kbd, tt, samp {
   speak: no-punctuation;
 }
 
+[data-icon]:before {
+  speak: none;
+}
+
 /*SAY-INSTEAD DRAFTS 
 
 [recs] say-instead: "wrecks";
