@@ -23,6 +23,7 @@ Feature: Edit tags on a work
   When I follow "Edit Tags"
   Then I should see "Edit Work Tags for "
     And I should see "Testerwork"
+    And I should not see "Save Without Posting"
   When I fill in "Fandoms" with "Stargate SG-1, Hana Yori Dango"
     And I fill in "Additional Tags" with "Alternate Universe"
     And I press "Post Without Preview"
@@ -49,3 +50,4 @@ Feature: Edit tags on a work
     And I should see "Games"
     And I should see "Anthropomorphic"
     And I should see "The cooler version of tag"
+ 
