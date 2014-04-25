@@ -7,7 +7,7 @@
 		<%= ts('by') %>
 		<%= byline(series) %>
 		<% if series.restricted %>
-	    <span class="restricted">
+      <span class="restricted">
         <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
         <span class="landmark"><%= ts("Restricted") %></span>
       </span>
@@ -18,7 +18,7 @@
         <span class="landmark"><%= ts("Hidden by Administrator") %></span>
       </span>
     <% end %>
-	</h4>
+  </h4>
 	<h5 class="heading" title="<%= ts('fandoms') %>">
     <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>

@@ -1,13 +1,13 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-	<%= @series.title %>
-	<% if @series.restricted %>
-	  <span class="restricted">
+  <%= @series.title %>
+  <% if @series.restricted %>
+    <span class="restricted">
       <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
       <span class="landmark"><%= ts("Restricted") %></span>
     </span>
-	<% end %>
-	<% if @series.hidden_by_admin %>
+  <% end %>
+  <% if @series.hidden_by_admin %>
     <span class="flagged">
       <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
       <span class="landmark"><%= ts("Hidden by Administrator") %></span>
