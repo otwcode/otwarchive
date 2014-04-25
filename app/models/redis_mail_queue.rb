@@ -93,7 +93,7 @@ class RedisMailQueue
     list
   end
 
-  def redis_for_type(notification_type)
+  def self.redis_for_type(notification_type)
     notification_type == 'kudos' ? REDIS_KUDOS : REDIS_GENERAL
   end
 
