@@ -51,3 +51,9 @@ Feature: Edit tags on a work
     And I should see "Anthropomorphic"
     And I should see "The cooler version of tag"
  
+  Scenario: Ampersands and angle brackets should display in work titles on Edit Tags page
+  Given I have loaded the fixtures
+    And I am logged in as "testuser2" with password "testuser2"
+  When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
+    And I follow "Edit Tags"
+  Then I should see "I am <strong>er Than Yesterday & Other Lies"
