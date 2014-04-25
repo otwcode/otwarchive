@@ -45,11 +45,11 @@ module AutocompleteSource
         # We put each prefix and the word + completion token into the set of all completions,
         # with score 0 so they just get sorted lexicographically --
         # this will be used to quickly find all possible completions in this space
-        REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_completion_key(prefix), 0, word_piece)
+        REDIS_GENERAL.zadd(self.class.autocomplete_completion_key(prefix), 0, word_piece)
 
         # We put each complete search string into a separate set indexed by word with specified score
         if (self.class.is_complete_word?(word_piece))
-          REDIS_AUTOCOMPLETE.zadd(self.class.autocomplete_score_key(prefix, word_piece), score, autocomplete_value)
+          REDIS_GENERAL.zadd(self.class.autocomplete_score_key(prefix, word_piece), score, autocomplete_value)
         end
       end
     end
@@ -102,8 +102,8 @@ module AutocompleteSource
       options.reverse_merge!({:search_param => "", :autocomplete_prefix => "", :sort => "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
-      if REDIS_AUTOCOMPLETE.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
-        return REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
+      if REDIS_GENERAL.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
+        return REDIS_GENERAL.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end
 
       # we assume that if the user is typing in a phrase, any words they have
@@ -135,10 +135,10 @@ module AutocompleteSource
           phrases_with_scores = []
           if lastpiece && search_piece.length < 3
             # use a limit
-            phrases_with_scores = REDIS_AUTOCOMPLETE.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
+            phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
               'inf', 0, :withscores => true, :limit => [0, 50])
           else
-            phrases_with_scores = REDIS_AUTOCOMPLETE.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
+            phrases_with_scores = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word),
               'inf', 0, :withscores => true)
           end
 
@@ -147,7 +147,7 @@ module AutocompleteSource
             if options[:constraint_sets]
               # phrases must be in these sets or else no go
               # O(logN) complexity
-              next unless options[:constraint_sets].all {|set| REDIS_AUTOCOMPLETE.zrank(set, phrase)}
+              next unless options[:constraint_sets].all {|set| REDIS_GENERAL.zrank(set, phrase)}
             end
 
             if count[phrase]
@@ -184,9 +184,9 @@ module AutocompleteSource
       if search_param.length <= 2
         # cache the result for really quick response when only 1-2 letters entered
         # adds only a little bit to memory and saves doing a lot of processing of many phrases
-        results[0..limit].each_with_index {|res, index| REDIS_AUTOCOMPLETE.zadd(autocomplete_cache_key(autocomplete_prefix, search_param), index, res)}
+        results[0..limit].each_with_index {|res, index| REDIS_GENERAL.zadd(autocomplete_cache_key(autocomplete_prefix, search_param), index, res)}
         # expire every 24 hours so new entries get added if appropriate
-        REDIS_AUTOCOMPLETE.expire(autocomplete_cache_key(autocomplete_prefix, search_param), 24*60*60)
+        REDIS_GENERAL.expire(autocomplete_cache_key(autocomplete_prefix, search_param), 24*60*60)
       end
       results[0..limit]
     end
@@ -239,13 +239,13 @@ module AutocompleteSource
       # the rank of the word piece tells us where to start looking
       # in the completion set for possible completions
       # O(logN) N = number of things in the completion set (ie all the possible prefixes for all the words)
-      start_position = REDIS_AUTOCOMPLETE.zrank(autocomplete_completion_key(autocomplete_prefix), word_piece)
+      start_position = REDIS_GENERAL.zrank(autocomplete_completion_key(autocomplete_prefix), word_piece)
       return [] unless start_position
 
       results = []
       # start from that position and go for the specified range length
       # O(logN + M) M is the range length, so reduces to logN
-      REDIS_AUTOCOMPLETE.zrange(autocomplete_completion_key(autocomplete_prefix), start_position, start_position + AUTOCOMPLETE_RANGE_LENGTH - 1).each do |entry|
+      REDIS_GENERAL.zrange(autocomplete_completion_key(autocomplete_prefix), start_position, start_position + AUTOCOMPLETE_RANGE_LENGTH - 1).each do |entry|
         minlen = [entry.length, word_piece.length].min
         # if the entry stops matching the prefix then we've passed out of
         # the completions that could belong to this word -- return
@@ -269,13 +269,13 @@ module AutocompleteSource
           # parts of other completions -- doing a weekly reload for cleanup is good enough
           if is_complete_word?(word_piece)
             word = get_word(word_piece)
-            phrases = REDIS_AUTOCOMPLETE.zrevrangebyscore(autocomplete_score_key(prefix, word), 'inf', 0)
+            phrases = REDIS_GENERAL.zrevrangebyscore(autocomplete_score_key(prefix, word), 'inf', 0)
             if phrases.count == 1 && phrases.first == value
               # there's only one phrase for this word and we're removing it, remove the completed word from the completion set
-              REDIS_AUTOCOMPLETE.zrem(autocomplete_completion_key(prefix), word_piece)
+              REDIS_GENERAL.zrem(autocomplete_completion_key(prefix), word_piece)
             end
             # remove the phrase we're deleting from the score set
-            REDIS_AUTOCOMPLETE.zrem(autocomplete_score_key(prefix, word_piece), value)
+            REDIS_GENERAL.zrem(autocomplete_score_key(prefix, word_piece), value)
           end
         end
       end
