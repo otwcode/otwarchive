@@ -2,24 +2,24 @@
 
 <!--title etc-->
 <div class="header module">
-	<h4 class="heading" title="<%= ts('Series Title') %>">
-		<%= link_to series.title, series %>
-		<%= ts('by') %>
-		<%= byline(series) %>
-		<% if series.restricted %>
+  <h4 class="heading" title="<%= ts('Series Title') %>">
+    <%= link_to series.title, series %>
+    <%= ts('by') %>
+    <%= byline(series) %>
+    <% if series.restricted %>
       <span class="restricted">
         <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Restricted") %>"></span>
         <span class="landmark"><%= ts("Restricted") %></span>
       </span>
-		<% end %>
-		<% if series.hidden_by_admin %>
+    <% end %>
+    <% if series.hidden_by_admin %>
       <span class="flagged">
         <span class="symbol" aria-hidden="true" data-icon="&#xe0a8;" title="<%= ts("Hidden by Administrator") %>"></span>
         <span class="landmark"><%= ts("Hidden by Administrator") %></span>
       </span>
     <% end %>
   </h4>
-	<h5 class="heading" title="<%= ts('fandoms') %>">
+  <h5 class="heading" title="<%= ts('fandoms') %>">
     <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
