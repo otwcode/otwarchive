@@ -4,3 +4,5 @@ redis_kudos:
   test: localhost:6380
 redis_general:
   test: localhost:6381
+redis_autocomplete:
+  test: localhost:6381
