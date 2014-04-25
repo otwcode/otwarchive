@@ -58,7 +58,7 @@ class AdminMailer < ActionMailer::Base
     end
     mail(
       :to => ArchiveConfig.WEBMASTER_ADDRESS,
-      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent"
+      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
     )
   end
   

@@ -99,3 +99,17 @@ Feature: Archivist bulk imports
 
   Scenario: Importing straight into a collection
   # TODO
+  
+  Scenario: Should not be able to import for others unless the box is checked
+  
+    Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I fill in "URLs*" with "http://cesy.dreamwidth.org/154770.html"
+      And I fill in "Author Name*" with "cesy"
+      And I fill in "Author Email Address*" with "cesy@dreamwidth.org"
+    When I press "Import"
+    Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
+    When I check the 1st checkbox with id matching "importing_for_others"
+    And I press "Import"
+    Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
