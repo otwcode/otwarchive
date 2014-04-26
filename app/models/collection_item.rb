@@ -84,7 +84,7 @@ class CollectionItem < ActiveRecord::Base
   end
   
   after_save :update_work
-  # after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
+  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
   #  this is a has-many-through relationship!!!
   # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
   # itself -- see collectible.rb
@@ -163,6 +163,15 @@ class CollectionItem < ActiveRecord::Base
     end
     if anonymous_changed?
       notify_of_author_reveal
+    end
+  end
+  
+  after_save :expire_caches
+  after_destroy :expire_caches
+  
+  def expire_caches
+    if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
     end
   end
 

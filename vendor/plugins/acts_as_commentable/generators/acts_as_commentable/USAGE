@@ -1,5 +1,0 @@
-Description:
-    Creates a migration for a comments table.
-
-Run:
-    ./script/generate acts_as_commentable
