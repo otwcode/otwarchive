@@ -49,3 +49,14 @@ fifth:
   authors_to_sort_on: testuser2
   revised_at: 2012-04-30
   expected_number_of_chapters: 5
+sixth:
+  id: 6
+  posted: true
+  title: I am &lt;strong&gt;er Than Yesterday &amp; Other Lies
+  word_count: 500
+  title_to_sort_on: I am &lt;strong&gt;er Than Yesterday &amp; Other Lies
+  language: english
+  authors_to_sort_on: testuser2
+  revised_at: 2013-04-30
+  expected_number_of_chapters: 2
+  complete: false
