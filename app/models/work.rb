@@ -520,21 +520,30 @@ class Work < ActiveRecord::Base
   def set_revised_at(date=nil)
     date ||= self.chapters.where(:posted => true).maximum('published_at') || 
         self.revised_at || self.created_at
-    date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
-    self.revised_at = date
+    if !date.nil?
+      date = date.instance_of?(Date) ? DateTime::jd(date.jd, 12, 0, 0) : date
+      self.revised_at = date
+
+    end
   end
   
   def set_revised_at_by_chapter(chapter)
     return if self.posted? && !chapter.posted?
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.today
       self.set_revised_at(Time.now) # a new chapter is being posted, so most recent update is now
-    elsif self.revised_at.nil? || 
+    elsif self.revised_at.nil? ||
+    if !chapter.published_at.nil?
         chapter.published_at > self.revised_at.to_date || 
         chapter.published_at_changed? && chapter.published_at_was == self.revised_at.to_date
       # revised_at should be (re)evaluated to reflect the chapter's pub date
       max_date = self.chapters.where('id != ? AND posted = 1', chapter.id).maximum('published_at')
       max_date = max_date.nil? ? chapter.published_at : [max_date, chapter.published_at].max
       self.set_revised_at(max_date)
+    end
+
+
+    else
+
     # else 
       # In all other cases, we don't want to touch revised_at, since the chapter's pub date doesn't 
       # affect it. Setting revised_at to any Date will change its time to 12:00, likely changing the
