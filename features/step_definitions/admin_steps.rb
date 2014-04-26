@@ -64,7 +64,7 @@ end
 Given /^account creation is enabled$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
-  check("Account Creation Enabled")
+  check("Account creation enabled (People can create accounts without an invitation)")
   click_button("Update")
 end
 
