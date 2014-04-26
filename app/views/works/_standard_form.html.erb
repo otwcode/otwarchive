@@ -19,11 +19,11 @@
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
- 
+
       <!-- Add coauthors-->
       <%= render 'pseuds/byline', :form => f, :type => 'work' %>
- 
- 
+
+
       <dt class="summary">
         <%= f.label :summary, ts("Summary", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
@@ -38,7 +38,7 @@
 
     </dl>
   </fieldset>
- 
+
   <fieldset id="associations" role="article">
     <legend><%= ts('Associations') %></legend>
     <h3 class="landmark heading"><%= ts('Associations') %></h3>
@@ -65,7 +65,7 @@
               :checked_method => "challenge_claims", :name_helper_method => "claim_title" %>
         </dd>
       <% end %>
-       
+
       <!-- Add collection -->
       <dt class="collection">
         <%= f.label :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-collectible-to-collection" %>
@@ -73,22 +73,22 @@
       <dd class="collection" title="post to collection">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
- 
+
       <dt class="recipient">
         <%= f.label :recipients, ts("Gift this work to") %> <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient" title="gift to">
         <%= f.text_field :recipients, autocomplete_options("pseud") %>
       </dd>
- 
+
       <!-- Inspiration / remix -->
       <dt class="parent">
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %> 
+        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, a podfic, or was inspired by another work") %> 
         <%= link_to_help "parent-works-help" %>
- 
+
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
           <dl>
@@ -98,24 +98,24 @@
               <%= p.text_field :url, :value => work_parent_value(:url) %>
               <p class="important">For a work in the archive, only the url is required.</p>
             </dd>
- 
+
             <dt><%= p.label :title %></dt>
             <dd><%= p.text_field :title, :value => work_parent_value(:title) %></dd>
- 
+
             <dt><%= p.label :author %></dt>
             <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
- 
+
             <dt><%= p.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
             <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
-           
+
             <dt class="translation"><%= p.check_box :translation %></dt>
             <dd class="translation">
               <%= p.label :translation, ts("This is a translation") %>
               <%= link_to_help "translation-link" %>
             </dd>
-                   
+
           <% end %>
- 
+
           <% unless @work.parent_work_relationships.blank? %>
             <dt><%= ts('Current parent works') %></dt>
             <% for related_work in @work.parent_work_relationships %>
@@ -132,16 +132,16 @@
           </dl>
         </fieldset>
       </dd>
- 
+
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="serial">
         <%= check_box_tag "series-options-show", "1", !@work.series.blank?, :class => "toggle_formfield" %>
       </dt>
       <dd class="serial">
-        <%= label_tag 'series-options-show', ts("This work is part of a series") %> 
+        <%= label_tag 'series-options-show', ts("This work is part of a series") %>
         <%= link_to_help "choosing-series" %>
-      
+
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
           <dl>
@@ -178,7 +178,7 @@
       </dt>
       <dd class="chaptered wip">
         <%= label_tag "chapters-options-show", ts("This work has multiple chapters") %>
-      
+
         <fieldset id="chapters-options">
           <dl>
             <dt><%= ts('Chapter 1 of') %></dt>
@@ -188,10 +188,10 @@
           </dl>
         </fieldset>
       </dd>
- 
+
       <!--backdate-->
       <dt class="backdate">
-        <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :class => "toggle_formfield" %> 
+        <%= f.check_box :backdate, {:id => "backdate-options-show", :class => "toggle_formfield"} %>
       </dt>
       <dd class="backdate">
         <%= label_tag "backdate-options-show", ts("Set a different publication date") %> <%= link_to_help "backdating-help" %>
@@ -202,20 +202,9 @@
             <dd id="managePublicationDate" class="datetime" title="set date">
               <!--BACK END, this select box does not seem to be acquiring the label published_at -->
               <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %></dd>
-            <dt><%= f.check_box :backdate %></dt>
-            <dd><%= f.label :backdate, ts("Set this publication date for the entire work") %></dd>
           </dl>
         </fieldset>
       </dd>
- 
-      <!-- Privacy dropdown (storyprivacy) -->
-      <dt class="restrict">
-        <%= f.check_box :restricted %>
-      </dt>
-      <dd class="restrict">
-        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
-      </dd>
- 
       <dt class="language">
         <%= f.label :language_id, ts("Choose a language") %> <%= link_to_help "languages-help" %>
       </dt>
@@ -224,43 +213,44 @@
           <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
         </select>
       </dd>
-      <dt class="skin"><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dt class="skin"><%= f.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
         <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
     </dl>
- 
+
   </fieldset>
- 
+
+  <!-- privacy settings -->
+  <fieldset class="privacy" role="article">
+    <legend><%= ts('Privacy') %></legend>
+    <h3 class="landmark heading"><%= ts('Comments') %></h3>
+    <dl>
+      <!-- Privacy dropdown (storyprivacy) -->
+      <dt class="restrict">
+        <%= f.check_box :restricted %>
+      </dt>
+      <dd class="restrict">
+        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
+      </dd>
+      <dt class="anonymous comments">
+        <%= f.check_box :anon_commenting_disabled %>
+      </dt>
+      <dd class="anonymous comments">
+        <%= f.label :anon_commenting_disabled, ts("Anonymous commenting disabled") %><%= link_to_help "anonymous-commenting" %>
+      </dd>
+    </dl>
+  </fieldset>
       <% unless @chapters %>
         <!-- Work text field (chapter_attributes_content) -->
         <fieldset class="work text" role="article">
           <legend class="required"><%= ts('Work Text *') %></legend>
-          <p id="toggleText" role="menu">
-            <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-            <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-            <span class="rtf-html-switch actions">
-              <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
-              <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
-              <%= content_for :footer_js do %>
-                <%= javascript_tag do %>
-                  $j(document).ready(function(){
-                    $j("#richTextLink").click(function(event){
-                      addEditor('content');
-                      $j(this).toggle();
-                      $j('#plainTextLink').toggle();
-                      event.preventDefault();
-                    });
-                  
-                    $j('#plainTextLink').click(function(event){
-                      removeEditor('content');
-                      $j(this).toggle();
-                      $j('#richTextLink').toggle();
-                      event.preventDefault();
-                    });
-                  })            
-                <% end %>
-              <% end %>
-            </span>
+          <ul class="hidden rtf-html-switch actions" role="menu">
+            <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+            <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+          </ul>
+          <p class="rtf-html-instructions note">
+            <span class="html-notes"><%= allowed_html_instructions %></span>
+            <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
           </p>
 
           <% use_tinymce %>
@@ -280,14 +270,17 @@
       <% end %>
 
     <% end %> <!-- end of fields for chapters -->
- 
+
   <fieldset class="create">
     <legend><%= ts('Post') %></legend>
-    <p class="submit cancel actions">
-      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
-      <%= submit_tag ts('Post Without Preview'), :name => 'post_button' %>
-      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
-    </p>
+    <ul class="actions">
+      <% unless @work.new_record? || @work.posted? %>
+        <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
+      <% end %>
+      <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
+      <li><%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %></li>
+      <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
+    </ul>
   </fieldset>
 <% end %> <!-- end of form_for -->
 </div>

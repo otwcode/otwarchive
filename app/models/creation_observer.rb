@@ -15,8 +15,8 @@ class CreationObserver < ActiveRecord::Observer
     do_notify(creation)
   end
 
-  # Send notifications if a creation has been edited and its recipients list has changed
-  def after_update(creation)
+  # Notify recipients after save only to prevent repeat notifications from previewing
+  def after_save(creation)
     if creation.is_a?(Work)
       notify_recipients(creation)
     end
@@ -25,7 +25,6 @@ class CreationObserver < ActiveRecord::Observer
   # send the appropriate notifications
   def do_notify(creation)
     if creation.is_a?(Work)
-      notify_recipients(creation)
       notify_parents(creation)
       notify_subscribers(creation)
       notify_prompters(creation)
@@ -52,7 +51,7 @@ class CreationObserver < ActiveRecord::Observer
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
   def notify_recipients(work)
-    if !work.new_recipients.blank? && !work.unrevealed?
+    if work.posted && !work.new_recipients.blank? && !work.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         if work.collections.empty?

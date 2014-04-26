@@ -7,10 +7,9 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
   background: #ddd;
   border: 2px solid #ccc;
   padding: 0;
-  outline: 1px solid #fff;
   margin: 0.643em auto;
   overflow: hidden;
-    box-shadow: none;
+    box-shadow: 0 0 0 1px #fff;
 }
 
 .listbox .heading {

@@ -1,4 +1,11 @@
 Otwarchive::Application.routes.draw do
+  
+  #### ERRORS ####
+  
+  match '/403', :to => 'errors#403'
+  match '/404', :to => 'errors#404'
+  match '/422', :to => 'errors#422'
+  match '/500', :to => 'errors#500'
 
   #### DOWNLOADS ####
 
@@ -284,6 +291,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :preview
         post :post
+        get :confirm_delete
       end
       resources :comments
     end
@@ -320,6 +328,7 @@ Otwarchive::Application.routes.draw do
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
@@ -363,6 +372,9 @@ Otwarchive::Application.routes.draw do
       collection do
         get :summary
       end
+      member do
+        get :confirm_delete
+      end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
@@ -389,6 +401,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :generate
         get :cancel_generate
+        get :regenerate_for_signup
       end
     end
     resources :requests, :controller => "challenge_requests"
@@ -464,10 +477,13 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    member do
+      get :confirm_delete
+    end
     resources :collection_items
   end
 
-  resources :kudos, :only => [:create, :show]
+  resources :kudos, :only => [:create]
 
   resources :skins do
     member do
@@ -507,6 +523,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
@@ -514,6 +531,7 @@ Otwarchive::Application.routes.draw do
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
+  match 'about' => 'home#about'
 	match 'menu/browse' => 'menu#browse'
 	match 'menu/fandoms' => 'menu#fandoms'
 	match 'menu/search' => 'menu#search'	

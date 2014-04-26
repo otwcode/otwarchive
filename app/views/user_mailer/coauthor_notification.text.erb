@@ -1,0 +1,10 @@
+<% content_for :message do %>
+<% creation_type = @creation.class.name.underscore.humanize.downcase %>
+
+You have been listed as a coauthor on the following <%= creation_type %>:
+
+<%= @creation.title %>
+(<%= @creation.class == Series ? series_url(@creation) : work_url(@creation) %>)
+
+Edit the <%= creation_type %> to remove yourself as an author if you've been added in error or don't want to be listed as an author: <%= @creation.class == Series ? edit_series_url(@creation) : edit_work_url(@creation) %>
+<% end %>

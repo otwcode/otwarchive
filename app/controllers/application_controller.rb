@@ -12,6 +12,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  
+  # Title helpers
+  helper_method :process_title
 
   # clear out the flash-being-set
   before_filter :clear_flash_cookie
@@ -19,6 +22,10 @@ class ApplicationController < ActionController::Base
     cookies.delete(:flash_is_set)
   end
 
+  after_filter :check_for_flash
+  def check_for_flash
+    cookies[:flash_is_set] = 1 unless flash.empty?
+  end
 
   # So if there is not a user_credentials cookie and the user appears to be logged in then 
   # redirect to the logout page
@@ -73,6 +80,15 @@ protected
   
   def guest?
     !(logged_in? || logged_in_as_admin?)
+  end
+  
+  def process_title(string)
+  	string = string.humanize.titleize
+  
+  	string = string.sub("Faq", "FAQ")
+  	string = string.sub("Tos", "TOS")
+  	
+  	return string
   end
 
 public
@@ -147,18 +163,18 @@ public
     store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      setflash; flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
       redirect_to destination
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
-      setflash; flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
       redirect_to destination
     end
     false
   end
 
   def admin_only_access_denied
-    setflash; flash[:error] = ts("I'm sorry, only an admin can look at that area.")
+    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
     redirect_to root_path
     false
   end
@@ -166,7 +182,7 @@ public
   # Filter method - prevents users from logging in as admin
   def user_logout_required
     if logged_in?
-      setflash; flash[:notice] = 'Please log out of your user account first!'
+      flash[:notice] = 'Please log out of your user account first!'
       redirect_to root_path
     end
   end
@@ -174,7 +190,7 @@ public
   # Prevents admin from logging in as users
   def admin_logout_required
     if logged_in_as_admin?
-      setflash; flash[:notice] = 'Please log out of your admin account first!'
+      flash[:notice] = 'Please log out of your admin account first!'
       redirect_to root_path
     end
   end
@@ -208,7 +224,7 @@ public
   end
 
   def not_allowed(fallback=nil)
-    setflash; flash[:error] = ts("Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
   
@@ -241,7 +257,7 @@ public
   before_filter :set_media
   def set_media
     uncategorized = Media.uncategorized
-    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
   end
 
   ### GLOBALIZATION ###
@@ -310,9 +326,9 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        setflash; flash[:error] = t('suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
+        flash[:error] = t('suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
      else
-        setflash; flash[:error] = t('ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
+        flash[:error] = t('ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
      end
       redirect_to current_user
     end
@@ -352,7 +368,7 @@ public
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
     if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
-      setflash; flash[:error] = "Wrangling is disabled at the moment. Please check back later."
+      flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
