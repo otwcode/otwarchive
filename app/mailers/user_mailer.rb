@@ -10,6 +10,7 @@ class UserMailer < BulletproofMailer::Base
   helper_method :logged_in_as_admin?
 
   helper :application
+  helper :mailer
   helper :tags
   helper :works
   helper :users
@@ -17,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
@@ -44,23 +45,17 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author_id, claimed_work_ids)
-    external_author = ExternalAuthor.find(external_author_id)
-    @external_email = external_author.email
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
+    if is_user
+      creator = User.find(creator_id)
+    else
+      creator = ExternalAuthor.find(creator_id)
+    end
+    @external_email = creator.email
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
-      :to => external_author.user.email,
+      :to => creator.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
-    )
-  end
-
-  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
-    user = User.find(user_id)
-    @subscription = Subscription.find(subscription_id)
-    @creation = creation_class_name.constantize.find(creation_id)
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{@subscription.subject_text(@creation)}"
     )
   end
 
@@ -106,6 +101,17 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  # Emails a user to say that their request for invitation codes has been declined
+  def invite_request_declined(user_id, total, reason)
+    @user = User.find(user_id)
+    @total = total
+    @reason = reason
+    mail(
+      :to => @user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+    )
+  end
+
   # Sends an admin message to a user
   def archive_notification(admin_login, user_id, subject, message)
     @user = User.find(user_id)
@@ -113,7 +119,7 @@ class UserMailer < BulletproofMailer::Base
     @admin_login = admin_login
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message #{subject}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
     )
   end
 
@@ -130,6 +136,15 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @collection.get_maintainers_email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+    )
+  end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
@@ -222,7 +237,7 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
@@ -264,7 +279,24 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+    )
+  end
+
+  # Sends email to authors when a creation is deleted by an Admin
+  # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
+  # TODO refactor to make it asynchronous by passing the content in the method
+  def admin_deleted_work_notification(user, work)
+    @user = user
+    @work = work
+    work_copy = generate_attachment_content_from_work(work)
+    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
+    attachments["#{filename}.txt"] = {:content => work_copy}
+    attachments["#{filename}.html"] = {:content => work_copy}
+
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
     )
   end
   
@@ -278,7 +310,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 
@@ -292,17 +324,18 @@ class UserMailer < BulletproofMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_SHORT_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
-  def abuse_report(report_id)
-    report = AbuseReport.find(report_id)
-    @url = report.url
-    @comment = report.comment
+  def abuse_report(abuse_report_id)
+    abuse_report = AbuseReport.find(abuse_report_id)
+    @email = abuse_report.email
+    @url = abuse_report.url
+    @comment = abuse_report.comment
     mail(
-      :to => report.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
+        :to => abuse_report.email,
+        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

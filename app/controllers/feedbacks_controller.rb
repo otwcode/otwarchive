@@ -18,7 +18,7 @@ class FeedbacksController < ApplicationController
       if @feedback.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
+        if ArchiveConfig.PERFORM_DELIVERIES == true && %w(staging production).include?(Rails.env)
           # For some reason it won't let me move use and password into the config :(
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => ArchiveConfig.BUGS_USER, :password => ArchiveConfig.BUGS_PASSWORD)
           site['/projects/4911/bugs'].post build_post_info(@feedback), :content_type => 'application/xml', :accept => 'application/xml'
@@ -29,10 +29,10 @@ class FeedbacksController < ApplicationController
         if !@feedback.email.blank?
           UserMailer.feedback(@feedback.id).deliver
         end
-        setflash; flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
+        flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_back_or_default(root_path) }
       else
-        setflash; flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
+        flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
         format.html { render :action => "new" }
       end
     end

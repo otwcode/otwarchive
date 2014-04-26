@@ -2,6 +2,48 @@
 
 /*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
 
+#header {
+  z-index: 200;
+  zoom: 1;
+}
+
+#header .logo {
+  float: none;
+}
+
+#header .navigation .dropdown, #header .navigation .dropdown .menu li {
+  border: none;
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#header .primary li:first-child {
+  margin-left: 0;
+}
+
+#header #greeting .navigation .dropdown:hover .menu, #header #greeting .open .menu {
+  left: auto;
+  right: 0;
+  top: 1.715em;
+}
+
+#header .navigation .dropdown:hover .menu, #header .open .menu {
+  position: absolute;
+  top: 2.13em;
+  left: 0;
+}
+
+#header .navigation .dropdown .menu li {
+  border-bottom: 1px solid #888;
+  float: none;
+}
+
+#main {
+  z-index: 198;
+}
+
 /*transparency*/
 
 ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
@@ -16,9 +58,7 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
 
 /*margin quirk reset*/
 
-#header fieldset {
-  margin-bottom: 0.643em;
-}
+
 
 /* scrolling listbox list item containment */
 

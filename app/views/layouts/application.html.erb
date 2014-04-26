@@ -22,8 +22,8 @@
         <% if defined?(@page_subtitle) %>
           <%= @page_subtitle %>
         <% else %>
-          <%= controller.action_name=="index" ? "" : controller.action_name.humanize.titleize %>
-          <%= controller.action_name=="index" ? controller.controller_name.humanize.titleize : controller.controller_name.singularize.humanize.titleize %>
+          <%= controller.action_name=="index" ? "" : process_title(controller.action_name) %>
+          <%= controller.action_name=="index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>
         <% end %>
         |
         <%= ArchiveConfig.APP_NAME  %>
@@ -61,5 +61,6 @@
       </div>
       <%= render :partial => 'layouts/footer' %>
     </div>
+    <%= render :partial => 'layouts/javascripts' %>
   </body>
 </html>

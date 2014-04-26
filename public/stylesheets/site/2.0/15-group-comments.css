@@ -32,6 +32,11 @@ div.comment, li.comment {
   border-bottom: 5px solid #ddd;
 }
 
+.comment .icon .anonymous {
+  background: url("/images/imageset.png") no-repeat 0px -635px;
+  display: block;
+}
+
 .comment .icon .visitor {
   background: url("/images/imageset.png") no-repeat 0px -75px;
   display: block;

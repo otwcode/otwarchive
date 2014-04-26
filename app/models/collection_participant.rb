@@ -10,18 +10,18 @@ class CollectionParticipant < ActiveRecord::Base
   MEMBER = PARTICIPANT_ROLES[3]
   INVITED = PARTICIPANT_ROLES[4]
   MAINTAINER_ROLES = [PARTICIPANT_ROLES[1], PARTICIPANT_ROLES[2]]
-  PARTICIPANT_ROLE_OPTIONS = [ [t('collection_participant.none', :default => "None"), NONE],
-                         [t('collection_participant.none', :default => "Invited"), INVITED],
-                         [t('collection_participant.member', :default => "Member"), MEMBER],
-                         [t('collection_participant.moderator', :default => "Moderator"), MODERATOR],
-                         [t('collection_participant.owner', :default => "Owner"), OWNER] ]
+  PARTICIPANT_ROLE_OPTIONS = [ [ts("None"), NONE],
+                         [ts("Invited"), INVITED],
+                         [ts("Member"), MEMBER],
+                         [ts("Moderator"), MODERATOR],
+                         [ts("Owner"), OWNER] ]
   
   validates_uniqueness_of :pseud_id, :scope => [:collection_id], 
-    :message => t('collection_participant.not_unique', :default => "That person appears to already be a participant in that collection.")
+    :message => ts("That person appears to already be a participant in that collection.")
 
   validates_presence_of :participant_role
   validates_inclusion_of :participant_role, :in => PARTICIPANT_ROLES,
-    :message => t('collection.item.invalid_type', :default => "That is not a valid participant role.")
+    :message => ts("That is not a valid participant role.")
 
   scope :for_user, lambda {|user|
     select("DISTINCT collection_participants.*").

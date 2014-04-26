@@ -1,45 +1,51 @@
 <!-- BEGIN footer -->
 <div id="footer" role="contentinfo" class="region">
-	<h3 class="landmark heading">Footer</h3>
-  <div id="globalize"><!-- locales_menu --></div>
-	<p class="beta"><span class="landmark"><abbr title="Archive Of Our Own">AO3</abbr> Beta</span></p>
-
-  <%= yield :footer_js %>
-
+	<h3 class="landmark heading"><%= ts('Footer') %></h3>
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
-      <li>
-        <a href="#" class="skin_chooser_open"><%= ts("Choose Skin") %> &#8595;</a>
-        <a href="#" class="skin_chooser_close"><%= ts("Close") %> &#8593;</a>
-        <ul id="skin_chooser" class="toggled secondary">
-          <li><%= link_to ts("Default"), unset_skins_path %></li>
-          <% Skin.in_chooser.order(:title).each do |s| %>
-            <li><%= link_to s.title, set_skin_path(s) %></li>
-          <% end %>
+      <li class="module group">
+        <h4 class="heading"><%= ts('Customize') %></h4>
+        <ul class="menu">
+          <li aria-haspopup="true">
+            <a href="#"><%= ts("Choose Skin") %></a>
+            <ul id="skin_chooser" class="expandable secondary">
+              <li><%= link_to ts("Default"), unset_skins_path %></li>
+              <% Skin.in_chooser.order(:title).each do |s| %>
+                <li><%= link_to s.title, set_skin_path(s) %></li>
+              <% end %>
+            </ul> 
+          </li>
         </ul>
-        &#8212; 
       </li>
     <% end %>
-    <li><%= link_to "Terms of Service", tos_path %></li>
-    <li>&#8212; <%= link_to "Site Map", site_map_path %></li>
-    <li>&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %></li>
-    <li>&#8212; <%= link_to 'Support and Feedback', new_feedback_report_path %></li>
-    <li>&#8212; <%= link_to 'Donate/Volunteer', donate_path %></li>
-    <li>&#8212; <%= link_to 'FAQ', archive_faqs_path %></li>
-    <li>&#8212; <%= link_to 'Known Issues', known_issues_path %></li>
-    <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
-      <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
-    <% end %>
-    <% if logged_in? && permit?("opendoors") %>
-      <li>&#8212; <%= link_to 'Open Doors', opendoors_tools_path %></li>
-    <% end %>    
-    <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
-      <li>&#8212; <%= link_to 'Devmode', devmode_path %></li>
-    <% end %>
-    <li>&#8212; <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('.layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
-    <% unless ArchiveConfig.REVISION.blank? %>
-      <li>&#8212; <%= link_to ts('otwarchive %{rev_number}', :rev_number => ArchiveConfig.REVISION), "https://github.com/otwcode/otwarchive/commits/#{ArchiveConfig.REVISION}" %></li>
-    <% end %>
+    <li class="module group">
+      <h4 class="heading"><%= ts('About the Archive') %></h4>
+      <ul class="menu">
+        <li><%= link_to ts('Site Map'), site_map_path %></li>
+        <li><%= link_to ts('Diversity Statement'), diversity_path %></li>
+        <li><%= link_to ts('Terms of Service'), tos_path %></li>
+      </ul>
+    </li>
+    <li class="module group">
+      <h4 class="heading"><%= ts('Contact Us') %></h4>
+      <ul class="menu">
+        <li><%= link_to ts('Report Abuse'), new_abuse_report_path %></li>
+        <li><%= link_to ts('Technical Support and Feedback'), new_feedback_report_path %></li>
+      </ul>
+    </li>
+    <li class="module group">
+      <h4 class="heading"><%= ts('Development') %></h4>
+      <ul class="menu">
+        <% unless ArchiveConfig.REVISION.blank? %>
+          <li><%= link_to ts('otwarchive %{rev_number}', :rev_number => ArchiveConfig.REVISION), "https://github.com/otwcode/otwarchive/commits/#{ArchiveConfig.REVISION}" %></li>
+        <% end %>
+        <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
+          <li><%= link_to 'Devmode', devmode_path %></li>
+        <% end %>
+        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
+        <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="<%= ts('View License') %>">GPL/CC</a> <%= ts('by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
+      </ul>
+    </li>
   </ul>
 </div>
 <!-- END footer -->

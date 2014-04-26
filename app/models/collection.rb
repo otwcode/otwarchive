@@ -1,14 +1,16 @@
 class Collection < ActiveRecord::Base
+  
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
   has_attached_file :icon,
   :styles => { :standard => "100x100>" },
   :url => "/system/:class/:attachment/:id/:style/:basename.:extension",
-  :path => Rails.env.production? ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-  :storage => Rails.env.production? ? :s3 : :filesystem,
+  :path => %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
+  :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
   :s3_credentials => "#{Rails.root}/config/s3.yml",
-  :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+  :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
   :default_url => "/images/skins/iconsets/default/icon_collection.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
@@ -128,7 +130,7 @@ class Collection < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => ts('must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
@@ -150,13 +152,18 @@ class Collection < ActiveRecord::Base
       title.match(/\,/)
   end
 
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
-  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("Not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("Only gif, jpg, png files allowed.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("is not a valid URL.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("can only point to a gif, jpg, or png file.")
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
@@ -165,8 +172,16 @@ class Collection < ActiveRecord::Base
   scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
+  scope :no_challenge, where(challenge_type: nil)
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
+
+  before_validation :cleanup_url
+  def cleanup_url
+    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+  end
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
@@ -260,9 +275,15 @@ class Collection < ActiveRecord::Base
   def all_participants
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
-
+  
+  def all_items
+    CollectionItem.where(:collection_id => ([self.id] + self.children.value_of(:id)))
+  end
+  
   def all_approved_works
-    (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
+    work_ids = all_items.where(:item_type => "Work", :user_approval_status => CollectionItem::APPROVED, 
+      :collection_approval_status => CollectionItem::APPROVED).value_of(:item_id)
+    Work.where(:id => work_ids, :posted => true)
   end
 
   def all_approved_works_count
@@ -382,20 +403,20 @@ class Collection < ActiveRecord::Base
   
   def reveal!
     async(:reveal_collection_items)
-    async(:send_reveal_notifications)
   end
 
   def reveal_authors!
     async(:reveal_collection_item_authors)
-    async(:send_author_reveal_notifications)
   end
   
   def reveal_collection_items
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+    send_reveal_notifications
   end
   
   def reveal_collection_item_authors
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
+    send_author_reveal_notifications
   end
   
   def send_reveal_notifications
@@ -422,6 +443,15 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
+    if filters[:challenge_type].present?
+      if filters[:challenge_type] == "gift_exchange"
+        query = query.gift_exchange
+      elsif filters[:challenge_type] == "prompt_meme"
+        query = query.prompt_meme
+      elsif filters[:challenge_type] == "no_challenge"
+        query = query.no_challenge
+      end
+    end
     query = query.order(sort)
 
     if !filters[:fandom].blank?

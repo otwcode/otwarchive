@@ -1,27 +1,21 @@
 <% # expects "work" %>
 
-<% is_unrevealed ||= work.unrevealed? %>
-<% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
-<% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
-  <% if is_unrevealed %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-  <% elsif is_anonymous %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
-  <% end %>
+<% if work.unrevealed? && !is_author_of?(work) %>
+  <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
 <% else %>
 
   <!--title, author, fandom-->
   <div class="header module">
 
     <h4 class="heading" title="title">
-  	  <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
-   		 <%= ts('by') %>
+      <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
+      <%= ts('by') %>
         
       <!-- do not cache -->
       <%= byline(work) %>
 
-<!-- caching -->
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<% #### CACHE show/hide #### %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v2") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
   
@@ -43,7 +37,6 @@
   	<p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
 	  
-	<!-- do not cache -->
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading">Tags</h6>
   <ul class="tags commas">
@@ -70,14 +63,21 @@
   <% end %>
 
   <!--stats-->
+
   <dl class="stats" title="stats">
+    <% if work.language.present? %>
+      <dt><%= ts("Language") %>:</dt>
+      <dd><%= work.language.name %></dd>
+    <% end %>
   	<dt><%= ts('Words') %>:</dt>
   	<dd><%= number_with_delimiter(work.word_count) %></dd>
   	<dt><%= ts('Chapters') %>:</dt>
   	<dd><%= work.chapter_total_display %></dd>
 
 <% end %>
-<!-- end cached section -->
+<% #### END CACHE show/hide %>
+
+<% #### CACHE stats #### %>
 <% cache("#{work.cache_key}/stats", :expires_in => 1.hour) do %>
   <% unless work.approved_collections.empty? %>
     <dt><%= ts('Collections')  %>:</dt>
@@ -90,7 +90,7 @@
                 (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
   <% end %>
   <% if work.all_kudos_count > 0 %>
-    <dt><%= ts('Kudos: ') %></dt>
+    <dt><%= ts('Kudos') %>:</dt>
     <dd><%= link_to work.all_kudos_count.to_s, 
         (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments") : 
           (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
@@ -106,6 +106,8 @@
     <dd><%= work.hits %></dd>
   <% end %>
 <% end %>
+<% #### END CACHE stats #### %>
+
   </dl>
 
 <% end %>

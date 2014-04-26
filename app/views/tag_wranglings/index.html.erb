@@ -4,13 +4,12 @@
 <% unless params[:show] %>
   <h4 class="landmark heading"><%= ts("Notes") %></h4>
   <ul class="notes">
-    <li><%= ts("When users create new tags, they're not 'canonical', or official, and they don't have any associations with other tags.") %></li>
-    <li><%= ts("Use mass wrangling pages to manage new tags as they come in, and to edit multiple tags at once.") %></li> 
-    <li><%= ts("The counts (47) are the number of unwrangled tags in each category.") %></li>
-    <li><%= ts("To associate relationships with characters, first choose a fandom to narrow down the scope. Choose a category to get started.") %></li>
+    <li><%= ts("Make tags canonical according to <a href=\"#{archive_faqs_path + "/31"}\">the wrangling guidelines</a>.".html_safe) %></li>
+    <li><%= ts("For more information on wrangling and volunteer guidelines, see <a href=\"http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee\">the internal OTW wiki</a>. If you have trouble accessing the wiki, or any other questions, please <a href=\"mailto: tagwranglers-staff@transformativeworks.org\">email the wrangling staff</a>.".html_safe) %></li>
   </ul>
+<% end %>
 
-<% end %><!--/descriptions-->
+<!--/descriptions-->
 
 <!--subnav-->
 <!--/subnav-->
@@ -77,22 +76,19 @@
   <caption><%= @tags.first.class.to_s.pluralize %> <%= ts("to be Wrangled") %></caption>
   <colgroup>
     <col class="name" />
-    <col span="4" />
+    <col span="3" />
   </colgroup>
   <thead role="navigation">
     <tr>
       <th scope="col">
-        <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
-      </th>
-      <th scope="col">
-        <%= ts("Mass Wrangle") %>
-     <ul class="actions" role="menu">
-        <li><a id="wrangle_all_select" title="select"><%= ts("All") %></a></li>
-        <li><a id="wrangle_all_deselect" title="select"><%= ts("None") %></a></li>
-      </ul>        
+      	<%= sort_link ts('Tag Name'), :name %>
+	     	<ul class="actions" role="menu">
+        	<li><a id="wrangle_all_select" title="select"><%= ts("All") %></a></li>
+        	<li><a id="wrangle_all_deselect" title="select"><%= ts("None") %></a></li>
+      	</ul>        
       </th>
       <th scope="col" title="sort by">
-        <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
+        <%= sort_link ts('Created'), :created_at, {:sort_default => true} %>
       </th>
       <% if params[:show] == 'character_relationships' %>
         <th scope="col"><%= ts("Characters") %></th>
@@ -112,7 +108,7 @@
   </thead>
   <tfoot>
       <tr>
-        <th scope="row" colspan="5"><%= ts("Action:") %></th>
+        <th scope="row" colspan="4"><%= ts("Action:") %></th>
         <td><span class="submit actions"><%= submit_tag ts("Wrangle") %></span></td>
       </tr>
     </tfoot>
@@ -120,9 +116,9 @@
         <% for tag in @tags %>
         <tr>
           <th scope="row" title="<%= ts("tag") %>">
-            <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
+          	<%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %>
+          	<%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
           </th>
-          <td title="<%= ts("mass wrangle?") %>"><%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %></td>
           <td title="<%= ts("created") %>"><%= l(tag.created_at.to_date) %></td>
           <% if params[:show] == 'character_relationships' %>
           <td title="<%= ts("characters") %>">
@@ -173,22 +169,22 @@
     $j(document).ready(function(){
       $j("#wrangle_all_select").click(function() {
         $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", true);
+            $j(ticky).prop("checked", true);
           });
       });
       $j("#wrangle_all_deselect").click(function() {
         $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", false);
+            $j(ticky).prop("checked", false);
           });
       });
       $j("#canonize_all_select").click(function() {
         $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", true);
+            $j(ticky).prop("checked", true);
           });
       });
       $j("#canonize_all_deselect").click(function() {
         $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", false);
+            $j(ticky).prop("checked", false);
           });
       });
     })

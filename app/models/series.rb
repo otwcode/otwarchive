@@ -18,21 +18,26 @@ class Series < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
     :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   validates_length_of :summary, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
     
   after_save :adjust_restricted
 
@@ -45,17 +50,12 @@ class Series < ActiveRecord::Base
   scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'series.updated_at DESC'}
   scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'series.updated_at DESC'}
   
-  #TODO: figure out why select distinct gets clobbered
   scope :exclude_anonymous, 
-    select("DISTINCT series.*").
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
-           INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
-           LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'").
+           INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`)").
     group("series.id").
-    having("(MAX(collection_items.anonymous) IS NULL OR MAX(collection_items.anonymous) = 0) AND (MAX(collection_items.unrevealed) IS NULL OR MAX(collection_items.unrevealed) = 0)")
+    having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   
-  # Needed to keep the normal pseud.series association from eating the exclude_anonymous selects  
-  # Oct 5 2010 - As of Rails 3, this is no longer needed! -- NN
   scope :for_pseuds, lambda {|pseuds|
     joins("INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')").
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id)) 
@@ -112,19 +112,19 @@ class Series < ActiveRecord::Base
     !self.works.select { |work| work.unrevealed? }.empty?    
   end
   
-	# if the series includes an unrestricted work, restricted should be false
-	# if the series includes no unrestricted works, restricted should be true
-	def adjust_restricted
-		unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
-		  self.restricted = !(self.works.where(:restricted => false).count > 0)
-		  self.save(:validate => false)
-		end
-	end
+  # if the series includes an unrestricted work, restricted should be false
+  # if the series includes no unrestricted works, restricted should be true
+  def adjust_restricted
+    unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
+      self.restricted = !(self.works.where(:restricted => false).count > 0)
+      self.save(:validate => false)
+    end
+  end
 	
-	# Change the positions of the serial works in the series
-	def reorder(positions)
-	  SortableList.new(self.serial_works.in_order).reorder_list(positions)
-	end
+  # Change the positions of the serial works in the series
+  def reorder(positions)
+    SortableList.new(self.serial_works.in_order).reorder_list(positions)
+  end
   
   # return list of pseuds on this series
   def allpseuds

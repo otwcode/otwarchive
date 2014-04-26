@@ -6,7 +6,12 @@
 <ul class="navigation actions" role="navigation">
   <li><%= ts("Sort By") %></li>
   <% if @show_request_fandom_tags %>
-    <li><%= sort_link ts("Fandom"), :fandom %></li>
+    <% @collection.prompts.each do |f| %>
+      <% if f.tag_groups.include?("Fandom") %>
+        <li><%= sort_link ts("Fandom #{@collection.challenge.request_restriction.allowed("fandom")}"), :fandom %></li>
+        <% break %>
+      <% end %>
+    <% end %>
   <% end %>
   <% unless @collection.prompts.where(:anonymous => true).exists? %>
     <li><%= sort_link ts("Prompter"), :prompter %></li>

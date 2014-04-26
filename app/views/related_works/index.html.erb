@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @user %>
-<h2 class="heading"><%= @user.login %>'s Related Works</h2>
+<h2 class="heading"><%= ts("%{user_login}'s Related Works", :user_login => @user.login) %></h2>
 <% end %>
 <!--/descriptions-->
 
@@ -9,7 +9,7 @@
 
 <!--main content-->
 <% unless @translations_of_user.blank? %>  
-  <h3 class="heading">Translations of <%= @user.login %>'s works</h3>
+  <h3 class="heading"><%= ts("Translations of %{user_login}'s works", :user_login => @user.login) %></h3>
   <% # FRONT END!!! 
     # This page is:
     # Foo's Related Works
@@ -19,14 +19,15 @@
     # works by others that inspired foo
     # this should be four listboxes
   %>
-  <table id="translationsofme">
+  <table summary="<%= ts("Translations of %{user_login}'s works, including links to the translation and the original. The languages of both works are listed.", :user_login => @user.login) %><% if current_user == @user %><%= ' ' + ts("Also includes management options.") %><% end %>" id="translationsofme">
+    <caption><%= ts("Translations of %{user_login}'s Works", :user_login => @user.login) %></caption>
     <thead>
       <tr>
-        <th>Translation</th>
-        <th>Original</th>
-        <th>Language</th>
+        <th scope="col"><%= ts("Translation") %></th>
+        <th scope="col"><%= ts("Original") %></th>
+        <th scope="col"><%= ts("Language") %></th>
         <% if current_user == @user %>
-        <th>Approve/remove link</th>
+          <th scope="col"><%= ts("Modify Link") %></th>
         <% end %>
       </tr>
     </thead>
@@ -35,19 +36,21 @@
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? %>
-          <td><%= "A work in an unrevealed challenge" %></td>
+          <td><%= ts("A work in an unrevealed challenge") %></td>
         <% else %>
-          <td><%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></td>
+          <td scope="row"><%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %></td>
           <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
           <td>
-              From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+            <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
           </td>
           <% if current_user == @user %>
-            <% if related_work.reciprocal? %>
-              <td><%= link_to "Remove", related_work %></td>
-            <% else %>
-              <td><%= link_to "Approve", related_work %></td>
-            <% end %>
+            <td>
+              <% if related_work.reciprocal? %>
+                <%= link_to ts("Remove"), related_work %>
+              <% else %>
+                <%= link_to ts("Approve"), related_work %>
+              <% end %>
+            </td>
           <% end %>
         <% end %>
       </tr>
@@ -58,24 +61,36 @@
 <% end %>  
  
 <% unless @translations_by_user.blank? %>  
-  <h3 class="heading">Works translated by <%= @user.login %></h3>
-  <dl class="own translations index group">
+  <h3 class="heading"><%= ts("Works translated by %{user_login}", :user_login => @user.login) %></h3>
+  <table summary="<%= ts("Works %{user_login} has translated, including links to the original and the translation. The languages of both works are listed.", :user_login => @user.login) %><% if current_user == @user %><%= ' ' + ts("Also includes management options.") %><% end %>" id="translationsbyme">
+    <caption><%= ts("Works Translated by %{user_login}", :user_login => @user.login) %></caption>
+    <thead>
+      <tr>
+        <th scope="col"><%= ts("Original") %></th>
+        <th scope="col"><%= ts("Translation") %></th>
+        <th scope="col"><%= ts("Language") %></th>
+        <% if current_user == @user %>
+          <th scope="col"><%= ts("Modify Link") %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
-      <dt>
-        <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-        <%= "A work in an unrevealed or anonymous challenge" %></td>
-        <% else %>
-          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %></td>
-          <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
-          <td>
-            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
-          </td>
-          <% if current_user == @user %>
-          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+        <tr>
+          <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
+            <td><%= ts("A work in an unrevealed or anonymous challenge") %></td>
+          <% else %>
+            <td scope="row"><%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %></td>
+            <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
+            <td>
+              <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
+            </td>
+            <% if current_user == @user %>
+              <td><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+            <% end %>
           <% end %>
-        <% end %>
-      </tr>    
+        </tr>    
       <% end %>
     <% end %>
     </tbody>
@@ -83,32 +98,35 @@
 <% end %>
  
 <% unless @remixes_of_user.blank? %>
-  <h3 class="heading">Works inspired by <%= @user.login %></h3>
-<dl class="inspired index group">
+  <h3 class="heading"><%= ts("Works inspired by %{user_login}", :user_login => @user.login) %></h3>
+  <dl class="inspired index group">
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
-      <dt class="child">
-        <% if related_work.work.unrevealed? %>
-          <%= "A work in an unrevealed challenge" %>
-        <% else %>
-          <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></dt>
-          <dd class="parent">was inspired by <%= link_to related_work.parent.title.html_safe, related_work.parent %>
-          <% if current_user == @user %>
-            <% if related_work.reciprocal? %>
-              <span class="submit actions"><%= link_to "Remove", related_work %></span>
-            <% else %>
-             <span class="submit actions"><%= link_to "Approve", related_work %></span>
+        <dt class="child">
+          <% if related_work.work.unrevealed? %>
+            <%= ts("A work in an unrevealed challenge") %>
+          <% else %>
+            <%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
+          </dt>
+          <dd class="parent"><%= ts("was inspired by ") %><%= link_to related_work.parent.title.html_safe, related_work.parent %>
+            <% if current_user == @user %>
+              <span class="submit actions">
+                <% if related_work.reciprocal? %>
+                  <%= link_to ts("Remove"), related_work %>
+                <% else %>
+                  <%= link_to ts("Approve"), related_work %>
+                <% end %>
+              </span>
             <% end %>
-          <% end %>
+          </dd>
         <% end %>
-      </dd>
       <% end %>
     <% end %>
-</dl>
+  </dl>
 <% end %>  
   
 <% unless @remixes_by_user.blank? %>
-  <h3 class="heading">Works that inspired <%= @user.login %></h3>
+  <h3 class="heading"><%= ts("Works that inspired %{user_login}", :user_login => @user.login) %></h3>
   <dl class="inspired index group">
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>
@@ -119,7 +137,7 @@
             <% elsif related_work.parent.unrevealed? || related_work.parent.anonymous? %>
               <%= ts("A work in an unrevealed or anonymous challenge") %>
             <% else %>
-              <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
+              <%= link_to related_work.parent.title, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>
             <% end %>
           </dt>
  		      <dd class="child">
@@ -130,7 +148,7 @@
               <%= link_to related_work.work.title, related_work.work %>
             <% end %>
             <% if current_user == @user %>
-            <span class="actions" role="button"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
+              <span class="actions" role="button"><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
             <% end %>
           </dd>
         <% end %>

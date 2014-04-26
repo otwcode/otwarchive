@@ -1,151 +1,125 @@
+# BACKGROUND:
+# To describe the idea here -- these are capistrano "recipes" which are a bit like rake tasks
+# You wrap all the fiddly systems scripts and things that you need to do for a deploy into these nice neat little individual tasks
+# and then you can chain the tasks together
+# 
+# when you run "cap deploy:migrate" let's say, all the things you've told to run before or after it go automatically
+# eg this line in deploy/production.rb:
+#    before "deploy:migrate", "production_only:backup_db"
+# says, if I run "cap deploy:migrate production" then before doing any of the actual work of the deploy, 
+# run the task called "production_only:backup_db" which is defined in deploy.rb 
+#
+# namespace :production_only do
+#   # Back up the production database
+#   task :backup_db, :roles => :db do
+#     run "/static/bin/backup_database.sh &"
+#   end
+# end
+#
+# which says, run this script backup_database.sh
+# and run it on the machine that has the ":db" role
+# 
+# The roles are defined in each of deploy/production.rb and deploy/staging.rb, 
+# and can be set differently for whichever system you are deploying to.
+#
+# Several tasks run automatically based on behind-the-scenes magic 
+#
 require './config/boot'
-require 'airbrake/capistrano'
+require 'new_relic/recipes'
 
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
 # deploy to different environments with tags
+require 'capistrano/ext/multistage'
+set :stages, ["staging", "production", "i18n"]
 set :default_stage, "staging"
-require 'capistrano/gitflow_version'
+#require 'capistrano/gitflow_version'
+
+# use rvm
+require "rvm/capistrano"    
+set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//, "")
+set :rvm_type, :user
 
 # user settings
-set :user, "www-data"
+set :user, "ao3app"
 set :auth_methods, "publickey"
 #ssh_options[:verbose] = :debug
 ssh_options[:auth_methods] = %w(publickey)
 set :use_sudo, false
+default_run_options[:shell] = '/bin/bash'
 
 # basic settings
 set :application, "otwarchive"
-set :deploy_to, "/var/www/otwarchive"
+set :deploy_to, "/home/ao3app/app"
 set :keep_releases, 4
 
 set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
 
 # git settings
 set :scm, :git
-set :repository,  "git://github.com/otwcode/otwarchive.git"
+set :repository, "git://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do
-  task :start, :roles => :app do
-    run "/static/bin/unicorns_start.sh"
-  end
-  task :stop, :roles => :app do
-    run "/static/bin/unicorns_stop.sh"
-  end
+  desc "Restart the unicorns"
   task :restart, :roles => :app do
-    run "/static/bin/unicorns_reload.sh"
+    run "/home/ao3app/bin/unicorns_reload"
   end
-  desc "Restart unicorns after gemfile changes."
-  task :hard_restart, :roles => :app do
-    run "/static/bin/unicorns_restart.sh"
+
+  desc "Restart the resque workers"
+  task :restart_workers, :roles => :workers do
+    run "/home/ao3app/bin/workers_reload"
   end
-  namespace :web do
-    desc "Present a maintenance page to visitors."
-    task :disable, :roles => :web do
-      run "mv #{deploy_to}/current/public/nomaintenance.html #{deploy_to}/current/public/maintenance.html 2>/dev/null || true"
-    end
-    desc "Makes the current release web-accessible."
-    task :enable, :roles => :web do
-      run "mv #{deploy_to}/current/public/maintenance.html #{deploy_to}/current/public/nomaintenance.html 2>/dev/null"
-    end
-    desc "Makes the new release web-accessible."
-    task :enable_new, :roles => :web do
-      run "mv #{release_path}/public/maintenance.html #{release_path}/public/nomaintenance.html 2>/dev/null"
-    end
-    desc "Update the web-related whenever tasks"
-    task :update_cron_web, :roles => :web do
-      run "whenever --update-crontab web -f config/schedule_web.rb"
-    end
+
+  desc "Get the config files"
+  task :update_configs, :roles => [ :app , :web ] do
+    run "/home/ao3app/bin/create_links_on_install"
+  end
+
+  desc "Update the web-related whenever tasks"
+  task :update_cron_web, :roles => :web do
+    # run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
+    run "echo cron entries are currently managed by hand"
+  end
+
+  # This should only be one machine 
+  desc "update the crontab for whatever machine should run the scheduled tasks"
+  task :update_cron, :roles => :app, :only => {:primary => true} do
+    # run "bundle exec whenever --update-crontab #{application}"
+    run "echo cron entries are currently managed by hand"
+  end
+
+  # Needs to run on web (front-end) servers, but they must also have rails installed
+  desc "Re-caches the site skins and puts the new versions into the static files area"
+  task :reload_site_skins, :roles => :web do
+    run "cd ~/app/current ; bundle exec rake skins:load_site_skins RAILS_ENV=#{rails_env}"
   end
 end
 
-# our tasks which are not environment specific
-namespace :extras do
-  task :update_revision, {:roles => :backend} do
-    run "/static/bin/fix_revision.sh"
-  end
-  task :reload_site_skins, {:roles => :backend} do
-    run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=production"
-  end
-  task :run_after_tasks, {:roles => :backend} do
-    run "cd #{release_path}; rake After RAILS_ENV=production"
-  end
-  # this actually restarts resque now - not obsolete!
-  task :restart_delayed_jobs, {:roles => :backend} do
-    run "/static/bin/dj_restart.sh"
-  end
-  task :update_cron, {:roles => :backend} do
-    run "whenever --update-crontab #{application}"
-  end
-end
+# ORDER OF EVENTS
+# Calling "cap deploy" runs:
+#   deploy:update which runs:
+#       deploy:update_code
+#       deploy:symlink
+#   deploy:restart
+#
+# Calling "cap deploy:migrations" inserts the task "deploy:migrate" before deploy:symlink 
+#
 
-# our tasks which are staging specific
-namespace :stage_only do
-  task :git_in_home do
-    run "git pull origin master"
-    run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
-  end
-  task :update_public do
-    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
-    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
-    run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
-  end
-  task :update_configs do
-    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
-  end
-  task :reset_db do
-    run "/static/bin/reset_database.sh"
-  end
-  task :notify_testers do
-    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
-  end
-end
+# after and before task triggers that should run on both staging and production
+#before "deploy:migrate", "deploy:web:disable"
+#after "deploy:migrate", "extras:run_after_tasks"
 
-# our tasks which are production specific
-namespace :production_only do
-  task :git_in_home, :roles => [:backend, :search] do
-    run "git pull origin deploy"
-    run "bundle install --quiet"
-#    don't update config files in home. they may have been customized
-#    run "ln -nfs -t config/ /static/config/*"
-  end
-  task :update_public, :roles => [:web, :backend] do
-    run "ln -nfs -t #{release_path}/public/ /static/downloads"
-    run "ln -nfs -t #{release_path}/public/ /static/static"
-    run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
-    run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
-  end
-  task :update_configs, :roles => [:app, :backend] do
-    run "ln -nfs -t #{release_path}/config/ /static/config/*"
-  end
-  task :backup_db, {:roles => :search} do
-    run "/static/bin/backup_database.sh &"
-  end
-  task :update_cron_email, {:roles => :backend} do
-    run "whenever --update-crontab production -f config/schedule_production.rb"
-  end
-  task :update_cron_reindex, {:roles => :search} do
-    run "whenever --update-crontab search -f config/schedule_search.rb"
-  end
-  task :notify_testers do
-    system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
-  end
-end
+#before "deploy:symlink", "deploy:web:enable_new"
+#after "deploy:symlink", "extras:update_revision"
 
-# after and before task triggers
+after "deploy:restart", "deploy:update_cron"
+after "deploy:restart", "deploy:update_cron_web"
+#after "deploy:restart", "extras:restart_delayed_jobs"
+#after "deploy:restart", "deploy:cleanup"
 
-before "deploy:migrate", "deploy:web:disable"
-after "deploy:migrate", "extras:run_after_tasks"
-
-before "deploy:symlink", "deploy:web:enable_new"
-after "deploy:symlink", "extras:update_revision"
-
-after "deploy:restart", "extras:update_cron"
-after "deploy:restart", "deploy:web:update_cron_web"
-after "deploy:restart", "extras:restart_delayed_jobs"
-after "deploy:restart", "deploy:cleanup"
+after "deploy:restart", "deploy:restart_workers"
+after "deploy:symlink", "deploy:update_configs"
+after "deploy:update", "newrelic:notice_deployment"

@@ -17,18 +17,10 @@
 <%= form_for @user, :html => {:id => "user_registration_form"} do |f| %>
   <%= hidden_field_tag :invitation_token, @user.invitation_token %>
  
-  <% if params[:use_openid] && ArchiveConfig.USE_OPENID %>
-    <p class="actions" role="navigation">
-      <%= link_to ts('Sign up using Password'), new_user_path(:invitation_token => @user.invitation_token) %>
-    </p>
-    <%= render :partial => "openid", :locals => {:f => f} %>
-  <% else %>
-
-    <fieldset>
-      <legend><%= ts("User Details") %></legend>
-      <%= render :partial => "passwd", :locals => {:f => f} %>
-    </fieldset>
-  <% end %>
+  <fieldset>
+    <legend><%= ts("User Details") %></legend>
+    <%= render :partial => "passwd", :locals => {:f => f} %>
+  </fieldset>
   
   <fieldset>
     <legend><%= ts("Legal Agreements") %></legend>

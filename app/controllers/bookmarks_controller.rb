@@ -4,9 +4,9 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
   before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
   # get the parent
   def load_bookmarkable
@@ -72,7 +72,9 @@ class BookmarksController < ApplicationController
         end
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
-          Bookmark.latest.to_a
+          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          results = search.search_results
+          @bookmarks = search.search_results.to_a
         end
       else
         @bookmarks = Bookmark.latest.to_a
@@ -124,7 +126,7 @@ class BookmarksController < ApplicationController
        render :new and return
     end
     if @bookmarkable.save && @bookmark.save
-      setflash; flash[:notice] = ts('Bookmark was successfully created.')
+      flash[:notice] = ts('Bookmark was successfully created.')
       redirect_to(@bookmark) and return
     end 
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
@@ -135,7 +137,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     if @bookmark.update_attributes(params[:bookmark])
-      setflash; flash[:notice] = ts("Bookmark was successfully updated.")
+      flash[:notice] = ts("Bookmark was successfully updated.")
       redirect_to(@bookmark) 
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -143,11 +145,14 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+
   # DELETE /bookmarks/1
   # DELETE /bookmarks/1.xml
   def destroy
     @bookmark.destroy
-    setflash; flash[:notice] = ts("Bookmark was successfully deleted.")
+    flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
   end
 
@@ -181,6 +186,9 @@ class BookmarksController < ApplicationController
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end
       unless @tag.canonical?
         if @tag.merger.present?
           redirect_to tag_bookmarks_path(@tag.merger) and return

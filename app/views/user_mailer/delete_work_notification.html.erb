@@ -1,3 +1,9 @@
-<p><%=h "Your story" %> <cite><%=h @work.title.html_safe %></cite> <%=h "was deleted at your request." %></p>
-<p><%=h "If you have questions, please contact" %> <%= "Support (http://archiveofourown.org/support)" %>.</p>
-<p><%=h "Attached is a copy of your work for your reference." %></p>
+<% content_for :message do %>
+  <p>Dear <%= @user.default_pseud.byline %>,</p>
+
+  <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> was deleted at <%= (@work.pseuds.count > 1 && @user != User.current_user) ? (ts("the request of ") + style_pseud_link(User.current_user.default_pseud)).html_safe : "your request" %>.</p>
+  
+  <p>If you have questions, please <%= support_link("contact Support") %>.</p>  
+  
+  <p>Attached is a copy of your work for your reference.</p>
+<% end %>

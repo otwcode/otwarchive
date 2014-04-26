@@ -1,0 +1,11 @@
+<% content_for :message do %>
+The following abuse report has been sent to the Abuse team:
+  
+URL of the page the abuse is on: <%= @url %>
+  
+Description of the abuse:
+<%= text_divider %>
+
+<%= to_plain_text(@comment) %><% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

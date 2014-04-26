@@ -1,7 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">Request an invite</h2>
 
-<p>To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently <%= InviteRequest.count %> people on the waiting list.</p>
+<p><%= ts("To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
+  %{count} people on the waiting list.", :count => InviteRequest.count) %>
+  <% if AdminSetting.invite_from_queue_enabled? %>
+    <%= ts("We are sending out %{invites} invitations per day.", :invites => AdminSetting.invite_from_queue_number) %>
+  <% end %></p>
 <!--/descriptions-->
 
 <!--main content-->
@@ -15,9 +19,10 @@
       <p>
         <%= f.label :email %>
         <%= f.text_field :email %>
-      <span class="submit actions">
-        <%= f.submit 'Add me to the list' %>
-      <span></p>
+        <span class="submit actions">
+          <%= f.submit ts("Add me to the list") %>
+        </span>
+      </p>
     </fieldset>
   <% end %>
 <% end %>
@@ -30,7 +35,8 @@
     <%= label_tag :email %>
     <%= text_field_tag :email %>
     <span class="submit actions">
-    <%= submit_tag 'Go' %></span>
+      <%= submit_tag 'Go' %>
+    </span>
   </p>
 </fieldset>
 <% end %>

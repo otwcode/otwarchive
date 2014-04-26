@@ -43,10 +43,10 @@ class Skin < ActiveRecord::Base
   has_attached_file :icon,
                     :styles => { :standard => "100x100>" },
                     :url => "/system/:class/:attachment/:id/:style/:basename.:extension",
-                    :path => Rails.env.production? ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-                    :storage => Rails.env.production? ? :s3 : :filesystem,
+                    :path => %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
+                    :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
                     :s3_credentials => "#{Rails.root}/config/s3.yml",
-                    :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+                    :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
                     :default_url => "/images/skins/iconsets/default/icon_skins.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
@@ -116,19 +116,7 @@ class Skin < ActiveRecord::Base
   validate :clean_css
   def clean_css
     return if self.css.blank?
-    scanner = StringScanner.new(self.css)
-    if !scanner.exist?(/\/\*/)
-      # no comments, clean the whole thing
-      self.css = clean_css_code(self.css)
-    else
-      clean_code = []
-      while (scanner.exist?(/\/\*/))
-        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/).chomp('/*')))
-        clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
-      end
-      clean_code << (clean = clean_css_code(scanner.rest))
-      self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
-    end
+    self.css = clean_css_code(self.css)
   end
 
   scope :public_skins, where(:public => true)
@@ -458,7 +446,7 @@ class Skin < ActiveRecord::Base
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
         end
-        if Rails.env.production?
+        if %w(staging production).include? Rails.env
           top_skin.cache!
         end
       end

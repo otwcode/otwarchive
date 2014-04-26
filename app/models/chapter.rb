@@ -160,7 +160,7 @@ class Chapter < ActiveRecord::Base
   def validate_authors
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
-      errors.add(:base, t('needs_author', :default => "Chapter must have at least one author."))
+      errors.add(:base, ts("Chapter must have at least one author."))
       return false
     end
   end

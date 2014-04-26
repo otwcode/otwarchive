@@ -24,21 +24,5 @@ class UserTest < ActiveSupport::TestCase
       should_validate_presence_of :password_confirmation, :message => /again/
       should_ensure_length_in_range :password, (6..40), :short_message => /too short/, :long_message => /too long/
     end
-    context "without a password" do
-      setup do
-        @url = random_url
-        assert @user = create_user(:password => nil, :password_confirmation => nil, :identity_url => @url)
-      end
-      should "require an identity_url" do
-        @user.identity_url=""
-        assert !@user.valid?
-        assert @user.errors.on("identity_url")
-      end
-      should "require a unique identity_url" do
-        user2 = new_user(:password => nil, :password_confirmation => nil, :identity_url => @url)
-        assert !user2.valid?
-        assert user2.errors.on("identity_url")
-      end
-    end
   end
 end

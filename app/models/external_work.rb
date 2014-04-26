@@ -14,13 +14,48 @@ class ExternalWork < ActiveRecord::Base
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating', :before_remove => :remove_filter_tagging
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category', :before_remove => :remove_filter_tagging
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning', :before_remove => :remove_filter_tagging
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom', :before_remove => :remove_filter_tagging
-  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship', :before_remove => :remove_filter_tagging
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character', :before_remove => :remove_filter_tagging
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform', :before_remove => :remove_filter_tagging
+  has_many :ratings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Rating'"
+  has_many :categories, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Category'"
+  has_many :warnings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Warning'"
+  has_many :fandoms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Fandom'"
+  has_many :relationships, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Relationship'"
+  has_many :characters, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Character'"
+  has_many :freeforms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Freeform'"
 
   belongs_to :language
   
@@ -30,16 +65,16 @@ class ExternalWork < ActiveRecord::Base
   
   validates_presence_of :title
   validates_length_of :title, :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title, :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
       
   validates_presence_of :author
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
-    :too_long=> t('author_too_long', :default => "must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
 
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them

@@ -32,6 +32,8 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
   background: url("/images/ao3_logos/sadface.png") top right no-repeat;
   border: 0;
   color: #222;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 #main.slow {

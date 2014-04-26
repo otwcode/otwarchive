@@ -1,35 +1,74 @@
-<% @seen = {} %>
+<% content_for :message do %>
+  <% @seen = {} %>
+  <% @seen_summary = {} %>
+  <% @creations.each_with_index do |creation, index| %>
 
-<% @creations.each do |creation| %>
+    <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
+    <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
 
-  <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-  <% if creation.is_a?(Chapter) %>
-  
-    <p>
-      <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted 
-      <%= link_to @subscription.chapter_name(creation), work_chapter_url(this_work, creation) %> of 
-      <%= link_to this_work.title, work_url(this_work) %> at 
-      <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>.
-    </p>
-    
-    <% unless creation.summary.blank? %>
-      <p>Chapter Summary:</p> <%= raw sanitize_field(creation, :summary) %>
+    <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> posted a
+    <% if creation.is_a?(Work) %>
+      <%= this_work.backdate ? "backdated" : "new" %> work:
+    <% else %>
+      new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
     <% end %>
 
-  <% elsif creation.is_a?(Work) %>
-
     <p>
-      <%= creation.pseuds.map{|p| p.byline}.to_sentence %> posted a <%= this_work.backdate ? "backdated" : "new" %> work:
+      <i>
+        <%= style_bold(creation.is_a?(Work) ? work_link :
+          style_link(@subscription.chapter_name(creation), work_chapter_url(this_work, creation))) %>
+      </i> (<%= creation.word_count%> words)
+
+      <% unless @seen[this_work.id] %>
+        <br>
+
+        by <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %>
+      <% end %>
     </p>
 
-  <% end %>
+    <% if creation.summary.present? && creation.is_a?(Chapter) %>
+      <%= style_bold("Chapter Summary:") %> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
+    <% end %>
 
-  <% unless @seen[this_work.id] %>
-    <%= raw simple_format(get_embed_link(this_work)) %>
-    <% @seen[this_work.id] = true %>
-  <% end %>
+    <% unless @seen[this_work.id] %>
+      <p>
+        <%= style_bold("Chapters:") %> <%= this_work.chapter_total_display %>
+        <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
+        <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
+        <br><%= style_bold("Warnings:") %> <%= this_work.warning_string %>
+        <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
+          <br><%= style_bold("Relationships:") %> <%= this_work.relationship_string %>
+        <% end %>
+        <% if this_work.character_string && !this_work.character_string.blank? %>
+          <br><%= style_bold("Characters:") %> <%= this_work.character_string %>
+        <% end %>
+        <% if this_work.freeform_string && !this_work.freeform_string.blank? %>
+          <br><%= style_bold("Additional Tags:") %> <%= this_work.freeform_string %>
+        <% end %>
+        <% if this_work.series.count > 0 %>
+          <br><%= style_bold("Series:") %> <%= series_list_for_feeds(this_work).html_safe %>
+        <% end %>
+      </p>
 
+      <% @seen[this_work.id] = true %>
+    <% end %>
+
+    <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
+        <p>
+          <%= style_bold("Summary:") %>
+          <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
+        </p>
+        <% @seen_summary[this_work.id] = true %>
+    <% end %>
+
+    <% if (index < @creations.length-1) %>
+      <%= styled_divider %>
+    <% end %>
+
+  <% end %>
 <% end %>
 
 
-<p>You're receiving this email because of your subscription to <%= link_to @subscription.name, polymorphic_url(@subscription.subscribable) %>. Follow the link to unsubscribe if you no longer want to receive updates.</p>
+<% content_for :footer_note do %>
+  You're receiving this email because you've subscribed to <%= style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable)) %>. Follow the link to unsubscribe if you no longer wish to receive updates.
+<% end %>

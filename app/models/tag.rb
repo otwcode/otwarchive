@@ -2,6 +2,8 @@ class Tag < ActiveRecord::Base
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include StringCleaner
+  include WorksOwner
 
   NAME = "Tag"
 
@@ -24,9 +26,13 @@ class Tag < ActiveRecord::Base
   def commentable_name
     self.name
   end
+
+  # For a tag, the commentable owners are the wranglers of the fandom(s)
   def commentable_owners
+    # if the tag is a fandom, grab its wranglers or the wranglers of its canonical merger
     if self.is_a?(Fandom)
-      self.wranglers
+      self.canonical? ? self.wranglers : (self.merger_id ? self.merger.wranglers : [])
+    # if the tag is any other tag, try to grab all the wranglers of all its parent fandoms, if applicable
     else
       begin
         self.fandoms.collect {|f| f.wranglers}.compact.flatten.uniq
@@ -88,12 +94,24 @@ class Tag < ActiveRecord::Base
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+
+  validates_presence_of :sortable_name
     
   validate :unwrangleable_status
   def unwrangleable_status
     if unwrangleable? && (canonical? || merger_id.present?)
       self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
     end
+
+    if unwrangleable? && is_a?(UnsortedTag)
+      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
+    end
+  end
+
+  before_update :remove_index_for_type_change, if: :type_changed?
+  def remove_index_for_type_change
+    @destroyed = true
+    tire.update_index
   end
 
   before_validation :check_synonym
@@ -121,6 +139,13 @@ class Tag < ActiveRecord::Base
   before_validation :squish_name
   def squish_name
     self.name = name.squish if self.name
+  end
+
+  before_validation :set_sortable_name
+  def set_sortable_name
+    if sortable_name.blank?
+      self.sortable_name = remove_articles_from_string(self.name)
+    end
   end
 
   before_save :set_last_wrangler
@@ -152,6 +177,7 @@ class Tag < ActiveRecord::Base
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
   scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
   scope :unwrangleable, where(:unwrangleable => true)
 
@@ -183,7 +209,7 @@ class Tag < ActiveRecord::Base
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
   scope :by_popularity, order('taggings_count DESC')
-  scope :by_name, order('name ASC')
+  scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
@@ -280,20 +306,27 @@ class Tag < ActiveRecord::Base
     where('children_tags.id IN (?)', relationships.collect(&:id))
   }
 
-  scope :in_challenge, lambda {|collection|
-    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
-           INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
-           INNER JOIN prompts ON (prompts.tag_set_id = tag_sets.id OR prompts.optional_tag_set_id = tag_sets.id)
-           INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)").
-    where("challenge_signups.collection_id = ?", collection.id)
-  }
+  # Get the tags for a challenge's signups, checking both the main tag set
+  # and the optional tag set for each prompt
+  def self.in_challenge(collection, prompt_type=nil)
+    ['', 'optional_'].map { |tag_set_type|
+      join = "INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
+        INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
+        INNER JOIN prompts ON (prompts.#{tag_set_type}tag_set_id = tag_sets.id)
+        INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)"
+
+      tags = self.joins(join).where("challenge_signups.collection_id = ?", collection.id)
+      tags = tags.where("prompts.type = ?", prompt_type) if prompt_type.present?
+      tags
+    }.flatten.compact.uniq
+  end
 
   scope :requested_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Request'")
+    in_challenge(collection, 'Request')
   }
 
   scope :offered_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Offer'")
+    in_challenge(collection, 'Offer')
   }
   
   # Resque
@@ -306,7 +339,11 @@ class Tag < ActiveRecord::Base
 
   # We can pass this any Tag instance method that we want to run later.
   def async(method, *args)
-    Resque.enqueue(Tag, id, method, *args)
+    if Rails.env.test?
+      send(method, *args)
+    else
+      Resque.enqueue(Tag, id, method, *args)
+    end
   end
 
   # Class methods
@@ -407,7 +444,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -417,7 +454,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -426,7 +463,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
       end
     end
   end
@@ -453,10 +490,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -528,6 +565,13 @@ class Tag < ActiveRecord::Base
     self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
   end
 
+  # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
+  def recategorize(new_type)
+    self.update_attribute(:type, new_type)
+    # return a new instance of the tag, with the correct class
+    Tag.find(self.id)
+  end
+
   #### FILTERING ####
 
   # Usage is either:
@@ -560,7 +604,7 @@ class Tag < ActiveRecord::Base
     if work_ids.empty? 
       work_ids = all_filtered_work_ids
     end
-    RedisSearchIndexQueue.queue_works(work_ids)
+    RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
   end
 
   # In the case of works, the filter_taggings table already collects all the things tagged
@@ -577,7 +621,7 @@ class Tag < ActiveRecord::Base
     if bookmark_ids.empty?
       bookmark_ids = all_bookmark_ids
     end
-    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
+    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
   end
   
   # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
@@ -749,7 +793,7 @@ class Tag < ActiveRecord::Base
               # instead we add the new merger of self (if there is one) as the relevant one to check
               remaining_tags += [self.merger] unless self.merger.nil?
               if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-                work.filters.delete(filter_to_remove)
+                work.filter_taggings.where(filter_id: filter_to_remove).destroy_all
                 filter_to_remove.reset_filter_count
               else # we should keep filter_to_remove, but check if inheritence needs to be updated
                 direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
@@ -775,7 +819,7 @@ class Tag < ActiveRecord::Base
     self.filtered_works.each do |work|        
       unless work.filters.include?(meta_tag)
         work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
-        RedisSearchIndexQueue.reindex(work)
+        RedisSearchIndexQueue.reindex(work, priority: :low)
       end
     end
   end
@@ -901,12 +945,13 @@ class Tag < ActiveRecord::Base
       to_remove.each do |tag|
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filters.delete(tag)
-            RedisSearchIndexQueue.reindex(work)
+            work.filter_taggings.where(filter_id: tag.id).destroy_all
+            RedisSearchIndexQueue.reindex(work, priority: :low)
           end
         end
       end
     end
+    meta_tag.update_works_index_timestamp!
   end
 
   def remove_sub_filters(sub_tag)
@@ -989,7 +1034,7 @@ class Tag < ActiveRecord::Base
         if new_merger && new_merger == self
           self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
         elsif new_merger && !new_merger.canonical?
-          self.errors.add(:base, new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+          self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
         elsif new_merger && new_merger.class != self.class
           self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
         elsif !new_merger
