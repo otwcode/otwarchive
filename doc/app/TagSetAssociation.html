@@ -708,17 +708,17 @@
     <span class="ruby-identifier">combo_key2</span> = <span class="ruby-identifier">combo_key</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;2&quot;</span>
     <span class="ruby-identifier">combo_key3</span> = <span class="ruby-identifier">combo_key</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;3&quot;</span>
     <span class="ruby-identifier">keys_for_intersect</span> = <span class="ruby-identifier">tag_sets</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">set</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;autocomplete_tagset_#{tag_type}_#{set}&quot;</span>}.<span class="ruby-identifier">flatten</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key2</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key3</span>, <span class="ruby-identifier">keys_for_intersect</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zinterstore</span>(<span class="ruby-identifier">combo_key</span>, [<span class="ruby-identifier">combo_key2</span>, <span class="ruby-identifier">combo_key3</span>], <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key2</span>, <span class="ruby-value">1</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key3</span>, <span class="ruby-value">1</span>
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key2</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key3</span>, <span class="ruby-identifier">keys_for_intersect</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zinterstore</span>(<span class="ruby-identifier">combo_key</span>, [<span class="ruby-identifier">combo_key2</span>, <span class="ruby-identifier">combo_key3</span>], <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key2</span>, <span class="ruby-value">1</span>
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key3</span>, <span class="ruby-value">1</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
   <span class="ruby-keyword">end</span>
   
-  <span class="ruby-identifier">results</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrevrange</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-value">0</span>, <span class="ruby-value">-1</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key</span>, <span class="ruby-value">1</span>
+  <span class="ruby-identifier">results</span> = <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrevrange</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-value">0</span>, <span class="ruby-value">-1</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key</span>, <span class="ruby-value">1</span>
   
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">search_param</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">search_regex</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">get_search_regex</span>(<span class="ruby-identifier">search_param</span>)
@@ -922,7 +922,7 @@
             <pre><span class="ruby-comment"># File app/models/tag_set_association.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_autocomplete</span>(<span class="ruby-identifier">score</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">score</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">autocomplete_score</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}&quot;</span>, <span class="ruby-identifier">score</span>, <span class="ruby-identifier">autocomplete_value</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}&quot;</span>, <span class="ruby-identifier">score</span>, <span class="ruby-identifier">autocomplete_value</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- add_to_autocomplete-source -->
           
@@ -1167,7 +1167,7 @@
           <div class="method-source-code" id="remove_from_autocomplete-source">
             <pre><span class="ruby-comment"># File app/models/tag_set_association.rb, line 95</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_from_autocomplete</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}&quot;</span>, <span class="ruby-identifier">autocomplete_value</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}&quot;</span>, <span class="ruby-identifier">autocomplete_value</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- remove_from_autocomplete-source -->
           
