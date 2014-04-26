@@ -57,7 +57,6 @@ Feature: Admin tasks
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
     When I follow "New FAQ Section"
-      And show me the page
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
       And I fill in "title" with "New subsection"
     When I press "Post"
@@ -308,7 +307,7 @@ Feature: Admin tasks
     And I fill in "admin_session_password" with "password"
     And I press "Log in as admin"
     And I follow "Settings"
-    And I check "Account Creation Enabled"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
     And I uncheck "Account Creation requires invitation"
     And I uncheck "admin_setting_invite_from_queue_enabled"
     And I press "Update"
@@ -327,7 +326,7 @@ Feature: Admin tasks
     And I fill in "admin_session_password" with "password"
     And I press "Log in as admin"
     And I follow "Settings"
-    And I uncheck "Account Creation Enabled"
+    And I uncheck "Account creation enabled (People can create accounts without an invitation)"
     And I press "Update"
   When I am logged out as an admin
     And I go to account creation page
@@ -343,7 +342,7 @@ Feature: Admin tasks
     And I fill in "admin_session_password" with "password"
     And I press "Log in as admin"
     And I follow "Settings"
-    And I check "Account Creation Enabled"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
     And I check "Account Creation requires invitation"
     And I check "admin_setting_invite_from_queue_enabled"
     And I press "Update"
@@ -361,7 +360,7 @@ Feature: Admin tasks
     And I fill in "admin_session_password" with "password"
     And I press "Log in as admin"
     And I follow "Settings"
-    And I check "Account Creation Enabled"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
     And I check "Account Creation requires invitation"
     And I uncheck "admin_setting_invite_from_queue_enabled"
     And I press "Update"
