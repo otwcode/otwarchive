@@ -291,6 +291,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :preview
         post :post
+        get :confirm_delete
       end
       resources :comments
     end
@@ -370,6 +371,9 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
@@ -472,6 +476,9 @@ Otwarchive::Application.routes.draw do
   resources :bookmarks do
     collection do
       get :search
+    end
+    member do
+      get :confirm_delete
     end
     resources :collection_items
   end
