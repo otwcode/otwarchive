@@ -173,6 +173,7 @@ Feature: Collection
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "anonyhugs"
     And I press "Post Without Preview"
+    And all search indexes are updated
   Then I should see "Old Snippet"
     And I should see "Collections: Anonymous Hugs"
   When I log out
