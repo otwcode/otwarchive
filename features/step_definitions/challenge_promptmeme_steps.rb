@@ -131,6 +131,8 @@ When /^I fill in no-column challenge options$/ do
     step %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     step %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
     step %{I check "Sign-up open?"}
+    fill_in("Sign-up opens:", :with => Date.yesterday)
+    fill_in("Sign-up closes:", :with => Date.tomorrow)
     step %{I submit}
 end
 
