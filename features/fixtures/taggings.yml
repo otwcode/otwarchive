@@ -63,3 +63,18 @@ tagging13:
   tagger_type: Tag
   taggable_id: 1
   taggable_type: Work
+tagging14:
+  tagger_id: 10
+  tagger_type: Tag
+  taggable_id: 6
+  taggable_type: Work
+tagging15:
+  tagger_id: 1
+  tagger_type: Tag
+  taggable_id: 6
+  taggable_type: Work
+tagging16:
+  tagger_id: 2
+  tagger_type: Tag
+  taggable_id: 6
+  taggable_type: Work

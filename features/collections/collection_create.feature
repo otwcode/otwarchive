@@ -107,3 +107,14 @@ Scenario: Fill out new collection form with faulty data
    And I should see "My Other Message" in the "Gift Notification Message" input
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
+
+
+Scenario: Create a collection with a malformed header URL
+
+Given I have the collection "Scotts Collection" with name "scotts_collection"
+  And I am logged in as "moderator"
+  And I am on "Scotts Collection" collection's page
+  And I follow "Collection Settings"
+  And I fill in "collection_header_image_url" with "fc00.deviantart.net/fs13/f/2007/004/a/7/Flooded_by_bingeling.jpg"
+  And I press "Update"
+  And I should see "Collection was successfully updated"

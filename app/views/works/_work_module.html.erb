@@ -63,7 +63,12 @@
   <% end %>
 
   <!--stats-->
+
   <dl class="stats" title="stats">
+    <% if work.language.present? %>
+      <dt><%= ts("Language") %>:</dt>
+      <dd><%= work.language.name %></dd>
+    <% end %>
   	<dt><%= ts('Words') %>:</dt>
   	<dd><%= number_with_delimiter(work.word_count) %></dd>
   	<dt><%= ts('Chapters') %>:</dt>
@@ -85,7 +90,7 @@
                 (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
   <% end %>
   <% if work.all_kudos_count > 0 %>
-    <dt><%= ts('Kudos: ') %></dt>
+    <dt><%= ts('Kudos') %>:</dt>
     <dd><%= link_to work.all_kudos_count.to_s, 
         (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments") : 
           (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 

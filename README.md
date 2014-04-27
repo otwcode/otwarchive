@@ -48,5 +48,3 @@ public
 
 db
   The overall archive database layout can be found in the file schema.rb
-
-
