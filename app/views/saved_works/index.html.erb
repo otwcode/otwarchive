@@ -16,7 +16,7 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Saved Works") %></h3>
 <% if @saved_works.present? %>
-  <ol class="works index">
+  <ol class="saved work index group">
     <% @saved_works.each do |saved_work| %>
       <li id="work_<%= saved_work.work_id %>" class="work blurb group" role="article">
         <%= render 'works/work_module', :work => saved_work.work %>
