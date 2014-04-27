@@ -4,6 +4,24 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
+require 'email_spec'
+
+# SimpleCov integration
+
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/features/'
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/vendor/'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Mailers', 'app/mailers'
+  add_group 'Views', 'app/views'
+
+end
 
 
 # Requires supporting ruby files with custom matchers and macros, etc,
