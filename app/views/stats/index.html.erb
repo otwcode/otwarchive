@@ -56,13 +56,13 @@
 </div>
 
 <h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
-<ul class="statistics index">
+<ul class="statistics index group">
   <% @works.keys.sort.each do |fandom| %>
     <li class="fandom listbox group">
       <h5 class="heading">
         <%= fandom %>
       </h5>
-      <ul class="index">
+      <ul class="index group">
         <% @works[fandom].each do |work| %>
           <li class="<%= cycle 'odd', 'even', :name => "tigerstriping" %>">
             <dl>
