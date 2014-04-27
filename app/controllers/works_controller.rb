@@ -356,7 +356,9 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        unless @work.posted?
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
