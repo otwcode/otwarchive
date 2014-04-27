@@ -94,6 +94,9 @@ GEM
     docile (1.1.1)
     domain_name (0.5.12)
       unf (>= 0.0.5, < 1.0.0)
+    email_spec (1.5.0)
+      launchy (~> 2.1)
+      mail (~> 2.2)
     erubis (2.7.0)
     escape_utils (0.3.2)
     ethon (0.6.2)
@@ -329,6 +332,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   delorean
+  email_spec
   escape_utils
   factory_girl
   faker
@@ -359,6 +363,7 @@ DEPENDENCIES
   rvm-capistrano
   sanitize
   shoulda
+  simplecov
   timeliness
   tire
   typhoeus
