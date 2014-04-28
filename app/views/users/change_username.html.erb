@@ -17,9 +17,15 @@
     <dt><%= ts("Current User Name") %></dt>
     <dd><span class="important"><%= @user.login %></span></dd>
     <dt><%= label_tag :new_login, ts("New User Name") %></dt>
-    <dd><%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %></dd>
+    <dd>
+      <%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %>
+      <p class="footnote"><%= ts("%d to %d characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number") % [User::LOGIN_LENGTH_MIN, User::LOGIN_LENGTH_MAX] %></p>
+    </dd>
     <dt><%= label_tag :password, ts("Password") %></dt>
-    <dd><%= password_field_tag :password %></dd>
+    <dd>
+      <%= password_field_tag :password %>
+      <p class="footnote"><%= ts("%d to %d characters") % [User::PASSWORD_LENGTH_MIN, User::PASSWORD_LENGTH_MAX] %></p>
+    </dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions"><%= submit_tag ts("Change User Name") %></dd>
   </dl>
