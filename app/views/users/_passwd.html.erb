@@ -8,8 +8,8 @@
     <%= live_validation_for_field('user_login', 
         :maximum_length => User::LOGIN_LENGTH_MAX, 
         :minimum_length => User::LOGIN_LENGTH_MIN, 
-        :failureMessage => ts("You need a login name! (At least %d letters long, please.)") % [User::LOGIN_LENGTH_MIN]) %>
-    <p class="footnote"><%= ts("%d to %d characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number") % [User::LOGIN_LENGTH_MIN, User::LOGIN_LENGTH_MAX] %></p>
+        :failureMessage => ts("You need a user name! (At least %{minimum} letters long, please.)", :minimum => User::LOGIN_LENGTH_MIN)) %>
+    <p class="footnote"><%= ts("%{minimum} to %{maximum} characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number", :minimum => User::LOGIN_LENGTH_MIN, :maximum => User::LOGIN_LENGTH_MAX) %></p>
   </dd>
   <!-- Password -->
   <dt>
@@ -20,8 +20,8 @@
     <%= live_validation_for_field('user_password',
           :maximum_length => User::PASSWORD_LENGTH_MAX, 
           :minimum_length => User::PASSWORD_LENGTH_MIN,
-          :failureMessage => ts("Please enter a password! (At least %d letters long, please.)") % [User::PASSWORD_LENGTH_MIN]) %>
-    <p class="footnote"><%= ts("%d to %d characters") % [User::PASSWORD_LENGTH_MIN, User::PASSWORD_LENGTH_MAX] %></p>
+          :failureMessage => ts("Please enter a password! (At least %{minimum} letters long, please.)", :minimum => User::PASSWORD_LENGTH_MIN)) %>
+    <p class="footnote"><%= ts("%{minimum} to %{maximum} characters", :minimum => User::PASSWORD_LENGTH_MIN, :maximum => User::PASSWORD_LENGTH_MAX) %></p>
   </dd>
   <!-- Confirm password -->
   <dt><%= f.label :password_confirmation, ts("Confirm Password") %></dt>

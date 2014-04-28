@@ -19,7 +19,7 @@ Feature: Invite queue management
   When I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
-  Then I should see "Request an invite"
+  Then I should see "Request an Invite"
 
   Scenario: Join queue and check status
     Given I have no users
