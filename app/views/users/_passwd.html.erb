@@ -13,7 +13,7 @@
   </dd>
   <!-- Password -->
   <dt>
-    <%= f.label :password, "Password" %>
+    <%= f.label :password, ts("Password") %>
   </dt>
   <dd>
     <%= f.password_field :password  %>
@@ -21,16 +21,16 @@
           :maximum_length => User::PASSWORD_LENGTH_MAX, 
           :minimum_length => User::PASSWORD_LENGTH_MIN,
           :failureMessage => ts("Please enter a password! (At least %d letters long, please.)") % [User::PASSWORD_LENGTH_MIN]) %>
+    <p class="footnote"><%= ts("%d to %d characters") % [User::PASSWORD_LENGTH_MIN, User::PASSWORD_LENGTH_MAX] %></p>
   </dd>
   <!-- Confirm password -->
-  <dt><%= f.label :password_confirmation, "Confirm Password" %></dt>
+  <dt><%= f.label :password_confirmation, ts("Confirm Password") %></dt>
   <dd>
     <%= f.password_field :password_confirmation %>
     <%= live_validation_for_field('user_password_confirmation',
           :maximum_length => User::PASSWORD_LENGTH_MAX, 
           :minimum_length => User::PASSWORD_LENGTH_MIN,
           :failureMessage => ts("Please enter the same password in both fields.")) %>
-    <p class="footnote"><%= ts("%d to %d characters") % [User::PASSWORD_LENGTH_MIN, User::PASSWORD_LENGTH_MAX] %></p>
   </dd>
   <!-- Email -->
   <dt>
