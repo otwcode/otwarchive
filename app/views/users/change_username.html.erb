@@ -21,7 +21,7 @@
     <dt><%= label_tag :password, ts("Password") %></dt>
     <dd><%= password_field_tag :password %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
-    <dd class="submit actions"><%= submit_tag ts("Change User Name") %></dd>
+    <dd class="submit actions"><%= submit_tag ts("Change User Name"), :confirm => ts("Are you sure you want to change your user name?") %></dd>
   </dl>
 <% end %>
 <% if @wrong_password %>
