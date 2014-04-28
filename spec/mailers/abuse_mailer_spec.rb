@@ -13,7 +13,7 @@ describe AdminMailer do
     end
 
     it "delivers from the correct address" do
-      mail.should deliver_from ArchiveConfig.RETURN_ADDRESS
+      mail.should deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
     end
 
     it "body text contains the comment" do
@@ -47,7 +47,7 @@ describe AdminMailer do
     end
 
     it "delivers from the correct address" do
-      mail.should deliver_from ArchiveConfig.RETURN_ADDRESS
+      mail.should deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
     end
 
     it "body text contains the comment" do
@@ -63,6 +63,8 @@ describe AdminMailer do
   context "abuse_reports sends copy if cc_me is checked" do
    let(:report) {create(:abuse_report, email: "cc_me@email.com", cc_me: "1")}
    let(:mail) {AdminMailer.abuse_report(report.id)}
+   let(:mail2) {UserMailer.abuse_report(report.id)}
+
 
    it "has the correct subject" do
      puts report.email_copy?
@@ -75,11 +77,11 @@ describe AdminMailer do
    end
 
    it "ccs the user who filed the report" do
-     mail.should cc_to("cc_me@email.com")
+     mail2.should deliver_to("cc_me@email.com")
    end
 
    it "delivers from the correct address" do
-     mail.should deliver_from ArchiveConfig.RETURN_ADDRESS
+     mail.should deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
    end
 
    it "body text contains the comment" do

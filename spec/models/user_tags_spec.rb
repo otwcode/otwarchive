@@ -35,7 +35,7 @@ describe User do
       create(:work, { :authors => [@pseud],
                       :fandom_string => @fandom1.name })
       create(:work, { :authors => [@pseud],
-                      :fandoms => [@fandom2.name] })
+                      :fandom_string => [@fandom2.name] })
       @user.most_popular_tags.should =~ [@fandom1, @fandom2]
       @user.most_popular_tags.first.taggings_count.should == 1
       @user.most_popular_tags.last.taggings_count.should == 1

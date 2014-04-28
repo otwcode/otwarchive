@@ -32,6 +32,9 @@ describe Work do
   end
 
   context "clean_and_validate_title" do
+    before do
+      ArchiveConfig.TITLE_MIN = 10
+    end
     it "strips out leading spaces from the title" do
       @work = create(:work, title: "    Has Leading Spaces")
       @work.reload
@@ -40,9 +43,7 @@ describe Work do
 
     let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      @work = create(:work, title: "     #{too_short}")
-      @work.reload
-      @work.errors[:base].should include("Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      expect { create(:work, title: "     #{too_short}")}.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
   end
