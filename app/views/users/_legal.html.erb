@@ -11,7 +11,7 @@
      <%= ts("And - really important - we need you to agree to our") %> 
      <%= link_to "Terms of Service (opens new window)", tos_path, :target => '_blank' %>:
   </p>
-  <fieldset name="<%= tos_field_name %>"id="tos-partial">
+  <fieldset name="<%= tos_field_name %>" id="tos-partial">
     <%= render(:partial => 'home/tos') %>
   </fieldset>
   <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
