@@ -86,8 +86,10 @@ Feature: Work Drafts
         And I should see "Post Draft" within "#main .own.work.blurb .navigation"
         And I should see "Delete Draft" within "#main .own.work.blurb .navigation"
       When I follow "Delete Draft"
-      Then I should see "Drafts (0)"
-        And I should see "Your work draft to delete was deleted"
+      Then I should not see "All bookmarks, comments, and kudos will be lost."
+        And I should not see "Orphan Work Instead"
+      When I press "Yes, Delete Draft"
+      Then I should see "Your work draft to delete was deleted"
         
     Scenario: Saving changes to an existing draft without posting and then double check that it is saved and I didn't get the success message erroneously
       Given I am logged in as "drafty" with password "breezeinhere"
@@ -109,3 +111,10 @@ Feature: Work Drafts
       Then I should see "Windbag"
       When I follow "Windbag"
       Then I should see "My draft has changed!"
+
+    Scenario: Editing a draft and previewing it should warn of impending deletion
+      Given I am logged in as "ringadingding"
+        And the draft "Walking Into Mordor"
+      When I edit the draft "Walking Into Mordor"
+        And I press "Preview"
+      Then I should see "Draft was successfully created. It will be automatically deleted on"

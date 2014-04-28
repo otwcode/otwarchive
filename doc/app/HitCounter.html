@@ -647,7 +647,7 @@
             <pre><span class="ruby-comment"># File app/models/hit_counter.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hits_to_database</span>
   <span class="ruby-comment"># persist from redis to db</span>
-  <span class="ruby-identifier">work_ids</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>}
+  <span class="ruby-identifier">work_ids</span> = <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>}
   <span class="ruby-identifier">found_works</span> = []
 
   <span class="ruby-constant">HitCounter</span>.<span class="ruby-identifier">find_each</span>(<span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;work_id IN (?)&quot;</span>, <span class="ruby-identifier">work_ids</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hit_counter</span><span class="ruby-operator">|</span>
@@ -658,14 +658,14 @@
       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;The redis hit count for work id: #{hit_counter.work_id} was #{redis_hits}. redis has been updated with the database value of #{hit_counter.hit_count}&quot;</span>
       <span class="ruby-identifier">set_stat</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">hit_count</span>)
     <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">work_id</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">work_id</span>)
     <span class="ruby-identifier">found_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">work_id</span>
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-comment"># Create hit counters for works that don't have them yet</span>
   (<span class="ruby-identifier">work_ids</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">found_works</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work_id</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">hit_counter</span> = <span class="ruby-constant">HitCounter</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value">:work_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work_id</span>, <span class="ruby-value">:hit_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_stat</span>(<span class="ruby-value">:hit_count</span>, <span class="ruby-identifier">work_id</span>))
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">work_id</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-constant">WORKS_TO_UPDATE_KEY</span>, <span class="ruby-identifier">work_id</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- hits_to_database-source -->
@@ -753,8 +753,8 @@
           <div class="method-source-code" id="init_redis-source">
             <pre><span class="ruby-comment"># File app/models/hit_counter.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">init_redis</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:hit_count</span>), <span class="ruby-value">0</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:download_count</span>), <span class="ruby-value">0</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:hit_count</span>), <span class="ruby-value">0</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">redis_stat_key</span>(<span class="ruby-value">:download_count</span>), <span class="ruby-value">0</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- init_redis-source -->
           

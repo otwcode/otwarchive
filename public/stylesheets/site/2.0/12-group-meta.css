@@ -22,12 +22,21 @@ dl.meta {
   margin: 0 0 0.643em;
 }
 
+.meta .stats dl {
+  float: left;
+  margin-top: 0;
+}
+
 .meta .stats dl dd, .meta .stats dl dt {
   margin: 0 0.375em auto 0;
   width: auto;
   min-width: 0;
   clear: none;
   float: left;
+}
+
+.meta .stats dl, .meta .stats dl dt:first-child, .meta dd ul li:first-child {
+  padding-left: 0;
 }
 
 .meta p {
