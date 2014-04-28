@@ -8,7 +8,6 @@ Feature:
     Given I am logged in as "testuser" with password "password"
     When I visit the change username page for testuser
       And I press "Change User Name"
-    # TODO - this button should be disabled initially
     # TODO - better written error message
     Then I should see "Your password was incorrect"
 
