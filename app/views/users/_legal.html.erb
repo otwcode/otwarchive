@@ -4,7 +4,7 @@
   <%= ts("(Sorry to anyone younger! You'll be more than welcome when the time comes.)") %></p>
   <p>
     <%= f.check_box :age_over_13 %>
-    <%= f.label :age_over_13, "Yes, I am over 13." %>
+    <%= f.label :age_over_13, ts("Yes, I am over 13.") %>
   </p>
   <!-- Terms of Service -->
   <p>
@@ -12,10 +12,12 @@
      <%= link_to "Terms of Service (opens new window)", tos_path, :target => '_blank' %>:
   </p>
   <fieldset name="<%= tos_field_name %>" id="tos-partial">
-    <%= render(:partial => 'home/tos') %>
+    <div class="tos module">
+      <%= render(:partial => 'home/tos') %>
+    </div>
   </fieldset>
   <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
   <p>
     <%= f.check_box :terms_of_service %>
-    <%= f.label :terms_of_service, "Yes, I have read the Terms of Service and agree to them.",  :class => 'important' %>
+    <%= f.label :terms_of_service, ts("Yes, I have read the Terms of Service and agree to them."),  :class => 'important' %>
   </p>

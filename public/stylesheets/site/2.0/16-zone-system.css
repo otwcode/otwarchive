@@ -92,7 +92,7 @@ SUBSECTIONS:
   min-width: 0;
 }
 
- #tos-partial {
+#tos-partial .tos {
   height: 36em;
   overflow: auto;
 }
