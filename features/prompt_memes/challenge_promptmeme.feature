@@ -547,7 +547,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   Then I should not see "myname4" within "h5"
     And I should not see "mod1" within "h5"
-    And I should see "Fulfilled Story by Anonymous" within "div.works h4"
+    And I should see "Fulfilled Story by Anonymous" within "div.work h4"
   
   Scenario: User cannot see unposted claims to delete
   
@@ -1033,7 +1033,7 @@ Feature: Prompt Meme Challenge
     And I should not see "mod" within "h4"
   Then I follow "Fulfilled Claims"
   # On the users' My Claims page, they see their anon works as Anonymous
-    And I should see "Anonymous" within "div.works h4"
+    And I should see "Anonymous" within "div.work h4"
   
     
   Scenario: check that claims can't be viewed even after challenge is revealed
@@ -1143,8 +1143,8 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see "Fulfilled By"
-    And I should see "Fulfilled Story by myname4" within "div.works"
-    And I should see "Fulfilled Story-thing by mod1" within "div.works"
+    And I should see "Fulfilled Story by myname4" within "div.work"
+    And I should see "Fulfilled Story-thing by mod1" within "div.work"
 
 
   Scenario: Anon prompts stay anon on claims index even if challenge is revealed
