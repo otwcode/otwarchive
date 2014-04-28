@@ -5,8 +5,8 @@ namespace :autocomplete do
   
   desc "Clear autocomplete data"
   task(:clear_data => :environment) do
-    keys = $redis.keys("autocomplete_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}    
+    keys = REDIS_GENERAL.keys("autocomplete_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}    
     puts "Cleared all autocomplete data"
   end
 
@@ -22,32 +22,32 @@ namespace :autocomplete do
   
   desc "Clear tag data"
   task(:clear_tag_data => :environment) do
-    keys = $redis.keys("autocomplete_tag_*") + $redis.keys("autocomplete_fandom_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    keys = REDIS_GENERAL.keys("autocomplete_tag_*") + REDIS_GENERAL.keys("autocomplete_fandom_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}
   end
 
   desc "Clear tagset data"
   task(:clear_tagset_data => :environment) do
-    keys = $redis.keys("autocomplete_tagset_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    keys = REDIS_GENERAL.keys("autocomplete_tagset_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}
   end
 
   desc "Clear tagset association data"
   task(:clear_association_data => :environment) do
-    keys = $redis.keys("autocomplete_association_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    keys = REDIS_GENERAL.keys("autocomplete_association_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}
   end
 
   desc "Clear pseud data"
   task(:clear_pseud_data => :environment) do
-    keys = $redis.keys("autocomplete_pseud_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    keys = REDIS_GENERAL.keys("autocomplete_pseud_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}
   end
   
   desc "Clear collection data"
   task(:clear_collection_data => :environment) do
-    keys = $redis.keys("autocomplete_collection_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    keys = REDIS_GENERAL.keys("autocomplete_collection_*")
+    keys.each_slice(KEYSLICE_SIZE) {|keyslice| REDIS_GENERAL.del(*keyslice)}
   end
   
   desc "Load tag data into Redis for autocomplete"

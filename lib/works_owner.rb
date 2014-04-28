@@ -17,14 +17,14 @@ module WorksOwner
   
   # Set the timestamp if it doesn't yet exist
   def works_index_timestamp
-    $redis.get(redis_works_index_key) || update_works_index_timestamp!
+    REDIS_GENERAL.get(redis_works_index_key) || update_works_index_timestamp!
   end
   
   # Should be called wherever works are updated
   # Making the timestamp a stringy integer mostly for ease of testing
   def update_works_index_timestamp!
     t = Time.now.to_i.to_s
-    $redis.set(redis_works_index_key, t)
+    REDIS_GENERAL.set(redis_works_index_key, t)
     return t
   end
   

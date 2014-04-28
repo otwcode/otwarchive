@@ -13,3 +13,6 @@ fourth:
 fifth:
   work_id: 5
   hit_count: 2
+sixth:
+  work_id: 6
+  hit_count: 37
