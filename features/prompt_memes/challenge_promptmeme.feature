@@ -1236,8 +1236,8 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made."
   When I am logged in as "myname4"
     And I go to the "Battle 12" requests page
-  Then I should see "mod1" within ".prompt .works"
-    And I should see "myname4" within ".prompt .works"
+  Then I should see "mod1" within ".prompt .work"
+    And I should see "myname4" within ".prompt .work"
     
   Scenario: Make another claim and then fulfill from the post new form (New Work)
   
@@ -1363,7 +1363,7 @@ Feature: Prompt Meme Challenge
   # claim is fulfilled on collection page
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  Then I should see "myname1" within ".prompt .works"
+  Then I should see "myname1" within ".prompt .work"
     And I should see "Fulfilled By"
 
   Scenario: Download prompt CSV from signups page
