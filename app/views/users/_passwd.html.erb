@@ -9,7 +9,7 @@
         :maximum_length => User::LOGIN_LENGTH_MAX, 
         :minimum_length => User::LOGIN_LENGTH_MIN, 
         :failureMessage => ts("You need a user name! (At least %{minimum} letters long, please.)", :minimum => User::LOGIN_LENGTH_MIN)) %>
-    <p class="footnote"><%= ts("%{minimum} to %{maximum} characters, using A-Z, a-z, 0-9, or _ and it must begin or end with a letter or number", :minimum => User::LOGIN_LENGTH_MIN, :maximum => User::LOGIN_LENGTH_MAX) %></p>
+    <p class="footnote"><%= ts("%{minimum} to %{maximum} characters long, containing only a-z, A-Z, 0-9, and _, no spaces. Cannot begin or end with an underscore (_).", :minimum => User::LOGIN_LENGTH_MIN, :maximum => User::LOGIN_LENGTH_MAX) %></p>
   </dd>
   <!-- Password -->
   <dt>
