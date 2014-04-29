@@ -162,6 +162,105 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
+Scenario: bookmark added to moderated collection has flash notice only when not approved
+  Given the following activated users exist
+    | login      | password |
+    | workauthor | password |
+    | bookmarker | password |
+    | otheruser  | password |
+    And I have a moderated collection "Five Pillars" with name "five_pillars"
+    And I am logged in as "workauthor" with password "password"
+    And I post the work "Fire Burn, Cauldron Bubble"
+  When I log out
+    And I am logged in as "bookmarker" with password "password"
+    And I view the work "Fire Burn, Cauldron Bubble"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "five_pillars"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "The collection Five Pillars is currently moderated."
+  When I go to bookmarker's bookmarks page
+    Then I should see "The collection Five Pillars is currently moderated."
+  When I log out
+    And I am logged in as "moderator" with password "password"
+    And I approve the first item in the collection "Five Pillars"
+    And I am logged in as "bookmarker" with password "password"
+    And I go to bookmarker's bookmarks page
+  Then I should not see "The collection Five Pillars is currently moderated."
+
+
+Scenario: bookmarks added to moderated collections appear correctly
+  Given the following activated users exist
+    | login      | password |
+    | workauthor | password |
+    | bookmarker | password |
+    | otheruser  | password |
+    And I have a moderated collection "JBs Greatest" with name "jbs_greatest"
+    And I have the collection "Mrs. Pots" with name "mrs_pots"
+    And I am logged in as "workauthor" with password "password"
+    And I post the work "The Murder of Sherlock Holmes"
+  When I log out
+    And I am logged in as "bookmarker" with password "password"
+    And I view the work "The Murder of Sherlock Holmes"
+    And I follow "Bookmark"
+    And I fill in "bookmark_collection_names" with "jbs_greatest"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+  When I go to bookmarker's bookmarks page
+    And I should see "The Murder of Sherlock Holmes"
+    And I should see "Bookmarker's Collections: JBs Greatest"
+    And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+  When I go to the bookmarks page
+    And I should see "The Murder of Sherlock Holmes"
+    And I should see "Bookmarker's Collections: JBs Greatest"
+    And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+  When I log out
+  # Users who do not own the bookmark should not see the notice, or see that it
+  # has been submitted to a specific collection
+    And I am logged in as "otheruser" with password "password"
+    And I go to bookmarker's bookmarks page
+  Then I should see "The Murder of Sherlock Holmes"
+    And I should not see "Bookmarker's Collections: JBs Greatest"
+    And I should not see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+  When I go to the bookmarks page
+    Then I should see "The Murder of Sherlock Holmes"
+    And I should not see "Bookmarker's Collections: JBs Greatest"
+    And I should not see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
+  # Edit the bookmark and add it to a second, unmoderated collection, and recheck
+  # all the things
+  When I log out
+    And I am logged in as "bookmarker" with password "password"
+    And I view the work "The Murder of Sherlock Holmes"
+    And I follow "Edit Bookmark"
+    And I fill in "bookmark_collection_names" with "jbs_greatest,mrs_pots"
+    And I press "Edit" within "div#bookmark-form"
+    And all search indexes are updated
+  Then I should see "Bookmark was successfully updated."
+    And I should see "The collection JBs Greatest is currently moderated."
+  When I go to bookmarker's bookmarks page
+    Then I should see "The Murder of Sherlock Holmes"
+    And I should see "JBs Greatest" within "ul.meta"
+    And I should see "Mrs. Pots" within "ul.meta"
+    And I should see "The collection JBs Greatest is currently moderated."
+  When I go to the bookmarks page
+    Then I should see "The Murder of Sherlock Holmes"
+    And I should see "JBs Greatest" within "ul.meta"
+    And I should see "Mrs. Pots" within "ul.meta"
+    And I should see "The collection JBs Greatest is currently moderated."
+  When I log out
+    And I am logged in as "otheruser" with password "password"
+    And I go to bookmarker's bookmarks page
+  Then I should see "The Murder of Sherlock Holmes"
+    And I should not see "JBs Greatest" within "ul.meta"
+    And I should see "Bookmarker's Collections: Mrs. Pots"
+    And I should not see "The collection JBs Greatest is currently moderated."
+  When I go to the bookmarks page
+    Then I should see "The Murder of Sherlock Holmes"
+    And I should not see "JBs Greatest" within "ul.meta"
+    And I should see "Bookmarker's Collections: Mrs. Pots"
+    And I should not see "The collection JBs Greatest is currently moderated."
+
 Scenario: Adding bookmarks to closed collections (Issue 3083)
   Given I am logged in as "moderator" with password "password"
     And I have a closed collection "Unsolved Mysteries" with name "unsolved_mysteries"
@@ -222,7 +321,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
     And I press "Edit"
   Then I should see "Bookmark was successfully updated."
-  
+
 Scenario: Delete bookmarks of a work and a series
   Given the following activated users exist
     | login           | password   |
