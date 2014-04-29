@@ -72,6 +72,8 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   fill_in("prompt_meme_requests_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
+  fill_in("Sign-up opens:", :with => Date.yesterday)
+  fill_in("Sign-up closes:", :with => Date.tomorrow)
   step %{I submit}
   step "I should see \"Challenge was successfully created\""
 end
@@ -140,6 +142,8 @@ When /^I fill in single-prompt challenge options$/ do
   step %{I fill in "prompt_meme_requests_num_required" with "1"}
     step %{I check "Sign-up open?"}
     check("prompt_meme_request_restriction_attributes_title_allowed")
+    fill_in("Sign-up opens:", :with => Date.yesterday)
+    fill_in("Sign-up closes:", :with => Date.tomorrow)
     step %{I submit}
 end
 
@@ -157,6 +161,8 @@ When /^I fill in prompt meme challenge options$/ do
     step %{I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"}
     step %{I fill in "prompt_meme_requests_num_required" with "2"}
     step %{I check "Sign-up open?"}
+    fill_in("Sign-up opens:", :with => Date.yesterday)
+    fill_in("Sign-up closes:", :with => Date.tomorrow)
 end
 
 When /^I sign up for Battle 12$/ do
