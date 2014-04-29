@@ -61,6 +61,10 @@ describe UserMailer do
       it 'should list the second imported work in an unordered list in the HTML body' do
         get_message_part(email, /html/).should have_xpath('//ul/li', :text => title2)
       end
+
+      it 'should only have style_to links in the HTML body' do
+        get_message_part(email, /html/).should_not have_xpath('//a[not(@style)]')
+      end
     end
 
     describe 'text version' do
@@ -68,12 +72,12 @@ describe UserMailer do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'should list the first imported work in an unordered list in the HTML body' do
+      it 'should list the first imported work as plain text' do
         get_message_part(email, /plain/).should_not have_xpath('//ul/li', :text => title)
       end
 
       it 'should list the second imported work with a leading hyphen' do
-        get_message_part(email, /plain/).should include(title2)
+        get_message_part(email, /plain/).should include('- ' + title2)
       end
     end
   end
@@ -133,6 +137,10 @@ describe UserMailer do
       it 'should list the second imported work in an unordered list in the HTML body' do
         get_message_part(email, /html/).should have_xpath('//ul/li', :text => title2)
       end
+
+      it 'should only have style_to links in the HTML body' do
+        get_message_part(email, /html/).should_not have_xpath('//a[not(@style)]')
+      end
     end
 
     describe 'text version' do
@@ -140,7 +148,7 @@ describe UserMailer do
         let(:part) { get_message_part(email, /plain/) }
       end
 
-      it 'should list the first imported work in an unordered list in the HTML body' do
+      it 'should list the first imported work as plain text' do
         get_message_part(email, /plain/).should_not have_xpath('//ul/li', :text => title)
       end
 

@@ -11,14 +11,14 @@
 
   <p>Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please <%= support_link("contact Support") %>.</p>
 
-  <p><%= link_to("Claim or remove your works: ", claim_url(:invitation_token => @token)) %> <%= link_to(claim_url(:invitation_token => @token), claim_url(:invitation_token => @token)) %></p>
+  <p><%= style_link("Claim or remove your works here.", claim_url(:invitation_token => @token)) %></p>
 
   <p>The works uploaded include:</p>
 
   <ul>
   <% @external_author.works.each do |work| %>
-    <li><%= link_to(work.title.html_safe, work_url(work)) %>
-    <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
+    <li><%= style_link(work.title.html_safe, work_url(work)) %>
+      <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
   <% end %>
   </ul>
 

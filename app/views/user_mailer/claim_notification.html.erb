@@ -15,8 +15,8 @@
 
   <ul>
   <% @claimed_works.each do |work| %>
-    <li><%= work.title.html_safe %>
-    <%= style_link work_url(work), work_url(work) %></li>
+    <li><%= style_link(work.title.html_safe, work_url(work)) %>
+      <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
   <% end %>
   </ul>
 
