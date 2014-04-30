@@ -32,6 +32,23 @@ Feature: Search Works
 
     When the statistics_tasks rake task is run
 
+    # check hit counts
+    # first work: 1001 
+    # second work: 10 
+    # third work: 10000
+    # fourth: 0
+    # fifth: 2
+    # I am &lt;strong&gt;er Than Yesterday &amp; Other Lies: 37
+    # the work for the prompt meme: 1, i think
+    When I go to the works page
+    Then I should see "Hits: 0"
+      And I should see "Hits: 1"
+      And I should see "Hits: 2"
+      And I should see "Hits: 10"
+      And I should see "Hits: 37"
+      And I should see "Hits: 1001"
+      And I should see "Hits: 10000"
+
     # do some valid searches
     When I search for a simple term from the search box
     Then I should see "3 Found"
@@ -50,13 +67,6 @@ Feature: Search Works
     Then I should see "1 Found"
     
     # search by range of hits
-    # first work: 1001 
-    # second work: 10 
-    # third work: 10000
-    # fourth: 0
-    # fifth: 2
-    # I am &lt;strong&gt;er Than Yesterday &amp; Other Lies: 37
-    # the work for the prompt meme: 1, i think
     # When I am on the search works page
     #   And I fill in "Hits" with "10000-20000"
     #   And I press "Search" within "form#new_work_search"
