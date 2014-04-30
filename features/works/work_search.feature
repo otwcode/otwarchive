@@ -54,7 +54,7 @@ Feature: Search Works
     When I fill in "Word Count" with ""
       And I fill in "Date" with "> 2 years ago"
       And I press "Search" within "form#new_work_search"
-    Then I should see "1 Found"
+    Then I should see "4 Found"
     When I follow "Edit Your Search"
     Then I should be on the search works page
     When I fill in "Word Count" with ">1000"
