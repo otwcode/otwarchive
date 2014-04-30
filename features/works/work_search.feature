@@ -51,7 +51,6 @@ Feature: Search Works
     When I am on the search works page
       And all search indexes are updated
     When I fill in "Hits" with "1000-2000"
-    Then show me the page
       And I press "Search" within "form#new_work_search"
     Then I should see "1 Found"
     
