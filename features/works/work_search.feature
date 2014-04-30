@@ -57,7 +57,7 @@ Feature: Search Works
     Then I should see "4 Found"
     When I follow "Edit Your Search"
     Then I should be on the search works page
-    When I fill in "Word Count" with ">1000"
+    When I fill in "Word Count" with ">1500"
       And I press "Search" within "form#new_work_search"
     Then I should see "No results found"
      #When I am on the search works page
