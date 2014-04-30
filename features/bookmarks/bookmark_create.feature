@@ -170,24 +170,33 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I post the work "Hooray for Homicide"
     And I post the work "Sing a Song of Murder"
     And I go to "Unsolved Mysteries" collection's page
+    # As a moderator, create a bookmark in a closed collection
   Then I view the work "Hooray for Homicide"
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "unsolved_mysteries"
     And I press "Create"
     And I should see "Bookmark was successfully created"
+    # Now, with the exising bookmark, as a mod, add it to a different closed collection
+    And I follow "Edit"
+    And I fill in "bookmark_collection_names" with "rescue_911"
+    And I press "Update"
+  Then I should see "Bookmark was successfully updated"
   Then I view the work "Sing a Song of Murder"
     And I follow "Bookmark"
     And I press "Create"
     And I should see "Bookmark was successfully created"
+    # Use the 'Add To Collections' button to add the bookmark to a closed collection AFTER creating said bookmark
     And I follow "Add To Collection"
     And I fill in "collection_names" with "unsolved_mysteries"
     And I press "Add"
     And I should see "Added to collection(s): Unsolved Mysteries"
+    # Still as the moderator, try to edit the bookmark which is IN a closed collection already
   When I follow "Edit"
     And I fill in "bookmark_notes" with "This is my edited bookmark"
     And I press "Update"
   Then I should see "Bookmark was successfully updated."
     And I am logged out
+    # Log in as a regular (totally awesome!) user
   Then I am logged in as "RobertStack" with password "password"
     And I view the work "Sing a Song of Murder"
     And I follow "Bookmark"
@@ -202,6 +211,11 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
+    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+    # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
+    And I follow "Edit"
+    And I fill in "bookmark_collection_names" with "rescue_911"
+    And I press "Update"
     And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
     And I am logged out
   # Create a collection, put a bookmark in it, close the collection, then try
@@ -222,6 +236,8 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I fill in "bookmark_notes" with "This is a user editing a closed collection bookmark"
     And I press "Edit"
   Then I should see "Bookmark was successfully updated."
+
+Scenario: Add an exising bookmark to a closed collection (Issue 3083)
   
 Scenario: Delete bookmarks of a work and a series
   Given the following activated users exist
