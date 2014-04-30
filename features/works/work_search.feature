@@ -31,6 +31,16 @@ Feature: Search Works
     When I search for works by mod
     Then I should see "No results found"
 
+    When I go to the works page
+    # Then show me the page
+    Then I should see "Hits: 0"
+      And I should see "Hits: 1"
+      And I should see "Hits: 2"
+      And I should see "Hits: 10"
+      And I should see "Hits: 37"
+      And I should see "Hits: 10000"
+      And I should see "Hits: 1001"
+
     # do some valid searches
     When I search for a simple term from the search box
     Then I should see "3 Found"
