@@ -6,7 +6,7 @@ first:
   title_to_sort_on: First work
   language: english
   authors_to_sort_on: testuser
-  revised_at: 2012-04-29
+  revised_at: 2012-03-30
   complete: true
 second:
   id: 2
@@ -16,7 +16,7 @@ second:
   title_to_sort_on: second work
   language: english
   authors_to_sort_on: testuser
-  revised_at: 2004-04-29
+  revised_at: 2004-03-30
   complete: true
 third:
   id: 3
@@ -38,7 +38,7 @@ fourth:
   title_to_sort_on: fourth work
   language: french
   authors_to_sort_on: testuser2
-  revised_at: 2012-04-29
+  revised_at: 2012-03-30
   complete: true
 fifth:
   id: 5
@@ -48,7 +48,7 @@ fifth:
   title_to_sort_on: fifth work
   language: english
   authors_to_sort_on: testuser2
-  revised_at: 2012-04-29
+  revised_at: 2012-03-30
   expected_number_of_chapters: 5
 sixth:
   id: 6
@@ -58,6 +58,6 @@ sixth:
   title_to_sort_on: I am &lt;strong&gt;er Than Yesterday &amp; Other Lies
   language: english
   authors_to_sort_on: testuser2
-  revised_at: 2013-04-29
+  revised_at: 2013-03-30
   expected_number_of_chapters: 2
   complete: false
