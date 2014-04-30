@@ -13,6 +13,7 @@ Feature: Search Works
     When mod fulfills claim
     When I reveal the "Battle 12" challenge
     When I am logged in as "myname4"
+      And the statistics_tasks rake task is run
       And the work indexes are updated
       
     # anon work doesn't show up in searches
@@ -29,8 +30,6 @@ Feature: Search Works
     Then I should see "No results found"
     When I search for works by mod
     Then I should see "No results found"
-
-    When the statistics_tasks rake task is run
 
     # check hit counts
     # first work: 1001 
