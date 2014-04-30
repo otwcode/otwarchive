@@ -49,11 +49,11 @@ Feature: Search Works
     
     # search by range of hits
     When I am on the search works page
-      #And I fill in "Hits" with "10000-20000"
-      And I fill in "Hits" with "1-45"
+      And I fill in "Hits" with "10000-20000"
+      #And I fill in "Hits" with "1-45"
       And I press "Search" within "form#new_work_search"
-    #Then I should see "1 Found"
-    Then I should see "4 Found"
+    Then I should see "1 Found"
+    #Then I should see "4 Found"
     
     # search by date and then by word count AND date
     When I am on the search works page
@@ -69,12 +69,14 @@ Feature: Search Works
     
     # search by > hits
     When I am on the search works page
-      And I fill in "Hits" with "> 100"
+      #And I fill in "Hits" with "> 100"
+      And I fill in "Hits" with "> 99"
       And I press "Search" within "form#new_work_search"
     Then I should see "First work"
       And I should see "third work"
       And I should see "2 Found"
-      And I should see "You searched for: hits: > 100"
+      #And I should see "You searched for: hits: > 100"
+      And I should see "You searched for: hits: > 99"
   
     # search with the header search field and then refine it using the author/artist field
     When I am on the homepage.

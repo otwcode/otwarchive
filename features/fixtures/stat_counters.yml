@@ -1,14 +1,14 @@
 first:
   work_id: 1
-  hit_count: 1001
+  hit_count: 1221
   kudos_count: 4
 second:
   work_id: 2
-  hit_count: 10
+  hit_count: 12
   kudos_count: 1
 third:
   work_id: 3
-  hit_count: 10000
+  hit_count: 15432
 fourth:
   work_id: 4
   hit_count: 0
