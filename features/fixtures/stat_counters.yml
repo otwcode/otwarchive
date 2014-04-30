@@ -1,9 +1,11 @@
 first:
   work_id: 1
   hit_count: 1001
+  kudos_count: 4
 second:
   work_id: 2
   hit_count: 10
+  kudos_count: 1
 third:
   work_id: 3
   hit_count: 10000

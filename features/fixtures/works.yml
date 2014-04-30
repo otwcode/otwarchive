@@ -28,6 +28,7 @@ third:
   authors_to_sort_on: testuser
   revised_at: 2012-07-10
   summary: for the second time
+  expected_number_of_chapters: 2
   complete: true
 fourth:
   id: 4
