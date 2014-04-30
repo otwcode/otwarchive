@@ -53,7 +53,7 @@ Feature: Search Works
       And I fill in "Hits" with "1-45"
       And I press "Search" within "form#new_work_search"
     #Then I should see "1 Found"
-    Then I should see "3 Found"
+    Then I should see "4 Found"
     
     # search by date and then by word count AND date
     When I am on the search works page
