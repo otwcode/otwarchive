@@ -56,10 +56,10 @@ Feature: Search Works
     # fifth: 2
     # I am &lt;strong&gt;er Than Yesterday &amp; Other Lies: 37
     # the work for the prompt meme: 1, i think
-    When I am on the search works page
-      And I fill in "Hits" with "10000-20000"
-      And I press "Search" within "form#new_work_search"
-    Then I should see "1 Found"
+    # When I am on the search works page
+    #   And I fill in "Hits" with "10000-20000"
+    #   And I press "Search" within "form#new_work_search"
+    # Then I should see "1 Found"
     
     # search by date and then by word count AND date
     When I am on the search works page
