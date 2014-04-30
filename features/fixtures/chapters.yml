@@ -3,12 +3,12 @@ chapter1:
   posted: true
   content: some content for the first work
   work_id: 1
-  published_at: 2010-03-30
+  published_at: 2010-04-30
 chapter2:
   id: 2
   posted: true
   content: this work was written a long time ago
-  published_at: 2004-03-30
+  published_at: 2004-04-30
   work_id: 2
 chapter3:
   id: 3
@@ -27,7 +27,7 @@ chapter5:
   posted: true
   work_id: 4
   content: This work is by a different user.
-  published_at: 2010-03-30
+  published_at: 2010-04-30
 chapter6:
   id: 6
   posted: true
@@ -39,4 +39,4 @@ chapter7:
   posted: true
   work_id: 6
   content: This is some content for a work with a fandom, rating, and warning tag and character entities.
-  published_at: 2013-03-30
+  published_at: 2013-04-30
