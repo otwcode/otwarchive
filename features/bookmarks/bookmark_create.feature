@@ -336,11 +336,6 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I press "Edit"
   Then I should see "Bookmark was successfully updated."
 
-<<<<<<< HEAD
-Scenario: Add an exising bookmark to a closed collection (Issue 3083)
-  
-=======
->>>>>>> master
 Scenario: Delete bookmarks of a work and a series
   Given the following activated users exist
     | login           | password   |
