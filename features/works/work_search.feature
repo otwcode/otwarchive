@@ -1,4 +1,4 @@
-@no-txn @works @search
+@works @search
 Feature: Search Works
   In order to test search
   As a humble coder
