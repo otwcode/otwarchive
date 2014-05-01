@@ -1,15 +1,15 @@
 language: ruby
 env:
-  - TEST_GROUP="rspec spec"
-  - TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"
-  - TEST_GROUP="cucumber -f progress -r features features/importing"
-  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
-  - TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
-  - TEST_GROUP="cucumber -f progress -r features features/collections"
-  - TEST_GROUP="cucumber -f progress -r features features/users"
+  #- TEST_GROUP="rspec spec"
+  #- TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"
+  #- TEST_GROUP="cucumber -f progress -r features features/importing"
+  #- TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
+  #- TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
+  #- TEST_GROUP="cucumber -f progress -r features features/collections"
+  #- TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
-  - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
-  - TEST_GROUP="cucumber -f progress -r features features/other"
+  #- TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
+  #- TEST_GROUP="cucumber -f progress -r features features/other"
 rvm:
   - "1.9.3"
 services:
