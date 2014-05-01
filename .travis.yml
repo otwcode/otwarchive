@@ -11,7 +11,7 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/other"
 rvm:
-  - 1.9.3-p484 --create
+  - "1.9.3"
 services:
   - elasticsearch
   - redis-server
@@ -27,6 +27,7 @@ before_script:
   - cp config/newrelic.example config/newrelic.yml
   - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
   - cp config/redis.travis.example config/redis.yml
+  - curl https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/3088e403dc09f570c78b9453cfce218747e5098e/gistfile1.sh
 notifications:
   email:
     recipients:
