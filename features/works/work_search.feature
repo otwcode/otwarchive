@@ -13,8 +13,8 @@ Feature: Search Works
     When mod fulfills claim
     When I reveal the "Battle 12" challenge
     When I am logged in as "myname4"
-      # And I have flushed Redis
-      # And the statistics_tasks rake task is run
+      And I have flushed Redis
+      And the statistics_tasks rake task is run
       And the work indexes are updated
       
     # anon work doesn't show up in searches
