@@ -35,7 +35,7 @@ dl.meta {
   float: left;
 }
 
-.meta .stats dl, .meta .stats dl dt:first-child, .meta dd ul li:first-child {
+.meta .stats dl, .meta .stats dl dt:first-child, dl.meta dd ul li:first-child {
   padding-left: 0;
 }
 

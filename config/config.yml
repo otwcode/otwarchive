@@ -119,6 +119,7 @@ TAG_LIST_LIMIT: 300
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 500
+MAX_KUDOS_TO_SHOW: 50
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
