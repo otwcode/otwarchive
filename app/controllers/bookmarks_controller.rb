@@ -8,6 +8,7 @@ class BookmarksController < ApplicationController
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]
