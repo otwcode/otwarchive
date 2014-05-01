@@ -11,7 +11,7 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/other"
 rvm:
-  - 1.9.3-p484
+  - 1.9.3-p484 --create
 services:
   - elasticsearch
   - redis-server
