@@ -334,6 +334,11 @@ When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
+
+When /^the statistics_tasks rake task is run$/ do
+  StatCounter.hits_to_database
+  StatCounter.stats_to_database
+end
 ### THEN
 
 Then /^I should see Updated today$/ do
