@@ -13,6 +13,7 @@ Feature: Search Works
     When mod fulfills claim
     When I reveal the "Battle 12" challenge
     When I am logged in as "myname4"
+      And I have flushed Redis
       And the statistics_tasks rake task is run
       And the work indexes are updated
       
@@ -43,10 +44,10 @@ Feature: Search Works
     Then I should see "Hits: 0"
       And I should see "Hits: 1"
       And I should see "Hits: 2"
-      # And I should see "Hits: 10"
+      And I should see "Hits: 10"
       And I should see "Hits: 37"
       And I should see "Hits: 1001"
-      # And I should see "Hits: 10000"
+      And I should see "Hits: 10000"
 
     # do some valid searches
     When I search for a simple term from the search box
@@ -66,42 +67,42 @@ Feature: Search Works
     Then I should see "1 Found"
     
     # search by range of hits
-    # When I am on the search works page
-    #   And I fill in "Hits" with "10000-20000"
-    #   And I press "Search" within "form#new_work_search"
-    # Then I should see "1 Found"
+    When I am on the search works page
+      And I fill in "Hits" with "10000-20000"
+      And I press "Search" within "form#new_work_search"
+    Then I should see "1 Found"
     
     # search by date and then by word count AND date
     When I am on the search works page
-    # When I fill in "Date" with "> 2 years ago"
-    #   And I press "Search" within "form#new_work_search"
-    # Then I should see "4 Found"
-    # When I follow "Edit Your Search"
+    When I fill in "Date" with "> 2 years ago"
+      And I press "Search" within "form#new_work_search"
+    Then I should see "4 Found"
+    When I follow "Edit Your Search"
     Then I should be on the search works page
     When I fill in "Word Count" with ">15000"
       And I press "Search" within "form#new_work_search"
     Then I should see "No results found"
     
     # search by > hits
-    # When I am on the search works page
-    #   And I fill in "Hits" with "> 100"
-    #   And I press "Search" within "form#new_work_search"
-    # Then I should see "2 Found"
-    #   And I should see "First work"
-    #   And I should see "third work"
-    #   And I should see "You searched for: hits: > 100"
+    When I am on the search works page
+      And I fill in "Hits" with "> 100"
+      And I press "Search" within "form#new_work_search"
+    Then I should see "2 Found"
+      And I should see "First work"
+      And I should see "third work"
+      And I should see "You searched for: hits: > 100"
   
     # search with the header search field and then refine it using the author/artist field
     When I am on the homepage.
       And I fill in "site_search" with "testuser2"
       And I press "Search"
     Then I should see "3 Found"
-    # When I follow "Edit Your Search"
-    # Then I should be on the search works page
-    # When I fill in "Any Field" with ""
-    #   And I fill in "Author/Artist" with "testuser2"
-    #   And I press "Search" within "form#new_work_search"
-    # Then I should see "3 Found"
+    When I follow "Edit Your Search"
+    Then I should be on the search works page
+    When I fill in "Any Field" with ""
+      And I fill in "Author/Artist" with "testuser2"
+      And I press "Search" within "form#new_work_search"
+    Then I should see "3 Found"
   
     # search by number of kudos
     When I am on the search works page
