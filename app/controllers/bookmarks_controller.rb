@@ -155,7 +155,7 @@ class BookmarksController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+        errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!") 
       end
     end
 
