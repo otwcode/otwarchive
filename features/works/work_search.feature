@@ -96,12 +96,12 @@ Feature: Search Works
       And I fill in "site_search" with "testuser2"
       And I press "Search"
     Then I should see "3 Found"
-    When I follow "Edit Your Search"
-    Then I should be on the search works page
-    When I fill in "Any Field" with ""
-      And I fill in "Author/Artist" with "testuser2"
-      And I press "Search" within "form#new_work_search"
-    Then I should see "3 Found"
+    # When I follow "Edit Your Search"
+    # Then I should be on the search works page
+    # When I fill in "Any Field" with ""
+    #   And I fill in "Author/Artist" with "testuser2"
+    #   And I press "Search" within "form#new_work_search"
+    # Then I should see "3 Found"
   
     # search by number of kudos
     When I am on the search works page
