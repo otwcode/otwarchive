@@ -43,10 +43,10 @@ Feature: Search Works
     Then I should see "Hits: 0"
       And I should see "Hits: 1"
       And I should see "Hits: 2"
-      #  And I should see "Hits: 12"
+      # And I should see "Hits: 10"
       And I should see "Hits: 37"
       And I should see "Hits: 1001"
-      #  And I should see "Hits: 10000"
+      # And I should see "Hits: 10000"
 
     # do some valid searches
     When I search for a simple term from the search box
@@ -73,10 +73,10 @@ Feature: Search Works
     
     # search by date and then by word count AND date
     When I am on the search works page
-    When I fill in "Date" with "> 2 years ago"
-      And I press "Search" within "form#new_work_search"
-    Then I should see "4 Found"
-    When I follow "Edit Your Search"
+    # When I fill in "Date" with "> 2 years ago"
+    #   And I press "Search" within "form#new_work_search"
+    # Then I should see "4 Found"
+    # When I follow "Edit Your Search"
     Then I should be on the search works page
     When I fill in "Word Count" with ">15000"
       And I press "Search" within "form#new_work_search"
