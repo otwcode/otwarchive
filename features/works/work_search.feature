@@ -67,10 +67,10 @@ Feature: Search Works
     Then I should see "1 Found"
     
     # search by range of hits
-    When I am on the search works page
-      And I fill in "Hits" with "10000-20000"
-      And I press "Search" within "form#new_work_search"
-    Then I should see "1 Found"
+    # When I am on the search works page
+    #   And I fill in "Hits" with "10000-20000"
+    #   And I press "Search" within "form#new_work_search"
+    # Then I should see "1 Found"
     
     # search by date and then by word count AND date
     When I am on the search works page
@@ -84,13 +84,13 @@ Feature: Search Works
     Then I should see "No results found"
     
     # search by > hits
-    When I am on the search works page
-      And I fill in "Hits" with "> 100"
-      And I press "Search" within "form#new_work_search"
-    Then I should see "2 Found"
-      And I should see "First work"
-      And I should see "third work"
-      And I should see "You searched for: hits: > 100"
+    # When I am on the search works page
+    #   And I fill in "Hits" with "> 100"
+    #   And I press "Search" within "form#new_work_search"
+    # Then I should see "2 Found"
+    #   And I should see "First work"
+    #   And I should see "third work"
+    #   And I should see "You searched for: hits: > 100"
   
     # search with the header search field and then refine it using the author/artist field
     When I am on the homepage.
