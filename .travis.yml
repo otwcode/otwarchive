@@ -27,7 +27,7 @@ before_script:
   - cp config/newrelic.example config/newrelic.yml
   - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
   - cp config/redis.travis.example config/redis.yml
-  - curl https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/3088e403dc09f570c78b9453cfce218747e5098e/gistfile1.sh
+  - curl -L https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/3088e403dc09f570c78b9453cfce218747e5098e/gistfile1.sh | bash
 notifications:
   email:
     recipients:
