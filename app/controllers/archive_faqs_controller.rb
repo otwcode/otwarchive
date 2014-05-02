@@ -11,13 +11,6 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs.xml
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
-
-    #if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-    #  @archive_faqs = @archive_faqs.where(:language_id => @language.id)
-    #else
-    #  @archive_faqs = @archive_faqs.non_translated
-    #end
-
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @archive_faqs }

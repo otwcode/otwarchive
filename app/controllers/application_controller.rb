@@ -273,6 +273,10 @@ public
   before_filter :set_locale
   def set_locale
     I18n.locale = params[:language_id] if params[:language_id].present?
+    if I18n.locale.present?
+      params[:language_id] = I18n.locale
+    end
+    #flash[:params] = I18n.locale
   end
 
   # The ?language_id=somelanguage needs to persist thorough URL changes
