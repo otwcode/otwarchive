@@ -36,7 +36,7 @@ class AdminPostsController < ApplicationController
     @next_admin_post = admin_posts.order('created_at ASC').where('created_at > ?', @admin_post.created_at).first
     @commentable = @admin_post
     @comments = @admin_post.comments
-    @page_subtitle = @admin_post.try(:title).try(:html_safe)
+    @page_subtitle = @admin_post.html_safe
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @admin_post }
