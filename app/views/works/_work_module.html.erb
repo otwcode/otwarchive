@@ -35,21 +35,21 @@
       <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
     </h4>
 
-  	<h5 class="fandoms heading" title="<%= ts("fandom") %>">
+    <h5 class="fandoms heading" title="<%= ts("fandom") %>">
       <% fandoms = tag_groups['Fandom'] %>
       <%= fandoms.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if fandoms %>
-  		&nbsp;
-  	</h5>
+      &nbsp;
+    </h5>
 
     <!--required tags-->
-  	<%= get_symbols_for(work, tag_groups) %>
-  	<p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
+    <%= get_symbols_for(work, tag_groups) %>
+    <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
 	  
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts("Tags") %></h6>
   <ul class="tags commas">
-  	<%= blurb_tag_block(work, tag_groups) %>
+    <%= blurb_tag_block(work, tag_groups) %>
   </ul>
 
   <!--summary-->	
