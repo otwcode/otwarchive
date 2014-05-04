@@ -54,21 +54,21 @@
 
   <!--summary-->	
   <% unless work.summary.blank? %>
-  	<h6 class="landmark heading"><%= ts("Summary") %></h6>
-  	<blockquote class="userstuff summary" title="<%= ts("summary") %>">
-  		<%=raw strip_images(sanitize_field(work, :summary)) %>
-  	</blockquote>
+    <h6 class="landmark heading"><%= ts("Summary") %></h6>
+    <blockquote class="userstuff summary" title="<%= ts("summary") %>">
+      <%=raw strip_images(sanitize_field(work, :summary)) %>
+    </blockquote>
   <% end %>
   	
   <% unless work.series.empty? %>
-  	<h6 class="landmark heading"><%= ts("Series") %></h6>
-  	<ul class="series">
-  	  <% work.series.each do |series| %>
-  	  <li>
-  	    <%= work_series_description(work, series) %>
-  	  </li>
-  	  <% end %>
-  	</ul>
+    <h6 class="landmark heading"><%= ts("Series") %></h6>
+    <ul class="series">
+      <% work.series.each do |series| %>
+        <li>
+          <%= work_series_description(work, series) %>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
 
   <!--stats-->
@@ -78,10 +78,10 @@
       <dt><%= ts("Language") %>:</dt>
       <dd><%= work.language.name %></dd>
     <% end %>
-  	<dt><%= ts('Words') %>:</dt>
-  	<dd><%= number_with_delimiter(work.word_count) %></dd>
-  	<dt><%= ts('Chapters') %>:</dt>
-  	<dd><%= work.chapter_total_display %></dd>
+    <dt><%= ts('Words') %>:</dt>
+    <dd><%= number_with_delimiter(work.word_count) %></dd>
+    <dt><%= ts('Chapters') %>:</dt>
+    <dd><%= work.chapter_total_display %></dd>
 
 <% end %>
 <% #### END CACHE show/hide %>
