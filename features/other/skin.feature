@@ -76,7 +76,6 @@ Feature: creating and editing skins
   Scenario: The user who creates a skin should be able to edit it
   Given I am logged in as "skinner"
     And I create the skin "my skin"
-    #And I follow "Site Skins"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
     And I submit
@@ -88,7 +87,7 @@ Feature: creating and editing skins
     And the unapproved public skin "public skin"
   When I am on the skins page
     Then I should not see "public skin"
-  When I follow "Public Site Skins"
+  When I am on skinner's skins page
   Then I should see "public skin"
     And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
@@ -363,7 +362,7 @@ Feature: creating and editing skins
     And I follow "Public Work Skins"
   Then I should see "Public Work Skins"
     When I follow "Public Site Skins"
-  Then I should see "Public Skins"
+  Then I should see "Public Site Skins"
 
   Scenario: Reverting to default skin when a custom skin is selected
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
@@ -377,7 +376,5 @@ Feature: creating and editing skins
     And I press "Revert to Default Skin"
   When I am on skinner's preferences page
     Then "Default" should be selected within "preference_skin_id"
-  When I am on skinner's skins page
-    Then I should see "Using Default Skin"
   
     
