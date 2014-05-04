@@ -18,7 +18,7 @@
     <% end %>
 
     <% unless controller.action_name == 'new' %>
-      <li><%= link_to ts('Create Skin'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %></li>
+      <li><%= link_to ts('Create New Skin'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->

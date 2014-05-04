@@ -88,7 +88,7 @@ Feature: creating and editing skins
     And the unapproved public skin "public skin"
   When I am on the skins page
     Then I should not see "public skin"
-  When I follow "Site Skins"
+  When I follow "Public Site Skins"
   Then I should see "public skin"
     And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
@@ -188,7 +188,7 @@ Feature: creating and editing skins
   When I am on skin's new page
   Then I should see "CSS" within "form#new_skin"
   When I follow "Use Wizard Instead?"
-  Then I should see "Create New Archive Site Skin"
+  Then I should see "Create New Site Skin"
     And I should not see "CSS" within "form"
   When I follow "Write Custom CSS Instead?"
   Then I should see "CSS"
@@ -315,18 +315,18 @@ Feature: creating and editing skins
   Scenario: New skin form should have the correct skin type pre-selected
     Given I am logged in as "skinner"
     When I am on the skins page
-      And I follow "Create Skin"
+      And I follow "Create New Skin"
     Then "Site Skin" should be selected within "skin_type"
     When I am on the skins page
-      And I follow "Work Skins"
-      And I follow "Create Skin"
+      And I follow "My Work Skins"
+      And I follow "Create New Skin"
     Then "Work Skin" should be selected within "skin_type"
 
   Scenario: Skin type should persist and remain selectable if you encounter errors during creation
     Given I am logged in as "skinner"
     When I am on the skins page
-      And I follow "Work Skins"
-      And I follow "Create Skin"
+      And I follow "My Work Skins"
+      And I follow "Create New Skin"
       And I fill in "Title" with "invalid skin"
       And I fill in "CSS" with "this is invalid css"
       And I submit
@@ -344,7 +344,6 @@ Feature: creating and editing skins
     When I am on skinner's preferences page
     When I follow "Skins"
   Then I should see "My Site Skins"
-    And I should see "My Site Skins"
     And I should see "My Work Skins"
     And I should see "Public Site Skins"
     And I should see "Public Work Skins"
