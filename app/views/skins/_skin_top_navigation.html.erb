@@ -1,34 +1,37 @@
+<% work_skin = params[:skin_type] && params[:skin_type] == 'WorkSkin'
+   revert_default = ts('Revert to Default Skin') %>
+
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
   <% if session[:site_skin] %>
-    <li><%= link_to ts("Revert to Default Skin"), unset_skins_path %></li>
+    <li><%= link_to revert_default, unset_skins_path %></li>
   <% end %>
 	<% if logged_in? %>
 	  <% if (current_user.preference.skin_id != Skin.default.id) && session[:site_skin].blank? %>
 	    <li>
-    	  <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
+    	  <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => 'put') do |f| %>
           <%= f.hidden_field :skin_id, :value => Skin.default.id %>
-          <%= f.submit ts("Revert to Default Skin") %>
+          <%= f.submit revert_default %>
         <% end %>
       </li>
     <% end %>
-	
-    <% unless controller.action_name == "new" %>
-      <li><%= link_to ts("Create Skin"), new_skin_path %></li>
+
+    <% unless controller.action_name == 'new' %>
+      <li><%= link_to ts('Create New Skin'), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->
-    <% if controller.action_name == "new" ||  (controller.action_name == "edit" && !@skin.is_a?(WorkSkin)) %>
+    <% if controller.action_name == 'new' ||  (controller.action_name == 'edit' && !@skin.is_a?(WorkSkin)) %>
       <% if params[:wizard] %>
         <li id="form-link">
-           <%= link_to( ts("Write Custom CSS Instead?"),
-             {:url => {:controller => :skins, :action => controller.action_name, :wizard => false}},
-             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => false)) %>
+           <%= link_to( ts('Write Custom CSS Instead?'),
+             {:url => {:controller => :skins, :action => controller.action_name}},
+             :href => url_for(:controller => :skins, :action => controller.action_name)) %>
         </li>
       <% else %>
         <li id="wizard-link">
-          <%= link_to( ts("Use Wizard Instead?"),
+          <%= link_to( ts('Use Wizard Instead?'),
             {:url => {:controller => :skins, :action => controller.action_name, :wizard => true}},
             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => true)) %>
         </li>
