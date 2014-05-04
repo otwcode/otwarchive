@@ -96,6 +96,10 @@ When /^I edit the work "([^\"]*)"$/ do |work|
   visit edit_work_url(work)
 end
 
+When /^I edit the draft "([^\"]*)"$/ do |draft|
+  step %{I edit the work "#{draft}"}
+end
+
 When /^I post the chaptered work "([^\"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
@@ -330,6 +334,20 @@ When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
+
+When /^the statistics_tasks rake task is run$/ do
+  StatCounter.hits_to_database
+  StatCounter.stats_to_database
+end
+
+When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+  step %{the user "#{coauthor}" exists and is activated}
+  step %{I edit the work "#{work}"}
+  check("Add co-authors?")
+  fill_in("pseud_byline", :with => "#{coauthor}")
+  step %{I post the work without preview}
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
