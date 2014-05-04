@@ -19,7 +19,7 @@
     <% unless character.relationships.empty? %>
     <ul class="tags commas">
       <% for relationship in character.relationships %>
-      <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
+      <li><%= link_to relationship.name, tag_works_path(relationship), :class => "tag" %></li>
       <% end %>
     </ul>
     <% end %>
