@@ -1,5 +1,5 @@
 /*==ACTIONS: buttons!
-http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
+http://otwcode.github.com/docs/front_end_coding/patterns/actions
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button

@@ -38,7 +38,7 @@ Feature: Pseud dashboard
 
   When I am logged in as "myself" with password "password"
     And I go to myself's pseuds page
-  Then I should see "Default Pseud" within ".navigation"
+  Then I should see "Default Pseud" within "div#main.pseuds-index"
   When I follow "New Pseud"
     And I fill in "Name" with "Me"
     And I check "pseud_is_default"
@@ -69,8 +69,7 @@ Feature: Pseud dashboard
     And I should not see "Stargatte SG-oops"
 
   # check on pseud that didn't post the work
-
-  When I follow "myself" within ".pseud .expandable li"
+  When I follow "myself" within "div#dashboard ul.expandable.secondary"
   Then I should not see "Stargate"
     And I should not see "SG-1"
     And I should not see "Stargate Franchise"
@@ -101,7 +100,7 @@ Feature: Pseud dashboard
 
   # check on pseud that didn't post the work
 
-  When I follow "myself" within ".pseud .expandable li"
+  When I follow "myself" within "div#dashboard ul.expandable.secondary"
   Then I should not see "Stargate"
     And I should not see "SG-1"
     And I should not see "Stargate Franchise"

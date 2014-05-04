@@ -5,25 +5,29 @@
 When /^I search for a complex term from the search box$/ do
   step %{I am on the homepage}
       step %{I fill in "site_search" with "(title,summary): second words: >100"}
-      step %{I press "search"}
+      step %{I press "Search"}
 end
 
 When /^I search for a simple term from the search box$/ do
   step %{I am on the homepage}
       step %{I fill in "site_search" with "first"}
-      step %{I press "search"}
+      step %{I press "Search"}
 end
 
 When /^I search for works containing "([^\"]*)"$/ do |term|
   step %{I am on the homepage}
       step %{I fill in "site_search" with "#{term}"}
-      step %{I press "search"}
+      step %{I press "Search"}
 end
 
 When /^I search for works by mod$/ do
   step %{I am on the homepage}
       step %{I fill in "site_search" with "author: mod"}
-      step %{I press "search"}
+      step %{I press "Search"}
+end
+
+When /^I have flushed Redis$/ do
+  REDIS_GENERAL.flushdb
 end
 
 ### THEN

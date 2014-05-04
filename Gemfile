@@ -1,8 +1,10 @@
 source 'http://rubygems.org'
 
+ruby '1.9.3'
+
 gem 'bundler'
 
-gem 'rails', '3.0.20'
+gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -19,12 +21,8 @@ gem 'redis-namespace'
 # Here are all our application-specific gems
 
 gem 'will_paginate', '>=3.0.2'
-# gem 'will_paginate',
-  # :git     => 'git://github.com/huerlisi/will_paginate.git',
-  # :branch  => 'rails3',
-  # :require => 'will_paginate'
-
-gem 'nested_has_many_through'
+gem 'acts_as_list'
+gem 'akismetor'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
@@ -36,19 +34,16 @@ gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
-gem 'aws-s3', :require => 'aws/s3'
-gem 'mocha'
+gem 'aws-sdk'
 gem 'css_parser'
 
-gem 'paperclip', '>=2.3.16'
+gem 'cocaine'
+gem 'paperclip'
 
 # for looking up image dimensions quickly
 gem 'fastimage'
 
-gem 'authlogic',
-  :git     => 'git://github.com/odorcicd/authlogic.git',
-  :branch  => 'rails3',
-  :require => 'authlogic'
+gem 'authlogic'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -56,9 +51,6 @@ gem 'permit_yo'
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
-
-# enable debugging with "rails server -u" or "rails server --debugger"
-gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'jquery-rails', '>= 0.2.6'
 
@@ -69,36 +61,52 @@ gem 'best_in_place'
 gem 'timeliness'
 
 gem 'rpm_contrib'
-gem 'newrelic_rpm', ">= 3.5.3.25"
-gem 'newrelic-redis'
 
 # for generating graphs
 gem "google_visualr", ">= 2.1"
+
+# Copycopter to aid translation
+# gem 'copycopter_client', '~> 2.0.1'
+
+# Coveralls for code test coverage
+gem 'coveralls', require: false
+
+#  Place the New Relic gem as low in the list as possible, allowing the 
+#  frameworks above it to be instrumented when the gem initializes.
+gem 'newrelic_rpm', "3.7.2.192"
+gem 'newrelic-redis'
+
+# For URL mangling
+gem 'addressable'
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
-  gem 'capybara', '=0.3.9'
-  gem 'database_cleaner', '>=0.6.0.rc.3'
-  gem 'cucumber-rails'
-  gem 'cucumber', '>=1.0.0'
-  gem 'gherkin', '>=2.4.1' 
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'cucumber-rails', require: false
+  gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
-  gem 'fakeweb'
-  gem 'vcr'
+  gem 'typhoeus'
+  gem "vcr", "~> 2.5.0"
   gem 'delorean'
+  gem 'faker'
+end
+
+group :test, :development do
+  gem 'pry'
 end
 
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
+gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
   gem "memcache-client"
 end
-

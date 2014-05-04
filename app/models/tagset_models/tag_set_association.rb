@@ -6,14 +6,6 @@ class TagSetAssociation < ActiveRecord::Base
   validates_uniqueness_of :tag_id, :scope => [:owned_tag_set_id, :parent_tag_id], :message => ts("^You have already associated those tags in your set.")
   validates_presence_of :tag_id, :parent_tag_id, :owned_tag_set_id
 
-  validate :not_existing
-  def not_existing
-    # not already existing 
-    if parent_tag && parent_tag.children.where(:id => tag.id).exists?
-      errors.add(:base, "^The tags #{tag.name} and #{parent_tag.name} are already canonically associated.")
-    end
-  end
-  
   attr_accessor :create_association
   
   def to_s
@@ -89,11 +81,11 @@ class TagSetAssociation < ActiveRecord::Base
       
   def add_to_autocomplete(score = nil)
     score ||= autocomplete_score
-    $redis.zadd("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", score, autocomplete_value)
+    REDIS_GENERAL.zadd("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", score, autocomplete_value)
   end
 
   def remove_from_autocomplete
-    $redis.zrem("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", autocomplete_value)
+    REDIS_GENERAL.zrem("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", autocomplete_value)
   end
     
   # returns tags that have been associated with a given fandom OR wrangled
@@ -118,17 +110,17 @@ class TagSetAssociation < ActiveRecord::Base
       combo_key2 = combo_key + "2"
       combo_key3 = combo_key + "3"
       keys_for_intersect = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
-      $redis.zunionstore(combo_key2, keys_to_lookup, :aggregate => :max)
-      $redis.zunionstore(combo_key3, keys_for_intersect, :aggregate => :max)
-      $redis.zinterstore(combo_key, [combo_key2, combo_key3], :aggregate => :max)
-      $redis.expire combo_key2, 1
-      $redis.expire combo_key3, 1
+      REDIS_GENERAL.zunionstore(combo_key2, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key3, keys_for_intersect, :aggregate => :max)
+      REDIS_GENERAL.zinterstore(combo_key, [combo_key2, combo_key3], :aggregate => :max)
+      REDIS_GENERAL.expire combo_key2, 1
+      REDIS_GENERAL.expire combo_key3, 1
     else
-      $redis.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
     end
     
-    results = $redis.zrevrange(combo_key, 0, -1)
-    $redis.expire combo_key, 1
+    results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)
+    REDIS_GENERAL.expire combo_key, 1
     
     unless search_param.blank?
       search_regex = Tag.get_search_regex(search_param)

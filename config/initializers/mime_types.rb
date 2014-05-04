@@ -5,10 +5,7 @@
 # Mime::Type.register_alias "text/html", :iphone
 
 # for mobi files
-Mime::Type.register 'application/mobi', :mobi
+Mime::Type.register 'application/x-mobipocket-ebook', :mobi
 
 # for epub files
 Mime::Type.register 'application/epub', :epub
-
-# pdf files
-Mime::Type.register 'application/pdf', :pdf

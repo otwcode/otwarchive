@@ -34,6 +34,7 @@ Feature: Collectible items email
      And I should see "collect-y work"
      And I should see "Antarctic Penguins"
      And 1 email should be delivered to test@archiveofourown.org
+     And all emails have been delivered
     When I edit the work "collect-y work"
     And I fill in "work_collection_names" with "AntarcticPenguins, PolarBears"
     And I press "Preview"
@@ -44,3 +45,20 @@ Feature: Collectible items email
     And I should see "Polar Bears"
     And I should see "Antarctic Penguins"
     And 1 email should be delivered to test2@archiveofourown.org
+
+  Scenario: Bookmark added to collection sends notification email
+    Given all email have been delivered
+    When I have the collection "Dont Bookmark Me Bro" with name "dont_bookmark_me_bro"
+      And I am logged in as "moderator"
+      And I go to "Dont Bookmark Me Bro" collection's page
+      And I follow "Collection Settings"
+      And I fill in "Collection Email" with "test@archiveofourown.org"
+      And I check "Send a message to the collection email when a work is added"
+      And I press "Update"
+    When I post the work "Excessive Force"
+      And I am logged in as "bookmarker"
+      And I view the work "Excessive Force"
+      And I follow "Bookmark"
+      And I fill in "bookmark_collection_names" with "dont_bookmark_me_bro"
+      And I press "Create"
+    Then 1 email should be delivered
