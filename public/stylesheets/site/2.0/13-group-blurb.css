@@ -51,6 +51,10 @@ li.blurb:after {
   margin: 0.375em 5.25em 0 65px;
 }
 
+.blurb .header p {
+  margin-left: 65px;
+}
+
 .blurb .header img {
   position: relative;
   margin: 0;
