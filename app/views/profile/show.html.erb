@@ -9,8 +9,8 @@
     <dl class="meta">
       <dt class="pseuds"><%= link_to ts("My pseuds:"), user_pseuds_path(@user) %></dt>
       <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
-	    <dt><%= ts("I joined on:") %></dt>
-		  <dd><%= ts("%{date}", :date => l(@user.created_at.to_date)) %></dd>
+      <dt><%= ts("I joined on:") %></dt>
+      <dd><%= ts("%{date}", :date => l(@user.created_at.to_date)) %></dd>
       <% if @user.profile.location? %>
         <dt class="location"><%=h ts("I live in:") %></dt>
         <dd><%=h @user.profile.location %></dd>
