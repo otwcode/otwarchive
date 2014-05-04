@@ -107,6 +107,6 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-  gem 'unicorn', :require => false
+  #gem 'unicorn', :require => false
   gem "memcache-client"
 end
