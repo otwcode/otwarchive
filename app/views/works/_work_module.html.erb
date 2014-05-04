@@ -7,7 +7,7 @@
   <!--title, author, fandom-->
   <div class="header module">
 
-    <h4 class="heading" title="title">
+    <h4 class="heading" title="<%= ts("title") %>">
       <% if (work.unrevealed? || work.anonymous?) && is_author_of?(work) %>
         <span class="status">
           <% if work.unrevealed? %>
@@ -15,8 +15,8 @@
           <% elsif work.anonymous? %>
             <%= ts("Anonymous:") %>
           <% end %>
-        <% end %>
-      </span>
+        </span>
+      <% end %>
   	  <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
    		<%= ts('by') %>
         
