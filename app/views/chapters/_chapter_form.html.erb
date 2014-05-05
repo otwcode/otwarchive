@@ -1,17 +1,18 @@
-<div id="work-form" class="verbose post work chapter">
+<div id="chapter-form" class="verbose post work chapter">
   <%= form_for([@work, chapter]) do |f| %>
+    <p class="required notice"><%= ts('* Required information') %></p>
     <fieldset id="chapter-ordering">
       <legend><%= ts("Name, Order and Date") %></legend>
       <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
       <dl>
-        <dt><%= f.label :title, ts("Chapter title") %> <%= link_to_help "chapter-title" %></dt>
+        <dt><%= f.label :title, ts("Chapter Title") %> <%= link_to_help "chapter-title" %></dt>
         <dd>
           <%= f.text_field :title, :class => "observe_textlength" %>
           <%= live_validation_for_field('chapter_title', :presence => false, :maximum_length => ArchiveConfig.TITLE_MAX) %>
           <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
         </dd>
   
-        <dt><%= f.label :position, ts("Chapter number") %></dt>
+        <dt><%= f.label :position, ts("Chapter Number") %></dt>
         <dd>
           <p>
             <%= f.text_field :position, :class => "number" %> 
@@ -19,7 +20,7 @@
             <%= f.text_field :wip_length, :class => "number" %> 
           </p>
         </dd>
-        <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter publication date") %>  <%= link_to_help "backdating-help" %></dt>
+        <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter Publication Date") %>  <%= link_to_help "backdating-help" %></dt>
         <dd class="datetime"><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %></dd>
       </dl>
     </fieldset>
@@ -30,7 +31,7 @@
       <dl>
         <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
-        <dt class="summary"><%= f.label :summary, ts("Chapter summary") %></dt>
+        <dt class="summary"><%= f.label :summary, ts("Chapter Summary") %></dt>
         <dd class="summary">
           <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "observe_textlength" %>
           <%= live_validation_for_field('chapter_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
@@ -43,7 +44,7 @@
     </fieldset>
 
 <fieldset class="text">
-  <legend> <%= f.label :content, ts("Chapter text"), :class => "required" %></legend>
+  <legend class="required"><%= ts('Chapter Text') + "*" %></legend>
   <h4 class="landmark heading"><%= ts("Chapter Text") %></h4>
   <ul class="hidden rtf-html-switch actions" role="menu">
     <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
@@ -73,15 +74,7 @@
           <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
         <% end %>
         <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
-        <% if chapter.posted? %>
-          <li><%= submit_tag ts('Update Without Preview'), :name => 'post_without_preview_button' %></li>
-          <li><%= link_to ts('Delete Chapter'), [:confirm_delete, @work, chapter], :confirm => ts('Are you sure you want to delete this chapter?') %></li>
-        <% else %>
-          <li><%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button', :disable_with => ts("Please wait...") %></li>
-          <% unless chapter.published_at.nil? %>
-            <li><%= link_to ts('Discard Draft'), [@work, chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
-          <% end %>
-        <% end %>
+        <li><%= submit_tag ts('Post Without Preview'), :name => 'post_without_preview_button' %></li>
         <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
       </ul>
     </fieldset>

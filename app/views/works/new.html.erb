@@ -1,9 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="landmark heading"><%=h ts('Post New Work') %></h2>
+<h2 class="heading"><%= ts('Post New Work') %></h2>
 
 <%= error_messages_for @work %>
 <!--/descriptions-->
 
+<!--subnav-->
 <ul class="actions" role="menu">
   <% if @unposted %>
     <li>
@@ -16,6 +17,7 @@
       :href => url_for(:controller => :works, :action => :new, :import => true)) %>
   </li>
 </ul>
+<!--/subnav-->
 
 <!--main content-->
 <%= render :partial => "standard_form" %>
