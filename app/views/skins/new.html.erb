@@ -1,11 +1,18 @@
 <!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
-<h2 class="heading"><%= ts('Create New Archive Skin')  %></h2>
+<h2 class="heading"><%= ts('Create New Skin')  %></h2>
+
+<%= render :partial => 'skin_top_navigation' %>
 
 <%= error_messages_for :skin %>
 
-<%= render :partial => "skin_top_navigation" %>
+<p class="notes">
+  <%= ts('This form allows you to create a new site or work skin.') %>
+  <%= link_to_help 'skins-basics' %>
+</p>
 
-<h3 class="landmark heading"><%= ts("New Archive Skin Form") %></h3>
+<%= render :partial => 'skin_type_navigation' %>
+
+<h3 class="landmark heading"><%= ts('New Archive Skin Form') %></h3>
 
 <%= form_for @skin, :html => {:multipart => true} do |f| %>
   <%= render 'form', :f => f %>
