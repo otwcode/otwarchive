@@ -143,10 +143,6 @@ dl.stats + h6 + .actions {
   float: left;
 }
 
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
-}
-
 .actions .secondary .submit, .nomination .actions {
   float: none;
 }
