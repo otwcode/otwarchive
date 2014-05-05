@@ -28,5 +28,5 @@ Scenario: view the help popup for chapter title
     And I fill in "content" with "Well, maybe not so epic."
     And I press "Post"
     And I follow "Add Chapter"
-    And I follow "Chapter Title"
+    And I follow "Chapter title"
   Then I should see "You can add a chapter title"
