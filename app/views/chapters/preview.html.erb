@@ -20,7 +20,7 @@
     <% else %>
       <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with =>  ts("Please wait...") %></li>
       <li><%= submit_tag ts("Save Without Posting"), :name => 'save_button' %></li>
-      <li><%= link_to ts('Delete Draft Chapter'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
+      <li><%= link_to ts('Delete Chapter Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
     <% end %>
     <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
     <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li> 
