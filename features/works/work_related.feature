@@ -342,3 +342,21 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+
+  Scenario: When a user is notified that a co-authored work has been inspired by a work they posted, the e-mail should link to each author's URL instead of showing escaped HTML
+  Given I have related works setup
+    And I am logged in as "inspiration"
+    And I post the work "Seed of an Idea"
+  When I am logged in as "inspired"
+    And I set up the draft "Seedling of an Idea"
+    And I add the co-author "misterdeejay"
+    And I list the work "Seed of an Idea" as inspiration
+    And I preview the work
+    And I post the work
+  Then 1 email should be delivered to "misterdeejay"
+    And the email should contain "You have been listed as a coauthor on the following work"
+  Then 1 email should be delivered to "inspiration"
+    And the email should link to inspired's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
+    And the email should link to misterdeejay's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"

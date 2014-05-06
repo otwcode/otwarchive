@@ -341,11 +341,19 @@ When /^the statistics_tasks rake task is run$/ do
 end
 
 When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
-  step %{the user "#{coauthor}" exists and is activated}
   step %{I edit the work "#{work}"}
+  step %{I add the co-author "#{coauthor}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the co-author "([^\"]*)"$/ do |coauthor|
+  step %{the user "#{coauthor}" exists and is activated}
   check("Add co-authors?")
   fill_in("pseud_byline", :with => "#{coauthor}")
-  step %{I post the work without preview}
+end
+
+When /^I give the work to "([^\"]*)"$/ do |recipient|
+  fill_in("work_recipients", :with => "#{recipient}")
 end
 
 ### THEN
