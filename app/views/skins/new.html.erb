@@ -6,13 +6,13 @@
 <%= error_messages_for :skin %>
 
 <p class="notes">
-  <%= ts('This form allows you to create a new site or work skin.') %>
+  <%= ts('This form allows you to create a new site or work skin. Select "Work Skin" or "Site Skin" in the Type option list to choose which type of skin you are creating.') %>
   <%= link_to_help 'skins-basics' %>
 </p>
 
 <%= render :partial => 'skin_type_navigation' %>
 
-<h3 class="landmark heading"><%= ts('New Archive Skin Form') %></h3>
+<h3 class="landmark heading"><%= ts('Create New Skin') %></h3>
 
 <%= form_for @skin, :html => {:multipart => true} do |f| %>
   <%= render 'form', :f => f %>
