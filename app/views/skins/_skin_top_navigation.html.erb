@@ -1,5 +1,5 @@
 <% work_skin = params[:skin_type] && params[:skin_type] == 'WorkSkin'
-   revert_default = ts('Revert to Default Skin') %>
+   revert_default = ts('Revert to Default Skin')%>
 
 <!--subnav-->
 <h3 class="landmark heading">Navigation</h3>
@@ -25,20 +25,13 @@
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->
-    <% if controller.action_name == 'new' ||  (controller.action_name == 'edit' && !@skin.is_a?(WorkSkin)) %>
-      <% if params[:wizard] %>
-        <li id="form-link">
-           <%= link_to( ts('Write Custom CSS Instead?'),
-             {:url => {:controller => :skins, :action => controller.action_name}},
-             :href => url_for(:controller => :skins, :action => controller.action_name)) %>
-        </li>
-      <% else %>
-        <li id="wizard-link">
-          <%= link_to( ts('Use Wizard Instead?'),
-            {:url => {:controller => :skins, :action => controller.action_name, :wizard => true}},
-            :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => true)) %>
-        </li>
-      <% end %>
+    <% if action_name == 'new' ||  (action_name == 'edit' && !@skin.is_a?(WorkSkin)) %>
+      <li id="form-link">
+        <%= span_if_current ts('Write Custom CSS'), new_skin_path, params[:wizard].blank? %>
+      </li>
+      <li id="wizard-link">
+        <%= span_if_current ts('Use Wizard'), new_skin_path(:wizard => true), params[:wizard] %>
+      </li>
     <% end %>
   <% end %>
 </ul>
