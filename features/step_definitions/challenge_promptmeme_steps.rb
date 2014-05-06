@@ -351,12 +351,6 @@ When /^I fulfill my claim again$/ do
   step %{I should see "Work was successfully posted"}
 end
 
-When /^I edit the work "([^\"]*)" to fulfill my claim$/ do |title|
-  step %{I edit the work "#{title}"}
-  
-  step %{I post the work without preview}
-end
-
 When /^mod fulfills claim$/ do
   step %{I am logged in as "mod1"}
   step %{I claim a prompt from "Battle 12"}
