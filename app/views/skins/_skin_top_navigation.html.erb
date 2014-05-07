@@ -19,8 +19,8 @@
 
     <% unless controller.action_name == 'new' %>
       <li>
-        <%= skin_name = work_skin ? "Work" : "Site"
-            link_to ts("Create #{skin_name} Skin"), new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %>
+        <%= create_text = work_skin ? ts('Create Work Skin') : ts('Create Site Skin')
+            link_to create_text, new_skin_path(:skin_type => work_skin ? "WorkSkin" : "Skin") %>
       </li>
     <% end %>
     
