@@ -1,6 +1,6 @@
 <fieldset>
-  <legend>About</legend>
-  <h3 class="landmark heading">ts('About')</h3>
+  <legend><%= ts('About') %></legend>
+  <h3 class="landmark heading"><%= ts('About') %></h3>
   <dl>      
     <dt><%= label_tag 'skin_type', ts('Type') %> <%= link_to_help 'skins-basics' %></dt>
     <% if @skin.id %>
@@ -28,13 +28,13 @@
 </fieldset>
 
 <fieldset>
-  <legend>CSS</legend>
+  <legend><%= ts('CSS') %></legend>
   <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help 'skins-creating' %></h3>
     <p><%= f.text_area :css, :cols => 70, :class => 'large' %></p>
 </fieldset>
   
 <fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
-  <legend>Advanced 
+  <legend><%= ts('Advanced') %>
   <span class="action">
     <a href="#" class="advanced_skin_open hidden"><%= ts('Show') %> &#8595;</a>
     <a href="#" class="advanced_skin_close hidden"><%= ts('Hide') %> &#8593;</a>

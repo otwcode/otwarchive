@@ -1,3 +1,5 @@
+<% work_skin = params[:skin_type] && params[:skin_type] == 'WorkSkin' %>
+
 <h2 class="heading"><%= ts('Skins') %></h2>
 <%= render 'skin_top_navigation' %>
 
@@ -11,11 +13,11 @@
 <%= render 'skin_type_navigation' %>
 
 
-<h4 class="landmark heading"><%= ts("List of Skins") %></h4>
+<h4 class="landmark heading"><%= ts('List of Skins') %></h4>
 <% if @skins.empty? %>
   <p>
-    <%= params[:work_skins] ? ts('No work skins here yet!') : ts('No site skins here yet!') %>
-    <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => params[:work_skins] ? 'WorkSkin' : 'Skin') %><% end %>
+    <%= work_skin ? ts('No work skins here yet!') : ts('No site skins here yet!') %>
+    <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => work_skin ? 'WorkSkin' : 'Skin') %><% end %>
   </p>
 <% else %>
   <ul class="index group">
