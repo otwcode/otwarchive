@@ -25,12 +25,13 @@
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->
-    <% if action_name == 'new' ||  (action_name == 'edit' && !@skin.is_a?(WorkSkin)) %>
+    <% if action_name == 'new' ||  (action_name == 'edit' && !@skin.is_a?(WorkSkin))
+    %>
       <li id="form-link">
-        <%= span_if_current ts('Write Custom CSS'), new_skin_path, params[:wizard].blank? %>
+        <%= span_if_current ts('Write Custom CSS'), action_name == 'new' ? new_skin_path : edit_skin_path, params[:wizard].blank? %>
       </li>
       <li id="wizard-link">
-        <%= span_if_current ts('Use Wizard'), new_skin_path(:wizard => true), params[:wizard] %>
+        <%= span_if_current ts('Use Wizard'), action_name == 'new' ? new_skin_path(:wizard => true) : edit_skin_path(:wizard => true), params[:wizard] %>
       </li>
     <% end %>
   <% end %>
