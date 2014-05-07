@@ -136,6 +136,11 @@ class Work < ActiveRecord::Base
   attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   ########################################################################
   # VALIDATION
   ########################################################################
