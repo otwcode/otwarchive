@@ -103,7 +103,6 @@
     <% end %>
 
     <div id="bookmark_form_placement" class="wrapper toggled">
-      <% @bookmark ||= bookmark_if_exists(commentable) %>
       <% bookmarkable = (commentable.respond_to?(:work) ? commentable.work : commentable) %>
       <% if @bookmark %>
         <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>
