@@ -26,9 +26,7 @@
       <div class="header module">
         <h4 class="heading" title="title">
           <%= link_to skin.title, skin %>
-          <span class="byline">
-            <%= ts("by %{byline}", :byline => skin.byline) %>
-          </span>
+          <%= ts("by %{byline}", :byline => skin.byline) %>
         </h4>
         <% if @user %>
           <% if skin.official? %> 
