@@ -51,10 +51,6 @@ li.blurb:after {
   margin: 0.375em 5.25em 0 65px;
 }
 
-.blurb .header p {
-  margin-left: 65px;
-}
-
 .blurb .header img {
   position: relative;
   margin: 0;
@@ -383,6 +379,12 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .reading .deleted h4.viewed {
   background: transparent;
+}
+
+/* mod: SKIN */
+
+.skin .blurb .header p {
+  margin-left: 65px;
 }
 
 /*END== */
