@@ -20,7 +20,7 @@
     <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => work_skin ? 'WorkSkin' : 'Skin') %><% end %>
   </p>
 <% else %>
-  <ul class="skin index group">
+  <ul class="skin picture index group">
   <% for skin in @skins %>
     <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
       <div class="header module">
