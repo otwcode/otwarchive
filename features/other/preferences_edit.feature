@@ -23,7 +23,7 @@ Feature: Edit preferences
     And I should see "Show the whole work by default."
     And I should see "Hide warnings (you can still choose to show them)."
     And I should see "Hide additional tags (you can still choose to show them)."
-    And I should see "Hide other people's work skins."
+    And I should see "Hide work skins (you can still choose to show them)."
     And I should see "Your site skin"
     And I should see "Your time zone:"
     And I should see "Browser page title format"
