@@ -139,8 +139,10 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + h6 + .actions {
+dl.stats + .landmark + .actions {
+  clear: none;
   float: left;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {

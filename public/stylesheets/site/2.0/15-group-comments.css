@@ -58,7 +58,7 @@ div.comment, li.comment {
   margin: 0;
 }
 
-fieldset.comments {
+fieldset.comments, .comment .userstuff {
   background: transparent;
   border: none;
     box-shadow: none;
