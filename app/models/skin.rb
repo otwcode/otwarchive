@@ -10,7 +10,7 @@ class Skin < ActiveRecord::Base
                  ]
     
   # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
-  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 640px)']
+  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 480px)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
@@ -240,7 +240,7 @@ class Skin < ActiveRecord::Base
   end
   
   def parse_media_from_filename(media_string)
-    media_string.gsub(/maxwidth/, 'only screen and (max-width: 640px)').gsub('.', ', ')
+    media_string.gsub(/maxwidth/, 'only screen and (max-width: 480px)').gsub('.', ', ')
   end
   
   def parse_sheet_role(role_string)

@@ -73,14 +73,6 @@ li.blurb:after {
   display: block;
 }
 
-.blurb dl.stats {
-  float: right;
-}
-
-.blurb dl.stats + .heading.landmark { 
-  display: inline;
-}
-
 /* ==START icon block rules*/
 
 .blurb ul.required-tags {
@@ -231,6 +223,10 @@ li.blurb:after {
   clear: none;
   margin: 0.643em auto;
   text-align: justify;
+}
+
+.blurb.own dl.stats {
+  padding-left: 12.15em;
 }
 
 /*modification: PICTURE 
