@@ -27,7 +27,7 @@ li.blurb, .blurb .blurb {
     border-radius: 0.15em;
 }
 
-li.blurb:after {
+li.blurb:after, .blurb .blurb:after {
   content: " ";
   display: block;
   height: 0;
@@ -66,7 +66,11 @@ li.blurb:after {
 }
 
 .blurb .header p.notice, .blurb ul.series {
-  margin: 0.875em 0 0 0;
+  margin: 0.875em 0 0;
+}
+
+.blurb ul.series {
+  margin-bottom: 0.875em;
 }
 
 .blurb .heading {
@@ -336,6 +340,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 .bookmark .user {
   border: 1px solid #ccc;
   clear: right;
+  margin-top: 0.643em;
   overflow: hidden;
 }
 
@@ -376,6 +381,10 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 }
 
 /* mod: READING */
+
+.reading .user { 
+  float: left;
+}
 
 .reading h4.viewed {
   background: #ddd;
