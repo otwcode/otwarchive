@@ -62,7 +62,7 @@ li.blurb:after, .blurb .blurb:after {
 }
 
 .blurb .header p.notice, .blurb ul.series {
-  margin: 0.875em 0 0;
+  margin: 1.25em 0 0;
 }
 
 .blurb ul.series {
@@ -345,6 +345,10 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	font-family: Georgia, serif;
 	font-size: 0.875em;
 	line-height: 2;
+}
+
+.bookmark .actions {
+  clear: both;
 }
 
 /* line break between types of meta */
