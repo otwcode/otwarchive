@@ -1,5 +1,5 @@
 /*==REGION: HEADER is #1 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
 
 #header input, #header #search>*, #header #search .submit {

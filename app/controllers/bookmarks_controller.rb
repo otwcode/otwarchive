@@ -139,12 +139,52 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    if @bookmark.update_attributes(params[:bookmark])
-      flash[:notice] = ts("Bookmark was successfully updated.")
-      redirect_to(@bookmark) 
+    new_collections = []
+    unapproved_collections = []
+    errors = []
+    params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+      collection = Collection.find_by_name(collection_name)
+      if @bookmark.collections.include?(collection)
+        next
+      elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
+        errors << ts("#{collection.title} is closed to new submissions.")
+      elsif @bookmark.add_to_collection(collection) && @bookmark.save
+        if @bookmark.approved_collections.include?(collection)
+          new_collections << collection
+        else
+          unapproved_collections << collection
+        end
+      else
+        errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!") 
+      end
+    end
+
+    # messages to the user
+    unless errors.empty?
+      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+    end
+    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    unless new_collections.empty?
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
+                          :collections => new_collections.collect(&:title).join(", "))
+    end
+    unless unapproved_collections.empty?
+      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
+                                      :moderated => unapproved_collections.collect(&:title).join(", "))
+    end
+
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+
+    if errors.empty?
+      if @bookmark.update_attributes(params[:bookmark])
+        flash[:notice] = ts("Bookmark was successfully updated.")
+        redirect_to(@bookmark)
+      end
     else
+      @bookmark.update_attributes(params[:bookmark])
       @bookmarkable = @bookmark.bookmarkable
-      render :action => :edit
+      render :edit and return
     end
   end
 

@@ -101,7 +101,7 @@ module NavigationHelpers
       new_work_path(:import => 'true')
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
-    when /^(.*)'s skin page/
+    when /^(.*)'s skins page/
       skins_path(:user_id => $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))

@@ -374,6 +374,17 @@ namespace :After do
       fandom.save
     end
   end
+  
+  desc "Increase skins' width threshold for handheld devices to 640px"
+  task(:increase_handheld_width => :environment) do
+    hh_width_media = "only screen and (max-width: 480px)"
+    hh_skins = Skin.select { |s| s.media.include? hh_width_media }
+    hh_skins.each do |skin|
+      new_media = skin.media.map { |m| m == hh_width_media ? "only screen and (max-width: 640px)" : m }
+      skin.media = new_media
+      skin.save
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 

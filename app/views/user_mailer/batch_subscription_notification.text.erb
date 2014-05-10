@@ -3,9 +3,10 @@
 <% @seen_summary = {} %>
 <% @creations.each_with_index do |creation, index| %>
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-<%= this_work.pseuds.map{|p| p.byline}.to_sentence.html_safe %> posted a <% if creation.is_a?(Work) then %><%= this_work.backdate ? "backdated" : "new" %> work:<% else %>new chapter of <%= this_work.title %> (<%= this_work.word_count %> words):<% end %> <%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
- 
-<%= creation.is_a?(Work) ? this_work.title.html_safe : @subscription.chapter_name(creation) %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
+<%= this_work.pseuds.map{|p| p.byline}.to_sentence.html_safe %> posted a <% if creation.is_a?(Work) then %><%= this_work.backdate ? "backdated" : "new" %> work:<% else %>new chapter of <%= this_work.title %> (<%= this_work.word_count %> words):<% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %><% end %>
+<%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
+
+<%= creation.is_a?(Work) ? this_work.title.html_safe : chapter_title %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
 by <%= this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>

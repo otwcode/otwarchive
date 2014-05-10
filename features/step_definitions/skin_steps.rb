@@ -107,7 +107,7 @@ end
 
 When /^I create a skin to change the header color$/ do
   visit new_skin_url
-  step %{I follow "Use Wizard Instead?"}
+  step %{I follow "Use Wizard"}
     step %{I fill in "Title" with "Shiny"}
     step %{I fill in "Header color" with "blue"}
     step %{I submit}
@@ -117,7 +117,7 @@ end
 
 When /^I create a skin to change the accent color$/ do
   visit new_skin_url
-  step %{I follow "Use Wizard Instead?"}
+  step %{I follow "Use Wizard"}
     step %{I fill in "Title" with "Shiny"}
     step %{I fill in "Accent color" with "blue"}
     step %{I submit}

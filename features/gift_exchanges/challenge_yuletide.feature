@@ -122,7 +122,7 @@ Feature: Collection
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
     And I should see "Characters (2 - 3)"
-    And I should see "Any?"
+    And I should see "Any Character"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
