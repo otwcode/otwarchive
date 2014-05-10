@@ -136,4 +136,6 @@
   <!--/subnav-->
 </div>
 
-<%= javascript_include_tag 'select_all' %>
+<% content_for :footer_js do %>
+  <%= javascript_include_tag 'select_all' %>
+<% end %>
