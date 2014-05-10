@@ -171,29 +171,4 @@
 <% end %>
 <!--/subnav-->
 
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function(){
-      $j("#wrangle_all_select").click(function() {
-        $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
-            $j(ticky).prop("checked", true);
-          });
-      });
-      $j("#wrangle_all_deselect").click(function() {
-        $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
-            $j(ticky).prop("checked", false);
-          });
-      });
-      $j("#canonize_all_select").click(function() {
-        $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
-            $j(ticky).prop("checked", true);
-          });
-      });
-      $j("#canonize_all_deselect").click(function() {
-        $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
-            $j(ticky).prop("checked", false);
-          });
-      });
-    })
-  <% end %>
-<% end %>
+<%= javascript_include_tag 'select_all' %>
