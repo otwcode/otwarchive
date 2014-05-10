@@ -21,10 +21,6 @@
   <h3 class="heading"><%= showing_header %></h3>
 <% end %>
 
-<% if @tag.is_a?(Fandom) && params[:show] == "relationships" %>
-  <p><%= link_to ts('Wrangle Relationships to Characters'), tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
-<% end %>
-
 <% if params[:show] %>
   <ul class="actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
@@ -43,16 +39,38 @@
   <%= will_paginate @tags %>
 
   <%= form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do %>
+
+    <% if @tag.is_a?(Fandom) %>
+      <fieldset>
+        <legend><%= ts("Assign and Mass Select") %></legend>
+
+        <dl>
+          <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom(s)") %></dt>
+          <dd title="<%= ts("wrangle to fandom(s)") %>"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom") %></dd>
+
+          <dt class="landmark"><%= ts("Submit") %></dt>
+          <dd class="submit"><%= submit_tag ts("Wrangle") %></dd>
+        </dl>
+      </fieldset>
+    <% end %>
+
     <p class="submit actions"><%= submit_tag ts("Wrangle") %></p>
+
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
+
     <!--TEST NOTE: titled these cells as on other wrangle tables, to expose to screenreaders that don't support scope
     need feedback from realuser on whether this is useful or annoying-->
     <table summary="<%= ts('Information and management options for tags.') %>">
       <caption><%= ts('Tags to Wrangle') %></caption>
+
       <thead>
         <tr>
           <th scope="col">
             <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
+            <ul class="actions" role="menu">
+              <li><a id="wrangle_all_select" title="select"><%= ts("All") %></a></li>
+              <li><a id="wrangle_all_deselect" title="select"><%= ts("None") %></a></li>
+            </ul>        
           </th>
           <% if params[:show] == "relationships" %>
             <th scope="col"><%= ts('Characters') %></th>
@@ -72,12 +90,20 @@
           <th scope="col"><%= ts('Manage') %></th>
         </tr>
       </thead>
+
       <tbody>
-        <% for tag in @tags %>
+        <% @tags.each do |tag| %>
           <tr>
-            <th scope="row" title="<%= ts('tag') %>">
-              <%= label_tag "canonicals_#{tag.id}", tag.name %>
-            </th>
+            <% if @tag.is_a?(Fandom) %>
+              <th scope="row" title="<%= ts("tag") %>">
+                <%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %>
+                <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
+              </th>
+            <% else %>
+              <th scope="row" title="<%= ts('tag') %>">
+                <%= label_tag "canonicals_#{tag.id}", tag.name %>
+              </th>
+            <% end %>
 
             <% if params[:show] == "relationships" %>
               <td title="<%= ts('characters') %>">
@@ -86,6 +112,7 @@
                 <% end %>
               </td>
             <% end %>
+
             <td title="<%= ts('canonical?') %>">
               <% if tag.canonical? %>
                 <%= ts('Yes') %>
@@ -95,6 +122,7 @@
                 <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
               <% end %>
             </td>
+
             <td title="<%= ts('metatag or synonym') %>">
               <% if params[:status] == "canonical" %>
                 <% unless tag.direct_meta_tags.blank? %><%= tag_link_list(tag.direct_meta_tags) %><% end %>
@@ -102,8 +130,11 @@
                 <% if tag.merger %><%= link_to_tag(tag.merger) %><% end %>
               <% end %>
             </td>
+
             <td title="<%= ts('created') %>"><%= tag.created_at.to_date %></td>
+
             <td title="<%= ts('taggings') %>"><%= tag.taggings_count %></td>
+
             <td>
               <ul class="actions" role="menu">
                 <% unless params[:status] == "unwrangled" %>
@@ -123,6 +154,7 @@
         <% end %>
       </tbody>
     </table>
+
     <div>
       <%= hidden_field_tag :show, params[:show] %>
       <%= hidden_field_tag :sort_column, params[:sort_column] %>
@@ -132,9 +164,11 @@
     </div>
     <p class="submit actions"><%= submit_tag ts("Wrangle") %></p>
   <% end %>
-<!--/content-->
-<!--subnav-->
+  <!--/content-->
+  <!--subnav-->
 
   <%= will_paginate @tags %>
 <% end %>
 <!--/subnav-->
+
+<%= javascript_include_tag 'select_all' %>

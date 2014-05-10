@@ -15,7 +15,6 @@ class TagsController < ApplicationController
     end
   end
 
-
   # GET /tags
   # GET /tags.xml
   def index
@@ -274,7 +273,7 @@ class TagsController < ApplicationController
 
     saved = []
     not_saved = []
-    
+
     # make tags canonical
     unless params[:canonicals].blank?
       params[:canonicals].each do |tag_id|
@@ -288,7 +287,7 @@ class TagsController < ApplicationController
     end
 
     # remove associated tags
-    unless params[:remove_associated].blank?      
+    unless params[:remove_associated].blank?
       params[:remove_associated].each do |tag_id|
         tag_to_remove = Tag.find(tag_id)
         if tag_to_remove
@@ -298,10 +297,35 @@ class TagsController < ApplicationController
       end
     end
 
+    if params[:fandom_string] && !params[:selected_tags].blank?
+      canonical_fandoms, noncanonical_fandom_names = [], []
+      fandom_names = params[:fandom_string].split(',').map(&:squish)
+      fandom_names.each do |fandom_name|
+        if (fandom = Fandom.find_by_name(fandom_name)).try(:canonical?)
+          canonical_fandoms << fandom
+        else
+          noncanonical_fandom_names << fandom_name
+        end
+      end
+
+      if canonical_fandoms.present?
+        saved = Tag.find_by_id(params[:selected_tags])
+        saved = [saved] if saved.is_a?(Tag)
+        saved.each do |tag|
+          canonical_fandoms.each do |fandom|
+            tag.add_association(fandom)
+          end
+        end
+      end
+
+      if noncanonical_fandom_names.present?
+        flash[:error] = ts("The following names are not canonical fandoms: %{noncanonical_fandom_names}.", noncanonical_fandom_names: noncanonical_fandom_names)
+      end
+    end
+
     flash[:notice] = ts("The following tags were successfully updated: %{tags_saved}", :tags_saved => saved.collect(&:name).join(', ')) if !saved.empty?
     flash[:error] = ts("The following tags weren't saved: %{tags_not_saved}", :tags_not_saved => not_saved.collect(&:name).join(', ')) if !not_saved.empty?
 
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end
-  
 end
