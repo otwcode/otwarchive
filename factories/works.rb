@@ -27,7 +27,7 @@ FactoryGirl.define do
   factory :external_work do
     title "An External Work"
     author "An Author"
-    #url "http://www.example.org"
+    url "http://www.example.org"
 
     after(:build) do |work|
       work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
