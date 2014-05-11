@@ -31,18 +31,20 @@ class TagWranglingsController < ApplicationController
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
     options = {show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction]}
 
-    not_saved_canonicals = []
     error_messages = []
 
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
-      tags = Tag.find_with_ids(params[:canonicals])
+      not_saved_canonicals = []
+      tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
         unless tag_to_canonicalize.update_attributes(canonical: true)
           not_saved_canonicals << tag_to_canonicalize
         end
       end
+
+      error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
     end
 
     if params[:media] && !params[:selected_tags].blank?
@@ -66,8 +68,6 @@ class TagWranglingsController < ApplicationController
         redirect_to tag_wranglings_path(options) and return
       end
     elsif params[:fandom_string].present? && params[:selected_tags].present? && !params[:selected_tags].empty?
-      options.merge!(fandom_string: params[:fandom_string])
-
       canonical_fandoms, noncanonical_fandom_names = [], []
       fandom_names = params[:fandom_string].split(',').map(&:squish)
 
@@ -80,21 +80,22 @@ class TagWranglingsController < ApplicationController
       end
 
       if canonical_fandoms.present?
-        tags = Tag.find_with_ids(params[:selected_tags])
+        tags = Tag.where(id: params[:selected_tags])
 
         tags.each do |tag_to_wrangle|
           canonical_fandoms.each do |fandom|
             tag_to_wrangle.add_association(fandom)
           end
         end
+
+        canonical_fandom_names = canonical_fandoms.collect(&:name)
+        options.merge!(fandom_string: canonical_fandom_names.join(','))
       end
 
       if noncanonical_fandom_names.present?
-        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names)
+        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names.join(', '))
       end
     end
-
-    error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
 
     flash[:error] = error_messages.join('\n') unless error_messages.empty?
     flash[:notice] = 'Tags were successfully wrangled!' if error_messages.empty?

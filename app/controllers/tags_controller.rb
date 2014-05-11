@@ -269,13 +269,12 @@ class TagsController < ApplicationController
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
     options = {show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction], status: params[:status]}
 
-    saved_canonicals, saved_removed_associateds, saved_to_fandoms = [], [], []
-    not_saved_canonicals, not_saved_removed_associateds = [], []
     error_messages, notice_messages = [], []
 
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
-      tags = Tag.find_with_ids(params[:canonicals])
+      saved_canonicals, not_saved_canonicals = [], []
+      tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
         if tag_to_canonicalize.update_attributes(canonical: true)
@@ -284,11 +283,15 @@ class TagsController < ApplicationController
           not_saved_canonicals << tag_to_canonicalize
         end
       end
+
+      error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
+      notice_messages << ts('The following tags were successfully made canonical: %{tags_saved}', tags_saved: saved_canonicals.collect(&:name).join(', ')) unless saved_canonicals.empty?
     end
 
     # remove associated tags
     if params[:remove_associated].present? && params[:remove_associated].is_a?(Array)
-      tags = Tag.find_with_ids(params[:remove_associated])
+      saved_removed_associateds, not_saved_removed_associateds = [], []
+      tags = Tag.where(id: params[:remove_associated])
 
       tags.each do |tag_to_remove|
         if @tag.remove_association(tag_to_remove.id)
@@ -297,15 +300,16 @@ class TagsController < ApplicationController
           not_saved_removed_associateds << tag_to_remove
         end
       end
+
+      error_messages << ts('The following tags couldn\'t be removed: %{tags_not_saved}', tags_not_saved: not_saved_removed_associateds.collect(&:name).join(', ')) unless not_saved_removed_associateds.empty?
+      notice_messages << ts('The following tags were successfully removed: %{tags_saved}', tags_saved: saved_removed_associateds.collect(&:name).join(', ')) unless saved_removed_associateds.empty?
     end
 
-    # wrangle into fandom(s)
+    # wrangle to fandom(s)
     if params[:fandom_string].blank? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
       error_messages << ts('There were no Fandom tags!')
     end
     if params[:fandom_string].present? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
-      options.merge!(fandom_string: params[:fandom_string])
-
       canonical_fandoms, noncanonical_fandom_names = [], []
       fandom_names = params[:fandom_string].split(',').map(&:squish)
 
@@ -318,29 +322,26 @@ class TagsController < ApplicationController
       end
 
       if canonical_fandoms.present?
-        saved_to_fandoms = Tag.find_with_ids(params[:selected_tags])
+        saved_to_fandoms = Tag.where(id: params[:selected_tags])
 
         saved_to_fandoms.each do |tag_to_wrangle|
           canonical_fandoms.each do |fandom|
             tag_to_wrangle.add_association(fandom)
           end
         end
+
+        canonical_fandom_names = canonical_fandoms.collect(&:name)
+        options.merge!(fandom_string: canonical_fandom_names.join(','))
+        notice_messages << ts('The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}', canonical_fandoms: canonical_fandom_names.join(', '), tags_saved: saved_to_fandoms.collect(&:name).join(', ')) unless saved_to_fandoms.empty?
       end
 
       if noncanonical_fandom_names.present?
-        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names)
+        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names.join(', '))
       end
     end
 
-    notice_messages << ts('The following tags were successfully made canonical: %{tags_saved}', tags_saved: saved_canonicals.collect(&:name).join(', ')) unless saved_canonicals.empty?
-    notice_messages << ts('The following tags were successfully removed: %{tags_saved}', tags_saved: saved_removed_associateds.collect(&:name).join(', ')) unless saved_removed_associateds.empty?
-    notice_messages << ts('The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}', canonical_fandoms: canonical_fandoms.collect(&:name).join(', '), tags_saved: saved_to_fandoms.collect(&:name).join(', ')) unless saved_to_fandoms.empty?
-
-    error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
-    error_messages << ts('The following tags couldn\'t be removed: %{tags_not_saved}', tags_not_saved: not_saved_removed_associateds.collect(&:name).join(', ')) unless not_saved_removed_associateds.empty?
-
-    flash[:notice] = notice_messages.join('\n')
-    flash[:error] = error_messages.join('\n')
+    flash[:notice] = notice_messages.join('\n') unless notice_messages.empty?
+    flash[:error] = error_messages.join('\n') unless error_messages.empty?
 
     redirect_to url_for({controller: :tags, action: :wrangle, id: params[:id]}.merge(options))
   end

@@ -24,7 +24,7 @@
 <% if params[:show] %>
   <ul class="actions" role="navigation">
     <li><h4 class="heading"><%= ts('Show:') %></h4></li>
-    <li><%= span_if_current ts('All'), url_for(:show: params[:show], status: nil) %></li>
+    <li><%= span_if_current ts('All'), url_for(show: params[:show], status: nil) %></li>
     <li><%= span_if_current ts('Canonical'), url_for(show: params[:show], status: 'canonical') %></li>
     <li><%= span_if_current ts('Synonymous'), url_for(show: params[:show], status: 'synonymous'), nil, ts('non-canonical tags that are synonyms') %></li>
     <li><%= span_if_current ts('Unfilterable'), url_for(show: params[:show], status: 'unfilterable'), nil, ts('non-canonical tags without synonyms') %></li>
@@ -161,7 +161,6 @@
       <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
       <%= hidden_field_tag :page, params[:page] %>
       <%= hidden_field_tag :status, params[:status] %>
-      <%= hidden_field_tag(:fandom_string, params[:fandom_string]) if params[:fandom_string] %>
     </div>
 
     <p class="submit actions"><%= submit_tag ts('Wrangle') %></p>
