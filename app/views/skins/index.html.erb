@@ -1,15 +1,14 @@
 <% work_skin = params[:skin_type] && params[:skin_type] == 'WorkSkin' %>
 
-<h2 class="heading"><%= ts('Skins') %></h2>
+<h2 class="heading"><%= @title %></h2>
 <%= render 'skin_top_navigation' %>
 
 <p class="notes">
-  <%= ts('A site skin lets you change the way the Archive looks in your browser, so you can customize your reading experience. With work skins you can customize the way your own works are shown to others.') %>
+  <%= ts('A site skin lets you change the way the Archive looks in your browser, so you can customize your reading experience. You can use work                                                                                                                                                                     skins to customize the way your own works are shown to others.') %>
   <%= link_to_help 'skins-basics' %>
 </p>
 
 
-<h3 class="heading"><%= @title %></h3>
 <%= render 'skin_type_navigation' %>
 
 
