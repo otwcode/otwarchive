@@ -21,7 +21,7 @@
       <dt class="required">
         <%= form.label :anchor, ts("Anchor name") + "*" %>
       </dt>
-      <dd>
+      <dd class="required">
         <%= form.text_field :anchor %>
         <%= live_validation_for_field(field_id(form, "anchor").to_sym, :failureMessage => ts("Please enter an anchor name.")) %>
       </dd>
