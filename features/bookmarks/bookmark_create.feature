@@ -22,7 +22,7 @@ Scenario: Create a bookmark
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-      And I should see "Back to Bookmarks"
+      And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should see "Revenge of the Sith"
