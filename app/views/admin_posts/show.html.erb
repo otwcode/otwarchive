@@ -50,7 +50,7 @@
   <% if @admin_post.tags.length > 0 %>
   <ul class="tags">
     <% for tag in @admin_post.tags %>
-      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
     <% end %>
   </ul>
   <% end %>

@@ -19,6 +19,10 @@ FactoryGirl.define do
     f.association :user
   end
 
+  factory :invitation do |f|
+    f.sequence(:invitee_email) { |n| "invitation#{n}@archiveofourown.org" }
+  end
+
   factory :admin do |f|
     f.sequence(:login) { |n| "testadmin#{n}" }
     f.password "password"
@@ -113,6 +117,19 @@ FactoryGirl.define do
     after(:build) do |work|
       work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
     end
+  end
+
+  factory :external_author do |f|
+    f.sequence(:email) { |n| "foo#{n}@external.com" }
+  end
+
+  factory :external_author_name do |f|
+    f.association :external_author
+  end
+
+  factory :external_creatorship do |f|
+    f.creation_type 'Work'
+    f.association :external_author_name
   end
 
   factory :collection_participant do |f|

@@ -73,3 +73,14 @@ RSpec.configure do |config|
   VALID_URLS = ['http://rocksalt-recs.livejournal.com/196316.html','https://rocksalt-recs.livejournal.com/196316.html']
   INACTIVE_URLS = ['https://www.iaminactive.com','http://www.iaminactive.com','https://iaminactive.com','http://iaminactive.com']
 end
+
+def get_message_part (mail, content_type)
+  mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
+end
+
+shared_examples_for "multipart email" do
+  it "generates a multipart message (plain text and html)" do
+    email.body.parts.length.should eq(2)
+    email.body.parts.collect(&:content_type).should == ["text/plain; charset=UTF-8", "text/html; charset=UTF-8"]
+  end
+end
