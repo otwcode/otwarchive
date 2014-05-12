@@ -234,7 +234,7 @@ namespace :After do
 #  end
 
 
-  
+
 #  desc "Set complete status for works"
 #  task(:set_complete_status => :environment) do
 #    Work.update_all("complete = 1", "expected_number_of_chapters = 1")
@@ -280,7 +280,7 @@ namespace :After do
 #     convert_restriction_tagset(meme.request_restriction, owners, title + "_requests")
 #   end
 # end
-# 
+#
 # def convert_restriction_tagset(restriction, owner_pseuds, title)
 #   if restriction && restriction.tag_set_id
 #     tag_set_title = "Tag Set For #{title.gsub(/[^\w\s]+/, '_')}"
@@ -296,7 +296,7 @@ namespace :After do
 #     end
 #   end
 # end
-# 
+#
 # desc "Convert existing skins to be based off version 1.0"
 # task(:convert_existing_skins => :environment) do
 #   oldskin = Skin.find_by_title_and_official("Archive 1.0", true)
@@ -322,7 +322,7 @@ namespace :After do
 #
 #
 # require 'nokogiri'
-# 
+#
 # desc "Esacape ampersands in work titles"
 # task(:escape_ampersands => :environment) do
 #   Work.where("title LIKE '%&%'").each do |work|
@@ -330,7 +330,7 @@ namespace :After do
 #     work.save
 #   end
 # end
-# 
+#
 # desc "Set stat counts for works"
 # task(:set_work_stats => :environment) do
 #   Work.find_each do |work|
@@ -338,7 +338,7 @@ namespace :After do
 #     work.update_stat_counter
 #   end
 # end
-# 
+#
 # desc "Set anon/unrevealed status for works"
 # task(:set_anon_unrevealed => :environment) do
 #   CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
@@ -346,13 +346,13 @@ namespace :After do
 #     work = collection_item.item
 #     if work.present?
 #       work.update_attributes(
-#         in_anon_collection: collection_item.anonymous, 
+#         in_anon_collection: collection_item.anonymous,
 #         in_unrevealed_collection: collection_item.unrevealed
 #       )
 #     end
 #   end
 # end
-# 
+#
 # desc "Add filters to external works"
 # task(:external_work_filters => :environment) do
 #   ExternalWork.find_each do |ew|
@@ -362,19 +362,26 @@ namespace :After do
 # end
 
   #### Add your new tasks here
-  
+
 
   desc "Set initial values for sortable tag names"
   task(:sortable_tag_names => :environment) do
     Media.all.each{ |m| m.save }
-    
+
     Fandom.find_each do |fandom|
       fandom.set_sortable_name
       puts fandom.sortable_name
       fandom.save
     end
   end
-  
+
+  desc "Migrate marked for later to new table"
+  task(:move_marked_for_later => :environment) do
+    Reading.where(markedtoread: true).find_each do |r|
+      SavedWork.create(user_id: r.user_id, work_id: r.work_id, created_at: r.created_at)
+    end
+  end
+
   desc "Increase skins' width threshold for handheld devices to 640px"
   task(:increase_handheld_width => :environment) do
     hh_width_media = "only screen and (max-width: 480px)"
@@ -392,7 +399,7 @@ end # this is the end that you have to put new tasks above
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING
 
 # Remove tasks from the list once they've been run on the deployed site
-# NOTE: 
+# NOTE:
 desc "Run all current migrate tasks"
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
 # 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']

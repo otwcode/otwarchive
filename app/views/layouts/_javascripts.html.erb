@@ -24,6 +24,7 @@ if (typeof jQuery == 'undefined')
 <%= javascript_include_tag 'jquery.trap.min.js' %>
 <%= javascript_include_tag 'ao3modal.min.js' %>
 <%= javascript_include_tag "jquery.cookie" %>
+<%= javascript_include_tag('saved_works') if @work.present? || @saved_works.present? %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
