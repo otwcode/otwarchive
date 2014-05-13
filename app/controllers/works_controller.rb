@@ -220,13 +220,8 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
-    @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
-
-    if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
-                                                       :subscribable_type => 'Work').first ||
-                      current_user.subscriptions.build(:subscribable => @work)
-    end
+    
+    @work_display = WorkDisplay.new(@work)
 
     render :show
     @work.increment_hit_count(request.remote_ip)

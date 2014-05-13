@@ -339,6 +339,15 @@ When /^the statistics_tasks rake task is run$/ do
   StatCounter.hits_to_database
   StatCounter.stats_to_database
 end
+
+When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+  step %{the user "#{coauthor}" exists and is activated}
+  step %{I edit the work "#{work}"}
+  check("Add co-authors?")
+  fill_in("pseud_byline", :with => "#{coauthor}")
+  step %{I post the work without preview}
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do

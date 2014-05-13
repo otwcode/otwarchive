@@ -95,6 +95,7 @@ class User < ActiveRecord::Base
   has_many :gifts, :through => :pseuds
   has_many :gift_works, :through => :pseuds, :uniq => true
 
+  has_many :saved_works, dependent: :destroy
   has_many :readings, :dependent => :destroy
   has_many :bookmarks, :through => :pseuds
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items

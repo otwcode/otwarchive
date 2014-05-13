@@ -87,7 +87,7 @@ protected
   
   	string = string.sub("Faq", "FAQ")
   	string = string.sub("Tos", "TOS")
-  	
+  	string = string.sub("Dmca", "DMCA")
   	return string
   end
 
