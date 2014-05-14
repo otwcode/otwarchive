@@ -276,7 +276,6 @@ public
     if I18n.locale.present?
       params[:language_id] = I18n.locale
     end
-    #flash[:params] = I18n.locale
   end
 
   # The ?language_id=somelanguage needs to persist thorough URL changes

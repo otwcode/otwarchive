@@ -57,10 +57,10 @@ Feature: Admin tasks
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
     When I follow "New FAQ Category"
-      And I fill in "question" with "What is AO3?"
-      And I fill in "content" with "Some text, that is sufficiently long to pass validation."
-      And I fill in "title" with "New subsection"
-      And I fill in "anchor" with "whatisao3"
+      And I fill in "Question*" with "What is AO3?"
+      And I fill in "Answer*" with "Some text, that is sufficiently long to pass validation."
+      And I fill in "Category name*" with "New subsection"
+      And I fill in "Anchor name*" with "whatisao3"
     When I press "Post"
     Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
@@ -73,14 +73,14 @@ Feature: Admin tasks
   When I follow "Admin Posts"
     And I follow "Archive FAQ" within "#main"
     And I follow "Edit"
-    And I fill in "content" with "Number 1 posted FAQ, this is, and Yoda approves."
+    And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
     And I press "Post"
     And 0 emails should be delivered
   Then I should see "ArchiveFaq was successfully updated"
     And I should see "Yoda approves"
   When I go to the archive_faqs page
     And I follow "Edit"
-    And I fill in "content" with "New Content, yay"
+    And I fill in "Answer*" with "New Content, yay"
     And I check "archive_faq_notify_translations"
     And I press "Post"
     And 1 email should be delivered
@@ -95,10 +95,10 @@ Feature: Admin tasks
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
     When I follow "New FAQ Category"
-      And I fill in "question" with "What is AO3?"
-      And I fill in "content" with "Some text, that is sufficiently long to pass validation."
-      And I fill in "title" with "New subsection"
-      And I fill in "anchor" with "whatisao3"
+      And I fill in "Question*" with "What is AO3?"
+      And I fill in "Answer*" with "Some text, that is sufficiently long to pass validation."
+      And I fill in "Category name*" with "New subsection"
+      And I fill in "Anchor name*" with "whatisao3"
     When I press "Post"
     Then I should see "ArchiveFaq was successfully created"
       And 0 emails should be delivered
@@ -106,26 +106,30 @@ Feature: Admin tasks
     # Now post a Translation of that FAQ
     Given all emails have been delivered
     When I go to the archive_faqs page
-      And I follow "New FAQ Category"
-      And I select "New subsection" from "archive_faq_translated_faq_id"
-      And I select "Deutsch" from "archive_faq_language_id"
-      And I fill in "content" with "Einige Text, das ist lang genug, um die Überprüfung bestanden."
-      And I fill in "title" with "Neuer Abschnitt"
-      And I fill in "question" with "was ist ao3"
-      And I fill in "anchor" with "wasistao3"
+      And I select "Deutsch" from "language_id"
+      And I press "Go" within "div#inner.wrapper"
+      And I should see "New subsection"
+      And I follow "Edit"
+      And I fill in "Question*" with "Was ist AO3?"
+      And I fill in "Answer*" with "Einige Text, das ist lang genug, um die Überprüfung bestanden."
+      And I fill in "Category name*" with "Neuer Abschnitt"
+      And I fill in "Anchor name*" with "wasistao3"
       And I check "archive_faq_notify_translations"
       And I press "Post"
-    Then I should see "ArchiveFaq was successfully created"
+    Then I should see "ArchiveFaq was successfully updated."
       And 1 email should be delivered
 
+    # The user has previously selected German as their language, lets make sure it persisted through Controller actions
+    Then I should see "Questions in the Neuer Abschnitt Category"
+      And I should not see "New subsection"
+      And I should see "Was ist AO3?"
+
     # Toggle the languages at the top and see the correct data
-    When I go to the archive_faqs page
+    Then I go to the archive_faqs page
+    When I select "English" from "language_id"
+      And I press "Go"
     Then I should see "New subsection"
       And I should not see "Neuer Abschnitt"
-    When I select "Deutsch" from "language_id"
-      And I press "Go"
-    Then I should see "Neuer Abschnitt"
-      And I should not see "New subsection"
 
   Scenario: Find users
 

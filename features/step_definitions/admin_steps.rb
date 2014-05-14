@@ -36,10 +36,6 @@ Given /^I am logged out as an admin$/ do
   assert !AdminSession.find
 end
 
-Given /^This is the end of the scenario$/ do
-  Rails.logger.debug "THIS IS THE END OF THE SCENARIO. DATABASE CLEANER BETTER TRUCATE THIS SHIT"
-end
-
 Given /^basic languages$/ do
   Language.default
   Language.find_or_create_by_short_and_name("DE", "Deutsch")
@@ -119,10 +115,10 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("question", :with => "Number #{n} Question.")
-  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("title", :with => "Number #{n} FAQ")
-  fill_in("anchor", :with => "Number#{n}anchor")
+  fill_in("Question*", :with => "Number #{n} Question.")
+  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", :with => "Number #{n} FAQ")
+  fill_in("Anchor name*", :with => "Number#{n}anchor")
   click_button("Post")
 end
 
