@@ -246,6 +246,7 @@ Otwarchive::Application.routes.draw do
       end
       resources :serial_works
     end
+    resources :saved_works
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
     resources :stats, :only => [:index]
@@ -524,6 +525,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'dmca' => 'home#dmca'
   match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'

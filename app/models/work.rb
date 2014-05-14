@@ -42,6 +42,7 @@ class Work < ActiveRecord::Base
   accepts_nested_attributes_for :gifts, :allow_destroy => true
 
   has_many :subscriptions, :as => :subscribable, :dependent => :destroy
+  has_many :saved_works, dependent: :destroy
 
   has_many :challenge_assignments, :as => :creation
   has_many :challenge_claims, :as => :creation

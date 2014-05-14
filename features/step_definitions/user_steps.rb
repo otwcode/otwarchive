@@ -28,6 +28,14 @@ Given /the following activated tag wranglers? exists?/ do |table|
   end
 end
 
+Given /^the user "([^\"]*)" exists and is activated$/ do |login|
+  user = User.find_by_login(login)
+  if user.blank?
+    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
+    user.activate
+  end
+end
+
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   step("I am logged out")
   user = User.find_by_login(login)
