@@ -6,7 +6,7 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= link_to ts("Saved for Later"), user_saved_works_path(@user) %>
+    <%= link_to ts("Saved For Later"), user_saved_works_path(@user) %>
   </li>
   <li>
     <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure you want to clear your History? This cannot be undone!'), :method => :post %>
