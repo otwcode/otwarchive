@@ -3,11 +3,16 @@
 
   <h3 class="heading">
     <%= ts("About") %>
-    <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
+    <span class="title"><%= @collection.title %></span>
+    <span class="name">
+      <% if @collection.title != @collection.name %>
+        (<%= @collection.name %>)
+      <% end %>
+    </span>
   </h3>
   <div class="wrapper">
     <dl class="meta group">
-      <dt><%= ts("Active since: ") %>
+      <dt><%= ts("Active since:") %>
       <dd class="datetime"><%= l(@collection.created_at.to_date) %>
       <dt><%= ts("Maintainers:") %></dt>
       <dd>
@@ -16,13 +21,13 @@
         </ul>
       </dd>
       <% unless @collection.email.blank? %>
-        <dt><%= ts("Contact: ") %></dt>
+        <dt><%= ts("Contact:") %></dt>
         <dd><%= @collection.email %></dd>
       <% end %>
       <% if @collection.challenge.present? %>
         <% tag_sets_counted = tag_set_count(@collection) %>
         <% if tag_sets_counted.present? %>
-          <dt><%= tag_sets_counted > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dt><%= tag_sets_counted > 1 ?  ts("Tag sets:") : ts("Tag set:") %></dt>
           <dd>
             <ul class="commas">
             <%= (@collection.challenge_type == "GiftExchange" ? @collection.challenge.offer_restriction.owned_tag_sets : @collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
