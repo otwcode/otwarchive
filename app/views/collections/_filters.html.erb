@@ -1,6 +1,9 @@
-<%= form_tag collections_url, :method => :get, :class => 'filters' do %>
+<%= form_tag collections_url, method: :get, class: 'filters', id: 'collection-filters' do %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts('Filter collections:') do %>
+    <p class="mobile-shown hidden">
+      <a href="#main" class="close action" title="<%= ts('close filters') %>">&times;</a>
+    </p>
  		<dl class="filters" role="menu">
       <dt class="landmark"><%= ts('Sort and Filter') %></dt>
       <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
@@ -88,4 +91,8 @@
       <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
     </dl>
   <% end %>
+  <% # On mobile, link jumps to top of index when JavaScript is disabled and close filters when JavaScript is enabled %>
+  <p class="mobile-shown hidden">
+    <a href="#main" id="leave_filters" class="close"><%= ts("Top of Collection Index") %></a>
+  </p>
 <% end %>

@@ -19,7 +19,7 @@
 <% end %>
 
 <!--main content-->
-<h3 class="landmark heading">Listing Works</h3>
+<h3 class="landmark heading"><%= ts("Listing Works") %></h3>
 <ol class="work index group">
   <% for work in @works %>
     <% if work %><%= render 'work_blurb', :work => work %><% end %>
@@ -30,7 +30,7 @@
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render :partial => 'collection_filters' %>
+  <%= render 'collection_filters' %>
 <% end %>
 <!---/subnav-->
 

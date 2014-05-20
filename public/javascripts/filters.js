@@ -1,8 +1,9 @@
 // Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
   showFilters();
+  setupMobileFilters();
 });
- 
+
 function showFilters() {
   var filters = $j('dd.tags');
     
@@ -20,4 +21,24 @@ function showFilters() {
       } //is checked
     }); //tags each
   });  //filters each 
-} //showfilters
+}; //showfilters
+
+function setupMobileFilters() {
+  var filters = $j('form.filters');
+  var show_link = $j('#go_to_filters');
+  var hide_link = $j(filters).find('.close');
+  
+  $j(show_link).click(function(event) {
+    event.preventDefault();
+    $j('#outer').addClass('filtering');
+    $j(filters).find(hide_link).first().focus();
+  });
+  
+  $j(hide_link).each(function() {
+    $j(this).click(function(event) {
+      event.preventDefault();
+      $j('#outer').removeClass('filtering');
+      $j(show_link).focus();
+    });
+  });
+}

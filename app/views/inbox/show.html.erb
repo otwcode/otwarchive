@@ -4,6 +4,13 @@
 <%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
 
+<!--subnav-->
+<% # Filters button for mobile jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+<p class="mobile-shown hidden actions">
+  <a href="#inbox-filters" id="go_to_filters"><%= ts("Filters") %></a>
+</p>
+<!--/subnav-->
+
 <!--main content-->
 <% unless @inbox_comments.blank? %>
 
@@ -108,9 +115,12 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
+    <p class="mobile-shown hidden">
+      <a href="#main" class="close action" title="<%= ts('close filters') %>">&times;</a>
+    </p>
     <dl class="filters" role="menu">
       <dt><%= ts("Filter by read") %></dt>
       <dd>
@@ -165,6 +175,10 @@
       <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
     </dl>
   <% end %>
+  <% # On mobile, link jumps to top of index when JavaScript is disabled and close filters when JavaScript is enabled %>
+  <p class="mobile-shown hidden">
+    <a href="#main" id="leave_filters" class="close"><%= ts("Top of Inbox") %></a>
+  </p>
 <% end %>
 <!--/subnav-->
 

@@ -7,10 +7,10 @@
 <div class="navigation actions module">
 
   <!--Subnavigation, sorting and actions.-->
-  <h3 class="landmark heading">Navigation, Sorting and Actions</h3>
+  <h3 class="landmark heading"><%= ts("Navigation and Actions") %></h3>
   <!--gift search subnav-->
   <% if @collection && @collection.gift_exchange? %>
-    <%= render :partial => 'gifts/gift_search' %>
+    <%= render 'gifts/gift_search' %>
   <% end %>
 
   <!--user role subnav-->
@@ -30,6 +30,10 @@
       <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
         <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
       <% end %>
+      <% if @facets.present? %>
+        <% # Filters button for mobile jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+        <li class="mobile-shown hidden"><a href="#work-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+      <% end %>
     </ul>
   <% end %>
   
@@ -37,7 +41,7 @@
 <!---/subnav-->
 
 <% unless @owner.present? %>
-  <p><%= ts("These are some of the latest works posted to the archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
+  <p><%= ts("These are some of the latest works posted to the Archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
 <% end %>
 
 <% if @works.respond_to?(:total_pages) %>
@@ -45,7 +49,7 @@
 <% end %>
 
 <!--main content-->
-<h3 class="landmark heading">Listing Works</h3>
+<h3 class="landmark heading"><%= ts('Listing Works') %></h3>
 <ol class="work index group">
   <% for work in @works %>
     <% if work %><%= render 'work_blurb', :work => work %><% end %>
@@ -56,7 +60,7 @@
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render :partial => 'filters' %>
+  <%= render 'filters' %>
 <% end %>
 <!---/subnav-->
 

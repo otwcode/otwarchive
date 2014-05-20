@@ -3,7 +3,7 @@ linearise content, suppress large images, suppress custom fonts and other large 
 pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
 
 #outer {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /*regions */
@@ -156,4 +156,56 @@ h1, h2, h3 {
 
 .comment h4.byline {
   padding-left: 58px;
+}
+
+/* non-JavaScript states
+.mobile-shown: should be displayed when mobile stylesheet is in use  */
+
+body .mobile-shown {
+  display: block;
+}
+
+.actions li.mobile-shown {
+  display: inline;
+}
+
+/* JavaScript states
+.mobile is ALWAYS applied to the page body when JS is enabled, but should ONLY be used within this stylesheet
+.mobile .mobile-hidden: should not be displayed when JS is enabled */
+
+.mobile .mobile-hidden {
+  display: none;
+}
+
+/* Filters with JavaScript */
+
+.mobile form.filters {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+  z-index: 400;
+}
+
+.mobile .filters fieldset {
+  position: relative;
+  z-index: 450;
+}
+
+.mobile .filters p.mobile-shown {
+  position: relative; 
+}
+
+.mobile .filters #leave_filters {
+  position: absolute;
+  top: -101em;
+  bottom: -101em;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.mobile .filtering form.filters {
+  visibility: visible;
 }
