@@ -2,14 +2,11 @@
   url: (@collection ? collection_bookmarks_path(@collection) : bookmarks_path), 
   html: { 
     method: :get, 
-    class: 'filters', 
+    class: 'mobile-hidden filters', 
     id: 'bookmark-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts('Filter results:') do %>
-    <p class="mobile-shown hidden">
-      <a href="#main" class="close action" title="<%= ts('close filters') %>">&times;</a>
-    </p>
     <dl class="filters" role="menu">
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>

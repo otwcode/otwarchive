@@ -1,6 +1,7 @@
 // Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
   showFilters();
+  addFilterCloser();
   setupMobileFilters();
 });
 
@@ -23,22 +24,31 @@ function showFilters() {
   });  //filters each 
 }; //showfilters
 
+function addFilterCloser() {
+  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><a href="#" class="close action">&times;</a></p>') );
+};
+
 function setupMobileFilters() {
   var filters = $j('form.filters');
+  var outer = $j('#outer');
   var show_link = $j('#go_to_filters');
   var hide_link = $j(filters).find('.close');
   
-  $j(show_link).click(function(event) {
-    event.preventDefault();
-    $j('#outer').addClass('filtering');
-    $j(filters).find(hide_link).first().focus();
+  show_link.click(function(e) {
+    e.preventDefault();
+    filters.removeClass('mobile-hidden');
+    outer.addClass('filtering'); 
+    outer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
+      hide_link.first().focus();
+    });
   });
-  
-  $j(hide_link).each(function() {
-    $j(this).click(function(event) {
-      event.preventDefault();
-      $j('#outer').removeClass('filtering');
-      $j(show_link).focus();
+    
+  hide_link.each(function() {
+    $j(this).click(function(e) {
+      e.preventDefault();
+      filters.addClass('mobile-hidden');
+      show_link.focus();
+      outer.removeClass('filtering');
     });
   });
 }

@@ -198,6 +198,7 @@ body .mobile-shown {
 }
 
 .mobile .filters #leave_filters {
+  border-bottom: none;
   position: absolute;
   top: -101em;
   bottom: -101em;

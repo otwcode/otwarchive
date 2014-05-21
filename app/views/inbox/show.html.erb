@@ -115,12 +115,9 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: 'mobile-hidden filters', id: 'inbox-filters') do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
-    <p class="mobile-shown hidden">
-      <a href="#main" class="close action" title="<%= ts('close filters') %>">&times;</a>
-    </p>
     <dl class="filters" role="menu">
       <dt><%= ts("Filter by read") %></dt>
       <dd>

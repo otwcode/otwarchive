@@ -2,14 +2,11 @@
   url: collected_user_works_path(@user), 
   html: { 
     method: :get, 
-    class: 'filters', 
+    class: 'mobile-hidden filters', 
     id: 'works-in-collections-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
-    <p class="mobile-shown hidden">
-      <a href="#main" class="close action" title="<%= ts('close filters') %>">&times;</a>
-    </p>
     <dl class="filters" role="menu">
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
