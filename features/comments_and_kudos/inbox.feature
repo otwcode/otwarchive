@@ -25,7 +25,7 @@ Feature: Get messages in the inbox
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
 
-  Scenario: I should not receive comments in my inbox if I have set my preferences to "Turn off copies of your own comments."
+  Scenario: I should not receive my own comments in my inbox if I have set my preferences to "Turn off copies of your own comments."
     Given I am logged in as "boxer" with password "10987tko"
       And I post the work "Fighting Myself"
       And I set my preferences to turn off copies of my own comments
@@ -34,7 +34,7 @@ Feature: Get messages in the inbox
     Then I should not see "boxer on Fighting Myself"
       And I should not see "I should not see this in my inbox."
 
-  Scenario: I should receive comments in my inbox if I haven't set my preferences to "Turn off copies of your own comments."
+  Scenario: I should receive my own comments in my inbox if I haven't set my preferences to "Turn off copies of your own comments."
     Given I am logged in as "boxer" with password "10987tko"
       And I post the work "Shadow Boxing"
       And I set my preferences to turn on copies of my own comments
