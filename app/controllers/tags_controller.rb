@@ -155,7 +155,7 @@ class TagsController < ApplicationController
     type = params[:tag][:type] if params[:tag]
     if type
       model = type.classify.constantize rescue nil
-      @tag = model.find_or_create_by_name(params[:tag][:name])  if model.is_a? Class
+      @tag = model.find_or_create_by_name(params[:tag][:name]) if model.is_a? Class
     else
       flash[:error] = ts("Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
@@ -340,8 +340,8 @@ class TagsController < ApplicationController
       end
     end
 
-    flash[:notice] = notice_messages.join('\n') unless notice_messages.empty?
-    flash[:error] = error_messages.join('\n') unless error_messages.empty?
+    flash[:notice] = notice_messages.join('<br />').html_safe unless notice_messages.empty?
+    flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to url_for({controller: :tags, action: :wrangle, id: params[:id]}.merge(options))
   end
