@@ -55,7 +55,13 @@ class ChaptersController < ApplicationController
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @work_display = WorkDisplay.new(@work)
+      @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+
+      if current_user.respond_to?(:subscriptions)
+        @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
+                                                         :subscribable_type => 'Work').first ||
+                        current_user.subscriptions.build(:subscribable => @work)
+      end
 
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
       if chapter_position == 0

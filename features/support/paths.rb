@@ -65,8 +65,6 @@ module NavigationHelpers
       user_invitations_path(:user_id => $1)
     when /^(.*)'s reading page$/i
       user_readings_path(:user_id => $1)
-    when /^(.*)'s saved works page$/i
-      user_saved_works_path(:user_id => $1)
     when /^(.*)'s series page$/i
       user_series_index_path(:user_id => $1)
     when /^(.*)'s stats page$/i

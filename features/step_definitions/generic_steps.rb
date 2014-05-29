@@ -22,7 +22,7 @@ Then /^show me the main content$/ do
   puts "\n" + find("#main").native.inner_html
 end
 
-Then /^show me the errors$/ do
+Then /^show me the errors$/ do 
   puts "\n" + find("div.error").native.inner_html
 end
 
@@ -191,9 +191,9 @@ end
 # These submit steps will only find submit tags inside a <p class="submit">
 # That wrapping paragraph tag will be generated automatically if you use
 # the submit_button or submit_fieldset helpers in application_helper.rb
-# The text on the button will not matter and can be changed without breaking tests.
+# The text on the button will not matter and can be changed without breaking tests. 
 #
-# NOTE:
+# NOTE: 
 # If you have multiple forms on a page you will need to specify which one you want to submit with, eg,
 # "I submit with the 2nd button", but in those cases you probably want to make sure that
 # the different forms have different button text anyway, and submit them using
@@ -245,10 +245,3 @@ When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
 
-Then /^I should see a "([^"]*)" button/ do |name|
-  should have_button name
-end
-
-Then /^I should not see a "([^"]*)" button/ do |name|
-  should have_no_button name
-end
