@@ -134,3 +134,20 @@ Feature: Admin posts
       And I go to the home page
     Then I should see "More news"
       And I should see "Amazing News"
+
+  Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
+    Given I am logged in as an admin
+    When I follow "Admin Posts"
+      And I follow "Post AO3 News"
+      And I fill in "admin_post_title" with "App News & a <strong> Warning"
+      And I fill in "content" with "We're delaying it a week for every question we get."
+    When I press "Post"
+    Then I should see the page title "App News & a <strong> Warning"
+      And I should not see "App News &amp; a &lt;strong&gt; Warning"
+    When I go to the admin-posts page
+    Then I should see "App News & a <strong> Warning"
+      And I should not see "App News &amp; a &lt;strong&gt; Warning"
+    When I am logged out as an admin
+      And I go to the admin-posts page
+    Then I should see "App News & a <strong> Warning"
+      And I should not see "App News &amp; a &lt;strong&gt; Warning"
