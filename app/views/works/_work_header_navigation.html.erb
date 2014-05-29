@@ -52,10 +52,8 @@
       <%= link_to ts("Cancel Bookmark"), "#", :class => "hidden bookmark_form_placement_close" %>
     </li>
 
-    <% unless current_user.is_author_of?(@work) %>
-      <li class="mark">
-        <%= render 'saved_works/form', saved_work: @work_display.saved_work %>
-      </li>
+    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
+      <li class="mark"><%= marktoread_link(@work) %></li>
     <% end %>
   <% end %>
 
@@ -80,10 +78,10 @@
       <%= render 'share/share', :shareable => @work %>
     </li>
   <% end %>
-
-  <% if current_user && @work_display.subscription %>
+  
+  <% if current_user && @subscription %>
     <li class="subscribe">
-      <%= render 'subscriptions/form', :subscription => @work_display.subscription %>
+      <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
 

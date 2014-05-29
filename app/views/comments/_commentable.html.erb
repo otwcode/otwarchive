@@ -46,14 +46,15 @@
 
     <% if logged_in? && @work %>
       <li>
-        <% @bookmark ||= @work_display.bookmark %>
+        <% @bookmark ||= bookmark_if_exists(commentable) %>
         <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
       </li>
-      <% unless current_user.is_author_of?(@work) %>
-        <li>
-          <%= render 'saved_works/form', saved_work: @work_display.saved_work %>
-        </li>
-      <% end %>
+    <% end %>
+
+    <% if logged_in? && @work && marked_for_later?(@work) %>
+      <li>
+        <%= markasread_link(@work) %>
+      </li>
     <% end %>
 
     <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
@@ -68,7 +69,7 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% if @work && (@chapter.blank? || @chapter.posted?) %>
-    <%= render "kudos/kudos", :kudos => @work_display.kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
+    <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
   <% end %>
 
   <% if !logged_in? && (commentable.is_a?(Work) && commentable.anon_commenting_disabled || commentable.is_a?(Chapter) && commentable.work.anon_commenting_disabled) %>
@@ -103,6 +104,7 @@
     <% end %>
 
     <div id="bookmark_form_placement" class="wrapper toggled">
+      <% @bookmark ||= bookmark_if_exists(commentable) %>
       <% bookmarkable = (commentable.respond_to?(:work) ? commentable.work : commentable) %>
       <% if @bookmark %>
         <%= render "bookmarks/bookmark_form", :bookmarkable => bookmarkable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>

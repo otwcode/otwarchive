@@ -12,6 +12,10 @@ class ReadingsController < ApplicationController
   def index
     @readings = @user.readings
     @page_subtitle = ts("History")
+    if params[:show] == 'to-read'
+      @readings = @readings.where(:toread => true)
+      @page_subtitle = ts("Saved For Later")
+    end
     @readings = @readings.order("last_viewed DESC").page(params[:page])
   end
 
