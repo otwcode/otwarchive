@@ -20,15 +20,15 @@ Feature: Saved Works
   When I am logged out
     And I am logged in as "reader"
     And I view the work "Testy"
-    Then I should see a "Save For Later" button
-  When I press "Save For Later"
-    Then I should see a "Remove From Saved List" button
+    Then I should see a "Add to saved list" button
+  When I press "Add to saved list"
+    Then I should see a "Remove from saved list" button
   When I go to reader's saved works page
     Then I should see "Testy"
   When I view the work "Testy"
-    Then I should see a "Remove From Saved List" button
-  When I press "Remove From Saved List"
-    Then I should see a "Save For Later" button
+    Then I should see a "Remove from saved list" button
+  When I press "Remove from saved list"
+    Then I should see a "Add to saved list" button
   When I go to reader's saved works page
     Then I should not see "Testy"
   
@@ -38,9 +38,9 @@ Feature: Saved Works
   When I post the work "Testy"
   Then I should see "Work was successfully posted"
   When I view the work "Testy"
-  Then I should not see a "Save For Later" button
-    And I should not see a "Remove From Saved List" button
+  Then I should not see a "Add to saved list" button
+    And I should not see a "Remove from saved list" button
   When I am logged out
     And I view the work "Testy"
-  Then I should not see a "Save For Later" button
-    And I should not see a "Remove From Saved List" button
+  Then I should not see a "Add to saved list" button
+    And I should not see a "Remove from saved list" button
