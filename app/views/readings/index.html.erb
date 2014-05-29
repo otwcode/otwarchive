@@ -7,10 +7,14 @@
 <ul class="navigation actions" role="navigation">
   <li>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <%= span_if_current ts("Full History"), user_readings_path(@user), params[:show].blank? %>
 =======
     <%= link_to ts("Saved for Later"), user_saved_works_path(@user) %>
 >>>>>>> parent of 4089da5... Make spelling consistent
+=======
+    <%= span_if_current ts("Full History"), user_readings_path(@user), params[:show].blank? %>
+>>>>>>> parent of 7878f9f... Clean up marked for later references, tweak wording
   </li>
   <li>
     <%= span_if_current ts("Marked for Later"), user_readings_path(@user, :show => 'to-read'), params[:show] == "to-read" %>
