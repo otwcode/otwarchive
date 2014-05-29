@@ -6,10 +6,13 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= link_to ts("Saved For Later"), user_saved_works_path(@user) %>
+    <%= span_if_current ts("Full History"), user_readings_path(@user), params[:show].blank? %>
   </li>
   <li>
-    <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure you want to clear your History? This cannot be undone!'), :method => :post %>
+    <%= span_if_current ts("Marked for Later"), user_readings_path(@user, :show => 'to-read'), params[:show] == "to-read" %>
+  </li>
+  <li>
+  <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure you want to clear your History and Marked for Later lists? This cannot be undone!'), :method => :post %>
   </li>
 </ul>
 <% end %>

@@ -377,7 +377,7 @@ namespace :After do
 
   desc "Migrate marked for later to new table"
   task(:move_marked_for_later => :environment) do
-    Reading.where(toread: true).find_each do |r|
+    Reading.where(markedtoread: true).find_each do |r|
       SavedWork.create(user_id: r.user_id, work_id: r.work_id, created_at: r.created_at)
     end
   end
