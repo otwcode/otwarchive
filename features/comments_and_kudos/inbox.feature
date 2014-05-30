@@ -24,24 +24,6 @@ Feature: Get messages in the inbox
       And I go to my inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
-
-  Scenario: I should not receive my own comments in my inbox if I have set my preferences to "Turn off copies of your own comments."
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Fighting Myself"
-      And I set my preferences to turn off copies of my own comments
-      And I post the comment "I should not see this in my inbox." on the work "Fighting Myself"
-    When I go to my inbox page
-    Then I should not see "boxer on Fighting Myself"
-      And I should not see "I should not see this in my inbox."
-
-  Scenario: I should receive my own comments in my inbox if I haven't set my preferences to "Turn off copies of your own comments."
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Shadow Boxing"
-      And I set my preferences to turn on copies of my own comments
-      And I post the comment "I should see this in my inbox." on the work "Shadow Boxing"
-    When I go to my inbox page
-    Then I should see "boxer on Shadow Boxing"
-      And I should see "I should see this in my inbox."
     
   Scenario: Logged in comments in my inbox should have timestamps
     Given I am logged in as "boxer" with password "10987tko"
