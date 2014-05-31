@@ -56,7 +56,7 @@ Scenario: Editing posted work
     Then I should see "Sad generic work"
     When I am logged in as "fandomer" with password "password"
       And I edit the work "Sad generic work"
-      And I check lock the work
+      And I lock the work
       And I fill in "Fandoms" with "Supernatural"
     When I press "Preview"
     Then I should see the "title" text "Restricted" within "h2.title"
