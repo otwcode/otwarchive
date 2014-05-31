@@ -164,10 +164,10 @@ module WorksHelper
   
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
-    @work.recipients ||
-    @work.approved_related_works.where(translation: true).exists? ||
-    @work.parent_work_relationships ||
-    @work.challenge_claims
+    work.recipients.present? ||
+    work.approved_related_works.where(translation: true).exists? ||
+    work.parent_work_relationships.exists? ||
+    work.challenge_claims.present?
   end
     
   
