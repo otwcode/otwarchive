@@ -147,6 +147,9 @@ Feature: Admin posts
     When I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
+    When I go to the home page
+    Then I should see "App News & a <strong> Warning"
+      And I should not see "App News &amp; a &lt;strong&gt; Warning"
     When I am logged out as an admin
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
