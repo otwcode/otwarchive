@@ -106,10 +106,4 @@
 <% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
 <% content_for :footer_js do %>
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-  <%= javascript_tag do %>
-    // Scroll to the top of the feedback section when loading comments via AJAX
-    $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
-      $j.scrollTo('#feedback');
-    });
-  <% end %>
 <% end %>
