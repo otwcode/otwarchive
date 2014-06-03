@@ -302,6 +302,7 @@ class Pseud < ActiveRecord::Base
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
     Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
+    # NB: updates the kudos to use the new default pseud, but the cache will not expire
     Kudo.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.kudos.blank?
     change_collections_membership
     change_gift_recipients

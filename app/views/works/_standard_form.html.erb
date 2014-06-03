@@ -86,7 +86,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %>
+        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, a podfic, or was inspired by another work") %> 
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -106,7 +106,7 @@
             <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
 
             <dt><%= p.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
-            <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
+            <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") %></dd>
 
             <dt class="translation"><%= p.check_box :translation %></dt>
             <dd class="translation">
@@ -213,9 +213,10 @@
           <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
         </select>
       </dd>
-      <dt class="skin"><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dt class="skin"><%= f.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
-        <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
+        <p class="navigation actions" role="navigation"><%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %></p>
+      </dd>
     </dl>
 
   </fieldset>
@@ -244,33 +245,13 @@
         <!-- Work text field (chapter_attributes_content) -->
         <fieldset class="work text" role="article">
           <legend class="required"><%= ts('Work Text *') %></legend>
-          <p id="toggleText" role="menu">
-            <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-            <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-            <span class="rtf-html-switch actions">
-              <span><a id="richTextLink" href="#richTextLink"><%= ts('Rich text') %></a></span>
-              <span><a id="plainTextLink" href="#plainTextLink"><%= ts('HTML') %></a></span>
-              <%= content_for :footer_js do %>
-                <%= javascript_tag do %>
-                  $j(document).ready(function(){
-                    $j("#plainTextLink").addClass("current");
-                    $j("#richTextLink").click(function(event){
-                      addEditor('content');
-                      $j(this).addClass("current");
-                      $j("#plainTextLink").removeClass("current");
-                      event.preventDefault();
-                    });
-
-                    $j("#plainTextLink").click(function(event){
-                      removeEditor('content');
-                      $j("#richTextLink").removeClass("current");
-                      $j(this).addClass("current");
-                      event.preventDefault();
-                    });
-                  })
-                <% end %>
-              <% end %>
-            </span>
+          <ul class="hidden rtf-html-switch actions" role="menu">
+            <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
+            <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+          </ul>
+          <p class="rtf-html-instructions note">
+            <span class="html-notes"><%= allowed_html_instructions %></span>
+            <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
           </p>
 
           <% use_tinymce %>
