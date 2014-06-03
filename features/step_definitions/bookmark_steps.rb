@@ -4,6 +4,14 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
     step %{I press "Create"}
 end
 
+When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
+  step %{I start a new bookmark for "#{title}"}
+  unless pseud.nil?
+    select(pseud, :from => "bookmark_pseud_id")
+  end
+  click_button("Create")
+end
+
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
   step %{I open the bookmarkable work "#{title}"}  
   click_link("Bookmark")
