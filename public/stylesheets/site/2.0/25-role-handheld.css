@@ -3,7 +3,7 @@ linearise content, suppress large images, suppress custom fonts and other large 
 pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
 
 #outer {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /*regions */
