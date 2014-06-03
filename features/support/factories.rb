@@ -13,6 +13,10 @@ FactoryGirl.define do
     f.association :user
   end
 
+  factory :invitation do |f|
+    f.sequence(:invitee_email) { |n| "invitation#{n}@archiveofourown.org" }
+  end
+
   factory :admin do |f|
     f.sequence(:login) { |n| "testadmin#{n}" }
     f.password "password"
@@ -109,6 +113,19 @@ FactoryGirl.define do
     end
   end
 
+  factory :external_author do |f|
+    f.sequence(:email) { |n| "foo#{n}@external.com" }
+  end
+
+  factory :external_author_name do |f|
+    f.association :external_author
+  end
+
+  factory :external_creatorship do |f|
+    f.creation_type 'Work'
+    f.association :external_author_name
+  end
+
   factory :collection_participant do |f|
     f.association :pseud
     f.participant_role "Owner"
@@ -136,6 +153,23 @@ FactoryGirl.define do
     f.subscribable_type "Series"
     f.subscribable_id { FactoryGirl.create(:series).id }
   end
+
+  factory :comment do |f|
+    f.sequence(:content) {|n| "Comment content #{n}"}
+    f.sequence(:name) {|o| "GuestName#{o}"}
+    f.sequence(:email)  {|p| "guest#{p}email@example.org"}
+
+    after(:build) do |comment|
+      comment.commentable_type = "Work"
+      comment.commentable_id = FactoryGirl.create(:work).id
+    end
+  end
+
+  factory :kudo do |f|
+    f.commentable_id { FactoryGirl.create(:work).id }
+    f.commentable_type  "Work"
+end
+
 
   factory :owned_tag_set do |f|
     f.sequence(:title) {|n| "Owned Tag Set #{n}"}

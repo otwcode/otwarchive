@@ -22,6 +22,8 @@ module NavigationHelpers
     when /^the search people page$/i
       Pseud.tire.index.refresh
       search_people_path
+    when /^the bookmarks page$/i
+      bookmarks_path
 
     # the following are examples using path_to_pickle
 
@@ -46,7 +48,7 @@ module NavigationHelpers
     when /^(.*)'s user page$/i
       user_path(:id => $1)
     when /^(.*)'s user url$/i
-      user_url(:id => $1).sub("http://www.example.com", ArchiveConfig.APP_URL)
+      user_url(:id => $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^(.*)'s works page$/i
       Work.tire.index.refresh
       user_works_path(:user_id => $1)
@@ -59,12 +61,18 @@ module NavigationHelpers
       user_bookmarks_path(:user_id => $1)
     when /^(.*)'s pseuds page$/i
       user_pseuds_path(:user_id => $1)
+    when /^(.*)'s invitations page$/i
+      user_invitations_path(:user_id => $1)
     when /^(.*)'s reading page$/i
       user_readings_path(:user_id => $1)
     when /^(.*)'s series page$/i
       user_series_index_path(:user_id => $1)
+    when /^(.*)'s stats page$/i
+      user_stats_path(:user_id => $1)
     when /^(.*)'s preferences page$/i
       user_preferences_path(:user_id => $1)
+    when /^(.*)'s related works page$/i
+      user_related_works_path(:user_id => $1)
     when /^the subscriptions page for "(.*)"$/i
       user_subscriptions_path(:user_id => $1)
     when /^(.*)'s profile page$/i
@@ -82,18 +90,22 @@ module NavigationHelpers
       Work.tire.index.refresh
       user_works_path(User.current_user)
     when /my subscriptions page/
-      user_subscriptions_path(User.current_user)      
+      user_subscriptions_path(User.current_user)   
+    when /my stats page/
+      user_stats_path(User.current_user)   
     when /my profile page/
       user_profile_path(User.current_user)
     when /my claims page/
       user_claims_path(User.current_user)
     when /my signups page/
       user_signups_path(User.current_user)
+    when /my related works page/
+      user_related_works_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
-    when /^(.*)'s skin page/
+    when /^(.*)'s skins page/
       skins_path(:user_id => $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
@@ -106,9 +118,11 @@ module NavigationHelpers
     when /^the "(.*)" requests page$/i                      # e.g. when I go to "Collection name" signup page
       collection_requests_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
-      collection_url(Collection.find_by_title($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+      collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by_title($1))
+    when /^"(.*)" gift exchange matching page$/i
+      collection_potential_matches_path(Collection.find_by_title($1))
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)"$/i
@@ -116,13 +130,15 @@ module NavigationHelpers
       tag_works_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
       Work.tire.index.refresh
-      tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+      tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
-      collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+      collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+    when /^the tag comments? page for "(.*)"$/i
+      tag_comments_path(Tag.find_by_name($1))
     when /^the admin-posts page$/i
       admin_posts_path
     when /^the admin-settings page$/i
@@ -131,6 +147,10 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
+    when /^the tos page$/i
+      tos_path
+    when /^the faq page$/i
+      archive_faqs_path
     when /^the support page$/i
       new_feedback_report_path
     when /^the new tag ?set page$/i

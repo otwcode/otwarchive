@@ -120,7 +120,7 @@ Feature: Create Works
       And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
        And 1 email should be delivered to "recipient@example.org"
-       And the email should contain "A gift story has been posted for you"
+       And the email should contain "A gift work has been posted for you"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -313,12 +313,11 @@ Feature: Create Works
       And I should not see "This is a preview"
 
   Scenario: RTE and HTML buttons are separate
-  Given basic tags
-    And I am logged in as "newbie"
+  Given I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
-    And I should see "Rich text" within "a#richTextLink"
-    And I should see "HTML" within "a#plainTextLink"
+    And I should see "Rich Text" within ".rtf-html-switch"
+    And I should see "HTML" within ".rtf-html-switch"
     
   Scenario: posting a backdated work
   Given I am logged in as "testuser" with password "testuser"

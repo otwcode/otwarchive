@@ -8,3 +8,21 @@ second:
   name: othertest
   description: This is another collection or something
 
+third:
+  title: Another Plain Collection
+  name: anothertest
+
+fourth:
+  title: Surprise Presents
+  name: surprisetest
+  challenge_type: GiftExchange
+  
+fifth:
+  title: Another Gift Swap
+  name: swaptest
+  challenge_type: GiftExchange
+
+sixth:
+  title: On Demand
+  name: demandtest
+  challenge_type: PromptMeme
