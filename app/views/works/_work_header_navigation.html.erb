@@ -80,11 +80,13 @@
     </li>
   <% end %>
 
-  <li class="share hidden">
-    <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
-    <%= render 'share/share', :shareable => @work %>
-  </li>
-
+  <% unless @work.users.all? {|u| u.preference.disable_share_links?} %>
+    <li class="share hidden">
+      <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
+      <%= render 'share/share', :shareable => @work %>
+    </li>
+  <% end %>
+  
   <% if current_user && @subscription %>
     <li class="subscribe">
       <%= render 'subscriptions/form', :subscription => @subscription %>
