@@ -61,7 +61,7 @@
         <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
     <% end %>
   </ul>
-  
+
   <div id="kudos_message"></div>
 
   <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
@@ -116,37 +116,3 @@
 
 </div>
 <!-- END comments -->
-
-<%= content_for :footer_js do %>
-  <script src="/javascripts/jquery.scrollTo.min.js" type="text/javascript"></script>
-
-  <%= javascript_tag do %>
-    $j('#kudo_submit').on("click", function(event) {
-      event.preventDefault();
-
-      $j.ajax({
-        type: 'POST',
-        url: '/kudos.js',
-        data: jQuery('#new_kudo').serialize(),
-        error: function(jqXHR, textStatus, errorThrown ) {
-          var msg = 'Sorry, we were unable to save your kudos';
-          var data = $j.parseJSON(jqXHR.responseText);
-
-          if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
-            msg = "You have already left kudos here. :)";
-          }
-
-          $j('#kudos_message').addClass('comment_error').text(msg);
-        },
-        success: function(data) { 
-          $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
-        }
-      });
-    });
-
-    // Set things up to scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-    $j('#comments_placeholder .pagination a[data-remote]').livequery('click.rails', function(e){
-      $j.scrollTo('#comments_placeholder');
-    });
-  <% end %>
-<% end %>

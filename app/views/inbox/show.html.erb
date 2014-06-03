@@ -39,7 +39,10 @@
                 <h4 class="heading byline"><%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
               <% end %>
             <% else %>
-              <h4 class="heading byline"><%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
+              <h4 class="heading byline">
+                <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
+                <span class="posted datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></span>
+              </h4>
             <% end %>
 
             <div class="icon">
@@ -57,8 +60,6 @@
             <blockquote class="userstuff">
               <%= raw sanitize_field(feedback_comment, :content) %>
             </blockquote>
-
-            <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
 
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 

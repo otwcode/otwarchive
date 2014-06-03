@@ -622,7 +622,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   Then I should see "Challenge sign-up was deleted."
   # work fulfilling is still fine
   When I view the work "Fulfilled Story"
@@ -643,7 +643,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   When I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should not see "Stargate Atlantis"
@@ -817,12 +817,12 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 14" many-fandom prompt meme
   When I am on my user page
     And I follow "Sign-ups"
-  # Then 14 should be the last signup in the table
+  # TODO
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
@@ -851,7 +851,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
@@ -896,7 +896,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I delete my signup for "Battle 12"
+  When I delete my signup for the prompt meme "Battle 12"
   When I view prompts for "Battle 12"
   Then I should not see "myname1" within "ul.index"
 
@@ -905,7 +905,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I delete my signup for "Battle 12"
+  When I delete my signup for the prompt meme "Battle 12"
   When I go to my signups page
   Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
@@ -936,7 +936,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   Then I should see "Challenge sign-up was deleted."
   When I am logged in as "myname4"
     And I go to my claims page
@@ -950,7 +950,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   When I am logged in as "myname4"
     And I go to my claims page
   Then I should see "Claims (0)"
@@ -1389,7 +1389,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "Scott" with password "password"
     And I go to "Scotts Prompt" collection's page
     And I follow "Prompt Form"
-    And I check "Semi-anonymous prompt"
+    And I check "Semi-anonymous Prompt"
     And I press "Submit"
   Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
-    And the "Semi-anonymous prompt" checkbox should be checked
+    And the "Semi-anonymous Prompt" checkbox should be checked

@@ -31,7 +31,7 @@
 
       	<% if bookmark_count > 1 %>
         	<% if params[:tag_id] || @most_recent_bookmarks %>
-          	<li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>" style="display: none;" class="showme">
+          	<li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
             	<%= link_to ts("Show Most Recent Bookmarks"), 
               url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }), :class => "actions", :remote => true %>
           	</li>
@@ -47,7 +47,7 @@
 	<%= render 'bookmarks/bookmark_user_module', :bookmark => bookmark %>
 
   <% # recent bookmarks will be loaded up here if requested %>
-  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
+  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
 
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>

@@ -1,19 +1,51 @@
 require 'spec_helper'
 
 describe WorksOwner do
-
+  
+  before do
+    @tag = Tag.new
+    @tag.id = 666
+    @time = "2013-09-27 19:14:18 -0400".to_datetime
+    @time_string = @time.to_i.to_s
+    Delorean.time_travel_to @time
+    @tag.update_works_index_timestamp!
+    Delorean.back_to_the_present
+  end
+  
+  describe "works_index_timestamp" do
+    it "should retrieve the owner's timestamp" do
+      @tag.works_index_timestamp.should == @time_string
+    end
+  end
+  
+  describe "works_index_cache_key" do
+    it "should return the full cache key" do
+      @tag.works_index_cache_key.should == "works_index_for_tag_666_#{@time_string}"
+    end
+    
+    it "should accept a tag argument and return the tag's timestamp" do
+      collection = Collection.new
+      collection.id = 42
+      collection.works_index_cache_key(@tag).should == "works_index_for_collection_42_tag_666_#{@time_string}"
+    end
+  end
+  
+  describe "update_works_index_timestamp!" do
+    it "should update the timestamp for the owner" do
+      @tag.update_works_index_timestamp!
+      @tag.works_index_timestamp.should_not == @time_string
+    end
+  end
+  
   describe "index_cache_key" do
     
     shared_examples_for "an owner" do
       it "should change after a work is updated" do
-        # skip ahead a bit in time to ensure we don't end up with the same timestamp!
-        Delorean.time_travel_to "1 second from now"
-        @work.touch
+        @work.save
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
-        Delorean.back_to_the_present
       end
       
-      it "should change after a work is deleted" do
+      xit "should change after a work is deleted" do
         @work.destroy
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
       end      
@@ -48,34 +80,28 @@ describe WorksOwner do
         @original_cache_key.should_not eq(@owner.works_index_cache_key)
       end
     end
-    
-    describe "for a noncanonical tag" do
-      before do
-        @owner = FactoryGirl.create(:fandom, :canonical => false)
-        @work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
-        @original_cache_key = @owner.works_index_cache_key
-      end
-      it_should_behave_like "an owner"
-      it_should_behave_like "an owner tag"
-    end
         
     describe "for a canonical tag" do
       before do
+        Delorean.time_travel_to "10 minutes ago"
         @owner = FactoryGirl.create(:fandom, :canonical => true)
         @work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
         @original_cache_key = @owner.works_index_cache_key
+        Delorean.back_to_the_present
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner tag"
       
       describe "with a synonym" do
         before do
+          Delorean.time_travel_to "10 minutes ago"
           @syn_tag = FactoryGirl.create(:fandom, :canonical => false)
           @syn_tag.syn_string = @owner.name
           @syn_tag.save
           @work2 = @work
           @work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
           @original_cache_key = @owner.works_index_cache_key
+          Delorean.back_to_the_present
         end
         it_should_behave_like "an owner"
         it_should_behave_like "an owner tag"
@@ -90,20 +116,23 @@ describe WorksOwner do
     
     describe "for a collection" do
       before do
+        Delorean.time_travel_to "10 minutes ago"
         @owner = FactoryGirl.create(:collection)
         @work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
-
+      
         # we have to approve the collection items before we get a change in
         # the cache key, since it uses approved works
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
-
+      
         @original_cache_key = @owner.works_index_cache_key
+        Delorean.back_to_the_present
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner collection"
             
       describe "with a child" do
         before do
+          Delorean.time_travel_to "10 minutes ago"
           # Stub out User.current_user to get past the collection needing to be owned by same person as parent
           User.stub!(:current_user).and_return(@owner.owners.first.user)
           @child = FactoryGirl.create(:collection, :parent_name => @owner.name)
@@ -113,6 +142,7 @@ describe WorksOwner do
           @work = FactoryGirl.create(:work, :collection_names => @child.name, :posted => true)
           @child.collection_items.each {|ci| ci.approve(nil); ci.save}
           @original_cache_key = @owner.works_index_cache_key
+          Delorean.back_to_the_present
         end
         it_should_behave_like "an owner"
         it_should_behave_like "an owner collection"
@@ -164,10 +194,9 @@ describe WorksOwner do
         end 
         
       end
-
       
     end
-
+  
     describe "for a user" do
       before do
         @owner = FactoryGirl.create(:user)
@@ -188,6 +217,6 @@ describe WorksOwner do
     end
     
   end
-      
+  
 
 end

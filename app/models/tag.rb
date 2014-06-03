@@ -3,6 +3,7 @@ class Tag < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include StringCleaner
+  include WorksOwner
 
   NAME = "Tag"
 
@@ -176,6 +177,7 @@ class Tag < ActiveRecord::Base
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
   scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
   scope :unwrangleable, where(:unwrangleable => true)
 
@@ -304,20 +306,27 @@ class Tag < ActiveRecord::Base
     where('children_tags.id IN (?)', relationships.collect(&:id))
   }
 
-  scope :in_challenge, lambda {|collection|
-    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
-           INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
-           INNER JOIN prompts ON (prompts.tag_set_id = tag_sets.id OR prompts.optional_tag_set_id = tag_sets.id)
-           INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)").
-    where("challenge_signups.collection_id = ?", collection.id)
-  }
+  # Get the tags for a challenge's signups, checking both the main tag set
+  # and the optional tag set for each prompt
+  def self.in_challenge(collection, prompt_type=nil)
+    ['', 'optional_'].map { |tag_set_type|
+      join = "INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
+        INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
+        INNER JOIN prompts ON (prompts.#{tag_set_type}tag_set_id = tag_sets.id)
+        INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)"
+
+      tags = self.joins(join).where("challenge_signups.collection_id = ?", collection.id)
+      tags = tags.where("prompts.type = ?", prompt_type) if prompt_type.present?
+      tags
+    }.flatten.compact.uniq
+  end
 
   scope :requested_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Request'")
+    in_challenge(collection, 'Request')
   }
 
   scope :offered_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Offer'")
+    in_challenge(collection, 'Offer')
   }
   
   # Resque
@@ -435,7 +444,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -445,7 +454,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -454,7 +463,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
       end
     end
   end
@@ -481,10 +490,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -564,14 +573,6 @@ class Tag < ActiveRecord::Base
   end
 
   #### FILTERING ####
-  
-  include WorksOwner  
-  # Used in works_controller to determine whether to expire the cache for this tag's works index page
-  def works_index_cache_key(tag=nil, index_works=nil)
-    index_works ||= self.canonical? ? self.filtered_works : self.works
-    super(tag, index_works.where(:posted => true))
-  end
-    
 
   # Usage is either:
   # reindex_taggables
@@ -792,7 +793,7 @@ class Tag < ActiveRecord::Base
               # instead we add the new merger of self (if there is one) as the relevant one to check
               remaining_tags += [self.merger] unless self.merger.nil?
               if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-                work.filters.delete(filter_to_remove)
+                work.filter_taggings.where(filter_id: filter_to_remove).destroy_all
                 filter_to_remove.reset_filter_count
               else # we should keep filter_to_remove, but check if inheritence needs to be updated
                 direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
@@ -944,12 +945,13 @@ class Tag < ActiveRecord::Base
       to_remove.each do |tag|
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filters.delete(tag)
+            work.filter_taggings.where(filter_id: tag.id).destroy_all
             RedisSearchIndexQueue.reindex(work, priority: :low)
           end
         end
       end
     end
+    meta_tag.update_works_index_timestamp!
   end
 
   def remove_sub_filters(sub_tag)
