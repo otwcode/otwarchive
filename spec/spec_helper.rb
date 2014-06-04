@@ -6,6 +6,11 @@ require 'factory_girl'
 require 'database_cleaner'
 require 'email_spec'
 
+
+# Coverals needs to work here too
+require 'coveralls'
+Coveralls.wear!('rails')
+
 # SimpleCov integration
 
 require 'simplecov'
