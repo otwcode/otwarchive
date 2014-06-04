@@ -207,12 +207,4 @@ end
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
   end
-
-  factory :invite_request do
-    email
-  end
-
-  factory :invitation do
-    invitee_email "default@email.com"
-  end
 end
