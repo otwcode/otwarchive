@@ -33,4 +33,18 @@ FactoryGirl.define do
       work.fandoms = [FactoryGirl.build(:fandom)] if work.fandoms.blank?
     end
   end
+
+  factory :external_author do |f|
+    f.sequence(:email) { |n| "foo#{n}@external.com" }
+  end
+
+  factory :external_author_name do |f|
+    f.association :external_author
+  end
+
+  factory :external_creatorship do |f|
+    f.creation_type 'Work'
+    f.association :external_author_name
+  end
+
 end
