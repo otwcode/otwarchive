@@ -79,7 +79,7 @@ describe Work do
       @work.errors[:base].should include["These pseuds are invalid: *pseud*"]
     end
 
-    it "does not save if author is blank" do
+    it "does not save if author is blank", :pending do
       @work = build(:no_authors)
       @work.save.should be_false
       @work.errors[:base].should include "Work must have at least one author."
