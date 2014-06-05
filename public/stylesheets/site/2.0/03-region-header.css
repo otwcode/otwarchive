@@ -214,11 +214,16 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 }
 
 #small_login .footnote {
+  float: left;
   font-size: 0.857em;
   padding: 0.375em 0;
 }
 
-#header .dropdown .login .footnote a {
+#small_login .footnote li {
+  padding: 0 0.25em;
+}
+
+.dropdown #small_login .footnote a {
   background: transparent;
   border-bottom: 1px solid;
 }
