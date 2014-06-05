@@ -9,7 +9,7 @@
 <p>You can search this page by pressing <kbd>ctrl F</kbd> / <kbd>cmd F</kbd> and typing in what you are looking for.</p>
 <% if @collection %>
   <div class="filters">
-	  <h3 class="landmark heading"><%= ts('Filters') %></h3>
+    <h3 class="landmark heading"><%= ts('Filters') %></h3>
     <%= form_tag '', :method => :get do %>
       <fieldset><p title="Choose media type"><%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
       <%= submit_tag "Show" %></p></fieldset>
