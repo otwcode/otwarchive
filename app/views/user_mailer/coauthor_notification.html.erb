@@ -1,8 +1,15 @@
-<p>You have been listed as a coauthor on the following <%= @creation.class.name.underscore.humanize.downcase %>:</p>
+<% content_for :message do %>
+  <% creation_type = @creation.class.name.underscore.humanize.downcase %>
 
-<p><%= link_to(@creation.title, @creation.class == Series ? series_url(@creation) : work_url(@creation)) %></p>
+  <p>
+    You have been listed as a coauthor on the following <%= creation_type %>:
+  </p>
 
-<p>
-<%= link_to("Edit the #{@creation.class.name.underscore.humanize.downcase}", @creation.class == Series ? edit_series_url(@creation) : edit_work_url(@creation)) %>
- to remove yourself as author if you've been added in error or don't want to be listed as an author.
-</p>
+  <p>
+    <i><b><%= style_link(@creation.title, (@creation.class == Series ? series_url(@creation) : work_url(@creation))) %></b></i>
+  </p>
+
+  <p>
+    <%= style_link("Edit the " + creation_type, (@creation.class == Series ? edit_series_url(@creation) : edit_work_url(@creation))) %> to remove yourself as author if you've been added in error or don't want to be listed as an author.
+  </p>
+<% end %>

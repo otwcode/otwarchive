@@ -1,6 +1,7 @@
 class Media < Tag
 
   NAME = ArchiveConfig.MEDIA_CATEGORY_NAME
+  index_name Tag.index_name
   
   has_many :common_taggings, :as => :filterable
   has_many :fandoms, :through => :common_taggings, :source => :common_tag, :conditions => "type = 'Fandom'"

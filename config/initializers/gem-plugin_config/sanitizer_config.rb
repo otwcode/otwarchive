@@ -13,7 +13,7 @@ class Sanitize
 
       # see in the Transformers section for what classes we strip
       :attributes => {
-        :all => ['align', 'title', 'class'],
+        :all => ['align', 'title', 'class', 'dir'],
         'a' => ['href', 'name'],
         'blockquote' => ['cite'],
         'col' => ['span', 'width'],
@@ -77,33 +77,41 @@ class Sanitize
       end
       
       # Verify that the video URL is actually a valid video URL from a site we trust.
+      
+      # strip off optional protocol and www
+      url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
+      
       source = case url
-      when /^http:\/\/(?:www\.)?youtube\.com\//
+      when /^youtube(-nocookie)?\.com\//
         then "youtube"
-      when /^http:\/\/(?:www\.|player\.)?vimeo\.com\//
+      when /^(player\.)?vimeo\.com\//
         then "vimeo"
-      when /^http:\/\/(?:www\.)?blip\.tv\//
+      when /^blip\.tv\//
         then "blip"
-      when /^http:\/\/(?:www\.|static\.)?ning\.com\//
+      when /^(static\.)?ning\.com\//
         then "ning"
-      when /^http:\/\/(?:www\.)?dailymotion\.com\//
+      when /^dailymotion\.com\//
         then "dailymotion"
-      when /^http:\/\/(?:www\.)?viddler\.com\//
+      when /^viddler\.com\//
         then "viddler"
-      when /^http:\/\/(?:www\.)?metacafe\.com\//
+      when /^metacafe\.com\//
         then "metacafe"
-      when /^http:\/\/(?:www\.)?4shared\.net\//
-          then "4shared"
-      when /^http:\/\/(?:www\.)?vidders\.net\//
+      when /^vidders\.net\//
         then "vidders.net"
-      when /^http:\/\/(?:www\.)?criticalcommons\.org\//
+      when /^criticalcommons\.org\//
         then "criticalcommons"
-      when /^http:\/\/(?:www\.)?google\.com\//
+      when /^google\.com\//
         then "google"
-      when /^http:\/\/(?:www\.)?archiveofourown\.org\//
+      when /^archiveofourown\.org\//
         then "archiveofourown"
-      when /^http:\/\/(?:www\.)?podfic\.com\//
+      when /^podfic\.com\//
         then "podfic"
+      when /^(embed\.)?spotify\.com\//
+        then "spotify"
+      when /^8tracks\.com\//
+        then "8tracks"
+      when /^(w\.)?soundcloud\.com\//
+        then "soundcloud"
       else
         nil
       end
@@ -111,7 +119,7 @@ class Sanitize
       # if we don't know the source, sorry
       return if source.nil?           
 
-      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic"]
+      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or

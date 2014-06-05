@@ -73,23 +73,6 @@ module WorksHelper
     end
   end
 
-  # Return true or false to determine whether the published at field should show on the work form
-  def check_backdate_box(work, chapter)
-
-    return true if work.backdate
-
-    if !chapter.created_at.nil?
-      # A draft or posted work already exists
-      return chapter.created_at.to_date != chapter.published_at
-    elsif !chapter.published_at.nil?
-      # There's data from the input form but the work that hasn't been
-      # stored as a draft yet
-      return chapter.published_at != Date.today
-    end
-
-  end
-
-
   def language_link(work)
     if work.respond_to?(:language) && work.language
       link_to work.language.name, work.language
@@ -114,69 +97,28 @@ module WorksHelper
   end
   
   def marktoread_link(work)
-    link_to ts("Mark for later"), marktoread_work_path(work)
+    link_to ts("Mark for Later"), marktoread_work_path(work)
   end
   
   def markasread_link(work)
-    link_to ts("Mark as read"), marktoread_work_path(work)
-  end
-
-  private
-  def add_label_for_embed(label, text) ; text.blank? ? nil : label + text ; end
-
-  public
-  # get a nicely formatted bit of text for pasting into other services
-  # title (# words) by authors
-  # Chapters: 
-  # Fandom:
-  # Rating:
-  # Warnings:
-  # etc
-  def get_embed_link(work)
-    title_link = link_to(content_tag(:strong, work.title.html_safe), work_url(work)) + " (#{work.word_count} #{ts('words')})"
-    if work.anonymous?
-      profile_link = ts("Anonymous")
-    else
-      profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon", :border => "0"), user_profile_url(pseud.user)) +
-                                    link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
-    end
-
-    chapters_text = ts("Chapters: ") + work.chapter_total_display
-    fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)
-    rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
-    category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '))
-    warning_text = add_label_for_embed(ts("Warning: "), work.warnings.map {|warning| warning_display_name(warning.name)}.join(', '))
-    relationship_text = add_label_for_embed(ts("Relationships: "), work.relationships.map {|rel| rel.name}.join(', '))
-    char_text = add_label_for_embed(ts("Characters: "), work.characters.map {|char| char.name}.join(', '))
-    if work.series.count != 0
-      series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work))
-    end
-    summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
-
-    # we deliberately don't html_safe this because we want it escaped
-    if work.series.count != 0
-      [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, series_text, summary_text].compact.join("\n")
-    else
-      [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
-    end
-  end
-
-  # convert a bookmark into a nicely formatted chunk of text
-  def get_bookmark_embed_link(bookmark)
-    if bookmark.bookmarkable.is_a?(Work)
-      work_embed = get_embed_link(bookmark.bookmarkable)
-      tags_text = add_label_for_embed(ts("Bookmarker's Tags: "), bookmark.tags.map {|tag| tag.name}.join(", "))
-      bookmark_text = add_label_for_embed(content_tag(:strong, ts("Bookmarker's Notes: ")), raw(sanitize_field(bookmark, :notes)))
-      [work_embed, tags_text, bookmark_text].compact.join("\n")
-    end
+    link_to ts("Mark as Read"), marktoread_work_path(work)
   end
   
   def get_endnotes_link
     current_page?(:controller => 'chapters', :action => 'show') ?
-      chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
+      chapter_path(@work.last_posted_chapter.id, :anchor => 'work_endnotes') :
       "#work_endnotes"
-  end      
-    
+  end
+  
+  def get_related_works_url
+    current_page?(:controller => 'chapters', :action => 'show') ?
+      chapter_path(@work.last_posted_chapter.id, :anchor => 'children') :
+      "#children"
+  end
+  
+  def get_inspired_by(work)
+    work.approved_related_works.where(translation: false)
+  end
 
   def download_url_for_work(work, format)
     url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')
@@ -218,6 +160,14 @@ module WorksHelper
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
+  end
+  
+  # Returns true or false to determine whether the work associations should be included
+  def show_associations?(work)
+    work.recipients.present? ||
+    work.approved_related_works.where(translation: true).exists? ||
+    work.parent_work_relationships.exists? ||
+    work.challenge_claims.present?
   end
     
   

@@ -1,0 +1,9 @@
+<% content_for :message do %>
+Hi, <%= @user.login %>!
+
+We just wanted to let you know that you have <%= @total %> new invitation(s), which can be used to create new accounts at the archive. You can invite a friend from your invitations page at <%= user_invitations_url(@user) %>.
+
+Cheers,
+<%= ArchiveConfig.APP_SHORT_NAME %>
+<% end %>
+

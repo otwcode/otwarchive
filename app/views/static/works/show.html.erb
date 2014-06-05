@@ -1,28 +1,26 @@
 <div id="work">
-  <%= render :partial => 'downloads/download_preface.html' %>
+  <%= render 'downloads/download_preface.html' %>
 
   <div id="chapters" class="userstuff">
     <% if @chapters.size > 1 %>
       <% for chapter in @chapters %>
-        <%= render :partial => 'downloads/download_chapter.html', :locals => {:chapter => chapter} %>
+        <%= render 'downloads/download_chapter.html', :chapter => chapter %>
       <% end %>
     <% else %>
       <%=raw sanitize_field(@chapters.first, :content) %>
     <% end %>
   </div>
 
-  <%= render :partial => 'downloads/download_afterword.html' %>
+  <%= render 'downloads/download_afterword.html' %>
 
   <div class="kudos">
     <%= form_for Kudo.new do |kudo_form| %>
-      <%= kudo_form.hidden_field :kudosable_id, :value => @work.id %>
-      <%= kudo_form.hidden_field :kudosable_type, :value => 'Work' %>
+      <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
+      <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
       <% # need to know whether to redirect to work or chapter in the kudos controller %>
-      <% # commentable is whatever the user is reading - chapter or work; kudosable is the object that can have kudos - the work %>
       <%= hidden_field_tag :commentable_controller, controller.controller_name %>
       <%= hidden_field_tag :commentable_id, params[:id] %>
-      <%= kudo_form.submit ts("Kudos ♥") %>
+      <%= kudo_form.submit ts("Kudos ♥"), :id => 'kudo_submit' %>
     <% end %>
   </div>
-
 </div>

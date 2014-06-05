@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
-	<% 	display_name = @author ? @author.name : @user.login	%>
+	<% 	display_name = @pseud ? @pseud.name : @user.login	%>
 	<h2 class="heading">
-	  <%= @author ? link_to_unless_current(display_name, user_pseud_path(@user, @author)) : link_to_unless_current(display_name, @user) %>
+	  <%= @pseud ? link_to_unless_current(display_name, user_pseud_path(@user, @pseud)) : link_to_unless_current(display_name, @user) %>
 	</h2>
-	<p class="icon"><%= icon_display(@user, @author) %></p>
+	<p class="icon"><%= icon_display(@user, @pseud) %></p>
 <!--/descriptions-->
 
   <%= render "users/header_navigation" %>

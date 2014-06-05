@@ -33,6 +33,7 @@ module HtmlCleaner
   end
 
   class TagStack < Array
+    include HtmlCleaner
 
     def inside_paragraph?
       flatten.include?("p")

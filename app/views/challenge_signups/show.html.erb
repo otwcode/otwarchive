@@ -1,18 +1,13 @@
-<div id="collection-page" class="collection challenge home">
-  <!--main content-->
-  <h2 class="heading"><%= ts("Signup for %{person}", :person => @challenge_signup.pseud.byline) %></h2>
-  <!--subnav-->
-  <%= render "signup_controls", :challenge_signup => @challenge_signup %>
-  <!--/subnav-->
+<% # Only gift exchanges link to this page, but you can manually enter collections/name/signups/# to view for prompt memes %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Sign-up for %{person}", :person => @challenge_signup.pseud.byline) %></h2>
+<!--/descriptions-->
 
-  <!--main content-->
+<!--subnav-->
+<%= render "signup_controls", :challenge_signup => @challenge_signup %>
+<!--/subnav-->
 
-  <%= render "show_requests", :challenge_signup => @challenge_signup %>
-  <%= render "show_offers", :challenge_signup => @challenge_signup %>
-
-  <!--/content-->
-
-  <!--subnav-->
-  <%= render "signup_controls", :challenge_signup => @challenge_signup %>
-  <!--/subnav-->
-</div>
+<!--main content-->
+<%= render "show_requests", :challenge_signup => @challenge_signup %>
+<%= render "show_offers", :challenge_signup => @challenge_signup %>
+<!--/content-->

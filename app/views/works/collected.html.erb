@@ -1,0 +1,39 @@
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
+  <%= ts("Works in Challenges/Collections") %>
+</h2>
+<!-- /end descriptions-->
+
+<!--subnav-->
+<ul class="user navigation actions" role="navigation">
+  <% if @user == current_user %>
+    <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+  <% end %>
+  <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
+  <li><%= span_if_current ts('Works'), user_works_path %></li>
+</ul>
+<!--/subnav-->
+
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
+<% end %>
+
+<!--main content-->
+<h3 class="landmark heading">Listing Works</h3>
+<ol class="work index group">
+  <% for work in @works %>
+    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+  <% end %>
+</ol>
+  
+<!--/content-->
+
+<!--filters subnav-->
+<% if @facets.present? %>
+  <%= render :partial => 'collection_filters' %>
+<% end %>
+<!---/subnav-->
+
+<% if @works.respond_to?(:total_pages) %>
+  <%= will_paginate @full_results %>
+<% end %>

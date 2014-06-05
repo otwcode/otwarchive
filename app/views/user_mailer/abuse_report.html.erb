@@ -1,4 +1,17 @@
-<p><%= ts("The following abuse report has been sent to the Abuse team:") %></p>
-<p><%= ts("URL of the page the abuse is on") %>: <%= link_to(@url, @url) %></p>
-<p><%= ts("Description of the abuse") %>:</p>
-<%= @comment %>
+<% content_for :message do %>
+  <p>
+    The following abuse report has been sent to the Abuse team:
+  </p>
+  
+  <p>
+    <%= style_bold("URL of the page the abuse is on:") %> <%= style_link(@url, @url) %>
+  </p>
+  
+  <%= style_bold("Description of the abuse:") %>
+  <%= style_quote(@comment) %>
+
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>

@@ -14,26 +14,30 @@ end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
-    admin = Factory.create(:admin, hash)
+    admin = FactoryGirl.create(:admin, hash)
   end
 end
 
 Given /^I am logged in as an admin$/ do
-  Given "I am logged out"
+  step("I am logged out")
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
-    admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
+    admin = FactoryGirl.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
   end
   visit admin_login_path
   fill_in "Admin user name", :with => "testadmin"
   fill_in "Admin password", :with => "testadmin"
   click_button "Log in as admin"
-  Then "I should see \"Successfully logged in\""
+  step("I should see \"Successfully logged in\"")
 end
 
 Given /^I am logged out as an admin$/ do
   visit admin_logout_path
   assert !AdminSession.find
+end
+
+Given /^This is the end of the scenario$/ do
+  Rails.logger.debug "THIS IS THE END OF THE SCENARIO. DATABASE CLEANER BETTER TRUCATE THIS SHIT"
 end
 
 Given /^basic languages$/ do
@@ -46,63 +50,63 @@ Given /^advanced languages$/ do
 end
 
 Given /^guest downloading is off$/ do
-  Given "I am logged in as an admin"
+  step("I am logged in as an admin")
   visit(admin_settings_path)
   check("Turn off downloading for guests")
   click_button("Update")
 end
 
 Given /^guest downloading is on$/ do
-  Given "I am logged in as an admin"
+  step("I am logged in as an admin")
   visit(admin_settings_path)
   uncheck("Turn off downloading for guests")
   click_button("Update")
 end
 
 Given /^tag wrangling is off$/ do
-  Given "I am logged in as an admin"
+  step("I am logged in as an admin")
   visit(admin_settings_path)
-  And "I check \"Turn off tag wrangling for non-admins\""
-  And "I press \"Update\""
-  And "I am logged out as an admin"
+  step("I check \"Turn off tag wrangling for non-admins\"")
+  step("I press \"Update\"")
+  step("I am logged out as an admin")
 end
 
 Given /^tag wrangling is on$/ do
-  Given "I am logged in as an admin"
+  step("I am logged in as an admin")
   visit(admin_settings_path)
-  And "I uncheck \"Turn off tag wrangling for non-admins\""
-  And "I press \"Update\""
-  And "I am logged out as an admin"
+  step("I uncheck \"Turn off tag wrangling for non-admins\"")
+  step("I press \"Update\"")
+  step("I am logged out as an admin")
 end
 
 Given /^I have posted a FAQ$/ do
-  When "I am logged in as an admin"
-  When %{I make a 1st FAQ post}
+  step("I am logged in as an admin")
+  step(%{I make a 1st FAQ post})
 end
 
 Given /^I have posted known issues$/ do
-  When %{I am logged in as an admin}
-    And %{I follow "Admin Posts"}
-    And %{I follow "Known Issues" within "#main"}
-    And %{I follow "make a new known issues post"}
-    And %{I fill in "known_issue_title" with "First known problem"}
-    And %{I fill in "content" with "This is a bit of a problem"}
-    And %{I press "Post"}
+  step(%{I am logged in as an admin})
+    step(%{I follow "Admin Posts"})
+    step(%{I follow "Known Issues" within "#main"})
+    step(%{I follow "make a new known issues post"})
+    step(%{I fill in "known_issue_title" with "First known problem"})
+    step(%{I fill in "content" with "This is a bit of a problem"})
+    step(%{I press "Post"})
 end
 
 Given /^I have posted an admin post$/ do
-  Given "I am logged in as an admin"
-    And "I make an admin post"
-    And "I am logged out as an admin"
+  step("I am logged in as an admin")
+    step("I make an admin post")
+    step("I am logged out as an admin")
 end
 
 ### WHEN
 
 When /^I turn off guest downloading$/ do
-  Given "I am logged in as an admin"
+  step("I am logged in as an admin")
   visit(admin_settings_path)
-  And "I check \"Turn off downloading for guests\""
-  And "I press \"Update\""
+  step("I check \"Turn off downloading for guests\"")
+  step("I press \"Update\"")
 end
 
 When /^I make an admin post$/ do
@@ -122,13 +126,33 @@ end
 
 When /^there are (\d+) Archive FAQs$/ do |n|
   (1..n.to_i).each do |i|
-    When %{I make a #{i} FAQ post}
+    step(%{I make a #{i} FAQ post})
+  end
+end
+
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
+  n ||= 1
+  visit new_admin_post_path
+  fill_in("admin_post_title", :with => "Amazing News #{n}")
+  fill_in("content", :with => "This is the content for the #{n} Admin Post")
+  click_button("Post")
+end
+
+When /^there are (\d+) Admin Posts$/ do |n|
+  (1..n.to_i).each do |i|
+    step(%{I make a #{i} Admin Post})
   end
 end
 
 When /^(\d+) Archive FAQs? exists?$/ do |n|	
   (1..n.to_i).each do |i|
-    Factory.create(:archive_faq)
+    FactoryGirl.create(:archive_faq, id: i)
+  end
+end
+
+When /^(\d+) Admin Posts? exists?$/ do |n|
+  (1..n.to_i).each do |i|
+    FactoryGirl.create(:admin_post, id: i)
   end
 end
 
@@ -141,13 +165,13 @@ When /^the check_queue rake task is run$/ do
 end
 
 When /^I edit known issues$/ do
-  When %{I am logged in as an admin}
-    And %{I follow "Admin Posts"}
-    And %{I follow "Known Issues" within "#main"}
-    And %{I follow "Edit"}
-    And %{I fill in "known_issue_title" with "More known problems"}
-    And %{I fill in "content" with "This is a bit of a problem, and this is too"}
-    And %{I press "Post"}
+  step(%{I am logged in as an admin})
+    step( %{I follow "Admin Posts"})
+    step(%{I follow "Known Issues" within "#main"})
+    step(%{I follow "Edit"})
+    step(%{I fill in "known_issue_title" with "More known problems"})
+    step(%{I fill in "content" with "This is a bit of a problem, and this is too"})
+    step(%{I press "Post"})
 end
 
 ### THEN
@@ -156,17 +180,17 @@ When /^I make a translation of an admin post$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
-  When %{I select "Deutsch" from "Choose a language"}
-    And %{I select "Default Admin Post" from "Is this a translation of another post?"}
+  step(%{I select "Deutsch" from "Choose a language"})
+    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
   click_button("Post")
 end
 
 Then /^I should see a translated admin post$/ do
-  When %{I go to the admin-posts page}
-  Then %{I should see "Default Admin Post"}
-    And %{I should not see "Deutsch Ankuendigung"}
-  When %{I follow "Default Admin Post"}
-  Then %{I should see "Translations: Deutsch Deutsch Ankuendigung"}
-  When %{I follow "Deutsch Ankuendigung"}
-  Then %{I should see "Deutsch Woerter"}
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+    step(%{I should not see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
+  step(%{I follow "Deutsch Ankuendigung"})
+  step(%{I should see "Deutsch Woerter"})
 end

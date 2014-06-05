@@ -8,17 +8,48 @@ class CommentsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
+  before_filter :check_if_restricted
   before_filter :check_tag_wrangler_access, :only => [:index, :show]
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
+  before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
 
   cache_sweeper :comment_sweeper
+
+
 
   def load_comment
     @comment = Comment.find(params[:id])
     @check_ownership_of = @comment
     @check_visibility_of = @comment
+  end
+
+  def find_parent
+    if @comment.present?
+      @comment.ultimate_parent
+    elsif @commentable.present? && @commentable.respond_to?(:work)
+      @commentable.work
+    else
+      @commentable
+    end
+  end
+
+  # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
+  def check_if_restricted
+    parent =  find_parent
+    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
+      redirect_to login_path(:restricted_commenting => true) and return
+    end
+  end
+
+  # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
+  def check_anonymous_comment_preference
+    parent =  find_parent
+    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
+      flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
+      redirect_to work_path(parent)
+    end
   end
 
   def check_tag_wrangler_access
@@ -35,7 +66,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
-      setflash; flash[:error] = ts('Comments with replies cannot be edited')
+      flash[:error] = ts('Comments with replies cannot be edited')
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
   end
@@ -60,7 +91,7 @@ class CommentsController < ApplicationController
       @commentable = AdminPost.find(params[:admin_post_id])
     elsif params[:tag_id]
       @commentable = Tag.find_by_name(params[:tag_id])
-      @page_subtitle = @commentable.name
+      @page_subtitle = @commentable.try(:name)
     end
   end
 
@@ -88,7 +119,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      setflash; flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new
@@ -123,7 +154,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      setflash; flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(params[:comment])
@@ -139,7 +170,7 @@ class CommentsController < ApplicationController
             cookies[:comment_name] = @comment.name[0..100]
             cookies[:comment_email] = @comment.email[0..100]
           end
-          setflash; flash[:comment_notice] = ts('Comment created!')
+          flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
@@ -159,11 +190,10 @@ class CommentsController < ApplicationController
           end
         else
           # this shouldn't come up any more
-          setflash; flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
+          flash[:comment_notice] = ts('Sorry, but this comment looks like spam to us.')
           redirect_back_or_default(root_path)
         end
       else
-        setflash
         render :action => "new"
       end
     end
@@ -174,7 +204,7 @@ class CommentsController < ApplicationController
   def update
     params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
-      setflash; flash[:comment_notice] = ts('Comment was successfully updated.')
+      flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html { redirect_to_comment(@comment) }
         format.js # updating the comment in place
@@ -192,13 +222,13 @@ class CommentsController < ApplicationController
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
-      setflash; flash[:comment_error] = ts("We couldn't delete that comment.")
+      flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
     elsif parent_comment
-      setflash; flash[:comment_notice] = ts("Comment deleted.")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
-      setflash; flash[:comment_notice] = ts("Comment deleted.")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {:show_comments => true})
     end
   end
@@ -248,6 +278,7 @@ class CommentsController < ApplicationController
       format.html do
         options = {:add_comment => true}
         options[:show_comments] = params[:show_comments] if params[:show_comments]
+        options[:page] = params[:page] if params[:page]
         redirect_to_all_comments(@commentable, options)
       end
       format.js
@@ -342,14 +373,14 @@ class CommentsController < ApplicationController
            :controller => :comments,
            :action => :show,
            :id => comment.commentable.id,
-           :tag_id => comment.ultimate_parent,
+           :tag_id => comment.ultimate_parent.to_param,
            :anchor => "comment_#{comment.id}"
         }
       else
         default_options = {
            :controller => comment.commentable.class.to_s.underscore.pluralize,
            :action => :show,
-           :id => comment.commentable.id,
+           :id => (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
            :anchor => "comment_#{comment.id}"
         }
       end
@@ -364,11 +395,13 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
+
     if commentable.is_a?(Tag)
-      redirect_to comments_path(:tag_id => commentable.name,
+      redirect_to comments_path(:tag_id => commentable.to_param,
                   :add_comment => options[:add_comment],
                   :add_comment_reply_id => options[:add_comment_reply_id],
                   :delete_comment_id => options[:delete_comment_id],
+                  :page => options[:page],
                   :anchor => options[:anchor])
     else
       if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))

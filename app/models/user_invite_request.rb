@@ -4,7 +4,7 @@ class UserInviteRequest < ActiveRecord::Base
   belongs_to :user
   validates_presence_of :quantity
   validates_presence_of :reason
-  validates_inclusion_of :quantity, :in => 1..MAX_USER_INVITE_REQUEST, :message => ts("must be less than %{max}", :max => MAX_USER_INVITE_REQUEST)
+  validates :quantity, :numericality => {:less_than_or_equal_to => MAX_USER_INVITE_REQUEST}
 
   before_update :check_status, :grant_request
 

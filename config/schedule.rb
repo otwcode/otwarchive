@@ -50,7 +50,7 @@ every 1.day, :at => '7:40 am' do
 end
 
 # Send kudos notifications
-every 1.day, :at => '6:10am' do
+every 1.day, :at => '10:00 am' do
   rake "notifications:deliver_kudos"
 end
 
@@ -62,6 +62,10 @@ end
 # Move hit counts from redis to database
 every 10.minutes do
   rake "statistics:update_stat_counters"
+end
+
+every 30.minutes do
+  rake "statistics:update_stats"
 end
 
 # Move readings from redis to database

@@ -15,6 +15,17 @@ module UsersHelper
     result
   end
   
+  def sidebar_pseud_link_text(user, pseud)
+    if current_page?(user)
+      text = ts("Pseuds")
+    elsif pseud.present? && !pseud.new_record?
+      text = pseud.name
+    else
+      text = user.login
+    end
+    (text + ' &#8595;').html_safe
+  end
+  
   # Prints user pseuds with links to anchors for each pseud on the page and the description as the title
   def print_pseuds(user)
     user.pseuds.collect(&:name).join(", ")
@@ -52,7 +63,8 @@ module UsersHelper
   
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
-  def print_bookmarks_link(user)
+  def print_bookmarks_link(user, pseud=nil)
+    return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
     total = (logged_in_as_admin? || current_user == user) ? @user.bookmarks.count : @user.bookmarks.visible.size
 	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
   end
@@ -64,7 +76,8 @@ module UsersHelper
   
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
-  def print_works_link(user)
+  def print_works_link(user, pseud=nil)
+    return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
     total = user.visible_work_count
 	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
   end
@@ -75,7 +88,8 @@ module UsersHelper
   end
 
   # Prints link to series page with user-appropriate number of series
-  def print_series_link(user)
+  def print_series_link(user, pseud=nil)
+    return print_pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
     if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
     else

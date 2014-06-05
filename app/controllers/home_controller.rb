@@ -13,6 +13,16 @@ class HomeController < ApplicationController
   def tos_faq 
     render :action => "tos_faq", :layout => "application"
   end
+
+  # dmca policy
+  def dmca 
+    render :action => "dmca", :layout => "application"
+  end
+  
+  # diversity statement
+  def diversity 
+    render :action => "diversity_statement", :layout => "application"
+  end
   
   # site map
   def site_map 
@@ -24,6 +34,11 @@ class HomeController < ApplicationController
     render :action => "donate", :layout => "application"
   end
   
+  # about
+  def about
+    render :action => "about", :layout => "application"
+  end
+  
   def first_login_help
     render :action => "first_login_help", :layout => false
   end
@@ -33,8 +48,8 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    @admin_post = AdminPost.non_translated.order("created_at DESC").first
-    @admin_post_show_more = AdminPost.count > 1
+    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
+    @admin_post_show_more = AdminPost.count > 3
     render :action => "index", :layout => "home"
   end
 

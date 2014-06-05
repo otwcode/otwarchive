@@ -1,0 +1,18 @@
+<% content_for :message do %>
+
+Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.
+  
+In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.
+  
+Here is a copy of your message for your reference:
+<%= text_divider %>
+
+* <%= to_plain_text(raw @summary) %> *
+<%= to_plain_text(raw @comment) %>
+
+<%= text_divider %>
+
+Love, the AO3 Support team.
+<% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

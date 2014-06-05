@@ -1,5 +1,11 @@
-<p><%=ts("The following abuse report has been made") %>:</p>
-<p><%=ts("Email of the person who reported the abuse, if given") %>: <%= mail_to(@email, @email) %></p> 
-<p><%=ts("URL of the page the abuse is on") %>: <%= link_to(@url, @url) %></p>
-<p><%=ts("Description of the abuse") %>:</p>
-<%=@comment %>
+<% content_for :message do %>
+
+  <p>The following abuse report has been made:</p>
+  
+  Email of the person who reported the abuse, if given: <%= style_email(@email, @email) %><br>
+  URL of the page the abuse is on: <%= style_link(@url, @url) %><br>
+  Description of the abuse:
+  
+  <%= style_quote(@comment) %>
+
+<% end %>

@@ -6,49 +6,39 @@
 		<p class="message"><%= ts("This has been deleted, sorry!") %></p>
   <% else %>  
   	<!--bookmark icons-->
-    <% bookmark_count = bookmarkable.bookmarks.is_public.count %>
+    <% bookmark_count = bookmarkable.public_bookmark_count %>
     <p class="status" title="<%= bookmark_count %> Bookmarks">
       <%= get_symbol_for_bookmark(bookmark) %>
-      <span class="count"><%=  (bookmark_count < 100) ? bookmark_count : '*' %></span>
+      <span class="count"><%=  (bookmark_count < 100) ? link_to_bookmarkable_bookmarks(bookmarkable, bookmark_count.to_s) : link_to_bookmarkable_bookmarks(bookmarkable, '*') %></span>
 		</p>
   
-  	<!--work module-->
-		<% if bookmarkable.is_a?(ExternalWork) %>
-			<%= render 'external_works/work_module', :external_work => bookmarkable, :bookmarkable => bookmarkable %>
-		<% elsif bookmarkable.is_a?(Series) %>
-			<%= render 'series/series_module', :series => bookmarkable %>
-		<% else %>
-			<%= render 'works/work_module', :work => bookmarkable %>
-		<% end %>
-
+  	<!--bookmark item module-->
+  	<%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
+		
     <!--navigation and actions-->
-    <ul class="navigation actions" role="navigation">
-      <% if bookmark_count > 1 || bookmark_count == 0 %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Times', :count=>bookmark_count)) %></li>
-      <% else %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} Time', :count=>bookmark_count)) %></li>
-      <% end %>
+    <% if (bookmark_count > 1 && (params[:tag_id] || @most_recent_bookmarks)) || (logged_in? && !is_author_of?(bookmark)) %>
+    	<ul class="navigation actions" role="navigation">
+      	<% # let the user reading this bookmark save a copy for themselves %>
+      	<% if logged_in? && !is_author_of?(bookmark) %>
+        	<li>
+          	<% if (current_user_bookmark ||= bookmark_if_exists(bookmarkable)) %>
+            	<%= link_to ts("Saved"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
+          	<% else %>
+            	<%= link_to ts("Save"), get_new_bookmark_path(bookmarkable), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
+          	<% end %>
+        	</li>
+      	<% end %>
 
-      <% # let the user reading this bookmark save a copy for themselves %>
-      <% if logged_in? && !is_author_of?(bookmark) %>
-        <li>
-          <% if (current_user_bookmark ||= bookmark_if_exists(bookmarkable)) %>
-            <%= link_to ts("Saved"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
-          <% else %>
-            <%= link_to ts("Save"), get_new_bookmark_path(bookmarkable), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
-          <% end %>
-        </li>
-      <% end %>
-
-      <% if bookmark_count > 1 %>
-        <% if params[:tag_id] || @most_recent_bookmarks %>
-          <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>" style="display: none;" class="showme">
-            <%= link_to ts("Show Most Recent Bookmarks"), 
+      	<% if bookmark_count > 1 %>
+        	<% if params[:tag_id] || @most_recent_bookmarks %>
+          	<li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
+            	<%= link_to ts("Show Most Recent Bookmarks"), 
               url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }), :class => "actions", :remote => true %>
-          </li>
-        <% end %>
-      <% end %>
-    </ul>
+          	</li>
+        	<% end %>
+      	<% end %>
+    	</ul>
+    <% end %>
     
     <% # bookmark form loaded here if requested %>
     <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
@@ -57,7 +47,7 @@
 	<%= render 'bookmarks/bookmark_user_module', :bookmark => bookmark %>
 
   <% # recent bookmarks will be loaded up here if requested %>
-  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
+  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
 
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>

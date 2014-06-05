@@ -1,34 +1,5 @@
 namespace :After do
 
-  ##################################################################
-  # LEAVE THIS SECTION ALONE -- turns off TS deltas and turns them back on
-  # after all migrate tasks are run
-#  desc "Turn off thinking sphinx deltas"
-#  task(:turn_off_deltas => :environment) do
-#    puts "Disabling Thinking Sphinx updates while we migrate..."
-#    ThinkingSphinx.deltas_enabled=false
-#    puts %x{script/delayed_job stop}
-#  end
-#
-#  desc "Turn on thinking sphinx deltas"
-#  task(:turn_on_deltas => :environment) do
-#    ThinkingSphinx.deltas_enabled=true
-#    puts "Re-enabled Thinking Sphinx updates"
-#    puts %x{script/delayed_job start}
-#  end
-#
-#  # top_level_tasks isn't writable so we need to do this
-#  # instance_variable_set hack to prepend/append the delta
-#  # tasks when the After tasks are run
-#  current_tasks =  Rake.application.top_level_tasks
-#  if current_tasks.first && current_tasks.first.match(/After/)
-#    current_tasks.unshift('After:turn_off_deltas')
-#    current_tasks << 'After:turn_on_deltas'
-#    Rake.application.instance_variable_set(:@top_level_tasks, current_tasks)
-#  end
-  ###################################################################
-
-
 # everything commented out has already been run on the archive...
 # keeping only the most recent tasks - if you need to go back further, check subversion
 
@@ -359,10 +330,61 @@ namespace :After do
 #     work.save
 #   end
 # end
-
+# 
+# desc "Set stat counts for works"
+# task(:set_work_stats => :environment) do
+#   Work.find_each do |work|
+#     puts work.id
+#     work.update_stat_counter
+#   end
+# end
+# 
+# desc "Set anon/unrevealed status for works"
+# task(:set_anon_unrevealed => :environment) do
+#   CollectionItem.where("(anonymous = 1 OR unrevealed = 1) AND item_type = 'Work'").each do |collection_item|
+#     puts collection_item.id
+#     work = collection_item.item
+#     if work.present?
+#       work.update_attributes(
+#         in_anon_collection: collection_item.anonymous, 
+#         in_unrevealed_collection: collection_item.unrevealed
+#       )
+#     end
+#   end
+# end
+# 
+# desc "Add filters to external works"
+# task(:external_work_filters => :environment) do
+#   ExternalWork.find_each do |ew|
+#     puts ew.id
+#     ew.check_filter_taggings
+#   end
+# end
 
   #### Add your new tasks here
   
+
+  desc "Set initial values for sortable tag names"
+  task(:sortable_tag_names => :environment) do
+    Media.all.each{ |m| m.save }
+    
+    Fandom.find_each do |fandom|
+      fandom.set_sortable_name
+      puts fandom.sortable_name
+      fandom.save
+    end
+  end
+  
+  desc "Increase skins' width threshold for handheld devices to 640px"
+  task(:increase_handheld_width => :environment) do
+    hh_width_media = "only screen and (max-width: 480px)"
+    hh_skins = Skin.select { |s| s.media.include? hh_width_media }
+    hh_skins.each do |skin|
+      new_media = skin.media.map { |m| m == hh_width_media ? "only screen and (max-width: 640px)" : m }
+      skin.media = new_media
+      skin.save
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 
@@ -372,9 +394,6 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 # NOTE: 
 desc "Run all current migrate tasks"
-#task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-#task :After => ['autocomplete:reload_data']
-#task :After => ['After:set_complete_status', 'After:invite_external_authors']
-# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
-#                 'skins:load_user_skins', 'After:remove_old_epubs']
+# task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
+# 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
 task :After => []

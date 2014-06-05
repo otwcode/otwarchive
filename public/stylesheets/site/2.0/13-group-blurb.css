@@ -1,5 +1,5 @@
 /*==GROUP: BLURB
-http://media.transformativeworks.org/training/front_end_coding/blurb.html
+http://otwcode.github.com/docs/front_end_coding/patterns/blurb
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -27,7 +27,7 @@ li.blurb, .blurb .blurb {
     border-radius: 0.15em;
 }
 
-li.blurb:after {
+li.blurb:after, .blurb .blurb:after {
   content: " ";
   display: block;
   height: 0;
@@ -62,15 +62,23 @@ li.blurb:after {
 }
 
 .blurb .header p.notice, .blurb ul.series {
-  margin: 0.875em 0 0 0;
+  margin: 1.25em 0 0;
+}
+
+.blurb ul.series {
+  margin-bottom: 0.875em;
 }
 
 .blurb .heading {
   display: block;
 }
 
-.item .blurb .header {
-  display: none;
+.blurb dl.stats {
+  float: right;
+}
+
+.blurb dl.stats + .heading.landmark { 
+  display: inline;
 }
 
 /* ==START icon block rules*/
@@ -126,83 +134,83 @@ li.blurb:after {
 
 /*icon image replacement*/
 
-.blurb .rating-general-audience {
+.required-tags .rating-general-audience {
   background: url("/images/imageset.png") -50px -25px;
 }
 
-.blurb .rating-explicit {
+.required-tags .rating-explicit {
   background: url("/images/imageset.png") -25px -25px;
 }
 
-.blurb .rating-mature {
+.required-tags .rating-mature {
   background: url("/images/imageset.png") -75px -25px;
 }
 
-.blurb .rating-notrated, .blurb .category-none, .blurb .warning-no, .blurb .count {
+.required-tags .rating-notrated, .required-tags .category-none, .required-tags .warning-no, .status .count {
   background: url("/images/imageset.png") -150px 0px;
 }
 
-.blurb .rating-teen {
+.required-tags .rating-teen {
   background: url("/images/imageset.png") 0px -25px;
 }
 
-.blurb .category-femslash {
+.required-tags .category-femslash {
   background: url("/images/imageset.png") -25px 0px;
 }
 
-.blurb .category-gen {
+.required-tags .category-gen {
   background: url("/images/imageset.png") -50px 0px;
 }
 
-.blurb .category-slash {
+.required-tags .category-slash {
   background: url("/images/imageset.png") 0px 0px;
 }
 
-.blurb .category-het {
+.required-tags .category-het {
   background: url("/images/imageset.png") -75px 0px;
 }
 
-.blurb .category-multi {
+.required-tags .category-multi {
   background: url("/images/imageset.png") -100px -0px;
 }
 
-.blurb .category-other {
+.required-tags .category-other {
   background: url("/images/imageset.png") -125px 0px;
 }
 
-.blurb .complete-no {
+.required-tags .complete-no {
   background: url("/images/imageset.png") -100px -25px;
 }
 
-.blurb .complete-yes {
+.required-tags .complete-yes {
   background: url("/images/imageset.png") -175px -25px;
 }
 
-.blurb .warning-yes {
+.required-tags .warning-yes {
   background: url("/images/imageset.png") -150px -25px;
 }
 
-.blurb .warning-choosenotto {
+.required-tags .warning-choosenotto {
   background: url("/images/imageset.png") -125px -25px;
 }
 
-.blurb .external-work {
+.required-tags .external-work {
   background: url("/images/imageset.png") -75px -50px;
 }
 
-.blurb .private .text {
+.status .private .text {
   background: url("/images/imageset.png") -175px -50px;
 }
 
-.blurb .public {
+.status .public {
   background: url("/images/imageset.png") -125px -50px;
 }
 
-.blurb .hidden {
+.status .hidden {
   background: url("/images/imageset.png") -150px -50px;
 }
 
-.blurb .rec {
+.status .rec {
   background: url("/images/imageset.png") -100px -50px;
 }
 
@@ -223,10 +231,6 @@ li.blurb:after {
   clear: none;
   margin: 0.643em auto;
   text-align: justify;
-}
-
-.blurb.own dl.stats {
-  padding-left: 12.15em;
 }
 
 /*modification: PICTURE 
@@ -265,14 +269,34 @@ eg collections, users, skins, instead of the 4-icon list
   min-width: 65px;
 }
 
+/* mod: ITEM
+blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
+*/
+
+.item .blurb blockquote, .item dl.stats {
+  margin: 0.643em auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+    box-shadow: none;
+}
+
+.item .blurb .header, .item dl.stats dt {
+  border: none;
+}
+
+.item dl.visibility {
+  background: #eee;
+}
+
 /* mod: BOOKMARK */
 
-.bookmark .status {
+.bookmark p.status {
   position: absolute;
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
-  z-index: 50;
+  z-index: 1;
 }
 
 .bookmark .status span, .bookmark .status a {
@@ -296,6 +320,15 @@ eg collections, users, skins, instead of the 4-icon list
   text-align: center;
 }
 
+.bookmark .count a {
+  border-bottom: none;
+  color: #069;
+}
+
+.bookmark .count a:hover, .bookmark .count a:focus {
+  color: #111;
+}
+
 .bookmark .datetime {
 	top: 28px;
 }
@@ -303,6 +336,7 @@ eg collections, users, skins, instead of the 4-icon list
 .bookmark .user {
   border: 1px solid #ccc;
   clear: right;
+  margin-top: 0.643em;
   overflow: hidden;
 }
 
@@ -311,6 +345,10 @@ eg collections, users, skins, instead of the 4-icon list
 	font-family: Georgia, serif;
 	font-size: 0.875em;
 	line-height: 2;
+}
+
+.bookmark .actions {
+  clear: both;
 }
 
 /* line break between types of meta */
@@ -338,7 +376,15 @@ eg collections, users, skins, instead of the 4-icon list
 	position: static;
 }
 
+.bookmark .recent .index {
+    width: 100%;
+}
+
 /* mod: READING */
+
+.reading .user { 
+  float: left;
+}
 
 .reading h4.viewed {
   background: #ddd;
@@ -346,6 +392,12 @@ eg collections, users, skins, instead of the 4-icon list
 
 .reading .deleted h4.viewed {
   background: transparent;
+}
+
+/* mod: SKIN */
+
+.skin .blurb .header p {
+  margin-left: 65px;
 }
 
 /*END== */

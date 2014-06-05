@@ -1,5 +1,5 @@
 /*==ACTIONS: buttons!
-http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
+http://otwcode.github.com/docs/front_end_coding/patterns/actions
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -57,6 +57,12 @@ p.submit, input.submit, dd.submit {
   cursor: text;
 }
 
+.actions input[type="checkbox"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 
@@ -70,7 +76,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus {
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -82,6 +88,10 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
   border-color: #fff;
     box-shadow: inset 1px 1px 3px #333;
+}
+
+.actions label.disabled {
+  background: #ccc;
 }
 
 .delete a, span.delete {
@@ -129,12 +139,10 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + h6 + .actions {
+dl.stats + .landmark + .actions {
+  clear: none;
   float: left;
-}
-
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {

@@ -1,0 +1,12 @@
+<% content_for :message do %>
+  <p><%= ts("Dear #{style_bold(@user.login)}, ").html_safe%></p>
+
+  <p><%= ts("We regret to inform you that your request for #{@total} new ") %><%= @total == 1 ? ts("invitation") : ts("invitations") %><%= ts(" cannot be fulfilled at this time.") %> </p>
+  <p><%= ts("Your request was: ") %></p>
+  <p><%= style_quote(@reason) %></p>
+
+  <p>Regards,</p>
+  <p><%= style_link(ArchiveConfig.APP_SHORT_NAME, root_path) %></p>
+<% end %>
+
+

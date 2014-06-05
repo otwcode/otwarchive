@@ -310,7 +310,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var first_dropdown_item = null;
 
     // The list to store the token items in
-    var token_list = $("<ul role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"/>")
+    var token_list = $("<ul />") // was role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"
         .addClass(settings.classes.tokenList)
         .click(function (event) {
             var li = $(event.target).closest("li");
@@ -345,7 +345,7 @@ $.TokenList = function (input, url_or_data, settings) {
     }
 
     // The token holding the input box
-    var input_token = $("<li role=\"menuitem\" />")
+    var input_token = $("<li />") // was role=\"menuitem\"
         .addClass(settings.classes.inputToken)
         .appendTo(token_list)
         .append(input_box);
@@ -446,13 +446,17 @@ $.TokenList = function (input, url_or_data, settings) {
           };
 
         // The 'delete token' button
-        $("<span>" + settings.deleteText + "</span>")
+        var delete_span_token = $("<span></span>")
             .addClass(settings.classes.tokenDelete)
             .appendTo(this_token)
             .click(function () {
                 delete_token($(this).parent());
                 return false;
             });
+				// Link with a title attribute for better accessibility
+        $("<a href=\"#\">" + settings.deleteText + "</a>")
+						.attr("title", "remove " + value)
+						.appendTo(delete_span_token)
 
         // Store data on the token
         var token_data = {"id": id, "name": value};
@@ -703,7 +707,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li role=\"menuitem\">" + highlight_term(escapeHTML(value.name), query) + "</li>")
+                var this_li = $("<li role=\"option\">" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {

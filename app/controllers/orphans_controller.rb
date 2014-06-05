@@ -15,7 +15,7 @@ class OrphansController < ApplicationController
       @pseuds = (current_user.pseuds & work.pseuds)
       @orphans = [work]
     elsif params[:work_ids]
-      @orphans = Work.joins(:pseuds => :user).where("users.id = ?", current_user.id).where(:id => params[:work_ids])
+      @orphans = Work.joins(:pseuds => :user).where("users.id = ?", current_user.id).where(:id => params[:work_ids]).readonly(false)
       @pseuds = current_user.pseuds & (@orphans.collect(&:pseuds).flatten)
     elsif params[:series_id]
       series = Series.find(params[:series_id])
@@ -30,7 +30,7 @@ class OrphansController < ApplicationController
     end
     
     if @pseuds.empty?
-      setflash; flash[:error] = ts("You don't have permission to orphan that!")
+      flash[:error] = ts("You don't have permission to orphan that!")
       redirect_to root_path and return
       false
     end
@@ -44,10 +44,10 @@ class OrphansController < ApplicationController
     new_orphans = {}
     use_default = params[:use_default] == "true"
     if !@pseuds.blank? && Creatorship.orphan(@pseuds, @orphans, use_default)
-      setflash; flash[:notice] = ts('Orphaning was successful.')
+      flash[:notice] = ts('Orphaning was successful.')
       redirect_to(current_user)
     else
-      setflash; flash[:error] = ts("You don't seem to have permission to orphan this.")
+      flash[:error] = ts("You don't seem to have permission to orphan this.")
       redirect_to root_path
     end 
   end

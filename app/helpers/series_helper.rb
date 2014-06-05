@@ -32,7 +32,7 @@ module SeriesHelper
     else
       list = []
       for s in series
-        list << "Part #{s.serial_works.where(:work_id => work.id).select(:position).first.position} of #{link_to(s.title, s)}"
+        list << "Part #{s.serial_works.where(:work_id => work.id).select(:position).first.position} of #{link_to(s.title, series_url(s))}"
       end
       return list.join(', ')
     end

@@ -128,13 +128,13 @@ blockquote p:last-child {
   margin-bottom: 0;
 }
 
-kbd, tt, code, var, pre {
+kbd, tt, code, var, pre, samp {
   font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
   margin: auto;
 }
 
 pre {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 strong, b {
@@ -183,7 +183,7 @@ sup {
   line-height: 0;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/accessible-tables.html*/
+/*http://otwcode.github.com/docs/front_end_coding/accessible-tables*/
 
 table {
   background: #ddd;
@@ -243,7 +243,6 @@ th, tr:hover, col.name {
 
 th a, th a:visited, th a:link {
   text-decoration: none;
-  border: 0;
 }
 
 tbody tr th {

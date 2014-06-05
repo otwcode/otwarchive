@@ -473,6 +473,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -612,7 +614,7 @@
         
         <div class="method-heading">
           <span class="method-name">after_create</span><span
-            class="method-args">(work)</span>
+            class="method-args">(record)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -625,9 +627,9 @@
           
           <div class="method-source-code" id="after_create-source">
             <pre><span class="ruby-comment"># File app/sweepers/feed_sweeper.rb, line 5</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_create</span>(<span class="ruby-identifier">work</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">posted?</span>
-    <span class="ruby-identifier">expire_tag_feeds</span>(<span class="ruby-identifier">work</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_create</span>(<span class="ruby-identifier">record</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">posted?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Chapter</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">work</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">work</span>.<span class="ruby-identifier">posted?</span>)
+    <span class="ruby-identifier">expire_tag_feeds</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- after_create-source -->
@@ -644,7 +646,7 @@
         
         <div class="method-heading">
           <span class="method-name">after_update</span><span
-            class="method-args">(work)</span>
+            class="method-args">(record)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -657,9 +659,9 @@
           
           <div class="method-source-code" id="after_update-source">
             <pre><span class="ruby-comment"># File app/sweepers/feed_sweeper.rb, line 11</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_update</span>(<span class="ruby-identifier">work</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">posted?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">work</span>.<span class="ruby-identifier">posted_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">revised_at_changed?</span>)
-    <span class="ruby-identifier">expire_tag_feeds</span>(<span class="ruby-identifier">work</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">after_update</span>(<span class="ruby-identifier">record</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">posted?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">posted_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">revised_at_changed?</span>)
+    <span class="ruby-identifier">expire_tag_feeds</span>(<span class="ruby-identifier">record</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- after_update-source -->

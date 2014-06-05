@@ -12,10 +12,10 @@ user_00025:
   suspended: false
   suspended_until: 
   login: badjuju
-  identity_url: 
   out_of_invites: true
   email: mjsunbound@gmail.com
   banned: false
+  persistence_token: foo
 user_00014: 
   salt: 9a5dd70dd81851f215947e1bd1ec3f37e2ecec6b
   created_at: 2008-12-07 19:54:32 Z
@@ -29,10 +29,10 @@ user_00014:
   suspended: false
   suspended_until: 
   login: Uriel
-  identity_url: 
   out_of_invites: true
   email: Uriel@example.com
   banned: false
+  persistence_token: foo
 user_00003: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   created_at: 2008-11-09 01:26:02 Z
@@ -46,10 +46,10 @@ user_00003:
   suspended: false
   suspended_until: 
   login: testuser3
-  identity_url: 
   out_of_invites: true
   email: user3@example.com
   banned: false
+  persistence_token: foo
 user_00004: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   created_at: 2008-11-09 01:26:02 Z
@@ -63,10 +63,10 @@ user_00004:
   suspended: false
   suspended_until: 
   login: testuser4
-  identity_url: 
   out_of_invites: true
   email: user4@example.com
   banned: false
+  persistence_token: foo
 user_00015: 
   salt: 787e39d8cc37646fb25274a444a48abbafeebd7a
   created_at: 2009-07-17 22:44:23 Z
@@ -80,10 +80,10 @@ user_00015:
   suspended: false
   suspended_until: 
   login: parenthetical
-  identity_url: 
   out_of_invites: true
   email: sarkymoocow@example.com
   banned: false
+  persistence_token: foo
 user_00026: 
   salt: 631dcaa51dd023f4cdcdf2747a6322fc2e108ceb
   created_at: 2009-12-12 21:08:12 Z
@@ -97,10 +97,10 @@ user_00026:
   suspended: false
   suspended_until: 
   login: DawningStar
-  identity_url: 
   out_of_invites: true
   email: dawn@ccaonline.com
   banned: false
+  persistence_token: foo
 user_00027: 
   salt: 5a432a7543be536b62f1f51fee2255d0483c3b9d
   created_at: 2009-12-12 21:09:13 Z
@@ -114,10 +114,10 @@ user_00027:
   suspended: false
   suspended_until: 
   login: yulechatismadeofawesome
-  identity_url: 
   out_of_invites: true
   email: attempt-unique@yahoo.com
   banned: false
+  persistence_token: foo
 user_00016: 
   salt: 47bfebbcd173627903284aced46fc6efea0c9eb4
   created_at: 2009-07-17 23:18:52 Z
@@ -131,10 +131,10 @@ user_00016:
   suspended: false
   suspended_until: 
   login: cal
-  identity_url: 
   out_of_invites: true
   email: cal@example.com
   banned: false
+  persistence_token: foo
 user_00005: 
   salt: 343452076355fe7bf635ee217a55e6e98acf8d41
   created_at: 2008-12-05 13:55:27 Z
@@ -148,10 +148,10 @@ user_00005:
   suspended: false
   suspended_until: 
   login: Ash
-  identity_url: 
   out_of_invites: true
   email: ash@example.com
   banned: false
+  persistence_token: foo
 user_00006: 
   salt: 97bf16bc68d47f5d5cccca85770c82f52c23e58d
   created_at: 2008-12-05 13:55:28 Z
@@ -165,10 +165,10 @@ user_00006:
   suspended: false
   suspended_until: 
   login: orphan_account
-  identity_url: 
   out_of_invites: true
   email: 
   banned: false
+  persistence_token: foo
 user_00017: 
   salt: 97730ef8bcd524fd18e4b9237fc05130a177c413
   created_at: 2009-07-18 09:55:25 Z
@@ -182,10 +182,10 @@ user_00017:
   suspended: false
   suspended_until: 
   login: reccer
-  identity_url: 
   out_of_invites: true
   email: reccer@example.com
   banned: false
+  persistence_token: foo
 user_00028: 
   salt: 4231509879a346f8f3c88294be33d28567a3649f
   created_at: 2009-12-12 21:10:24 Z
@@ -199,10 +199,10 @@ user_00028:
   suspended: false
   suspended_until: 
   login: Shusu
-  identity_url: 
   out_of_invites: true
   email: boo@moog.com
   banned: false
+  persistence_token: foo
 user_00029: 
   salt: 73c1309f8eafb8a949355857d46f682a36854cc3
   created_at: 2009-12-12 21:13:55 Z
@@ -216,10 +216,10 @@ user_00029:
   suspended: false
   suspended_until: 
   login: whetherwoman
-  identity_url: 
   out_of_invites: true
   email: marina@nbtsc.org
   banned: false
+  persistence_token: foo
 user_00007: 
   salt: 2239939fc04c4d2a0d2b5ceedfc1727c3e527b63
   created_at: 2008-12-05 14:07:24 Z
@@ -233,10 +233,10 @@ user_00007:
   suspended: false
   suspended_until: 
   login: Boccaccio
-  identity_url: 
   out_of_invites: true
   email: boccaccio@example.org
   banned: false
+  persistence_token: foo
 user_00030: 
   salt: 3979aea39223e3479cf5d29af9a388ea2d13f25f
   created_at: 2009-12-12 21:58:12 Z
@@ -250,10 +250,10 @@ user_00030:
   suspended: false
   suspended_until: 
   login: Lizifer
-  identity_url: 
   out_of_invites: true
   email: elmiller00@gmail.com
   banned: false
+  persistence_token: foo
 user_00031: 
   salt: 570b4a55a931c7a1c5be1f5608ee825a88b51e37
   created_at: 2009-12-12 22:39:41 Z
@@ -267,10 +267,10 @@ user_00031:
   suspended: false
   suspended_until: 
   login: tassos
-  identity_url: 
   out_of_invites: true
   email: savyln7@gmail.com
   banned: false
+  persistence_token: foo
 user_00019: 
   salt: 
   created_at: 2009-09-16 23:37:53 Z
@@ -284,10 +284,10 @@ user_00019:
   suspended: false
   suspended_until: 
   login: Zee
-  identity_url: http://zooey-glass04.livejournal.com/
   out_of_invites: true
   email: zooey.glass04@gmail.com
   banned: false
+  persistence_token: foo
 user_00008: 
   salt: 6e2ee018720464deaa10520d4b3f059710eb2b8d
   created_at: 2008-12-06 22:53:08 Z
@@ -301,10 +301,10 @@ user_00008:
   suspended: false
   suspended_until: 
   login: Chaucer
-  identity_url: 
   out_of_invites: true
   email: chaucer@example.com
   banned: false
+  persistence_token: foo
 user_00020: 
   salt: 67363e5f3b3debc2a528aeead8c182e2e4398dab
   created_at: 2009-12-12 21:06:59 Z
@@ -318,10 +318,10 @@ user_00020:
   suspended: false
   suspended_until: 
   login: hh_ook
-  identity_url: 
   out_of_invites: true
   email: hh-ook@gmail.com
   banned: false
+  persistence_token: foo
 user_00021: 
   salt: 56e1aeae2f94163b784b694f4d22f6452241d543
   created_at: 2009-12-12 21:07:09 Z
@@ -335,10 +335,10 @@ user_00021:
   suspended: false
   suspended_until: 
   login: yulechatrulesall
-  identity_url: 
   out_of_invites: true
   email: sdfsdf@gmail.com
   banned: false
+  persistence_token: foo
 user_00010: 
   salt: efff6c5d4da98884f33dfe1b858163bf8b6832b3
   created_at: 2008-12-06 23:03:31 Z
@@ -352,10 +352,10 @@ user_00010:
   suspended: false
   suspended_until: 
   login: Sam
-  identity_url: 
   out_of_invites: true
   email: Sam@example.com
   banned: false
+  persistence_token: foo
 user_00009: 
   salt: b09cbc4962f7a925a704704d687548e2040856d4
   created_at: 2008-12-06 22:58:44 Z
@@ -369,10 +369,10 @@ user_00009:
   suspended: false
   suspended_until: 
   login: Dean
-  identity_url: 
   out_of_invites: true
   email: Dean@example.com
   banned: false
+  persistence_token: foo
 user_00032: 
   salt: 143ff69e26d306a5cb0016e6d5feda3213027138
   created_at: 2009-12-12 23:45:44 Z
@@ -386,10 +386,10 @@ user_00032:
   suspended: false
   suspended_until: 
   login: Enigel
-  identity_url: 
   out_of_invites: true
   email: enigel@gmail.com
   banned: false
+  persistence_token: foo
 user_00033: 
   salt: feef278f6c8d201c0cb4c37253833f60f2090f8e
   created_at: 2009-12-17 11:37:58 Z
@@ -403,10 +403,10 @@ user_00033:
   suspended: false
   suspended_until: 
   login: invitest
-  identity_url: 
   out_of_invites: true
   email: liminimail@googlemail.com
   banned: false
+  persistence_token: foo
 user_00011: 
   salt: 21f8f1eb19a6dd5b649b451bb4386841506a387d
   created_at: 2008-12-06 23:05:24 Z
@@ -420,10 +420,10 @@ user_00011:
   suspended: false
   suspended_until: 
   login: Ellen
-  identity_url: 
   out_of_invites: true
   email: Ellen@example.com
   banned: false
+  persistence_token: foo
 user_00022: 
   salt: fef057870a00a1d4cd6d67e1441ce762a451d7cb
   created_at: 2009-12-12 21:07:24 Z
@@ -437,10 +437,10 @@ user_00022:
   suspended: false
   suspended_until: 
   login: Jenn_Calaelen
-  identity_url: 
   out_of_invites: true
   email: jenn.calaelen@googlemail.com
   banned: false
+  persistence_token: foo
 user_00023: 
   salt: b510f1f2ac546e9b85d0d17dec60f590992715ca
   created_at: 2009-12-12 21:07:37 Z
@@ -454,10 +454,10 @@ user_00023:
   suspended: false
   suspended_until: 
   login: Llwyden
-  identity_url: 
   out_of_invites: true
   email: llwyden@trickster.org
   banned: false
+  persistence_token: foo
 user_00012: 
   salt: c5e416e746f06c3c68b542ed3223d89ce9be52cf
   created_at: 2008-12-06 23:13:19 Z
@@ -471,10 +471,10 @@ user_00012:
   suspended: false
   suspended_until: 
   login: Zooey_Glass
-  identity_url: 
   out_of_invites: true
   email: zooey@example.com
   banned: false
+  persistence_token: foo
 user_00001: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   created_at: 2008-11-09 01:26:02 Z
@@ -488,10 +488,10 @@ user_00001:
   suspended: false
   suspended_until: 
   login: testuser
-  identity_url: 
   out_of_invites: true
   email: user1@example.com
   banned: false
+  persistence_token: foo
 user_00002: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   created_at: 2008-11-09 01:26:02 Z
@@ -505,10 +505,10 @@ user_00002:
   suspended: false
   suspended_until: 
   login: testuser2
-  identity_url: 
   out_of_invites: true
   email: user2@example.com
   banned: false
+  persistence_token: foo
 user_00013: 
   salt: 5860eac2a470dbee25aa5a4ba8a4e6b841c38c37
   created_at: 2008-12-06 23:29:42 Z
@@ -522,10 +522,10 @@ user_00013:
   suspended: false
   suspended_until: 
   login: Jessica
-  identity_url: 
   out_of_invites: true
   email: Jessica@example.com
   banned: false
+  persistence_token: foo
 user_00024: 
   salt: 943292d06d1761ac3c7e8585a5b728db1f82a930
   created_at: 2009-12-12 21:07:42 Z
@@ -539,7 +539,7 @@ user_00024:
   suspended: false
   suspended_until: 
   login: moriann
-  identity_url: 
   out_of_invites: true
   email: aaa@bbb.com
   banned: false
+  persistence_token: foo

@@ -1,26 +1,14 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @most_recent_bookmarks %>
-    <%= ts("Recent") %>
-  <% elsif @user %>
-    <%= @user.login %>'s
-  <% else %>
-    <%= ts("Listing") %>
-<% end %>
-<% if params[:recs_only] %>
-  <%= ts("Recs") %>
-<% else %>
-  <%= ts("Bookmarks") %>
-<% end %>
+  <%= search_header @bookmarks, @search, "Bookmark", @owner %>
 </h2>
 <!-- /descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
-  	<% if @user == current_user || @most_recent_bookmarks || @collection %>
-    	<li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
-
+    <% if @user == current_user || @most_recent_bookmarks || @collection %>
+      <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
     <% # let the user reading this bookmark save a copy for themselves %>	
       <% if logged_in? && !is_author_of?(@bookmark) %>
@@ -34,22 +22,24 @@
       <% end %>
     <% end %>
   <% end %>
-  
-  <li>
-    <%= span_if_current(ts("All Bookmarks"), url_for(params.merge :recs_only => false), params[:recs_only].blank?) %>
-  </li>
-  <li>
-    <%= span_if_current ts("Recs Only"), url_for(params.merge :recs_only => true) %>
-  </li>
-<% if params[:tag_id] %>
-  <%= taggable_list(params[:tag_id], "bookmarks") %>
-<% end %>
+  <% if @tag %>
+    <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
+    <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
 <% if params[:work_id] || params[:series_id] || params[:external_work_id] %>
   <% # bookmark form loaded here if requested %>
   <div class="new dynamic" id="bookmark_form_placement_for_<%= @bookmarkable.id %>"></div>
+<% end %>
+
+<% unless @owner.present? || @bookmarkable.present? %>
+  <p><%= ts("These are some of the latest bookmarks created on the archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
+<% end %>
+
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
 <% end %>
 
 <!--main content-->
@@ -59,6 +49,21 @@
 </ol>
 <!-- /content-->
 
+<!--filters subnav-->
+<% if @facets.present? %>
+  <%= render :partial => 'filters' %>
+<% end %>
+<!---/subnav-->
+
+<div id="dynamic-bookmark" class="dynamic hidden"></div>
+
 <!--subnav-->
-	  <%= will_paginate @bookmarks %>
+<% if @bookmarks.respond_to?(:total_pages) %>
+  <%= will_paginate @bookmarks %>
+<% end %>
 <!-- /subnav-->
+
+<% # FRONT END NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>

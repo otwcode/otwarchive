@@ -6,6 +6,10 @@ describe Tag do
   before(:each) do
     @tag = Tag.new
   end
+  
+  after(:each) do
+    User.current_user = nil
+  end
 
   it "should not be valid without a name" do
     @tag.save.should_not be_true
@@ -26,12 +30,28 @@ describe Tag do
     @tag.errors[:name].join.should =~ /restricted characters/
   end
 
+  context "unwrangleable" do
+    it "should not be valid as canonical and unwrangleable" do
+      tag = Freeform.create(:name => "wrangled", :canonical => true)
+
+      tag.unwrangleable = true
+      tag.should_not be_valid
+    end
+
+    it "should not be valid as unsorted and unwrangleable" do
+      tag = FactoryGirl.create(:unsorted_tag)
+
+      tag.unwrangleable = true
+      tag.should_not be_valid
+    end
+  end
+
   context "when checking for synonym/name change" do
 
     context "when logged in as a regular user" do
 
       before(:each) do
-        User.current_user = Factory.create(:user)
+        User.current_user = FactoryGirl.create(:user)
       end
 
       it "should ignore capitalisation" do
@@ -87,7 +107,7 @@ describe Tag do
 
     context "when logged in as an admin" do
       before do
-        User.current_user = Factory.create(:admin)
+        User.current_user = FactoryGirl.create(:admin)
       end
 
       it "should allow any change" do
@@ -130,8 +150,8 @@ describe Tag do
     end
 
     it "should be true for a tag with a Fandom parent" do
-      tag_character = Factory.create(:character, :canonical => false)
-      tag_fandom = Factory.create(:fandom, :canonical => true)
+      tag_character = FactoryGirl.create(:character, :canonical => false)
+      tag_fandom = FactoryGirl.create(:fandom, :canonical => true)
       tag_character.parents = [tag_fandom]
       tag_character.save
 
@@ -149,7 +169,7 @@ describe Tag do
       tag = Fandom.create(:name => "Fandom")
       tag.can_change_type?.should be_true
 
-      work = Factory.create(:work, :fandom_string => tag.name)
+      work = FactoryGirl.create(:work, :fandom_string => tag.name)
       tag.can_change_type?.should be_false      
     end
 
@@ -157,7 +177,7 @@ describe Tag do
       tag = Fandom.create(:name => "Fandom")
       tag.can_change_type?.should be_true
 
-      work = Factory.create(:work, :fandom_string => tag.name)
+      work = FactoryGirl.create(:work, :fandom_string => tag.name)
       work.posted = true
       work.save
       tag.can_change_type?.should be_false
@@ -166,7 +186,7 @@ describe Tag do
     it "should be false for a tag used in a tag set"
 
     it "should be true for a tag used on a bookmark" do
-      tag = Factory.create(:unsorted_tag)
+      tag = FactoryGirl.create(:unsorted_tag)
       tag.can_change_type?.should be_true
       
       # TODO: use factories when they stop giving validation errors and stack too deep errors
@@ -187,7 +207,7 @@ describe Tag do
     end
 
     it "should be true for a tag used on an external work" do
-      external_work = Factory.create(:external_work, :character_string => "Jane Smith")
+      external_work = FactoryGirl.create(:external_work, :character_string => "Jane Smith")
       tag = Tag.find_by_name("Jane Smith")
 
       tag.can_change_type?.should be_true
@@ -197,7 +217,7 @@ describe Tag do
   describe "type changes" do
     context "from Unsorted to Fandom" do
       before do
-        @fandom_tag = Factory.create(:unsorted_tag)
+        @fandom_tag = FactoryGirl.create(:unsorted_tag)
         @fandom_tag.type = "Fandom"
         @fandom_tag.save
         @fandom_tag = Tag.find(@fandom_tag.id)
@@ -214,7 +234,7 @@ describe Tag do
 
     context "from Unsorted to Character" do
       before do
-        @character_tag = Factory.create(:unsorted_tag)
+        @character_tag = FactoryGirl.create(:unsorted_tag)
         @character_tag.type = "Character"
         @character_tag.save
         @character_tag = Tag.find(@character_tag.id)
@@ -231,7 +251,7 @@ describe Tag do
 
     context "from Fandom to Unsorted" do
       before do
-        @unsorted_tag = Factory.create(:fandom, :canonical => false)
+        @unsorted_tag = FactoryGirl.create(:fandom, :canonical => false)
         @unsorted_tag.type = "UnsortedTag"
         @unsorted_tag.save
         @unsorted_tag = Tag.find(@unsorted_tag.id)
@@ -249,7 +269,7 @@ describe Tag do
 
     context "from Fandom to Character" do
       before do
-        @character_tag = Factory.create(:fandom, :canonical => false)
+        @character_tag = FactoryGirl.create(:fandom, :canonical => false)
         @character_tag.type = "Character"
         @character_tag.save
         @character_tag = Tag.find(@character_tag.id)
@@ -267,7 +287,7 @@ describe Tag do
 
     context "from Character to Unsorted" do
       before do
-        @unsorted_tag = Factory.create(:character, :canonical => false)
+        @unsorted_tag = FactoryGirl.create(:character, :canonical => false)
         @unsorted_tag.type = "UnsortedTag"
         @unsorted_tag.save
         @unsorted_tag = Tag.find(@unsorted_tag.id)
@@ -284,7 +304,7 @@ describe Tag do
 
     context "from Character to Fandom" do
       before do
-        @fandom_tag = Factory.create(:character, :canonical => false)
+        @fandom_tag = FactoryGirl.create(:character, :canonical => false)
         @fandom_tag.type = "Fandom"
         @fandom_tag.save
         @fandom_tag = Tag.find(@fandom_tag.id)
@@ -301,8 +321,8 @@ describe Tag do
 
     context "when the Character had a Fandom attached" do
       before do
-        @unsorted_tag = Factory.create(:character, :canonical => false)
-        fandom_tag = Factory.create(:fandom, :canonical => true)
+        @unsorted_tag = FactoryGirl.create(:character, :canonical => false)
+        fandom_tag = FactoryGirl.create(:fandom, :canonical => true)
         @unsorted_tag.parents = [fandom_tag]
         @unsorted_tag.save
       end
@@ -329,19 +349,89 @@ describe Tag do
 
   describe "find_or_create_by_name" do
     it "should sort unsorted tags that get used on works" do
-      tag = Factory.create(:unsorted_tag)
-      work = Factory.create(:work, :character_string => tag.name)
+      tag = FactoryGirl.create(:unsorted_tag)
+      work = FactoryGirl.create(:work, :character_string => tag.name)
 
       tag = Tag.find(tag.id)
       tag.should be_a(Character)
     end
 
     it "should sort unsorted tags that get used on external works" do
-      tag = Factory.create(:unsorted_tag)
-      external_work = Factory.create(:external_work, :character_string => tag.name)
+      tag = FactoryGirl.create(:unsorted_tag)
+      external_work = FactoryGirl.create(:external_work, :character_string => tag.name)
 
       tag = Tag.find(tag.id)
       tag.should be_a(Character)
     end
+  end      
+
+  describe "multiple tags of the same type" do
+    before do
+      # set up three tags of the same type
+      @canonical_tag = FactoryGirl.create(:fandom)
+      @syn_tag = FactoryGirl.create(:fandom)
+      @sub_tag = FactoryGirl.create(:fandom)
+    end
+    
+    it "should let you make a tag the synonym of a canonical one" do
+      @syn_tag.syn_string = @canonical_tag.name
+      @syn_tag.save
+
+      @syn_tag.merger.should eq(@canonical_tag)
+      @canonical_tag = Tag.find(@canonical_tag.id)
+      @canonical_tag.mergers.should eq([@syn_tag])
+    end
+    
+    it "should let you make a canonical tag the subtag of another canonical one" do
+      @sub_tag.meta_tag_string = @canonical_tag.name
+
+      @canonical_tag.sub_tags.should eq([@sub_tag])
+      @sub_tag.meta_tags.should eq([@canonical_tag])
+    end
+    
+    describe "with a synonym and a subtag" do
+      before do
+        @syn_tag.syn_string = @canonical_tag.name
+        @syn_tag.save
+        @sub_tag.meta_tag_string = @canonical_tag.name
+      end
+      
+      describe "and works under each" do
+        before do
+          # create works with all three tags
+          @direct_work = FactoryGirl.create(:work, :fandom_string => @canonical_tag.name)
+          @syn_work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name)
+          @sub_work = FactoryGirl.create(:work, :fandom_string => @sub_tag.name)
+        end
+        
+        xit "should find all works that would need to be reindexed" do      
+          # get all the work ids that it would queue
+          @syn_tag.all_filtered_work_ids.should eq([@syn_work.id])
+          @sub_tag.all_filtered_work_ids.should eq([@sub_work.id])
+          @canonical_tag.all_filtered_work_ids.should eq([@direct_work.id, @syn_work.id, @sub_work.id])
+      
+          # make sure the canonical tag continues to have the right ids even if set to non-canonical
+          @canonical_tag.canonical = false
+          @canonical_tag.all_filtered_work_ids.should =~ [@direct_work.id, @syn_work.id, @sub_work.id]
+      
+        end
+      end
+      
+      describe "and bookmarks under each" do
+        before do
+          # create bookmarks with all three tags
+          @direct_bm = FactoryGirl.create(:bookmark, :tag_string => @canonical_tag.name)
+          @syn_bm = FactoryGirl.create(:bookmark, :tag_string => @syn_tag.name)
+          @sub_bm = FactoryGirl.create(:bookmark, :tag_string => @sub_tag.name)
+        end
+        
+        it "should find all bookmarks that would need to be reindexed" do
+          @syn_tag.all_bookmark_ids.should eq([@syn_bm.id])
+          @sub_tag.all_bookmark_ids.should eq([@sub_bm.id])
+          @canonical_tag.all_bookmark_ids.should  =~ [@direct_bm.id, @syn_bm.id, @sub_bm.id]
+        end
+      end
+    end
   end
+ 
 end
