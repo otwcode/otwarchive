@@ -201,7 +201,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-    
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -210,8 +210,8 @@ class WorksController < ApplicationController
     end
 
     # Users must explicitly okay viewing of entire work
-    if @work.number_of_posted_chapters > 1
-      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+    if @work.chaptered?
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
@@ -284,13 +284,15 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
+      
+      @work.set_revised_at_by_chapter(@chapter)
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
 
-      if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
+      if valid && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created.')
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
@@ -354,7 +356,9 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created.')
+        unless @work.posted?
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
@@ -374,37 +378,12 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit
     else
+      @work.posted = @chapter.posted = true if params[:post_button]
+      posted_changed = @work.posted_changed?
+      @work.set_revised_at_by_chapter(@chapter)
       saved = @chapter.save
       @work.has_required_tags? || saved = false
       if saved
-        # Setting the @work.revised_at datetime if appropriate
-        # if @chapter.published_at has been changed or work is being posted
-        if params[:post_button] || (defined?(@previous_published_at) && @previous_published_at != @chapter.published_at)
-          # if work has only one chapter - so we don't need to take any other chapter dates into account,
-          # OR the date is set to today AND the backdating setting has not been changed
-          if @work.number_of_chapters == 1 || (@chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate)
-            @work.set_revised_at(@chapter.published_at)
-          # work has more than one chapter and the published_at date for this chapter is not today
-          # so we can't tell if there is a later date than this one elsewhere, and need to grab all
-          # OR the date is today but the backdate setting has changed
-          else
-            # if backdate has been changed to positive
-            if defined?(@previous_backdate_setting) && @previous_backdate_setting == false && @work.backdate
-              @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
-            # if backdate has been changed to negative
-            # OR there is no change in the backdate setting but the date isn't today
-            else
-              @work.set_revised_at
-            end
-          end
-        # elsif the date hasn't been changed, but the backdate setting has
-        elsif defined?(@previous_backdate_setting) && @previous_backdate_setting != @work.backdate
-          if @previous_backdate_setting == false && @work.backdate  # if backdate has been changed to positive
-            @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
-          else # if backdate has been changed to negative, grab most recent chapter date
-            @work.set_revised_at
-          end
-        end
         if !@work.challenge_claims.empty?
           @included = 0
           @work.challenge_claims.each do |claim|
@@ -419,19 +398,13 @@ class WorksController < ApplicationController
             @included = 0
           end
         end
-        @work.posted = true if params[:post_button]
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
       end
       if saved
-        if params[:post_button]
-          flash[:notice] = ts('Work was successfully posted.')
-          in_moderated_collection
-        elsif params[:update_button]
-          flash[:notice] = ts('Work was successfully updated.')
-          in_moderated_collection
-        end
+        flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
+        in_moderated_collection
         redirect_to(@work)
       else
         unless @chapter.valid?
@@ -546,6 +519,12 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
+    
+    # is external author information entered when import for others is not checked?
+    if (params[:external_author_name] || params[:external_author_email]) && !params[:importing_for_others]
+      flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
+      render :new_import and return
+    end
 
     # is this an archivist importing?
     if params[:importing_for_others] && !current_user.archivist
@@ -566,7 +545,8 @@ class WorksController < ApplicationController
     if params[:pseuds_to_apply]
       pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
     end
-    options = {:pseuds => pseuds_to_apply,
+    options = {
+      :pseuds => pseuds_to_apply,
       :post_without_preview => params[:post_without_preview],
       :importing_for_others => params[:importing_for_others],
       :restricted => params[:restricted],
@@ -578,7 +558,11 @@ class WorksController < ApplicationController
       :relationship => params[:work][:relationship_string],
       :category => params[:work][:category_string],
       :freeform => params[:work][:freeform_string],
-      :encoding => params[:encoding]
+      :encoding => params[:encoding],
+      :external_author_name => params[:external_author_name],
+      :external_author_email => params[:external_author_email],
+      :external_coauthor_name => params[:external_coauthor_name],
+      :external_coauthor_email => params[:external_coauthor_email]
     }
 
     # now let's do the import
@@ -660,7 +644,7 @@ protected
         @external_authors.each do |external_author|
           external_author.find_or_invite(current_user)
         end
-        message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+        message = " " + ts("We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually.")
         flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
     end
@@ -669,13 +653,14 @@ protected
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
     if !@collection.nil? && @collection.moderated?
-      flash[:notice] ||= ""
-      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+      if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
+        flash[:notice] ||= ""
+        flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+      end
     end
   end
 
 public
-
 
   def post_draft
     @user = current_user
@@ -719,7 +704,7 @@ public
     end
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
+      select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
   end
 
   def edit_multiple
@@ -776,7 +761,11 @@ public
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
-    flash[:notice] = ts("This work was marked for later. You can find it in your #{view_context.link_to('history', read_later_path)}. (The work may take a short while to show up there.)").html_safe
+    if @work.marked_for_later?(current_user)
+      flash[:notice] = ts("This work was <strong>removed</strong> from your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    else
+      flash[:notice] = ts("This work was <strong>added</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}. It may take a while for changes to show up.").html_safe
+    end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
@@ -834,8 +823,6 @@ public
   def set_instance_variables
     if params[:id] # edit, update, preview, manage_chapters
       @work ||= Work.find(params[:id])
-      @previous_published_at = @work.first_chapter.published_at
-      @previous_backdate_setting = @work.backdate
       if params[:work]  # editing, save our changes
         if params[:preview_button] || params[:cancel_button]
           @work.preview_mode = true

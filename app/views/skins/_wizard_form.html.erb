@@ -1,5 +1,5 @@
 <fieldset class="post skin wizard">
-  <legend><%= ts("Wizard") %></legend>
+  <legend><%= ts('Wizard') %></legend>
   <dl>
     <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
@@ -10,7 +10,7 @@
     <dt><%= f.label :margin, ts('Margin width (%)') %> <%= link_to_help('skins-wizard-margin') %></dt>
     <dd><%= f.text_field :margin %></dd>
 
-    <dt><%= f.label :font, ts("Font family") %> <%= link_to_help('skins-wizard-font') %></dt>
+    <dt><%= f.label :font, ts('Font family') %> <%= link_to_help('skins-wizard-font') %></dt>
     <dd><%= f.text_field :font %></dd>
   
     <dt>
@@ -22,8 +22,8 @@
     </dd>
   
     <dt>
-      <%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (name or hex code)') %> 
-      <%= link_to_help('skins-wizard-forground-color') %>
+      <%= f.label :foreground_color, ts('Foreground color (name or hex code)') %>
+      <%= link_to_help('skins-wizard-foreground-color') %>
     </dt>
     <dd>
       <%= f.text_field :foreground_color %>
@@ -52,7 +52,7 @@
     <dd><%= f.text_field :accent_color %></dd>
   </dl>
 
-    <%= hidden_field_tag "wizard", true %>
+    <%= hidden_field_tag 'wizard', true %>
 </fieldset>
 
 <%= submit_fieldset(f) %>

@@ -60,7 +60,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "Synonyms"
-  When I follow "First Doctor"
+  When I follow "Edit First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
     And I should see "The First Doctor"

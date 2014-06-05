@@ -177,7 +177,7 @@ class User < ActiveRecord::Base
             :through => :followings,
             :source => :user
 
-  has_many :wrangling_assignments
+  has_many :wrangling_assignments, :dependent => :destroy
   has_many :fandoms, :through => :wrangling_assignments
   has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
 
@@ -189,6 +189,7 @@ class User < ActiveRecord::Base
 
   def remove_pseud_from_kudos
     ids = self.pseuds.collect(&:id).join(',')
+    # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
     Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{ids})") if ids.present?
   end
 

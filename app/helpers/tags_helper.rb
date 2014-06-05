@@ -158,7 +158,7 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag.type + ": " + link_to_tag(tag) + " &lrm;(#{tag.taggings_count})</span>"
       span.html_safe
     end
   end
@@ -298,6 +298,9 @@ module TagsHelper
       "warning-no warnings"
     elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
       # only one tag and it says choose not to warn
+      "warning-choosenotto warnings"
+    elsif warning_tags.size == 2 && ((warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME))
+      # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
       "warning-choosenotto warnings"
     else
       "warning-yes warnings"

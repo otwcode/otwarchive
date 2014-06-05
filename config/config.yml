@@ -93,10 +93,14 @@ ICON_COMMENT_MAX: 50
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
 
+# max number of potential matches to generate
+POTENTIAL_MATCHES_MAX: 50
+
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
 # max for prompt memes (can be much higher than for gift exchanges, as there is no matching)
 PROMPT_MEME_PROMPTS_MAX: 50
+
 
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25
@@ -115,6 +119,7 @@ TAG_LIST_LIMIT: 300
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 500
+MAX_KUDOS_TO_SHOW: 50
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
@@ -228,14 +233,14 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # We use this list for properties which can take shorthand values and also have subproperties or variants 
 # (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "column", "cue", "font", "layer-background",
-  "layout-grid", "list-style", "margin", "marker",
-  "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background", 
+"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause", 
+"scrollbar", "text", "transform", "transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source", 
   "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
   "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
-  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
   "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
   "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
   "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
@@ -249,7 +254,7 @@ SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source",
   "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
   "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
   "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
-  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", 
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select", 
   "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
   "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
 
@@ -323,14 +328,16 @@ ACTION_NEW_EMAIL: 9
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 DUMP_SEEDS: [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza"
+            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
+            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
+            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
+            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
+            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
+            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble", 
+            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
+            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
+            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
+            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
 ]
 
 # seeds who want their email address preserved for testing

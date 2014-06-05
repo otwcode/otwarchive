@@ -18,7 +18,7 @@ namespace :statistics do
   desc "update database hit counts from squid cache logfiles"
   task(:update_hitcounts_from_squid => :environment) do
     # 1339152484.319      0 127.0.0.1 TCP_MEM_HIT/200 22940 GET http://testarchive.transformativeworks.org/works/424841/chapters/712694? - NONE/- text/html
-    logdata_rows = `grep "TCP_MEM_HIT/200" /var/log/squid3/access.log.1 | grep "GET" | grep "/works/"`.force_encoding(Encoding::BINARY).split("\n")
+    logdata_rows = `grep "TCP_MEM_HIT/200" /home/ao3squid/log/old/access.log.1 | grep "GET" | grep "/works/"`.force_encoding(Encoding::BINARY).split("\n")
     work_hits = {}
     logdata_rows.each do |row|
       if row.match(/\/works\/([0-9]+)\/?/)

@@ -1,12 +1,12 @@
 class CollectionsController < ApplicationController
-  
+
   before_filter :users_only, :only => [:new, :edit, :create, :update]
   before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
-  
+
   cache_sweeper :collection_sweeper
-  cache_sweeper :static_sweeper  
-  
+  cache_sweeper :static_sweeper
+
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
     unless @collection
@@ -35,28 +35,31 @@ class CollectionsController < ApplicationController
       params[:collection_filters] ||= {}
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]      
+      sort = params[:sort_column] + " " + params[:sort_direction]
       @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
   end
-  
+
   # display challenges that are currently taking signups
   def list_challenges
+    @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))    
+    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
   end
-  
+
   def list_ge_challenges
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15) 
+    @page_subtitle = "Open Gift Exchange Challenges"
+    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
   end
-  
+
   def list_pm_challenges
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15) 
+    @page_subtitle = "Open Prompt Meme Challenges"
+    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
   end
-  
+
   def show
     @page_subtitle = @collection.title
-    
+
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -94,7 +97,7 @@ class CollectionsController < ApplicationController
       owner_attributes << {:pseud => pseud, :participant_role => CollectionParticipant::OWNER} if pseud
     end
     @collection.collection_participants.build(owner_attributes)
-    
+
     if @collection.save
       flash[:notice] = 'Collection was successfully created.'
       unless params[:challenge_type].blank?
@@ -141,7 +144,7 @@ class CollectionsController < ApplicationController
     @collection = Collection.find_by_name(params[:id])
     @collection.destroy
 
-    redirect_to(collections_url) 
+    redirect_to(collections_url)
   end
-  
+
 end

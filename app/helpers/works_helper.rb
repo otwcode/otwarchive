@@ -97,19 +97,28 @@ module WorksHelper
   end
   
   def marktoread_link(work)
-    link_to ts("Mark for later"), marktoread_work_path(work)
+    link_to ts("Mark for Later"), marktoread_work_path(work)
   end
   
   def markasread_link(work)
-    link_to ts("Mark as read"), marktoread_work_path(work)
+    link_to ts("Mark as Read"), marktoread_work_path(work)
   end
   
   def get_endnotes_link
     current_page?(:controller => 'chapters', :action => 'show') ?
-      chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
+      chapter_path(@work.last_posted_chapter.id, :anchor => 'work_endnotes') :
       "#work_endnotes"
-  end      
-    
+  end
+  
+  def get_related_works_url
+    current_page?(:controller => 'chapters', :action => 'show') ?
+      chapter_path(@work.last_posted_chapter.id, :anchor => 'children') :
+      "#children"
+  end
+  
+  def get_inspired_by(work)
+    work.approved_related_works.where(translation: false)
+  end
 
   def download_url_for_work(work, format)
     url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')
@@ -151,6 +160,14 @@ module WorksHelper
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
+  end
+  
+  # Returns true or false to determine whether the work associations should be included
+  def show_associations?(work)
+    work.recipients.present? ||
+    work.approved_related_works.where(translation: true).exists? ||
+    work.parent_work_relationships.exists? ||
+    work.challenge_claims.present?
   end
     
   
