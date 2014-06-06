@@ -16,7 +16,7 @@ Scenario: Posting locked work
       And I fill in "Characters" with "Sammy"
       And I fill in "Work Title" with "Awesomeness"
       And I fill in "content" with "The story of how they met and how they got into trouble"
-      And I check "work_restricted"
+      And I lock the work
     When I press "Preview"
     
     # shows as restricted
@@ -56,7 +56,7 @@ Scenario: Editing posted work
     Then I should see "Sad generic work"
     When I am logged in as "fandomer" with password "password"
       And I edit the work "Sad generic work"
-      And I check "work_restricted"
+      And I lock the work
       And I fill in "Fandoms" with "Supernatural"
     When I press "Preview"
     Then I should see the "title" text "Restricted" within "h2.title"
@@ -78,7 +78,7 @@ Scenario: Editing posted work
     Then I should see "Work was successfully updated."
       And I should see the "alt" text "(Restricted)" within "h2.title"
     When I edit the work "Sad generic work"
-      And I uncheck "work_restricted"
+      And I unlock the work
       And I press "Preview"
     Then I should not see the "alt" text "(Restricted)"
     When I update the work

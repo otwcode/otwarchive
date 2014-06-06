@@ -57,8 +57,8 @@ describe LogfileReader do
     it "gets the correct logfiles with no start date" do
       results = self.class.logfiles_to_read
       results.size.should == 2
-      results.first.should == LogfileReader::LOGFILE_DIR + "default.log.1"
-      results.second.should == LogfileReader::LOGFILE_DIR + "default.log.2"
+      results.should include(LogfileReader::LOGFILE_DIR + "default.log.1")
+      results.should include(LogfileReader::LOGFILE_DIR + "default.log.2")
     end
     
     it "gets the correct logfiles given a start date" do
