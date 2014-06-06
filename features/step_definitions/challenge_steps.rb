@@ -169,6 +169,16 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
     step %{I press "Update"}
 end
 
+When /^I approve the first item in the collection "([^\"]*)"$/ do |collection|
+  collection = Collection.find_by_title(collection)
+  collection_item = collection.collection_items.first.id
+  visit collection_path(collection)
+  step %{I follow "Manage Items"}
+  step %{I select "Approved" from "collection_items_#{collection_item}_collection_approval_status"}
+  step %{I press "Submit"}
+end
+
+
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))

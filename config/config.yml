@@ -119,6 +119,7 @@ TAG_LIST_LIMIT: 300
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 500
+MAX_KUDOS_TO_SHOW: 50
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
@@ -327,14 +328,16 @@ ACTION_NEW_EMAIL: 9
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 DUMP_SEEDS: [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza"
+            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
+            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
+            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
+            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
+            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
+            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble", 
+            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
+            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
+            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
+            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
 ]
 
 # seeds who want their email address preserved for testing

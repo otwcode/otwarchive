@@ -313,7 +313,7 @@ class ChallengeAssignment < ActiveRecord::Base
   # generate automatic match for a collection
   # this requires potential matches to already be generated
   def self.generate(collection)
-    $redis.set(progress_key(collection), 1)
+    REDIS_GENERAL.set(progress_key(collection), 1)
     Resque.enqueue(ChallengeAssignment, :delayed_generate, collection.id)
   end
 
@@ -322,14 +322,14 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   def self.in_progress?(collection)
-    $redis.get(progress_key(collection)) ? true : false
+    REDIS_GENERAL.get(progress_key(collection)) ? true : false
   end
   
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
     settings = collection.challenge.potential_match_settings
 
-    $redis.set(progress_key(collection), 1)
+    REDIS_GENERAL.set(progress_key(collection), 1)
     ChallengeAssignment.clear!(collection)
 
     # we sort signups into buckets based on how many potential matches they have
@@ -378,7 +378,7 @@ class ChallengeAssignment < ActiveRecord::Base
         end
       end
     end
-    $redis.del(progress_key(collection))
+    REDIS_GENERAL.del(progress_key(collection))
     UserMailer.potential_match_generation_notification(collection.id).deliver
   end
 

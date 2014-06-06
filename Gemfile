@@ -4,7 +4,7 @@ ruby '1.9.3'
 
 gem 'bundler'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.18'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -71,9 +71,12 @@ gem "google_visualr", ">= 2.1"
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
+#Phrase-app
+gem 'phrase'
+
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm', "3.7.2.192"
+gem 'newrelic_rpm', "3.8.0.218"
 gem 'newrelic-redis'
 
 # For URL mangling

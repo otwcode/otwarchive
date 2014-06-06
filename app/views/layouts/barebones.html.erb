@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <%= render 'layouts/phraseapp' %>
   <title><%= @page_title %></title>
   <style type="text/css">
     p.message { text-align: center; }
@@ -12,8 +13,8 @@
     .meta dl.tags { border: 1px solid;  padding: 1em; }
     .meta dd { margin: -1em 0 0 10em; }
     .meta .endnote-link { font-size: .8em; }
-    #chapters  { padding: 1em; }
-    .userstuff  { padding: 1em; }
+    #chapters  { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
+    .userstuff  { font-family: "Nimbus Roman No9 L", "Times New Roman", serif; padding: 1em; }
   </style>
 </head>
 <body>

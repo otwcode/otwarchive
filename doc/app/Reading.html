@@ -633,7 +633,7 @@
             <pre><span class="ruby-comment"># File app/models/reading.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">mark_to_read_later</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">user</span>)
   <span class="ruby-identifier">reading_json</span> = [<span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">major_version</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">minor_version</span>, <span class="ruby-keyword">true</span>].<span class="ruby-identifier">to_json</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- mark_to_read_later-source -->
           
@@ -680,7 +680,7 @@ and is not the author of the work</p>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">reading</span>.<span class="ruby-identifier">save</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">srem</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">reading</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- reading_object-source -->
@@ -713,7 +713,7 @@ and is not the author of the work</p>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_or_create</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">user</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:history_enabled</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">work</span>)
     <span class="ruby-identifier">reading_json</span> = [<span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">major_version</span>, <span class="ruby-identifier">work</span>.<span class="ruby-identifier">minor_version</span>, <span class="ruby-keyword">false</span>].<span class="ruby-identifier">to_json</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>, <span class="ruby-identifier">reading_json</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- update_or_create-source -->
@@ -744,7 +744,7 @@ and is not the author of the work</p>
           <div class="method-source-code" id="update_or_create_in_database-source">
             <pre><span class="ruby-comment"># File app/models/reading.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_or_create_in_database</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>).<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">reading_json</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">smembers</span>(<span class="ruby-string">&quot;Reading:new&quot;</span>).<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">reading_json</span><span class="ruby-operator">|</span>
     <span class="ruby-constant">Reading</span>.<span class="ruby-identifier">reading_object</span>(<span class="ruby-identifier">reading_json</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
