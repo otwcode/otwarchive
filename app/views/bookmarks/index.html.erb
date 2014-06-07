@@ -36,7 +36,7 @@
 <% end %>
 
 <% unless @owner.present? || @bookmarkable.present? %>
-  <p><%= ts("These are some of the latest bookmarks created on the archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
+  <p><%= ts("These are some of the latest bookmarks created on the Archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
 <% end %>
 
 <% if @bookmarks.respond_to?(:total_pages) %>
