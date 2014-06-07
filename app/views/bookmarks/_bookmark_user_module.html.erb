@@ -4,7 +4,7 @@
     <% cache(blurb_cache_key) do %>
     <!--bookmarker, time-->
     <h5 class="byline heading">
-      <%= ts("Bookmarked by") %>
+      <%= ts("Bookmarked by ") %>
       <%= link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud)) %>
     </h5>
     <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
