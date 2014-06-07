@@ -4,24 +4,30 @@
 # if in_page is true then we assume that this is embedded within another page (eg the work page)
 # if dynamic is true then this has been rendered via ajax 
 %>
-
-<div class="post bookmark <% if bookmarkable.class == ExternalWork %>verbose<% end %>" id="bookmark-form">
+<div class="<% if bookmark.new_record? && bookmarkable.class == ExternalWork %>verbose <% end %>post bookmark" id="bookmark-form">
   <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
-  <% if bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
+  
   <% bookmark ||= Bookmark.new %>
   <% bookmarkable ||= bookmark.bookmarkable %>
+  
+  <% in_page ||= false %>
+  <% dynamic ||= false %>
+  
+  <% bookmark_form_id = (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}") %>
+  <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmark_form_id}" : "") %>
+
+  <% # Note telling users about our bookmarklet for external links %>
+  <% if !dynamic && bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
+
   <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
   <fieldset>
     <legend><%= ts("Bookmark") %></legend>
-    <% in_page ||= false %>
-    <% dynamic ||= false %>
-    <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmarkable.id}" : "") %>
     <% if in_page %>
       <p class="close actions">
         <% if dynamic %>
-          <a id="bookmark_form_close_for_<%= bookmarkable.id %>" title="cancel"><%= ts("x") %></a>
+          <a id="bookmark_form_close_for_<%= bookmark_form_id %>" title="<%= ts('cancel') %>">&times;</a>
         <% else %>
-          <a class="bookmark_form_placement_close" href="#comments" title="cancel"><%= ts("x") %></a>
+          <a class="bookmark_form_placement_close" href="#comments" title="<%= ts('cancel') %>">&times;</a>
         <% end %>        
       </p>
     <% end %>
@@ -30,7 +36,7 @@
       <% if current_user.pseuds.count > 1 %>
         <%= select_tag "bookmark[pseud_id]", 
           options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, 
-          bookmark.pseud ? bookmark.pseud.id : current_user.default_pseud.id), :title => "choose pseud" %>
+          bookmark.pseud ? bookmark.pseud.id : current_user.default_pseud.id), :title => ts("choose pseud") %>
       <% else %>
         <span class="byline">
           <%= current_user.default_pseud.name %>, 
@@ -67,7 +73,7 @@
           </dd>
 
           <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
-          <dd title="your tags">
+          <dd title="<%= ts('your tags') %>">
             <% if bookmarkable.class != ExternalWork %>
               <p class="footnote"><%= ts("The author's tags are added automatically.") %></p>
             <% end %>
