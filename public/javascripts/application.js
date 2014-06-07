@@ -432,8 +432,13 @@ $j(document).ready(function() {
     });
   });
 
-  // Set things up to scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder .pagination a[data-remote]').livequery('click.rails', function(e){
+  // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
+  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
     $j.scrollTo('#comments_placeholder');
+  });
+
+  // Scroll to the top of the feedback section when loading comments via AJAX
+  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+    $j.scrollTo('#feedback');
   });
 });
