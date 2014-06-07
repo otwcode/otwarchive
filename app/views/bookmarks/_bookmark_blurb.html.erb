@@ -32,7 +32,7 @@
           </li>
         <% end %>
 
-      	<% if bookmark_count > 1 %>
+        <% if bookmark_count > 1 %>
           <% if params[:tag_id] || (@owner.blank? && @bookmarkable.blank?) %>
             <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
               <%= link_to ts("Show Most Recent Bookmarks"), 
@@ -55,4 +55,5 @@
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>
   <% end %>
+
 </li>
