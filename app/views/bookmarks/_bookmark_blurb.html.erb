@@ -20,7 +20,7 @@
 		
     <!--navigation and actions-->
     <% if (bookmark_count > 1 && (params[:tag_id] || (@owner.blank? && @bookmarkable.blank?))) || (logged_in? && !is_author_of?(bookmark)) %>
-      <ul class="navigation actions" role="navigation">
+      <ul class="actions" role="navigation">
         <% # let the user reading this bookmark save a copy for themselves %>
         <% if logged_in? && !is_author_of?(bookmark) %>
           <li>
