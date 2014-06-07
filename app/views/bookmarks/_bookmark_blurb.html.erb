@@ -19,7 +19,7 @@
     <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
 		
     <!--navigation and actions-->
-    <% if (bookmark_count > 1 && (params[:tag_id] || !@owner.present?)) || (logged_in? && !is_author_of?(bookmark)) %>
+    <% if (bookmark_count > 1 && params[:tag_id]) || (bookmark_count > 1 && (@owner.blank? && @bookmarkable.blank?)) || (logged_in? && !is_author_of?(bookmark)) %>
       <ul class="actions" role="navigation">
         <% # If this bookmark does not belong to the current user, let them save a new copy or edit their existing copy %>
         <% if logged_in? && !is_author_of?(bookmark) %>
@@ -32,8 +32,9 @@
           </li>
         <% end %>
 
+        <% # If there are multiple bookmarks of this item and we are on a tag page or any page other than a user's bookmark index, let the user view the most recent bookmarks %>
         <% if bookmark_count > 1 %>
-          <% if params[:tag_id] || !@owner.present? %>
+          <% if params[:tag_id] || (@owner.blank? && @bookmarkable.blank?) %>
             <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
               <%= link_to ts("Show Most Recent Bookmarks"), 
               url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }), :class => "actions", :remote => true %>
