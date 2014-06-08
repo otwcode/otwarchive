@@ -21,13 +21,13 @@ class TagsController < ApplicationController
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+      @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_LIST)
       # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
+      # and then sort the random tags from most used to least used
       if params[:show] == "random"
-        @tags = @tags.random.canonical.sort
+        @tags = @tags.random.canonical.sort{ |a, b| b.count <=> a.count }
       else
-        @tags = @tags.popular.canonical.sort
+        @tags = @tags.popular.canonical
       end
     end
   end

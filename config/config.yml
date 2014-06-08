@@ -113,7 +113,7 @@ ITEMS_PER_PAGE: 25
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
-TAGS_IN_CLOUD: 200
+TAGS_IN_LIST: 200
 TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
 # can be before we just use an autocomplete instead

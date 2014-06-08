@@ -292,9 +292,9 @@ class Tag < ActiveRecord::Base
     for_collections(collections).
     select("tags.*, count(tags.id) as count").
     group(:id).
-    order(:name)
+    order("count DESC")
   }
-
+  
   scope :with_scoped_count, lambda {
     select("tags.*, count(tags.id) as count").
     group(:id)

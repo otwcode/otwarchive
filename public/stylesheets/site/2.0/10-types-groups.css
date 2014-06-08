@@ -25,60 +25,75 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   display: block;
 }
 
-/*GROUP CLOUD */
+ol.tags {
+  float: left;
+}
 
-ul.cloud {
-  margin: 2em auto;
+ol.tags li {
+  display: list-item;
+  list-style: decimal inside;
+}
+
+.cloud {
   text-align: center;
-  line-height: 2;
 }
 
-a.cloud1 {
-  color: #200;
-  font-size: 0.625em;
-  font-weight: 100;
+ol.cloud li {
+  display: inline;
+  float: none;
+  line-height: 1;
+  margin: 0 0.25em;
+  width: auto;
 }
 
-a.cloud2 {
-  color: #300;
-  font-size: 0.75em;
-  font-weight: 200;
+.cloud .count {
+  display: none;
 }
 
-a.cloud3 {
-  color: #400;
-  font-size: 0.875em;
-  font-weight: 300;
+.cloud .micro {
+font-size: 0.875em;
+line-height: 3;
 }
 
-a.cloud4 {
-  color: #500;
-  font-size: 1em;
-  font-weight: 400;
+.cloud .milli {
+font-size: 1.25em;
+line-height: 2;
 }
 
-a.cloud5 {
-  color: #600;
-  font-size: 1.125em;
-  font-weight: 500;
+.cloud .centi {
+font-size: 1.625em;
+line-height: 1.5;
 }
 
-a.cloud6 {
-  color: #700;
-  font-size: 1.5em;
-  font-weight: 600;
+.cloud .deci {
+font-size: 1.875em;
+line-height: 1.5;
 }
 
-a.cloud7 {
-  color: #800;
-  font-size: 1.875em;
-  font-weight: 700;
+.cloud .base {
+font-size: 2.25em;
+line-height: 1.5;
 }
 
-a.cloud8 {
-  color: #900;
-  font-size: 2.25em;
-  font-weight: 800;
+.cloud .deka {
+font-size: 2.875em;
+line-height: 1.5;
+}
+
+.cloud .hecto {
+font-size: 3.25em;
+line-height: 1;
+}
+
+.cloud .kilo {
+font-size: 3.5em;
+line-height: 1;
+}
+
+.cloud .mega {
+font-size: 4em;
+font-weight: 700;
+line-height: 1;
 }
 
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
