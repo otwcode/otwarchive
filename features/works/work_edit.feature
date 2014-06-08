@@ -45,7 +45,7 @@ Feature: Edit Works
       And I follow "Add Chapter"
       And I fill in "content" with "second chapter content"
       And I press "Preview"
-    Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+    Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
       And I should see "second chapter content"
     When I press "Post"
     Then I should see "Chapter was successfully posted."
@@ -125,3 +125,10 @@ Feature: Edit Works
 #      And I press "Update"
 #      And I go to the works page
 #    Then "This One Stays On Top" should appear before "Don't Bump Me"
+
+  Scenario: Previewing edits to a posted work should not refer to the work as a draft
+    Given I am logged in as "editor"
+      And I post the work "Load of Typos"
+    When I edit the work "Load of Typos"
+      And I press "Preview"
+    Then I should not see "draft"

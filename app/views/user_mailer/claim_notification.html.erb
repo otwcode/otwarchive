@@ -12,10 +12,13 @@
   <p>Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please <%= support_link("contact Support") %>.</p>
 
   <p>These works were written under the e-mail: <%= @external_email %></p>
+
+  <ul>
   <% @claimed_works.each do |work| %>
-    -	<%= work.title.html_safe %>
-    <%= link_to work_url(work), work_url(work) %>
+    <li><%= style_link(work.title.html_safe, work_url(work)) %>
+      <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
   <% end %>
+  </ul>
 
   <p>To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time. If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive. Please don't delete the newly imported copies as it will break the redirect--instead, please request that Open Doors reset the redirect to point toward the pre-existing copy on AO3 by <%= style_link( "contacting Open Doors", "http://opendoors.transformativeworks.org/contact/open%20doors") %> with your AO3 account name, your account name on the imported archive, and links to both the original archive URL, and the URL of the fanwork designated as the redirect.</p>
 

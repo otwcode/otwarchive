@@ -4,7 +4,11 @@
   <div class="offers listbox group">
     <h3 class="heading">
       <%= ts("Offers") %>
-      <% if @challenge_assignment %> <%= ts("by %{offerer}", :offerer => @challenge_assignment.offer_byline) %><% end %>
+      <% if @challenge_assignment %>
+        <%= ts("by %{offerer}", :offerer => @challenge_assignment.offer_byline) %>
+        <% user = @challenge_assignment.try(:offer_signup).try(:pseud).try(:user) %>
+        <% if user %><%= mailto_link user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %><% end %>
+      <% end %>
     </h3>
     <ol class="index group">
       <% challenge_signup.offers.each_with_index do |offer, index| %>
