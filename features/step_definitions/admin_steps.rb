@@ -130,9 +130,29 @@ When /^there are (\d+) Archive FAQs$/ do |n|
   end
 end
 
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
+  n ||= 1
+  visit new_admin_post_path
+  fill_in("admin_post_title", :with => "Amazing News #{n}")
+  fill_in("content", :with => "This is the content for the #{n} Admin Post")
+  click_button("Post")
+end
+
+When /^there are (\d+) Admin Posts$/ do |n|
+  (1..n.to_i).each do |i|
+    step(%{I make a #{i} Admin Post})
+  end
+end
+
 When /^(\d+) Archive FAQs? exists?$/ do |n|	
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
+  end
+end
+
+When /^(\d+) Admin Posts? exists?$/ do |n|
+  (1..n.to_i).each do |i|
+    FactoryGirl.create(:admin_post, id: i)
   end
 end
 

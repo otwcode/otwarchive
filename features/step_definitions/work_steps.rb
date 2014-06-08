@@ -96,6 +96,10 @@ When /^I edit the work "([^\"]*)"$/ do |work|
   visit edit_work_url(work)
 end
 
+When /^I edit the draft "([^\"]*)"$/ do |draft|
+  step %{I edit the work "#{draft}"}
+end
+
 When /^I post the chaptered work "([^\"]*)"$/ do |title|
   step %{I post the work "#{title}"}
   step %{I follow "Add Chapter"}
@@ -262,6 +266,26 @@ When /^the locked draft "([^\"]*)"$/ do |title|
   click_button("Preview")
 end
 
+When /^I lock the work$/ do
+  check("work_restricted")
+end
+
+When /^I lock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I lock the work}
+  step %{I post the work}
+end
+
+When /^I unlock the work$/ do
+  uncheck("work_restricted")
+end
+
+When /^I unlock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I unlock the work}
+  step %{I post the work}
+end
+
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
@@ -273,10 +297,16 @@ When /^I set the publication date to today$/ do
   today = Time.new
   month = today.strftime("%B")
   
-  check("backdate-options-show")
-  select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
-  select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
-  select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+  if page.has_selector?("#backdate-options-show")
+    check("backdate-options-show") if page.find("#backdate-options-show")
+    select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
+    select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
+    select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+  else
+    select("#{today.day}", :from => "chapter[published_at(3i)]")
+    select("#{month}", :from => "chapter[published_at(2i)]")
+    select("#{today.year}", :from => "chapter[published_at(1i)]")
+  end
 end
 
 When /^I browse the "([^"]+)" works$/ do |tagname|
@@ -324,6 +354,50 @@ When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
+
+When /^the statistics_tasks rake task is run$/ do
+  StatCounter.hits_to_database
+  StatCounter.stats_to_database
+end
+
+When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the co-author "#{coauthor}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the co-author "([^\"]*)"$/ do |coauthor|
+  step %{the user "#{coauthor}" exists and is activated}
+  check("Add co-authors?")
+  fill_in("pseud_byline", :with => "#{coauthor}")
+end
+
+When /^I give the work to "([^\"]*)"$/ do |recipient|
+  fill_in("work_recipients", :with => "#{recipient}")
+end
+
+When /^I add the beginning notes "([^\"]*)"$/ do |notes|
+  check("at the beginning")
+  fill_in("work_notes", :with => "#{notes}")
+end
+
+When /^I add the end notes "([^\"]*)"$/ do |notes|
+  check("at the end")
+  fill_in("work_endnotes", :with => "#{notes}")
+end
+
+When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the beginning notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the end notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -336,3 +410,20 @@ Then /^I should not see Updated today$/ do
   step "I should not see \"Updated:#{today}\""
 end
 
+Then /^I should see Completed today$/ do
+  today = Time.zone.today.to_s
+  step "I should see \"Completed:#{today}\""
+end
+
+Then /^I should not see Completed today$/ do
+  today = Date.today.to_s
+  step "I should not see \"Completed:#{today}\""
+end
+
+Then /^I should find a list for associations$/ do
+  page.should have_xpath("//ul[@class=\"associations\"]")
+end
+
+Then /^I should not find a list for associations$/ do
+  page.should_not have_xpath("//ul[@class=\"associations\"]")
+end

@@ -8,10 +8,6 @@ describe ChallengeAssignment do
       @collection = @assignment.collection
     end
 
-    it "should save" do
-      @assignment.save.should be_true
-    end
-    
     it "should initially be unposted and unfulfilled and undefaulted" do
       @assignment.posted?.should be_false
       @assignment.fulfilled?.should be_false

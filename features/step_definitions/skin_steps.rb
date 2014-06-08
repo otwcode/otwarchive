@@ -9,7 +9,7 @@ Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_url
   fill_in("Title", :with => skin_name)
   fill_in("Description", :with => "Random description")
-  fill_in("CSS", :with => DEFAULT_CSS)
+  fill_in("CSS", :with => "#title { text-decoration: blink;}")
 end
 
 Given /^I set up the skin "([^"]*)" with css$/ do |skin_name, css|
@@ -107,7 +107,7 @@ end
 
 When /^I create a skin to change the header color$/ do
   visit new_skin_url
-  step %{I follow "Use Wizard Instead?"}
+  step %{I follow "Use Wizard"}
     step %{I fill in "Title" with "Shiny"}
     step %{I fill in "Header color" with "blue"}
     step %{I submit}
@@ -117,7 +117,7 @@ end
 
 When /^I create a skin to change the accent color$/ do
   visit new_skin_url
-  step %{I follow "Use Wizard Instead?"}
+  step %{I follow "Use Wizard"}
     step %{I fill in "Title" with "Shiny"}
     step %{I fill in "Accent color" with "blue"}
     step %{I submit}
