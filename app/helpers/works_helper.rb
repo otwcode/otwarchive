@@ -4,7 +4,7 @@ module WorksHelper
   def work_meta_list(work, chapter=nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts("Published:"), date_in_user_time_zone(work.first_chapter.created_at).to_date],
+    list = [[ts("Published:"), date_in_user_time_zone(published_date).to_date],
             [ts("Words:"), work.word_count],
             [ts("Chapters:"), work.chapter_total_display]]
 
