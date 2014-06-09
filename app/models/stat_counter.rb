@@ -44,7 +44,6 @@ class StatCounter < ActiveRecord::Base
   end
   
   # Update stat counters and search indexes for works with new kudos, comments, or bookmarks.
-  # TODO: build out redis tracking to actually store kudos and reduce the load on mysql
   def self.stats_to_database
     work_ids = REDIS_GENERAL.smembers('works_to_update_stats').map{ |id| id.to_i }
 

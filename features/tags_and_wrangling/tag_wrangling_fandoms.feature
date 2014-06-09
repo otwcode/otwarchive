@@ -203,7 +203,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Fandoms" within "h2"
   When I follow "Uncategorized Fandoms"
   Then I should see "B C N W Y" within ".alphabet"
-    And I should see "A weird thing" within "#letter-W .tags .odd"
-    And I should see "Be a second B fandom" within "#letter-B .tags .odd"
-    And I should see "Be another thing" within "#letter-B .tags .even"
+    And I should see "A weird thing" within "#letter-W .tags"
+    And I should see "Be a second B fandom" within "#letter-B .tags"
+    And I should see "Be another thing" within "#letter-B .tags"
 

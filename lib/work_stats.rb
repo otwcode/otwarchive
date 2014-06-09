@@ -48,7 +48,9 @@ module WorkStats
 
   def increment_hit_count(visitor)
     # skip if this is the same visitor as before or if the current user is the author of this work
-    unless self.last_visitor == visitor || (User.current_user.is_a?(User) && User.current_user.is_author_of?(self))
+    # Or the request comes from a unicorn which sets the REQUEST_FROM_BOT enviroment variable
+    # We will set this in the unicorn which servers bots, which is chosen by nginx.
+    unless ENV['REQUEST_FROM_BOT'] || self.last_visitor == visitor || (User.current_user.is_a?(User) && User.current_user.is_author_of?(self))
       set_last_visitor(visitor)
       add_to_hit_count(1)
       REDIS_GENERAL.sadd(WORKS_TO_UPDATE_KEY, get_work_id)
