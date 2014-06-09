@@ -21,39 +21,48 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
     step(%{I press "Update"})
 end
 
-When /^I import the work "([^\"]*)"$/ do |url|
+When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url,external_author_name,external_author_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
-    step(%{I fill in "urls" with "#{url}"})
-    step(%{I check "Post without previewing"})
-    step(%{I press "Import"})
+  step(%{I fill in "urls" with "#{url}"})
+  if external_author_name.present?
+    step(%{I fill in "external_author_name" with "#{external_author_name}"})
+    step(%{I fill in "external_author_email" with "#{external_author_email}"})
+  end
+  step(%{I check "Post without previewing"})
+  step(%{I press "Import"})
 end
+
+When /^I import the works "([^\"]*)"$/ do |urls|
+  urls = urls.split(/, ?/).join("\n")
+  step(%{I go to the import page})
+  step(%{I check "Import for others ONLY with permission"})
+  step(%{I fill in "urls" with "#{urls}"})
+  step(%{I check "Post without previewing"})
+  step(%{I press "Import"})
+end  
 
 ### THEN
 
 Then /^I should not see multi-story import messages$/ do
   step %{I should not see "Importing completed successfully for the following works! (But please check the results over carefully!)"}
-    step %{I should not see "Imported Works"}
-    step %{I should not see "We were able to successfully upload the following works."}
+  step %{I should not see "Imported Works"}
+  step %{I should not see "We were able to successfully upload the following works."}
 end
 
 Then /^I should see multi-story import messages$/ do
   step %{I should see "Importing completed successfully for the following works! (But please check the results over carefully!)"}
-   step %{I should see "Imported Works"}
-    step %{I should see "We were able to successfully upload the following works."}
+  step %{I should see "Imported Works"}
+  step %{I should see "We were able to successfully upload the following works."}
 end
 
 Then /^I should see import confirmation$/ do
-  step %{I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."}
+  step %{I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."}
 end
 
 Then /^the email should contain invitation warnings from "([^\"]*)" for work "([^\"]*)" in fandom "([^\"]*)"$/ do |name, work, fandom|
-  step %{the email should contain "has recently been imported by"}
+  step %{the email should contain "has recently been imported"}
   step %{the email should contain "Open Doors"}
-  step %{the email should contain "we believe that the following fanworks belong to you"}
-  step %{the email should contain "the archivist #{name} has decided to move"}
-  step %{the email should contain "your works will only be readable by logged-in users"}
-  step %{the email should contain "Claim or remove your works"}
   step %{the email should contain "#{work}"}
   step %{the email should contain "#{fandom}"}
 end

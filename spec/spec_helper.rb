@@ -18,6 +18,8 @@ RSpec.configure do |config|
   # config.mock_with :rr
   config.mock_with :rspec
 
+  config.include Capybara::DSL
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -25,4 +27,15 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+end
+
+def get_message_part (mail, content_type)
+  mail.body.parts.find { |p| p.content_type.match content_type }.body.raw_source
+end
+
+shared_examples_for "multipart email" do
+  it "generates a multipart message (plain text and html)" do
+    email.body.parts.length.should eq(2)
+    email.body.parts.collect(&:content_type).should == ["text/plain; charset=UTF-8", "text/html; charset=UTF-8"]
+  end
 end

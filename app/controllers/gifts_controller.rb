@@ -7,7 +7,7 @@ class GiftsController < ApplicationController
     @recipient_name = params[:recipient]
     @page_subtitle = ts("for %{name}", :name => (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
-      setflash; flash[:error] = ts("Whose gifts did you want to see?")
+      flash[:error] = ts("Whose gifts did you want to see?")
       redirect_to(@collection || root_path) and return
     end
     if @user
@@ -32,7 +32,8 @@ class GiftsController < ApplicationController
         end
       end
     end
-    @works = (@works & @collection.approved_works) if @collection && (@user || @recipient_name)
+    @works = @works.in_collection(@collection) if @collection
+    @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
   
 end

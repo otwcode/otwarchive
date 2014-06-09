@@ -14,19 +14,16 @@
 
   <%= render 'hidden_fields', :form => f %>
 
-  <p class="submit actions">
+  <ul class="actions">
     <% if @chapter.posted? %>
-      <%= submit_tag ts("Update"), :name => 'update_button' %>
+      <li><%= submit_tag ts('Update'), :name => 'update_button' %></li>
     <% else %>
-      <%= submit_tag ts("Post"), :name => 'post_button', :disable_with =>  ts("Please wait...") %>
+      <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with =>  ts("Please wait...") %></li>
+      <li><%= submit_tag ts("Save Without Posting"), :name => 'save_button' %></li>
+      <li><%= link_to ts('Delete Chapter Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
     <% end %>
-    <%= submit_tag ts("Edit"), :name => 'edit_button' %>
-    <% if @chapter.posted? %>
-      <%= submit_tag ts("Cancel"), :name => 'cancel_button' %>
-    <% else %>
-      <%= submit_tag ts("Keep Draft"), :name => 'save_button' %>
-      <%= link_to ts('Discard Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %>
-    <% end %>
-  </p>
+    <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
+    <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li> 
+  </ul>
 
 <% end %>

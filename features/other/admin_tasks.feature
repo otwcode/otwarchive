@@ -194,13 +194,14 @@ Feature: Admin tasks
     And the email should contain "enigel"
   When the system processes jobs
   # confirmation email to admin, and to one user
-  Then 1 email should be delivered to e@e.org
-    # Hack for HTML emails. 'Enigel' is a link the new mailers, tests not catching that
+      Then 1 email should be delivered to e@e.org
+    # Hack for HTML emails. 'Enigel' is a link in the new mailers, tests not catching that
     And the email should contain "Dear"
     And the email should contain "enigel"
-    And "Issue 2035" is fixed
-    # And the email should contain "Hey, we did stuff"
+    And the email should have "\[AO3\] Admin Message - Hey, we did stuff" in the subject
     And the email should contain "And it was awesome"
+  Then 1 email should be delivered to webmaster@example.org
+    And the email should have "\[AO3\] Admin Archive Notification Sent - Hey, we did stuff" in the subject
 
   Scenario: Mark a comment as spam
 
@@ -284,3 +285,14 @@ Feature: Admin tasks
   Given I have posted known issues
   When I edit known issues
   Then I should see "KnownIssue was successfully updated"
+
+  Scenario: Admin can set invite from queue number to a number greater than or equal to 1
+
+    Given I am logged in as an admin
+    And I go to the admin-settings page
+    And I fill in "admin_setting_invite_from_queue_number" with "0"
+    And I press "Update"
+    Then I should see "Invite from queue number must be greater than 0. To disable invites, uncheck the appropriate setting."
+    When I fill in "admin_setting_invite_from_queue_number" with "1"
+    And I press "Update"
+    Then I should not see "Invite from queue number must be greater than 0."
