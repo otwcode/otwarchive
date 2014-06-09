@@ -212,7 +212,7 @@ function setupToggled(){
     open_toggles.each(function(){
       $j(this).click(function(e){
         if ($j(this).attr('href') == '#') {e.preventDefault();}
-        node.slideDown();
+        node.show();
         open_toggles.each(function(){$j(this).hide();});
         close_toggles.each(function(){$j(this).show();});
       });
@@ -221,7 +221,7 @@ function setupToggled(){
     close_toggles.each(function(){
       $j(this).click(function(e){
         if ($j(this).attr('href') == '#') {e.preventDefault();}
-        node.slideUp();
+        node.hide();
         close_toggles.each(function(){$j(this).hide();});
         open_toggles.each(function(){$j(this).show();});
       });
