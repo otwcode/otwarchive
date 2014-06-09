@@ -18,12 +18,12 @@
 <!-- /descriptions-->
 
 <!--main content-->
-<h3 class="landmark heading">Tag Set Settings</h3>
+<h3 class="landmark heading"><%= ts("Tag Set Settings") %></h3>
 <%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put), :class => "verbose tagset"}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
 
   <fieldset>
-    <legend>Management</legend>
+    <legend><%= ts("Management") %></legend>
     <%= render "tag_set_form_management", :form => tag_set_form %>
   </fieldset>
 
