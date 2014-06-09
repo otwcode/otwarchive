@@ -207,7 +207,7 @@ function setupToggled(){
       node.hide();
       close_toggles.each(function(){$j(this).hide();});
       open_toggles.each(function(){$j(this).show();});
-    };
+    }
 
     open_toggles.each(function(){
       $j(this).click(function(e){
