@@ -223,8 +223,19 @@ class BookmarksController < ApplicationController
   def load_owner
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
+      #fix for situation where newrelic catches unneded error, ie invalid userid / pseud id
+      #steph 2-17-2014
+      unless @user
+        flash[:error] = ts("The bookmarks for the user specified can not be found.")
+        redirect_to root_path
+      end
+
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @pseud
+          flash[:error] = ts("The bookmarks for the pseud specified can not be found.")
+          redirect_to root_path
+        end
       end
     end
     if params[:tag_id]

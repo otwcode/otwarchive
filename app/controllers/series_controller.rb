@@ -6,6 +6,10 @@ class SeriesController < ApplicationController
   
   def load_series
     @series = Series.find(params[:id])
+    unless @series
+      flash[:error] = ts("The series id specified is invalid or does not exist.")
+      redirect_to '/' and return
+    end
     @check_ownership_of = @series
     @check_visibility_of = @series  
   end
