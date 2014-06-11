@@ -11,8 +11,12 @@ describe UrlFormatter do
 
   describe '#minimal' do
     it "should remove anchors and query parameters from url" do
-      url = "http://ao3.org#monkeys?evil=false"
+      url = "http://ao3.org?evil=false#monkeys"
       UrlFormatter.new(url).minimal.should == "http://ao3.org"
+    end
+    it "should remove all parameters except \"sid\" for eFiction sites" do
+      url = "http://eFiction.com/viewstory.php?param=foo&sid=123#comments"
+      UrlFormatter.new(url).minimal.should == "http://eFiction.com/viewstory.php?sid=123"
     end
   end
   
@@ -21,11 +25,19 @@ describe UrlFormatter do
       url = "http://www.ao3.org"
       UrlFormatter.new(url).no_www.should == "http://ao3.org"
     end
+    it "should remove www, query parameters and anchors from the url" do
+      url = "http://www.ao3.org?evil=false#monkeys"
+      UrlFormatter.new(url).no_www.should == "http://ao3.org"
+    end
   end
   
   describe '#with_www' do
     it "should add www to the url" do
       url = "http://ao3.org"
+      UrlFormatter.new(url).with_www.should == "http://www.ao3.org"
+    end
+    it "should add www to the url and remove query parameters and anchors" do
+      url = "http://ao3.org?evil=false#monkeys"
       UrlFormatter.new(url).with_www.should == "http://www.ao3.org"
     end
   end

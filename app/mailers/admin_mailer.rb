@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
@@ -38,7 +38,7 @@ class AdminMailer < ActionMailer::Base
     end
     mail(
       :to => ArchiveConfig.WEBMASTER_ADDRESS,
-      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent"
+      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
     )
   end
   

@@ -20,7 +20,7 @@
 <div role="article" class="group">
   <div class="header">
     <h3 class="heading">
-      <%= @admin_post.title %>
+      <%= @admin_post.title.html_safe %>
     </h3>
       <h4 class="heading">
         Published: <%= @admin_post.created_at %>  
@@ -38,7 +38,7 @@
             <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>
           </dt>
           <dd>
-            <%= link_to admin_post.title, admin_post %>
+            <%= link_to admin_post.title.html_safe, admin_post %>
           </dd>
         <% end %>
       </dl>
@@ -50,7 +50,7 @@
   <% if @admin_post.tags.length > 0 %>
   <ul class="tags">
     <% for tag in @admin_post.tags %>
-      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
     <% end %>
   </ul>
   <% end %>

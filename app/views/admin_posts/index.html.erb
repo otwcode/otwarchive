@@ -21,7 +21,7 @@
   <div class="module group" role="article">
     <div class="header">
       <h3 class="heading">
-        <%= link_to admin_post.title, admin_post %>
+        <%= link_to admin_post.title.html_safe, admin_post %>
       </h3>
       <h4 class="heading">
         <%= ts('Published:') %> <span class="datetime"><%= admin_post.created_at %></span> 
@@ -36,7 +36,7 @@
     <% if admin_post.tags.length > 0 %>
       <ul class="tags">
         <% for tag in admin_post.tags %>
-          <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+          <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
         <% end %>
       </ul>
     <% end %>

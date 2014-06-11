@@ -52,11 +52,8 @@ VCR.cucumber_tags do |t|
   t.tags '@import_lj_multi_chapter'
   t.tags '@import_lj_underscores'
 
-  t.tags '@import_yt'
-  t.tags '@import_yt_no_notes'
-  t.tags '@import_yt_ny'
-
   t.tags '@work_external_parent'
   t.tags '@work_external_language'
+
 end
 

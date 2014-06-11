@@ -404,7 +404,7 @@ describe Tag do
           @sub_work = FactoryGirl.create(:work, :fandom_string => @sub_tag.name)
         end
         
-        it "should find all works that would need to be reindexed" do      
+        xit "should find all works that would need to be reindexed" do      
           # get all the work ids that it would queue
           @syn_tag.all_filtered_work_ids.should eq([@syn_work.id])
           @sub_tag.all_filtered_work_ids.should eq([@sub_work.id])

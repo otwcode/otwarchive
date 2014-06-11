@@ -23,7 +23,7 @@
   </div>
   
   <% inspired_by = get_inspired_by(@work) %>
-  <% if @chapter == @work.last_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty?) %>
+  <% if @chapter == @work.last_posted_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty?) %>
   <!--afterword-->
   <div class="afterword preface group" role="complementary">  
     <% if !@work.endnotes.blank? %>

@@ -1,5 +1,9 @@
 ### GIVEN
 
+Given /^I have no collections$/ do
+  Collection.delete_all
+end
+
 Given /^mod1 lives in Alaska$/ do
   step %{I am logged in as "mod1" with password "something"}
   
@@ -58,6 +62,24 @@ Given /^I have a closed collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |ti
   step "I am logged out"
 end
 
+Given /^I open the collection with the title "([^\"]*)"$/ do |title|
+  step %{I am logged in as "moderator"}
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Collection Settings"}
+  step %{I uncheck "This collection is closed"}
+  step %{I submit}
+  step %{I am logged out}
+end
+
+Given /^I close the collection with the title "([^\"]*)"$/ do |title|
+  step %{I am logged in as "moderator"}
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Collection Settings"}
+  step %{I check "This collection is closed"}
+  step %{I submit}
+  step %{I am logged out}
+end
+
 Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
   # create the user 
   step %{I am logged in as "#{name}"}
@@ -103,18 +125,10 @@ end
 
 ### THEN
 
-Then /^Battle 12 collection exists$/ do
+Then /^"([^"]*)" collection exists$/ do |title|
   step "I go to the collections page"
   step %{I should see "Collections in the "}
-    step %{I should see "Battle 12"}
-    step %{I should see "(Open, Unmoderated, Unrevealed, Anonymous, Prompt Meme Challenge)"}
-end
-
-Then /^My Gift Exchange collection exists$/ do
-  step "I go to the collections page"
-  step %{I should see "Collections in the "}
-    step %{I should see "My Gift Exchange"}
-    step %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
+  step %{I should see "#{title}"}
 end
 
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|

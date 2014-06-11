@@ -9,6 +9,7 @@ class MetaTagging < ActiveRecord::Base
   
   before_create :add_filters, :inherit_meta_tags
   after_create :expire_caching
+  after_destroy :expire_caching
   
   validate :meta_tag_validation
   def meta_tag_validation

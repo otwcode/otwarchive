@@ -30,7 +30,7 @@
 
     <% %w(cast fandom character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
-        <fieldset class="<%= tag_type %> listbox group <%= cycle :odd, :even, :name => "top_level" %>">
+        <fieldset class="<%= tag_type %> listbox group">
           <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type.classify.pluralize} (%{count} left to review)", :count => @tag_set.send("#{tag_type}_nominations").unreviewed.count) %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>

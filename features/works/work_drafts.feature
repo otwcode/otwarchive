@@ -19,7 +19,7 @@ Feature: Work Drafts
     And I fill in "Work Title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."  
     And I press "Preview"
-  Then I should see "Draft was successfully created."
+  Then I should see "Draft was successfully created. It will be automatically deleted on"
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
@@ -42,7 +42,7 @@ Feature: Work Drafts
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"
     And I press "Preview"
-  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted (unposted work drafts are automatically deleted one month after creation; this chapter's work is scheduled for deletion at"
+  Then I should see "This is a draft chapter in an unposted work. The work will be automatically deleted on"
 
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
@@ -86,8 +86,10 @@ Feature: Work Drafts
         And I should see "Post Draft" within "#main .own.work.blurb .actions"
         And I should see "Delete Draft" within "#main .own.work.blurb .actions"
       When I follow "Delete Draft"
-      Then I should see "Drafts (0)"
-        And I should see "Your work draft to delete was deleted"
+      Then I should not see "All bookmarks, comments, and kudos will be lost."
+        And I should not see "Orphan Work Instead"
+      When I press "Yes, Delete Draft"
+      Then I should see "Your work draft to delete was deleted"
         
     Scenario: Saving changes to an existing draft without posting and then double check that it is saved and I didn't get the success message erroneously
       Given I am logged in as "drafty" with password "breezeinhere"
@@ -109,3 +111,10 @@ Feature: Work Drafts
       Then I should see "Windbag"
       When I follow "Windbag"
       Then I should see "My draft has changed!"
+
+    Scenario: Editing a draft and previewing it should warn of impending deletion
+      Given I am logged in as "ringadingding"
+        And the draft "Walking Into Mordor"
+      When I edit the draft "Walking Into Mordor"
+        And I press "Preview"
+      Then I should see "Draft was successfully created. It will be automatically deleted on"

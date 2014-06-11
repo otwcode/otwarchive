@@ -14,7 +14,7 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[REJECTED], REJECTED] ]
 
   belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
+  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
 
@@ -84,7 +84,7 @@ class CollectionItem < ActiveRecord::Base
   end
   
   after_save :update_work
-  # after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
+  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
   #  this is a has-many-through relationship!!!
   # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
   # itself -- see collectible.rb
@@ -166,19 +166,12 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
-  after_save :expire_caching
-  before_destroy :expire_caching
+  after_save :expire_caches
+  after_destroy :expire_caches
   
-  def expire_caching
-    if self.item.is_a?(Work)
-      self.collection.update_works_index_timestamp!
-      self.item.pseuds.each do |pseud|
-        pseud.update_works_index_timestamp!
-        pseud.user.update_works_index_timestamp!
-      end
-      self.item.filters.each do |tag|
-        tag.update_works_index_timestamp!
-      end
+  def expire_caches
+    if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
     end
   end
 
