@@ -34,14 +34,12 @@
           <% # Warn about prompt loss if matching has not run; OTHERWISE warn that matching will need to be rerun %>
           <% if collection.potential_matches.count == 0 %>
             <%= link_to ts("Delete Sign-up"), 
-              collection_signup_path(collection, challenge_signup), 
-              :confirm => ts("Are you sure? All prompts in this sign-up will be lost."), 
-              :method => :delete %>
+              confirm_delete_collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? All prompts in this sign-up will be lost.") %>
           <% else %>
             <%= link_to ts("Delete Sign-up"), 
-              collection_signup_path(collection, challenge_signup), 
-              :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
-              :method => :delete %>
+              confirm_delete_collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards.") %>
           <% end %>
         </li>
       <% end %>

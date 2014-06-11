@@ -3,8 +3,11 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  breakpoint
-  0
+  binding.pry
+end
+
+Then /^tell me I got (.*)$/ do |spot|
+  puts "got #{spot}"
 end
 
 Then /^show me the response$/ do
@@ -223,10 +226,6 @@ Then /^I should see the page title "(.*)"$/ do |text|
   end
 end
 
-Given /^I have no prompts$/ do
-  Prompt.delete_all
-end
-
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should
@@ -241,3 +240,8 @@ Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{text}/m
 end
+
+When /^I want to search for exactly one term$/ do
+  Capybara.exact = true
+end
+

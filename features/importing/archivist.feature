@@ -25,12 +25,12 @@ Feature: Archivist bulk imports
   
   Given I have an archivist "alice_ttlg"
     When I am logged in as "alice_ttlg"
-      And I import the work "http://yuletidetreasure.org/archive/84/thatshall.html"
+      And I import the work "http://rebecca2525.livejournal.com/3562.html"
     Then I should see "We have notified the author(s) you imported works for"
-      And I should see "That Shall Achieve The Sword"
+      And I should see "Importing Test"
     When the system processes jobs
-    Then 1 email should be delivered to "shalott@intimations.org"
-      And the email should contain invitation warnings from "alice ttlg" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
+    Then 1 email should be delivered to "rebecca2525@livejournal.com"
+      And the email should contain invitation warnings from "alice ttlg" for work "Importing Test" in fandom "Lewis"
       
   Scenario: Import multiple works as an archivist
   
@@ -99,3 +99,17 @@ Feature: Archivist bulk imports
 
   Scenario: Importing straight into a collection
   # TODO
+  
+  Scenario: Should not be able to import for others unless the box is checked
+  
+    Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I fill in "URLs*" with "http://cesy.dreamwidth.org/154770.html"
+      And I fill in "Author Name*" with "cesy"
+      And I fill in "Author Email Address*" with "cesy@dreamwidth.org"
+    When I press "Import"
+    Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
+    When I check the 1st checkbox with id matching "importing_for_others"
+    And I press "Import"
+    Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."

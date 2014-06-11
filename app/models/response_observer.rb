@@ -12,7 +12,7 @@ class ResponseObserver < ActiveRecord::Observer
   def update_work_stats(response)
     work = get_work(response)
     return unless work.present?
-    $redis.sadd('works_to_update_stats', work.id)
+    REDIS_GENERAL.sadd('works_to_update_stats', work.id)
   end
   
   def get_work(response)
