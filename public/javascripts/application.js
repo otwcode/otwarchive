@@ -190,19 +190,24 @@ jQuery(function($){
 // Notes:
 // - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
 // - You can have multiple open and close buttons for the same div since those are labeled with classes
-// - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
-// - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
+// - You don't have to use div and a, those are just examples. Anything you put the toggled and _open/_close classes on will work.
+// - If you want the toggled item not to be visible to users without JavaScript by default, add the class "hidden" to the toggled item as well.
 //   (and you can then add an alternative link for them using <noscript>)
-// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
 
-    if (!node.hasClass('open')) {node.hide();}
-    close_toggles.each(function(){$j(this).hide();});
-    open_toggles.each(function(){$j(this).show();});
+    if (node.hasClass('open')) {
+      close_toggles.each(function(){$j(this).show();});
+      open_toggles.each(function(){$j(this).hide();});    
+    } else {
+      node.hide();
+      close_toggles.each(function(){$j(this).hide();});
+      open_toggles.each(function(){$j(this).show();});
+    }
 
     open_toggles.each(function(){
       $j(this).click(function(e){
@@ -432,8 +437,13 @@ $j(document).ready(function() {
     });
   });
 
-  // Set things up to scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
-  $j('#comments_placeholder .pagination a[data-remote]').livequery('click.rails', function(e){
+  // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
+  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
     $j.scrollTo('#comments_placeholder');
+  });
+
+  // Scroll to the top of the feedback section when loading comments via AJAX
+  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+    $j.scrollTo('#feedback');
   });
 });

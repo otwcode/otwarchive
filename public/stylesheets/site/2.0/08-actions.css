@@ -139,12 +139,10 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + h6 + .actions {
+dl.stats + .landmark + .actions {
+  clear: none;
   float: left;
-}
-
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {

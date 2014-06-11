@@ -11,6 +11,7 @@ Feature: Create Gifts
       | gifter2    | something   | gifter2@foo.com  |
       | giftee1    | something   | giftee1@foo.com  |
       | giftee2    | something   | giftee2@foo.com  |
+      | associate  | something   | associate@foo.com |
       And I am logged in as "gifter" with password "something"
       And I set up the draft "GiftStory1"
 
@@ -188,3 +189,10 @@ Feature: Create Gifts
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"
       And the email should link to gifter2's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter2/pseuds/gifter2&quot;"
+
+  Scenario: A gift work should have an associations list
+
+    Given I give the work to "associate"
+    When I press "Post Without Preview"
+    Then I should find a list for associations
+      And I should see "For associate"

@@ -14,7 +14,7 @@ I'd like to comment on a tag'
     Then I should see "0 comments"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis" via web
     Then I should see "Shouldn't this be a metatag with Stargate?"
-      And I should see Posted nowish
+      And the comment's posted date should be nowish
 
   Scenario: Edit a comment on a tag
 
@@ -77,9 +77,9 @@ I'd like to comment on a tag'
     When I am logged in as "dizmo"
     When I view tag wrangling discussions
     Then I should not see "Stargate Atlantis"
-    
+
     Scenario: admin can also comment on tags, issue 1428
-    
+
     Given a fandom exists with name: "Stargate Atlantis", canonical: true
     When I am logged in as an admin
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
@@ -98,7 +98,7 @@ I'd like to comment on a tag'
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Eroica"
       And the tag wrangler "Cesy" with password "wrangulator" is wrangler of "Doctor Who"
       And the tag wrangler "dizmo" with password "wrangulator" is wrangler of "Doctor Who"
-      
+
     # receive copies of own comments
     When I am logged in as "Enigel" with password "wrangulator"
       And I go to Enigel's user page
@@ -106,8 +106,8 @@ I'd like to comment on a tag'
       And I uncheck "Turn off copies of your own comments"
       And I press "Update"
       And I log out
-      
-    # fellow wrangler leaves a comment on a wrangler's fandom  
+
+    # fellow wrangler leaves a comment on a wrangler's fandom
     When I am logged in as "Cesy" with password "wrangulator"
       And I go to Cesy's user page
       And I follow "Preferences"
@@ -124,7 +124,7 @@ I'd like to comment on a tag'
       And the email should contain "Cesy"
       And the email should contain "left the following comment on"
       And the email should contain "the tag"
-      
+
     # check that the links in the email go where they should; this is wonky and I don't know why
     # I'm having the tests only check the html based email for now
     When I follow "Go to the thread starting from this comment" in the email

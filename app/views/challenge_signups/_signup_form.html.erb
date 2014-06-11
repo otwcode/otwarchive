@@ -37,9 +37,11 @@
     <h3 class="heading">
       <%= prompt_type.capitalize %> (<%= @challenge.allowed_range_string(prompt_type) %>)      
     </h3>
-    <blockquote class="userstuff">
-      <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
-    </blockquote>
+    <% unless sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym).blank? %>
+      <blockquote class="userstuff">
+        <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
+      </blockquote>
+    <% end %>
     
   <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
     <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>

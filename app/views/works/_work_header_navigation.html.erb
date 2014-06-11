@@ -57,9 +57,17 @@
     <% end %>
   <% end %>
 
-  <li class="comments"><%= link_to ts("Comments"), (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
-
-<!-- allow user to disable style on work if it has been customized -->
+  <li class="comments" id="show_comments_link_top">
+    <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
+    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %> 
+    <% if commentable.count_visible_comments > 0 %>
+      <%= show_hide_comments_link(commentable) %>
+    <% else %>
+      <%= link_to ts("Comments"), "#comments" %>
+    <% end %>
+  </li>
+  
+  <% # allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
     <li class="style">
       <% if Preference.disable_work_skin?(params[:style]) %>

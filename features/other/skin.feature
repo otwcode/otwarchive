@@ -181,17 +181,21 @@ Feature: creating and editing skins
     And I should not see "#title"
     And I should not see "text-decoration: blink;"
 
+  Scenario: User should be able to toggle between the wizard and the form
+  When I am logged in
+    And I am on skin's new page
+  Then I should see "CSS" within "form#new_skin"
+  When I follow "Use Wizard"
+    Then I should see "Site Skin Wizard"
+    And I should not see "CSS" within "form"
+  When I follow "Write Custom CSS"
+    Then I should see "CSS"
+
   Scenario: Users should be able to create a skin using the wizard
   Given basic skins
     And I am logged in as "skinner"
   When I am on skin's new page
-  Then I should see "CSS" within "form#new_skin"
-  When I follow "Use Wizard Instead?"
-  Then I should see "Create New Site Skin"
-    And I should not see "CSS" within "form"
-  When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS"
-  When I follow "Use Wizard Instead?"
+  When I follow "Use Wizard"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
     And I fill in "skin_margin" with "text"
@@ -203,7 +207,7 @@ Feature: creating and editing skins
   Then I should see "Skin was successfully created"
     And I should see "Margin:5"
   When I follow "Edit"
-    And I follow "Use Wizard Instead?"
+    And I follow "Use Wizard"
     And I fill in "skin_margin" with "4.5"
     And I fill in "skin_font" with "Garamond"
     And I fill in "skin_background_color" with "#ccccff"
@@ -314,18 +318,18 @@ Feature: creating and editing skins
   Scenario: New skin form should have the correct skin type pre-selected
     Given I am logged in as "skinner"
     When I am on the skins page
-      And I follow "Create New Skin"
+      And I follow "Create Site Skin"
     Then "Site Skin" should be selected within "skin_type"
     When I am on the skins page
       And I follow "My Work Skins"
-      And I follow "Create New Skin"
+      And I follow "Create Work Skin"
     Then "Work Skin" should be selected within "skin_type"
 
   Scenario: Skin type should persist and remain selectable if you encounter errors during creation
     Given I am logged in as "skinner"
     When I am on the skins page
       And I follow "My Work Skins"
-      And I follow "Create New Skin"
+      And I follow "Create Work Skin"
       And I fill in "Title" with "invalid skin"
       And I fill in "CSS" with "this is invalid css"
       And I submit
