@@ -14,16 +14,6 @@ It has to be purple, see wiki, ADT meeting 25
 .shiny-happy-people table {display:table-cell; 
 background:purple; color:#555;}
 
-/* TEMP FIX Issue 2652 -- don't integrate this
-
-span.delete a {
-  margin: 0 0.2em;
-  border: 0;
-  padding: 0;
-  line-height: 0.5;
-    box-shadow: none;
-} */
-
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
