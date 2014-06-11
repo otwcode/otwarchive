@@ -36,7 +36,7 @@ Feature: Leave kudos
     When I log out
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
-      And I should see "myname2 as well as a guest left kudos on this work!"
+      And I should see "myname2 as well as 1 guest left kudos on this work!"
     When I press "Kudos ♥"
     Then I should see "You have already left kudos here. :)"
     When kudos are sent
@@ -47,7 +47,7 @@ Feature: Leave kudos
     When I am logged in as "myname3"
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
-    Then I should see "myname3 and myname2 as well as a guest left kudos on this work!"
+    Then I should see "myname3 and myname2 as well as 1 guest left kudos on this work!"
     When I am logged in as "myname1"
       And I view the work "Awesome Story"
       Then I should not see "Kudos ♥"
@@ -55,9 +55,7 @@ Feature: Leave kudos
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
       And I post the chaptered work "Epic Saga"
-      And I follow "Add Chapter"
-      And I fill in "content" with "third chapter is a draft"
-      And I press "Preview"
+      And a draft chapter is added to "Epic Saga"
     When I am logged in as "myname3"
       And I view the work "Epic Saga"
       And I press "Kudos ♥"
@@ -83,7 +81,7 @@ Feature: Leave kudos
     When "myname3" deletes their account
       And I view the work "Awesome Story"
       And "issue 2198" is fixed
-    # Then I should see "a guest left kudos on this work!"
+    # Then I should see "1 guest left kudos on this work!"
 
   Scenario: redirection when kudosing on a middle chapter, with default preferences
 
@@ -103,9 +101,9 @@ Feature: Leave kudos
       And I press "Kudos ♥"
     Then I should see "Chapter 2" within "div#chapters"
       And I should see "Chapter 3" within "div#chapters"
-    
+
   Scenario: batched kudos email
-  
+
     Given I am logged in as "myname1"
       And I post the work "Another Awesome Story"
       And all emails have been delivered

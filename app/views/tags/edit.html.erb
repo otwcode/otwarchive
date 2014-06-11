@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Edit") %> <%= link_to_tag(@tag) %> <%= ts('Tag') %></h2>
+<h2 class="heading"><%= ts("Edit %{tag_link} Tag", :tag_link => link_to_tag(@tag)).html_safe %></h2>
 <%= error_messages_for :tag %>
 <!--/descriptions-->
 
@@ -11,7 +11,8 @@
 <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
   <fieldset>
-    <legend><%= ts("Tag info") %>:</legend>
+    <legend><%= ts("Tag Info") %></legend>
+    <h3 class="landmark heading"><%= ts("Tag Info") %></h3>
     <dl>
       <dt><%= f.label :name, ts('Name') %></dt>
       <dd>
@@ -66,7 +67,9 @@
         <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
         <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
         <% if @tag.merger %>
-          <p class="navigation actions" role="navigation"><%= ts("Edit") %> <%= link_to_edit_tag(@tag.merger) %></p>
+          <p class="navigation actions" role="navigation">
+            <%= link_to ts("Edit %{tag_name}", :tag_name => @tag.merger.name), edit_tag_path(@tag.merger) %>
+          </p>
         <% elsif @tag.canonical? %>
           <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
         <% end %>
@@ -83,7 +86,8 @@
 
   <% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
     <fieldset>
-      <legend><%= ts("Parent tags") %>:</legend>
+      <legend><%= ts("Parent Tags") %></legend>
+      <h3 class="landmark heading"><%= ts("Parent Tags") %></h3>
       <dl>
         <% @tag.parent_types.each do |tag_type| %>
           <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
@@ -104,7 +108,7 @@
           <dt><%= tag_category_name(tag_type) %></dt>
           <dd title="<%= tag_category_name(tag_type) %>" class="tags listbox group">
             <% if @parents[tag_type].present? %>
-              <h4 class="heading"><%= ts("Check to remove: ") %></h4>
+              <h4 class="heading"><%= ts("Check to remove:") %></h4>
               <%= check_all_none %>
               <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
                     :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
@@ -112,8 +116,8 @@
             <% else %>
               <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
             <% end %>
-            <div title="add tags">
-                <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
+            <div title="<%= ts('add tags') %>">
+              <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
             </div>
           </dd>
         <% end %>
@@ -122,7 +126,8 @@
 
     <% if @tag.canonical? %>
       <fieldset>
-        <legend><%= ts("Child tags") %>:</legend>
+        <legend><%= ts("Child Tags") %></legend>
+        <h3 class="landmark heading"><%= ts("Child Tags") %></h3>
         <p class="navigation actions" role="navigation"><%= link_to ts('wrangle all child tags'), {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
         <dl>
           <% @tag.child_types.each do |tag_type| %>

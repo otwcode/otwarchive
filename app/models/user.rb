@@ -177,7 +177,7 @@ class User < ActiveRecord::Base
             :through => :followings,
             :source => :user
 
-  has_many :wrangling_assignments
+  has_many :wrangling_assignments, :dependent => :destroy
   has_many :fandoms, :through => :wrangling_assignments
   has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
 

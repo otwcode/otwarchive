@@ -22,7 +22,7 @@
         <% else %>
           <%= ts("Viewed %{count} times", :count => reading.view_count) %>
         <% end %>
-        <% if reading.toread? %><%= ts('(Marked for later.)') %><% end %>
+        <% if reading.toread? %><%= ts('(Marked for Later.)') %><% end %>
         <% if reading.toskip? %><%= ts('(Flagged to skip.)') %><% end %>
       </h4>
   

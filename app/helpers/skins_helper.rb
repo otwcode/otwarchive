@@ -48,7 +48,7 @@ module SkinsHelper
   def show_advanced_skin?(skin)
     !skin.new_record? && 
       (skin.role != Skin::DEFAULT_ROLE ||
-        skin.media != Skin::DEFAULT_MEDIA ||
+        (skin.media.present? && skin.media != Skin::DEFAULT_MEDIA) ||
         skin.ie_condition.present? ||
         skin.unusable? ||
         !skin.skin_parents.empty?)

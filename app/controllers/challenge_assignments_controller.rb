@@ -155,18 +155,30 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def send_out
-    ChallengeAssignment.send_out(@collection)
-    flash[:notice] = "Assignments are now being sent out."
-    redirect_to collection_assignments_path(@collection)
+    no_giver_count = @collection.assignments.with_request.with_no_offer.count
+    no_recip_count = @collection.assignments.with_offer.with_no_request.count
+    if (no_giver_count + no_recip_count) > 0
+      flash[:error] = ts("Some participants still aren't assigned. Please either delete them or match them to a placeholder before sending out assignments.")
+      redirect_to collection_potential_matches_path(@collection)
+    else
+      ChallengeAssignment.send_out(@collection)
+      flash[:notice] = "Assignments are now being sent out."
+      redirect_to collection_assignments_path(@collection)
+    end
   end
 
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
+    @assignments = ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values).reject {|a| a.errors.empty?}
     ChallengeAssignment.update_placeholder_assignments!(@collection)
-    flash[:notice] = "Assignments updated"
-    redirect_to collection_potential_matches_path(@collection)
+    if @assignments.empty?
+      flash[:notice] = "Assignments updated"
+      redirect_to collection_potential_matches_path(@collection)
+    else
+      flash[:error] = ts("These assignments could not be saved because the two participants do not match. Did you mean to write in a giver?")
+      render template: "potential_matches/index" 
+    end
   end
 
   def purge
