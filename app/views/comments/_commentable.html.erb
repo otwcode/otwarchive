@@ -58,7 +58,7 @@
     <% end %>
 
     <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
-        <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
+        <li id="show_comments_link"><%= show_hide_comments_link(commentable, :show_count => true) %></li>
     <% end %>
   </ul>
 
@@ -86,7 +86,7 @@
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
-  <div id="comments_placeholder">
+  <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
       <% @comments = commentable.comments.paginate(:page => params[:page]) %>
       <%= will_paginate @comments %>

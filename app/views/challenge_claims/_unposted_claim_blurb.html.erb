@@ -41,6 +41,14 @@
   
   <!--prompt tags -->
   <%= prompt_tags(prompt) %>
+
+  <!--prompt description -->
+  <% unless prompt.description.blank? %>
+    <h6 class="landmark heading"><%= ts("Summary") %></h6>
+    <blockquote class="userstuff summary" title="<%= ts("prompt") %>">
+      <%=raw sanitize_field(prompt, :description) %>
+    </blockquote>
+  <% end %>
   
   <!--actions-->
   <% if @collection.user_is_maintainer?(current_user) %>  
