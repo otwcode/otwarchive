@@ -20,7 +20,7 @@
     </ol>
 
     <% unless @fandom_listing[medium].size < 5 %>
-    <p class="navigation actions" role="navigation"><%= link_to ts("All %{media_type}...", :media_type => medium.name), medium_fandoms_path(medium) %></p>
+    <p class="actions" role="navigation"><%= link_to ts("All %{media_type}...", :media_type => medium.name), medium_fandoms_path(medium) %></p>
     <% end %>
   </li>
 <% end %>

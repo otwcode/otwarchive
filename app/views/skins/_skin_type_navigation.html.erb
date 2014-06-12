@@ -1,7 +1,7 @@
 <!--subnav-->
 <h3 class="landmark heading"><%= ts('Skin Type Navigation') %></h3>
 
-  <ul class="navigation actions" role="navigation">
+  <ul class="actions" role="navigation">
   <% if logged_in? %>
     <li>
       <%= span_if_current ts('My Site Skins'), user_skins_path(current_user, :skin_type => 'Site'), current_page?(user_skins_path(current_user)) && (params[:skin_type].blank? || params[:skin_type] == 'Site')  %>
