@@ -54,7 +54,7 @@ class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
 
     def html_container(html)
       tag(:h4, "Pages Navigation", :class => "landmark heading") +
-        tag(:ol, html, container_attributes.merge(:class => "navigation pagination actions", :role => "navigation", :title => "pagination"))
+        tag(:ol, html, container_attributes.merge(:class => "pagination actions", :role => "navigation", :title => "pagination"))
     end
 
 end

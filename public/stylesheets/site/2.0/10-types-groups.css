@@ -208,4 +208,23 @@ dl.stats dd {
   padding-right: 0.5em;
 }
 
+.statistics .index li {
+ padding: 0.643em 0.375em;
+}
+
+.statistics .even {
+  background: #eee;
+}
+
+.statistics dt:after {
+  content: ":";
+}
+
+.concise li { 
+  width: 45%; 
+  float: left; 
+  clear: none; 
+  margin-right: 1.5em
+}
+
 /*END== */
