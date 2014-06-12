@@ -3,7 +3,10 @@
   <h2 class="heading"><%= ts("Batch Loading") %> <%= link_to_help "tagset-batch-load" %></h2>
 
 <!-- /descriptions-->
+
+<!--subnav-->
 <%= render "navigation" %>
+<!--/subnav-->
 
 <!--main content-->
 <%= form_for(@tag_set, :url => do_batch_load_tag_set_path(@tag_set), :html => {:method => :put, :class => "tagset"}) do |form| %>
