@@ -18,7 +18,7 @@
     <!--bookmark item module-->
     <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
 		
-    <!--navigation and actions-->
+    <!--actions-->
     <% if (bookmark_count > 1 && params[:tag_id]) || (bookmark_count > 1 && (@owner.blank? && @bookmarkable.blank?)) || (logged_in? && !is_author_of?(bookmark)) %>
       <ul class="actions" role="navigation">
         <% # If this bookmark does not belong to the current user, let them save a new copy or edit their existing copy %>
