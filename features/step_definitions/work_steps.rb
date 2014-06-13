@@ -266,6 +266,26 @@ When /^the locked draft "([^\"]*)"$/ do |title|
   click_button("Preview")
 end
 
+When /^I lock the work$/ do
+  check("work_restricted")
+end
+
+When /^I lock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I lock the work}
+  step %{I post the work}
+end
+
+When /^I unlock the work$/ do
+  uncheck("work_restricted")
+end
+
+When /^I unlock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I unlock the work}
+  step %{I post the work}
+end
+
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
@@ -334,6 +354,50 @@ When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
+
+When /^the statistics_tasks rake task is run$/ do
+  StatCounter.hits_to_database
+  StatCounter.stats_to_database
+end
+
+When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the co-author "#{coauthor}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the co-author "([^\"]*)"$/ do |coauthor|
+  step %{the user "#{coauthor}" exists and is activated}
+  check("Add co-authors?")
+  fill_in("pseud_byline", :with => "#{coauthor}")
+end
+
+When /^I give the work to "([^\"]*)"$/ do |recipient|
+  fill_in("work_recipients", :with => "#{recipient}")
+end
+
+When /^I add the beginning notes "([^\"]*)"$/ do |notes|
+  check("at the beginning")
+  fill_in("work_notes", :with => "#{notes}")
+end
+
+When /^I add the end notes "([^\"]*)"$/ do |notes|
+  check("at the end")
+  fill_in("work_endnotes", :with => "#{notes}")
+end
+
+When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the beginning notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the end notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -356,3 +420,10 @@ Then /^I should not see Completed today$/ do
   step "I should not see \"Completed:#{today}\""
 end
 
+Then /^I should find a list for associations$/ do
+  page.should have_xpath("//ul[@class=\"associations\"]")
+end
+
+Then /^I should not find a list for associations$/ do
+  page.should_not have_xpath("//ul[@class=\"associations\"]")
+end

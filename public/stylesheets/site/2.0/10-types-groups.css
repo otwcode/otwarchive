@@ -1,10 +1,10 @@
 /*==TYPES OF DATA, GROUPS OF DATA 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 */
 
 /*TYPE: TAGS */
 
-a.tag, .tags a {
+a.tag {
   color: #111;
   line-height: 1.5;
   text-decoration: none;
@@ -106,7 +106,7 @@ a.cloud8 {
   width: 100%;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/patterns/pattern-index.html*/
+/*http://otwcode.github.com/docs/front_end_coding/patterns/pattern-index*/
 
 dl.index {
   margin: 0.643em 0;
@@ -206,6 +206,25 @@ dl.stats {
 dl.stats dd {
   white-space: nowrap;
   padding-right: 0.5em;
+}
+
+.statistics .index li {
+ padding: 0.643em 0.375em;
+}
+
+.statistics li:nth-of-type(even) {
+  background: #eee;
+}
+
+.statistics dt:after {
+  content: ":";
+}
+
+.concise li { 
+  width: 45%; 
+  float: left; 
+  clear: none; 
+  margin-right: 1.5em
 }
 
 /*END== */

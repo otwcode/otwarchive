@@ -1,13 +1,13 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t('.supported_languages', :default => 'The archive supports these languages') %></h2>
+<h2 class="heading"><%= ts('The Archive supports these languages') %></h2>
 <!--/descriptions-->
 
-<!--subnav, actions-->
+<!--subnav-->
 <p class="navigation actions" role="navigation">
 <% if current_user.is_a?(User) && current_user.is_translation_admin? %>
-  <%= link_to t('.link_to_new', :default => 'Add a new one'), new_language_path %>
+  <%= link_to ts('Add a Language'), new_language_path %>
 <% else %>
-  <%= link_to t('.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
+  <%= link_to ts('Suggest a Language'), new_feedback_report_path %>
 <% end %>
 </p>
 <!--/subnav-->
@@ -31,9 +31,9 @@
 <!--subnav-->
 <p class="navigation actions" role="navigation">
 <% if current_user.is_a?(User) && current_user.is_translation_admin? %>
-  <%= link_to t('.link_to_new', :default => 'Add a new one'), new_language_path %>
+  <%= link_to ts('Add a Language'), new_language_path %>
 <% else %>
-  <%= link_to t('.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
+  <%= link_to ts('Suggest a Language'), new_feedback_report_path %>
 <% end %>
 </p>
 <!--/subnav-->

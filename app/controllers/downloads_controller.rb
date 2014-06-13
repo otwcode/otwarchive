@@ -21,7 +21,7 @@ class DownloadsController < ApplicationController
   def show
     @work = Work.find(params[:id])
     @check_visibility_of = @work
-    
+
     if @work.unrevealed?
       flash[:error] = ts("Sorry, you can't download an unrevealed work")
       redirect_back_or_default works_path and return
@@ -76,28 +76,16 @@ protected
      author = Shellwords.escape(@work.display_authors)
      cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
 
-    # if only one chapter can use same file as html and pdf versions
-    if @chapters.size == 1
-      create_work_html
-
-      # except mobi requires latin1 encoding
-      unless File.exists?("#{@work.download_dir}/mobi.html")
-        html = Iconv.conv("LATIN1//TRANSLIT//IGNORE", "UTF8",
-                 File.read("#{@work.download_basename}.html")).force_encoding("ISO-8859-1")
-        File.open("#{@work.download_dir}/mobi.html", 'w') {|f| f.write(html)}
-      end
-
-      # convert latin html to mobi
-      cmd = cmd_pre + "mobi.html" + cmd_post
-    else
-      # more than one chapter
-      # create a table of contents out of separate chapter files
-      mobi_files = create_mobi_html
-      cmd = cmd_pre + mobi_files + " --gentoc" + cmd_post
+    # more than one chapter
+    # create a table of contents out of separate chapter files
+    mobi_files = create_mobi_html
+    cmd = cmd_pre + mobi_files + cmd_post
+    if @chapters.length > 1
+      cmd << " --gentoc"
     end
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
-    
+
     # send as mobi, if file exists, or flash error and redirect
     unless check_for_file("mobi")
       flash[:error] = ts('We were not able to render this work. Please try another format')
@@ -146,7 +134,6 @@ protected
   end
 
   def create_mobi_html
-    return if File.exists?("#{@work.download_basename}.mobi")
     FileUtils.mkdir_p "#{@work.download_dir}/mobi"
 
     # the preface contains meta tag information, the title/author, work summary and work notes
@@ -195,7 +182,7 @@ protected
     @parts = []
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
-      
+
       # split chapters into multiple parts if they are too big
       @parts << split_xhtml(sanitize_field(@chapter, :content))
       @parts[-1].each_with_index do |part, partindex|
@@ -233,3 +220,4 @@ protected
   end
 
 end
+
