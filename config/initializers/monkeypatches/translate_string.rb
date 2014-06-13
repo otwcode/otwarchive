@@ -12,7 +12,7 @@ module I18n
         default_string = args.shift
         key = "#{self.class.name}."
         if options.has_key?(:key)
-           key =  options[:key]+"."
+           key = options[:key] + "."
         end
         key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
         #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
