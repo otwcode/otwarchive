@@ -4,6 +4,9 @@
 <%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
 <!--main content-->
 <% unless @inbox_comments.blank? %>
 
@@ -32,18 +35,18 @@
 
           <!-- START of single comment -->
           <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
-            <% if !feedback_comment.pseud.nil? %>
-              <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-                <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
+            <h4 class="heading byline">
+              <% if !feedback_comment.pseud.nil? %>
+                <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
+                  <%= ts('Anonymous Creator on') %> <%= commentable_description_link(feedback_comment) %>
+                <% else %>
+                  <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
+                <% end %>
               <% else %>
-                <h4 class="heading byline"><%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
-              <% end %>
-            <% else %>
-              <h4 class="heading byline">
                 <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
-                <span class="posted datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></span>
-              </h4>
-            <% end %>
+              <% end %>
+              <span class="posted datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></span>
+            </h4>
 
             <div class="icon">
               <% if !feedback_comment.pseud.nil? %>
@@ -108,7 +111,7 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
     <dl class="filters" role="menu">
