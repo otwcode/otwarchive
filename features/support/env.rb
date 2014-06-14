@@ -6,7 +6,7 @@
 
 # Code Coverage - Coveralls.io
 require 'coveralls'
-Coveralls.wear!('rails')
+Coveralls.wear_merged!('rails')
 
 require 'cucumber/rails'
 ENV["RAILS_ENV"] ||= "test"

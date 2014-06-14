@@ -28,6 +28,8 @@ before_script:
   - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
   - cp config/redis.travis.example config/redis.yml
   - curl -L https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/1d4b990f7922e388d6d7563b9e5cda7c97af18a7/gistfile1.sh | bash
+after_script:
+  - bundle exec rake :test_with_coveralls
 notifications:
   email:
     recipients:

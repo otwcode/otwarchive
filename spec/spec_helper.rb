@@ -1,4 +1,9 @@
 ENV["RAILS_ENV"] ||= 'test'
+
+# Coverals needs to work here too
+require 'coveralls'
+Coveralls.wear_merged!('rails')
+
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'rspec/rails'
@@ -7,13 +12,13 @@ require 'database_cleaner'
 require 'email_spec'
 
 
-# Coverals needs to work here too
-require 'coveralls'
-Coveralls.wear!('rails')
 
 # SimpleCov integration
 
 require 'simplecov'
+require 'coveralls'
+
+SimpleCov.formatter = Coveralls::SimpleCov::formatter
 SimpleCov.start 'rails' do
   add_filter '/features/'
   add_filter '/spec/'

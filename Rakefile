@@ -7,3 +7,11 @@ require 'resque/tasks'
 
 include Rake::DSL
 Otwarchive::Application.load_tasks
+
+# Coveralls and SimpleCov require additional config options here.
+# All test coverage is gathered and held until all suites are done
+# then the data is pushed to Coveralls.io.
+
+require 'coveralls/rake/task'
+Coveralls::RakeTask.new
+task :test_with_coveralls => [:spec, :features, 'coveralls:push']
