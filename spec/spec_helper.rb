@@ -18,7 +18,7 @@ require 'email_spec'
 require 'simplecov'
 require 'coveralls'
 
-SimpleCov.formatter = Coveralls::SimpleCov::formatter
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start 'rails' do
   add_filter '/features/'
   add_filter '/spec/'
