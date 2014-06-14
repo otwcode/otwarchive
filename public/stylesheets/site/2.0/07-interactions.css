@@ -520,6 +520,27 @@ div.dynamic {
   z-index: 500;
 }
 
+/*MODE: VERBOSE for forms with more than three fieldsets 
+TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
+in some areas, hence .verbose form */
+
+form.verbose legend, .verbose form legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
+/*MODE: SIMPLE for forms with three or fewer fieldsets (default) */
+
+form.simple span.actions {
+  float: none;
+}
+
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {

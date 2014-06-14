@@ -21,7 +21,7 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of History Items") %></h3>
 <% if logged_in? && @readings.present? %>
-  <ol class="reading index">
+  <ol class="reading work index">
     <% @readings.each do |reading| %>
       <%= render 'reading_blurb', :work => reading.work, :reading => reading %>
     <% end %>

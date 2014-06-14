@@ -121,7 +121,7 @@
             <% for related_work in @work.parent_work_relationships %>
               <% if related_work.parent %>
               <dd>
-                <ul class="navigation actions" role="navigation">
+                <ul class="actions" role="navigation">
                   <li><%= link_to related_work.parent.title, related_work.parent %></li>
                   <li><%= link_to ts('Remove'), related_work, :confirm => ts('Are you sure you want to delete the connection to this work?'), :method => :delete %></li>
                 </ul>
@@ -158,7 +158,7 @@
             <dt><%= ts('Current Series') %></dt>
             <% for serial in @serial_works %>
               <dd>
-                <ul class="navigation actions" role="navigation">
+                <ul class="actions" role="navigation">
                   <li><%= link_to serial.series.title, serial.series %></li>
                   <li><%= link_to ts('Remove'), serial_work_path(serial), :method => :delete %></li>
                   <li><%= link_to ts('Delete'), serial.series, :confirm => ts('Delete series from all works?'), :method => :delete %></li>
@@ -215,7 +215,7 @@
       </dd>
       <dt class="skin"><%= f.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
-        <p class="navigation actions" role="navigation"><%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %></p>
+        <p class="actions" role="navigation"><%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %></p>
       </dd>
     </dl>
 

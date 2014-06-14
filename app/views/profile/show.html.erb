@@ -1,6 +1,7 @@
 <div class="user home profile">
   <%= render 'users/header' %>
 
+  <!--main content-->
   <% unless @user.profile.title.blank? %>
     <h3 class="heading"><%=h @user.profile.title %></h3>
   <% end %>
@@ -32,7 +33,9 @@
       <blockquote class="userstuff"><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
     </div>
   <% end %>
+  <!--/content-->
   
+  <!--subnav-->
   <% if logged_in? && current_user == @user %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
   <ul class="navigation actions" role="navigation">
@@ -43,5 +46,6 @@
     <li><%= link_to ts("Delete My Account"), @user, :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
   </ul>
   <% end %>
+  <!--/subnav-->
 
 </div>
