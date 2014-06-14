@@ -39,7 +39,7 @@ Feature: Edit tags on a work
   Then I should see "Drafts (1)"
   When I follow "Drafts (1)"
   Then I should see "Freeze Tag"
-    And I should see "Edit Tags" within "#main .own.work.blurb .navigation"
+    And I should see "Edit Tags" within "#main .own.work.blurb .actions"
   When I follow "Edit Tags"
     Then I should see "Edit Work Tags"
   When I fill in "Fandoms" with "Games, Anthropomorphic"

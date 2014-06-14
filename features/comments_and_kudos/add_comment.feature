@@ -58,7 +58,7 @@ Scenario: Comment threading, comment editing
     And I follow "Reply" within ".thread .thread .odd"
     And I fill in "Comment" with "Mistaken comment" within ".thread .thread .odd"
     And I press "Comment" within ".thread .thread .odd"
-    And I follow "Edit" within "ol.thread li ol.thread li ol.thread li ol.thread ul.navigation"
+    And I follow "Edit" within "ol.thread li ol.thread li ol.thread li ol.thread ul.actions"
     And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
   Then I should see "Comment was successfully updated"
