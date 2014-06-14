@@ -38,7 +38,7 @@
             <h4 class="heading byline">
               <% if !feedback_comment.pseud.nil? %>
                 <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-                  <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
+                  <%= ts('Anonymous Creator on') %> <%= commentable_description_link(feedback_comment) %>
                 <% else %>
                   <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
                 <% end %>
