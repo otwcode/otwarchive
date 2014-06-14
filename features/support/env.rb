@@ -7,6 +7,7 @@
 # Code Coverage - Coveralls.io
 require 'coveralls'
 Coveralls.wear_merged!('rails')
+SimpleCov.merge_timeout 3600
 
 require 'cucumber/rails'
 ENV["RAILS_ENV"] ||= "test"

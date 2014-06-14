@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 # Coverals needs to work here too
 require 'coveralls'
 Coveralls.wear_merged!('rails')
+SimpleCov.merge_timeout 3600
 
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)

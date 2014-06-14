@@ -29,7 +29,7 @@ before_script:
   - cp config/redis.travis.example config/redis.yml
   - curl -L https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/1d4b990f7922e388d6d7563b9e5cda7c97af18a7/gistfile1.sh | bash
 after_script:
-  - bundle exec rake :test_with_coveralls
+  - bundle exec rake coveralls:push
 notifications:
   email:
     recipients:
@@ -39,5 +39,5 @@ notifications:
   irc:
    channels:
      - "irc.freenode.org#otw-dev"
-   on_success: always
+   on_success: change
    on_failure: always
