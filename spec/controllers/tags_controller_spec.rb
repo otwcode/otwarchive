@@ -31,7 +31,9 @@ describe TagsController do
       @fandom3 = FactoryGirl.create(:fandom, canonical: false)
 
       @freeform1 = FactoryGirl.create(:freeform, canonical: false)
-      @work = FactoryGirl.create(:work, posted: true, fandom_string: "#{@fandom1.name}", freeform_string: "#{@freeform1.name}")
+      @character1 = FactoryGirl.create(:character, canonical: false)
+      @character2 = FactoryGirl.create(:character, canonical: false, merger: FactoryGirl.create(:character, canonical: true))
+      @work = FactoryGirl.create(:work, posted: true, fandom_string: "#{@fandom1.name}", character_string: "#{@character1.name},#{@character2.name}", freeform_string: "#{@freeform1.name}")
     end
 
     xit "should redirect to the wrangle action for that tag" do
@@ -59,6 +61,36 @@ describe TagsController do
         @freeform1.reload
         @freeform1.fandoms.should include(@fandom2)
         @freeform1.fandoms.should_not include(@fandom3)
+      end
+    end
+
+    context "with two canonical fandoms in the fandom string and a selected character" do
+      it "should be successful" do
+        put :mass_update, id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id]
+
+        @character1.reload
+        @character1.fandoms.should include(@fandom1)
+        @character1.fandoms.should include(@fandom2)
+      end
+    end
+
+    context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
+      it "should be successful" do
+        put :mass_update, id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id]
+
+        @character1.reload
+        @character1.fandoms.should include(@fandom1)
+        @character1.should be_canonical
+      end
+    end
+
+    context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
+      it "should be successful" do
+        put :mass_update, id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id]
+
+        @character2.reload
+        @character2.fandoms.should include(@fandom2)
+        @character2.should_not be_canonical
       end
     end
   end

@@ -80,7 +80,7 @@
   
     <% # if prompt has been fulfilled list works %>
     <% unless prompt.unfulfilled? %>
-      <div class="works listbox group">
+      <div class="work listbox group">
         <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index group">
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>

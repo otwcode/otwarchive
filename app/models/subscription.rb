@@ -16,10 +16,6 @@ class Subscription < ActiveRecord::Base
     group(:user_id)
   }
   
-  scope :for_work_directly, lambda { |work| 
-    where(subscribable_id: work.id, subscribable_type: 'Work')
-  }
-  
   # The name of the object to which the user is subscribed
   def name
     if subscribable.respond_to?(:login)

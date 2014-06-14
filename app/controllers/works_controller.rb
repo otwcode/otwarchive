@@ -220,8 +220,13 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
-    
-    @work_display = WorkDisplay.new(@work)
+    @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
+                                                       :subscribable_type => 'Work').first ||
+                      current_user.subscriptions.build(:subscribable => @work)
+    end
 
     render :show
     @work.increment_hit_count(request.remote_ip)
@@ -699,7 +704,7 @@ public
     end
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
+      select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
   end
 
   def edit_multiple

@@ -93,7 +93,7 @@
       <dd>
         <ul>
           <% for tag in Category.canonical.by_name.sort %>
-            <li class="<%= cycle("odd", "even") %>">
+            <li>
               <%= check_box_tag "work_search[category_ids][]", tag.id, @search.category_ids.present? && @search.category_ids.include?(tag.id.to_s), :id => "category_#{tag.id}" %>
               <%= label_tag "category_#{tag.id}", tag.name %>
             </li>

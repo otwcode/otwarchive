@@ -47,10 +47,9 @@
         <!--<legend class="landmark">Category</legend>-->
         <ul>
           <% for tag in Category.canonical.by_name.sort %>
-            <% cycle_class = cycle("odd", "even") %>
-            <li class="<%= cycle_class %>"><%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
+            <li><%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
             <%= label_tag "work_category_string_#{tag.id}", tag.name %></li>
-          <% end %>
+          <% end %> 
         </ul>
       </fieldset>
     </dd>
