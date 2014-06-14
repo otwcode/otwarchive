@@ -78,7 +78,7 @@
                   autocomplete_options("tags_in_sets?tag_type=#{tag_type}&tag_set=#{restriction.tag_set_ids.join(',')}", :autocomplete_token_limit => num_allowed) %>    
               <p class="actions" role="button">
                 <% # TODO: would be nice to improve this for the case of multiple tag sets, currently it links to just an index of all the tag sets for this challenge %>
-                <%= link_to( ts("List %{taglist_size} %{tag_type}", :taglist_size => restriction.tags(tag_type).count, :tag_type => tag_name.pluralize.titleize),
+                <%= link_to( ts("List %{taglist_size} %{tag_name}", :taglist_size => restriction.tags(tag_type).count, :tag_type => tag_name.pluralize.titleize),
                         show_options_tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
               </p>
             </dd>
@@ -91,8 +91,8 @@
 
         <% if restriction.allow_any?(tag_type) %>
           <dd class="any option">
-            <% form.check_box "any_#{tag_type}".to_sym %>
-            <% form.label "any_#{tag_type}", ts("Any #{tag_name.singularize.titleize}") %> 
+            <%= form.check_box "any_#{tag_type}".to_sym %>
+            <%= form.label "any_#{tag_type}", ts("Any #{tag_name.singularize.titleize}") %> 
             <%= link_to_help("challenge-any") %>
           </dd>
         <% end %>        
