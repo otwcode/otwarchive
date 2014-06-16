@@ -106,9 +106,10 @@
 /*tables */
 
 .userstuff caption {
-  height: auto;
   font-size: 1em;
-  color: #222;
+  height: auto;
+  opacity: 1.0;
+  width: auto;
 }
 
 .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
