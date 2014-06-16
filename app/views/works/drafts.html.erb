@@ -8,16 +8,17 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<%= will_paginate @works %>
 <!--/subnav-->
 
 <!--main content-->
-<%= will_paginate @works %>
-
 <ul class="work index group">
   <% for work in @works %>
     <%= render 'work_blurb', :work => work %>
   <% end %>
 </ul>
+<!--/content-->
 
+<!--/subnav-->
 <%= will_paginate @works %>
 <!--/content-->
