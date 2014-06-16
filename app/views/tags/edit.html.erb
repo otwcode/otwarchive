@@ -87,9 +87,15 @@
   </fieldset>
 
   <fieldset>
+    <legend><%= ts('Taggings Count') %></legend>
+    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
+
     <dl>
       <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
-      <dd><%= f.check_box('fix_taggings_count')%>&nbsp;<%= ts('Select this if the number of taggings appears to be wrong and needs to be fixed.') %></dd>
+      <dd>
+        <%= f.check_box(:fix_taggings_count) %>&nbsp;
+        <p><%= ts('Select this if the number of taggings appears to be wrong and needs to be fixed.') %></p>
+      </dd>
     </dl>
   </fieldset>
 
