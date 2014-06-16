@@ -6,7 +6,7 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current ts(''Full History'), user_readings_path(@user), params[:show].blank? %>
+    <%= span_if_current ts('Full History'), user_readings_path(@user), params[:show].blank? %>
   </li>
   <li>
     <%= span_if_current ts('Marked for Later'), user_readings_path(@user, :show => 'to-read'), params[:show] == "to-read" %>
