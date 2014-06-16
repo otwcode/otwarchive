@@ -1,14 +1,24 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Unposted Drafts") %></h2>
 
 <p class="caution notice">
   <strong><%= ts("Please note:") %></strong>
   <%= ts("Unposted drafts are only saved for a month from the day they are first created, and then deleted from the Archive.") %>
 </p>
+<!--/descriptions-->
 
-<%= paginated_section @works, {:previous_label => '&#8592;'.html_safe + ' ' + ts('Previous'), :next_label => h(ts('Next')) + ' ' + ' &#8594;'.html_safe} do %>
-  <ul class="work index group">
-    <% for work in @works %>
-      <%= render 'work_blurb', :work => work %>
-    <% end %>
-  </ul>
-<% end %>
+<!--subnav-->
+<%= will_paginate @works %>
+<!--/subnav-->
+
+<!--main content-->
+<ul class="work index group">
+  <% for work in @works %>
+    <%= render 'work_blurb', :work => work %>
+  <% end %>
+</ul>
+<!--/content-->
+
+<!--subnav-->
+<%= will_paginate @works %>
+<!--/subnav-->
