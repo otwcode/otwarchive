@@ -1,4 +1,4 @@
-*.swp
+w*.swp
 .DS_Store
 .bundle
 .idea
@@ -65,6 +65,7 @@ features/cassette_library/cucumber_tags/work_import_special_characters_man_latin
 features/cassette_library/cucumber_tags/import_lj_comm.yml
 
 spec/results.html
+spec/results
 features_report.html
 coverage
 
