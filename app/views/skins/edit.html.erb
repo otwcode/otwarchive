@@ -8,7 +8,7 @@
 <!--/subnav-->
 
 <h3 class="landmark heading"><%= ts("Edit Archive Skin Form") %></h3>
-<%= form_for(@skin, :html => {:multipart => true}) do |f| %>
+<%= form_for(@skin, :html => {:multipart => true, :class => "skin verbose post"}) do |f| %>
 
   <% if params[:wizard] %>
     <%= render 'wizard_form', :f => f %>
