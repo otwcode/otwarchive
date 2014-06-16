@@ -42,6 +42,8 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  attr_accessor :fix_taggings_count
+
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
