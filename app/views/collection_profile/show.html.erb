@@ -19,7 +19,17 @@
         <dt><%= ts("Contact: ") %></dt>
         <dd><%= @collection.email %></dd>
       <% end %>
-
+      <% if @collection.challenge.present? %>
+        <% tag_sets_counted = tag_set_count(@collection) %>
+        <% if tag_sets_counted.present? %>
+          <dt><%= tag_sets_counted > 1 ?  ts("Tag sets: ") : ts("Tag set: ") %></dt>
+          <dd>
+            <ul class="commas">
+            <%= (@collection.challenge_type == "GiftExchange" ? @collection.challenge.offer_restriction.owned_tag_sets : @collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>
+            </ul>
+          </dd>
+        <% end %>
+      <% end %>
       <% if @collection.challenge %>
       <!-- challenge information -->
         <%= render "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>
@@ -69,6 +79,7 @@
 
 <% end %><!-- end of cached profile -->
 
+<!--subnav-->
 <% if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
   <ul class="navigation actions" role="menu">
@@ -83,7 +94,7 @@
       <% if @collection.challenge %>
         <li><%= link_to ts("Delete Challenge"), 
                         eval("collection_#{challenge_class_name(@collection)}_path(@collection)"),
-                        :confirm => ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
+                        :confirm => ts('Are you certain you want to delete the challenge from this collection? All sign-ups, assignments, and settings will be lost. (Works will remain in the collection.)'),
                         :method => :delete %></li>
 
       <% end %>
@@ -93,5 +104,6 @@
     <% end %>
   </ul>
   <% end %>
+<!--/subnav-->
 
 </div>

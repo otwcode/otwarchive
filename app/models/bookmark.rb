@@ -125,9 +125,14 @@ class Bookmark < ActiveRecord::Base
 
   def tag_string=(tag_string)
     self.tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      if !string.blank?
+
+    # Replace unicode full-width commas
+    tag_string.gsub!(/\uff0c|\u3001/, ',')
+    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+
+    tag_array.each do |string|
+      string.strip!
+      unless string.blank?
         tag = Tag.find_by_name(string)
         if tag
           self.tags << tag
@@ -157,7 +162,7 @@ class Bookmark < ActiveRecord::Base
 
   mapping do
     indexes :notes
-    indexes :private
+    indexes :private, :type => 'boolean'
     indexes :bookmarkable_type
     indexes :bookmarkable_id
     indexes :created_at,          :type  => 'date'

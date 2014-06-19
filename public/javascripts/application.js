@@ -16,14 +16,13 @@ $j(document).ready(function() {
     });
     setupDropdown();
 
-    // replace all GET delete links with their AJAXified equivalent
-    $j('a[href$="/confirm_delete"]').each(function(){
-        this.href = this.href.replace(/\/confirm_delete$/, "");
-        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    });
-
     // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
+
+    // make Share buttons on works and own bookmarks visible
+    $j('.actions').children('.share').removeClass('hidden');
+
+    prepareDeleteLinks();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -191,19 +190,24 @@ jQuery(function($){
 // Notes:
 // - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
 // - You can have multiple open and close buttons for the same div since those are labeled with classes
-// - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
-// - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
+// - You don't have to use div and a, those are just examples. Anything you put the toggled and _open/_close classes on will work.
+// - If you want the toggled item not to be visible to users without JavaScript by default, add the class "hidden" to the toggled item as well.
 //   (and you can then add an alternative link for them using <noscript>)
-// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
 
-    if (!node.hasClass('open')) {node.hide();}
-    close_toggles.each(function(){$j(this).hide();});
-    open_toggles.each(function(){$j(this).show();});
+    if (node.hasClass('open')) {
+      close_toggles.each(function(){$j(this).show();});
+      open_toggles.each(function(){$j(this).hide();});    
+    } else {
+      node.hide();
+      close_toggles.each(function(){$j(this).hide();});
+      open_toggles.each(function(){$j(this).show();});
+    }
 
     open_toggles.each(function(){
       $j(this).click(function(e){
@@ -311,15 +315,15 @@ function attachCharacterCounters() {
                 duplicate ids. So search for the input's associated counter element first by id,
                 then by checking the input's siblings, then by checking its cousins. */
                 var cc = $j('.character_counter [id='+input.attr('id')+'_counter]');
-                if (cc.length === 1) { return cc; } // id search, use attribute selector rather 
+                if (cc.length === 1) { return cc; } // id search, use attribute selector rather
                 // than # to check for duplicate ids
 
                 cc = input.nextAll('.character_counter').first().find('.value'); // sibling search
-                if (cc.length) { return cc; } 
+                if (cc.length) { return cc; }
 
                 var parent = input.parent(); // 2 level cousin search
                 for (var i = 0; i < 2; i++) {
-                    cc = parent.nextAll('.character_counter').find('.value');                    
+                    cc = parent.nextAll('.character_counter').find('.value');
                     if (cc.length) { return cc; }
                     parent = parent.parent();
                 }
@@ -379,3 +383,67 @@ function setupAccordion() {
     expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
   });
 }
+
+// Remove the /confirm_delete portion of delete links so user who have JS enabled will
+// be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
+// form page. Also add a confirmation message if one was not set in the back end using
+// :confirm => "message"
+function prepareDeleteLinks() {
+  $j('a[href$="/confirm_delete"]').each(function(){
+    this.href = this.href.replace(/\/confirm_delete$/, "");
+    $j(this).attr("data-method", "delete");
+    if ($j(this).is("[data-confirm]")) {
+      return;
+    } else {
+      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+    };
+  });
+}
+
+/// Kudos
+$j(document).ready(function() {
+  $j('a#kudos_summary').click(function(e) {
+    e.preventDefault();
+    $j('a#kudos_summary').hide();
+    $j('.kudos_expanded').show();
+  });
+
+  $j('.kudos_expanded a').click(function(e) {
+    e.preventDefault();
+    $j('a#kudos_summary').show();
+    $j('.kudos_expanded').hide();
+  });
+
+  $j('#kudo_submit').on("click", function(event) {
+    event.preventDefault();
+
+    $j.ajax({
+      type: 'POST',
+      url: '/kudos.js',
+      data: jQuery('#new_kudo').serialize(),
+      error: function(jqXHR, textStatus, errorThrown ) {
+        var msg = 'Sorry, we were unable to save your kudos';
+        var data = $j.parseJSON(jqXHR.responseText);
+
+        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
+          msg = "You have already left kudos here. :)";
+        }
+
+        $j('#kudos_message').addClass('comment_error').text(msg);
+      },
+      success: function(data) {
+        $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
+      }
+    });
+  });
+
+  // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
+  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+    $j.scrollTo('#comments_placeholder');
+  });
+
+  // Scroll to the top of the feedback section when loading comments via AJAX
+  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+    $j.scrollTo('#feedback');
+  });
+});

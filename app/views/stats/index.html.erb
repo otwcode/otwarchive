@@ -1,8 +1,13 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Statistics") %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
 <%= render "stats/navigation" %>
+<!--subnav-->
 
+<!--main content-->
 <ol class="year actions">
   <% @years.each do |year| %>
     <li>
@@ -19,7 +24,7 @@
 <div class="wrapper">
   <dl class="work meta group" role="complementary">
     <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <dt><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize%></dt>
+      <dt><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
       <dd><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
@@ -34,27 +39,26 @@
 <div id="stat_chart" class="statistics chart"></div>
 <%= render_chart(@chart, 'stat_chart') %>
 
-<h3 class="landmark heading"><%= ts('View Sorting and Actions') %></h3>
-<ul class="sorting actions" role="menu">
-  <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-  <% unless @user.preference.hide_hit_counts %>
+<div class="actions module">
+  <h3 class="landmark heading"><%= ts('View Sorting and Actions') %></h3>
+  <ul class="sorting actions" role="menu">
+    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <li><%= sort_link ts("Date"), "date" %></li>
-    <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
-  <% end %>
-  <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
-  <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
-  <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
-  <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
-  <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
-</ul>
-
-<ul class="view actions" role="menu">
-  <% if params[:flat_view] %>
-    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => false) %></li>
-  <% else %>
-    <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
-  <% end %>
-</ul>
+    <% unless @user.preference.hide_hit_counts %>
+      <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
+    <% end %>
+    <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Comment Threads'), "comments.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Bookmarks'), "bookmarks.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
+    <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
+  </ul>
+  
+  <ul class="view actions" role="menu">
+    <li><%= span_if_current ts("Fandoms View"), url_for(params.merge :flat_view => nil), params[:flat_view].blank? %></li>
+    <li><%= span_if_current ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
+  </ul>
+</div>
 
 <h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
 <ul class="statistics index">
@@ -65,7 +69,7 @@
       </h5>
       <ul class="index">
         <% @works[fandom].each do |work| %>
-          <li class="<%= cycle 'odd', 'even', :name => "tigerstriping" %>">
+          <li>
             <dl>
               <dt>
                 <%= link_to work.title, work_path(:id => work.id) %> 
@@ -96,6 +100,6 @@
         <% end %>
       </ul>
     </li>
-    <% reset_cycle("tigerstriping") %>
   <% end %>
 </ul>
+<!--/content-->

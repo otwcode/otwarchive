@@ -1,0 +1,6 @@
+redis_resque:
+  test: localhost:6379
+redis_kudos:
+  test: localhost:6379
+redis_general:
+  test: localhost:6379

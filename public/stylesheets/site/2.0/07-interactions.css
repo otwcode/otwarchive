@@ -1,4 +1,5 @@
 /*==INTERACTIONS: global form rules
+http://otwcode.github.com/docs/front_end_coding/patterns/interactions
 (submit button styling is in actions.css with the other buttons)
 General rules for all form elements, and nearly ALL our forms use just these. 
 Forms are normally in definition lists <dt label: dd input>
@@ -13,6 +14,11 @@ and a few variations for INTERACTION TYPES, which are, roughly:
 
 form {
   clear: right;
+}
+
+/* wrap long text in Opera, Safari, and Chrome */
+fieldset {
+  min-width: 0;
 }
 
 /*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
@@ -185,7 +191,7 @@ p.character_counter {
   margin: 0.25em auto auto;
 }
 
-.autocomplete input, div.dropdown ul li {
+.autocomplete input, .autocomplete .dropdown ul li {
   display: block;
   margin: 0.25em 0 0;
   min-width: 10em;
@@ -508,6 +514,27 @@ div.dynamic {
   z-index: 500;
 }
 
+/*MODE: VERBOSE for forms with more than three fieldsets 
+TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
+in some areas, hence .verbose form */
+
+form.verbose legend, .verbose form legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
+/*MODE: SIMPLE for forms with three or fewer fieldsets (default) */
+
+form.simple span.actions {
+  float: none;
+}
+
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {
@@ -555,12 +582,13 @@ div.dynamic {
 
 /* CONTEXT: dashboard*/
 
-.dashboard fieldset {
-  clear: right;
+.dashboard > form {
+  float: left;
+  width: 100%;
 }
 
-.dashboard .filters dt {
-  width: auto;
+.dashboard fieldset {
+  clear: right;
 }
 
 /*END== */

@@ -2,7 +2,7 @@
   <% # signups for a given challenge %>
 
   <% # render differently based on the challenge %>
-  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups.html" %>
+  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups" %>
   
 <% elsif @user %>
   <% # view in user dashboard %>
@@ -17,12 +17,12 @@
   <!--main content-->
   <dl class="signup index group">
     <% @challenge_signups.each do |challenge_signup| %>
-      <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %><dt>
+      <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %></dt>
       <dd>
         <%= ts("As") %> <%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup), :class => "byline" %>
         
         <!--menu of actions-->
-        <%= render "signup_controls", :challenge_signup => challenge_signup %>
+        <%= render "signup_controls", :challenge_signup => challenge_signup, :subnav => false %>
       </dd>
     <% end %>
   </dl>

@@ -59,6 +59,8 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
+  before_destroy :remove_pseud_from_kudos # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
 
@@ -98,19 +100,65 @@ class User < ActiveRecord::Base
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
   has_many :comments, :through => :pseuds
   has_many :kudos, :through => :pseuds
-  has_many :creatorships, :through => :pseuds
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true, :readonly => false
-  has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true, :readonly => false
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true, :readonly => false
+  
+  # Nested associations through creatorships got weird after 3.0.x
+  
+  def works
+    Work.select("DISTINCT works.*").
+    joins("INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
+  end
+  
+  def series
+    Series.select("DISTINCT series.*").
+    joins("INNER JOIN `creatorships` ON `series`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Series'", self.id)
+  end
+  
+  def chapters
+    Chapter.joins("INNER JOIN `creatorships` ON `chapters`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Chapter'", self.id)
+  end
+  
+  def related_works
+    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`parent_id` = `works`.`id` 
+      AND `related_works`.`parent_type` = 'Work' 
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
+  end
+  
+  def parent_work_relationships
+    RelatedWork.joins("INNER JOIN `works` ON `related_works`.`work_id` = `works`.`id` 
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
+  end
+  
+  def tags
+    Tag.joins("INNER JOIN `taggings` ON `tags`.`id` = `taggings`.`tagger_id` 
+      INNER JOIN `works` ON `taggings`.`taggable_id` = `works`.`id` AND `taggings`.`taggable_type` = 'Work' 
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
+  end
+  
+  def filters
+    Tag.joins("INNER JOIN `filter_taggings` ON `tags`.`id` = `filter_taggings`.`filter_id` 
+      INNER JOIN `works` ON `filter_taggings`.`filterable_id` = `works`.`id` AND `filter_taggings`.`filterable_type` = 'Work' 
+      INNER JOIN `creatorships` ON `works`.`id` = `creatorships`.`creation_id` 
+      INNER JOIN `pseuds` ON `creatorships`.`pseud_id` = `pseuds`.`id`").
+    where("`pseuds`.`user_id` = ? AND `creatorships`.`creation_type` = 'Work'", self.id)
+  end
+  
+  def direct_filters
+    filters.where("filter_taggings.inherited = false")
+  end
 
-  has_many :related_works, :through => :works
-  has_many :parent_work_relationships, :through => :works
-
-  has_many :tags, :through => :works
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
-  has_many :filters, :through => :works
-  has_many :direct_filters, :through => :works
 
   has_many :translations, :foreign_key => 'translator_id'
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
@@ -129,7 +177,7 @@ class User < ActiveRecord::Base
             :through => :followings,
             :source => :user
 
-  has_many :wrangling_assignments
+  has_many :wrangling_assignments, :dependent => :destroy
   has_many :fandoms, :through => :wrangling_assignments
   has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
 
@@ -139,9 +187,10 @@ class User < ActiveRecord::Base
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
 
-  before_destroy :remove_pseud_from_kudos
   def remove_pseud_from_kudos
-    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
+    ids = self.pseuds.collect(&:id).join(',')
+    # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
+    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{ids})") if ids.present?
   end
 
   def read_inbox_comments
@@ -255,17 +304,17 @@ class User < ActiveRecord::Base
   # Gets the user's most recent unposted work
   def unposted_work
     return @unposted_work if @unposted_work
-    @unposted_work = works.find(:first, :conditions => {:posted => false}, :order => 'works.created_at DESC')
+    @unposted_work = unposted_works.first
   end
 
   def unposted_works
     return @unposted_works if @unposted_works
-    @unposted_works = works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
+    @unposted_works = works.where(posted: false).order('works.created_at DESC')
   end
 
   # removes ALL unposted works
   def wipeout_unposted_works
-    works.find(:all, :conditions => {:posted => false}).each do |w|
+    works.where(posted: false).each do |w|
       w.destroy
     end
   end
@@ -422,7 +471,7 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user was invited, update the invitation
+  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
       invitation = Invitation.find_by_token(self.invitation_token)

@@ -76,7 +76,6 @@ jQuery(document).ready(function() {
                 scaledHeight = _bgDiv.height()*_tallHeight.scale;
                 maxHeight = Math.min(scaledHeight, _tallHeight.max);
 
-                _modalDiv.toggleClass(!maxHeight || _modalDiv[0].scrollHeight > maxHeight);
                 _modalDiv.toggleClass('tall', (!maxHeight || _modalDiv[0].scrollHeight > maxHeight));
             }
 
@@ -189,7 +188,7 @@ jQuery(document).ready(function() {
                         }).replaceAll(img)
                         .append(img);
 
-                a.addClass('modal')
+                a.addClass('modal modal-attached')
                     .attr('aria-controls', '#modal')
                     .click(function(event){
                         _show($(this).attr('href'), $(this).attr('title'));
@@ -309,6 +308,19 @@ jQuery(document).ready(function() {
 
         // set modal-classed links to open modal boxes
         _addLink($('a.modal, img.modal'));
+
+        // ensure handlers are attached to dynamically added modal invokers
+        $('body').on('click', 'a.modal, img.modal', function(event) {
+            var $this = $(this);
+            if ($this.is('.modal-attached')) { return; }
+            _addLink($this);
+            event.preventDefault();
+            if ($this.is('img')) {
+                $this.parent().click();
+            } else {
+                $this.click();
+            }
+        });
 
         return {
             show: _show,

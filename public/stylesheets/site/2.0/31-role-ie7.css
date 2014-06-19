@@ -1,9 +1,10 @@
 /* IE_CONDITION: IE7 */
 
-/*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
+/*http://otwcode.github.com/docs/front_end_coding/debugging-ie*/
 
 #header {
   z-index: 200;
+  zoom: 1;
 }
 
 #header .logo {

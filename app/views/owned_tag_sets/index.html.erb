@@ -7,14 +7,14 @@
   <% elsif @restriction %>
     <%= ts("Tag Sets Used In This Challenge") %>
   <% elsif @query %>
-    <%= search_header @tag_sets, @query, "Tag Set" %> <%= link_to_help 'tagset-about' %>
+    <%= search_header @tag_sets, nil, "Tag Set" %> <%= link_to_help 'tagset-about' %>
   <% else %>
     <%= ts("Tag Sets") %> <%= link_to_help 'tagset-about' %> <%= ts("in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 <!--/descriptions-->
 
-<!--Subnavigation, sorting and actions-->
+<!--subnav-->
 <ul class="navigation actions" role="navigation">
   <li class="search" role="search">
     <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
@@ -29,13 +29,16 @@
   	<li><%= link_to ts("Tags"), tags_path %></li>
   <% end %>
 </ul>
+<!--/subnav-->
 
+<!--main content-->
 <% if @tag_sets.empty? %>
   <p><%= ts("No tag sets found.") %></p>
 <% else %>
-  <%= will_paginate @tag_sets %>
+  <% if @tag_sets.respond_to?(:total_pages) %>
+    <%= will_paginate @tag_sets %>
+  <% end %>
 
-<!--main content-->
   <h3 class="landmark heading">Listing Tag Sets</h3>
 	<ul class="index group">
     <% @tag_sets.each do |tag_set| %>
@@ -43,6 +46,9 @@
     <% end %>
   </ul>
 
-  <%= will_paginate @tag_sets %>
+  <% if @tag_sets.respond_to?(:total_pages) %>
+    <%= will_paginate @tag_sets %>
+  <% end %>
 <% end %>
+<!--/content-->
 </div>

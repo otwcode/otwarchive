@@ -3,15 +3,11 @@ require 'spec_helper'
 describe ChallengeAssignment do
 
   describe "a challenge assignment" do
-    before do      
-      @assignment = Factory.create(:challenge_assignment)
+    before do
+      @assignment = create(:challenge_assignment)
       @collection = @assignment.collection
     end
 
-    it "should save" do
-      @assignment.save.should be_true
-    end
-    
     it "should initially be unposted and unfulfilled and undefaulted" do
       @assignment.posted?.should be_false
       @assignment.fulfilled?.should be_false
@@ -38,7 +34,7 @@ describe ChallengeAssignment do
       before do
         @assignment.send_out
         @author = @assignment.offer_signup.pseud
-        @work = Factory.create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
+        @work = create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
         @assignment.reload
       end
       
