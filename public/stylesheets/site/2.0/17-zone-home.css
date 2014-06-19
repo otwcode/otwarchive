@@ -10,6 +10,7 @@ user home, collections and challenges home, tag home, admin comms home
   text-align: right;
   border-bottom: 2px solid;
   display: block;
+  margin-left: 100px;
 }
 
 .home .header .userstuff, .home .header dl.stats, .home .header .type {

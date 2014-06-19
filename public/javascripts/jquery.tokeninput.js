@@ -310,7 +310,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var first_dropdown_item = null;
 
     // The list to store the token items in
-    var token_list = $("<ul role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"/>")
+    var token_list = $("<ul />") // was role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"
         .addClass(settings.classes.tokenList)
         .click(function (event) {
             var li = $(event.target).closest("li");
@@ -345,7 +345,7 @@ $.TokenList = function (input, url_or_data, settings) {
     }
 
     // The token holding the input box
-    var input_token = $("<li role=\"menuitem\" />")
+    var input_token = $("<li />") // was role=\"menuitem\"
         .addClass(settings.classes.inputToken)
         .appendTo(token_list)
         .append(input_box);
@@ -707,7 +707,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li role=\"menuitem\">" + highlight_term(escapeHTML(value.name), query) + "</li>")
+                var this_li = $("<li role=\"option\">" + highlight_term(escapeHTML(value.name), query) + "</li>") // was role=\"menuitem\"
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {
