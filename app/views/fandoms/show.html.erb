@@ -10,21 +10,21 @@
 <!--subnav-->
 
 <!--main content-->
-<h3 class="heading"><%= ts('Characters and Relationships') %></h3>
+<h3 class="heading"><%= ts('Relationships by Character') %></h3>
 <% unless @characters.blank? %>
-<ul class="characters relationships index group">
-  <% for character in @characters %>
-  <li class="listbox group">
-    <h4 class="heading"><%= link_to character.name, tag_works_path(character) %></h4>
-    <% unless character.relationships.empty? %>
-    <ul class="tags commas">
-      <% for relationship in character.relationships %>
-      <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
-      <% end %>
-    </ul>
+  <ul class="characters relationships index group">
+    <% for character in @characters %>
+      <li class="listbox group">
+        <h4 class="heading"><%= link_to character.name, tag_works_path(character) %></h4>
+        <% unless character.relationships.empty? %>
+          <ul class="tags commas index group">
+            <% for relationship in character.relationships %>
+              <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
     <% end %>
-  </li>
-  <% end %>
-</ul>
+  </ul>
 <% end %>
 <!--/content-->

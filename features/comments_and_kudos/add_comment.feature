@@ -58,7 +58,7 @@ Scenario: Comment threading, comment editing
     And I follow "Reply" within ".thread .thread .odd"
     And I fill in "Comment" with "Mistaken comment" within ".thread .thread .odd"
     And I press "Comment" within ".thread .thread .odd"
-    And I follow "Edit" within "ol.thread li ol.thread li ol.thread li ol.thread ul.navigation"
+    And I follow "Edit" within "ol.thread li ol.thread li ol.thread li ol.thread ul.actions"
     And I fill in "Comment" with "Actually, I meant something different"
     And I press "Update"
   Then I should see "Comment was successfully updated"
@@ -121,7 +121,7 @@ Scenario: Set preference and receive comment notifications of your own comments
   When I am logged in as "author"
     And I post the work "Generic Work"
   When I am logged in as "commenter"
-    And I set my preferences to receive copies of my own comments
+    And I set my preferences to turn on copies of my own comments
     And I post the comment "Something" on the work "Generic Work"
   Then "author" should be emailed
     And "commenter" should be emailed
