@@ -4,7 +4,7 @@ Given /^I have the default comment notifications setup$/ do
 end
 
 Given /^I have the receive all comment notifications setup$/ do
-  step %{I set my preferences to receive copies of my own comments}
+  step %{I set my preferences to turn on copies of my own comments}
 end
 
 Given /^I have the receive no comment notifications setup$/ do
@@ -29,6 +29,10 @@ end
 
 Then /^I should see the comment form$/ do
   step %{I should see "New comment on"}
+end
+
+Then /^I should see the reply to comment form$/ do
+  step %{I should see "Comment as" within ".odd"}
 end
 
 # WHEN
@@ -100,8 +104,4 @@ end
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
     step %{I follow "Yes, delete!"}
-end
-
-Then /^I should see the reply to comment form$/ do
-  step %{I should see "Comment as" within ".odd"}
 end

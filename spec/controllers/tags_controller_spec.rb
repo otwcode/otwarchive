@@ -94,4 +94,22 @@ describe TagsController do
       end
     end
   end
+
+  describe "update" do
+    context "when fixing a tag's taggings_count" do
+      before do
+        @tag = FactoryGirl.create(:freeform)
+        # manufacture a tag with borked taggings_count
+        @tag.taggings_count = 10
+        @tag.save
+      end
+
+      it "should reset the taggings_count" do
+        put :update, id: @tag.name, tag: { fix_taggings_count: true }
+
+        @tag.reload
+        @tag.taggings_count.should eq(0)
+      end
+    end
+  end
 end

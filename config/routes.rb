@@ -79,9 +79,9 @@ Otwarchive::Application.routes.draw do
   resources :tags do
     member do
       get :feed
-      get :wrangle
       post :mass_update
       get :remove_association
+      get :wrangle
     end
     collection do
       get :show_hidden

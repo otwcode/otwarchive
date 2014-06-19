@@ -101,6 +101,8 @@ module NavigationHelpers
       user_signups_path(User.current_user)
     when /my related works page/
       user_related_works_path(User.current_user)
+    when /my inbox page/
+      user_inbox_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
