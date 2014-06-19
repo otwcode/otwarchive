@@ -44,11 +44,11 @@
     </ul>
     <% if @pseud %>
       <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
+        <ul class="actions" role="navigation"><li><%= print_pseud_works_link(@pseud) %></li>
       <% end %>
     <% else %>   
       <% if @user.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
+        <ul class="actions" role="navigation"><li><%= print_works_link(@user) %></li></ul>
       <% end %>
     <% end %>
   </div>
@@ -61,16 +61,16 @@
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
       <% end %>
-      <% if @pseud %>
-        <% if @pseud.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation actions" role="navigation"><li><%= print_pseud_series_link(@pseud) %></li></ul>
-        <% end %>
-      <% else %>
-        <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation actions" role="navigation"><li><%= print_series_link(@user) %></li></ul>
-        <% end %>
-      <% end %> 
     </ol>
+    <% if @pseud %>
+      <% if @pseud.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="actions" role="navigation"><li><%= print_pseud_series_link(@pseud) %></li></ul>
+      <% end %>
+    <% else %>
+      <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+        <ul class="actions" role="navigation"><li><%= print_series_link(@user) %></li></ul>
+      <% end %>
+    <% end %> 
    </div>
   <% end %>
   
@@ -81,18 +81,18 @@
       <% for bookmark in @bookmarks %>
         <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
       <% end %>
-      <% unless @user == User.orphan_account %>
-        <% if @pseud %>
-          <% if @pseud.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation actions" role="navigation"><li><%= print_pseud_bookmarks_link(@pseud) %></li></ul>
-          <% end %>
-        <% else %>
-          <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation actions" role="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
-          <% end %>
-        <% end %> 
-      <% end %>
     </ol>
+    <% unless @user == User.orphan_account %>
+      <% if @pseud %>
+        <% if @pseud.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+          <ul class="actions" role="navigation"><li><%= print_pseud_bookmarks_link(@pseud) %></li></ul>
+        <% end %>
+      <% else %>
+        <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+          <ul class="actions" role="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
+        <% end %>
+      <% end %> 
+    <% end %>
   </div>
   <% end %>
 
@@ -106,7 +106,7 @@
       <%= link_to ts("a new bookmark"), new_external_work_path %>?
     </p>
   <% else %>
-    <p class="alt message">There are no works or bookmarks under this name yet.</p>
+    <p class="message"><%= ts("There are no works or bookmarks under this name yet.") %></p>
   <% end %>
 <% end %>
 <!--/content-->

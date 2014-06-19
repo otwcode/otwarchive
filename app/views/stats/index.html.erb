@@ -1,8 +1,13 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Statistics") %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
 <%= render "stats/navigation" %>
+<!--subnav-->
 
+<!--main content-->
 <ol class="year actions">
   <% @years.each do |year| %>
     <li>
@@ -64,7 +69,7 @@
       </h5>
       <ul class="index">
         <% @works[fandom].each do |work| %>
-          <li class="<%= cycle 'odd', 'even', :name => "tigerstriping" %>">
+          <li>
             <dl>
               <dt>
                 <%= link_to work.title, work_path(:id => work.id) %> 
@@ -95,6 +100,6 @@
         <% end %>
       </ul>
     </li>
-    <% reset_cycle("tigerstriping") %>
   <% end %>
 </ul>
+<!--/content-->

@@ -13,6 +13,11 @@ class HomeController < ApplicationController
   def tos_faq 
     render :action => "tos_faq", :layout => "application"
   end
+
+  # dmca policy
+  def dmca 
+    render :action => "dmca", :layout => "application"
+  end
   
   # diversity statement
   def diversity 
