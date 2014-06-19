@@ -76,7 +76,6 @@ jQuery(document).ready(function() {
                 scaledHeight = _bgDiv.height()*_tallHeight.scale;
                 maxHeight = Math.min(scaledHeight, _tallHeight.max);
 
-                _modalDiv.toggleClass(!maxHeight || _modalDiv[0].scrollHeight > maxHeight);
                 _modalDiv.toggleClass('tall', (!maxHeight || _modalDiv[0].scrollHeight > maxHeight));
             }
 

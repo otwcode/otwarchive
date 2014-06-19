@@ -1,8 +1,14 @@
 class KudosController < ApplicationController
-  
+
   cache_sweeper :kudos_sweeper
 
   skip_before_filter :store_location
+
+  def index
+    @work = Work.find(params[:work_id])
+    @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+    @guest_kudos_count = @work.kudos.by_guest.count
+  end
 
   def create
     @kudo = Kudo.new(params[:kudo])

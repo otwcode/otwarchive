@@ -1,6 +1,6 @@
 <h3 class="landmark heading"><%= ts("Navigation") %></h3>
 <% if show_collection_profile_navigation(@collection, section) %>
-<ul class="navigation actions" role="navigation">
+<ul class="actions" role="navigation">
 	<% if show_collection_section(@collection, "intro") && section != "intro" %>
 	<li><a href="#intro"><%= ts("Intro:") %></a></li>
 	<% end %>

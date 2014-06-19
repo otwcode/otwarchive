@@ -68,7 +68,7 @@
       <%= ew.label :category_string, Category::NAME %> <%= link_to_help "categories-help" %>
     </dt>
     <dd>
-      <%= ew.collection_select(:category_string, Category.canonical.by_name, :name, :name, {:include_blank => true}) %>
+      <%= ew.collection_select(:category_string, Category.canonical.by_name.sort, :name, :name, {:include_blank => true}) %>
     </dd>
     <dt>
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>
