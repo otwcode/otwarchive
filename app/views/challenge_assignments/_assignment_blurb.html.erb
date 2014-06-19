@@ -52,7 +52,7 @@
   </dl>
 
   <% unless assignment.fulfilled? %>
-    <ul class="navigation actions" role="menu">
+    <ul class="actions" role="menu">
       <% if @user && @user == current_user %>        
         <li><%= link_to ts("Fulfill"), new_collection_work_path(assignment.collection, :assignment_id => assignment.id) %></li>
         <li role="button">

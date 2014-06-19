@@ -92,6 +92,11 @@ SUBSECTIONS:
   min-width: 0;
 }
 
+#tos-partial .tos {
+  height: 36em;
+  overflow: auto;
+}
+
 /*3. ZONE: SYSTEM: DOCS 
 For practicality, /home .docs have been given the .userstuff class as well, to save doubling up that sheet or confusing end users. We will just cope with the inconsistency.*/
 
@@ -132,10 +137,13 @@ admin role is only admin facing, and changes normal views in role-admin.css*/
   margin: 0.643em;
 }
 
-/*6. ZONE: SYSTEM: ERROR PAGES*/
+/* 6. ZONE: SYSTEM: FAQS */
 
-.error .tweet_list {
-  padding: 0.5em;
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .example { 
+  margin: 0.643em 3.858em; 
+  padding: 0.643em;
+} 
+
+.faq .example {
+  border: 1px solid #c2d2df;
 }
-		
-/*END== */
