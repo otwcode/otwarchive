@@ -26,6 +26,12 @@ module WorksHelper
       latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
       list.insert(1, [prefix, localize(latest_date)])
     end
+    
+    if work.abandoned? || work.is_complete
+      list.concat([[ts("Status: "), work.status.capitalize ]])
+    elsif work.is_wip
+      list.concat([[ts("Status: "), work.status.upcase ]])
+    end
     list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe
     content_tag(:dl, list.to_s, :class => "stats").html_safe
   end

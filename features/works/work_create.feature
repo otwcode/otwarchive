@@ -337,4 +337,60 @@ Feature: Create Works
   Then I should see "Published:1990-01-01"
   When I go to the works page
   Then "This One Stays On Top" should appear before "Backdated"
+
+  Scenario: Post a complete work and it will show its status in the meta and the blurb
+  Given basic tags
+    And I am logged in as "closer"
+  When I go to the new work page
+  Then I should see "Post New Work"
+  When I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Testing"
+    And I fill in "Work Title" with "Done"
+    And I check "chapters-options-show"
+    And I choose "work_status_wip"
+    And I fill in "content" with "With your foolish ways."  
+    And I press "Post Without Preview"
+  Then I should see "Status: Complete"
+  When I go to my works page
+  Then I should see "Complete Work"
   
+  Scenario: Post an abandoned work and it will show its status in the meta and the blurb
+  Given basic tags
+    And I am logged in as "starter"
+  When I go to the new work page
+  Then I should see "Post New Work"
+  When I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Testing"
+    And I fill in "Work Title" with "You Complete Me"
+    And I check "chapters-options-show"
+    And I fill in "work_wip_length" with "?"
+    And I choose "work_status_abandoned"
+    And I fill in "content" with "But you're gone and I'll never be complete."  
+    And I press "Post Without Preview"
+  Then I should see "Status: Abandoned"
+    And I should see "Chapters: 1/?"
+  When I go to my works page
+  Then I should see "Abandoned Work"
+    And I should see "Chapters: 1/?"
+  
+  Scenario: Post a work in progress and it will show its status in the meta and the blurb
+  Given basic tags
+    And I am logged in as "worker"
+  When I go to the new work page
+  Then I should see "Post New Work"
+  When I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Testing"
+    And I fill in "Work Title" with "Chain Gang"
+    And I check "chapters-options-show"
+    And I fill in "work_wip_length" with "5"
+    And I choose "work_status_wip"
+    And I fill in "content" with "That's the sound of the men."  
+    And I press "Post Without Preview"
+  Then I should see "Status: WIP"
+    And I should see "Chapters: 1/5"
+  When I go to my works page
+  Then I should see "Work in Progress"
+    And I should see "Chapters: 1/5"
