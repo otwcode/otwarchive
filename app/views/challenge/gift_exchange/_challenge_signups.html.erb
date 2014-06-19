@@ -1,6 +1,6 @@
 <h2 class="heading"><%= ts("Sign-ups for %{collection}", :collection => @collection.title) %></h2>
   
-<ul class="navigation" role="menu">
+<ul class="navigation actions" role="menu">
   <li class="action">
     <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %> 
     <%= link_to_help "csv-download"%>
@@ -19,7 +19,7 @@
         <%= mailto_link signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
       </dt>
       <dd>
-        <%= render "challenge_signups/signup_controls", :challenge_signup => signup %>
+        <%= render "challenge_signups/signup_controls", :challenge_signup => signup, :subnav => false %>
         <ul class="actions" role="menu">
           <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
           <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", :class => "requests_#{signup.id}_close" %></li>

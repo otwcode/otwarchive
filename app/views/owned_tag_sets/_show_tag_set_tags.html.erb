@@ -43,7 +43,7 @@
         %>
         <% has_characters = (@tag_hash[:character] && @tag_hash[:character][fandom]) ? @tag_hash[:character][fandom].size : 0 %>
         <% has_relationships = (@tag_hash[:relationship] && @tag_hash[:relationship][fandom]) ? @tag_hash[:relationship][fandom].size : 0 %>
-        <li class="fandom listbox group <%= cycle :odd, :even %>">
+        <li class="fandom listbox group">
           <% if (has_relationships + has_characters) > 0 %>
             <h3 class="expander_parent heading">
               <%= ts("%{fandom}", :fandom => fandom) %>

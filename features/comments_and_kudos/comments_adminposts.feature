@@ -14,7 +14,7 @@ Feature: Commenting on admin posts
   Scenario: A user who receives copies of their own comments comments on an admin post
     Given I have posted an admin post
       And I am logged in as "narcis"
-      And I set my preferences to receive copies of my own comments
+      And I set my preferences to turn on copies of my own comments
       And all emails have been delivered
     When I comment on an admin post
     Then 1 email should be delivered to "narcis"
@@ -30,7 +30,7 @@ Feature: Commenting on admin posts
   Scenario: A user who receives copies of their own comments edits a comment on an admin post
     Given I have posted an admin post
       And I am logged in as "narcis"
-      And I set my preferences to receive copies of my own comments
+      And I set my preferences to turn on copies of my own comments
       And I comment on an admin post
       And all emails have been delivered
     When I edit a comment

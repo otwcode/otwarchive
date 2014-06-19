@@ -5,7 +5,7 @@
 <% user = challenge_signup.pseud.user %>
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
-  <ul class="actions" role="menu">
+  <ul class="<%= subnav ? "navigation actions" : "actions" %>" role="menu">
     <% # The edit and delete links shouldn't show on the challenge index for a prompt meme unless you are owner or mod, but should show on user index %>
     <% unless (controller.action_name == "index" && @user.nil? && collection.challenge_type == "PromptMeme" && (current_user.nil? || (current_user && !collection.user_is_maintainer?(current_user)))) %>
     <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
@@ -34,14 +34,12 @@
           <% # Warn about prompt loss if matching has not run; OTHERWISE warn that matching will need to be rerun %>
           <% if collection.potential_matches.count == 0 %>
             <%= link_to ts("Delete Sign-up"), 
-              collection_signup_path(collection, challenge_signup), 
-              :confirm => ts("Are you sure? All prompts in this sign-up will be lost."), 
-              :method => :delete %>
+              confirm_delete_collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? All prompts in this sign-up will be lost.") %>
           <% else %>
             <%= link_to ts("Delete Sign-up"), 
-              collection_signup_path(collection, challenge_signup), 
-              :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
-              :method => :delete %>
+              confirm_delete_collection_signup_path(collection, challenge_signup), 
+              :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards.") %>
           <% end %>
         </li>
       <% end %>
