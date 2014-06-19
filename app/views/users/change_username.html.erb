@@ -6,28 +6,24 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Edit My Profile"), edit_user_path(@user) %></li>
-  <li><%= span_if_current ts("Edit Default Pseud and Icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
-  <li><%= span_if_current ts("Change Email"), change_email_user_path(@user) %></li>
-</ul> 
+<%= render 'edit_header_navigation' %>
 <!--/subnav-->
-
 
 <!--main content-->
 
 <%= form_tag change_username_user_path(@user) do %>  
   <dl>
-    <% # The password field is up here to stop Firefox from autofilling the user name field when the user attempts to change its capitalization and to match the Change Email form %>
-    <dt><%= label_tag :password, ts("Password") %></dt>
-    <dd><%= password_field_tag :password %></dd>
     <dt><%= ts("Current User Name") %></dt>
     <dd><span class="important"><%= @user.login %></span></dd>
     <dt><%= label_tag :new_login, ts("New User Name") %></dt>
-    <dd><%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %></dd>
+    <dd>
+      <%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %>
+      <p class="footnote"><%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)", :minimum => User::LOGIN_LENGTH_MIN, :maximum => User::LOGIN_LENGTH_MAX) %></p>
+    </dd>
+    <dt><%= label_tag :password, ts("Password") %></dt>
+    <dd><%= password_field_tag :password %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
-	  <dd class="submit actions"><%= submit_tag ts("Change") %></dd>
+    <dd class="submit actions"><%= submit_tag ts("Change User Name"), :confirm => ts("Are you sure you want to change your user name?") %></dd>
   </dl>
 <% end %>
 <% if @wrong_password %>

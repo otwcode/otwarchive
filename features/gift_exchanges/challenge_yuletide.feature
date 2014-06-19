@@ -122,7 +122,7 @@ Feature: Collection
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
     And I should see "Characters (2 - 3)"
-    And I should see "Any?"
+    And I should see "Any Character"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
@@ -565,7 +565,7 @@ Feature: Collection
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
-    And the email should contain "A gift story has been posted for you"
+    And the email should contain "A gift work has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
     And the email should contain "by an anonymous responder"

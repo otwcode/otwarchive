@@ -23,6 +23,7 @@ Feature: Edit tags on a work
   When I follow "Edit Tags"
   Then I should see "Edit Work Tags for "
     And I should see "Testerwork"
+    And I should not see "Save Without Posting"
   When I fill in "Fandoms" with "Stargate SG-1, Hana Yori Dango"
     And I fill in "Additional Tags" with "Alternate Universe"
     And I press "Post Without Preview"
@@ -38,7 +39,7 @@ Feature: Edit tags on a work
   Then I should see "Drafts (1)"
   When I follow "Drafts (1)"
   Then I should see "Freeze Tag"
-    And I should see "Edit Tags" within "#main .own.work.blurb .navigation"
+    And I should see "Edit Tags" within "#main .own.work.blurb .actions"
   When I follow "Edit Tags"
     Then I should see "Edit Work Tags"
   When I fill in "Fandoms" with "Games, Anthropomorphic"
@@ -49,3 +50,10 @@ Feature: Edit tags on a work
     And I should see "Games"
     And I should see "Anthropomorphic"
     And I should see "The cooler version of tag"
+ 
+  Scenario: Ampersands and angle brackets should display in work titles on Edit Tags page
+  Given I have loaded the fixtures
+    And I am logged in as "testuser2" with password "testuser2"
+  When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
+    And I follow "Edit Tags"
+  Then I should see "I am <strong>er Than Yesterday & Other Lies"
