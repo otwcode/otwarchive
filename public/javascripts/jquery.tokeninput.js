@@ -142,10 +142,9 @@ $.TokenList = function (input, url_or_data, settings) {
     var timeout;
     var input_val;
 
-    // Keep a reference to the original input box's id so we can add it to our new input, and then remove the id attribute to keep our HTML nice and valid
+    // Keep a reference to the original input box's id so we can add it to our new input
     var $hidden_input_id = $(input)
-                              .attr('id')
-                              .removeAttr('id');
+                              .attr('id');
 
     // Add the original input's id to our new input
     // Originally included .css({outline: "none" }), but we actually want to see an outline for accessibility reasons
@@ -300,8 +299,10 @@ $.TokenList = function (input, url_or_data, settings) {
     });
 
     // Keep a reference to the original input box
+    // Remove its id because we don't want it duplicated after adding it to the new input
     var hidden_input = $(input)
                            .hide()
+                           .removeAttr('id')
                            .focus(function () {
                                input_box.focus();
                            })
