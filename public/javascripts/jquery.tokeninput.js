@@ -142,10 +142,16 @@ $.TokenList = function (input, url_or_data, settings) {
     var timeout;
     var input_val;
 
-    // Create a new text input an attach keyup events
-    var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
-        .css({
-            outline: "none"
+    // Keep a reference to the original input box's id so we can add it to our new input, and then remove the id attribute to keep our HTML nice and valid
+    var $hidden_input_id = $(input)
+                              .attr('id')
+                              .removeAttr('id');
+
+    // Add the original input's id to our new input
+    // Originally included .css({outline: "none" }), but we actually want to see an outline for accessibility reasons
+        var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
+        .attr({
+          'id': $hidden_input_id
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
