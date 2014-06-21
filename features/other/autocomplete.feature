@@ -49,21 +49,3 @@ Scenario: Collection autocomplete shows Collection Title and Name
     And I fill in "collection_names" with "Issue"
   Then I should see "jb_fletcher" in the autocomplete
     And I should see "robert_stack" in the autocomplete
-
-Scenario: Autocomplete should match words in parentheses, e.g. it should find the tag My (Awesome) Work when Awesome is entered. (We have to look for the words individually because Nokogiri can't handle parentheses.)
-	Given I am logged in
-		And a set of tags for testing autocomplete
-  When I go to the new work page
-    And I fill in "Additional Tags" with "Awesome"
-  Then I should see "My" in the autocomplete
-    And I should see "Awesome" in the autocomplete
-    And I should see "Work" in the autocomplete
-
-Scenario: Autocomplete should match words in quotes, e.g. it should find the tag "Trapper" John McIntyre when Trapper is entered. (We have to look for the words individually because handling quotation marks would mean rewriting all the things to take regexes instead.)
-	Given I am logged in
-		And a set of tags for testing autocomplete
-  When I go to the new work page
-    And I fill in "Characters" with "Trapper"
-  Then I should see "Trapper" in the autocomplete
-    And I should see "John" in the autocomplete 
-    And I should see "McIntyre" in the autocomplete
