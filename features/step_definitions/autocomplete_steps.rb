@@ -13,10 +13,7 @@ Given /^a set of tags for testing autocomplete$/ do
     step %{a noncanonical relationship "Destiel"}
     step %{a canonical freeform "Alternate Universe"}
     step %{a canonical freeform "Superduper"}
-    step %{a canonical freeform "My (Awesome) Work"}
     step %{a noncanonical freeform "alternate sundays"}
-    # Make a canonical character tag that uses quotation marks, since we can't do that with steps
-    char = Character.find_or_create_by_name_and_canonical('"Trapper" John McIntyre', true)
 end
 
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
