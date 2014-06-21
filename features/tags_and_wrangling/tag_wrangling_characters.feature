@@ -83,14 +83,14 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "1st Doctor"
     And I follow "Edit"
     And I fill in "Synonym of" with "First"
-  Then I should find "First Doctor" within ".autocomplete"
-    But I should not find "The First Doctor" within ".autocomplete"
+  Then I should see "First Doctor" within ".autocomplete"
+    But I should not see "The First Doctor" within ".autocomplete"
   When I fill in "Synonym of" with "First Doctor"
     And I fill in "Fandoms" with "Doc"
     
     # don't we want this to pull the fandom as well? if it doesn't already, I think we should add it
     
-    And I should find "Doctor Who" within ".autocomplete"
+    And I should see "Doctor Who" within ".autocomplete"
     And I fill in "Fandoms" with "Doctor Who"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -100,7 +100,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should see "Doctor Who"
     And the "tag_canonical" checkbox should be disabled
   When I fill in "tag_merger_string" with "One"
-  Then I should find "One" within ".autocomplete"
+  Then I should see "One" within ".autocomplete"
   When I fill in "tag_merger_string" with "One"
     And I fill in "Relationships" with "First Doctor/TARDIS"
     And I press "Save changes"
@@ -123,7 +123,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I choose "Character"
     And I press "Create Tag"
     And I fill in "SubTags" with "First "
-  Then I should find "First Doctor" within ".autocomplete"
+  Then I should see "First Doctor" within ".autocomplete"
   When I fill in "SubTags" with "First Doctor"
     And I press "Save changes"
   Then I should see "Tag was updated"

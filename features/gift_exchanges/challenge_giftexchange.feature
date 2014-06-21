@@ -55,7 +55,7 @@ Feature: Gift Exchange Challenge
   When I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
     And I submit
   Then I should see "Challenge was successfully updated"
-  Then I should find "Alaska"
+  Then I should see "Alaska"
 
   Scenario: Add a co-mod
 

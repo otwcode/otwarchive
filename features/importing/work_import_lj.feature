@@ -107,7 +107,7 @@ Feature: Import Works from LJ
       And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
       And I should see "more to their friendship than he'd thought." within "div.summary"
       And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should find "stanwood_title_400.png" within "img[src]"
+      And I should see "stanwood_title_400.png" within "img[src]"
       And I should see "Follow me to AO3"
       And I should not see "rarelitslash"
       And I should not see "rebecca2525"

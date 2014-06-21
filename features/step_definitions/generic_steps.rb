@@ -91,14 +91,16 @@ end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.all(text)
+    page.has_content?(text)
   end
+  find(:xpath, "//#{selector}[contains(text(),'#{text}')]").should_not(be_nil, "Could not find the text '#{text}' within the selector '#{selector}'")
 end
 
 Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.all(text)
-  end
+  #with_scope(selector) do
+  #  page.all(text)
+  #end
+  find(:xpath, "//#{selector}[contains(text(),'#{text}')]").should_not(be_nil, "Could not find the text '#{text}' within the selector '#{selector}'")
 end
 
 Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|

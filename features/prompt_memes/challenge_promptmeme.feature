@@ -1289,7 +1289,7 @@ Feature: Prompt Meme Challenge
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I view the work "Existing work"
-  Then I should find "draft"
+  Then I should see "draft"
   
   Scenario: work left in draft so claim is not yet totally fulfilled
   
@@ -1369,7 +1369,7 @@ Feature: Prompt Meme Challenge
     And I edit the work "Here's one I made earlier"
     And I check "Battle 12"
     And I press "Preview"
-  Then I should find "draft"
+  Then I should see "draft"
     And I should see "In response to a prompt by"
     # TODO: Figure out why this isn't showing - it works fine when testing manually
   #  And I should see "Collections:"
