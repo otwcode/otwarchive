@@ -17,8 +17,6 @@ Given /^a set of tags for testing autocomplete$/ do
     step %{a noncanonical freeform "alternate sundays"}
     # Make a canonical character tag that uses quotation marks, since we can't do that with steps
     char = Character.find_or_create_by_name_and_canonical('"Trapper" John McIntyre', true)
-    fand = Fandom.find_or_create_by_name_and_canonical('MASH (TV)', true)
-  char.add_association(fand)
 end
 
 Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
