@@ -12,7 +12,7 @@
               to_sentence(:last_word_connector => ', ').
               html_safe + ', ' %>
           <%= link_to work_kudos_path(commentable), :id => "kudos_summary" do %>
-            <%= ts(" and %{collapsed_count} more user(s)", :collapsed_count => kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW) %>
+            <%= ts(" and %{collapsed_count} more" + (%{collapsed_count} == 1 ? " user" : " users"), :collapsed_count => kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW) %>
           <% end %>
           <span class="kudos_expanded hidden">
             <%= kudos[ArchiveConfig.MAX_KUDOS_TO_SHOW..-1].map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
