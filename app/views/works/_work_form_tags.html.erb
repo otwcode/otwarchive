@@ -21,7 +21,7 @@
     <dd class="warning required">
       <fieldset class="warnings">
 			<!--<legend class="landmark">Warning</legend>-->
-			  <ul>
+        <ul>
           <% for tag in Warning.canonical.by_name %>
             <li>
               <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
@@ -29,7 +29,7 @@
             </li>
           <% end %>
         </ul>
-	    </fieldset>
+      </fieldset>
     </dd>
 
     <dt class="fandom required">
@@ -42,7 +42,7 @@
                           :id => "work_fandom",
                           :title => ts('fandoms')) %>
       <p class="footnote"><%= ts('If this is the first work for a fandom, it may not show up in the fandoms page for a day or two.') %></p>
-	  </dd>
+    </dd>
 
     <dt class="category">
       <label><%= Category::NAME %></label>
@@ -88,7 +88,7 @@
 
     <dt class="freeform" title="<%= ts('additional tags') %>">
       <label for="work_freeform"><%= Freeform::NAME %></label>
-      <%=	 link_to_help "additional-tags-help" %>
+      <%= link_to_help "additional-tags-help" %>
     </dt>
     <dd class="freeform" title="<%= ts('additional tags') %>">
       <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform',
