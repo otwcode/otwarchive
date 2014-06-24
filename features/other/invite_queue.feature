@@ -67,7 +67,7 @@ Feature: Invite queue management
   When I am logged out as an admin
   When I go to the invite_requests page
   Then I should see "Wondering how long you'll have to wait"
-    And I should see "email"
+    And I should see "Email"
   
   Scenario: queue sends out invites
   

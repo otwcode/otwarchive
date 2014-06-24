@@ -89,35 +89,34 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+#Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+#  with_scope(selector) do
+#    page.has_content?(text)
+#  end
+#end
+#
+#Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
+#  with_scope(selector) do
+#    page.has_content?(text)
+#  end
+#end
+#
+#Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+#  with_scope(selector) do
+#    page.has_content?(text)
+#  end
+#end
+
+# img attributes
+Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.has_content?(text)
+    page.should have_xpath("//img[@#{attribute}='#{text}']")
   end
-  find(:xpath, "//#{selector}[contains(text(),'#{text}')]").should_not(be_nil, "Could not find the text '#{text}' within the selector '#{selector}'")
 end
 
-Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
-  #with_scope(selector) do
-  #  page.all(text)
-  #end
-  find(:xpath, "//#{selector}[contains(text(),'#{text}')]").should_not(be_nil, "Could not find the text '#{text}' within the selector '#{selector}'")
-end
-
-Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.all(text)
-  end
-end
-
-Then /^I should see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_xpath("//img[@alt='#{text}']")) : (page.should have_xpath("//img[@title='#{text}']"))
-  end
-end
-
-Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_no_xpath("//img[@alt='#{text}']")) : (page.should have_no_xpath("//img[@title='#{text}']"))
+    page.should_not have_xpath("//img[@#{attribute}='#{text}']")
   end
 end
 

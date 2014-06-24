@@ -1,3 +1,4 @@
+@wip
 Feature: Display autocomplete for tags
   In order to facilitate posting
   I should be getting autocompletes for my tags
