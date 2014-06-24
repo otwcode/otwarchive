@@ -10,7 +10,7 @@
     <h3 class="landmark heading"><%= ts('Preface') %></h3>
     <dl>
       <dt class="title">
-        <%= f.label :title, ts("Work Title *"), :class => "required" %>
+        <%= f.label :title, ts('Work Title *'), :class => "required" %>
       </dt>
       <dd class="title">
         <%= f.text_field :title, :class => "observe_textlength text" %>
@@ -25,7 +25,7 @@
       <%= render 'pseuds/byline', :form => f, :type => 'work' %>
 
       <dt class="summary">
-        <%= f.label :summary, ts("Summary", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, ts('Summary', :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :class => "observe_textlength" %>
@@ -46,11 +46,11 @@
       <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted.sent).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
-          <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
+          <%= f.label "challenge_assignment_ids[]", ts('Does this fulfill a challenge assignment') %>
           <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection listbox">
-          <h4 class="heading"><%= ts("Open Assignments") %></h4>
+          <h4 class="heading"><%= ts('Open Assignments') %></h4>
           <%= checkbox_section f, :challenge_assignment_ids, (@work.challenge_assignments + @assignments).uniq,
                 :checked_method => "challenge_assignments", :name_method => "title" %>
         </dd>
@@ -58,10 +58,10 @@
       <% if !(@claims = current_user.request_claims.unstarted).empty? || !@work.challenge_claims.empty? %>
         <!-- if the user has open claims? -->
         <dt class="collection">
-          <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %> <%= link_to_help "add-work-to-assignment" %>
+          <%= f.label "challenge_claim_ids[]", ts('Fulfill a Claim') %> <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection listbox">
-          <h4 class="heading"><%= ts("Open Claims") %></h4>
+          <h4 class="heading"><%= ts('Open Claims') %></h4>
           <%= checkbox_section f, :challenge_claim_ids, (@work.challenge_claims + @claims).uniq,
               :checked_method => "challenge_claims", :name_helper_method => "claim_title" %>
         </dd>
@@ -69,14 +69,14 @@
 
       <!-- Add collection -->
       <dt class="collection" title="<%= ts('post to collection or challenge') %>">
-        <%= f.label :collection_names, ts("Post to Collections / Challenges") %> <%= link_to_help "add-collectible-to-collection" %>
+        <%= f.label :collection_names, ts('Post to Collections / Challenges') %> <%= link_to_help "add-collectible-to-collection" %>
       </dt>
       <dd class="collection" title="<%= ts('post to collection or challenge') %>">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
 
       <dt class="recipient" title="<%= ts('gift to') %>">
-        <%= f.label :recipients, ts("Gift this work to") %> <%= link_to_help "recipients" %>
+        <%= f.label :recipients, ts('Gift this work to') %> <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient" title="<%= ts('gift to') %>">
         <%= f.text_field :recipients, autocomplete_options("pseud") %>
@@ -87,7 +87,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, a podfic, or was inspired by another work") %> 
+        <%= label_tag 'parent-options-show', ts('This work is a remix, a translation, a podfic, or was inspired by another work') %> 
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -97,7 +97,7 @@
               <dt><%= p.label :url %></dt>
               <dd>
                 <%= p.text_field :url, :value => work_parent_value(:url) %>
-                <p class="important"><%= ts('For a work in the archive, only the URL is required.') %></p>
+                <p class="important"><%= ts('For a work in the Archive, only the URL is required.') %></p>
               </dd>
 
               <dt><%= p.label :title %></dt>
@@ -241,14 +241,14 @@
         <%= f.check_box :restricted %>
       </dt>
       <dd class="restrict">
-        <%= f.label :restricted, ts("Only show your work to registered users") %>
+        <%= f.label :restricted, ts('Only show your work to registered users') %>
         <%= link_to_help "registered-users" %>
       </dd>
       <dt class="anonymous comments">
         <%= f.check_box :anon_commenting_disabled %>
       </dt>
       <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts("Anonymous commenting disabled") %>
+        <%= f.label :anon_commenting_disabled, ts('Anonymous commenting disabled') %>
         <%= link_to_help "anonymous-commenting" %>
       </dd>
     </dl>
