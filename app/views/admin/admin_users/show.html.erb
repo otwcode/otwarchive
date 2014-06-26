@@ -5,7 +5,7 @@
 
 <!--subnav-->
 
-<ul class="navigation actions" role="navigation actions ">
+<ul class="navigation actions" role="navigation">
   <li><%= button_to ts("Send Activation Email"), {:action => 'send_activation', :id => @user}, :disabled => @user.active? %></li>
   <li>
     <%= button_to ts("Activate User Account"), {:action => 'activate', :id => @user}, :disabled => @user.active? %>

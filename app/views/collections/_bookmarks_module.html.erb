@@ -1,4 +1,4 @@
-<div class="bookmarks listbox group" id="collection-bookmarks">
+<div class="bookmark listbox group" id="collection-bookmarks">
   <h3 class="heading">
     <% if collection.collection_preference.show_random || params[:show_random] %>
       <%= ts("Random bookmarks") %>  
@@ -12,6 +12,6 @@
     <% end %>
   </ul>
   <% if @collection.all_approved_bookmarks_count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-    <ul class="navigation actions" role="navigation"><li><%= link_to ts("Bookmarks (%{count})", :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li></ul>
+    <ul class="actions" role="navigation"><li><%= link_to ts("Bookmarks (%{count})", :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li></ul>
   <% end %>
 </div>
