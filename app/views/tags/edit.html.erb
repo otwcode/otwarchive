@@ -86,19 +86,6 @@
     </dl>
   </fieldset>
 
-  <fieldset>
-    <legend><%= ts('Taggings Count') %></legend>
-    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
-
-    <dl>
-      <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
-      <dd>
-        <%= f.check_box(:fix_taggings_count) %>&nbsp;
-        <p><%= ts('Select this if the number of taggings appears to be wrong and needs to be fixed.') %></p>
-      </dd>
-    </dl>
-  </fieldset>
-
   <% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
     <fieldset>
       <legend><%= ts("Parent Tags") %></legend>
@@ -182,9 +169,22 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= ts('Taggings Count') %></legend>
+    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
+
+    <dl>
+      <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
+      <dd>
+        <%= f.check_box(:fix_taggings_count) %>&nbsp;
+        <p><%= ts('Enable this if the number of taggings on search or wrangle pages needs to be fixed.') %></p>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= ts('Submit') %></legend>
     <p class="submit actions">
-      <%= submit_tag ts("Save changes") %>
+      <%= submit_tag ts('Save changes') %>
     </p>
   </fieldset>
 <% end %>

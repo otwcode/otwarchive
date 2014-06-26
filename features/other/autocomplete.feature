@@ -8,7 +8,6 @@ Scenario: Only matching canonical tags should appear in autocomplete, and search
 		And a set of tags for testing autocomplete
    	And I go to the new work page
   Then the tag autocomplete fields should list only matching canonical tags
-	Then the tag autocomplete fields should list only matching canonical tags
   
 Scenario: For fandom-specific autocomplete, if a fandom is entered then only characters/relationships within the fandom should appear in autocomplete
 	Given I am logged in
@@ -51,5 +50,3 @@ Scenario: Collection autocomplete shows Collection Title and Name
     And I fill in "collection_names" with "Issue"
   Then I should see "jb_fletcher" in the autocomplete
     And I should see "robert_stack" in the autocomplete
-
-	

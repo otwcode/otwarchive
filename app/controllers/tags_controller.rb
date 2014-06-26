@@ -185,12 +185,13 @@ class TagsController < ApplicationController
     end
 
     @counts = {}
-    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
+    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Taggings Count']
     @counts['Works'] = @tag.visible_works_count
     @counts['Drafts'] = @tag.works.unposted.count
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
+    @counts['Taggings Count'] = @tag.taggings_count
 
     @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
