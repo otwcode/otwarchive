@@ -659,7 +659,6 @@ protected
           flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
         end
       end
-    end
   end
 
 public
