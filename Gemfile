@@ -79,6 +79,9 @@ gem 'newrelic-redis'
 # For URL mangling
 gem 'addressable'
 
+# For controlling application behavour dynaically
+gem 'rollout'
+
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
