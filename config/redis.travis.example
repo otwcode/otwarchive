@@ -4,5 +4,3 @@ redis_kudos:
   test: localhost:6379
 redis_general:
   test: localhost:6379
-redis_rollover:
-  test: localhost:6379
