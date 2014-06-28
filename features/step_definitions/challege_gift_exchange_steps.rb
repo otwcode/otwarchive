@@ -41,6 +41,16 @@ Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
+Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
+end
+
+Given /^I have created the tagless gift exchange "([^\"]*)"$/ do |challengename|
+  step %{I have created the tagless gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+end
+
 When /^I fill in gift exchange challenge options$/ do
   current_date = DateTime.current
   fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
@@ -60,6 +70,12 @@ Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
   step %{I should see a create confirmation message}
   step %{"#{title}" collection exists}
   step %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
+end
+
+Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
+  step %{I am logged in as "mod1"}
+  step %{I have created the gift exchange "Awesome Gift Exchange"}
+  step %{I open signups for "Awesome Gift Exchange"}
 end
 
 ## Signing up
@@ -135,7 +151,57 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
     step %{I check the 1st checkbox with value "Stargate SG-1"}
 end
 
+When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Sign Up"}
+  step %{I fill in "Description" with "random text"}
+  step %{I press "Submit"}
+  step %{I should see "Sign-up was successfully created"}
+end
+
 ## Matching
+
+Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
+  step %{the gift exchange "#{title}" is ready for signups}
+  step %{everyone has signed up for the gift exchange "#{title}"}
+end
+
+Given /^I create an invalid signup in the gift exchange "([^\"]*)"$/ do |challengename|
+  collection = Collection.find_by_title(challengename)
+  # create an invalid signup by deleting the first one's offers,
+  # bypassing the validation checks
+  collection.signups.first.offers.delete_all
+end
+
+When /^I remove a recipient$/ do
+  step %{I fill in the 1st field with id matching "_request_signup_pseud" with ""}
+end
+
+When /^I assign a recipient to herself$/ do
+  first_recip_field = page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/_request_signup_pseud/)}[0]
+  recip = first_recip_field['value']
+  id = first_recip_field['id']
+  if id.match(/assignments_(\d+)_request/)
+    num = $1
+    fill_in "challenge_assignments_#{num}_offer_signup_pseud", :with => recip
+  end
+end
+
+When /^I manually destroy the assignments for "([^\"]*)"$/ do |title|
+  collection = Collection.find_by_title(title)
+  collection.assignments.destroy_all
+end
+
+When /^I assign a pinch hitter$/ do
+  step %{I fill in the 1st field with id matching "pinch_hitter_byline" with "mod1"}
+end
+
+When /^I assign a pinch recipient$/ do
+  name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
+  pseud = Pseud.find_by_name(name)
+  request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
+end
 
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}

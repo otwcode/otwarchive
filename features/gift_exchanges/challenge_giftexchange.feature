@@ -72,22 +72,20 @@ Feature: Gift Exchange Challenge
   Then I should see "New members invited: comod"
 
   Scenario: Sign up for a gift exchange
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-  When I am logged in as "myname1"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    And I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Sign-up was successfully created"
-  
+  # Invalid signup should warn the user
+  When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+    And I reload the page
+  Then I should see "sign-up is invalid"  
   
   Scenario: Optional tags should be saved when editing a signup (gcode issue #2729)
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And I edit settings for "Awesome Gift Exchange" challenge
     And I check "Optional Tags?"
     And I submit
-    And I open signups for "Awesome Gift Exchange"
   When I am logged in as "myname1"
     And I sign up for "Awesome Gift Exchange" with combination A
     And I follow "Edit Sign-up"
@@ -99,31 +97,24 @@ Feature: Gift Exchange Challenge
   Then I should see "Something else weird"
   
   Scenario: Sign-ups can be seen in the dashboard
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
   When I am logged in as "myname1"
-  When I sign up for "Awesome Gift Exchange" with combination A
+    And I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
   Then I should see "Sign-ups (1)"
   When I follow "Sign-ups (1)"
   Then I should see "Awesome Gift Exchange"
 
   Scenario: Ordinary users cannot see other signups
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-  When I am logged in as "myname1"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    And I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
-  When I go to the collections page
+    And I go to the collections page
     And I follow "Awesome Gift Exchange"
   Then I should not see "Sign-ups" within "#dashboard"
   
   Scenario: Mod can view signups
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -136,10 +127,7 @@ Feature: Gift Exchange Challenge
     And I should see "Alternate Universe - Historical"
 
   Scenario: Cannot generate matches while signup is open
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
@@ -148,31 +136,82 @@ Feature: Gift Exchange Challenge
     And I should not see "Generate Potential Matches"
 
   Scenario: Matches can be generated
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-  When I close signups for "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I close signups for "Awesome Gift Exchange"
   When I follow "Matching"
-  When I follow "Generate Potential Matches"
+    And I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
   
+  Scenario: Invalid signups are caught before generation
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+  When I close signups for "Awesome Gift Exchange"
+    And I follow "Matching"
+    And I follow "Generate Potential Matches"
+    And the system processes jobs
+    And I wait 3 seconds
+  Then 1 email should be delivered to "mod1"
+    And the email should contain "invalid sign-up"
+  When I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Generate Potential Matches"
+    And I should see "invalid sign-ups"
+    
+  Scenario: Assignments can be updated and cannot be sent out until everyone is assigned
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I remove a recipient
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should see "No Recipient"
+    And I should see "No Giver"
+  When I follow "Send Assignments"
+  Then I should see "aren't assigned"
+  When I follow "No Giver"
+    And I assign a pinch hitter
+    And I press "Save Assignment Changes"
+  Then I should see "Assignments updated"
+    And I should not see "No Giver"
+  When I follow "No Recipient"
+    And I assign a pinch recipient
+    And I press "Save Assignment Changes"
+    And I should not see "No Recipient"
+  When I follow "Send Assignments"
+  Then I should see "Assignments are now being sent out"
+  
+  Scenario: Issues with assignments
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
+    And I have generated matches for "Awesome Gift Exchange"
+  When I assign a recipient to herself
+    And I press "Save Assignment Changes"
+  Then I should not see "Assignments updated"
+    And I should see "do not match"  
+  When I manually destroy the assignments for "Awesome Gift Exchange"
+    And I go to "Awesome Gift Exchange" gift exchange matching page  
+  Then I should see "Regenerate Assignments"
+    And I should see "Regenerate All Potential Matches"
+    And I should see "try regenerating assignments"
+  When I follow "Regenerate Assignments"
+    And the system processes jobs
+    And I wait 3 seconds
+    And I reload the page
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    
   Scenario: Matches can be regenerated for a single signup
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I am logged in as "Mismatch"
     And I sign up for "Awesome Gift Exchange" with a mismatched combination
   When I am logged in as "mod1"
     And I have generated matches for "Awesome Gift Exchange"
   Then I should see "No Potential Givers"
     And I should see "No Potential Recipients"
-    And I should see "Regenerate Matches For Mismatch"
+  When I follow "No Potential Givers"
+    Then I should see "Regenerate Matches For Mismatch"
   When I follow "Edit"
     And I check the 1st checkbox with the value "Stargate Atlantis"
     And I uncheck the 1st checkbox with the value "Bad Choice"
@@ -180,6 +219,7 @@ Feature: Gift Exchange Challenge
     And I uncheck the 2nd checkbox with the value "Bad Choice"
     And I submit
     And I follow "Matching"
+    And I follow "No Potential Recipients"
     And I follow "Regenerate Matches For Mismatch"
   Then I should see "Matches are being regenerated for Mismatch"
   When the system processes jobs
@@ -193,18 +233,11 @@ Feature: Gift Exchange Challenge
     And I reload the page
   Then I should not see "No Potential Givers"
     And I should not see "No Potential Recipients"
-    And I should see "Main Assignments"
+    And I should see "Complete"
     
-  Scenario: Correct potential matches are generated
-  
-
-
   Scenario: Assignments can be sent
 
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for matching
     And I have generated matches for "Awesome Gift Exchange"
   When I follow "Send Assignments"
   Then I should see "Assignments are now being sent out"
@@ -303,6 +336,37 @@ Feature: Gift Exchange Challenge
     And I follow "Download (CSV)"
     Then I should get a file with ending and type csv
 
+  Scenario: View a signup summary with no tags
+  Given the following activated users exist
+  | login   | password |
+  | user1   | password |
+  | user2   | password |
+  | user3   | password |
+  | user4   | password |
+  | user5   | password |
+  | user6   | password |
+  When I am logged in as "mod1"
+    And I have created the tagless gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
+  When I am logged in as "user1" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user2" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user3" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user4" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user5" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user6" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "mod1"
+    And I go to "My Gift Exchange" collection's page
+    And I follow "Sign-up Summary"
+  Then I should not see "Summary does not appear until at least"
+    And I should see "Tags were not used in this Challenge, so there is no summary to display here."
+
+
   Scenario: Tagsets show up in Challenge metadata
   Given I am logged in as "mod1"
     And I have created the gift exchange "Cabbot Cove Remixes"
@@ -330,7 +394,16 @@ Feature: Gift Exchange Challenge
     And I should not see "Angela Lansbury"
 
 
-
-
-    
-
+  Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I open signups for "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to the "Awesome Gift Exchange" signups page
+    And I delete the signup by "myname1"
+  Then I should see "Challenge sign-up was deleted." 
+  When I am logged in as "myname2"
+    And I delete my signup for the gift exchange "Awesome Gift Exchange"
+  Then I should see "Challenge sign-up was deleted."
+  

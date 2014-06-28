@@ -201,7 +201,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
-    
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -210,8 +210,8 @@ class WorksController < ApplicationController
     end
 
     # Users must explicitly okay viewing of entire work
-    if @work.number_of_posted_chapters > 1
-      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+    if @work.chaptered?
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep
@@ -292,7 +292,7 @@ class WorksController < ApplicationController
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created.')
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
@@ -356,7 +356,9 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created.')
+        unless @work.posted?
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
@@ -517,6 +519,12 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
+    
+    # is external author information entered when import for others is not checked?
+    if (params[:external_author_name] || params[:external_author_email]) && !params[:importing_for_others]
+      flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
+      render :new_import and return
+    end
 
     # is this an archivist importing?
     if params[:importing_for_others] && !current_user.archivist
@@ -645,10 +653,10 @@ protected
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
     if !@collection.nil? && @collection.moderated?
-      if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
-        flash[:notice] ||= ""
-        flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
-      end
+     if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+     end
     end
   end
 
@@ -696,7 +704,7 @@ public
     end
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
+      select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
   end
 
   def edit_multiple

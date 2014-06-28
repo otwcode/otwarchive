@@ -8,7 +8,7 @@
     <%= @bannertext %>
     <% if current_user.nil? %>
       <p class="submit">
-        <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>
+        <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]) %>
         <%= link_to "x", nil, :remote => true, :id => "hide-notice-banner", :title => "close", :class => "showme" %>
       </p>
     <% else %>

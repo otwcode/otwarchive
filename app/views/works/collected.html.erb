@@ -5,7 +5,7 @@
 <!-- /end descriptions-->
 
 <!--subnav-->
-<ul class="user navigation actions" role="navigation">
+<ul class="navigation actions" role="navigation">
   <% if @user == current_user %>
     <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
   <% end %>

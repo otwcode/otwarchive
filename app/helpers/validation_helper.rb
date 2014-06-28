@@ -23,7 +23,7 @@ module ValidationHelper
     
     if object && object.errors.any?
       errors = object.errors.full_messages
-      intro = content_tag(:h4, h(ts("Sorry! We couldn't save this %{objectname} because:", :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 
+      intro = content_tag(:h4, h(ts("Sorry! We couldn't save this %{objectname} because:", :objectname => object.class.model_name.human.to_s.downcase.gsub(/_/, ' '))))
       error_messages_formatted(errors, intro)
     end
   end

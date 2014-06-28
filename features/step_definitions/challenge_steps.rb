@@ -48,7 +48,6 @@ Given /^I have Yuletide challenge tags set ?up$/ do
     step %{a canonical fandom "Unrequested"}
 end
 
-
 ### General Challenge Settings
 
 When /^I edit settings for "([^\"]*)" challenge$/ do |title|
@@ -107,7 +106,6 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   step %{I follow "Sign Up"}
 end
 
-
 ### Editing signups
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
@@ -126,16 +124,39 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   step %{I should see an update confirmation message}
 end
 
-When /^I delete my signup for "([^\"]*)"$/ do |title|
+When /^I delete my signup for the prompt meme "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "My Prompts"}
-  step %{I follow "Delete Sign-up"}
-  step %{I should see "Challenge sign-up was deleted."}
+  step %{I delete the signup}
+end
+
+When /^I delete my signup for the gift exchange "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "My Sign-up"}
+  step %{I delete the signup}
 end
 
 When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   step %{I follow "Prompts ("}
+end
+
+When /^I delete the signup by "([^\"]*)"$/ do |participant|
+  click_link("#{participant}")
+  step %{I delete the signup}
+end
+
+When /^I delete the signup$/ do
+  step %{I follow "Delete Sign-up"}
+  step %{I press "Yes, Delete Sign-up"}
+  step %{I should see "Challenge sign-up was deleted."}
+end
+
+When /^I edit the prompt by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  step %{I follow "Prompts ("}
+  click_link("#{participant}")
+  step %{I follow "Edit"}
 end
 
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
@@ -145,6 +166,16 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
     step %{I uncheck "This collection is unrevealed"}
     step %{I press "Update"}
 end
+
+When /^I approve the first item in the collection "([^\"]*)"$/ do |collection|
+  collection = Collection.find_by_title(collection)
+  collection_item = collection.collection_items.first.id
+  visit collection_path(collection)
+  step %{I follow "Manage Items"}
+  step %{I select "Approved" from "collection_items_#{collection_item}_collection_approval_status"}
+  step %{I press "Submit"}
+end
+
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   step %{I am logged in as "mod1"}

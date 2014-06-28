@@ -4,7 +4,7 @@ describe AutocompleteController do
 
   before do
     # clear out the test redis db so we don't get duplicate entries
-    $redis.flushdb
+    REDIS_GENERAL.flushdb
   end
   
   describe "do_tag" do

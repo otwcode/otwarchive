@@ -3,8 +3,7 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  breakpoint
-  0
+  binding.pry
 end
 
 Then /^tell me I got (.*)$/ do |spot|

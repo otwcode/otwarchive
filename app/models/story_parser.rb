@@ -38,11 +38,11 @@ class StoryParser
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
-  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet lotrfanfiction twilightarchives)
+  KNOWN_STORY_PARSERS = %w(deviantart dw lj lotrfanfiction twilightarchives)
 
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
-  KNOWN_AUTHOR_PARSERS= %w(yuletide lj minotaur)
+  KNOWN_AUTHOR_PARSERS= %w(lj minotaur)
 
   # places for which we have a download_story_from_[source]
   # used to customize the downloading process
@@ -55,7 +55,6 @@ class StoryParser
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
   SOURCE_DW = 'dreamwidth\.org'
-  SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = '(^|[^A-Za-z0-9-])fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
@@ -126,7 +125,7 @@ class StoryParser
   # - sanitize_params: after processing, clean up the params and strip out bad HTML
   #
   # If the story is from a known source, parse_common hands off to a custom parser built just for that source,
-  # including parse_story_from_yuletide, parse_story_from_lj, parse_story_from_ffnet. If not known, it falls
+  # including parse_story_from_lj. If not known, it falls
   # back on parse_story_from_unknown.
   #
   # The various parsers use different methods to collect up metadata, and generically we also use:
@@ -328,22 +327,6 @@ class StoryParser
       return work
     end
 
-    def parse_author_from_yuletide(location)
-      if location.match(/archive\/([0-9]+\/.*)\.html/)
-        yuletide_location = $1
-        archive_url = "http://yuletidetreasure.org/cgi-bin/files/get_author.cgi?filename=#{yuletide_location}"
-        author_info = download_text(archive_url)
-        email = name = ""
-        if author_info.match(/^EMAIL: (.*)$/)
-          email = $1
-        end
-        if author_info.match(/^NAME: (.*)/)
-          name = $1
-        end
-        return parse_author_common(email, name)
-      end
-    end
-
     def parse_author_from_lj(location)
       if location.match( /^(http:\/\/)?([^\.]*).(livejournal.com|dreamwidth.org|insanejournal.com|journalfen.net)/)
         email = name = ""
@@ -464,27 +447,7 @@ class StoryParser
 
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
-      raise Error, "Imports from fanfiction.net are no longer available due to a block on their end. :("
-      # raise Error, "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
-      # raise Error, "The url #{location} is locked." if location.match(/secure/)
-      # @chapter_contents = []
-      # if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
-      #   urlstart = $1
-      #   urlend = $3
-      #   chapnum = 1
-      #   Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
-      #     loop do
-      #       url = "#{urlstart}#{chapnum.to_s}#{urlend}"
-      #       body = download_with_timeout(url)
-      #       if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/FanFiction\.Net Message/)
-      #         break
-      #       end
-      #       @chapter_contents << body
-      #       chapnum = chapnum + 1
-      #     end
-      #   }
-      # end
-      # return @chapter_contents
+      raise Error, "Sorry, Fanfiction.net does not allow imports from their site."
     end
     
     # this is an efiction archive but it doesn't handle chapters normally
@@ -730,139 +693,6 @@ class StoryParser
       unless details[0].nil?
          work_params[:revised_at] = convert_revised_at(details[0].inner_text)
       end
-
-      return work_params
-    end
-
-    # Parses a story from the Yuletide archive (an AutomatedArchive)
-    def parse_story_from_yuletide(story)
-      work_params = {:chapter_attributes => {}}
-      tags = ['yuletide']
-
-      content_table = (@doc/"table[@class='form']/tr/td[2]")
-      
-      unless content_table.nil?
-        centers = content_table.css("center")
-
-        # Try to parse (and remove) the metadata
-        p = /Fandom:\s*?<a .*?>(.*?)<\/a>.*?Written for: (.*) in the (Yuletide|New Year Resolutions) (\d*) Challenge.*?by <a .*?>(.*?)<\/a>/im
-        
-        if !centers[0].nil? && centers[0].to_html.match(p)
-
-          fandom, recip, challenge, year, author = $1, $2, $3, $4, $5
-
-          work_params[:recipients] = recip
-
-          if challenge=="Yuletide"
-            tags << "challenge:Yuletide #{year}"
-            work_params[:revised_at] = convert_revised_at("#{year}-12-25")
-          else
-            tags << "challenge:NYR #{year}"
-            work_params[:revised_at] = convert_revised_at("#{year}-01-01")
-          end
-            
-          work_params[:fandom_string] = fandom
-
-          unless centers[0].css("h2")[0].nil?
-            work_params[:title] = centers[0].css("h2")[0].inner_html
-          else
-            work_params[:title] = (@doc/"title").inner_html
-          end
-
-          unless centers[0].css("p")[0].nil?
-            work_params[:notes] = centers[0].css("p")[0].inner_html
-          end
-          
-          centers[0].remove
-        end
-        
-        # Try to remove the comment links at the bottom
-        if !centers[-1].nil? && centers[-1].to_html.match(/<!-- COMMENTLINK START -->/)
-          centers[-1].remove
-        end
-        
-        storytext = content_table.inner_html
-        
-      else
-        storytext = (@doc/"body").inner_html
-        work_params[:title] = (@doc/"title").inner_html
-      end
-      
-      storytext = clean_storytext(storytext)
-
-      # fix the relative links
-      storytext.gsub!(/<a href="\//, '<a href="http://yuletidetreasure.org/')
-
-      work_params.merge!(scan_text_for_meta(storytext))
-      work_params[:chapter_attributes][:content] = storytext
-
-      # Here we're going to try and get the search results
-      begin
-        search_title = work_params[:title].gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-        search_author = author.nil? ? "" : author.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-        search_recip = recip.nil? ? "" : recip.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-        search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" +
-                      "Recipient=#{search_recip}&Title=#{search_title}&Author=#{search_author}&NumToList=0"
-        search_res = download_with_timeout(search_url)
-        search_doc = Nokogiri.parse(search_res)
-        summary = search_doc.css('dd.summary') ? search_doc.css('dd.summary').first.content : ""
-        work_params[:summary] = summary
-        work_params.merge!(scan_text_for_meta(search_res))
-      rescue
-        # couldn't get the summary data, oh well, keep going
-      end
-
-      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
-
-      return work_params
-    end
-
-    # Parses a story from fanfiction.net
-    def parse_story_from_ffnet(story)
-      work_params = {:chapter_attributes => {}}
-      # storytext = clean_storytext((@doc/"#storytext").inner_html)
-      storytext = (@doc/"#storytext")
-      #remove share area
-      divs = storytext.css("div div.a2a_kit")
-      if !divs[0].nil?
-        divs[0].remove
-      end
-
-      storytext = clean_storytext(storytext.inner_html)
-
-      work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)
-
-      # put in some blank lines to make it readable in the textarea
-      # the processing will strip out the extras
-      storytext.gsub!(/<\/p><p>/, "</p>\n\n<p>")
-
-      tags = []
-      pagetitle = (@doc/"title").inner_html
-      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic/)
-        work_params[:fandom_string] = $2
-        work_params[:title] = $1
-        if work_params[:title].match(/^(.*) Chapter ([0-9]+): (.*)$/)
-          work_params[:title] = $1
-          work_params[:chapter_attributes][:title] = $3
-        end
-      end
-      if story.match(/rated:\s*<a.*?>\s*(.*?)<\/a>/i)
-        rating = convert_rating($1)
-        work_params[:rating_string] = rating
-      end
-
-      if story.match(/published:\s*(\d\d)-(\d\d)-(\d\d)/i)
-        date = convert_revised_at("#{$3}/#{$1}/#{$2}")
-        work_params[:revised_at] = date
-      end
-
-      if story.match(/rated.*?<\/a> - .*? - (.*?)(\/(.*?))? -/i)
-        tags << $1
-        tags << $3 unless $1 == $3
-      end
-
-      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
-      work_params[:chapter_attributes][:content] = storytext
 
       return work_params
     end
