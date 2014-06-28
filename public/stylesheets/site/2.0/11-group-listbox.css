@@ -27,7 +27,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   padding: 0.25em;
 }
 
-.listbox .index, .dashboard .listbox .index {
+.listbox .index {
   width: auto;
   padding: 0.643em;
   float: none;
