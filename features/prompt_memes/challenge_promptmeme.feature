@@ -547,7 +547,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   Then I should not see "myname4" within "h5"
     And I should not see "mod1" within "h5"
-    And I should see "Fulfilled Story by Anonymous" within "div.works h4"
+    And I should see "Fulfilled Story by Anonymous" within "div.work h4"
   
   Scenario: User cannot see unposted claims to delete
   
@@ -1033,7 +1033,7 @@ Feature: Prompt Meme Challenge
     And I should not see "mod" within "h4"
   Then I follow "Fulfilled Claims"
   # On the users' My Claims page, they see their anon works as Anonymous
-    And I should see "Anonymous" within "div.works h4"
+    And I should see "Anonymous" within "div.work h4"
   
     
   Scenario: check that claims can't be viewed even after challenge is revealed
@@ -1077,6 +1077,27 @@ Feature: Prompt Meme Challenge
   # 2 stories are now revealed, so notify the prompters
     And 2 emails should be delivered
     
+  Scenario: When a prompt is filled with a co-authored work, the e-mail should link to each author's URL instead of showing escaped HTML
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
+    And I log out
+  When I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Co-authored Fill"
+    And I add the co-author "myname3" 
+  When I press "Post Without Preview"
+  Then 1 email should be delivered to "myname3"
+    And the email should contain "You have been listed as a coauthor on the following work"
+  When I am logged in as "mod1"
+    And I reveal the authors of the "Battle 12" challenge
+    And I reveal the "Battle 12" challenge
+  Then 1 email should be delivered to "myname1"
+    And the email should link to myname2's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname2/pseuds/myname2&quot;"
+    And the email should link to myname3's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname3/pseuds/myname3&quot;"
+        
   Scenario: Story is anon when challenge is revealed
   
   Given I have standard challenge tags setup
@@ -1143,8 +1164,8 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see "Fulfilled By"
-    And I should see "Fulfilled Story by myname4" within "div.works"
-    And I should see "Fulfilled Story-thing by mod1" within "div.works"
+    And I should see "Fulfilled Story by myname4" within "div.work"
+    And I should see "Fulfilled Story-thing by mod1" within "div.work"
 
 
   Scenario: Anon prompts stay anon on claims index even if challenge is revealed
@@ -1236,8 +1257,8 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made."
   When I am logged in as "myname4"
     And I go to the "Battle 12" requests page
-  Then I should see "mod1" within ".prompt .works"
-    And I should see "myname4" within ".prompt .works"
+  Then I should see "mod1" within ".prompt .work"
+    And I should see "myname4" within ".prompt .work"
     
   Scenario: Make another claim and then fulfill from the post new form (New Work)
   
@@ -1363,7 +1384,7 @@ Feature: Prompt Meme Challenge
   # claim is fulfilled on collection page
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  Then I should see "myname1" within ".prompt .works"
+  Then I should see "myname1" within ".prompt .work"
     And I should see "Fulfilled By"
 
   Scenario: Download prompt CSV from signups page
@@ -1389,7 +1410,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "Scott" with password "password"
     And I go to "Scotts Prompt" collection's page
     And I follow "Prompt Form"
-    And I check "Semi-anonymous prompt"
+    And I check "Semi-anonymous Prompt"
     And I press "Submit"
   Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
-    And the "Semi-anonymous prompt" checkbox should be checked
+    And the "Semi-anonymous Prompt" checkbox should be checked

@@ -356,7 +356,9 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        unless @work.posted?
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
@@ -651,10 +653,10 @@ protected
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
     if !@collection.nil? && @collection.moderated?
-      if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
-        flash[:notice] ||= ""
-        flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
-      end
+     if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
+     end
     end
   end
 
@@ -702,7 +704,7 @@ public
     end
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
+      select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
   end
 
   def edit_multiple
