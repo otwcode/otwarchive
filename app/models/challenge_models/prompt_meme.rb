@@ -29,7 +29,6 @@ class PromptMeme < ActiveRecord::Base
     end
   end
 
-  before_validation :update_allowed_values
   before_validation :update_allowed_values, :update_allowed_prompts
   
   # make sure that challenge sign-up / close / open dates aren't contradictory
