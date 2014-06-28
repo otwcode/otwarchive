@@ -15,6 +15,9 @@ Feature: Invite queue management
   
   When I turn on the invitation queue
   When I am logged out as an admin
+    And I have an AdminSetting
+    And account creation requires invitation
+    And account creation is enabled
   When I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
