@@ -23,7 +23,6 @@
 
 
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
-<<<<<<< HEAD
   <p class="required notice"><%= ts('* Required information') %></p>
   <% unless @challenge_signup.errors.empty? %>
     <div class="error">
