@@ -654,22 +654,12 @@ protected
   def in_moderated_collection
     moderated_collection =[]
     @work.collections.each do |collection|
-      Rails.logger.debug "COLLECTION: >>>#{collection.title}<<<"
-      Rails.logger.debug "MODERATED: >>>#{collection.title}<<< #{collection.moderated?}"
-      Rails.logger.debug "POSTING PARTICIPANT: >>>#{collection.title}<<< #{collection.user_is_posting_participant?(current_user)}"
       if !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
-        Rails.logger.debug "THE COLLECTION IS MODERATED NOW CHECKING"
         if @work.collection_items.present?
           @work.collection_items.each do |collection_item|
-            Rails.logger.debug "COLLECTION ITEM: #{@work.title} #{collection_item.collection.title} THIS COLLECTION: #{collection.title}"
             if collection_item.collection == collection
-              Rails.logger.debug ">>>> WE HAVE A MATCH <<<<"
-              Rails.logger.debug "#{collection_item.user_approval_status} AND #{collection_item.collection_approval_status}"
               if collection_item.user_approval_status == 1 && collection_item.collection_approval_status == 0
-                Rails.logger.debug "UNAUTHORIZED BRO"
                 moderated_collection << collection
-                #flash[:notice] ||= "<br />"
-                #flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to (#{view_context.link_to(collection.title, collection_path(collection))}) once it is approved by a moderator.").html_safe
               end
             end
           end
@@ -677,9 +667,8 @@ protected
       end
     end
     if moderated_collection.present?
-      joined_collections = moderated_collection.map { |f| view_context.link_to(f.title, collection_path(f)) }.join(', ')
       flash[:notice] ||= ""
-      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to (%{joined_collection}) once it is approved by a moderator.").html_safe
+      flash[:notice] += ts(" You have submitted your work to #{moderated_collection.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections " : "the moderated collection '%{all_collections}'. It will not become a part of the collection "}until it has been approved by a moderator.", :all_collections => moderated_collection.map { |f| f.title }.join(', '))
     end
   end
 
