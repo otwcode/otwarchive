@@ -82,6 +82,9 @@ gem 'newrelic-redis'
 # For URL mangling
 gem 'addressable'
 
+# For controlling application behavour dynaically
+gem 'rollout'
+
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
@@ -98,6 +101,9 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  # Code coverage
+  gem 'simplecov', :require => false
+  gem 'email_spec'
 end
 
 group :test, :development do

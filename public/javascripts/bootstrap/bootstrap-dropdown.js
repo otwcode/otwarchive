@@ -1,5 +1,5 @@
 /* ============================================================
- * bootstrap-dropdown.js v2.2.2
+ * bootstrap-dropdown.js v2.3.1
  * http://twitter.github.com/bootstrap/javascript.html#dropdowns
  * ============================================================
  * Copyright 2012 Twitter, Inc.
@@ -15,14 +15,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ========================================================== 
- * OTWARCHVIE DEVS:
+ * ============================================================
+ * OTWARCHIVE DEVS:
  *
  * When updating to the newest version, make sure to include the
- * customizations from LINES 60-68 AND 172-178 and UPDATE THIS
+ * customizations from LINES 61-69 AND 177-183 and UPDATE THIS
  * MESSAGE with the new line numbers. These lines ensure proper
  * behavior when both JS and CSS hover are used for menus
  * ========================================================== */
+
 
 !function ($) {
 
@@ -93,7 +94,10 @@
 
       isActive = $parent.hasClass('open')
 
-      if (!isActive || (isActive && e.keyCode == 27)) return $this.click()
+      if (!isActive || (isActive && e.keyCode == 27)) {
+        if (e.which == 27) $parent.find(toggle).focus()
+        return $this.click()
+      }
 
       $items = $('[role=menu] li:not(.divider):visible a', $parent)
 
@@ -127,8 +131,9 @@
       selector = selector && /#/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
     }
 
-    $parent = $(selector)
-    $parent.length || ($parent = $this.parent())
+    $parent = selector && $(selector)
+
+    if (!$parent || !$parent.length) $parent = $this.parent()
 
     return $parent
   }
@@ -164,11 +169,11 @@
    * =================================== */
 
   $(document)
-    .on('click.dropdown.data-api touchstart.dropdown.data-api', clearMenus)
-    .on('click.dropdown touchstart.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-    .on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
-    .on('click.dropdown.data-api touchstart.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
-    .on('keydown.dropdown.data-api touchstart.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
+    .on('click.dropdown.data-api', clearMenus)
+    .on('click.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.dropdown-menu', function (e) { e.stopPropagation() })
+    .on('click.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
+    .on('keydown.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
     .on('mouseenter', '.dropdown', function (e) {
       var $parent = $(this)
       if ($parent.siblings('.open').length) {

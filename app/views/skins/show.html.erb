@@ -19,7 +19,9 @@
         <% if @skin.unusable? %>parent only<% end %>
       </dd>
     </dl>
+    <!--subnav-->
     <%= render :partial => 'skin_top_navigation' %>
+    <!--/subnav-->
     <p class="icon"><%= skin_preview_display(@skin) %></p>
   </div>
 

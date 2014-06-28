@@ -1,5 +1,5 @@
 <% @tag_hash[:fandom].keys.each do |media| %>
-  <li class="media listbox group <%= cycle :odd, :even %>">
+  <li class="media listbox group">
     <h3 class="expander_parent heading">
       <%= ts("%{media}", :media => media) %>
       <% list_id = "list_for_media_#{media.gsub(/[^\w]/, '_')}" %>
@@ -22,7 +22,7 @@
              # this gets called a ton if there are a lot of fandoms so not doing it in a partial to save on time, although
              # as a result it's duplicated in show_tag_set_tags :( 
           %>
-          <li class="fandom listbox group <%= cycle :odd, :even %>">
+          <li class="fandom listbox group">
             <% if (has_relationships + has_characters) > 0 %>
               <h3 class="expander_parent heading">
                 <%= ts("%{fandom}", :fandom => fandom) %>

@@ -95,6 +95,9 @@ GEM
     docile (1.1.1)
     domain_name (0.5.12)
       unf (>= 0.0.5, < 1.0.0)
+    email_spec (1.5.0)
+      launchy (~> 2.1)
+      mail (~> 2.2)
     erubis (2.7.0)
     escape_utils (0.3.2)
     ethon (0.6.2)
@@ -231,6 +234,8 @@ GEM
       actionmailer (>= 3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rollout (2.0.0)
+      redis
     rpm_contrib (2.1.11)
       newrelic_rpm (>= 3.1.1)
       newrelic_rpm (>= 3.1.1)
@@ -334,6 +339,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   delorean
+  email_spec
   escape_utils
   factory_girl
   faker
@@ -360,11 +366,13 @@ DEPENDENCIES
   resque (>= 1.14.0)
   resque_mailer
   rest-client
+  rollout
   rpm_contrib
   rspec-rails (>= 2.6.0)
   rvm-capistrano
   sanitize
   shoulda
+  simplecov
   timeliness
   tire
   typhoeus
