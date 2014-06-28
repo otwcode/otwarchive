@@ -47,4 +47,4 @@ public
   under the public/ directory.
 
 db
-  The overall archive database layout can be found in the file schema.rb.
+  The overall archive database layout can be found in the file schema.rb
