@@ -101,11 +101,7 @@ module ActionView
             key = "#{self.class.name}."
           end
           key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
-<<<<<<< HEAD
           #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
-=======
-
->>>>>>> 774479c4c016217ce303e3017070a8894837852b
           # add the default string as an option, and hand off to translate.
           options.merge!(:default => default_string)
           translate(key.to_sym, options)
