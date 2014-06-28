@@ -9,7 +9,7 @@
     <% else %>      
       <dd>
         <%= select_tag 'skin_type', options_for_select(Skin::TYPE_OPTIONS, @skin.type || params[:skin_type] ),
-          :onchange => 'if ($j(this).val() == "WorkSkin") {$j(".verbose").hide();} else {$j(".verbose").show();}' %>
+          :onchange => 'if ($j(this).val() == "WorkSkin") {$j("#advanced_skin_fieldset").hide();} else {$j("#advanced_skin_fieldset").show();}' %>
       </dd>
     <% end %>
   
@@ -33,12 +33,10 @@
   <p><%= f.text_area :css, :cols => 70, :class => 'large' %></p>
 </fieldset>
   
-<fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
+<fieldset id="advanced_skin_fieldset" class="<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? 'hidden ' : ''%>">
   <legend><%= ts('Advanced') %>
-  <span class="action">
-    <a href="#" class="<%= show_advanced_skin?(@skin) ? 'advanced_skin_close' : 'advanced_skin_open' %> hidden"><%= ts('Show') %> &#8595;</a>
-    <a href="#" class="<%= show_advanced_skin?(@skin) ? 'advanced_skin_open' : 'advanced_skin_close' %> hidden"><%= ts('Hide') %> &#8593;</a>
-  </span>
+    <a href="#" class="advanced_skin_open action hidden"><%= ts('Show') %> &#8595;</a>
+    <a href="#" class="advanced_skin_close action hidden"><%= ts('Hide') %> &#8593;</a>
   </legend>
 
 

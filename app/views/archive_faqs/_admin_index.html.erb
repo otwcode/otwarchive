@@ -18,7 +18,7 @@
     <dt><%= link_to archive_faq.title, archive_faq %></dt>
     <dd>
       <p class="datetime">Created at <%= archive_faq.created_at %> and updated at <%= archive_faq.updated_at %></p>
-      <ul class="navigation actions">
+      <ul class="actions">
         <li><%= link_to ts("Show"), archive_faq %></li>
         <li><%= link_to ts("Edit"), edit_archive_faq_path(archive_faq) %></li>
         <li><%= link_to ts("Delete"), archive_faq, :confirm => 'Are you sure?', :method => :delete %></td>
