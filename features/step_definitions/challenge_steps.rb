@@ -53,7 +53,6 @@ Given /^I have Yuletide challenge tags set ?up$/ do
     step %{a canonical fandom "Unrequested"}
 end
 
-
 ### General Challenge Settings
 
 When /^I edit settings for "([^\"]*)" challenge$/ do |title|
@@ -111,7 +110,6 @@ When /^I start signing up for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   step %{I follow "Sign Up"}
 end
-
 
 ### Editing signups
 

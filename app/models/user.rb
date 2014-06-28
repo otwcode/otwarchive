@@ -471,7 +471,7 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user was invited, update the invitation
+  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
       invitation = Invitation.find_by_token(self.invitation_token)

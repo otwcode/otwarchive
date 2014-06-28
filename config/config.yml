@@ -83,7 +83,8 @@ CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
 LOGNOTE_MIN: 5
 LOGNOTE_MAX: 1250
-FEEDBACK_SUMMARY_MAX: 100
+FEEDBACK_SUMMARY_MAX_DISPLAYED: 100
+FEEDBACK_SUMMARY_MAX: 107
 INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
@@ -328,14 +329,16 @@ ACTION_NEW_EMAIL: 9
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 DUMP_SEEDS: [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza"
+            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
+            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
+            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
+            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
+            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
+            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble", 
+            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
+            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
+            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
+            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
 ]
 
 # seeds who want their email address preserved for testing

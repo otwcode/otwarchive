@@ -180,7 +180,7 @@ Feature: Create Works
       And 1 email should be delivered to "cosomeone@example.org"
     When all emails have been delivered
       And I follow "Edit"
-      And I fill in "work_recipients" with "giftee"
+      And I give the work to "giftee"
       And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -233,7 +233,7 @@ Feature: Create Works
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see a save error message
+    Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
     # Collections are now parsed by collectible.rb which only shows the first failing collection and nothing else
     # And I should see a collection not found message for "collection2"

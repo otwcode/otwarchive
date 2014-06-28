@@ -79,9 +79,9 @@ Otwarchive::Application.routes.draw do
   resources :tags do
     member do
       get :feed
-      get :wrangle
       post :mass_update
       get :remove_association
+      get :wrangle
     end
     collection do
       get :show_hidden
@@ -346,6 +346,9 @@ Otwarchive::Application.routes.draw do
       get :list_ge_challenges
       get :list_pm_challenges
     end
+    member do
+      get :confirm_delete
+    end
     resource  :profile, :controller => "collection_profile"
     resources :collections
     resources :works
@@ -524,6 +527,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'dmca' => 'home#dmca'
   match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
