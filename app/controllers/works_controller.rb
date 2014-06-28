@@ -652,14 +652,34 @@ protected
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
+    moderated_collection =[]
     @work.collections.each do |collection|
-      if !collection.nil? && collection.moderated?
-        if (!Work.in_collection(collection).include?(@work)) && (!collection.user_is_posting_participant?(current_user))
-          flash[:notice] ||= ""
-          flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
-          return
+      Rails.logger.debug "COLLECTION: >>>#{collection.title}<<<"
+      Rails.logger.debug "MODERATED: >>>#{collection.title}<<< #{collection.moderated?}"
+      Rails.logger.debug "POSTING PARTICIPANT: >>>#{collection.title}<<< #{collection.user_is_posting_participant?(current_user)}"
+      if !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
+        Rails.logger.debug "THE COLLECTION IS MODERATED NOW CHECKING"
+        if @work.collection_items.present?
+          @work.collection_items.each do |collection_item|
+            Rails.logger.debug "COLLECTION ITEM: #{@work.title} #{collection_item.collection.title} THIS COLLECTION: #{collection.title}"
+            if collection_item.collection == collection
+              Rails.logger.debug ">>>> WE HAVE A MATCH <<<<"
+              Rails.logger.debug "#{collection_item.user_approval_status} AND #{collection_item.collection_approval_status}"
+              if collection_item.user_approval_status == 1 && collection_item.collection_approval_status == 0
+                Rails.logger.debug "UNAUTHORIZED BRO"
+                moderated_collection << collection
+                #flash[:notice] ||= "<br />"
+                #flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to (#{view_context.link_to(collection.title, collection_path(collection))}) once it is approved by a moderator.").html_safe
+              end
+            end
+          end
         end
       end
+    end
+    if moderated_collection.present?
+      joined_collections = moderated_collection.map { |f| view_context.link_to(f.title, collection_path(f)) }.join(', ')
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to (%{joined_collection}) once it is approved by a moderator.").html_safe
     end
   end
 
