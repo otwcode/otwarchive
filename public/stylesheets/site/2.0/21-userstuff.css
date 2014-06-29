@@ -1,5 +1,9 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
+.userstuff {
+    word-wrap: break-word;
+}
+
 .userstuff p {
   margin: 1.286em auto;
   padding: 0;
@@ -102,14 +106,14 @@
 /*tables */
 
 .userstuff caption {
-  height: auto;
   font-size: 1em;
-  color: #222;
+  height: auto;
+  opacity: 1.0;
+  width: auto;
 }
 
 .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
   background: transparent;
-  color: #222;
   border: none;
 }
 
@@ -137,9 +141,12 @@
 /* WORK MARGINS */
 
 #workskin {
-  max-width: 72em;
-  margin: auto;
   font-size: 1.08em;
+  margin: auto;
+  max-width: 72em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
 }
 
 #workskin .module {

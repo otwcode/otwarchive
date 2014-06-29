@@ -77,36 +77,40 @@ class Sanitize
       end
       
       # Verify that the video URL is actually a valid video URL from a site we trust.
+      
+      # strip off optional protocol and www
+      url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
+      
       source = case url
-      when /^http:\/\/(?:www\.)?youtube\.com\//
+      when /^youtube(-nocookie)?\.com\//
         then "youtube"
-      when /^http:\/\/(?:www\.|player\.)?vimeo\.com\//
+      when /^(player\.)?vimeo\.com\//
         then "vimeo"
-      when /^http:\/\/(?:www\.)?blip\.tv\//
+      when /^blip\.tv\//
         then "blip"
-      when /^http:\/\/(?:www\.|static\.)?ning\.com\//
+      when /^(static\.)?ning\.com\//
         then "ning"
-      when /^http:\/\/(?:www\.)?dailymotion\.com\//
+      when /^dailymotion\.com\//
         then "dailymotion"
-      when /^http:\/\/(?:www\.)?viddler\.com\//
+      when /^viddler\.com\//
         then "viddler"
-      when /^http:\/\/(?:www\.)?metacafe\.com\//
+      when /^metacafe\.com\//
         then "metacafe"
-      when /^http:\/\/(?:www\.)?vidders\.net\//
+      when /^vidders\.net\//
         then "vidders.net"
-      when /^http:\/\/(?:www\.)?criticalcommons\.org\//
+      when /^criticalcommons\.org\//
         then "criticalcommons"
-      when /^http:\/\/(?:www\.)?google\.com\//
+      when /^google\.com\//
         then "google"
-      when /^http:\/\/(?:www\.)?archiveofourown\.org\//
+      when /^archiveofourown\.org\//
         then "archiveofourown"
-      when /^http:\/\/(?:www\.)?podfic\.com\//
+      when /^podfic\.com\//
         then "podfic"
-      when /^https:\/\/(?:embed\.)?spotify\.com\//
+      when /^(embed\.)?spotify\.com\//
         then "spotify"
-      when /^http:\/\/(?:www\.)?8tracks\.com\//
+      when /^8tracks\.com\//
         then "8tracks"
-      when /^https:\/\/(?:w\.)?soundcloud\.com\//
+      when /^(w\.)?soundcloud\.com\//
         then "soundcloud"
       else
         nil

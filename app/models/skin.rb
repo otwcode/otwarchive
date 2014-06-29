@@ -10,7 +10,7 @@ class Skin < ActiveRecord::Base
                  ]
     
   # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
-  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 480px)']
+  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 640px)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
@@ -116,19 +116,7 @@ class Skin < ActiveRecord::Base
   validate :clean_css
   def clean_css
     return if self.css.blank?
-    scanner = StringScanner.new(self.css)
-    if !scanner.exist?(/\/\*/)
-      # no comments, clean the whole thing
-      self.css = clean_css_code(self.css)
-    else
-      clean_code = []
-      while (scanner.exist?(/\/\*/))
-        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/).chomp('/*')))
-        clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
-      end
-      clean_code << (clean = clean_css_code(scanner.rest))
-      self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
-    end
+    self.css = clean_css_code(self.css)
   end
 
   scope :public_skins, where(:public => true)
@@ -252,7 +240,7 @@ class Skin < ActiveRecord::Base
   end
   
   def parse_media_from_filename(media_string)
-    media_string.gsub(/maxwidth/, 'only screen and (max-width: 480px)').gsub('.', ', ')
+    media_string.gsub(/maxwidth/, 'only screen and (max-width: 640px)').gsub('.', ', ')
   end
   
   def parse_sheet_role(role_string)

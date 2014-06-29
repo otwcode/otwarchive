@@ -191,7 +191,7 @@ class BookmarkSearch < Search
   
   # Search within text fields: general, notes, bookmarker names, and partial tag names
   def generate_search_text
-    search_text = self.query.present? ? self.query.dup : ""
+    search_text = self.query.present? ? escape_slashes(self.query.dup) : ""
     [:bookmarker, :notes, :tag].each do |field|
       if self.options[field].present?
         self.options[field].split(" ").each do |word|
@@ -214,20 +214,6 @@ class BookmarkSearch < Search
         options[countable].gsub!("&lt;", "<")
       end
     end
-  end
-  
-  def escape_reserved_characters(word)
-    word.gsub!('!', '\\!')
-    word.gsub!('+', '\\+')
-    word.gsub!('-', '\\-')
-    word.gsub!('?', '\\?')
-    word.gsub!("~", '\\~')
-    word.gsub!("(", '\\(')
-    word.gsub!(")", '\\)')
-    word.gsub!("[", '\\[')
-    word.gsub!("]", '\\]')
-    word.gsub!(':', '\\:')
-    word
   end
   
   def summary

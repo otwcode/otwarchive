@@ -29,6 +29,15 @@
       <% end %>
     <% end %>
 
+    <% unless @work.language.blank? %>
+      <dt class="language">
+        <%= ts("Language:") %>
+      </dt>
+      <dd class="language">
+        <%= @work.language.name %>
+      </dd>
+    <% end %>
+
     <% unless @work.series.blank? %>
       <dt class="series">
         <%= ts("Series:") %>
@@ -52,7 +61,6 @@
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
-      <div class="clear"><!--clear stats--></div>      
     </dd>
   </dl>
 </div>

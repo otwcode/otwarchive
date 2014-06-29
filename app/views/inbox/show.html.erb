@@ -4,12 +4,15 @@
 <%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
 <!--main content-->
 <% unless @inbox_comments.blank? %>
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
+  <%= form_tag user_inbox_path(@user, :filters => params[:filters]), :method => :put, :id => 'inbox-form' do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
@@ -31,16 +34,19 @@
           <% next if feedback_comment.nil? || feedback_comment.is_deleted? %>
 
           <!-- START of single comment -->
-          <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
-            <% if !feedback_comment.pseud.nil? %>
-              <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-                <h4 class="heading byline"><%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
+          <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
+            <h4 class="heading byline">
+              <% if !feedback_comment.pseud.nil? %>
+                <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
+                  <%= ts('Anonymous Creator on') %> <%= commentable_description_link(feedback_comment) %>
+                <% else %>
+                  <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
+                <% end %>
               <% else %>
-                <h4 class="heading byline"><%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
+                <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
               <% end %>
-            <% else %>
-              <h4 class="heading byline"><%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %> </h4>
-            <% end %>
+              <span class="posted datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></span>
+            </h4>
 
             <div class="icon">
               <% if !feedback_comment.pseud.nil? %>
@@ -58,11 +64,9 @@
               <%= raw sanitize_field(feedback_comment, :content) %>
             </blockquote>
 
-            <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
-
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-            <ul class="navigation actions" role="menu">
+            <ul class="actions" role="menu">
               <% unless inbox_comment.read? %>
                 <li><span class="unread"><%= ts("Unread") %></span></li>
               <% end %>
@@ -107,46 +111,58 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
     <dl class="filters" role="menu">
       <dt><%= ts("Filter by read") %></dt>
       <dd>
-        <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
-        <%= label_tag 'filters_read_all', ts("Show all") %>
-      </dd>
-      <dd>
-        <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
-        <%= label_tag 'filters_read_false', ts("Show unread") %>
-      </dd>
-      <dd>
-        <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
-        <%= label_tag 'filters_read_true', ts("Show read") %>
+        <ul>
+          <li>
+            <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
+            <%= label_tag 'filters_read_all', ts("Show all") %>
+          </li>
+          <li>
+            <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
+            <%= label_tag 'filters_read_false', ts("Show unread") %>
+          </li>
+          <li>
+            <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
+            <%= label_tag 'filters_read_true', ts("Show read") %>
+          </li>
+        </ul>
       </dd>
 
       <dt><%= ts("Filter by replied to") %></dt>
       <dd>
-        <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
-        <%= label_tag 'filters_replied_to_all', ts("Show all") %>
-      </dd>
-      <dd>
-        <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
-        <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
-      </dd>
-      <dd>
-        <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
-        <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
+        <ul>
+          <li>
+            <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
+            <%= label_tag 'filters_replied_to_all', ts("Show all") %>
+          </li>
+          <li>
+            <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
+            <%= label_tag 'filters_replied_to_false', ts("Show without replies") %>
+          </li>
+          <li>
+            <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
+            <%= label_tag 'filters_replied_to_true', ts("Show replied to") %>
+          </li>
+        </ul>
       </dd>
 
       <dt><%= ts("Sort by date") %></dt>
       <dd>
-        <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
-        <%= label_tag 'filters_date_desc', ts("Newest first") %>
-      </dd>
-      <dd>
-        <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
-        <%= label_tag 'filters_date_asc', ts("Oldest first") %>
+        <ul>
+          <li>
+            <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
+            <%= label_tag 'filters_date_desc', ts("Newest first") %>
+          </li>
+          <li>
+            <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
+            <%= label_tag 'filters_date_asc', ts("Oldest first") %>
+          </li>
+        </ul>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>

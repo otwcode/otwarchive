@@ -18,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
@@ -40,7 +40,7 @@ class UserMailer < BulletproofMailer::Base
     @token = @invitation.token
     mail(
       :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation To Claim Stories"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
     )
   end
 
@@ -55,10 +55,10 @@ class UserMailer < BulletproofMailer::Base
     @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
       :to => creator.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Stories Uploaded"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
     )
-  end
-
+  end  
+  
   # Sends a batched subscription notification
   def batch_subscription_notification(subscription_id, entries)
     @subscription = Subscription.find(subscription_id)
@@ -70,6 +70,8 @@ class UserMailer < BulletproofMailer::Base
       creation = creation_type.constantize.where(:id => creation_id).first
       next unless creation && creation.try(:posted)
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
+      next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
+      # TODO: allow subscriptions to orphan_account to receive notifications
       @creations << creation
     end
     
@@ -119,7 +121,7 @@ class UserMailer < BulletproofMailer::Base
     @admin_login = admin_login
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message #{subject}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
     )
   end
 
@@ -136,6 +138,15 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => @collection.get_maintainers_email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+    )
+  end
+  
+  def invalid_signup_notification(collection_id, invalid_signup_ids)
+    @collection = Collection.find(collection_id)
+    @invalid_signups = invalid_signup_ids
+    mail(
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
@@ -185,7 +196,7 @@ class UserMailer < BulletproofMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
     )
   end
-	
+
 	  # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)
@@ -196,7 +207,7 @@ class UserMailer < BulletproofMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
     )
   end
-   
+
   ### WORKS NOTIFICATIONS ###
 
   # Sends email when a user is added as a co-author
@@ -228,7 +239,7 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
@@ -274,10 +285,10 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Sends email to authors when a creation is deleted by abuse
+  # Sends email to authors when a creation is deleted by an Admin
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def abuse_deleted_work_notification(user, work)
+  def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
@@ -287,10 +298,10 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by our Abuse team"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
     )
   end
-  
+
   def delete_signup_notification(user, challenge_signup)
     @user = user
     @signup = challenge_signup
@@ -301,7 +312,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your signup for #{@signup.collection.title} has been deleted"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 
@@ -350,7 +361,7 @@ class UserMailer < BulletproofMailer::Base
     end
     return attachment_string
   end
-  
+
   def generate_attachment_content_from_signup(signup)
     attachment_string =  "Collection: " + signup.collection + "<br />\n"
     signup.requests.each_with_index do |prompt, index|
@@ -374,7 +385,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
       end
       unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label") 
+        desc_label = prompt.collection.challenge.send("request_description_label")
         attachment_string += desc_label.blank? ? ts("Details") : desc_label
         attachment_string += ": " +  prompt.description + "<br />\n"
       end
@@ -403,7 +414,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
       end
       unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label") 
+        desc_label = prompt.collection.challenge.send("request_description_label")
         attachment_string += desc_label.blank? ? ts("Details") : desc_label
         attachment_string += ": " +  prompt.description + "<br />\n"
       end

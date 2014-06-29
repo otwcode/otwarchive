@@ -4,7 +4,7 @@ ruby '1.9.3'
 
 gem 'bundler'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.18'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -61,11 +61,23 @@ gem 'best_in_place'
 gem 'timeliness'
 
 gem 'rpm_contrib'
-gem 'newrelic_rpm', ">= 3.5.3.25"
-gem 'newrelic-redis'
 
 # for generating graphs
 gem "google_visualr", ">= 2.1"
+
+# Copycopter to aid translation
+# gem 'copycopter_client', '~> 2.0.1'
+
+# Coveralls for code test coverage
+gem 'coveralls', require: false
+
+#  Place the New Relic gem as low in the list as possible, allowing the 
+#  frameworks above it to be instrumented when the gem initializes.
+gem 'newrelic_rpm', "3.8.0.218"
+gem 'newrelic-redis'
+
+# For URL mangling
+gem 'addressable'
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'
@@ -79,10 +91,17 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make
   # cuke fast
-  gem 'fakeweb'
+  gem 'typhoeus'
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  # Code coverage
+  gem 'simplecov', :require => false
+  gem 'email_spec'
+end
+
+group :test, :development do
+  gem 'pry'
 end
 
 # Deploy with Capistrano
@@ -94,5 +113,3 @@ group :production do
   gem 'unicorn', :require => false
   gem "memcache-client"
 end
-
-

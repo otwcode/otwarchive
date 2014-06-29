@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("My Assignments") %> <%= @collection ? "in #{link_to(@collection.title, @collection)}" : "" %></h2>
+<h2 class="heading"><%= ts("My Assignments") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -10,7 +10,7 @@
   <p class="note"><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
 <% end %>
 
-<dl class="index group">
+<dl class="assignment index group">
 
   <% @challenge_assignments.each do |assignment| %>
     <%= render "assignment_blurb", :assignment => assignment %>

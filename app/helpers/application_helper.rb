@@ -41,11 +41,14 @@ module ApplicationHelper
     link_to_function(name, remote_function(options), html_options)
   end
 
-  # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
-  def span_if_current(link_to_default_text, path, condition=nil)
+  # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
+  def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
-    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
+    title_text = ts(title_attribute_default_text)
+    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{text}</span>" : "<span class=\"current\" title=\"#{title_text}\">#{text}</span>"
+    link_code = title_attribute_default_text.nil? ? link_to(text, path) : link_to(text, path, title: "#{title_text}")
+    is_current ? span_tag.html_safe : link_code
   end
   
   def link_to_rss(link_to_feed)
@@ -262,11 +265,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = "" 
     content_for :tinymce do
-      javascript_include_tag "tiny_mce/tiny_mce"
+      javascript_include_tag "tinymce/tinymce.min.js"
     end
     @content_for_tinymce_init = "" 
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor"
+      javascript_include_tag "mce_editor.min.js"
     end
   end  
   
@@ -480,12 +483,9 @@ module ApplicationHelper
       if options[:extra_info_method]
         checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
-      content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
+      content_tag(:li, checkbox_and_label)
     end.join("\n").html_safe
     checkboxes_ul = content_tag(:ul, checkboxes)
-
-    # reset the tiger striping
-    reset_cycle("tigerstriping")
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size

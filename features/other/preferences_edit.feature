@@ -4,6 +4,46 @@ Feature: Edit preferences
   As a humble user
   I want to fill out my preferences
 
+
+  Scenario: Ensure all Preference options are available
+
+  Given the following activated user exists
+    | login         | password   |
+    | scott         | password   |
+
+  When I am logged in as "scott" with password "password"
+    And I go to scott's user page
+    And I follow "Preferences"
+  Then I should see "Set My Preferences"
+    And I should see "Show my email address to other people."
+    And I should see "Show my date of birth to other people."
+    And I should see "Hide my work from search engines when possible."
+    And I should see "Hide the share buttons on my work."
+    And I should see "Show me adult content without checking."
+    And I should see "Show the whole work by default."
+    And I should see "Hide warnings (you can still choose to show them)."
+    And I should see "Hide additional tags (you can still choose to show them)."
+    And I should see "Hide work skins (you can still choose to show them)."
+    And I should see "Your site skin"
+    And I should see "Your time zone:"
+    And I should see "Browser page title format"
+    And I should see "Don't show me any hit counts."
+    And I should see "Don't show me hits on my works."
+    And I should see "Don't show other people hits on my works."
+    And I should see "Turn off emails about comments."
+    And I should see "Turn off messages to your inbox about comments."
+    And I should see "Turn off copies of your own comments."
+    And I should see "Turn off emails about kudos."
+    And I should see "Turn off admin emails."
+    And I should see "Automatically agree to your work being collected by others in the archive."
+    And I should see "Turn off emails from collections."
+    And I should see "Turn off inbox messages from collections."
+    And I should see "Turn off emails about gift works."
+    And I should see "Turn on Viewing History."
+    And I should see "Turn the new user help banner back on."
+    And I should see "Turn off the banner showing on every page."
+
+
   Scenario: View and edit preferences - viewing history, personal details, view entire work
 
   Given the following activated user exists
@@ -198,8 +238,9 @@ Feature: Edit preferences
   Then I should see "Scary tag"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-    And I should not see "Bookmarks" within "#main .navigation li"
-    And I should not see "Works" within "#main .navigation li"
+    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
+    # And I should not see "Bookmarks" within "#main .navigation li"
+    # And I should not see "Works" within "#main .navigation li"
   When I follow "My new series"
   Then I should see "This work has warnings and tags"
     And I should not see "This also has warnings and tags"
@@ -263,8 +304,9 @@ Feature: Edit preferences
   Then I should not see "Scary tag"
     And I should see "Scarier"
     And I should see "Show additional tags"
-    And I should not see "Bookmarks" within "#main .navigation li"
-    And I should not see "Works" within "#main .navigation li"
+    # TODO: The next two steps were only passing before Issue 3909 because it was looking at the .navigation in the blurb -- a noncanonical tag page does not have .navigation at the top (where Bookmarks and Works are for canonical tags) unless you are logged in as a wrangler so this will always fail because it cannot find a #main .navigation li
+    # And I should not see "Bookmarks" within "#main .navigation li"
+    # And I should not see "Works" within "#main .navigation li"
   Then I should see "This work has warnings and tags"
   When I follow "My new series"
   Then I should see "This work has warnings and tags"

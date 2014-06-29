@@ -1,5 +1,5 @@
 /*==GROUP: PREFACE 
-http://media.transformativeworks.org/training/front_end_coding_docs/patterns/preface.html
+http://otwcode.github.com/docs/front_end_coding/patterns/preface
 blockquote contents (the user-written notes) are styled in userstuff.css like all other user content
 .preface appears within #workskin on a work page
 */
@@ -52,6 +52,14 @@ div.preface .notes, div.preface .summary, div.preface .series, div.preface .chil
 
 div.preface .series ul, div.preface .children ul {
   padding: 0 0.643em;
+}
+
+div.preface .associations {
+  margin-bottom: 1.5em;
+}
+
+div.preface .jump {
+  margin-top: 1.5em;
 }
 
 /* mod: afterword
