@@ -301,7 +301,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
-    And I should see "Sorry! We couldn't save this Bookmark because:"
+    And I should see "Sorry! We couldn't save this bookmark because:"
     And I should see "The collection rescue_911 is not currently open."
   Then I view the work "Hooray for Homicide"
     And I follow "Bookmark"

@@ -63,6 +63,8 @@ after "deploy:restart", "production_only:update_cron_email"
 after "deploy:update_code", "production_only:update_robots"
 after "deploy:restart", "production_only:notify_testers"
 after "deploy:restart", "production_only:rebalance_unicorns"
+after "deploy:restart", "deploy:reload_site_skins"
+
 
 # deploy from clean branch
 set :branch, "deploy"

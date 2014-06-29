@@ -8,11 +8,13 @@
 <!--/subnav-->
 
 <!--main content-->
+
 <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
   <fieldset>
     <legend><%= ts("Tag Info") %></legend>
     <h3 class="landmark heading"><%= ts("Tag Info") %></h3>
+
     <dl>
       <dt><%= f.label :name, ts('Name') %></dt>
       <dd>
@@ -62,18 +64,18 @@
       <% end %>
 
       <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
-      <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
-      <dd>
-        <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
-        <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
-        <% if @tag.merger %>
-          <p class="actions" role="navigation">
-            <%= link_to ts("Edit %{tag_name}", :tag_name => @tag.merger.name), edit_tag_path(@tag.merger) %>
-          </p>
-        <% elsif @tag.canonical? %>
-          <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
-        <% end %>
-      </dd>
+        <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
+        <dd>
+          <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
+          <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
+          <% if @tag.merger %>
+            <p class="actions" role="navigation">
+              <%= link_to ts("Edit %{tag_name}", :tag_name => @tag.merger.name), edit_tag_path(@tag.merger) %>
+            </p>
+          <% elsif @tag.canonical? %>
+            <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
+          <% end %>
+        </dd>
       <% end %>
 
       <dt><%= f.label :unwrangleable %></dt>
@@ -152,8 +154,8 @@
                 <% end %>
                 <div title="add tags">
                   <%= f.text_field tag_type.underscore + '_string', 
-      							  autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
-      								:class => 'tags autocomplete') %>
+                      autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
+                      :class => 'tags autocomplete') %>
                 </div>
               </fieldset>
             </dd>
@@ -167,9 +169,22 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= ts('Taggings Count') %></legend>
+    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
+
+    <dl>
+      <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
+      <dd>
+        <%= f.check_box(:fix_taggings_count) %>&nbsp;
+        <p><%= ts('Enable this if the number of taggings on search or wrangle pages needs to be fixed.') %></p>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= ts('Submit') %></legend>
     <p class="submit actions">
-      <%= submit_tag ts("Save changes") %>
+      <%= submit_tag ts('Save changes') %>
     </p>
   </fieldset>
 <% end %>
