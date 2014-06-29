@@ -79,9 +79,9 @@ Otwarchive::Application.routes.draw do
   resources :tags do
     member do
       get :feed
-      get :wrangle
       post :mass_update
       get :remove_association
+      get :wrangle
     end
     collection do
       get :show_hidden
@@ -246,7 +246,6 @@ Otwarchive::Application.routes.draw do
       end
       resources :serial_works
     end
-    resources :saved_works
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
     resources :stats, :only => [:index]
@@ -346,6 +345,9 @@ Otwarchive::Application.routes.draw do
       get :list_challenges
       get :list_ge_challenges
       get :list_pm_challenges
+    end
+    member do
+      get :confirm_delete
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections

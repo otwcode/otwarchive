@@ -95,7 +95,6 @@ class User < ActiveRecord::Base
   has_many :gifts, :through => :pseuds
   has_many :gift_works, :through => :pseuds, :uniq => true
 
-  has_many :saved_works, dependent: :destroy
   has_many :readings, :dependent => :destroy
   has_many :bookmarks, :through => :pseuds
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
@@ -472,7 +471,7 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user was invited, update the invitation
+  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
       invitation = Invitation.find_by_token(self.invitation_token)

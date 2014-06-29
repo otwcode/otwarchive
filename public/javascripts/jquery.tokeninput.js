@@ -142,10 +142,23 @@ $.TokenList = function (input, url_or_data, settings) {
     var timeout;
     var input_val;
 
-    // Create a new text input an attach keyup events
-    var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
-        .css({
-            outline: "none"
+    // Keep a reference to the original input box's id so we can use it for our new input and its label
+    var hidden_input_id = $(input)
+                              .attr('id');
+
+    // Keep a reference to the label whose for attribute that matches the original input box's id        
+    var hidden_input_label = $('label[for="' + hidden_input_id + '"]');
+    
+    // Change the original label's for attribute so it will match the id attribue we give the new input box
+    hidden_input_label.attr({
+      'for': hidden_input_id + '_autocomplete'
+    });
+
+    // Give the new input box an id attribute based on the original input box's id
+    // Originally included .css({outline: "none" }), but we actually want to see an outline for accessibility reasons
+        var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
+        .attr({
+          'id': hidden_input_id + '_autocomplete'
         })
         .focus(function () {
             if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
@@ -294,6 +307,7 @@ $.TokenList = function (input, url_or_data, settings) {
     });
 
     // Keep a reference to the original input box
+    // Remove its id because we don't want it duplicated after adding it to the new input
     var hidden_input = $(input)
                            .hide()
                            .focus(function () {

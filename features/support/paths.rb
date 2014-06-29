@@ -65,14 +65,14 @@ module NavigationHelpers
       user_invitations_path(:user_id => $1)
     when /^(.*)'s reading page$/i
       user_readings_path(:user_id => $1)
-    when /^(.*)'s saved works page$/i
-      user_saved_works_path(:user_id => $1)
     when /^(.*)'s series page$/i
       user_series_index_path(:user_id => $1)
     when /^(.*)'s stats page$/i
       user_stats_path(:user_id => $1)
     when /^(.*)'s preferences page$/i
       user_preferences_path(:user_id => $1)
+    when /^(.*)'s related works page$/i
+      user_related_works_path(:user_id => $1)
     when /^the subscriptions page for "(.*)"$/i
       user_subscriptions_path(:user_id => $1)
     when /^(.*)'s profile page$/i
@@ -99,6 +99,10 @@ module NavigationHelpers
       user_claims_path(User.current_user)
     when /my signups page/
       user_signups_path(User.current_user)
+    when /my related works page/
+      user_related_works_path(User.current_user)
+    when /my inbox page/
+      user_inbox_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/

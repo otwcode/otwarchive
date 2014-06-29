@@ -74,7 +74,7 @@
     <dl>
       <dt><%= f.label :skin_id, ts('Your site skin')%> <%= link_to_help 'skins-basics' %>:</dt>
       <dd>
-        <span class="navigation actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
+        <span class="actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
         <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
       </dd>
 

@@ -31,20 +31,23 @@ class TagWranglingsController < ApplicationController
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
     options = {show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction]}
 
-    error_messages = []
+    error_messages, notice_messages = [], []
 
     # make tags canonical if allowed
     if params[:canonicals].present? && params[:canonicals].is_a?(Array)
-      not_saved_canonicals = []
+      saved_canonicals, not_saved_canonicals = [], []
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        unless tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update_attributes(canonical: true)
+          saved_canonicals << tag_to_canonicalize
+        else
           not_saved_canonicals << tag_to_canonicalize
         end
       end
 
       error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
+      notice_messages << ts('The following tags were successfully made canonical: %{tags_saved}', tags_saved: saved_canonicals.collect(&:name).join(', ')) unless saved_canonicals.empty?
     end
 
     if params[:media] && !params[:selected_tags].blank?
@@ -67,7 +70,9 @@ class TagWranglingsController < ApplicationController
 
         redirect_to tag_wranglings_path(options) and return
       end
-    elsif params[:fandom_string].present? && params[:selected_tags].present? && !params[:selected_tags].empty?
+    elsif params[:fandom_string].blank? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
+      error_messages << ts('There were no Fandom tags!')
+    elsif params[:fandom_string].present? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
       canonical_fandoms, noncanonical_fandom_names = [], []
       fandom_names = params[:fandom_string].split(',').map(&:squish)
 
@@ -80,9 +85,9 @@ class TagWranglingsController < ApplicationController
       end
 
       if canonical_fandoms.present?
-        tags = Tag.where(id: params[:selected_tags])
+        saved_to_fandoms = Tag.where(id: params[:selected_tags])
 
-        tags.each do |tag_to_wrangle|
+        saved_to_fandoms.each do |tag_to_wrangle|
           canonical_fandoms.each do |fandom|
             tag_to_wrangle.add_association(fandom)
           end
@@ -90,6 +95,7 @@ class TagWranglingsController < ApplicationController
 
         canonical_fandom_names = canonical_fandoms.collect(&:name)
         options.merge!(fandom_string: canonical_fandom_names.join(','))
+        notice_messages << ts('The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}', canonical_fandoms: canonical_fandom_names.join(', '), tags_saved: saved_to_fandoms.collect(&:name).join(', ')) unless saved_to_fandoms.empty?
       end
 
       if noncanonical_fandom_names.present?
@@ -97,8 +103,8 @@ class TagWranglingsController < ApplicationController
       end
     end
 
-    flash[:error] = error_messages.join('\n') unless error_messages.empty?
-    flash[:notice] = 'Tags were successfully wrangled!' if error_messages.empty?
+    flash[:notice] = notice_messages.join('<br />').html_safe unless notice_messages.empty?
+    flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to tag_wranglings_path(options)
   end

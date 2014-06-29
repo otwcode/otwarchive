@@ -41,6 +41,16 @@ Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
+Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
+  step "I submit"
+  step %{I should see "Challenge was successfully created"}
+end
+
+Given /^I have created the tagless gift exchange "([^\"]*)"$/ do |challengename|
+  step %{I have created the tagless gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+end
+
 When /^I fill in gift exchange challenge options$/ do
   current_date = DateTime.current
   fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
@@ -139,6 +149,14 @@ end
 When /^I start to sign up for "([^\"]*)"$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I check the 1st checkbox with value "Stargate SG-1"}
+end
+
+When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  step %{I follow "Sign Up"}
+  step %{I fill in "Description" with "random text"}
+  step %{I press "Submit"}
+  step %{I should see "Sign-up was successfully created"}
 end
 
 ## Matching

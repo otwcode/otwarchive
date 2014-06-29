@@ -1,11 +1,14 @@
+<!--subnav-->
 <% if @tag_set.new_record? %>
 <ul class="navigation actions" role="navigation">
     <li><%= link_to ts("Back to Tag Sets"), tag_sets_path %></li>
   </ul>
 <% else %>
   <%= render "navigation" %>
-<% end %>    
+<% end %>
+<!--/subnav-->
 
+<!--main content-->
 <h3 class="landmark heading"><%= ts("Notes") %></h3>
 <ul class="notes">
   <li>Tag sets are used for running a challenge.</li>
@@ -15,9 +18,6 @@
   <li>Tag names have to be unique. If necessary the archive may add on the tag type. (For instance, if you entered a character "Firefly", you'd see "Firefly - Character" in your tag set instead since the tag Firefly is already used for the show.)</li>   
 </ul>
 
-<!-- /descriptions-->
-
-<!--main content-->
 <h3 class="landmark heading">Tag Set Settings</h3>
 <%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put), :class => "verbose tagset"}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
