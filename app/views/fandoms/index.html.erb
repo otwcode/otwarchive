@@ -21,7 +21,7 @@
 <!--main content-->
 <% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
   <h3 class="landmark heading"><%= ts('Alphabet Navigation') %></h3>
-  <ul class="alphabet navigation actions" id="alphabet" role="navigation">
+  <ul class="alphabet actions" id="alphabet" role="navigation">
     <% for letter in @fandoms_by_letter.keys %>
       <li><%= link_to letter, "#letter-#{letter}" %></li>
     <% end %>

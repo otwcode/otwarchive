@@ -1,8 +1,13 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Statistics") %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
 <%= render "stats/navigation" %>
+<!--subnav-->
 
+<!--main content-->
 <ol class="year actions">
   <% @years.each do |year| %>
     <li>
@@ -17,7 +22,7 @@
 
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
-  <dl class="work meta group" role="complementary">
+  <dl class="statistics meta group" role="complementary">
     <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
       <dt><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
       <dd><%= @totals[stat] %></dd>
@@ -56,13 +61,13 @@
 </div>
 
 <h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
-<ul class="statistics index">
+<ul class="statistics index group">
   <% @works.keys.sort.each do |fandom| %>
     <li class="fandom listbox group">
       <h5 class="heading">
         <%= fandom %>
       </h5>
-      <ul class="index">
+      <ul class="index group">
         <% @works[fandom].each do |work| %>
           <li>
             <dl>
@@ -97,3 +102,4 @@
     </li>
   <% end %>
 </ul>
+<!--/content-->

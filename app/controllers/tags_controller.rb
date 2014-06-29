@@ -177,23 +177,28 @@ class TagsController < ApplicationController
 
   def edit
     @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
+
     if @tag.is_a?(Banned) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
+
       redirect_to tag_wranglings_path and return
     end
+
     @counts = {}
-    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
+    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Taggings Count']
     @counts['Works'] = @tag.visible_works_count
     @counts['Drafts'] = @tag.works.unposted.count
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
+    @counts['Taggings Count'] = @tag.taggings_count
 
     @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
     @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
+
     if @tag.respond_to?(:wranglers)
       @wranglers = @tag.canonical ? @tag.wranglers : (@tag.merger ? @tag.merger.wranglers : [])
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
@@ -207,6 +212,7 @@ class TagsController < ApplicationController
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     new_tag_type = params[:tag].delete(:type)
+    fix_taggings_count = params[:tag].delete(:fix_taggings_count)
 
     # Limiting the conditions under which you can update the tag type
     if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
@@ -218,21 +224,29 @@ class TagsController < ApplicationController
     @tag.syn_string = syn_string if @tag.save
 
     if @tag.errors.empty? && @tag.save
+      # check if a resetting of the taggings_count was requsted
+      if fix_taggings_count.present?
+        @tag.taggings_count = @tag.taggings.count
+        @tag.save
+      end
       flash[:notice] = ts('Tag was updated.')
-      if params[:commit] == "Wrangle"
+
+      if params[:commit] == 'Wrangle'
         params[:page] = '1' if params[:page].blank?
-        params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], "tag")
+        params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
         params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
-        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
+
+        redirect_to url_for(controller: :tags, action: :wrangle, id: params[:id], show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction], status: params[:status])
       else
-        redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
+        redirect_to url_for(controller: :tags, action: :edit, id: @tag)
       end
     else
-      @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
+      @parents = @tag.parents.find(:all, order: :name).group_by {|tag| tag[:type]}
       @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-      @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
+      @children = @tag.children.find(:all, order: :name).group_by {|tag| tag[:type]}
       @children['SubTag'] = @tag.direct_sub_tags.by_name
       @children['Merger'] = @tag.mergers.by_name
+
       render :edit
     end
   end

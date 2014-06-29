@@ -22,7 +22,7 @@ Scenario: Create a bookmark
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-      And I should see "Back to Bookmarks"
+      And I should see "My Bookmarks"
     When I am logged in as "another_bookmark_user"
       And I go to the bookmarks page
     Then I should see "Revenge of the Sith"
@@ -301,7 +301,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "rescue_911"
     And I press "Create"
-    And I should see "Sorry! We couldn't save this Bookmark because:"
+    And I should see "Sorry! We couldn't save this bookmark because:"
     And I should see "The collection rescue_911 is not currently open."
   Then I view the work "Hooray for Homicide"
     And I follow "Bookmark"
