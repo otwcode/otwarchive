@@ -353,14 +353,14 @@ jQuery.fn.preventDoubleSubmit = function() {
 
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
-  $j('#header .dropdown').attr("aria-haspopup", true);
-  $j('#header .dropdown > a, #header .dropdown .actions > a').attr({
+  $j('#header').find('.dropdown').attr("aria-haspopup", true);
+  $j('#header').find('.dropdown, .dropdown .actions').children('a').attr({
     'class': 'dropdown-toggle',
     'data-toggle': 'dropdown',
     'data-target': '#'
   });
-  $j('.dropdown .menu').addClass("dropdown-menu");
-  $j('.dropdown .menu li').attr("role", "menu-item");
+  $j('.dropdown').find('.menu').addClass("dropdown-menu");
+  $j('.dropdown').find('.menu').children('li').attr("role", "menu-item");
 }
 
 // Accordion-style collapsible widgets

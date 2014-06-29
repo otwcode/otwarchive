@@ -118,3 +118,23 @@ Feature: Work Drafts
       When I edit the draft "Walking Into Mordor"
         And I press "Preview"
       Then I should see "Draft was successfully created. It will be automatically deleted on"
+
+    Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
+      Given I am logged in as "composer"
+        And I post the chaptered draft "Epic in Progress"
+      When I edit the draft "Epic in Progress"
+        And I add the beginning notes "Some beginning notes."
+        And I add the end notes "Some end notes."
+        And I press "Save Without Posting"
+      Then I should see "Some beginning notes."
+        And I should see "See the end of the work for more notes."
+      When I follow "more notes"
+      Then I should see "Some end notes."
+
+      Scenario: If a chaptered draft belongs to a series, the series should be listed on the draft
+        Given I am logged in as "two_can_sam"
+          And I post the chaptered draft "Cereal Serial"
+        When I add the draft "Cereal Serial" to series "Aisle 5"
+          And I follow "Next Chapter"
+        Then I should see "Series this work belongs to:"
+          And I should see "Aisle 5"
