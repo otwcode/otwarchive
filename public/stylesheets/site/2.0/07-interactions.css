@@ -451,7 +451,7 @@ a.modal.help {
   min-width: 0;
   padding: 0;
   width: auto;
-  box-shadow: none;
+    box-shadow: none;
 }
 
 #modal.img a {
