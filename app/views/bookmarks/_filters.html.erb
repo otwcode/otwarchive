@@ -46,8 +46,9 @@
                       @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
                       :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                   <% end %>
-                  <%= label_tag "bookmark_search_#{tag_type}_ids_#{tag.id}", 
-                    "#{tag.name} (#{tag.count})" %>
+                    <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
+                      "#{tag_type == "warning" ? warning_display_name(tag.name) :
+                        tag.name} (#{tag.count})" %>
                 </li>
               <% end %>
             </ul>
