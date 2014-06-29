@@ -89,24 +89,6 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-#Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-#  with_scope(selector) do
-#    page.has_content?(text)
-#  end
-#end
-#
-#Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
-#  with_scope(selector) do
-#    page.has_content?(text)
-#  end
-#end
-#
-#Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-#  with_scope(selector) do
-#    page.has_content?(text)
-#  end
-#end
-
 # img attributes
 Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do

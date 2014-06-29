@@ -71,7 +71,6 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
 
   @import_dw_tables_no_backdate

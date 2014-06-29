@@ -31,8 +31,8 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
+
   @import_lj_tables
   Scenario: Creating a new work from an LJ story that has tables
   # This is to make sure that we don't accidentally strip other tables than
@@ -64,7 +64,6 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
 
   @import_lj_no_backdate
