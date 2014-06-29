@@ -55,7 +55,8 @@ Feature: Collection
     # 0-2 characters allowed in request
     # 2-3 characters required in offer
     # unique fandoms required in offers and requests
-    # "any" option available in offers
+    # "any" option available in character offers
+    # restrict character to fandom only
     # match on 1 fandom and 1 character
     And I check "gift_exchange_request_restriction_attributes_url_allowed"
     And I uncheck "gift_exchange_offer_restriction_attributes_description_allowed"
@@ -122,7 +123,7 @@ Feature: Collection
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
     And I should see "Characters (2 - 3)"
-    And I should see "Any Character"
+    And I should see "Any Character" within "dd.any.option"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
