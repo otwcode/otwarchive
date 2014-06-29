@@ -122,11 +122,16 @@ end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   page.has_select?(field, :selected => value).should == true
-  #find_field(field).xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
+end
+
+Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+  with_scope(selector) do
+    page.should have_xpath("//input[@value='#{text}']")
+  end
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|

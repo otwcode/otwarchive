@@ -1285,7 +1285,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    # TODO: Figure this out
+    When "Issue 3461" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I view the work "Existing work"
@@ -1351,7 +1351,7 @@ Feature: Prompt Meme Challenge
   When I follow "Existing work"
   Then I should see "Existing work"
     And I should see "Battle 12"
-    And I should not find "draft"
+    And I should not see "draft"
   
   Scenario: Fulfill a claim by editing an existing work
   
@@ -1369,14 +1369,13 @@ Feature: Prompt Meme Challenge
     And I edit the work "Here's one I made earlier"
     And I check "Battle 12"
     And I press "Preview"
-  Then I should see "draft"
-    And I should see "In response to a prompt by"
-    # TODO: Figure out why this isn't showing - it works fine when testing manually
+  Then I should see "In response to a prompt by"
+    When "Issue 3461" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
-    And I should not find "draft"
+    And I should not see "draft"
     And I should see "In response to a prompt by"
   Then I should see "Collections:"
     And I should see "Battle 12"

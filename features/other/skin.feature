@@ -117,8 +117,8 @@ Feature: creating and editing skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to "public skin" skin page
-  Then I should not find "Edit"
-    And I should not find "Delete"
+  Then I should not see "Edit"
+    And I should not see "Delete"
   When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
 
@@ -137,7 +137,7 @@ Feature: creating and editing skins
     And I am logged in as an admin
   When I go to "public skin" skin page
   Then I should see "Edit"
-    But I should not find "Delete"
+    But I should not see "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love (admin modified)"

@@ -110,7 +110,7 @@ Feature: creating and editing tag sets
   When I check "fandom_reject_Floobry"
     And I submit
   Then I should see "Successfully rejected: Floobry"
-    And I should not find "Floobry" within ".tagset"
+    And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
     
   Scenario: Tags with brackets should work with replacement
