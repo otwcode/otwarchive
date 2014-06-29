@@ -95,6 +95,9 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  # Code coverage
+  gem 'simplecov', :require => false
+  gem 'email_spec'
 end
 
 group :test, :development do

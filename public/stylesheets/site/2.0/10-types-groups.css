@@ -212,7 +212,7 @@ dl.stats dd {
  padding: 0.643em 0.375em;
 }
 
-.statistics .even {
+.statistics .index li:nth-of-type(even) {
   background: #eee;
 }
 

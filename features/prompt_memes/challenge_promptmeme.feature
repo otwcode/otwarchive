@@ -1077,6 +1077,27 @@ Feature: Prompt Meme Challenge
   # 2 stories are now revealed, so notify the prompters
     And 2 emails should be delivered
     
+  Scenario: When a prompt is filled with a co-authored work, the e-mail should link to each author's URL instead of showing escaped HTML
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
+    And I log out
+  When I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Co-authored Fill"
+    And I add the co-author "myname3" 
+  When I press "Post Without Preview"
+  Then 1 email should be delivered to "myname3"
+    And the email should contain "You have been listed as a coauthor on the following work"
+  When I am logged in as "mod1"
+    And I reveal the authors of the "Battle 12" challenge
+    And I reveal the "Battle 12" challenge
+  Then 1 email should be delivered to "myname1"
+    And the email should link to myname2's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname2/pseuds/myname2&quot;"
+    And the email should link to myname3's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname3/pseuds/myname3&quot;"
+        
   Scenario: Story is anon when challenge is revealed
   
   Given I have standard challenge tags setup

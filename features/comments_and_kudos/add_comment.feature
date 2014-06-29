@@ -121,7 +121,7 @@ Scenario: Set preference and receive comment notifications of your own comments
   When I am logged in as "author"
     And I post the work "Generic Work"
   When I am logged in as "commenter"
-    And I set my preferences to receive copies of my own comments
+    And I set my preferences to turn on copies of my own comments
     And I post the comment "Something" on the work "Generic Work"
   Then "author" should be emailed
     And "commenter" should be emailed

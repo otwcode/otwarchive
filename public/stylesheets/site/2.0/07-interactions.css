@@ -345,8 +345,8 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 .qtip-content {
   position: relative;
   padding: 0.15em 0.25em;
-  background: #FFFFA3;
-  border: 1px solid #F1D031;
+  background: #d1e1ef;
+  border: 1px solid #c2d2df;
   overflow: hidden;
     word-wrap: break-word;
 }
