@@ -88,15 +88,18 @@
             <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed) %>
           </dd>
         <% end %>
-
-        <% if restriction.allow_any?(tag_type) %>
-          <dd class="any option">
-            <%= form.check_box "any_#{tag_type}".to_sym %>
-            <%= form.label "any_#{tag_type}", ts("Any #{tag_name.singularize.titleize}") %> 
-            <%= link_to_help("challenge-any") %>
-          </dd>
-        <% end %>        
+      
       <% end # long if for the dd %>
+
+      <% if restriction.allow_any?(tag_type) %>
+        <dd class="any option">
+          <%= form.label "any_#{tag_type}", :class => 'action' do %>
+            <%= form.check_box "any_#{tag_type}".to_sym %>
+            <%= ts("Any #{tag_name.singularize.titleize}") %>
+          <% end %>
+          <%= link_to_help("challenge-any") %>
+        </dd>
+      <% end %>  
     <% end # if num_allowed > 0 %>
   <% end # each tag_type %>
 <% end # do tag_set_form %>
