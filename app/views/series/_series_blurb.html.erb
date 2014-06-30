@@ -2,6 +2,6 @@
   <%= render 'series/series_module', :series => series %>
   <% if is_author_of?(series) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
-    <p class="navigation actions" role="navigation"><%= link_to ts('Edit'), edit_series_path(series) %></p>
+    <p class="actions" role="navigation"><%= link_to ts('Edit'), edit_series_path(series) %></p>
   <% end %>
 </li>

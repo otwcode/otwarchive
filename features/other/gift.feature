@@ -8,6 +8,7 @@ Feature: Create Gifts
     Given the following activated users exist
       | login      | password    | email            |
       | gifter     | something   | gifter@foo.com   |
+      | gifter2    | something   | gifter2@foo.com  |
       | giftee1    | something   | giftee1@foo.com  |
       | giftee2    | something   | giftee2@foo.com  |
       | associate  | something   | associate@foo.com |
@@ -175,6 +176,19 @@ Feature: Create Gifts
       And 0 emails should be delivered to "giftee1@foo.com"
       And "giftee2@foo.com" should be notified by email about their gift "GiftStory1"
 
+
+  Scenario: When a user is notified that a co-authored work has been given to them as a gift, the e-mail should link to each author's URL instead of showing escaped HTML
+
+    Given I add the co-author "gifter2"
+      And I give the work to "giftee1"
+      And I post the work without preview
+    Then 1 email should be delivered to "gifter2"
+      And the email should contain "You have been listed as a coauthor on the following work"
+    Then 1 email should be delivered to "giftee1"
+      And the email should link to gifter's user url
+      And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"
+      And the email should link to gifter2's user url
+      And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter2/pseuds/gifter2&quot;"
 
   Scenario: A gift work should have an associations list
 

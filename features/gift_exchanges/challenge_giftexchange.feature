@@ -55,7 +55,7 @@ Feature: Gift Exchange Challenge
   When I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
     And I submit
   Then I should see "Challenge was successfully updated"
-  Then I should find "Alaska"
+  Then I should see "AKDT"
 
   Scenario: Add a co-mod
 
@@ -336,6 +336,37 @@ Feature: Gift Exchange Challenge
     And I follow "Download (CSV)"
     Then I should get a file with ending and type csv
 
+  Scenario: View a signup summary with no tags
+  Given the following activated users exist
+  | login   | password |
+  | user1   | password |
+  | user2   | password |
+  | user3   | password |
+  | user4   | password |
+  | user5   | password |
+  | user6   | password |
+  When I am logged in as "mod1"
+    And I have created the tagless gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
+  When I am logged in as "user1" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user2" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user3" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user4" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user5" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "user6" with password "password"
+    And I start to sign up for "My Gift Exchange" tagless gift exchange
+  When I am logged in as "mod1"
+    And I go to "My Gift Exchange" collection's page
+    And I follow "Sign-up Summary"
+  Then I should not see "Summary does not appear until at least"
+    And I should see "Tags were not used in this Challenge, so there is no summary to display here."
+
+
   Scenario: Tagsets show up in Challenge metadata
   Given I am logged in as "mod1"
     And I have created the gift exchange "Cabbot Cove Remixes"
@@ -361,6 +392,7 @@ Feature: Gift Exchange Challenge
     And I should not see "Tag set:"
     And I should not see "Standard Challenge Tags"
     And I should not see "Angela Lansbury"
+
 
   Scenario: Mod deletes a user's sign-up and a user deletes their own sign-up without JavaScript
   Given I am logged in as "mod1"

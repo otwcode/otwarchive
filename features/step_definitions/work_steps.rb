@@ -109,6 +109,11 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   Work.tire.index.refresh
 end
 
+When /^I post the chaptered draft "([^\"]*)"$/ do |title|
+  step %{the draft "#{title}"}
+  step %{a draft chapter is added to "#{title}"}
+end
+
 When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, collection|
   work = Work.find_by_title(title)
   if work.blank?

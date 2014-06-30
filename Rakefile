@@ -7,3 +7,7 @@ require 'resque/tasks'
 
 include Rake::DSL
 Otwarchive::Application.load_tasks
+
+require 'coveralls/rake/task'
+Coveralls::RakeTask.new
+
