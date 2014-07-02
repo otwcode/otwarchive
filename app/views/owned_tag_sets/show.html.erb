@@ -16,7 +16,7 @@
       <dt><%= ts("Maintainers:") %></dt>
       <dd>
         <ul class="mods commas">
-          <%= (@tag_set.owners + @tag_set.moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
+          <%= (@tag_set.owners + @tag_set.moderators).map {|owner| content_tag(:li, link_to(owner.login, owner))}.join("\n").html_safe %>
         </ul>
       </dd>
       <dt><%= ts("Description:")%></dt>

@@ -73,6 +73,11 @@ class User < ActiveRecord::Base
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
   has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
 
+  has_many :tag_set_ownerships, :dependent => :destroy
+  has_many :tag_sets, :through => :tag_set_ownerships
+  has_many :tag_set_nominations
+
+
   before_create :create_default_associateds
 
   after_update :log_change_if_login_was_edited
@@ -230,11 +235,26 @@ class User < ActiveRecord::Base
                           :allow_nil => false,
                           :message => ts('Sorry, you have to be over 13!'),
                           :if => :first_save?
-
+  #login
   def to_param
     login
   end
 
+  # Parse a string of the "pseud.name (user.login)" format into a user
+  def self.parse_byline_login(byline, options = {})
+    pseud_name = ""
+    login = ""
+    begin
+      if byline.include?("(")
+        pseud_name, login = byline.split('(', 2)
+        pseud_name = pseud_name.strip
+        login = login.strip.chop
+        conditions = ['users.login = ?', login]
+      end
+      User.find(:all, :conditions => conditions)
+    rescue
+    end
+  end
 
   def self.for_claims(claims_ids)    
     joins(:request_claims).

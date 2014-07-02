@@ -182,13 +182,13 @@ end
     f.nominated true
     after(:build) do |owned_tag_set|
       owned_tag_set.build_tag_set
-      owned_tag_set.add_owner(FactoryGirl.create(:pseud))
+      owned_tag_set.add_owner(FactoryGirl.create(:user))
     end
   end
 
   factory :tag_set_nomination do |f|
     f.association :owned_tag_set
-    f.association :pseud
+    f.association :user
   end
 
   factory :challenge_assignment do |f|

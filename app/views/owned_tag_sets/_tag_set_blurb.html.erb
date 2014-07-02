@@ -5,11 +5,11 @@
 		<p class="datetime"><%= l(tag_set.updated_at.to_date) %></p>
 		<h6 class="landmark heading">Owners and Mods</h6>
 	  <ul title="owned by" class="mods commas">
-		  <%= tag_set.owners.map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
+		  <%= tag_set.owners.map {|owner| content_tag(:li, link_to(owner.login, owner))}.join("\n").html_safe %>
 		</ul>
 		 <% if tag_set.moderators.length > 0 %>
   		<ul title="moderated by" class="mods commas">
-  			<%= tag_set.moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join("\n").html_safe %>
+  			<%= tag_set.moderators.map {|mod| content_tag(:li, link_to(mod.login, mod))}.join("\n").html_safe %>
   	  </ul>
     <% end %>
 	<div class="icon"></div>

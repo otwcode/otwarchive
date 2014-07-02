@@ -7,19 +7,19 @@
   <dt><%= ts("Current Owners") %></dt>
   <dd>
     <ul class="mods commas">
-      <%= @tag_set.new_record? ? content_tag(:li, current_user.default_pseud.byline) : @tag_set.owners.collect(&:byline).sort.map {|owner| content_tag(:li, owner)}.join("\n").html_safe =%>
+      <%= @tag_set.new_record? ? content_tag(:li, current_user.default_pseud.byline) : @tag_set.owners.collect(&:login).sort.map {|owner| content_tag(:li, owner)}.join("\n").html_safe =%>
     </ul>
   </dd>
   <dt><%= form.label :owner_changes, ts("Add/Remove Owners: ") %></dt>
-  <dd><%= form.text_field :owner_changes, autocomplete_options("pseud", :size => 80) %></dd>
+  <dd><%= form.text_field :owner_changes %></dd>
 
   <dt><%= ts("Current Moderators") %></dt>
   <dd>
-    <ul class="mods commas"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join("\n").html_safe =%></ul>
+    <ul class="mods commas"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:login).sort.map {|mod| content_tag(:li, mod)}.join("\n").html_safe =%></ul>
   </dd>
   
   <dt><%= form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
-  <dd><%= form.text_field :moderator_changes, autocomplete_options("pseud", :size => 80) %></dd>
+  <dd><%= form.text_field :moderator_changes %></dd>
 </dl>   
 </fieldset>
 
