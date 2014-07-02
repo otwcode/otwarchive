@@ -44,8 +44,7 @@ module TagSetsHelper
   end
 
   def nomination_status(nomination=nil)
-    case
-    when nomination
+    if nomination
       if nomination.approved
         symbol = "&#10004;"
         status = "approved"
