@@ -7,9 +7,9 @@
       setupTooltips();
     });
     function setupTooltips() {
-      $j('span[tooltip]').each(function(){
+      $j('span[data-tooltip]').each(function(){
         $j(this).qtip({
-            content: $j(this).attr('tooltip'),
+            content: $j(this).attr('data-tooltip'),
             position: {corner: {target: 'topMiddle'}}
         });
       });

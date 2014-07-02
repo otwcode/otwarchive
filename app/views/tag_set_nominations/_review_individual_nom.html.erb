@@ -4,11 +4,12 @@
 
   <dl class="nomination">
     <% tag_type = nom.class.name.gsub(/Nomination/, '').downcase %>
-    <dt><%= nomination_status_span(nom) %>
-      <%= nom.tagname %></dt>
-      <% if (nom_count = nom.times_nominated(@tag_set)) > 1 %>
-        <dd class="count">(x<%= nom_count %>)</dd>
-      <% end %>
+    <dt>
+      <%= nomination_tag_information(nom) %>
+    </dt>
+    <% if (nom_count = nom.times_nominated(@tag_set)) > 1 %>
+      <dd class="count">(x<%= nom_count %>)</dd>
+    <% end %>
 
     <% # this is necessary or else rails thinks the [] characters represent a sub-model! %>
     <% tagname = nom.tagname.gsub('[', '#LBRACKET').gsub(']', '#RBRACKET') %>
