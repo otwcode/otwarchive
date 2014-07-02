@@ -44,13 +44,28 @@ module TagSetsHelper
   end
   
   def nomination_status(nomination=nil)
-    if nomination && nomination.approved
-      '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#10004;</span></span>'.html_safe
-    elsif nomination && nomination.rejected
-      '<span class="symbol rejected" tooltip="This nomination was rejected (but another version may have been approved instead)."><span>&#10006;</span></span>'.html_safe
-    else
-      '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>?!</span></span>'.html_safe
+    case
+    when nomination
+      if nomination.approved
+        symbol = "&#10004;"
+        status = "approved"
+        tooltip = ts('This nomination has been approved!')
+      elsif nomination.rejected
+        symbol = "&#10006;"
+        status = "rejected"
+        tooltip = ts('This nomination was rejected (but another version may have been approved instead).')
+      elsif @tag_set.nominated
+        symbol = "?!"
+        status = "unreviewed"
+        tooltip = ts('This nomination has not been reviewed yet and can still be changed.')
+      else
+        symbol = "?!"
+        status = "unreviewed"
+        tooltip = ts('This nomination has not been reviewed yet.')
+      end
     end
+
+    return content_tag(:span, content_tag(:span, "#{symbol}".html_safe), class: "#{status} symbol", tooltip: "#{tooltip}")
   end
   
 #BACK END, I attempted to put titles in but it's rendering as oldtitle
