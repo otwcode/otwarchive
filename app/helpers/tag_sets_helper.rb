@@ -44,6 +44,9 @@ module TagSetsHelper
   end
 
   def nomination_status(nomination=nil)
+    symbol = "?!"
+    status = "unreviewed"
+    tooltip = ts('This nomination has not been reviewed yet.')
     if nomination
       if nomination.approved
         symbol = "&#10004;"
@@ -57,10 +60,6 @@ module TagSetsHelper
         symbol = "?!"
         status = "unreviewed"
         tooltip = ts('This nomination has not been reviewed yet and can still be changed.')
-      else
-        symbol = "?!"
-        status = "unreviewed"
-        tooltip = ts('This nomination has not been reviewed yet.')
       end
     end
 
