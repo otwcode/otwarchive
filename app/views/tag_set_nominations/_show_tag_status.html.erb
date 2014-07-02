@@ -1,5 +1,2 @@
 <%= nomination_status(tag) %>
-
-<% tag_object = tag.type.gsub(/Nomination/, '').constantize.find_by_name(tag.tagname) %>
-
-<%= nomination_status_span(tag, tag_object) %>
+<%= nomination_tag_information(tag) %>

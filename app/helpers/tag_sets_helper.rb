@@ -68,7 +68,8 @@ module TagSetsHelper
     return content_tag(:span, content_tag(:span, "#{symbol}".html_safe), class: "#{status} symbol", data: {tooltip: "#{tooltip}"})
   end
 
-  def nomination_status_span(nominated_tag, tag_object=nil)
+  def nomination_tag_information(nominated_tag)
+    tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
     status = "nonexistent"
     tooltip = ts("This tag has never been used on the archive before. Check the spelling!")
     title = ts("nonexistent tag")
