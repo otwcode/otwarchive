@@ -125,8 +125,6 @@ module NavigationHelpers
       edit_collection_gift_exchange_path(Collection.find_by_title($1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by_title($1))
-    when /^"(.*)" collection's static page$/i
-      static_collection_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
