@@ -127,8 +127,8 @@ module TagsHelper
   end
 
   # Makes filters show warnings display name
-  def label_for_filter(type, tag_info)
-    name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+  def label_for_filter(tag_type, tag_info)
+    name = (tag_type == "warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
   end
 

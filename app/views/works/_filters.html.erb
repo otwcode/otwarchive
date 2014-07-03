@@ -39,7 +39,7 @@
                       <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
                         tag.id, 
                         @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %> 
+                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
                     <% else %>
                       <%= check_box_tag "work_search[#{tag_type}_ids][]", 
                         tag.id,
@@ -47,7 +47,7 @@
                         :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
                     <% end %>
                     <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
-                      "#{tag.name} (#{tag.count})" %>
+                      "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                   </li>
                 <% end %>
               </ul>
