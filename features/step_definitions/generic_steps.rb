@@ -89,43 +89,31 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+# img attributes
+Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.all(text)
+    page.should have_xpath("//img[@#{attribute}='#{text}']")
   end
 end
 
-Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
+Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.all(text)
-  end
-end
-
-Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.all(text)
-  end
-end
-
-Then /^I should see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_xpath("//img[@alt='#{text}']")) : (page.should have_xpath("//img[@title='#{text}']"))
-  end
-end
-
-Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_no_xpath("//img[@alt='#{text}']")) : (page.should have_no_xpath("//img[@title='#{text}']"))
+    page.should_not have_xpath("//img[@#{attribute}='#{text}']")
   end
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   page.has_select?(field, :selected => value).should == true
-  #find_field(field).xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
+end
+
+Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+  with_scope(selector) do
+    page.should have_xpath("//input[@value='#{text}']")
+  end
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
