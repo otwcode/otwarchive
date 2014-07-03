@@ -92,7 +92,7 @@ Feature: creating and editing tag sets
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
     And I nominate fandom "Floobry" and character "Barblah" in "Nominated Tags"
     And I review nominations for "Nominated Tags"
-  Then I should find "Floobry" within ".tagset"
+  Then I should see "Floobry" within ".tagset"
   When I check "fandom_approve_Floobry"
     And I check "character_approve_Barblah"
     And I submit
@@ -110,7 +110,7 @@ Feature: creating and editing tag sets
   When I check "fandom_reject_Floobry"
     And I submit
   Then I should see "Successfully rejected: Floobry"
-    And I should not find "Floobry" within ".tagset"
+    And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
     
   Scenario: Tags with brackets should work with replacement
