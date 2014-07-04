@@ -45,7 +45,6 @@ Feature: Collectible items
     Then I should see "the moderated collection 'Various Penguins'"
       And I press "Update"
       And I should see "the moderated collection 'Various Penguins'"
-      #And I follow "Add To Collections"
       And I fill in "collection_names" with "various_aardvarks"
       And I press "Add"
       And I follow "Edit"
