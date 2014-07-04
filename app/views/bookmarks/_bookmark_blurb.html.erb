@@ -19,9 +19,9 @@
     <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
 		
     <!--actions-->
-    <% if (bookmark_count > 1 && (params[:tag_id] || @most_recent_bookmarks)) || (logged_in? && !is_author_of?(bookmark)) %>
+    <% if (bookmark_count > 1 && params[:tag_id]) || (bookmark_count > 1 && (@owner.blank? && @bookmarkable.blank?)) || (logged_in? && !is_author_of?(bookmark)) %>
       <ul class="actions" role="navigation">
-        <% # let the user reading this bookmark save a copy for themselves %>
+        <% # If this bookmark does not belong to the current user, let them save a new copy or edit their existing copy %>
         <% if logged_in? && !is_author_of?(bookmark) %>
           <li>
           	<% if (current_user_bookmark ||= bookmark_if_exists(bookmarkable)) %>
@@ -33,7 +33,7 @@
         <% end %>
 
         <% if bookmark_count > 1 %>
-          <% if params[:tag_id] || @most_recent_bookmarks %>
+          <% if params[:tag_id] || (@owner.blank? && @bookmarkable.blank?) %>
             <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
               <%= link_to ts("Show Most Recent Bookmarks"), 
               url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }), :class => "actions", :remote => true %>
@@ -42,7 +42,7 @@
         <% end %>
       </ul>
     <% end %>
-    
+
     <% # bookmark form loaded here if requested %>
     <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>"></div>
   <% end %>
