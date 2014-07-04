@@ -16,3 +16,10 @@ Feature: View a work with various options
     And the chaptered work "Whatever"
   When I view the work "Whatever"
   Then I should see "Chapter 2"
+
+  Scenario: viewing a work and chapter that have been deleted
+  Given I am logged in as a random user
+    And I view a deleted work
+  Then I am on the homepage
+
+
