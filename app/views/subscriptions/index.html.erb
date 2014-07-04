@@ -31,6 +31,7 @@
         <% @sub_series.each do |subscription| %>
           <dt>
             <%= link_to(subscription.name, subscription.subscribable) %>
+            <%= ts("by %{names}", :names => byline(subscription.subscribable)).html_safe %>
           </dt>
           <dd>
             <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
@@ -49,9 +50,7 @@
         <% @sub_works.each do |subscription| %>
           <dt>
             <%= link_to(subscription.name, subscription.subscribable) %>
-            <% if %w(Work Series).include?(subscription.subscribable_type) %>
               <%= ts("by %{names}", :names => byline(subscription.subscribable)).html_safe %>
-            <% end %>
           </dt>
           <dd>
             <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
