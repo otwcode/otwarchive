@@ -4,11 +4,11 @@
   <h3 class="heading">
     <%= ts('About') %>
     <span class="title"><%= @collection.title %></span>
-    <span class="name">
-      <% if @collection.title != @collection.name %>
+    <% if @collection.title != @collection.name %>
+      <span class="name">
         (<%= @collection.name %>)
-      <% end %>
-    </span>
+      </span>
+    <% end %>
   </h3>
   <div class="wrapper">
     <dl class="meta group">
