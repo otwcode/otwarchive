@@ -127,6 +127,7 @@ Feature: User Authentication
       And I should not see "Log Out"
       And I should not see "Preferences"
 
+  # TODO make this an actual test - it's been 4 years...
   Scenario Outline: Show or hide preferences link
     Given I have no users
       And the following activated users exist

@@ -7,7 +7,7 @@ Feature: User icons
   When I attach the file "test/fixtures/icon.gif" to "icon"
     And I press "Update"
   Then I should see "Pseud was successfully updated"
-    And I should see the "alt" text ""
+    And I should see the image "alt" text ""
 
   Scenario: Users can change alt text
 
@@ -15,7 +15,7 @@ Feature: User icons
   When I follow "Edit Pseud"
     And I fill in "pseud_icon_alt_text" with "Some test description"
     And I press "Update"
-  Then I should see the "alt" text "Some test description"
+  Then I should see the image "alt" text "Some test description"
 
   Scenario: Add an icon to a collection
 

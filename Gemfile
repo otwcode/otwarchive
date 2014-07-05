@@ -71,6 +71,9 @@ gem 'coveralls', require: false
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark"
 
+#Phrase-app
+gem 'phrase'
+
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm', "3.8.0.218"

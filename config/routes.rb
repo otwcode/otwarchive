@@ -11,18 +11,6 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### STATIC CACHED COLLECTIONS ####
-
-  namespace 'static' do
-    resources :collections, :only => [:show] do
-      resources :media, :only => [:show]
-      resources :fandoms, :only => [:index, :show]
-      resources :works, :only => [:show]
-      resources :restricted_works, :only => [:index, :show]
-    end
-  end
-
-
   #### OPEN DOORS ####
   namespace :opendoors do
     resources :tools, :only => [:index] do
