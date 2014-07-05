@@ -5,10 +5,10 @@
     <dt class="note"><%= ts("Currently in set")%></dt>
     <dd>
       <fieldset class="tagset listbox">
-      <h4 class="heading">Tags</h4>
-      <%= check_all_none %>
-      <%= checkbox_section(form, :associations_to_remove, associations_for_remove, :name_method => "to_s") %>
-    </fieldset>
+        <h4 class="heading"><%= ts('Tags') %></h4>
+        <%= check_all_none %>
+        <%= checkbox_section(form, :associations_to_remove, associations_for_remove, :name_method => "to_s") %>
+      </fieldset>
     </dd>
   </dl>
 </fieldset>

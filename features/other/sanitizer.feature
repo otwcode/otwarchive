@@ -39,13 +39,11 @@ Feature: Sanitizing HTML
     And I press "Preview"
   Then I should see "Preview"
     And I should not see "XSS"
-    And I should not find "XSS"
     And I should see "BODY{-moz-binding:url("
   When I press "Edit"
     And I fill in "content" with "behavior: url(xss.htc);"
     And I press "Preview"
   Then I should see "Preview"
     And I should not see "XSS"
-    And I should not find "XSS"
     And I should see "behavior: url(xss.htc);"
 
