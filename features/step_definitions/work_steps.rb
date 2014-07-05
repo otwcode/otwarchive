@@ -91,6 +91,10 @@ When /^I view the work "([^\"]*)" with comments$/ do |work|
   visit work_url(work, :anchor => "comments", :show_comments => true)
 end
 
+When /^I view a deleted work$/ do
+  visit "/works/12345/chapters/12345"
+end
+
 When /^I edit the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
