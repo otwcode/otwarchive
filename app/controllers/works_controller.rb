@@ -305,11 +305,14 @@ class WorksController < ApplicationController
           render :_choose_coauthor
         else
           unless @work.has_required_tags?
+            error_message = "Please add all required tags."
             if @work.fandoms.blank?
-              @work.errors.add(:base, "Please add all required tags. Fandom is missing.")
-            else
-              @work.errors.add(:base, "Required tags are missing.")
+              error_message << " Fandom is missing."
             end
+            if @work.warnings.blank?
+              error_message << " Warning is missing."
+            end
+            @work.errors.add(:base, error_message)           
           end
           render :new
         end
