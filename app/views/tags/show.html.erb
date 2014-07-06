@@ -86,7 +86,7 @@
 
   <% unless (@tag_children.keys - ['Merger']).blank? %>
     <!-- caching -->
-    <% cache("tag-#{@tag.cache_key}-children") do %>
+    <% cache("tag-#{@tag.cache_key}-children-v2") do %>
       <div class="child listbox group">
         <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
         <% %w(Character Relationship Freeform).each do |type| %>
