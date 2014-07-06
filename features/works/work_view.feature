@@ -22,4 +22,10 @@ Feature: View a work with various options
     And I view a deleted work
   Then I am on the homepage
 
+  Scenario: viewing a deleted chapter on a work that still exists
+  Given I am logged in as a random user
+    And I view a deleted chapter
+    And I should see "Sorry, we couldn't find the chapter you were looking for."
+    #Then I am on the homepage
+
 
