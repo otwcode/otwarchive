@@ -97,7 +97,7 @@ end
 
 When /^I view a deleted chapter$/ do
   step "the draft \"DeletedChapterWork\""
-  work = Work.find_by_title(DeletedChapterWork)
+  work = Work.find_by_title("DeletedChapterWork")
   visit "/works/#{work.id}/chapters/12345"
 end
 
