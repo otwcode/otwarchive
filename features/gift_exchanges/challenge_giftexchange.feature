@@ -288,29 +288,36 @@ Feature: Gift Exchange Challenge
 
   Scenario: User tries to change pseud on a challenge signup and should not be able to, as it would break matching
 
-  Given "myname1" has the pseud "othername"
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Sensitive Gift Exchange"
-    And I open signups for "Sensitive Gift Exchange"
-  When I am logged in as "myname1"
-  When I sign up for "Sensitive Gift Exchange" with combination A
-  Then I should see "Sign-up was successfully created"
-    And I should see "Sign-up for myname1"
-  When I edit my signup for "Sensitive Gift Exchange"
-  Then I should not see "othername"
+  Scenario: Mod can see everyone's assignments, includind users' emails
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Awesome Gift Exchange"
+      And I open signups for "Awesome Gift Exchange"
+      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+      And I have generated matches for "Awesome Gift Exchange"
+      And I have sent assignments for "Awesome Gift Exchange"
+    When I go to the "Awesome Gift Exchange" assignments page
+      Then I should see "Assignments for Awesome"
+    When I follow "Open"
+    Then I should see "Open Assignments"
+      And I should see "myname1"
+      And I should see the image "alt" text "email myname1"
 
-  Scenario: User can see their assignment
-
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I open signups for "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-    And I have generated matches for "Awesome Gift Exchange"
-    And I have sent assignments for "Awesome Gift Exchange"
-  When I am logged in as "myname1"
-    And I go to my user page
-    And I follow "Assignments"
-  Then I should see "Awesome Gift Exchange"
+  Scenario: User can see their assignment, but no email links
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Awesome Gift Exchange"
+      And I open signups for "Awesome Gift Exchange"
+      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+      And I have generated matches for "Awesome Gift Exchange"
+      And I have sent assignments for "Awesome Gift Exchange"
+    When I am logged in as "myname1"
+      And I go to my user page
+      And I follow "Assignments"
+    Then I should see "Awesome Gift Exchange"
+    When I follow "Awesome Gift Exchange"
+      Then I should see "Requests by myname3"
+      But I should not see the image "alt" text "email myname3"
+      And I should see "Offers by myname1"
+      But I should not see the image "alt" text "email myname1"
 
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
   

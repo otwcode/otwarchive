@@ -119,7 +119,9 @@ module NavigationHelpers
       collection_signups_path(Collection.find_by_title($1))
     when /^the "(.*)" requests page$/i                      # e.g. when I go to "Collection name" signup page
       collection_requests_path(Collection.find_by_title($1))
-    when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
+    when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
+      collection_assignments_path(Collection.find_by_title($1))
+    when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by_title($1))
