@@ -344,10 +344,10 @@ Feature: Create Works
       And I am logged in as "triggerfinger" with password "everyoneinthephonebook"
     When I go to the new work page
       And I fill in "Fandoms" with "Dallas"
-      And I fill in "Work Title" with "I Shot J.R.: Kristen's Story"
+      And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"
       And I fill in "content" with "It wasn't my fault, you know."
       And I press "Post Without Preview"
-    Then I should see "We couldn't save this Work"
+    Then I should see "We couldn't save this work"
       And I should see "Please add all required tags. Warning is missing."
     When I check "No Archive Warnings Apply"
       And I press "Post Without Preview"
