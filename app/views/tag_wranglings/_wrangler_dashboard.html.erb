@@ -30,10 +30,10 @@
           </li>
         <% end %>
       <% else %>
-        <li><%= span_if_current ts("Fandoms by media (%{count})" , count=> @counts[:fandoms]), tag_wranglings_path(:show => "fandoms") %></li>
-        <li><%= span_if_current ts("Characters by fandom (%{count})" , count=> @counts[:characters]), tag_wranglings_path(:show => "characters") %></li>
-        <li><%= span_if_current ts("Relationships by fandom (%{count})" , count=> @counts[:relationships]), tag_wranglings_path(:show => "relationships") %></li>
-        <li><%= span_if_current ts("Freeforms by fandom (%{count})" , count=> @counts[:freeforms]), tag_wranglings_path(:show => "freeforms") %></li>
+        <li><%= span_if_current ts("Fandoms by media (%{count})" , :count=> @counts[:fandoms]), tag_wranglings_path(:show => "fandoms") %></li>
+        <li><%= span_if_current ts("Characters by fandom (%{count})" , :count=> @counts[:characters]), tag_wranglings_path(:show => "characters") %></li>
+        <li><%= span_if_current ts("Relationships by fandom (%{count})" , :count=> @counts[:relationships]), tag_wranglings_path(:show => "relationships") %></li>
+        <li><%= span_if_current ts("Freeforms by fandom (%{count})" , :count=> @counts[:freeforms]), tag_wranglings_path(:show => "freeforms") %></li>
       <% end %>
     </ul>
   <% end %>
