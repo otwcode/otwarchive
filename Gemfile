@@ -74,6 +74,9 @@ gem 'globalize', '~> 3.1.0'
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
+#Phrase-app
+gem 'phrase'
+
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm', "3.8.0.218"
