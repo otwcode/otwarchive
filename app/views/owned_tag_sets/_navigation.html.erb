@@ -3,14 +3,14 @@
     <% if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first %>
       <li><%= span_if_current ts("My Nominations"), tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>
     <% elsif @tag_set.nominated %>
-  	  <li><%= span_if_current ts("Nominate"), new_tag_set_nomination_path(@tag_set) %></li>
-  	<% end %>
+      <li><%= span_if_current ts("Nominate"), new_tag_set_nomination_path(@tag_set) %></li>
+    <% end %>
     <% if @tag_set.user_is_moderator?(current_user) %>
       <% if @tag_set.tag_set_nominations.count > 0 %>
-  	    <li><%= span_if_current ts("Review Nominations"), tag_set_nominations_path(@tag_set) %></li>
-  	    <li><%= span_if_current ts("Review Associations"), tag_set_associations_path(@tag_set) %></li>
-  	  <% end %>
-  	<% end %>
+        <li><%= span_if_current ts("Review Nominations"), tag_set_nominations_path(@tag_set) %></li>
+        <li><%= span_if_current ts("Review Associations"), tag_set_associations_path(@tag_set) %></li>
+      <% end %>
+    <% end %>
     <% if @tag_set.user_is_owner?(current_user) %>
       <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
         :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect the tags already in your set, but it will clear the history of rejected tags and users will be able to nominate again.)'),

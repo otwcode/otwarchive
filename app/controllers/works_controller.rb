@@ -22,7 +22,6 @@ class WorksController < ApplicationController
   before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
   cache_sweeper :collection_sweeper
-  cache_sweeper :static_sweeper
   cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
@@ -306,11 +305,14 @@ class WorksController < ApplicationController
           render :_choose_coauthor
         else
           unless @work.has_required_tags?
+            error_message = "Please add all required tags."
             if @work.fandoms.blank?
-              @work.errors.add(:base, "Please add all required tags. Fandom is missing.")
-            else
-              @work.errors.add(:base, "Required tags are missing.")
+              error_message << " Fandom is missing."
             end
+            if @work.warnings.blank?
+              error_message << " Warning is missing."
+            end
+            @work.errors.add(:base, error_message)           
           end
           render :new
         end
@@ -652,11 +654,23 @@ protected
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
   def in_moderated_collection
-    if !@collection.nil? && @collection.moderated?
-     if (!Work.in_collection(@collection).include?(@work)) && (!@collection.user_is_posting_participant?(current_user))
+    moderated_collections = []
+    @work.collections.each do |collection|
+      if !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
+        if @work.collection_items.present?
+          @work.collection_items.each do |collection_item|
+            if collection_item.collection == collection
+              if collection_item.user_approval_status == 1 && collection_item.collection_approval_status == 0
+                moderated_collections << collection
+              end
+            end
+          end
+        end
+      end
+    end
+    if moderated_collections.present?
       flash[:notice] ||= ""
-      flash[:notice] += ts(" Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator.")
-     end
+      flash[:notice] += ts(" You have submitted your work to #{moderated_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", :all_collections => moderated_collections.map { |f| f.title }.join(', '))
     end
   end
 
