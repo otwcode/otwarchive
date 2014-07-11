@@ -22,6 +22,8 @@ Feature: View a work with various options
     And I view a deleted work
     And I should see "Sorry, we couldn't find the work you were looking for."
     And I should see "Welcome to the Archive of Our Own!"
+    And I follow "Site Map"
+    And I should not see "Sorry, we couldn't find the work you were looking for."
 
 
 
@@ -30,6 +32,8 @@ Feature: View a work with various options
     And I view a deleted chapter
     And I should see "Sorry, we couldn't find the chapter you were looking for."
     And I should see "DeletedChapterWork"
+    And I follow "Site Map"
+  Then I should not see "Sorry, we couldn't find the chapter you were looking for."
 
 
 
