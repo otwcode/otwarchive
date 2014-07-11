@@ -26,6 +26,8 @@ class SubscriptionsController < ApplicationController
       @subscriptions = subscriptions
     end
     
+    @subscriptions.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    
     @subscriptions = @subscriptions.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
   end
 
