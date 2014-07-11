@@ -14,15 +14,18 @@
   </li>
   <li>
     <%= span_if_current ts('Series Subscriptions'),
-    user_subscriptions_path(@user, :type => "series") %>
+    user_subscriptions_path(@user, :type => "series"), 
+    params[:type] == "series" %>
   </li>
   <li>
     <%= span_if_current ts('User Subscriptions'),
-    user_subscriptions_path(@user, :type => "users") %>
+    user_subscriptions_path(@user, :type => "users"), 
+    params[:type] == "users" %>
   </li>
   <li>
     <%= span_if_current ts('Work Subscriptions'),
-    user_subscriptions_path(@user, :type => "works") %>
+    user_subscriptions_path(@user, :type => "works"), 
+    params[:type] == "works" %>
   </li>
 </ul>
 <!--/subnav-->
