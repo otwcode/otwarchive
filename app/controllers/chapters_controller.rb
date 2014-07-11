@@ -36,7 +36,7 @@ class ChaptersController < ApplicationController
     end
     @chapter = @work.chapters.find_by_id(params[:id])
     unless @chapter
-      flash.now[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
       redirect_to work_path(@work) and return
     end
     @chapters = @work.chapters_in_order(false)
