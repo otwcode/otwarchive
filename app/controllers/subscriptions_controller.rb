@@ -23,7 +23,7 @@ class SubscriptionsController < ApplicationController
     elsif params[:type] == "works"
       @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "Work"}
     else
-      @subscriptions = subscriptions
+      @subscriptions = subscriptions.to_a
     end
     
     @subscriptions.sort! { |a,b| a.name.downcase <=> b.name.downcase }
