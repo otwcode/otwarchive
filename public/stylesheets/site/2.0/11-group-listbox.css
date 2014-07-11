@@ -44,10 +44,6 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   visibility: hidden;
 }
 
-.listbox dl.index {
-  margin: 0;
-}
-
 .commas li.listbox:after {
   content: none;
 }
