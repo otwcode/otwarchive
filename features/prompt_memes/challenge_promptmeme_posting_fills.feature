@@ -26,6 +26,7 @@ Feature: Prompt Meme Challenge
     And I press "Claim"
   Then I should see "New claim made"
     And I follow "Fulfill"
+    And I check "No Archive Warnings Apply"
   # Then I should see "GhostSoup" in the "Fandoms" input # feature was removed
     And I fill in "Fandoms" with "GhostSoup"
     And I should see "promptcollection" in the "work_collection_names" input
