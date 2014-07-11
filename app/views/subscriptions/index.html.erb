@@ -1,63 +1,50 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Subscriptions") %></h2>
+<h2 class="heading">
+  <%= params[:type].blank? ? ts('My Subscriptions') : 
+  ts('My %{type} Subscriptions', type: params[:type].to_s.singularize.titleize)
+  %>
+</h2>
 <!--/descriptions-->
 
 <!--subnav-->
+<ul class="navigation actions" role="navigation">
+  <li>
+    <%= span_if_current ts('All Subscriptions'),
+    user_subscriptions_path(@user), params[:type].blank? %>
+  </li>
+  <li>
+    <%= span_if_current ts('Series Subscriptions'),
+    user_subscriptions_path(@user, :type => "series") %>
+  </li>
+  <li>
+    <%= span_if_current ts('User Subscriptions'),
+    user_subscriptions_path(@user, :type => "users") %>
+  </li>
+  <li>
+    <%= span_if_current ts('Work Subscriptions'),
+    user_subscriptions_path(@user, :type => "works") %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
-<% if @sub_users.present? %>
-  <div class="user subscription listbox group">
-    <h3 class="heading"><%= ts("Users") %></h3>
-    <dl class="index group">
-      <% @sub_users.each do |subscription| %>
-        <dt>
-          <%= link_to(subscription.name, subscription.subscribable) %>
-        </dt>
-        <dd>
-          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-            <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
-          <% end %>
-        </dd>
+<%= will_paginate @subscriptions %>
+
+<dl class="subscription index group">
+  <% @subscriptions.each do |subscription| %>
+    <dt>
+      <%= link_to(subscription.name, subscription.subscribable) %>
+      <% unless subscription.subscribable_type == "User" %>
+        <%= ts("by %{creators}", :creators => byline(subscription.subscribable)).html_safe %>
       <% end %>
-    </dl>
-  </div>
-<% end %>
+    </dt>
+    <dd>
+      <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+        <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name) %>
+      <% end %>
+    </dd>
+  <% end %>
+</dl>
 
-<% if @sub_series.present? %>
-  <div class="series subscription listbox group">
-    <h3 class="heading"><%= ts("Series") %></h3>
-      <dl class="index group">
-        <% @sub_series.each do |subscription| %>
-          <dt>
-            <%= link_to(subscription.name, subscription.subscribable) %>
-            <%= ts("by %{creators}", :creators => byline(subscription.subscribable)).html_safe %>
-          </dt>
-          <dd>
-            <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-              <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name).html_safe %>
-            <% end %>
-          </dd>
-        <% end %>
-      </dl>
-  </div>
-<% end %>
-
-<% if @sub_works.present? %>
-  <div class="work subscription listbox group">
-    <h3 class="heading"><%= ts("Works") %></h3>
-      <dl class="index group">
-        <% @sub_works.each do |subscription| %>
-          <dt>
-            <%= link_to(subscription.name, subscription.subscribable) %>
-            <%= ts("by %{creators}", :creators => byline(subscription.subscribable)).html_safe %>
-          </dt>
-          <dd>
-            <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-              <%= f.submit ts("Unsubscribe from %{name}", :name => subscription.name).html_safe %>
-            <% end %>
-          </dd>
-        <% end %>
-      </dl>
-  </div>
-<% end %>
+<%= will_paginate @subscriptions %>
+<!--/content-->

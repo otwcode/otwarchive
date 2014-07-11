@@ -16,14 +16,17 @@ class SubscriptionsController < ApplicationController
   def index
     subscriptions = @user.subscriptions.includes(:subscribable)
 
-    # split the subscriptions by subscribable_type
-    @sub_series, rest = subscriptions.partition{ |s| s.subscribable_type == "Series"}
-    @sub_users, @sub_works = rest.partition{ |r| r.subscribable_type == "User"}
-
-    # sort each subscription type array alphabetically
-    @sub_series.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-    @sub_users.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-    @sub_works.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    if params[:type] == "series"
+      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "Series"}
+    elsif params[:type] == "users"
+      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "User"}
+    elsif params[:type] == "works"
+      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "Work"}
+    else
+      @subscriptions = subscriptions
+    end
+    
+    @subscriptions = @subscriptions.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
   end
 
   # POST /subscriptions
