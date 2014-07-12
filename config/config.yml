@@ -128,7 +128,7 @@ MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
 WARNING_DEFAULT_TAG_NAME: 'Choose Not To Use Archive Warnings'
-WARNING_DEFAULT_TAG_DISPLAY_NAME: 'Author Chose Not To Use Archive Warnings'
+WARNING_DEFAULT_TAG_DISPLAY_NAME: 'Creator Chose Not To Use Archive Warnings'
 WARNING_NONE_TAG_NAME: 'No Archive Warnings Apply'
 WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
