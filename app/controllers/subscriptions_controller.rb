@@ -14,21 +14,12 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions
   # GET /subscriptions.xml
   def index
-    subscriptions = @user.subscriptions.includes(:subscribable)
-
-    if params[:type] == "series"
-      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "Series"}
-    elsif params[:type] == "users"
-      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "User"}
-    elsif params[:type] == "works"
-      @subscriptions = subscriptions.find_all{ |s| s.subscribable_type == "Work"}
-    else
-      @subscriptions = subscriptions.to_a
+    @subscriptions = @user.subscriptions.includes(:subscribable)
+    if params[:type].present?
+      @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
     end
-    
-    @subscriptions.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-    
-    @subscriptions = @subscriptions.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+    @subscriptions = @subscriptions.to_a.sort! { |a,b| a.name.downcase <=> b.name.downcase }    
+    @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   # POST /subscriptions
