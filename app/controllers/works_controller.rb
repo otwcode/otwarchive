@@ -823,7 +823,7 @@ public
   def load_work
     @work = Work.find_by_id(params[:id])
     if @work.nil?
-      flash.now[:error] = ts("Sorry, we couldn't find the work you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
