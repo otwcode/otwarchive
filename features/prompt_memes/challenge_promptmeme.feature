@@ -258,6 +258,20 @@ Feature: Prompt Meme Challenge
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see correct signups for Battle 12
+
+  Scenario: Mod can delete signups
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+  When I am logged in as "mod1"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+    And I should see "Prompts for Battle 12"
+  When I follow "Delete Sign-up"
+  Then I should see "Challenge sign-up was deleted."
+    And I should see "Prompts (0)"
+
   
   Scenario: Sign up with both prompts anon
   
@@ -344,15 +358,6 @@ Feature: Prompt Meme Challenge
   When I start to delete the signup by "myname1"
   Then I should see "myname1"
     And I should not see a link "myname1"
-
-	Scenario: Mod can't delete prompt if they don't have enough
-
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-  When I am logged in as "mod1"
-	When I view prompts for "Battle 12"
-	Then I should not see "Delete"
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   
