@@ -165,3 +165,15 @@ end
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
   step %{I should see "wrangler" within "fieldset dl"}
 end
+
+Then /^I should see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/ do |result, selector|
+    with_scope(selector) do
+      page.has_text?(result)
+    end
+end
+
+Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/ do |result, selector|
+    with_scope(selector) do
+      page.has_no_text?(result)
+    end
+end

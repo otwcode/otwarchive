@@ -28,10 +28,10 @@ Feature: creating and editing skins
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
     And I should see "by skinner"
-    But I should find "Use"
-    And I should find "Delete"
-    And I should find "Edit"
-    And I should not find "Stop Using"
+    But I should see "Use"
+    And I should see "Delete"
+    And I should see "Edit"
+    And I should not see "Stop Using"
     And I should not see "(Approved)"
     And I should not see "(Not yet reviewed)"
 
@@ -52,9 +52,8 @@ Feature: creating and editing skins
   Scenario: A user should be able to select one of their own non-public skins to use in their My Skins page
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
-  When I follow "My Skins"
   Then I should see "my blinking skin"
-    And I should find "Use"
+    And I should see "Use"
   When I press "Use"
   Then I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -77,7 +76,6 @@ Feature: creating and editing skins
   Scenario: The user who creates a skin should be able to edit it
   Given I am logged in as "skinner"
     And I create the skin "my skin"
-    And I follow "My Skins"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
     And I submit
@@ -89,7 +87,7 @@ Feature: creating and editing skins
     And the unapproved public skin "public skin"
   When I am on the skins page
     Then I should not see "public skin"
-  When I follow "My Skins"
+  When I am on skinner's skins page
   Then I should see "public skin"
     And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
@@ -119,8 +117,8 @@ Feature: creating and editing skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to "public skin" skin page
-  Then I should not find "Edit"
-    And I should not find "Delete"
+  Then I should not see "Edit"
+    And I should not see "Delete"
   When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
 
@@ -139,7 +137,7 @@ Feature: creating and editing skins
     And I am logged in as an admin
   When I go to "public skin" skin page
   Then I should see "Edit"
-    But I should not find "Delete"
+    But I should not see "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love (admin modified)"
@@ -154,8 +152,11 @@ Feature: creating and editing skins
     And I am logged in as "skinner"
     And I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
-  When I follow "My Skins"
-  Then I should see "(Approved)"
+  When I am on the skins page
+    Then I should see "public skin"
+  When I follow "Site Skins"
+  Then I should see "public skin"
+    And I should see "(Approved)"
     And I should not see "Edit"
 
   Scenario: Users should be able to use public approved skins created by others
@@ -180,17 +181,21 @@ Feature: creating and editing skins
     And I should not see "#title"
     And I should not see "text-decoration: blink;"
 
+  Scenario: User should be able to toggle between the wizard and the form
+  When I am logged in
+    And I am on skin's new page
+  Then I should see "CSS" within "form#new_skin"
+  When I follow "Use Wizard"
+    Then I should see "Site Skin Wizard"
+    And I should not see "CSS" within "form"
+  When I follow "Write Custom CSS"
+    Then I should see "CSS"
+
   Scenario: Users should be able to create a skin using the wizard
   Given basic skins
     And I am logged in as "skinner"
   When I am on skin's new page
-  Then I should see "CSS" within "form#new_skin"
-  When I follow "Use Wizard Instead?"
-  Then I should see "Archive Skin Wizard"
-    And I should not see "CSS" within "form"
-  When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS"
-  When I follow "Use Wizard Instead?"
+  When I follow "Use Wizard"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
     And I fill in "skin_margin" with "text"
@@ -200,9 +205,9 @@ Feature: creating and editing skins
   When I fill in "skin_margin" with "5"
     And I submit
   Then I should see "Skin was successfully created"
-    And I should see "Margin5"
+    And I should see "Margin:5"
   When I follow "Edit"
-    And I follow "Use Wizard Instead?"
+    And I follow "Use Wizard"
     And I fill in "skin_margin" with "4.5"
     And I fill in "skin_font" with "Garamond"
     And I fill in "skin_background_color" with "#ccccff"
@@ -313,18 +318,18 @@ Feature: creating and editing skins
   Scenario: New skin form should have the correct skin type pre-selected
     Given I am logged in as "skinner"
     When I am on the skins page
-      And I follow "Create Skin"
+      And I follow "Create Site Skin"
     Then "Site Skin" should be selected within "skin_type"
     When I am on the skins page
-      And I follow "Work Skins"
-      And I follow "Create Skin"
+      And I follow "My Work Skins"
+      And I follow "Create Work Skin"
     Then "Work Skin" should be selected within "skin_type"
 
   Scenario: Skin type should persist and remain selectable if you encounter errors during creation
     Given I am logged in as "skinner"
     When I am on the skins page
-      And I follow "Work Skins"
-      And I follow "Create Skin"
+      And I follow "My Work Skins"
+      And I follow "Create Work Skin"
       And I fill in "Title" with "invalid skin"
       And I fill in "CSS" with "this is invalid css"
       And I submit
@@ -335,3 +340,45 @@ Feature: creating and editing skins
       And I submit
     Then I should see errors
       And "Site Skin" should be selected within "skin_type"
+
+  Scenario: View toggle buttons on skins (Issue 3197)
+  Given basic skins
+    And I am logged in as "skinner"
+    When I am on skinner's preferences page
+    When I follow "Skins"
+  Then I should see "My Site Skins"
+    And I should see "My Work Skins"
+    And I should see "Public Site Skins"
+    And I should see "Public Work Skins"
+
+  Scenario: Toggle between user's work skins and site skins
+  Given basic skins
+    And I am logged in as "skinner"
+    And I am on skinner's skins page
+    And I follow "My Work Skins"
+  Then I should see "My Work Skins"
+    When I follow "My Site Skins"
+  Then I should see "My Site Skins"
+
+  Scenario: Toggle between public site skins and public work skins
+  Given I am logged in as "skinner"
+    And I am on skinner's skins page
+    And I follow "Public Work Skins"
+  Then I should see "Public Work Skins"
+    When I follow "Public Site Skins"
+  Then I should see "Public Site Skins"
+
+  Scenario: Reverting to default skin when a custom skin is selected
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as "skinner"
+    And I am on skinner's preferences page
+    And I select "public skin" from "preference_skin_id"
+    And I submit
+  When I am on skinner's preferences page
+    Then "public skin" should be selected within "preference_skin_id"
+  When I go to skinner's skins page
+    And I press "Revert to Default Skin"
+  When I am on skinner's preferences page
+    Then "Default" should be selected within "preference_skin_id"
+  
+    

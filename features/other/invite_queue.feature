@@ -19,7 +19,7 @@ Feature: Invite queue management
   When I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
-  Then I should see "Request an invite"
+  Then I should see "Request an Invite"
 
   Scenario: Join queue and check status
     Given I have no users
@@ -42,18 +42,14 @@ Feature: Invite queue management
     Then I should see "You've been added to our queue"
     
     # check your place in the queue - invalid address
-    When I am on the homepage
-      And I follow "Get an Invite"
-    When I fill in "email" with "testttt@archiveofourown.org"
-      And I press "Go"
+    When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "You can search for the email address you signed up with below."
       And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."
     # Then I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
     
     # check your place in the queue - correct address
-    When I fill in "email" with "test@archiveofourown.org"
-      And I press "Go"
+    When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
 
@@ -63,7 +59,7 @@ Feature: Invite queue management
   When I am logged out as an admin
   When I go to the invite_requests page
   Then I should not see "Add yourself to the list"
-    And I should not find "invite_request_email"
+    And I should not see "invite_request_email"
   
   Scenario: Can still check status when queue is off
   
@@ -71,7 +67,7 @@ Feature: Invite queue management
   When I am logged out as an admin
   When I go to the invite_requests page
   Then I should see "Wondering how long you'll have to wait"
-    And I should find "email"
+    And I should see "Email"
   
   Scenario: queue sends out invites
   
@@ -94,9 +90,7 @@ Feature: Invite queue management
     When the invite_from_queue_at is yesterday
     And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
-    When I am on the invite_requests page
-      And I fill in "email" with "test@archiveofourown.org"
-      And I press "Go"
+    When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     # Then I should see "Sorry, we can't find the email address you entered."
     Then I should see "You can search for the email address you signed up with below."
       And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there."

@@ -1,5 +1,5 @@
 /*==GROUP: LISTBOX 
-http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.html
+http://otwcode.github.com/docs/front_end_coding/patterns/listbox
 */
 
 .listbox, fieldset fieldset.listbox {
@@ -16,18 +16,17 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
   display: inline-block;
 }
 
-.listbox li.blurb, .listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots ul li, .listbox .all ul li {
+.listbox li.blurb, .listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots li, .listbox .all li {
   display: block;
 }
 
-.listbox .heading, .listbox .heading a:visited {
+.listbox > .heading, .listbox .heading a:visited {
   margin: 0;
   color: #222;
-  margin-top: 0;
   padding: 0.25em;
 }
 
-.listbox .index, .dashboard .listbox .index {
+.listbox .index {
   width: auto;
   padding: 0.643em;
   float: none;
@@ -71,13 +70,16 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
 
 /*INTERACTION context (show many/more/lots)*/
 
+.listbox .options {
+  overflow: auto;
+}
+
 .listbox .all {
   height: auto;
 }
 
-.listbox .many ul {
-  overflow: auto;
-  max-height: 10em;
+.listbox .many {
+  max-height: 12em;
 }
 
 /*END== */

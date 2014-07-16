@@ -86,7 +86,7 @@ class SkinsController < ApplicationController
         else
           @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
         end
-        @title = ts('Public Skins')
+        @title = ts('Public Site Skins')
       end
     end
   end

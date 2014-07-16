@@ -19,7 +19,7 @@ protected
   def self.progress_key(collection)
     CACHE_PROGRESS_KEY + "#{collection.id}"
   end
-  
+
   def self.byline_key(collection)
     CACHE_BYLINE_KEY + "#{collection.id}"
   end
@@ -27,7 +27,7 @@ protected
   def self.interrupt_key(collection)
     CACHE_INTERRUPT_KEY + "#{collection.id}"
   end
-  
+
   def self.invalid_signup_key(collection)
     CACHE_INVALID_SIGNUP_KEY + "#{collection.id}"
   end
@@ -40,54 +40,54 @@ public
   end
 
   def self.set_up_generating(collection)
-    $redis.set progress_key(collection), collection.signups.first.pseud.byline
+    REDIS_GENERAL.set progress_key(collection), collection.signups.first.pseud.byline
   end
 
   def self.cancel_generation(collection)
-    $redis.set interrupt_key(collection), "1"
+    REDIS_GENERAL.set interrupt_key(collection), "1"
   end
 
   def self.canceled?(collection)
-    $redis.get(interrupt_key(collection)) == "1"
+    REDIS_GENERAL.get(interrupt_key(collection)) == "1"
   end
 
   @queue = :collection
-  
+
   # This only works on class methods
   def self.perform(method, *args)
     self.send(method, *args)
   end
-  
+
   def self.generate(collection)
     Resque.enqueue(self, :generate_in_background, collection.id)
   end
-  
+
   # Regenerate the potential matches for a given signup
   def self.regenerate_for_signup(signup)
     Resque.enqueue(self, :regenerate_for_signup_in_background, signup.id)
   end
-  
+
   def self.invalid_signups_for(collection)
-    $redis.smembers(invalid_signup_key(collection))
+    REDIS_GENERAL.smembers(invalid_signup_key(collection))
   end
-  
+
   def self.clear_invalid_signups(collection)
-    $redis.del invalid_signup_key(collection)
+    REDIS_GENERAL.del invalid_signup_key(collection)
   end
-  
+
   # The actual method that generates the potential matches for an entire collection
   def self.generate_in_background(collection_id)
     collection = Collection.find(collection_id)
-    
+
     # check for invalid signups
-    PotentialMatch.clear_invalid_signups(collection)    
+    PotentialMatch.clear_invalid_signups(collection)
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
     unless invalid_signup_ids.empty?
-      invalid_signup_ids.each {|sid| $redis.sadd invalid_signup_key(collection), sid}
+      invalid_signup_ids.each {|sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid}
       UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids).deliver
       PotentialMatch.cancel_generation(collection)
     else
-    
+
       PotentialMatch.clear!(collection)
       settings = collection.challenge.potential_match_settings
 
@@ -100,7 +100,7 @@ public
       # treat each signup as a request signup first
       collection.signups.find_each do |signup|
         break if PotentialMatch.canceled?(collection)
-        $redis.set progress_key(collection), signup.pseud.byline
+        REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
       end
 
@@ -108,28 +108,28 @@ public
     # TODO: for any signups with no potential matches try regenerating?
     PotentialMatch.finish_generation(collection)
   end
-  
+
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
 
     # only check the signups that have any overlap
-    match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)                                                     
+    match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
 
     # We randomize the signup ids to make sure potential matches are distributed across all the participants
     match_signup_ids.sort_by {rand}.each do |other_signup_id|
       next if signup.id == other_signup_id
       other_signup = ChallengeSignup.find(other_signup_id)
-      
+
       # The "match" method of ChallengeSignup creates and returns a new (unsaved) potential match object
       # It assumes the signup that is calling is the requesting signup, so if this is meant to be an offering signup
-      #  instead, we call it from the other signup 
+      #  instead, we call it from the other signup
       potential_match = (prompt_type == "request") ? signup.match(other_signup, settings) : other_signup.match(signup, settings)
       if potential_match && potential_match.valid?
-        potential_match.save 
+        potential_match.save
         potential_match_count += 1
       end
-      
+
       # Stop looking if we've hit the max
       break if potential_match_count == ArchiveConfig.POTENTIAL_MATCHES_MAX
     end
@@ -139,29 +139,29 @@ public
   def self.random_signup_ids(collection)
     collection.signups.order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:id)
   end
-  
+
   # Get the ids of all signups that have some overlap in the tag types required for matching
   def self.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type = "request")
     matching_signup_ids = []
 
     if required_types.empty?
       # nothing is required, so any signup can match -- check a random selection
-      return PotentialMatch.random_signup_ids
+      return PotentialMatch.random_signup_ids(collection)
     end
 
     # get the tagsets used in the signup we are trying to match
     signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
-    
+
     # get the ids of all the tags of the required types in the signup's tagsets
     signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
-      return PotentialMatch.random_signup_ids
+      return PotentialMatch.random_signup_ids(collection)
     else
       # now find all the tagsets in the collection that share the original signup's tags
       match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
-    
+
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
       # looking for requests with the same tag.
@@ -173,18 +173,18 @@ public
       condition = "any_#{required_types.first.downcase} = 1"
       matching_signup_ids += collection.prompts.where(condition).order("RAND()").limit(ArchiveConfig.POTENTIAL_MATCHES_MAX).value_of(:challenge_signup_id).uniq
     end
-    
-    return matching_signup_ids    
+
+    return matching_signup_ids
   end
 
   # Regenerate potential matches for a single signup within a challenge where (presumably)
-  # the other signups already have matches generated. 
+  # the other signups already have matches generated.
   # To do this, we have to regenerate its potential matches both as a request and as an offer
-  # (instead of just generating them as a request as we do when generating ALL potential matches) 
+  # (instead of just generating them as a request as we do when generating ALL potential matches)
   def self.regenerate_for_signup_in_background(signup_id)
     signup = ChallengeSignup.find(signup_id)
     collection = signup.collection
-    
+
     # Get all the data
     settings = collection.challenge.potential_match_settings
     collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
@@ -202,11 +202,11 @@ public
 
   # Finish off the potential match generation
   def self.finish_generation(collection)
-    $redis.del progress_key(collection)
-    $redis.del byline_key(collection)
+    REDIS_GENERAL.del progress_key(collection)
+    REDIS_GENERAL.del byline_key(collection)
     if PotentialMatch.canceled?(collection)
-      $redis.del interrupt_key(collection)
-      # eventually we'll want to be able to pick up where we left off, 
+      REDIS_GENERAL.del interrupt_key(collection)
+      # eventually we'll want to be able to pick up where we left off,
       # but not there yet
       PotentialMatch.clear!(collection)
     else
@@ -215,7 +215,7 @@ public
   end
 
   def self.in_progress?(collection)
-    if $redis.get(progress_key(collection))
+    if REDIS_GENERAL.get(progress_key(collection))
       if PotentialMatch.canceled?(collection)
         self.finish_generation(collection)
         return false
@@ -226,21 +226,21 @@ public
   end
 
   def self.position(collection)
-    $redis.get progress_key(collection)
+    REDIS_GENERAL.get progress_key(collection)
   end
 
   def self.progress(collection)
     # the index of our current signup person in the full index of signup participants
-    current_byline = $redis.get(progress_key(collection))
+    current_byline = REDIS_GENERAL.get(progress_key(collection))
     collection_byline_key = byline_key(collection)
-    unless $redis.exists(collection_byline_key)
+    unless REDIS_GENERAL.exists(collection_byline_key)
       score = 0
       collection.signups.pseud_only.find_each do |pseud|
-        $redis.zadd collection_byline_key, score, pseud.byline
+        REDIS_GENERAL.zadd collection_byline_key, score, pseud.byline
         score += 1
       end
     end
-    progress = ($redis.zrank(collection_byline_key, current_byline)  * 100)/$redis.zcount(collection_byline_key, 0, "+inf")
+    progress = (REDIS_GENERAL.zrank(collection_byline_key, current_byline)  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches

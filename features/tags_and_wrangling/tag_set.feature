@@ -26,7 +26,34 @@ Feature: creating and editing tag sets
   Then I should see an update confirmation message
     And I should see "wheee"
     
-  Scenario: If a set is not visible, only a moderator should be able to see the tags in the set
+  Scenario: If a tag set does not have a visible tag list, only a moderator should be able to see the tags in the set, but everyone should be able to see the tag set
+  Given I am logged in as "tagsetter"
+    And I set up the tag set "Tag Set with Non-visible Tag List" with an invisible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
+  When I go to the tagsets page
+  Then I should see "Tag Set with Non-visible Tag List"
+  When I log out
+    And I go to the tagsets page
+  Then I should see "Tag Set with Non-visible Tag List"
+  When I follow "Tag Set with Non-visible Tag List"
+  Then I should not see "Dallas"
+    And I should not see "Knots Landing"
+    And I should not see "Models Inc"
+    And I should see "The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway)."
+    
+  Scenario: If a tag set has a visible tag list, everyone should be able to see the tags in the set
+  Given I am logged in as "tagsetter"
+    And I set up the tag set "Tag Set with Visible Tag List" with a visible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
+  When I log out
+    And I view the tag set "Tag Set with Visible Tag List"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
 
   Scenario: A moderator should be able to manually set up associations between tags in their set on the main tag set edit page
 
@@ -65,7 +92,7 @@ Feature: creating and editing tag sets
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
     And I nominate fandom "Floobry" and character "Barblah" in "Nominated Tags"
     And I review nominations for "Nominated Tags"
-  Then I should find "Floobry" within ".tagset"
+  Then I should see "Floobry" within ".tagset"
   When I check "fandom_approve_Floobry"
     And I check "character_approve_Barblah"
     And I submit
@@ -83,7 +110,7 @@ Feature: creating and editing tag sets
   When I check "fandom_reject_Floobry"
     And I submit
   Then I should see "Successfully rejected: Floobry"
-    And I should not find "Floobry" within ".tagset"
+    And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
     
   Scenario: Tags with brackets should work with replacement

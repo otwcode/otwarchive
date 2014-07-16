@@ -5,7 +5,7 @@
 <% user = challenge_signup.pseud.user %>
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
-  <ul class="navigation actions" role="menu">
+  <ul class="actions" role="menu">
     <% # The edit link should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
     <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
@@ -24,6 +24,14 @@
         :confirm => ts("Are you sure? All information in this prompt will be lost."), 
         :method => :delete %>
     </li>
+    <% end %>
+    <% # Moderators should be able to delete entire sign-ups from the /requests page in PromptMemes.  %>
+    <% if collection.user_is_maintainer?(current_user) && collection.challenge_type == "PromptMeme" %>
+      <li><%= link_to ts("Delete Sign-up"),
+                  collection_signup_path(collection, challenge_signup),
+                  :confirm => ts("Are you sure? All prompts in this sign-up will be lost."),
+                  :method => :delete %>
+      </li>
     <% end %>
     
     <% # The claiming and fulfilling options should show up if the prompt is claimable %>
