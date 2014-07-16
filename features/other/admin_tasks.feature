@@ -105,7 +105,7 @@ Feature: Admin tasks
 
     # Now post a Translation of that FAQ
     Given all emails have been delivered
-    When I go to the archive_faqs page
+    When I follow "Archive FAQ"
       And I select "Deutsch" from "language_id"
       And I press "Go" within "div#inner.wrapper"
       And I should see "New subsection"
@@ -125,8 +125,8 @@ Feature: Admin tasks
       And I should see "Was ist AO3?"
 
     # Toggle the languages at the top and see the correct data
-    Then I go to the archive_faqs page
-    When I select "English" from "language_id"
+    When I follow "Archive FAQ"
+      And I select "English" from "language_id"
       And I press "Go" within "div#inner.wrapper"
     Then I should see "New subsection"
       And I should not see "Neuer Abschnitt"
