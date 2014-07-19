@@ -42,7 +42,7 @@ module TagSetsHelper
   def noncanonical_info_class(form)
     ((form.object.new_record? || form.object.canonical) ? ' hideme' : '')
   end
-  
+
   def nomination_status(nomination=nil)
     symbol = "?!"
     status = "unreviewed"
@@ -63,9 +63,9 @@ module TagSetsHelper
       end
     end
 
-    return content_tag(:span, content_tag(:span, "#{symbol}".html_safe), class: "#{status} symbol", tooltip: "#{tooltip}")
+    return content_tag(:span, content_tag(:span, "#{symbol}".html_safe), class: "#{status} symbol", data: {tooltip: "#{tooltip}"})
   end
-  
+
   def nomination_tag_information(nominated_tag)
     tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
     status = "nonexistent"
@@ -97,7 +97,7 @@ module TagSetsHelper
       title = ts("unofficial tag")
     end
  
-    return content_tag(:span, "#{span_content}".html_safe, class: "#{status} nomination", title: "#{title}", tooltip: "#{tooltip}") + synonym_for
+    return content_tag(:span, "#{span_content}".html_safe, class: "#{status} nomination", title: "#{title}", data: {tooltip: "#{tooltip}"}) + synonym_for
 
   end
   
