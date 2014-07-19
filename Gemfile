@@ -82,7 +82,7 @@ gem 'newrelic-redis'
 # For URL mangling
 gem 'addressable'
 
-# For controlling application behavour dynaically
+# For controlling application behavour dynamically
 gem 'rollout'
 
 group :test do
