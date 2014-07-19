@@ -19,8 +19,11 @@
         </div>
         <ul class="actions">
           <li>
-            <span class="active current"><%= ts("Active") %></span>
-            <span class="inactive"><%= ts("Inactive") %></span>
+            <% if admin_banner.active? %>
+              <span class="active current"><%= ts("Active") %></span>
+            <% else %>
+              <span class="inactive"><%= ts("Inactive") %></span>
+            <% end %>
           </li>
           <li><%= link_to ts("Edit"), edit_admin_banner_path(admin_banner) %></li>
           <li><%= link_to ts("Delete"), confirm_delete_admin_banner_path(admin_banner), :confirm => ts("Are you sure you want to delete this banner?") %></li>

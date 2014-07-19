@@ -8,5 +8,9 @@ class AdminBanner < ActiveRecord::Base
   def self.banner_on
     Preference.update_all("banner_seen = false")
   end
+  
+  def self.active?
+    self.active?
+  end
 
 end
