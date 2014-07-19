@@ -4,7 +4,7 @@ module WorksHelper
   def work_meta_list(work, chapter=nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts("Published:"), localize(published_date)],
+    list = [[ts("Published:"), date_in_user_time_zone(published_date).to_date],
             [ts("Words:"), work.word_count],
             [ts("Chapters:"), work.chapter_total_display]]
 
@@ -49,7 +49,7 @@ module WorksHelper
   # select the default warning if this is a new work
   def check_warning(work, warning)
     if work.nil? || work.warning_strings.empty?
-      warning.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+      warning.name == nil
     else
       work.warning_strings.include?(warning.name)
     end

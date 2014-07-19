@@ -87,7 +87,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    But I should not see "Alternate Universe" within "fieldset.tags"
+    But I should not see "Alternate Universe" within "dd.tags"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"

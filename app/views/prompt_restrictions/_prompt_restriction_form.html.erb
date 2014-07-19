@@ -54,11 +54,9 @@ is verbose-->
       <dl>
         <% unless restriction.owned_tag_sets.empty? %>
           <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets:") %></dt>
-          <dd>
-            <fieldset class="listbox">
-              <h4 class="heading"><%= ts("Check to remove") %></h4>
-              <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
-            </fieldset>
+          <dd class="tagset listbox group">
+            <h4 class="heading"><%= ts("Check to remove") %></h4>
+            <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
           </dd>
         <% end %>
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use:") %></dt>

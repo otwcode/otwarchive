@@ -85,7 +85,7 @@ Feature: Edit Works
       And I am logged out
     When I am logged in as "Scott" with password "password"
       And I post the work "Murder in Milan" in the collection "Digital Hoarders 2013"
-    Then I should see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."
+    Then I should see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
       And I am logged out
       And I am logged in as "moderator"
       And I go to "Digital Hoarders 2013" collection's page
@@ -109,7 +109,7 @@ Feature: Edit Works
       And I edit the work "Murder by Numbers"
       And I press "Post Without Preview"
       And I should see "Work was successfully updated"
-    Then I should not see "Your work will only show up in the moderated collection you have submitted it to once it is approved by a moderator."      
+    Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
       
   Scenario: Editing a work you created today should not bump its revised-at date
       When "Issue 2542" is fixed    

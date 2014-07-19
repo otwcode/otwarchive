@@ -67,7 +67,7 @@
       setupTooltips();
     });
     function setupTooltips() {
-      $j('span[data-tooltip]').each(function(){
+      $j('[data-tooltip]').each(function(){
         $j(this).qtip({
             content: $j(this).attr('data-tooltip'),
             position: {corner: {target: 'topMiddle'}}

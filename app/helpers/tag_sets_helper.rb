@@ -69,7 +69,7 @@ module TagSetsHelper
   def nomination_tag_information(nominated_tag)
     tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
     status = "nonexistent"
-    tooltip = ts("This tag has never been used on the archive before. Check the spelling!")
+    tooltip = ts("This tag has never been used before. Check the spelling!")
     title = ts("nonexistent tag")
     span_content = nominated_tag.tagname
     synonym_for = ""
@@ -77,23 +77,23 @@ module TagSetsHelper
     when nominated_tag.canonical
       if nominated_tag.parented
         status = "canonical"
-        tooltip = ts("This is a canonical archive tag.")
-        title = ts("canonical tag")
+        tooltip = ts("This is an official tag.")
+        title = ts("official tag")
         span_content = link_to_tag_works(tag_object)
       else
         status = "unparented"
-        tooltip = ts("This is a canonical archive tag but not associated with the specified fandom.")
-        title = ts("canonical tag without parent")
+        tooltip = ts("This is an official tag but not associated with the specified fandom.")
+        title = ts("official tag without parent")
         span_content = link_to_tag_works(tag_object)
       end
     when nominated_tag.synonym
       status = "synonym"
-      tooltip = ts("This is a synonym of an official archive tag.")
+      tooltip = ts("This is a synonym of an official tag.")
       title = ts("tag synonym")
       synonym_for = content_tag(:span, " (#{link_to_tag_works(tag_object.merger, class: "canonical")})".html_safe)
     when nominated_tag.exists
       status = "unwrangled"
-      tooltip = ts("This is not an official archive tag.")
+      tooltip = ts("This is not an official tag.")
       title = ts("unofficial tag")
     end
  
