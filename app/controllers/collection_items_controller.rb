@@ -112,6 +112,7 @@ class CollectionItemsController < ApplicationController
     # add the collection and save
     # if there are errors, add them to errors
     new_collections = []
+    invited_collections = []
     unapproved_collections = []
     errors = []
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
@@ -120,13 +121,23 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", :name => collection_name)
       elsif @item.collections.include?(collection)
         errors << ts("%{collection_title}, because this item has already been submitted to it.", :collection_title => collection.title)
-      elsif collection.closed?
+      elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", :collection_title => collection.title)
+      # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save
+        # approved_by_user and approved_by_collection are both true
         if @item.approved_collections.include?(collection)
           new_collections << collection
+        # if the current_user is a maintainer of the collection then approved_by_user must have been false (which means
+        # the current_user isn't the owner of the item), then the maintainer is attempting to invite this work to
+        # their collection
+        elsif collection.user_is_maintainer?(current_user)
+          invited_collections << collection
+        # otherwise the current_user is the owner of the item and approved_by_COLLECTION was false (which means the
+        # current_user isn't a collection_maintainer), so the item owner is attempting to add their work to a moderated
+        # collection
         else
           unapproved_collections << collection
         end
@@ -144,11 +155,15 @@ class CollectionItemsController < ApplicationController
       flash[:notice] = ts("Added to collection(s): %{collections}.",
                             :collections => new_collections.collect(&:title).join(", "))
     end
-    unless unapproved_collections.empty?
-       unapproved_collections.each do |needs_approval|
+    unless invited_collections.empty?
+       invited_collections.each do |needs_user_approval|
          flash[:notice] ||= ""
-         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_approval)}?invited=true\">Invited</a> to your collection (#{needs_approval.title}).").html_safe
+         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">Invited</a> to your collection (#{needs_user_approval.title}).").html_safe
        end
+    end
+    unless unapproved_collections.empty?
+      flash[:notice] ||= ""
+      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", :all_collections => unapproved_collections.map { |f| f.title }.join(', '))
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
