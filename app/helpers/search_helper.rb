@@ -27,7 +27,7 @@ module SearchHelper
                       " by #{parent.login}"
                     end
       if parent.is_a?(Tag)
-        parent_text = " in #{link_to_tag(parent)}"
+        parent_text = " in #{link_to_tag_with_text(parent, parent.name)}"
       end
       if @fandom.present?
         parent_text << " in #{link_to_tag(@fandom)}"

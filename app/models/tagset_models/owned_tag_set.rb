@@ -66,7 +66,7 @@ class OwnedTagSet < ActiveRecord::Base
   def no_midstream_nomination_changes
     if !self.tag_set_nominations.empty? && 
       %w(fandom_nomination_limit character_nomination_limit relationship_nomination_limit freeform_nomination_limit).any? {|field| self.changed.include?(field)}
-      errors.add(:base, ts("^You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
+      errors.add(:base, ts("You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
     end
   end
   

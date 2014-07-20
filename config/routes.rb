@@ -11,18 +11,6 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### STATIC CACHED COLLECTIONS ####
-
-  namespace 'static' do
-    resources :collections, :only => [:show] do
-      resources :media, :only => [:show]
-      resources :fandoms, :only => [:index, :show]
-      resources :works, :only => [:show]
-      resources :restricted_works, :only => [:index, :show]
-    end
-  end
-
-
   #### OPEN DOORS ####
   namespace :opendoors do
     resources :tools, :only => [:index] do
@@ -95,8 +83,12 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        put :update_multiple
+        put  :update_multiple
         post :destroy_multiple
+        get  :confirm_destroy_multiple
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :associations, :controller => 'tag_set_associations', :only => [:index] do
@@ -107,6 +99,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :batch_load
       put :do_batch_load
+      get :confirm_delete
     end
     collection do
       get :show_options

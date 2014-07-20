@@ -28,10 +28,10 @@ Feature: creating and editing skins
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
     And I should see "by skinner"
-    But I should find "Use"
-    And I should find "Delete"
-    And I should find "Edit"
-    And I should not find "Stop Using"
+    But I should see "Use"
+    And I should see "Delete"
+    And I should see "Edit"
+    And I should not see "Stop Using"
     And I should not see "(Approved)"
     And I should not see "(Not yet reviewed)"
 
@@ -53,7 +53,7 @@ Feature: creating and editing skins
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   Then I should see "my blinking skin"
-    And I should find "Use"
+    And I should see "Use"
   When I press "Use"
   Then I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -117,8 +117,8 @@ Feature: creating and editing skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
   When I go to "public skin" skin page
-  Then I should not find "Edit"
-    And I should not find "Delete"
+  Then I should not see "Edit"
+    And I should not see "Delete"
   When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
 
@@ -137,7 +137,7 @@ Feature: creating and editing skins
     And I am logged in as an admin
   When I go to "public skin" skin page
   Then I should see "Edit"
-    But I should not find "Delete"
+    But I should not see "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love (admin modified)"
