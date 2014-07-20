@@ -140,12 +140,13 @@
     And "second_user" subscribes to series "Awesome Series"
   When I am on my subscriptions page
   Then I should see "My Subscriptions"
-    And I should see "Awesome Series"
+    And I should see "Awesome Series (Series)"
     And I should see "third_user"
-    And I should see "Awesome Story"
+    And I should see "Awesome Story (Work)"
   When I follow "Series Subscriptions"
   Then I should see "My Series Subscriptions"
     And I should see "Awesome Series"
+    And I should not see "(Series)"
     And I should not see "third_user"
     And I should not see "Awesome Story"
   When I follow "User Subscriptions"
@@ -156,6 +157,7 @@
   When I follow "Work Subscriptions"
   Then I should see "My Work Subscriptions"
     And I should see "Awesome Story"
+    And I should not see "(Work)"
     And I should not see "Awesome Series"
     And I should not see "third_user"
 
