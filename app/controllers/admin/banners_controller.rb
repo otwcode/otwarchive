@@ -5,7 +5,7 @@ class Admin::BannersController < ApplicationController
   # GET /admin/banners
   # GET /admin/banners.xml
   def index   
-    @admin_banners = AdminBanner.all
+    @admin_banners = AdminBanner.order("id DESC").paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -7,6 +7,8 @@
   <%= render 'navigation' %>
   <!--/subnav-->
 
+  <%= will_paginate @admin_banners %>
+
   <!--main content-->
   <ul class="banners index group">
     <% for admin_banner in @admin_banners %>
@@ -26,6 +28,8 @@
       </li>
     <% end %>
   </ul>
-
   <!--/content-->
+
+  <%= will_paginate @admin_banners %>
+
 </div>
