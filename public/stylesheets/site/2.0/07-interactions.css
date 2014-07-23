@@ -577,7 +577,7 @@ form.simple span.actions {
 
 /*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
 
-.post .required .warnings {
+.post .required .warnings, dd.required {
   font-weight: normal;
   color: #2a2a2a;
 }

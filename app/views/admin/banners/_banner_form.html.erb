@@ -1,19 +1,21 @@
 <%= form_for @admin_banner, html: { class: "post" } do |f| %>
   <%= error_messages_for @admin_banner %>
   
+  <p class="required notice"><%= ts('* Required information') %></p>
+  
   <fieldset>
     <legend><%= ts('Admin Banner') %></legend>
     <h3 class="landmark heading"><%= ts('Admin Banner') %></h3>
     <dl>
   
-      <dt><%= f.label :content, ts('Banner text') %></dt>
-      <dd>
+      <dt class="required"><%= f.label :content, ts('Banner text') %></dt>
+      <dd class="required">
         <p><%= allowed_html_instructions %></p>
         <%= f.text_area :content %>
       </dd>
 
-      <dt><%= ts('Banner type') %></dt>
-      <dd>
+      <dt class="required"><%= ts('Banner type') %></dt>
+      <dd class="required">
         <ul>
           <li>
             <%= f.radio_button :banner_type, "", :checked => true %>
