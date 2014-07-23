@@ -8,13 +8,13 @@
     <h3 class="landmark heading"><%= ts('Admin Banner') %></h3>
     <dl>
   
-      <dt class="required"><%= f.label :content, ts('Banner text') %></dt>
+      <dt class="required"><%= f.label :content, ts('Banner text') + "*" %></dt>
       <dd class="required">
         <p><%= allowed_html_instructions %></p>
         <%= f.text_area :content %>
       </dd>
 
-      <dt class="required"><%= ts('Banner type') %></dt>
+      <dt class="required"><%= ts('Banner type') %>*</dt>
       <dd class="required">
         <ul>
           <li>
