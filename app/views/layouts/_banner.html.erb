@@ -4,8 +4,7 @@
 <% unless current_user && current_user.try(:preference).try(:banner_seen) %>
 <% if @admin_banner && @admin_banner.active? %>
 <% unless current_user.nil? && session[:hide_banner] %>
-  <% # Before the announcement class, put in the type string. %>
-  <div class="<%= @admin_banner.type? %> announcement group" id="admin-banner">
+  <div class="<%= @admin_banner.banner_type %> announcement group" id="admin-banner">
     <blockquote class="userstuff">
       <%=raw sanitize_field(@admin_banner, :content) %>
     </blockquote>

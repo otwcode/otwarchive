@@ -3,7 +3,7 @@ class CreateAdminBanners < ActiveRecord::Migration
     create_table :admin_banners do |t|
       t.text :content
       t.integer :content_sanitizer_version, :limit => 2, :default => 0, :null => false
-      t.string :type
+      t.string :banner_type
       t.boolean :active, :default => false, :null => false
     end
     

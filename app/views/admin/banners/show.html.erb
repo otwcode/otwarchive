@@ -1,6 +1,6 @@
 <div class="admin">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= ts("Banner") %></h2>
+  <h2 class="heading"><%= ts('Banner') %></h2>
   <!--/descriptions-->
   
   <!--subnav-->
@@ -8,10 +8,6 @@
   <!--/subnav-->
  
   <!--main content-->
-  <div class="announcement group">
-    <blockquote class="userstuff">
-      <%=raw sanitize_field(@admin_banner, :content) %>
-    </blockquote>
-  </div>
+  <%= render 'banner', :admin_banner => @admin_banner %>
   <!--/content--> 
 </div>

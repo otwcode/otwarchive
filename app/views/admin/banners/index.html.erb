@@ -11,22 +11,17 @@
   <ul class="banners index group">
     <% for admin_banner in @admin_banners %>
       <li class="blurb">
-        <% # Before the announcement class, put in the type string. %>
-        <div class="<%= admin_banner.type.to_s %> announcement group">
-          <blockquote class="userstuff">
-            <%=raw sanitize_field(admin_banner, :content) %>
-          </blockquote>
-        </div>
+        <%= render 'banner', :admin_banner => admin_banner %>
         <ul class="actions">
           <li>
             <% if admin_banner.active? %>
-              <span class="active current"><%= ts("Active") %></span>
+              <span class="active current"><%= ts('Active') %></span>
             <% else %>
-              <span class="inactive"><%= ts("Inactive") %></span>
+              <span class="inactive"><%= ts('Inactive') %></span>
             <% end %>
           </li>
-          <li><%= link_to ts("Edit"), edit_admin_banner_path(admin_banner) %></li>
-          <li><%= link_to ts("Delete"), confirm_delete_admin_banner_path(admin_banner), :confirm => ts("Are you sure you want to delete this banner?") %></li>
+          <li><%= link_to ts('Edit'), edit_admin_banner_path(admin_banner) %></li>
+          <li><%= link_to ts('Delete'), confirm_delete_admin_banner_path(admin_banner), :confirm => ts('Are you sure you want to delete this banner?') %></li>
         </ul>
       </li>
     <% end %>
