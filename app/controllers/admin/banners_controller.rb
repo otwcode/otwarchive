@@ -51,7 +51,6 @@ class Admin::BannersController < ApplicationController
   end 
   
   # DELETE /admin/banners/1
-  # DELETE /admin/banners/1.xml
   def destroy
     @admin_banner = AdminBanner.find(params[:id])
     @admin_banner.destroy
