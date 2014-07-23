@@ -12,5 +12,13 @@ class AdminBanner < ActiveRecord::Base
   def self.active?
     self.active?
   end
+  
+  private
+  
+  def expire_cached_admin_banner
+    unless Rails.env.development?
+      Rails.cache.delete("admin_banner")
+    end
+  end
 
 end
