@@ -81,6 +81,7 @@ alert => yellow-orange to alert users of problems or planned downtime
 */
 
 .announcement {
+  clear: both;
   position: relative;
 }
 
