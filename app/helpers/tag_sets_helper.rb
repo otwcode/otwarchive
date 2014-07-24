@@ -77,24 +77,24 @@ module TagSetsHelper
     when nominated_tag.canonical
       if nominated_tag.parented
         status = "canonical"
-        tooltip = ts("This is an official tag.")
-        title = ts("official tag")
+        tooltip = ts("This is a canonical tag.")
+        title = ts("canonical tag")
         span_content = link_to_tag_works(tag_object)
       else
         status = "unparented"
-        tooltip = ts("This is an official tag but not associated with the specified fandom.")
-        title = ts("official tag without parent")
+        tooltip = ts("This is a canonical tag but not associated with the specified fandom.")
+        title = ts("canonical tag without parent")
         span_content = link_to_tag_works(tag_object)
       end
     when nominated_tag.synonym
       status = "synonym"
-      tooltip = ts("This is a synonym of an official tag.")
+      tooltip = ts("This is a synonym of a canonical tag.")
       title = ts("tag synonym")
       synonym_for = content_tag(:span, " (#{link_to_tag_works(tag_object.merger, class: "canonical")})".html_safe)
     when nominated_tag.exists
       status = "unwrangled"
-      tooltip = ts("This is not an official tag.")
-      title = ts("unofficial tag")
+      tooltip = ts("This is not a canonical tag.")
+      title = ts("non-canonical tag")
     end
  
     return content_tag(:span, "#{span_content}".html_safe, class: "#{status} nomination", title: "#{title}", data: {tooltip: "#{tooltip}"}) + synonym_for
