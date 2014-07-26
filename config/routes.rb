@@ -84,7 +84,7 @@ Otwarchive::Application.routes.draw do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
         put  :update_multiple
-        post :destroy_multiple
+        delete :destroy_multiple
         get  :confirm_destroy_multiple
       end
       member do
