@@ -234,6 +234,8 @@ GEM
       actionmailer (>= 3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rollout (2.0.0)
+      redis
     rpm_contrib (2.1.11)
       newrelic_rpm (>= 3.1.1)
       newrelic_rpm (>= 3.1.1)
@@ -364,6 +366,7 @@ DEPENDENCIES
   resque (>= 1.14.0)
   resque_mailer
   rest-client
+  rollout
   rpm_contrib
   rspec-rails (>= 2.6.0)
   rvm-capistrano
