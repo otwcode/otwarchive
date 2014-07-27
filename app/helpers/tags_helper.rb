@@ -1,4 +1,15 @@
 module TagsHelper
+  
+  def tag_type_label(tag_type)
+    case tag_type
+    when 'tag'
+      "Bookmarker's Tags"
+    when 'freeform'
+      "Additional Tags"
+    else
+      tag_type.capitalize.pluralize
+    end
+  end
 
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
@@ -116,8 +127,8 @@ module TagsHelper
   end
 
   # Makes filters show warnings display name
-  def label_for_filter(type, tag_info)
-    name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+  def label_for_filter(tag_type, tag_info)
+    name = (tag_type == "warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
   end
 
@@ -147,7 +158,7 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag.type + ": " + link_to_tag(tag) + " &lrm;(#{tag.taggings_count})</span>"
       span.html_safe
     end
   end
@@ -165,7 +176,7 @@ module TagsHelper
 
   def show_wrangling_dashboard
     can_wrangle? && 
-    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests).include?(controller.controller_name) ||
+    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
     (@tag && controller.controller_name == 'comments'))
   end
 
@@ -189,10 +200,11 @@ module TagsHelper
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.each do |sub|
-        sub_ul << "<li>" + link_to_tag(sub) + "</li>"
+        sub_ul << "<li>" + link_to_tag(sub)
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)
         end
+        sub_ul << "</li>"
       end
       sub_ul << "</ul>"
     end
@@ -230,6 +242,8 @@ module TagsHelper
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
       tags.collect(&:name).join(", ")
+    elsif tags.blank? && category_name.blank?
+     "Choose Not To Use Archive Warnings"
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end
@@ -285,6 +299,9 @@ module TagsHelper
       "warning-no warnings"
     elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
       # only one tag and it says choose not to warn
+      "warning-choosenotto warnings"
+    elsif warning_tags.size == 2 && ((warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME))
+      # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
       "warning-choosenotto warnings"
     else
       "warning-yes warnings"

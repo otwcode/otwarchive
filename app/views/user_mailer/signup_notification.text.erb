@@ -1,0 +1,11 @@
+<% content_for :message do %>
+Welcome to the Archive of Our Own, <%= @user.login %>!
+
+Please activate your account at: <%= activate_url(:id => @user.activation_code) %> .
+
+Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite authors or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've viewed on the Archive via your history, and much more.
+
+There's lots of information and advice on how to use the Archive in our FAQ at <%= archive_faqs_url %>. You'll find the latest news about site developments in our Archive admin posts at <%= root_url %>admin_posts. If you need more help, run into a bug, or have questions or comments, please get in touch with our Support team, who are always happy to help out: <%= root_url %>support.
+
+We hope you enjoy using the Archive.
+<% end %>

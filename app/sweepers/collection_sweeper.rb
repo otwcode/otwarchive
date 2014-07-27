@@ -5,14 +5,11 @@ class CollectionSweeper < ActionController::Caching::Sweeper
     record.add_to_autocomplete if record.is_a?(Collection)
   end
 
-  def before_update(record)
-    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
-      record.remove_from_autocomplete
-    end
-  end
-
   def after_update(record)
-    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
+    if record.is_a?(Collection) && (record.name_changed? || record.title_changed?)
+      Rails.logger.debug "Removing renamed collection from autocomplete: #{record.autocomplete_search_string_was}"
+      record.remove_stale_from_autocomplete
+      Rails.logger.debug "Adding renamed collection to autocomplete: #{record.autocomplete_search_string}"
       record.add_to_autocomplete
     end
   end
@@ -53,6 +50,7 @@ class CollectionSweeper < ActionController::Caching::Sweeper
       # expire the collection blurb and dashboard and profile
       expire_fragment("collection-blurb-#{collection.id}")
       expire_fragment("collection-profile-#{collection.id}")
+
     end
   end
 

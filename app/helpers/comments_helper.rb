@@ -72,47 +72,40 @@ module CommentsHelper
   #### Helpers for _commentable.html.erb ####
 
   # return link to show or hide comments
-  def show_hide_comments_link(commentable)
-    if params[:show_comments]
-      hide_comments_link(commentable)
-    else
-      show_comments_link(commentable)
-    end
-  end
+  def show_hide_comments_link(commentable, options={})
+    options[:link_type] ||= "show"
+    options[:show_count] ||= false
 
-  def show_comments_link(commentable)
-    if commentable.count_visible_comments > 0
-      commentable_id = commentable.is_a?(Tag) ?
-                          :tag_id :
-                          "#{commentable.class.to_s.underscore}_id".to_sym
-      commentable_value = commentable.is_a?(Tag) ?
-                            commentable.name :
-                            commentable.id
-      link_to(
-          ts("Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
-          url_for(:controller => :comments,
-                  :action => :show_comments,
-                  commentable_id => commentable_value,
-                  :view_full_work => params[:view_full_work]),
-          :remote => true)
-    end
-  end
-
-  def hide_comments_link(commentable)
     commentable_id = commentable.is_a?(Tag) ?
-                        :tag_id :
-                        "#{commentable.class.to_s.underscore}_id".to_sym
+                      :tag_id :
+                      "#{commentable.class.to_s.underscore}_id".to_sym
     commentable_value = commentable.is_a?(Tag) ?
                           commentable.name :
                           commentable.id
+       
+    comment_count = commentable.count_visible_comments.to_s
+
+    link_action = options[:link_type] == "hide" || params[:show_comments] ?
+                    :hide_comments :
+                    :show_comments
+    
+    link_text = ts("%{words} %{count}",
+                  :words => options[:link_type] == "hide" || params[:show_comments] ?
+                              "Hide Comments" :
+                              "Comments",
+                  :count => options[:show_count] ?
+                              "(" +comment_count+ ")" :
+                              "")
+    
     link_to(
-      ts("Hide Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
-      url_for(:controller => :comments,
-              :action => :hide_comments,
-              commentable_id => commentable_value,
-              :view_full_work => params[:view_full_work]),
-      :remote => true)
+        link_text,
+        url_for(:controller => :comments,
+                :action => link_action,
+                commentable_id => commentable_value,
+                :view_full_work => params[:view_full_work]),
+        :remote => true)
   end
+
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
@@ -255,7 +248,7 @@ module CommentsHelper
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)
     if comment.approved
-      link_to(ts("Spam"), reject_comment_path(comment), :method => :put)
+      link_to(ts("Spam"), reject_comment_path(comment), :method => :put, :confirm => "Are you sure you want to mark this as spam?" )
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), :method => :put)
     end

@@ -491,6 +491,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -544,6 +546,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -704,7 +710,7 @@
         
         <div class="method-heading">
           <span class="method-name">comment_notification</span><span
-            class="method-args">(admin_id, comment_id)</span>
+            class="method-args">(comment_id)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -717,11 +723,11 @@
           
           <div class="method-source-code" id="comment_notification-source">
             <pre><span class="ruby-comment"># File app/mailers/admin_mailer.rb, line 45</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">admin_id</span>, <span class="ruby-identifier">comment_id</span>)
-  <span class="ruby-identifier">admin</span> = <span class="ruby-constant">Admin</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">admin_id</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">comment_notification</span>(<span class="ruby-identifier">comment_id</span>)
+  <span class="ruby-comment"># admin = Admin.find(admin_id)</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">comment_id</span>)
   <span class="ruby-identifier">mail</span>(
-    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">admin</span>.<span class="ruby-identifier">email</span>,
+    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ADMIN_ADDRESS</span>,
     <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
   )
 <span class="ruby-keyword">end</span></pre>
@@ -739,7 +745,7 @@
         
         <div class="method-heading">
           <span class="method-name">edited_comment_notification</span><span
-            class="method-args">(admin_id, comment_id)</span>
+            class="method-args">(comment_id)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -752,11 +758,11 @@
           
           <div class="method-source-code" id="edited_comment_notification-source">
             <pre><span class="ruby-comment"># File app/mailers/admin_mailer.rb, line 55</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">admin_id</span>, <span class="ruby-identifier">comment_id</span>)
-  <span class="ruby-identifier">admin</span> = <span class="ruby-constant">Admin</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">admin_id</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edited_comment_notification</span>(<span class="ruby-identifier">comment_id</span>)
+  <span class="ruby-comment"># admin = Admin.find(admin_id)</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">comment_id</span>)
   <span class="ruby-identifier">mail</span>(
-    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">admin</span>.<span class="ruby-identifier">email</span>,
+    <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ADMIN_ADDRESS</span>,
     <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on &quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&quot;the tag &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">commentable_name</span>
   )
 <span class="ruby-keyword">end</span></pre>

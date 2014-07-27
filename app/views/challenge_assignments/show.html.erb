@@ -1,49 +1,40 @@
-<!-- descriptions NOTE: WHERE IS THIS? IS IT REALLY A PROFILE?-->
-<div id="collection-page" class="collection challenge assignments home profile">
-  <!-- /descriptions-->
-  <!--subnavigation, sorting and actions-->
-  <!--/subnav-->
-  <!--main content-->
-  <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %>
-  <h3 class="heading">
-    <% if request %>
-      <%= ts("Assigned to %{requester}: %{offerer}", :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) %>
-      <% if @challenge_assignment.collection.challenge.user_allowed_to_see_assignments?(current_user) %>
-        <%= challenge_assignment_email(@challenge_assignment) %>
+<% # accessed through My Assignment on challenge dashboard %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Assignment for") %> <%= @challenge_assignment.offer_byline %> <% if @challenge_assignment.collection.challenge.user_allowed_to_see_assignments?(current_user) %><%= challenge_assignment_email(@challenge_assignment) %><% end %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<% if !@challenge_assignment.fulfilled? && @challenge_assignment.try(:offering_pseud).try(:user) == current_user %>
+  <ul class="navigation actions" role="menu">
+    <li>
+      <% if @challenge_assignment.defaulted? %>
+        <span class="defaulted"><%= ts("Defaulted") %></span>
+      <% else %>
+        <%= link_to ts("Default"), default_user_assignment_path(@challenge_assignment.offering_pseud.user, @challenge_assignment), 
+          :confirm => ts("Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.") %>
       <% end %>
-    <% else %>
-      No Assignment
-    <% end %>
-  </h3>
-
-  <% if request %>
-      <h3 class="heading"><%=h t("challenge_assignments.requests_for", :default => "Requests by %{requester}", :requester => request.pseud.byline) %></h3>
-      <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => request} %>
-    <% else %>
-      <p class="note">No request!</p>
-      <p class="note">Contact challenge moderators for help.</p>
-    <% end %>
-    
-    <% if @challenge_assignment.offer_signup %>
-      <h3 class="heading"><%=h t("challenge_assignments.offers_for", :default => "Offers from %{offerer}", :offerer => @challenge_assignment.offer_byline) %></h3>
-      <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @challenge_assignment.offer_signup} %>
-    <% elsif @challenge_assignment.pinch_hitter %>
-      <p class="note">Pinch Hitter</p>
-    <% else %>
-      <p class="note">No assigned giver!</p>
-      <p class="note">Contact challenge moderators for help.</p>
-    <% end %>
- 
-  <!--/content-->
-  <% if !@challenge_assignment.fulfilled? && @challenge_assignment.offering_pseud.user == current_user %>
-    <ul class="navigation actions" role="menu">
-      <li>
-        <%= link_to "Default", default_user_assignment_path(@challenge_assignment.offering_pseud.user, @challenge_assignment), 
-            :confirm => "Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone." %>
-      </li>
-      <li><%= link_to t('.assignment.post_new', :default => "Fulfill"), new_collection_work_path(@challenge_assignment.collection, :assignment_id => @challenge_assignment.id) %></li>
-    </ul>
-  <% end %>
+    </li>
+    <li><%= link_to ts("Fulfill"), new_collection_work_path(@challenge_assignment.collection, :assignment_id => @challenge_assignment.id) %></li>
+  </ul>
+<% end %>
+<!--/subnav-->
   
-</div>
+<!--main content-->
+<% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %> 
 
+<% if request %>
+  <%= render "challenge_signups/show_requests", :challenge_signup => request %>
+<% else %>
+  <h3 class="heading"><%= ts("No request!") %></h3>
+  <p class="note"><%= ts("Contact challenge moderators for help.") %></p>
+<% end %>
+    
+<% if @challenge_assignment.offer_signup %>
+  <%= render "challenge_signups/show_offers", :challenge_signup => @challenge_assignment.offer_signup %>
+<% elsif @challenge_assignment.pinch_hitter %>
+  <p class="note"><%= ts("Pinch Hitter") %></p>
+<% else %>
+  <p class="note"><%= ts("No assigned giver!") %></p>
+  <p class="note"><%= ts("Contact challenge moderators for help.") %></p>
+<% end %>
+<!--/content-->

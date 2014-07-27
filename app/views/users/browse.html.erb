@@ -44,18 +44,18 @@
             <li>
           <% end %>       
           <% if tag.merger %>
-            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [tag.merger.id]} %> 
+            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :selected_tags => [tag.merger.id]} %> 
 (<%=tag.count%>)
           <% else %>
-            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [tag.id]} %> 
+            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @pseud, :selected_tags => [tag.id]} %> 
 (<%=tag.count%>)
           <% end %>
           </li>
        <% end %>
        <% if @tags[tag_type].length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
-          <li class="navigation actions" role="button">
+          <li class="actions" role="button">
             <% if params["expand_#{tag_type.downcase.pluralize}"] %>
-            <%= link_to "Hide full list", [@user, @author], :id => "expandable-#{tag_type.downcase}-link" %>
+            <%= link_to "Hide full list", [@user, @pseud], :id => "expandable-#{tag_type.downcase}-link" %>
             <% else %>
             <%= link_to "Expand full list", url_for("expand_#{tag_type.downcase.pluralize}" => true), 
                 :id => "expandable-#{tag_type.downcase}-link" %>

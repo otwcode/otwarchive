@@ -1,3 +1,5 @@
+# Relationships between meta and sub tags 
+# Meta tags represent a superset of sub tags 
 class MetaTagging < ActiveRecord::Base
   belongs_to :meta_tag, :class_name => 'Tag'
   belongs_to :sub_tag, :class_name => 'Tag'
@@ -6,6 +8,8 @@ class MetaTagging < ActiveRecord::Base
   validates_uniqueness_of :meta_tag_id, :scope => :sub_tag_id 
   
   before_create :add_filters, :inherit_meta_tags
+  after_create :expire_caching
+  after_destroy :expire_caching
   
   validate :meta_tag_validation
   def meta_tag_validation
@@ -29,11 +33,7 @@ class MetaTagging < ActiveRecord::Base
   # but not vice versa
   def add_filters
     if self.meta_tag.canonical?
-      self.sub_tag.filtered_works.each do |work|        
-        unless work.filters.include?(self.meta_tag)
-          work.filter_taggings.create!(:inherited => true, :filter_id => self.meta_tag.id)
-        end
-      end
+      self.sub_tag.async(:inherit_meta_filters, self.meta_tag.id)
     end 
   end
   
@@ -59,5 +59,9 @@ class MetaTagging < ActiveRecord::Base
         end
       end
     end
+  end
+  
+  def expire_caching
+    self.meta_tag.update_works_index_timestamp!
   end
 end

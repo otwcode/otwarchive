@@ -8,25 +8,34 @@ module Collectible
       has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
-      has_many :collections, :through => :collection_items
-      has_many :approved_collections, :through => :collection_items, :source => :collection,
+      has_many :collections, 
+        :through => :collection_items, 
+        :after_add => [:set_visibility, :expire_item_caches],
+        :after_remove => [:update_visibility, :expire_item_caches]
+      has_many :approved_collections, 
+        :through => :collection_items, 
+        :source => :collection,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
     end
   end
-  
+
   # add collections based on a comma-separated list of names
   def collections_to_add=(collection_names)
-    names = collection_names.split(',').reject {|name| name.blank?}.map { |name| name.strip }.each do |name|
+    old_collections = self.collection_items.collect(&:collection_id)
+    names = trim_collection_names(collection_names)
+    names.each do |name|
       c = Collection.find_by_name(name)
-      errors.add(:base, ts("We couldn't find the collection {{name}}.", :name => name)) and return if c.nil?
-      errors.add(:base, ts("The collection {{name}} is not currently open.", :name => name)) and return if (c.closed? && !c.user_is_maintainer?(User.current_user))
+      errors.add(:base, ts("We couldn't find the collection %{name}.", :name => name)) and return if c.nil?
+      if c.closed?
+        errors.add(:base, ts("The collection %{name} is not currently open.", :name => name)) and return unless c.user_is_maintainer?(User.current_user) || old_collections.include?(c.id)
+      end
       add_to_collection(c)
     end
   end
-  
+
   # remove collections based on an array of ids
   def collections_to_remove=(collection_ids)
-    collection_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
+    collection_ids.reject {|id| id.blank?}.map {|id| id.is_a?(String) ? id.strip : id}.each do |id|
       c = Collection.find(id) || nil
       remove_from_collection(c)
     end
@@ -45,37 +54,79 @@ module Collectible
       self.collections -= [collection]
     end
   end
+  
+  private
+  def trim_collection_names(names)
+    names.split(',').map{ |name| name.strip }.reject {|name| name.blank?}
+  end
 
-  # DEPRECATED -- please use collections_to_add/remove above instead
-  # Set an item's collections based on a list of collection names
-  # Don't delete all existing collections, or else items in closed collections
+  public
+  # Set ALL of an item's collections based on a list of collection names
+  # Refactored to use collections_to_(add,remove) above so we only have one set of code 
+  #  performing the actual add/remove actions
+  # This method now just does the convenience work of getting the removed ids -- any missing collections
+  # will be identified 
+  # IMPORTANT: cannot delete all existing collections, or else items in closed collections
   # can't be edited
   def collection_names=(new_collection_names)
-    Rails.logger.info "DEPRECATED: collection_names is deprecated, please refactor"
-    names = new_collection_names.split(',').map{ |name| name.strip }
-    new_collections = Collection.where(:name => names)
-    missing = names - new_collections.value_of(:name)
-    to_add = new_collections - self.collections
-    to_remove = self.collections - new_collections
-    to_remove.each do |c|
-      self.collections.delete(c)
-    end
-    to_add.each do |c|
-      self.collections << c
-    end
-    unless missing.blank?
-      error = missing.size == 1 ? 
-        ts("We couldn't find a collection with the name %{name}. ", :name => missing.first) : 
-        ts("We couldn't find the collections named %{names}. ", :names => missing.to_sentence)
-      error += ts("Make sure you are using the one-word name, and not the title?")
-      self.errors.add(:base, error)
-    end
+    new_names = trim_collection_names(new_collection_names)
+    remove_ids = self.collections.reject {|c| new_names.include?(c.name)}.collect(&:id)
+    self.collections_to_add = new_names.join(",")
+    self.collections_to_remove = remove_ids
   end
 
-  # DEPRECATED -- please use collections_to_add/remove above instead
+  # NOTE: better to use collections_to_add/remove above instead for more consistency
   def collection_names
-    Rails.logger.info "DEPRECATED: collection_names is deprecated, please refactor"
-    @collection_names ? @collection_names : self.collections.collect(&:name).join(",")
+    @collection_names ? @collection_names : self.collections.collect(&:name).uniq.join(",")
+  end
+  
+  
+  #### UNREVEALED/ANONYMOUS
+
+  # Set the anonymous/unrevealed status of the collectible based on its collections
+  def set_anon_unrevealed
+    if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
+      self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? 
+      self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+    end
+    return true
+  end
+  
+  # TODO: need a better, DRY, long-term fix
+  # Collection items can be revealed independently of a collection, so we don't want
+  # to check the collection status when those are updated
+  def update_anon_unrevealed
+    if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
+      self.in_anon_collection = !self.collection_items.select {|c| c.anonymous? }.empty?
+      self.in_unrevealed_collection = !self.collection_items.select{|c| c.unrevealed? }.empty?
+    end
+    return true
   end
 
+  # save as well
+  def set_anon_unrevealed!
+    set_anon_unrevealed
+    save
+  end
+  
+  def update_anon_unrevealed!
+    update_anon_unrevealed
+    save
+  end
+
+  def set_visibility(collection)
+    set_anon_unrevealed
+    return true
+  end
+  
+  def update_visibility(collection)
+    set_anon_unrevealed!
+    return true
+  end
+  
+  def expire_item_caches(collection)
+    self.expire_caches if self.respond_to?(:expire_caches)
+  end
+  
+  
 end

@@ -3,7 +3,7 @@ class ProfileController < ApplicationController
   def show
     @user = User.find_by_login(params[:user_id])
     if @user.nil?
-      setflash; flash[:error] = ts("Sorry, there's no user by that name.")
+      flash[:error] = ts("Sorry, there's no user by that name.")
       redirect_to '/' and return
     elsif @user.profile.nil?
       Profile.create(:user_id => @user.id)
@@ -15,6 +15,7 @@ class ProfileController < ApplicationController
                                                        :subscribable_type => 'User').first ||
                       current_user.subscriptions.build(:subscribable => @user)
     end
+    @page_subtitle = ts("%{username} - Profile", username: @user.login)
   end
   
 end

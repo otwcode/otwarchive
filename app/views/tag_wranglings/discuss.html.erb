@@ -1,19 +1,19 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading">Tag Wrangling Discussion</h2>
+<h2 class="heading"><%= ts('Tag Wrangling Discussion') %></h2>
 <!--/descriptions-->
 
 <%= will_paginate(@comments) %>
 <div class="wrapper">
-	<table summary="a message board displaying discussions about tags">
-		<caption></caption>
+	<table summary="<%= ts('A message board displaying discussions about tags.') %>">
+		<caption><%= ts('Tag Wrangling Discussions') %></caption>
 		<thead>
 			<tr>
-    			<th scope="col">Tag</th>
-    			<th scope="col">Comment</th>
-    			<th scope="col">Replies</th>
-    			<th scope="col">Thread Started By</th>
-    			<th scope="col">Last Reply By</th>
-    			<th scope="col">Last Updated At</th>
+    			<th scope="col"><%= ts('Tag') %></th>
+    			<th scope="col"><%= ts('Comment') %></th>
+    			<th scope="col"><%= ts('Replies') %></th>
+    			<th scope="col"><%= ts('Thread Started By') %></th>
+    			<th scope="col"><%= ts('Last Reply By') %></th>
+    			<th scope="col"><%= ts('Last Updated At') %></th>
   			</tr>
 		</thead>
 		<tbody>

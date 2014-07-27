@@ -503,6 +503,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -556,6 +558,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -793,7 +799,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="download_url_for_work-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 174</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 181</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_url_for_work</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">format</span>)
   <span class="ruby-identifier">url_for</span> (<span class="ruby-node">&quot;/#{work.download_folder}/#{work.download_title}.#{format}&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">' '</span>, <span class="ruby-string">'%20'</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -823,7 +829,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="feed_summary-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 179</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 186</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">feed_summary</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">work</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">group_by</span>(&amp;<span class="ruby-value">:type</span>)
   <span class="ruby-identifier">text</span> = <span class="ruby-node">&quot;&lt;p&gt;by #{byline(work, :visibility =&gt; 'public')}&lt;/p&gt;&quot;</span>
@@ -876,7 +882,7 @@ when the work form loads</p>
 
           
           <div class="method-source-code" id="get_bookmark_embed_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 158</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 165</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_bookmark_embed_link</span>(<span class="ruby-identifier">bookmark</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">bookmark</span>.<span class="ruby-identifier">bookmarkable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>)
     <span class="ruby-identifier">work_embed</span> = <span class="ruby-identifier">get_embed_link</span>(<span class="ruby-identifier">bookmark</span>.<span class="ruby-identifier">bookmarkable</span>)
@@ -929,10 +935,17 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
   <span class="ruby-identifier">warning_text</span> = <span class="ruby-identifier">add_label_for_embed</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Warning: &quot;</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">warnings</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">warning</span><span class="ruby-operator">|</span> <span class="ruby-identifier">warning_display_name</span>(<span class="ruby-identifier">warning</span>.<span class="ruby-identifier">name</span>)}.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>))
   <span class="ruby-identifier">relationship_text</span> = <span class="ruby-identifier">add_label_for_embed</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Relationships: &quot;</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">relationships</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">name</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>))
   <span class="ruby-identifier">char_text</span> = <span class="ruby-identifier">add_label_for_embed</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Characters: &quot;</span>), <span class="ruby-identifier">work</span>.<span class="ruby-identifier">characters</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span> <span class="ruby-identifier">char</span>.<span class="ruby-identifier">name</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>))
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">series_text</span> = <span class="ruby-identifier">add_label_for_embed</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Series: &quot;</span>), <span class="ruby-identifier">series_list_for_feeds</span>(<span class="ruby-identifier">work</span>))
+  <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">summary_text</span> = <span class="ruby-identifier">add_label_for_embed</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Summary: &quot;</span>), <span class="ruby-identifier">sanitize_field</span>(<span class="ruby-identifier">work</span>, <span class="ruby-value">:summary</span>))
 
   <span class="ruby-comment"># we deliberately don't html_safe this because we want it escaped</span>
-  [<span class="ruby-identifier">title_link</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot; by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">profile_link</span>, <span class="ruby-identifier">chapters_text</span>, <span class="ruby-identifier">fandom_text</span>, <span class="ruby-identifier">rating_text</span>, <span class="ruby-identifier">warning_text</span>, <span class="ruby-identifier">relationship_text</span>, <span class="ruby-identifier">char_text</span>, <span class="ruby-identifier">summary_text</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    [<span class="ruby-identifier">title_link</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot; by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">profile_link</span>, <span class="ruby-identifier">chapters_text</span>, <span class="ruby-identifier">fandom_text</span>, <span class="ruby-identifier">rating_text</span>, <span class="ruby-identifier">warning_text</span>, <span class="ruby-identifier">relationship_text</span>, <span class="ruby-identifier">char_text</span>, <span class="ruby-identifier">series_text</span>, <span class="ruby-identifier">summary_text</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+  <span class="ruby-keyword">else</span>
+    [<span class="ruby-identifier">title_link</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot; by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">profile_link</span>, <span class="ruby-identifier">chapters_text</span>, <span class="ruby-identifier">fandom_text</span>, <span class="ruby-identifier">rating_text</span>, <span class="ruby-identifier">warning_text</span>, <span class="ruby-identifier">relationship_text</span>, <span class="ruby-identifier">char_text</span>, <span class="ruby-identifier">summary_text</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- get_embed_link-source -->
           
@@ -960,7 +973,7 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
           
           <div class="method-source-code" id="get_endnotes_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 167</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 174</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_endnotes_link</span>
   <span class="ruby-identifier">current_page?</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'chapters'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'show'</span>) <span class="ruby-operator">?</span>
     <span class="ruby-identifier">chapter_path</span>(<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">last_chapter</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'work_endnotes'</span>) <span class="ruby-operator">:</span>
@@ -1243,7 +1256,7 @@ display</p>
 
           
           <div class="method-source-code" id="show_work_notes-3F-source">
-            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 207</span>
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_work_notes?</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">notes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
   <span class="ruby-identifier">work</span>.<span class="ruby-identifier">endnotes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>

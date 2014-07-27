@@ -481,6 +481,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -534,6 +536,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -732,7 +738,7 @@
           <div class="method-source-code" id="manage-source">
             <pre><span class="ruby-comment"># File app/controllers/invite_requests_controller.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">manage</span>
-  <span class="ruby-ivar">@invite_requests</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:position</span>)
+  <span class="ruby-ivar">@invite_requests</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:position</span>).<span class="ruby-identifier">page</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
           </div><!-- manage-source -->
           
@@ -799,7 +805,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>])
   <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">request</span>.<span class="ruby-identifier">xml_http_request?</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@invite_request</span>
-    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Sorry, we couldn't find that address in our queue. If you signed up and you haven't received an invitation, please contact our support team for help.&quot;</span>
+    <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email Spam folder as your spam filters may have placed it there.&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">invite_requests_url</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>

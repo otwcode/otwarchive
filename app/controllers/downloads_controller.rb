@@ -1,3 +1,5 @@
+require 'iconv'
+
 class DownloadsController < ApplicationController
 
   include XhtmlSplitter
@@ -19,15 +21,16 @@ class DownloadsController < ApplicationController
   def show
     @work = Work.find(params[:id])
     @check_visibility_of = @work
-    
+
     if @work.unrevealed?
-      setflash; flash[:error] = ts("Sorry, you can't download an unrevealed work")
+      flash[:error] = ts("Sorry, you can't download an unrevealed work")
       redirect_back_or_default works_path and return
     end
 
     Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(:posted => true)
+    create_work_html
 
     respond_to do |format|
       format.html {download_html}
@@ -52,15 +55,15 @@ protected
     create_work_html
 
     # convert to PDF
-    # double quotes in title need to be escaped
-    title = @work.title.gsub(/"/, '\"')
-    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title "#{title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
+    # title needs to be escaped
+    title = Shellwords.escape(@work.title)
+    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title #{title} "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
     # send as PDF, if file exists, or flash error and redirect
     unless check_for_file("pdf")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
     send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
@@ -68,38 +71,27 @@ protected
 
   def download_mobi
      cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
-     # double quotes in title need to be escaped
-     title = @work.title.gsub(/"/, '\"')
-     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{title}" --author "#{@work.display_authors}" }
+     # metadata needs to be escaped for command line
+     title = Shellwords.escape(@work.title)
+     author = Shellwords.escape(@work.display_authors)
+     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title #{title} --author #{author} }
 
-    # if only one chapter can use same file as html and pdf versions
-    if @chapters.size == 1
-      create_work_html
-
-      # except mobi requires latin1 encoding
-      unless File.exists?("#{@work.download_dir}/mobi.html")
-        html = Iconv.conv("LATIN1//TRANSLIT//IGNORE", "UTF8",
-                 File.read("#{@work.download_basename}.html")).force_encoding("ISO-8859-1")
-        File.open("#{@work.download_dir}/mobi.html", 'w') {|f| f.write(html)}
-      end
-
-      # convert latin html to mobi
-      cmd = cmd_pre + "mobi.html" + cmd_post
-    else
-      # more than one chapter
-      # create a table of contents out of separate chapter files
-      mobi_files = create_mobi_html
-      cmd = cmd_pre + mobi_files + " --gentoc" + cmd_post
+    # more than one chapter
+    # create a table of contents out of separate chapter files
+    mobi_files = create_mobi_html
+    cmd = cmd_pre + mobi_files + cmd_post
+    if @chapters.length > 1
+      cmd << " --gentoc"
     end
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
-    
+
     # send as mobi, if file exists, or flash error and redirect
     unless check_for_file("mobi")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
+    send_file("#{@work.download_basename}.mobi", :type => "application/x-mobipocket-ebook")
   end
 
   def download_epub
@@ -117,10 +109,10 @@ protected
 
     # send as epub, if file exists, or flash error and redirect
     unless check_for_file("epub")
-      setflash; flash[:error] = ts('We were not able to render this work. Please try another format')
+      flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
-    send_file("#{@work.download_basename}.epub", :type => "application/epub")
+    send_file("#{@work.download_basename}.epub", :type => "application/epub+zip")
   end
 
   # redirect and return inside this method would only exit *this* method, not the controller action it was called from
@@ -142,7 +134,6 @@ protected
   end
 
   def create_mobi_html
-    return if File.exists?("#{@work.download_basename}.mobi")
     FileUtils.mkdir_p "#{@work.download_dir}/mobi"
 
     # the preface contains meta tag information, the title/author, work summary and work notes
@@ -191,7 +182,7 @@ protected
     @parts = []
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
-      
+
       # split chapters into multiple parts if they are too big
       @parts << split_xhtml(sanitize_field(@chapter, :content))
       @parts[-1].each_with_index do |part, partindex|
@@ -229,3 +220,4 @@ protected
   end
 
 end
+

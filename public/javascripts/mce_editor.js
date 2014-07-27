@@ -1,94 +1,104 @@
 //Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
 tinyMCE.init({
-	theme:"advanced",
-	mode:"none",
-	editor_selector:"mce-editor",
-	plugins : "paste",
-	paste_insert_word_content_callback : "convertWord",
-	paste_auto_cleanup_on_paste : true,
-	// TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
-	// because we're stripping those tags out.
-	inline_styles : false,
-
-
-
-	
-	// Theme options - using the advanced theme for now and just limiting the buttons used - we may want to create a custom theme in future.
-	theme_advanced_buttons1 : "pasteword,|,bold,italic,underline,strikethrough,|,link,unlink,image,|,blockquote,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,|,undo,redo",
-	theme_advanced_buttons2 : "",
-	theme_advanced_buttons3 : "",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_resizing : true
-
-});
- 
-//Changes the labels and info at the top to Story Text section in _works_form and _chapter_form
+  plugins: "directionality image link paste tabfocus",
+  menubar: false,
+  toolbar: "bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
   
-  //function toggle() {
-  //    var ele = document.getElementById("toggleText");
-  //    var text = document.getElementById("displayText");
-  //    if(ele.style.display == "block") {
-  //  		ele.style.display = "none";
-  //    text.innerHTML = "Rich text";
-  //    }
-  //    else {
-  //    ele.style.display = "block";
-  //    text.innerHTML = "Rich text";
-  //    }
-  //  }
+  browser_spellcheck: true,
+  
+  // Disable inline styles, partly because our sanitizer strips them but mostly because strike and u won't work otherwise
+  inline_styles: false,
+  
+  // Restore URLs to their original correct value instead of using shortened broken versions some browsers produce 
+  convert_urls: false,
+  
+  // Add a custom stylesheet with cache busting to override the way text displays in the editor
+  content_css: "/stylesheets/tiny_mce_custom.css?" + new Date().getTime(),
+  
+  // Put the keyboard focus on the text input area rather than the first button when tabbing into the editor (requires tabfocus plugin)
+  tabfocus_elements: "tinymce",
 
-  function toggle() {
-    var elems = new Array();
-    elems[0] = document.getElementById("richTextLink");
-    elems[1] = document.getElementById("plainTextLink");
-    elems[2] = document.getElementById("richTextNotes");
-    elems[3] = document.getElementById("plainTextNotes");
-    for (i=0; i<elems.length; i++) {
-        if (elems[i].style.display == "block" || elems[i].style.display == "inline") {
-            elems[i].style.display = "none";
-        }
-        else {
-            if (elems[i].parentNode.className == "rtf-html-switch" ) {
-                elems[i].style.display = "inline";
-            }
-            else {
-                elems[i].style.display = "block";
-            }
-        }
-    }
-  }
+  // Add HTML tags the editor will accept
+  // - b so it doesn't convert to strong
+  // - i so it doesn't convert to em
+  // - span when it contains a class or dir attribute
+  extended_valid_elements: "b, i, span[!class|!dir], strike, u",
 
-    
-//Allows the user to turn the rich text editor off and on. 
-  function addEditor(id) {
-    tinyMCE.execCommand('mceAddControl', false, id)
-  }
-        
-  function removeEditor(id) {
-		tinyMCE.execCommand('mceRemoveControl', false,  id)
-  }
+  // Add HTML tags for the editor to remove, either for cleanup or to make the what-you-see aspect of the editor line up better with the what-you-get-after-the-sanitizer-runs aspect
+  invalid_elements: "font",
 
+  // Override the default method of styling
+  // - align$value: align="$value" attribute replaces style="text-align: $value"
+  // - underline: u tag instead of span style="text-decoration:underline"
+  // - strikethrough: strike tag instead of span style="text-decoration:line-through"
+  // -- strikethrough should also remove del tag
+  formats: {
+    alignleft: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'left' }
+    },
+    aligncenter: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'center' }
+    },
+    alignright: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'right' }
+    },
+    alignjustify: {
+      selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
+      attributes: { align: 'justify' }
+    },
+    underline: { inline: 'u', exact: true },
+    strikethrough: [
+      { inline: 'strike', exact: true },
+      { inline: 's', remove: "all" },
+      { inline: 'del', remove: "all" }
+    ]
+  },
 
-function convertWord (type, content) {
-    switch (type) {
-        // Gets executed before the built in logic performs it's cleanups
-        case "before":
-            //content = content.toLowerCase(); // Some dummy logic
-            //alert(content);
-            break;
-        // Gets executed after the built in logic performs it's cleanups
-        case "after":
-            //alert(content);
-            content = content.replace(/<!(?:--[\s\S]*?--\s*)?>\s*/g,'');
-            //content = content.toLowerCase(); // Some dummy logic
-            //alert(content);
-            break;
-    }
-    return content;
+  // Override the list of elements that can be pasted from Word. It's necessary to copy the list from the plugin source.
+  // - allow align attribue
+  // - stop allowing style attribute
+  paste_word_valid_elements: "@[align],-strong/b,-em/i,-u,-span,-p,-ol,-ul,-li,-h1,-h2,-h3,-h4,-h5,-h6,-table,-tr,-td[colspan|rowspan],-th,-thead,-tfoot,-tbody,-a[href|name],sub,sup,strike,br",
+  
+  // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
+  // Note: TinyMCE versions <4.0.13 have a bug where the "None" option is included even when this option is set. When updating to 4.0.13 or later, add it back: { title: 'None', value: '' }
+  target_list: []
+});
+
+// Require the user to turn the RTE on instead of loading automatically using selector option 
+function addEditor(id) {
+  tinyMCE.execCommand('mceAddEditor', false, id)
+}
+ 
+// Let the user turn the RTE back off        
+function removeEditor(id) {
+	tinyMCE.execCommand('mceRemoveEditor', false, id)
 }
 
-
-
-
+// Toggle between the links
+$j(document).ready(function(){
+  $j(".rtf-html-switch").removeClass('hidden');
+  
+  $j(".html-link").addClass('current'); 
+  
+  $j(".rtf-link").click(function(event){
+    addEditor('content');
+    $j(this).addClass('current');
+    $j('.rtf-notes').removeClass('hidden');
+    $j('.html-link').removeClass('current');
+    $j('.html-notes').addClass('hidden');
+    event.preventDefault();
+  });            
+  
+  $j('.html-link').click(function(event){
+    removeEditor('content');
+    $j(this).addClass('current');
+    $j('.html-notes').removeClass('hidden');
+    $j('.rtf-link').removeClass('current');
+    $j('.rtf-notes').addClass('hidden');
+    event.preventDefault();
+  });
+})

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Edit") %> <cite><%= link_to_tag(@tag) %></cite> <%= ts('Tag') %></h2>
+<h2 class="heading"><%= ts("Edit %{tag_link} Tag", :tag_link => link_to_tag(@tag)).html_safe %></h2>
 <%= error_messages_for :tag %>
 <!--/descriptions-->
 
@@ -8,157 +8,185 @@
 <!--/subnav-->
 
 <!--main content-->
+
 <%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
-<fieldset>
-  <legend>Tag info:</legend>
-  <dl>
-    <dt><%= f.label :name, 'Name' %></dt>
-    <dd>
-      <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
-        <%= f.text_field :name, :size => (@tag.name.length + 5) %>
-        <% unless logged_in_as_admin? %>
-        <p>Only changes to capitalization are permitted.</p>
-        <% end %>
-      <% else %>
-        <strong><%= @tag.name %></strong>
-      <% end %>
-    </dd>
+  <fieldset>
+    <legend><%= ts("Tag Info") %></legend>
+    <h3 class="landmark heading"><%= ts("Tag Info") %></h3>
 
-    <dt><%= 'Category' %></dt>
-    <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more . Attention SYSTEM MESSAGES wrangler-->
-    <dd><strong><%= @tag.type %></strong></dd>
-
-    <% if @wranglers %>
-    <dt><%= 'Wranglers' %></dt>
-    <dd><%= wrangler_list(@wranglers, @tag) %></dd>
-    <% end %>
-
-    <dt><%= f.label :canonical, 'Canonical' %></dt>
-    <dd>
-      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
-      <p><%= "This is the official name for the " + @tag.class.name %></p>
-      <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
-      <p class="navigation actions" role="navigation"><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
-      <% end %>
-    </dd>
-
-    <dt><%= f.label :unwrangleable %></dt>
-    <dd>
-      <%= f.check_box :unwrangleable %>&nbsp;
-      <p><%= "This tag will never be merged or made canonical and should not be included on wrangling pages." %></p>
-    </dd>
-
-    <% if @tag.is_a?(Rating)%>
-    <dt><%= f.label :adult, 'Adult' %></dt>
-    <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= 'This tag indicates adult content.'%></dd>
-    <% end %>
-
-    <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
-    <dt><%= f.label :syn_string, 'Synonym of' %></dt>
-    <dd>
-      <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
-      <p>Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.</p>
-      <% if @tag.merger %>
-        <p class="navigation actions" role="navigation">Edit <%= link_to_edit_tag(@tag.merger) %></p>
-      <% elsif @tag.canonical? %>
-        <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. Attention SYSTEM MESSAGES wrangler-->
-        <p class="important warning">Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. <strong>(Be careful with this!)</strong></p>
-      <% end %>
-    </dd>
-    <% end %>
-  </dl>
-</fieldset>
-
-<% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
-<fieldset>
-  <legend>Parent tags:</legend>
-  <dl>
-    <% @tag.parent_types.each do |tag_type| %>
-      <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
-        <dt>Suggested Fandoms:</dt>
-        <dd>
-        <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
-          <ul class="tags commas">
-          <% for tag in fandom_list %>
-            <li><%= link_to_edit_tag(tag) %></li>
+    <dl>
+      <dt><%= f.label :name, ts('Name') %></dt>
+      <dd>
+        <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
+          <%= f.text_field :name, :size => (@tag.name.length + 5) %>
+          <% unless logged_in_as_admin? %>
+            <p><%= ts("Only changes to capitalization and diacritic marks are permitted.") %></p>
           <% end %>
-          </ul>
+        <% else %>
+          <strong><%= @tag.name %></strong>
         <% end %>
-        <% if @suggested_fandoms.length > 20 %>
-          <p><%= link_to "See all (#{@suggested_fandoms.length})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => :suggested_fandoms} %></p>
-        <% end %>
+      </dd>
+
+      <% if @tag.type.to_s == 'Fandom' %>
+        <dt><%= f.label :sortable_name, ts('Name To Use For Alphabetical Sorting') %></dt>
+        <dd>
+          <%= f.text_field :sortable_name, :size => (@tag.sortable_name.length + 5) %>
         </dd>
       <% end %>
-      <dt><%= tag_category_name(tag_type) %></dt>
-      <dd title="<%= tag_category_name(tag_type) %>">
-        <fieldset class="tags listbox">
-          <% if @parents[tag_type].present? %>
-            <h4 class="heading"><%= ts("Check to remove: ") %></h4>
-            <%= check_all_none %>
-            <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
-                  :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
-            <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
-          <% else %>
-            <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
-          <% end %>
-          <div title="add tags">
-            <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
-          </div>
-        </fieldset>
-      </dd>
-    <% end %>
-  </dl>
-</fieldset>
 
-  <% if @tag.canonical? %>
-  <fieldset>
-    <legend>Child tags:</legend>
-    <p class="navigation actions" role="navigation"><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
-    <dl>
-      <% @tag.child_types.each do |tag_type| %>
-        <dt><%= tag_category_name(tag_type) %></dt>
+      <dt><%= ts('Category') %></dt>
+      <dd>
+        <% if @tag.can_change_type? %>
+          <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
+        <% else %>
+          <strong><%= @tag.type %></strong>
+        <% end %>  
+      </dd>
+
+      <% if @wranglers %>
+        <dt><%= ts('Wranglers') %></dt>
+        <dd><%= wrangler_list(@wranglers, @tag) %></dd>
+      <% end %>
+
+      <dt><%= f.label :canonical, ts('Canonical') %></dt>
+      <dd>
+        <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
+        <p><%= ts("This is the official name for the %{tag_class_name}", :tag_class_name => @tag.class.name) %></p>
+        <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
+          <p class="actions" role="navigation"><%= link_to ts('Make tag non-canonical and unhook all associations'), {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
+        <% end %>
+      </dd>
+
+      <% if @tag.is_a?(Rating)%>
+        <dt><%= f.label :adult, ts('Adult') %></dt>
+        <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= ts('This tag indicates adult content.') %></dd>
+      <% end %>
+
+      <% if Tag::USER_DEFINED.include?(@tag[:type]) %>
+        <dt><%= f.label :syn_string, ts('Synonym of') %></dt>
         <dd>
-          <fieldset class="tags listbox">
-            <% if @children[tag_type].present? %>
-              <h4 class="heading"><%= ts("Check to remove: ") %></h4>
-              <%= check_all_none %>
-              <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
-                    :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
-              <% if @children[tag_type].length > 20 %>
-                <p class="navigation actions" role="navigation">
-                  <%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %>
-                </p>
+          <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
+          <p><%= ts("Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.") %></p>
+          <% if @tag.merger %>
+            <p class="actions" role="navigation">
+              <%= link_to ts("Edit %{tag_name}", :tag_name => @tag.merger.name), edit_tag_path(@tag.merger) %>
+            </p>
+          <% elsif @tag.canonical? %>
+            <p class="important caution notice"><%= ts("Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)") %></p>
+          <% end %>
+        </dd>
+      <% end %>
+
+      <dt><%= f.label :unwrangleable %></dt>
+      <dd>
+        <%= f.check_box(:unwrangleable, :disabled => (@tag.class.name == "UnsortedTag")) %>&nbsp;
+        <p><%= ts("This tag will never be merged or made canonical and should not be included on wrangling pages.") %></p>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
+    <fieldset>
+      <legend><%= ts("Parent Tags") %></legend>
+      <h3 class="landmark heading"><%= ts("Parent Tags") %></h3>
+      <dl>
+        <% @tag.parent_types.each do |tag_type| %>
+          <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
+            <dt><%= ts("Suggested Fandoms") %>:</dt>
+            <dd>
+            <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
+              <ul class="tags commas">
+              <% for tag in fandom_list %>
+                <li><%= link_to_edit_tag(tag) %></li>
               <% end %>
+              </ul>
+            <% end %>
+            <% if @suggested_fandoms.length > 20 %>
+              <p><%= link_to ts("See all (%{fandoms_len})", :fandoms_len => @suggested_fandoms.length), {:controller => :tags, :action => :wrangle, :id => @tag, :show => :suggested_fandoms} %></p>
+            <% end %>
+            </dd>
+          <% end %>
+          <dt><%= tag_category_name(tag_type) %></dt>
+          <dd title="<%= tag_category_name(tag_type) %>" class="tags listbox group">
+            <% if @parents[tag_type].present? %>
+              <h4 class="heading"><%= ts("Check to remove:") %></h4>
+              <%= check_all_none %>
+              <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
+                    :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
               <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
             <% else %>
               <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
             <% end %>
-            <div title="add tags">
-              <%= f.text_field tag_type.underscore + '_string', 
-  							  autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
-  								:class => 'tags autocomplete') %>
+            <div title="<%= ts('add tags') %>">
+              <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
             </div>
-          </fieldset>
-        </dd>
-      <% end %>
-    </dl>
-  </fieldset>
-  <% end %>
+          </dd>
+        <% end %>
+      </dl>
+    </fieldset>
+
+    <% if @tag.canonical? %>
+      <fieldset>
+        <legend><%= ts("Child Tags") %></legend>
+        <h3 class="landmark heading"><%= ts("Child Tags") %></h3>
+        <p class="actions" role="navigation"><%= link_to ts('wrangle all child tags'), {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
+        <dl>
+          <% @tag.child_types.each do |tag_type| %>
+            <dt><%= tag_category_name(tag_type) %></dt>
+            <dd class="tags listbox group">
+              <% if @children[tag_type].present? %>
+                <h4 class="heading"><%= ts("Check to remove: ") %></h4>
+                <%= check_all_none %>
+                <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
+                      :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
+                  <% if @children[tag_type].length > 20 %>
+                    <p class="actions" role="navigation">
+                      <%= link_to ts("See all (%{children_count})", :children_count => @tag.send(tag_type.underscore.pluralize).count), {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %>
+                    </p>
+                  <% end %>
+                <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
+              <% else %>
+                <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
+              <% end %>
+              <div title="<%= ts("add tags") %>">
+                <%= f.text_field tag_type.underscore + '_string', 
+      							autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
+      							:class => 'tags autocomplete') %>
+              </div>
+            </dd>
+          <% end %>
+        </dl>
+      </fieldset>
+    <% end %>
+
   <% elsif @tag.is_a?(Media) %>
-    <p class="navigation actions" role="navigation"><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
+    <p class="actions" role="navigation"><%= link_to ts('See all fandoms'), {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
   <% end %>
 
   <fieldset>
-  <legend>Submit</legend>
-  <p class="submit actions">
-    <%= submit_tag "Save changes" %>
-  </p>
+    <legend><%= ts('Taggings Count') %></legend>
+    <h3 class="landmark heading"><%= ts('Taggings Count') %></h3>
+
+    <dl>
+      <dt><%= f.label :fix_taggings_count, ts('Fix Taggings Count') %></dt>
+      <dd>
+        <%= f.check_box(:fix_taggings_count) %>&nbsp;
+        <p><%= ts('Enable this if the number of taggings on search or wrangle pages needs to be fixed.') %></p>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= ts('Submit') %></legend>
+    <p class="submit actions">
+      <%= submit_tag ts('Save changes') %>
+    </p>
   </fieldset>
 <% end %>
 
 <% if logged_in_as_admin? %>
-  <p>Last updated by <%= @tag.last_wrangler.try(:login) || '---' %> on <%= @tag.updated_at %></p>
+  <p><%= ts("Last updated by") %> <%= @tag.last_wrangler.try(:login) || '---' %> <%= ts("on") %> <%= @tag.updated_at %></p>
 <% end %>
 <!--/content-->
 

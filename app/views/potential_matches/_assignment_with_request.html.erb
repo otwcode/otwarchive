@@ -1,60 +1,37 @@
 <!-- expects local "assignment" -->
 <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <% request_signup = assignment.request_signup %>
+  <% offer_signup = assignment.offer_signup %>
   <tr>
     <th scope="row">
-      <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
-      <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) %>
-    </th>
-
-    <td>
       <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-      <%= assignment_form.hidden_field :request_signup_id, :value => request_signup.id %>
-      <%= request_signup.offer_assignments.map { |offer_assignment| 
-        offer_assignment.request_signup ?
-          "#{offer_assignment.request_signup.pseud.byline}" :
-          (offer_assignment.pinch_request_signup ?
-            "#{offer_assignment.pinch_request_signup.pseud.byline}* 
-             (pinch recipient)" : 
-             "<strong>None</strong>")}.join(", ").html_safe
-      %>
-    </td>
-    <td>
-      <% @pmatches = request_signup.request_potential_matches.sort.reverse %>
-      <%= assignment_form.collection_select :offer_signup_id, @pmatches.collect(&:offer_signup), :id, :byline, 
-                                              :include_blank => "- None Assigned -" %>
-    </td>
-    <td>
-      <% if @pmatches.size > 0 %>
-        <h5 id="show_potentials_for_<%= request_signup.id %>">(Show <%= @pmatches.size %>)</h5>
-        <div id="potentials_for_<%= request_signup.id %>" class="hideme">
-          <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ").html_safe %>
-        </div>
-        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id %>">(Hide)</h5>
+      <%= link_to assignment.id, collection_assignment_path(@collection, assignment) %>
+    </th>
+    <td id="request_signup_for_<%= assignment.id %>">
+      <% if offer_signup %>
+        <% # offer an autocomplete of potential matches %>
+        <%= assignment_form.text_field :request_signup_pseud, autocomplete_options("potential_requests?signup_id=#{offer_signup.id}", 
+          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
       <% else %>
-        <strong>No potential matches.</strong>
+        <%= request_signup.pseud.byline %>
       <% end %>
     </td>
-    <td><!--BACK END this td should probably be titled, but what with?-->
-      <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
+    
+    <td id="offer_signup_for_<%= assignment.id %>">
+      <% if request_signup %>
+        <% # offer an autocomplete of potential matches %>
+        <%= assignment_form.text_field :offer_signup_pseud, autocomplete_options("potential_offers?signup_id=#{request_signup.id}", 
+          :autocomplete_min_chars => 0, :autocomplete_token_limit => 1, :size => ArchiveConfig.POTENTIAL_MATCHES_MAX) %>
+      <% else %>
+        <%= offer_signup.pseud.byline %>
+      <% end %>
     </td>
+    
+    <% unless params[:no_recipient] %>
+      <td><!--BACK END this td should probably be titled, but what with?-->
+        <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
+      </td>
+    <% end %>
   </tr>
   
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function() {
-      $j("#show_potentials_for_<%= request_signup.id %>").click(function() {
-          $j("#potentials_for_<%= request_signup.id %>").show();
-          $j("#hide_potentials_for_<%= request_signup.id %>").show();
-          $j(this).hide();
-      });
-      $j("#hide_potentials_for_<%= request_signup.id %>").click(function() {
-          $j("#potentials_for_<%= request_signup.id %>").hide();
-          $j("#show_potentials_for_<%= request_signup.id %>").show();
-          $j(this).hide();
-      });
-    })
-  <% end %>
-<% end %>
-
 <% end %> <!-- end form -->

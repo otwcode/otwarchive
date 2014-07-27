@@ -1,6 +1,7 @@
 class Fandom < Tag
 
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
+  index_name Tag.index_name
   
   has_many :wrangling_assignments
   has_many :wranglers, :through => :wrangling_assignments, :source => :user
@@ -26,7 +27,7 @@ class Fandom < Tag
   
   after_save :add_media_for_uncategorized
   def add_media_for_uncategorized
-    if self.medias.empty?
+    if self.medias.empty? && self.type == "Fandom" # type could be something else if the tag is in the process of being re-categorised (re-sorted)
       self.parents << Media.uncategorized
     end
     true    
@@ -55,7 +56,7 @@ class Fandom < Tag
       self.parents << tag unless self.parents.include?(tag)
       # Remove default media if another is added
       if self.medias.include?(Media.uncategorized)
-        self.remove_association(Media.uncategorized)
+        self.remove_association(Media.uncategorized.id)
       end
     else
       self.children << tag unless self.children.include?(tag)

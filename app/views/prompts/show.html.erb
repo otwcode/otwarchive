@@ -1,13 +1,13 @@
-<!-- descriptions BACK END is this really a collection page? Is it in a Home View? where does this show up? HALP - have made a guess for now to make it valid-->
-<div id="collection-page" class="collection prompt home">
-<h3 class="heading"><%= ts("#{@prompt.class.name} by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @prompt.challenge_signup.pseud.byline) %></h3>
+<% # prompt_form links here when called from prompts/edit %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("#{@prompt.class.name} by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @prompt.challenge_signup.pseud.byline) %></h2>
+<!--/descriptions-->
 
-  <!--/subnav-->
+<!--subnav-->
+<!--/subnav-->
 
-  <ul class="index group">
-    <%= render "prompts/prompt_blurb", :prompt => @prompt %>
-  </ul>
-  <!--/content-->
-
-</div>
-
+<!--main content-->
+<ul class="index group">
+  <%= render "prompts/prompt_blurb", :prompt => @prompt %>
+</ul>
+<!--/content-->

@@ -5,8 +5,25 @@
 <% end %>
 
 <div id="chapters">
-<div id="workskin">
-<%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+  <div id="workskin">
+    <%= render @chapter %>
+  </div>
 </div>
-<%= render :partial => 'chapter_management', :locals => { :chapter => @chapter, :work => @work, :preview_mode => @preview_mode } %>
-</div>
+
+<%= form_for([@work, @chapter]) do |f| %>
+
+  <%= render 'hidden_fields', :form => f %>
+
+  <ul class="actions">
+    <% if @chapter.posted? %>
+      <li><%= submit_tag ts('Update'), :name => 'update_button' %></li>
+    <% else %>
+      <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with =>  ts("Please wait...") %></li>
+      <li><%= submit_tag ts("Save Without Posting"), :name => 'save_button' %></li>
+      <li><%= link_to ts('Delete Chapter Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
+    <% end %>
+    <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
+    <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li> 
+  </ul>
+
+<% end %>

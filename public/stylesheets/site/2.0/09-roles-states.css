@@ -1,9 +1,9 @@
 /*==ROLES AND STATES 
-http://media.transformativeworks.org/training/front_end_coding/patterns/modifiers.html
+http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
 */
 
 .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
-  background: #e8e6ed;
+  background: #ededed;
     opacity: 0.95;
 }
 
@@ -15,7 +15,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/modifier
 
 /*(these states spoof the ".navigation .current" style)*/
 
-span.unread, .replied, span.claimed {
+span.unread, .replied, span.claimed, .actions span.defaulted {
   background: #ccc;
   color: #900;
   width: auto;
@@ -34,24 +34,46 @@ span.unread, .replied, span.claimed {
     border-radius: 0.25em;
 }
 
+.actions span.defaulted {
+  color: #111;
+}
+
 .canonical, li.requested {
   font-weight: 700;
 }
 
-.hidden, body .hidden {
+.hidden, body .hidden, .actions .hidden {
   display: none;
 }
 
-.draggable, .droppable, span.requested {
+.draggable, .droppable, span.requested, .nominations .rejected {
   color: #900;
 }
 
-span.offered, .replied {
-  color: green;
+span.offered, .replied, .nominations .approved {
+  color: #008000;
+}
+
+.nominations .approved {
+  background: #d1f0d1;
+}
+
+.nominations .rejected {
+  background: #efd1d1;
 }
 
 span.offered.requested {
-  color: #daa520;
+  color: #876714;
+}
+
+/* Arrows for the accordion widget */
+
+.collapsed:after { 
+  content: " \2191";
+}
+
+.expanded:after {
+  content: " \2193";
 }
 
 /*This is a helper for Back End and can be overridden contextually anywhere*/

@@ -1,128 +1,18 @@
 <% # expects "work" %>
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb group" id="work_<%= work.id %>" role="article">
-
-  <% is_unrevealed ||= (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
-  <% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
-  <% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
-    <% if is_unrevealed %>
-      <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-    <% elsif is_anonymous %>
-      <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
-    <% end %>
-  <% else %>
-
-    <!--title, author, fandom-->
-    <div class="header module">
-
-      <h4 class="heading" title="title">
-  	    <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
-   		  <%= ts('by') %>
-        
-        <!-- do not cache -->
-        <%= byline(work) %>
-
-<!-- caching -->
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-
-        <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
-  
-        <% unless work.recipients.blank? %>
-          <%= ts("for") %> <%= recipients_link(work) %>
-        <% end %>
-        <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-        <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
-      </h4>
-
-  	  <h5 class="heading" title="fandom" class="fandoms">
-        <% fandoms = tag_groups['Fandom'] %>
-        <%= fandoms.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if fandoms %>
-  		  &nbsp;
-  	  </h5>
-
-      <!--required tags-->
-  	  <%= get_symbols_for(work, tag_groups) %>
-  	  <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
-    </div>
-	  
-	  <!-- do not cache -->
-    <!--warnings again, cast, freeform tags-->
-  	<h6 class="landmark heading">Tags</h6>
-  	<ul class="tags commas">
-  	  <%= blurb_tag_block(work, tag_groups) %>
-  	</ul>
-
-    <!--summary-->	
-  	<% unless work.summary.blank? %>
-  		<h6 class="landmark heading">Summary</h6>
-  		<blockquote class="userstuff summary" title="summary">
-  		  <%=raw strip_images(sanitize_field(work, :summary)) %>
-  		</blockquote>
-  	<% end %>
-  	
-  	<% unless work.series.empty? %>
-  	  <h6 class="landmark heading">Series</h6>
-  	  <ul class="series">
-  	    <% work.series.each do |series| %>
-  	    <li>
-  	      <%= work_series_description(work, series) %>
-  	    </li>
-  	    <% end %>
-  	  </ul>
-  	<% end %>
-
-    <!--stats-->
-  	<dl class="stats" title="stats">
-  		<dt><%= ts('Words') %>:</dt>
-  		<dd><%= number_with_delimiter(work.word_count) %></dd>
-  		<dt><%= ts('Chapters') %>:</dt>
-  		<dd><%= work.chapter_total_display %></dd>
-
-<% end %>
-<!-- end cached section -->
-  <% cache("#{work.cache_key}/stats", :expires_in => 1.hour) do %>
-    <% unless work.approved_collections.empty? %>
-      <dt><%= ts('Collections')  %>:</dt>
-      <dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
-    <% end %>
-
-    <% if work.count_visible_comments > 0 %>
-      <dt><%= ts('Comments') %>:</dt>
-      <dd><%= link_to work.count_visible_comments, 
-                (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
-    <% end %>
-    <% if work.all_kudos_count > 0 %>
-      <dt><%= ts('Kudos: ') %></dt>
-      <dd><%= link_to work.all_kudos_count.to_s, 
-        (@collection && false) ? collection_work_path(@collection, work, :anchor => "comments") : 
-          (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
-            work_path(work, :anchor => "comments")) %></dd>
-    <% end %>
-    <% if (bookmark_count = work.bookmarks.is_public.count) > 0 %>
-      <dt><%= ts('Bookmarks') %>:</dt>
-      <dd><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
-    <% end %>
-
-    <% if show_hit_count_to_public?(work) %>
-      <dt><%= ts("Hits") %>:</dt>
-      <dd><%= work.hits %></dd>
-    <% end %>
-  <% end %>
-    </dl>
-
-    <% if is_author_of?(work) %>
-      <h6 class="landmark heading">Author Actions</h6>
-  	  <ul class="navigation actions" role="navigation">
-        <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
-  	    <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
-        <% if work.is_wip %>
-          <li><%= link_to ts('Add Chapter'), new_work_chapter_path(work) %></li>
-        <% end %>
-        <% if !work.posted? %>
-          <li><%= link_to ts('Post Draft'), post_draft_work_path(work), :method => :put %></li>
-          <li role="button"><%= link_to ts("Delete Draft"), work, :confirm => "Are you sure?", :method => :delete %></li>
-        <% end %>
-      </ul>
-    <% end %>
-
+  <%= render 'works/work_module', :work => work %>
+  <% if is_author_of?(work) %>
+    <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
+  	<ul class="actions" role="navigation">
+      <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
+  	  <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
+      <% if work.is_wip %>
+        <li><%= link_to ts('Add Chapter'), new_work_chapter_path(work) %></li>
+      <% end %>
+      <% if !work.posted? %>
+        <li><%= link_to ts('Post Draft'), post_draft_work_path(work), :method => :put %></li>
+        <li role="button"><%= link_to ts("Delete Draft"), confirm_delete_work_path(work), :confirm => ts("Are you sure you want to delete this draft?") %></li>
+      <% end %>
+    </ul>
   <% end %>
 </li>

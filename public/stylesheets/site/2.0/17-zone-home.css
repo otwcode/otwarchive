@@ -10,6 +10,7 @@ user home, collections and challenges home, tag home, admin comms home
   text-align: right;
   border-bottom: 2px solid;
   display: block;
+  margin-left: 100px;
 }
 
 .home .header .userstuff, .home .header dl.stats, .home .header .type {
@@ -33,10 +34,6 @@ user home, collections and challenges home, tag home, admin comms home
   top: 0;
 }
 
-.collection .primary .icon {
-  background: url("/images/imageset.png") 100px -175px;
-}
-
 .skins .primary .icon {
   background: url("/images/imageset.png") 0px -175px;
 }
@@ -47,6 +44,10 @@ user home, collections and challenges home, tag home, admin comms home
 
 .tag .primary .icon, .tagset .primary .icon {
   background: url("/images/imageset.png") 0px -275px;
+}
+
+.wrangler .primary .icon {
+  background: none;
 }
 
 /*contexts*/
@@ -61,27 +62,26 @@ user home, collections and challenges home, tag home, admin comms home
   width: 100%;
 }
 
+.dashboard.works-index h4.landmark, .dashboard.works-index ol.pagination {
+	float: left;
+	width: 100%;
+}
+
 #dynamic-bookmark + h4.landmark {
   clear: both;
 }
 
 /*(with filters)*/
 
+/* wrap long text in Firefox (applied to inbox only to avoid weirdness on all forms in IE) */
 #inbox-form {
   float: left;
+  overflow-x: auto;
   width: 75%;
 }
 
 .dashboard form.filters + h4.landmark {
   clear: left;
-}
-
-/*HISTORY note:listbox? generalise this irregular structure*/
-
-.readings-index h3 {
-  background: #ddd;
-  margin: -0.5em 0 -0.25em 0;
-  padding: 0.25em;
 }
 
 /*END== */

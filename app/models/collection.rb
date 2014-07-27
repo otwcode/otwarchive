@@ -1,14 +1,16 @@
 class Collection < ActiveRecord::Base
+  
+  include WorksOwner
 
   attr_protected :description_sanitizer_version
 
   has_attached_file :icon,
   :styles => { :standard => "100x100>" },
   :url => "/system/:class/:attachment/:id/:style/:basename.:extension",
-  :path => Rails.env.production? ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-  :storage => Rails.env.production? ? :s3 : :filesystem,
+  :path => %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
+  :storage => %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
   :s3_credentials => "#{Rails.root}/config/s3.yml",
-  :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
+  :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
   :default_url => "/images/skins/iconsets/default/icon_collection.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
@@ -56,7 +58,7 @@ class Collection < ActiveRecord::Base
 
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+           :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
@@ -84,6 +86,8 @@ class Collection < ActiveRecord::Base
                              [ts("Gift Exchange"), "GiftExchange"],
                              [ts("Prompt Meme"), "PromptMeme"],
                            ]
+
+  before_validation :clear_icon
 
   validate :must_have_owners
   def must_have_owners
@@ -117,16 +121,16 @@ class Collection < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :name, :message => t('collection.no_name', :default => "Please enter a name for your collection.")
-  validates_uniqueness_of :name, :case_sensitive => false, :message => t('collection.duplicate_name', :default => 'Sorry, that name is already taken. Try again, please!')
+  validates_presence_of :name, :message => ts("Please enter a name for your collection.")
+  validates_uniqueness_of :name, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
   validates_length_of :name,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :name,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
@@ -135,26 +139,31 @@ class Collection < ActiveRecord::Base
 
   validates :email, :email_veracity => {:allow_blank => true}
 
-  validates_presence_of :title, :message => t('collection.no_title', :default => "Please enter a title to be displayed for your collection.")
+  validates_presence_of :title, :message => ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validate :no_reserved_strings
   def no_reserved_strings
-    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
-      title.match(/\,\,/)
+    errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
+      title.match(/\,/)
+  end
+
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
   end
 
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
-  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("is not a valid URL.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("can only point to a gif, jpg, or png file.")
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
@@ -163,16 +172,24 @@ class Collection < ActiveRecord::Base
   scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
+  scope :no_challenge, where(challenge_type: nil)
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
 
-  # we need to add other challenge types to this join in future
-  scope :ge_signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
-                       where("gift_exchanges.signup_open = 1").
-                       order("gift_exchanges.signups_close_at")
-  scope :pm_signups_open, joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").
-                       where("prompt_memes.signup_open = 1").
-                       order("prompt_memes.signups_close_at")
+  before_validation :cleanup_url
+  def cleanup_url
+    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+  end
+
+  # Get only collections with running challenges
+  def self.signup_open(challenge_type)
+    table = challenge_type.tableize
+    unmoderated.not_closed.where(:challenge_type => challenge_type).
+      joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
+      where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
+  end
 
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
@@ -210,8 +227,13 @@ class Collection < ActiveRecord::Base
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
+
   def autocomplete_search_string
     "#{name} #{title}"
+  end
+
+  def autocomplete_search_string_was
+    "#{name_was} #{title_was}"
   end
 
   def autocomplete_prefixes
@@ -253,15 +275,27 @@ class Collection < ActiveRecord::Base
   def all_participants
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
-
+  
+  def all_items
+    CollectionItem.where(:collection_id => ([self.id] + self.children.value_of(:id)))
+  end
+  
   def all_approved_works
-    (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
+    work_ids = all_items.where(:item_type => "Work", :user_approval_status => CollectionItem::APPROVED, 
+      :collection_approval_status => CollectionItem::APPROVED).value_of(:item_id)
+    Work.where(:id => work_ids, :posted => true)
   end
 
   def all_approved_works_count
-    count = self.approved_works.count
-    self.children.each {|child| count += child.approved_works.count}
-    count
+    if !User.current_user.nil?
+      count = self.approved_works.count
+      self.children.each {|child| count += child.approved_works.count}
+      count
+    else
+      count = self.approved_works.where(:restricted => false).count
+      self.children.each {|child| count += child.approved_works.where(:restricted => false).count}
+      count
+    end
   end
 
   def all_approved_bookmarks
@@ -269,8 +303,8 @@ class Collection < ActiveRecord::Base
   end
 
   def all_approved_bookmarks_count
-    count = self.approved_bookmarks.count
-    self.children.each {|child| count += child.approved_bookmarks.count}
+    count = self.approved_bookmarks.where(:private => false).count
+    self.children.each {|child| count += child.approved_bookmarks.where(:private => false).count}
     count
   end
 
@@ -368,13 +402,21 @@ class Collection < ActiveRecord::Base
   end
   
   def reveal!
-    approved_collection_items.update_all("unrevealed = 0")
-    async(:send_reveal_notifications)
+    async(:reveal_collection_items)
   end
 
   def reveal_authors!
-    approved_collection_items.update_all("anonymous = 0")
-    async(:send_author_reveal_notifications)
+    async(:reveal_collection_item_authors)
+  end
+  
+  def reveal_collection_items
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
+    send_reveal_notifications
+  end
+  
+  def reveal_collection_item_authors
+    approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
+    send_author_reveal_notifications
   end
   
   def send_reveal_notifications
@@ -401,12 +443,16 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
-    if sort.match /item_count/
-      query = query.with_item_count
-      pagination_args.merge!({:order => sort})
-    else
-      query = query.order(sort)
+    if filters[:challenge_type].present?
+      if filters[:challenge_type] == "gift_exchange"
+        query = query.gift_exchange
+      elsif filters[:challenge_type] == "prompt_meme"
+        query = query.prompt_meme
+      elsif filters[:challenge_type] == "no_challenge"
+        query = query.no_challenge
+      end
     end
+    query = query.order(sort)
 
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
@@ -418,6 +464,20 @@ class Collection < ActiveRecord::Base
     else
       query.paginate(pagination_args)
     end
+  end
+  
+  # Delete current icon (thus reverting to archive default icon)
+  def delete_icon=(value)
+    @delete_icon = !value.to_i.zero?
+  end
+
+  def delete_icon
+    !!@delete_icon
+  end
+  alias_method :delete_icon?, :delete_icon
+
+  def clear_icon
+    self.icon = nil if delete_icon? && !icon.dirty?
   end
 
 end

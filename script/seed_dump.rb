@@ -13,41 +13,9 @@ RAILS_ENV=production rails runner script/seed_dump.rb
 
 BACKUPDIR = Rails.root.to_s + '/db/seed'
 
-# users who have webdavs or asked to be added
-# or who have problematic works which need testing
-SEEDS = [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza",
-]
-
-# seeds who want their email address preserved for testing
-EMAIL = [ 
-          "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
-          "admin-kielix", "admin-shalott", "admin-sidra",
-          "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
-          "cesytest", "elz", "Enigel", "hele", "Lal", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" , 
-          "zz9pzza",
-]
-
-# a bunch of bigger collections (>250 works)
-# probably would be scooped up anyway, but just in case
-
-COLLECTION_SEEDS = [
-          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
-          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
-          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
-          "Remix2011", "PornBattleXII",
-]
 
 # N determines how many users, works, bookmarks, etc. are dumped if they aren't all dumped
-N = 10
+N = 5
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
@@ -112,6 +80,7 @@ end
 # take an instance and cleanse it,
 # then write to a file the sql statement which would re-create it
 def write_model(thing)
+  return if thing.nil?
   raise "#{thing} is not a model!!!" if thing.is_a?(Array)
   raise "#{thing} is not a model!!!" unless thing
   file = thing.class.name.underscore + ".sql"
@@ -122,7 +91,7 @@ def write_model(thing)
   # redact email addresses
   if thing.respond_to? :email
     if thing.respond_to? :login  # users and admins
-      thing.email = "#{thing.login}-seed@ao3.org" unless EMAIL.include?(thing.login)
+      thing.email = "#{thing.login}-seed@ao3.org" unless ArchiveConfig.DUMP_EMAIL.include?(thing.login)
     else # everything else
       thing.email = "#{thing.class.name}-#{thing.id.to_s}-seed@ao3.org"
     end
@@ -151,7 +120,7 @@ PSEUDS = {}
 TAGS = {}
 
 # populate the hashes
-SEEDS.each do |seed|
+ArchiveConfig.DUMP_SEEDS.each do |seed|
   user = User.find_by_login(seed)
   raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
   USERS[user.id] = user
@@ -249,6 +218,7 @@ def user_associations(users)
     # comments need associations
     u.inbox_comments.find_in_batches(:batch_size => u.inbox_comments.size/N + 1) do |batch|
       inbox_comment = batch.sample
+      next if inbox_comment.nil? or inbox_comment.feedback_comment.nil? or inbox_comment.feedback_comment.ultimate_parent.nil?
       write_model(inbox_comment)
       write_model(inbox_comment.feedback_comment)
       commentable = inbox_comment.feedback_comment.ultimate_parent
@@ -261,7 +231,7 @@ def user_associations(users)
           write_model(commentable)
         end
       end
-      PSEUDS[inbox_comment.feedback_comment.pseud.id] = inbox_comment.feedback_comment.pseud if inbox_comment.feedback_comment.pseud
+      PSEUDS[inbox_comment.feedback_comment.pseud.id] = inbox_comment.feedback_comment.pseud if !inbox_comment.feedback_comment.nil? and inbox_comment.feedback_comment.pseud
       commentable = inbox_comment.feedback_comment.ultimate_parent
       WORKS[commentable.id] = commentable if (MULTI && commentable.is_a?(Work))
     end
@@ -336,7 +306,7 @@ user_associations(USERS)
 ## COLLECTIONS first because it add more WORKS
 
 if MULTI
-  COLLECTION_SEEDS.each do |seed|
+  ArchiveConfig.DUMP_COLLECTION_SEEDS.each do |seed|
     collection = Collection.find_by_name(seed)
     raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
     COLLECTIONS[collection.id] = collection
@@ -414,7 +384,7 @@ def work_associations(items)
     work.creatorships.each {|x| write_model(x)}
     work.pseuds.each {|p| PSEUDS[p.id] = p }
     write_model(work.language) if work.language
-    write_model(work.hit_counter)
+    write_model(work.stat_counter)
     work.gifts.each {|x| write_model(x)}
     work.gifts.each {|g| PSEUDS[g.pseud.id] = g.pseud if g.pseud}
     work.serial_works.each {|x| write_model(x)}
@@ -471,7 +441,9 @@ end
 
 # return an array of records associated with the pseuds
 def pseud_associations(pseuds)
+  return if pseuds.nil? or pseuds.each_value.nil?
   pseuds.each_value do |p|
+    next if p.nil? or p.user.nil?
     write_model(p)
     write_model(p.user)
     write_model(p.user.preference)

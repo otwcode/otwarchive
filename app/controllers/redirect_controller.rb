@@ -1,43 +1,29 @@
 class RedirectController < ApplicationController
-  before_filter :get_url_to_look_for
-  
-  def get_url_to_look_for
-    @original_url = params[:original_url] || ""
-    @minimal_url = @original_url
-    # strip it down to the most basic URL
-    @minimal_url.gsub!(/\?.*$/, "")
-    @minimal_url.gsub!(/\#.*$/, "")
-    
-    # get encoded and unencoded versions
-    @encoded_url = URI.encode(@minimal_url)
-    @decoded_url = URI.decode(@minimal_url)
+
+  def index
+    do_redirect
   end
-  
+
   def do_redirect
-    if @original_url.blank?
-      setflash; flash[:error] = ts("What url did you want to look up?")
+    url = params[:original_url]
+    if url.blank?
+      flash[:error] = ts("What url did you want to look up?")
     else
-      urls = [@original_url, @minimal_url, @encoded_url, @decoded_url]
-      @work = Work.where(:imported_from_url => @original_url).first || 
-              Work.where(:imported_from_url => [@minimal_url, @encoded_url, @decoded_url]).first ||
-              Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{@encoded_url}%", "%#{@decoded_url}%").first
+      @work = Work.find_by_url(url)
       if @work
-        setflash; flash[:notice] = ts("You have been redirected here from #{@original_url}. Please update the original link if possible!")
+        flash[:notice] = ts("You have been redirected here from #{url}. Please update the original link if possible!")
         redirect_to work_path(@work) and return
-      else 
-        setflash; flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
-        unless Rails.env.production?
-          flash[:error] += " We checked all of the following URLs: #{urls.to_sentence}" 
-        end
+      else
+        flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")
       end
     end
     redirect_to redirect_path
-  end 
-  
+  end
+
   def show
-    if !@original_url.blank?
-      redirect_to :action => :do_redirect, :original_url => @original_url and return
+    if params[:original_url].present?
+      redirect_to :action => :do_redirect, :original_url => params[:original_url] and return
     end
   end
-  
+
 end

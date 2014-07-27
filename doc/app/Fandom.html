@@ -483,6 +483,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -536,6 +538,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -720,7 +726,7 @@
           <div class="method-source-code" id="add_media_for_uncategorized-source">
             <pre><span class="ruby-comment"># File app/models/fandom.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_media_for_uncategorized</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">medias</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">medias</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Fandom&quot;</span> <span class="ruby-comment"># type could be something else if the tag is in the process of being re-categorised (re-sorted)</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Media</span>.<span class="ruby-identifier">uncategorized</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">true</span>    

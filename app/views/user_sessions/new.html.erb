@@ -16,6 +16,15 @@
       <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
     <% end %>
   </p>
+<% elsif params[:restricted_commenting] %>
+  <h3 class="heading"><%= ts('Sorry!') %></h3>
+  <p>
+    <%= ts('Commenting on this work is only available to registered users of the Archive.') %>
+    <%= ts('If you already have an Archive of Our Own account, log in now.') %>
+    <% if @admin_settings.account_creation_enabled? %>
+      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
+    <% end %>
+  </p>
 <% else %>
   <h3 class="heading"><%= ts('Log in') %></h3>
   <p>
@@ -27,11 +36,7 @@
 <% end %>
 
 <div id="loginform">
-  <%- if params[:use_openid] -%>
-    <%= render :partial => "user_sessions/openid" %>
-  <%- else -%>
-    <%= render :partial => "user_sessions/passwd" %>
-  <% end %>
+  <%= render "user_sessions/passwd" %>
 </div>
 
 <p>

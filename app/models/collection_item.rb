@@ -14,7 +14,7 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[REJECTED], REJECTED] ]
 
   belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
+  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
 
@@ -82,6 +82,41 @@ class CollectionItem < ActiveRecord::Base
       self.anonymous = true if collection.anonymous?
     end
   end
+  
+  after_save :update_work
+  #after_destroy :update_work: NOTE: after_destroy DOES NOT get invoked when an item is removed from a collection because
+  #  this is a has-many-through relationship!!!
+  # The case of removing a work from a collection has to be handled via after_add and after_remove callbacks on the work 
+  # itself -- see collectible.rb
+  
+  # Set associated works to anonymous or unrevealed as appropriate
+  # Check for chapters to avoid work association creation order shenanigans
+  def update_work
+    return unless item_type == 'Work' && work.present? && work.chapters.present? && !work.new_record?
+    # Check if this is new - can't use new_record? with after_save
+    if self.id_changed?
+      work.set_anon_unrevealed!
+    else
+      work.update_anon_unrevealed!
+    end
+  end
+
+  # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
+  after_update :update_item_for_status_change
+  def update_item_for_status_change
+    if user_approval_status_changed? || collection_approval_status_changed?
+      item.save
+    end
+  end
+
+  after_create :notify_of_association
+  # TODO: make this work for bookmarks instead of skipping them
+  def notify_of_association
+    self.work.present? ? creation_id = self.work.id : creation_id = self.item_id
+    if self.collection.collection_preference.email_notify && !self.collection.email.blank?
+      CollectionMailer.item_added_notification(creation_id, self.collection.id, self.item_type).deliver
+    end
+  end
 
   before_save :approve_automatically
   def approve_automatically
@@ -121,10 +156,22 @@ class CollectionItem < ActiveRecord::Base
   after_update :notify_of_status_change
   def notify_of_status_change
     if unrevealed_changed?
-      notify_of_reveal
+      # making sure that creation_observer.rb has not already notified the user
+      if !work.new_recipients.blank?
+        notify_of_reveal
+      end
     end
     if anonymous_changed?
       notify_of_author_reveal
+    end
+  end
+  
+  after_save :expire_caches
+  after_destroy :expire_caches
+  
+  def expire_caches
+    if self.item.respond_to?(:expire_caches)
+      self.item.expire_caches
     end
   end
 

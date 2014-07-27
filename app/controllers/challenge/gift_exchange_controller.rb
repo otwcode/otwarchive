@@ -22,7 +22,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def new
     if (@collection.challenge)
-      setflash; flash[:notice] = ts("There is already a challenge set up for this collection.")
+      flash[:notice] = ts("There is already a challenge set up for this collection.")
       # TODO this will break if the challenge isn't a gift exchange
       redirect_to edit_collection_gift_exchange_path(@collection)
     else
@@ -38,7 +38,7 @@ class Challenge::GiftExchangeController < ChallengesController
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      setflash; flash[:notice] = ts('Challenge was successfully created.')      
+      flash[:notice] = ts('Challenge was successfully created.')      
       redirect_to collection_profile_path(@collection)
     else
       render :action => :new
@@ -47,7 +47,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def update
     if @challenge.update_attributes(params[:gift_exchange])
-      setflash; flash[:notice] = ts('Challenge was successfully updated.')
+      flash[:notice] = ts('Challenge was successfully updated.')
       
       # expire the cache on the signup form
       expire_fragment(:controller => 'challenge_signups', :action => 'new')
@@ -61,7 +61,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def destroy
     @challenge.destroy
-    setflash; flash[:notice] = 'Challenge settings were deleted.'
+    flash[:notice] = 'Challenge settings were deleted.'
     redirect_to @collection
   end
   

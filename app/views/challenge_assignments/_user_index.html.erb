@@ -1,12 +1,20 @@
-<!--SUSPECT USER HOME/ COLLECTION HOME and h2-->
-<h3 class="heading">Your Assignments<%= @collection ? " In #{link_to(@collection.title, @collection)}" : "" %></h3>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("My Assignments") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% unless @collection %>
-<p><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
+  <p class="note"><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
 <% end %>
 
-<dl class="index group">
+<dl class="assignment index group">
+
   <% @challenge_assignments.each do |assignment| %>
     <%= render "assignment_blurb", :assignment => assignment %>
   <% end %>
+
 </dl>
+<!--/content-->

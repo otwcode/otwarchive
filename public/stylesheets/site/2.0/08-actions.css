@@ -1,5 +1,5 @@
 /*==ACTIONS: buttons!
-http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
+http://otwcode.github.com/docs/front_end_coding/patterns/actions
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -32,11 +32,11 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-decoration: none;
   border: 1px solid #bbb;
   border-bottom: 1px solid #aaa;
-    background: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-    background: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background-image: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
     border-radius: 0.25em;
     box-shadow: none;
 }
@@ -57,6 +57,12 @@ p.submit, input.submit, dd.submit {
   cursor: text;
 }
 
+.actions input[type="checkbox"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 
@@ -70,7 +76,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus {
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -84,7 +90,12 @@ ol.pagination, div.pagination, ol.year {
     box-shadow: inset 1px 1px 3px #333;
 }
 
+.actions label.disabled {
+  background: #ccc;
+}
+
 .delete a, span.delete {
+  border: 0;
   color: #900;
   font-weight: 900;
   margin-right: 0.375em;
@@ -92,6 +103,11 @@ ol.pagination, div.pagination, ol.year {
   cursor: pointer;
     box-shadow: -1px -1px 2px rgba(0,0,0,0.75);
     border-radius: 0.875em;
+}
+
+span.delete a {
+  margin: 0 0.2em;
+    box-shadow: none;
 }
 
 ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
@@ -129,12 +145,10 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + h6 + .actions {
+dl.stats + .landmark + .actions {
+  clear: none;
   float: left;
-}
-
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {
@@ -157,6 +171,19 @@ dl.stats + h6 + .actions, li.news .actions {
   border: 0;
   background: none;
   padding: 0 0 0.15em 0;
+}
+
+.many p.actions { 
+  float: none; 
+  text-align: right; 
+}
+
+.concise label.action { 
+  float: left; 
+}
+
+dd.any label.action {
+  margin-left: 0.5625em;
 }
 
 /*END== */

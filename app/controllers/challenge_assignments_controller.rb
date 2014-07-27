@@ -26,7 +26,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_challenge
-    setflash; flash[:error] = t('challenge_assignments.no_challenge', :default => "What challenge did you want to work with?")
+    flash[:error] = t('challenge_assignments.no_challenge', :default => "What challenge did you want to work with?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -37,7 +37,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_assignment
-    setflash; flash[:error] = t('challenge_assignments.no_assignment', :default => "What assignment did you want to work on?")
+    flash[:error] = t('challenge_assignments.no_assignment', :default => "What assignment did you want to work on?")
     if @collection
       redirect_to collection_path(@collection) rescue redirect_to '/'
     else
@@ -52,14 +52,14 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_user
-    setflash; flash[:error] = t("challenge_assignments.no_user", :default => "What user were you trying to work with?")
+    flash[:error] = t("challenge_assignments.no_user", :default => "What user were you trying to work with?")
     redirect_to "/" and return
     false
   end
 
   def owner_only
     unless @user == @challenge_assignment.offering_pseud.user
-      setflash; flash[:error] = t("challenge_assignments.not_owner", :default => "You aren't the owner of that assignment.")
+      flash[:error] = t("challenge_assignments.not_owner", :default => "You aren't the owner of that assignment.")
       redirect_to "/" and return false
     end
   end
@@ -69,7 +69,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def signup_open
-    setflash; flash[:error] = t('challenge_assignments.signup_open', :default => "Signup is currently open, you cannot make assignments now.")
+    flash[:error] = t('challenge_assignments.signup_open', :default => "Signup is currently open, you cannot make assignments now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -79,7 +79,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_sent
-    setflash; flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
@@ -89,7 +89,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_not_sent
-    setflash; flash[:error] = t('challenge_assignments.assignments_not_sent', :default => "Assignments have not been sent! You might want matching instead.")
+    flash[:error] = t('challenge_assignments.assignments_not_sent', :default => "Assignments have not been sent! You might want matching instead.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -111,7 +111,7 @@ class ChallengeAssignmentsController < ApplicationController
           @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
         end
       else
-        setflash; flash[:error] = ts("You aren't allowed to see that user's assignments.")
+        flash[:error] = ts("You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
       end
     else
@@ -139,38 +139,53 @@ class ChallengeAssignmentsController < ApplicationController
 
   def show
     unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user
-      setflash; flash[:error] = "You aren't allowed to see that assignment!"
+      flash[:error] = ts("You aren't allowed to see that assignment!")
       redirect_to "/" and return
+    end
+    if @challenge_assignment.defaulted?
+      flash[:notice] = ts("This assignment has been defaulted-on.")
     end
   end
 
   def generate
     # regenerate assignments using the current potential matches
     ChallengeAssignment.generate(@collection)
-    setflash; flash[:notice] = ts("Beginning regeneration of assignments. This may take some time, especially if your challenge is large.")
+    flash[:notice] = ts("Beginning regeneration of assignments. This may take some time, especially if your challenge is large.")
     redirect_to collection_potential_matches_path(@collection)
   end
 
   def send_out
-    ChallengeAssignment.send_out(@collection)
-    setflash; flash[:notice] = "Assignments are now being sent out."
-    redirect_to collection_assignments_path(@collection)
+    no_giver_count = @collection.assignments.with_request.with_no_offer.count
+    no_recip_count = @collection.assignments.with_offer.with_no_request.count
+    if (no_giver_count + no_recip_count) > 0
+      flash[:error] = ts("Some participants still aren't assigned. Please either delete them or match them to a placeholder before sending out assignments.")
+      redirect_to collection_potential_matches_path(@collection)
+    else
+      ChallengeAssignment.send_out(@collection)
+      flash[:notice] = "Assignments are now being sent out."
+      redirect_to collection_assignments_path(@collection)
+    end
   end
 
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
+    @assignments = ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values).reject {|a| a.errors.empty?}
     ChallengeAssignment.update_placeholder_assignments!(@collection)
-    setflash; flash[:notice] = "Assignments updated"
-    redirect_to collection_potential_matches_path(@collection)
+    if @assignments.empty?
+      flash[:notice] = "Assignments updated"
+      redirect_to collection_potential_matches_path(@collection)
+    else
+      flash[:error] = ts("These assignments could not be saved because the two participants do not match. Did you mean to write in a giver?")
+      render template: "potential_matches/index" 
+    end
   end
 
   def purge
     ChallengeAssignment.clear!(@collection)
     @challenge.assignments_sent_at = nil
     @challenge.save
-    setflash; flash[:notice] = "Assignments purged!"
+    flash[:notice] = "Assignments purged!"
     redirect_to collection_path(@collection)
   end
 
@@ -206,10 +221,10 @@ class ChallengeAssignmentsController < ApplicationController
       end
     end
     if @errors.empty?
-      setflash; flash[:notice] = "Assignment updates complete!"
+      flash[:notice] = "Assignment updates complete!"
       redirect_to collection_assignments_path(@collection)
     else
-      setflash; flash[:error] = @errors
+      flash[:error] = @errors
       redirect_to collection_assignments_path(@collection)
     end 
   end
@@ -218,7 +233,7 @@ class ChallengeAssignmentsController < ApplicationController
     # mark all unfulfilled assignments as defaulted
     unfulfilled_assignments = ChallengeAssignment.unfulfilled_in_collection(@collection).readonly(false)
     unfulfilled_assignments.update_all :defaulted_at => Time.now
-    setflash; flash[:notice] = "All unfulfilled assignments marked as defaulting."
+    flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)
   end
 
@@ -228,28 +243,28 @@ class ChallengeAssignmentsController < ApplicationController
     @challenge_assignment.collection.notify_maintainers("Challenge default by #{@challenge_assignment.offer_byline}",
         "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " +
         "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
-    setflash; flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
+    flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(@user)
   end
 
   def undefault
     @challenge_assignment.defaulted_at = nil
     @challenge_assignment.save
-    setflash; flash[:notice] = "Assignment marked as not-defaulted."
+    flash[:notice] = "Assignment marked as not-defaulted."
     redirect_to collection_assignments_path(@collection)
   end
 
   def cover_default
     @challenge_assignment.covered_at = Time.now
     @challenge_assignment.save
-    setflash; flash[:notice] = "Assignment marked as covered. It will not appear in the defaulted list anymore."
+    flash[:notice] = "Assignment marked as covered. It will not appear in the defaulted list anymore."
     redirect_to collection_assignments_path(@collection)
   end
 
   def uncover_default
     @challenge_assignment.covered_at = nil
     @challenge_assignment.save
-    setflash; flash[:notice] = "Assignment marked as uncovered. It will appear in the defaulted list until it is covered."
+    flash[:notice] = "Assignment marked as uncovered. It will appear in the defaulted list until it is covered."
     redirect_to collection_assignments_path(@collection)
   end
 

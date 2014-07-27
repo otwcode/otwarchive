@@ -1,48 +1,29 @@
 // Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults 
+// This file is automatically included by javascript_include_tag :defaults
 
 //things to do when the page loads
 $j(document).ready(function() {
-    // visualizeTables();
-    // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
     showShowMe();
     handlePopUps();
-    generateCharacterCounters();
-    $j('#expandable-link').click(function(e){
-          e.preventDefault();
-          expandList();
-          return false;
-      });
-    $j('#hide-notice-banner').click(function (e) { 
+    attachCharacterCounters();
+    setupAccordion();
+    $j('#hide-notice-banner').click(function(e){
       $j('#notice-banner').hide();
-      e.preventDefault(); 
+      e.preventDefault();
     });
-    setupTooltips();
+    setupDropdown();
 
-    // replace all GET delete links with their AJAXified equivalent
-    $j('a[href$="/confirm_delete"]').each(function(){
-        this.href = this.href.replace(/\/confirm_delete$/, "");
-        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    });
+    // remove final comma from comma lists in older browsers
     $j('.commas li:last-child').addClass('last');
+
+    // make Share buttons on works and own bookmarks visible
+    $j('.actions').children('.share').removeClass('hidden');
+
+    prepareDeleteLinks();
 });
-
-function visualizeTables() {
-     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
-     $j("table.stats-line").visualize({type: 'line'});
-}
-
-// Shows expandable fields when clicked on
-function ShowExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'inline';
-  var collapsible = document.getElementById('collapsible');
-  if (collapsible != null) collapsible.style.display = 'none';
-}
-
 
 ///////////////////////////////////////////////////////////////////
 // Autocomplete
@@ -64,19 +45,22 @@ function get_token_input_options(self) {
 
 // Look for autocomplete_options in application helper and throughout the views to
 // see how to use this!
-jQuery(function($) {
-  $('input.autocomplete').livequery(function(){
-    var self = $(this);
-    var token_input_options = get_token_input_options(self);
-    var method;
-    try {
-        method = $.parseJSON(self.attr('autocomplete_method'));
-    } catch (err) {
-        method = self.attr('autocomplete_method');
-    }
-    self.tokenInput(method, token_input_options);
+var input = $j('input.autocomplete');
+if (input.livequery) {
+  jQuery(function($) {
+    $('input.autocomplete').livequery(function(){
+      var self = $(this);
+      var token_input_options = get_token_input_options(self);
+      var method;
+      try {
+          method = $.parseJSON(self.attr('autocomplete_method'));
+      } catch (err) {
+          method = self.attr('autocomplete_method');
+      }
+      self.tokenInput(method, token_input_options);
+    });
   });
-});
+}
 
 ///////////////////////////////////////////////////////////////////
 
@@ -93,21 +77,21 @@ jQuery(function($){
       $(this).nextAll(".shuffle").show();
       $(this).next(".contract").show();
     }
-    
-    // set up click event to expand the list 
+
+    // set up click event to expand the list
     $(this).click(function(event){
       list = $($(this).attr('action_target'));
       list.show();
-      
+
       // show the contract & shuffle buttons and hide us
       $(this).next(".contract").show();
       $(this).nextAll(".shuffle").show();
       $(this).hide();
-      
+
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.contract').each(function(){
     $(this).click(function(event){
       // hide the list when clicked
@@ -118,11 +102,11 @@ jQuery(function($){
       $(this).prev(".expand").show();
       $(this).nextAll(".shuffle").hide();
       $(this).hide();
-      
+
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.shuffle').each(function(){
     // shuffle the list's children when clicked
     $(this).click(function(event){
@@ -131,28 +115,28 @@ jQuery(function($){
       event.preventDefault(); // don't want to actually click the link
     });
   });
-  
+
   $('.expand_all').each(function(){
       target = "." + $(this).attr('target_class');
      $(this).click(function(event) {
         $(this).closest(target).find(".expand").click();
         event.preventDefault();
-     }); 
+     });
   });
-  
+
   $('.contract_all').each(function(){
      target = "." + $(this).attr('target_class');
      $(this).click(function(event) {
         $(this).closest(target).find(".contract").click();
         event.preventDefault();
-     }); 
+     });
   });
-  
+
 });
 
 // check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
 // stored in the "checkbox_name_filter" attribute on the all/none links.
-// allow for some flexibility by checking the next fieldset if the checkboxes aren't in this one
+// allow for some flexibility by checking the next and previous fieldset if the checkboxes aren't in this one
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
@@ -162,13 +146,18 @@ jQuery(function($){
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
-        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+        if (checkboxes.length == 0) {
+          checkboxes = $(this).closest("fieldset").next().find(':checkbox');
+          if (checkboxes.length == 0) {
+            checkboxes = $(this).closest("fieldset").prev().find(':checkbox');
+          }
+        }
       }
-      checkboxes.attr('checked', true);
+      checkboxes.prop('checked', true);
       event.preventDefault();
     });
   });
-  
+
   $('.check_none').each(function(){
     $(this).click(function(event){
       var filter = $(this).attr('checkbox_name_filter');
@@ -177,25 +166,18 @@ jQuery(function($){
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
-        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+        if (checkboxes.length == 0) {
+          checkboxes = $(this).closest("fieldset").next().find(':checkbox');
+          if (checkboxes.length == 0) {
+            checkboxes = $(this).closest("fieldset").prev().find(':checkbox');
+          }
+        }
       }
-      checkboxes.attr('checked', false);
+      checkboxes.prop('checked', false);
       event.preventDefault();
     });
   });
 });
-
-// Timepicker
-jQuery(function($) {
-  $('.timepicker').datetimepicker({
-    ampm: true,
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mmTT',
-    hourGrid: 5,
-    minuteGrid: 10
-  });
-});
-
 
 // Set up open and close toggles for a given object
 // Typical setup (this will leave the toggled item open for users without javascript but hide the controls from them):
@@ -204,22 +186,28 @@ jQuery(function($) {
 //   foo!
 //   <a class="foo_close hidden">Close</a>
 // </div>
-// 
+//
 // Notes:
 // - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
 // - You can have multiple open and close buttons for the same div since those are labeled with classes
-// - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
-// - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
+// - You don't have to use div and a, those are just examples. Anything you put the toggled and _open/_close classes on will work.
+// - If you want the toggled item not to be visible to users without JavaScript by default, add the class "hidden" to the toggled item as well.
 //   (and you can then add an alternative link for them using <noscript>)
+// - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
   $j('.toggled').each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
-    
-    if (!node.hasClass('open')) {node.hide();}
-    close_toggles.each(function(){$j(this).hide();});
-    open_toggles.each(function(){$j(this).show();});
+
+    if (node.hasClass('open')) {
+      close_toggles.each(function(){$j(this).show();});
+      open_toggles.each(function(){$j(this).hide();});    
+    } else {
+      node.hide();
+      close_toggles.each(function(){$j(this).hide();});
+      open_toggles.each(function(){$j(this).show();});
+    }
 
     open_toggles.each(function(){
       $j(this).click(function(e){
@@ -229,7 +217,7 @@ function setupToggled(){
         close_toggles.each(function(){$j(this).show();});
       });
     });
-    
+
     close_toggles.each(function(){
       $j(this).click(function(e){
         if ($j(this).attr('href') == '#') {e.preventDefault();}
@@ -238,14 +226,7 @@ function setupToggled(){
         open_toggles.each(function(){$j(this).show();});
       });
     });
-  });  
-}
-
-
-// Hides expandable fields if Javascript is enabled
-function hideExpandable() {
-  var expandable = document.getElementById('expandable');
-  if (expandable != null) expandable.style.display = 'none';
+  });
 }
 
 function hideHideMe() {
@@ -261,10 +242,10 @@ function handlePopUps() {
       if (event.stopped) return;
       window.open($j(element).attr('href'));
       event.stop();
-    });    
+    });
 }
 
-// used in nested form fields for deleting a nested resource 
+// used in nested form fields for deleting a nested resource
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {
     $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
@@ -274,7 +255,7 @@ function remove_section(link, class_of_section_to_remove) {
 // used with nested form fields for dynamically stuffing in an extra partial
 // see challenge signup form and prompt form for an example
 function add_section(link, nested_model_name, content) {
-    // get the right new_id which should be in a div with class "last_id" at the bottom of 
+    // get the right new_id which should be in a div with class "last_id" at the bottom of
     // the nearest section
     var last_id = parseInt($j(link).parent().siblings('.last_id').last().html());
     var new_id = last_id + 1;
@@ -288,12 +269,12 @@ function add_section(link, nested_model_name, content) {
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
     var ticky = $j('#' + element_id + '-show');
-    if (ticky.is(':checked')) { 
-      $j('#' + element_id).removeClass('hidden'); 
+    if (ticky.is(':checked')) {
+      $j('#' + element_id).removeClass('hidden');
     }
-    else { 
+    else {
         $j('#' + element_id).addClass('hidden');
-        if (element_id != 'chapters-options') {
+        if (element_id != 'chapters-options' && element_id != 'backdate-options') {
             $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
                 if ($j(d).attr('type') == "checkbox") {$j(d).attr('checked', false);}
                 else {$j(d).val('');}
@@ -305,14 +286,6 @@ function toggleFormField(element_id) {
         var item = document.getElementById('work_wip_length');
         if (item.value == 1 || item.value == '1') {item.value = '?';}
         else {item.value = 1;}
-    }
-}
-
-function showOptions(idToCheck, idToShow) {
-    var checkbox = document.getElementById(idToCheck);
-    var areaToShow = document.getElementById(idToShow);
-    if (checkbox.checked) {
-        Element.toggle(idToShow);
     }
 }
 
@@ -334,32 +307,38 @@ function hideField(id) {
   $j('#' + id).toggle();
 }
 
-function updateCharacterCounter(counter) {
-    var input_id = '#' + $j(counter).attr('id');
-    var maxlength = $j(input_id + '_counter').attr('data-maxlength');
-    var input_value = $j(input_id).val();
-    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
-    var remaining_characters = maxlength - input_value.length;
-    $j(input_id + '_counter').html(remaining_characters);
-    $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);
-}
+function attachCharacterCounters() {
+    var countFn = function() {
+        var counter = (function(input) {
+                /* Character-counted inputs do not always have the same hierarchical relationship
+                to their associated counter elements in the DOM, and some cc-inputs have
+                duplicate ids. So search for the input's associated counter element first by id,
+                then by checking the input's siblings, then by checking its cousins. */
+                var cc = $j('.character_counter [id='+input.attr('id')+'_counter]');
+                if (cc.length === 1) { return cc; } // id search, use attribute selector rather
+                // than # to check for duplicate ids
 
-function generateCharacterCounters() {
-  $j(".observe_textlength").each(function(){
-      updateCharacterCounter(this);
-  });
-  $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
-      updateCharacterCounter(this);
-  });
-}
+                cc = input.nextAll('.character_counter').first().find('.value'); // sibling search
+                if (cc.length) { return cc; }
 
-function setupTooltips() {
-    $j('span[tooltip]').each(function(){
-       $j(this).qtip({
-          content: $j(this).attr('tooltip'),
-          position: {corner: {target: 'topMiddle'}}
-       });
-    });
+                var parent = input.parent(); // 2 level cousin search
+                for (var i = 0; i < 2; i++) {
+                    cc = parent.nextAll('.character_counter').find('.value');
+                    if (cc.length) { return cc; }
+                    parent = parent.parent();
+                }
+
+                return $j(); // return empty jquery element if search found nothing
+            })($j(this)),
+            max = parseInt(counter.attr('data-maxlength'), 10),
+            val = $j(this).val().replace(/\r\n/g,'\n').replace(/\r|\n/g,'\r\n'),
+            remaining = max - val.length;
+
+        counter.html(remaining).attr("aria-valuenow", remaining);
+    };
+
+    $j(document).on('keyup keydown mouseup mousedown change', '.observe_textlength', countFn);
+    $j('.observe_textlength').each(countFn);
 }
 
 // prevent double submission for JS enabled
@@ -372,3 +351,99 @@ jQuery.fn.preventDoubleSubmit = function() {
   });
 };
 
+// add attributes that are only needed in the primary menus and when JavaScript is enabled
+function setupDropdown(){
+  $j('#header').find('.dropdown').attr("aria-haspopup", true);
+  $j('#header').find('.dropdown, .dropdown .actions').children('a').attr({
+    'class': 'dropdown-toggle',
+    'data-toggle': 'dropdown',
+    'data-target': '#'
+  });
+  $j('.dropdown').find('.menu').addClass("dropdown-menu");
+  $j('.dropdown').find('.menu').children('li').attr("role", "menu-item");
+}
+
+// Accordion-style collapsible widgets
+// The pane element can be showen or hidden using the expander (link)
+// Apply hidden to the pane element if it shouldn't be visible when JavaScript is disabled
+// Typical set up:
+// <li aria-haspopup="true">
+//  <a href="#">Expander</a>
+//  <div class="expandable">
+//    foo!
+//  </div>
+// </li>
+function setupAccordion() {
+  var panes = $j(".expandable");
+  panes.hide().prev().removeClass("hidden").addClass("expanded").click(function(e) {
+    var expander = $j(this);
+    if (expander.attr('href') == '#') {
+      e.preventDefault();
+    }
+    expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+  });
+}
+
+// Remove the /confirm_delete portion of delete links so user who have JS enabled will
+// be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
+// form page. Also add a confirmation message if one was not set in the back end using
+// :confirm => "message"
+function prepareDeleteLinks() {
+  $j('a[href$="/confirm_delete"]').each(function(){
+    this.href = this.href.replace(/\/confirm_delete$/, "");
+    $j(this).attr("data-method", "delete");
+    if ($j(this).is("[data-confirm]")) {
+      return;
+    } else {
+      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+    };
+  });
+}
+
+/// Kudos
+$j(document).ready(function() {
+  $j('a#kudos_summary').click(function(e) {
+    e.preventDefault();
+    $j('a#kudos_summary').hide();
+    $j('.kudos_expanded').show();
+  });
+
+  $j('.kudos_expanded a').click(function(e) {
+    e.preventDefault();
+    $j('a#kudos_summary').show();
+    $j('.kudos_expanded').hide();
+  });
+
+  $j('#kudo_submit').on("click", function(event) {
+    event.preventDefault();
+
+    $j.ajax({
+      type: 'POST',
+      url: '/kudos.js',
+      data: jQuery('#new_kudo').serialize(),
+      error: function(jqXHR, textStatus, errorThrown ) {
+        var msg = 'Sorry, we were unable to save your kudos';
+        var data = $j.parseJSON(jqXHR.responseText);
+
+        if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
+          msg = "You have already left kudos here. :)";
+        }
+
+        $j('#kudos_message').addClass('comment_error').text(msg);
+      },
+      success: function(data) {
+        $j('#kudos_message').addClass('notice').text('Thank you for leaving kudos!');
+      }
+    });
+  });
+
+  // Scroll to the top of the comments section when loading additional pages via Ajax in comment pagination.
+  $j('#comments_placeholder').find('.pagination').find('a[data-remote]').livequery('click.rails', function(e){
+    $j.scrollTo('#comments_placeholder');
+  });
+
+  // Scroll to the top of the feedback section when loading comments via AJAX
+  $j("#show_comments_link_top").find('a[href*="show_comments"]').livequery('click.rails', function(e){
+    $j.scrollTo('#feedback');
+  });
+});

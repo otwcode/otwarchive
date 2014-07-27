@@ -1,6 +1,6 @@
-<h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Sign-ups for %{collection}", :collection => @collection.title) %></h2>
   
-<ul class="navigation" role="menu">
+<ul class="navigation actions" role="menu">
   <li class="action">
     <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %> 
     <%= link_to_help "csv-download"%>
@@ -8,23 +8,27 @@
 </ul>
   
 <% if @challenge_signups.empty? %>
-  <p><%= ts("No signups yet!")%></p>
+  <p><%= ts("No sign-ups yet!")%></p>
 <% else %>
   <%= will_paginate(@challenge_signups) %>
 
   <dl class="index group">
     <% @challenge_signups.each do |signup| %>
-      <dt class="participant" title="user name">
+      <dt class="participant" title="<%= ts("user name") %>">
         <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
         <%= mailto_link signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
       </dt>
       <dd>
-        <%= render "challenge_signups/signup_controls", :challenge_signup => signup %>
+        <%= render "challenge_signups/signup_controls", :challenge_signup => signup, :subnav => false %>
         <ul class="actions" role="menu">
-          <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
-          <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", :class => "requests_#{signup.id}_close" %></li>
-          <%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", :class => "offers_#{signup.id}_open" %>
-          <%= link_to h(ts("Close Offers")) + ' &#8593;'.html_safe, "#", :class => "offers_#{signup.id}_close" %></li>
+          <li>
+            <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
+            <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", :class => "requests_#{signup.id}_close" %>
+          </li>
+          <li>
+            <%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", :class => "offers_#{signup.id}_open" %>
+            <%= link_to h(ts("Close Offers")) + ' &#8593;'.html_safe, "#", :class => "offers_#{signup.id}_close" %>
+          </li>
         </ul>
         <div class="toggled" id="<%= "requests_#{signup.id}" %>">
           <%= render "challenge_signups/show_requests", :challenge_signup => signup %>

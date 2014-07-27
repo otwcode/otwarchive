@@ -12,7 +12,7 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id)
+    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(posted: true)
     work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom, 
@@ -28,7 +28,7 @@ class StatsController < ApplicationController
     sort_options = ""
     @sort = ""
     if current_user.preference.hide_hit_counts
-      sort_options = %w(kudos.count comments.count bookmarks.count subscriptions.count word_count)
+      sort_options = %w(date kudos.count comments.count bookmarks.count subscriptions.count word_count)
       @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
     else
       sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
@@ -59,7 +59,7 @@ class StatsController < ApplicationController
     
     # group by fandom or flat view
     if params[:flat_view]
-      @works = {ts("All Fandoms") => works}
+      @works = {ts("All Fandoms") => works.uniq}
     else
       @works = works.group_by(&:fandom)
     end
@@ -69,21 +69,23 @@ class StatsController < ApplicationController
     (sort_options - ["date"]).each do |value|
       # see explanation above about the eval here
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
-      @totals[value.split(".")[0].to_sym] = works.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
+      @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
     @totals[:author_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new    
     @chart_data.new_column('string', 'Title')
-    chart_col = @sort == "date" ? "hits" : @sort 
-    chart_col_title = chart_col.split(".")[0].titleize
+
+    # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
+    chart_col = @sort == "date" ? "hits" : @sort
+    chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
     chart_title = @sort == "date" ? ts("Most Recent") : ts("Top Five By #{chart_col_title}")
     @chart_data.new_column('number', chart_col_title)
       
     # Add Rows and Values 
     # see explanation above about the eval here
-    @chart_data.add_rows(works[0..4].map {|w| [w.title, eval("w.#{chart_col}")]})
+    @chart_data.add_rows(works.uniq[0..4].map {|w| [w.title, eval("w.#{chart_col}")]})
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html

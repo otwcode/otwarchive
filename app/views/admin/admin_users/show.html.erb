@@ -1,10 +1,11 @@
+<div class="admin">
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('User') %>: <%= @user.login %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 
-<ul class="navigation actions" role="navigation actions ">
+<ul class="navigation actions" role="navigation">
   <li><%= button_to ts("Send Activation Email"), {:action => 'send_activation', :id => @user}, :disabled => @user.active? %></li>
   <li>
     <%= button_to ts("Activate User Account"), {:action => 'activate', :id => @user}, :disabled => @user.active? %>
@@ -53,8 +54,9 @@
     </p>
   </fieldset>
 
-  <p class="submit actions"><%= submit_tag ts("Update") %></p>
+  <p class="submit"><%= submit_tag ts("Update") %></p>
 <% end %>
 
 <%= render :partial => 'user_history', :locals => {:user => @user} %>
 <!--/content-->
+</div>

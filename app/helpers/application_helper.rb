@@ -7,18 +7,29 @@ module ApplicationHelper
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
+    
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
-      if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
-        class_names = "system support " + controller.controller_name + ' ' + controller.action_name
-      end
-      if controller.controller_name == "archive_faqs"
-        class_names = "system support faq " + controller.action_name
-      end
-      if controller.controller_name == "home"
-        class_names = "system docs " + controller.action_name
-      end
+    
+    if page_has_filters?
+      class_names += " filtered"
+    end
+    
+    if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
+      class_names = "system support " + controller.controller_name + ' ' + controller.action_name
+    end
+    if controller.controller_name == "archive_faqs"
+      class_names = "system support faq " + controller.action_name
+    end
+    if controller.controller_name == "home"
+      class_names = "system docs " + controller.action_name
+    end
+    
     class_names
+  end
+  
+  def page_has_filters?
+    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
 
   # A more gracefully degrading link_to_remote.
@@ -30,11 +41,14 @@ module ApplicationHelper
     link_to_function(name, remote_function(options), html_options)
   end
 
-  # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
-  def span_if_current(link_to_default_text, path, condition=nil)
+  # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
+  def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
-    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
+    title_text = ts(title_attribute_default_text)
+    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{text}</span>" : "<span class=\"current\" title=\"#{title_text}\">#{text}</span>"
+    link_code = title_attribute_default_text.nil? ? link_to(text, path) : link_to(text, path, title: "#{title_text}")
+    is_current ? span_tag.html_safe : link_code
   end
   
   def link_to_rss(link_to_feed)
@@ -45,11 +59,11 @@ module ApplicationHelper
   #2: show_text = true: shows "plain text with limited html" and link to help
   #3 show_list = true: plain text and limited html, link to help, list of allowed html
   def allowed_html_instructions(show_list = false, show_text=true)
-    (show_text ? h(ts("Plain text with limited html")) : ''.html_safe) + 
+    (show_text ? h(ts("Plain text with limited HTML")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
-      col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
-      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
+      col, colgroup, dd, del, dfn, [dir], div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
+      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
   end
   
@@ -159,6 +173,14 @@ module ApplicationHelper
       pseud.byline
   end
 
+   def link_to_modal(content="",options = {})   
+     options[:class] ||= ""
+     options[:for] ||= ""
+     options[:title] ||= options[:for]
+     
+     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}     
+     link_to content, options[:for], html_options
+   end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -171,15 +193,15 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
-  #       setflash; flash[:error] = "OMG ERRORZ AIE"
+  #       flash[:error] = "OMG ERRORZ AIE"
   # or
-  #       setflash; flash.now[:error] = "OMG ERRORZ AIE"
+  #       flash.now[:error] = "OMG ERRORZ AIE"
   #
   # then that error will appear in the view where you have
   #       <%= flash_div :error %>
@@ -243,11 +265,11 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = "" 
     content_for :tinymce do
-      javascript_include_tag "tiny_mce/tiny_mce"
+      javascript_include_tag "tinymce/tinymce.min.js"
     end
     @content_for_tinymce_init = "" 
     content_for :tinymce_init do
-      javascript_include_tag "mce_editor"
+      javascript_include_tag "mce_editor.min.js"
     end
   end  
   
@@ -264,7 +286,7 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     max = max.to_s
-    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
+    span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
     content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
   
@@ -373,10 +395,10 @@ module ApplicationHelper
   
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
-    toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
+    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", :checkboxes_size => checkboxes_size), 
                               :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
+    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), :style => "display: none;",
                               :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
                               "\n".html_safe
     
@@ -384,13 +406,14 @@ module ApplicationHelper
  
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
+        "$j('##{checkboxes_id}').find('.actions').show();\n" +
         "$j('.#{checkboxes_id}_show').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', 'options index all');\n" + 
+          "$j('##{checkboxes_id}').find('.index').attr('class', 'options index all');\n" + 
           "$j('.#{checkboxes_id}_hide').show();\n" +
           "$j('.#{checkboxes_id}_show').hide();\n" +
         "});" + "\n" + 
         "$j('.#{checkboxes_id}_hide').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', '#{css_class}');\n" +
+          "$j('##{checkboxes_id}').find('.index').attr('class', '#{css_class}');\n" +
           "$j('.#{checkboxes_id}_show').show();\n" +
           "$j('.#{checkboxes_id}_hide').hide();\n" +
         "});\n" +
@@ -400,11 +423,9 @@ module ApplicationHelper
     toggle = content_tag(:p, 
       (options[:no_show] ? "".html_safe : toggle_show) + 
       toggle_hide + 
-      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions")
+      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions", :style => "display: none;")
   end
   
-  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes) I suspect this is a listbox
-  #
   # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
   # attribute: the attribute being set 
@@ -461,29 +482,25 @@ module ApplicationHelper
       if options[:extra_info_method]
         checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
-      content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
+      content_tag(:li, checkbox_and_label)
     end.join("\n").html_safe
-    checkboxes_ul = content_tag(:ul, checkboxes)
-
-    # reset the tiger striping
-    reset_cycle("tigerstriping")
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
     css_class = checkbox_section_css_class(size, options[:concise])
-    top_toggle = "".html_safe
-    bottom_toggle = "".html_safe
+    checkboxes_ul = content_tag(:ul, checkboxes, :class => css_class)
+
+    toggle = "".html_safe
     if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
-      top_toggle = checkbox_section_toggle(checkboxes_id, size)
-      bottom_toggle = checkbox_section_toggle(checkboxes_id, size, :no_show => true, :no_js => true)
+      toggle = checkbox_section_toggle(checkboxes_id, size)
     end
       
-    # We wrap the whole thing in a div module with the classes
-    return content_tag(:div, top_toggle + checkboxes_ul + bottom_toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
+    # We wrap the whole thing in a div
+    return content_tag(:div, checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id)
   end
   
   def checkbox_section_css_class(size, concise=false)
-    css_class = "options index"
+    css_class = "options index group"
     
     if concise
       css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
@@ -506,11 +523,26 @@ module ApplicationHelper
   
   def submit_button(form=nil, button_text=nil)
     button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
-    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=>"submit")
+    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=> "submit")
   end
     
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
+  end
+  
+  # Cache fragments of a view if +condition+ is true
+  #
+  # <%= cache_if admin?, project do %>
+  # <b>All the topics on this project</b>
+  # <%= render project.topics %>
+  # <% end %>
+  def cache_if(condition, name = {}, options = nil, &block)
+    if condition
+      cache(name, options, &block)
+    else
+      yield
+    end
+    nil
   end
     
 end # end of ApplicationHelper

@@ -475,6 +475,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -528,6 +530,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -662,10 +668,25 @@
       <span class="ruby-comment"># newly canonical tag</span>
       <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">add_to_autocomplete</span>
     <span class="ruby-keyword">else</span>
+      <span class="ruby-comment"># decanonicalised tag</span>
       <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">remove_from_autocomplete</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># if type has changed, expire the tag's parents' children cache (it stores the children's type)</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type_changed?</span>
+    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent_tag</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">expire_fragment</span>(<span class="ruby-node">&quot;views/tags/#{parent_tag.id}/children&quot;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
   <span class="ruby-identifier">update_tag_nominations</span>(<span class="ruby-identifier">tag</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">name_changed?</span>
+    <span class="ruby-comment"># canonical tag renamed: remove the old name from the autocomplete, add the current one</span>
+    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">remove_stale_from_autocomplete</span>
+    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">add_to_autocomplete</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- after_update-source -->
           
@@ -693,7 +714,7 @@
 
           
           <div class="method-source-code" id="before_destroy-source">
-            <pre><span class="ruby-comment"># File app/sweepers/tag_sweeper.rb, line 23</span>
+            <pre><span class="ruby-comment"># File app/sweepers/tag_sweeper.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">before_destroy</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-constant">Tag</span><span class="ruby-operator">::</span><span class="ruby-constant">USER_DEFINED</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical</span>
     <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">remove_from_autocomplete</span>

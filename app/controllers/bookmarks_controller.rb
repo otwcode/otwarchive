@@ -1,12 +1,14 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
+  before_filter :load_owner, :only => [ :index ]
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
   before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]
@@ -27,103 +29,58 @@ class BookmarksController < ApplicationController
   end
 
   def search
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      begin
-        page = params[:page] || 1
-        errors, @bookmarks = Query.search_with_sphinx(Bookmark, @query, page)
-        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
-      rescue Riddle::ConnectionError
-        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+    @languages = Language.default_order
+    options = params[:bookmark_search] || {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    options[:show_private] = false    
+    options[:show_restricted] = current_user.present?
+    @search = BookmarkSearch.new(options)
+    @page_subtitle = ts("Search Bookmarks")
+    if params[:bookmark_search].present? && params[:edit_search].blank?
+      if @search.query.present?
+        @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
+      @bookmarks = @search.search_results
+      render 'search_results'
     end
-  end  
+  end
 
-  
-  # aggregates bookmarks for the same bookmarkable
-  # note, these do not show private bookmarks
-  # GET    /bookmarks
-  # GET    /tags/:tag_id/bookmarks
-  # non aggregates - show all bookmarks, even duplicates and private
-  # GET    /collections/:collection_id/bookmarks
-  # GET    /users/:user_id/pseuds/:pseud_id/bookmarks
-  # GET    /users/:user_id/bookmarks
-  # GET    /works/:work_id/bookmarks
-  # GET    /external_works/:external_work_id/bookmarks
-  # GET    /series/:series/bookmarks
-  # TODO needs a complete overhaul. using reject is a performance killer
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
-    end
-    if params[:user_id]
-      # @user is needed in the sidebar
-      owner = @user = User.find_by_login(params[:user_id])
-      @page_subtitle = ts("by ") + @user.login if @user
-      if params[:pseud_id] && @user
-        # @author is needed in the sidebar
-        owner = @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @page_subtitle = ts("by ") + @author.byline if @author
-      end
-    elsif params[:tag_id]
-      owner ||= Tag.find_by_name(params[:tag_id])
-      @page_subtitle = owner.name if owner
-    elsif @collection
-      @page_subtitle = @collection.title
-      owner ||= @collection # insufficient to filter out unapproved bookmarks, see below
+      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
     else
-      owner ||= @bookmarkable
-    end
-    if params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || params[:collection_id]
-      unless owner
-        # we have to manually trigger a 404 when we're using find_by_name
-        # otherwise the user gets a 500 error
-        raise ActiveRecord::RecordNotFound
+      if params[:bookmark_search].present?
+        options = params[:bookmark_search].dup
+      else
+        options = {}
       end
 
-      # Do not aggregate bookmarks on these pages
-      if params[:collection_id] && @collection
-        @bookmarks = Bookmark.in_collection(@collection)
-      else
-        @bookmarks= owner.bookmarks
-      end
+      options[:show_private] = (@user.present? && @user == current_user)
+      options[:show_restricted] = current_user.present?
 
-      if @user && @user == current_user
-        # can see all own bookmarks
-      elsif logged_in_as_admin?
-        @bookmarks = @bookmarks.visible_to_admin
-      elsif logged_in?
-        @bookmarks = @bookmarks.visible_to_registered_user
-      else
-        @bookmarks = @bookmarks.visible_to_all
-      end
-    else 
-      setflash; flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
-      if params[:tag_id]  # tag page
-        unless owner
-          raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      options.merge!(page: params[:page])      
+      @page_subtitle = index_page_title
+
+      if @owner.present?
+        if @admin_settings.disable_filtering?
+          @bookmarks = Bookmark.list_without_filters(@owner, options)
+        else
+          @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
+          results = @search.search_results
+          @bookmarks = @search.search_results
+          @facets = @bookmarks.facets
         end
-        @bookmarks = owner.bookmarks
-      else # main page
-        @most_recent_bookmarks = true
-        @bookmarks = Bookmark.recent.visible_to_user(current_user)
-        if params[:recs_only]
-          @page_subtitle = ts("recs")
+      elsif use_caching?
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
+          search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
+          results = search.search_results
+          @bookmarks = search.search_results.to_a
         end
-      end
-      if logged_in_as_admin?
-        @bookmarks = @bookmarks.visible_to_admin
-      elsif logged_in?
-        @bookmarks = @bookmarks.visible_to_registered_user
       else
-        @bookmarks = @bookmarks.visible_to_all
+        @bookmarks = Bookmark.latest.to_a
       end
     end
-    if params[:recs_only]
-      @bookmarks = @bookmarks.recs
-    end
-    @bookmarks = @bookmarks.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id
@@ -169,10 +126,12 @@ class BookmarksController < ApplicationController
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
     end
-    if @bookmarkable.save && @bookmark.save
-      setflash; flash[:notice] = ts('Bookmark was successfully created.')
-      redirect_to(@bookmark) and return
-    end 
+    if @bookmark.errors.empty?
+      if @bookmarkable.save && @bookmark.save
+        flash[:notice] = ts('Bookmark was successfully created.')
+        redirect_to(@bookmark) and return
+      end
+    end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
     render :action => "new" and return
   end
@@ -180,20 +139,63 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    if @bookmark.update_attributes(params[:bookmark])
-      setflash; flash[:notice] = ts("Bookmark was successfully updated.")
-      redirect_to(@bookmark) 
-    else
-      @bookmarkable = @bookmark.bookmarkable
-      render :action => :edit
+    new_collections = []
+    unapproved_collections = []
+    errors = []
+    params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+      collection = Collection.find_by_name(collection_name)
+      if @bookmark.collections.include?(collection)
+        next
+      elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
+        errors << ts("#{collection.title} is closed to new submissions.")
+      elsif @bookmark.add_to_collection(collection) && @bookmark.save
+        if @bookmark.approved_collections.include?(collection)
+          new_collections << collection
+        else
+          unapproved_collections << collection
+        end
+      else
+        errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!") 
+      end
     end
+
+    # messages to the user
+    unless errors.empty?
+      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+    end
+    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    unless new_collections.empty?
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
+                          :collections => new_collections.collect(&:title).join(", "))
+    end
+    unless unapproved_collections.empty?
+      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
+                                      :moderated => unapproved_collections.collect(&:title).join(", "))
+    end
+
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+
+    if errors.empty?
+      if @bookmark.update_attributes(params[:bookmark])
+        flash[:notice] = ts("Bookmark was successfully updated.")
+        redirect_to(@bookmark)
+      end
+    else
+      @bookmark.update_attributes(params[:bookmark])
+      @bookmarkable = @bookmark.bookmarkable
+      render :edit and return
+    end
+  end
+
+  def confirm_delete
   end
 
   # DELETE /bookmarks/1
   # DELETE /bookmarks/1.xml
   def destroy
     @bookmark.destroy
-    setflash; flash[:notice] = ts("Bookmark was successfully deleted.")
+    flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
   end
 
@@ -214,6 +216,49 @@ class BookmarksController < ApplicationController
   end
   def hide_recent
     @bookmarkable = @bookmark.bookmarkable
+  end
+
+  protected
+
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id].present?
+        @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+      end
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end
+      unless @tag.canonical?
+        if @tag.merger.present?
+          redirect_to tag_bookmarks_path(@tag.merger) and return
+        else
+          redirect_to tag_path(@tag) and return
+        end
+      end
+    end
+    @owner = @bookmarkable || @pseud || @user || @collection || @tag
+  end
+
+  def index_page_title
+    if @owner.present?
+      owner_name = case @owner.class.to_s
+                   when 'Pseud'
+                     @owner.name
+                   when 'User'
+                     @owner.login
+                   when 'Collection'
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      "#{owner_name} - Bookmarks".html_safe
+    else
+      "Latest Bookmarks"
+    end
   end
 
 end

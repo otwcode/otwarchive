@@ -24,25 +24,19 @@ class AbuseReportsController < ApplicationController
       if @abuse_report.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
+        if ArchiveConfig.PERFORM_DELIVERIES == true && %w(staging production).include?(Rails.env)
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => ArchiveConfig.BUGS_USER, :password => ArchiveConfig.BUGS_PASSWORD)
           site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
         end
         # Email bug to feedback email address
         AdminMailer.abuse_report(@abuse_report.id).deliver
-        if params[:cc_me]
-          # If user requests, and supplies email address, email them a copy of their message
-          if !@abuse_report.email.blank?
-            UserMailer.abuse_report(@abuse_report.id).deliver
-          else
-            setflash; flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
-            format.html { render :action => "new" }
-          end
+        # The user requested a copy of the Abuse Report, send it to them
+        if @abuse_report.email_copy?
+          UserMailer.abuse_report(@abuse_report.id).deliver
         end
-        setflash; flash[:notice] = t('successfully_sent', :default => 'Your abuse report was sent to the Abuse team.')
+        flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
         format.html { redirect_to '' }
       else
-        setflash; flash[:error] = t('failure_send', :default => 'Sorry, your abuse report could not be sent - please try again!')
         format.html { render :action => "new" }
       end
     end

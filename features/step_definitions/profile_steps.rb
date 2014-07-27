@@ -1,7 +1,7 @@
 Given /^I want to edit my profile$/ do
   visit user_profile_path(User.current_user)
   click_link("Edit My Profile")
-  And %{I should see "Edit My Profile"}
+  step %{I should see "Edit My Profile"}
 end
 
 
@@ -30,7 +30,7 @@ end
 
 
 When /^I enter an incorrect password$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "passw")
@@ -39,7 +39,7 @@ end
 
 
 When /^I change my email$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "password")
@@ -49,13 +49,13 @@ end
 
 When /^I view my profile$/ do
   visit user_path(User.current_user)
-  Then %{I should see "Dashboard"}
+  step %{I should see "Dashboard"}
   click_link("Profile")
 end
 
 		
 When /^I enter an invalid email$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "bob.bob.bob")
   fill_in("Confirm New Email", :with => "bob.bob.bob")
   fill_in("Password", :with => "password")
@@ -64,9 +64,9 @@ end
 
 
 When /^I enter a duplicate email$/ do
-  user = Factory.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
+  user = FactoryGirl.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
   user.activate
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "foo@ao3.org")
   fill_in("Confirm New Email", :with => "foo@ao3.org")
   fill_in("Password", :with => "password")
@@ -75,7 +75,9 @@ end
 
 
 When /^I enter a birthdate that shows I am under age$/ do
-  select("1999", :from => "profile_attributes[date_of_birth(1i)]")
+  time = Time.new
+  under_age_year = time.year - 13
+  select("#{under_age_year}", :from => "profile_attributes[date_of_birth(1i)]")
   select("December", :from => "profile_attributes[date_of_birth(2i)]")
   select("31", :from => "profile_attributes[date_of_birth(3i)]")
   click_button("Update")

@@ -485,6 +485,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -538,6 +540,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -632,7 +638,7 @@
 
           
           <div class="method-source-code" id="donate-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 22</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">donate</span>
   <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;donate&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -662,7 +668,7 @@
 
           
           <div class="method-source-code" id="first_login_help-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 26</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">first_login_help</span>
   <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;first_login_help&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -692,7 +698,7 @@
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 31</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@user_count</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">count</span>
   <span class="ruby-ivar">@work_count</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">count</span>
@@ -727,7 +733,7 @@
 
           
           <div class="method-source-code" id="site_map-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 17</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">site_map</span> 
   <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;site_map&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -757,7 +763,7 @@
 
           
           <div class="method-source-code" id="site_pages-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 42</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">site_pages</span>    
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">reload_routes!</span>
   <span class="ruby-identifier">page_routes</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">select</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">route</span><span class="ruby-operator">|</span>
@@ -822,7 +828,7 @@
 
           
           <div class="method-source-code" id="tos-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 7</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tos</span>
   <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;tos&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -852,7 +858,7 @@
 
           
           <div class="method-source-code" id="tos_faq-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 12</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tos_faq</span> 
   <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;tos_faq&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -889,7 +895,7 @@ fallback is just using the first object of a given class</p>
 
           
           <div class="method-source-code" id="get_id-source">
-            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 86</span>
+            <pre><span class="ruby-comment"># File app/controllers/home_controller.rb, line 87</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_id</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">classname</span>)
   <span class="ruby-keyword">begin</span>    
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">classname</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;person&quot;</span>

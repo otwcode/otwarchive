@@ -19,19 +19,19 @@
       <% if defined?(@page_title) %>
         <%= @page_title %>
       <% else %>
-        <%= ArchiveConfig.APP_NAME  %>
-        &raquo;
-        <%= controller.action_name=="index" ? "list" : controller.action_name.humanize.downcase %>
-        <%= controller.action_name=="index" ? controller.controller_name.humanize.downcase : controller.controller_name.singularize.humanize.downcase %>
         <% if defined?(@page_subtitle) %>
-          &raquo;
           <%= @page_subtitle %>
+        <% else %>
+          <%= controller.action_name=="index" ? "" : process_title(controller.action_name) %>
+          <%= controller.action_name=="index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>
         <% end %>
+        |
+        <%= ArchiveConfig.APP_NAME  %>
       <% end %>
     </title>
 
     <%= render :partial => 'layouts/includes' %>
-
+    <%= render 'layouts/phraseapp' %>
   </head>
 
   <body>
@@ -61,5 +61,6 @@
       </div>
       <%= render :partial => 'layouts/footer' %>
     </div>
+    <%= render :partial => 'layouts/javascripts' %>
   </body>
 </html>

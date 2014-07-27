@@ -1,4 +1,9 @@
 class Tag < ActiveRecord::Base
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+  include StringCleaner
+  include WorksOwner
 
   NAME = "Tag"
 
@@ -21,9 +26,13 @@ class Tag < ActiveRecord::Base
   def commentable_name
     self.name
   end
+
+  # For a tag, the commentable owners are the wranglers of the fandom(s)
   def commentable_owners
+    # if the tag is a fandom, grab its wranglers or the wranglers of its canonical merger
     if self.is_a?(Fandom)
-      self.wranglers
+      self.canonical? ? self.wranglers : (self.merger_id ? self.merger.wranglers : [])
+    # if the tag is any other tag, try to grab all the wranglers of all its parent fandoms, if applicable
     else
       begin
         self.fandoms.collect {|f| f.wranglers}.compact.flatten.uniq
@@ -32,6 +41,8 @@ class Tag < ActiveRecord::Base
       end
     end
   end
+
+  attr_accessor :fix_taggings_count
 
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
@@ -46,15 +57,15 @@ class Tag < ActiveRecord::Base
               :class_name => "FilterTagging",
               :foreign_key => 'filter_id',
               :conditions => "inherited = 0"
-  has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
+  # not used anymore? has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
-  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
+  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :update_meta_filters
   has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
   has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
@@ -85,12 +96,24 @@ class Tag < ActiveRecord::Base
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+
+  validates_presence_of :sortable_name
     
   validate :unwrangleable_status
   def unwrangleable_status
     if unwrangleable? && (canonical? || merger_id.present?)
       self.errors.add(:unwrangleable, "can't be set on a canonical or synonymized tag.")
     end
+
+    if unwrangleable? && is_a?(UnsortedTag)
+      self.errors.add(:unwrangleable, "can't be set on an unsorted tag.")
+    end
+  end
+
+  before_update :remove_index_for_type_change, if: :type_changed?
+  def remove_index_for_type_change
+    @destroyed = true
+    tire.update_index
   end
 
   before_validation :check_synonym
@@ -120,6 +143,13 @@ class Tag < ActiveRecord::Base
     self.name = name.squish if self.name
   end
 
+  before_validation :set_sortable_name
+  def set_sortable_name
+    if sortable_name.blank?
+      self.sortable_name = remove_articles_from_string(self.name)
+    end
+  end
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?
@@ -132,11 +162,24 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  before_save :check_type_changes, :if => :type_changed?
+  def check_type_changes
+    # if the tag used to be a Fandom and is now something else, no parent type will fit, remove all parents
+    # if the tag had a type and is now an UnsortedTag, it can't be put into fandoms, so remove all parents
+    if self.type_was == "Fandom" || self.type == "UnsortedTag" && !self.type_was.nil?
+      self.parents = []
+    # if the tag has just become a Fandom, it needs the Uncategorized media added to it manually, and no other parents (the after_save hook on Fandom won't take effect, since it's not a Fandom yet)
+    elsif self.type == "Fandom" && !self.type_was.nil?
+      self.parents = [Media.uncategorized]
+    end
+  end
+
   scope :id_only, select("tags.id")
 
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
   scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
   scope :unwrangleable, where(:unwrangleable => true)
 
@@ -168,7 +211,7 @@ class Tag < ActiveRecord::Base
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
 
   scope :by_popularity, order('taggings_count DESC')
-  scope :by_name, order('name ASC')
+  scope :by_name, order('sortable_name ASC')
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
@@ -265,22 +308,45 @@ class Tag < ActiveRecord::Base
     where('children_tags.id IN (?)', relationships.collect(&:id))
   }
 
-  scope :in_challenge, lambda {|collection|
-    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
-           INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
-           INNER JOIN prompts ON (prompts.tag_set_id = tag_sets.id OR prompts.optional_tag_set_id = tag_sets.id)
-           INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)").
-    where("challenge_signups.collection_id = ?", collection.id)
-  }
+  # Get the tags for a challenge's signups, checking both the main tag set
+  # and the optional tag set for each prompt
+  def self.in_challenge(collection, prompt_type=nil)
+    ['', 'optional_'].map { |tag_set_type|
+      join = "INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
+        INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
+        INNER JOIN prompts ON (prompts.#{tag_set_type}tag_set_id = tag_sets.id)
+        INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)"
+
+      tags = self.joins(join).where("challenge_signups.collection_id = ?", collection.id)
+      tags = tags.where("prompts.type = ?", prompt_type) if prompt_type.present?
+      tags
+    }.flatten.compact.uniq
+  end
 
   scope :requested_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Request'")
+    in_challenge(collection, 'Request')
   }
 
   scope :offered_in_challenge, lambda {|collection|
-    in_challenge(collection).where("prompts.type = 'Offer'")
+    in_challenge(collection, 'Offer')
   }
+  
+  # Resque
+  
+  @queue = :utilities
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
 
+  # We can pass this any Tag instance method that we want to run later.
+  def async(method, *args)
+    if Rails.env.test?
+      send(method, *args)
+    else
+      Resque.enqueue(Tag, id, method, *args)
+    end
+  end
 
   # Class methods
 
@@ -380,7 +446,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -390,11 +456,20 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
-    
+  
+  def remove_stale_from_autocomplete
+    super
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+      end
+    end
+  end
+
   def self.parse_autocomplete_value(current_autocomplete_value)
     current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
   end
@@ -417,10 +492,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -447,7 +522,8 @@ class Tag < ActiveRecord::Base
     if new_name && new_name.is_a?(String)
       new_name.squish!
       tag = Tag.find_by_name(new_name)
-      if tag && tag.class == self
+      # if the tag exists and has the proper class, or it is an unsorted tag and it can be sorted to the self class
+      if tag && (tag.class == self || tag.class == UnsortedTag && tag = tag.recategorize(self.to_s))
         tag
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
@@ -486,8 +562,83 @@ class Tag < ActiveRecord::Base
     name.downcase <=> another_tag.name.downcase
   end
 
+  # only allow changing the tag type for unwrangled tags not used in any tag sets or on any works
+  def can_change_type?
+    self.unwrangled? && self.set_taggings.count == 0 && self.works.count == 0
+  end
+
+  # tags having their type changed need to be reloaded to be seen as an instance of the proper subclass
+  def recategorize(new_type)
+    self.update_attribute(:type, new_type)
+    # return a new instance of the tag, with the correct class
+    Tag.find(self.id)
+  end
+
   #### FILTERING ####
 
+  # Usage is either:
+  # reindex_taggables
+  # 
+  # or:
+  # reindex taggables do 
+  #   # some other code
+  # end
+  #
+  # If you use the second method, what will happen is that the ids of the works and 
+  # bookmarks that need to be re-indexed for the search engine will first be saved,
+  # then the code will be executed, and then the works/bookmarks will be sent off for
+  # reindexing. (that's what the "yield" does -- it yields to the block you pass in)
+  # 
+  # Otherwise, if you removed the works from this tag in the code, you wouldn't have 
+  # a way of finding their ids to reindex them. :)
+  def reindex_taggables
+    work_ids = all_filtered_work_ids
+    bookmark_ids = all_bookmark_ids
+    yield if block_given?
+    reindex_all_works(work_ids)
+    reindex_all_bookmarks(bookmark_ids)
+  end
+
+  # reindex all works that are tagged with this tag or its subtags or synonyms (the filter_taggings table)
+  # if work_ids are passed in, those will be used (eg if we need to save the ids before making changes, then
+  # reindex after the changes are done)
+  def reindex_all_works(work_ids = [])
+    if work_ids.empty? 
+      work_ids = all_filtered_work_ids
+    end
+    RedisSearchIndexQueue.queue_works(work_ids, priority: :low)
+  end
+
+  # In the case of works, the filter_taggings table already collects all the things tagged
+  # by this tag or its subtags/synonyms
+  def all_filtered_work_ids
+    # all synned and subtagged works should be under filter taggings
+    # add in the direct works for any noncanonical tags    
+    (self.filter_taggings.where(:filterable_type => "Work").value_of(:filterable_id) +      
+      self.works.value_of(:id)).uniq
+  end
+  
+  # Reindex all bookmarks (bookmark_ids argument works as above)
+  def reindex_all_bookmarks(bookmark_ids = [])
+    if bookmark_ids.empty?
+      bookmark_ids = all_bookmark_ids
+    end
+    RedisSearchIndexQueue.queue_bookmarks(bookmark_ids, priority: :low)
+  end
+  
+  # We call this to get the ids of all the bookmarks that are tagged by this tag or its subtags
+  # We use ids rather than actual bookmark objects to avoid passing around a lot of instantiated AR objects around 
+  # Per discussion with TW chair Emilie, I'm limiting depth of the recursion to 10 here so we don't get stuck in some endlessly deep loop
+  # That means that if we ever have subtags nested more than 10 deep, the bookmarks will NOT get reindexed but we shouldn't
+  # have that much nesting anyway -- current max is 4 we think
+  def all_bookmark_ids(depth = 0)
+    return [] if depth == 10
+    self.bookmarks.value_of(:id) + 
+      self.sub_tags.collect {|subtag| subtag.all_bookmark_ids(depth+1)}.flatten + 
+      self.mergers.collect {|syn| syn.all_bookmark_ids(depth+1)}.flatten
+  end
+  
+  
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
     Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
@@ -523,8 +674,8 @@ class Tag < ActiveRecord::Base
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
 
-  before_save :update_filters_for_canonical_change
-  before_save :update_filters_for_merger_change
+  before_update :update_filters_for_canonical_change
+  before_update :update_filters_for_merger_change
 
   # If a tag was not canonical but is now, it needs new filter_taggings
   # If it was canonical but isn't anymore, we need to change or remove
@@ -532,14 +683,25 @@ class Tag < ActiveRecord::Base
   def update_filters_for_canonical_change
     if self.canonical_changed?
       if self.canonical?
-        self.add_filter_taggings
+        self.async(:add_filter_taggings)
       elsif self.merger && self.merger.canonical?
-        self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
-        self.reset_filter_count
+        self.async(:move_filter_taggings_to_merger)
       else
-        self.remove_filter_taggings
+        self.async(:remove_filter_taggings)
       end
     end
+  end
+  
+  # this tag was canonical and now isn't anymore
+  # move the filter taggings from this tag to its new synonym and
+  # update the search index for the works under this tag and its subtags 
+  def move_filter_taggings_to_merger
+    # we pass the code to be done to reindex taggables so the work and bookmark ids that will need to be reindexed
+    # get saved BEFORE we change the merger in all the filters!
+    reindex_taggables do
+      self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+    end
+    self.async(:reset_filter_count)
   end
 
   # If a tag has a new merger, add to the filter_taggings for that merger
@@ -554,17 +716,20 @@ class Tag < ActiveRecord::Base
         self.merger = nil
       end
       if self.merger && self.merger.canonical?
-        self.add_filter_taggings
+        self.async(:add_filter_taggings)
       end
       old_merger = Tag.find_by_id(self.merger_id_was)
       if old_merger && old_merger.canonical?
-        self.remove_filter_taggings(old_merger)
+        self.async(:remove_filter_taggings, old_merger.id)
       end
     end
   end
 
   # Add filter taggings for a given tag
+  # This is currently called only if this tag has just become canonical 
   def add_filter_taggings
+    # the "filter" method gets either this tag itself or its merger -- in practice will always be this tag because
+    # this method only gets called when this tag is canonical and therefore cannot have a merger
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
       # we collect tags for resetting count so that it's only done once after we've added all filters to works
@@ -590,6 +755,11 @@ class Tag < ActiveRecord::Base
           end
         end
       end
+      
+      # make sure that all the works and bookmarks under this tag get reindexed
+      # for filtering/searching
+      async(:reindex_taggables)
+      
       tags_that_need_filter_count_reset.each do |tag_to_reset|
         tag_to_reset.reset_filter_count
       end
@@ -599,43 +769,60 @@ class Tag < ActiveRecord::Base
   # Remove filter taggings for a given tag
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
-  def remove_filter_taggings(old_filter=nil)
-    if old_filter
-      # An old merger of a tag needs to be removed
-      # This means we remove the old merger itself and all its meta tags unless they
-      # should remain because of other existing tags of the work (or because they are
-      # also meta tags of the new merger)
-      self.works.each do |work|
-        filters_to_remove = [old_filter] + old_filter.meta_tags
-        filters_to_remove.each do |filter_to_remove|
-          if work.filters.include?(filter_to_remove)
-            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
-            # meta. If any of these or its mergers (synonyms) are tags of the work, the
-            # filter_to_remove remains
-            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
-            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
-            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
-            # don't include self because at this point in time (before the save) self
-            # is still in the list of submergers from when it was a synonym to the old filter
-            remaining_tags = work.tags - [self]
-            # instead we add the new merger of self (if there is one) as the relevant one to check
-            remaining_tags += [self.merger] unless self.merger.nil?
-            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-              work.filters.delete(filter_to_remove)
-              filter_to_remove.reset_filter_count
-            else # we should keep filter_to_remove, but check if inheritence needs to be updated
-              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
-              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
-                ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
-                ft.update_attribute(:inherited, true)
+  def remove_filter_taggings(old_filter_id=nil)
+    # we're going to have to reindex all the taggables that WERE attached to this work after 
+    # we do this
+    reindex_taggables do     
+      if old_filter_id
+        old_filter = Tag.find(old_filter_id)
+        # An old merger of a tag needs to be removed
+        # This means we remove the old merger itself and all its meta tags unless they
+        # should remain because of other existing tags of the work (or because they are
+        # also meta tags of the new merger)
+        self.works.each do |work|
+          filters_to_remove = [old_filter] + old_filter.meta_tags
+          filters_to_remove.each do |filter_to_remove|
+            if work.filters.include?(filter_to_remove)
+              # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
+              # meta. If any of these or its mergers (synonyms) are tags of the work, the
+              # filter_to_remove remains
+              all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+              sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+              all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+              # don't include self because at this point in time (before the save) self
+              # is still in the list of submergers from when it was a synonym to the old filter
+              remaining_tags = work.tags - [self]
+              # instead we add the new merger of self (if there is one) as the relevant one to check
+              remaining_tags += [self.merger] unless self.merger.nil?
+              if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+                work.filter_taggings.where(filter_id: filter_to_remove).destroy_all
+                filter_to_remove.reset_filter_count
+              else # we should keep filter_to_remove, but check if inheritence needs to be updated
+                direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+                if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+                  ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                  ft.update_attribute(:inherited, true)
+                end
               end
             end
           end
         end
+      else
+        self.filter_taggings.destroy_all
+        self.reset_filter_count
       end
-    else
-      self.filter_taggings.destroy_all
-      self.reset_filter_count
+    end
+  end
+
+  # Add filter taggings to this tag's works for one of its meta tags
+  def inherit_meta_filters(meta_tag_id)
+    meta_tag = Tag.find_by_id(meta_tag_id)
+    return unless meta_tag.present?
+    self.filtered_works.each do |work|        
+      unless work.filters.include?(meta_tag)
+        work.filter_taggings.create!(:inherited => true, :filter_id => meta_tag.id)
+        RedisSearchIndexQueue.reindex(work, priority: :low)
+      end
     end
   end
 
@@ -708,13 +895,14 @@ class Tag < ActiveRecord::Base
     taglist.reject {|tid| tid.blank?}.each do |tag_id|
       tag_to_remove = Tag.find(tag_id)
       if tag_to_remove
-        self.remove_association(tag_to_remove)
+        self.async(:remove_association, tag_to_remove.id)
       end
     end
   end
   
   # Determine how two tags are related and divorce them from each other
-  def remove_association(tag)
+  def remove_association(tag_id)
+    tag = Tag.find(tag_id)
     if tag.class == self.class
       if self.mergers.include?(tag)
         tag.update_attributes(:merger_id => nil)
@@ -730,12 +918,20 @@ class Tag < ActiveRecord::Base
         tag.parents.delete(self)
       end
     end
+    tag.touch
+    self.touch
+  end
+  
+  # Making this asynchronous
+  def update_meta_filters(meta_tag)
+    async(:remove_meta_filters, meta_tag.id)
   end
 
   # When a meta tagging relationship is removed, things filter-tagged with the meta tag
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
-  def remove_meta_filters(meta_tag)
+  def remove_meta_filters(meta_tag_id)
+    meta_tag = Tag.find(meta_tag_id)
     # remove meta tag from this tag's sub tags
     self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
     # remove inherited meta tags from this tag and all of its sub tags
@@ -751,29 +947,35 @@ class Tag < ActiveRecord::Base
       to_remove.each do |tag|
         if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
           unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
-            work.filters.delete(tag)
+            work.filter_taggings.where(filter_id: tag.id).destroy_all
+            RedisSearchIndexQueue.reindex(work, priority: :low)
           end
         end
       end
     end
+    meta_tag.update_works_index_timestamp!
   end
 
   def remove_sub_filters(sub_tag)
-    sub_tag.remove_meta_filters(self)
+    sub_tag.update_meta_filters(self)
   end
 
   # If we're making a tag non-canonical, we need to update its synonyms and children
   before_update :check_canonical
   def check_canonical
     if self.canonical_changed? && !self.canonical?
-      self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
-      self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
-      self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
-      self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
+      self.async(:remove_canonical_associations)
     elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
     true
+  end
+  
+  def remove_canonical_associations
+    self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
+    self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
+    self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
+    self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
   end
 
   attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
@@ -821,6 +1023,10 @@ class Tag < ActiveRecord::Base
     self.merger.name if self.merger
   end
 
+  # Make this tag a synonym of another tag -- tag_string is the name of the other tag (which should be canonical)
+  # NOTE for potential confusion
+  # "merger" is the canonical tag of which this one will be a synonym
+  # "mergers" are the tags which are (currently) synonyms of THIS one
   def syn_string=(tag_string)
     if tag_string.blank?
       self.merger_id = nil
@@ -830,7 +1036,7 @@ class Tag < ActiveRecord::Base
         if new_merger && new_merger == self
           self.errors.add(:base, tag_string + " is considered the same as " + self.name + " by the database.")
         elsif new_merger && !new_merger.canonical?
-          self.errors.add(:base, new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+          self.errors.add(:base, '<a href="/tags/' + new_merger.to_param + '/edit">' + new_merger.name + '</a> is not a canonical tag. Please make it canonical before adding synonyms to it.')
         elsif new_merger && new_merger.class != self.class
           self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
         elsif !new_merger
@@ -842,23 +1048,36 @@ class Tag < ActiveRecord::Base
         if new_merger && self.errors.empty?
           self.canonical = false
           self.merger_id = new_merger.id
-          ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
-          if new_merger.is_a?(Fandom)
-            (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
-          else
-            (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
-          end
-          self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-          self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
-          self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
-          self.children = []
-          self.meta_tags = []
-          self.sub_tags = []
+          async(:add_merger_associations)
         end
       end
     end
   end
 
+
+  # When we make this tag a synonym of another canonical tag, we want to move all the associations this tag has
+  # (subtags, meta tags, etc) over to that canonical tag. 
+  # We also need to make sure that the works under those other tags get reindexed
+  def add_merger_associations
+    # we want to pass this whole block to reindex_taggables so we get the right work_ids 
+    reindex_taggables do 
+      new_merger = self.merger
+      return unless new_merger.present?
+      ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
+      if new_merger.is_a?(Fandom)
+        (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
+      else
+        (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
+      end
+      self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+      self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
+      self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+      self.children = []
+      self.meta_tags = []
+      self.sub_tags = []
+    end
+  end
+  
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
@@ -883,17 +1102,30 @@ class Tag < ActiveRecord::Base
     series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
+  
+  #################################
+  ## SEARCH #######################
+  #################################
 
-  # Index for Thinking Sphinx
-  define_index do
 
-    # fields
-    indexes :name, :sortable => true
-    indexes :type, :sortable => true
-    has canonical
-
-    # properties
-#    set_property :delta => :delayed
+  mapping do
+    indexes :id,           :index    => :not_analyzed
+    indexes :name,         :analyzer => 'snowball', :boost => 100
+    indexes :type
+    indexes :canonical,    :type     => :boolean
   end
+  
+  def self.search(options={})
+    tire.search(page: options[:page], per_page: 50, type: nil, load: true) do
+      query do
+        boolean do
+          must { string options[:name], default_operator: "AND" } if options[:name].present?
+          must { term '_type', options[:type].downcase } if options[:type].present?
+          must { term :canonical, 'T' } if options[:canonical].present?
+        end
+      end
+    end
+  end  
 
 end
+

@@ -2,7 +2,8 @@ class AdminMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
-  default :from => ArchiveConfig.RETURN_ADDRESS
+  helper :mailer
+  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
@@ -11,7 +12,7 @@ class AdminMailer < ActionMailer::Base
     @comment = abuse_report.comment
     mail(
       :to => ArchiveConfig.ABUSE_ADDRESS,
-      :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Admin Abuse Report"
+      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
     )
   end
 
@@ -22,7 +23,7 @@ class AdminMailer < ActionMailer::Base
     mail(
       :from => feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
       :to => ArchiveConfig.FEEDBACK_ADDRESS,
-      :subject => "#{ArchiveConfig.APP_SHORT_NAME}" + ": Support - " + feedback.summary,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - " + feedback.summary,
     )
   end
 
@@ -37,26 +38,26 @@ class AdminMailer < ActionMailer::Base
     end
     mail(
       :to => ArchiveConfig.WEBMASTER_ADDRESS,
-      :subject  => "#{ArchiveConfig.APP_SHORT_NAME}" + " - " + "Admin Archive Notification Sent"
+      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
     )
   end
   
   # Sends email to an admin when a new comment is created on an admin post
-  def comment_notification(admin_id, comment_id)
-    admin = Admin.find(admin_id)
+  def comment_notification(comment_id)
+    # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      :to => admin.email,
+      :to => ArchiveConfig.ADMIN_ADDRESS,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
   # Sends email to an admin when a comment on an admin post is edited
-  def edited_comment_notification(admin_id, comment_id)
-    admin = Admin.find(admin_id)
+  def edited_comment_notification(comment_id)
+    # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      :to => admin.email,
+      :to => ArchiveConfig.ADMIN_ADDRESS,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end

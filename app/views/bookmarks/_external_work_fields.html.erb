@@ -50,11 +50,10 @@
   <legend>Tag</legend>
   <p>
     <%= ts("Author's Tags (comma separated, %{max} characters per tag). Only a fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
-    <%= link_to_help "tagging-help" %>
   </p>
   <dl>
     <dt class="required">
-      <%= ew.label :fandom_string, Fandom::NAME.pluralize %>
+      <%= ew.label :fandom_string, Fandom::NAME.pluralize %>*  <%= link_to_help "fandom-help" %>
     </dt>
     <dd title="fandom required">
       <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
@@ -66,21 +65,21 @@
       <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
     </dd>
     <dt>
-      <%= ew.label :category_string, Category::NAME %>
+      <%= ew.label :category_string, Category::NAME %> <%= link_to_help "categories-help" %>
     </dt>
     <dd>
-      <%= ew.collection_select(:category_string, Category.canonical.by_name, :name, :name, {:include_blank => true}) %>
+      <%= ew.collection_select(:category_string, Category.canonical.by_name.sort, :name, :name, {:include_blank => true}) %>
     </dd>
     <dt>
-      <%= ew.label :relationship_string, Relationship::NAME.pluralize %>
+      <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>
     </dt>
-    <dd title-"relationship">
+    <dd title="relationships">
       <%= ew.text_field :relationship_string, autocomplete_options('relationship_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
     <dt>
-      <%= ew.label :character_string, Character::NAME.pluralize %>
+      <%= ew.label :character_string, Character::NAME.pluralize %> <%= link_to_help "characters-help" %>
     </dt>
-    <dd title="character">
+    <dd title="characters">
       <%= ew.text_field :character_string, autocomplete_options('character_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
   </dl>

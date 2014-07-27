@@ -49,6 +49,9 @@ class ChallengeSignup < ActiveRecord::Base
   scope :order_by_date, order("updated_at DESC")
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
+  
+  scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
+  scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
 
   ### VALIDATION
 
@@ -176,13 +179,7 @@ class ChallengeSignup < ActiveRecord::Base
 
   def self.generate_summary_tags(collection)
     tag_type = collection.challenge.topmost_tag_type
-    summary_tags = tag_type.classify.constantize.in_challenge(collection).
-                                                 select("tags.id, tags.name,
-                                                         SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests,
-                                                         SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
-                                                 group('tags.id').
-                                                 having('requests > 0').
-                                                 order('offers, requests DESC, tags.name')
+    summary_tags = ChallengeSignupSummary.new(collection).summary
 
     return [tag_type, summary_tags]
   end

@@ -541,6 +541,8 @@
   
     <li><a href="./SkinsHelper.html">SkinsHelper</a>
   
+    <li><a href="./StatCounter.html">StatCounter</a>
+  
     <li><a href="./StaticSweeper.html">StaticSweeper</a>
   
     <li><a href="./StatsController.html">StatsController</a>
@@ -594,6 +596,10 @@
     <li><a href="./TranslationsController.html">TranslationsController</a>
   
     <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UnsortedTag.html">UnsortedTag</a>
+  
+    <li><a href="./UnsortedTagsController.html">UnsortedTagsController</a>
   
     <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
   
@@ -688,10 +694,9 @@
 
           
           <div class="method-source-code" id="abuse_report-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 298</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 299</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">abuse_report</span>(<span class="ruby-identifier">report_id</span>)
   <span class="ruby-identifier">report</span> = <span class="ruby-constant">AbuseReport</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">report_id</span>)
-  <span class="ruby-identifier">setup_email_without_name</span>(<span class="ruby-identifier">report</span>.<span class="ruby-identifier">email</span>)
   <span class="ruby-ivar">@url</span> = <span class="ruby-identifier">report</span>.<span class="ruby-identifier">url</span>
   <span class="ruby-ivar">@comment</span> = <span class="ruby-identifier">report</span>.<span class="ruby-identifier">comment</span>
   <span class="ruby-identifier">mail</span>(
@@ -725,7 +730,7 @@
 
           
           <div class="method-source-code" id="activation-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 164</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 165</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">activation</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-identifier">mail</span>(
@@ -759,7 +764,7 @@
 
           
           <div class="method-source-code" id="archive_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 109</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">archive_notification</span>(<span class="ruby-identifier">admin_login</span>, <span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">message</span>
@@ -795,7 +800,7 @@
 
           
           <div class="method-source-code" id="batch_subscription_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 67</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 68</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">batch_subscription_notification</span>(<span class="ruby-identifier">subscription_id</span>, <span class="ruby-identifier">entries</span>)
   <span class="ruby-ivar">@subscription</span> = <span class="ruby-constant">Subscription</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">subscription_id</span>)
   <span class="ruby-identifier">creation_entries</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">entries</span>)
@@ -852,7 +857,7 @@
 
           
           <div class="method-source-code" id="challenge_assignment_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 143</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 144</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_assignment_notification</span>(<span class="ruby-identifier">collection_id</span>, <span class="ruby-identifier">assigned_user_id</span>, <span class="ruby-identifier">assignment_id</span>)
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">collection_id</span>)
   <span class="ruby-ivar">@assigned_user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">assigned_user_id</span>)
@@ -889,7 +894,7 @@
 
           
           <div class="method-source-code" id="change_email-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 183</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 184</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">change_email</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">old_email</span>, <span class="ruby-identifier">new_email</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
               <span class="ruby-ivar">@old_email</span>= <span class="ruby-identifier">old_email</span>
@@ -925,7 +930,7 @@
 
           
           <div class="method-source-code" id="claim_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 46</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">claim_notification</span>(<span class="ruby-identifier">external_author_id</span>, <span class="ruby-identifier">claimed_work_ids</span>)
   <span class="ruby-identifier">external_author</span> = <span class="ruby-constant">ExternalAuthor</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">external_author_id</span>)
   <span class="ruby-ivar">@external_email</span> = <span class="ruby-identifier">external_author</span>.<span class="ruby-identifier">email</span>
@@ -961,7 +966,7 @@
 
           
           <div class="method-source-code" id="coauthor_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 196</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 197</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">coauthor_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">creation_id</span>, <span class="ruby-identifier">creation_class_name</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@creation</span> = <span class="ruby-identifier">creation_class_name</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">creation_id</span>)
@@ -996,7 +1001,7 @@
 
           
           <div class="method-source-code" id="collection_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 126</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 127</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_notification</span>(<span class="ruby-identifier">collection_id</span>, <span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>)
   <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">message</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">collection_id</span>)
@@ -1031,7 +1036,7 @@
 
           
           <div class="method-source-code" id="delete_signup_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 270</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 271</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_signup_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">challenge_signup</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-ivar">@signup</span> = <span class="ruby-identifier">challenge_signup</span>
@@ -1073,7 +1078,7 @@ refactor to make it asynchronous by passing the content in the method</p>
 
           
           <div class="method-source-code" id="delete_work_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 256</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 257</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_work_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">work</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-identifier">work</span>
@@ -1115,7 +1120,7 @@ make it asynchronous by passing the content in the method</p>
 
           
           <div class="method-source-code" id="edit_work_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 244</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 245</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_work_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">work</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-identifier">work</span>
@@ -1150,7 +1155,7 @@ make it asynchronous by passing the content in the method</p>
 
           
           <div class="method-source-code" id="feedback-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 287</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 288</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">feedback</span>(<span class="ruby-identifier">feedback_id</span>)
   <span class="ruby-identifier">feedback</span> = <span class="ruby-constant">Feedback</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">feedback_id</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">feedback</span>.<span class="ruby-identifier">email</span>
@@ -1324,7 +1329,7 @@ rescued TODO refactor to make it asynchronous</p>
 
           
           <div class="method-source-code" id="invitation-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 24</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">invitation</span>(<span class="ruby-identifier">invitation_id</span>)
   <span class="ruby-ivar">@invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">invitation_id</span>)
   <span class="ruby-ivar">@user_name</span> = (<span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">creator</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">creator</span>.<span class="ruby-identifier">login</span> <span class="ruby-operator">:</span> <span class="ruby-string">''</span>)
@@ -1360,7 +1365,7 @@ imported as part of a bulk import</p>
 
           
           <div class="method-source-code" id="invitation_to_claim-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 34</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">invitation_to_claim</span>(<span class="ruby-identifier">invitation_id</span>, <span class="ruby-identifier">archivist_login</span>)
   <span class="ruby-ivar">@invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">invitation_id</span>)
   <span class="ruby-ivar">@external_author</span> = <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">external_author</span>
@@ -1398,7 +1403,7 @@ friends</p>
 
           
           <div class="method-source-code" id="invite_increase_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 99</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">invite_increase_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">total</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@total</span> = <span class="ruby-identifier">total</span>
@@ -1433,7 +1438,7 @@ friends</p>
 
           
           <div class="method-source-code" id="mass_archive_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 120</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 121</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mass_archive_notification</span>(<span class="ruby-identifier">admin</span>, <span class="ruby-identifier">users</span>, <span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>)
   <span class="ruby-identifier">users</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">archive_notification</span>(<span class="ruby-identifier">admin</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>)
@@ -1465,7 +1470,7 @@ friends</p>
 
           
           <div class="method-source-code" id="potential_match_generation_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 135</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 136</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">potential_match_generation_notification</span>(<span class="ruby-identifier">collection_id</span>)
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">collection_id</span>)
   <span class="ruby-identifier">mail</span>(
@@ -1499,7 +1504,7 @@ friends</p>
 
           
           <div class="method-source-code" id="prompter_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 229</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 230</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">prompter_notification</span>(<span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">collection_id</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">work_id</span>)
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">collection_id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">collection_id</span>
@@ -1537,14 +1542,14 @@ friends</p>
 
           
           <div class="method-source-code" id="recipient_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 218</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 219</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">recipient_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">work_id</span>, <span class="ruby-identifier">collection_id</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">work_id</span>)
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">collection_id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">collection_id</span>
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}&quot;</span>
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}&quot;</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- recipient_notification-source -->
@@ -1574,7 +1579,7 @@ another work</p>
 
           
           <div class="method-source-code" id="related_work_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 206</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 207</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">related_work_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">related_work_id</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@related_work</span> = <span class="ruby-constant">RelatedWork</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">related_work_id</span>)
@@ -1611,7 +1616,7 @@ another work</p>
 
           
           <div class="method-source-code" id="reset_password-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 173</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 174</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reset_password</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">activation_code</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@password</span> = <span class="ruby-identifier">activation_code</span>
@@ -1646,12 +1651,12 @@ another work</p>
 
           
           <div class="method-source-code" id="signup_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 155</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 156</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">signup_notification</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-identifier">mail</span>(
     <span class="ruby-value">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>,
-    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Please activate your new account&quot;</span>
+    <span class="ruby-value">:subject</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation&quot;</span>
   )
 <span class="ruby-keyword">end</span></pre>
           </div><!-- signup_notification-source -->
@@ -1680,7 +1685,7 @@ another work</p>
 
           
           <div class="method-source-code" id="subscription_notification-source">
-            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 56</span>
+            <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">subscription_notification</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">subscription_id</span>, <span class="ruby-identifier">creation_id</span>, <span class="ruby-identifier">creation_class_name</span>)
   <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">user_id</span>)
   <span class="ruby-ivar">@subscription</span> = <span class="ruby-constant">Subscription</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">subscription_id</span>)

@@ -1,4 +1,3 @@
-<%= @user.login %>, <%= ts('The email associated with your account has been changed to') %>
-
-<%= @user.email%>
-
+<% content_for :message do %>
+  <%= style_bold(@user.login) %>, the email associated with your account has been changed to <%= style_email(@user.email) %>.
+<% end %>

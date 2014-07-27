@@ -1,13 +1,16 @@
-<h2>Prompt!</h2>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= ts("New Prompt") %></h2>
+<!--/descriptions-->
 
-<ul class="navigation actions" role="navigation">
-  <% if @prompt.challenge_signup %>
-    <li><%= link_to ts('Edit whole signup instead?'), edit_collection_signup_path(@collection, @prompt.challenge_signup) %></li>
-  <% end %>
-  <li><%= link_to ts('Back to %{title}', :title => @collection.title), @collection %></li>
-</ul>
+<!--subnav-->
+<% if @prompt.challenge_signup %>
+  <%= render "prompt_navigation" %>
+<% end %>
+<!--/subnav-->
 
+<!--main content-->
 <%= form_for @prompt, :as => :prompt, :url => collection_prompts_path(@collection), :html => {:method => :post} do |form| %>
   <%= render "prompt_form", :form => form, :required => true, :index => @index %>
   <%= submit_fieldset form %>
 <% end %>
+<!--/content-->
