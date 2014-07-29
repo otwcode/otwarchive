@@ -473,7 +473,7 @@ end
 Then /^I should see Battle 12 descriptions$/ do
   step %{I should see "Welcome to the meme" within "#intro"}
   step %{I should see "Sign-up: Open"}
-  step %{I should see "Sign-up closes:"}
+  step %{I should see "Sign-up Closes:"}
   step %{I should see "#{Time.now.year}" within ".collection .meta"}
   step %{I should see "What is this thing?" within "#faq"}
   step %{I should see "It is a comment fic thing" within "#faq"}

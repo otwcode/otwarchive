@@ -1,10 +1,10 @@
 <!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
-<li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb group" role="article">
+<li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% cache("collection-blurb-#{collection.id}") do %>
  		<div class="header module group">
 			<h4 class="heading" title="<%= ts('name') %>">
 			<%= link_to collection.title, collection_path(collection) %>
-				<span>(<%= collection.name %>)</span>
+				<span class="name">(<%= collection.name %>)</span>
 					<%= ts('by') %>
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ").html_safe %>
 			</h4>

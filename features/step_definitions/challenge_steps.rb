@@ -91,7 +91,7 @@ end
 Then /^signup should be open$/ do
   step %{I should see "Profile" within "div#main .collection .navigation"}
   step %{I should see "Sign-up: Open" within ".collection .meta"}
-    step %{I should see "Sign-up closes:"}
+    step %{I should see "Sign-up Closes:"}
 end
 
 When /^I view open challenges$/ do
