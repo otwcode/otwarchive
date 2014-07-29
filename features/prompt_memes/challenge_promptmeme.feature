@@ -998,7 +998,7 @@ Feature: Prompt Meme Challenge
     And I should see "canon SGA love by myname4 in Battle 12" within "div#main.challenge_claims-index h4"
   When I follow "Fulfill"
     And I fill in "Fandoms" with "Stargate Atlantis"
-    And I fill in "Work Title *" with "Fulfilled Story-thing"
+    And I fill in "Work Title*" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"

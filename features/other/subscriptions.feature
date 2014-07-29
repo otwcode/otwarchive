@@ -90,7 +90,7 @@
     And I am logged in as "wip_author"
     And I view the work "Cake Story"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "ICE CREAM CAKE"
+    And I fill in "Chapter Title" with "ICE CREAM CAKE"
     And I fill in "content" with "meltiiiinnngg"
     And I press "Post Without Preview"
     And subscription notifications are sent
