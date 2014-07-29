@@ -128,8 +128,7 @@ Feature: Create Works
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
       And I should see "No Archive Warnings Apply"
-      And "warning redesign" is fixed
-      #And I should not see "Choose Not To Use Archive Warnings"
+      And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
@@ -169,7 +168,8 @@ Feature: Create Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".autocomplete"
+    When "autocomplete tests with JavaScript" is fixed
+#      Then I should see "cosomeone" in the autocomplete
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -251,6 +251,7 @@ Feature: Create Works
     Given basic tags
       And I am logged in
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural, Smallville"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
@@ -265,6 +266,7 @@ Feature: Create Works
     Given basic tags
     When I am logged in as "newbie" with password "password"
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "4 > 3 and 2 < 5"
       And I fill in "content" with "Bad things happen, etc."
@@ -337,4 +339,20 @@ Feature: Create Works
   Then I should see "Published:1990-01-01"
   When I go to the works page
   Then "This One Stays On Top" should appear before "Backdated"
-  
+        
+  Scenario: Users must set something as a warning and Author Chose Not To Use Archive Warnings should not be added automatically
+    Given basic tags
+      And I am logged in as "triggerfinger" with password "everyoneinthephonebook"
+    When I go to the new work page
+      And I fill in "Fandoms" with "Dallas"
+      And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"
+      And I fill in "content" with "It wasn't my fault, you know."
+      And I press "Post Without Preview"
+    Then I should see "We couldn't save this work"
+      And I should see "Please add all required tags. Warning is missing."
+    When I check "No Archive Warnings Apply"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully posted."
+      And I should see "No Archive Warnings Apply"
+      And I should not see "Author Chose Not To Use Archive Warnings"
+      And I should see "It wasn't my fault, you know."

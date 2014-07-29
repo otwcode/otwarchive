@@ -127,9 +127,13 @@ form dt {
   border-bottom: 1px solid #f3efec;
 }
 
-form dd {
+form dd, form dd.any {
   float: left;
   width: 72.5%;
+}
+
+form dd.any {
+  margin-left: 25%;
 }
 
 form dd + dd {
@@ -345,15 +349,17 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 .qtip-content {
   position: relative;
   padding: 0.15em 0.25em;
-  background: #FFFFA3;
-  border: 1px solid #F1D031;
+  background: #d1e1ef;
+  border: 1px solid #c2d2df;
   overflow: hidden;
     word-wrap: break-word;
 }
 
 /* WIDGET: MODAL DIALOGS (called by help links) */
 
-a.modal.help { cursor: help; }
+a.modal.help { 
+  cursor: help;
+}
 
 #modal-bg, #modal-wrap {
   display: none;
@@ -363,7 +369,7 @@ a.modal.help { cursor: help; }
 }
 
 #modal-bg {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   width: 100%;
   z-index: 499;
@@ -400,7 +406,6 @@ a.modal.help { cursor: help; }
 #modal {
   background: #fff;
   border: 10px solid #eee;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   margin: 3% 0;
   max-width: 800px;
   min-width: 200px;
@@ -409,6 +414,7 @@ a.modal.help { cursor: help; }
   text-align: left;
   width: 80%; 
   z-index: 501;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .content {
@@ -439,13 +445,13 @@ a.modal.help { cursor: help; }
 #modal.img {
   background: transparent;
   border: 0;
-  box-shadow: none;
   margin: 0 0 44px;
   max-height: none;
   max-width: 90%;
   min-width: 0;
   padding: 0;
   width: auto;
+    box-shadow: none;
 }
 
 #modal.img a {
@@ -472,10 +478,10 @@ a.modal.help { cursor: help; }
 }
 
 #modal.img .content img {
-  border: 1px solid rgba(0,0,0,0.5);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   max-height: 100%;
   max-width: 100%;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .footer {
@@ -490,10 +496,10 @@ a.modal.help { cursor: help; }
 
 #modal.img .footer {
   background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   color: #fff;
   position: fixed;
   text-align: center;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #modal .footer .action.modal-closer {
@@ -502,9 +508,9 @@ a.modal.help { cursor: help; }
   right: 8px;
 }
 
-#modal .content > h1:first-child, 
-#modal .content > h2:first-child, 
-#modal .content > .heading:first-child { margin-top: 0.5em; }
+#modal .content > h1:first-child, #modal .content > h2:first-child, #modal .content > .heading:first-child { 
+  margin-top: 0.5em;
+}
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 

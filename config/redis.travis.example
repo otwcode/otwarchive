@@ -4,3 +4,5 @@ redis_kudos:
   test: localhost:6379
 redis_general:
   test: localhost:6379
+redis_rollout:
+  test: localhost:6379
