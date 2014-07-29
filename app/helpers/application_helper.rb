@@ -127,7 +127,7 @@ module ApplicationHelper
     if @downloading
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
   
