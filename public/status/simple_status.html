@@ -47,9 +47,9 @@ $j(document).ready(function() {
 <td><!--# include virtual="/status/squid_mod.html" --></td>
 </tr>
 <tr>
-<td title="Resque workers, execute code asynchronously such as the subscription emails.">Resque workers ao3-front01</td>
-<td><!--# include virtual="/status/resque_status_ao3-front01.html" --></td>
-<td><!--# include virtual="/status/resque_status_ao3-front01_mod.html" --></td>
+<td title="Resque workers, execute code asynchronously such as the subscription emails.">Resque workers</td>
+<td><!--# include virtual="/status/worker_status.html" --></td>
+<td><!--# include virtual="/status/worker_status_mod.html" --></td>
 </tr>
 <tr>
 <td title="Resque queues (This is how behind we are with our batch jobs).">Resque queues</td>
@@ -57,23 +57,8 @@ $j(document).ready(function() {
 <td><!--# include virtual="/status/resque_queue_mod.html" --></td>
 </tr>
 <tr>
-<td title="Unicorns give you the pages.">Unicorns ao3-app01</td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app01.html" --></td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app01_mod.html" --></td>
-</tr>
-<tr>
-<td title="Unicorns give you the pages.">Unicorns ao3-app02</td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app02.html" --></td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app02_mod.html" --></td>
-</tr>
-<tr>
-<td title="Unicorns give you the pages.">Unicorns ao3-app03</td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app03.html" --></td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app03_mod.html" --></td>
-</tr>
-<tr>
-<td title="Unicorns give you the pages.">Unicorns ao3-front01</td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app03.html" --></td>
-<td><!--# include virtual="/status/uncorn_status_ao3-app03_mod.html" --></td>
+<td title="Unicorns give you the pages.">Unicorns</td>
+<td><!--# include virtual="/status/unicorn_status.html" --></td>
+<td><!--# include virtual="/status/unicorn_status_mod.html" --></td>
 </tr>
 </table>

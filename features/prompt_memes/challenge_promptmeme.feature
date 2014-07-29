@@ -112,7 +112,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for "Battle 12" with missing prompts
-  Then I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
+  Then I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
   When I fill in the missing prompt
   Then I should see "Sign-up was successfully created"
   
@@ -258,6 +258,20 @@ Feature: Prompt Meme Challenge
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see correct signups for Battle 12
+
+  Scenario: Mod can delete signups
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+  When I am logged in as "mod1"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+    And I should see "Prompts for Battle 12"
+  When I follow "Delete Sign-up"
+  Then I should see "Challenge sign-up was deleted."
+    And I should see "Prompts (0)"
+
   
   Scenario: Sign up with both prompts anon
   
@@ -344,15 +358,6 @@ Feature: Prompt Meme Challenge
   When I start to delete the signup by "myname1"
   Then I should see "myname1"
     And I should not see a link "myname1"
-
-	Scenario: Mod can't delete prompt if they don't have enough
-
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination C
-  When I am logged in as "mod1"
-	When I view prompts for "Battle 12"
-	Then I should not see "Delete"
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   
@@ -547,7 +552,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   Then I should not see "myname4" within "h5"
     And I should not see "mod1" within "h5"
-    And I should see "Fulfilled Story by Anonymous" within "div.works h4"
+    And I should see "Fulfilled Story by Anonymous" within "div.work h4"
   
   Scenario: User cannot see unposted claims to delete
   
@@ -622,7 +627,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   Then I should see "Challenge sign-up was deleted."
   # work fulfilling is still fine
   When I view the work "Fulfilled Story"
@@ -643,7 +648,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   When I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should not see "Stargate Atlantis"
@@ -817,12 +822,12 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 14" many-fandom prompt meme
   When I am on my user page
     And I follow "Sign-ups"
-  # Then 14 should be the last signup in the table
+  # TODO
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
@@ -851,7 +856,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
-    And I have opened signup for the gift exchange "My Gift Exchange"
+    And I open signups for "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
@@ -896,7 +901,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I delete my signup for "Battle 12"
+  When I delete my signup for the prompt meme "Battle 12"
   When I view prompts for "Battle 12"
   Then I should not see "myname1" within "ul.index"
 
@@ -905,7 +910,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I delete my signup for "Battle 12"
+  When I delete my signup for the prompt meme "Battle 12"
   When I go to my signups page
   Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
@@ -936,7 +941,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   Then I should see "Challenge sign-up was deleted."
   When I am logged in as "myname4"
     And I go to my claims page
@@ -950,7 +955,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-    And I delete my signup for "Battle 12"
+    And I delete my signup for the prompt meme "Battle 12"
   When I am logged in as "myname4"
     And I go to my claims page
   Then I should see "Claims (0)"
@@ -993,7 +998,7 @@ Feature: Prompt Meme Challenge
     And I should see "canon SGA love by myname4 in Battle 12" within "div#main.challenge_claims-index h4"
   When I follow "Fulfill"
     And I fill in "Fandoms" with "Stargate Atlantis"
-    And I fill in "Work Title *" with "Fulfilled Story-thing"
+    And I fill in "Work Title*" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
@@ -1033,7 +1038,7 @@ Feature: Prompt Meme Challenge
     And I should not see "mod" within "h4"
   Then I follow "Fulfilled Claims"
   # On the users' My Claims page, they see their anon works as Anonymous
-    And I should see "Anonymous" within "div.works h4"
+    And I should see "Anonymous" within "div.work h4"
   
     
   Scenario: check that claims can't be viewed even after challenge is revealed
@@ -1077,6 +1082,27 @@ Feature: Prompt Meme Challenge
   # 2 stories are now revealed, so notify the prompters
     And 2 emails should be delivered
     
+  Scenario: When a prompt is filled with a co-authored work, the e-mail should link to each author's URL instead of showing escaped HTML
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
+    And I log out
+  When I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Co-authored Fill"
+    And I add the co-author "myname3" 
+  When I press "Post Without Preview"
+  Then 1 email should be delivered to "myname3"
+    And the email should contain "You have been listed as a coauthor on the following work"
+  When I am logged in as "mod1"
+    And I reveal the authors of the "Battle 12" challenge
+    And I reveal the "Battle 12" challenge
+  Then 1 email should be delivered to "myname1"
+    And the email should link to myname2's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname2/pseuds/myname2&quot;"
+    And the email should link to myname3's user url
+    And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/myname3/pseuds/myname3&quot;"
+        
   Scenario: Story is anon when challenge is revealed
   
   Given I have standard challenge tags setup
@@ -1143,8 +1169,8 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see "Fulfilled By"
-    And I should see "Fulfilled Story by myname4" within "div.works"
-    And I should see "Fulfilled Story-thing by mod1" within "div.works"
+    And I should see "Fulfilled Story by myname4" within "div.work"
+    And I should see "Fulfilled Story-thing by mod1" within "div.work"
 
 
   Scenario: Anon prompts stay anon on claims index even if challenge is revealed
@@ -1236,8 +1262,8 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made."
   When I am logged in as "myname4"
     And I go to the "Battle 12" requests page
-  Then I should see "mod1" within ".prompt .works"
-    And I should see "myname4" within ".prompt .works"
+  Then I should see "mod1" within ".prompt .work"
+    And I should see "myname4" within ".prompt .work"
     
   Scenario: Make another claim and then fulfill from the post new form (New Work)
   
@@ -1264,11 +1290,11 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    # TODO: Figure this out
+    When "Issue 3461" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I view the work "Existing work"
-  Then I should find "draft"
+  Then I should see "draft"
   
   Scenario: work left in draft so claim is not yet totally fulfilled
   
@@ -1330,7 +1356,7 @@ Feature: Prompt Meme Challenge
   When I follow "Existing work"
   Then I should see "Existing work"
     And I should see "Battle 12"
-    And I should not find "draft"
+    And I should not see "draft"
   
   Scenario: Fulfill a claim by editing an existing work
   
@@ -1348,14 +1374,13 @@ Feature: Prompt Meme Challenge
     And I edit the work "Here's one I made earlier"
     And I check "Battle 12"
     And I press "Preview"
-  Then I should find "draft"
-    And I should see "In response to a prompt by"
-    # TODO: Figure out why this isn't showing - it works fine when testing manually
+  Then I should see "In response to a prompt by"
+    When "Issue 3461" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
-    And I should not find "draft"
+    And I should not see "draft"
     And I should see "In response to a prompt by"
   Then I should see "Collections:"
     And I should see "Battle 12"
@@ -1363,7 +1388,7 @@ Feature: Prompt Meme Challenge
   # claim is fulfilled on collection page
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  Then I should see "myname1" within ".prompt .works"
+  Then I should see "myname1" within ".prompt .work"
     And I should see "Fulfilled By"
 
   Scenario: Download prompt CSV from signups page
@@ -1384,12 +1409,14 @@ Feature: Prompt Meme Challenge
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 
+
   Scenario: Validation error doesn't cause semi-anon ticky to lose state (Issue 2617)
   Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
     And I am logged in as "Scott" with password "password"
     And I go to "Scotts Prompt" collection's page
     And I follow "Prompt Form"
-    And I check "Semi-anonymous prompt"
+    And I check "Semi-anonymous Prompt"
     And I press "Submit"
-  Then I should see "your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
+  Then I should see "There were some problems with this submission. Please correct the mistakes below."
+    And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
     And the "Semi-anonymous prompt" checkbox should be checked

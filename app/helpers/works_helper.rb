@@ -49,7 +49,7 @@ module WorksHelper
   # select the default warning if this is a new work
   def check_warning(work, warning)
     if work.nil? || work.warning_strings.empty?
-      warning.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+      warning.name == nil
     else
       work.warning_strings.include?(warning.name)
     end
@@ -97,22 +97,28 @@ module WorksHelper
   end
   
   def marktoread_link(work)
-    link_to ts("Mark for later"), marktoread_work_path(work)
+    link_to ts("Mark for Later"), marktoread_work_path(work)
   end
   
   def markasread_link(work)
-    link_to ts("Mark as read"), marktoread_work_path(work)
+    link_to ts("Mark as Read"), marktoread_work_path(work)
   end
   
   def get_endnotes_link
-    current_page?(:controller => 'chapters', :action => 'show') ?
-      chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
+    if current_page?(:controller => 'chapters', :action => 'show')
+      if @work.posted?
+        chapter_path(@work.last_posted_chapter.id, :anchor => 'work_endnotes')
+      else
+        chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')
+      end
+    else 
       "#work_endnotes"
+    end
   end
   
   def get_related_works_url
     current_page?(:controller => 'chapters', :action => 'show') ?
-      chapter_path(@work.last_chapter.id, :anchor => 'children') :
+      chapter_path(@work.last_posted_chapter.id, :anchor => 'children') :
       "#children"
   end
   
@@ -160,6 +166,14 @@ module WorksHelper
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
+  end
+  
+  # Returns true or false to determine whether the work associations should be included
+  def show_associations?(work)
+    work.recipients.present? ||
+    work.approved_related_works.where(translation: true).exists? ||
+    work.parent_work_relationships.exists? ||
+    work.challenge_claims.present?
   end
     
   

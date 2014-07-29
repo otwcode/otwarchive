@@ -127,8 +127,8 @@ module TagsHelper
   end
 
   # Makes filters show warnings display name
-  def label_for_filter(type, tag_info)
-    name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+  def label_for_filter(tag_type, tag_info)
+    name = (tag_type == "warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
   end
 
@@ -158,7 +158,7 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag.type + ": " + link_to_tag(tag) + " &lrm;(#{tag.taggings_count})</span>"
       span.html_safe
     end
   end
@@ -200,10 +200,11 @@ module TagsHelper
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.each do |sub|
-        sub_ul << "<li>" + link_to_tag(sub) + "</li>"
+        sub_ul << "<li>" + link_to_tag(sub)
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)
         end
+        sub_ul << "</li>"
       end
       sub_ul << "</ul>"
     end

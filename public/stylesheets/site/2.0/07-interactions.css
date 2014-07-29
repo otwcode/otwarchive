@@ -1,4 +1,5 @@
 /*==INTERACTIONS: global form rules
+http://otwcode.github.com/docs/front_end_coding/patterns/interactions
 (submit button styling is in actions.css with the other buttons)
 General rules for all form elements, and nearly ALL our forms use just these. 
 Forms are normally in definition lists <dt label: dd input>
@@ -126,9 +127,13 @@ form dt {
   border-bottom: 1px solid #f3efec;
 }
 
-form dd {
+form dd, form dd.any {
   float: left;
   width: 72.5%;
+}
+
+form dd.any {
+  margin-left: 25%;
 }
 
 form dd + dd {
@@ -203,7 +208,7 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   margin: 0.25em auto auto;
 }
 
-.autocomplete input, div.dropdown ul li {
+.autocomplete input, .autocomplete .dropdown ul li {
   display: block;
   margin: 0.25em 0 0;
   min-width: 10em;
@@ -357,8 +362,8 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 .qtip-content {
   position: relative;
   padding: 0.15em 0.25em;
-  background: #FFFFA3;
-  border: 1px solid #F1D031;
+  background: #d1e1ef;
+  border: 1px solid #c2d2df;
   overflow: hidden;
     word-wrap: break-word;
 }
@@ -377,7 +382,7 @@ a.modal.help {
 }
 
 #modal-bg {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   width: 100%;
   z-index: 499;
@@ -528,6 +533,27 @@ div.dynamic {
   z-index: 500;
 }
 
+/*MODE: VERBOSE for forms with more than three fieldsets 
+TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
+in some areas, hence .verbose form */
+
+form.verbose legend, .verbose form legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
+/*MODE: SIMPLE for forms with three or fewer fieldsets (default) */
+
+form.simple span.actions {
+  float: none;
+}
+
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {
@@ -574,6 +600,11 @@ div.dynamic {
 }
 
 /* CONTEXT: dashboard*/
+
+.dashboard > form {
+  float: left;
+  width: 100%;
+}
 
 .dashboard fieldset {
   clear: right;

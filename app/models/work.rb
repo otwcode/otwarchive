@@ -135,6 +135,11 @@ class Work < ActiveRecord::Base
   attr_accessor :should_reset_filters
   attr_accessor :new_recipients
 
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   ########################################################################
   # VALIDATION
   ########################################################################
@@ -231,6 +236,23 @@ class Work < ActiveRecord::Base
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
+  
+  after_save :expire_caches
+  
+  def expire_caches
+    self.pseuds.each do |pseud|
+      pseud.update_works_index_timestamp!
+      pseud.user.update_works_index_timestamp!
+    end
+    
+    self.all_collections.each do |collection|
+      collection.update_works_index_timestamp!
+    end
+
+    self.filters.each do |tag|
+      tag.update_works_index_timestamp!
+    end
+  end
 
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
@@ -305,6 +327,13 @@ class Work < ActiveRecord::Base
   #
   #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
   # end
+  
+  def self.find_by_url(url)
+    url = UrlFormatter.new(url)
+    Work.where(:imported_from_url => url.original).first ||
+      Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
+      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+  end
 
   ########################################################################
   # AUTHORSHIP
@@ -418,6 +447,10 @@ class Work < ActiveRecord::Base
         self.gifts << Gift.new(:recipient => name) unless gift
       end
     end
+  end
+
+  def marked_for_later?(user)
+    Reading.where(work_id: self.id, user_id: user.id, toread: true).exists?
   end
 
   ########################################################################
@@ -797,8 +830,9 @@ class Work < ActiveRecord::Base
           all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
           remaining_tags = self.tags - [tag]
           if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
-            self.filters.delete(filter_to_remove)
+            self.filter_taggings.where(filter_id: filter_to_remove.id).destroy_all
             filter_to_remove.reset_filter_count
+            filter_to_remove.update_works_index_timestamp!
           else # we should keep filter_to_remove, but check if inheritence needs to be updated
             direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
             if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
@@ -872,13 +906,13 @@ class Work < ActiveRecord::Base
   end
 
   def guest_kudos_count
-    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/guest_kudos_count" do
       kudos.by_guest.count
     end
   end
 
   def all_kudos_count
-    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+    Rails.cache.fetch "works/#{id}/kudos_count" do
       kudos.count
     end
   end
@@ -1102,9 +1136,9 @@ class Work < ActiveRecord::Base
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
     select("DISTINCT works.*").
-    joins(:collection_items, :collections).
-    where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-          [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
+        joins(:collection_items).
+        where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
+              [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
   def self.in_series(series)

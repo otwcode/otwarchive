@@ -1,7 +1,7 @@
 Otwarchive::Application.routes.draw do
-  
+
   #### ERRORS ####
-  
+
   match '/403', :to => 'errors#403'
   match '/404', :to => 'errors#404'
   match '/422', :to => 'errors#422'
@@ -11,22 +11,10 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### STATIC CACHED COLLECTIONS ####
-
-  namespace 'static' do
-    resources :collections, :only => [:show] do
-      resources :media, :only => [:show]
-      resources :fandoms, :only => [:index, :show]
-      resources :works, :only => [:show]
-      resources :restricted_works, :only => [:index, :show]
-    end
-  end
-  
-  
   #### OPEN DOORS ####
   namespace :opendoors do
     resources :tools, :only => [:index] do
-      collection do 
+      collection do
         post :url_update
       end
     end
@@ -79,9 +67,9 @@ Otwarchive::Application.routes.draw do
   resources :tags do
     member do
       get :feed
-      get :wrangle
       post :mass_update
       get :remove_association
+      get :wrangle
     end
     collection do
       get :show_hidden
@@ -92,21 +80,26 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
-  resources :tag_sets, :controller => 'owned_tag_sets' do 
+  resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        put :update_multiple
-        post :destroy_multiple
+        put  :update_multiple
+        delete :destroy_multiple
+        get  :confirm_destroy_multiple
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :associations, :controller => 'tag_set_associations', :only => [:index] do
       collection do
         put :update_multiple
       end
-    end      
+    end
     member do
       get :batch_load
       put :do_batch_load
+      get :confirm_delete
     end
     collection do
       get :show_options
@@ -250,7 +243,7 @@ Otwarchive::Application.routes.draw do
     resources :skins, :only => [:index]
     resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
-    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]
     resources :works do
       collection do
         get :drafts
@@ -291,6 +284,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :preview
         post :post
+        get :confirm_delete
       end
       resources :comments
     end
@@ -302,7 +296,8 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
-    resources :links, :controller => "work_links", :only => [:index]          
+    resources :kudos, :only => [:index]
+    resources :links, :controller => "work_links", :only => [:index]
   end
 
   resources :chapters do
@@ -322,11 +317,12 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :related_works
   end
-  
+
   resources :related_works
   resources :serial_works
   resources :series do
     member do
+      get :confirm_delete
       get :manage
       post :update_positions
     end
@@ -342,6 +338,9 @@ Otwarchive::Application.routes.draw do
       get :list_challenges
       get :list_ge_challenges
       get :list_pm_challenges
+    end
+    member do
+      get :confirm_delete
     end
     resource  :profile, :controller => "collection_profile"
     resources :collections
@@ -370,6 +369,9 @@ Otwarchive::Application.routes.draw do
       collection do
         get :summary
       end
+      member do
+        get :confirm_delete
+      end
     end
     resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
@@ -396,6 +398,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :generate
         get :cancel_generate
+        get :regenerate_for_signup
       end
     end
     resources :requests, :controller => "challenge_requests"
@@ -471,6 +474,9 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    member do
+      get :confirm_delete
+    end
     resources :collection_items
   end
 
@@ -514,6 +520,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'dmca' => 'home#dmca'
   match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
@@ -525,7 +532,7 @@ Otwarchive::Application.routes.draw do
   match 'about' => 'home#about'
 	match 'menu/browse' => 'menu#browse'
 	match 'menu/fandoms' => 'menu#fandoms'
-	match 'menu/search' => 'menu#search'	
+	match 'menu/search' => 'menu#search'
 	match 'menu/about' => 'menu#about'
 
   # The priority is based upon order of creation:
