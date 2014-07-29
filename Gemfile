@@ -65,11 +65,11 @@ gem 'rpm_contrib'
 # for generating graphs
 gem "google_visualr", ">= 2.1"
 
-# Copycopter to aid translation
-# gem 'copycopter_client', '~> 2.0.1'
-
 # Coveralls for code test coverage
 gem 'coveralls', require: false
+
+# Add a clean notifier that shows we are on dev or test
+gem "rack-dev-mark"
 
 #Phrase-app
 gem 'phrase'
