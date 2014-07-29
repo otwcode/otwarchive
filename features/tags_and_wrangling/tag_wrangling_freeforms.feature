@@ -57,11 +57,13 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "Pirate AU"
     And I follow "Edit"
     And I fill in "Synonym of" with "Alternate Universe "
-  Then I should find "Alternate Universe Pirates" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Alternate Universe Pirates" in the autocomplete
   When I fill in "Synonym of" with "Alternate Universe Pirates"
     And I fill in "Fandoms" with "No"
-    And I should find "No Fandom" within ".autocomplete"
-    And I fill in "Fandoms" with "No Fandom"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "No Fandom" in the autocomplete
+  When I fill in "Fandoms" with "No Fandom"
     And I press "Save changes"
   Then I should see "Tag was updated"
   
@@ -71,7 +73,8 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should see "Pirate AU"
     And the "tag_canonical" checkbox should be disabled
   When I fill in "tag_merger_string" with "Arrr"
-  Then I should find "Arrr-verse" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Arrr-verse" in the autocomplete
   When I fill in "tag_merger_string" with "Arrr-verse"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -84,7 +87,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    But I should not see "Alternate Universe" within "fieldset.tags"
+    But I should not see "Alternate Universe" within "dd.tags"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"
@@ -92,7 +95,8 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I press "Create Tag"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "SubTags" with "Alternate Universe P"
-  Then I should find "Alternate Universe Pirates" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Alternate Universe Pirates" in the autocomplete
   When I fill in "SubTags" with "Alternate Universe Pirates"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -102,8 +106,9 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Alternate Universe" within "div#parent_MetaTag_associations_to_remove_checkboxes"
   When I edit the tag "Alternate Universe Space Pirates"
     And I fill in "MetaTags" with "Alternate Universe P"
-    And I should find "Alternate Universe Pirates" within ".autocomplete"
-    And I fill in "MetaTags" with "Alternate Universe Pirates"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "Alternate Universe Pirates" in the autocomplete
+  When I fill in "MetaTags" with "Alternate Universe Pirates"
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I follow "Alternate Universe Pirates"

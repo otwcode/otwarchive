@@ -71,6 +71,9 @@ gem "google_visualr", ">= 2.1"
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
+#Phrase-app
+gem 'phrase'
+
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
 gem 'newrelic_rpm', "3.8.0.218"
@@ -78,6 +81,9 @@ gem 'newrelic-redis'
 
 # For URL mangling
 gem 'addressable'
+
+# For controlling application behavour dynamically
+gem 'rollout'
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'

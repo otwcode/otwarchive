@@ -213,7 +213,7 @@ module AutocompleteSource
 
     def autocomplete_phrase_split(string)
       # split into words
-      string.downcase.split(/(?:\s+|\&|\/)/) # split on spaces, slash, ampersand
+      string.downcase.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/) # split on one or more spaces, ampersand, slash, double quotation mark, opening parenthesis, closing parenthesis (just in case), tilde, hyphen
     end
 
     def autocomplete_pieces(string)
