@@ -79,6 +79,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Sign-up open?"
+    And I set up the challenge dates
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
