@@ -12,7 +12,7 @@
               to_sentence(:last_word_connector => ', ').
               html_safe + ', ' %>
           <%= link_to work_kudos_path(commentable), :id => "kudos_summary" do %>
-            collapsed_count = kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW
+           <% collapsed_count = kudos.length - ArchiveConfig.MAX_KUDOS_TO_SHOW %>
             <% if collapsed_count == 1 %>
               <%= ts(' and 1 more user') %>
             <% else %>
