@@ -135,7 +135,7 @@ jQuery(function($){
 });
 
 // check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
-// stored in the "data-checkbox-name-filter" attribute on the all/none links.
+// stored in the "data-checkbox-id-filter" attribute on the all/none links.
 // allow for some flexibility by checking the next and previous fieldset if the checkboxes aren't in this one
 jQuery(function($){
   $('.check_all').each(function(){
