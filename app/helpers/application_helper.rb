@@ -513,7 +513,7 @@ module ApplicationHelper
   end
   
   def check_all_none(all_text="All", none_text="None", id_filter=nil)
-    filter_attrib = (id_filter ? " data-checkbox-id-filter=\"#{name_filter}\"" : '')    
+    filter_attrib = (id_filter ? " data-checkbox-id-filter=\"#{id_filter}\"" : '')    
     ('<ul class="actions">
       <li><a href="#" class="check_all"' + 
       "#{filter_attrib}>#{all_text}</a></li>" +
