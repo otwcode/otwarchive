@@ -6,13 +6,11 @@ class SeriesController < ApplicationController
   
   def load_series
     @series = Series.find_by_id(params[:id])
-    if @series.nil?
-      flash[:error] = ts("We're sorry, but that series does not exist.")
-      redirect_back_or_default works_path and return
-    else
-      @check_ownership_of = @series
-      @check_visibility_of = @series
+    unless @series && @series.is_a?(Series)
+      raise ActiveRecord::RecordNotFound, "Couldn't find series '#{params[:id]}'"
     end
+    @check_ownership_of = @series
+    @check_visibility_of = @series
   end
   
   # GET /series
