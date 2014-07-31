@@ -10,12 +10,14 @@ Feature: Invite queue management
   When I am on the homepage
   Then I should not see "Get an Invite"
     And I should see "Archive of Our Own"
-    And This is the end of the scenario
   
   Scenario: Can turn queue on and it displays as on
   
   When I turn on the invitation queue
   When I am logged out as an admin
+    And I have an AdminSetting
+    And account creation requires invitation
+    And account creation is enabled
   When I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
@@ -73,6 +75,8 @@ Feature: Invite queue management
   
     Given I have no users
       And I have an AdminSetting
+      And account creation requires invitation
+      And account creation is enabled
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
@@ -114,3 +118,46 @@ Feature: Invite queue management
     Then the email should contain "You've been invited to join our beta!"
       And the email should contain "fanart"
       And the email should contain "podfic"
+    
+    # user creates account, with error messages
+    When I click the first link in the email
+      And I fill in "user_login" with "user1"
+      And I fill in "user_password" with "pass"
+      And I press "Create Account"
+    Then I should see "Login has already been taken"
+      And I should see "Password is too short (minimum is 6 characters)"
+      And I should see "Password doesn't match confirmation"
+      And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should see "Sorry, you have to be over 13!"
+      And I should not see "Email address is too short"
+    When I fill in "user_login" with "newuser"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
+      And I check "user_age_over_13"
+      And I check "user_terms_of_service"
+      And I fill in "user_email" with ""
+      And I press "Create Account"
+    Then I should see "Email does not seem to be a valid address."
+    When I fill in "user_email" with "fake@fake@fake"
+      And I press "Create Account"
+    Then I should see "Email does not seem to be a valid address."
+    When I fill in "user_email" with "test@archiveofourown.org"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
+      And all emails have been delivered
+    When I press "Create Account"
+    Then I should see "Account Created!"
+    Then 1 email should be delivered
+      And the email should contain "Welcome to the Archive of Our Own,"
+      And the email should contain "newuser"
+      And the email should contain "Please activate your account"
+    
+    # user activates account
+    When all emails have been delivered
+      And I click the first link in the email
+    Then 1 email should be delivered
+      And the email should contain "your account has been activated"
+      And I should see "Please log in"
+    When I fill in "user_session_login" with "newuser"
+      And I fill in "user_session_password" with "password1"
+

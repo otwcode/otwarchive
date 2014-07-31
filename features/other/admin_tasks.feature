@@ -286,6 +286,7 @@ Feature: Admin tasks
   When I edit known issues
   Then I should see "Known issue was successfully updated"
 
+
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
 
     Given I am logged in as an admin
@@ -296,3 +297,75 @@ Feature: Admin tasks
     When I fill in "admin_setting_invite_from_queue_number" with "1"
     And I press "Update"
     Then I should not see "Invite from queue number must be greater than 0."
+
+  Scenario: Account creation enabled
+  Given the following admin exists
+    | login | password |
+    | Scott | password |
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Scott"
+    And I fill in "admin_session_password" with "password"
+    And I press "Log in as admin"
+    And I follow "Settings"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
+    And I uncheck "Account creation requires invitation"
+    And I uncheck "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
+  When I am logged out as an admin
+    And I go to account creation page
+    And I should be on account creation page
+    And I should see "Create Account"
+
+
+  Scenario: Account creation disabled
+  Given the following admin exists
+    | login       | password |
+    | Scott       | password |
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Scott"
+    And I fill in "admin_session_password" with "password"
+    And I press "Log in as admin"
+    And I follow "Settings"
+    And I uncheck "Account creation enabled (People can create accounts without an invitation)"
+    And I press "Update"
+  When I am logged out as an admin
+    And I go to account creation page
+  Then I should be on the home page
+    And I should see "Account creation is suspended at the moment. Please check back with us later."
+
+  Scenario: Account creation enabled, Invite required, Queue enabled
+  Given the following admin exists
+    | login     | password |
+    | Scott     | password |
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Scott"
+    And I fill in "admin_session_password" with "password"
+    And I press "Log in as admin"
+    And I follow "Settings"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
+    And I check "Account creation requires invitation"
+    And I check "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
+  When I am logged out as an admin
+    And I go to account creation page
+  Then I should be on invite requests page
+    And I should see "To create an account, you'll need an invitation. One option is to add your name to the automatic queue below."
+
+  Scenario: Account creation enabled, Invite is required, Queue is disabled
+  Given the following admin exists
+      | login     | password |
+      | Scott     | password |
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Scott"
+    And I fill in "admin_session_password" with "password"
+    And I press "Log in as admin"
+    And I follow "Settings"
+    And I check "Account creation enabled (People can create accounts without an invitation)"
+    And I check "Account creation requires invitation"
+    And I uncheck "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
+  When I am logged out as an admin
+    And I go to account creation page
+  Then I should be on the home page
+    And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
+
