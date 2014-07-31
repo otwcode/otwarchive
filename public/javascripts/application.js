@@ -140,7 +140,7 @@ jQuery(function($){
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
-      var filter = $(this).data('checkbox-name-filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
         checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
@@ -160,7 +160,7 @@ jQuery(function($){
 
   $('.check_none').each(function(){
     $(this).click(function(event){
-      var filter = $(this).data('checkbox-name-filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
         checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
