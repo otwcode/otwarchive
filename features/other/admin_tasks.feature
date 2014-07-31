@@ -308,7 +308,7 @@ Feature: Admin tasks
     And I press "Log in as admin"
     And I follow "Settings"
     And I check "Account creation enabled (People can create accounts without an invitation)"
-    And I uncheck "Account Creation requires invitation"
+    And I uncheck "Account creation requires invitation"
     And I uncheck "admin_setting_invite_from_queue_enabled"
     And I press "Update"
   When I am logged out as an admin
@@ -343,7 +343,7 @@ Feature: Admin tasks
     And I press "Log in as admin"
     And I follow "Settings"
     And I check "Account creation enabled (People can create accounts without an invitation)"
-    And I check "Account Creation requires invitation"
+    And I check "Account creation requires invitation"
     And I check "admin_setting_invite_from_queue_enabled"
     And I press "Update"
   When I am logged out as an admin
@@ -361,7 +361,7 @@ Feature: Admin tasks
     And I press "Log in as admin"
     And I follow "Settings"
     And I check "Account creation enabled (People can create accounts without an invitation)"
-    And I check "Account Creation requires invitation"
+    And I check "Account creation requires invitation"
     And I uncheck "admin_setting_invite_from_queue_enabled"
     And I press "Update"
   When I am logged out as an admin
