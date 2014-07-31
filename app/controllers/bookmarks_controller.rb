@@ -20,6 +20,9 @@ class BookmarksController < ApplicationController
     elsif params[:series_id]
       @bookmarkable = Series.find(params[:series_id])
     end
+    unless  @bookmarkable
+       raise ActiveRecord::RecordNotFound, 'Bookmarkable item not found'
+    end
   end  
 
   def load_bookmark
