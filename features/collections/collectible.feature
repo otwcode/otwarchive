@@ -51,6 +51,23 @@ Feature: Collectible items
       And I press "Post Without Preview"
       And I should see "moderated collections (Various Penguins, Various Aardvarks). It will not"
 
+  Scenario: Add my work to both moderated and unmoderated collections
+    Given I have a moderated collection "ModeratedCollection"
+      And I have the collection "UnModeratedCollection"
+      And I am logged in as a random user
+      And I post the work "RandomWork"
+      And I edit the work "RandomWork"
+      And I fill in "work_collection_names" with "ModeratedCollection"
+      And I press "Post Without Preview"
+      And I go to "ModeratedCollection" collection's page
+    Then I should not see "RandomWork"
+      And I edit the work "RandomWork"
+      And I fill in "work_collection_names" with "UnModeratedCollection"
+      And I press "Post Without Preview"
+    When I go to "UnModeratedCollection" collection's page
+      And I should see "RandomWork"
+      And I go to "ModeratedCollection" collection's page
+    Then I should not see "RandomWork"
 
   Scenario: Add my work to a closed collection
     Given I have a closed collection "Various Penguins"

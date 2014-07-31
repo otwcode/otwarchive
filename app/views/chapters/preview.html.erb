@@ -1,3 +1,8 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Preview") %></h2>
+<%= error_messages_for :chapter %>
+<!--/descriptions-->
+
 <% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
   <% cache("#{@work.work_skin.id}-#{@work.work_skin.updated_at}-work-skin") do %>
     <%= render "skins/skin_style_block", :skin => @work.work_skin %>
@@ -14,16 +19,18 @@
 
   <%= render 'hidden_fields', :form => f %>
 
-  <ul class="actions">
-    <% if @chapter.posted? %>
-      <li><%= submit_tag ts('Update'), :name => 'update_button' %></li>
-    <% else %>
-      <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with =>  ts("Please wait...") %></li>
-      <li><%= submit_tag ts("Save Without Posting"), :name => 'save_button' %></li>
-      <li><%= link_to ts('Delete Chapter Draft'), [@work, @chapter], :confirm => ts('Are you sure?'), :method => :delete %></li>
-    <% end %>
-    <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
-    <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li> 
-  </ul>
-
+  <fieldset>
+    <legend><%= ts("Post Chapter") %></legend>
+    <ul class="actions">
+      <% if @chapter.posted? %>
+        <li><%= submit_tag ts('Update'), :name => 'update_button' %></li>
+      <% else %>
+        <li><%= submit_tag ts('Post'), :name => 'post_button', :disable_with =>  ts("Please wait...") %></li>
+        <li><%= submit_tag ts("Save Without Posting"), :name => 'save_button' %></li>
+      <% end %>
+      <li><%= submit_tag ts('Edit'), :name => 'edit_button' %></li>
+      <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li> 
+    </ul>
+  </fieldset>
+  
 <% end %>

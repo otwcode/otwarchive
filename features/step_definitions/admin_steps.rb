@@ -6,11 +6,13 @@ Given /^I have an AdminSetting$/ do
       :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
       :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
       :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-      :account_creation_enabled => ArchiveConfig.ACCOUNT_CREATION_ENABLED,
+      :account_creation_enabled => true,
+      :creation_requires_invite => true,
       :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
     settings.save(:validate => false)
   end
 end
+
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
@@ -36,10 +38,6 @@ Given /^I am logged out as an admin$/ do
   assert !AdminSession.find
 end
 
-Given /^This is the end of the scenario$/ do
-  Rails.logger.debug "THIS IS THE END OF THE SCENARIO. DATABASE CLEANER BETTER TRUCATE THIS SHIT"
-end
-
 Given /^basic languages$/ do
   Language.default
   Language.find_or_create_by_short_and_name("DE", "Deutsch")
@@ -60,6 +58,20 @@ Given /^guest downloading is on$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
   uncheck("Turn off downloading for guests")
+  click_button("Update")
+end
+
+Given /^account creation is enabled$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  check("Account creation enabled (People can create accounts without an invitation)")
+  click_button("Update")
+end
+
+Given /^account creation requires invitation$/ do
+  step("I am logged in as an admin")
+  visit(admin_settings_path)
+  check("Account creation requires invitation")
   click_button("Update")
 end
 

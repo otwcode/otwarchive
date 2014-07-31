@@ -51,6 +51,11 @@ Otwarchive::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
+  # Make it clear we are on staging
+  config.rack_dev_mark.enable = true
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', fixed: 'true', color: 'orange' )]
+
+
 #  # run after initialization so have access to ArchiveConfig
 #  config.after_initialize do
 #    config.middleware.use ExceptionNotifier,

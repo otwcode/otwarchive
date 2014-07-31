@@ -83,8 +83,12 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        put :update_multiple
-        post :destroy_multiple
+        put  :update_multiple
+        delete :destroy_multiple
+        get  :confirm_destroy_multiple
+      end
+      member do
+        get :confirm_delete
       end
     end
     resources :associations, :controller => 'tag_set_associations', :only => [:index] do
@@ -95,6 +99,7 @@ Otwarchive::Application.routes.draw do
     member do
       get :batch_load
       put :do_batch_load
+      get :confirm_delete
     end
     collection do
       get :show_options

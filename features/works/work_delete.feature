@@ -98,8 +98,7 @@ Feature: Delete Works
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
       And I should see "No Archive Warnings Apply"
-      And "warning redesign" is fixed
-      #And I should not see "Choose Not To Use Archive Warnings"
+      And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
@@ -116,7 +115,7 @@ Feature: Delete Works
       And I should see "My new series"
       And I should see "Bad things happen, etc."
     When I follow "Add Chapter"
-      And I fill in "title" with "This is my second chapter"
+      And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"

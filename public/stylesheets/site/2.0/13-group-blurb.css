@@ -264,6 +264,10 @@ eg collections, users, skins, instead of the 4-icon list
 
 /*various little mods*/
 
+.collection .name {
+    word-wrap: break-word;
+}
+
 .prompt h6 {
   float: left;
   min-width: 65px;

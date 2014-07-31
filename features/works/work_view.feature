@@ -20,6 +20,20 @@ Feature: View a work with various options
   Scenario: viewing a work and chapter that have been deleted
   Given I am logged in as a random user
     And I view a deleted work
-  Then I am on the homepage
+    And I should see "Sorry, we couldn't find the work you were looking for."
+    And I should see "Welcome to the Archive of Our Own!"
+    And I follow "Site Map"
+    And I should not see "Sorry, we couldn't find the work you were looking for."
+
+
+
+  Scenario: viewing a deleted chapter on a work that still exists
+  Given I am logged in as a random user
+    And I view a deleted chapter
+    And I should see "Sorry, we couldn't find the chapter you were looking for."
+    And I should see "DeletedChapterWork"
+    And I follow "Site Map"
+  Then I should not see "Sorry, we couldn't find the chapter you were looking for."
+
 
 

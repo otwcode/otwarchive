@@ -24,17 +24,17 @@
 <%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
-      <p class="notice"><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></p>
-      <dl>
-        <dt><%= f.label :email, ts("Your email (optional)") %>:</dt>
-        <dd><%= f.text_field :email, :size => 60 %></dd>
-      </dl>
+    <p class="notice"><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></p>
+    <dl>
+      <dt><%= f.label :email, ts("Your email (optional)") %></dt>
+      <dd><%= f.text_field :email, :size => 60 %></dd>
+    </dl>
   </fieldset>
   
   <fieldset>
     <legend><%= ts('Describe Your Feedback') %></legend>
     <dl>
-      <dt class="required"><%= f.label :category, ts("What is your feedback about") %>:</dt>
+      <dt class="required"><%= f.label :category, ts("What is your feedback about") %></dt>
       <dd>
         <%= f.select("category", [ 
             [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], 
@@ -45,20 +45,17 @@
             [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], 
           :selected => Feedback::BUGS_MISC) %>
       </dd>
-      <dt class="required"><%= f.label :summary, "Brief summary (required)" %>: </dt>
+      <dt class="required"><%= f.label :summary, ts("Brief summary (required)") %></dt>
       <dd>
         <%= f.text_field :summary, :size => 60, :class => "observe_textlength" %>
         <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
-        <p>
-          <%= live_validation_for_field('feedback_summary', :failureMessage => ts("Please enter a brief summary of your message")) %>
-        </p>
+        <%= live_validation_for_field('feedback_summary', :failureMessage => ts("Please enter a brief summary of your message")) %>
       </dd>
-      <dt class="required"><%= f.label :comment, ts("Your comment (required)") %>:
-      </dt>
+      <dt class="required"><%= f.label :comment, ts("Your comment (required)") %></dt>
       <dd>
         <%= f.text_area :comment, :cols => 60 %>
+        <%= live_validation_for_field('feedback_comment', :failureMessage => ts("Please enter your feedback")) %>
         <p class="footnote"><%= ts("Please be as specific as possible, including error messages and/or links") %></p>
-        <p><%= live_validation_for_field('feedback_comment', :failureMessage => ts("Please enter your feedback")) %></p>
       </dd>
     </dl>
   </fieldset>

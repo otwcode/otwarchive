@@ -55,7 +55,8 @@ Feature: Collection
     # 0-2 characters allowed in request
     # 2-3 characters required in offer
     # unique fandoms required in offers and requests
-    # "any" option available in offers
+    # "any" option available in character offers
+    # restrict character to fandom only
     # match on 1 fandom and 1 character
     And I check "gift_exchange_request_restriction_attributes_url_allowed"
     And I uncheck "gift_exchange_offer_restriction_attributes_description_allowed"
@@ -78,6 +79,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Sign-up open?"
+    And I set up the challenge dates
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
@@ -90,10 +92,10 @@ Feature: Collection
   Then I should see "About Yuletide (yule2011)"
     And I should see "Sign-up:" within ".collection .meta"
     And I should see "Open" within ".collection .meta"
-    And I should see "Sign-up closes:" within ".collection .meta"
-    And I should see "Assignments due:" within ".collection .meta"
-    And I should see "Works revealed:" within ".collection .meta"
-    And I should see "Authors revealed:" within ".collection .meta"
+    And I should see "Sign-up Closes:" within ".collection .meta"
+    And I should see "Assignments Due:" within ".collection .meta"
+    And I should see "Works Revealed:" within ".collection .meta"
+    And I should see "Authors Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
@@ -122,7 +124,7 @@ Feature: Collection
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
     And I should see "Characters (2 - 3)"
-    And I should see "Any Character"
+    And I should see "Any Character" within "dd.any.option"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
@@ -136,13 +138,13 @@ Feature: Collection
     And I press "Submit"
   Then I should see a save error message
     # errors for the empty request
-    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
+    And I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
     # errors for the not-quite-filled offer
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 1 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 1 character tags in your current Offer"
     And I should see a not-in-fandom error message
     # errors for the empty offer
-    And I should see "Offer: your Offer must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Offer"
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 0 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 0 character tags in your current Offer"
   # Over-fill the remaining missing fields and duplicate fandoms
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
     And I check the 2nd checkbox with the value "Tiny fandom"
@@ -153,11 +155,11 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see a save error message
-    And I should see "Request: your Request must include between 0 and 2 character tags, but you have included 3 character tags in your current Request"
+    And I should see "Request: Your Request must include between 0 and 2 character tags, but you have included 3 character tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person" in "Stargate Atlantis"
-    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 2 fandom tags in your current Request"
+    And I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 2 fandom tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard" in "Care Bears"
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
   
