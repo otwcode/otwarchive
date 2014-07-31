@@ -71,7 +71,7 @@ end
 Given /^account creation requires invitation$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
-  check("Account Creation requires invitation")
+  check("Account creation requires invitation")
   click_button("Update")
 end
 
