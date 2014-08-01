@@ -164,15 +164,11 @@ class UsersController < ApplicationController
           old_login = @user.login
           old_lower_login = "#{@user.login}".downcase
           new_lower_login = "#{@new_login}".downcase
-
-
           if old_lower_login == new_lower_login
             old_pseud = Pseud.find_by_name_and_user_id(old_login,@user.id)
             old_pseud.name = @new_login
             old_pseud.save!
-
-            end
-
+          end
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name has been successfully updated.")
