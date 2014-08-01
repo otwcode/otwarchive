@@ -134,16 +134,16 @@ jQuery(function($){
 
 });
 
-// check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
-// stored in the "checkbox_name_filter" attribute on the all/none links.
+// check all or none within the parent fieldset, optionally with a string to match on the id attribute of the checkboxes
+// stored in the "data-checkbox-id-filter" attribute on the all/none links.
 // allow for some flexibility by checking the next and previous fieldset if the checkboxes aren't in this one
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
-      var filter = $(this).attr('checkbox_name_filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
-        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+        checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
         if (checkboxes.length == 0) {
@@ -160,10 +160,10 @@ jQuery(function($){
 
   $('.check_none').each(function(){
     $(this).click(function(event){
-      var filter = $(this).attr('checkbox_name_filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
-        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+        checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
         if (checkboxes.length == 0) {
