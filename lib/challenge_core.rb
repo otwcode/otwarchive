@@ -17,10 +17,10 @@ module ChallengeCore
     signups_open = self.signup_open
     if signups_open
       if close_date && close_date.past?
-        error_message << ts("If signups are open, signup close date cannot be in the past.")
+        error_message << ts("If sign-ups are open, sign-up close date cannot be in the past.")
       end
       if open_date && open_date.future?
-        error_message << ts("If signups are open, signup open date cannot be in the future.")
+        error_message << ts("If sign-ups are open, sign-up open date cannot be in the future.")
       end
       if close_date && close_date.to_s(:number) < open_date.to_s(:number)
         error_message << ts("Close date cannot be before open date.")

@@ -1430,11 +1430,11 @@ Feature: Prompt Meme Challenge
       And I fill in "Sign-up opens:" with "2010-09-20 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
       And I submit
-      And I should see "If signups are open, signup close date cannot be in the past."
+      And I should see "If sign-ups are open, sign-up close date cannot be in the past."
     Then I fill in "Sign-up opens:" with "2022-09-20 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
       And I submit
-      And I should see "If signups are open, signup open date cannot be in the future."
+      And I should see "If sign-ups are open, sign-up open date cannot be in the future."
     Then I fill in "Sign-up opens:" with "2010-09-22 12:40AM"
       And I fill in "Sign-up closes:" with "2010-09-20 12:40AM"
       And I submit
