@@ -161,6 +161,17 @@
     And I should not see "Awesome Series"
     And I should not see "third_user"
 
+  Scenario: Subscribe to a multi-chapter work should redirect you back to the chapter you were viewing
+  
+  When I am logged in as "first_user"
+    And I post the work "Multi Chapter Work"
+    And a chapter is added to "Multi Chapter Work"
+  When I am logged in as "second_user"
+    And I view the work "Multi Chapter Work"
+    And I view the 2nd chapter
+  When I press "Subscribe"
+  Then the page title should include "Chapter 2"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
   Given I have loaded the fixtures
