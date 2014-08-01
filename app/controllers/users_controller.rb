@@ -165,7 +165,7 @@ class UsersController < ApplicationController
           old_lower_login = "#{@user.login}".downcase
           new_lower_login = "#{@new_login}".downcase
           if old_lower_login == new_lower_login
-            old_pseud = Pseud.find_by_name_and_user_id(old_login,@user.id)
+            old_pseud = Pseud.find_by_name_and_user_id(old_login, @user.id)
             old_pseud.name = @new_login
             old_pseud.save!
           end
