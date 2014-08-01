@@ -5,14 +5,14 @@ Feature: Invite requests
 
     Given I have invitations set up
     When I try to invite a friend from the homepage
-    Then I should see "Invite a friend"
+    Then I should see "Invite a Friend"
       And I should see "Sorry, you have no unsent invitations right now."
 
   Scenario: Can't invite a friend from your user page if you don't have any invitations
 
     Given I have invitations set up
     When I try to invite a friend from my user page
-    Then I should see "Invite a friend"
+    Then I should see "Invite a Friend"
       And I should see "Sorry, you have no unsent invitations right now."
 
 @wip
@@ -72,7 +72,7 @@ Feature: Invite requests
     When I request some invites
     When an admin grants the request
     When I try to invite a friend from my user page
-    Then I should see "Invite a friend"
+    Then I should see "Invite a Friend"
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
