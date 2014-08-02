@@ -182,4 +182,8 @@ dl.stats + .landmark + .actions {
   float: left; 
 }
 
+dd.any label.action {
+  margin-left: 0.5625em;
+}
+
 /*END== */

@@ -37,18 +37,18 @@ Feature: Preferences
     And I press "Preview"
     And I press "Post"
     And I go to the "Big and Loud" work page
-  Then I should find ".userstuff .font-murkyyellow" within "style"
+  Then I should see "#workskin .font-murkyyellow" within "style"
     And I should see "Hide Creator's Style"
   When I go to my preferences page
   Then the "Hide work skins (you can still choose to show them)." checkbox should not be checked
   When I check "Hide work skins (you can still choose to show them)."
     And I press "Update"
   When I go to the "Big and Loud" work page
-  Then I should not find ".userstuff .font-murkyyellow"
+  Then I should not see "#workskin .font-murkyyellow"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
   When I follow "Creator's Style"
-  Then I should find ".userstuff .font-murkyyellow" within "style"
+  Then I should see "#workskin .font-murkyyellow" within "style"
     And I should see "Hide Creator's Style"
   Given I am logged out
     And I am logged in as "tasteful"

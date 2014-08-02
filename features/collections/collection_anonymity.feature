@@ -37,6 +37,7 @@ Feature: Collection
   Given all emails have been delivered
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -51,6 +52,7 @@ Feature: Collection
   # Post to collection with preview
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -185,6 +187,7 @@ Feature: Collection
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -200,6 +203,7 @@ Feature: Collection
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -326,6 +330,7 @@ Feature: Collection
   Given all emails have been delivered
   When I go to "Hidden Treasury" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -342,6 +347,7 @@ Feature: Collection
   # post to collection for day 2
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet 2"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -401,7 +407,7 @@ Feature: Collection
       And I follow "2" within "div#main.works-edit.region"
       And I check "Add co-authors?"
       And I fill in "pseud_byline" with "Amos"
-      And I press "Update Without Preview"
+      And I press "Post Without Preview"
       And I follow "Entire Work"
     Then I should not see "Jessica" within "div.preface"
       And I should not see "Amos" within "div.preface"

@@ -5,7 +5,7 @@
     (<%= @tag_set.with_type(tag_type).count %>)
     <%= expand_contract_shuffle("list_for_#{tag_type}") %> 
   </h3>
-  <ol id="list_for_<%= tag_type %>" class="tags index group">
+  <ol id="list_for_<%= tag_type %>" class="commas tags index group">
     <%= tag_relation_to_list @tag_set.with_type(tag_type) %>
   </ol>
 </li>

@@ -60,7 +60,8 @@ class RedisSearchIndexQueue
   end
   
   def self.queue_bookmarks(ids, options={})
-    ids.each { |id| async(:run_bookmark_reindex, id, options) }
+    # This is commented out as we are having issues with indexing in realtime
+    #ids.each { |id| async(:run_bookmark_reindex, id, options) }
   end
 
   def self.run_bookmark_reindex(bookmark_id)

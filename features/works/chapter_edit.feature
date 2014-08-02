@@ -93,7 +93,7 @@ Feature: Edit chapters
     And I fill in "chapter_wip_length" with "4"
     And I fill in "content" with "last chapter"
     #And I press "Preview"
-    And I press "Update Without Preview"
+    And I press "Post Without Preview"
   Then I should see "Chapter 4"
   #When I press "Update"
   Then I should see "Chapter was successfully updated"
@@ -177,7 +177,7 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
     And I view the work "New Epic Work"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "Chapter Title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
@@ -191,7 +191,7 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
     And I view the work "New Epic Work"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "Chapter Title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
@@ -202,28 +202,8 @@ Feature: Edit chapters
   When I press "Post"
     Then I should see "Chapter was successfully posted."
     And I should not see "This chapter is a draft and hasn't been posted yet!"
-
-
-  Scenario: view chapter title info pop up
-
-  Given the following activated user exists
-    | login         | password   |
-    | epicauthor    | password   |
-    And basic tags
-  When I am logged in as "epicauthor"
-    And I go to epicauthor's user page
-    And I follow "New Work"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "New Fandom"
-    And I fill in "Work Title" with "New Epic Work"
-    And I fill in "content" with "Well, maybe not so epic."
-    And I press "Post"
-    And I follow "Add Chapter"
-    And I follow "Chapter title"
-  Then I should see "You can add a chapter title"
   
-  
+
   Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
   Given basic tags
     And I am logged in as "moose" with password "muffin"  
@@ -298,4 +278,3 @@ Feature: Edit chapters
       And I press "Post Without Preview"
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
-    

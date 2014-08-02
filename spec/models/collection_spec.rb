@@ -12,8 +12,10 @@ describe Collection do
       describe "of type #{challenge_klass.name}" do        
         before do
           @collection.challenge = challenge_klass.new
-          @collection.save
           @challenge = @collection.challenge
+          @challenge.signups_open_at = Time.now - 3.days
+          @challenge.signups_close_at = Time.now + 3.days
+          @collection.save
         end
       
         it "should correctly identify the collection challenge type" do
@@ -28,6 +30,7 @@ describe Collection do
 
           describe "and close date in the future" do
             before do
+              @challenge.signups_open_at = Time.now - 3.days
               @challenge.signups_close_at = Time.now + 3.days
               @challenge.save
             end
@@ -39,7 +42,11 @@ describe Collection do
         
           describe "and close date in the past" do
             before do
-              @challenge.signups_close_at = 3.days.ago
+              @challenge.signups_close_at = 2.days.ago
+              @challenge.signups_open_at = 8.days.ago
+              @challenge.signup_open = false
+              @challenge.save
+              @challenge.signup_open = true
               @challenge.save
             end
           

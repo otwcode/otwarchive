@@ -45,6 +45,10 @@ module NavigationHelpers
       tag_sets_path
     when /^the login page$/i
       new_user_session_path
+    when /^account creation page$/i
+      new_user_path
+    when /^invite requests page$/i
+      invite_requests_path
     when /^(.*)'s user page$/i
       user_path(:id => $1)
     when /^(.*)'s user url$/i
@@ -113,20 +117,20 @@ module NavigationHelpers
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/
       edit_skin_path(Skin.find_by_title($1))
-    when /^"(.*)" collection's page$/i                      # e.g. when I go to "Collection name" collection's page
+    when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
       collection_path(Collection.find_by_title($1))
-    when /^the "(.*)" signups page$/i                      # e.g. when I go to "Collection name" signup page
+    when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
       collection_signups_path(Collection.find_by_title($1))
-    when /^the "(.*)" requests page$/i                      # e.g. when I go to "Collection name" signup page
+    when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page
       collection_requests_path(Collection.find_by_title($1))
-    when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
+    when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
+      collection_assignments_path(Collection.find_by_title($1))
+    when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by_title($1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by_title($1))
-    when /^"(.*)" collection's static page$/i
-      static_collection_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
