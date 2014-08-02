@@ -53,7 +53,7 @@ Otwarchive::Application.configure do
 
   # Make it clear we are on staging
   config.rack_dev_mark.enable = true
-  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', fixed: 'true', color: 'orange' )]
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', fixed: 'true', color: 'green' )]
 
 
 #  # run after initialization so have access to ArchiveConfig
