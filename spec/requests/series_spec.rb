@@ -1,12 +1,8 @@
 require 'spec_helper'
 
 describe "Series" do
-  subject { page }
-
-  context "that have been deleted" do
-    it "should respond with a 404" do
-      visit "/series/12345/"
-      response.response_code.should == 404
-    end
+  it 'response with 404 if page not found' do
+    get :show, { series: 'pages', id: '12345' }
+    expect(response.status).to eq(404)
   end
 end
