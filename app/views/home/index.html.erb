@@ -15,12 +15,11 @@
         <% end %>
       <% else %>
         <p id="signup" class="actions" role="navigation">
+          <%= link_to ts('Log in'), login_path %>
           <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-            <%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %>
+             or <%= link_to ts('Create an Account'), new_user_path %>
           <% elsif @admin_settings.invite_from_queue_enabled? %>
-            <%= link_to ts('Get an Invite'), invite_requests_path %>
-          <% else %>
-            <%= link_to ts('Log in'), login_path %>
+            or <%= link_to ts('Get an Invite'), invite_requests_path %>
           <% end %>
         </p>
       <% end %>
