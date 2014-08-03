@@ -1,22 +1,26 @@
 @admin
 Feature: Invite queue management
 
-  Scenario: Can turn queue off and it displays as off
+  Scenario: Can turn queue off in Admin Settings and it displays as off
   
-  When I turn off the invitation queue
-  Then I should see "Setting banner back on for all users. This may take some time"
-  # Changing from null to empty string counts as a change to the banner
+  Given I am logged in as an admin
+    And I go to the admin-settings page
+    And I uncheck "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
   When I am logged out as an admin
-  When I am on the homepage
+    And I am on the homepage
   Then I should not see "Get an Invite"
     And I should see "Archive of Our Own"
-    And This is the end of the scenario
   
-  Scenario: Can turn queue on and it displays as on
+  Scenario: Can turn queue on in Admin Settings and it displays as on
   
-  When I turn on the invitation queue
+  When I am logged in as an admin
+    And account creation requires an invitation
+    And I go to the admin-settings page
+    And I check "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
   When I am logged out as an admin
-  When I am on the homepage
+    And I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
   Then I should see "Request an Invite"
@@ -32,7 +36,8 @@ Feature: Invite queue management
       | user1 | password |
     
     # join queue
-    When I turn on the invitation queue
+    When account creation requires an invitation
+      And the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invite"
@@ -55,15 +60,14 @@ Feature: Invite queue management
 
   Scenario: Can't add yourself to the queue when queue is off
   
-  When I turn off the invitation queue
-  When I am logged out as an admin
+  When the invitation queue is disabled
   When I go to the invite_requests page
   Then I should not see "Add yourself to the list"
     And I should not see "invite_request_email"
   
   Scenario: Can still check status when queue is off
   
-  When I turn off the invitation queue
+  When the invitation queue is disabled
   When I am logged out as an admin
   When I go to the invite_requests page
   Then I should see "Wondering how long you'll have to wait"
@@ -72,7 +76,8 @@ Feature: Invite queue management
   Scenario: queue sends out invites
   
     Given I have no users
-      And I have an AdminSetting
+      And account creation requires an invitation
+      And account creation is enabled
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
@@ -81,7 +86,7 @@ Feature: Invite queue management
       | user1 | password |
     
     # join queue
-    When I turn on the invitation queue
+    When the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invite"
@@ -114,3 +119,46 @@ Feature: Invite queue management
     Then the email should contain "You've been invited to join our beta!"
       And the email should contain "fanart"
       And the email should contain "podfic"
+    
+    # user creates account, with error messages
+    When I click the first link in the email
+      And I fill in "user_login" with "user1"
+      And I fill in "user_password" with "pass"
+      And I press "Create Account"
+    Then I should see "Login has already been taken"
+      And I should see "Password is too short (minimum is 6 characters)"
+      And I should see "Password doesn't match confirmation"
+      And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should see "Sorry, you have to be over 13!"
+      And I should not see "Email address is too short"
+    When I fill in "user_login" with "newuser"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
+      And I check "user_age_over_13"
+      And I check "user_terms_of_service"
+      And I fill in "user_email" with ""
+      And I press "Create Account"
+    Then I should see "Email does not seem to be a valid address."
+    When I fill in "user_email" with "fake@fake@fake"
+      And I press "Create Account"
+    Then I should see "Email does not seem to be a valid address."
+    When I fill in "user_email" with "test@archiveofourown.org"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
+      And all emails have been delivered
+    When I press "Create Account"
+    Then I should see "Account Created!"
+    Then 1 email should be delivered
+      And the email should contain "Welcome to the Archive of Our Own,"
+      And the email should contain "newuser"
+      And the email should contain "Please activate your account"
+    
+    # user activates account
+    When all emails have been delivered
+      And I click the first link in the email
+    Then 1 email should be delivered
+      And the email should contain "your account has been activated"
+      And I should see "Please log in"
+    When I fill in "user_session_login" with "newuser"
+      And I fill in "user_session_password" with "password1"
+

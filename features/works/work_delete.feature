@@ -115,7 +115,7 @@ Feature: Delete Works
       And I should see "My new series"
       And I should see "Bad things happen, etc."
     When I follow "Add Chapter"
-      And I fill in "title" with "This is my second chapter"
+      And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"

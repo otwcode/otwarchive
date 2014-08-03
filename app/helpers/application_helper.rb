@@ -127,7 +127,7 @@ module ApplicationHelper
     if @downloading
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
   
@@ -512,8 +512,8 @@ module ApplicationHelper
     css_class
   end
   
-  def check_all_none(all_text="All", none_text="None", name_filter=nil)
-    filter_attrib = (name_filter ? " checkbox_name_filter=\"#{name_filter}\"" : '')    
+  def check_all_none(all_text="All", none_text="None", id_filter=nil)
+    filter_attrib = (id_filter ? " data-checkbox-id-filter=\"#{id_filter}\"" : '')    
     ('<ul class="actions">
       <li><a href="#" class="check_all"' + 
       "#{filter_attrib}>#{all_text}</a></li>" +

@@ -4,8 +4,10 @@ Feature: Sign Up for a new account
   I want to be able to create a new account.
 
   Background:
-    Given I am a visitor
-    And I use an invitation to sign up
+    Given account creation is enabled
+      And account creation requires an invitation
+      And I am a visitor
+      And I use an invitation to sign up
 
   Scenario Outline: The user should see validation errors when signing up with invalid data.
     When I fill in the sign up form with valid data
@@ -21,7 +23,7 @@ Feature: Sign Up for a new account
       | user_email                 |                | Email does not seem to be a valid address.      |
       | user_email                 | fake@fake@fake | Email does not seem to be a valid address       |
 
-  Scenario Outline: The user should see validation erros when signing up without filling in required fields.
+  Scenario Outline: The user should see validation errors when signing up without filling in required fields.
     When I press "Create Account"
     Then I should see "<error>"
       And I should not see "Account Created!"   

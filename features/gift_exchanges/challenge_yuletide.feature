@@ -79,6 +79,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Sign-up open?"
+    And I set up the challenge dates
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
@@ -91,10 +92,10 @@ Feature: Collection
   Then I should see "About Yuletide (yule2011)"
     And I should see "Sign-up:" within ".collection .meta"
     And I should see "Open" within ".collection .meta"
-    And I should see "Sign-up closes:" within ".collection .meta"
-    And I should see "Assignments due:" within ".collection .meta"
-    And I should see "Works revealed:" within ".collection .meta"
-    And I should see "Authors revealed:" within ".collection .meta"
+    And I should see "Sign-up Closes:" within ".collection .meta"
+    And I should see "Assignments Due:" within ".collection .meta"
+    And I should see "Works Revealed:" within ".collection .meta"
+    And I should see "Authors Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"

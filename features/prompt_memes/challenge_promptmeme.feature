@@ -998,7 +998,7 @@ Feature: Prompt Meme Challenge
     And I should see "canon SGA love by myname4 in Battle 12" within "div#main.challenge_claims-index h4"
   When I follow "Fulfill"
     And I fill in "Fandoms" with "Stargate Atlantis"
-    And I fill in "Work Title *" with "Fulfilled Story-thing"
+    And I fill in "Work Title*" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
@@ -1420,3 +1420,22 @@ Feature: Prompt Meme Challenge
   Then I should see "There were some problems with this submission. Please correct the mistakes below."
     And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
     And the "Semi-anonymous prompt" checkbox should be checked
+
+  Scenario: Dates should be correctly set on PromptMemes
+    Given I am logged in as "mod1"
+      And I have standard challenge tags set up
+      And I have no prompts
+    When I set up Battle 12 promptmeme collection
+      And I check "Sign-up open?"
+      And I fill in "Sign-up opens:" with "2010-09-20 12:40AM"
+      And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
+      And I submit
+      And I should see "If sign-ups are open, sign-up close date cannot be in the past."
+    Then I fill in "Sign-up opens:" with "2022-09-20 12:40AM"
+      And I fill in "Sign-up closes:" with "2010-09-22 12:40AM"
+      And I submit
+      And I should see "If sign-ups are open, sign-up open date cannot be in the future."
+    Then I fill in "Sign-up opens:" with "2010-09-22 12:40AM"
+      And I fill in "Sign-up closes:" with "2010-09-20 12:40AM"
+      And I submit
+      And I should see "Close date cannot be before open date."

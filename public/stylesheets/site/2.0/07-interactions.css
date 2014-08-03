@@ -141,6 +141,10 @@ form dd + dd {
   margin-left: 0.5625em;
 }
 
+form dd.required {
+  color: #2a2a2a;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
@@ -150,31 +154,40 @@ p.character_counter {
   text-align: right;
 }
 
-.character_counter span {
-  display: inline-block;
-  width: 3.75em;
-}
-
 .comment .character_counter {
   float: left;
 }
 
-/* WIDGET: LIVE VALIDATION (todo: ARIA live region)*/
+/* WIDGET: LIVE VALIDATION (todo: ARIA live region)
+We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating. */
 
 .LV_validation_message {
-  font-weight: bold;
-}
-
-.LV_valid {
-  color: #0c0;
+  font-weight: 900;
 }
 
 .LV_invalid {
-  color: #c00;
+  background: #efd1d1;
+  border: 1px solid #900;
+  color: #900;
+  margin: 0.643em auto;
+  padding: 0.25em 0.375em;
+  position: absolute;
+    box-shadow: 1px 1px 2px;
+    border-radius: 0.25em;
 }
 
 .LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
   border: 1px solid #c00;
+}
+
+.LV_invalid:before {
+  border-color: #900 transparent;
+  border-style: solid;
+  border-width: 0 0.643em 0.643em;
+  content: "";
+  left: 0.875em;
+  position: absolute;
+  top: -0.643em;
 }
 
 /* WIDGET: AUTO COMPLETE */
