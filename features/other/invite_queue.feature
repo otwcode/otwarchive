@@ -1,24 +1,26 @@
 @admin
 Feature: Invite queue management
 
-  Scenario: Can turn queue off and it displays as off
+  Scenario: Can turn queue off in Admin Settings and it displays as off
   
-  When I turn off the invitation queue
-  Then I should see "Setting banner back on for all users. This may take some time"
-  # Changing from null to empty string counts as a change to the banner
+  Given I am logged in as an admin
+    And I go to the admin-settings page
+    And I uncheck "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
   When I am logged out as an admin
-  When I am on the homepage
+    And I am on the homepage
   Then I should not see "Get an Invite"
     And I should see "Archive of Our Own"
   
-  Scenario: Can turn queue on and it displays as on
+  Scenario: Can turn queue on in Admin Settings and it displays as on
   
-  When I turn on the invitation queue
+  When I am logged in as an admin
+    And account creation requires an invitation
+    And I go to the admin-settings page
+    And I check "admin_setting_invite_from_queue_enabled"
+    And I press "Update"
   When I am logged out as an admin
-    And I have an AdminSetting
-    And account creation requires invitation
-    And account creation is enabled
-  When I am on the homepage
+    And I am on the homepage
   Then I should see "Get an Invite"
   When I follow "Get an Invite"
   Then I should see "Request an Invite"
@@ -34,7 +36,8 @@ Feature: Invite queue management
       | user1 | password |
     
     # join queue
-    When I turn on the invitation queue
+    When account creation requires an invitation
+      And the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invite"
@@ -57,15 +60,14 @@ Feature: Invite queue management
 
   Scenario: Can't add yourself to the queue when queue is off
   
-  When I turn off the invitation queue
-  When I am logged out as an admin
+  When the invitation queue is disabled
   When I go to the invite_requests page
   Then I should not see "Add yourself to the list"
     And I should not see "invite_request_email"
   
   Scenario: Can still check status when queue is off
   
-  When I turn off the invitation queue
+  When the invitation queue is disabled
   When I am logged out as an admin
   When I go to the invite_requests page
   Then I should see "Wondering how long you'll have to wait"
@@ -74,8 +76,7 @@ Feature: Invite queue management
   Scenario: queue sends out invites
   
     Given I have no users
-      And I have an AdminSetting
-      And account creation requires invitation
+      And account creation requires an invitation
       And account creation is enabled
       And the following admin exists
       | login       | password   | email                    |
@@ -85,7 +86,7 @@ Feature: Invite queue management
       | user1 | password |
     
     # join queue
-    When I turn on the invitation queue
+    When the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invite"

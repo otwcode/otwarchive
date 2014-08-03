@@ -5,7 +5,7 @@ Feature: Sign Up for a new account
 
   Background:
     Given account creation is enabled
-      And account creation requires invitation
+      And account creation requires an invitation
       And I am a visitor
       And I use an invitation to sign up
 
