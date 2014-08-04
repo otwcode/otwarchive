@@ -138,9 +138,10 @@ Feature: Invite queue management
     Then I should see "Email does not seem to be a valid address."
 
     # Correct user and email
-    When I fill in "user_email" with "test@archiveofourown.org"
-      And I fill in "user_password" with "password1"
-      And I fill in "user_password_confirmation" with "password1"
+    When I fill in the following:
+      | user_email                 | test@archiveofourown.org |
+      | user_password              | password1                |
+      | user_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
     Then I should see "Account Created!"
@@ -155,5 +156,5 @@ Feature: Invite queue management
     Then 1 email should be delivered
       And the email should contain "your account has been activated"
       And I should see "Please log in"
-    When I fill in "user_session_login" with "newuser"
-      And I fill in "user_session_password" with "password1"
+    When I am logged in as "newuser" with password "password1"
+    Then I should see "Successfully logged in."
