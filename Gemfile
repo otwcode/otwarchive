@@ -101,6 +101,7 @@ group :test do
   gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  gem 'webmock', '>=1.8.0'
   # Code coverage
   gem 'simplecov', :require => false
   gem 'email_spec'
@@ -116,6 +117,6 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-  gem 'unicorn', :require => false
-  gem "memcache-client"
+  #gem 'unicorn', :require => false
+  #gem "memcache-client"
 end
