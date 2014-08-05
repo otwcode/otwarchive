@@ -40,7 +40,7 @@
       <%= render :partial => 'layouts/header' %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->
-        <% if @admin_posts %>
+        <% if @admin_posts && !@hide_dashboard %>
           <%= render :partial => 'admin_posts/sidebar' %>
         <% elsif @user && !@hide_dashboard %>
           <%= render :partial => 'users/sidebar' %>

@@ -22,7 +22,11 @@ module ApplicationHelper
       class_names = "system support faq " + controller.action_name
     end
     if controller.controller_name == "home"
-      class_names = "system docs " + controller.action_name
+      if controller.action_name == "index"
+        class_names = "splash system"
+      else
+        class_names = "system docs " + controller.action_name
+      end
     end
     
     class_names
