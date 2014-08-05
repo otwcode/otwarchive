@@ -48,7 +48,7 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
+    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
     @admin_post_show_more = AdminPost.count > 3
     
     @hide_dashboard = true
