@@ -107,6 +107,7 @@ Feature: Invite queue management
       And the email should contain "fanart"
       And the email should contain "podfic"
     When I click the first link in the email
+      And I fill in the sign up form with valid data
       And I fill in the following:
         | user_login                 | newuser                  |
         | user_email                 | test@archiveofourown.org |
