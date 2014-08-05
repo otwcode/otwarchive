@@ -24,6 +24,10 @@
     <h3 class="heading"><%= ts("News") %></h3>
     <% @admin_posts.each do |admin_post| %>
       <p><%= link_to admin_post.title.html_safe, admin_post %></p>
+      <blockquote>
+        <%= first_paragraph(admin_post.content, '(No preview is available for this news post.)') %>
+      </blockquote>
+      <p><%= link_to ts('Read more...'), admin_post %></p>
     <% end %>
     <% if @admin_post_show_more %>
       <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
