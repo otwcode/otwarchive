@@ -75,19 +75,18 @@ Feature: Invite queue management
     Then I should see "Wondering how long you'll have to wait"
       And I should see "Email"
 
-  Scenario: queue sends out invites
+  Scenario: The queue sends out invites and user can create and activate an account
 
-    # join queue
     Given account creation is enabled
       And the invitation queue is enabled
       And account creation requires an invitation
+      And the invite_from_queue_at is yesterday
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invite"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
-    When the invite_from_queue_at is yesterday
-    And the check_queue rake task is run
+      And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "You can search for the email address you signed up with below."
@@ -99,7 +98,6 @@ Feature: Invite queue management
       And I fill in "invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
-      And I should see "copy and use"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
 
@@ -108,40 +106,12 @@ Feature: Invite queue management
     Then the email should contain "You've been invited to join our beta!"
       And the email should contain "fanart"
       And the email should contain "podfic"
-    
-    # user creates account, with error messages
     When I click the first link in the email
-      And I fill in "user_login" with "user1"
-      And I fill in "user_password" with "pass"
-      And I press "Create Account"
-    Then I should see "Login has already been taken"
-      And I should see "Password is too short (minimum is 6 characters)"
-      And I should see "Password doesn't match confirmation"
-      And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
-      And I should see "Sorry, you have to be over 13!"
-      And I should not see "Email address is too short"
-
-    # Blank email
-    When I fill in the following:
-      | user_login                 | newuser   |
-      | user_password              | password1 |
-      | user_password_confirmation | password1 |
-      | user_email                 |           |
-      And I check "user_age_over_13"
-      And I check "user_terms_of_service"
-      And I press "Create Account"
-    Then I should see "Email does not seem to be a valid address."
-
-    # Invalid email
-    When I fill in "user_email" with "fake@fake@fake"
-      And I press "Create Account"
-    Then I should see "Email does not seem to be a valid address."
-
-    # Correct user and email
-    When I fill in the following:
-      | user_email                 | test@archiveofourown.org |
-      | user_password              | password1                |
-      | user_password_confirmation | password1                |
+      And I fill in the following:
+        | user_login                 | newuser                  |
+        | user_email                 | test@archiveofourown.org |
+        | user_password              | password1                |
+        | user_password_confirmation | password1                |
       And all emails have been delivered
     When I press "Create Account"
     Then I should see "Account Created!"
