@@ -95,13 +95,11 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
-  # automatically record http requests and save them to make
-  # cuke fast
-  gem 'typhoeus'
-  gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
-  gem 'webmock', '>=1.8.0'
+  # Record and replay data from external URLs
+  gem "vcr", "~> 2.5.0"
+  gem 'webmock', '~> 1.8.8'
   # Code coverage
   gem 'simplecov', :require => false
   gem 'email_spec'
@@ -117,6 +115,6 @@ gem 'rvm-capistrano'
 
 group :production do
   # Use unicorn as the web server
-  #gem 'unicorn', :require => false
-  #gem "memcache-client"
+  gem 'unicorn', :require => false
+  gem "memcache-client"
 end
