@@ -51,6 +51,10 @@ class HomeController < ApplicationController
     @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
     @admin_post_show_more = AdminPost.count > 3
     
+    if logged_in?
+      @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})
+    end
+    
     @hide_dashboard = true
     render :action => "index", :layout => "application"
   end
