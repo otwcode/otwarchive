@@ -26,13 +26,11 @@ class PseudsController < ApplicationController
   # GET /users/:user_id/pseuds/:id
   def show
     if @user.blank?
-      flash[:error] = ts("Sorry, could not find this user.")
-      redirect_to people_path and return
+      raise ActiveRecord::RecordNotFound , "Sorry, could not find this user."
     end
     @pseud = @user.pseuds.find_by_name(params[:id])
     unless @pseud
-      flash[:error] = ts("Sorry, could not find this pseud.")
-      redirect_to people_path and return
+      raise ActiveRecord::RecordNotFound , "Sorry, could not find pseud  #{params[:id]}"
     end
     @page_subtitle = @pseud.name
 
