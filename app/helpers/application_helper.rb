@@ -555,7 +555,7 @@ module ApplicationHelper
     if paragraph_text.present?
       return content_tag(:p, paragraph_text)
     else
-      return content_tag(:p, ts(placeholder_text))
+      return content_tag(:p, ts(placeholder_text), class: "placeholder")
     end
   end
     

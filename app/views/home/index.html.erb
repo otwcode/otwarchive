@@ -1,29 +1,64 @@
 <% if !logged_in? %>
-  <div class="intro module">
-    <h2 class="heading"><%= ts('Welcome to the Archive of Our Own!') %></h2>
+  <div class="intro-new module">
+    <h3 class="heading"><%= ts('What is the Archive of Our Own?') %></h3>
     <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic. We currently have %{fandom_count} fandoms, %{user_count} registered users, and %{work_count} works.", :fandom_count => content_tag(:span, @fandom_count, class: "count"), :user_count => content_tag(:span, @user_count, class: "count"), :work_count => content_tag(:span, @work_count, class:"count")).html_safe %></p>
-    <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
     <p><%= ts("The Archive of Our Own is a project of the ") %><%= link_to ts("Organization for Transformative Works"), "http://transformativeworks.org" %>.</p>
-    <% if logged_in? %>
-      <% if @admin_settings.creation_requires_invite? %>
-        <p id="signup" class="actions" role="navigation"><%= link_to ts('Invite a Friend'), user_invitations_path(current_user) %></p>
-      <% end %>
-    <% else %>
-      <p id="signup" class="actions" role="navigation">
-        <%= link_to ts('Log in'), login_path %>
-        <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-          or <%= link_to ts('Create an Account'), new_user_path %>
-        <% elsif @admin_settings.invite_from_queue_enabled? %>
-          or <%= link_to ts('Get an Invite'), invite_requests_path %>
+    
+    <div class="account module">
+      <h4 class="heading"><%= ts('Feel like getting an account?') %></h4>
+      <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
+      <% if logged_in? %>
+        <% if @admin_settings.creation_requires_invite? %>
+          <p id="signup" class="actions" role="navigation"><%= link_to ts('Invite a Friend'), user_invitations_path(current_user) %></p>
         <% end %>
-      </p>
+      <% else %>
+        <p id="signup" class="actions" role="navigation">
+          <%= link_to ts('Log in'), login_path %>
+          <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+            or <%= link_to ts('Create an Account'), new_user_path %>
+          <% elsif @admin_settings.invite_from_queue_enabled? %>
+            or <%= link_to ts('Get an Invite'), invite_requests_path %>
+          <% end %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @admin_posts %>
+  <div class="latest news module">
+    <h3 class="heading"><%= ts("News") %></h3>
+    <ul class="news index group">
+      <% @admin_posts.each do |admin_post| %>
+        <li class="group">
+          <div class="header module group">
+            <h4 class="heading"><%= link_to admin_post.title.html_safe, admin_post %></h4>
+            <p>
+              <span class="published"><%= ts('Published:') %> <%= time_in_zone(admin_post.created_at) %></span>
+              <span class="comments"><%= ts('Comments:') %> <%= admin_post.count_visible_comments %></span>
+            </p>
+          </div>
+          <blockquote class="userstuff">
+            <%= first_paragraph(admin_post.content, 'No preview is available for this news post.') %>
+          </blockquote>
+          <p class="jump"><%= link_to ts('Read more...'), admin_post %></p>
+        </li>
+      <% end %>
+    </ul>
+    <% if @admin_post_show_more %>
+      <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
     <% end %>
   </div>
 <% end %>
 
+<div class="browse module">
+  <h3 class="heading"><%= ts('Have a look around') %></h3>
+  <%= render 'menu/menu_fandoms' %>
+</div>
+
 <% if logged_in? %>
   <% if @readings %>
-    <div class="readings latest module">
+    <div class="random readings module">
       <h3 class="heading"><%= ts('Is it later already?') %></h3>
       <p><%= link_to ts('My History'), user_readings_path(@current_user) %></p>
       <p><%= ts('Some works you\'ve marked for later.') %></p>
@@ -36,25 +71,9 @@
   <% end %>
 <% end %>
 
-<% if @admin_posts %>
-  <div class="news latest module">
-    <h3 class="heading"><%= ts("News") %></h3>
-    <% @admin_posts.each do |admin_post| %>
-      <p><%= link_to admin_post.title.html_safe, admin_post %></p>
-      <blockquote>
-        <%= first_paragraph(admin_post.content, '(No preview is available for this news post.)') %>
-      </blockquote>
-      <p><%= link_to ts('Read more...'), admin_post %></p>
-    <% end %>
-    <% if @admin_post_show_more %>
-      <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
-    <% end %>
-  </div>
-<% end %>
-
 <% if logged_in? %>
   <% if @inbox_comments %>
-    <div class="unread messages latest module">
+    <div class="unread latest messages module">
       <h3 class="heading"><%= ts("Unread Messages") %></h3>
       <ul class="comment index group">
         <% @inbox_comments.each do |inbox_comment| %>
@@ -65,7 +84,7 @@
   <% end %>
 <% end %>
 
-<div class="tweets latest module">
+<div class="latest tweets module">
   <h3 class="heading"><%= ts("Tweets") %></h3>
   <a class="twitter-timeline" href="https://twitter.com/otw_status/otw-tweets" data-widget-id="382983150978076672" height="300"><%= ts("Tweets from @otw_status/otw-tweets") %></a>
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
