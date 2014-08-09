@@ -1,5 +1,9 @@
 Otwarchive::Application.routes.draw do
 
+  #### FAVORITE TAGS ####
+
+  resources :favorite_tags
+
   #### ERRORS ####
 
   match '/403', :to => 'errors#403'
@@ -204,6 +208,7 @@ Otwarchive::Application.routes.draw do
     resources :external_authors do
       resources :external_author_names
     end
+    resources :favorite_tags
     resources :gifts, :only => [:index]
     resource :inbox, :controller => "inbox" do
       member do

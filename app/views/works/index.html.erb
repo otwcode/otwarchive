@@ -38,6 +38,10 @@
 <% end %>
 <!---/subnav-->
 
+<% if @tag && logged_in? %>
+  <%= render 'favorite_tags/form' %>
+<% end %>
+
 <% unless @owner.present? %>
   <p><%= ts("These are some of the latest works posted to the Archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
 <% end %>

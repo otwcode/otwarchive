@@ -1,7 +1,9 @@
-<div class="browse module">
-  <h3 class="heading"><%= ts('Have a look around') %></h3>
-  <%= render 'menu/menu_fandoms' %>
-</div>
+<% unless logged_in? && @favorite_fandoms %>
+  <div class="browse module">
+    <h3 class="heading"><%= ts('Have a look around') %></h3>
+    <%= render 'menu/menu_fandoms' %>
+  </div>
+<% end %>
 
 <% if !logged_in? %>
   <div class="intro-new module">
@@ -21,7 +23,9 @@
       <% if @admin_settings.invite_from_queue_enabled? %>
         <p><%= ts('While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
         <p class="actions"><%= link_to ts('Get Invited!'), invite_requests_path %></p>
-      <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+      <% end %>
+      
+      <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
         <p class="actions"><%= link_to ts('Create an Account!'), new_user_path %></p>
       <% end %>      
      </div>

@@ -80,6 +80,10 @@ class Tag < ActiveRecord::Base
   has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'
   has_many :approved_collections, :through => :filtered_works
 
+  # TODO Destroy favorite_tags for this tag_id when a tag is de-canonized
+  # TODO Update favorite_tags for this tag_id when a canonical tag becomes a synonym of a new canonical tag
+  has_many :favorite_tags, :dependent => :destroy
+
   has_many :set_taggings, :dependent => :destroy
   has_many :tag_sets, :through => :set_taggings
   has_many :owned_tag_sets, :through => :tag_sets
