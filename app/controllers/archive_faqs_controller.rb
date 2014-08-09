@@ -1,6 +1,7 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
+  before_filter :set_locale, :only => [:index, :show]
   #before_filter :get_faq_translations, :only => [:new, :create, :edit, :update, :update_positions]
 
   #def get_faq_translations
@@ -128,7 +129,7 @@ class ArchiveFaqsController < ApplicationController
       format.js { render :nothing => true }
     end
   end
-  
+
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
     @archive_faq = ArchiveFaq.find(params[:id])
