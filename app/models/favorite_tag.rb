@@ -4,7 +4,6 @@ class FavoriteTag < ActiveRecord::Base
   
   validates :user_id, presence: true
   validates :tag_id, presence: true
-  # attr_accessible :title, :body
   
   def tag
     Tag.find_by_id(tag_id)
