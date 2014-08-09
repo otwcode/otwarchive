@@ -1,26 +1,8 @@
 <% if @favorite_tag.new_record? %>
   <%= form_for [@current_user, @favorite_tag] do |f| %>
-    <div class="field">
-      <% # f.label :user_id %>
-      <% # f.text_field :user_id %>
-      @current_user: <%= @current_user %><br />
-      @current_user.login: <%= @current_user.login %><br />
-      @current_user.id: <%= @current_user.id %>
-    </div>
-    <div class="field">
-      <% # f.label :tag_id %>
-      <% # f.text_field :tag_id, :value => :tag %>
-      <%= f.hidden_field :user_id %>
-      <%= f.hidden_field :tag_id %>
-      <% if @tag %>
-      @tag: <%= @tag %><br />
-      @tag.name: <%= @tag.name %><br />
-      @tag.id: <%= @tag.id %>
-      <% end %>
-    </div>
-    <div class="actions">
-      <%= f.submit ts('Favorite Tag') %>
-    </div>
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :tag_id %>
+    <%= f.submit ts('Favorite Tag') %>
   <% end %>
 <% else %>
   <%= form_for [@current_user, @favorite_tag], :html => {:method => :delete} do |f| %>

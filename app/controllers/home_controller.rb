@@ -54,6 +54,7 @@ class HomeController < ApplicationController
     if logged_in?
       @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     
       @inbox_comments = @current_user.inbox_comments.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:read => false})
+      @favorite_tags = @current_user.favorite_tags.find(:all)
     end
     
     @hide_dashboard = true

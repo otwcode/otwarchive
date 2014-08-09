@@ -1,7 +1,23 @@
-<% unless logged_in? && @favorite_fandoms %>
+<% unless logged_in? && @favorite_tags.present? %>
   <div class="browse module">
-    <h3 class="heading"><%= ts('Have a look around') %></h3>
+    <h3 class="heading"><%= ts('Find your favorites') %></h3>
+    <% if logged_in? %>
+      <p><%= ts('Browse fandoms by media or favorite some tags to have them listed here!') %></p>
+    <% end %>
     <%= render 'menu/menu_fandoms' %>
+  </div>
+<% end %>
+
+<% if logged_in? && @favorite_tags.present? %>
+  <div class="browse module">
+    <h3 class="heading"><%= ts('Find your favorites') %></h3>
+    <ul>
+      <% @favorite_tags.each do |favorite_tag| %>
+        <li>
+          <%= link_to_tag_works(favorite_tag.tag) %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
 
@@ -32,7 +48,7 @@
   </div>
 <% end %>
 
-<% if @admin_posts %>
+<% if @admin_posts.present? %>
   <div class="latest news module">
     <h3 class="heading"><%= ts("News") %></h3>
     <ul class="news index group">
@@ -58,32 +74,28 @@
   </div>
 <% end %>
 
-<% if logged_in? %>
-  <% if @readings %>
-    <div class="random readings module">
-      <h3 class="heading"><%= ts('Is it later already?') %></h3>
-      <p><%= link_to ts('My History'), user_readings_path(@current_user) %></p>
-      <p><%= ts('Some works you\'ve marked for later.') %></p>
-      <ul class="readings works index group">
-        <% @readings.each do |reading| %>
-          <%= render 'readings/reading_blurb', :work => reading.work, :reading => reading %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if logged_in? && @readings.present? %>
+  <div class="random readings module">
+    <h3 class="heading"><%= ts('Is it later already?') %></h3>
+    <p><%= link_to ts('My History'), user_readings_path(@current_user) %></p>
+    <p><%= ts('Some works you\'ve marked for later.') %></p>
+    <ul class="readings works index group">
+      <% @readings.each do |reading| %>
+        <%= render 'readings/reading_blurb', :work => reading.work, :reading => reading %>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
 
-<% if logged_in? %>
-  <% if @inbox_comments %>
-    <div class="unread latest messages module">
-      <h3 class="heading"><%= ts("Unread Messages") %></h3>
-      <ul class="comment index group">
-        <% @inbox_comments.each do |inbox_comment| %>
-          <%= render 'comments/single_comment_abbreviated', :single_comment => inbox_comment.feedback_comment %>
-          <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if logged_in? && @inbox_comments.present? %>
+  <div class="unread latest messages module">
+    <h3 class="heading"><%= ts("Unread Messages") %></h3>
+    <ul class="comment index group">
+      <% @inbox_comments.each do |inbox_comment| %>
+        <%= render 'comments/single_comment_abbreviated', :single_comment => inbox_comment.feedback_comment %>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
 
 <div class="latest tweets module">
