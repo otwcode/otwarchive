@@ -1,11 +1,11 @@
 <% if @favorite_tag.new_record? %>
-  <%= form_for [@current_user, @favorite_tag] do |f| %>
+  <%= form_for(:favorite_tag, url: [@current_user, @favorite_tag], html: { method: 'post', id: 'favorite_tag' }) do |f| %>
     <%= f.hidden_field :user_id %>
     <%= f.hidden_field :tag_id %>
     <%= f.submit ts('Favorite Tag') %>
   <% end %>
 <% else %>
-  <%= form_for [@current_user, @favorite_tag], :html => {:method => :delete} do |f| %>
+  <%= form_for(:favorite_tag, url: [@current_user, @favorite_tag], html: { method: 'delete', id: 'favorite_tag' }) do |f| %>
     <%= f.hidden_field :user_id %>
     <%= f.hidden_field :tag_id %>
     <%= f.submit ts('Unfavorite Tag') %>
