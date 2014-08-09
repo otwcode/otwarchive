@@ -2,7 +2,7 @@ Otwarchive::Application.routes.draw do
 
   #### FAVORITE TAGS ####
 
-  resources :favorite_tags, :only => [:index, :create, :destroy]
+  resources :favorite_tags, :only => [:create, :destroy]
 
   #### ERRORS ####
 
@@ -208,7 +208,7 @@ Otwarchive::Application.routes.draw do
     resources :external_authors do
       resources :external_author_names
     end
-    resources :favorite_tags, :only => [:index, :create, :destroy]
+    resources :favorite_tags, :only => [:create, :destroy]
     resources :gifts, :only => [:index]
     resource :inbox, :controller => "inbox" do
       member do
