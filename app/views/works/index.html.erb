@@ -29,7 +29,7 @@
           <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
         <% end %>
         <% if @tag && logged_in? %>
-          <%= render 'favorite_tags/form' %>
+          <li><%= render 'favorite_tags/form' %></li>
         <% end %>
         <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
           <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
