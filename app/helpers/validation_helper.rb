@@ -1,3 +1,5 @@
+require 'json'
+
 module ValidationHelper
 
   # Set a custom error-message handler that puts the errors on 
@@ -110,9 +112,7 @@ module ValidationHelper
     end
     
     if options[:exclusion]
-      exclusion_string = "['"
-      exclusion_string += options[:exclusion].join("', '")
-      exclusion_string += "']"
+      exclusion_string = options[:exclusion].to_json
       validation_code += "#{live_validation_varname(id)}.add(Validate.Exclusion, { "
       validation_code += "\"within\": #{exclusion_string}, "
       validation_code += "\"failureMessage\":\"#{options[:failureMessage]}\", "
