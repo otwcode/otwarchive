@@ -92,30 +92,30 @@ module ValidationHelper
     
     validation_code = ""
     if options[:presence]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Presence, {\"failureMessage\":\"#{options[:failureMessage]}\", "
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Presence, {\"failureMessage\":\"#{options[:failureMessage]}\","
       validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
     end
     
     if options[:maximum_length]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, { \"maximum\":\"#{options[:maximum_length]}\", "
-      validation_code += "\"tooLongMessage\": \"#{options[:tooLongMessage]}\"});\n"
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, {\"maximum\":\"#{options[:maximum_length]}\","
+      validation_code += "\"tooLongMessage\":\"#{options[:tooLongMessage]}\"});\n"
     end
     
     if options[:minimum_length]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, { \"minimum\":\"#{options[:minimum_length]}\", "
-      validation_code += "\"tooShortMessage\": \"#{options[:tooShortMessage]}\"});\n"
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, {\"minimum\":\"#{options[:minimum_length]}\","
+      validation_code += "\"tooShortMessage\":\"#{options[:tooShortMessage]}\"});\n"
     end
     
     if options[:numericality]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Numericality, { \"notANumberMessage\":\"#{options[:notANumberMessage]}\", "
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Numericality, {\"notANumberMessage\":\"#{options[:notANumberMessage]}\","
       validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
     end
     
     if options[:exclusion]
       exclusion_string = options[:exclusion].to_json
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Exclusion, { "
-      validation_code += "\"within\": #{exclusion_string}, "
-      validation_code += "\"failureMessage\":\"#{options[:failureMessage]}\", "
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Exclusion, {"
+      validation_code += "\"within\":#{exclusion_string},"
+      validation_code += "\"failureMessage\":\"#{options[:failureMessage]}\","
       validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});"
     end
     
