@@ -400,25 +400,6 @@ function prepareDeleteLinks() {
   });
 }
 
-  $j('#favorite_tag').find('input').on("click", function(event) {
-    event.preventDefault();
-
-    $j.ajax({
-      type: 'POST',
-      url: '/favorite_tags.js',
-      data: jQuery('#favorite_tag').serialize(),
-      error: function(jqXHR, textStatus, errorThrown ) {
-        var msg = 'Sorry, we were unable to favorite this tag.';
-        //var data = $j.parseJSON(jqXHR.responseText);
-        $j('#favorite_tag_message').addClass('error notice').text(msg);
-      },
-      success: function(data) {
-        $j('#favorite_tag_message').addClass('notice').text('You have successfully favorited the tag %{tag_name}. It will be listed on your homepage.');
-      }
-    });
-  });
-
-
 /// Kudos
 $j(document).ready(function() {
   $j('a#kudos_summary').click(function(e) {

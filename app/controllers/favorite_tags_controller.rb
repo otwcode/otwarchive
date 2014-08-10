@@ -1,49 +1,42 @@
 class FavoriteTagsController < ApplicationController
-
-  skip_before_filter :store_location
-
+  
+  skip_before_filter :store_location, only: [ :create, :destroy ]
+  before_filter :users_only
+  before_filter :load_user
+  before_filter :check_ownership
+  
+  respond_to :html, :json
+  
   # GET /favorites_tags
   def index
     @favorite_tags = FavoriteTag.all
   end
-
-  # POST /favorite_tags
+  
+  # POST /favorites_tags
   def create
-    @favorite_tag = FavoriteTag.new(params[:favorite_tag])
-
-    if @favorite_tag.save
-      respond_to do |format|
-        format.html do
-          flash[:notice] = ts('You have successfully favorited the tag %{tag_name}. It will be listed on your homepage.', :tag_name => @favorite_tag.tag_name).html_safe
-          redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param) and return
-        end
-        format.js do
-          render :create, status: :created
-        end
-      end
-    else
-      respond_to do |format|
-        format.html do
-          flash[:error] = ts('Sorry, we could not favorite the tag %{tag_name}.', :tag_name => @favorite_tag.tag_name).html_safe
-          redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param) and return
-        end
-        format.js do
-          render json: { errors: @favorite_tag.errors }
-        end
-      end
+    @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
+    @favorite_tag.save!
+    respond_to do |format|
+      format.html { redirect_to @favorite_tag.work }
+      format.json { render json: { favorite_tag_id: @favorite_tag.id }, status: :created }
     end
   end
-
-  # DELETE /favorite_tags/1
+ 
+  # DELETE /favorite_tags/1 
   def destroy
     @favorite_tag = FavoriteTag.find(params[:id])
     @favorite_tag.destroy
-
     respond_to do |format|
-      format.html do
-          flash[:notice] = ts('You have successfully unfavorited the tag %{tag_name}. It will no longer be listed on your homepage.', :tag_name => @favorite_tag.tag_name).html_safe
-          redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param) and return
-        end
+      format.html { redirect_to @favorite_tag.work }
+      format.json { render json: {}, status: :ok }
     end
   end
+  
+  private
+  
+  def load_user
+    @user = User.find_by_login(params[:user_id])
+    @check_ownership_of = @user
+  end
+  
 end

@@ -1,0 +1,15 @@
+
+
+<% if @favorite_tag.new_record? %>
+  <%= form_for([@current_user, @favorite_tag], method: 'post', html: { class: 'favorite_tag' }) do |f| %>
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :tag_id %>
+    <%= f.submit ts("Create Favorite Tag"), class: 'submit_favorite_tag' %>
+  <% end %>
+<% else %>
+  <%= form_for([@current_user, @favorite_tag], method: 'delete', html: { class: 'favorite_tag' }) do |f| %>
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :tag_id %>
+    <%= f.submit ts("Destroy Favorite Tag"), class: 'submit_favorite_tag' %>
+  <% end %>
+<% end %>
