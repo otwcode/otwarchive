@@ -29,19 +29,11 @@ describe ValidationHelper do
       | <script type="text/javascript">
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
-      | validation_for_10.add(Validate.Presence, {"failureMessage":"failure message.", 
-      | "validMessage":"valid message."});
-      | validation_for_10.add(Validate.Length, { "maximum":"10", 
-      | "tooLongMessage": "too long message."}); 
-      | validation_for_10.add(Validate.Length, { "minimum":"5", 
-      | "tooShortMessage": "too short message."}); 
-      | validation_for_10.add(Validate.Numericality, { "notANumberMessage":"not a number message.", 
-      | "validMessage":"valid message."});
-      | validation_for_10.add(Validate.Exclusion, { 
-      | "within": ['one', 'two', 'three'], 
-      | "failureMessage":"failure message.", 
-      | "validMessage":"valid message."});
-      |
+      | validation_for_10.add(Validate.Presence, {"failureMessage":"failure message.", "validMessage":"valid message."});
+      | validation_for_10.add(Validate.Length, { "maximum":"10", "tooLongMessage": "too long message."});
+      | validation_for_10.add(Validate.Length, { "minimum":"5", "tooShortMessage": "too short message."});
+      | validation_for_10.add(Validate.Numericality, { "notANumberMessage":"not a number message.", "validMessage":"valid message."});
+      | validation_for_10.add(Validate.Exclusion, { "within": ['one', 'two', 'three'], "failureMessage":"failure message.", "validMessage":"valid message."});
       | //]]>
       | </script>
       EOF
