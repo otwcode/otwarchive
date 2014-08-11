@@ -3,49 +3,49 @@ Feature: Admin tasks
 
   Scenario: admin cannot log in as an ordinary user - it is a different type of account
   
-  Given the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-  When I go to the home page
-      And I fill in "user_session_login" with "Zooey"
-      And I fill in "user_session_password" with "secret"
-      And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records"
+    Given the following admin exists
+        | login       | password |
+        | Zooey       | secret   |
+    When I go to the home page
+        And I fill in "user_session_login" with "Zooey"
+        And I fill in "user_session_password" with "secret"
+        And I press "Log In"
+      Then I should see "The password or user name you entered doesn't match our records"
     
   Scenario: Ordinary user cannot log in as admin
   
-  Given the following activated user exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
-      And I have loaded the "roles" fixture
-  
-  When I go to the admin_login page
-      And I fill in "admin_session_login" with "dizmo"
-      And I fill in "admin_session_password" with "wrangulator"
-      And I press "Log in as admin"
-    Then I should see "Authentication failed"
+    Given the following activated user exists
+        | login       | password      |
+        | dizmo       | wrangulator   |
+        And I have loaded the "roles" fixture
+    
+    When I go to the admin_login page
+        And I fill in "admin_session_login" with "dizmo"
+        And I fill in "admin_session_password" with "wrangulator"
+        And I press "Log in as admin"
+      Then I should see "Authentication failed"
     
   Scenario: Admin can log in
   
-  Given I have no users
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-      And I have loaded the "roles" fixture
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
+    Given I have no users
+        And the following admin exists
+        | login       | password |
+        | Zooey       | secret   |
+        And I have loaded the "roles" fixture
+      When I go to the admin_login page
+        And I fill in "admin_session_login" with "Zooey"
+        And I fill in "admin_session_password" with "secret"
+        And I press "Log in as admin"
+      Then I should see "Successfully logged in"
   
   Scenario: admin can find users
   
-  Given I am logged in as "someone"
-    And I have loaded the "roles" fixture
-    When I am logged in as an admin
-      And I fill in "query" with "someone"
-      And I press "Find"
-    Then I should see "someone" within "#admin_users_table"
+    Given I am logged in as "someone"
+      And I have loaded the "roles" fixture
+      When I am logged in as an admin
+        And I fill in "query" with "someone"
+        And I press "Find"
+      Then I should see "someone" within "#admin_users_table"
     
   Scenario: Post a FAQ
   
@@ -69,21 +69,21 @@ Feature: Admin tasks
     
   Scenario: Edit FAQ
   
-  Given I have posted a FAQ
-  When I follow "Admin Posts"
-    And I follow "Archive FAQ" within "#main"
-    And I follow "Edit"
-    And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
-    And I press "Post"
-    And 0 emails should be delivered
-  Then I should see "ArchiveFaq was successfully updated"
-    And I should see "Yoda approves"
-  When I go to the archive_faqs page
-    And I follow "Edit"
-    And I fill in "Answer*" with "New Content, yay"
-    And I check "archive_faq_notify_translations"
-    And I press "Post"
-    And 1 email should be delivered
+    Given I have posted a FAQ
+    When I follow "Admin Posts"
+      And I follow "Archive FAQ" within "#main"
+      And I follow "Edit"
+      And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
+      And I press "Post"
+      And 0 emails should be delivered
+    Then I should see "ArchiveFaq was successfully updated"
+      And I should see "Yoda approves"
+    When I go to the archive_faqs page
+      And I follow "Edit"
+      And I fill in "Answer*" with "New Content, yay"
+      And I check "archive_faq_notify_translations"
+      And I press "Post"
+      And 1 email should be delivered
 
   Scenario: Post a FAQ that is a Translation of another
     Given basic languages
@@ -105,7 +105,7 @@ Feature: Admin tasks
 
     # Now post a Translation of that FAQ
     Given all emails have been delivered
-    When I go to the archive_faqs page
+    When I follow "Archive FAQ"
       And I select "Deutsch" from "language_id"
       And I press "Go" within "div#inner.wrapper"
       And I should see "New subsection"
@@ -125,9 +125,9 @@ Feature: Admin tasks
       And I should see "Was ist AO3?"
 
     # Toggle the languages at the top and see the correct data
-    Then I go to the archive_faqs page
-    When I select "English" from "language_id"
-      And I press "Go"
+    When I follow "Archive FAQ"
+      And I select "English" from "language_id"
+      And I press "Go" within "div#inner.wrapper"
     Then I should see "New subsection"
       And I should not see "Neuer Abschnitt"
 
@@ -161,185 +161,185 @@ Feature: Admin tasks
 
   Scenario: Change some admin settings for performance - guest downloading and tag wrangling
 
-  Given the following activated tag wrangler exists
-      | login           |
-      | dizmo           |
-    And a character exists with name: "Ianto Jones", canonical: true
+    Given the following activated tag wrangler exists
+        | login           |
+        | dizmo           |
+      And a character exists with name: "Ianto Jones", canonical: true
 
-  # post a work and download it as a guest
+    # post a work and download it as a guest
 
-  When I am logged in as "dizmo"
-    And I post the work "Storytime"
-    And I log out
-    And I view the work "Storytime"
-  Then I should see "Download"
+    When I am logged in as "dizmo"
+      And I post the work "Storytime"
+      And I log out
+      And I view the work "Storytime"
+    Then I should see "Download"
 
-  # turn off guest downloading
+    # turn off guest downloading
 
-  When I am logged in as an admin
-  When I follow "Settings"
-  Then I should see "Turn off downloading for guests"
-    And I should see "Turn off tag wrangling for non-admins"
-  When I check "Turn off downloading for guests"
-    And I press "Update"
-  Then I should see "Setting banner back on for all users. This may take some time"
-  # Changing from null to empty string counts as a change to the banner
+    When I am logged in as an admin
+    When I follow "Settings"
+    Then I should see "Turn off downloading for guests"
+      And I should see "Turn off tag wrangling for non-admins"
+    When I check "Turn off downloading for guests"
+      And I press "Update"
+    Then I should see "Setting banner back on for all users. This may take some time"
+    # Changing from null to empty string counts as a change to the banner
 
-  # Check guest downloading is off
+    # Check guest downloading is off
 
-  When I log out
-  Then I should see "Successfully logged out"
-  When I view the work "Storytime"
-    And I follow "MOBI"
-  Then I should see "Due to current high load"
+    When I log out
+    Then I should see "Successfully logged out"
+    When I view the work "Storytime"
+      And I follow "MOBI"
+    Then I should see "Due to current high load"
 
-  # Turn off tag wrangling
+    # Turn off tag wrangling
 
-  When I am logged in as an admin
-  When I follow "Settings"
-    And I check "Turn off tag wrangling for non-admins"
-    And I press "Update"
-  Then I should see "Archive settings were successfully updated."
+    When I am logged in as an admin
+    When I follow "Settings"
+      And I check "Turn off tag wrangling for non-admins"
+      And I press "Update"
+    Then I should see "Archive settings were successfully updated."
 
-  # Check tag wrangling is off
+    # Check tag wrangling is off
 
-  When I log out
-  Then I should see "Successfully logged out"
-  When I am logged in as "dizmo"
-    And I edit the tag "Ianto Jones"
-  Then I should see "Wrangling is disabled at the moment. Please check back later."
-    And I should not see "Synonym of"
+    When I log out
+    Then I should see "Successfully logged out"
+    When I am logged in as "dizmo"
+      And I edit the tag "Ianto Jones"
+    Then I should see "Wrangling is disabled at the moment. Please check back later."
+      And I should not see "Synonym of"
 
-  # Set them back to normal
-  Given I am logged out
-  Given guest downloading is on
-  Given I am logged out as an admin
-  Given tag wrangling is on
+    # Set them back to normal
+    Given I am logged out
+    Given guest downloading is on
+    Given I am logged out as an admin
+    Given tag wrangling is on
 
   Scenario: Send out an admin notice to all users
 
-  Given I have no users
-    And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-    And the following activated user exists
-      | login       | password             | email   |
-      | enigel      | emailnotifications   | e@e.org |
-      | otherfan    | hatesnotifications   | o@e.org |
-    And all emails have been delivered
+    Given I have no users
+      And the following admin exists
+        | login       | password |
+        | Zooey       | secret   |
+      And the following activated user exists
+        | login       | password             | email   |
+        | enigel      | emailnotifications   | e@e.org |
+        | otherfan    | hatesnotifications   | o@e.org |
+      And all emails have been delivered
 
-  # otherfan turns off notifications
+    # otherfan turns off notifications
 
-  When I am logged in as "otherfan" with password "hatesnotifications"
-    And I go to my preferences page
-    And I check "Turn off admin emails"
-    And I press "Update"
-  Then I should see "Your preferences were successfully updated"
+    When I am logged in as "otherfan" with password "hatesnotifications"
+      And I go to my preferences page
+      And I check "Turn off admin emails"
+      And I press "Update"
+    Then I should see "Your preferences were successfully updated"
 
-  # admin sends out notice to all users
+    # admin sends out notice to all users
 
-  When I am logged in as an admin
-    And I go to the admin-notices page
-    And I fill in "Subject" with "Hey, we did stuff"
-    And I fill in "Message" with "And it was awesome"
-    And I check "Notify All Users"
-    And I press "Send Notification"
-  Then 1 email should be delivered to webmaster@example.org
-    And the email should not contain "otherfan"
-    And the email should contain "enigel"
-  When the system processes jobs
-  # confirmation email to admin, and to one user
-      Then 1 email should be delivered to e@e.org
-    # Hack for HTML emails. 'Enigel' is a link in the new mailers, tests not catching that
-    And the email should contain "Dear"
-    And the email should contain "enigel"
-    And the email should have "\[AO3\] Admin Message - Hey, we did stuff" in the subject
-    And the email should contain "And it was awesome"
-  Then 1 email should be delivered to webmaster@example.org
-    And the email should have "\[AO3\] Admin Archive Notification Sent - Hey, we did stuff" in the subject
+    When I am logged in as an admin
+      And I go to the admin-notices page
+      And I fill in "Subject" with "Hey, we did stuff"
+      And I fill in "Message" with "And it was awesome"
+      And I check "Notify All Users"
+      And I press "Send Notification"
+    Then 1 email should be delivered to webmaster@example.org
+      And the email should not contain "otherfan"
+      And the email should contain "enigel"
+    When the system processes jobs
+    # confirmation email to admin, and to one user
+        Then 1 email should be delivered to e@e.org
+      # Hack for HTML emails. 'Enigel' is a link in the new mailers, tests not catching that
+      And the email should contain "Dear"
+      And the email should contain "enigel"
+      And the email should have "\[AO3\] Admin Message - Hey, we did stuff" in the subject
+      And the email should contain "And it was awesome"
+    Then 1 email should be delivered to webmaster@example.org
+      And the email should have "\[AO3\] Admin Archive Notification Sent - Hey, we did stuff" in the subject
 
   Scenario: Mark a comment as spam
 
-  Given I have no works or comments
-    And the following activated users exist
-    | login         | password   |
-    | author        | password   |
-    | commenter     | password   |
-    And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
+    Given I have no works or comments
+      And the following activated users exist
+      | login         | password   |
+      | author        | password   |
+      | commenter     | password   |
+      And the following admin exists
+        | login       | password |
+        | Zooey       | secret   |
 
-  # set up a work with a genuine comment
+    # set up a work with a genuine comment
 
-  When I am logged in as "author" with password "password"
-    And I post the work "The One Where Neal is Awesome"
-  When I am logged out
-    And I am logged in as "commenter" with password "password"
-    And I view the work "The One Where Neal is Awesome"
-    And I fill in "Comment" with "I loved this!"
-    And I press "Comment"
-  Then I should see "Comment created!"
-  When I am logged out
+    When I am logged in as "author" with password "password"
+      And I post the work "The One Where Neal is Awesome"
+    When I am logged out
+      And I am logged in as "commenter" with password "password"
+      And I view the work "The One Where Neal is Awesome"
+      And I fill in "Comment" with "I loved this!"
+      And I press "Comment"
+    Then I should see "Comment created!"
+    When I am logged out
 
-  # comment from registered user cannot be marked as spam.
-  # If registered user is spamming, this goes to Abuse team as ToS violation
-  When I am logged in as an admin
-  Then I should see "Successfully logged in"
-  When I view the work "The One Where Neal is Awesome"
-    And I follow "Comments (1)"
-  Then I should not see "Mark as spam"
+    # comment from registered user cannot be marked as spam.
+    # If registered user is spamming, this goes to Abuse team as ToS violation
+    When I am logged in as an admin
+    Then I should see "Successfully logged in"
+    When I view the work "The One Where Neal is Awesome"
+      And I follow "Comments (1)"
+    Then I should not see "Mark as spam"
 
-  # now mark a comment as spam
-  When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
-    And I am logged in as an admin
-    And I view the work "The One Where Neal is Awesome"
-    And I follow "Comments (2)"
-  Then I should see "rolex"
-    And I should see "Spam"
-  When I follow "Spam"
-  Then I should see "Not Spam"
-  When I follow "Hide Comments"
-  # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
-  # Then I should see "Comments (1)"
+    # now mark a comment as spam
+    When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
+      And I am logged in as an admin
+      And I view the work "The One Where Neal is Awesome"
+      And I follow "Comments (2)"
+    Then I should see "rolex"
+      And I should see "Spam"
+    When I follow "Spam"
+    Then I should see "Not Spam"
+    When I follow "Hide Comments"
+    # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
+    # Then I should see "Comments (1)"
 
-  # comment should no longer be there
-  When I follow "Comments"
-  Then I should see "rolex"
-    And I should see "Not Spam"
-  When I am logged out as an admin
-    And I view the work "The One Where Neal is Awesome"
-    And I follow "Comments"
-  Then I should not see "rolex"
-  When I am logged in as "author" with password "password"
-    And I view the work "The One Where Neal is Awesome"
-    And I follow "Comments"
+    # comment should no longer be there
+    When I follow "Comments"
+    Then I should see "rolex"
+      And I should see "Not Spam"
+    When I am logged out as an admin
+      And I view the work "The One Where Neal is Awesome"
+      And I follow "Comments"
     Then I should not see "rolex"
+    When I am logged in as "author" with password "password"
+      And I view the work "The One Where Neal is Awesome"
+      And I follow "Comments"
+      Then I should not see "rolex"
 
   Scenario: admin goes to the Support page
   
-  Given I am logged in as an admin
-  When I go to the support page
-  Then I should see "Support and Feedback"
-    And I should see "testadmin@example.org" in the "feedback_email" input
+    Given I am logged in as an admin
+    When I go to the support page
+    Then I should see "Support and Feedback"
+      And I should see "testadmin@example.org" in the "feedback_email" input
     
   Scenario: Post known issues
   
-  When I am logged in as an admin
-    And I follow "Admin Posts"
-    And I follow "Known Issues" within "#main"
-    And I follow "make a new known issues post"
-    And I fill in "known_issue_title" with "First known problem"
-    And I fill in "content" with "This is a bit of a problem"
-    # Suspect related to issue 2458
-    And I press "Post"
-  Then I should see "KnownIssue was successfully created"
+    When I am logged in as an admin
+      And I follow "Admin Posts"
+      And I follow "Known Issues" within "#main"
+      And I follow "make a new known issues post"
+      And I fill in "known_issue_title" with "First known problem"
+      And I fill in "content" with "This is a bit of a problem"
+      # Suspect related to issue 2458
+      And I press "Post"
+    Then I should see "KnownIssue was successfully created"
   
   Scenario: Edit known issues
   
-  # TODO
-  Given I have posted known issues
-  When I edit known issues
-  Then I should see "KnownIssue was successfully updated"
+    # TODO
+    Given I have posted known issues
+    When I edit known issues
+    Then I should see "KnownIssue was successfully updated"
 
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
 

@@ -48,4 +48,5 @@ Feature: Languages
   When I am on the languages page
   Then I should see "English"
     And I should see "English" within "dl.language"
-    And I should see the text with tags "<a href=\"/works\">1</a>"
+    # And I should see the text with tags "<a href=\"/works\">1</a>"
+    And I should see the text with tags '<a href="/works?language_id=en">1</a>'
