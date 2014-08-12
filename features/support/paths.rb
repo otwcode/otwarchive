@@ -45,6 +45,10 @@ module NavigationHelpers
       tag_sets_path
     when /^the login page$/i
       new_user_session_path
+    when /^account creation page$/i
+      new_user_path
+    when /^invite requests page$/i
+      invite_requests_path
     when /^(.*)'s user page$/i
       user_path(:id => $1)
     when /^(.*)'s user url$/i

@@ -74,6 +74,9 @@ gem 'globalize', '~> 3.1.0'
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
+# Add a clean notifier that shows we are on dev or test
+gem "rack-dev-mark"
+
 #Phrase-app
 gem 'phrase'
 
@@ -84,6 +87,9 @@ gem 'newrelic-redis'
 
 # For URL mangling
 gem 'addressable'
+
+# For controlling application behavour dynamically
+gem 'rollout'
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'

@@ -22,4 +22,8 @@ Otwarchive::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+
+  # Make it clear we are on Dev
+  config.rack_dev_mark.enable = true
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', color: 'green' , fixed: 'true' )]
 end

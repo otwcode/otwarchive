@@ -5,15 +5,15 @@
 <!--main content-->
 <%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "verbose manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
-  
   <fieldset>
     <legend><%= ts("Accounts and Invitations") %></legend>
     <h3 class="landmark heading"><%= ts("Accounts and Invitations") %></h3>
     <dl>
   
       <dt><%= f.check_box :account_creation_enabled %></dt>
-      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled (People can create accounts without an invitation)") %></dd>
-
+      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled") %></dd>
+      <dt><%= f.check_box :creation_requires_invite %></dt>
+      <dd><%= f.label :creation_requires_invite, ts("Account creation requires invitation") %></dd>
       <dt><%= f.check_box :request_invite_enabled %></dt>
       <dd><%= f.label :request_invite_enabled, ts("Users can request invitations") %></dd>
     

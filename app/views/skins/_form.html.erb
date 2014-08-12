@@ -58,11 +58,9 @@
         <dd><%= f.check_box :unusable %></dd>
 
         <dt><%= f.label :media, ts('Media: ')%></dt>
-        <dd>
-          <fieldset class="listbox group">
+        <dd class="listbox group">
           <h5 class="heading"><%= ts('Choose @media') %></h5>
-            <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || Skin::DEFAULT_MEDIA, :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
-          </fieldset>
+          <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || Skin::DEFAULT_MEDIA, :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
         </dd>        
       </dl>
     </fieldset>

@@ -1,15 +1,35 @@
+default_settings = {
+  :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+  :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  :account_creation_enabled => true,
+  :creation_requires_invite => true,
+  :request_invite_enabled => true,
+  :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+}
+
+def update_settings(settings)
+  admin_settings = AdminSetting.first_or_create
+  admin_settings.update_attributes(settings)
+  admin_settings.save(:validate => false)
+end
+
 ### GIVEN
 
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
-    settings = AdminSetting.new(
-      :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-      :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-      :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-      :account_creation_enabled => ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-      :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
+    settings = AdminSetting.new(default_settings)
     settings.save(:validate => false)
   end
+end
+
+Given /^the following admin settings are configured:$/ do |table|
+  settings = default_settings.merge(table.rows_hash.symbolize_keys)
+  update_settings settings
+end
+
+Given /^default admin settings$/ do
+  update_settings settings = {}
 end
 
 Given /the following admins? exists?/ do |table|

@@ -77,6 +77,22 @@ Feature:
     Then the "pseud_is_default" checkbox should be checked
       And the "pseud_is_default" checkbox should be disabled
 
+  Scenario: Changing only the capitalization of my user name with one pseud changes that pseud's capitalization
+    Given I have no users
+      And I am logged in as "uppercrust" with password "password"
+    When I visit the change username page for uppercrust
+      And I fill in "New User Name" with "Uppercrust"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, Uppercrust"
+    When I go to my pseuds page
+      Then I should not see "uppercrust"
+    When I follow "Edit"
+    Then I should see "cannot change your fallback pseud"
+    Then the "pseud_is_default" checkbox should be checked
+      And the "pseud_is_default" checkbox should be disabled
+
   Scenario: Changing my user name with two pseuds, one same as new, doesn't change old
     Given I have no users
       And the following activated user exists

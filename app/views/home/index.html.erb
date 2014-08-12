@@ -3,25 +3,26 @@
   
   <div id="main" class="splash system region" role="main">
     <%= flash_div :error, :caution, :notice %>
-  
+
     <div class="intro module">
       <h2 class="heading"><%= ts('Welcome to the Archive of Our Own!') %></h2>
       <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic. We currently have %{fandom_count} fandoms, %{user_count} registered users, and %{work_count} works.", :fandom_count => content_tag(:span, @fandom_count, class: "count"), :user_count => content_tag(:span, @user_count, class: "count"), :work_count => content_tag(:span, @work_count, class:"count")).html_safe %></p>
       <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
       <p><%= ts("The Archive of Our Own is a project of the ") %><%= link_to ts("Organization for Transformative Works"), "http://transformativeworks.org" %>.</p>
-      <p id="signup" class="actions" role="navigation">
-        <% if logged_in? %>
-          <%= link_to ts('Invite a friend'), user_invitations_path(current_user) %> 
-        <% else %>
-          <% if @admin_settings.account_creation_enabled? %>
-            <%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %>
-          <% elsif @admin_settings.invite_from_queue_enabled? %>
-            <%= link_to ts('Get an Invite'), invite_requests_path %>
-          <% else %>
-            <%= link_to ts('Log in'), login_path %></p>
-          <% end %>
+      <% if logged_in? %>
+        <% if @admin_settings.creation_requires_invite? %>
+          <p id="signup" class="actions" role="navigation"><%= link_to ts('Invite a Friend'), user_invitations_path(current_user) %></p>
         <% end %>
-      </p>
+      <% else %>
+        <p id="signup" class="actions" role="navigation">
+          <%= link_to ts('Log in'), login_path %>
+          <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+             or <%= link_to ts('Create an Account'), new_user_path %>
+          <% elsif @admin_settings.invite_from_queue_enabled? %>
+            or <%= link_to ts('Get an Invite'), invite_requests_path %>
+          <% end %>
+        </p>
+      <% end %>
     </div>
 
     <% if @admin_posts %>
@@ -42,7 +43,5 @@
       <a class="twitter-timeline" href="https://twitter.com/otw_status/otw-tweets" data-widget-id="382983150978076672" height="300"><%= ts("Tweets from @otw_status/otw-tweets") %></a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
     </div>
-    
   </div>
-
 </div>
