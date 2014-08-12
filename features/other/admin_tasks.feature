@@ -47,17 +47,7 @@ Feature: Admin tasks
         And I fill in "query" with "someone"
         And I press "Find"
       Then I should see "someone" within "#admin_users_table"
-    
-=======
 
-  Given the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-  When I go to the home page
-      And I fill in "user_session_login" with "Zooey"
-      And I fill in "user_session_password" with "secret"
-      And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records"
 
   Scenario: Ordinary user cannot log in as admin
 
@@ -94,7 +84,6 @@ Feature: Admin tasks
       And I press "Find"
     Then I should see "someone" within "#admin_users_table"
 
->>>>>>> master
   Scenario: Post a FAQ
 
     When I go to the archive_faqs page
@@ -116,8 +105,7 @@ Feature: Admin tasks
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
 
   Scenario: Edit FAQ
-<<<<<<< HEAD
-  
+
     Given I have posted a FAQ
     When I follow "Admin Posts"
       And I follow "Archive FAQ" within "#main"
@@ -179,17 +167,6 @@ Feature: Admin tasks
       And I press "Go" within "div#inner.wrapper"
     Then I should see "New subsection"
       And I should not see "Neuer Abschnitt"
-=======
-
-  Given I have posted a FAQ
-  When I follow "Admin Posts"
-    And I follow "Archive FAQ" within "#main"
-    And I follow "Edit"
-    And I fill in "content" with "Number 1 posted FAQ, this is, and Yoda approves."
-    And I press "Post"
-  Then I should see "Archive FAQ was successfully updated"
-    And I should see "Yoda approves"
->>>>>>> master
 
   Scenario: Find users
 
