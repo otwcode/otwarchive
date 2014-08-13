@@ -6,12 +6,7 @@ class FavoriteTagsController < ApplicationController
   before_filter :check_ownership
   
   respond_to :html, :json
-  
-  # GET /favorites_tags
-  def index
-    @favorite_tags = FavoriteTag.all
-  end
-  
+
   # POST /favorites_tags
   def create
     @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
