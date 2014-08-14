@@ -805,33 +805,49 @@ public
   # and @tags[category]
   def set_instance_variables
     if params[:id] # edit, update, preview, manage_chapters
-      @work ||= Work.find(params[:id])
-      if params[:work]  # editing, save our changes
-        if params[:preview_button] || params[:cancel_button]
-          @work.preview_mode = true
-        else
-          @work.preview_mode = false
-        end
-        @work.attributes = params[:work]
-        @work.save_parents if @work.preview_mode
-      end
+      set_instance_variables_id
     elsif params[:work] # create
-      @work = Work.new(params[:work])
+      set_instance_variables_create
     else # new
-      if params[:load_unposted] && current_user.unposted_work
-        @work = current_user.unposted_work
-      else
-        @work = Work.new
-        @work.chapters.build
-      end
+      set_instance_variables_default
     end
 
     @serial_works = @work.serial_works
 
     @chapter = @work.first_chapter
+
     # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
     if params[:work] && params[:work][:chapter_attributes]
       @chapter.attributes = params[:work][:chapter_attributes]
+    end
+  end
+
+  # edit, update, preview, manage_chapters
+  def set_instance_variables_id
+    @work ||= Work.find(params[:id])
+    if params[:work]  # editing, save our changes
+      if params[:preview_button] || params[:cancel_button]
+        @work.preview_mode = true
+      else
+        @work.preview_mode = false
+      end
+      @work.attributes = params[:work]
+      @work.save_parents if @work.preview_mode
+    end
+  end
+
+  # create
+  def set_instance_variables_work
+    @work = Work.new(params[:work])
+  end
+
+  # new
+  def set_instance_variables_default
+    if params[:load_unposted] && current_user.unposted_work
+      @work = current_user.unposted_work
+    else
+      @work = Work.new
+      @work.chapters.build
     end
   end
 
