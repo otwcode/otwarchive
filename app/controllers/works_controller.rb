@@ -53,11 +53,7 @@ class WorksController < ApplicationController
         _, sort_column = WorkSearch::SORT_OPTIONS.find {|opt, _| opt =~ /#{sortby}/i}
         params[:work_search][:sort_column] = sort_column unless sort_column.nil?
 
-        if sortdir == ">" || sortdir == "ascending"
-          params[:work_search][:sort_direction] = "asc"
-        elsif sortdir == "<" || sortdir == "descending"
-          params[:work_search][:sort_direction] = "desc"
-        end
+        params[:work_search][:sort_direction] = sort_direction(sortdir)
       end
 
       # put categories into quotes
@@ -957,4 +953,13 @@ public
     end
   end
 
+  private
+
+  def sort_direction(sortdir)
+    if sortdir == ">" || sortdir == "ascending"
+      "asc"
+    elsif sortdir == "<" || sortdir == "descending"
+      "desc"
+    end
+  end
 end
