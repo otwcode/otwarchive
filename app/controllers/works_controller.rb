@@ -347,25 +347,7 @@ class WorksController < ApplicationController
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
-      @preview_mode = true
-      if @work.has_required_tags? && @work.invalid_tags.blank?
-        unless @work.posted?
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
-        end
-        in_moderated_collection
-        @chapter = @work.chapters.first unless @chapter
-        render :preview
-      else
-        if !@work.invalid_tags.blank?
-          @work.check_for_invalid_tags
-        end
-        if @work.fandoms.blank?
-          @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
-        elsif !@work.has_required_tags?
-          @work.errors.add(:base, "Updating: Please add all required tags.")
-        end
-        render :edit
-      end
+      update_preview_mode
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
@@ -957,6 +939,28 @@ public
   end
 
   private
+
+  def update_preview_mode
+    @preview_mode = true
+    if @work.has_required_tags? && @work.invalid_tags.blank?
+      unless @work.posted?
+        flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+      end
+      in_moderated_collection
+      @chapter = @work.chapters.first unless @chapter
+      render :preview
+    else
+      if !@work.invalid_tags.blank?
+        @work.check_for_invalid_tags
+      end
+      if @work.fandoms.blank?
+        @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
+      elsif !@work.has_required_tags?
+        @work.errors.add(:base, "Updating: Please add all required tags.")
+      end
+      render :edit
+    end
+  end
 
   def sort_direction(sortdir)
     if sortdir == ">" || sortdir == "ascending"
