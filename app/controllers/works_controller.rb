@@ -165,22 +165,22 @@ class WorksController < ApplicationController
   end
 
   def drafts
-    unless params[:user_id]
-      flash[:error] = ts("Whose drafts did you want to look at?")
-      redirect_to :controller => :users, :action => :index
-    else
+    if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      unless current_user == @user
-        flash[:error] = ts("You can only see your own drafts, sorry!")
-        redirect_to current_user
-      else
+      if current_user == @user
         if params[:pseud_id]
           @pseud = @user.pseuds.find_by_name(params[:pseud_id])
           @works = @pseud.unposted_works.paginate(:page => params[:page])
         else
           @works = @user.unposted_works.paginate(:page => params[:page])
         end
+      else
+        flash[:error] = ts("You can only see your own drafts, sorry!")
+        redirect_to current_user
       end
+    else
+      flash[:error] = ts("Whose drafts did you want to look at?")
+      redirect_to :controller => :users, :action => :index
     end
   end
 
