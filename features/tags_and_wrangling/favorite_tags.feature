@@ -1,5 +1,3 @@
-@tags
-
 Feature: Favorite Tags
   In order to browse more efficiently
   As an archive user
@@ -7,8 +5,7 @@ Feature: Favorite Tags
 
   Scenario: Favorite a tag and have it added to my homepage, and then unfavorite the tag and have it removed from my homepage
   
-  Given basic tags
-    And a canonical fandom "Dallas (TV 2012)"
+  Given a canonical fandom "Dallas (TV 2012)"
   When I am logged in as "bourbon" with password "andbranch"
     And I go to the homepage
   Then I should see "Find your favorites"
