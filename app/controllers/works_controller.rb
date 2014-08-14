@@ -50,13 +50,8 @@ class WorksController < ApplicationController
         sortdir = $3 || $1
         sortby = $2.gsub(/\s*_?count/, '').singularize # turn word_count or word count or words into just "word" eg
 
-        WorkSearch::SORT_OPTIONS.each do |opt, value|
-          # stop at the first one we find
-          if opt.match(/#{sortby}/i)
-            params[:work_search][:sort_column] = value
-            break
-          end
-        end
+        _, sort_column = WorkSearch::SORT_OPTIONS.find {|opt, _| opt =~ /#{sortby}/i}
+        params[:work_search][:sort_column] = sort_column unless sort_column.nil?
 
         if sortdir == ">" || sortdir == "ascending"
           params[:work_search][:sort_direction] = "asc"
