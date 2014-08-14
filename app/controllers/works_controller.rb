@@ -347,7 +347,14 @@ class WorksController < ApplicationController
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
-      update_preview_mode
+      preview_mode(:edit) do
+        unless @work.posted?
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+        end
+        in_moderated_collection
+        @chapter = @work.chapters.first unless @chapter
+        render :preview
+      end
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
@@ -410,20 +417,8 @@ class WorksController < ApplicationController
     end
 
     if params[:preview_button]
-      @preview_mode = true
-
-      if @work.has_required_tags? && @work.invalid_tags.blank?
+      preview_mode(:edit_tags) do
         render :preview_tags
-      else
-        if !@work.invalid_tags.blank?
-          @work.check_for_invalid_tags
-        end
-        if @work.fandoms.blank?
-          @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
-        elsif !@work.has_required_tags?
-          @work.errors.add(:base, "Updating: Please add all required tags.")
-        end
-        render :edit_tags
       end
     elsif params[:cancel_button]
       cancel_posting_and_redirect
@@ -435,28 +430,16 @@ class WorksController < ApplicationController
     else
       saved = true
 
-      (@work.has_required_tags? && @work.invalid_tags.blank?) || saved = false
-      if saved
+      if @work.has_required_tags? && @work.invalid_tags.blank?
         @work.posted = true
         @work.minor_version = @work.minor_version + 1
         saved = @work.save
         # @work.update_minor_version
       end
-      if saved
+
+      preview_mode(:edit_tags) do
         flash[:notice] = ts('Work was successfully updated.')
         redirect_to(@work)
-      else
-        if !@work.invalid_tags.blank?
-          @work.check_for_invalid_tags
-        end
-        unless @work.has_required_tags?
-          if @work.fandoms.blank?
-            @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
-          else
-            @work.errors.add(:base, "Updating: Required tags are missing.")
-          end
-        end
-        render :edit_tags
       end
     end
   end
@@ -940,25 +923,23 @@ public
 
   private
 
-  def update_preview_mode
+  def preview_mode(page_name, &block)
     @preview_mode = true
+
     if @work.has_required_tags? && @work.invalid_tags.blank?
-      unless @work.posted?
-        flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
-      end
-      in_moderated_collection
-      @chapter = @work.chapters.first unless @chapter
-      render :preview
+      yield
     else
       if !@work.invalid_tags.blank?
         @work.check_for_invalid_tags
       end
+
       if @work.fandoms.blank?
         @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
       elsif !@work.has_required_tags?
         @work.errors.add(:base, "Updating: Please add all required tags.")
       end
-      render :edit
+
+      render page_name
     end
   end
 
