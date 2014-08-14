@@ -376,25 +376,30 @@ class WorksController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       saved = @chapter.save
       @work.has_required_tags? || saved = false
-      if saved
-        if !@work.challenge_claims.empty?
-          @included = 0
-          @work.challenge_claims.each do |claim|
-            @work.collections.each do |collection|
-              if collection == claim.collection
-                @included = 1
-              end
+
+      return unless saved
+
+      if !@work.challenge_claims.empty?
+        @included = 0
+        @work.challenge_claims.each do |claim|
+          @work.collections.each do |collection|
+            if collection == claim.collection
+              @included = 1
             end
-            if @included == 0
-              @work.collections << claim.collection
-            end
-            @included = 0
           end
+
+          if @included == 0
+            @work.collections << claim.collection
+          end
+
+          @included = 0
         end
-        @work.minor_version = @work.minor_version + 1
-        @work.set_challenge_info
-        saved = @work.save
       end
+
+      @work.minor_version = @work.minor_version + 1
+      @work.set_challenge_info
+      saved = @work.save
+
       if saved
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
         in_moderated_collection
@@ -403,6 +408,7 @@ class WorksController < ApplicationController
         unless @chapter.valid?
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
+
         unless @work.has_required_tags?
           if @work.fandoms.blank?
             @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
@@ -410,6 +416,7 @@ class WorksController < ApplicationController
             @work.errors.add(:base, "Updating: Required tags are missing.")
           end
         end
+
         render :edit
       end
     end
