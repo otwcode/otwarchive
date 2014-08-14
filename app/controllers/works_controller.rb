@@ -840,13 +840,11 @@ public
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
     sorry = ts("You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.")
-    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
+
+    if params[:work] && (!params[:work][:author_attributes] || !params[:work][:author_attributes][:ids])
       flash.now[:notice] = sorry
+      params[:work][:author_attributes] ||= {}
       params[:work][:author_attributes][:ids] = [current_user.default_pseud]
-    end
-    if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = sorry
-      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
 
     # stuff new bylines into author attributes to be parsed by the work model
