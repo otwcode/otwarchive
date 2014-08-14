@@ -79,6 +79,7 @@ describe ValidationHelper do
       | <script type="text/javascript">
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
+      |
       | //]]>
       | </script>
       EOF
