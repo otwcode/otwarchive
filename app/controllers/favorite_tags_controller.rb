@@ -10,11 +10,20 @@ class FavoriteTagsController < ApplicationController
   # POST /favorites_tags
   def create
     @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
-    @favorite_tag.save!
     success = ts('You have successfully added %{tag_name} to your favorite tags.', tag_name: @favorite_tag.tag_name)
-    respond_to do |format|
-      format.html { redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param), notice: success }
-      format.json { render json: { favorite_tag_id: @favorite_tag.id, favorite_tag_success: success }, status: :created }
+     if @favorite_tag.save
+      respond_to do |format|
+        format.html { redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param), notice: success }
+        format.json { render json: { favorite_tag_id: @favorite_tag.id, favorite_tag_success: success }, status: :created }
+      end
+    else
+      respond_to do |format|
+        format.html {
+          flash[:error] = @favorite_tag.errors.full_messages.join("\n")
+          redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param)
+        }
+        format.json { render json: { errors: @favorite_tag.errors.full_messages }, status: :unprocessable_entity }    
+      end
     end
   end
  
