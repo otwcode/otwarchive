@@ -437,7 +437,7 @@ class WorksController < ApplicationController
         # @work.update_minor_version
       end
 
-      preview_mode(:edit_tags) do
+      preview_mode(:edit_tags, saved) do
         flash[:notice] = ts('Work was successfully updated.')
         redirect_to(@work)
       end
@@ -923,10 +923,15 @@ public
 
   private
 
-  def preview_mode(page_name, &block)
+  # NOTE: The reason for the gross condition=(...) thing is because I don't know
+  #       what potential values `saved` has as used elsewhere (which is what is
+  #       passed as `condition`) and thus the usual approach of condition=nil
+  #       followed by a ||= cannot be reliably used. -@duckinator
+  def preview_mode(page_name, condition=(@work.has_required_tags? && @work.invalid_tags.blank?),
+      &block)
     @preview_mode = true
 
-    if @work.has_required_tags? && @work.invalid_tags.blank?
+    if condition
       yield
     else
       if !@work.invalid_tags.blank?
