@@ -44,5 +44,51 @@ describe ValidationHelper do
 
       output.should == expected
     end
+
+    it 'should generate JavaScript for default options' do
+      # NOTE: defaults to:
+      # {
+      #   presence: true,
+      #   failureMessage: 'Must be present.',
+      #   validMessage: ''
+      # }
+      options = {}
+
+      expected = <<-EOF
+      | <script type="text/javascript">
+      | //<![CDATA[
+      | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
+      | validation_for_10.add(Validate.Presence, {"failureMessage":"Must be present.","validMessage":""});
+      | //]]>
+      | </script>
+      EOF
+
+      expected.gsub!(/^\s*\|( |$)/, '').strip!
+
+      output = helper.live_validation_for_field(10, options)
+
+      output.should == expected
+    end
+
+    it 'should generate nothing if presence set to false' do
+      options = {
+        presence: false
+      }
+
+      expected = <<-EOF
+      | <script type="text/javascript">
+      | //<![CDATA[
+      | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
+      |
+      | //]]>
+      | </script>
+      EOF
+
+      expected.gsub!(/^\s*\|( |$)/, '').strip!
+
+      output = helper.live_validation_for_field(10, options)
+
+      output.should == expected
+    end
   end
 end

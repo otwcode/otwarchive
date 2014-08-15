@@ -101,6 +101,10 @@ module ValidationHelper
 
     options = defaults.merge(options)
 
+    # Remove things where the value is a falsey, e.g.:
+    #    live_validation_for_field(id, {presence: false})
+    options.reject!{|k, v| !v}
+
     # Generates a Hash mapping option[] keys to Hashes, each Hash being a
     # representation of the arguments passed to validation_for_X.add() in
     # JavaScript.
