@@ -8,7 +8,7 @@
 <ul class="navigation actions" role="navigation">
   <li><h4 class="heading"><%= ts('Manage:') %></h4></li>
   <li>
-    <%= span_if_current(ts("unsent (%{count})" , :count=> @user.invitations.unsent.count.to_s), 
+    <%= span_if_current(ts("unsent (%{count})", :count=> @user.invitations.unsent.count.to_s), 
       manage_user_invitations_path(@user, :status => :unsent)) %>
   </li>
   <li>
