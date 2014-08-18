@@ -23,7 +23,7 @@ class ReadingsController < ApplicationController
     @reading = @user.readings.find(params[:id])
     @reading.destroy
     flash[:notice] = ts("Work deleted from your history.")
-    redirect_to user_readings_url(current_user)
+    redirect_to request.referer || user_readings_url(current_user)
   end
 
   def clear

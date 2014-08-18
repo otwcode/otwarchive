@@ -1,5 +1,5 @@
 <% if !logged_in? %>
-  <div class="intro-new module">
+  <div class="intro module">
     <h2 class="heading"><%= ts('A fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic') %></h2>
     <p class="stats"><%= ts('%{fandom_count} fandoms | %{user_count} users | %{work_count} works', :fandom_count => content_tag(:span, @fandom_count, class: "count"), :user_count => content_tag(:span, @user_count, class: "count"), :work_count => content_tag(:span, @work_count, class: "count")).html_safe %></p>
     <p class="parent"><%= ts('The Archive of Our Own is a project of the') %> <%= link_to ts('Organization for Transformative Works'), "http://transformativeworks.org" %>.</p>
@@ -29,14 +29,14 @@
   <div class="browse module">
     <h3 class="heading"><%= ts('Find your favorites') %></h3>
     <% if logged_in? %>
-      <p><%= ts('Browse fandoms by media or favorite some tags to have them listed here!') %></p>
+      <p class="note"><%= ts('Browse fandoms by media or favorite up to 20 tags to have them listed here!') %></p>
     <% end %>
     <%= render 'menu/menu_fandoms' %>
   </div>
 <% end %>
 
 <% if logged_in? && @favorite_tags.present? %>
-  <div class="browse module">
+  <div class="favorite module">
     <h3 class="heading"><%= ts('Find your favorites') %></h3>
     <ul>
       <% @favorite_tags.each do |favorite_tag| %>
@@ -81,8 +81,8 @@
 <% if logged_in? && @readings.present? %>
   <div class="random readings module">
     <h3 class="heading"><%= ts('Is it later already?') %></h3>
-    <p><%= link_to ts('My History'), user_readings_path(@current_user) %></p>
-    <p><%= ts('Some works you\'ve marked for later.') %></p>
+    <p><%= link_to ts('My History'), user_readings_path(current_user) %></p>
+    <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
     <ul class="readings works index group">
       <% @readings.each do |reading| %>
         <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
@@ -92,13 +92,29 @@
 <% end %>
 
 <% if logged_in? && @inbox_comments.present? %>
-  <div class="unread latest messages module">
-    <h3 class="heading"><%= ts('Unread Messages') %></h3>
-    <ul class="comment index group">
+  <div class="latest messages module">
+    <h3 class="heading"><%= ts('Unread messages') %></h3>
+    <p><%= link_to ts('My Inbox'), user_inbox_path(current_user) %></p>
+    <p class="note"><%= ts('The latest unread items from your inbox.') %></p>
+    <ul class="abbreviated comment group">
       <% @inbox_comments.each do |inbox_comment| %>
-        <%= render 'comments/single_comment_abbreviated', single_comment: inbox_comment.feedback_comment %>
+        <li class="unread comment group">
+          <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>
+          <ul class="actions">
+            <li>
+              <%= render 'inbox/delete_form', inbox_comment: inbox_comment %>
+            </li>
+            <li>
+              <%= render 'inbox/read_form', inbox_comment: inbox_comment %>
+            </li>
+            <li>
+              <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
+            </li>
+          </ul>
+        </li>
       <% end %>
     </ul>
+    <div id="reply-to-comment" class="dynamic hidden"></div>
   </div>
 <% end %>
 

@@ -49,7 +49,6 @@ class HomeController < ApplicationController
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
     @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
-    @admin_post_show_more = AdminPost.count > 3
     
     if logged_in?
       @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     

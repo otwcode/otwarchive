@@ -39,6 +39,6 @@ class InboxController < ApplicationController
     rescue
       flash[:caution] = ts("Please select something first")
     end
-    redirect_to user_inbox_path(@user, :filters => params[:filters])
+    redirect_to request.referer || user_inbox_path(@user, :filters => params[:filters])
   end
 end

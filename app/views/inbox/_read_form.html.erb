@@ -1,0 +1,5 @@
+<% # expects inbox_comment %>
+<%= form_tag user_inbox_path(@current_user), :method => :put do |f| %>
+  <%= hidden_field_tag "inbox_comments[]", inbox_comment.id, :id => 'inbox_comments_#{inbox_comment.id}' %>
+  <%= submit_tag ts('Mark Read'), :name => 'read' %>
+<% end %>
