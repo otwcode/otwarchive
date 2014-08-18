@@ -26,7 +26,7 @@ class AdminPostsController < ApplicationController
     admin_posts = AdminPost.non_translated
     @admin_post = AdminPost.find_by_id(params[:id])
     unless @admin_post
-      raise ActiveRecord::RecordNotFound , "Couldn't find admin post #{params[:id]}"
+      raise ActiveRecord::RecordNotFound, "Couldn't find admin post #{params[:id]}"
     end
     @admin_posts = admin_posts.order('created_at DESC').limit(8)
     @previous_admin_post = admin_posts.order('created_at DESC').where('created_at < ?', @admin_post.created_at).first
