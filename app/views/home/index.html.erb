@@ -82,6 +82,7 @@
   <div class="random readings module">
     <h3 class="heading"><%= ts('Is it later already?') %></h3>
     <p><%= link_to ts('My History'), user_readings_path(current_user) %></p>
+    <div class="flash"></div>
     <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
     <ul class="readings works index group">
       <% @readings.each do |reading| %>
