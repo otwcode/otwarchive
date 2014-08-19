@@ -26,7 +26,7 @@ class SeriesController < ApplicationController
       if params[:pseud_id]
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
         unless @pseud
-          raise ActiveRecord::RecordNotFound,  "Couldn't find pseud '#{params[:pseud_id]}'"
+          raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:pseud_id]}'"
         end
         @page_subtitle = ts("by ") + @pseud.byline
         pseuds = [@pseud]
