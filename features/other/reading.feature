@@ -130,8 +130,8 @@ Feature: Reading count
     And I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Viewed once"
-  When I follow "Delete"
-  Then I should see "Work deleted from your history."
+  When I press "Delete from History"
+  Then I should see "Work successfully deleted from your history."
   When I go to the works page
     And I follow "some work"
   Then I should not see "la la la la la la la la la la la"

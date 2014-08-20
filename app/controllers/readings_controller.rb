@@ -22,7 +22,7 @@ class ReadingsController < ApplicationController
   def destroy
     @reading = @user.readings.find(params[:id])
     if @reading.destroy
-      success_message = ts('Work deleted from your history.')
+      success_message = ts('Work successfully deleted from your history.')
       respond_to do |format|
         format.html { redirect_to request.referer || user_readings_url(current_user), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
