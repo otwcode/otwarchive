@@ -214,6 +214,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :reply
         get :cancel_reply
+        post :delete
       end
     end
     resources :invitations do
