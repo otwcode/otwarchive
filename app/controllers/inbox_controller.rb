@@ -25,7 +25,7 @@ class InboxController < ApplicationController
       format.js
     end
   end
-  
+ 
   def update
     begin
       @inbox_comments = InboxComment.find(params[:inbox_comments])
