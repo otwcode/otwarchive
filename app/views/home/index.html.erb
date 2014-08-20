@@ -1,126 +1,56 @@
-<% if !logged_in? %>
-  <div class="intro module">
-    <h2 class="heading"><%= ts('A fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic') %></h2>
-    <p class="stats"><%= ts('%{fandom_count} fandoms | %{user_count} users | %{work_count} works', :fandom_count => content_tag(:span, @fandom_count, class: "count"), :user_count => content_tag(:span, @user_count, class: "count"), :work_count => content_tag(:span, @work_count, class: "count")).html_safe %></p>
-    <p class="parent"><%= ts('The Archive of Our Own is a project of the') %> <%= link_to ts('Organization for Transformative Works'), "http://transformativeworks.org" %>.</p>
-    
-    <div class="account module">
-      <h4 class="heading"><%= ts('With an AO3 account, you can:') %></h4>
+<div class="splash">
+  <% if !logged_in? %>
+    <%= render 'intro_module' %>
+  <% end %>
+
+  <% if logged_in? && @favorite_tags.present? %>
+    <div class="favorite module">
+      <h3 class="heading"><%= ts('Find your favorites') %></h3>
       <ul>
-        <li><%= ts('Share your own fanworks') %></li>
-        <li><%= ts('Get notified when your favorite works, series, or users update') %></li>
-        <li><%= ts('Participate in challenges') %></li>
-        <li><%= ts('Keep track of works you\'ve visited and works you want to check out later') %></li>
+        <% @favorite_tags.each do |favorite_tag| %>
+          <li>
+            <%= link_to_tag_works(favorite_tag.tag) %>
+          </li>
+        <% end %>
       </ul>
-      
-      <% if @admin_settings.invite_from_queue_enabled? %>
-        <p><%= ts('While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
-        <p class="actions"><%= link_to ts('Get Invited!'), invite_requests_path %></p>
+    </div>
+  <% else %>
+    <div class="browse module">
+      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+      <% if logged_in? %>
+        <p class="note"><%= ts('Browse fandoms by media or favorite up to 20 tags to have them listed here!') %></p>
       <% end %>
-      
-      <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
-        <p class="actions"><%= link_to ts('Create an Account!'), new_user_path %></p>
-      <% end %>      
-     </div>
-  </div>
-<% end %>
+      <%= render 'menu/menu_fandoms' %>
+    </div>
+  <% end %>
 
-<% unless logged_in? && @favorite_tags.present? %>
-  <div class="browse module">
-    <h3 class="heading"><%= ts('Find your favorites') %></h3>
-    <% if logged_in? %>
-      <p class="note"><%= ts('Browse fandoms by media or favorite up to 20 tags to have them listed here!') %></p>
-    <% end %>
-    <%= render 'menu/menu_fandoms' %>
-  </div>
-<% end %>
+  <% if @admin_posts.present? %>
+    <%= render 'news_module' %>
+  <% end %>
 
-<% if logged_in? && @favorite_tags.present? %>
-  <div class="favorite module">
-    <h3 class="heading"><%= ts('Find your favorites') %></h3>
-    <ul>
-      <% @favorite_tags.each do |favorite_tag| %>
-        <li>
-          <%= link_to_tag_works(favorite_tag.tag) %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+  <% if logged_in? && @readings.present? %>
+    <div class="random readings module">
+      <h3 class="heading">
+        <span class="title"><%= ts('Is it later already?') %></span>
+        <span class="link"><%= link_to ts('My History'), user_readings_path(current_user) %></span>
+      </h3>
+      <div class="flash"></div>
+      <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
+      <ul class="readings works index group">
+        <% @readings.each do |reading| %>
+          <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-<% if @admin_posts.present? %>
-  <div class="latest news module">
-    <h3 class="heading"><%= ts('News') %></h3>
-    <ul class="news index group">
-      <% @admin_posts.each do |admin_post| %>
-        <li class="post group">
-          <div class="header module group">
-            <h4 class="heading"><%= link_to admin_post.title.html_safe, admin_post %></h4>
-            <p>
-              <span class="published">
-                <%= ts('Published:') %> <%= time_in_zone(admin_post.created_at) %>
-              </span>
-              <span class="comments">
-                <%= ts('Comments:') %> <%= link_to(admin_post.count_visible_comments, polymorphic_url(admin_post, :show_comments => true, :anchor => :comments)) %>
-              </span>
-            </p>
-          </div>
-          <blockquote class="userstuff">
-            <%= first_paragraph(admin_post.content, 'No preview is available for this news post.') %>
-          </blockquote>
-          <p class="jump"><%= link_to ts('Read more...'), admin_post %></p>
-        </li>
-      <% end %>
-    </ul>
-    <% if @admin_post_show_more %>
-      <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
-    <% end %>
-  </div>
-<% end %>
+  <% if logged_in? && @inbox_comments.present? %>
+    <%= render 'inbox_module' %>
+  <% end %>
 
-<% if logged_in? && @readings.present? %>
-  <div class="random readings module">
-    <h3 class="heading"><%= ts('Is it later already?') %></h3>
-    <p><%= link_to ts('My History'), user_readings_path(current_user) %></p>
-    <div class="flash"></div>
-    <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
-    <ul class="readings works index group">
-      <% @readings.each do |reading| %>
-        <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
-      <% end %>
-    </ul>
+  <div class="latest tweets module">
+    <h3 class="heading"><%= ts('Tweets') %></h3>
+    <a class="twitter-timeline" href="https://twitter.com/otw_status/otw-tweets" data-widget-id="382983150978076672" height="300"><%= ts('Tweets from @otw_status/otw-tweets') %></a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
   </div>
-<% end %>
-
-<% if logged_in? && @inbox_comments.present? %>
-  <div class="latest messages module">
-    <h3 class="heading"><%= ts('Unread messages') %></h3>
-    <p><%= link_to ts('My Inbox'), user_inbox_path(current_user) %></p>
-    <p class="note"><%= ts('The latest unread items from your inbox.') %></p>
-    <ul class="abbreviated comment group">
-      <% @inbox_comments.each do |inbox_comment| %>
-        <li class="unread comment group">
-          <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>
-          <ul class="actions">
-            <li>
-              <%= render 'inbox/delete_form', inbox_comment: inbox_comment %>
-            </li>
-            <li>
-              <%= render 'inbox/read_form', inbox_comment: inbox_comment %>
-            </li>
-            <li>
-              <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
-            </li>
-          </ul>
-        </li>
-      <% end %>
-    </ul>
-    <div id="reply-to-comment" class="dynamic hidden"></div>
-  </div>
-<% end %>
-
-<div class="latest tweets module">
-  <h3 class="heading"><%= ts('Tweets') %></h3>
-  <a class="twitter-timeline" href="https://twitter.com/otw_status/otw-tweets" data-widget-id="382983150978076672" height="300"><%= ts('Tweets from @otw_status/otw-tweets') %></a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
 </div>
