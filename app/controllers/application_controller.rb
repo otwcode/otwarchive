@@ -33,8 +33,13 @@ class ApplicationController < ActionController::Base
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
       logger.error "Forcing logout"
+      @user_session = UserSession.find
+      if @user_session
+        @user_session.destroy
+        flash[:notice] = ts("Successfully logged out.")
+      end
       # You can only have one flash message, so you can't set a helpful error  message here.
-      redirect_to '/logout' and return
+      redirect_to '/cookie_error' and return
     end
   end
 
