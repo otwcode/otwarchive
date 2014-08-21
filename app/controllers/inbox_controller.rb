@@ -39,13 +39,7 @@ class InboxController < ApplicationController
     rescue
       flash[:caution] = ts("Please select something first")
     end
-    redirect_to request.referer || user_inbox_path(@user, :filters => params[:filters])
-  end
-
-  def destroy
-    @inbox_comment = InboxComment.find(params[:inbox_comment])
-    @inbox_comment.destroy
-    success_message = ts('Comment successfully deleted from inbox.')
+    success_message = ts('Inbox successfully updated.')
     respond_to do |format|
       format.html { redirect_to request.referer || user_inbox_path(@user, :filters => params[:filters]), notice: success_message }
       format.json { render json: { item_success_message: success_message }, status: :ok }

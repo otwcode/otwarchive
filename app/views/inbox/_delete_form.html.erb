@@ -1,5 +1,6 @@
 <% # expects inbox_comment %>
-<%= form_tag user_inbox_path(@current_user), method: "delete", class: "ajax-remove" do %>
-  <%= hidden_field_tag :inbox_comment, inbox_comment.id %>
-  <%= submit_tag ts('Delete') %>
+<%= form_tag user_inbox_path(@current_user), method: "put", class: "ajax-remove" do %>
+  <%= hidden_field_tag "delete", "Delete From Inbox" %>
+  <%= hidden_field_tag "inbox_comments[]", inbox_comment.id, id: "inbox_comments_#{inbox_comment.id}" %>
+  <%= submit_tag ts('Delete'), name: "delete" %>
 <% end %>
