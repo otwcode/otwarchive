@@ -36,7 +36,6 @@ class ApplicationController < ActionController::Base
       @user_session = UserSession.find
       if @user_session
         @user_session.destroy
-        flash[:notice] = ts("Successfully logged out.")
       end
       redirect_to '/cookie_error' and return
     end
