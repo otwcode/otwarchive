@@ -895,16 +895,18 @@ public
 
   def index_page_title
     if @owner.present?
-      owner_name = case @owner.class.to_s
-                   when 'Pseud'
-                     @owner.name
-                   when 'User'
-                     @owner.login
-                   when 'Collection'
-                     @owner.title
-                   else
-                     @owner.try(:name)
-                   end
+      owner_name =
+        case @owner.class.to_s
+        when 'Pseud'
+          @owner.name
+        when 'User'
+          @owner.login
+        when 'Collection'
+          @owner.title
+        else
+          @owner.try(:name)
+        end
+
       "#{owner_name} - Works".html_safe
     else
       "Latest Works"
