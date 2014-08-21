@@ -38,7 +38,6 @@ class ApplicationController < ActionController::Base
         @user_session.destroy
         flash[:notice] = ts("Successfully logged out.")
       end
-      # You can only have one flash message, so you can't set a helpful error  message here.
       redirect_to '/cookie_error' and return
     end
   end
