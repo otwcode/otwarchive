@@ -3,7 +3,7 @@ require 'vcr'
 VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir     = 'features/cassette_library'
-  c.hook_into                :typhoeus
+  c.hook_into                :webmock
   c.allow_http_connections_when_no_cassette = true
 
   #use this after setup...

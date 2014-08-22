@@ -6,13 +6,11 @@ class SeriesController < ApplicationController
   
   def load_series
     @series = Series.find_by_id(params[:id])
-    if @series.nil?
-      flash[:error] = ts("We're sorry, but that series does not exist.")
-      redirect_back_or_default works_path and return
-    else
-      @check_ownership_of = @series
-      @check_visibility_of = @series
+    unless @series 
+      raise ActiveRecord::RecordNotFound, "Couldn't find series '#{params[:id]}'"
     end
+    @check_ownership_of = @series
+    @check_visibility_of = @series
   end
   
   # GET /series
@@ -21,14 +19,14 @@ class SeriesController < ApplicationController
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
       unless @user
-        raise ActiveRecord::RecordNotFound and return
+        raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
       end
       @page_subtitle = ts("%{username} - Series", username: @user.login)
       pseuds = @user.pseuds
       if params[:pseud_id]
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
         unless @pseud
-          raise ActiveRecord::RecordNotFound and return
+          raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:pseud_id]}'"
         end
         @page_subtitle = ts("by ") + @pseud.byline
         pseuds = [@pseud]
