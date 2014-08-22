@@ -29,8 +29,8 @@
       <ul>
 		<% types.each do |type| %>
         <li><%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %></li>
-	</ul>
       <% end %>
+      </ul>
     </dd>
   </dl>
 
