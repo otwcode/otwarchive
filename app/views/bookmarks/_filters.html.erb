@@ -46,7 +46,7 @@
                       @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
                       :id => "bookmark_search_#{tag_type}_ids_#{tag.id}" %>
                   <% end %>
-                    <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
+                    <%= label_tag "bookmark_search_#{tag_type}_ids_#{tag.id}", 
                       "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
                 </li>
               <% end %>
