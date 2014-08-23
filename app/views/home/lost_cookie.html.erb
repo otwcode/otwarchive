@@ -4,8 +4,6 @@
 <h2 class="heading"><%= ts('Forced logout') %> </h2>
 
 <div class="userstuff">
-  <p><%= ts("I am afraid we have had to log you out as your cookies are inconsistent. We use the cookies to ensure that your data remains private and to ensure that is the case we have logged you out, sorry.") %></p>
-  <p><%= ts("Please ensure that we can save cookies. You could try a differnet browser?") %></p>
-
+  <p><%= ts("You have been automatically logged out to protect your privacy.  Please make sure that your browser is set to accept cookies from archiveofourown.org and delete any existing Archive cookies.  If you continue to have problems logging in, please")%> <%= link_to ts('contact support.'), new_feedback_report_path %></p>
 </div>
 </div>
