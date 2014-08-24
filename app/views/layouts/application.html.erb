@@ -53,8 +53,8 @@
 
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> region" role="main">
-          <div id="ajax_flash" class="flash"></div>
           <%= flash_div :error, :caution, :notice %>
+          <div class="flash"></div>
           <%= yield %>
           <div class="clear"><!--presentational--></div>
         </div>
