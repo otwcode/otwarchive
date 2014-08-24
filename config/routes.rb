@@ -1,9 +1,5 @@
 Otwarchive::Application.routes.draw do
 
-  #### FAVORITE TAGS ####
-
-  resources :favorite_tags, :only => [:create, :destroy]
-
   #### ERRORS ####
 
   match '/403', :to => 'errors#403'
