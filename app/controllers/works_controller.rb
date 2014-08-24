@@ -152,16 +152,18 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
     @user = User.find_by_login(params[:user_id])
-    if @user.present?
-      if @admin_settings.disable_filtering?
-        @works = Work.collected_without_filters(@user, options)
-      else
-        @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
-        @works = @search.search_results
-        @facets = @works.facets
-      end
-      @page_subtitle = ts("%{username} - Collected Works", username: @user.login)
+
+    return unless @user.present?
+
+    if @admin_settings.disable_filtering?
+      @works = Work.collected_without_filters(@user, options)
+    else
+      @search = WorkSearch.new(options.merge(works_parent: @user, collected: true))
+      @works = @search.search_results
+      @facets = @works.facets
     end
+
+    @page_subtitle = ts("%{username} - Collected Works", username: @user.login)
   end
 
   def drafts
