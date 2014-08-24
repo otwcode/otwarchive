@@ -238,14 +238,15 @@ class WorksController < ApplicationController
       @work.challenge_assignments << @challenge_assignment
       @work.collections << @challenge_assignment.collection
       @work.recipients = @challenge_assignment.requesting_pseud.byline
-    else
-      @work.collection_names = @collection.name if @collection
+    elsif @collection
+      @work.collection_names = @collection.name
     end
+
     if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
       @work.challenge_claims << @challenge_claim
       @work.collections << @challenge_claim.collection
-    else
-      @work.collection_names = @collection.name if @collection
+    elsif @collection
+      @work.collection_names = @collection.name
     end
     if params[:import]
       @page_subtitle = ts("import")
