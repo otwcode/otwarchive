@@ -321,15 +321,17 @@ class WorksController < ApplicationController
     @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
     @series = current_user.series.uniq
-    if params["remove"] == "me"
-      pseuds_with_author_removed = @work.pseuds - current_user.pseuds
-      if pseuds_with_author_removed.empty?
-        redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
-      else
-        @work.remove_author(current_user)
-        flash[:notice] = ts("You have been removed as an author from the work")
-        redirect_to current_user
-      end
+
+    return unless params["remove"] == "me"
+
+    pseuds_with_author_removed = @work.pseuds - current_user.pseuds
+
+    if pseuds_with_author_removed.empty?
+      redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
+    else
+      @work.remove_author(current_user)
+      flash[:notice] = ts("You have been removed as an author from the work")
+      redirect_to current_user
     end
   end
 
