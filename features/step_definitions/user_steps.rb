@@ -100,6 +100,7 @@ Given /^"([^\"]*)" deletes their account/ do |username|
 end
 
 Given /^I am a visitor$/ do
+  step(%{I am logged out as an admin})
   step(%{I am logged out})
 end
 
@@ -123,7 +124,6 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
-  # " '
   user = User.find_by_login(login)
   fill_in "Password", :with => user.activation_code
 end
@@ -140,7 +140,7 @@ When /^I create the pseud "([^\"]*)"$/ do |newpseud|
   click_button "Create"
 end
 
-When(/^I fill in the sign up form with valid data$/) do
+When /^I fill in the sign up form with valid data$/ do
   step(%{I fill in "user_login" with "#{NEW_USER}"})
   step(%{I fill in "user_email" with "test@archiveofourown.org"})
   step(%{I fill in "user_password" with "password1"})
@@ -149,17 +149,17 @@ When(/^I fill in the sign up form with valid data$/) do
   step(%{I check "user_terms_of_service"})
 end
 
-When(/^I try to delete my account as (.*)$/) do |login|
+When /^I try to delete my account as (.*)$/ do |login|
   step (%{I go to #{login}\'s user page})
   step (%{I follow "Profile"})
   step (%{I follow "Delete My Account"})
 end
 
-When(/^I try to delete my account$/) do
+When /^I try to delete my account$/ do
   step (%{I try to delete my account as #{DEFAULT_USER}})
 end
 
-When(/^I visit the change username page for (.*)$/) do |login|
+When /^I visit the change username page for (.*)$/ do |login|
   user = User.find_by_login(login)
   visit change_username_user_path(user) 
 end
@@ -170,32 +170,32 @@ Then /^I should get the error message for wrong username or password$/ do
   step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
 end
 
-Then (/^I should get an activation email for "(.*?)"$/) do |login|
+Then /^I should get an activation email for "(.*?)"$/ do |login|
   step(%{1 email should be delivered})
   step(%{the email should contain "Welcome to the Archive of Our Own,"})
   step(%{the email should contain "#{login}"})
   step(%{the email should contain "Please activate your account"})
 end
 
-Then (/^I should get a new user activation email$/) do
+Then /^I should get a new user activation email$/ do
   step(%{I should get an activation email for "#{NEW_USER}"})
 end
 
-Then(/^a user account should exist for "(.*?)"$/) do |login|
+Then /^a user account should exist for "(.*?)"$/ do |login|
    user = User.find_by_login(login)
    assert !user.blank?
 end
 
-Then(/^a user account should not exist for "(.*)"$/) do |login|
+Then /^a user account should not exist for "(.*)"$/ do |login|
   user = User.find_by_login(login)
   assert user.blank?
 end
 
-Then(/^a new user account should exist$/) do
-  step(%{a user account should exist for "#{NEW_USER}"})
+Then /^a new user account should exist$/ do
+  step %{a user account should exist for "#{NEW_USER}"}
 end
 
-Then(/^I should be logged out$/) do
+Then /^I should be logged out$/ do
   assert !UserSession.find
 end
 
