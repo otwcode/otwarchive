@@ -820,7 +820,7 @@ public
     if params[:id] # edit, update, preview, manage_chapters
       set_instance_variables_id
     elsif params[:work] # create
-      set_instance_variables_create
+      set_instance_variables_work
     else # new
       set_instance_variables_default
     end
