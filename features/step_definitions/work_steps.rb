@@ -71,6 +71,11 @@ Given /^the chaptered work with comments setup$/ do
   step "I am logged out"
 end
 
+Given /^the work "([^\"]*)"$/ do |work|
+  step %{I have a work "#{work}"}
+  step %{I am logged out}
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
@@ -411,6 +416,13 @@ When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
   step %{I post the work without preview}
+end
+
+When /^I mark the work "([^\"]*)" for later$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  step %{I follow "Mark for Later"}
+  Reading.update_or_create_in_database
 end
 
 ### THEN
