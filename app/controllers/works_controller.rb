@@ -311,22 +311,23 @@ class WorksController < ApplicationController
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
           render :_choose_coauthor
-        else
-          unless @work.has_required_tags?
-            error_message = "Please add all required tags."
-            if @work.fandoms.blank?
-              error_message << " Fandom is missing."
-            end
+          return
+        end
 
-            if @work.warnings.blank?
-              error_message << " Warning is missing."
-            end
-
-            @work.errors.add(:base, error_message)
+        unless @work.has_required_tags?
+          error_message = "Please add all required tags."
+          if @work.fandoms.blank?
+            error_message << " Fandom is missing."
           end
 
-          render :new
+          if @work.warnings.blank?
+            error_message << " Warning is missing."
+          end
+
+          @work.errors.add(:base, error_message)
         end
+
+        render :new
       end
     end
   end
