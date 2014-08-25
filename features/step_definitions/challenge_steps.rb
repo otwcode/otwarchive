@@ -7,6 +7,11 @@ Then /^I should see a not\-in\-fandom error message$/ do
   step %{I should see "are not in the selected fandom(s)"}
 end
 
+### Set up dates correctly ###
+Then /^I set up the challenge dates$/ do
+  fill_in("Sign-up opens:", :with => Date.yesterday)
+  fill_in("Sign-up closes:", :with => Date.tomorrow)
+end
 
 ### Clear out old data
 
@@ -91,7 +96,7 @@ end
 Then /^signup should be open$/ do
   step %{I should see "Profile" within "div#main .collection .navigation"}
   step %{I should see "Sign-up: Open" within ".collection .meta"}
-    step %{I should see "Sign-up closes:"}
+    step %{I should see "Sign-up Closes:"}
 end
 
 When /^I view open challenges$/ do

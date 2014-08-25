@@ -3,7 +3,12 @@
 
   <h3 class="heading">
     <%= ts('About') %>
-    <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
+    <span class="title"><%= @collection.title %></span>
+    <% if @collection.title != @collection.name %>
+      <span class="name">
+        (<%= @collection.name %>)
+      </span>
+    <% end %>
   </h3>
   <div class="wrapper">
     <dl class="meta group">
@@ -22,7 +27,7 @@
       <% if @collection.challenge.present? %>
         <% tag_sets_counted = tag_set_count(@collection) %>
         <% if tag_sets_counted.present? %>
-          <dt><%= tag_sets_counted > 1 ?  ts('Tag sets:') : ts('Tag set:') %></dt>
+          <dt><%= tag_sets_counted > 1 ?  ts('Tag Sets:') : ts('Tag Set:') %></dt>
           <dd>
             <ul class="commas">
             <%= (@collection.challenge_type == "GiftExchange" ? @collection.challenge.offer_restriction.owned_tag_sets : @collection.challenge.request_restriction.owned_tag_sets).map {|tag_set| content_tag(:li, link_to(tag_set.title, tag_set_path(tag_set)))}.join("\n").html_safe %>

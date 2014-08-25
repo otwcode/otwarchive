@@ -9,14 +9,14 @@
 <!--main content-->
 <%= form_for @abuse_report, :class => "post" do |f| %>
   <fieldset>
-  	<legend>Link and Describe Abuse</legend>
-  	<dl>
-    	<dt><%= f.label :url, ts("Link to the page you are reporting (required)") %>:</dt>
-    	<dd><%= f.text_field :url, :size => 60 %>
-  		  <p class="footnote"><%= ts("If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %></p>
+    <legend><%= ts("Link and Describe Abuse") %></legend>
+    <dl>
+      <dt class="required"><%= f.label :url, ts("Link to the page you are reporting (required)") %></dt>
+      <dd class="required"><%= f.text_field :url, :size => 60 %>
+        <%= live_validation_for_field('abuse_report_url', :failureMessage => ts("Please enter the link to the page you are reporting.")) %>
+        <p class="footnote"><%= ts("If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %></p>
       </dd>
-      <%= live_validation_for_field('abuse_report_url', :failureMessage => ts("Please enter the link to the page you are reporting")) %>
-  	
+
       <dt><%= f.label :category, ts("Most abuse reports fall into the following categories. Please select your concern if it is listed here.") %>   <%= link_to_help('abuse-report-help')%></dt>
       <dd>
         <%= f.select("category", 
@@ -32,32 +32,31 @@
             [AbuseReport::BUGS_FAIRUSE_NAME, AbuseReport::BUGS_FAIRUSE], 
             [AbuseReport::BUGS_SPAM_NAME, AbuseReport::BUGS_SPAM] ],
         :include_blank => true) %>
-      
       </dd>
     
-  	  <dt><%= f.label :comment, ts("Describe your concern (required)") %>:</dt>
-      <dd>
+      <dt class="required"><%= f.label :comment, ts("Describe your concern (required)") %></dt>
+      <dd class="required">
         <p>
           <%= ts("Please include all relevant URLs and what about the content violates the Archive %{tos_link}.", 
                   :tos_link => (link_to ts("Terms of Service"), tos_path)).html_safe %>
         </p>
         <%= f.text_area :comment, :cols => 60 %>
+        <%= live_validation_for_field('abuse_report_comment', :failureMessage => ts("Please describe your concern.")) %>
       </dd>
-      <%= live_validation_for_field('abuse_report_comment', :failureMessage => ts("Please describe your concern")) %>
-    	
-  	  <dt><%= f.label :email, ts("Your email (optional)") %>:</dt>
+
+      <dt><%= f.label :email, ts("Your email (optional)") %></dt>
       <dd>
         <%= f.text_field :email, :size => 60 %>
-  		  <p class="footnote"><%= ts("Leave this blank to file an anonymous report.") %></p>
+        <p class="footnote"><%= ts("Leave this blank to file an anonymous report.") %></p>
         <p>
-          <%= f.label :cc_me, ts("Email me a copy of my message (optional)") %>:
+          <%= f.label :cc_me, ts("Email me a copy of my message (optional)") %>
           <%= f.check_box :cc_me %>
         </p>
         <%= f.hidden_field :ip_address, :value => request.remote_ip %>
-  	  </dd>		
-      <dt class="landmark">Send to Abuse Team</dt>
-  		<dd class="submit actions"><%= f.submit ts("Submit") %></dd>
-		</dl>
+      </dd>		
+      <dt class="landmark"><%= ts("Send to Abuse Team") %></dt>
+      <dd class="submit actions"><%= f.submit ts("Submit") %></dd>
+    </dl>
   </fieldset>
 
 <% end %>

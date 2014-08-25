@@ -52,10 +52,27 @@
     <% end %>
 
     <fieldset>
-      <p class="submit"><%= submit_tag "Submit" %></p>      
+      <p class="submit"><%= submit_tag ts("Submit") %></p>      
     </fieldset>    
 
   <% end %>
   <!--/content-->
 
 </div>
+
+<%= content_for :footer_js do %>
+  <%= javascript_include_tag '/javascripts/jquery.qtip.min.js' %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      setupTooltips();
+    });
+    function setupTooltips() {
+      $j('[data-tooltip]').each(function(){
+        $j(this).qtip({
+            content: $j(this).attr('data-tooltip'),
+            position: {corner: {target: 'topMiddle'}}
+        });
+      });
+    }
+  <% end %>
+<% end %>

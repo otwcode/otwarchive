@@ -407,7 +407,7 @@ Feature: Collection
       And I follow "2" within "div#main.works-edit.region"
       And I check "Add co-authors?"
       And I fill in "pseud_byline" with "Amos"
-      And I press "Update Without Preview"
+      And I press "Post Without Preview"
       And I follow "Entire Work"
     Then I should not see "Jessica" within "div.preface"
       And I should not see "Amos" within "div.preface"

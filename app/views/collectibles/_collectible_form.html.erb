@@ -5,11 +5,9 @@
 <!-- collections -->
 <% unless (collections = collectibles.collect(&:collections).flatten.uniq).empty? %>
   <dt><%= form.label :collections_to_remove, ts("Current Collections") %></dt>
-  <dd>
-    <fieldset class="listbox">
-      <h4 class="heading">Check to remove</h4>
-      <%= checkbox_section(form, :collections_to_remove, collections, :name_method => "title") %>
-    </fieldset>
+  <dd class="listbox group">
+    <h4 class="heading"><%= ts("Check to remove") %></h4>
+    <%= checkbox_section(form, :collections_to_remove, collections, :name_method => "title") %>
   </dd>
 <% end %>
   

@@ -14,13 +14,13 @@
 
 <ul class="footnote actions">
   <li><%= link_to ts("Forgot password?"), new_password_path %></li>
-  <% if @admin_settings.account_creation_enabled? %>
+  <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
     <li>
-      <%= link_to ts("Sign Up"), new_user_path %>
+      <%= link_to ts("Create an Account"), new_user_path %>
     </li>
   <% elsif @admin_settings.invite_from_queue_enabled? %>
     <li>
-      <%= link_to ts('Get Invite'), invite_requests_path %>
+      <%= link_to ts('Get an Invite'), invite_requests_path %>
     </li>
   <% end %>
 </ul>

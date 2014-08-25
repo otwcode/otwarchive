@@ -3,7 +3,7 @@ class LanguagesController < ApplicationController
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
-  end  
+  end
   
   def index
     @languages = Language.default_order

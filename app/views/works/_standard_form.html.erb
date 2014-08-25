@@ -10,13 +10,13 @@
     <h3 class="landmark heading"><%= ts('Preface') %></h3>
     <dl>
       <dt class="title">
-        <%= f.label :title, ts('Work Title *'), :class => "required" %>
+        <%= f.label :title, ts('Work Title*'), :class => "required" %>
       </dt>
       <dd class="title">
         <%= f.text_field :title, :class => "observe_textlength text" %>
         <%= live_validation_for_field('work_title',
               :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN,
-              :failureMessage => ts("We need a title! (At least %{min_length} characters long, please.)", :min_length => ArchiveConfig.TITLE_MIN.to_s))
+              :failureMessage => ts('We need a title! (At least %{min_length} characters long, please.)', :min_length => ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
@@ -49,7 +49,7 @@
           <%= f.label "challenge_assignment_ids[]", ts('Does this fulfill a challenge assignment') %>
           <%= link_to_help "add-work-to-assignment" %>
         </dt>
-        <dd class="collection listbox">
+        <dd class="collection listbox group">
           <h4 class="heading"><%= ts('Open Assignments') %></h4>
           <%= checkbox_section f, :challenge_assignment_ids, (@work.challenge_assignments + @assignments).uniq,
                 :checked_method => "challenge_assignments", :name_method => "title" %>
@@ -60,7 +60,7 @@
         <dt class="collection">
           <%= f.label "challenge_claim_ids[]", ts('Fulfill a Claim') %> <%= link_to_help "add-work-to-assignment" %>
         </dt>
-        <dd class="collection listbox">
+        <dd class="collection listbox group">
           <h4 class="heading"><%= ts('Open Claims') %></h4>
           <%= checkbox_section f, :challenge_claim_ids, (@work.challenge_claims + @claims).uniq,
               :checked_method => "challenge_claims", :name_helper_method => "claim_title" %>
@@ -263,7 +263,7 @@
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
-        <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
+        <span class="hidden rtf-notes"><%= ts('Type or paste formatted text.') %><%= link_to_help "rte-help" %></span>
       </p>
 
       <% use_tinymce %>
@@ -291,7 +291,7 @@
         <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
       <% end %>
       <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
-      <li><%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts("Please wait...") %></li>
+      <li><%= submit_tag ts('Post Without Preview'), :name => 'post_button', :disable_with => ts('Please wait...') %></li>
       <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
     </ul>
   </fieldset>

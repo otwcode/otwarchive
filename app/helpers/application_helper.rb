@@ -44,10 +44,8 @@ module ApplicationHelper
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
   def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
-    text = ts(link_to_default_text)
-    title_text = ts(title_attribute_default_text)
-    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{text}</span>" : "<span class=\"current\" title=\"#{title_text}\">#{text}</span>"
-    link_code = title_attribute_default_text.nil? ? link_to(text, path) : link_to(text, path, title: "#{title_text}")
+    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{link_to_default_text}</span>" : "<span class=\"current\" title=\"#{title_attribute_default_text}\">#{link_to_default_text}</span>"
+    link_code = title_attribute_default_text.nil? ? link_to(link_to_default_text, path) : link_to(link_to_default_text, path, title: "#{title_attribute_default_text}")
     is_current ? span_tag.html_safe : link_code
   end
   
@@ -127,7 +125,7 @@ module ApplicationHelper
     if @downloading
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
   
@@ -395,10 +393,10 @@ module ApplicationHelper
   
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
-    toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
+    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", :checkboxes_size => checkboxes_size), 
                               :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
+    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), :style => "display: none;",
                               :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
                               "\n".html_safe
     
@@ -406,13 +404,14 @@ module ApplicationHelper
  
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
+        "$j('##{checkboxes_id}').find('.actions').show();\n" +
         "$j('.#{checkboxes_id}_show').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', 'options index all');\n" + 
+          "$j('##{checkboxes_id}').find('.index').attr('class', 'options index all');\n" + 
           "$j('.#{checkboxes_id}_hide').show();\n" +
           "$j('.#{checkboxes_id}_show').hide();\n" +
         "});" + "\n" + 
         "$j('.#{checkboxes_id}_hide').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', '#{css_class}');\n" +
+          "$j('##{checkboxes_id}').find('.index').attr('class', '#{css_class}');\n" +
           "$j('.#{checkboxes_id}_show').show();\n" +
           "$j('.#{checkboxes_id}_hide').hide();\n" +
         "});\n" +
@@ -422,11 +421,9 @@ module ApplicationHelper
     toggle = content_tag(:p, 
       (options[:no_show] ? "".html_safe : toggle_show) + 
       toggle_hide + 
-      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions")
+      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions", :style => "display: none;")
   end
   
-  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes) I suspect this is a listbox
-  #
   # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
   # attribute: the attribute being set 
@@ -485,24 +482,23 @@ module ApplicationHelper
       end
       content_tag(:li, checkbox_and_label)
     end.join("\n").html_safe
-    checkboxes_ul = content_tag(:ul, checkboxes)
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
     css_class = checkbox_section_css_class(size, options[:concise])
-    top_toggle = "".html_safe
-    bottom_toggle = "".html_safe
+    checkboxes_ul = content_tag(:ul, checkboxes, :class => css_class)
+
+    toggle = "".html_safe
     if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
-      top_toggle = checkbox_section_toggle(checkboxes_id, size)
-      bottom_toggle = checkbox_section_toggle(checkboxes_id, size, :no_show => true, :no_js => true)
+      toggle = checkbox_section_toggle(checkboxes_id, size)
     end
       
-    # We wrap the whole thing in a div module with the classes
-    return content_tag(:div, top_toggle + checkboxes_ul + bottom_toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
+    # We wrap the whole thing in a div
+    return content_tag(:div, checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id)
   end
   
   def checkbox_section_css_class(size, concise=false)
-    css_class = "options index"
+    css_class = "options index group"
     
     if concise
       css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
@@ -514,8 +510,8 @@ module ApplicationHelper
     css_class
   end
   
-  def check_all_none(all_text="All", none_text="None", name_filter=nil)
-    filter_attrib = (name_filter ? " checkbox_name_filter=\"#{name_filter}\"" : '')    
+  def check_all_none(all_text="All", none_text="None", id_filter=nil)
+    filter_attrib = (id_filter ? " data-checkbox-id-filter=\"#{id_filter}\"" : '')    
     ('<ul class="actions">
       <li><a href="#" class="check_all"' + 
       "#{filter_attrib}>#{all_text}</a></li>" +
@@ -525,7 +521,7 @@ module ApplicationHelper
   
   def submit_button(form=nil, button_text=nil)
     button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
-    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=>"submit")
+    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=> "submit")
   end
     
   def submit_fieldset(form=nil, button_text=nil)

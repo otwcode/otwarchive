@@ -277,11 +277,6 @@ public
     end
   end
 
-  # The ?language_id=somelanguage needs to persist thorough URL changes
-  def default_url_options(options={})
-    { language_id: I18n.locale }
-  end
-
 
   def load_locales
     @loaded_locales ||= Locale.order(:iso)

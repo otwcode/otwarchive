@@ -1,20 +1,25 @@
 class SubscriptionsController < ApplicationController
-  
+
   skip_before_filter :store_location, :only => [:create, :destroy]
-  
+
   before_filter :users_only
   before_filter :load_user
   before_filter :check_ownership
 
   def load_user
     @user = User.find_by_login(params[:user_id])
-    @check_ownership_of = @user  
+    @check_ownership_of = @user
   end
-  
+
   # GET /subscriptions
   # GET /subscriptions.xml
-  def index    
+  def index
     @subscriptions = @user.subscriptions.includes(:subscribable)
+    if params[:type].present?
+      @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
+    end
+    @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }    
+    @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   # POST /subscriptions
@@ -26,8 +31,7 @@ class SubscriptionsController < ApplicationController
       if @subscription.save
         format.html {
           flash[:notice] = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_url}\">your Subscriptions page</a>.", :name => @subscription.name).html_safe
-          # redirect_back_or_default(@subscription.subscribable) # it always returns to subscriptions rather than the subscribable
-          redirect_to(@subscription.subscribable)
+          redirect_to request.referer || @subscription.subscribable
         }
       else
         format.html { render :action => "new" }
@@ -45,7 +49,7 @@ class SubscriptionsController < ApplicationController
     respond_to do |format|
       format.html {
         flash[:notice] = ts("You have successfully unsubscribed from %{name}.", :name => @subscription.name).html_safe
-        redirect_back_or_default(@subscribable)
+        redirect_to request.referer || user_subscriptions_path(current_user)
       }
     end
   end

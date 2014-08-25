@@ -108,21 +108,19 @@
             </dd>
           <% end %>
           <dt><%= tag_category_name(tag_type) %></dt>
-          <dd title="<%= tag_category_name(tag_type) %>">
-            <fieldset class="tags listbox">
-              <% if @parents[tag_type].present? %>
-                <h4 class="heading"><%= ts("Check to remove:") %></h4>
-                <%= check_all_none %>
-                <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
-                      :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
-                <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
-              <% else %>
-                <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
-              <% end %>
-              <div title="add tags">
-                <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
-              </div>
-            </fieldset>
+          <dd title="<%= tag_category_name(tag_type) %>" class="tags listbox group">
+            <% if @parents[tag_type].present? %>
+              <h4 class="heading"><%= ts("Check to remove:") %></h4>
+              <%= check_all_none("All", "None", tag_type) %>
+              <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
+                    :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
+              <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
+            <% else %>
+              <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
+            <% end %>
+            <div title="<%= ts('add tags') %>">
+              <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
+            </div>
           </dd>
         <% end %>
       </dl>
@@ -136,28 +134,26 @@
         <dl>
           <% @tag.child_types.each do |tag_type| %>
             <dt><%= tag_category_name(tag_type) %></dt>
-            <dd>
-              <fieldset class="tags listbox">
-                <% if @children[tag_type].present? %>
-                  <h4 class="heading"><%= ts("Check to remove: ") %></h4>
-                  <%= check_all_none %>
-                  <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
-                        :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
+            <dd class="tags listbox group">
+              <% if @children[tag_type].present? %>
+                <h4 class="heading"><%= ts("Check to remove: ") %></h4>
+                <%= check_all_none("All", "None", tag_type) %>
+                <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
+                      :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
                   <% if @children[tag_type].length > 20 %>
                     <p class="actions" role="navigation">
                       <%= link_to ts("See all (%{children_count})", :children_count => @tag.send(tag_type.underscore.pluralize).count), {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %>
                     </p>
                   <% end %>
-                  <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
-                <% else %>
-                  <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
-                <% end %>
-                <div title="add tags">
-                  <%= f.text_field tag_type.underscore + '_string', 
-                      autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
-                      :class => 'tags autocomplete') %>
-                </div>
-              </fieldset>
+                <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
+              <% else %>
+                <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
+              <% end %>
+              <div title="<%= ts("add tags") %>">
+                <%= f.text_field tag_type.underscore + '_string', 
+      							autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
+      							:class => 'tags autocomplete') %>
+              </div>
             </dd>
           <% end %>
         </dl>

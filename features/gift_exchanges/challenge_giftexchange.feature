@@ -27,7 +27,7 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Challenge was successfully updated"
       And I should see "Sign-up: Open" within ".collection .meta"
-      And I should see "Sign-up closes:"
+      And I should see "Sign-up Closes:"
 
   Scenario: Gift exchange appears in list of open challenges
     Given I am logged in as "mod1"
@@ -388,20 +388,20 @@ Feature: Gift Exchange Challenge
       And I submit
       And I go to "Cabbot Cove Remixes" collection's page
       And I follow "Profile"
-      And I should see "Tag set:"
+      And I should see "Tag Set:"
       And I should see "Standard Challenge Tags"
     When I edit settings for "Cabbot Cove Remixes" challenge
       And I fill in "Tag Sets To Use:" with "Angela Lansbury"
       And I press "Update"
-    Then I should see "Tag sets:"
+    Then I should see "Tag Sets:"
       And I should see "Standard Challenge Tags"
       And I should see "Angela Lansbury"
     When I edit settings for "Cabbot Cove Remixes" challenge
       And I check "Standard Challenge Tags"
       And I check "Angela Lansbury"
       And I press "Update"
-    Then I should not see "Tag sets:"
-      And I should not see "Tag set:"
+    Then I should not see "Tag Sets:"
+      And I should not see "Tag Set:"
       And I should not see "Standard Challenge Tags"
       And I should not see "Angela Lansbury"
 

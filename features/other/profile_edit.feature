@@ -75,7 +75,7 @@ Scenario: Edit profile - entering date of birth and displaying
   When I fill in my date of birth
     Then I should see "Your profile has been successfully updated"
     When I change my preferences to display my date of birth
-      Then I should see "My birthday: 1980-11-30"
+    Then I should see "My birthday: 1980-11-30"
 	  And 0 emails should be delivered
 		
 Scenario: Edit profile - change password - mistake in typing old password

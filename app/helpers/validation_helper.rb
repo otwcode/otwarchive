@@ -1,4 +1,17 @@
+require 'json'
+
 module ValidationHelper
+
+  # VALIDATION_NAME_MAPPING[options_key], where `options_key` is a valid key for
+  # the `options` Hash passed to `validation_for_field`, returns the corresponding
+  # key for the validation_for_X.add(Validate[key], ...) JavaScript function call.
+  VALIDATION_NAME_MAPPING =   {
+    :presence       => "Presence",
+    :maximum_length => "Length",
+    :minimum_length => "Length",
+    :numericality   => "Numericality",
+    :exclusion      => "Exclusion",
+  }
 
   # Set a custom error-message handler that puts the errors on 
   # their respective fields instead of on the top of the page
@@ -87,39 +100,80 @@ module ValidationHelper
     end
 
     options = defaults.merge(options)
-    
-    validation_code = ""
-    if options[:presence]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Presence, {\"failureMessage\":\"#{options[:failureMessage]}\", \n"
-      validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
+
+    # Remove things where the value is a falsey, e.g.:
+    #    live_validation_for_field(id, {presence: false})
+    options.reject!{|k, v| !v}
+
+    # Generates a Hash mapping option[] keys to Hashes, each Hash being a
+    # representation of the arguments passed to validation_for_X.add() in
+    # JavaScript.
+    validation_hashes = {}
+    options.each do |key, _|
+      validation_hashes[key] =
+        case key
+        when :presence
+          {
+          "failureMessage" => options[:failureMessage].to_s,
+          "validMessage"   => options[:validMessage].to_s,
+          }
+        when :maximum_length
+          {
+            "maximum"        => options[:maximum_length].to_s,
+            "tooLongMessage" => options[:tooLongMessage].to_s,
+          }
+        when :minimum_length
+          {
+            "minimum"         => options[:minimum_length].to_s,
+            "tooShortMessage" => options[:tooShortMessage].to_s,
+          }
+        when :numericality
+          {
+            "notANumberMessage" => options[:notANumberMessage].to_s,
+            "validMessage"      => options[:validMessage].to_s
+          }
+        when :exclusion
+          {
+            "within"         => options[:exclusion],
+            "failureMessage" => options[:failureMessage],
+            "validMessage"   => options[:validMessage],
+          }
+        end
     end
-    
-    if options[:maximum_length]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, { \"maximum\":\"#{options[:maximum_length]}\", \n" 
-      validation_code += "\"tooLongMessage\": \"#{options[:tooLongMessage]}\"}); \n"     
-    end
-    
-    if options[:minimum_length]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Length, { \"minimum\":\"#{options[:minimum_length]}\", \n" 
-      validation_code += "\"tooShortMessage\": \"#{options[:tooShortMessage]}\"}); \n"           
-    end
-    
-    if options[:numericality]
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Numericality, { \"notANumberMessage\":\"#{options[:notANumberMessage]}\", \n"
-      validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
-    end
-    
-    if options[:exclusion]
-      exclusion_string = "['"
-      exclusion_string += options[:exclusion].join("', '")
-      exclusion_string += "']"
-      validation_code += "#{live_validation_varname(id)}.add(Validate.Exclusion, { \n"
-      validation_code += "\"within\": #{exclusion_string}, \n"
-      validation_code += "\"failureMessage\":\"#{options[:failureMessage]}\", \n"
-      validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
-    end
-    
+
+    # Build the validation code from the hashes created above.
+    validation_code = validation_code_builder(id, validation_hashes)
+
     return live_validation_wrapper(id, validation_code.html_safe)
+  end
+
+  private
+
+  # Builds validation_for_X.add(...) JavaScript calls.
+  #
+  # Implementation note: JSON is a subset of JavaScript, so `object.to_json`
+  #                      works *brilliantly* for this.
+  def validation_json(id, validate_key, object)
+    validation_code = live_validation_varname(id)
+    validation_code += ".add(Validate.#{validate_key}, %s);" % object.to_json
+
+    validation_code
+  end
+
+  # Builds a sequence of validation_for_X.add(...) JavaScript calls.
+  #
+  # Takes `id` and a hash mapping `options` keys to a Hash that, when converted
+  # converted to JSON, is the second argument for validation_for_X.add().
+  #
+  # For each key specified both in the hash and in `options`, it adds the
+  # corresponding validation_for_X.add(...) call.
+  def validation_code_builder(id, validation_hashes)
+    validation_hashes.reject! {|k, v| v.nil?}
+
+    validation_hashes.map do |option_key, object|
+      validate_key = VALIDATION_NAME_MAPPING[option_key]
+      validation_json(id, validate_key, object)
+    end.join("\n")
   end
 
 end

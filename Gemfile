@@ -74,6 +74,9 @@ gem 'globalize', '~> 3.1.0'
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
+# Add a clean notifier that shows we are on dev or test
+gem "rack-dev-mark"
+
 #Phrase-app
 gem 'phrase'
 
@@ -85,6 +88,9 @@ gem 'newrelic-redis'
 # For URL mangling
 gem 'addressable'
 
+# For controlling application behavour dynamically
+gem 'rollout'
+
 group :test do
   gem 'rspec-rails', '>=2.6.0'
   gem 'pickle'
@@ -95,12 +101,11 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
-  # automatically record http requests and save them to make
-  # cuke fast
-  gem 'typhoeus'
-  gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  # Record and replay data from external URLs
+  gem "vcr", "~> 2.5.0"
+  gem 'webmock', '~> 1.8.8'
   # Code coverage
   gem 'simplecov', :require => false
   gem 'email_spec'
