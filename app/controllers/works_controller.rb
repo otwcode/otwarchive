@@ -914,7 +914,7 @@ public
   end
 
   def cancel_posting_and_redirect
-    if @work and @work.posted
+    if @work && @work.posted
       flash[:notice] = ts("The work was not updated.")
       redirect_to user_works_path(current_user)
     else
