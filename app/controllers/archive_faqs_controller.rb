@@ -1,12 +1,7 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
-  before_filter :set_locale, :only => [:index, :show]
-  #before_filter :get_faq_translations, :only => [:new, :create, :edit, :update, :update_positions]
-
-  #def get_faq_translations
-  #  @translatable_faqs = ArchiveFaq.non_translated.order("created_at ASC")
-  #end
+  #before_filter :set_locale
 
   # GET /archive_faqs
   def index
@@ -67,11 +62,6 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/manage
   def manage
     @archive_faqs = ArchiveFaq.order('position ASC')
-    #if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-     # @archive_faqs = @archive_faqs.where(:language_id => @language.id)
-    #else
-    #  @archive_faqs = @archive_faqs.non_translated
-    #end
   end
 
   # POST /archive_faqs
@@ -118,6 +108,12 @@ class ArchiveFaqsController < ApplicationController
       format.html { redirect_to(archive_faqs_path) }
       format.js { render :nothing => true }
     end
+  end
+
+
+  # The ?language_id=somelanguage needs to persist thorough URL changes
+  def default_url_options(options={})
+    { language_id: I18n.locale }
   end
 
   # GET /archive_faqs/1/confirm_delete
