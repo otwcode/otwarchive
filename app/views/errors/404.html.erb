@@ -1,5 +1,6 @@
 <div id="main" class="error">
   <h2 class="heading">Error 404</h2>
+  <h3 class="heading"><%= if defined? @message then  @message end %></h3> 
   <h3 class="heading">The page you were looking for doesn't exist.</h3>
-  <p>You may have mistyped the address or the page may have moved.</p>
+  <p>You may have mistyped the address or the page may have moved or been deleted by the creator.</p>
 </div>
