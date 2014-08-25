@@ -717,7 +717,6 @@ public
     @user = current_user
     @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids]).readonly(false)
     titles = @works.collect(&:title)
-    Rails.logger.info "!&!&!&!&&! GOT HERE #{titles}"
 
     @works.each do |work|
       work.destroy
