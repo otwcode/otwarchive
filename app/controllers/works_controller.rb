@@ -322,7 +322,7 @@ class WorksController < ApplicationController
               error_message << " Warning is missing."
             end
 
-            @work.errors.add(:base, error_message)           
+            @work.errors.add(:base, error_message)
           end
 
           render :new
