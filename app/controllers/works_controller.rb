@@ -79,10 +79,12 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @search = WorkSearch.new(options)
     @page_subtitle = ts("Search Works")
+
     if params[:work_search].present? && params[:edit_search].blank?
       if @search.query.present?
         @page_subtitle = ts("Works Matching '%{query}'", query: @search.query)
       end
+
       @works = @search.search_results
       render 'search_results'
     end
@@ -95,14 +97,17 @@ class WorksController < ApplicationController
     else
       options = {}
     end
+
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
         @fandom = Fandom.find_by_id(params[:fandom_id])
       end
+
       tag = @fandom || @tag
       options[:filter_ids] ||= []
       options[:filter_ids] << tag.id
     end
+
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
@@ -131,6 +136,7 @@ class WorksController < ApplicationController
         else
           @works = @search.search_results
         end
+
         @facets = @works.facets
       end
     elsif use_caching?
@@ -148,6 +154,7 @@ class WorksController < ApplicationController
     else
       options = {}
     end
+
     options.merge!(page: params[:page])
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
 
@@ -238,6 +245,7 @@ class WorksController < ApplicationController
     load_pseuds
     @series = current_user.series.uniq
     @unposted = current_user.unposted_work
+
     # for clarity, add the collection and recipient
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
@@ -253,6 +261,7 @@ class WorksController < ApplicationController
     elsif @collection
       @work.collection_names = @collection.name
     end
+
     if params[:import]
       @page_subtitle = ts("import")
       render :new_import and return
@@ -270,6 +279,7 @@ class WorksController < ApplicationController
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
+
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
@@ -287,6 +297,7 @@ class WorksController < ApplicationController
       if valid && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
+
         if params[:preview_button] || params[:cancel_coauthor_button]
           flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
@@ -306,11 +317,14 @@ class WorksController < ApplicationController
             if @work.fandoms.blank?
               error_message << " Fandom is missing."
             end
+
             if @work.warnings.blank?
               error_message << " Warning is missing."
             end
+
             @work.errors.add(:base, error_message)           
           end
+
           render :new
         end
       end
@@ -348,6 +362,7 @@ class WorksController < ApplicationController
     @work.reset_published_at(@chapter)
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
+
     unless @work.errors.empty?
       render :edit and return
     end
@@ -359,6 +374,7 @@ class WorksController < ApplicationController
         unless @work.posted?
           flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
         end
+
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
         render :preview
@@ -469,6 +485,7 @@ class WorksController < ApplicationController
   # DELETE /works/1
   def destroy
     @work = Work.find(params[:id])
+
     begin
       was_draft = !@work.posted?
       title = @work.title
@@ -477,6 +494,7 @@ class WorksController < ApplicationController
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
+
     if was_draft
       redirect_to drafts_user_works_path(current_user)
     else
@@ -488,6 +506,7 @@ class WorksController < ApplicationController
   def import
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
+
     unless @urls.length > 0
       flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
@@ -522,7 +541,6 @@ class WorksController < ApplicationController
     else # a single work possibly with multiple chapters
       import_single(@urls, options)
     end
-
   end
 
 protected
@@ -531,6 +549,7 @@ protected
   def import_single(urls, options)
     # try the import
     storyparser = StoryParser.new
+
     begin
       if urls.size == 1
         @work = storyparser.download_and_parse_story(urls.first, options)
@@ -628,6 +647,7 @@ public
   def post_draft
     @user = current_user
     @work = Work.find(params[:id])
+
     unless @user.is_author_of?(@work)
       flash[:error] = ts("You can only post your own works.")
       redirect_to current_user and return
@@ -641,10 +661,12 @@ public
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
+
     unless @work.valid? && @work.save
       flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work) and return
     end
+
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), :notice => ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')
     else
@@ -657,14 +679,17 @@ public
 
   def show_multiple
     @user = current_user
+
     if params[:pseud_id]
       @works = Work.joins(:pseuds).where(:pseud_id => params[:pseud_id])
     else
       @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id)
     end
+
     if params[:work_ids]
       @works = @works.where(:id => params[:work_ids])
     end
+
     @works_by_fandom = @works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom, works.id, works.title, works.posted").group_by(&:fandom)
@@ -674,8 +699,10 @@ public
     if params[:commit] == "Orphan"
       redirect_to new_orphan_path(:work_ids => params[:work_ids]) and return
     end
+
     @user = current_user
     @works = Work.select("distinct works.*").joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids])
+
     if params[:commit] == "Delete"
       render "confirm_delete_multiple" and return
     end
@@ -691,9 +718,11 @@ public
     @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids]).readonly(false)
     titles = @works.collect(&:title)
     Rails.logger.info "!&!&!&!&&! GOT HERE #{titles}"
+
     @works.each do |work|
       work.destroy
     end
+
     flash[:notice] = ts("Your works %{titles} were deleted.", :titles => titles.join(", "))
     redirect_to show_multiple_user_works_path(@user)
   end
@@ -704,12 +733,14 @@ public
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
     work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
+
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(work_params)
         @errors << ts("The work %{title} could not be edited: %{error}", :title => work.title, :error => work.errors_on.to_s)
       end
     end
+
     unless @errors.empty?
       flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
       redirect_to edit_multiple_user_works_path(@user)
@@ -771,12 +802,14 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
+
     if @work.nil?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
     end
+
     @check_ownership_of = @work
     @check_visibility_of = @work
   end
@@ -811,6 +844,7 @@ public
       else
         @work.preview_mode = false
       end
+
       @work.attributes = params[:work]
       @work.save_parents if @work.preview_mode
     end
@@ -870,6 +904,7 @@ public
           else
             @work.preview_mode = false
           end
+
           @work.attributes = params[:work]
           @work.save_parents if @work.preview_mode
         end
@@ -924,9 +959,11 @@ public
   def log_admin_activity
     if logged_in_as_admin?
       options = { action: params[:action] }
+
       if params[:action] == 'update_tags'
         summary = "Old tags: #{@work.tags.value_of(:name).join(", ")}"
       end
+
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
     end
   end
