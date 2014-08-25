@@ -894,18 +894,18 @@ public
 
   # Sets values for @work and @tags[category]
   def set_instance_variables_tags
-    if params[:id] # edit_tags, update_tags, preview_tags
-      @work ||= Work.find(params[:id])
-      if params[:work]  # editing, save our changes
-        if params[:preview_button] || params[:cancel_button] || params[:edit_button]
-          @work.preview_mode = true
-        else
-          @work.preview_mode = false
-        end
+    return unless params[:id] # edit_tags, update_tags, preview_tags
 
-        @work.attributes = params[:work]
-        @work.save_parents if @work.preview_mode
+    @work ||= Work.find(params[:id])
+    if params[:work]  # editing, save our changes
+      if params[:preview_button] || params[:cancel_button] || params[:edit_button]
+        @work.preview_mode = true
+      else
+        @work.preview_mode = false
       end
+
+      @work.attributes = params[:work]
+      @work.save_parents if @work.preview_mode
     end
   rescue
   end
