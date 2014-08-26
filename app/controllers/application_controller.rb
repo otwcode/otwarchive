@@ -92,7 +92,7 @@ protected
   end
 
 public
-  
+
   before_filter :fetch_admin_settings
   def fetch_admin_settings
     if Rails.env.development?
