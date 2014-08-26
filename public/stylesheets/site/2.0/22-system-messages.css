@@ -91,6 +91,11 @@ alert => yellow-orange to alert users of problems or planned downtime
   color: #333;
   margin: 0 2em;
   padding: 0.375em 0.75em;
+  text-align: left;
+}
+
+.announcement .userstuff p {
+  margin: 0.643em auto 0;
 }
 
 .announcement p.submit {
@@ -113,6 +118,7 @@ alert => yellow-orange to alert users of problems or planned downtime
   border: none;
   color: inherit;
   margin: 0;
+  text-align: center;
     text-shadow: none;
 }
 
