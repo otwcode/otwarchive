@@ -13,6 +13,7 @@
     <caption>Locales</caption>
     <thead>
       <tr>
+        <th scope="col"></th>
         <th scope="col">Name</th>
         <th scope="col">ISO code</th>
         <th scope="col">Primary locale</th>
@@ -21,7 +22,7 @@
     </thead>
     <tbody>
     <% for locale in @locales %>
-      <tr> <td><%= link_to locale.name, locale %></td><td><%=locale.iso%></td><td><%=locale.main%></td><td><%=locale.updated_at%></td></tr>
+      <tr> <td><%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %></td><td><%= locale.name %></td><td><%=locale.iso%></td><td><%=locale.main%></td><td><%=locale.updated_at%></td></tr>
     <% end %>
     </tbody>
   </table>
