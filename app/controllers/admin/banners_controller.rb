@@ -27,10 +27,10 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.new(params[:admin_banner])
 
     if @admin_banner.save
-      flash[:notice] = 'Banner was successfully created.'
-      redirect_to(@admin_banner)
+      flash[:notice] = ts('Banner was successfully created.')
+      redirect_to @admin_banner
     else
-      render :action => "new"
+      render action: 'new'
     end
   end
 
@@ -39,15 +39,16 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.find(params[:id])
 
     if @admin_banner.update_attributes(params[:admin_banner])
-      flash[:notice] = 'Banner was successfully updated.'
+      flash[:notice] = ts('Banner was successfully updated.')
       redirect_to(@admin_banner)
     else
-      render :action => "edit"
+      render action: 'edit'
     end
   end
   
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
+    @admin_banner = AdminBanner.find(params[:id])
   end 
   
   # DELETE /admin/banners/1
@@ -55,7 +56,7 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.find(params[:id])
     @admin_banner.destroy
 
-    redirect_to(admin_banners_url)
+    redirect_to admin_banners_url
   end
 
 end

@@ -1,4 +1,4 @@
-<%= form_for @admin_banner, html: { class: "post" } do |f| %>
+<%= form_for @admin_banner, html: { class: 'post' } do |f| %>
   <%= error_messages_for @admin_banner %>
   
   <p class="required notice"><%= ts('* Required information') %></p>
@@ -8,7 +8,7 @@
     <h3 class="landmark heading"><%= ts('Admin Banner') %></h3>
     <dl>
   
-      <dt class="required"><%= f.label :content, ts('Banner text') + "*" %></dt>
+      <dt class="required"><%= f.label :content, ts('Banner text') + '*' %></dt>
       <dd class="required">
         <p><%= allowed_html_instructions %></p>
         <%= f.text_area :content %>
@@ -18,15 +18,15 @@
       <dd class="required">
         <ul>
           <li>
-            <%= f.radio_button :banner_type, "", :checked => true %>
+            <%= f.radio_button :banner_type, '', checked: true %>
             <%= f.label :banner_type_, ts('Default') %>
           </li>
           <li>
-            <%= f.radio_button :banner_type, "event" %>
+            <%= f.radio_button :banner_type, 'event' %>
             <%= f.label :banner_type_event, ts('Event (For membership drives, celebrations, etc.)') %>
           </li>
           <li>
-            <%= f.radio_button :banner_type, "alert" %>
+            <%= f.radio_button :banner_type, 'alert' %>
             <%= f.label :banner_type_alert, ts('Alert (For bugs, important changes, expected downtime, etc.)') %>
           </li>
         </ul>
