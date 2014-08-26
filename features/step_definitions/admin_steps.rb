@@ -79,20 +79,6 @@ Given /^guest downloading is on$/ do
   click_button("Update")
 end
 
-#Given /^account creation is enabled$/ do
-#  step("I am logged in as an admin")
-#  visit(admin_settings_path)
-#  check("Account creation enabled (People can create accounts without an invitation)")
-#  click_button("Update")
-#end
-
-#Given /^account creation requires invitation$/ do
-#  step("I am logged in as an admin")
-#  visit(admin_settings_path)
-#  check("Account creation requires invitation")
-#  click_button("Update")
-#end
-
 Given /^tag wrangling is off$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)

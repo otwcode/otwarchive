@@ -209,7 +209,7 @@ class Collection < ActiveRecord::Base
     group("collections.id")
 
   def to_param
-    name
+   name_was
   end
 
   # Change membership of collection(s) from a particular pseud to the orphan account

@@ -223,13 +223,19 @@ class BookmarksController < ApplicationController
   def load_owner
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
+      unless @user 
+        raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
+      end
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @pseud 
+          raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
+        end
       end
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag && @tag.is_a?(Tag)
+      unless @tag 
         raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
       end
       unless @tag.canonical?

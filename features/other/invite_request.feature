@@ -70,7 +70,7 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
-  Scenario: User can send out invites they have been granted
+  Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
       And I am logged in as "user1"
@@ -82,16 +82,14 @@ Feature: Invite requests
       And I press "Send invite"
     Then 1 email should be delivered to test@archiveofourown.org
       And the email should contain "has invited you to join our beta!"
-    When I log out
-    Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-    
-    # user uses invite
+
+    Given I am a visitor
     When I click the first link in the email
-      And I fill in "user_login" with "user2"
-      And I fill in "user_password" with "password1"
-      And I fill in "user_password_confirmation" with "password1"
-      And I check "user_age_over_13"
-      And I check "user_terms_of_service"
+      And I fill in the sign up form with valid data
+      And I fill in the following:
+        | user_login                  | user2     |
+        | user_password               | password1 |
+        | user_password_confirmation  | password1 |
       And I press "Create Account"
     Then I should see "Within 24 hours, you should receive an email at the address you gave us."
       And I should see "You must verify your account within 14 days"
