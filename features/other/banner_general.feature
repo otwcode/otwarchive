@@ -46,7 +46,7 @@ Scenario: Banner stays off when logging out and in again
 Scenario: Logged out user can turn off banner
   Given an admin creates an active banner
     And I am logged out
-  When I turn off the banner
+  When I follow "×"
   Then I should not see "This is some banner text"
    
 Scenario: User can turn off banner in preferences
