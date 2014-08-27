@@ -6,6 +6,10 @@ Given /^I have turned off the banner$/ do
   step "I turn off the banner"
 end
 
+Given /^there are no banners$/ do
+  AdminBanner.delete_all
+end
+
 ### WHEN
 
 When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|

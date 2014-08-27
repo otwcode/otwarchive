@@ -23,6 +23,7 @@ Feature: creating and editing skins
     And I fill in "Title" with "my blinking skin"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I submit
+  Then show me the page
   Then I should see "Skin was successfully created"
     And I should see "my blinking skin skin by skinner"
     And I should see "text-decoration: blink;"
