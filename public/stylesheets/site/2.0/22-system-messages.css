@@ -95,7 +95,7 @@ alert => yellow-orange to alert users of problems or planned downtime
 }
 
 .announcement .userstuff p {
-  margin: 0.643em auto 0;
+  margin: 0.375em auto;
 }
 
 .announcement p.submit {
