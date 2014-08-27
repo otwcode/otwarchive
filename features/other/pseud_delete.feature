@@ -13,20 +13,21 @@ Feature: Delete pseud.
   And I am logged in as "testuser" with password "testuser"
     And I am on testuser's pseuds page
   When I follow "delete_tester_pseud"
-  Then I should see "Delete these bookmarks"
-  When I choose "Delete these bookmarks"
-    And I submit
-  Then I should see "The pseud was successfully deleted."
-  When I am on testuser's pseuds page
-    Then I should not see "tester_pseud"
-    And I follow "delete_testy"
-    And I choose "Transfer these bookmarks to the default pseud"
-    And I submit
-  Then I should see "The pseud was successfully deleted."
-  When I am on testuser's pseuds page
-    And I follow "testymctesty"
-  Then I should see "fourth"
-    And I should not see "fifth work"
+  When Issue 283 is fixed
+  #Then I should see "Delete these bookmarks"
+  #When I choose "Delete these bookmarks"
+  #  And I submit
+  #Then I should see "The pseud was successfully deleted."
+  #When I am on testuser's pseuds page
+  #  Then I should not see "tester_pseud"
+  #  And I follow "delete_testy"
+  #  And I choose "Transfer these bookmarks to the default pseud"
+  #  And I submit
+  #Then I should see "The pseud was successfully deleted."
+  #When I am on testuser's pseuds page
+  #  And I follow "testymctesty"
+  #Then I should see "fourth"
+  #  And I should not see "fifth work"
               
      
     
