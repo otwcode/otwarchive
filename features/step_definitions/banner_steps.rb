@@ -1,0 +1,110 @@
+# encoding: UTF-8
+
+### GIVEN
+
+Given /^I have turned off the banner$/ do
+  step "I turn off the banner"
+end
+
+### WHEN
+
+When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
+  step %{I am logged in as an admin}
+  visit(new_admin_banner_path)
+  fill_in("admin_banner_content", :with => "This is some banner text")
+  if banner_type.present?
+    if banner_type == "alert"
+      choose("admin_banner_banner_type_alert")
+    elsif banner_type == "event"
+      choose("admin_banner_banner_type_event")
+    else
+      choose("admin_banner_banner_type_")
+    end
+  end
+  check("admin_banner_active")
+  click_button("Create Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
+end
+
+When /^an admin deactivates the banner$/ do
+  step %{I am logged in as an admin}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  uncheck("admin_banner_active")
+  click_button("Update Banner")
+  step %{I should see "Banner successfully updated."}
+end
+
+When /^an admin creates a different active banner$/ do
+  step %{I am logged in as an admin}
+  visit(new_admin_banner_path)
+  fill_in("admin_banner_content", :with => "This is new banner text")
+  check("admin_banner_active")
+  click_button("Create Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
+end
+
+When /^I turn off the banner$/ do
+  step %{I am logged in as "newname"}
+  step %{I am on my user page}
+  click_button("×")
+end
+
+### THEN
+
+Then /^a logged-in user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
+  step %{I am logged in as "ordinaryuser"}
+  visit(works_path)
+  if banner_type.present?
+    if banner_type == "alert"
+      page.should have_xpath("//div[@class=\"alert\"]")
+    elsif banner_type == "event"
+      page.should have_xpath("//div[@class=\"event\"]")
+    else
+      page.should have_xpath("//div[@class=\"announcement\"]")
+      page.should_not have_xpath("//div[@class=\"alert\"]")
+      page.should_not have_xpath("//div[@class=\"event\"]")
+    end
+  end
+  step %{I should see "This is some banner text"}
+end
+
+Then /^a logged-out user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
+  step %{I am logged out}
+  visit(works_path)
+  if banner_type.present?
+    if banner_type == "alert"
+      page.should have_xpath("//div[@class=\"alert\"]")
+    elsif banner_type == "event"
+      page.should have_xpath("//div[@class=\"event\"]")
+    else
+      page.should have_xpath("//div[@class=\"announcement\"]")
+      page.should_not have_xpath("//div[@class=\"alert\"]")
+      page.should_not have_xpath("//div[@class=\"event\"]")
+    end
+  end
+  step %{I should see "This is some banner text"}
+end
+
+Then /^a logged-in user should not see a banner$/ do
+  step %{I am logged in as "ordinaryuser"}
+  page.should_not have_xpath("//div[@class=\"announcement\"]")
+end
+
+Then /^a logged-out user should not see a banner$/ do
+  step %{I am logged out}
+  page.should_not have_xpath("//div[@class=\"announcement\"]")
+end
+
+Then /^I should see the first login banner$/ do
+  step %{I should see "It looks like you've just logged into the archive for the first time"}
+end
+
+Then /^I should not see the first login banner$/ do
+  step %{I should not see "It looks like you've just logged into the archive for the first time"}
+end
+
+Then /^I should see the first login popup$/ do
+  step %{I should see "Here are some tips to help you get started."}
+    step %{I should see "To log in, locate and fill in the log in link"}
+end
