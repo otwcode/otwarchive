@@ -27,7 +27,12 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.new(params[:admin_banner])
 
     if @admin_banner.save
-      flash[:notice] = ts('Banner was successfully created.')
+      if @admin_banner.active?
+        AdminBanner.banner_on
+        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
+      else
+        flash[:notice] = ts('Banner successfully created.')
+      end
       redirect_to @admin_banner
     else
       render action: 'new'
@@ -39,8 +44,13 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.find(params[:id])
 
     if @admin_banner.update_attributes(params[:admin_banner])
-      flash[:notice] = ts('Banner was successfully updated.')
-      redirect_to(@admin_banner)
+      if @admin_banner.active?
+        AdminBanner.banner_on
+        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
+      else
+        flash[:notice] = ts('Banner successfully updated.')
+      end
+      redirect_to @admin_banner
     else
       render action: 'edit'
     end
