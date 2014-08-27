@@ -66,6 +66,7 @@ class Admin::BannersController < ApplicationController
     @admin_banner = AdminBanner.find(params[:id])
     @admin_banner.destroy
 
+    flash[:notice] = ts('Banner successfully deleted.')
     redirect_to admin_banners_url
   end
 
