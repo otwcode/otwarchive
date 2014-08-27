@@ -5,6 +5,7 @@ class AdminBanner < ActiveRecord::Base
   attr_protected :content_sanitizer_version
 
   after_save :expire_cached_admin_banner
+  after_destroy :expire_cached_admin_banner
 
   # update admin banner setting for all users when banner notice is changed
   def self.banner_on
