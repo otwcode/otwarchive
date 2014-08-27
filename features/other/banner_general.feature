@@ -15,6 +15,7 @@ Scenario: Admin can set a banner
 
 Scenario: Admin can set an alert banner
   Given an admin creates an active "alert" banner
+  When I am logged in as "whatever"
   Then a logged-in user should see the "alert" banner
     And a logged-out user should see the "alert" banner
 
@@ -52,13 +53,15 @@ Scenario: Logged out user can turn off banner
 Scenario: User can turn off banner in preferences
   Given an admin creates an active banner
     And I am logged in as "newname"
-  When I set my preferences to turn off the banner showing on every page
+    And I set my preferences to turn off the banner showing on every page
+  When I go to my user page
   Then I should not see "This is some banner text"
 
 Scenario: User can turn off banner in preferences, but will still see a banner when an admin sets a new banner
   Given an admin creates an active banner
     And I am logged in as "newname"
-  When I set my preferences to turn off the banner showing on every page
+    And I set my preferences to turn off the banner showing on every page
+  When I go to my user page
   Then I should not see "This is some banner text"
   When an admin creates a different active banner
     And I am logged in as "newname"

@@ -57,12 +57,12 @@ Then /^a logged-in user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
   visit(works_path)
   if banner_type.present?
     if banner_type == "alert"
-      page.should have_xpath("//div[@class=\"alert\"]")
+      page.should have_xpath("//div[@class=\"alert announcement group\"]")
     elsif banner_type == "event"
-      page.should have_xpath("//div[@class=\"event\"]")
+      page.should have_xpath("//div[@class=\"event announcement group\"]")
     else
-      page.should have_xpath("//div[@class=\"announcement\"]")
-      page.should_not have_xpath("//div[@class=\"alert\"]")
+      page.should have_xpath("//div[@class=\"announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"alert announcement group\"]")
       page.should_not have_xpath("//div[@class=\"event\"]")
     end
   end
@@ -74,13 +74,13 @@ Then /^a logged-out user should see the(?: "([^\"]*)")? banner$/ do |banner_type
   visit(works_path)
   if banner_type.present?
     if banner_type == "alert"
-      page.should have_xpath("//div[@class=\"alert\"]")
+      page.should have_xpath("//div[@class=\"alert announcement group\"]")
     elsif banner_type == "event"
-      page.should have_xpath("//div[@class=\"event\"]")
+      page.should have_xpath("//div[@class=\"event announcement group\"]")
     else
-      page.should have_xpath("//div[@class=\"announcement\"]")
-      page.should_not have_xpath("//div[@class=\"alert\"]")
-      page.should_not have_xpath("//div[@class=\"event\"]")
+      page.should have_xpath("//div[@class=\"announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"alert announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"event announcement group\"]")
     end
   end
   step %{I should see "This is some banner text"}
@@ -88,12 +88,12 @@ end
 
 Then /^a logged-in user should not see a banner$/ do
   step %{I am logged in as "ordinaryuser"}
-  page.should_not have_xpath("//div[@class=\"announcement\"]")
+  page.should_not have_xpath("//div[@class=\"announcement group\"]")
 end
 
 Then /^a logged-out user should not see a banner$/ do
   step %{I am logged out}
-  page.should_not have_xpath("//div[@class=\"announcement\"]")
+  page.should_not have_xpath("//div[@class=\"announcement group\"]")
 end
 
 Then /^I should see the first login banner$/ do
