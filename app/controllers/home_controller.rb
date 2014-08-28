@@ -48,9 +48,16 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
-    @admin_post_show_more = AdminPost.count > 3
-    render :action => "index", :layout => "home"
+    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
+    
+    if logged_in?
+      @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     
+      @inbox_comments = @current_user.inbox_comments.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:read => false})
+      @favorite_tags = @current_user.favorite_tags.find(:all)
+    end
+    
+    @hide_dashboard = true
+    render :action => "index", :layout => "application"
   end
 
 

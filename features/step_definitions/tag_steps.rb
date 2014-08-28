@@ -160,6 +160,22 @@ When /^I view tag wrangling discussions$/ do
   step %{I follow "Discussion"}
 end
 
+When /^I add "([^"]*)" to my favorite tags$/ do |tag|
+  step %{I view the "#{tag}" works index}
+  step %{I press "Favorite Tag"}
+end
+
+When /^I remove "([^"]*)" from my favorite tags$/ do |tag|
+  step %{I view the "#{tag}" works index}
+  step %{I press "Unfavorite Tag"}
+end
+
+When /^the tag "([^\"]*)" is decanonized$/ do |tag|
+  tag = Tag.find_by_name!(tag)
+  tag.canonical = false
+  tag.save
+end
+
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
