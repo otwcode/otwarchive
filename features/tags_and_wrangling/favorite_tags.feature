@@ -4,7 +4,6 @@ Feature: Favorite Tags
   I should be able to list my favorite tags on my homepage
 
   Scenario: A user can add a canonical tag to their favorite tags
-
   Given a canonical fandom "Dallas (TV 2012)"
   When I am logged in as "bourbon" with password "andbranch"
     And I go to the homepage
@@ -18,7 +17,6 @@ Feature: Favorite Tags
   Then I should see "Dallas (TV 2012)"
 
   Scenario: A user can remove a tag from their favorite tags
-
   Given a canonical relationship "John Ross Ewing/Elena Ramos"
   When I am logged in as "bourbon" with password "andbranch"
     And I add "John Ross Ewing/Elena Ramos" to my favorite tags
@@ -31,7 +29,6 @@ Feature: Favorite Tags
     And I should see "Browse fandoms by media or favorite up to 20 tags to have them listed here!"
 
   Scenario: A tag that is decanonized should be removed from users' favorite tags
- 
   Given a canonical character "Rebecca Sutter"
   When I am logged in as "bourbon" with password "andbranch"
     And I add "Rebecca Sutter" to my favorite tags
