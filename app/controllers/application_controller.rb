@@ -27,6 +27,9 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
+  # Custom 404 pages
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   # So if there is not a user_credentials cookie and the user appears to be logged in then 
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials
@@ -48,6 +51,13 @@ class ApplicationController < ActionController::Base
   alias :setflash :set_flash_cookie
 
 protected
+
+  def record_not_found (exception)
+    @message=exception.message
+    respond_to do |f|
+      f.html{ render :template => "errors/404", :status => 404 }
+    end
+  end
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
