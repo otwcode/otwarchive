@@ -35,5 +35,5 @@ Feature: Favorite Tags
   When I go to the homepage
   Then I should see "Rebecca Sutter"
   When the tag "Rebecca Sutter" is decanonized
-  And I go to the homepage
+    And I go to the homepage
   Then I should not see "Rebecca Sutter"
