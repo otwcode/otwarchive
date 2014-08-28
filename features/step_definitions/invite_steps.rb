@@ -94,12 +94,6 @@ When /^I use an already used invitation to sign up$/ do
   visit signup_path(invite.token)
 end
 
-When /^I try to invite a friend from the homepage$/ do
-  step %{I am logged in as "user1"}
-  step %{I go to the homepage}
-  step %{I follow "Invite a Friend"}
-end
-
 When /^I try to invite a friend from my user page$/ do
   step %{I am logged in as "user1"}
   step %{I go to my user page}
