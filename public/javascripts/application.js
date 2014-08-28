@@ -477,12 +477,12 @@ $j(document).ready(function() {
       success: function(data) {
         flashContainer.removeClass('error').empty();
         if (data.item_id) {
-          flashContainer.addClass('notice').text(data.item_success_message);
+          flashContainer.addClass('notice').html(data.item_success_message);
           formSubmit.val(destroyValue);
           form.append('<input name="_method" type="hidden" value="delete">');
           form.attr('action', formAction + '/' + data.item_id);
         } else {
-          flashContainer.addClass('notice').text(data.item_success_message);
+          flashContainer.addClass('notice').html(data.item_success_message);
           formSubmit.val(createValue);
           form.find('input[name="_method"]').remove();
           form.attr('action', formAction.replace(/\/\d+/, ''));
@@ -520,7 +520,7 @@ $j(document).ready(function() {
       dataType: 'json',
       success: function(data) {
         flashContainer.removeClass('error').empty();
-        flashContainer.addClass('notice').text(data.item_success_message);
+        flashContainer.addClass('notice').html(data.item_success_message);
       },
       error: function(xhr, textStatus, errorThrown) {
         flashContainer.empty();
