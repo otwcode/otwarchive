@@ -51,32 +51,27 @@ SUBSECTIONS:
   width: 60%;
 }
 
-.splash .browse ul, .splash .browse li, .splash .favorite ul {
+.splash .browse ul, .splash .browse li {
   float: left;
   width: 100%;
-    box-sizing: border-box;
 }
 
-.splash .dynamic {
-  width: 100%;
+.splash .browse li a, .splash .favorite a {
+  border-bottom: none;
+  display: block;
 }
 
 /* module: browse */
 
 .splash .browse li {
-  width: 50%;
   margin: 0.643em 0;
-  padding: 0.375em;
-}
-
-.splash .browse li a {
-  border-bottom: none;
-  display: block;
+  padding: 0.375em 0;
+  width: 50%;
 }
 
 .splash .browse li a:before {
   color: #900;
-  content: "\00BB"; /* in the audio stylesheet make this un-spoken */
+  content: "\00BB";
   padding: 0 0.25em 0 0;
 }
 
@@ -87,8 +82,6 @@ SUBSECTIONS:
 }
 
 .splash .favorite a {
-  border-bottom: none;
-  display: block;
   padding: 0.25em 0.375em;
 }
 
@@ -109,7 +102,6 @@ SUBSECTIONS:
 .splash .intro h2 {
   font-size: 2em;
   line-height: 1.375;
-    text-shadow: none;
 }
 
 .splash .intro .stats, .splash .parent {
@@ -125,7 +117,6 @@ SUBSECTIONS:
   background: #eaeaea;
   border: 1px solid #ccc;
   margin: 0 7%;
-  text-align: left;
   width: 86%;
     border-radius: 0.5em;
     box-sizing: border-box;
@@ -136,8 +127,8 @@ SUBSECTIONS:
 }
 
 .splash .account p {
- margin-left: 1em;
- margin-right: 1em; 
+  margin-left: 1em;
+  margin-right: 1em; 
 }
 
 .splash .account ul {
@@ -202,7 +193,7 @@ SUBSECTIONS:
 
 /* misc */
 
-.splash .module .module {
+.splash .module .module, .splash .dynamic {
   margin: 0;
   width: 100%;
 }
