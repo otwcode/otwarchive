@@ -1,8 +1,8 @@
 <% if @favorite_tag.new_record? %>
   <%= form_for([@current_user, @favorite_tag],
-    method: "post",
+    method: 'post',
     html: { 
-      class: "ajax-create-destroy", 
+      class: 'ajax-create-destroy', 
       data: { 
         create_value: ts('Favorite Tag'),
         destroy_value: ts('Unfavorite Tag')
@@ -13,9 +13,9 @@
   <% end %>
 <% else %>
   <%= form_for([@current_user, @favorite_tag],
-    method: "delete",
+    method: 'delete',
     html: { 
-      class: "ajax-create-destroy",
+      class: 'ajax-create-destroy',
       data: { 
         create_value: ts('Favorite Tag'),
         destroy_value: ts('Unfavorite Tag')

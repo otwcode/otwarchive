@@ -45,7 +45,7 @@
 
     <ul class="actions" role="menu">
       <li>
-        <%= form_tag user_reading_path(current_user, reading), method: "delete", class: "ajax-remove" do |f| %>
+        <%= form_tag user_reading_path(current_user, reading), method: 'delete', class: 'ajax-remove' do |f| %>
           <%= hidden_field_tag :reading, reading.id %>
           <%= submit_tag ts('Delete from History') %>
         <% end %>
