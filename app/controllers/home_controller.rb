@@ -51,7 +51,17 @@ class HomeController < ApplicationController
     @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
     
     if logged_in?
-      @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     
+      #@readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})
+      
+      #before_filter :load_home_marked_for_later
+      #def load_home_marked_for_later
+        if Rails.env.development?
+          @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     
+        else
+          @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later"){@current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})}
+        end
+      #end
+      
       @inbox_comments = @current_user.inbox_comments.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:read => false})
       @favorite_tags = @current_user.favorite_tags.find(:all)
     end
