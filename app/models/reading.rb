@@ -50,6 +50,7 @@ class Reading < ActiveRecord::Base
   end
 
   private
+
   def expire_cached_home_marked_for_later
     unless Rails.env.development?
       Rails.cache.delete("home/index/#{User.current_user.id}/home_marked_for_later")
