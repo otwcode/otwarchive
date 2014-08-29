@@ -6,9 +6,10 @@ class Work < ActiveRecord::Base
   include Collectible
   include Bookmarkable
   include Pseudable
+  include Searchable
   include WorkStats
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS

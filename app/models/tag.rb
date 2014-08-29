@@ -1,7 +1,8 @@
 class Tag < ActiveRecord::Base
   
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
+  include Searchable
   include StringCleaner
   include WorksOwner
 
