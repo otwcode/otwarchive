@@ -10,10 +10,6 @@ $j(document).ready(function() {
     handlePopUps();
     attachCharacterCounters();
     setupAccordion();
-    $j('#hide-notice-banner').click(function(e){
-      $j('#notice-banner').hide();
-      e.preventDefault();
-    });
     setupDropdown();
 
     // remove final comma from comma lists in older browsers
