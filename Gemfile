@@ -24,6 +24,7 @@ gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
 
+gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.4.2'
