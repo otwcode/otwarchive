@@ -51,15 +51,16 @@ class HomeController < ApplicationController
     @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE)
     
     if logged_in?
-      # get random works the user has marked for later and cache them
+      # get and cache the user's favorite tags and some random works the user has marked for later
       if Rails.env.development?
-        @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})     
+        @favorite_tags = @current_user.favorite_tags.find(:all)
+        @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})   
       else
+        @favorite_tags = Rails.cache.fetch("home/index/#{@current_user.id}/home_favorite_tags"){@current_user.favorite_tags.find(:all)}
         @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later"){@current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:toread => true})}
       end
       
       @inbox_comments = @current_user.inbox_comments.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => {:read => false})
-      @favorite_tags = @current_user.favorite_tags.find(:all)
     end
     
     @hide_dashboard = true
