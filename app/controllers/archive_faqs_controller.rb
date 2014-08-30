@@ -1,7 +1,7 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
-  #before_filter :set_locale
+  before_filter :set_locale, :only => [:index, :show]
 
   # GET /archive_faqs
   def index
