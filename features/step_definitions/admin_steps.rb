@@ -190,6 +190,14 @@ When /^I edit known issues$/ do
     step(%{I press "Post"})
 end
 
+Given(/^the following language exists$/) do |table|
+  # table is a Cucumber::Ast::Table
+  table.hashes.each do |hash|
+    language = FactoryGirl.create(:language, hash)
+  end
+end
+
+
 ### THEN
 
 When /^I make a translation of an admin post$/ do
@@ -210,3 +218,4 @@ Then /^I should see a translated admin post$/ do
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
 end
+

@@ -207,4 +207,10 @@ end
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
   end
+
+  factory :language do
+    short 'nl'
+    name  'Deutsch'
+  end
+
 end
