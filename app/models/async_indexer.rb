@@ -27,7 +27,7 @@ class AsyncIndexer
   def perform_batch_update(ids)
     objects = klass.where(id: ids).group_by(&:id)
     @batch = []
-    ids.each { |id| add_to_batch(id, (objects[id] || []).first) }
+    ids.each { |id| add_to_batch(id, (objects[id.to_i] || []).first) }
     ElasticsearchSimpleClient.send_batch(@batch)
   end
 
