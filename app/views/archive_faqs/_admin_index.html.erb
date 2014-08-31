@@ -7,8 +7,10 @@
 <%= render 'archive_faqs/filters' %>
 <%= render 'admin/admin_nav' %>
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("New FAQ Category"), new_archive_faq_path %></li>
-  <li><%= link_to ts("Reorder FAQs"), manage_archive_faqs_path(:language_id => params[:language_id]) %></li>
+  <% if Globalize.locale.to_s == "en" %>
+    <li><%= link_to ts("New FAQ Category"), new_archive_faq_path %></li>
+    <li><%= link_to ts("Reorder FAQs"), manage_archive_faqs_path(:language_id => params[:language_id]) %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
@@ -22,7 +24,9 @@
       <ul class="navigation actions">
         <li><%= link_to ts("Show"), archive_faq %></li>
         <li><%= link_to ts("Edit"), edit_archive_faq_path(archive_faq) %></li>
-        <li><%= link_to ts("Delete"), confirm_delete_archive_faq_path(archive_faq), :confirm => ts('Are you sure you want to delete this FAQ category?') %></li>
+        <% if Globalize.locale.to_s == "en" %>
+          <li><%= link_to ts("Delete"), confirm_delete_archive_faq_path(archive_faq), :confirm => ts('Are you sure you want to delete this FAQ category?') %></li>
+        <% end %>
       </ul>
     </dd>
   <% end %>
