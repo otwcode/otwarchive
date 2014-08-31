@@ -2,8 +2,6 @@
 Feature: Admin tasks
 
   Scenario: admin cannot log in as an ordinary user - it is a different type of account
-<<<<<<< HEAD
-  
     Given the following admin exists
         | login       | password |
         | Zooey       | secret   |
@@ -47,42 +45,6 @@ Feature: Admin tasks
         And I fill in "query" with "someone"
         And I press "Find"
       Then I should see "someone" within "#admin_users_table"
-
-
-  Scenario: Ordinary user cannot log in as admin
-
-  Given the following activated user exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
-      And I have loaded the "roles" fixture
-
-  When I go to the admin_login page
-      And I fill in "admin_session_login" with "dizmo"
-      And I fill in "admin_session_password" with "wrangulator"
-      And I press "Log in as admin"
-    Then I should see "Authentication failed"
-
-  Scenario: Admin can log in
-
-  Given I have no users
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-      And I have loaded the "roles" fixture
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
-
-  Scenario: admin can find users
-
-  Given I am logged in as "someone"
-    And I have loaded the "roles" fixture
-    When I am logged in as an admin
-      And I fill in "query" with "someone"
-      And I press "Find"
-    Then I should see "someone" within "#admin_users_table"
 
   Scenario: Post a FAQ
 
