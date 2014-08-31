@@ -1,18 +1,20 @@
 <noscript>
-  <%= form_tag({}, {:method => :get}) do %>
-    <fieldset>
-      <legend><%= ts("Add Questions") %></legend>
-      <h3 class="landmark heading"><%= ts("Add Questions") %></h3>
-      <p class="notes">
-        <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", :num => @archive_faq.questions.count) %>
-      </p>
-      <p>
-        <%= label_tag "num_questions", ts("Questions:") %>
-        <%= text_field_tag "num_questions", params["num_questions"], :class => "number" %>
-      </p>
-      <p class="submit"><%= submit_tag ts('Update Form') %></p>
-    </fieldset>
-  <% end %>
+  <% if Globalize.locale.to_s == "en" %>
+    <%= form_tag({}, {:method => :get}) do %>
+      <fieldset>
+        <legend><%= ts("Add Questions") %></legend>
+        <h3 class="landmark heading"><%= ts("Add Questions") %></h3>
+        <p class="notes">
+          <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", :num => @archive_faq.questions.count) %>
+        </p>
+        <p>
+          <%= label_tag "num_questions", ts("Questions:") %>
+          <%= text_field_tag "num_questions", params["num_questions"], :class => "number" %>
+        </p>
+        <p class="submit"><%= submit_tag ts('Update Form') %></p>
+      </fieldset>
+    <% end %>
+    <% end %>
 </noscript>
 
 <%= form_for(@archive_faq, :html => {:class => "create faq"}) do |form| %>
@@ -48,10 +50,11 @@
         <%= render 'question_answer_fields', :form => question_form, :index => index %>
       <% end %>
     <% end %>
-
-    <p class="actions" role="button">
-      <%= link_to_add_section("Add Question", form, :questions, "question_answer_fields") %>
-    </p>
+    <% if Globalize.locale.to_s == "en" %>
+      <p class="actions" role="button">
+        <%= link_to_add_section("Add Question", form, :questions, "question_answer_fields") %>
+      </p>
+    <% end %>
   </fieldset>
 
   <fieldset>
