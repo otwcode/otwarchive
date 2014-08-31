@@ -1,7 +1,8 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
-  before_filter :set_locale, :only => [:index, :show]
+  before_filter :default_url_options
+
 
   # GET /archive_faqs
   def index
@@ -111,8 +112,12 @@ class ArchiveFaqsController < ApplicationController
   end
 
 
-  # The ?language_id=somelanguage needs to persist thorough URL changes
+  # The ?language_id=somelanguage needs to persist throughout URL changes
   def default_url_options(options={})
+    I18n.locale = params[:language_id] if params[:language_id].present?
+    if I18n.locale.present?
+      params[:language_id] = I18n.locale
+    end
     { language_id: I18n.locale }
   end
 

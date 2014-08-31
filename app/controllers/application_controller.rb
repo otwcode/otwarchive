@@ -269,15 +269,6 @@ public
 #  I18n.record_missing_keys = false # if you want to record missing translations
   protected
 
-  # Use our custom Language selector to set the user's :locale
-  def set_locale
-    I18n.locale = params[:language_id] if params[:language_id].present?
-    if I18n.locale.present?
-      params[:language_id] = I18n.locale
-    end
-  end
-
-
   def load_locales
     @loaded_locales ||= Locale.order(:iso)
   end
