@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
       if @user_session
         @user_session.destroy
       end
-      redirect_to '/cookie_error' and return
+      redirect_to '/lost_cookie' and return
     end
   end
 
