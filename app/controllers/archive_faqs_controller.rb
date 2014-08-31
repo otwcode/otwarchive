@@ -15,7 +15,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1
   def show
-    @archive_faq = ArchiveFaq.find(params[:id])
+    @archive_faq = ArchiveFaq.find_by_id(params[:id])
     @page_subtitle = @archive_faq.title + ts(" FAQ")
 
     respond_to do |format|
