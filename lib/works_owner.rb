@@ -1,6 +1,13 @@
 # Used to generate cache keys for any works index page
 # Include in models that can "own" works, eg ...tags/TAGNAME/works or users/LOGIN/works
 module WorksOwner
+
+  # expire a bunch of keys without having to look up the objects in the database
+  def self.expire_ids(ids)
+    ids.each do |id|
+      REDIS_GENERAL.set("#{self.to_s.downcase}_#{id}_windex", Time.now.to_i.to_s)
+    end
+  end
   
   # Used in works_controller to determine whether to expire the cache for this object's works index page
   # The timestamp should reflect the last update that would cause the list to need refreshing

@@ -6,9 +6,10 @@ class Work < ActiveRecord::Base
   include Collectible
   include Bookmarkable
   include Pseudable
+  include Searchable
   include WorkStats
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -252,6 +253,30 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+  end
+
+  # When works are done being reindexed, expire the appropriate caches
+  def self.successful_reindex(ids)
+    tag_ids = FilterTagging.where(filterable_id: ids, filterable_type: 'Work').
+                            group(:filter_id).
+                            value_of(:filter_id)
+
+    collection_ids = CollectionItem.where(collectible_id: ids, collectible_type: 'Work').
+                                    group(:collection_id).
+                                    value_of(:collection_id)
+
+    pseuds = Pseud.select("pseuds.id, pseuds.user_id").
+                    joins(:creatorships).
+                    where(creatorships: {
+                      creation_id: ids, 
+                      creation_type: 'Work'
+                      }
+                    )
+
+    pseuds.each { |p| p.update_works_index_timestamp! }
+    User.expire_ids(pseuds.map(&:user_id).uniq)
+    Tag.expire_ids(tag_ids)
+    Collection.expire_ids(collection_ids)
   end
 
   after_destroy :destroy_chapters_in_reverse
