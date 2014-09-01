@@ -5,10 +5,13 @@ module Searchable
       after_save :enqueue_to_index
       after_destroy :enqueue_to_index
     end
+    searchable.extend(ClassMethods)
   end
 
-  def self.successful_reindex(ids)
-    # override to do something in response
+  module ClassMethods
+    def successful_reindex(ids)
+      # override to do something in response
+    end
   end
 
   def enqueue_to_index
