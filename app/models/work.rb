@@ -261,7 +261,7 @@ class Work < ActiveRecord::Base
                             group(:filter_id).
                             value_of(:filter_id)
 
-    collection_ids = CollectionItem.where(collectible_id: ids, collectible_type: 'Work').
+    collection_ids = CollectionItem.where(item_id: ids, item_type: 'Work').
                                     group(:collection_id).
                                     value_of(:collection_id)
 
