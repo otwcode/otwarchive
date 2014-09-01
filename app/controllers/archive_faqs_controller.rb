@@ -15,7 +15,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1
   def show
-    @archive_faq = ArchiveFaq.find_by_id(params[:id])
+    @archive_faq = ArchiveFaq.find(params[:id])
     @page_subtitle = @archive_faq.title + ts(" FAQ")
 
     respond_to do |format|
@@ -84,14 +84,12 @@ class ArchiveFaqsController < ApplicationController
   # PUT /archive_faqs/1
   def update
     @archive_faq = ArchiveFaq.find(params[:id])
-    respond_to do |format|
       if @archive_faq.update_attributes(params[:archive_faq])
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         redirect_to(@archive_faq)
       else
         render :action => "edit"
       end
-    end
   end
 
   # reorder FAQs
