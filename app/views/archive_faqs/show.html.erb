@@ -26,16 +26,24 @@
         </h3>
         <ul role="navigation">
           <% for q in @archive_faq.questions %>
-            <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+            <% if Globalize.locale.to_s == "ar" || "he" || "nl" %>
+              <li dir="rtl"><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+            <% else %>
+              <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+            <% end %>
           <% end %>
         </ul>
       </div>
 
       <div id="faq">
         <% for q in @archive_faq.questions %>
-          <h3 id="<%= q.anchor %>">
-            <%= q.question %>
-          </h3>
+          <% if Globalize.locale.to_s == "ar" || "he" || "nl" %>
+            <h3 dir="rtl" id="<%= q.anchor %>">
+          <% else %>
+            <h3 id="<%= q.anchor %>">
+          <% end %>
+              <%= q.question %>
+            </h3>
           <% unless q.screencast.to_s == "" %>
             <p class="screencast">
               <span class="label"><%= ts("Screencast") %>:</span> <%= link_to q.question, q.screencast.to_s %>
