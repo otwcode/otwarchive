@@ -47,7 +47,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/new
   def new
     @archive_faq = ArchiveFaq.new
-    1.times { @archive_faq.questions.build}
+    1.times { @archive_faq.questions.build(attributes: { question: "This is a temporary question", content: "This is temporary content", anchor: "ThisIsATemporaryAnchor"})}
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @archive_faq }
@@ -68,7 +68,6 @@ class ArchiveFaqsController < ApplicationController
   # POST /archive_faqs
   def create
     @archive_faq = ArchiveFaq.new(params[:archive_faq])
-    respond_to do |format|
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
@@ -78,7 +77,6 @@ class ArchiveFaqsController < ApplicationController
       else
         render :action => "new"
       end
-    end
   end
 
   # PUT /archive_faqs/1
