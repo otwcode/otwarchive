@@ -1,10 +1,11 @@
 class AsyncIndexer
 
   BATCH_SIZE = 1000
-  attr_reader :klass
+  attr_reader :klass, :options
 
   def initialize(klass, options={})
     @klass = klass
+    @options = options
   end
 
   def log
@@ -24,12 +25,37 @@ class AsyncIndexer
   end
 
   def perform
+    return unless REDIS_GENERAL.exists(old_queue_name)
     REDIS_GENERAL.rename(old_queue_name, queue_name)
     ids = REDIS_GENERAL.smembers(queue_name)
-    ids.in_groups_of(BATCH_SIZE) do |id_batch|
-      perform_batch_update(id_batch)
+    ids.in_groups_of(BATCH_SIZE).each_with_index do |id_batch, i|
+      subset_key = "#{queue_name}_#{i}"
+      REDIS_GENERAL.sadd(subset_key, id_batch)
+      enqueue_subset(subset_key)
     end
     REDIS_GENERAL.del(queue_name)
+  end
+
+  def enqueue_subset(key)
+    queue = case options[:label].to_s
+            when 'stats'
+              :reindex_stats
+            when 'background'
+              :reindex_low
+            else
+              :reindex_high
+            end
+    job_class = "#{self.klass}ReindexJob".constantize
+    Resque::Job.create(queue, job_class, key)
+  end
+
+  def run_subset(key)
+    ids = REDIS_GENERAL.smembers(key)
+    if perform_batch_update(ids) == 200
+      REDIS_GENERAL.del(key)
+    else
+      REDIS_GENERAL.rename(key, "#{key}_DEAD")
+    end
   end
 
   def perform_batch_update(ids)
@@ -39,10 +65,11 @@ class AsyncIndexer
     response = ElasticsearchSimpleClient.send_batch(@batch)
     case response.code
     when 200
-      klass.successful_reindex(ids, queue_name)
+      klass.successful_reindex(ids)
     else
       log.info(response.inspect)
     end
+    response.code
   end
 
   def add_to_batch(id, obj)

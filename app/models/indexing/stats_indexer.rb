@@ -1,5 +1,9 @@
 class StatsIndexer < AsyncIndexer
 
+  def options
+    @options[:label] = :stats
+  end
+
   def add_to_batch(id, obj)
     basics = { "_index" => Work.index_name, "_type" => Work.document_type, "_id" => obj.work_id}
     unless obj.nil?
