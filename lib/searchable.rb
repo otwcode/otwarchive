@@ -2,7 +2,8 @@ module Searchable
 
   def self.included(searchable)
     searchable.class_eval do
-      after_commit :enqueue_to_index
+      after_save :enqueue_to_index
+      after_destroy :enqueue_to_index
     end
   end
 
