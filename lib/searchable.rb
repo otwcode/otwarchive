@@ -6,7 +6,14 @@ module Searchable
     end
   end
 
+  def self.successful_reindex(ids)
+    # override to do something in response
+  end
+
   def enqueue_to_index
+    if Rails.env.test?
+      update_index and return
+    end
     REDIS_GENERAL.sadd("search_index_#{self.class.to_s.underscore}", self.id)
   end
 

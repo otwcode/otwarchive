@@ -3,12 +3,20 @@ class AsyncIndexer
   BATCH_SIZE = 1000
   attr_reader :klass
 
-  def initialize(klass)
+  def initialize(klass, options={})
     @klass = klass
   end
 
+  def log
+    @@log ||= Logger.new("#{Rails.root}/log/index-errors.log")
+  end
+
   def old_queue_name
-    "search_index_#{klass.to_s.underscore}"
+    name = "search_index_#{klass.to_s.underscore}"
+    if options[:label].present?
+      name << "_#{options[:label]}"
+    end
+    name
   end
 
   def queue_name
@@ -28,7 +36,13 @@ class AsyncIndexer
     objects = klass.where(id: ids).group_by(&:id)
     @batch = []
     ids.each { |id| add_to_batch(id, (objects[id.to_i] || []).first) }
-    ElasticsearchSimpleClient.send_batch(@batch)
+    response = ElasticsearchSimpleClient.send_batch(@batch)
+    case response.code
+    when 200
+      klass.successful_reindex(ids, queue_name)
+    else
+      log.info(response.inspect)
+    end
   end
 
   def add_to_batch(id, obj)
