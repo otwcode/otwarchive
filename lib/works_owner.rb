@@ -2,10 +2,16 @@
 # Include in models that can "own" works, eg ...tags/TAGNAME/works or users/LOGIN/works
 module WorksOwner
 
-  # expire a bunch of keys without having to look up the objects in the database
-  def self.expire_ids(ids)
-    ids.each do |id|
-      REDIS_GENERAL.set("#{self.to_s.downcase}_#{id}_windex", Time.now.to_i.to_s)
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+    # expire a bunch of keys without having to look up the objects in the database
+    def expire_ids(ids)
+      ids.each do |id|
+        REDIS_GENERAL.set("#{self.to_s.downcase}_#{id}_windex", Time.now.to_i.to_s)
+      end
     end
   end
   
