@@ -2,6 +2,7 @@ class StatsIndexer < AsyncIndexer
 
   def options
     @options[:label] = :stats
+    @options
   end
 
   def add_to_batch(id, obj)
