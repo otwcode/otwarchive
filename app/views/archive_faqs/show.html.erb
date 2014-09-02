@@ -21,7 +21,7 @@
     <div class="userstuff">
 
       <div id="toc" class="toc" role="navigation">
-        <h3 class="heading">
+        <h3 <% Globalize.locale.to_s == "ar" || "he" || "nl" ? "dir='rtl'" : "" %> class="heading">
           <%= ts("Questions in the #{@archive_faq.title} Category") %>
         </h3>
         <ul role="navigation">
