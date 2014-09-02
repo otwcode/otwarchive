@@ -65,7 +65,7 @@ class AsyncIndexer
     response = ElasticsearchSimpleClient.send_batch(@batch)
     case response.code
     when 200
-      klass.successful_reindex(ids) if klass.respond_to?(:sucessful_reindex)
+      klass.successful_reindex(ids) if klass.respond_to?(:successful_reindex)
     else
       log.info(response.inspect)
     end
