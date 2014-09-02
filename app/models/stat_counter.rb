@@ -13,7 +13,7 @@ class StatCounter < ActiveRecord::Base
   after_commit :enqueue_to_index, on: :update
 
   def enqueue_to_index
-    REDIS_GENERAL.sadd("search_index_#{self.class.to_s.underscore}", self.id)
+    REDIS_GENERAL.sadd("search_index_#{self.class.to_s.underscore}_stats", self.id)
   end
 
   ###############################################

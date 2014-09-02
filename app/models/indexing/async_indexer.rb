@@ -21,7 +21,7 @@ class AsyncIndexer
   end
 
   def queue_name
-    "#{old_queue_name}_#{Time.now.to_i}"
+    @queue_name ||= "#{old_queue_name}_#{Time.now.to_i}"
   end
 
   def perform
@@ -45,12 +45,12 @@ class AsyncIndexer
             else
               :reindex_high
             end
-    job_class = "#{self.klass}ReindexJob".constantize
-    Resque::Job.create(queue, job_class, key)
+    Resque::Job.create(queue, ReindexJob, klass.to_s, key)
   end
 
   def run_subset(key)
     ids = REDIS_GENERAL.smembers(key)
+    ids = ids.select{ |id| id.present? }
     if perform_batch_update(ids) == 200
       REDIS_GENERAL.del(key)
     else
@@ -65,7 +65,7 @@ class AsyncIndexer
     response = ElasticsearchSimpleClient.send_batch(@batch)
     case response.code
     when 200
-      klass.successful_reindex(ids)
+      klass.successful_reindex(ids) if klass.respond_to?(:sucessful_reindex)
     else
       log.info(response.inspect)
     end

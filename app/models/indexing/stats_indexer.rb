@@ -11,10 +11,12 @@ class StatsIndexer < AsyncIndexer
       @batch << { update: basics }.to_json
       @batch << { 
         doc: { 
-          hits: obj.hit_count,
-          kudos_count: obj.kudos_count, 
-          bookmarks_count: obj.bookmarks_count, 
-          comments_count: obj.comments_count
+          work: {
+            hits: obj.hit_count,
+            kudos_count: obj.kudos_count, 
+            bookmarks_count: obj.bookmarks_count, 
+            comments_count: obj.comments_count
+          }
         } 
       }.to_json
     end
