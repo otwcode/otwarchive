@@ -1,10 +1,5 @@
-﻿<%= render 'layouts/header' %>
-<div id="inner" class="wrapper">
-  <div id="main" class="system region" role="main">
-  <h2 class="heading"><%= ts('Forced Logout') %></h2>
+﻿<h2 class="heading"><%= ts('Forced Logout') %></h2>
 
-    <div class="userstuff">
-      <p><%= ts("You have been automatically logged out to protect your privacy.  Please make sure that your browser is set to accept cookies from archiveofourown.org and delete any existing Archive cookies.  If you continue to have problems logging in, please")%> <%= link_to ts('contact support.'), new_feedback_report_path %></p>
-    </div>
-  </div>
+<div class="userstuff">
+  <p><%= ts("You have been automatically logged out to protect your privacy.  Please make sure that your browser is set to accept cookies from archiveofourown.org and delete any existing Archive cookies.  If you continue to have problems logging in, please")%> <%= link_to ts('contact support.'), new_feedback_report_path %></p>
 </div>

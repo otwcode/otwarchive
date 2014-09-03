@@ -18,6 +18,11 @@ class HomeController < ApplicationController
   def dmca 
     render :action => "dmca", :layout => "application"
   end
+
+  # lost cookie
+  def lost_cookie
+    render action: 'lost_cookie', layout: 'application'
+  end
   
   # diversity statement
   def diversity 
