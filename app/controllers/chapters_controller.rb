@@ -36,7 +36,7 @@ class ChaptersController < ApplicationController
     end
     @chapter = @work.chapters.find_by_id(params[:id])
     unless @chapter
-      raise ActiveRecord::RecordNotFound, "Couldn't find the chapter #{params[:id]} as part of work #{params[:work_id]}"
+      raise ActiveRecord::RecordNotFound, "Couldn't find the chapter '#{params[:id]}' belonging to work '#{params[:work_id]}'"
     end
     @chapters = @work.chapters_in_order(false)
     if !logged_in? || !current_user.is_author_of?(@work)
