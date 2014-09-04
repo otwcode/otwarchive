@@ -6,6 +6,8 @@ Otwarchive::Application.routes.draw do
   match '/404', :to => 'errors#404'
   match '/422', :to => 'errors#422'
   match '/500', :to => 'errors#500'
+  match '/abuse_reports', :to => 'errors#404'
+
 
   #### DOWNLOADS ####
 

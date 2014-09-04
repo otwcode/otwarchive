@@ -2,12 +2,6 @@
 <!--Descriptive page name, messages and instructions--><h2 class="heading"><%= ts("Abuse Report") %> <%= @abuse_report.id %></h2>
 <!--/descriptions-->
 
-<!--subnav-->
-<ul class="navigation actions" role="navigation">
-	<li><%= link_to ts("All Abuse Reports"), abuse_reports_path %></li>
-</ul>
-<!--/subnav-->
-
 <!--main content-->
 <div class="abuse comment group" role="article">
   <h4 class="heading byline"><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %> <%= ts("regarding") %> <%= link_to @abuse_report.url, @abuse_report.url %></h4>
@@ -16,9 +10,4 @@
 </div>
 <!--/content-->
 
-<!--subnav-->
-<ul class="navigation actions" role="navigation">
-	<li><%= link_to ts("All Abuse Reports"), abuse_reports_path %></li>
-</ul>
-<!--/subnav-->
 </div>
