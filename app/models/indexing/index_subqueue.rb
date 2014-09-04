@@ -86,9 +86,9 @@ class IndexSubqueue
   end
 
   def respond_to_success
-    # if klass.respond_to?(:successful_reindex)
+    if klass.respond_to?(:successful_reindex)
       klass.successful_reindex(ids)
-    # end
+    end
     delete
   end
 
