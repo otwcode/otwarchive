@@ -1,5 +1,5 @@
 @admin @comments
-Feature: Admin posts
+Feature: Admin Actions to Post News
   In order to post news items
   As an an admin
   I want to be able to use the Admin Posts screen
