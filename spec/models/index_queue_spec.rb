@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe IndexQueue do
 
+  before(:each) do
+    IndexQueue.all.each do |key|
+      REDIS_GENERAL.del(key)
+    end
+  end
+
   it "should build correct keys" do
     IndexQueue.get_key('StatCounter', :stats).should == "index:stat_counter:stats"
   end
@@ -27,6 +33,7 @@ describe IndexQueue do
 
   it "should create subqueues when run" do
     iq = IndexQueue.new("index:work:main")
+    iq.add_id(1)
     IndexSubqueue.should_receive(:create_and_enqueue)
     iq.run
 
