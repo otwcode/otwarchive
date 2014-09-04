@@ -73,6 +73,12 @@ namespace :deploy do
     run "/home/ao3app/bin/workers_reload"
   end
 
+  desc "Restart the schedulers"
+  task :restart_schedulers, :roles => :schedulers do
+    run "/home/ao3app/bin/scheduler_reload"
+  end
+
+
   desc "Get the config files"
   task :update_configs, :roles => [ :app , :web ] do
     run "/home/ao3app/bin/create_links_on_install"
@@ -121,5 +127,6 @@ after "deploy:restart", "deploy:update_cron_web"
 #after "deploy:restart", "deploy:cleanup"
 
 after "deploy:restart", "deploy:restart_workers"
+after "deploy:restart", "deploy:restart_schedulers"
 after "deploy:symlink", "deploy:update_configs"
 after "deploy:update", "newrelic:notice_deployment"
