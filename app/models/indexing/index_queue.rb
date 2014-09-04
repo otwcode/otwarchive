@@ -16,7 +16,8 @@ class IndexQueue
   end
 
   def self.enqueue(object, label)
-    enqueue_id(object.class.to_s, object.id, label)
+    klass = object.is_a?(Tag) ? 'Tag' : object.class.to_s
+    enqueue_id(klass, object.id, label)
   end
 
   def self.enqueue_id(klass, id, label)
