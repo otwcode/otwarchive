@@ -319,12 +319,12 @@ class UserMailer < BulletproofMailer::Base
     begin
       @work = Work.find(work_id)
       @collection = Collection.find(collection_id) if collection_id
-      @work.challenge_claims.each do |claim|
-        user = User.find(claim.request_signup.pseud.user.id)
     rescue ActiveRecord::RecordNotFound
       return
     end
-      mail(
+    @work.challenge_claims.each do |claim|
+      user = User.find(claim.request_signup.pseud.user.id)
+    mail(
         :to => user.email,
         :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
       )
