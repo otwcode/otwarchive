@@ -42,13 +42,6 @@ class AbuseReportsController < ApplicationController
     end
   end
 
-  def index
-  end
-
-  def show
-    @abuse_report = AbuseReport.find(params[:id])
-  end
-
  protected
 
  def build_post_info(report)

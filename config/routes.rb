@@ -6,7 +6,6 @@ Otwarchive::Application.routes.draw do
   match '/404', :to => 'errors#404'
   match '/422', :to => 'errors#422'
   match '/500', :to => 'errors#500'
-  match '/abuse_reports', :to => 'errors#404'
 
 
   #### DOWNLOADS ####
@@ -507,7 +506,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :abuse_reports
+  resources :abuse_reports, only: [:new, :create] 
   resources :external_authors do
     resources :external_author_names
   end
