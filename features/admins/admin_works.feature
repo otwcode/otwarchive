@@ -1,6 +1,5 @@
 @admin
 Feature: Admin Actions for Works and Bookmarks
-
   As an admin
   I should be able to perform special actions on works
 
