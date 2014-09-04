@@ -257,6 +257,7 @@ class Work < ActiveRecord::Base
 
   # When works are done being reindexed, expire the appropriate caches
   def self.successful_reindex(ids)
+    CacheMaster.expire_caches(ids)
     tag_ids = FilterTagging.where(filterable_id: ids, filterable_type: 'Work').
                             group(:filter_id).
                             value_of(:filter_id)

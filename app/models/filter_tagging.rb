@@ -20,7 +20,7 @@ class FilterTagging < ActiveRecord::Base
 
   def expire_caches
     if self.filter && self.filterable.respond_to?(:expire_caches)
-      CacheMaster.register_deletion(filterable_id, 'tag', filter_id)
+      CacheMaster.record(filterable_id, 'tag', filter_id)
     end
   end
 
