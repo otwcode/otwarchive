@@ -12,7 +12,7 @@ class ScheduledReindexJob
     classes.each{ |klass| run_queue(klass, reindex_type) }
   end
 
-  def run_queue(klass, reindex_type)
+  def self.run_queue(klass, reindex_type)
     IndexQueue.new("index:#{klass.underscore}:#{reindex_type}").run
   end
 
