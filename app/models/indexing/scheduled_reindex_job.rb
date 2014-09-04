@@ -1,20 +1,19 @@
 class ScheduledReindexJob
 
-  INDEXED_TYPES = %w(Pseud Tag Work Bookmark)
-
   def self.perform(reindex_type)
-    case reindex_type
-    when 'main'
-      INDEXED_TYPES.each do |klass|
-        AsyncIndexer.new(klass.constantize).perform
-      end
-    when 'background'
-      %w(Work Bookmark).each do |klass|
-        AsyncIndexer.new(klass.constantize, label: :background).perform
-      end
-    when 'stats'
-      StatsIndexer.new(StatCounter).perform
-    end
+    classes = case reindex_type
+              when 'main'
+                %w(Pseud Tag Work Bookmark)
+              when 'background'
+                %w(Work Bookmark)
+              when 'stats'
+                %w(StatCounter)
+              end
+    classes.each{ |klass| run_queue(klass, reindex_type) }
+  end
+
+  def run_queue(klass, reindex_type)
+    IndexQueue.new("index:#{klass.underscore}:#{reindex_type}").run
   end
 
 end

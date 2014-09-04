@@ -170,7 +170,7 @@ class CollectionItem < ActiveRecord::Base
   
   def expire_caches
     if self.item.respond_to?(:expire_caches)
-      CacheMaster.register_deletion(item_id, 'collection', collection_id)
+      CacheMaster.record(item_id, 'collection', collection_id)
     end
   end
 

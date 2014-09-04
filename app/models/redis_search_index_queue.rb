@@ -18,14 +18,14 @@ class RedisSearchIndexQueue
 
   # queue a work to have its search index updated
   def self.queue_work(work, options={})
-    REDIS_GENERAL.sadd("search_index_work_background", work.id)
+    IndexQueue.enqueue(work, :background)
     unless options[:without_bookmarks].present?
       queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id), options)
     end
   end
   
   def self.queue_works(work_ids, options={})
-    work_ids.each { |id| REDIS_GENERAL.sadd("search_index_work_background", id) }
+    work_ids.each { |id| IndexQueue.enqueue_id('Work', id, :background) }
     unless options[:without_bookmarks].present? 
       # queue their bookmarks also
       queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id), options)
@@ -35,11 +35,11 @@ class RedisSearchIndexQueue
   #### BOOKMARKS
 
   def self.queue_bookmark(bookmark, options={})
-    REDIS_GENERAL.sadd("search_index_bookmark_background", bookmark.id)
+    IndexQueue.enqueue(bookmark, :background)
   end
   
   def self.queue_bookmarks(ids, options={})
-    ids.each { |id| REDIS_GENERAL.sadd("search_index_bookmark_background", id) }
+    ids.each { |id| IndexQueue.enqueue_id('Bookmark', id, :background) }
   end
 
   #########################

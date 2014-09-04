@@ -18,7 +18,7 @@ module Searchable
     if Rails.env.test?
       update_index and return
     end
-    REDIS_GENERAL.sadd("search_index_#{self.class.to_s.underscore}", self.id)
+    IndexQueue.enqueue(self, :main)
   end
 
 end
