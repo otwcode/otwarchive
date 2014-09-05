@@ -20,6 +20,7 @@ class Creatorship < ActiveRecord::Base
   def expire_caches
     if creation_type == 'Work' && self.pseud.present?
       CacheMaster.record(creation_id, 'pseud', self.pseud_id)
+      CacheMaster.record(creation_id, 'user', self.pseud.user_id)
     end
   end
 
