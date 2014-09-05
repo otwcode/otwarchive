@@ -1,8 +1,5 @@
 <% # expects "work" %>
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb group" id="work_<%= work.id %>" role="article">
-  <% if !work.posted? %>
-   <h5 class="caution notice"><%= ts("This draft will be") %> <strong><%= ts("automatically deleted") %></strong> <%= ts("on") %> <%= time_in_zone(work.created_at + 1.month) %></h5>
-  <% end %>
   <%= render 'works/work_module', :work => work %>
   <% if is_author_of?(work) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
