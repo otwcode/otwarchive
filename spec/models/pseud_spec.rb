@@ -6,11 +6,14 @@ describe Pseud do
     build(:pseud).should be_valid
   end
 
+  it "is invalid without a name" do
+    build(:pseud, name: nil).should be_invalid
+  end
+
   it "is invalid if there are special characters" do
-      @pseud = build(:pseud, name: '*pseud*')
-      @pseud.should be_invalid
+      build(:pseud, name: '*pseud*').should be_invalid
   end
 
   # TODO: add more tests
-  
+
 end
