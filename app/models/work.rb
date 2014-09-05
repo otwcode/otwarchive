@@ -257,6 +257,7 @@ class Work < ActiveRecord::Base
 
   def expire_pseud(pseud)
     CacheMaster.record(self.id, 'pseud', pseud.id)
+    CacheMaster.record(self.id, 'user', pseud.user_id)
   end
 
   # When works are done being reindexed, expire the appropriate caches
