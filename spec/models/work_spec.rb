@@ -72,11 +72,9 @@ describe Work do
 
   context "validate authors" do
 
-    it "does not save an invalid pseud with *", :pending do
-      @pseud = create(:pseud, name: "*pseud*")
-      @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
-      @work.save.should be_false
-      @work.errors[:base].should include["These pseuds are invalid: *pseud*"]
+    it "does not save an invalid pseud with *" do
+      # @pseud = create(:pseud, name: "*pseud*")
+      @work = build(:work, authors: ["*pseud*"]).should be_invalid
     end
 
     it "does not save if author is blank", :pending do
