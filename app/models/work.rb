@@ -18,7 +18,7 @@ class Work < ActiveRecord::Base
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, :as => :creation
-  has_many :pseuds, :through => :creatorships
+  has_many :pseuds, :through => :creatorships, after_remove: :expire_pseud
   has_many :users, :through => :pseuds, :uniq => true
 
   has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
@@ -253,6 +253,10 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+  end
+
+  def expire_pseud(pseud)
+    CacheMaster.record(self.id, 'pseud', pseud.id)
   end
 
   # When works are done being reindexed, expire the appropriate caches
