@@ -118,8 +118,6 @@ class Sanitize
         nil
       end
       
-      Rails.logger.fatal "sant"
-      Rails.logger.fatal source
       # if we don't know the source, sorry
       return if source.nil?           
 
