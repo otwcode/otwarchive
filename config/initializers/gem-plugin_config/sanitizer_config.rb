@@ -79,6 +79,7 @@ class Sanitize
       # Verify that the video URL is actually a valid video URL from a site we trust.
       
       # strip off optional protocol and www
+      return if url.nil? 
       url.gsub!(/^(?:https?:)?\/\/(?:www\.)?/i, '')
       
       source = case url
