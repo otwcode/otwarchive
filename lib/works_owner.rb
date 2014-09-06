@@ -45,7 +45,8 @@ module WorksOwner
   private
   
   def redis_works_index_key
-    "#{self.class.to_s.downcase}_#{self.id}_windex"
+    klass = self.is_a?(Tag) ? 'tag' : self.class.to_s.underscore
+    "#{klass}_#{self.id}_windex"
   end
   
 end
