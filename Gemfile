@@ -73,6 +73,9 @@ gem 'coveralls', require: false
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark"
 
+# ilib curl rather than net/httpL
+gem 'curb'
+
 #Phrase-app
 gem 'phrase'
 

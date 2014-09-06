@@ -90,6 +90,7 @@ GEM
       cucumber (>= 1.2.0)
       nokogiri (>= 1.5.0)
       rails (~> 3.0)
+    curb (0.8.6)
     database_cleaner (1.0.1)
     delorean (2.1.0)
       chronic
@@ -348,6 +349,7 @@ DEPENDENCIES
   coveralls
   css_parser
   cucumber-rails
+  curb
   database_cleaner
   delorean
   email_spec
