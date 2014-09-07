@@ -379,8 +379,8 @@ Feature: Admin tasks
     And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
     # Check to see if the buttons are correct on the main page
     And I should see "Log in" within "p#signup"
-    And I should not see "Get an Invite" within "p#signup"
+    And I should not see "Account creation disabled" within "p#signup"
     # Check to see if the buttons are correct in the login popup
     And I should see "Forgot password?" within "div#small_login"
-    And I should not see "Get an Invite" within "div#small_login"
+    And I should not see "Account creation disabled" within "div#small_login"
 
