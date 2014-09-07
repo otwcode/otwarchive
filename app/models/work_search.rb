@@ -53,7 +53,7 @@ class WorkSearch < Search
   def self.cached_count(owner)
     status = User.current_user ? 'logged_in' : 'logged_out'
     key = "#{owner.works_index_cache_key}_#{status}_page"
-    works = Rails.cache.get(key)
+    works = Rails.cache.read(key)
     if works.present?
       works.total_entries
     end
