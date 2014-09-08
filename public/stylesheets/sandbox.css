@@ -23,3 +23,12 @@ background:purple; color:#555;}
 .edit_external_author ul ul {
   margin-left: 2.75em;
 }
+
+#notice-banner {
+  overflow: hidden;
+}
+
+#notice-banner .left-float {
+  float: left;
+  margin: 0 0.643em 0 0;
+}
