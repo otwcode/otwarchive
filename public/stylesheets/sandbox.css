@@ -31,4 +31,5 @@ background:purple; color:#555;}
 #notice-banner .left-float {
   float: left;
   margin: 0 0.643em 0 0;
+  opacity: 0.5;
 }
