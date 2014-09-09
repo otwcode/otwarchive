@@ -62,6 +62,7 @@ class WorkSearch < Search
   # Make a direct request to the elasticsearch count api
   def self.count_for_pseuds(pseuds)
     terms = [
+      { term: { posted: 'T' } },
       { term: { hidden_by_admin: 'F' } },
       { term: { in_unrevealed_collection: 'F' } },
       { term: { in_anon_collection: 'F' } },
