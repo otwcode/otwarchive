@@ -30,8 +30,14 @@ describe Skin do
         dd {color: blue;}
         /* end comment */",
         
-      "should allow through CSS3 properties like border-radius and box-shadow" => 
-        ".profile { border-radius: 5px; box-shadow: 5px 5px 5px black; } ",
+      "should allow through border-radius (CSS3 property)" => 
+        ".profile { border-radius: 5px }",
+
+      ".should allow through specific border radius properties" =>
+        ".profile { border-bottom-right-radius: 10px; }",
+
+      "should allow through box-shadow (CSS3 property)" =>
+        ".profile { box-shadow: 5px 5px 5px black; }",
 
       "should allow through alphabetic strings as keyword values even if they are not explicitly listed" => 
         "#main .navigation input { vertical-align: baseline; }
