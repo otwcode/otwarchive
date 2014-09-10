@@ -127,8 +127,7 @@ Feature: Admin tasks
     And I should see "Turn off tag wrangling for non-admins"
   When I check "Turn off downloading for guests"
     And I press "Update"
-  Then I should see "Setting banner back on for all users. This may take some time"
-  # Changing from null to empty string counts as a change to the banner
+  Then I should see "Archive settings were successfully updated."
 
   # Check guest downloading is off
 
