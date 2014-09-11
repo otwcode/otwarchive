@@ -35,6 +35,15 @@ When /^an admin deactivates the banner$/ do
   step %{I should see "Banner successfully updated."}
 end
 
+When /^an admin edits the active banner$/ do
+  step %{I am logged in as an admin}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  fill_in("admin_banner_content", :with => "This is some edited banner text")
+  click_button("Update Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
+end
+
 When /^an admin creates a different active banner$/ do
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
@@ -84,6 +93,18 @@ Then /^a logged-out user should see the(?: "([^\"]*)")? banner$/ do |banner_type
     end
   end
   step %{I should see "This is some banner text"}
+end
+
+Then /^a logged-in user should see the edited active banner$/ do
+  step %{I am logged in as "ordinaryuser"}
+  visit(works_path)
+  step %{I should see "This is some edited banner text"}
+end
+
+Then /^a logged-out user should see the edited active banner$/ do
+  step %{I am logged out}
+  visit(works_path)
+  step %{I should see "This is some edited banner text"}
 end
 
 Then /^a logged-in user should not see a banner$/ do
