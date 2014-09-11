@@ -25,6 +25,13 @@ Scenario: Admin can set an event banner
   Then a logged-in user should see the "event" banner
     And a logged-out user should see the "event" banner
 
+Scenario: Admin can edit an active banner
+  Given there are no banners
+    And an admin creates an active banner
+  When an admin edits the active banner
+  Then a logged-in user should see the edited active banner
+    And a logged-out user should see the edited active banner
+
 Scenario: Admin can deactivate a banner
   Given there are no banners
     And an admin creates an active banner
