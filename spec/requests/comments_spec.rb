@@ -11,7 +11,7 @@ end
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "false" )
+      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "The one where Merlin....",  restricted: "false" )
       @work2.index.refresh
       @comment2 = create(:comment)
       @work2.comments << @comment2
@@ -58,7 +58,7 @@ describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "true" )
+      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)",title: "The one where Merlin....",  restricted: "true" )
       @work1.index.refresh
       @comment = create(:comment)
       @work1.comments << @comment
