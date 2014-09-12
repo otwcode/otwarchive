@@ -80,11 +80,11 @@ describe "Comments" do
       visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    it "should not be directly readable by guests on a work" do
+    xit "should not be directly readable by guests on a work" do
       visit "/works/#{@work1.id}/comments/#{@comment.id}"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    it "should not be directly readable by guests on a work's chapter" do
+    xit "should not be directly readable by guests on a work's chapter" do
       visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/#{@comment.id}"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
