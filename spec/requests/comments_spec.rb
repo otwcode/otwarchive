@@ -54,7 +54,7 @@ shared_examples_for "on unrestricted works", :pending do
     end
 end
 
-describe "Comments", :pending do
+describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
@@ -99,10 +99,12 @@ describe "Comments", :pending do
     before do
       @user = create(:user)
       visit login_path
-      fill_in "User name",with: "#{@user.login}"
-      fill_in "Password", with: "password"
-      check "Remember Me"
-      click_button "Log In"
+      within("div#small_login") do
+        fill_in "User name:",with: "#{@user.login}" ,  exact: true
+        fill_in "Password", with: "password" 
+        check "Remember Me"
+        click_button "Log In"
+      end
     end
 
     it_behaves_like "on unrestricted works" do
