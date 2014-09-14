@@ -161,10 +161,12 @@ class ExternalWork < ActiveRecord::Base
   def posted
     true
   end
+  alias_method :posted?, :posted
 
   def restricted
     false
   end
+  alias_method :restricted?, :restricted
 
   def creators
     [author]

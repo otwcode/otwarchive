@@ -236,6 +236,7 @@ class Series < ActiveRecord::Base
   def posted
     !posted_works.empty?
   end
+  alias_method :posted?, :posted
 
   # Simple name to make it easier for people to use in full-text search
   def tag
