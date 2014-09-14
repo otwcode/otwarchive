@@ -272,27 +272,22 @@ class UsersController < ApplicationController
   end
   
   def change_email
-    if params[:new_email].blank?
-      render :change_email and return
-    else
-      if !reauthenticate
-        render :change_email and return
+    if !params[:new_email].blank? && reauthenticate
+      @old_email = @user.email
+      @user.email = params[:new_email]
+      @new_email = params[:new_email]
+      @confirm_email = params[:email_confirmation]
+
+      if @new_email == @confirm_email && @user.save
+        flash[:notice] = ts("Your email has been successfully updated")
+        UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
       else
-        @old_email = @user.email
-        @user.email = params[:new_email]
-        @new_email = params[:new_email]
-        @confirm_email = params[:email_confirmation]
-        if @new_email == @confirm_email && @user.save
-          flash[:notice] = ts("Your email has been successfully updated")
-          UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-        else
-          flash[:error] = ts("Email addresses don't match! Please retype and try again")
-          render :change_email and return
-        end
+        flash[:error] = ts("Email addresses don't match! Please retype and try again")
       end
     end
-    render :change_email and return
+
+    render :change_email
   end
 
   # DELETE /users/1
