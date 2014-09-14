@@ -114,7 +114,6 @@ describe Tag do
       end
 
       it 'old tag maker still works' do
-        #tag_adult=Tag.create_canonical('adult',true)
         tag_adult=Rating.create_canonical('adult', true)
         tag_normal=Warning.create_canonical('other')
         tag_adult.name.should == 'adult'
