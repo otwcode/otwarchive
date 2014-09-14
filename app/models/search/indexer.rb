@@ -1,5 +1,7 @@
 class Indexer
 
+  BATCH_SIZE = 1000
+
   ##################
   # CLASS METHODS
   ##################
@@ -52,9 +54,9 @@ class Indexer
   end
 
   def self.index_from_db
-    total = (indexables.count / 1000) + 1
+    total = (indexables.count / BATCH_SIZE) + 1
     i = 1
-    indexables.find_in_batches do |group|
+    indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
       puts "Reindexing #{klass} batch #{i} of #{total}"
       self.new(group.map(&:id)).index_documents
       i += 1
