@@ -112,6 +112,16 @@ describe Tag do
         results.include?("#{tag_character.id}: #{tag_character.name}").should be_true
         results.include?("brave_sire_robin").should be_false
       end
+
+      it 'old tag maker still works' do
+        #tag_adult=Tag.create_canonical('adult',true)
+        tag_adult=Rating.create_canonical('adult', true)
+        tag_normal=Warning.create_canonical('other')
+        tag_adult.name.should == 'adult'
+        tag_normal.name.should == 'other'
+        tag_adult.adult.should be_true
+        tag_normal.adult.should be_false
+      end
     end
 
     context "when logged in as an admin" do
