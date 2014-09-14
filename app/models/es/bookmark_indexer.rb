@@ -37,6 +37,7 @@ module ES
     # INSTANCE METHODS
     ####################
 
+    # TODO: Make this work for deleted bookmarks
     def routing(id)
       { 
         '_index' => index_name, 

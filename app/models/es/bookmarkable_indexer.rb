@@ -9,5 +9,38 @@ module ES
       'bookmarkable'
     end
 
+    def self.mapping
+      {
+        'bookmarkable' => {
+          properties: {
+            title: {
+              type: 'string',
+              analyzer: 'simple'
+            },
+            creators: {
+              type: 'string',
+              analyzer: 'simple'
+            },
+            tag: {
+              type: 'string',
+              analyzer: 'simple'
+            }
+          }
+        }
+      }
+    end
+
+    def routing_info(id)
+      {
+        '_index' => index_name,
+        '_type' => document_type,
+        '_id' => "#{id}-#{klass.underscore}"
+      }
+    end
+
+    def document(object)
+      object.bookmarkable_json
+    end    
+
   end
 end
