@@ -5,6 +5,17 @@ module ES
       'Bookmark'
     end
 
+    def self.index_all(options={})
+      options[:skip_delete] = true
+      ES::BookmarkableIndexer.delete_index
+      ES::BookmarkableIndexer.create_index
+      create_mapping
+      ES::BookmarkedExternalWorkIndexer.index_all(skip_delete: true)
+      ES::BookmarkedSeriesIndexer.index_all(skip_delete: true)
+      ES::BookmarkedWorkIndexer.index_all(skip_delete: true)
+      super
+    end
+
     def self.mapping
       {
         "bookmark" => {
@@ -38,12 +49,12 @@ module ES
     ####################
 
     # TODO: Make this work for deleted bookmarks
-    def routing(id)
+    def routing_info(id)
       { 
         '_index' => index_name, 
         '_type' => document_type,
         '_id' => id,
-        '_parent' => objects[id.to_i].bookmarkable_id
+        'parent' => objects[id.to_i].bookmarkable_id
       }
     end
 

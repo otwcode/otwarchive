@@ -25,7 +25,7 @@ module ES
     def document(object)
       object.as_json(
         root: false,
-        only: [:id, :name, :merger_id, :canonical]
+        only: [:id, :name, :merger_id, :canonical, :created_at]
       ).merge(tag_type: object.type)
     end
 

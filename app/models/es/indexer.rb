@@ -25,6 +25,15 @@ module ES
       )
     end
 
+    # Note that the index must exist before you can set the mapping
+    def self.create_mapping
+      $elasticsearch.indices.put_mapping(
+        index: index_name,
+        type: document_type,
+        body: mapping
+      )
+    end
+
     def self.mapping
       {
         document_type => {
@@ -35,13 +44,15 @@ module ES
       }
     end
 
-    def self.index_all
-      delete_index
-      create_index
+    def self.index_all(options={})
+      unless options[:skip_delete]
+        delete_index
+        create_index
+      end
       total = (klass.constantize.count / 1000) + 1
       i = 1
       klass.constantize.find_in_batches do |group|
-        puts "Reindexing batch #{i} of #{total}"
+        puts "Reindexing #{klass} batch #{i} of #{total}"
         self.new(group.map(&:id)).index_documents
         i += 1
       end

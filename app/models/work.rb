@@ -48,57 +48,6 @@ class Work < ActiveRecord::Base
   has_many :challenge_claims, :as => :creation
   accepts_nested_attributes_for :challenge_claims
 
-  has_many :filter_taggings, :as => :filterable
-  has_many :filters, :through => :filter_taggings
-  has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
-  has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
-
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-
-  has_many :ratings,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Rating'"
-  has_many :categories,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Category'"
-  has_many :warnings,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Warning'"
-  has_many :fandoms,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Fandom'"
-  has_many :relationships,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Relationship'"
-  has_many :characters,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Character'"
-  has_many :freeforms,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Freeform'"
-
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
   has_many :kudos, :as => :commentable, :dependent => :destroy
@@ -1308,45 +1257,25 @@ class Work < ActiveRecord::Base
       ])
   end
 
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (tags + filters).uniq.map{ |t| t.name }
-  end
-
-  # Index all the filters for pulling works
-  def filter_ids
-    filters.value_of :id
-  end
-
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
-  end
-  def rating_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
-  end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
-  end
-  def category_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
-  end
-  def fandom_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
-  end
-  def character_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
-  end
-  def relationship_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
-  end
-  def freeform_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  def bookmarkable_json
+    as_json(
+      root: false,
+      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :language_id, :word_count],
+      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids, 
+        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, 
+        :pseud_ids, :creators, :collection_ids, :work_types]
+    ).merge(
+      anonymous: anonymous?, 
+      unrevealed: unrevealed?,
+      bookmarkable_type: 'Work'
+    )
   end
 
   def pseud_ids
     creatorships.value_of :pseud_id
   end
+
   def collection_ids
     approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
@@ -1361,6 +1290,7 @@ class Work < ActiveRecord::Base
     self.stat_counter.bookmarks_count
   end
 
+  # Deprecated: old search
   def creator
     names = ""
     if anonymous?
@@ -1374,6 +1304,46 @@ class Work < ActiveRecord::Base
       end
     end
     names
+  end
+
+  # New version
+  def creators
+    if anonymous?
+      ["Anonymous"]
+    else
+      pseuds.map(&:byline) + external_author_names.value_of(:name)
+    end
+  end
+
+  # A work with multiple fandoms which are not related
+  # to one another can be considered a crossover
+  def crossover
+    filters.by_type('Fandom').first_class.count > 1
+  end
+
+  # Quick and dirty categorization of the most obvious stuff
+  # To be replaced by actual categories
+  def work_types
+    types = []
+    video_ids = [44011] # Video
+    audio_ids = [70308] # Podfic
+    art_ids = [7844, 125758] # Fanart, Arts
+    types << "Video" if (filter_ids & video_ids).present?
+    types << "Audio" if (filter_ids & audio_ids).present?
+    types << "Art" if (filter_ids & art_ids).present?
+    # Very arbitrary cut off here, but wanted to make sure we
+    # got fic + art/podfic/video tagged as text as well
+    if types.empty? || word_count > 200
+      types << "Text"
+    end
+    types
+  end
+
+  # To be replaced by actual category
+  # Can't use the 'Meta' tag since that has too many different uses
+  def nonfiction
+    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    (filter_ids & nonfiction_tags).present?
   end
 
 end

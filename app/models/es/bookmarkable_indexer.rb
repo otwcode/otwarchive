@@ -19,11 +19,17 @@ module ES
             },
             creators: {
               type: 'string',
-              analyzer: 'simple'
+              analyzer: 'simple',
+              index_name: 'creator'
             },
             tag: {
               type: 'string',
               analyzer: 'simple'
+            },
+            work_types: {
+              type: 'string',
+              index: 'not_analyzed',
+              index_name: 'work_type'
             }
           }
         }
