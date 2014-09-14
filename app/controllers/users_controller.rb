@@ -418,27 +418,27 @@ class UsersController < ApplicationController
   private
 
   def reauthenticate
-    if !params[:password_check].blank?
-      session = UserSession.new(:login => @user.login, :password => params[:password_check])
-      if session.valid?
-        return true
-      else
-        if params[:new_email]
-          flash.now[:error] = ts("Your password was incorrect")
-        else
-          flash.now[:error] = ts("Your old password was incorrect")
-        end
-        @wrong_password = true
-        return false
-      end
-    else
-      if params[:new_email]
-        flash.now[:error] = ts("You must enter your password")
-      else
-        flash.now[:error] = ts("You must enter your old password")
-      end
-      @wrong_password = true
-      return false
+    if params[:password_check].blank?
+      return wrong_password!(params[:new_email],
+        ts("You must enter your password"),
+        ts("You must enter your old password"))
     end
+
+    session = UserSession.new(:login => @user.login, :password => params[:password_check])
+
+    if session.valid?
+      true
+    else
+      wrong_password!(params[:new_email],
+        ts("Your password was incorrect"),
+        ts("Your old password was incorrect"))
+    end
+  end
+
+  def wrong_password!(condition, if_true, if_false)
+    flash.now[:error] = condition ? if_true : if_false
+    @wrong_password = true
+
+    false
   end
 end
