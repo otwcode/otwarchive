@@ -68,6 +68,7 @@ describe Admin, :ready do
     it "is invalid if email already exists" do
       build(:admin, email: existing_user.email).should be_invalid
     end
+   end
 
    context 'edit_user' do
      let(:existing_user) {create(:user)}
@@ -77,6 +78,9 @@ describe Admin, :ready do
        fill_in 'Admin user name',with: "#{admin.login}"
        fill_in 'Admin password', with: 'password'
        click_button 'Log in as admin'
+     end
+     after do 
+       visit '/admin/logout'
      end
 
      it 'find a user in the admin interface' do
@@ -131,6 +135,13 @@ describe Admin, :ready do
        page.should have_content('Warning was recorded')
      end
 
-   end
+     it 'hide and show a work' do
+       work=FactoryGirl.create(:work)
+       visit "/admin/user_creations/#{work.id}/hide?creation_type=Work&hidden=true"
+       page.should have_content('Item has been hidden.')
+       visit "/admin/user_creations/#{work.id}/hide?creation_type=Work&hidden=false"
+       page.should have_content('Item is no longer hidden.')
+     end
+
   end
 end
