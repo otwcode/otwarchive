@@ -21,7 +21,12 @@ class Indexer
       index: index_name,
       type: document_type,
       body: {
-        mapping: mapping
+        settings: {
+          index: {
+            number_of_shards: 5
+          }
+        },
+        mappings: mapping
       }
     )
   end
