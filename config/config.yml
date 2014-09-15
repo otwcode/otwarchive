@@ -50,6 +50,7 @@ OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
 ELASTICSEARCH_URL: 'http://localhost:9200'
+ELASTICSEARCH_1_URL: 'http://localhost:9200'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings

@@ -1,0 +1,2 @@
+class PseudQuery < Query
+end
