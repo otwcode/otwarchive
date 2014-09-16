@@ -121,6 +121,9 @@ GEM
       multi_json (~> 1.3)
     gherkin (2.12.0-x86-mingw32)
       multi_json (~> 1.3)
+    globalize (3.1.0)
+      activemodel (>= 3.1.0, < 4.0.0)
+      activerecord (>= 3.1.0, < 4.0.0)
     google_visualr (2.1.7)
     hashr (0.0.22)
     highline (1.6.19)
@@ -368,6 +371,7 @@ DEPENDENCIES
   faker
   fastimage
   gherkin
+  globalize (~> 3.1.0)
   google_visualr (>= 2.1)
   htmlentities
   httparty
