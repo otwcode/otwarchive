@@ -15,7 +15,7 @@ class Skin < ActiveRecord::Base
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
   # We don't show some roles to users
-  ALL_ROLES = ROLES + %w(admin translator site)
+  ALL_ROLES = ROLES + %w(admin site)
   DEFAULT_ROLE = "user"
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
