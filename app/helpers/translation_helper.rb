@@ -1,32 +1,5 @@
 module TranslationHelper
   
-  # Returns the status of a localized translation with a class for css styling
-  def translation_status(main_translation, local_translation)
-    if local_translation.betaed? || !local_translation.text.blank?
-      if local_translation.updated?
-        "<span class='updated'>Main translation has been updated</span>"
-      elsif local_translation.betaed?
-        "<span class='betaed'>Betaed</span>"
-      else
-        "<span class='translated'>Translated</span>"
-      end
-    else
-      "<span class='not_translated'>Not translated</span>"
-    end    
-  end
-  
-  def namespace_notes(namespace)
-    note_count = @current_locale.translation_notes.count(:all, :conditions => {:namespace => namespace}).to_s
-    read_link = link_to('Read notes (' + note_count + ')', translation_notes_path(:namespace => namespace))
-    add_link = link_to('Add a note', new_translation_note_path(:namespace => namespace))
-    read_link + " | " + add_link
-  end
-  
-  def rows_for_words(string)
-   words = (string).split(/\S+/).size
-   words > 5 ? words/5 : 1
-  end
-
 # Enigel Nov. 15 08
   def distance_of_time_in_words(from_time, to_time = 0, include_seconds = false)
     
