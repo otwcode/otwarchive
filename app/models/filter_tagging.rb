@@ -9,7 +9,6 @@ class FilterTagging < ActiveRecord::Base
 
   validates_presence_of :filter, :filterable
 
-  after_create :expire_caches
   before_destroy :expire_caches
 
   def self.find(*args)
@@ -20,7 +19,9 @@ class FilterTagging < ActiveRecord::Base
   end
 
   def expire_caches
-    self.filter.update_works_index_timestamp! unless self.filter.blank?
+    if self.filter && self.filterable.respond_to?(:expire_caches)
+      CacheMaster.record(filterable_id, 'tag', filter_id)
+    end
   end
 
   # Is this a valid filter tagging that should actually exist?

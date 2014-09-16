@@ -49,6 +49,13 @@ class ApplicationController < ActionController::Base
 
 protected
 
+  def record_not_found (exception)
+    @message=exception.message
+    respond_to do |f|
+      f.html{ render :template => "errors/404", :status => 404 }
+    end
+  end
+
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
@@ -97,14 +104,17 @@ public
   def fetch_admin_settings
     if Rails.env.development?
       @admin_settings = AdminSetting.first
-      unless @admin_settings.banner_text.blank?
-        @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
-      end
     else
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-      unless @admin_settings.banner_text.blank?
-        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
-      end
+    end
+  end
+  
+  before_filter :load_admin_banner
+  def load_admin_banner
+    if Rails.env.development?
+      @admin_banner = AdminBanner.where(:active => true).last
+    else
+      @admin_banner = Rails.cache.fetch("admin_banner"){AdminBanner.where(:active => true).last}
     end
   end
 

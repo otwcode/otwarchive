@@ -1,0 +1,2 @@
+class TagQuery < Query
+end
