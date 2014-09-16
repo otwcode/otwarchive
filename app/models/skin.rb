@@ -15,7 +15,7 @@ class Skin < ActiveRecord::Base
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
   # We don't show some roles to users
-  ALL_ROLES = ROLES + %w(admin site)
+  ALL_ROLES = ROLES + %w(admin translator site)
   DEFAULT_ROLE = "user"
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
@@ -77,7 +77,7 @@ class Skin < ActiveRecord::Base
   end
 
   validates :ie_condition, :inclusion => {:in => IE_CONDITIONS, :allow_nil => true, :allow_blank => true}
-  validates :role, :inclusion => {:in => ALL_ROLES, :allow_nil => true, :allow_blank => true}
+  validates :role, :inclusion => {:in => ALL_ROLES, :allow_blank => true, :allow_nil => true }
 
   validate :valid_public_preview
   def valid_public_preview
