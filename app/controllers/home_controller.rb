@@ -137,7 +137,7 @@ protected
         query.first
       when "item", "participant"
         "collection_#{classname}".classify.constantize.where(:collection_id => @last_id).first
-      when "tag_wrangling", "user_creation", "translator", "translation"
+      when "tag_wrangling", "user_creation"
         # not real objects
         nil
       else
