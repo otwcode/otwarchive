@@ -9,7 +9,6 @@ class ArchiveFaqsController < ApplicationController
     @archive_faqs = ArchiveFaq.order('position ASC')
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @archive_faqs }
     end
   end
 
@@ -20,7 +19,6 @@ class ArchiveFaqsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @archive_faq }
     end
   end
 
@@ -50,7 +48,6 @@ class ArchiveFaqsController < ApplicationController
     1.times { @archive_faq.questions.build(attributes: { question: "This is a temporary question", content: "This is temporary content", anchor: "ThisIsATemporaryAnchor"})}
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @archive_faq }
     end
   end
 

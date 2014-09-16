@@ -6,10 +6,6 @@ module LanguageHelper
   end
 
   def rtl?
-    if Globalize.locale.to_s == "ar" || Globalize.locale.to_s == "he"
-      return true
-    else
-      return false
-    end
+    %w(ar he).include?(Globalize.locale.to_s)
   end
 end
