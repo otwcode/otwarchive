@@ -67,6 +67,7 @@ class WorkIndexer < Indexer
         :bookmarks_count,
         :creators,
         :crossover,
+        :otp,
         :work_types,
         :nonfiction
       ]

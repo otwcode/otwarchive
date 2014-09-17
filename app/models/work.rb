@@ -1321,6 +1321,11 @@ class Work < ActiveRecord::Base
     filters.by_type('Fandom').first_class.count > 1
   end
 
+  # Does this work have only one relationship tag?
+  def otp
+    filters.by_type('Relationship').first_class.count == 1
+  end
+
   # Quick and dirty categorization of the most obvious stuff
   # To be replaced by actual categories
   def work_types
@@ -1333,7 +1338,7 @@ class Work < ActiveRecord::Base
     types << "Art" if (filter_ids & art_ids).present?
     # Very arbitrary cut off here, but wanted to make sure we
     # got fic + art/podfic/video tagged as text as well
-    if types.empty? || word_count > 200
+    if types.empty? || (word_count && word_count > 200)
       types << "Text"
     end
     types

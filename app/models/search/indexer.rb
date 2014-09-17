@@ -62,8 +62,8 @@ class Indexer
     total = (indexables.count / BATCH_SIZE) + 1
     i = 1
     indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
-      puts "Reindexing #{klass} batch #{i} of #{total}"
-      self.new(group.map(&:id)).index_documents
+      puts "Queueing #{klass} batch #{i} of #{total}"
+      AsyncIndexer.new(self, :world).enqueue_ids(group.map(&:id))
       i += 1
     end
   end

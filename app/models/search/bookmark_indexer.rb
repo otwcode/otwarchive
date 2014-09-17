@@ -49,11 +49,12 @@ class BookmarkIndexer < Indexer
 
   # TODO: Make this work for deleted bookmarks
   def routing_info(id)
+    object = objects[id.to_i]
     { 
       '_index' => index_name, 
       '_type' => document_type,
       '_id' => id,
-      'parent' => objects[id.to_i].bookmarkable_id
+      'parent' => "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
     }
   end
 
