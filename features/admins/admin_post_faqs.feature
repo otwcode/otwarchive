@@ -11,11 +11,13 @@ Scenario: Post a FAQ
     When I follow "Admin Posts"
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
-    When I follow "New FAQ Section"
-      And I fill in "content" with "Some text, that is sufficiently long to pass validation."
-      And I fill in "title" with "New subsection"
+    When I follow "New FAQ Category"
+      And I fill in "Question*" with "What is AO3?"
+      And I fill in "Answer*" with "Some text, that is sufficiently long to pass validation."
+      And I fill in "Category name*" with "New subsection"
+      And I fill in "Anchor name*" with "whatisao3"
     When I press "Post"
-    Then I should see "Archive FAQ was successfully created"
+    Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
       And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
@@ -25,10 +27,16 @@ Scenario: Post a FAQ
     When I follow "Admin Posts"
       And I follow "Archive FAQ" within "#main"
       And I follow "Edit"
-      And I fill in "content" with "Number 1 posted FAQ, this is, and Yoda approves."
+      And I fill in "Answer*" with "Number 1 posted FAQ, this is, and Yoda approves."
       And I press "Post"
-    Then I should see "Archive FAQ was successfully updated"
+    Then I should see "ArchiveFaq was successfully updated"
       And I should see "Yoda approves"
+    When I go to the archive_faqs page
+      And I follow "Edit"
+      And I fill in "Answer*" with "New Content, yay"
+      And I check "archive_faq_notify_translations"
+      And I press "Post"
+      And 1 email should be delivered
 
   Scenario: Post a FAQ that is a Translation of another
     Given basic languages

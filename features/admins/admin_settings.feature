@@ -16,8 +16,7 @@ Feature: Admin Settings Page
       And I check "Turn off downloading for guests"
       And I check "Turn off tag wrangling for non-admins"
       And I press "Update"
-    # TODO: Update this to something reasonable to verify success
-    Then I should see "Setting banner back on for all users. This may take some time"
+    Then I should see "Archive settings were successfully updated."
 
   Scenario: Turn off guest downloading
     Given guest downloading is off
