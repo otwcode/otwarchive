@@ -68,6 +68,12 @@ gem 'rpm_contrib'
 # for generating graphs
 gem "google_visualr", ">= 2.1"
 
+# Copycopter to aid translation
+# gem 'copycopter_client', '~> 2.0.1'
+
+# Globalize for translations
+gem 'globalize', '~> 3.1.0'
+
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 

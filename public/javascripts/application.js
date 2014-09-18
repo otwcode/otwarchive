@@ -244,8 +244,13 @@ function handlePopUps() {
 // used in nested form fields for deleting a nested resource
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {
-    $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
-    $j(link).closest("." + class_of_section_to_remove).hide();
+  $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
+  var section = $j(link).closest("." + class_of_section_to_remove);
+  section.find(".required input, .required textarea").each(function(index) {
+    var element = eval('validation_for_' + $j(this).attr('id'));
+    element.disable();
+  });
+  section.hide();
 }
 
 // used with nested form fields for dynamically stuffing in an extra partial
