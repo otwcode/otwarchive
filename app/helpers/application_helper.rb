@@ -19,7 +19,7 @@ module ApplicationHelper
       class_names = "system support " + controller.controller_name + ' ' + controller.action_name
     end
     if controller.controller_name == "archive_faqs"
-      class_names = "system support faq " + controller.action_name
+      class_names = "system docs support faq " + controller.action_name
     end
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name

@@ -126,6 +126,11 @@ Otwarchive::Application.routes.draw do
 
   namespace :admin do
     resources :activities, :only => [:index, :show]
+    resources :banners do
+      member do
+        get :confirm_delete
+      end
+    end
     resources :settings
     resources :skins do
       collection do
@@ -493,6 +498,9 @@ Otwarchive::Application.routes.draw do
   end
   resources :known_issues
   resources :archive_faqs do
+    member do
+      get :confirm_delete
+    end
     collection do
       get :manage
       post :reorder

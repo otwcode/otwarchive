@@ -130,7 +130,7 @@ class WorksController < ApplicationController
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = (@tag.present? && @tag != @owner) ? @tag : nil
           user = current_user.present? ? "logged_in" : "logged_out"
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}") do
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -296,7 +296,7 @@ class WorksController < ApplicationController
           redirect_to preview_work_path(@work)
         else
           # We check here to see if we are attempting to post to moderated collection
-          flash[:notice]= ts("Work was successfully posted.")
+          flash[:notice]= ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
           in_moderated_collection
           redirect_to work_path(@work)
         end
@@ -406,6 +406,9 @@ class WorksController < ApplicationController
       end
       if saved
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
+        if posted_changed
+          flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
+        end
         in_moderated_collection
         redirect_to(@work)
       else
