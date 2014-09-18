@@ -1,0 +1,16 @@
+<% content_for :message do %>
+  Dear Translation Committee:
+
+  <%= @admin %> has created a new FAQ Category!
+
+  Category name: <%= @archive_faq.title.html_safe %>
+
+  <% for q in @archive_faq.questions %>
+    <%= "Question: " + q.question %>
+    <%= to_plain_text(q.content) %>
+    <%= text_divider %>
+  <% end %>
+
+<% end %>
+
+<% content_for :sent_at do %><%= Time.now.to_s(:time_for_mailers) %><% end %>

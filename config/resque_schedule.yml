@@ -1,19 +1,19 @@
 run_main_reindex_queues:
-  every: 5m
+  every: 1m
   class: "ScheduledReindexJob"
   queue: utilities
   args: main
   description: "Kick off a reindex of all main content indexing"
 
 run_background_reindex_queue:
-  every: 15m
+  every: 10m
   class: "ScheduledReindexJob"
   queue: utilities
   args: background
   description: "Kick off a reindex of all background reindexes"
 
 run_stats_reindex_queue:
-  every: 1h
+  every: 30m
   class: "ScheduledReindexJob"
   queue: utilities
   args: stats 

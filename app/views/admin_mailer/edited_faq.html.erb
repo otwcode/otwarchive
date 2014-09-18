@@ -1,0 +1,14 @@
+<% content_for :message do %>
+  <p>
+    <%= style_bold("Dear Translation Committee:") %>
+  </p>
+  <p>
+    <%= style_bold(@admin) %> has edited the <%= style_bold(@archive_faq.title) %> Category.
+    <%= ts("Please") %> <%= link_to ts("visit the Category"), archive_faq_url(@archive_faq) %><%= ts(" to see the changes.") %>
+  </p>
+
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>

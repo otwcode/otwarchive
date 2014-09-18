@@ -67,9 +67,19 @@ class Series < ActiveRecord::Base
   
   # Get the filters for the works in this series
   def filters
-    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id JOIN works ON works.id = filter_taggings.filterable_id JOIN serial_works ON serial_works.work_id = works.id").where("serial_works.series_id = #{self.id} AND works.posted = 1 AND filter_taggings.filterable_type = 'Work'").group("tags.id")
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
+               JOIN works ON works.id = filter_taggings.filterable_id
+               JOIN serial_works ON serial_works.work_id = works.id").
+        where("serial_works.series_id = #{self.id} AND
+               works.posted = 1 AND
+               filter_taggings.filterable_type = 'Work'").
+        group("tags.id")
   end
-  
+
+  def direct_filters
+    filters.where("filter_taggings.inherited = 0")
+  end
+
   # visibility aped from the work model
   def visible(current_user=User.current_user)
     if current_user.is_a?(Admin) || (current_user.is_a?(User) && current_user.is_author_of?(self))
@@ -197,5 +207,82 @@ class Series < ActiveRecord::Base
     else
       Work.in_series(self).visible.collect(&:revised_at).compact.uniq.sort.last
     end
+  end
+
+  ######################
+  # SEARCH
+  ######################
+
+  def bookmarkable_json
+    as_json(
+      root: false,
+      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :created_at],
+      methods: [:revised_at, :posted, :tag, :filter_ids, :rating_ids,
+        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :relationship_ids, :freeform_ids, :pseud_ids, :creators, :language_id, 
+        :word_count, :work_types]
+    ).merge(
+      anonymous: anonymous?, 
+      unrevealed: unrevealed?,
+      bookmarkable_type: 'Series'
+    )
+  end
+
+  # FIXME: should series have their own language?
+  def language_id
+    works.first.language_id if works.present?
+  end
+
+  def posted
+    !posted_works.empty?
+  end
+  alias_method :posted?, :posted
+
+  # Simple name to make it easier for people to use in full-text search
+  def tag
+    (work_tags + filters).uniq.map{ |t| t.name }
+  end
+
+  # Index all the filters for pulling works
+  def filter_ids
+    filters.value_of :id
+  end
+
+  # Index only direct filters (non meta-tags) for facets
+  def filters_for_facets
+    @filters_for_facets ||= direct_filters
+  end
+  def rating_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
+  end
+  def warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  end
+  def category_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
+  end
+  def fandom_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
+  end
+  def character_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
+  end
+  def relationship_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
+  end
+  def freeform_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  end
+
+  def pseud_ids
+    creatorships.value_of :pseud_id
+  end
+
+  def creators
+    anonymous? ? ['Anonymous'] : pseuds.map(&:byline)
+  end
+
+  def work_types
+    works.map(&:work_types).flatten.uniq
   end
 end

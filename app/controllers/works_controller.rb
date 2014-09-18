@@ -296,7 +296,7 @@ class WorksController < ApplicationController
           redirect_to preview_work_path(@work)
         else
           # We check here to see if we are attempting to post to moderated collection
-          flash[:notice]= ts("Work was successfully posted.")
+          flash[:notice]= ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
           in_moderated_collection
           redirect_to work_path(@work)
         end
@@ -406,6 +406,9 @@ class WorksController < ApplicationController
       end
       if saved
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
+        if posted_changed
+          flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
+        end
         in_moderated_collection
         redirect_to(@work)
       else
