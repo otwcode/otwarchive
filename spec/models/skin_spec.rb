@@ -104,6 +104,13 @@ describe Skin do
         @skin.save.should be_true
       end
     end
+
+    # This is verified to work in prod and staging, but not dev
+    # TODO: fix across environments?
+    xit "should save CSS3 box shadows with multiple shadows" do
+      @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
+      @skin.save.should be_true
+    end
     
     # bad bad bad css
     {
