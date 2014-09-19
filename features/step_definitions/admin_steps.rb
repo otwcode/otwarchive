@@ -201,7 +201,7 @@ end
 
 ### THEN
 
-When /^I make a translation of an admin post$/ do
+When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
@@ -210,7 +210,7 @@ When /^I make a translation of an admin post$/ do
   click_button("Post")
 end
 
-Then /^I should see a translated admin post$/ do
+Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
     step(%{I should not see "Deutsch Ankuendigung"})
