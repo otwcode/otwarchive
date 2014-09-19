@@ -199,7 +199,6 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
-
 ### THEN
 
 When /^I make a translation of an admin post$/ do
@@ -220,4 +219,3 @@ Then /^I should see a translated admin post$/ do
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
 end
-
