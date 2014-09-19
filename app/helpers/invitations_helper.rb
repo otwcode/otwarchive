@@ -24,5 +24,4 @@ module InvitationsHelper
       link_to ts('Create an Account'), new_user_path
     end 
   end
-
 end
