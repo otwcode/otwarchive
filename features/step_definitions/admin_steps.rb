@@ -195,7 +195,7 @@ end
 Given(/^the following language exists$/) do |table|
   # table is a Cucumber::Ast::Table
   table.hashes.each do |hash|
-    language = FactoryGirl.create(:language, hash)
+    FactoryGirl.create(:language, hash)
   end
 end
 
