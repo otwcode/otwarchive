@@ -57,5 +57,4 @@ class AbuseReportsController < ApplicationController
    post_info << "</bug>"
    return post_info
  end
-
 end
