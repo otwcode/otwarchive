@@ -71,11 +71,11 @@ describe Admin, :ready do
    end
 
    context 'edit_user' do
-     let(:existing_user) {create(:user)}
-     let(:admin)         {create(:admin)}
+     let(:existing_user) { create(:user) }
+     let(:admin)         { create(:admin) }
      before do
        visit '/admin/login'
-       fill_in 'Admin user name',with: "#{admin.login}"
+       fill_in 'Admin user name', with: "#{admin.login}"
        fill_in 'Admin password', with: 'password'
        click_button 'Log in as admin'
      end
@@ -130,13 +130,13 @@ describe Admin, :ready do
        visit "/admin/users/#{existing_user.login}"
        choose 'admin_action_warn'
        fill_in 'admin_note', with: 'This poor user is annoying me'
-       click_button "Update"
+       click_button 'Update'
        page.should have_content('This poor user is annoying me')
        page.should have_content('Warning was recorded')
      end
 
      it 'hide and show a work' do
-       work=FactoryGirl.create(:work)
+       work = FactoryGirl.create(:work)
        visit "/admin/user_creations/#{work.id}/hide?creation_type=Work&hidden=true"
        page.should have_content('Item has been hidden.')
        visit "/admin/user_creations/#{work.id}/hide?creation_type=Work&hidden=false"
