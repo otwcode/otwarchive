@@ -17,7 +17,7 @@ module InvitationsHelper
   end
 
   def new_account_link
-    unless @admin_settings.account_creation_enabled?  return ts('Account creation disabled')
+    return ts('Account creation disabled') unless @admin_settings.account_creation_enabled?  
     if @admin_settings.creation_requires_invite?
       link_to ts('Get an Invite'), invite_requests_path
     else
