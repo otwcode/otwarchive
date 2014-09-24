@@ -7,6 +7,9 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
+    unless logged_in_as_admin?
+      @archive_faqs = @archive_faqs.with_translations(I18n.locale) 
+    end
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -116,7 +119,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find(params[:id])
+    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
   end
 
   # DELETE /archive_faqs/1
