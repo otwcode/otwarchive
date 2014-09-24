@@ -3,7 +3,7 @@ class WranglingGuideline < ActiveRecord::Base
 
   attr_protected :content_sanitizer_version
 
-  validates_presence_of :content
+  validates_presence_of :content, :title
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
     :too_long => ts('cannot be more than %{max} characters long.', :max => ArchiveConfig.CONTENT_MAX)
 
