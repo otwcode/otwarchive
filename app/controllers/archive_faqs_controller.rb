@@ -116,7 +116,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find(params[:id])
+    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
   end
 
   # DELETE /archive_faqs/1
