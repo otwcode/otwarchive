@@ -23,3 +23,55 @@ background:purple; color:#555;}
 .edit_external_author ul ul {
   margin-left: 2.75em;
 }
+
+/* thermometer */
+
+.thermometer-content {
+  width: 100%;
+  margin: auto;
+}
+
+.thermometer {
+  position: relative;
+}
+
+.thermometer .track {
+  background: #fff;
+  background-image: linear-gradient(to bottom, #fff 0%, #f3f3f3 50%, #ededed 51%, #fff 100%);
+  border: 1px solid #aaa;
+  height: 1.25em;
+  margin: 0 auto;
+  position: relative;
+  width: 50%;
+}
+
+.thermometer .progress {
+  height: 100%;
+  background: #066;
+  background-image: linear-gradient(to bottom, #008c8c 0%, #006d6d 50%, #006666 51%, #008c8c 100%);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.thermometer .goal {
+  position: absolute;
+  right: 0;
+}
+
+.thermometer .goal .amount {
+  padding-left: 0.25em;
+  position: absolute;
+  left: 0;
+}
+
+.thermometer .amount {
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.25em;
+}
+
+.thermometer .progress .amount {
+  position: absolute;
+  right: 0.25em;
+}
