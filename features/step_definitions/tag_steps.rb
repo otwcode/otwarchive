@@ -173,12 +173,6 @@ When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   click_button("Post")
 end
 
-When /^there are (\d+) Wrangling Guidelines$/ do |n|
-  (1..n.to_i).each do |i|
-    step(%{I make a #{i} Wrangling Guideline})
-  end
-end
-
 When /^(\d+) Wrangling Guidelines? exists?$/ do |n|	
   (1..n.to_i).each do |i|
     FactoryGirl.create(:wrangling_guideline, id: i)

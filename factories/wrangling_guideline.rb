@@ -6,13 +6,13 @@ FactoryGirl.define do
     "The #{n} Wrangling Guideline"
   end
 
-  sequence(:content) do |n|
+  sequence(:wrangling_guideline_content) do |n|
     "This is the #{n} Wrangling Guideline"
   end
 
   factory :wrangling_guideline do |f|
     title {generate(:wrangling_guideline_title)}
-    content
+    content {generate(:wrangling_guideline_content)}
   end
 
 end

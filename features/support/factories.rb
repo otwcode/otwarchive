@@ -54,7 +54,7 @@ FactoryGirl.define do
 
   factory :wrangling_guideline do |f|
     f.sequence(:title) { |n| "The #{n} Wrangling Guideline" }
-    f.sequence(:content) { |n| "The #{n} Wrangling Guideline."}
+    f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
   end
 
   factory :tag do |f|
