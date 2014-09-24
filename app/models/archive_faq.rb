@@ -13,7 +13,7 @@ class ArchiveFaq < ActiveRecord::Base
   belongs_to :language
   #skip_callback :save, :before, :update_sanitizer_version
 
-  before_validation :set_slug, on: :create
+  before_validation :set_slug
   def set_slug
     self.slug = self.title.parameterize
   end
