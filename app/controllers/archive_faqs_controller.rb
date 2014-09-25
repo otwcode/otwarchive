@@ -112,7 +112,9 @@ class ArchiveFaqsController < ApplicationController
   def default_url_options(options={})
     I18n.locale = params[:language_id] if params[:language_id].present?
     if I18n.locale.present?
-      params[:language_id] = I18n.locale
+      if I18n.locale.to_s != params[:language_id]
+        redirect_to "#{request.protocol}#{request.host_with_port}#{request.fullpath}?language_id=#{I18n.locale}"
+      end
     end
     { language_id: I18n.locale }
   end
