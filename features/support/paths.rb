@@ -153,10 +153,14 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
+    when /^the Wrangling Guidelines reorder page$/i
+      manage_wrangling_guidelines_path
     when /^the tos page$/i
       tos_path
     when /^the faq page$/i
       archive_faqs_path
+    when /^the wrangling guidelines page$/i
+      wrangling_guidelines_path
     when /^the support page$/i
       new_feedback_report_path
     when /^the new tag ?set page$/i
