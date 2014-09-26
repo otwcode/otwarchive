@@ -113,7 +113,15 @@ class ArchiveFaqsController < ApplicationController
     I18n.locale = params[:language_id] if params[:language_id].present?
     if I18n.locale.present?
       if I18n.locale.to_s != params[:language_id]
-        redirect_to "#{request.protocol}#{request.host_with_port}#{request.fullpath}?language_id=#{I18n.locale}"
+        # First lets find the parameters of the url ( after the ? )
+        url_parameters=request.fullpath.split("?")
+        # Now lets have an array of the parameters ( split on & )
+        if url_parameters[1].nil?
+          parameters=["language_id=#{I18n.locale}"]
+        else
+          parameters=url_parameters[1].split("&").concat(["language_id=#{I18n.locale}"]).uniq
+        end
+        redirect_to "#{request.protocol}#{request.host_with_port}#{url_parameters[0]}?#{parameters.join('&')}"
       end
     end
     { language_id: I18n.locale }
