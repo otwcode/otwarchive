@@ -59,38 +59,12 @@ class UsersController < ApplicationController
     end
     @page_subtitle = @user.login
 
-    # very similar to show under pseuds - if you change something here, change it there too
-    if current_user.nil?
-      # hahaha omg so ugly BUT IT WORKS :P
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC").
-                   merge(Work.visible_to_all.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
-      visible_works = @user.works.visible_to_all
-      visible_series = @user.series.visible_to_all
-      visible_bookmarks = @user.bookmarks.visible_to_all
-    else
-      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
-                   joins(:direct_filter_taggings).
-                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC").
-                   merge(Work.visible_to_registered_user.revealed.non_anon).
-                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
-      visible_works = @user.works.visible_to_registered_user
-      visible_series = @user.series.visible_to_registered_user
-      visible_bookmarks = @user.bookmarks.visible_to_registered_user
-    end
+    visible = visible_items(current_user)
 
     @fandoms = @fandoms.all # force eager loading
-    @works = visible_works.revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible[:works].revealed.non_anon.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = visible[:series].order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @bookmarks = visible[:bookmarks].order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @user.id,
@@ -441,5 +415,30 @@ class UsersController < ApplicationController
       flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
       redirect_to invite_requests_path
     end
+  end
+
+  def visible_items(current_user)
+    # NOTE: When current_user is nil, we use .visible_to_all, otherwise we use
+    #       .visible_to_registered_user.
+    visible_method = current_user.nil? ? :visible_to_all : :visible_to_registered_user
+
+    # hahaha omg so ugly BUT IT WORKS :P
+    @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
+                 joins(:direct_filter_taggings).
+                 joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
+                 group("tags.id").order("work_count DESC").
+                 merge(Work.send(visible_method).revealed.non_anon).
+                 merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+  INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+  INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
+    visible_works = @user.works.send(visible_method)
+    visible_series = @user.series.send(visible_method)
+    visible_bookmarks = @user.bookmarks.send(visible_method)
+
+    {
+      works: visible_works,
+      series: visible_series,
+      bookmarks: visible_bookmarks
+    }
   end
 end
