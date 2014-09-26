@@ -5,6 +5,7 @@ class ArchiveFaq < ActiveRecord::Base
   has_many :questions, :dependent => :destroy
   accepts_nested_attributes_for :questions, allow_destroy: true
 
+  validates :slug, presence: true, uniqueness: true
 
   attr_protected :content_sanitizer_version
   attr_accessor :notify_translations
@@ -12,6 +13,10 @@ class ArchiveFaq < ActiveRecord::Base
   belongs_to :language
   #skip_callback :save, :before, :update_sanitizer_version
 
+  before_validation :set_slug
+  def set_slug
+    self.slug = self.title.parameterize
+  end
 
   # When we modify either a FAQs Category name or one of the Questions, we send an email to Translations.
   after_save :notify_translations_committee
@@ -28,6 +33,10 @@ class ArchiveFaq < ActiveRecord::Base
         AdminMailer.edited_faq(self.id, User.current_user.login).deliver
       end
     end
+  end
+
+  def to_param
+    slug_was
   end
 
   def email_translations?

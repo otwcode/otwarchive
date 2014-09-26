@@ -29,6 +29,8 @@ module Otwarchive
     #
 
     I18n.config.enforce_available_locales = true
+    I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id, 
+      :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer

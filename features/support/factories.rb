@@ -52,6 +52,11 @@ FactoryGirl.define do
     f.sequence(:content) { |n| "The #{n} Content that is long enough to validate."}
   end
 
+  factory :wrangling_guideline do |f|
+    f.sequence(:title) { |n| "The #{n} Wrangling Guideline" }
+    f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
+  end
+
   factory :tag do |f|
     f.canonical true
     f.sequence(:name) { |n| "The #{n} Tag" }

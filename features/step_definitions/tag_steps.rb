@@ -113,6 +113,11 @@ Given /^the unsorted tags setup$/ do
   end
 end
 
+Given /^I have posted a Wrangling Guideline$/ do
+  step("I am logged in as an admin")
+  step(%{I make a 1st Wrangling Guideline})
+end
+
 ### WHEN
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
@@ -158,6 +163,20 @@ end
 When /^I view tag wrangling discussions$/ do
   step %{I follow "Tag Wrangling"}
   step %{I follow "Discussion"}
+end
+
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
+  n ||= 1
+  visit new_wrangling_guideline_path
+  fill_in("Guideline text", :with => "Number #{n} posted Wrangling Guideline, this is.")
+  fill_in("Title", :with => "Number #{n} Wrangling Guideline")
+  click_button("Post")
+end
+
+When /^(\d+) Wrangling Guidelines? exists?$/ do |n|	
+  (1..n.to_i).each do |i|
+    FactoryGirl.create(:wrangling_guideline, id: i)
+  end
 end
 
 ### THEN

@@ -163,12 +163,12 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   font-weight: 700;
 }
 
-.faq .userstuff .notice, .faq .userstuff .caution, .faq .example { 
+.faq .userstuff .notice, .faq .userstuff .caution, .faq .example, .guideline .userstuff .notice, .guideline .userstuff .caution, .guideline .example  { 
   margin: 0.643em 3.858em; 
   padding: 0.643em;
 } 
 
-.faq .example {
+.faq .example, .guideline .example {
   border: 1px solid #c2d2df;
 }
 
