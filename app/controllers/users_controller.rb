@@ -200,35 +200,49 @@ class UsersController < ApplicationController
     if params[:id].blank?
       flash[:error] = ts("Your activation key is missing.")
       redirect_to ''
-    else
-      @user = User.find_by_activation_code(params[:id])
-      if @user
-        if @user.active?
-          flash.now[:error] = ts("Your account has already been activated.")
-          redirect_to @user and return
-        end
-        # this is just a confirmation and it's ok if it gets delayed
-        @user.activate && UserMailer.activation(@user.id).deliver
-        flash[:notice] = ts("Signup complete! Please log in.")
-        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
-        # assign over any external authors that belong to this user
-        external_authors = []
-        external_authors << ExternalAuthor.find_by_email(@user.email)
-        @invitation = @user.invitation
-        external_authors << @invitation.external_author if @invitation
-        external_authors.compact!
-        unless external_authors.empty?
-          external_authors.each do |external_author|
-            external_author.claim!(@user)
-          end
-          flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
-        end
-        redirect_to(login_path)
-      else
-        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
-        redirect_to ''
-      end
+
+      return
     end
+
+    @user = User.find_by_activation_code(params[:id])
+
+    unless @user
+      flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
+      redirect_to ''
+
+      return
+    end
+
+    if @user.active?
+      flash.now[:error] = ts("Your account has already been activated.")
+      redirect_to @user
+
+      return
+    end
+
+    # this is just a confirmation and it's ok if it gets delayed
+    @user.activate && UserMailer.activation(@user.id).deliver
+
+    flash[:notice] = ts("Signup complete! Please log in.")
+
+    @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
+
+    # assign over any external authors that belong to this user
+    external_authors = []
+    external_authors << ExternalAuthor.find_by_email(@user.email)
+    @invitation = @user.invitation
+    external_authors << @invitation.external_author if @invitation
+    external_authors.compact!
+
+    unless external_authors.empty?
+      external_authors.each do |external_author|
+        external_author.claim!(@user)
+      end
+
+      flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
+    end
+
+    redirect_to(login_path)
   end
 
   def update
