@@ -110,47 +110,58 @@ class UsersController < ApplicationController
   end
 
   def change_username
-    if params[:new_login]
-      @new_login = params[:new_login]
-      session = UserSession.new(:login => @user.login, :password => params[:password])
-      if !session.valid?
-        flash[:error] = ts("Your password was incorrect")
-      else
-        user = User.find_by_login(@new_login)
-        if user && (user != @user)
-          flash[:error] = ts("User name already taken.")
-        else
-          old_login = @user.login
-          old_lower_login = "#{@user.login}".downcase
-          new_lower_login = "#{@new_login}".downcase
-          if old_lower_login == new_lower_login
-            old_pseud = Pseud.find_by_name_and_user_id(old_login, @user.id)
-            old_pseud.name = @new_login
-            old_pseud.save!
-          end
-          @user.login = @new_login
-          if @user.save
-            flash[:notice] = ts("Your user name has been successfully updated.")
-            new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
-            old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
-            if new_pseud
-              # do nothing - they already have the matching pseud
-            elsif old_pseud
-              # change the old pseud to match
-              old_pseud.update_attribute(:name, @new_login)
-            else
-              # shouldn't be able to get here, but just in case
-              Pseud.create(:name => @new_login, :user_id => @user.id)
-            end
-            redirect_to @user and return
-          else
-            @user.errors.clear
-            @user.reload
-            flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
-          end
-        end
-      end
+    return unless params[:new_login]
+
+    @new_login = params[:new_login]
+    session = UserSession.new(:login => @user.login, :password => params[:password])
+    if !session.valid?
+      flash[:error] = ts("Your password was incorrect")
+
+      return
     end
+
+    user = User.find_by_login(@new_login)
+    if user && (user != @user)
+      flash[:error] = ts("User name already taken.")
+      return
+    end
+
+    old_login = @user.login
+    old_lower_login = "#{@user.login}".downcase
+    new_lower_login = "#{@new_login}".downcase
+
+    if old_lower_login == new_lower_login
+      old_pseud = Pseud.find_by_name_and_user_id(old_login, @user.id)
+      old_pseud.name = @new_login
+      old_pseud.save!
+    end
+
+    @user.login = @new_login
+
+    unless @user.save
+      @user.errors.clear
+      @user.reload
+
+      flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
+
+      return
+    end
+
+    flash[:notice] = ts("Your user name has been successfully updated.")
+    new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
+    old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
+
+    if new_pseud
+      # do nothing - they already have the matching pseud
+    elsif old_pseud
+      # change the old pseud to match
+      old_pseud.update_attribute(:name, @new_login)
+    else
+      # shouldn't be able to get here, but just in case
+      Pseud.create(:name => @new_login, :user_id => @user.id)
+    end
+
+    redirect_to @user and return
   end
 
   # POST /users
