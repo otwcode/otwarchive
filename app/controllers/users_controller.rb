@@ -57,6 +57,7 @@ class UsersController < ApplicationController
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
+
     @page_subtitle = @user.login
 
     visible = visible_items(current_user)
@@ -77,11 +78,13 @@ class UsersController < ApplicationController
   # GET /users/new.xml
   def new
     @user = User.new
+
     if params[:invitation_token]
       @invitation = Invitation.find_by_token(params[:invitation_token])
       @user.invitation_token = @invitation.token
       @user.email = @invitation.invitee_email
     end
+
     @hide_dashboard = true
   end
 
@@ -103,6 +106,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:notice] = ts("Your password has been changed")
       @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
+
       redirect_to user_profile_path(@user) and return
     else
       render :change_password and return
@@ -114,6 +118,7 @@ class UsersController < ApplicationController
 
     @new_login = params[:new_login]
     session = UserSession.new(:login => @user.login, :password => params[:password])
+
     if !session.valid?
       flash[:error] = ts("Your password was incorrect")
 
@@ -168,6 +173,7 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
     @hide_dashboard = true
+
     if params[:cancel_create_account]
       redirect_to root_path
     else
@@ -177,9 +183,12 @@ class UsersController < ApplicationController
       @user.invitation_token = params[:invitation_token]
       @user.age_over_13 = params[:user][:age_over_13]
       @user.terms_of_service = params[:user][:terms_of_service]
+
       @user.password = params[:user][:password] if params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
+
       @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+
       if @user.save
         notify_and_show_confirmation_screen
       else
@@ -190,9 +199,11 @@ class UsersController < ApplicationController
 
   def notify_and_show_confirmation_screen
     # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver! 
+    UserMailer.signup_notification(@user.id).deliver!
+
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
+
     render "confirmation"
   end
 
@@ -247,6 +258,7 @@ class UsersController < ApplicationController
 
   def update
     @user.profile.update_attributes(params[:profile_attributes])
+
     if @user.profile.save
       flash[:notice] = ts("Your profile has been successfully updated")
       redirect_to user_profile_path(@user)
@@ -280,43 +292,58 @@ class UsersController < ApplicationController
     @hide_dashboard = true
     @works = @user.works.find(:all, :conditions => {:posted => true})
     @sole_owned_collections = @user.collections.delete_if {|collection| (collection.all_owners - @user.pseuds).size > 0}
+
     if @works.empty? && @sole_owned_collections.empty?
       if @user.unposted_works
         @user.wipeout_unposted_works
       end
+
       @user.destroy
       flash[:notice] = ts('You have successfully deleted your account.')
-     redirect_to(delete_confirmation_path)
+
+      redirect_to(delete_confirmation_path)
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
+
       render 'delete_preview' and return
     elsif params[:coauthor] || params[:sole_author]
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
+
       if params[:cancel_button]
         flash[:notice] = ts("Account deletion canceled.")
-       redirect_to user_profile_path(@user)
+        redirect_to user_profile_path(@user)
       else
-        # Orphans co-authored works, keeps the user's pseud on the orphan account
         if params[:coauthor] == 'keep_pseud'
+          # Orphans co-authored works, keeps the user's pseud on the orphan account
+
           pseuds = @user.pseuds
           works = @coauthored_works
           use_default = params[:use_default] == "true"
+
           Creatorship.orphan(pseuds, works, use_default)
-          # Orphans co-authored works, changes pseud to the default orphan pseud
+
         elsif params[:coauthor] == 'orphan_pseud'
+          # Orphans co-authored works, changes pseud to the default orphan pseud
+
           pseuds = @user.pseuds
           works = @coauthored_works
+
           Creatorship.orphan(pseuds, works)
-          # Removes user as an author from co-authored works
+
         elsif params[:coauthor] == 'remove'
+          # Removes user as an author from co-authored works
+
           @coauthored_works.each do |w|
             pseuds_with_author_removed = w.pseuds - @user.pseuds
             w.pseuds = pseuds_with_author_removed
+
             w.save
+
             w.chapters.each do |c|
               c.pseuds = c.pseuds - @user.pseuds
+
               if c.pseuds.empty?
                 c.pseuds = w.pseuds
               end
@@ -324,17 +351,22 @@ class UsersController < ApplicationController
             end
           end
         end
+
         if params[:sole_author] == 'keep_pseud'
           # Orphans works where user is sole author, keeps their pseud on the orphan account
+
           pseuds = @user.pseuds
           works = @sole_authored_works
           use_default = params[:use_default] == "true"
+
           Creatorship.orphan(pseuds, works, use_default)
           Collection.orphan(pseuds, @sole_owned_collections, use_default)
         elsif params[:sole_author] == 'orphan_pseud'
           # Orphans works where user is sole author, uses the default orphan pseud
+
           pseuds = @user.pseuds
           works = @sole_authored_works
+
           Creatorship.orphan(pseuds, works)
           Collection.orphan(pseuds, @sole_owned_collections)
         elsif params[:sole_author] == 'delete'
@@ -342,17 +374,22 @@ class UsersController < ApplicationController
           @sole_authored_works.each do |s|
             s.destroy
           end
+
           # Deletes collections where user is sole author
           @sole_owned_collections.each do |c|
             c.destroy
           end
         end
+
         @works = @user.works.find(:all, :conditions => {:posted => true})
+
         if @works.blank?
           if @user.unposted_works
             @user.wipeout_unposted_works
           end
+
           @user.destroy
+
           flash[:notice] = ts('You have successfully deleted your account.')
           redirect_to(delete_confirmation_path)
         else
@@ -368,6 +405,7 @@ class UsersController < ApplicationController
 
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
+
     respond_to do |format|
       format.html { redirect_to @user and return }
       format.js
@@ -376,6 +414,7 @@ class UsersController < ApplicationController
   
   def end_banner
     @user.preference.update_attribute(:banner_seen, true)
+
     respond_to do |format|
       format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) and return }
       format.js
@@ -386,11 +425,13 @@ class UsersController < ApplicationController
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
     @tag_types = %w(Fandom Character Relationship Freeform)
     @tags = @user.tags.with_scoped_count.includes(:merger)
+
     if params[:sort] == "count"
       @tags = @tags.order("count DESC")
     else
       @tags = @tags.order("name ASC")
     end
+
     @tags = @tags.group_by{|t| t.type.to_s}
   end
 
@@ -424,6 +465,7 @@ class UsersController < ApplicationController
   def check_account_creation_invite(token)
     unless token.blank?
       invitation = Invitation.find_by_token(token)
+
       if !invitation
         flash[:error] = ts("There was an error with your invitation token, please contact support")
         redirect_to new_feedback_report_path
