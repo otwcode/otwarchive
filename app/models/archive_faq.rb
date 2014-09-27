@@ -15,7 +15,9 @@ class ArchiveFaq < ActiveRecord::Base
 
   before_validation :set_slug
   def set_slug
-    self.slug = self.title.parameterize
+    if I18n.locale == :en
+      self.slug = self.title.parameterize
+    end
   end
 
   # When we modify either a FAQs Category name or one of the Questions, we send an email to Translations.
