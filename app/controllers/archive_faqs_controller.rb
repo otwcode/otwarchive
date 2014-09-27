@@ -1,7 +1,8 @@
 class ArchiveFaqsController < ApplicationController
 
   before_filter :admin_only, :except => [:index, :show]
-  before_filter :default_url_options
+  before_filter :set_locale
+  before_filter :require_language_id
 
 
   # GET /archive_faqs
@@ -107,14 +108,14 @@ class ArchiveFaqsController < ApplicationController
     end
   end
 
+  def set_locale
+    I18n.locale = params[:language_id] || I18n.default_locale
+  end
 
-  # The ?language_id=somelanguage needs to persist throughout URL changes
-  def default_url_options(options={})
-    I18n.locale = params[:language_id] if params[:language_id].present?
-    if I18n.locale.present?
-      params[:language_id] = I18n.locale
+  def require_language_id
+    if params[:language_id].blank?
+      redirect_to url_for(request.query_parameters.merge(language_id: I18n.locale.to_s))
     end
-    { language_id: I18n.locale }
   end
 
   # GET /archive_faqs/1/confirm_delete
