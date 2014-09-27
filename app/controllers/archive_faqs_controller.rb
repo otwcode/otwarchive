@@ -111,8 +111,20 @@ class ArchiveFaqsController < ApplicationController
   # The ?language_id=somelanguage needs to persist throughout URL changes
   def default_url_options(options={})
     I18n.locale = params[:language_id] if params[:language_id].present?
-    if I18n.locale.present?
-      params[:language_id] = I18n.locale
+    # If the local is not defined set it to the Archive default
+    if I18n.locale.blank?
+      I18n.locale = ArchiveConfig.DEFAULT_LOCALE_ISO
+    end
+    if I18n.locale.to_s != params[:language_id]
+      # First lets find the parameters of the url ( after the ? )
+      url_parameters=request.fullpath.split("?")
+      # Now lets have an array of the parameters ( split on & )
+      if url_parameters[1].nil?
+        parameters=["language_id=#{I18n.locale}"]
+      else
+        parameters=url_parameters[1].split("&").concat(["language_id=#{I18n.locale}"]).uniq
+      end
+      redirect_to "#{request.protocol}#{request.host_with_port}#{url_parameters[0]}?#{parameters.join('&')}"
     end
     { language_id: I18n.locale }
   end
