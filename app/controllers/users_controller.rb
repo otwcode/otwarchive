@@ -90,20 +90,22 @@ class UsersController < ApplicationController
   end
 
   def change_password
-    if params[:password]
-      unless @user.recently_reset? || reauthenticate
-        render :change_password and return
-      end
-      @user.password = params[:password]
-      @user.password_confirmation = params[:password_confirmation]
-      @user.recently_reset = false
-      if @user.save
-        flash[:notice] = ts("Your password has been changed")
-        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
-        redirect_to user_profile_path(@user) and return
-      else
-        render :change_password and return
-      end
+    return unless params[:password]
+
+    unless @user.recently_reset? || reauthenticate
+      render :change_password and return
+    end
+
+    @user.password = params[:password]
+    @user.password_confirmation = params[:password_confirmation]
+    @user.recently_reset = false
+
+    if @user.save
+      flash[:notice] = ts("Your password has been changed")
+      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
+      redirect_to user_profile_path(@user) and return
+    else
+      render :change_password and return
     end
   end
 
