@@ -114,7 +114,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   def set_locale
-    I18n.locale = params[:language_id] || I18n.default_locale
+    if params[:language_id] && session[:language_id] != params[:language_id]
+      session[:language_id] = params[:language_id]
+    end
+    I18n.locale = session[:language_id] || I18n.default_locale
   end
 
   def require_language_id
