@@ -4,7 +4,6 @@ class ArchiveFaqsController < ApplicationController
   before_filter :set_locale
   before_filter :require_language_id
 
-
   # GET /archive_faqs
   def index
     @archive_faqs = ArchiveFaq.order('position ASC')
@@ -106,6 +105,12 @@ class ArchiveFaqsController < ApplicationController
       format.html { redirect_to(archive_faqs_path) }
       format.js { render :nothing => true }
     end
+  end
+
+  # The ?language_id=somelanguage needs to persist throughout URL changes
+  # Get the value from set_locale to make sure there's no problem with order
+  def default_url_options
+    { language_id: set_locale.to_s }
   end
 
   def set_locale
