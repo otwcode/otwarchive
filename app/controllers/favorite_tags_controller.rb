@@ -17,10 +17,10 @@ class FavoriteTagsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html {
+        format.html do
           flash.keep
           redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param), flash: { error: @favorite_tag.errors.full_messages }
-        }
+        end
         format.json { render json: { errors: @favorite_tag.errors.full_messages }, status: :unprocessable_entity }
       end
     end
