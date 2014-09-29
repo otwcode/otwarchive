@@ -25,7 +25,7 @@
   <% end %>
 
   <% if @admin_posts.present? %>
-    <%= render 'news_module' %>
+    <%= render 'news_module', admin_posts: @admin_posts %>
   <% end %>
 
   <% if logged_in? && @readings.present? %>
@@ -45,7 +45,7 @@
   <% end %>
 
   <% if logged_in? && @inbox_comments.present? %>
-    <%= render 'inbox_module' %>
+    <%= render 'inbox_module', inbox_comments: @inbox_comments %>
   <% end %>
 
   <div class="latest tweets module">
