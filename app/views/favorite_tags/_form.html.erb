@@ -2,7 +2,7 @@
 <%= form_for([current_user, favorite_tag],
   method: favorite_tag.new_record? ? 'post' : 'delete',
   html: {
-    class: 'ajax-create-destroy', 
+    class: 'ajax-create-destroy',
     data: { create_value: ts('Favorite Tag'), destroy_value: ts('Unfavorite Tag') }
   }) do |f| %>
   <%= f.hidden_field :tag_id %>

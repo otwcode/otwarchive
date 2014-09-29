@@ -26,7 +26,7 @@ class FavoriteTagsController < ApplicationController
     end
   end
 
-  # DELETE /favorite_tags/1 
+  # DELETE /favorite_tags/1
   def destroy
     @favorite_tag = FavoriteTag.find(params[:id])
     @favorite_tag.destroy
@@ -43,5 +43,4 @@ class FavoriteTagsController < ApplicationController
     @user = User.find_by_login(params[:user_id])
     @check_ownership_of = @user
   end
-
 end
