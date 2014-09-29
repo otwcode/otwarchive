@@ -1,10 +1,10 @@
 class FavoriteTagsController < ApplicationController
-  
-  skip_before_filter :store_location, only: [ :create, :destroy ]
+
+  skip_before_filter :store_location, only: [:create, :destroy]
   before_filter :users_only
   before_filter :load_user
   before_filter :check_ownership
-  
+
   respond_to :html, :json
 
   # POST /favorites_tags
@@ -26,7 +26,7 @@ class FavoriteTagsController < ApplicationController
       end
     end
   end
- 
+
   # DELETE /favorite_tags/1 
   def destroy
     @favorite_tag = FavoriteTag.find(params[:id])
@@ -37,12 +37,12 @@ class FavoriteTagsController < ApplicationController
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
-  
+
   private
-  
+
   def load_user
     @user = User.find_by_login(params[:user_id])
     @check_ownership_of = @user
   end
-  
+
 end

@@ -19,6 +19,6 @@
 
     <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
       <p class="actions"><%= link_to ts('Create an Account!'), new_user_path %></p>
-    <% end %>      
+    <% end %>
   </div>
 </div>

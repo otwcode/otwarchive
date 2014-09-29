@@ -31,5 +31,4 @@ class FavoriteTag < ActiveRecord::Base
       Rails.cache.delete("home/index/#{User.current_user.id}/home_favorite_tags")
     end
   end
-
 end
