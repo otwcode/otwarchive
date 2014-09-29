@@ -56,8 +56,8 @@ class HomeController < ApplicationController
         @favorite_tags = @current_user.favorite_tags.find(:all)
         @readings = @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :toread => true })   
       else
-        @favorite_tags = Rails.cache.fetch("home/index/#{@current_user.id}/home_favorite_tags"){ @current_user.favorite_tags.find(:all) }
-        @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later"){@current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :toread => true })}
+        @favorite_tags = Rails.cache.fetch("home/index/#{@current_user.id}/home_favorite_tags") { @current_user.favorite_tags.find(:all) }
+        @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later") { @current_user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :toread => true }) }
       end
       
       @inbox_comments = @current_user.inbox_comments.find(:all, :order => "created_at DESC", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :read => false })

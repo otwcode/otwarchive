@@ -1,5 +1,4 @@
 class FavoriteTagsController < ApplicationController
-
   skip_before_filter :store_location, only: [:create, :destroy]
   before_filter :users_only
   before_filter :load_user
@@ -22,7 +21,7 @@ class FavoriteTagsController < ApplicationController
           flash.keep
           redirect_to tag_works_path(:tag_id => @favorite_tag.tag.to_param), flash: { error: @favorite_tag.errors.full_messages }
         }
-        format.json { render json: { errors: @favorite_tag.errors.full_messages }, status: :unprocessable_entity }    
+        format.json { render json: { errors: @favorite_tag.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end

@@ -141,9 +141,9 @@ class WorksController < ApplicationController
           @works = @search.search_results
         end
         @facets = @works.facets
-        
+
         if logged_in? && @tag
-          @favorite_tag = @current_user.favorite_tags.find(:first, :conditions => {:tag_id => @tag.id}) ||
+          @favorite_tag = @current_user.favorite_tags.find(:first, :conditions => { :tag_id => @tag.id }) ||
                             FavoriteTag.new(:tag_id => @tag.id, :user_id => @current_user.id)
         end
       end

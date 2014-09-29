@@ -34,7 +34,7 @@ class ReadingsController < ApplicationController
           redirect_to request.referer || user_readings_url(current_user), flash: { error: @reading.errors.full_messages }
         }
         format.json { render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity }
-      end  
+      end
     end
   end
 
