@@ -57,7 +57,7 @@ class HomeController < ApplicationController
         @readings = @current_user.readings.for_homepage   
       else
         @favorite_tags = Rails.cache.fetch("home/index/#{@current_user.id}/home_favorite_tags") { @current_user.favorite_tags.find(:all) }
-        @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later") { @current_user.readings.for_homepage) }
+        @readings = Rails.cache.fetch("home/index/#{@current_user.id}/home_marked_for_later") { @current_user.readings.for_homepage }
       end
       
       @inbox_comments = @current_user.inbox_comments.for_homepage
