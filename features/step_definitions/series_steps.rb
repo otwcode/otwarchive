@@ -19,6 +19,7 @@ When /^I add the work "([^\"]*)" to series "([^\"]*)"(?: as "([^"]*)")?$/ do |wo
     visit preview_work_url(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
+    Work.tire.index.refresh
   end
 
   if pseud.blank?
@@ -49,6 +50,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     visit preview_work_url(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
+    Work.tire.index.refresh
   end
   
   count.to_i.times do |i|

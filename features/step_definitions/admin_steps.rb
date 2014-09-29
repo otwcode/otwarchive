@@ -135,8 +135,10 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("title", :with => "Number #{n} FAQ")
+  fill_in("Question*", :with => "Number #{n} Question.")
+  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", :with => "Number #{n} FAQ")
+  fill_in("Anchor name*", :with => "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -160,7 +162,7 @@ When /^there are (\d+) Admin Posts$/ do |n|
   end
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|	
+When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
   end

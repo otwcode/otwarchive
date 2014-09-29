@@ -4,6 +4,47 @@
 # RedisSearchIndexQueue.queue_works(work_ids)
 # RedisSearchIndexQueue.queue_bookmarks(bookmark_ids)
 class RedisSearchIndexQueue
+
+  # Reindex an object
+  def self.reindex(item, options={})
+    if item.is_a?(Work)
+      queue_work(item, options)
+    elsif item.is_a?(Bookmark)
+      queue_bookmark(item, options)
+    end
+  end 
+
+  #### WORKS
+
+  # queue a work to have its search index updated
+  def self.queue_work(work, options={})
+    IndexQueue.enqueue(work, :background)
+    unless options[:without_bookmarks].present?
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id), options)
+    end
+  end
+  
+  def self.queue_works(work_ids, options={})
+    work_ids.each { |id| IndexQueue.enqueue_id('Work', id, :background) }
+    unless options[:without_bookmarks].present? 
+      # queue their bookmarks also
+      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id), options)
+    end
+  end
+
+  #### BOOKMARKS
+
+  def self.queue_bookmark(bookmark, options={})
+    IndexQueue.enqueue(bookmark, :background)
+  end
+  
+  def self.queue_bookmarks(ids, options={})
+    ids.each { |id| IndexQueue.enqueue_id('Bookmark', id, :background) }
+  end
+
+  #########################
+  ## DEPRECATED! ##########
+  #########################
   
   # Resque
   
@@ -21,47 +62,9 @@ class RedisSearchIndexQueue
     end
     Resque::Job.create(queue, RedisSearchIndexQueue, method, id)
   end
-
-  # Reindex an object
-  def self.reindex(item, options={})
-    if item.is_a?(Work)
-      queue_work(item, options)
-    elsif item.is_a?(Bookmark)
-      queue_bookmark(item, options)
-    end
-  end
-  
-  #### WORKS
-  
-  def self.queue_works(work_ids, options={})
-    work_ids.each { |id| async(:run_work_reindex, id, options) }
-    unless options[:without_bookmarks].present? 
-      # queue their bookmarks also
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work_ids).value_of(:id), options)
-    end
-  end    
-  
-  # queue a work to have its search index updated
-  def self.queue_work(work, options={})
-    async(:run_work_reindex, work.id, options)
-    unless options[:without_bookmarks].present?
-      queue_bookmarks(Bookmark.where(:bookmarkable_type => "Work", :bookmarkable_id => work.id).value_of(:id), options)
-    end
-  end
   
   def self.run_work_reindex(work_id)
     Work.find(work_id).update_index
-  end
-
-  #### BOOKMARKS
-
-  def self.queue_bookmark(bookmark, options={})
-    async(:run_bookmark_reindex, bookmark.id, options)
-  end
-  
-  def self.queue_bookmarks(ids, options={})
-    # This is commented out as we are having issues with indexing in realtime
-    #ids.each { |id| async(:run_bookmark_reindex, id, options) }
   end
 
   def self.run_bookmark_reindex(bookmark_id)
