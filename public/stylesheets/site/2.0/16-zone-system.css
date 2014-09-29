@@ -113,7 +113,7 @@ SUBSECTIONS:
   font-weight: 700;
 }
 
-.splash .account {
+.splash .module div.account {
   background: #eaeaea;
   border: 1px solid #ccc;
   margin: 0 7%;
