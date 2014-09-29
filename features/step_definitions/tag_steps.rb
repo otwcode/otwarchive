@@ -179,6 +179,7 @@ When /^the tag "([^\"]*)" is decanonized$/ do |tag|
   tag = Tag.find_by_name!(tag)
   tag.canonical = false
   tag.save
+end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
