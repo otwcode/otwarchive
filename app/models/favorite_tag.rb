@@ -28,7 +28,7 @@ class FavoriteTag < ActiveRecord::Base
 
   def expire_cached_home_favorite_tags
     unless Rails.env.development?
-      Rails.cache.delete('home/index/#{User.current_user.id}/home_favorite_tags')
+      Rails.cache.delete("home/index/#{User.current_user.id}/home_favorite_tags")
     end
   end
 end

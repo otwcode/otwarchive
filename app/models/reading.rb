@@ -5,10 +5,6 @@ class Reading < ActiveRecord::Base
   after_save :expire_cached_home_marked_for_later, if: :toread?
   after_destroy :expire_cached_home_marked_for_later, if: :toread?
 
-  scope :for_homepage, conditions: { toread: true },
-    order: "RAND()",
-    limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
-
   # called from show in work controller
   def self.update_or_create(work, user)
     if user && user.preference.try(:history_enabled) && !user.is_author_of?(work)
@@ -57,7 +53,7 @@ class Reading < ActiveRecord::Base
 
   def expire_cached_home_marked_for_later
     unless Rails.env.development?
-      Rails.cache.delete('home/index/#{User.current_user.id}/home_marked_for_later')
+      Rails.cache.delete("home/index/#{User.current_user.id}/home_marked_for_later")
     end
   end
 end
