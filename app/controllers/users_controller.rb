@@ -308,7 +308,7 @@ class UsersController < ApplicationController
 
       render 'delete_preview' and return
     elsif params[:coauthor] || params[:sole_author]
-      destroy_with_author
+      destroy_author
     end
   end
 
@@ -423,95 +423,98 @@ class UsersController < ApplicationController
     }
   end
 
-  def destroy_with_author
+  def destroy_author
     @sole_authored_works = @user.sole_authored_works
     @coauthored_works = @user.coauthored_works
 
     if params[:cancel_button]
       flash[:notice] = ts("Account deletion canceled.")
       redirect_to user_profile_path(@user)
-    else
-      if params[:coauthor] == 'keep_pseud'
-        # Orphans co-authored works, keeps the user's pseud on the orphan account
 
-        pseuds = @user.pseuds
-        works = @coauthored_works
-        use_default = params[:use_default] == "true"
+      return
+    end
 
-        Creatorship.orphan(pseuds, works, use_default)
 
-      elsif params[:coauthor] == 'orphan_pseud'
-        # Orphans co-authored works, changes pseud to the default orphan pseud
+    if params[:coauthor] == 'keep_pseud'
+      # Orphans co-authored works, keeps the user's pseud on the orphan account
 
-        pseuds = @user.pseuds
-        works = @coauthored_works
+      pseuds = @user.pseuds
+      works = @coauthored_works
+      use_default = params[:use_default] == "true"
 
-        Creatorship.orphan(pseuds, works)
+      Creatorship.orphan(pseuds, works, use_default)
 
-      elsif params[:coauthor] == 'remove'
-        # Removes user as an author from co-authored works
+    elsif params[:coauthor] == 'orphan_pseud'
+      # Orphans co-authored works, changes pseud to the default orphan pseud
 
-        @coauthored_works.each do |w|
-          pseuds_with_author_removed = w.pseuds - @user.pseuds
-          w.pseuds = pseuds_with_author_removed
+      pseuds = @user.pseuds
+      works = @coauthored_works
 
-          w.save
+      Creatorship.orphan(pseuds, works)
 
-          w.chapters.each do |c|
-            c.pseuds = c.pseuds - @user.pseuds
+    elsif params[:coauthor] == 'remove'
+      # Removes user as an author from co-authored works
 
-            if c.pseuds.empty?
-              c.pseuds = w.pseuds
-            end
-            c.save
+      @coauthored_works.each do |w|
+        pseuds_with_author_removed = w.pseuds - @user.pseuds
+        w.pseuds = pseuds_with_author_removed
+
+        w.save
+
+        w.chapters.each do |c|
+          c.pseuds = c.pseuds - @user.pseuds
+
+          if c.pseuds.empty?
+            c.pseuds = w.pseuds
           end
+          c.save
         end
       end
+    end
 
-      if params[:sole_author] == 'keep_pseud'
-        # Orphans works where user is sole author, keeps their pseud on the orphan account
+    if params[:sole_author] == 'keep_pseud'
+      # Orphans works where user is sole author, keeps their pseud on the orphan account
 
-        pseuds = @user.pseuds
-        works = @sole_authored_works
-        use_default = params[:use_default] == "true"
+      pseuds = @user.pseuds
+      works = @sole_authored_works
+      use_default = params[:use_default] == "true"
 
-        Creatorship.orphan(pseuds, works, use_default)
-        Collection.orphan(pseuds, @sole_owned_collections, use_default)
-      elsif params[:sole_author] == 'orphan_pseud'
-        # Orphans works where user is sole author, uses the default orphan pseud
+      Creatorship.orphan(pseuds, works, use_default)
+      Collection.orphan(pseuds, @sole_owned_collections, use_default)
+    elsif params[:sole_author] == 'orphan_pseud'
+      # Orphans works where user is sole author, uses the default orphan pseud
 
-        pseuds = @user.pseuds
-        works = @sole_authored_works
+      pseuds = @user.pseuds
+      works = @sole_authored_works
 
-        Creatorship.orphan(pseuds, works)
-        Collection.orphan(pseuds, @sole_owned_collections)
-      elsif params[:sole_author] == 'delete'
-        # Deletes works where user is sole author
-        @sole_authored_works.each do |s|
-          s.destroy
-        end
-
-        # Deletes collections where user is sole author
-        @sole_owned_collections.each do |c|
-          c.destroy
-        end
+      Creatorship.orphan(pseuds, works)
+      Collection.orphan(pseuds, @sole_owned_collections)
+    elsif params[:sole_author] == 'delete'
+      # Deletes works where user is sole author
+      @sole_authored_works.each do |s|
+        s.destroy
       end
 
-      @works = @user.works.find(:all, :conditions => {:posted => true})
-
-      if @works.blank?
-        if @user.unposted_works
-          @user.wipeout_unposted_works
-        end
-
-        @user.destroy
-
-        flash[:notice] = ts('You have successfully deleted your account.')
-        redirect_to(delete_confirmation_path)
-      else
-        flash[:error] = ts("Sorry, something went wrong! Please try again.")
-        redirect_to(@user)
+      # Deletes collections where user is sole author
+      @sole_owned_collections.each do |c|
+        c.destroy
       end
+    end
+
+    @works = @user.works.find(:all, :conditions => {:posted => true})
+
+    if @works.blank?
+      if @user.unposted_works
+        @user.wipeout_unposted_works
+      end
+
+      @user.destroy
+
+      flash[:notice] = ts('You have successfully deleted your account.')
+      redirect_to(delete_confirmation_path)
+    else
+      flash[:error] = ts("Sorry, something went wrong! Please try again.")
+      redirect_to(@user)
     end
   end
 end
