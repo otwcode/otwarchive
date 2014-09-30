@@ -279,7 +279,7 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   padding: 0;
 }
 
-.faq .categories .questions li {
+.faq .categories .questions li, .faq .userstuff .toc li {
   list-style-type: circle;
 }
 

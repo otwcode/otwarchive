@@ -3,6 +3,7 @@ class ArchiveFaqsController < ApplicationController
   before_filter :admin_only, :except => [:index, :show]
   before_filter :set_locale
   before_filter :require_language_id
+  around_filter :with_locale
 
   # GET /archive_faqs
   def index
@@ -113,17 +114,23 @@ class ArchiveFaqsController < ApplicationController
     { language_id: set_locale.to_s }
   end
 
+  # Set the locale as an instance variable first
   def set_locale
     if params[:language_id] && session[:language_id] != params[:language_id]
       session[:language_id] = params[:language_id]
     end
-    I18n.locale = session[:language_id] || I18n.default_locale
+    @i18n_locale = session[:language_id] || I18n.default_locale
   end
 
   def require_language_id
     if params[:language_id].blank?
-      redirect_to url_for(request.query_parameters.merge(language_id: I18n.locale.to_s))
+      redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
     end
+  end
+
+  # Setting I18n.locale directly is not thread safe
+  def with_locale
+    I18n.with_locale(@i18n_locale) { yield }
   end
 
   # GET /archive_faqs/1/confirm_delete
