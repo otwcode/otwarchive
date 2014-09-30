@@ -64,7 +64,7 @@ class HomeController < ApplicationController
     end
     
     @hide_dashboard = true
-    render :action => "index", :layout => "application"
+    render action: 'index', layout: 'application'
   end
 
 
