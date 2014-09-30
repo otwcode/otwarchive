@@ -435,22 +435,16 @@ class UsersController < ApplicationController
     end
 
 
-    if params[:coauthor] == 'keep_pseud'
-      # Orphans co-authored works, keeps the user's pseud on the orphan account
+    if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
+      # Orphans co-authored works.
 
       pseuds = @user.pseuds
       works = @coauthored_works
-      use_default = params[:use_default] == "true"
+
+      # We change the pseud to the default orphan pseud if use_default is true.
+      use_default = params[:use_default] == "true" || params[:coauthor] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
-
-    elsif params[:coauthor] == 'orphan_pseud'
-      # Orphans co-authored works, changes pseud to the default orphan pseud
-
-      pseuds = @user.pseuds
-      works = @coauthored_works
-
-      Creatorship.orphan(pseuds, works)
 
     elsif params[:coauthor] == 'remove'
       # Removes user as an author from co-authored works
@@ -472,23 +466,17 @@ class UsersController < ApplicationController
       end
     end
 
-    if params[:sole_author] == 'keep_pseud'
-      # Orphans works where user is sole author, keeps their pseud on the orphan account
+    if params[:sole_author] == 'keep_pseud' || params[:sole_author] == 'orphan_pseud'
+      # Orphans works where user is the sole author.
 
       pseuds = @user.pseuds
       works = @sole_authored_works
-      use_default = params[:use_default] == "true"
+
+      # We change the pseud to default orphan pseud if use_default is true.
+      use_default = params[:use_default] == "true" || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
       Collection.orphan(pseuds, @sole_owned_collections, use_default)
-    elsif params[:sole_author] == 'orphan_pseud'
-      # Orphans works where user is sole author, uses the default orphan pseud
-
-      pseuds = @user.pseuds
-      works = @sole_authored_works
-
-      Creatorship.orphan(pseuds, works)
-      Collection.orphan(pseuds, @sole_owned_collections)
     elsif params[:sole_author] == 'delete'
       # Deletes works where user is sole author
       @sole_authored_works.each do |s|
