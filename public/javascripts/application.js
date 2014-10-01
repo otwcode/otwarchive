@@ -21,7 +21,9 @@ $j(document).ready(function() {
     prepareDeleteLinks();
 
     // add the HTML for the thermometer so we don't have to deal with the parser
-    $j('.announcement').find('blockquote').append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"></div><div class="progress"></div></div></div></div>');
+    $j('.announcement').has('.goal').each(function(){
+      $j(this).find('blockquote').append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"></div><div class="progress"></div></div></div></div>');
+    });
 
     thermometer();
 });
@@ -456,44 +458,49 @@ $j(document).ready(function() {
 
 // FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
 function thermometer() {
-  $j('.announcement').each(function(){
-    var bannerContent = $j(this).find('blockquote')
-        thermometer = bannerContent.find('.thermometer')
-        $goaltext = bannerContent.find('span.goal')
-        $progresstext = bannerContent.find('span.progress')
-        $progress = thermometer.find('.progress')
-        $goal = thermometer.find('.goal')
-  
-        goalAmount = parseFloat($goaltext.text().replace(/,/g, ''))
-        progressAmount = parseFloat($progresstext.text().replace(/,/g, ''))
-        percentageAmount = Math.min( Math.round(progressAmount / goalAmount * 1000) / 10, 100); //make sure we have 1 decimal point
+  $j('.announcement').has('.goal').each(function(){
+    var banner_content = $j(this).find('blockquote')
+        banner_goal_text = banner_content.find('span.goal').text()
+        banner_progress_text = banner_content.find('span.progress').text()
 
-    $goal.append('<span class="amount">US$' + $goaltext.text() + '</span>');
-    $progress.append('<span class="amount">US$' + $progresstext.text() + '</span>');
+        thermometer = banner_content.find('.thermometer')
+        progress_indicator = thermometer.find('.progress')
+        goal_indicator = thermometer.find('.goal')
+
+        goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
+        progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
+        percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
+
+    goal_indicator.append('<span class="amount">US$' + banner_goal_text + '</span>');
+    progress_indicator.append('<span class="amount">US$' + banner_progress_text + '</span>');
 
     //set the progress indicator
-    // green for 100
-    // yellow-green for 50-99
-    // yellow for 30-49
-    // orange for 0-30
-    if (percentageAmount >= 100) {
-      $progress.css({
+    // green for 100% and up
+    // yellow-green for 85-99%
+    // yellow for 30-84%
+    // orange for 0-29%
+    if (percentage_amount >= 100) {
+      progress_indicator.css({
         "width": "100%",
+        "background": "#8eb92a",
         "background-image": "linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)"
       });
-    } else if (percentageAmount >= 50) {
-      $progress.css({
-        "width": percentageAmount + "%",
+    } else if (percentage_amount >= 85) {
+      progress_indicator.css({
+        "width": percentage_amount + "%",
+        "background": "#d2e638",
         "background-image": "linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)"
       });
-    } else if (percentageAmount >= 30) {
-      $progress.css({
-          "width": percentageAmount + "%",
+    } else if (percentage_amount >= 30) {
+      progress_indicator.css({
+          "width": percentage_amount + "%",
+          "background": "#fccd4d",
           "background-image": "linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)"
       });
     } else {
-      $progress.css({
-          "width": percentageAmount + "%",
+      progress_indicator.css({
+          "width": percentage_amount + "%",
+          "background": "#f17432",
           "background-image": "linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)"
       });  
     }
