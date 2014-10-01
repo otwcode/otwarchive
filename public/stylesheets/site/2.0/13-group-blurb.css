@@ -23,8 +23,6 @@ li.blurb, .blurb .blurb {
   clear: left;
   padding: 0.429em 0.75em;
   overflow: visible;
-    box-shadow: inset 1px 1px 3px #ccc;
-    border-radius: 0.15em;
 }
 
 li.blurb:after, .blurb .blurb:after {

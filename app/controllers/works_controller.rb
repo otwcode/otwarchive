@@ -141,6 +141,11 @@ class WorksController < ApplicationController
           @works = @search.search_results
         end
         @facets = @works.facets
+
+        if logged_in? && @tag
+          @favorite_tag = @current_user.favorite_tags.find(:first, :conditions => { :tag_id => @tag.id }) ||
+                            FavoriteTag.new(:tag_id => @tag.id, :user_id => @current_user.id)
+        end
       end
     elsif use_caching?
       @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do

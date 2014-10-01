@@ -28,6 +28,9 @@
           <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
           <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
         <% end %>
+        <% if @tag && logged_in? %>
+          <li><%= render 'favorite_tags/form', current_user: @current_user, favorite_tag: @favorite_tag %></li>
+        <% end %>
         <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
           <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
         <% end %>

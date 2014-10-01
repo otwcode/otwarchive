@@ -28,6 +28,9 @@ class AdminPost < ActiveRecord::Base
     :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
   scope :non_translated, where('translated_post_id IS NULL')
+
+  scope :for_homepage, order: "created_at DESC",
+    limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
   
   # Return the name to link comments to for this object
   def commentable_name
