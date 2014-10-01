@@ -26,11 +26,11 @@ class PseudsController < ApplicationController
   # GET /users/:user_id/pseuds/:id
   def show
     if @user.blank?
-      raise ActiveRecord::RecordNotFound, "Sorry, Couldn't find user '#{params[:user_id]}'"
+      raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
     end
     @pseud = @user.pseuds.find_by_name(params[:id])
     unless @pseud
-      raise ActiveRecord::RecordNotFound, "Sorry, Couldn't find pseud '#{params[:id]}'"
+      raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:id]}'"
     end
     @page_subtitle = @pseud.name
 
