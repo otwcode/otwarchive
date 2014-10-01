@@ -71,7 +71,7 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     if @user.blank?
-      raise ActiveRecord::RecordNotFound, "Sorry, could not find user '#{params[:id]}'"
+      raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:id]}'"
     end
     @page_subtitle = @user.login
 
