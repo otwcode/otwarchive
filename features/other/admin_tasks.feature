@@ -443,12 +443,12 @@ Feature: Admin tasks
   Scenario: Add a locale
   Given the following language exists
       | name       | short |
-      | Deutsch    | nl    |
+      | Dutch      | nl    |
   And I am logged in as an admin
   When I go to the locales page
   Then I should see "English (US)"
     And I follow "Add a new one"
-    And I select "Deutsch" from "Language"
+    And I select "Dutch" from "Language"
     And I fill in "locale_name" with "Dutch - Netherlands"
     And I fill in "locale_iso" with "nl-nl"
     And I press "Submit"

@@ -218,7 +218,7 @@ end
 
   factory :language do
     short 'nl'
-    name  'Deutsch'
+    name  'Dutch'
   end
 
 end
