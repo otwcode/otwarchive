@@ -359,7 +359,7 @@ class WorksController < ApplicationController
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
         unless @work.posted?
-          flash[:notice] = ts('Your changes have not been saved.  Please post your work or save without posting if you want to keep them.')
+          flash[:notice] = ts('Your changes have not been saved. Please post your work or save without posting if you want to keep them.')
         end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
