@@ -11,7 +11,7 @@ organization by and for fans.
 Release Status
 ---------
 
-The OTW-Archive software is still in development and has not yet been released, but you
+The OTW-Archive software is still in beta and has not yet been formally released, but you
 can see it in action on the [Archive of Our Own](http://archiveofourown.org), aka AO3, a
 multifandom archive also run by the OTW.
 
