@@ -29,7 +29,6 @@ Volunteers are always welcome both for coding and testing! Please [contact us](h
 * Bug Tracking: https://code.google.com/p/otwarchive/issues/list
 * Developer Documentation: https://github.com/otwcode/otwarchive/wiki
 * Beta Website: http://archiveofourown.org
-* Test/Staging: http://test.archiveofourown.org
 
 License
 ----------
