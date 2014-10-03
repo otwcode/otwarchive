@@ -2,25 +2,39 @@
 <h2 class="heading"><%= t('.supported_locales', :default => 'The archive supports the following locales:') %></h2>
 <!--/descriptions-->
 
-<!--subnav actions-->
+<!--main content-->
+<% if   logged_in_as_admin? || permit?("translation_admin")  %>
 <p>
-<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
   <%= link_to t('.link_to_new', :default => 'Add a new one'), new_locale_path %>
+</p>
+<!--main content-->
+<h3 class="landmark heading">List of Locales</h3>
+<table summary="Locales">
+    <caption>Locales</caption>
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col">ISO code</th>
+        <th scope="col">Primary locale</th>
+        <th scope="col">Created at</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% for locale in @locales %>
+      <tr> <td><%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %></td><td><%= locale.name %></td><td><%=locale.iso%></td><td><%=locale.main%></td><td><%=locale.updated_at%></td></tr>
+    <% end %>
+    </tbody>
+  </table>
 <% else %>
+<ul>
+<% for locale in @locales %>
+ <li><%= locale.name%></li>
+<% end %>
+</ul>
   <%= link_to t('.suggest_locale', :default => 'Suggest a new one!'), new_feedback_report_path %>
 <% end %>
-</p>
-<!--/subnav-->
 
-
-<!--main content-->
-<h3 class="landmark heading">List of Locales and Number of Translators</h3>
-<dl id="locales_list">
-  <% for locale in @locales %>
-    <dt><%= link_to locale.name, locale %></dt>
-    <dd><%= link_to locale.has_translators.size, locale_translators_path(locale) %> <%= t('.translators_size', :default => 'Translators') %></dd>
-  <% end %>
-</dl>
 <!--/content-->
 
 <!--subnav-->
