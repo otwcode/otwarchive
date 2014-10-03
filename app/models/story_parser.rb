@@ -584,7 +584,7 @@ class StoryParser
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
-      date = @doc.css("span.b-singlepost-author-date")
+      date = @doc.css("time.b-singlepost-author-date")
       unless date.empty?
         work_params[:revised_at] = convert_revised_at(date.first.inner_text)
       end
