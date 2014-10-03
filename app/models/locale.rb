@@ -17,7 +17,7 @@ class Locale < ActiveRecord::Base
 
   def self.set_base_locale(locale={:iso => "en", :name => "English"})
     language = Language.find_by_short(ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
-    Locale.find_by_iso(locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1, :email_enabled => 1, :interface_enabled => 1)
+    Locale.find_by_iso(locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
   end
 
 end
