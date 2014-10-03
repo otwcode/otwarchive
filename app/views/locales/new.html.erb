@@ -17,6 +17,13 @@
     
     <dt><%= f.label :iso, t('.iso', :default => "Iso:") %></dt>
     <dd><%= f.text_field :iso %></dd>
+
+    <dt><%= f.label :email_enabled, ts('Is the locale used to send email')%></dt>
+    <dd><%= f.check_box :email_enabled %></dd>
+
+    <dt><%= f.label :interface_enabled, ts('Is the locale used in the interface')%></dt>
+    <dd><%= f.check_box :interface_enabled %></dd>
+
   </dl>
   <p class="submit actions"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
 <% end %>

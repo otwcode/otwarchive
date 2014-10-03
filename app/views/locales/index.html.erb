@@ -17,12 +17,14 @@
         <th scope="col">Name</th>
         <th scope="col">ISO code</th>
         <th scope="col">Primary locale</th>
+        <th scope="col">Allow the locale to be used for email</th>
+        <th scope="col">Allow the locale to be used for the user interface</th>
         <th scope="col">Created at</th>
       </tr>
     </thead>
     <tbody>
     <% for locale in @locales %>
-      <tr> <td><%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %></td><td><%= locale.name %></td><td><%=locale.iso%></td><td><%=locale.main%></td><td><%=locale.updated_at%></td></tr>
+      <tr> <td><%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %></td><td><%= locale.name %></td><td><%=locale.iso%></td><td><%=locale.main%></td><td><%=locale.email_enabled%></td><td><%=locale.interface_enabled%></td><td><%=locale.updated_at%></td></tr>
     <% end %>
     </tbody>
   </table>
