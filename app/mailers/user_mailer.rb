@@ -230,7 +230,7 @@ class UserMailer < BulletproofMailer::Base
      I18n.locale = I18n.default_locale
   end
 
-	  # Confirms to a user that their email was changed
+  # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)
     @old_email= old_email
