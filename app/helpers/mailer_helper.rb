@@ -1,5 +1,9 @@
 module MailerHelper
 
+  def reset_locale
+    I18n.locale = I18n.default_locale
+  end
+
   def style_bold(text)
     ("<b style=\"color:#990000\">" + "#{text}".html_safe + "</b>").html_safe
   end
