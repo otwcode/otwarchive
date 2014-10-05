@@ -16,7 +16,7 @@ class CommentMailer < ActionMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
@@ -30,7 +30,7 @@ class CommentMailer < ActionMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply is posted to their comment
@@ -43,7 +43,7 @@ class CommentMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply to their comment is edited
@@ -56,7 +56,7 @@ class CommentMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to the poster of a comment
@@ -68,7 +68,7 @@ class CommentMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
 end

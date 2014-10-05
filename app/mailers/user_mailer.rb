@@ -62,7 +62,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end  
   
   # Sends a batched subscription notification
@@ -99,7 +99,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say they have been given more invitations for their friends
@@ -113,7 +113,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Emails a user to say that their request for invitation codes has been declined
@@ -128,7 +128,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends an admin message to a user
@@ -143,7 +143,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends an admin message to an array of users
@@ -200,7 +200,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Emails a user to confirm that their account is validated and activated
@@ -213,7 +213,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends a temporary password to the user
@@ -227,7 +227,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
 	  # Confirms to a user that their email was changed
@@ -242,7 +242,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   ### WORKS NOTIFICATIONS ###
@@ -258,7 +258,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends emails to authors whose stories were listed as the inspiration of another work
@@ -274,7 +274,7 @@ class UserMailer < BulletproofMailer::Base
       )
    end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Emails a recipient to say that a gift has been posted for them
@@ -289,7 +289,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
@@ -306,7 +306,7 @@ class UserMailer < BulletproofMailer::Base
        end
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to coauthors when a work is edited
@@ -322,7 +322,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to authors when a creation is deleted
@@ -342,7 +342,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   # Sends email to authors when a creation is deleted by an Admin
@@ -362,7 +362,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   def delete_signup_notification(user, challenge_signup)
@@ -379,7 +379,7 @@ class UserMailer < BulletproofMailer::Base
       )
     end
     ensure
-      reset_locale
+     I18n.locale = I18n.default_locale
   end
 
   ### OTHER NOTIFICATIONS ###
