@@ -112,6 +112,8 @@ class Sanitize
         then "8tracks"
       when /^(w\.)?soundcloud\.com\//
         then "soundcloud"
+      when /^grooveshark\.com\//
+        then "grooveshark"
       else
         nil
       end
@@ -119,7 +121,7 @@ class Sanitize
       # if we don't know the source, sorry
       return if source.nil?           
 
-      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud"]
+      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons", "archiveofourown", "podfic", "spotify", "8tracks", "soundcloud", "grooveshark"]
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
