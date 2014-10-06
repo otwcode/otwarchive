@@ -2,4 +2,15 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  user_mailer:
+    invite_increase_notification:
+      html:  "<p> Hi %{login}! </p>\n\
+          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
+          <p> Cheers, <br> %{archive_name} </p>"
+      txt: |-
+          Hi %{login}
+          We just wanted to let you know that you have %{total} new invitation(s),
+          which can be used to create new accounts at the archive. You can invite a
+          friend at %{invitation_page}.>
+          Cheers, 
+          %{archive_name}
