@@ -16,7 +16,7 @@ can see it in action on the [Archive of Our Own](http://archiveofourown.org), ak
 multifandom archive also run by the OTW.
 
 Our ultimate goal is to release OTW-Archive in a form that can be installed and used by
-any fan archivist who wants to create her own archive. 
+any fan archivist interested in creating and maintaining a fanwork archive.
 
 You can get more information about
 our broad development plan at the [OTW-Archive Roadmap](http://transformativeworks.org/projects/archive).
@@ -24,7 +24,11 @@ our broad development plan at the [OTW-Archive Roadmap](http://transformativewor
 How to Contribute
 ----------
 
-Volunteers are always welcome both for coding and testing! Please [contact us](http://transformativeworks.org/contact/volunteers%20and%20recruiting) for full details on how to get involved.
+Volunteers are always welcome both for coding and testing! 
+
+[Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer) or [drop into our Campfire chatroom](https://fanarchive.campfirenow.com/7e097) if you have any questions. 
+
+You can also submit a pull request; we'll get back to you as soon as we can!
 
 * Bug Tracking: https://code.google.com/p/otwarchive/issues/list
 * Developer Documentation: https://github.com/otwcode/otwarchive/wiki
@@ -33,4 +37,4 @@ Volunteers are always welcome both for coding and testing! Please [contact us](h
 License
 ----------
 
-Code is licensed under [GPL](http://www.gnu.org/licenses/gpl-2.0.html) by [OTW](http://transformativeworks.org)
+Code is licensed under [GPL](http://www.gnu.org/licenses/gpl-2.0.html) by the [Organization for Transformative Works](http://transformativeworks.org).
