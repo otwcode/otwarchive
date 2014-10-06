@@ -138,3 +138,6 @@ fr:
         even: "doit être pair"
         record_invalid: "La validation a échoué : {{errors}}"
         
+  user_mailer:
+    Hi: 'Salut,'
+    
