@@ -149,3 +149,14 @@ de:
         odd: "muss ungerade sein"
         even: "muss gerade sein"
         record_invalid: "Gültigkeitsprüfung ist fehlgeschlagen: {{errors}}"
+
+  user_mailer:
+    invite_increase_notification:
+      html:  "<p> Hi %{login}! </p>\n\
+          <p> Wir wollten dir nur mitteilen, dass du %{total} neu(e) Einladung(en) hast mit denen du neue Benutzerkonten im Archiv erstellen kannst. Du kannst Freunde über die %{invitation_page} einladen. </p>\n\
+          <p> Grüße, <br> %{archive_name} </p>"
+      txt: |-
+          Hi %{login}
+          Wir wollten dir nur mitteilen, dass du %{total} neu(e) Einladung(en) hast mit denen du neue Benutzerkonten im Archiv erstellen kannst. Du kannst Freunde über die %{invitation_page} einladen.>
+          Grüße, 
+          %{archive_name}
