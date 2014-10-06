@@ -471,37 +471,38 @@ function thermometer() {
         progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
+    // add amounts below thermometer
     goal_indicator.append('<span class="amount">US$' + banner_goal_text + '</span>');
     progress_indicator.append('<span class="amount">US$' + banner_progress_text + '</span>');
 
-    //set the progress indicator
+    // set the progress indicator
     // green for 100% and up
     // yellow-green for 85-99%
     // yellow for 30-84%
     // orange for 0-29%
     if (percentage_amount >= 100) {
       progress_indicator.css({
-        "width": "100%",
-        "background": "#8eb92a",
-        "background-image": "linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)"
+        'width': '100%',
+        'background': '#8eb92a',
+        'background-image': 'linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)'
       });
     } else if (percentage_amount >= 85) {
       progress_indicator.css({
-        "width": percentage_amount + "%",
-        "background": "#d2e638",
-        "background-image": "linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)"
+        'width': percentage_amount + '%',
+        'background': '#d2e638',
+        'background-image': 'linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)'
       });
     } else if (percentage_amount >= 30) {
       progress_indicator.css({
-          "width": percentage_amount + "%",
-          "background": "#fccd4d",
-          "background-image": "linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)"
+          'width': percentage_amount + '%',
+          'background': '#fccd4d',
+          'background-image': 'linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)'
       });
     } else {
       progress_indicator.css({
-          "width": percentage_amount + "%",
-          "background": "#f17432",
-          "background-image": "linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)"
+          'width': percentage_amount + '%',
+          'background': '#f17432',
+          'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
       });  
     }
   });
