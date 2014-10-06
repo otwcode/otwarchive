@@ -19,12 +19,6 @@ $j(document).ready(function() {
     $j('.actions').children('.share').removeClass('hidden');
 
     prepareDeleteLinks();
-
-    // add the HTML for the thermometer so we don't have to deal with the parser
-    $j('.announcement').has('.goal').each(function(){
-      $j(this).find('blockquote').append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"></div><div class="progress"></div></div></div></div>');
-    });
-
     thermometer();
 });
 
@@ -463,46 +457,41 @@ function thermometer() {
         banner_goal_text = banner_content.find('span.goal').text()
         banner_progress_text = banner_content.find('span.progress').text()
 
-        thermometer = banner_content.find('.thermometer')
-        progress_indicator = thermometer.find('.progress')
-        goal_indicator = thermometer.find('.goal')
-
         goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
         progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
-    // add amounts below thermometer
-    goal_indicator.append('<span class="amount">US$' + banner_goal_text + '</span>');
-    progress_indicator.append('<span class="amount">US$' + banner_progress_text + '</span>');
+    // add thermometer markup (with amounts)
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
 
     // set the progress indicator
     // green for 100% and up
     // yellow-green for 85-99%
     // yellow for 30-84%
     // orange for 0-29%
-    if (percentage_amount >= 100) {
-      progress_indicator.css({
+     if (percentage_amount >= 100) {
+      banner_content.find('div.progress').css({
         'width': '100%',
         'background': '#8eb92a',
         'background-image': 'linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)'
       });
     } else if (percentage_amount >= 85) {
-      progress_indicator.css({
+      banner_content.find('div.progress').css({
         'width': percentage_amount + '%',
         'background': '#d2e638',
         'background-image': 'linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)'
       });
     } else if (percentage_amount >= 30) {
-      progress_indicator.css({
-          'width': percentage_amount + '%',
-          'background': '#fccd4d',
-          'background-image': 'linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)'
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#fccd4d',
+        'background-image': 'linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)'
       });
     } else {
-      progress_indicator.css({
-          'width': percentage_amount + '%',
-          'background': '#f17432',
-          'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#f17432',
+        'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
       });  
     }
   });
