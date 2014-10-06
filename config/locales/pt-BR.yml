@@ -179,6 +179,6 @@ pt-BR:
           Oi, %{login}!
           Só pra avisar que você tem %{total} novo(s) convite(s),
           que pode usar para criar novas contas no site. Para convidar amigxs, 
-          acesse a página %{invitation_page}.>
+          acesse a página %{invitation_page}.
           Atenciosamente, 
           %{archive_name}
