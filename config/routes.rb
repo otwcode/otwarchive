@@ -546,6 +546,7 @@ Otwarchive::Application.routes.draw do
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
+  match 'lost_cookie' => 'home#lost_cookie'
   match 'about' => 'home#about'
 	match 'menu/browse' => 'menu#browse'
 	match 'menu/fandoms' => 'menu#fandoms'
