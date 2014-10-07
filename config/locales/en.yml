@@ -1,7 +1,25 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
-en:
+en: 
+  mailer: 
+    general: 
+      footer: 
+        general: 
+          html: |-
+              <p>
+               If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
+              </p>
+              
+              <p>
+               The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
+              </p>
+          text: |-
+              If you've received this message in error, please contact Support at %{support_url} .
+              
+              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url} .
+        sentat: "Sent at"
+        sentby: "Sent by"
   user_mailer:
     invite_increase_notification:
       html:  "<p> Hi %{login}! </p>\n\

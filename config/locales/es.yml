@@ -187,3 +187,15 @@ es:
       words_connector: ", "
       two_words_connector: " y "
       last_word_connector: " y "
+
+  user_mailer:
+    invite_increase_notification:
+      html:  "<p> ¡Hola, %{login}! </p>\n\
+          <p>Tienes %{total} nueva(s) invitacion(es) que puedes usar para crear una cuenta en el AO3. Para invitar a alguien, entra a %{invitation_page}. </p>\n\
+          <p> Saludos, <br> %{archive_name} </p>"
+      txt: |-
+          ¡Hola, %{login}!
+          Tienes %{total} nueva(s) invitacion(es)
+          que puedes usar para crear una cuenta en el AO3. Para invitar a alguien, entra a %{invitation_page}.
+          Saludos, 
+          %{archive_name}
