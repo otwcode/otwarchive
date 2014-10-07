@@ -19,6 +19,7 @@ $j(document).ready(function() {
     $j('.actions').children('.share').removeClass('hidden');
 
     prepareDeleteLinks();
+    thermometer();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -448,3 +449,50 @@ $j(document).ready(function() {
     $j.scrollTo('#feedback');
   });
 });
+
+// FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
+function thermometer() {
+  $j('.announcement').has('.goal').each(function(){
+    var banner_content = $j(this).find('blockquote')
+        banner_goal_text = banner_content.find('span.goal').text()
+        banner_progress_text = banner_content.find('span.progress').text()
+
+        goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
+        progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
+        percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
+
+    // add thermometer markup (with amounts)
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
+
+    // set the progress indicator
+    // green for 100% and up
+    // yellow-green for 85-99%
+    // yellow for 30-84%
+    // orange for 0-29%
+     if (percentage_amount >= 100) {
+      banner_content.find('div.progress').css({
+        'width': '100%',
+        'background': '#8eb92a',
+        'background-image': 'linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)'
+      });
+    } else if (percentage_amount >= 85) {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#d2e638',
+        'background-image': 'linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)'
+      });
+    } else if (percentage_amount >= 30) {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#fccd4d',
+        'background-image': 'linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)'
+      });
+    } else {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#f17432',
+        'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
+      });  
+    }
+  });
+}
