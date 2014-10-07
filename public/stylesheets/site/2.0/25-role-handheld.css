@@ -123,6 +123,11 @@ h1, h2, h3 {
   display: none;
 }
 
+.announcement .thermometer .progress .amount {
+  left: 0;
+  right: auto;
+}
+
 /*SKIN: Dash Line */
 
 /* DESCRIPTION: Horizontal dash inline*/
