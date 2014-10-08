@@ -19,7 +19,10 @@ module ApplicationHelper
       class_names = "system support " + controller.controller_name + ' ' + controller.action_name
     end
     if controller.controller_name == "archive_faqs"
-      class_names = "system support faq " + controller.action_name
+      class_names = "system docs support faq " + controller.action_name
+    end
+    if controller.controller_name == "wrangling_guidelines"
+      class_names = "system docs guideline " + controller.action_name
     end
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name
@@ -273,7 +276,7 @@ module ApplicationHelper
   
   # check for pages that allow tiny_mce before loading the massive javascript
   def allow_tinymce?(controller)
-    %w(admin_posts archive_faqs known_issues chapters works).include?(controller.controller_name) &&
+    %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
       %w(new create edit update).include?(controller.action_name)
   end
 

@@ -33,7 +33,7 @@ describe WorksHelper do
 
     context "for a revealed, non-anon work with one fandom" do
       it "should include all info" do
-        helper.get_tweet_text(@work).should == "My title by #{@work.pseuds.first.name} - Testing"
+        helper.get_tweet_text(@work).should == "My title is long enough by #{@work.pseuds.first.name} - Testing"
       end
     end
 

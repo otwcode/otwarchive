@@ -10,7 +10,7 @@ Feature: Filing an abuse report
     And I am on the home page
     And I follow "Report Abuse"
   Then I should see "Most abuse reports fall into the following categories"
-    And I should see the text with tags "value=\"http://www.example.com/"
+    And I should see the text with tags 'value="http://www.example.com/'
   When I fill in "Describe your concern" with "This is wrong"
     And I fill in "Link to the page you are reporting" with "http://www.archiveofourown.org/works"
     And I press "Submit"
@@ -25,7 +25,7 @@ Feature: Filing an abuse report
   When I am logged in as "otheruser"
     And I view the work "Illegal thing"
     And I follow "Report Abuse"
-  Then I should see the text with tags "value=\"http://www.example.com/works/"
+  Then I should see the text with tags 'value="http://www.example.com/works/'
 
   Scenario: Receive a copy of your abuse request
 

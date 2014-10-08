@@ -3,7 +3,6 @@
 <!--/descriptions-->
 
 <!--subnav-->
-
 <!--/subnav-->
 
 <!--main content-->
@@ -15,8 +14,37 @@
       </h3>
     </div>
   <% end %>
-  <div class="userstuff">
-    <%=raw sanitize_field(@archive_faq, :content) %>
-  </div>
+
+  <% if @archive_faq.questions.blank?  %>
+    <p class="notice"><%= ts("We're sorry, there are currently no entries in this category.") %></p>
+  <% else %>
+    <div <% if rtl? %>dir="rtl"<% end %> class="userstuff">
+      <div id="toc" class="toc" role="navigation">
+        <h3 class="heading">
+          <% #TODO: Change this back to 'Questions in the NAME Category' once Translation system in place %>
+          <%= ts("#{@archive_faq.title}") %>
+        </h3>
+        <ul role="navigation">
+          <% for q in @archive_faq.questions %>
+            <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div id="faq">
+        <% for q in @archive_faq.questions %>
+          <h3 id="<%= q.anchor %>">
+            <%= q.question %>
+          </h3>
+          <% unless q.screencast.to_s == "" %>
+            <p class="screencast">
+              <span class="label"><%= ts("Screencast") %>:</span> <%= link_to q.question, q.screencast.to_s %>
+            </p>
+          <% end %>
+          <%= raw sanitize_field(q, :content) %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
 <!--/content-->
