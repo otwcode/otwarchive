@@ -7,55 +7,6 @@ class ExternalWork < ActiveRecord::Base
   attr_protected :summary_sanitizer_version
   
   has_many :related_works, :as => :parent  
-  
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-  
-  has_many :filter_taggings, :as => :filterable, :dependent => :destroy
-  has_many :filters, :through => :filter_taggings
-
-  has_many :ratings, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Rating'"
-  has_many :categories, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Category'"
-  has_many :warnings, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Warning'"
-  has_many :fandoms, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Fandom'"
-  has_many :relationships, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Relationship'"
-  has_many :characters, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Character'"
-  has_many :freeforms, 
-    :through => :taggings, 
-    :source => :tagger, 
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Freeform'"
 
   belongs_to :language
   
@@ -189,4 +140,40 @@ class ExternalWork < ActiveRecord::Base
     self.tags.group_by { |t| t.type.to_s }
   end
    
+  ######################
+  # SEARCH
+  ######################
+
+  def bookmarkable_json
+    as_json(
+      root: false,
+      only: [
+        :title, :summary, :hidden_by_admin, :created_at, :language_id
+      ],
+      methods: [ 
+        :posted, :restricted, :tag, :filter_ids, :rating_ids,
+        :warning_ids, :category_ids, :fandom_ids, :character_ids,
+        :relationship_ids, :freeform_ids, :creators, :revised_at 
+      ]
+    ).merge(bookmarkable_type: "ExternalWork")
+  end
+
+  def posted
+    true
+  end
+  alias_method :posted?, :posted
+
+  def restricted
+    false
+  end
+  alias_method :restricted?, :restricted
+
+  def creators
+    [author]
+  end
+
+  def revised_at
+    created_at
+  end
+
 end

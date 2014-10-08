@@ -5,6 +5,57 @@ module Taggable
       attr_accessor :invalid_tags
       attr_accessor :preview_mode, :placeholder_tags
       after_update :reset_placeholders
+
+      has_many :filter_taggings, :as => :filterable
+      has_many :filters, :through => :filter_taggings
+      has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
+      has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
+
+      has_many :taggings, :as => :taggable, :dependent => :destroy
+      has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+
+      has_many :ratings,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Rating'"
+      has_many :categories,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Category'"
+      has_many :warnings,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Warning'"
+      has_many :fandoms,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Fandom'"
+      has_many :relationships,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Relationship'"
+      has_many :characters,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Character'"
+      has_many :freeforms,
+        :through => :taggings,
+        :source => :tagger,
+        :source_type => 'Tag',
+        :before_remove => :remove_filter_tagging,
+        :conditions => "tags.type = 'Freeform'"
     end
   end
 
@@ -203,6 +254,48 @@ module Taggable
       end
       self.send(klass_symbol.to_s + '=', tags.uniq)
     end
+  end
+
+  ################
+  # SEARCH
+  ################
+
+  public
+
+  # Simple name to make it easier for people to use in full-text search
+  def tag
+    (tags + filters).uniq.map{ |t| t.name }
+  end
+
+  # Index all the filters for pulling works
+  def filter_ids
+    filters.value_of :id
+  end
+
+  # Index only direct filters (non meta-tags) for facets
+  def filters_for_facets
+    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
+  end
+  def rating_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
+  end
+  def warning_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
+  end
+  def category_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
+  end
+  def fandom_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
+  end
+  def character_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
+  end
+  def relationship_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
+  end
+  def freeform_ids
+    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
   end
 
 end

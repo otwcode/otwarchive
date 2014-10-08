@@ -103,6 +103,24 @@ describe Tag do
         @tag.errors.should_not be_empty
         @tag.save.should be_false
       end
+
+      it 'autocomplete should work' do
+        tag_character = FactoryGirl.create(:character, :canonical => true, :name => 'kirk')
+        tag_fandom = FactoryGirl.create(:fandom, :name => 'Star Trek', :canonical => true)
+        tag_fandom.add_to_autocomplete
+        results=Tag.autocomplete_fandom_lookup(:term => 'ki', :fandom => 'Star Trek' )
+        results.include?("#{tag_character.id}: #{tag_character.name}").should be_true
+        results.include?("brave_sire_robin").should be_false
+      end
+
+      it 'old tag maker still works' do
+        tag_adult=Rating.create_canonical('adult', true)
+        tag_normal=Warning.create_canonical('other')
+        tag_adult.name.should == 'adult'
+        tag_normal.name.should == 'other'
+        tag_adult.adult.should be_true
+        tag_normal.adult.should be_false
+      end
     end
 
     context "when logged in as an admin" do

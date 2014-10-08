@@ -37,6 +37,7 @@ Arguably filter and search could be styled in interactions but I've put them her
   position: absolute;
   left: -999em;
   font-size: 0.75em;
+  z-index: 1;
 }
 
 .search:hover .tip {
