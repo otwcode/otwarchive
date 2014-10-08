@@ -440,3 +440,24 @@ Feature: Admin tasks
     And I should see "Forgot password?" within "div#small_login"
     And I should not see "Get an Invite" within "div#small_login"
 
+  Scenario: Add a locale
+  Given the following language exists
+      | name       | short |
+      | Dutch      | nl    |
+  And I am logged in as an admin
+  When I go to the locales page
+  Then I should see "English (US)"
+    And I follow "Add a new one"
+    And I select "Dutch" from "Language"
+    And I fill in "locale_name" with "Dutch - Netherlands"
+    And I fill in "locale_iso" with "nl-nl"
+    And I press "Submit"
+    Then I should see "Dutch"
+    And I follow "Edit"
+    And I select "English" from "Language"
+    And I fill in "locale_name" with "English (GB)"
+    And I fill in "locale_iso" with "en-gb"
+    And I press "Submit"
+    Then I should see "Your locale was successfully updated."
+
+    

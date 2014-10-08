@@ -142,6 +142,57 @@ alert => yellow-orange to alert users of problems or planned downtime
   color: #333;
 }
 
+/* thermometer JavaScript widget for fundraising drives
+progress indicator colors are set in application.js */
+
+.announcement .thermometer-content {
+  height: 2.6em;
+  margin: auto;
+  width: 50%;
+}
+
+.announcement .thermometer {
+  position: relative;
+}
+
+.announcement .thermometer .track {
+  background: #fff;
+  border: 1px solid #aaa;
+  height: 1.25em;
+  margin: 0 auto;
+  position: relative;
+    background-image: linear-gradient(to bottom, #fff 0%, #f3f3f3 50%, #ededed 51%, #fff 100%);
+}
+
+.announcement .thermometer .progress {
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  position: absolute;
+}
+
+.announcement .thermometer .goal {
+  position: absolute;
+  right: 0;
+}
+
+.announcement .thermometer .amount {
+  font-weight: 700;
+  line-height: 1.25em;
+  position: absolute;
+}
+
+.announcement .thermometer .goal .amount {
+  left: 0;
+  padding-left: 0.25em;
+  top: 0;
+}
+
+.announcement .thermometer .progress .amount {
+  top: 1.35em;
+  right: 0;
+}
+
 /* SYMBOLS (mostly help button, arguably an action but hey ho); 
 IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot*/
 
