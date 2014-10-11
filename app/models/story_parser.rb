@@ -435,7 +435,7 @@ class StoryParser
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           begin
             agent = Mechanize.new
-            form = agent.get(url).forms.fourth
+            url.include?("dreamwidth") ? form = agent.get(url).forms.first : form = agent.get(url).forms.fourth
             page = agent.submit(form, form.buttons.first) # submits the adult concepts form
             text = page.body.force_encoding(agent.page.encoding)
           rescue
