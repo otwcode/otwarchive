@@ -111,7 +111,7 @@
           <dd title="<%= tag_category_name(tag_type) %>" class="tags listbox group">
             <% if @parents[tag_type].present? %>
               <h4 class="heading"><%= ts("Check to remove:") %></h4>
-              <%= check_all_none %>
+              <%= check_all_none("All", "None", tag_type) %>
               <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
                     :field_id => "parent_#{tag_type}_associations_to_remove", :concise => true) %>
               <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
@@ -137,7 +137,7 @@
             <dd class="tags listbox group">
               <% if @children[tag_type].present? %>
                 <h4 class="heading"><%= ts("Check to remove: ") %></h4>
-                <%= check_all_none %>
+                <%= check_all_none("All", "None", tag_type) %>
                 <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
                       :field_id => "child_#{tag_type}_associations_to_remove", :concise => true) %>
                   <% if @children[tag_type].length > 20 %>

@@ -9,8 +9,7 @@ class CollectionsController < ApplicationController
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
     unless @collection
-      flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
-      redirect_to collections_path and return
+        raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
     end
   end
 

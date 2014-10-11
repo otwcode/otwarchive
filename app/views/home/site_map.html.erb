@@ -44,7 +44,7 @@
       <li><%= link_to t('.edit_user_profile', :default =>"Edit My Profile"), edit_user_path(current_user) %></li>
       <li><%= link_to t('.my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
       <li><%= link_to t('.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
-      <li><%= link_to t('.delete_account', :default => "Delete My Account"), @user, :confirm => t('.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+      <li><%= link_to ts("Delete My Account"), user_path(current_user), :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
 	  </ul>
   <% end %>
 	

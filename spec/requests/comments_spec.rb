@@ -11,7 +11,7 @@ end
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "false" )
+      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "false" )
       @work2.index.refresh
       @comment2 = create(:comment)
       @work2.comments << @comment2
@@ -54,11 +54,11 @@ shared_examples_for "on unrestricted works", :pending do
     end
 end
 
-describe "Comments", :pending do
+describe "Comments" do
     subject { page }
   context "on restricted works" do
     before do
-      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", restricted: "true" )
+      @work1 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "true" )
       @work1.index.refresh
       @comment = create(:comment)
       @work1.comments << @comment
@@ -80,11 +80,11 @@ describe "Comments", :pending do
       visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    it "should not be directly readable by guests on a work" do
+    xit "should not be directly readable by guests on a work" do
       visit "/works/#{@work1.id}/comments/#{@comment.id}"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
-    it "should not be directly readable by guests on a work's chapter" do
+    xit "should not be directly readable by guests on a work's chapter" do
       visit "/works/#{@work1.id}/chapters/#{@work1.chapters.last.id}/comments/#{@comment.id}"
       should have_content("Commenting on this work is only available to registered users of the Archive.")
     end
@@ -99,10 +99,12 @@ describe "Comments", :pending do
     before do
       @user = create(:user)
       visit login_path
-      fill_in "User name",with: "#{@user.login}"
-      fill_in "Password", with: "password"
-      check "Remember Me"
-      click_button "Log In"
+      within("div#small_login") do
+        fill_in "User name:",with: "#{@user.login}" ,  exact: true
+        fill_in "Password", with: "password" 
+        check "Remember Me"
+        click_button "Log In"
+      end
     end
 
     it_behaves_like "on unrestricted works" do

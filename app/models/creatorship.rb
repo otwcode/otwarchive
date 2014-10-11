@@ -2,7 +2,6 @@ class Creatorship < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :creation, :polymorphic => true
   
-  after_create :expire_caches
   before_destroy :expire_caches
 
   # Change authorship of works or series from a particular pseud to the orphan account
@@ -20,8 +19,8 @@ class Creatorship < ActiveRecord::Base
   
   def expire_caches
     if creation_type == 'Work' && self.pseud.present?
-      self.pseud.update_works_index_timestamp!
-      self.pseud.user.update_works_index_timestamp!
+      CacheMaster.record(creation_id, 'pseud', self.pseud_id)
+      CacheMaster.record(creation_id, 'user', self.pseud.user_id)
     end
   end
 

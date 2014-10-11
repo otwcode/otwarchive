@@ -1,17 +1,20 @@
-<h3 class="landmark heading">Admin Navigation</h3>
+<h3 class="landmark heading"><%= ts('Admin Navigation') %></h3>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current "AO3 News", admin_posts_path %>
+    <%= span_if_current ts('AO3 News', key: 'header'), admin_posts_path %>
    </li>
   <li>
-    <%= span_if_current "Post AO3 News", new_admin_post_path %>
-</li>
+    <%= span_if_current ts('Post AO3 News', key: 'header'), new_admin_post_path %>
+  </li>
   <li>
-    <%= span_if_current "Archive FAQ", archive_faqs_path %>
-</li>
+    <%= span_if_current ts('Archive FAQ', key: 'header'), archive_faqs_path %>
+  </li>
   <li>
-    <%= span_if_current "Known Issues", known_issues_path %>
-</li>
+    <%= span_if_current ts('Known Issues', key: 'header'), known_issues_path %>
+  </li>
+  <li>
+    <%= span_if_current ts('Wrangling Guidelines', key: 'header'), wrangling_guidelines_path %>
+  </li>
 </ul>
 
 

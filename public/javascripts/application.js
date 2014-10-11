@@ -10,10 +10,6 @@ $j(document).ready(function() {
     handlePopUps();
     attachCharacterCounters();
     setupAccordion();
-    $j('#hide-notice-banner').click(function(e){
-      $j('#notice-banner').hide();
-      e.preventDefault();
-    });
     setupDropdown();
 
     // remove final comma from comma lists in older browsers
@@ -23,6 +19,7 @@ $j(document).ready(function() {
     $j('.actions').children('.share').removeClass('hidden');
 
     prepareDeleteLinks();
+    thermometer();
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -134,16 +131,16 @@ jQuery(function($){
 
 });
 
-// check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
-// stored in the "checkbox_name_filter" attribute on the all/none links.
+// check all or none within the parent fieldset, optionally with a string to match on the id attribute of the checkboxes
+// stored in the "data-checkbox-id-filter" attribute on the all/none links.
 // allow for some flexibility by checking the next and previous fieldset if the checkboxes aren't in this one
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
-      var filter = $(this).attr('checkbox_name_filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
-        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+        checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
         if (checkboxes.length == 0) {
@@ -160,10 +157,10 @@ jQuery(function($){
 
   $('.check_none').each(function(){
     $(this).click(function(event){
-      var filter = $(this).attr('checkbox_name_filter');
+      var filter = $(this).data('checkbox-id-filter');
       var checkboxes;
       if (filter) {
-        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+        checkboxes = $(this).closest('fieldset').find('input[id*="' + filter + '"][type="checkbox"]');
       } else {
         checkboxes = $(this).closest("fieldset").find(':checkbox');
         if (checkboxes.length == 0) {
@@ -248,8 +245,13 @@ function handlePopUps() {
 // used in nested form fields for deleting a nested resource
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {
-    $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
-    $j(link).closest("." + class_of_section_to_remove).hide();
+  $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
+  var section = $j(link).closest("." + class_of_section_to_remove);
+  section.find(".required input, .required textarea").each(function(index) {
+    var element = eval('validation_for_' + $j(this).attr('id'));
+    element.disable();
+  });
+  section.hide();
 }
 
 // used with nested form fields for dynamically stuffing in an extra partial
@@ -447,3 +449,50 @@ $j(document).ready(function() {
     $j.scrollTo('#feedback');
   });
 });
+
+// FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
+function thermometer() {
+  $j('.announcement').has('.goal').each(function(){
+    var banner_content = $j(this).find('blockquote')
+        banner_goal_text = banner_content.find('span.goal').text()
+        banner_progress_text = banner_content.find('span.progress').text()
+
+        goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
+        progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
+        percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
+
+    // add thermometer markup (with amounts)
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
+
+    // set the progress indicator
+    // green for 100% and up
+    // yellow-green for 85-99%
+    // yellow for 30-84%
+    // orange for 0-29%
+     if (percentage_amount >= 100) {
+      banner_content.find('div.progress').css({
+        'width': '100%',
+        'background': '#8eb92a',
+        'background-image': 'linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)'
+      });
+    } else if (percentage_amount >= 85) {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#d2e638',
+        'background-image': 'linear-gradient(to bottom, #e6f0a3 0%, #d2e638 50%, #c3d825 51%, #dbf043 100%)'
+      });
+    } else if (percentage_amount >= 30) {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#fccd4d',
+        'background-image': 'linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%)'
+      });
+    } else {
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#f17432',
+        'background-image': 'linear-gradient(to bottom, #feccb1 0%, #f17432 50%, #ea5507 51%, #fb955e 100%)'
+      });  
+    }
+  });
+}

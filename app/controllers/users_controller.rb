@@ -36,19 +36,29 @@ class UsersController < ApplicationController
       redirect_to root_path and return
     end
     token = params[:invitation_token]
-    if token.blank?
-      if !@admin_settings.account_creation_enabled?
-        flash[:error] = ts("You need an invitation to sign up.")
-        redirect_to invite_requests_path and return
-      end
+    if !@admin_settings.account_creation_enabled?
+      flash[:error] = ts("Account creation is suspended at the moment. Please check back with us later.")
+      redirect_to root_path and return
     else
-      invitation = Invitation.find_by_token(token)
-      if !invitation
-        flash[:error] = ts("There was an error with your invitation token, please contact support")
-        redirect_to new_feedback_report_path and return
-      elsif invitation.redeemed_at && invitation.invitee
-        flash[:error] = ts("This invitation has already been used to create an account, sorry!")
-        redirect_to root_path and return
+      if @admin_settings.creation_requires_invite?
+        if token.blank?
+          if !@admin_settings.invite_from_queue_enabled?
+            flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")
+            redirect_to root_path and return
+          else
+            flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
+            redirect_to invite_requests_path and return
+          end
+        else
+          invitation = Invitation.find_by_token(token)
+          if !invitation
+            flash[:error] = ts("There was an error with your invitation token, please contact support")
+            redirect_to new_feedback_report_path and return
+          elsif invitation.redeemed_at && invitation.invitee
+            flash[:error] = ts("This invitation has already been used to create an account, sorry!")
+            redirect_to root_path and return
+          end
+        end
       end
     end
   end
@@ -152,6 +162,13 @@ class UsersController < ApplicationController
           flash[:error] = ts("User name already taken.")
         else
           old_login = @user.login
+          old_lower_login = "#{@user.login}".downcase
+          new_lower_login = "#{@new_login}".downcase
+          if old_lower_login == new_lower_login
+            old_pseud = Pseud.find_by_name_and_user_id(old_login, @user.id)
+            old_pseud.name = @new_login
+            old_pseud.save!
+          end
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name has been successfully updated.")
@@ -166,7 +183,6 @@ class UsersController < ApplicationController
               # shouldn't be able to get here, but just in case
               Pseud.create(:name => @new_login, :user_id => @user.id)
             end
-
             redirect_to @user and return
           else
             @user.errors.clear
@@ -249,7 +265,7 @@ class UsersController < ApplicationController
     @user.profile.update_attributes(params[:profile_attributes])
     if @user.profile.save
       flash[:notice] = ts("Your profile has been successfully updated")
-      redirect_to edit_user_path(@user)
+      redirect_to user_profile_path(@user)
     else
       render :edit
     end

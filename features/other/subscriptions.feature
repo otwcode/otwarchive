@@ -90,7 +90,7 @@
     And I am logged in as "wip_author"
     And I view the work "Cake Story"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "ICE CREAM CAKE"
+    And I fill in "Chapter Title" with "ICE CREAM CAKE"
     And I fill in "content" with "meltiiiinnngg"
     And I press "Post Without Preview"
     And subscription notifications are sent
@@ -140,12 +140,13 @@
     And "second_user" subscribes to series "Awesome Series"
   When I am on my subscriptions page
   Then I should see "My Subscriptions"
-    And I should see "Awesome Series"
+    And I should see "Awesome Series (Series)"
     And I should see "third_user"
-    And I should see "Awesome Story"
+    And I should see "Awesome Story (Work)"
   When I follow "Series Subscriptions"
   Then I should see "My Series Subscriptions"
     And I should see "Awesome Series"
+    And I should not see "(Series)"
     And I should not see "third_user"
     And I should not see "Awesome Story"
   When I follow "User Subscriptions"
@@ -156,8 +157,20 @@
   When I follow "Work Subscriptions"
   Then I should see "My Work Subscriptions"
     And I should see "Awesome Story"
+    And I should not see "(Work)"
     And I should not see "Awesome Series"
     And I should not see "third_user"
+
+  Scenario: Subscribe to a multi-chapter work should redirect you back to the chapter you were viewing
+  
+  When I am logged in as "first_user"
+    And I post the work "Multi Chapter Work"
+    And a chapter is added to "Multi Chapter Work"
+  When I am logged in as "second_user"
+    And I view the work "Multi Chapter Work"
+    And I view the 2nd chapter
+  When I press "Subscribe"
+  Then the page title should include "Chapter 2"
 
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
