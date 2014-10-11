@@ -12,7 +12,7 @@ class KudoMailer < ActionMailer::Base
     @commentable = kudo.commentable
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{t 'mailer.kudos.kudoson'} " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
   
@@ -33,7 +33,7 @@ class KudoMailer < ActionMailer::Base
     end
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{t 'mailer.kudos.youhave'}"
     )
   end
 
