@@ -5,21 +5,6 @@ class KudoMailer < ActionMailer::Base
   helper :mailer
   default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
-  def kudo_notification(user_id, kudo_id)
-    user = User.find(user_id)
-    kudo = Kudo.find(kudo_id)
-    @pseud = kudo.pseud
-    @commentable = kudo.commentable
-    I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
-      mail(
-        :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{t 'mailer.kudos.kudoson'} " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
-      )
-    end
-    ensure
-     I18n.locale = I18n.default_locale
-  end
-  
   # send a batched-up notification 
   # user_kudos is a hash of arrays converted to JSON string format
   # [commentable_type]_[commentable_id] => [array of users who left kudos with the last entry being "# guests" if any]
