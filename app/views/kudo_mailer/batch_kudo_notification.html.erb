@@ -3,10 +3,7 @@
   <% @commentables.each_with_index do |commentable, index| %>
     <% guest_count = @guest_count["#{commentable.id}"].to_i %>
     <% givers_list = @kudo_givers["#{commentable.id}"] %>
-  
     <%= if ! givers_list.nil? then givers_list.each_with_index.map {|g,i| style_bold(( i == 0) ? g.capitalize : g)}.to_sentence.html_safe end  %>
-    <%= if guest_count == 1 then t 'mailer.kudos.guest' end %>
-    <%= if guest_count > 1 then  guest_count t 'mailer.kudos.guests' end %> 
 
     <%=  t 'mailer.kudos.leftkudos' %> 
     
