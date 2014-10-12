@@ -10,7 +10,6 @@ class KudoMailer < ActionMailer::Base
   # [commentable_type]_[commentable_id] => [array of users who left kudos with the last entry being "# guests" if any]
   def batch_kudo_notification(user_id, user_kudos)
     @commentables = []
-    @guest_count = {}
     @kudo_givers = {}
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
