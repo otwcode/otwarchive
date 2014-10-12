@@ -1,4 +1,5 @@
 <p>
+we got <%= @guest_count %>
 <% if @pseud %>
   <%= link_to @pseud.name,
       user_pseud_url(@pseud.user, @pseud) %>

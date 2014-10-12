@@ -4,6 +4,7 @@ en:
   mailer: 
     kudos:
       guest: A guest
+      guests: Guests
       leftkudos: left kudos on
       kudoson: Kudos on
       youhave: You've got kudos!

@@ -25,15 +25,17 @@ class KudoMailer < ActionMailer::Base
   # [commentable_type]_[commentable_id] => [array of users who left kudos with the last entry being "# guests" if any]
   def batch_kudo_notification(user_id, user_kudos)
     @commentables = []
+    @guest_count = {}
     @kudo_givers = {}
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
     kudos_hash.each_pair do |commentable_info, kudo_givers|
-      commentable_type, commentable_id = commentable_info.split("_")
+      commentable_type, commentable_id, guest_count  = commentable_info.split('_')
       commentable = commentable_type.constantize.find_by_id(commentable_id)
       next unless commentable
       @commentables << commentable
-      @kudo_givers[commentable_info] = kudo_givers
+      @kudo_givers[commentable_id] = kudo_givers
+      @guest_count[commentable_id] = guest_count
     end
     I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
       mail(
