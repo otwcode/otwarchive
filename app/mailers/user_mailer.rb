@@ -109,7 +109,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.prefered_locale).iso) do
       mail(
         :to => @user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+        :subject => "#{t 'user_mailer.invite_increase_notification.subject' ,app_name: ArchiveConfig.APP_SHORT_NAME}"
       )
     end
     ensure
