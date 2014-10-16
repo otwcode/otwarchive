@@ -41,8 +41,8 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   visit work_url(work)
 end
 
-When /^I add my bookmark to the collection$/ do
+When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", :with => "Various_Penguins")
+    fill_in("collection_names", :with => "#{collection}")
     click_button("Add")
 end
