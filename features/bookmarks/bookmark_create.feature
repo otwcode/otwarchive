@@ -365,9 +365,6 @@ Scenario: Bookmark External Work link should be available to logged in users, bu
   Given a fandom exists with name: "Testing BEW Button", canonical: true
     And I am logged in as "markie" with password "theunicorn"
     And I create the collection "Testing BEW Collection"
-    And I post the work "Whatever" with fandom "Testing BEW Button"
-    And I bookmark the work "Whatever"
-    And I add my bookmark to the collection "Testing_BEW_Collection"
   When I go to my bookmarks page
   Then I should see "Bookmark External Work"
   When I go to the bookmarks page
