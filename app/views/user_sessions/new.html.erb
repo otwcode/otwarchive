@@ -3,27 +3,21 @@
   <p>
     <%= ts('This work is only available to registered users of the Archive.') %>
     <%= ts('If you already have an Archive of Our Own account, log in now.') %>
-    <% if @admin_settings.account_creation_enabled? %>
-      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
-    <% end %>
+    <%= new_account_link %>
   </p>
 <% elsif params[:high_load] %>
   <h3 class="heading"><%= ts('We are very sorry.') %></h3>
   <p>
     <%= ts('Due to current high load, downloads are currently available to registered users of the Archive only.') %>
     <%= ts('If you already have an Archive of Our Own account, log in now.') %>
-    <% if @admin_settings.account_creation_enabled? %>
-      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
-    <% end %>
+    <%= new_account_link %>
   </p>
 <% elsif params[:restricted_commenting] %>
   <h3 class="heading"><%= ts('Sorry!') %></h3>
   <p>
     <%= ts('Commenting on this work is only available to registered users of the Archive.') %>
     <%= ts('If you already have an Archive of Our Own account, log in now.') %>
-    <% if @admin_settings.account_creation_enabled? %>
-      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
-    <% end %>
+    <%= new_account_link %>
   </p>
 <% else %>
   <h3 class="heading"><%= ts('Log in') %></h3>
@@ -40,8 +34,5 @@
 </div>
 
 <p>
-  <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_password_path %>
-  <% if @admin_settings.account_creation_enabled? %>
-    <br \><%= ts("Don't have an account?") %> <%= link_to ts('Create an account now.'), new_user_path %>
-  <% end %>
+  <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_password_path %> or <%= new_account_link %>
 </p>
