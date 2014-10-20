@@ -1,8 +1,9 @@
 class Admin < ActiveRecord::Base
   # Authlogic gem
   acts_as_authentic do |config|
+    config.crypto_provider = Authlogic::CryptoProviders::BCrypt
     config.transition_from_restful_authentication = true
-    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
+    config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
   end
   
   has_many :log_items
