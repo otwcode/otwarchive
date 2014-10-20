@@ -54,7 +54,7 @@
                                     :autocomplete_hint_text => ts("Please select a fandom first!"),
                                     :autocomplete_searching_text => ts("Searching by fandom..."),
       															:autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
-        	<%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
+          <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
       	</dd>
       <% else # all other cases %>
         <% # save the field id to pass for autocompleting based on fandoms in autocomplete if we use autocomplete %>
