@@ -30,6 +30,7 @@ before_script:
   - cp config/newrelic.example config/newrelic.yml
   - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
   - cp config/redis.travis.example config/redis.yml
+  - cp config/local.travis.yml config/local.yml
   - bash script/travis_elasticsearch_upgrade.sh
 after_script:
   - bundle exec rake coveralls:push
