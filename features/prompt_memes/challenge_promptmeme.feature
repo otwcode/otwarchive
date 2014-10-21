@@ -1409,13 +1409,37 @@ Feature: Prompt Meme Challenge
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 
+  Scenario: Disable anonymous prompts
+    Given the following activated users exist
+      | login          | password    |
+      | Scott          | password   |
+      And I have standard challenge tags setup
+      And I set up an anon promptmeme "No Anon Prompts"
+    When I am logged in as "Scott"
+      And I go to "No Anon Prompts" collection's page
+      And I follow "Prompt Form"
+      And I fill in "challenge_signup_requests_attributes_0_description" with "My first prompt"
+      And I fill in "Fandoms" with "Stargate Atlantis"
+      And I check "Semi-anonymous prompt:"
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created"
+    When I am logged in as "mod1"
+      And I edit settings for "No Anon Prompts" challenge
+      And I check "Disable anonymous prompts?"
+      And I press "Update"
+    Then I should see "Challenge was successfully updated"
+    When I am logged in as "Scott"
+      And I go to "No Anon Prompts" collection's page
+      And I follow "My Prompts"
+      And I follow "Edit Prompt"
+    Then I should not see "Semi-Anonymous prompt:"
 
   Scenario: Validation error doesn't cause semi-anon ticky to lose state (Issue 2617)
   Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
     And I am logged in as "Scott" with password "password"
     And I go to "Scotts Prompt" collection's page
     And I follow "Prompt Form"
-    And I check "Semi-anonymous Prompt"
+    And I check "Semi-anonymous prompt"
     And I press "Submit"
   Then I should see "There were some problems with this submission. Please correct the mistakes below."
     And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."

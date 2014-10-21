@@ -90,11 +90,13 @@
            # (currently the prompt memes don't allow a mod to specify no anonymity allowed)
            # and should probably be done via an Anonymous user like the Orphan user.  
         %>
-        <dt><%= form.label :anonymous, ts("Semi-anonymous Prompt?") %></dt>
-        <dd>
-          <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? true : form.object.anonymous %>
-  	      <p class="footnote"><%= ts("(Note: This is not totally secure, and is still guessable in some places.)") %></p>
-  	    </dd>
+        <% unless @collection.challenge.disable_anon_prompts %>
+          <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
+          <dd>
+            <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? @collection.challenge.anonymous? : form.object.anonymous %>
+            <p class="footnote"><%= ts("(Note: This is not totally secure, and is still guessable in some places.)") %></p>
+          </dd>
+        <% end %>
       <% end %>     
     </dl>
 
