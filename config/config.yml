@@ -366,5 +366,5 @@ DUMP_COLLECTION_SEEDS: [
 ]
 
 # Just a test
-BCRYPT: "falses"
+BCRYPT: "false"
 
