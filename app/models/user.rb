@@ -20,13 +20,13 @@ class User < ActiveRecord::Base
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
-    #if ArchiveConfig.BCRYPT  || "true" == "true" then
-    #  config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-    #  config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    #else
+    if ArchiveConfig.BCRYPT  || "true" == "true" then
+      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
+    else
       config.crypto_provider = Authlogic::CryptoProviders::Sha512
       config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    #end
+    end
     config.validates_length_of_password_field_options = {:on => :update,
                                                          :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
                                                          :if => :has_no_credentials?}
