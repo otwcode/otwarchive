@@ -1,1 +1,1 @@
-BCRYPT_COST: 4
+BCRYPT: "falses"
