@@ -3,11 +3,9 @@ class Admin < ActiveRecord::Base
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
     if (ArchiveConfig.BCRYPT  || "true")  == "true" then
-      puts "BCRYPT ***********************************************************"
       config.crypto_provider = Authlogic::CryptoProviders::BCrypt
       config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
     else
-      puts "SHA1 ***********************************************************"
       config.crypto_provider = Authlogic::CryptoProviders::Sha512
       config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
     end
