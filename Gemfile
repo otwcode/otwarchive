@@ -47,6 +47,7 @@ gem 'paperclip'
 gem 'fastimage'
 
 gem 'authlogic'
+gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
