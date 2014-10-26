@@ -30,7 +30,7 @@
 <!--notes-->    
 	<% unless bookmark.notes.blank? %>
     <h6 class="landmark heading"><%= ts("Bookmark Notes:") %></h6>
-    <blockquote class="userstuff summary" title="notes">
+    <blockquote class="userstuff summary">
 		<%=raw sanitize_field(bookmark, :notes) %>
 	  </blockquote>
   <% end %>
