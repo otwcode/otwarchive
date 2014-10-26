@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     @page_subtitle = @user.login
 
     # very similar to show under pseuds - if you change something here, change it there too
-    if current_user.nil?
+    if  !(logged_in? || logged_in_as_admin?)
       # hahaha omg so ugly BUT IT WORKS :P
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
