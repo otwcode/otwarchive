@@ -14,6 +14,7 @@
 		<% end %>
 	</h4>
 	<h5 class="heading">
+	  <span class="landmark"><%= ts('Fandom') %>:</span>
     <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
