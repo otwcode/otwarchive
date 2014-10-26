@@ -5,7 +5,7 @@
 <% challenge = claim.collection.challenge %>
 <li class="collection claim picture blurb group">
   <div class="header module">
-    <h4 class="heading" title="<%= ts("prompt title") %>">  
+    <h4 class="heading">  
       <%= prompt.title || ts("Request") %>
     </h4>
 
@@ -45,7 +45,7 @@
   <!--prompt description -->
   <% unless prompt.description.blank? %>
     <h6 class="landmark heading"><%= ts("Summary") %></h6>
-    <blockquote class="userstuff summary" title="<%= ts("prompt") %>">
+    <blockquote class="userstuff summary">
       <%=raw sanitize_field(prompt, :description) %>
     </blockquote>
   <% end %>
