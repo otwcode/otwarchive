@@ -14,7 +14,7 @@
     </div>
 	</div>  
     <% unless pseud.description.blank? %>
-      <blockquote class="userstuff" title="bio">
+      <blockquote class="userstuff">
 	<%=raw sanitize_field(pseud, :description) %>
       </blockquote>
     <% end %>
