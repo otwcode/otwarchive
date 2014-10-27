@@ -7,6 +7,7 @@ Otwarchive::Application.routes.draw do
   match '/422', :to => 'errors#422'
   match '/500', :to => 'errors#500'
 
+
   #### DOWNLOADS ####
 
   match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
@@ -524,7 +525,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :abuse_reports
+  resources :abuse_reports, only: [:new, :create] 
   resources :external_authors do
     resources :external_author_names
   end
@@ -548,6 +549,7 @@ Otwarchive::Application.routes.draw do
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
+  match 'lost_cookie' => 'home#lost_cookie'
   match 'about' => 'home#about'
 	match 'menu/browse' => 'menu#browse'
 	match 'menu/fandoms' => 'menu#fandoms'

@@ -1,0 +1,22 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t('.edit_locale', :default => 'Edit a locale:') %></h2>
+<%= error_messages_for :locale %>
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<%= form_for(@locale) do |f| %>
+  <dl>
+    <dt><%= f.label :language_id, t('.language', :default => "Language:") %></dt>
+    <dd><%= f.select(:language_id, @languages.collect {|l| [ l.name, l.id ] }) %></dd>
+    <dt><%= f.label :name, t('.name', :default => "Name:") %></dt>
+    <dd><%= f.text_field :name %></dd>
+    <dt><%= f.label :iso, t('.iso', :default => "Iso:") %></dt>
+    <dd><%= f.text_field :iso %></dd>
+  </dl>
+  <p class="submit actions"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
+<% end %>
+<!--/content-->
+

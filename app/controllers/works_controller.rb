@@ -364,7 +364,7 @@ class WorksController < ApplicationController
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
         unless @work.posted?
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts('Your changes have not been saved. Please post your work or save without posting if you want to keep them.')
         end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
@@ -830,10 +830,10 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
-    if @work.nil?
-      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
-      redirect_to root_path and return
-    elsif @collection && !@work.collections.include?(@collection)
+    unless @work
+      raise ActiveRecord::RecordNotFound, "Couldn't find work with id '#{params[:id]}'"
+    end
+    if @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
     end
     @check_ownership_of = @work

@@ -12,17 +12,17 @@
     <div class="icon">
       <%= icon_display(@user, pseud) %>
     </div>
-	</div>  
-    <% unless pseud.description.blank? %>
-      <blockquote class="userstuff" title="bio">
-	<%=raw sanitize_field(pseud, :description) %>
-      </blockquote>
-    <% end %>
-    <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
+  </div>  
+  <% unless pseud.description.blank? %>
+    <blockquote class="userstuff">
+      <%=raw sanitize_field(pseud, :description) %>
+    </blockquote>
+  <% end %>
+  <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
     
-    <% if current_user == pseud.user %>
-       <h6 class="landmark heading">User Actions</h6>
- 	<ul class="actions" role="navigation">
+  <% if current_user == pseud.user %>
+    <h6 class="landmark heading">User Actions</h6>
+    <ul class="actions" role="navigation">
       <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
       <% unless pseud.works.blank? %>
         <li><%= link_to "#{h(ts('Orphan Works'))} <span class=\"landmark\">by #{h pseud.name}</span>".html_safe, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} %></li>
@@ -33,5 +33,5 @@
         <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], :confirm => ts('Are you sure?'), :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
       <% end %>
     </ul>
-    <% end %>	
+  <% end %>	
 </li>

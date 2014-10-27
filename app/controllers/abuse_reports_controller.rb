@@ -42,14 +42,6 @@ class AbuseReportsController < ApplicationController
     end
   end
 
-  def index
-    @abuse_reports = AbuseReport.by_date.paginate(:page => params[:page])
-  end
-
-  def show
-    @abuse_report = AbuseReport.find(params[:id])
-  end
-
  protected
 
  def build_post_info(report)
@@ -65,5 +57,4 @@ class AbuseReportsController < ApplicationController
    post_info << "</bug>"
    return post_info
  end
-
 end
