@@ -109,6 +109,15 @@ h1, h2, h3 {
   width: 98%;
 }
 
+.splash .intro {
+  padding-top: 0;
+}
+
+.splash .intro h2 {
+  font-size: 1.5em;
+    word-break: normal;
+}
+
 /* system: messages */
 
 .announcement .userstuff {
