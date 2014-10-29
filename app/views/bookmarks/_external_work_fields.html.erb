@@ -22,7 +22,7 @@
         <% end %>
       <% end %>
     </dd>
-    <dt class="required"><%= ew.label :author, ts('Author') + '*' %></dt>
+    <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
     <dd class="required">
       <%= ew.text_field :author, :class => "observe_textlength" %>
       <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
@@ -37,7 +37,7 @@
       <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
     <dt>
-      <%= ew.label :summary, ts('Author\'s Summary') %>
+      <%= ew.label :summary, ts('Creator\'s Summary') %>
       <%= ts("(please copy and paste from original work)") %>
     </dt>
     <dd>
@@ -47,9 +47,9 @@
   </dl>
 </fieldset>
 <fieldset>
-  <legend><%= ts('Tag') %></legend>
+  <legend><%= ts('Creator\'s Tags') %></legend>
   <p>
-    <%= ts('Author\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => ArchiveConfig.TAG_MAX) %>
+    <%= ts('Creator\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => ArchiveConfig.TAG_MAX) %>
   </p>
   <dl>
     <dt class="required">
@@ -61,7 +61,7 @@
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
     </dt>
-    <dd>
+    <dd class="rating">
       <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
     </dd>
     <dt>
