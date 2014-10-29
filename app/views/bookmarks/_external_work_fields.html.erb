@@ -55,7 +55,7 @@
     <dt class="required">
       <%= ew.label :fandom_string, Fandom::NAME.pluralize + '*' %> <%= link_to_help "fandom-help" %>
     </dt>
-    <dd title="required fandom">
+    <dd class="required" title="fandom">
       <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
     </dd>
     <dt class="rating">
