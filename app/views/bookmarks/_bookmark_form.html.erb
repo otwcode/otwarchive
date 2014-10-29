@@ -20,6 +20,9 @@
   <% if !dynamic && bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
 
   <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
+    <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
+      <p class="required notice"><%= ts('* Required information') %></p>
+    <% end %>
     <fieldset>
       <legend><%= ts("Bookmark") %></legend>
       <% if in_page %>
