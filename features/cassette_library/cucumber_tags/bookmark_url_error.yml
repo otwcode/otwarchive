@@ -19,7 +19,7 @@ http_interactions:
       Server: 
       - nginx/1.2.1
       Date: 
-      - Wed, 29 Oct 2014 23:37:39 GMT
+      - Fri, 31 Oct 2014 23:26:08 GMT
       Content-Type: 
       - text/html
       Content-Length: 
@@ -34,5 +34,5 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     http_version: 
-  recorded_at: Wed, 29 Oct 2014 23:37:39 GMT
+  recorded_at: Fri, 31 Oct 2014 23:26:08 GMT
 recorded_with: VCR 2.5.0
