@@ -7,7 +7,7 @@ describe UserMailer do
       @user = FactoryGirl.create(:user, login: 'activation', email: 'activation@ao3.org')
     end
 
-    let(:email) { UserMailer.activation(@user.id).deliver }
+    let(:email) { UserMailer.signup_notification(@user.id).deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
