@@ -117,7 +117,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'Forgot password?' link below."
 
   Scenario: Logged out
     Given I have no users
