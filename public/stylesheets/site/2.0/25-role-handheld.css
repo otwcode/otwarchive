@@ -104,6 +104,30 @@ h1, h2, h3 {
   width: auto;
 }
 
+/* system: messages */
+
+.announcement .userstuff {
+  margin: 1%;
+}
+
+.announcement p.submit {
+  bottom: -0.5em;
+  right: 1%;
+}
+
+.announcement .thermometer-content {
+  width: 80%;
+}
+
+.announcement .goal .amount {
+  display: none;
+}
+
+.announcement .thermometer .progress .amount {
+  left: 0;
+  right: auto;
+}
+
 /*SKIN: Dash Line */
 
 /* DESCRIPTION: Horizontal dash inline*/

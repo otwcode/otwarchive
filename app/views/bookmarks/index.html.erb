@@ -7,7 +7,7 @@
 <!--subnav-->
 <% if current_user.is_a?(User) || @tag %>
   <ul class="navigation actions" role="navigation">
-    <% if @user == current_user || (@owner.blank? && @bookmarkable.blank?) || @collection %>
+    <% if logged_in? && (@user == current_user || (@owner.blank? && @bookmarkable.blank?) || @collection) %>
       <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
       <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>

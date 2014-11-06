@@ -430,11 +430,12 @@ class StoryParser
       url.gsub!('_', '-') # convert underscores in usernames to hyphens
       url += "?format=light" # go to light format
       text = download_with_timeout(url)
+
       if text.match(/adult_check/)
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           begin
             agent = Mechanize.new
-            form = agent.get(url).forms.first
+            url.include?("dreamwidth") ? form = agent.get(url).forms.first : form = agent.get(url).forms.fourth
             page = agent.submit(form, form.buttons.first) # submits the adult concepts form
             text = page.body.force_encoding(agent.page.encoding)
           rescue
@@ -584,7 +585,7 @@ class StoryParser
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
-      date = @doc.css("span.b-singlepost-author-date")
+      date = @doc.css("time.b-singlepost-author-date")
       unless date.empty?
         work_params[:revised_at] = convert_revised_at(date.first.inner_text)
       end

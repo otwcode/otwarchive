@@ -3,13 +3,14 @@
   <!--title, author, fandom-->
   <div class="header module">
 
-    <h4 class="heading" title="title">
+    <h4 class="heading">
       <%= link_to external_work.title, external_work.url %>
       <%= ts("by") %>
       <%= byline(external_work) %>
     </h4>
 
-    <h5 class="heading" title="fandom">
+    <h5 class="heading">
+      <span class="landmark"><%= ts('Fandom') %>:</span>
       <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
       &nbsp;
     </h5>
@@ -21,21 +22,21 @@
   </div>
 
   <!--warnings again, cast, freeform tags-->
-  <h6 class="landmark heading">Tags</h6>
+  <h6 class="landmark heading"><%= ts('Tags') %></h6>
   <ul class="tags commas">
     <%= blurb_tag_block(external_work) %>
   </ul>
 
   <!--summary-->	
   <% unless external_work.summary.blank? %>
-    <h6 class="landmark heading">Summary</h6>
-    <blockquote class="userstuff summary" title="summary">
+    <h6 class="landmark heading"><%= ts('Summary') %></h6>
+    <blockquote class="userstuff summary">
       <%=raw strip_images(sanitize_field(external_work, :summary)) %>
     </blockquote>
   <% end %>
 
   <!--stats-->
-  <dl class="stats" title="stats">
+  <dl class="stats">
     <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
     <dt><%= ts("Bookmarks") + ": " %></dt>
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>

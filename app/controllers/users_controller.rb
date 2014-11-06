@@ -71,12 +71,13 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     if @user.blank?
-      raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:id]}'"
+      flash[:error] = ts("Sorry, could not find this user.")
+      redirect_to people_path and return
     end
     @page_subtitle = @user.login
 
     # very similar to show under pseuds - if you change something here, change it there too
-    if current_user.nil?
+    if  !(logged_in? || logged_in_as_admin?)
       # hahaha omg so ugly BUT IT WORKS :P
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).

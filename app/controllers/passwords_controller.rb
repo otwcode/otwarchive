@@ -9,7 +9,8 @@ class PasswordsController < ApplicationController
   def create
     @user = User.find_by_login(params[:login]) || User.find_by_email(params[:login])
     if @user.nil?
-      raise ActiveRecord::RecordNotFound, "Couldn't find user with username or email '#{params[:login]}'"
+      flash[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
+      render :action => "new"
     elsif !@user.active?
       flash.now[:error] = ts("Your account has not been activated. Please check your email (including your spam folder) for the activation link or <a href=\"#{new_feedback_report_url}\">contact Support</a>.".html_safe)
       render :action => "new"
