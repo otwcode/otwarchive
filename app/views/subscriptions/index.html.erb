@@ -7,6 +7,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<h3 class="landmark heading"><%= ts('Navigation') %></h3>
 <ul class="navigation actions" role="navigation">
   <li>
     <%= span_if_current ts('All Subscriptions'),
@@ -33,6 +34,7 @@
 <!--main content-->
 <%= will_paginate @subscriptions %>
 
+<h3 class="landmark heading"><%= ts('List of Subscriptions') %></h3>
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
     <dt>

@@ -203,19 +203,6 @@ class UserMailer < BulletproofMailer::Base
      I18n.locale = I18n.default_locale
   end
 
-  # Emails a user to confirm that their account is validated and activated
-  def activation(user_id)
-    @user = User.find(user_id)
-    I18n.with_locale(Locale.find(@user.preference.prefered_locale).iso) do
-      mail(
-        :to => @user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your account has been activated."
-      )
-    end
-    ensure
-     I18n.locale = I18n.default_locale
-  end
-
   # Sends a temporary password to the user
   def reset_password(user_id, activation_code)
     @user = User.find(user_id)

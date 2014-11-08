@@ -124,7 +124,7 @@ TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
-MAX_OPTIONS_TO_SHOW: 500
+MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
 
 # how many signups in a challenge before we move to static summaries generated hourly
@@ -364,4 +364,3 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
-

@@ -218,3 +218,11 @@ Then (/^I should see a translated admin post$/) do
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
 end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+end

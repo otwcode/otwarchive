@@ -1,7 +1,7 @@
 <% # expects "prompt", if index is passed will use that in title if none exists, if suppress_claims is true will ignore %>
 <li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb group" role="article">
   <div class="header module">
-    <h4 class="heading" title="<%= ts("title") %>">
+    <h4 class="heading">
       <% if !prompt.title.blank? %>
         <%= prompt.title %>
       <% else %>
@@ -20,16 +20,17 @@
     <% tag_groups = prompt.tag_groups %>
 
     <% # eventually we should let mod specify topmost tag type to display -- ie chars and rels for single-fandom meme, freeforms for single-relationship meme  %>
-	  <h5 class="heading" title="<%= ts("fandom") %>">
+    <h5 class="heading">
+      <span class="landmark"><%= ts('Fandom') %>:</span>
       <%= tag_groups['Fandom'].collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
-		  &nbsp;
-	  </h5>
+      &nbsp;
+    </h5>
 
     <!--required tags-->
-	  <%= get_symbols_for(prompt, tag_groups) %>
-	  <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
+    <%= get_symbols_for(prompt, tag_groups) %>
+    <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
   </div>
-    
+
   <h6 class="landmark heading"><%= ts("Tags") %></h6>  
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
@@ -44,14 +45,14 @@
       <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
     </ul>
   <% end %>
-    
+
   <% unless prompt.description.blank? %>
     <h6 class="landmark heading"><%= ts("Summary") %></h6>
-    <blockquote class="userstuff summary" title="<%= ts("prompt") %>">
+    <blockquote class="userstuff summary">
       <%=raw sanitize_field(prompt, :description) %>
     </blockquote>
   <% end %>
-  
+
   <% unless prompt.url.blank? %>
     <p>
       <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL:") : url_label %>
@@ -77,7 +78,7 @@
         </ul>
       </div>
     <% end %>
-  
+
     <% # if prompt has been fulfilled list works %>
     <% unless prompt.unfulfilled? %>
       <div class="work listbox group">
