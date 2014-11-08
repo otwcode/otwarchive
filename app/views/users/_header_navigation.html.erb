@@ -5,9 +5,6 @@
     <li><%= span_if_current ts("Edit Works"), (path = show_multiple_user_works_path(@user)), 
               current_page?(path) && params[:work_ids].blank? %></li>      
   <% end %>
-  <% unless @user == current_user %>  
-    <li><%= link_to_help "coming-soon", ts("Bookmark") %></li>
-  <% end %>
   <% if current_user && @subscription %>
     <li>
       <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>

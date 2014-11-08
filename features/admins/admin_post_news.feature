@@ -81,6 +81,17 @@ Feature: Admin Actions to Post News
     When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
+    
+  Scenario: Make a translation of an admin post stop being a translation
+    Given I have posted an admin post
+      And basic languages
+      And I am logged in as an admin
+      And I make a translation of an admin post
+    When I follow "Edit Post"
+      And I select "" from "Is this a translation of another post?"
+      And I press "Post"
+    When I am logged in as "ordinaryuser"
+    Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
     Given I have no users

@@ -42,6 +42,7 @@ GEM
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
+    bcrypt (3.1.7)
     best_in_place (2.1.0)
       jquery-rails
       rails (~> 3.1)
@@ -356,6 +357,7 @@ DEPENDENCIES
   akismetor
   authlogic
   aws-sdk
+  bcrypt
   best_in_place
   bundler
   capistrano-gitflow_version (>= 0.0.3)
