@@ -237,8 +237,7 @@ class UsersController < ApplicationController
           flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
-        # this is just a confirmation and it's ok if it gets delayed
-        @user.activate && UserMailer.activation(@user.id).deliver
+        @user.activate
         flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user
