@@ -1,14 +1,14 @@
 <li class="<% if tag_set.user_is_owner?(current_user) %>own<% end %> tagset picture blurb group" role="article">
   <div class="header module">
-    <h4 class="heading" title="<%= ts('name') %>">
+    <h4 class="heading">
       <%= link_to tag_set.title, tag_set_path(tag_set) %></h4>
     <p class="datetime"><%= l(tag_set.updated_at.to_date) %></p>
     <h6 class="landmark heading"><%= ts('Owners and Mods') %></h6>
-    <ul title="<%= ts('owned by') %>" class="mods commas">
+    <ul class="mods commas">
       <%= tag_set.owners.map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
     </ul>
     <% if tag_set.moderators.length > 0 %>
-      <ul title="<%= ts('moderated by') %>" class="mods commas">
+      <ul class="mods commas">
         <%= tag_set.moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join("\n").html_safe %>
       </ul>
     <% end %>
@@ -23,7 +23,7 @@
 
   <!--stats-->
   <% if tag_set.tag_set %>
-    <dl class="stats" title="<%= ts('stats') %>">
+    <dl class="stats">
       <% %w(fandom character relationship freeform).each do |tag_type| %>
         <dt><%= ts("#{tag_type.classify.pluralize}") %>:</dt>
         <dd><%= tag_set.with_type(tag_type).count %></dd>
@@ -33,7 +33,7 @@
     
   <% if logged_in? && (tag_set.user_is_moderator?(current_user) || tag_set.nominated) %>
     <h6 class="landmark heading"><%= ts('User Actions') %></h6>
-	  <ul class="actions" role="navigation">
+    <ul class="actions" role="navigation">
       <% if tag_set.user_is_owner?(current_user) %>
         <li><%= link_to ts('Edit'), edit_tag_set_path(tag_set) %></li>
       <% end %>

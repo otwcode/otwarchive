@@ -30,10 +30,15 @@ describe Skin do
         dd {color: blue;}
         /* end comment */",
         
-      "should allow through CSS3 properties like border-bottom-right-radius and box-shadow" => 
-        ".profile .module h3, .media-index li.category h3 { border-left: 4px double #111 !important; border-bottom-right-radius: 0 !important; }
-        li {box-shadow: inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111}",
-        
+      "should allow through border-radius (CSS3 property)" => 
+        ".profile { border-radius: 5px }",
+
+      ".should allow through specific border radius properties" =>
+        ".profile { border-bottom-right-radius: 10px; }",
+
+      "should allow through box-shadow (CSS3 property)" =>
+        ".profile { box-shadow: 5px 5px 5px black; }",
+
       "should allow through alphabetic strings as keyword values even if they are not explicitly listed" => 
         "#main .navigation input { vertical-align: baseline; }
         #header .navigation li { text-transform: capitalize; }
@@ -94,10 +99,17 @@ describe Skin do
                 background:linear-gradient(top,#fafafa,#ddd);
                 color:#555 }"
     }.each_pair do |condition, css|
-      xit condition do 
+      it condition do 
         @skin.css = css
         @skin.save.should be_true
       end
+    end
+
+    # This is verified to work in prod and staging, but not dev
+    # TODO: fix across environments?
+    xit "should save CSS3 box shadows with multiple shadows" do
+      @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
+      @skin.save.should be_true
     end
     
     # bad bad bad css

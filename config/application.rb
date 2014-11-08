@@ -25,6 +25,13 @@ module Otwarchive
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
     config.plugins = [ :all ]
 
+    # I18n validation deprecation warning fix
+    #
+
+    I18n.config.enforce_available_locales = true
+    I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id, 
+      :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
+
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
     config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_preference_observer, :kudo_observer, :response_observer
