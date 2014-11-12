@@ -12,30 +12,11 @@ Feature: Admin Actions for Works and Bookmarks
   Scenario: Can hide bookmarks
     pending
 
-  @bookmark_fandom_error
+  Scenario: Can edit tags on works
+    pending
+  
   Scenario: Can edit external works
-    Given the following admin exists
-        | login       | password |
-        | testadmin       | testadmin   |
-      And I am logged in as "first_bookmark_user"
-    When I go to first_bookmark_user's bookmarks page
-    Then I should not see "Stuck with You"
-    When I follow "Bookmark External Work"
-      And I fill in "bookmark_external_author" with "Sidra"
-      And I fill in "bookmark_external_title" with "Stuck with You"
-      And I fill in "bookmark_external_url" with "http://test.sidrasue.com/short.html"
-      And I fill in "bookmark_external_fandom_string" with "Popslash"
-      And I press "Create"
-    Then I should see "This work isn't hosted on the Archive"
-    When I am logged in as an admin
-      And I go to first_bookmark_user's bookmarks page
-      And I follow "Stuck with You"
-      And I follow "Edit"
-    Then show me the page
-    When I select "Mature" from "work_rating_string"
-      And I press "Update External work"
-    Then I should see "Testing"
-      And I should not see "Popslash"
+    pending
 
   Scenario: Can mark a comment as spam
     Given I have no works or comments
