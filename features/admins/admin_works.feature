@@ -29,7 +29,6 @@ Feature: Admin Actions for Works and Bookmarks
       And I uncheck "M/M"
       And I check "Other"
     When I press "Post Without Preview"
-    Then show me the page
     Then I should not see "User-Added Fandom"
       And I should see "Admin-Added Fandom"
       And I should not see "User-Added Freeform"
