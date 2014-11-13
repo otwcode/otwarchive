@@ -13,7 +13,35 @@ Feature: Admin Actions for Works and Bookmarks
     pending
 
   Scenario: Can edit tags on works
-    pending
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
+    When I am logged in as an admin
+      And I view the work "Changes"
+      And I follow "Edit Tags"
+    When I select "Mature" from "Rating"
+      And I uncheck "No Archive Warnings Apply"
+      And I check "Choose Not To Use Archive Warnings"
+      And I fill in "Fandoms" with "Admin-Added Fandom"
+      And I fill in "Relationships" with "Admin-Added Relationship"
+      And I fill in "Characters" with "Admin-Added Character"
+      And I fill in "Additional Tags" with "Admin-Added Freeform"
+      And I uncheck "M/M"
+      And I check "Other"
+    When I press "Post Without Preview"
+    Then show me the page
+    Then I should not see "User-Added Fandom"
+      And I should see "Admin-Added Fandom"
+      And I should not see "User-Added Freeform"
+      And I should see "Admin-Added Freeform"
+      And I should not see "M/M"
+      And I should see "Other"
+      And I should not see "No Archive Warnings Apply"
+      And I should see "Creator Chose Not To Use Archive Warnings"
+      And I should not see "Not Rated"
+      And I should see "Mature"
+      And I should see "Admin-Added Relationship"
+      And I should see "Admin-Added Character"
   
   Scenario: Can edit external works
     pending
