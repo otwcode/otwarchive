@@ -43,8 +43,31 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Admin-Added Character"
   
   Scenario: Can edit external works
-    pending
-
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as an admin
+      And I view the external work "External Changes"
+      And I follow "Edit"
+    When I fill in "Author" with "Admin-Added Creator"
+      And I fill in "Title" with "Admin-Added Title"
+      And I fill in "Author's Summary" with "Admin-added summary"
+      And I select "Mature" from "Rating"
+      And I fill in "Fandoms" with "Admin-Added Fandom"
+      And I fill in "Relationships" with "Admin-Added Relationship"
+      And I fill in "Characters" with "Admin-Added Character"
+      And I fill in "Additional Tags" with "Admin-Added Freeform"
+      And I check "M/M"
+    When I press "Update External work"
+    Then I should see "Admin-Added Creator"
+      And I should see "Admin-Added Title"
+      And I should see "Admin-added summary"
+      And I should see "Mature"
+      And I should see "Admin-Added Fandom"
+      And I should see "Admin-Added Character"
+      And I should see "Admin-Added Freeform"
+      And I should see "M/M"      
+  
   Scenario: Can mark a comment as spam
     Given I have no works or comments
       And the following activated users exist
