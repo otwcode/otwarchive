@@ -4,11 +4,44 @@ Feature: Admin Actions for Works and Bookmarks
   I should be able to perform special actions on works
 
   Scenario: Can hide works
-    pending
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Hide"
+    Then I should see "Item has been hidden."
+      And logged out users should not see the hidden work "ToS Violation" by "regular_user"
+      And logged in users should not see the hidden work "ToS Violation" by "regular_user"
+      And "regular_user" should see their work "ToS Violation" is hidden      
+
+  Scenario: Can unhide works
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Hide"
+    Then I should see "Item has been hidden."
+    When I follow "Make Visible"
+    Then I should see "Item is no longer hidden."      
+      And logged out users should see the unhidden work "ToS Violation" by "regular_user"
+      And logged in users should see the unhidden work "ToS Violation" by "regular_user"
 
   Scenario: Can delete works
-    pending
-
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Delete"
+    Then I should see "Item was successfully deleted."
+      And 1 email should be delivered
+      And the email should contain "deleted from the Archive by a site admin"
+    When I am logged out
+      And I am on regular_users's works page
+    Then I should not see "ToS Violation"
+    When I am logged in
+      And I am on regular_users's works page
+    Then I should not see "ToS Violation"  
+      
   Scenario: Can hide bookmarks
     pending
 
