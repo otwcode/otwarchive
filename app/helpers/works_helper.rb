@@ -4,29 +4,29 @@ module WorksHelper
   def work_meta_list(work, chapter=nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts("Published:"), localize(published_date)],
-            [ts("Words:"), work.word_count],
-            [ts("Chapters:"), work.chapter_total_display]]
+    list = [[ts("Published:"), 'published', localize(published_date)],
+            [ts("Words:"), 'words', work.word_count],
+            [ts("Chapters:"), 'chapters', work.chapter_total_display]]
 
     if (comment_count = work.count_visible_comments) > 0
-      list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
+      list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
     end
 
     if work.all_kudos_count > 0
-      list.concat([[ts('Kudos:'), work.all_kudos_count.to_s]])
+      list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
     end
 
     if (bookmark_count = work.bookmarks.is_public.count) > 0
-      list.concat([[ts('Bookmarks:'), link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
+      list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
+    list.concat([[ts("Hits:"), 'hits', work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
       latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
-      list.insert(1, [prefix, localize(latest_date)])
+      list.insert(1, [prefix, 'status', localize(latest_date)])
     end
-    list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe
+    list = list.map {|list_item| content_tag(:dt, list_item.first, class: list_item.second) + content_tag(:dd, list_item.last.to_s, class: list_item.second)}.join.html_safe
     content_tag(:dl, list.to_s, :class => "stats").html_safe
   end
 

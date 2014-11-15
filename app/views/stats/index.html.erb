@@ -23,13 +23,21 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <dt><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
-      <dd><%= @totals[stat] %></dd>
+    <% [:creator_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
+      <% if stat.to_s.titleize == "Creator Subscriptions"
+          html_class = 'creator subscriptions'
+        elsif stat.to_s.titleize == "Word Count"
+          html_class = 'words'
+        else
+         html_class = stat.to_s
+        end
+      %> 
+      <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
+      <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
-      <dt><%= ts("Hits") %></dt>
-      <dd><%= @totals[:hits] %></dd>
+      <dt class="hits"><%= ts("Hits") %></dt>
+      <dd class="hits"><%= @totals[:hits] %></dd>
     <% end %>
   </dl>
 </div>
@@ -74,20 +82,25 @@
               <dt>
                 <%= link_to work.title, work_path(:id => work.id) %> 
                 <% if params[:flat_view] %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
-                <span class="wordcount">(<%= ts("%{wordcount} words", :wordcount => work.word_count) %>)</span>
+                <span class="words">(<%= ts("%{wordcount} words", :wordcount => work.word_count) %>)</span>
               </dt>
               <dd>
                 <dl class="stats">
                   <% if (work_subscriber_count = Subscription.where(:subscribable_id => work.id, :subscribable_type => 'Work').count) > 0 %>
-                    <dt><%= ts("Subscribers") %></dt><dd><%= work_subscriber_count %></dd>
+                    <dt class="subscriptions"><%= ts("Subscriptions") %></dt>
+                    <dd class="subscriptions"><%= work_subscriber_count %></dd>
                   <% end %>
                   <% unless @user.preference.hide_hit_counts %>
-                    <dt><%= ts("Hits") %></dt><dd><%= work.hits %></dd>
+                    <dt class="hits"><%= ts("Hits") %></dt>
+                    <dd class="hits"><%= work.hits %></dd>
                   <% end %>
                   <% # dt ts("Downloads") /dt dd work.downloads /dd %>
-                  <dt><%= ts("Kudos") %></dt><dd><%= work.kudos.count %></dd>
-                  <dt><%= ts("Comment Threads") %></dt><dd><%= work.comments.count %></dd>
-                  <dt><%= ts("Bookmarks") %></dt><dd><%= work.bookmarks.count %></dd>
+                  <dt class="kudos"><%= ts("Kudos") %></dt>
+                  <dd class="kudos"><%= work.kudos.count %></dd>
+                  <dt class="comments"><%= ts("Comment Threads") %></dt>
+                  <dd class="comments"><%= work.comments.count %></dd>
+                  <dt class="bookmarks"><%= ts("Bookmarks") %></dt>
+                  <dd class="bookmarks"><%= work.bookmarks.count %></dd>
                   <% # dt ts("Newest Link") /dt %>
                     <% # dd %>
                     <% # work.work_links.last.try(:url) || ts("none yet") %> 
