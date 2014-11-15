@@ -71,7 +71,7 @@ class StatsController < ApplicationController
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
-    @totals[:creator_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
+    @totals[:user_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new    

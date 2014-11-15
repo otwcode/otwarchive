@@ -23,9 +23,9 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% [:creator_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <% if stat.to_s.titleize == "Creator Subscriptions"
-          html_class = 'creator subscriptions'
+    <% [:user_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
+      <% if stat.to_s.titleize == "User Subscriptions"
+          html_class = 'user subscriptions'
         elsif stat.to_s.titleize == "Word Count"
           html_class = 'words'
         else
