@@ -41,6 +41,16 @@
     </li>
   </ul>
 </fieldset>
+<% if  Rails.env.test? || $rollout.active?(:set_locale_preference, @user) then %>
+<fieldset>
+  <dl>
+    <dt><%= f.label :prefered_locale, ts('Prefered Locale')%> <%= link_to_help 'locale-preferences' %></dt>
+      <dd>
+        <%= f.select :prefered_locale, @available_locales.collect{|l| [l.name, l.id]}, :default => @preference.prefered_locale  %>
+      </dd>
+  </dl>
+</fieldset>
+<% end %>
 <fieldset>
   <legend><%= ts('Display') %></legend><h4 class="heading"><%= ts('Display') %> <%= link_to_help 'display-preferences' %></h4>
   <ul>
@@ -68,8 +78,10 @@
       <%= f.check_box :disable_work_skins %>
       <%= f.label :disable_work_skins, ts('Hide work skins (you can still choose to show them).')  %> <%= link_to_help 'skins-basics' %>
     </li>
+    <li>
   </ul>
-
+</fieldset>
+  </ul>
   <fieldset>
     <dl>
       <dt><%= f.label :skin_id, ts('Your site skin')%> <%= link_to_help 'skins-basics' %>:</dt>
