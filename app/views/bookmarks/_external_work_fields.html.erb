@@ -65,10 +65,17 @@
       <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
     </dd>
     <dt>
-      <%= ew.label :category_string, Category::NAME %> <%= link_to_help "categories-help" %>
+      <%= Category::NAME %> <%= link_to_help "categories-help" %>
     </dt>
     <dd>
-      <%= ew.collection_select(:category_string, Category.canonical.by_name.sort, :name, :name, {:include_blank => true}) %>
+      <ul>
+        <% for tag in Category.canonical.by_name.sort %>
+          <li>               
+            <%= check_box_tag "bookmark[external][category_string][]", tag.name, false, id: "bookmark_external_category_string_#{tag.id}" %>
+            <%= label_tag "bookmark_external_category_string_#{tag.id}", tag.name %>
+          </li>
+        <% end %> 
+      </ul>
     </dd>
     <dt>
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>
