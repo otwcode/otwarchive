@@ -43,8 +43,7 @@ ms">Fandom &amp; Megafandom notes</a></li>
 
   <!--subnav-->
   <!--/subnav-->
-
-  <!--main content-->
+<!--main content-->
   <!--Eventually, something less redundant will go here-->
   <% unless params[:show].blank? %>
     <h3 class="heading"><%= ts('Mass Wrangle New/Unwrangled Tags') %></h3>
@@ -55,8 +54,8 @@ ms">Fandom &amp; Megafandom notes</a></li>
   <% elsif @tags %>
     <%= will_paginate @tags %>
 
-    <%= form_tag url_for(controller: 'tag_wranglings', action: 'wrangle'), method: :post, i
-d: 'wrangulator' do %>
+    <%= form_tag url_for(controller: 'tag_wranglings', action: 'wrangle'), method: :post, id:
+ 'wrangulator' do %>
       <fieldset>
         <legend><%= ts('Assign and Mass Select') %></legend>
 
@@ -66,8 +65,8 @@ d: 'wrangulator' do %>
             <dd><%= select_tag :media, options_for_select(@media_names) %></dd>
           <% else %>
             <dt><%= label_tag :fandom_string, ts('Wrangle to Fandom(s)') %></dt>
-<dd title="<%= ts('wrangle to fandom(s)') %>"><%= text_field_tag 'fandom_string
-', params[:fandom_string], autocomplete_options('fandom') %></dd>
+            <dd title="<%= ts('wrangle to fandom(s)') %>"><%= text_field_tag 'fandom_string',
+ params[:fandom_string], autocomplete_options('fandom') %></dd>
           <% end %>
           <dt class="landmark"><%= ts('Submit') %></dt>
           <dd class="submit"><%= submit_tag ts('Wrangle') %></dd>
@@ -80,11 +79,11 @@ d: 'wrangulator' do %>
         <h3 class="landmark heading"><%= ts('Individual Selection Table') %></h3>
 
         <div class="wrapper">
-          <table summary="<%= ts('A subset of tags listed by name, with options to edit, wr
-angle, or view works tagged thus. Also listed is when each tag was created, whether each is
- canonical, and the number of works tagged thus.') %>" id="wrangulise">
-            <caption><%= @tags.first.class.to_s.pluralize %> <%= ts('to be Wrangled') %></c
-aption>
+          <table summary="<%= ts('A subset of tags listed by name, with options to edit, wran
+gle, or view works tagged thus. Also listed is when each tag was created, whether each is can
+onical, and the number of works tagged thus.') %>" id="wrangulise">
+            <caption><%= @tags.first.class.to_s.pluralize %> <%= ts('to be Wrangled') %></cap
+tion>
 
             <colgroup>
               <col class="name" />
@@ -96,22 +95,20 @@ aption>
                 <th scope="col">
                   <%= sort_link ts('Tag Name'), :name %>
                   <ul class="actions" role="menu">
-                    <li><a id="wrangle_all_select" title="<%= ts('select') %>"><%= ts('All'
-) %></a></li>
-                    <li><a id="wrangle_all_deselect" title="<%= ts('select') %>"><%= ts('No
-ne') %></a></li>
+                    <li><a id="wrangle_all_select" title="<%= ts('select') %>"><%= ts('All') 
+%></a></li>
+                    <li><a id="wrangle_all_deselect" title="<%= ts('select') %>"><%= ts('None
+') %></a></li>
                   </ul>
                 </th>
                 <th scope="col" title="<%= ts('sort by') %>">
                   <%= sort_link ts('Created'), :created_at, {sort_default: true} %>
-                </th>
+</th>
                 <th scope="col">
                   <%= ts('Canonical') %>
                   <ul class="actions" role="menu">
-                    <li><a id="canonize_all_select" title="<%= ts('select') %>"><%= ts('All
-') %></a></li>
-                    <li><a id="canonize_all_deselect" title="<%= ts('select') %>"><%= ts('N
-one') %></a></li>
+                    <li><a id="canonize_all_select" title="<%= ts('select') %>"><%= ts('All') %></a></li>
+                    <li><a id="canonize_all_deselect" title="<%= ts('select') %>"><%= ts('None') %></a></li>
                   </ul>
                 </th>
                 <th scope="col" title="<%= ts('sort by') %>">
@@ -124,8 +121,7 @@ one') %></a></li>
             <tfoot>
               <tr>
                 <th scope="row" colspan="4"><%= ts('Action:') %></th>
-                <td><span class="submit actions"><%= submit_tag ts('Wrangle') %></span></td
->
+                <td><span class="submit actions"><%= submit_tag ts('Wrangle') %></span></td>
               </tr>
             </tfoot>
 
@@ -133,23 +129,7 @@ one') %></a></li>
               <% @tags.each do |tag| %>
                 <tr>
                   <th scope="row" title="<%= ts('tag') %>">
-                    <%= check_box_tag 'selected_tags[]', tag.id, nil, id: "selected_tags_#{
-</thead>
-
-            <tfoot>
-              <tr>
-                <th scope="row" colspan="4"><%= ts('Action:') %></th>
-                <td><span class="submit actions"><%= submit_tag ts('Wrangle') %></span></td
->
-              </tr>
-            </tfoot>
-
-            <tbody>
-              <% @tags.each do |tag| %>
-                <tr>
-                  <th scope="row" title="<%= ts('tag') %>">
-                    <%= check_box_tag 'selected_tags[]', tag.id, nil, id: "selected_tags_#{
-tag.id}" %>
+                    <%= check_box_tag 'selected_tags[]', tag.id, nil, id: "selected_tags_#{tag.id}" %>
                     <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
                   </th>
 
@@ -159,8 +139,7 @@ tag.id}" %>
                     <% if tag.canonical? %>
                       <%= ts('Yes') %>
                     <% else %>
-                      <%= check_box_tag 'canonicals[]', tag.id, tag.canonical?, id: "canoni
-cals_#{tag.id}" %>
+                      <%= check_box_tag 'canonicals[]', tag.id, tag.canonical?, id: "canonicals_#{tag.id}" %>
                     <% end %>
                   </td>
 
@@ -168,12 +147,9 @@ cals_#{tag.id}" %>
 
                   <td>
                     <ul class="actions" role="navigation">
-                      <li><%= link_to ts('Edit'), {controller: :tags, action: :edit, id: ta
-g} %></li>
-                      <li><%= link_to ts('Wrangle'), {controller: :tags, action: :wrangle, 
-id: tag} %></li>
-                      <li><%= link_to ts('Works'), {controller: :works, action: :index, tag
-_id: tag} %></li>
+                      <li><%= link_to ts('Edit'), {controller: :tags, action: :edit, id: tag} %></li>
+                      <li><%= link_to ts('Wrangle'), {controller: :tags, action: :wrangle, id: tag} %></li>
+                      <li><%= link_to ts('Works'), {controller: :works, action: :index, tag_id: tag} %></li>
                     </ul>
                   </td>
                 </tr>
