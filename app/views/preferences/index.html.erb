@@ -81,22 +81,21 @@
     <li>
   </ul>
 </fieldset>
-  </ul>
-  <fieldset>
-    <dl>
-      <dt><%= f.label :skin_id, ts('Your site skin')%> <%= link_to_help 'skins-basics' %>:</dt>
-      <dd>
-        <span class="actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
-        <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
-      </dd>
+<fieldset>
+  <dl>
+    <dt><%= f.label :skin_id, ts('Your site skin')%> <%= link_to_help 'skins-basics' %>:</dt>
+    <dd>
+      <span class="actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
+    </dd>
 
-      <dt><%= f.label :time_zone, ts('Your time zone: ')%></dt>
-      <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-      
-      <dt><%= f.label :work_title_format, ts('Browser page title format')  %> <%= link_to_help 'work_title_format' %>:</dt>
-      <dd><%= f.text_field :work_title_format %></dd>
-    </dl>
-  </fieldset>
+    <dt><%= f.label :time_zone, ts('Your time zone: ')%></dt>
+    <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
+    
+    <dt><%= f.label :work_title_format, ts('Browser page title format')  %> <%= link_to_help 'work_title_format' %>:</dt>
+    <dd><%= f.text_field :work_title_format %></dd>
+  </dl>
+</fieldset>
 </fieldset>
 
 <fieldset>
