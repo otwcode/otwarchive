@@ -23,9 +23,9 @@ class ExternalWork < ActiveRecord::Base
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
       
-  validates_presence_of :author
+  validates_presence_of :author, :message => ts('^Creator can\'t be blank')
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
-    :too_long=> ts("must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
+    :too_long=> ts('^Creator must be less than %{max} characters long.', :max => AUTHOR_LENGTH_MAX)
 
   # TODO: External works should have fandoms, but they currently don't get added through the
   # post new work form so we can't validate them

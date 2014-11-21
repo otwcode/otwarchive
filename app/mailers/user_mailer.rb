@@ -178,15 +178,6 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Emails a user to confirm that their account is validated and activated
-  def activation(user_id)
-    @user = User.find(user_id)
-    mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your account has been activated."
-    )
-  end
-
   # Sends a temporary password to the user
   def reset_password(user_id, activation_code)
     @user = User.find(user_id)

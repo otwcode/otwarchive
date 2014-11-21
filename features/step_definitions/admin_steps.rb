@@ -218,3 +218,53 @@ Then (/^I should see a translated admin post$/) do
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
 end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+end
+
+Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+end
+
+Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+  step(%{I am logged in as "#{user}"})
+  step(%{I am on my works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see the image "title" text "Hidden by Administrator"})
+end
+
+Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "#{work}"})
+end
