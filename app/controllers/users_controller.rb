@@ -188,11 +188,11 @@ class UsersController < ApplicationController
             @user.errors.clear
             @user.reload
             if @new_login.length < ArchiveConfig.LOGIN_LENGTH_MIN
-              flash[:error] = ts("Passwords need to have at least %{min} characters.", :min => ArchiveConfig.LOGIN_LENGTH_MIN)
+              flash[:error] = ts("User names need to have at least %{min} characters.", :min => ArchiveConfig.LOGIN_LENGTH_MIN)
               return
             end
             if @new_login.length > ArchiveConfig.LOGIN_LENGTH_MAX
-              flash[:error] = ts("Passwords need to have at most %{max} characters.", :max => ArchiveConfig.LOGIN_LENGTH_MAX)
+              flash[:error] = ts("User names need to have at most %{max} characters.", :max => ArchiveConfig.LOGIN_LENGTH_MAX)
               return
             end
             flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
