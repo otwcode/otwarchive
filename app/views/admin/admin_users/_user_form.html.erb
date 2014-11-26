@@ -11,6 +11,11 @@
       <%= check_box_tag "user[roles][]", role.id, user.roles.include?(role), :title => role.name, :id => "user_roles_#{role.id}" %>
     </td>
   <% end %>
+  <td>
+    <% unless user.fannish_next_of_kin_user.blank? %>
+      <%= link_to User.find_by_id(user.fannish_next_of_kin_user).login, user_path(User.find_by_id(user.fannish_next_of_kin_user).login) %>
+    <% end %>
+  </td>
   <td class="actions"><%= submit_tag ts("Update") %></td>
   <td class="actions"><%= link_to ts("Details"), admin_user_path(user) %></td>
 <% end %>
