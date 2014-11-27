@@ -8,9 +8,5 @@ class FannishNextOfKin < ActiveRecord::Base
   def kin_name
     User.find_by_id(kin_id).login
   end
-  
-  def user_name
-    User.find_by_id(user_id).login
-  end
 
 end
