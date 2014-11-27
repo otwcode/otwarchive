@@ -74,11 +74,6 @@
     </p>
     <p>
       <%= text_area_tag 'admin_note', nil, class: 'observe_textlength' %>
-      <% # live_validation_for_field('admin_note', 
-                # :maximum_length => ArchiveConfig.LOGNOTE_MAX,
-                # :minimum_length => ArchiveConfig.LOGNOTE_MIN, 
-                # :failureMessage => ts('Notes are required in order to perform this action.'))
-      # %>
       <%= generate_countdown_html("admin_note", ArchiveConfig.LOGNOTE_MAX) %>
     </p>
   </fieldset>

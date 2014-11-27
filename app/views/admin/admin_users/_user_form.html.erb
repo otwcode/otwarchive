@@ -13,8 +13,7 @@
   <% end %>
   <td>
     <% unless user.fannish_next_of_kin.blank? %>
-      <%= link_to user.fannish_next_of_kin.kin_name,
-       user_path(user.fannish_next_of_kin.kin_name) %>
+      <%= link_to user.fannish_next_of_kin.kin_name, user_path(user.fannish_next_of_kin.kin_name) %>
     <% end %>
   </td>
   <td class="actions"><%= submit_tag ts("Update") %></td>
