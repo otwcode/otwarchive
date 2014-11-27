@@ -26,13 +26,13 @@
         <%= label_tag 'next_of_kin_name', t('.fnok_name', default: "Fannish next of kin's username") %>
       </dt>
       <dd>
-        <%= text_field_tag 'next_of_kin_name', @user.fannish_next_of_kin_user ? User.find_by_id(@user.fannish_next_of_kin_user).login : '' %>
+        <%= text_field_tag 'next_of_kin_name', @user.fannish_next_of_kin.present? ? @user.fannish_next_of_kin.kin_name : '' %>
       </dd>
       <dt>
         <%= label_tag 'next_of_kin_email', t('.fnok_email', default: "Fannish next of kin's email") %>
       </dt>
       <dd>
-        <%= text_field_tag 'next_of_kin_email', @user.fannish_next_of_kin_email %>
+        <%= text_field_tag 'next_of_kin_email', @user.fannish_next_of_kin.present? ? @user.fannish_next_of_kin.kin_email : '' %>
       </dd>
     </dl>
   </fieldset>

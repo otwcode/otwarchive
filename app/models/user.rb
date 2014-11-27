@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
+  has_one :fannish_next_of_kin, :dependent => :destroy
+
   # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
   before_destroy :remove_pseud_from_kudos
 

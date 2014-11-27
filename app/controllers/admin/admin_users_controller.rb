@@ -42,22 +42,20 @@ class Admin::AdminUsersController < ApplicationController
     else
       @admin_note = params[:admin_note]
       @user = User.find_by_login(params[:user_login])
-      @user.fannish_next_of_kin_user = User.find_by_login(params[:next_of_kin_name])
-      @user.fannish_next_of_kin_email = params[:next_of_kin_email]
-
+ 
       # there is a next of kin username, but no email
       if params[:next_of_kin_name].present? && params[:next_of_kin_email].blank?
-        flash[:error] = ts('Fannish next of kin username is missing.')
+        flash[:error] = ts('Fannish next of kin email is missing.')
         redirect_to request.referer || root_path
 
       # there is a next of kin email, but no username
       elsif params[:next_of_kin_name].blank? && params[:next_of_kin_email].present?
-        flash[:error] = ts('Fannish next of kin email is missing.')
+        flash[:error] = ts('Fannish next of kin user is missing.')
         redirect_to request.referer || root_path
 
       # there is a next of kin username, but it is not a valid user
-      elsif params[:next_of_kin_name].present? && @user.fannish_next_of_kin_user.nil?
-        flash[:error] = ts('Fannish next of kin username is invalid.')
+      elsif params[:next_of_kin_name].present? && User.find_by_login(params[:next_of_kin_name]).nil?
+        flash[:error] = ts('Fannish next of kin user is invalid.')
         redirect_to request.referer || root_path
 
       # there is an admin action selected, but no note entered  
@@ -70,20 +68,43 @@ class Admin::AdminUsersController < ApplicationController
         flash[:error] = ts('Please enter the number of days for which the user should be suspended.')
         redirect_to request.referer || root_path
 
-      # everything checks out, so let's update some stuff
+      # we made it through without any errors, so let's do some stuff
       else
         success_message = []
 
-        # PROBLEM: This is always true. Why?
-        if @user.fannish_next_of_kin_user_changed? || @user.fannish_next_of_kin_email_changed?
-          success_message << 'Fannish next of kin updated.'
+        # find or create a fannish next of kin if the fields are filled in
+        if params[:next_of_kin_name].present? && params[:next_of_kin_email].present?
+          @user.fannish_next_of_kin ||= FannishNextOfKin.new(:user_id => params[:user_login],
+            :kin_id => User.find_by_login(params[:next_of_kin_name]).id,
+            :kin_email => params[:next_of_kin_email])
+          success_message << 'Fannish next of kin added.' if FannishNextOfKin.new
         end
 
+        # update the next of kin user if the field is present and changed
+        if params[:next_of_kin_name].present? && !(User.find_by_login(params[:next_of_kin_name]).id == @user.fannish_next_of_kin.kin_id)
+          @user.fannish_next_of_kin.kin_id = User.find_by_login(params[:next_of_kin_name]).id
+          success_message << 'Fannish next of kin user updated.'
+        end
+
+        # update the next of kin email is the field is present and changed
+        if params[:next_of_kin_email].present? && !(params[:next_of_kin_email] == @user.fannish_next_of_kin.kin_email)
+          @user.fannish_next_of_kin.kin_email = params[:next_of_kin_email]
+          success_message << 'Fannish next of kin email updated.'
+        end
+        
+        # delete the next of kin if the fields are blank and changed
+        if params[:next_of_kin_user].blank? && params[:next_of_kin_email].blank? && @user.fannish_next_of_kin
+          @user.fannish_next_of_kin.destroy
+          success_message << 'Fannish next of kin removed.'
+        end
+
+        # create warning
         if params[:admin_action] == 'warn'
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
           success_message << 'Warning was recorded.'
         end
 
+        # create suspension
         if params[:admin_action] == 'suspend'
           @user.suspended = true
           @suspension_days = params[:suspend_days].to_i
@@ -92,34 +113,33 @@ class Admin::AdminUsersController < ApplicationController
           success_message << 'User has been temporarily suspended.'
         end
 
+        # create ban
         if params[:admin_action] == 'ban'
           @user.banned = true
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
           success_message << 'User has been permanently suspended.'
         end
 
-        if params[:admin_action] == 'unsuspend'
-          if @user.suspended?
-            @user.suspended = false
-            @user.suspended_until = nil
-            if !@user.suspended && @user.suspended_until.blank?
-              @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              success_message << 'Suspension has been lifted.'
-            end
+        # unsuspended suspended user
+        if params[:admin_action] == 'unsuspend' && @user.suspended?
+          @user.suspended = false
+          @user.suspended_until = nil
+          if !@user.suspended && @user.suspended_until.blank?
+            @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+            success_message << 'Suspension has been lifted.'
           end
         end
 
-        if params[:admin_acton] == 'unban'
-          if @user.banned?
-            @user.banned = false
-            if !@user.banned?
-              @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-              success_message << 'Suspension has been lifted.'
-            end
+        # unban banned user
+        if params[:admin_acton] == 'unban' && @user.banned?
+          @user.banned = false
+          if !@user.banned?
+            @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+            success_message << 'Suspension has been lifted.'
           end
-        end 
-                
-        @user.save    
+        end
+    
+        @user.save
         flash[:notice] = success_message
         redirect_to request.referer || root_path
   
