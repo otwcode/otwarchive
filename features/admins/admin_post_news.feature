@@ -79,6 +79,7 @@ Feature: Admin Actions to Post News
       And basic languages
       And I am logged in as an admin
     When I make a translation of an admin post
+    Then show me the page
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
     
@@ -88,7 +89,7 @@ Feature: Admin Actions to Post News
       And I am logged in as an admin
       And I make a translation of an admin post
     When I follow "Edit Post"
-      And I select "" from "Is this a translation of another post?"
+      And I fill in "Translation of" with ""
       And I press "Post"
     When I am logged in as "ordinaryuser"
     Then I should not see a translated admin post

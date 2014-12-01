@@ -205,7 +205,7 @@ When (/^I make a translation of an admin post$/) do
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
+  fill_in("admin_post_translated_post_id", :with => AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
