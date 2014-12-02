@@ -11,11 +11,14 @@ class StoryParser
   META_PATTERNS = {:title => 'Title',
                    :notes => 'Note',
                    :summary => 'Summary',
-                   :freeform_string => "Tag",
-                   :fandom_string => "Fandom",
-                   :rating_string => "Rating",
-                   :relationship_string => "Relationship|Pairing",
-                   :revised_at => 'Date|Posted|Posted on|Posted at'
+                   :freeform_string => 'Tag',
+                   :fandom_string => 'Fandom',
+                   :rating_string => 'Rating',
+                   :warning_string => 'Warning',
+                   :relationship_string => 'Relationship|Pairing',
+                   :character_string => 'Character',
+                   :revised_at => 'Date|Posted|Posted on|Posted at',
+                   :chapter_title => 'Chapter Title'
                    }
 
 
@@ -543,20 +546,17 @@ class StoryParser
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
       storyhead = @doc.css("head").inner_html if @doc.css("head")
-      storytext = @doc.css("body").inner_html if @doc.css("body")
-      if storytext.blank?
-        storytext = @doc.css("html").inner_html
-      end
-      if storytext.blank?
-        # just grab everything
-        storytext = story
-      end
+      # Story content - Look for progressively less specific containers or grab everything
+      element = @doc.css('.chapter-content') || @doc.css('body') || @doc.css('html')
+      storytext = element.present? ? element.inner_html : story
+
       meta = {}
       unless storyhead.blank?
         meta.merge!(scan_text_for_meta(storyhead))
       end
-      meta.merge!(scan_text_for_meta(storytext))
-      work_params[:title] = @doc.css("title").inner_html
+      meta.merge!(scan_text_for_meta(story))
+      meta[:title] ||= @doc.css('title').inner_html
+      work_params[:chapter_attributes][:title] = meta.delete(:chapter_title)
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
 
@@ -811,8 +811,7 @@ class StoryParser
       # and strip out some tags
       text = text.gsub(/<br/, "\n<br")
       text.gsub!(/<p/, "\n<p")
-      text.gsub!(/<\/?span(.*?)?>/, '')
-      text.gsub!(/<\/?div(.*?)?>/, '')
+      text.gsub!(/<\/?(label|span|div|b)(.*?)?>/, '')
 
       meta = {}
       metapatterns = META_PATTERNS
@@ -825,13 +824,9 @@ class StoryParser
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Fandom: Stargate SG-1 it will set meta[:fandom] = Stargate SG-1
         # then it runs it through convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
-        metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
-        metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
-        if text.match(metapattern) || text.match(metapattern_plural)
+        metapattern = Regexp.new("(#{pattern}|#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
+        if text.match(metapattern)
           value = $2
-          if value.match(metapattern) || value.match(metapattern_plural)
-            value = $2
-          end
           value = clean_tags(value) if is_tag[metaname]
           value = clean_close_html_tags(value)
           value.strip! # lose leading/trailing whitespace
