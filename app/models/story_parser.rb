@@ -518,7 +518,7 @@ class StoryParser
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
       
       # Try to convert all relative links to absolute
-      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first      
+      base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
       if base.present?
         @doc.css('a').each do |link|
           if link['href'].present?
@@ -547,8 +547,8 @@ class StoryParser
       work_params = {:chapter_attributes => {}}
       storyhead = @doc.css("head").inner_html if @doc.css("head")
       # Story content - Look for progressively less specific containers or grab everything
-      element = @doc.css('.chapter-content') || @doc.css('body') || @doc.css('html')
-      storytext = element.present? ? element.inner_html : story
+      element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc
+      storytext = element.inner_html
 
       meta = {}
       unless storyhead.blank?
