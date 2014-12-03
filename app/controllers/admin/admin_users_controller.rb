@@ -42,6 +42,7 @@ class Admin::AdminUsersController < ApplicationController
     else
       @admin_note = params[:admin_note]
       @user = User.find_by_login(params[:user_login])
+      submitted_kin_user = User.find_by_login(params[:next_of_kin_name])
  
       # there is a next of kin username, but no email
       if params[:next_of_kin_name].present? && params[:next_of_kin_email].blank?
@@ -54,7 +55,7 @@ class Admin::AdminUsersController < ApplicationController
         redirect_to request.referer || root_path
 
       # there is a next of kin username, but it is not a valid user
-      elsif params[:next_of_kin_name].present? && User.find_by_login(params[:next_of_kin_name]).nil?
+      elsif params[:next_of_kin_name].present? && submitted_kin_user.nil?
         flash[:error] = ts('Fannish next of kin user is invalid.')
         redirect_to request.referer || root_path
 
@@ -74,34 +75,38 @@ class Admin::AdminUsersController < ApplicationController
 
         # find or create a fannish next of kin if the fields are filled in
         if params[:next_of_kin_name].present? && params[:next_of_kin_email].present?
-          @user.fannish_next_of_kin ||= FannishNextOfKin.new(:user_id => params[:user_login],
-            :kin_id => User.find_by_login(params[:next_of_kin_name]).id,
-            :kin_email => params[:next_of_kin_email])
-          success_message << 'Fannish next of kin added.' if FannishNextOfKin.new
+          if @user.fannish_next_of_kin.nil?
+            @user.fannish_next_of_kin = FannishNextOfKin.new(:user_id => params[:user_login],
+              :kin_id => submitted_kin_user.id,
+              :kin_email => params[:next_of_kin_email])
+            success_message << ts('Fannish next of kin added.')
+          else
+            @user.fannish_next_of_kin = @user.fannish_next_of_kin
+          end
         end
 
         # update the next of kin user if the field is present and changed
-        if params[:next_of_kin_name].present? && !(User.find_by_login(params[:next_of_kin_name]).id == @user.fannish_next_of_kin.kin_id)
-          @user.fannish_next_of_kin.kin_id = User.find_by_login(params[:next_of_kin_name]).id
-          success_message << 'Fannish next of kin user updated.'
+        if params[:next_of_kin_name].present? && !(submitted_kin_user.id == @user.fannish_next_of_kin.kin_id)
+          @user.fannish_next_of_kin.kin_id = submitted_kin_user.id
+          success_message << ts('Fannish next of kin user updated.')
         end
 
         # update the next of kin email is the field is present and changed
         if params[:next_of_kin_email].present? && !(params[:next_of_kin_email] == @user.fannish_next_of_kin.kin_email)
           @user.fannish_next_of_kin.kin_email = params[:next_of_kin_email]
-          success_message << 'Fannish next of kin email updated.'
+          success_message << ts('Fannish next of kin email updated.')
         end
         
         # delete the next of kin if the fields are blank and changed
         if params[:next_of_kin_user].blank? && params[:next_of_kin_email].blank? && @user.fannish_next_of_kin
           @user.fannish_next_of_kin.destroy
-          success_message << 'Fannish next of kin removed.'
+          success_message << ts('Fannish next of kin removed.')
         end
 
         # create warning
         if params[:admin_action] == 'warn'
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
-          success_message << 'Warning was recorded.'
+          success_message << ts('Warning was recorded.')
         end
 
         # create suspension
@@ -110,14 +115,14 @@ class Admin::AdminUsersController < ApplicationController
           @suspension_days = params[:suspend_days].to_i
           @user.suspended_until = @suspension_days.days.from_now
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
-          success_message << 'User has been temporarily suspended.'
+          success_message << ts('User has been temporarily suspended.')
         end
 
         # create ban
         if params[:admin_action] == 'ban'
           @user.banned = true
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
-          success_message << 'User has been permanently suspended.'
+          success_message << ts('User has been permanently suspended.')
         end
 
         # unsuspended suspended user
@@ -126,7 +131,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended_until = nil
           if !@user.suspended && @user.suspended_until.blank?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-            success_message << 'Suspension has been lifted.'
+            success_message << ts('Suspension has been lifted.')
           end
         end
 
@@ -135,7 +140,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.banned = false
           if !@user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
-            success_message << 'Suspension has been lifted.'
+            success_message << ts('Suspension has been lifted.')
           end
         end
     
