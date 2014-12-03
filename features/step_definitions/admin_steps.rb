@@ -116,6 +116,16 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
+  step %{the user "#{kin}" exists and is activated}
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  fill_in("Fannish next of kin's username", :with => "#{kin}")
+  fill_in("Fannish next of kin's email", :with => "testing@foo.com")
+  click_button("Update")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
