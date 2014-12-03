@@ -459,3 +459,5 @@ Feature: Admin tasks
     And I fill in "locale_iso" with "en-gb"
     And I press "Submit"
     Then I should see "Your locale was successfully updated."
+
+    
