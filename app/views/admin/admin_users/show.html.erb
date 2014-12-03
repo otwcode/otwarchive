@@ -1,33 +1,38 @@
 <div class="admin">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= ts('User') %>: <%= @user.login %></h2>
+  <h2 class="heading"><%= t('.abuse_page_heading', default: 'User') %>: <%= @user.login %></h2>
   <!--/descriptions-->
 
   <!--subnav-->
   <ul class="navigation actions" role="navigation">
-    <li><%= button_to ts("Send Activation Email"), {:action => 'send_activation', :id => @user}, :disabled => @user.active? %></li>
     <li>
-      <%= button_to ts("Activate User Account"), {:action => 'activate', :id => @user}, :disabled => @user.active? %></li>
-    <li><%= link_to ts("Manage User Roles"), {:action => "index", :query => @user.login, :role => '0'} %></li>
+      <%= button_to t('.subnav_send_activation', default: 'Send Activation Email'), {:action => 'send_activation', :id => @user}, disabled: @user.active? %>
+    </li>
+    <li>
+      <%= button_to t('.subnav_activate_user', default: 'Activate User Account'), {:action => 'activate', :id => @user}, disabled: @user.active? %>
+    </li>
+    <li>
+      <%= link_to t('.subnav_manage_user', default: 'Manage User Roles'), {:action => "index", :query => @user.login, :role => '0'} %>
+    </li>
   </ul>
   <!--/subnav-->
 
   <!--main content-->
-  <h3 class="heading"><%= ts('Abuse Administration') %></h3>
+  <h3 class="heading"><%= t('.abuse_form_heading', default: 'Abuse Administration') %></h3>
   <%= form_tag :action => "update_user", :controller => "admin/admin_users" do %>
     <%= hidden_field_tag 'user_login', @user.login %>
     <fieldset>
-      <legend><%= t('.fnok_legend', default: "Fannish Next of Kin") %></legend>
-      <h4 class="heading"><%= t('.fnok_heading', default: "Fannish Next of Kin") %></h4>
+      <legend><%= t('.fnok_legend', default: 'Fannish Next of Kin') %></legend>
+      <h4 class="heading"><%= t('.fnok_heading', default: 'Fannish Next of Kin') %></h4>
       <dl>
         <dt>
-          <%= label_tag 'next_of_kin_name', t('.fnok_name', default: "Fannish next of kin's username") %>
+          <%= label_tag 'next_of_kin_name', t('.fnok_name', default: 'Fannish next of kin\'s username') %>
         </dt>
         <dd>
           <%= text_field_tag 'next_of_kin_name', @user.fannish_next_of_kin.present? ? @user.fannish_next_of_kin.kin_name : '' %>
         </dd>
         <dt>
-          <%= label_tag 'next_of_kin_email', t('.fnok_email', default: "Fannish next of kin's email") %>
+          <%= label_tag 'next_of_kin_email', t('.fnok_email', default: 'Fannish next of kin\'s email') %>
         </dt>
         <dd>
           <%= text_field_tag 'next_of_kin_email', @user.fannish_next_of_kin.present? ? @user.fannish_next_of_kin.kin_email : '' %>
@@ -35,48 +40,48 @@
       </dl>
     </fieldset>
     <fieldset>
-      <legend>Warn or Suspend</legend>
-      <h4 class="heading">Warn or Suspend</h4>
+      <legend><%= t('.admin_action_legend', default: 'Warnings and Suspensions') %></legend>
+      <h4 class="heading"><%= t('.admin_action_heading', default: 'Warnings and Suspensions') %></h4>
       <ul>
         <li>
           <%= radio_button_tag 'admin_action', 'warn' %>
-          <%= label_tag 'admin_action_warn', ts('Record Warning') %>
+          <%= label_tag 'admin_action_warn', t('.admin_action_warn_label', default: 'Record Warning') %>
         </li>
         <li>
           <% if @user.suspended? %>
             <%= radio_button_tag 'admin_action', 'unsuspend', false %>
-            <%= label_tag 'admin_action_unsuspend', ts("Lift temporary suspension, effective immediately.") %>
+            <%= label_tag 'admin_action_unsuspend', t('.admin_action_unsuspend_label', default: 'Lift temporary suspension, effective immediately.') %>
           <% else %>
-            <%= radio_button_tag 'admin_action', 'suspend', false, :disabled => @user.banned? %>
-            <%= label_tag 'admin_action_suspend', ts("Suspend: enter a whole number of days") %>
-            <%= text_field_tag 'suspend_days', '', {:class => "number", :size => 2, :disabled => @user.banned?} %>
-            <%= live_validation_for_field('suspend_days', :presence => false, :numericality => true) %> 
+            <%= radio_button_tag 'admin_action', 'suspend', false, disabled: @user.banned? %>
+            <%= label_tag 'admin_action_suspend', t('.admin_action_suspend_label', default: 'Suspend: enter a whole number of days') %>
+            <%= text_field_tag 'suspend_days', '', class: 'number', size: 2, disabled: @user.banned? %>
+            <%= live_validation_for_field('suspend_days', presence: false, numericality: true) %> 
           <% end %>
         </li> 
         <li>
           <% if @user.banned? %> 
             <%= radio_button_tag 'admin_action', 'unban', false %>
-            <%= label_tag 'admin_action_unban', ts("Lift permanent suspension, effective immediately.") %>
+            <%= label_tag 'admin_action_unban', t('.admin_action_unban_label', default: 'Lift permanent suspension, effective immediately.') %>
           <% else %>
             <%= radio_button_tag 'admin_action', 'ban', false %>
-            <%= label_tag 'admin_action_ban', ts("Suspend permanently (ban user)") %>
+            <%= label_tag 'admin_action_ban', t('.admin_action_ban_label', default: 'Suspend permanently (ban user)') %>
           <% end %>
         </li>
       </ul>
     </fieldset>
     <fieldset>
-      <legend>Notes</legend>
-      <h4 class="heading"><%= label_tag 'admin_note', ts('Notes') %></h4>
+      <legend><%= t('.notes_legend', default: 'Notes') %></legend>
+      <h4 class="heading"><%= label_tag 'admin_note', t('.admin_notes_heading_label', default: 'Notes') %></h4>
       <p class="note">
-        <%= ts('Required when warning, banning, or suspending an account') %>
+        <%= t('.notes_required', default: 'Required when adding or removing a warning or suspension to an account.') %>
       </p>
       <p>
         <%= text_area_tag 'admin_note', nil, class: 'observe_textlength' %>
-        <%= generate_countdown_html("admin_note", ArchiveConfig.LOGNOTE_MAX) %>
+        <%= generate_countdown_html('admin_note', ArchiveConfig.LOGNOTE_MAX) %>
       </p>
     </fieldset>
 
-    <p class="submit"><%= submit_tag ts("Update") %></p>
+    <p class="submit"><%= submit_tag t('.abuse_form_submit', default: 'Update') %></p>
   <% end %>
 
   <%= render 'user_history', user: @user %>
