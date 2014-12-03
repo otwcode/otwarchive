@@ -91,3 +91,109 @@ Feature: Admin Actions to manage users
     And I fill in "Fannish next of kin's email" with ""
     And I press "Update"
   Then I should see "Fannish next of kin removed."
+
+  Scenario: A user is given a warning with a note
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Record Warning"
+    And I fill in "Notes" with "Next time, the brig."
+  When I press "Update"
+  Then I should see "Warning was recorded."
+    And I should see "Warned"
+    And I should see "Next time, the brig."
+
+  Scenario: A user cannot be given a warning without a note
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Record Warning"
+  When I press "Update"
+  Then I should see "You must include notes in order to perform this action."
+
+  Scenario: A user is given a suspension with a note and number of days
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Suspend: enter a whole number of days"
+    And I fill in "suspend_days" with "30"
+    And I fill in "Notes" with "Disobeyed orders."
+  When I press "Update"
+  Then I should see "User has been temporarily suspended."
+    And I should see "Suspended until"
+    And I should see "Disobeyed orders."
+
+  Scenario: A user cannot be given a suspension with without a number of days
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Suspend: enter a whole number of days"
+    And I fill in "Notes" with "Disobeyed orders."
+  When I press "Update"
+  Then I should see "Please enter the number of days for which the user should be suspended."
+
+  Scenario: A user cannot be given a suspension with without a note
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Suspend: enter a whole number of days"
+    And I fill in "suspend_days" with "30"
+  When I press "Update"
+  Then I should see "You must include notes in order to perform this action."
+
+  Scenario: A user is banned with a note
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Suspend permanently (ban user)"
+    And I fill in "Notes" with "To the New Zealand penal colony with you."
+  When I press "Update"
+  Then I should see "User has been permanently suspended."
+    And I should see "Suspended Permanently"
+    And I should see "To the New Zealand penal colony with you."
+
+  Scenario: A user cannot be banned without a note
+  Given the user "mrparis" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Suspend permanently (ban user)"
+  When I press "Update"
+  Then I should see "You must include notes in order to perform this action."
+
+  Scenario: A user's suspension is lifted with a note
+  Given the user "mrparis" is suspended
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Lift temporary suspension, effective immediately."
+    And I fill in "Notes" with "Good behavior."
+  When I press "Update"
+  Then I should see "Suspension has been lifted."
+    And I should see "Suspension Lifted"
+    And I should see "Good behavior."
+
+  Scenario: A user's suspension cannot be lifted without a note
+  Given the user "mrparis" is suspended
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Lift temporary suspension, effective immediately."
+  When I press "Update"
+  Then I should see "You must include notes in order to perform this action."
+
+  Scenario: A user's ban is lifted with a note
+  Given the user "mrparis" is banned
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Lift permanent suspension, effective immediately."
+    And I fill in "Notes" with "Need him to infiltrate the Maquis."
+  When I press "Update"
+  Then I should see "Suspension has been lifted."
+    And I should see "Suspension Lifted"
+    And I should see "Need him to infiltrate the Maquis."
+
+  Scenario: A user's ban cannot be lifted without a note
+  Given the user "mrparis" is banned
+    And I am logged in as an admin
+  When I go to the abuse administration page for "mrparis"
+    And I choose "Lift permanent suspension, effective immediately."
+  When I press "Update"
+  Then I should see "You must include notes in order to perform this action."
