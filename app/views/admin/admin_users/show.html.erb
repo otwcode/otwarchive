@@ -47,9 +47,9 @@
             <%= radio_button_tag 'admin_action', 'unsuspend', false %>
             <%= label_tag 'admin_action_unsuspend', ts("Lift temporary suspension, effective immediately.") %>
           <% else %>
-            <%= radio_button_tag 'admin_action', 'suspend', false, :disabled => (@user.suspended? || @user.banned?) %>
+            <%= radio_button_tag 'admin_action', 'suspend', false, :disabled => @user.banned? %>
             <%= label_tag 'admin_action_suspend', ts("Suspend: enter a whole number of days") %>
-            <%= text_field_tag 'suspend_days', '', {:class => "number", :size => 2, :disabled => @user.suspended?} %>
+            <%= text_field_tag 'suspend_days', '', {:class => "number", :size => 2, :disabled => @user.banned?} %>
             <%= live_validation_for_field('suspend_days', :presence => false, :numericality => true) %> 
           <% end %>
         </li> 
@@ -58,7 +58,7 @@
             <%= radio_button_tag 'admin_action', 'unban', false %>
             <%= label_tag 'admin_action_unban', ts("Lift permanent suspension, effective immediately.") %>
           <% else %>
-            <%= radio_button_tag 'admin_action', 'ban', false, :disabled => @user.banned? %>
+            <%= radio_button_tag 'admin_action', 'ban', false %>
             <%= label_tag 'admin_action_ban', ts("Suspend permanently (ban user)") %>
           <% end %>
         </li>
