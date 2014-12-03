@@ -136,7 +136,7 @@ class Admin::AdminUsersController < ApplicationController
         end
 
         # unban banned user
-        if params[:admin_acton] == 'unban' && @user.banned?
+        if params[:admin_action] == 'unban' && @user.banned?
           @user.banned = false
           if !@user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
