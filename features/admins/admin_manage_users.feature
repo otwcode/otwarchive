@@ -92,6 +92,34 @@ Feature: Admin Actions to manage users
     And I press "Update"
   Then I should see "Fannish next of kin removed."
 
+  Scenario: A Fannish Next of Kin updates when the next of kin user changes their username
+  Given the fannish next of kin "libby" for the user "harrykim"
+    And I am logged in as "libby"
+  When I visit the change username page for libby
+    And I fill in "New User Name" with "newlibby"
+    And I fill in "Password" with "password"
+    And I press "Change User Name"
+  Then I should get confirmation that I changed my username
+  When I am logged in as an admin
+    And I go to the manage users page
+    And I fill in "Name or email" with "harrykim"
+    And I press "Find"
+  Then I should see "newlibby"
+
+  Scenario: A Fannish Next of Kin stays with the user when the user changes their username
+  Given the fannish next of kin "libby" for the user "harrykim"
+    And I am logged in as "harrykim"
+  When I visit the change username page for harrykim
+    And I fill in "New User Name" with "harrykim2"
+    And I fill in "Password" with "password"
+    And I press "Change User Name"
+  Then I should get confirmation that I changed my username
+  When I am logged in as an admin
+    And I go to the manage users page
+    And I fill in "Name or email" with "harrykim2"
+    And I press "Find"
+  Then I should see "libby"
+
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
