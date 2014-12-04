@@ -20,7 +20,7 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
 .tags li {
   display: inline;
   padding-left: 0;
-  padding-right: 0.25;
+  padding-right: 0.25em;
 }
 
 .filters .tags li, .review .tags {
