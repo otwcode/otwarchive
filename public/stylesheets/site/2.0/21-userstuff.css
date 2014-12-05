@@ -86,6 +86,10 @@
   border-bottom: 0.25em double #333;
 }
 
+.userstuff h4 {
+  font-weight: 700;
+}
+
 .userstuff h5 {
   font-weight: 600;
   font-size: 1em;
