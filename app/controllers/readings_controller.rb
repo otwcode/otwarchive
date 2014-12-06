@@ -12,9 +12,17 @@ class ReadingsController < ApplicationController
   def index
     @readings = @user.readings
     @page_subtitle = ts("History")
+    @kudos_list = []
     if params[:show] == 'to-read'
       @readings = @readings.where(:toread => true)
       @page_subtitle = ts("Saved For Later")
+    end
+    if params[:show] == 'kudos-history'
+      # collext a list of pseuds the user may have left kudos under
+      pseuds=Pseud.where(user_id: @user.id ).map { |x| x.id }
+      @kudos_list = Kudo.where(:pseud_id => pseuds ).map{ |w| w.commentable_id }
+      @readings = @readings.where(:work_id => @kudos_list)
+      @page_subtitle = ts("Kudos history")
     end
     @readings = @readings.order("last_viewed DESC").page(params[:page])
   end
