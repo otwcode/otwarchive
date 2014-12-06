@@ -64,6 +64,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-slow_finder_errors (0.1.1)
+      capybara (~> 2.0)
     chronic (0.9.1)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -362,6 +364,7 @@ DEPENDENCIES
   bundler
   capistrano-gitflow_version (>= 0.0.3)
   capybara
+  capybara-slow_finder_errors
   cocaine
   coveralls
   css_parser
