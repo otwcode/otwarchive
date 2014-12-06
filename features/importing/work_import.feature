@@ -123,4 +123,8 @@ Feature: Import Works
   When I import "http://thehexfiles.net/viewstory.php?sid=15563"
   Then I should see "Preview"
     And I should see "Chapters:1/1"
-  
+
+  Scenario: Imported works should be English language by default
+    When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
+    Then I should see "Preview"
+      And I should see "English"
