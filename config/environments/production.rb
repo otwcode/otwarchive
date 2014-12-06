@@ -29,7 +29,8 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL']
-  require 'memcache'
+  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL'] ,
+                          {  :expires_in => 1.day, :compress => true , :pool_size => 10 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
