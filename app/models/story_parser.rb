@@ -313,6 +313,9 @@ class StoryParser
       work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
       work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
 
+      # set default language (English)
+      work.language_id = options[:language_id] || 1
+
       # set default value for title
       work.title = "Untitled Imported Work" if work.title.blank?
 

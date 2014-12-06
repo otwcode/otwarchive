@@ -524,7 +524,7 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
-    
+
     # is external author information entered when import for others is not checked?
     if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
       flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
@@ -567,7 +567,8 @@ class WorksController < ApplicationController
       :external_author_name => params[:external_author_name],
       :external_author_email => params[:external_author_email],
       :external_coauthor_name => params[:external_coauthor_name],
-      :external_coauthor_email => params[:external_coauthor_email]
+      :external_coauthor_email => params[:external_coauthor_email],
+      :language_id => params[:language_id]
     }
 
     # now let's do the import
