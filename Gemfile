@@ -114,6 +114,7 @@ group :test do
   # Code coverage
   gem 'simplecov', :require => false
   gem 'email_spec'
+  gem 'capybara-slow_finder_errors'
 end
 
 group :test, :development do
