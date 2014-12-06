@@ -19,8 +19,8 @@ class ReadingsController < ApplicationController
     end
     if params[:show] == 'kudos-history'
       # collext a list of pseuds the user may have left kudos under
-      pseuds=Pseud.where(user_id: @user.id ).map { |x| x.id }
-      @kudos_list = Kudo.where(:pseud_id => pseuds ).map{ |w| w.commentable_id }
+      pseuds=Pseud.where(user_id: @user.id ).value_of(:id)
+      @kudos_list = Kudo.where(:pseud_id => pseuds ).value_of(:commentable_id)
       @readings = @readings.where(:work_id => @kudos_list)
       @page_subtitle = ts("Kudos history")
     end
