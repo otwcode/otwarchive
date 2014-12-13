@@ -22,21 +22,30 @@ module TagsHelper
 
   # Adds the appropriate css classes for the tag index page
   def tag_cloud(tags, classes)
-    max, min = 0.0, 0.0
+    max, min = -1.0/0, 1.0/0
     tags.each { |t|
+      next if t.count.to_i == 0 # 0s make log scales sad
       max = Math.log(t.count.to_i) if Math.log(t.count.to_i) > max
       min = Math.log(t.count.to_i) if Math.log(t.count.to_i) < min
     }
 
     divisor = ((max - min) / classes.size)
-
     tags.each { |t|
-      class_idx = ((Math.log(t.count.to_i) - min) / divisor).floor
-      # handle upper edge case to prevent OOB access
-      if class_idx >= classes.size
-        class_idx = classes.size - 1
-      end    
-      yield t, classes[class_idx]
+      if divisor.infinite?
+        # all counts were 0
+        yield t, classes[0]
+      else
+        class_idx = ((Math.log(t.count.to_i) - min) / divisor)
+        # handle lower edge case to prevent OOB access
+        if class_idx.nan?
+          class_idx = 0.0
+        end
+        # handle upper edge case to prevent OOB access
+        if class_idx >= classes.size
+          class_idx = classes.size - 1
+        end
+        yield t, classes[class_idx.floor]
+      end
     }
   end
 
