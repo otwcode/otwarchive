@@ -24,6 +24,7 @@ gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
 
+gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.4.2'
@@ -32,8 +33,10 @@ gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
+gem 'elasticsearch'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -44,6 +47,7 @@ gem 'paperclip'
 gem 'fastimage'
 
 gem 'authlogic'
+gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -65,6 +69,12 @@ gem 'rpm_contrib'
 # for generating graphs
 gem "google_visualr", ">= 2.1"
 
+# Copycopter to aid translation
+# gem 'copycopter_client', '~> 2.0.1'
+
+# Globalize for translations
+gem 'globalize', '~> 3.1.0'
+
 # Coveralls for code test coverage
 gem 'coveralls', require: false
 
@@ -74,16 +84,17 @@ gem "rack-dev-mark"
 #Phrase-app
 gem 'phrase'
 
-#  Place the New Relic gem as low in the list as possible, allowing the 
-#  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm', "3.8.0.218"
-gem 'newrelic-redis'
-
 # For URL mangling
 gem 'addressable'
 
 # For controlling application behavour dynamically
 gem 'rollout'
+
+#  Place the New Relic gem as low in the list as possible, allowing the 
+#  frameworks above it to be instrumented when the gem initializes.
+gem 'newrelic_rpm', "3.9.3.241"
+gem 'newrelic-redis'
+
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'

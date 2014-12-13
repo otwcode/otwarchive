@@ -76,7 +76,6 @@
 
 .userstuff h2 {
   color: #333;
-  text-align: left;
   margin: 1.5em 0;
   display: block;
 }
@@ -85,6 +84,10 @@
   font-weight: 500;
   padding: 0.125em;
   border-bottom: 0.25em double #333;
+}
+
+.userstuff h4 {
+  font-weight: 700;
 }
 
 .userstuff h5 {

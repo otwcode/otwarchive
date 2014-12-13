@@ -10,7 +10,7 @@
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />
     <meta name="author" content="Organization for Transformative Works" />
-    <% if @user && @user.try(:preference).try(:minimize_search_engines?) %>
+    <% if @user && @user.try(:preference).try(:minimize_search_engines?) || @work.is_a?(Work) && @work.users.all? {|u| u.try(:preference).try(:minimize_search_engines?)} %>
       <meta name="robots" content="noindex" />
       <meta name="googlebot" content="noindex" />
     <% end %>

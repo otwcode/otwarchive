@@ -10,6 +10,12 @@ class StatCounter < ActiveRecord::Base
     REDIS_GENERAL.set(redis_stat_key(:download_count), 0)
   end
 
+  after_commit :enqueue_to_index, on: :update
+
+  def enqueue_to_index
+    IndexQueue.enqueue(self, :stats)
+  end
+
   ###############################################
   ##### MOVING DATA INTO THE DATABASE
   ###############################################

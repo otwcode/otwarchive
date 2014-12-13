@@ -126,7 +126,7 @@ class WorksController < ApplicationController
           # the subtag is for eg collections/COLL/tags/TAG
           subtag = (@tag.present? && @tag != @owner) ? @tag : nil
           user = current_user.present? ? "logged_in" : "logged_out"
-          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}") do
+          @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
             results = @search.search_results
             # calling this here to avoid frozen object errors
             results.items
@@ -304,7 +304,7 @@ class WorksController < ApplicationController
           redirect_to preview_work_path(@work)
         else
           # We check here to see if we are attempting to post to moderated collection
-          flash[:notice]= ts("Work was successfully posted.")
+          flash[:notice]= ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
           in_moderated_collection
           redirect_to work_path(@work)
         end
@@ -373,7 +373,7 @@ class WorksController < ApplicationController
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       preview_mode(:edit) do
         unless @work.posted?
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts('Your changes have not been saved. Please post your work or save without posting if you want to keep them.')
         end
 
         in_moderated_collection
@@ -416,6 +416,9 @@ class WorksController < ApplicationController
 
       if saved
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
+        if posted_changed
+          flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
+        end
         in_moderated_collection
         redirect_to(@work)
       else
@@ -514,7 +517,7 @@ class WorksController < ApplicationController
     end
     
     # is external author information entered when import for others is not checked?
-    if (params[:external_author_name] || params[:external_author_email]) && !params[:importing_for_others]
+    if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
       flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
       render :new_import and return
     end
@@ -802,11 +805,10 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
-
-    if @work.nil?
-      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
-      redirect_to root_path and return
-    elsif @collection && !@work.collections.include?(@collection)
+    unless @work
+      raise ActiveRecord::RecordNotFound, "Couldn't find work with id '#{params[:id]}'"
+    end
+    if @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
     end
 

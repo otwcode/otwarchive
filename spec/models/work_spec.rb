@@ -46,6 +46,10 @@ describe Work do
       expect { create(:work, title: "     #{too_short}")}.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
+    # Reset the min characters in the title, so that the factory is valid
+    after do
+      ArchiveConfig.TITLE_MIN = 1
+    end
   end
 
   context "invalid summary" do
@@ -72,6 +76,8 @@ describe Work do
 
   context "validate authors" do
 
+    # TODO: testing specific invalid pseuds should take place in pseud_spec
+    # However, we still want to make sure we can't save works without a valid pseud
     it "does not save an invalid pseud with *", :pending do
       @pseud = create(:pseud, name: "*pseud*")
       @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
@@ -79,10 +85,10 @@ describe Work do
       @work.errors[:base].should include["These pseuds are invalid: *pseud*"]
     end
 
-    it "does not save if author is blank", :pending do
-      @work = build(:no_authors)
-      @work.save.should be_false
-      @work.errors[:base].should include "Work must have at least one author."
+    let(:invalid_work) { build(:no_authors) }
+    it "does not save if author is blank" do
+      invalid_work.save.should be_false
+      invalid_work.errors[:base].should include "Work must have at least one author."
     end
   end
 
