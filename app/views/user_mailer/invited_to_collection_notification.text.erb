@@ -3,7 +3,7 @@ Dear <%= @user.default_pseud.byline %>,
 
 The collection maintainers of <%= @collection.title %> would like to include your work (<%= @work.title.html_safe %>) in their collection!
 
-To approve or reject this request, please visit your "Collection Items" (<%= user_collection_items_url(@user) %>) page.
+To approve or reject this request, please visit your "Collection Items" page: <%= user_collection_items_url(@user) %>.
 
 If in future you would prefer to automatically approve requests to add your
 works to collections, please edit your Preferences (<%= "#{root_url}#{@user.default_pseud.name}/preferences" %>)
