@@ -81,8 +81,8 @@
             <legend>Search Works</legend>
               <p>
                 <label class="landmark" for="site_search">Work Search:</label>
-                <input class="text" id="site_search" name="work_search[query]" type="text" />
-                <span class="tip">tip: lex m/m (mature OR explicit)</span>
+                <input aria-describedby="site_search_tooltip" class="text" id="site_search" name="work_search[query]" type="text">
+                <span class="tip" role="tooltip" id="site_search_tooltip">tip: lex m/m (mature OR explicit)</span>
                 <span class="submit actions"><input class="button" type="submit" value="Search" /></span>
               </p>
             </fieldset>

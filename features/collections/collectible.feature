@@ -84,7 +84,7 @@ Feature: Collectible items
     Given I have a collection "Various Penguins"
       And I am logged in as a random user
       And I have a bookmark for "Tundra penguins"
-    When I add my bookmark to the collection
+    When I add my bookmark to the collection "Various_Penguins"
     Then I should see "Added"
     # caching prevents the link from showing up immediately
     # When I follow "Various Penguins"
@@ -106,7 +106,7 @@ Feature: Collectible items
     Given I have a closed collection "Various Penguins"
       And I am logged in as a random user
       And I have a bookmark for "Tundra penguins"
-    When I add my bookmark to the collection
+    When I add my bookmark to the collection "Various_Penguins"
     Then I should see "is closed"
     When I go to "Various Penguins" collection's page
     Then I should see "Bookmarks (0)"

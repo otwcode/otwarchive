@@ -359,7 +359,7 @@ class WorksController < ApplicationController
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
         unless @work.posted?
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts('Your changes have not been saved. Please post your work or save without posting if you want to keep them.')
         end
         in_moderated_collection
         @chapter = @work.chapters.first unless @chapter
@@ -526,7 +526,7 @@ class WorksController < ApplicationController
     end
     
     # is external author information entered when import for others is not checked?
-    if (params[:external_author_name] || params[:external_author_email]) && !params[:importing_for_others]
+    if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
       flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
       render :new_import and return
     end

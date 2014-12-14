@@ -14,8 +14,6 @@
         <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, challenge_signup_label(tag_name, num_allowed, num_required), :class => tag_type %>
         
         <% # kludge required for bug in nested_attributes_for:https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes %>
-        <% # this would ideally be in the dd along with the item being validated rather than its label, but that would mean repeating it 5 times %>
-        <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
       </dt>
 
       <%  # Pseudocode for this long if
@@ -43,6 +41,7 @@
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", 
             (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name},
             :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
+          <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
         </dd>
     
       <% elsif TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && (restriction.restricted?(tag_type, "fandom") || restriction.restricted?(tag_type, "tag_set")) %>
@@ -55,6 +54,7 @@
                                     :autocomplete_hint_text => ts("Please select a fandom first!"),
                                     :autocomplete_searching_text => ts("Searching by fandom..."),
       															:autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
+          <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
       	</dd>
       <% else # all other cases %>
         <% # save the field id to pass for autocompleting based on fandoms in autocomplete if we use autocomplete %>
@@ -71,6 +71,7 @@
               <h4 class="heading"><%= ts("#{tag_name.titleize}") %></h4>
               <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", restriction.tags(tag_type).by_name_without_articles.value_of(:name),
                   :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
+              <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
             </dd>
           <% else # we have set options but too many for tickyboxes, do autocomplete instead %>        
             <dd title="<%= ts("choose #{tag_name.pluralize.downcase} from the challenge options") %>">
@@ -81,11 +82,13 @@
                 <%= link_to( ts("List %{taglist_size} %{tag_name}", :taglist_size => restriction.tags(tag_type).count, :tag_name => tag_name.pluralize.titleize),
                         show_options_tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
               </p>
+              <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
             </dd>
           <% end %>
         <% else # no specified tags so let's just go with standard autocomplete %>
           <dd title="<%= ts("choose #{tag_name.pluralize.downcase} from canonical archive tags") %>">
             <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed) %>
+            <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
           </dd>
         <% end %>
       
