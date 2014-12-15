@@ -5,8 +5,27 @@ en:
   admin:
     admin_users:
       index:
-        table:
-          fnok_heading: "Fannish Next of Kin"
+        page_heading: "Find Users"
+        form:
+          note: "Search for a user by username, pseud or email, or search by role"
+          query_label: "Name or email"
+          role_label: "Role"
+          status_label: "Status"
+          inactive_label: "Not yet activated"
+          submit: "Find"
+        results_table:
+          summary: "Users matching your search criteria, as well as options for updating the user's roles and viewing more information."
+          caption: "List of Users"
+          head:
+            username: "Username"
+            email: "Email"
+            fnok: "Fannish Next of Kin"
+            update: "Update"
+            details: "Details"
+          body:
+            email_title: "Email"
+            submit: "Update"
+            details: "Details"
       show:
         page_heading: "User"
         form_heading: "Abuse Administration"
