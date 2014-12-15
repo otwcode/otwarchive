@@ -15,7 +15,7 @@ en:
           activate_user: "Activate User Account"
           manage_user: "Manage User Roles"
         form:
-          sumbit: "Update"
+          submit: "Update"
           fnok:
             legend: "Fannish Next of Kin"
             heading: "Fannish Next of Kin"
