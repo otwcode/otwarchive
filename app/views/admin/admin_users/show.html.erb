@@ -19,7 +19,7 @@
 
   <!--main content-->
   <h3 class="heading"><%= t('admin.admin_users.show.form_heading') %></h3>
-  <%= form_tag :action => "update_user", :controller => "admin/admin.admin_users.show" do %>
+  <%= form_tag :action => "update_user", :controller => "admin/admin_users" do %>
     <%= hidden_field_tag 'user_login', @user.login %>
     <fieldset>
       <legend><%= t('admin.admin_users.show.form.fnok.legend') %></legend>
