@@ -2,4 +2,34 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  admin:
+    admin_users:
+      index:
+        table:
+          fnok_heading: "Fannish Next of Kin"
+      show:
+        page_heading: "User"
+        form_heading: "Abuse Administration"
+        subnav:
+          send_activation: "Send Activation Email"
+          activate_user: "Activate User Account"
+          manage_user: "Manage User Roles"
+        form:
+          sumbit: "Update"
+          fnok:
+            legend: "Fannish Next of Kin"
+            heading: "Fannish Next of Kin"
+            name: "Fannish next of kin's username"
+            email: "Fannish next of kin's email"
+          admin_actions:
+            legend: "Warnings and Suspensions"
+            heading: "Warnings and Suspensions"
+            warn_label: "Record Warning"
+            unsuspend_label: "Lift temporary suspension, effective immediately."
+            suspend_label: "Suspend: enter a whole number of days"
+            unban_label: "Lift permanent suspension, effective immediately."
+            ban_label: "Suspend permanently (ban user)"
+          notes:
+            legend: "Notes"
+            heading_label: "Notes"
+            required_note: "Required when adding or removing a warning or suspension to an account."
