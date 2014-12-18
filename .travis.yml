@@ -1,4 +1,6 @@
 language: ruby
+cache: bundler
+sudo: false
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rspec spec"
@@ -28,7 +30,7 @@ script:
   - bundle exec $TEST_GROUP
 before_script:
   - bash script/travis_configure.sh
-  - bash script/travis_elasticsearch_upgrade.sh
+  #- bash script/travis_elasticsearch_upgrade.sh
 after_script:
   - bundle exec rake coveralls:push
 notifications:

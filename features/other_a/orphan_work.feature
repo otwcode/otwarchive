@@ -30,8 +30,10 @@ Feature: Orphan work
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When all search indexes are updated
-      And I follow "Bookmarks (0)"
-      And I follow "Works (0)"
+      #And I follow "Bookmarks (0)"
+      #And I follow "Works (0)"
+      And I go to my bookmarks page
+      And I go to my works page
     Then I should not see "Shenanigans"
     When I view the work "Shenanigans"
     Then I should see "orphan_account"
