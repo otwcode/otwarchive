@@ -491,7 +491,8 @@ Feature: Collection
     And I should not see "Yuletide"
     And I should not see "Fulfilling Story 1"
     And I should not see "Stargate Atlantis"
-  When I follow "Works (0)"
+  #When I follow "Works (0)"
+  When I go to myname1's works page
   Then I should not see "Stargate Atlantis"
 
   # user edits it to undo fulfilling the assignment
