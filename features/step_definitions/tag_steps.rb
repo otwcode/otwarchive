@@ -165,12 +165,12 @@ When /^I view tag wrangling discussions$/ do
   step %{I follow "Discussion"}
 end
 
-When /^I add "([^"]*)" to my favorite tags$/ do |tag|
+When /^I add "([^\"]*)" to my favorite tags$/ do |tag|
   step %{I view the "#{tag}" works index}
   step %{I press "Favorite Tag"}
 end
 
-When /^I remove "([^"]*)" from my favorite tags$/ do |tag|
+When /^I remove "([^\"]*)" from my favorite tags$/ do |tag|
   step %{I view the "#{tag}" works index}
   step %{I press "Unfavorite Tag"}
 end
