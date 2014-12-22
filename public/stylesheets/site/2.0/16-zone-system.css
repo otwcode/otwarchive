@@ -181,6 +181,12 @@ SUBSECTIONS:
   margin: 1em;
 }
 
+/* module: twitter */
+
+.tweets iframe {
+  width: 100% !important;
+}
+
 /* mod: logged-in */
 
 .logged-in .splash .module {
