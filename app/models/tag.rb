@@ -99,7 +99,7 @@ class Tag < ActiveRecord::Base
     :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    :message => 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_presence_of :sortable_name
     

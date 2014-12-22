@@ -26,7 +26,7 @@ How to Contribute
 
 Volunteers are always welcome both for coding and testing! 
 
-[Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer) or [drop into our Campfire chatroom](https://fanarchive.campfirenow.com/7e097) if you have any questions. 
+[Read more about volunteering with the OTW](http://transformativeworks.org/how-you-can-help/volunteer) or [drop us an email](mailto:otw-coders@transformativeworks.org) if you have any questions. 
 
 You can also submit a pull request; we'll get back to you as soon as we can!
 

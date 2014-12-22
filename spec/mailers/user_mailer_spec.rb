@@ -2,19 +2,6 @@ require 'spec_helper'
 
 describe UserMailer do
 
-  describe "basic user emails" do
-    before(:each) do
-      @user = FactoryGirl.create(:user, login: 'activation', email: 'activation@ao3.org')
-    end
-
-    let(:email) { UserMailer.activation(@user.id).deliver }
-
-    it "should have a valid from line" do
-      text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      email.encoded.should =~ /#{text}/
-    end
-  end
-
   describe "claim notification" do
     title = 'Imported Work Title'
     title2 = 'Second ' + title
