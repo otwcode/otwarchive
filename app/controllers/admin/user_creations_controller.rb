@@ -21,9 +21,9 @@ class Admin::UserCreationsController < ApplicationController
       # Email users so they're aware of Abuse action
       orphan_account = User.orphan_account
       users = creation.pseuds.collect(&:user).uniq
-      for user in users
+      users.each do |user|
         unless user == orphan_account
-          UserMailer.admin_hidden_work_notification(creation,user).deliver
+          UserMailer.admin_hidden_work_notification(creation, user).deliver
         end
       end
      redirect_to(creation)
