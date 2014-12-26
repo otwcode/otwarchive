@@ -43,6 +43,7 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt (3.1.7)
+    bcrypt (3.1.7-x86-mingw32)
     best_in_place (2.1.0)
       jquery-rails
       rails (~> 3.1)
@@ -71,6 +72,7 @@ GEM
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
     colorize (0.6.0)
+    connection_pool (2.1.0)
     coveralls (0.7.0)
       multi_json (~> 1.3)
       rest-client
@@ -92,6 +94,7 @@ GEM
       cucumber (>= 1.2.0)
       nokogiri (>= 1.5.0)
       rails (~> 3.0)
+    dalli (2.7.2)
     database_cleaner (1.0.1)
     delorean (2.1.0)
       chronic
@@ -120,6 +123,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastimage (1.4.0)
     gherkin (2.12.0)
+      multi_json (~> 1.3)
+    gherkin (2.12.0-x86-mingw32)
       multi_json (~> 1.3)
     gherkin (2.12.2-x86-mingw32)
       multi_json (~> 1.3)
@@ -157,7 +162,6 @@ GEM
       nokogiri (~> 1.4)
       ntlm-http (~> 0.1, >= 0.1.1)
       webrobots (>= 0.0.9, < 0.2)
-    memcache-client (1.8.5)
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.5.0)
@@ -363,9 +367,11 @@ DEPENDENCIES
   capistrano-gitflow_version (>= 0.0.3)
   capybara
   cocaine
+  connection_pool
   coveralls
   css_parser
   cucumber-rails
+  dalli
   database_cleaner
   delorean
   elasticsearch
@@ -380,9 +386,9 @@ DEPENDENCIES
   htmlentities
   httparty
   jquery-rails (>= 0.2.6)
+  kgio
   launchy
   mechanize
-  memcache-client
   mysql2
   newrelic-redis
   newrelic_rpm (= 3.9.3.241)
