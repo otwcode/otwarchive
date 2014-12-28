@@ -29,7 +29,7 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL'] ,
-                          {  :namespace =>  ArchiveConfig.MEMCACHE_NAMESPACE || "ao3-v1", :expires_in => ArchiveConfig.MEMCACHE_DEF_EXPIRE || 0,  :compress => true , :pool_size => 5 }
+                          {  :namespace =>  'ao3-v1', :expires_in => 0,  :compress => true , :pool_size => 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
