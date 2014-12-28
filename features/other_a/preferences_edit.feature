@@ -66,7 +66,8 @@ Feature: Edit preferences
   Then I should not see "Secondy chapter"
   When I follow "editname"
   Then I should see "Dashboard" within "div#dashboard"
-    And I should see "History" within "div#dashboard"
+    And I should see "Works History" within "div#dashboard"
+    And I should see "Kudos History" within "div#dashboard"
     And I should see "Preferences" within "div#dashboard"
     And I should see "Profile" within "div#dashboard"
   When I follow "Preferences" within "div#dashboard"
@@ -89,7 +90,7 @@ Feature: Edit preferences
   Then I should see "Your preferences were successfully updated"
   # When I follow "editname"
   When I follow "Dashboard" within "div#dashboard"
-  Then I should not see "History" within "div#dashboard"
+  Then I should not see "Works History" within "div#dashboard"
   When I go to the works page
     And I follow "This has two chapters"
   Then I should see "Secondy chapter"

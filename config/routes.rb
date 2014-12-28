@@ -184,7 +184,6 @@ Otwarchive::Application.routes.draw do
       post :change_username
       post :end_first_login
       post :end_banner
-      get :kudos_history
     end
     resources :assignments, :controller => "challenge_assignments", :only => [:index] do
       collection do

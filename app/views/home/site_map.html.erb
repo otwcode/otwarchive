@@ -33,7 +33,7 @@
 		    <li><%= link_to t('.my_collections', :default => "My Collections and Challenges"), user_collections_path(current_user) %></li>
 		    <li><%= link_to t('.my_inbox', :default => "My Inbox"), user_inbox_path(current_user) %></li>
 		    <% if current_user.preference.history_enabled? %>
-		      <li><%= link_to t('.my_history', :default =>"My History"), user_readings_path(current_user) %></li>
+		      <li><%= link_to t('.my_history', :default =>"My Works History"), user_readings_path(current_user) %></li>
 		    <% end %>
                     <li><%= link_to t('.my_kudos_history', :default =>"My Kudos History"), user_kudos_path(current_user) %></li>
 		    <li><%= link_to t('.my_subscriptions', :default =>"My Subscriptions"), user_subscriptions_path(current_user) %></li>
