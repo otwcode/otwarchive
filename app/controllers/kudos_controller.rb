@@ -5,9 +5,11 @@ class KudosController < ApplicationController
   skip_before_filter :store_location
 
   def index
-    @work = Work.find(params[:work_id])
-    @kudos = @work.kudos.includes(:pseud => :user).with_pseud
-    @guest_kudos_count = @work.kudos.by_guest.count
+    if params[:work_id]
+      @work = Work.find(params[:work_id])
+      @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+      @guest_kudos_count = @work.kudos.by_guest.count
+    end
   end
 
   def create

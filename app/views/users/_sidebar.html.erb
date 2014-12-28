@@ -44,6 +44,7 @@
     <% if @user.preference.try(:history_enabled?) %>
       <li><%= span_if_current ts("History"), user_readings_path(@user) %></li>
     <% end %>
+    <li><%= span_if_current ts("Kudos History"), user_kudos_path(@user) %></li>
     <li><%= span_if_current ts("Subscriptions"), user_subscriptions_path(@user) %></li>
   </ul>
 <% end %>	
