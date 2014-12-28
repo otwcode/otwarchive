@@ -27,6 +27,7 @@
           <% if @current_user.preference.try(:history_enabled?) %>
             <li><%= span_if_current ts('My History', key: 'header'), user_readings_path(current_user) %></li>
           <% end %>
+          <li><%= span_if_current ts('My Kudos History', key: 'header'), user_kudos_path(current_user) %></li>
           <li><%= span_if_current ts('My Preferences', key: 'header'), user_preferences_path(current_user) %></li>
           <% if permit?('opendoors') %>
             <li><%= span_if_current ts('Open Doors', key: 'header'), opendoors_tools_path %></li>

@@ -22,3 +22,22 @@
   <% end %>
 </div>
 <% end %>
+<% if @kudos %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts('Kudos History') %></h2>
+<!--/descriptions-->
+<!--main content-->
+<% if logged_in? && @kudos.present? %>
+  <ol class="reading work index group">
+    <% @kudos.each do |kudo| %>
+      <%= render 'kudos_blurb', :work => kudo %>
+    <% end %>
+  </ol>
+<% end %>
+<!--/content-->
+
+<!--subnav-->
+<%= will_paginate @kudos %>
+<!--/subnav-->
+<% end %>
+

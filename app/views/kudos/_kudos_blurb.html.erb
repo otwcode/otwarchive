@@ -1,0 +1,10 @@
+<% # expects "work" and "reading" %>
+<li id="work_<%= work.id %>" class="reading work blurb group" role="article">
+    
+  <% unless work.nil? %>
+
+    <%= render 'works/work_module', :work => work %>
+
+  <% end %>
+
+</li>
