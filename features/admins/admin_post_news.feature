@@ -147,3 +147,9 @@ Feature: Admin Actions to Post News
     When I follow "Read more..."
     Then I should see "Default Admin Post"
       And I should see "Content of the admin post."
+
+  Scenario: Admin posts without paragraphs should have placeholder preview text on the homepage
+    Given I have posted an admin post without paragraphs
+    When I am on the homepage
+    Then I should see "Admin Post Without Paragraphs"
+      And I should see "No preview is available for this news post."
