@@ -16,7 +16,7 @@
 <div class="icon">
   <% if !feedback_comment.pseud.nil? %>
     <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-      <span class="anonymous icon"><!-- anonymous icon holder --></span>
+      <span class="anonymous icon"><!-- anonymous creator icon holder --></span>
     <% else %>
       <%= icon_display(feedback_comment.pseud.user, feedback_comment.pseud) %>
     <% end %>
