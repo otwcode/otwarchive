@@ -51,6 +51,10 @@ Feature: Leave kudos
     When I am logged in as "myname1"
       And I view the work "Awesome Story"
       Then I should not see "Kudos ♥"
+    When I am logged in as "myname2"
+      And I go to myname2's user page
+      And I follow "Kudos History"
+    Then I should see "Awesome Story"
 
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
