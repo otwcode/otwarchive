@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     @page_subtitle = @user.login
 
     # very similar to show under pseuds - if you change something here, change it there too
-    if current_user.nil?
+    if  !(logged_in? || logged_in_as_admin?)
       # hahaha omg so ugly BUT IT WORKS :P
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
@@ -187,6 +187,14 @@ class UsersController < ApplicationController
           else
             @user.errors.clear
             @user.reload
+            if @new_login.length < ArchiveConfig.LOGIN_LENGTH_MIN
+              flash[:error] = ts("User names need to have at least %{min} characters.", :min => ArchiveConfig.LOGIN_LENGTH_MIN)
+              return
+            end
+            if @new_login.length > ArchiveConfig.LOGIN_LENGTH_MAX
+              flash[:error] = ts("User names need to have at most %{max} characters.", :max => ArchiveConfig.LOGIN_LENGTH_MAX)
+              return
+            end
             flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
           end
         end
@@ -237,8 +245,7 @@ class UsersController < ApplicationController
           flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
-        # this is just a confirmation and it's ok if it gets delayed
-        @user.activate && UserMailer.activation(@user.id).deliver
+        @user.activate
         flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user

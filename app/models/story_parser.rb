@@ -11,11 +11,14 @@ class StoryParser
   META_PATTERNS = {:title => 'Title',
                    :notes => 'Note',
                    :summary => 'Summary',
-                   :freeform_string => "Tag",
-                   :fandom_string => "Fandom",
-                   :rating_string => "Rating",
-                   :relationship_string => "Relationship|Pairing",
-                   :revised_at => 'Date|Posted|Posted on|Posted at'
+                   :freeform_string => 'Tag',
+                   :fandom_string => 'Fandom',
+                   :rating_string => 'Rating',
+                   :warning_string => 'Warning',
+                   :relationship_string => 'Relationship|Pairing',
+                   :character_string => 'Character',
+                   :revised_at => 'Date|Posted|Posted on|Posted at',
+                   :chapter_title => 'Chapter Title'
                    }
 
 
@@ -430,11 +433,12 @@ class StoryParser
       url.gsub!('_', '-') # convert underscores in usernames to hyphens
       url += "?format=light" # go to light format
       text = download_with_timeout(url)
+
       if text.match(/adult_check/)
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           begin
             agent = Mechanize.new
-            form = agent.get(url).forms.first
+            url.include?("dreamwidth") ? form = agent.get(url).forms.first : form = agent.get(url).forms.third
             page = agent.submit(form, form.buttons.first) # submits the adult concepts form
             text = page.body.force_encoding(agent.page.encoding)
           rescue
@@ -514,7 +518,7 @@ class StoryParser
       @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
       
       # Try to convert all relative links to absolute
-      base = @doc.css('base').present? ? @doc.css('base')[0]['href'] : location.split('?').first      
+      base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
       if base.present?
         @doc.css('a').each do |link|
           if link['href'].present?
@@ -542,20 +546,17 @@ class StoryParser
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
       storyhead = @doc.css("head").inner_html if @doc.css("head")
-      storytext = @doc.css("body").inner_html if @doc.css("body")
-      if storytext.blank?
-        storytext = @doc.css("html").inner_html
-      end
-      if storytext.blank?
-        # just grab everything
-        storytext = story
-      end
+      # Story content - Look for progressively less specific containers or grab everything
+      element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc
+      storytext = element.inner_html
+
       meta = {}
       unless storyhead.blank?
         meta.merge!(scan_text_for_meta(storyhead))
       end
-      meta.merge!(scan_text_for_meta(storytext))
-      work_params[:title] = @doc.css("title").inner_html
+      meta.merge!(scan_text_for_meta(story))
+      meta[:title] ||= @doc.css('title').inner_html
+      work_params[:chapter_attributes][:title] = meta.delete(:chapter_title)
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
 
@@ -584,7 +585,7 @@ class StoryParser
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
-      date = @doc.css("span.b-singlepost-author-date")
+      date = @doc.css("time.b-singlepost-author-date")
       unless date.empty?
         work_params[:revised_at] = convert_revised_at(date.first.inner_text)
       end
@@ -810,8 +811,7 @@ class StoryParser
       # and strip out some tags
       text = text.gsub(/<br/, "\n<br")
       text.gsub!(/<p/, "\n<p")
-      text.gsub!(/<\/?span(.*?)?>/, '')
-      text.gsub!(/<\/?div(.*?)?>/, '')
+      text.gsub!(/<\/?(label|span|div|b)(.*?)?>/, '')
 
       meta = {}
       metapatterns = META_PATTERNS
@@ -824,13 +824,9 @@ class StoryParser
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Fandom: Stargate SG-1 it will set meta[:fandom] = Stargate SG-1
         # then it runs it through convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
-        metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
-        metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
-        if text.match(metapattern) || text.match(metapattern_plural)
+        metapattern = Regexp.new("(#{pattern}|#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
+        if text.match(metapattern)
           value = $2
-          if value.match(metapattern) || value.match(metapattern_plural)
-            value = $2
-          end
           value = clean_tags(value) if is_tag[metaname]
           value = clean_close_html_tags(value)
           value.strip! # lose leading/trailing whitespace

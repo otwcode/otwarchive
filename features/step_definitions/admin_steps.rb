@@ -1,18 +1,36 @@
+default_settings = {
+  :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+  :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  :account_creation_enabled => true,
+  :creation_requires_invite => true,
+  :request_invite_enabled => true,
+  :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+}
+
+def update_settings(settings)
+  admin_settings = AdminSetting.first_or_create
+  admin_settings.update_attributes(settings)
+  admin_settings.save(:validate => false)
+end
+
 ### GIVEN
 
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
-    settings = AdminSetting.new(
-      :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-      :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-      :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-      :account_creation_enabled => true,
-      :creation_requires_invite => true,
-      :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
+    settings = AdminSetting.new(default_settings)
     settings.save(:validate => false)
   end
 end
 
+Given /^the following admin settings are configured:$/ do |table|
+  settings = default_settings.merge(table.rows_hash.symbolize_keys)
+  update_settings settings
+end
+
+Given /^default admin settings$/ do
+  update_settings settings = {}
+end
 
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
@@ -58,20 +76,6 @@ Given /^guest downloading is on$/ do
   step("I am logged in as an admin")
   visit(admin_settings_path)
   uncheck("Turn off downloading for guests")
-  click_button("Update")
-end
-
-Given /^account creation is enabled$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Account creation enabled (People can create accounts without an invitation)")
-  click_button("Update")
-end
-
-Given /^account creation requires invitation$/ do
-  step("I am logged in as an admin")
-  visit(admin_settings_path)
-  check("Account creation requires invitation")
   click_button("Update")
 end
 
@@ -131,8 +135,10 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("title", :with => "Number #{n} FAQ")
+  fill_in("Question*", :with => "Number #{n} Question.")
+  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", :with => "Number #{n} FAQ")
+  fill_in("Anchor name*", :with => "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -156,7 +162,7 @@ When /^there are (\d+) Admin Posts$/ do |n|
   end
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|	
+When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
   end
@@ -186,18 +192,24 @@ When /^I edit known issues$/ do
     step(%{I press "Post"})
 end
 
+Given(/^the following language exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(:language, hash)
+  end
+end
+
 ### THEN
 
-When /^I make a translation of an admin post$/ do
+When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
+  fill_in("admin_post_translated_post_id", :with => AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
-Then /^I should see a translated admin post$/ do
+Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
     step(%{I should not see "Deutsch Ankuendigung"})
@@ -205,4 +217,54 @@ Then /^I should see a translated admin post$/ do
   step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
+end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+end
+
+Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+end
+
+Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+  step(%{I am logged in as "#{user}"})
+  step(%{I am on my works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see the image "title" text "Hidden by Administrator"})
+end
+
+Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "#{work}"})
 end

@@ -2,39 +2,37 @@ class User < ActiveRecord::Base
 
   include WorksOwner
 
-#### used to be in acts_as_authentable
 ## used in app/views/users/new.html.erb
-## TODO move to ArchiveConfig
-  LOGIN_LENGTH_MIN = 3
-  LOGIN_LENGTH_MAX = 40
-
-  validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => LOGIN_LENGTH_MAX)
-
-  PASSWORD_LENGTH_MIN = 6
-  PASSWORD_LENGTH_MAX = 40
+  validates_length_of :login, :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
 
   # allow nil so can save existing users
-  validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => PASSWORD_LENGTH_MAX)
-
-####
+  validates_length_of :password, :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
+                      :allow_nil => true,
+    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
 
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
-  # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
-  # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
-
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
-    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
-    config.validates_length_of_password_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
+    if (ArchiveConfig.BCRYPT  || "true") == "true" then
+      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
+    else
+      config.crypto_provider = Authlogic::CryptoProviders::Sha512
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
+    end
+    config.validates_length_of_password_field_options = {:on => :update,
+                                                         :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                         :if => :has_no_credentials?}
+    config.validates_length_of_password_confirmation_field_options = {:on => :update,
+                                                                      :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                                      :if => :has_no_credentials?}
   end
 
   def has_no_credentials?
@@ -59,7 +57,8 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
-  before_destroy :remove_pseud_from_kudos # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+  # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+  before_destroy :remove_pseud_from_kudos
 
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
@@ -159,10 +158,6 @@ class User < ActiveRecord::Base
   end
 
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
-
-  has_many :translations, :foreign_key => 'translator_id'
-  has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
-  has_many :translation_notes
 
   has_many :subscriptions, :dependent => :destroy
   has_many :followings,

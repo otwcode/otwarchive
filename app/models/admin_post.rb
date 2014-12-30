@@ -27,6 +27,8 @@ class AdminPost < ActiveRecord::Base
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
     :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
+  validate :translated_post_must_exist
+
   scope :non_translated, where('translated_post_id IS NULL')
   
   # Return the name to link comments to for this object
@@ -49,6 +51,12 @@ class AdminPost < ActiveRecord::Base
     self.tags = list.split(",").uniq.collect { |t| 
       AdminPostTag.fetch(:name => t.strip, :language_id => self.language_id, :post => self)
       }.compact
+  end
+
+  def translated_post_must_exist
+    if translated_post_id.present? && AdminPost.find_by_id(translated_post_id).nil?
+      errors.add(:translated_post_id, 'does not exist')
+    end
   end
 
 end

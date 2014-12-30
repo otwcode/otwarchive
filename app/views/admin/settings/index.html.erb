@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "verbose manage" } do |f| %>
+<%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), html: { method: "put", class: "manage" } do |f| %>
   <%= error_messages_for @admin_setting %>
   <fieldset>
     <legend><%= ts("Accounts and Invitations") %></legend>
@@ -11,7 +11,7 @@
     <dl>
   
       <dt><%= f.check_box :account_creation_enabled %></dt>
-      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled (People can create accounts without an invitation)") %></dd>
+      <dd><%= f.label :account_creation_enabled, ts("Account creation enabled") %></dd>
       <dt><%= f.check_box :creation_requires_invite %></dt>
       <dd><%= f.label :creation_requires_invite, ts("Account creation requires invitation") %></dd>
       <dt><%= f.check_box :request_invite_enabled %></dt>
@@ -53,20 +53,6 @@
     
       <dt><%= f.label :cache_expiration, ts("How often (in minutes) should we refresh caching") %></dt>
       <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
-    </dl>
-  </fieldset>
-  
-  <fieldset>
-    <legend><%= ts("Admin Banner") %></legend>
-    <h3 class="landmark heading"><%= ts("Admin Banner") %></h3>
-    <dl>
-  
-      <dt><%= f.label :banner_text, ts("Banner notice") %></dt>
-      <dd>
-        <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :banner_text %>
-      </dd>
-
     </dl>
   </fieldset>
   

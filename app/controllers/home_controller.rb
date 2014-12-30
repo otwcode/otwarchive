@@ -18,6 +18,11 @@ class HomeController < ApplicationController
   def dmca 
     render :action => "dmca", :layout => "application"
   end
+
+  # lost cookie
+  def lost_cookie
+    render action: 'lost_cookie', layout: 'application'
+  end
   
   # diversity statement
   def diversity 
@@ -137,7 +142,7 @@ protected
         query.first
       when "item", "participant"
         "collection_#{classname}".classify.constantize.where(:collection_id => @last_id).first
-      when "tag_wrangling", "user_creation", "translator", "translation"
+      when "tag_wrangling", "user_creation"
         # not real objects
         nil
       else

@@ -7,7 +7,7 @@
   <!--title, author, fandom-->
   <div class="header module">
 
-    <h4 class="heading" title="<%= ts("title") %>">
+    <h4 class="heading">
       <% if (work.unrevealed? || work.anonymous?) && is_author_of?(work) %>
         <span class="status">
           <% if work.unrevealed? %>
@@ -24,7 +24,7 @@
       <%= byline(work) %>
 
 <% #### CACHE show/hide #### %>
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v3") do %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v5") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
   
@@ -35,7 +35,8 @@
       <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
     </h4>
 
-    <h5 class="fandoms heading" title="<%= ts("fandom") %>">
+    <h5 class="fandoms heading">
+      <span class="landmark"><%= ts("Fandoms") %>:</span>
       <% fandoms = tag_groups['Fandom'] %>
       <%= fandoms.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if fandoms %>
       &nbsp;
@@ -55,7 +56,7 @@
   <!--summary-->	
   <% unless work.summary.blank? %>
     <h6 class="landmark heading"><%= ts("Summary") %></h6>
-    <blockquote class="userstuff summary" title="<%= ts("summary") %>">
+    <blockquote class="userstuff summary">
       <%=raw strip_images(sanitize_field(work, :summary)) %>
     </blockquote>
   <% end %>
@@ -73,7 +74,7 @@
 
   <!--stats-->
 
-  <dl class="stats" title="<%= ts("stats") %>">
+  <dl class="stats">
     <% if work.language.present? %>
       <dt><%= ts("Language") %>:</dt>
       <dd><%= work.language.name %></dd>

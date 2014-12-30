@@ -1,8 +1,8 @@
 <fieldset>
-	<legend>External Work</legend>
+	<legend><%= ts('External Work') %></legend>
   <dl>
-    <dt><%= ew.label :url, ts("URL") %>:</dt>
-    <dd title="URL">
+    <dt class="required"><%= ew.label :url, ts('URL') + '*' %></dt>
+    <dd class="required" title="URL">
       <% if !params[:url_from_external].blank? %>
         <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
       <% else %>
@@ -22,13 +22,13 @@
         <% end %>
       <% end %>
     </dd>
-    <dt><%= ew.label :author, ts("Author") %>:</dt>
-    <dd>
+    <dt class="required"><%= ew.label :author, ts('Creator') + '*' %></dt>
+    <dd class="required">
       <%= ew.text_field :author, :class => "observe_textlength" %>
       <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
     </dd>
-    <dt><%= ew.label :title, ts("Title") %>:</dt>
-    <dd>
+    <dt class="required"><%= ew.label :title, ts('Title') + '*' %></dt>
+    <dd class="required">
       <% if !params[:url_from_external].blank? %>
         <%= ew.text_field :title, :value => params[:title_from_external], :class => "observe_textlength" %>
       <% else %>
@@ -37,7 +37,7 @@
       <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
     <dt>
-      <%= ew.label :summary, ts("Author's Summary") %>
+      <%= ew.label :summary, ts('Creator\'s Summary') %>
       <%= ts("(please copy and paste from original work)") %>
     </dt>
     <dd>
@@ -47,28 +47,35 @@
   </dl>
 </fieldset>
 <fieldset>
-  <legend>Tag</legend>
+  <legend><%= ts('Creator\'s Tags') %></legend>
   <p>
-    <%= ts("Author's Tags (comma separated, %{max} characters per tag). Only a fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
+    <%= ts('Creator\'s Tags (comma separated, %{max} characters per tag). Only a fandom is required.', :max => ArchiveConfig.TAG_MAX) %>
   </p>
   <dl>
     <dt class="required">
-      <%= ew.label :fandom_string, Fandom::NAME.pluralize %>*  <%= link_to_help "fandom-help" %>
+      <%= ew.label :fandom_string, Fandom::NAME.pluralize + '*' %> <%= link_to_help "fandom-help" %>
     </dt>
-    <dd title="fandom required">
+    <dd class="required" title="fandom">
       <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
     </dd>
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
     </dt>
-    <dd>
+    <dd class="rating">
       <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
     </dd>
     <dt>
-      <%= ew.label :category_string, Category::NAME %> <%= link_to_help "categories-help" %>
+      <%= Category::NAME %> <%= link_to_help "categories-help" %>
     </dt>
     <dd>
-      <%= ew.collection_select(:category_string, Category.canonical.by_name.sort, :name, :name, {:include_blank => true}) %>
+      <ul>
+        <% for tag in Category.canonical.by_name.sort %>
+          <li>               
+            <%= check_box_tag "bookmark[external][category_string][]", tag.name, false, id: "bookmark_external_category_string_#{tag.id}" %>
+            <%= label_tag "bookmark_external_category_string_#{tag.id}", tag.name %>
+          </li>
+        <% end %> 
+      </ul>
     </dd>
     <dt>
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>

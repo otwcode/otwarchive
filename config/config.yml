@@ -50,6 +50,7 @@ OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
 ELASTICSEARCH_URL: 'http://localhost:9200'
+ELASTICSEARCH_1_URL: 'http://localhost:9200'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
@@ -89,6 +90,10 @@ INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+LOGIN_LENGTH_MIN: 3
+LOGIN_LENGTH_MAX: 40
+PASSWORD_LENGTH_MIN: 6
+PASSWORD_LENGTH_MAX: 40
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
@@ -119,7 +124,7 @@ TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
-MAX_OPTIONS_TO_SHOW: 500
+MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
 
 # how many signups in a challenge before we move to static summaries generated hourly
@@ -212,8 +217,8 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmark
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
 #
-FIELDS_ALLOWING_HTML: ["about_me", "banner_text", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
-  "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
+FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
+  "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary", "screencast"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
@@ -359,4 +364,3 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
-

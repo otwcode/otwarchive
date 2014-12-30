@@ -25,7 +25,7 @@
   <li id="form-link">
      <%= link_to( ts("Post New Work Instead?"),
        {:url => {:controller => :works, :action => :new, :import => false}},
-       :href => url_for(:controller => :works, :action => :new, :import => false)) %>
+       :href => url_for(:controller => :works, :action => :new, :import => nil)) %>
   </li>
 </ul>
 <!--/subnav-->

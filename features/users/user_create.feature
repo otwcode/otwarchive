@@ -5,7 +5,7 @@ Feature: Sign Up for a new account
 
   Background:
     Given account creation is enabled
-      And account creation requires invitation
+      And account creation requires an invitation
       And I am a visitor
       And I use an invitation to sign up
 
@@ -18,7 +18,9 @@ Feature: Sign Up for a new account
     Examples:
       | field                      | value          | error                                           |
       | user_login                 | xx             | Login is too short (minimum is 3 characters)    |
+      | user_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Login is too long (maximum is 40 characters)    |
       | user_password              | pass           | Password is too short (minimum is 6 characters) |
+      | user_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
       | user_password_confirmation | password2      | Password doesn't match confirmation             |
       | user_email                 |                | Email does not seem to be a valid address.      |
       | user_email                 | fake@fake@fake | Email does not seem to be a valid address       |
@@ -49,16 +51,3 @@ Feature: Sign Up for a new account
     Then I should see "Account Created!"
       And I should get a new user activation email
       And a new user account should exist
-
-    # TODO - Move into another scenario for when the user activates their account
-    When all emails have been delivered
-      And I click the first link in the email
-    Then 1 email should be delivered
-      And the email should contain "your account has been activated"
-      And I should see "Please log in"
-
-    # TODO - Move this into a test for when the user logs for the first time
-    # When I fill in "user_session_login" with "newuser"
-    #   And I fill in "user_session_password" with "password1"
-    #   And I press "Log in"
-    # Then I should be logged in

@@ -1,13 +1,17 @@
 language: ruby
 env:
+  - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rspec spec"
+  - TEST_GROUP="cucumber -f progress -r features features/admins"
   - TEST_GROUP="cucumber -f progress -r features features/bookmarks"
   - TEST_GROUP="cucumber -f progress -r features features/collections"
   - TEST_GROUP="cucumber -f progress -r features features/comments_and_kudos"
   - TEST_GROUP="cucumber -f progress -r features features/gift_exchanges"
   - TEST_GROUP="cucumber -f progress -r features features/importing"
-  - TEST_GROUP="cucumber -f progress -r features features/other"
-  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes"
+  - TEST_GROUP="cucumber -f progress -r features features/other_a"
+  - TEST_GROUP="cucumber -f progress -r features features/other_b"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_a"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_b"
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
@@ -23,12 +27,8 @@ script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec $TEST_GROUP
 before_script:
-  - mysql -e 'create database otwarchive_test;'
-  - cp config/database.travis.yml config/database.yml
-  - cp config/newrelic.example config/newrelic.yml
-  - cp config/redis-cucumber.conf.example config/redis-cucumber.conf
-  - cp config/redis.travis.example config/redis.yml
-  - curl -L https://gist.githubusercontent.com/scottsds/8fda6f6fbc66d3a2315e/raw/1d4b990f7922e388d6d7563b9e5cda7c97af18a7/gistfile1.sh | bash
+  - bash script/travis_configure.sh
+  - bash script/travis_elasticsearch_upgrade.sh
 after_script:
   - bundle exec rake coveralls:push
 notifications:

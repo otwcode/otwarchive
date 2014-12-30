@@ -19,7 +19,10 @@ module ApplicationHelper
       class_names = "system support " + controller.controller_name + ' ' + controller.action_name
     end
     if controller.controller_name == "archive_faqs"
-      class_names = "system support faq " + controller.action_name
+      class_names = "system docs support faq " + controller.action_name
+    end
+    if controller.controller_name == "wrangling_guidelines"
+      class_names = "system docs guideline " + controller.action_name
     end
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name
@@ -44,10 +47,8 @@ module ApplicationHelper
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
   def span_if_current(link_to_default_text, path, condition=nil, title_attribute_default_text=nil)
     is_current = condition.nil? ? current_page?(path) : condition
-    text = ts(link_to_default_text)
-    title_text = ts(title_attribute_default_text)
-    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{text}</span>" : "<span class=\"current\" title=\"#{title_text}\">#{text}</span>"
-    link_code = title_attribute_default_text.nil? ? link_to(text, path) : link_to(text, path, title: "#{title_text}")
+    span_tag = title_attribute_default_text.nil? ? "<span class=\"current\">#{link_to_default_text}</span>" : "<span class=\"current\" title=\"#{title_attribute_default_text}\">#{link_to_default_text}</span>"
+    link_code = title_attribute_default_text.nil? ? link_to(link_to_default_text, path) : link_to(link_to_default_text, path, title: "#{title_attribute_default_text}")
     is_current ? span_tag.html_safe : link_code
   end
   
@@ -275,7 +276,7 @@ module ApplicationHelper
   
   # check for pages that allow tiny_mce before loading the massive javascript
   def allow_tinymce?(controller)
-    %w(admin_posts archive_faqs known_issues chapters works).include?(controller.controller_name) &&
+    %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
       %w(new create edit update).include?(controller.action_name)
   end
 

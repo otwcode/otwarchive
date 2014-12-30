@@ -166,12 +166,11 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
-  after_save :expire_caches
   after_destroy :expire_caches
   
   def expire_caches
     if self.item.respond_to?(:expire_caches)
-      self.item.expire_caches
+      CacheMaster.record(item_id, 'collection', collection_id)
     end
   end
 
