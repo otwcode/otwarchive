@@ -32,10 +32,16 @@ class Homepage
   def readings
     return unless logged_in?
     if Rails.env.development?
-      @readings ||= @user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :toread => true })
+      @readings ||= @user.readings.order("RAND()").
+          limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
+          where(toread: true).
+          all
     else
       @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") { 
-        @user.readings.find(:all, :order => "RAND()", :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE, :conditions => { :toread => true })
+        @user.readings.order("RAND()").
+          limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
+          where(toread: true).
+          all
       }
     end
   end
