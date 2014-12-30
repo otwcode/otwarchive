@@ -33,6 +33,9 @@ class AdminPost < ActiveRecord::Base
 
   scope :for_homepage, order: "created_at DESC",
     limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+
+  after_save :expire_cached_home_admin_posts
+  after_destroy :expire_cached_home_admin_posts
   
   # Return the name to link comments to for this object
   def commentable_name
@@ -59,6 +62,14 @@ class AdminPost < ActiveRecord::Base
   def translated_post_must_exist
     if translated_post_id.present? && AdminPost.find_by_id(translated_post_id).nil?
       errors.add(:translated_post_id, 'does not exist')
+    end
+  end
+
+  private
+
+  def expire_cached_home_admin_posts
+    unless Rails.env.development?
+      Rails.cache.delete("home/index/home_admin_posts")
     end
   end
 

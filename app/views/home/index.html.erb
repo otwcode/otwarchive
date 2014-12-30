@@ -3,11 +3,11 @@
     <%= render 'intro_module' %>
   <% end %>
 
-  <% if logged_in? && @favorite_tags.present? %>
+  <% if logged_in? && @homepage.favorite_tags.present? %>
     <div class="favorite module">
       <h3 class="heading"><%= ts('Find your favorites') %></h3>
       <ul>
-        <% @favorite_tags.each do |favorite_tag| %>
+        <% @homepage.favorite_tags.each do |favorite_tag| %>
           <li>
             <%= link_to_tag_works(favorite_tag.tag) %>
           </li>
@@ -24,11 +24,11 @@
     </div>
   <% end %>
 
-  <% if @admin_posts.present? %>
-    <%= render 'news_module', admin_posts: @admin_posts %>
+  <% if @homepage.admin_posts.present? %>
+    <%= render 'news_module', admin_posts: @homepage.admin_posts %>
   <% end %>
 
-  <% if logged_in? && @readings.present? %>
+  <% if logged_in? && @homepage.readings.present? %>
     <div class="random readings module">
       <h3 class="heading">
         <span class="title"><%= ts('Is it later already?') %></span>
@@ -37,15 +37,15 @@
       <div class="flash"></div>
       <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
       <ul class="readings works index group">
-        <% @readings.each do |reading| %>
+        <% @homepage.readings.each do |reading| %>
           <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <% if logged_in? && @inbox_comments.present? %>
-    <%= render 'inbox_module', inbox_comments: @inbox_comments %>
+  <% if logged_in? && @homepage.inbox_comments.present? %>
+    <%= render 'inbox_module', inbox_comments: @homepage.inbox_comments %>
   <% end %>
 
   <div class="latest tweets module">
