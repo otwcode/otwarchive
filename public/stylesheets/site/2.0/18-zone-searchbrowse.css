@@ -30,7 +30,7 @@ Arguably filter and search could be styled in interactions but I've put them her
   position: relative;
 }
 
-.search span.tip {
+.search [role="tooltip"] {
   background: #ddd;
   border: 1px solid #fff;
   padding: 0.15em;
@@ -40,12 +40,8 @@ Arguably filter and search could be styled in interactions but I've put them her
   z-index: 1;
 }
 
-.search:hover .tip {
+.search input:focus + [role="tooltip"] {
   left: 1em;
-  top: 3.5em;
-}
-
-li.search:hover .tip {
   right: 1em;
   top: 2.75em;
 }

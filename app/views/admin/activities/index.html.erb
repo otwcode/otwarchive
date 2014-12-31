@@ -26,7 +26,9 @@
         <% for admin_activity in @activities %>
         <tr id="admin_activity_<%= admin_activity.id %>">
           <td><%= link_to admin_activity.created_at, admin_activity %></td>
-          <td><%= admin_activity.admin_login %></td>
+          <td>
+            <%= admin_activity.admin.nil? ? ts('Admin deleted') : admin_activity.admin_login %>
+          </td>
           <td><%= admin_activity.action %></td>
           <td>
             <%= link_to admin_activity.target_name, admin_activity.target %>

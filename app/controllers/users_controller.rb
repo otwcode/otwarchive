@@ -114,59 +114,24 @@ class UsersController < ApplicationController
   end
 
   def change_username
-    return unless params[:new_login]
+    return unless params[:new_login].present?
 
     @new_login = params[:new_login]
     session = UserSession.new(:login => @user.login, :password => params[:password])
 
     if !session.valid?
       flash[:error] = ts("Your password was incorrect")
-
       return
-    end
-
-    user = User.find_by_login(@new_login)
-    if user && (user != @user)
-      flash[:error] = ts("User name already taken.")
-      return
-    end
-
-    old_login = @user.login
-    old_lower_login = "#{@user.login}".downcase
-    new_lower_login = "#{@new_login}".downcase
-
-    if old_lower_login == new_lower_login
-      old_pseud = Pseud.find_by_name_and_user_id(old_login, @user.id)
-      old_pseud.name = @new_login
-      old_pseud.save!
     end
 
     @user.login = @new_login
 
-    unless @user.save
-      @user.errors.clear
-      @user.reload
-
-      flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
-
-      return
-    end
-
-    flash[:notice] = ts("Your user name has been successfully updated.")
-    new_pseud = Pseud.where(:name => @new_login, :user_id => @user.id).first
-    old_pseud = Pseud.where(:name => old_login, :user_id => @user.id).first
-
-    if new_pseud
-      # do nothing - they already have the matching pseud
-    elsif old_pseud
-      # change the old pseud to match
-      old_pseud.update_attribute(:name, @new_login)
+    if @user.save
+      flash[:notice] = ts("Your user name has been successfully updated.")
+      redirect_to @user
     else
-      # shouldn't be able to get here, but just in case
-      Pseud.create(:name => @new_login, :user_id => @user.id)
+      @user.reload
     end
-
-    redirect_to @user and return
   end
 
   # POST /users
@@ -231,12 +196,11 @@ class UsersController < ApplicationController
       return
     end
 
-    # this is just a confirmation and it's ok if it gets delayed
-    @user.activate && UserMailer.activation(@user.id).deliver
+    @user.activate
 
     flash[:notice] = ts("Signup complete! Please log in.")
 
-    @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
+    @user.create_log_item(action: ArchiveConfig.ACTION_ACTIVATE)
 
     # assign over any external authors that belong to this user
     external_authors = []
@@ -401,7 +365,7 @@ class UsersController < ApplicationController
   def visible_items(current_user)
     # NOTE: When current_user is nil, we use .visible_to_all, otherwise we use
     #       .visible_to_registered_user.
-    visible_method = current_user.nil? ? :visible_to_all : :visible_to_registered_user
+    visible_method = (current_user.nil? && current_admin.nil?) ? :visible_to_all : :visible_to_registered_user
 
     # hahaha omg so ugly BUT IT WORKS :P
     @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").

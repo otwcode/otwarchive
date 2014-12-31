@@ -134,9 +134,15 @@ module NavigationHelpers
     when /^the works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
+    when /^the bookmarks tagged "(.*)"$/i
+      Bookmark.tire.index.refresh
+      tag_bookmarks_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+    when /^the bookmarks in collection "(.*)"$/i
+      Bookmark.tire.index.refresh
+      collection_bookmarks_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
