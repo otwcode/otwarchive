@@ -503,7 +503,7 @@ class User < ActiveRecord::Base
   end
 
   def update_pseud_name
-    return unless login_changed?
+    return unless login_changed? && login_was.present?
     old_pseud = self.pseuds.where(name: login_was).first
     if login.downcase == login_was.downcase
       old_pseud.name = login
