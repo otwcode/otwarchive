@@ -25,7 +25,7 @@
         <td><%= ts('System Generated') %></td>
       </tr>
       <tr>
-        <td><% if @user.last_login_at.nil? %><%= ts('No logins recorded') %><%else%><%= @user.last_login_at %> ( <abbr class="timeago" title="<%= @user.last_login_at.iso8601 =%>"><%= @user.last_login_at.iso8601 =%></abbr> ) <%end%> </td>
+        <td><% if @user.last_sign_in_at.nil? %><%= ts('No logins recorded') %><%else%><%= @user.last_sign_in_at %> ( <abbr class="timeago" title="<%= @user.last_sign_in_at.iso8601 =%>"><%= @user.last_sign_in_at.iso8601 =%></abbr> ) <%end%> </td>
         <td><%= ts('Last Login') %></td>
         <td><%= ts('System Generated') %></td>
       </tr>

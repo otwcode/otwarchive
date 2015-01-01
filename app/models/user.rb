@@ -532,13 +532,11 @@ class User < ActiveRecord::Base
     User.transaction do
       list = REDIS_GENERAL.smembers("last_login_list").each
       list.each do |username|
-        puts username
         time = REDIS_GENERAL.get("last_login_#{username}")
-        puts time
         REDIS_GENERAL.srem("last_login_list",username)
         REDIS_GENERAL.del("last_login_#{username}")
         if username && time && user = User.find_by_login(username)
-          user.last_login_at = time
+          user.last_sign_in_at = time
           user.save
         end
       end
