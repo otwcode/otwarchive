@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 export RAILS_ENV=test
 bundle install
 rvm use 1.9.3-p484 
