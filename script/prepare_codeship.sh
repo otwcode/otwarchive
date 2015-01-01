@@ -1,5 +1,10 @@
 #!/bin/bash 
-set -x
+# Call this script like
+#
+# rvm use 1.9.3-p484
+# bash ./script/prepare_codeship.sh
+#
+#
 export RAILS_ENV=test
 bundle install
 cp config/database.codeship.yml config/database.yml
