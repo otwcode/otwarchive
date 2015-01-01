@@ -378,6 +378,12 @@ class User < ActiveRecord::Base
 
   public
 
+  # called to mark a user as "Active"
+  def update_active
+    REDIS_GENERAL.sadd("last_login_list",self.login)
+    REDIS_GENERAL.set("last_active_#{self.login}",Time.now)
+  end
+
   # Is this user an authorized translation admin?
   def translation_admin
     self.is_translation_admin?
@@ -532,13 +538,19 @@ class User < ActiveRecord::Base
     User.transaction do
       list = REDIS_GENERAL.smembers("last_login_list").each
       list.each do |username|
-        time = REDIS_GENERAL.get("last_login_#{username}")
+        login_time = REDIS_GENERAL.get("last_login_#{username}")
+        active_time = REDIS_GENERAL.get("last_active_#{username}")
         REDIS_GENERAL.srem("last_login_list",username)
-        REDIS_GENERAL.del("last_login_#{username}")
-        if username && time && user = User.find_by_login(username)
-          user.last_sign_in_at = time
-          user.save
+        user = User.find_by_login(username)
+        if username && login_time.present? && user
+          user.last_sign_in_at = login_time
+          REDIS_GENERAL.del("last_login_#{username}")
         end
+        if username && active_time.present? && user 
+          user.last_active_at = active_time
+          REDIS_GENERAL.del("last_active_#{username}")
+        end
+        user.save
       end
     end
   end

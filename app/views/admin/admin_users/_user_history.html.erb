@@ -29,6 +29,11 @@
         <td><%= ts('Last Login') %></td>
         <td><%= ts('System Generated') %></td>
       </tr>
+      <tr>
+        <td><% if @user.last_active_at.nil? %><%= ts('No activity recorded') %><%else%><%= @user.last_active_at %> ( <abbr class="timeago" title="<%= @user.last_active_at.iso8601 =%>"><%= @user.last_active_at.iso8601 =%></abbr> ) <%end%> </td>
+        <td><%= ts('Last Activity') %></td>
+        <td><%= ts('System Generated') %></td>
+      </tr>
     </tbody> 
   </table>
 </div>
