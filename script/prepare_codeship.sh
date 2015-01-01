@@ -1,6 +1,7 @@
 #!/bin/bash
 export RAILS_ENV=test
 bundle install
+rvm use 1.9.3-p484 
 cp config/database.codeship.yml config/database.yml
 cp config/newrelic.example config/newrelic.yml
 cp config/redis-cucumber.conf.example config/redis-cucumber.conf
