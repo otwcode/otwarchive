@@ -1,7 +1,6 @@
 #!/bin/bash 
 set -x
 export RAILS_ENV=test
-rvm use 1.9.3-p484
 bundle install
 cp config/database.codeship.yml config/database.yml
 cp config/newrelic.example config/newrelic.yml
