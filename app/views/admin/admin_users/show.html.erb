@@ -56,7 +56,8 @@
 
   <p class="submit"><%= submit_tag ts("Update") %></p>
 <% end %>
-
+<h3 class="heading"><%= ts('User last login') %></h3>
+<p><% if @user.last_login_at.nil? %><%= ts('No logins recorded') %><%else%><%= @user.last_login_at %></p><%end%>
 <%= render :partial => 'user_history', :locals => {:user => @user} %>
 <!--/content-->
 </div>

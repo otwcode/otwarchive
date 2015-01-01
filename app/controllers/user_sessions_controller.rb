@@ -22,6 +22,9 @@ class UserSessionsController < ApplicationController
       if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
+        user = User.find_by_login(params[:user_session][:login])
+        user.last_login_at = Time.now
+        user.save
         redirect_back_or_default(@current_user)
       else
         if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
