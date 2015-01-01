@@ -119,7 +119,7 @@ class UsersController < ApplicationController
     @new_login = params[:new_login]
     session = UserSession.new(:login => @user.login, :password => params[:password])
 
-    if !session.valid?
+    unless session.valid?
       flash[:error] = ts("Your password was incorrect")
       return
     end

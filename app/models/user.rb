@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   # done by authlogic
-  validates_uniqueness_of :login, :message => ts('is already taken')
+  validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
   validates :email, :email_veracity => true
 
