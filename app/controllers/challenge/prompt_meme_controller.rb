@@ -71,6 +71,7 @@ class Challenge::PromptMemeController < ChallengesController
 
   def destroy
     @challenge.destroy
+    clear_challenge_references
     flash[:notice] = 'Challenge settings were deleted.'
     redirect_to @collection
   end
