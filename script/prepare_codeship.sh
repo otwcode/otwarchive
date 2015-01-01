@@ -1,7 +1,5 @@
 #!/bin/bash
 export RAILS_ENV=test
-# We support all major ruby versions: 1.8.7, 1.9.2, 1.9.3, 2.0.0, jruby
-rvm use 1.9.3-p484
 bundle install
 cp config/database.codeship.yml config/database.yml
 cp config/newrelic.example config/newrelic.yml
@@ -23,7 +21,7 @@ VERSION="0.90.13"
 PORT="9333"
 cd ~
 wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${VERSION}.zip
-unzip elasticsearch-${VERSION}.zip
+unzip -o  elasticsearch-${VERSION}.zip
 cd elasticsearch-${VERSION}
 echo "http.port: ${PORT}" >> config/elasticsearch.yml
 # Make sure to use the exact parameters you want for elasticsearch and give it enough sleep time to properly start up
