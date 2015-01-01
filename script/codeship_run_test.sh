@@ -1,4 +1,5 @@
 #!/bin/bash
+rvm use 1.9.3-p484
 bundle exec rspec spec
 rake db:drop
 bash ./script/prepare_codeship.sh
