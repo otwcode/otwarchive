@@ -13,24 +13,36 @@
       <% unless @log_items.blank?
         @log_items.each do |item| %>
         <tr>
-          <td><%= item.created_at %> ( <abbr class="timeago" title="<%= item.created_at.iso8601 =%>"><%= item.created_at.iso8601  =%></abbr> )</td>
+          <td><%= item.created_at %> ( <abbr class="timeago" title="<%= item.created_at %>"><%= item.created_at.iso8601  %></abbr> )</td>
           <td><%= log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
           <td><%= item.note %></td>
         </tr>
         <% end %>
       <% end %>
       <tr>
-        <td><%= @user.created_at %> ( <abbr class="timeago" title="<%= @user.created_at.iso8601 =%>"><%= @user.created_at.iso8601  =%></abbr> )</td>
+        <td><%= @user.created_at %> ( <abbr class="timeago" title="<%= @user.created_at %>"><%= @user.created_at.iso8601  %></abbr> )</td>
         <td><%= ts('Account Created') %></td>
         <td><%= ts('System Generated') %></td>
       </tr>
       <tr>
-        <td><% if @user.last_sign_in_at.nil? %><%= ts('No logins recorded') %><%else%><%= @user.last_sign_in_at %> ( <abbr class="timeago" title="<%= @user.last_sign_in_at.iso8601 =%>"><%= @user.last_sign_in_at.iso8601 =%></abbr> ) <%end%> </td>
+        <td>
+            <% if @user.last_sign_in_at.nil? %>
+               <%= ts('No logins recorded') %>
+            <%else%>
+               <%= @user.last_sign_in_at %> ( <abbr class="timeago" title="<%= @user.last_sign_in_at %>"><%= @user.last_sign_in_at.iso8601 %></abbr> ) 
+            <%end%>
+        </td>
         <td><%= ts('Last Login') %></td>
         <td><%= ts('System Generated') %></td>
       </tr>
       <tr>
-        <td><% if @user.last_active_at.nil? %><%= ts('No activity recorded') %><%else%><%= @user.last_active_at %> ( <abbr class="timeago" title="<%= @user.last_active_at.iso8601 =%>"><%= @user.last_active_at.iso8601 =%></abbr> ) <%end%> </td>
+        <td>
+            <% if @user.last_active_at.nil? %>
+               <%= ts('No activity recorded') %>
+            <%else%>
+               <%= @user.last_active_at %> ( <abbr class="timeago" title="<%= @user.last_active_at =%>"><%= @user.last_active_at.iso8601 =%></abbr> ) 
+            <%end%>
+        </td>
         <td><%= ts('Last Activity') %></td>
         <td><%= ts('System Generated') %></td>
       </tr>
