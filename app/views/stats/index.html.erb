@@ -24,12 +24,10 @@
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
     <% [:user_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <% if stat.to_s.titleize == "User Subscriptions"
-          html_class = 'user subscriptions'
-        elsif stat.to_s.titleize == "Word Count"
+      <% if stat == :word_count
           html_class = 'words'
         else
-         html_class = stat.to_s
+         html_class = stat.to_s.humanize.downcase
         end
       %> 
       <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
