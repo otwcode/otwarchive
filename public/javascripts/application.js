@@ -18,6 +18,9 @@ $j(document).ready(function() {
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
+    // convert an absolute time to a relative time, e.g. 1 day ago
+    $j('.timeago').timeago();
+
     prepareDeleteLinks();
     thermometer();
 });
