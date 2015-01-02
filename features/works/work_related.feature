@@ -242,8 +242,7 @@ Scenario: Draft works should not show up on related works
     And I draft a translation
   When I am logged in as "inspiration"
     And I go to my user page
-  When "Issue 3936" is fixed
-  # Then I should not see "Related Works (1)"
+  Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
 
@@ -367,3 +366,4 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
+  

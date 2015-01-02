@@ -8,7 +8,7 @@ a.tag {
   color: #111;
   line-height: 1.5;
   text-decoration: none;
-  padding: 0 0.125em;
+  padding: 0;
   border-bottom: 1px dotted;
 }
 
@@ -19,6 +19,8 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
 
 .tags li {
   display: inline;
+  padding-left: 0;
+  padding-right: 0.25em;
 }
 
 .filters .tags li, .review .tags {
@@ -160,7 +162,7 @@ a.work {
   font-weight: bold;
 }
 
-li.relationships {
+li.relationships a {
   background: #eee;
 }
 
