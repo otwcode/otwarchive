@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Challenge::GiftExchangeController do
+describe Challenge::PromptMemeController do
   include LoginMacros
 
   describe "destroy" do
 
     before(:each) do
-      @collection = FactoryGirl.create(:collection, challenge: GiftExchange.new)
+      @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
       @collection.save
       fake_login_known_user(@collection.owners.first.user)
       delete :destroy, id: @collection.challenge.id, collection_id: @collection.name

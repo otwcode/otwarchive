@@ -7,5 +7,11 @@ module LoginMacros
     controller.stub!(:current_user).and_return(@current_user)
     controller.stub!(:logout_if_not_user_credentials).and_return(nil)
   end
-  
+
+  def fake_login_known_user(user)
+    @current_user = user
+    controller.stub!(:logged_in?).and_return(true)
+    controller.stub!(:current_user).and_return(@current_user)
+    controller.stub!(:logout_if_not_user_credentials).and_return(nil)
+  end
 end
