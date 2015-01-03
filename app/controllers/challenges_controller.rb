@@ -58,7 +58,7 @@ class ChallengesController < ApplicationController
   def clear_challenge_references
     @collection.challenge_id = nil
     @collection.challenge_type = nil
-    @collection.save
+    @collection.save!
   end
   
 end
