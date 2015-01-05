@@ -25,7 +25,7 @@ class InboxController < ApplicationController
       format.js
     end
   end
-  
+ 
   def update
     begin
       @inbox_comments = InboxComment.find(params[:inbox_comments])
@@ -39,6 +39,10 @@ class InboxController < ApplicationController
     rescue
       flash[:caution] = ts("Please select something first")
     end
-    redirect_to user_inbox_path(@user, :filters => params[:filters])
+    success_message = ts('Inbox successfully updated.')
+    respond_to do |format|
+      format.html { redirect_to request.referer || user_inbox_path(@user, :filters => params[:filters]), notice: success_message }
+      format.json { render json: { item_success_message: success_message }, status: :ok }
+    end
   end
 end

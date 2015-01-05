@@ -130,8 +130,8 @@ Feature: Reading count
     And I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Viewed once"
-  When I follow "Delete"
-  Then I should see "Work deleted from your history."
+  When I press "Delete from History"
+  Then I should see "Work successfully deleted from your history."
   When I go to the works page
     And I follow "some work"
   Then I should not see "la la la la la la la la la la la"
@@ -158,3 +158,28 @@ Feature: Reading count
   Then I should see "some work"
     And I should see "Viewed 3 times"
     And I should see "(Marked for Later.)"
+
+  Scenario: A user can see some of their works marked for later on the homepage
+
+  Given the work "Maybe Tomorrow"
+    And I am logged in as "testy"
+  When I mark the work "Maybe Tomorrow" for later
+    And I go to the homepage
+  Then I should see "Is it later already?"
+    And I should see "Some works you've marked for later."
+    And I should see "Maybe Tomorrow"
+
+  Scenario: A user can delete a work marked for later from their history on the homepage
+
+  Given the work "Not Ever"
+    And I am logged in as "testy"
+  When I mark the work "Not Ever" for later
+    And I go to the homepage
+  Then I should see "Not Ever"
+    And I should see a "Delete from History" button
+  When I press "Delete from History"
+  Then I should see "Work successfully deleted from your history."
+    And I should be on the homepage
+    And I should not see "Is it later already?"
+    And I should not see "Some works you've marked for later."
+    And I should not see "Not Ever"
