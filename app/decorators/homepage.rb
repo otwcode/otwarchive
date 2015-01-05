@@ -10,10 +10,10 @@ class Homepage
 
   def admin_posts
     if Rails.env.development?
-      @admin_posts = AdminPost.non_translated.for_homepage
+      @admin_posts = AdminPost.non_translated.for_homepage.all
     else
       @admin_posts = Rails.cache.fetch("home/index/home_admin_posts", expires_in: 20.minutes) { 
-        AdminPost.non_translated.for_homepage 
+        AdminPost.non_translated.for_homepage.all
       }
     end
   end
