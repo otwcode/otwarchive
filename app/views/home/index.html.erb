@@ -18,7 +18,7 @@
     <div class="browse module">
       <h3 class="heading"><%= ts('Find your favorites') %></h3>
       <% if logged_in? %>
-        <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', :maximum => ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
+        <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', maximum: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
       <% end %>
       <%= render 'menu/menu_fandoms' %>
     </div>

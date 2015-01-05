@@ -153,3 +153,25 @@ Feature: Admin Actions to Post News
     When I am on the homepage
     Then I should see "Admin Post Without Paragraphs"
       And I should see "No preview is available for this news post."
+
+  Scenario: Edits to an admin post should appear on the homepage
+    Given I have posted an admin post without paragraphs
+      And I am logged in as an admin
+    When I go to the admin-posts page
+      And I follow "Edit"
+      And I fill in "admin_post_title" with "Edited Post"
+      And I fill in "content" with "<p>Look! A preview!</p>"
+      And I press "Post"
+    When I am on the homepage
+    Then I should see "Edited Post"
+      And I should see "Look! A preview!"
+      And I should not see "Admin Post Without Paragraphs"
+      And I should not see "No preview is available for this news post."
+
+  Scenario: A deleted admin post should be removed from the homepage
+    Given I have posted an admin post
+      And I am logged in as an admin
+    When I go to the admin-posts page
+      And I follow "Delete"
+    When I go to the homepage
+    Then I should not see "Default Admin Post"
