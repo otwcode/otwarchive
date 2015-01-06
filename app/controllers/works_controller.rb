@@ -246,7 +246,7 @@ class WorksController < ApplicationController
     @series = current_user.series.uniq
     @unposted = current_user.unposted_work
 
-    @work.ip_address= request.remote_ip
+    @work.ip_address = request.remote_ip
     # for clarity, add the collection and recipient
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
@@ -281,7 +281,7 @@ class WorksController < ApplicationController
     @series = current_user.series.uniq
     @collection = Collection.find_by_name(params[:work][:collection_names])
 
-    @work.ip_address= request.remote_ip
+    @work.ip_address = request.remote_ip
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
