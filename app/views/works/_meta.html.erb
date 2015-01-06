@@ -56,11 +56,24 @@
       </dd>
     <% end %>
 
-    <dt class="stats"><%= ts("Stats") %>:</dt>
+    <dt class="stats"><%= ts("Stats:") %></dt>
     <dd class="stats">
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
+      <% if logged_in_as_admin? %>
+        <dt class="ipaddress">
+          <%= ts('IP Address:') %>
+        </dt>
+        <dt class="ipaddress">
+        <% if @work.ip_address.nil? %>
+           <%= ts('No address recorded') %>
+        <% else %>
+           <%= @work.ip_address %>
+        <% end %>
+        </dd>
+      <% end %>
+
     </dd>
   </dl>
 </div>
