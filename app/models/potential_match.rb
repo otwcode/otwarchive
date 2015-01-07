@@ -235,12 +235,14 @@ public
     collection_byline_key = byline_key(collection)
     unless REDIS_GENERAL.exists(collection_byline_key)
       score = 0
-      collection.signups.pseud_only.find_each do |pseud|
+      collection.signups.pseud_only.each do |pseud|
         REDIS_GENERAL.zadd collection_byline_key, score, pseud.byline
         score += 1
       end
     end
-    progress = (REDIS_GENERAL.zrank(collection_byline_key, current_byline)  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+    rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
+    return -1 if rank = nil # something's wrong
+    progress = (rank  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
