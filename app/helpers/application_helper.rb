@@ -551,7 +551,7 @@ module ApplicationHelper
     paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
     if paragraph.present?
       # if so, get its text and put it in a fresh p tag
-      paragraph_text = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]').text
+      paragraph_text = paragraph.text
       return content_tag(:p, paragraph_text)
     else
       # if not, put the placeholder text in a p tag with the placeholder class
