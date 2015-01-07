@@ -61,11 +61,12 @@
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
+      </dd>
       <% if logged_in_as_admin? %>
-        <dt class="ipaddress">
+        <dt class="ip">
           <%= ts('IP Address:') %>
         </dt>
-        <dt class="ipaddress">
+        <dd class="ip">
         <% if @work.ip_address.nil? %>
            <%= ts('No address recorded') %>
         <% else %>
@@ -73,7 +74,5 @@
         <% end %>
         </dd>
       <% end %>
-
-    </dd>
   </dl>
 </div>
