@@ -7,5 +7,5 @@ class AddIpAddressToWorks < ActiveRecord::Migration
   def self.down
     remove_index "works", "ip_address"
     remove_column :works, :ip_address
-   end
+  end
 end
