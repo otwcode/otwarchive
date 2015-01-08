@@ -67,11 +67,11 @@
           <%= ts('IP Address:') %>
         </dt>
         <dd class="ip">
-        <% if @work.ip_address.nil? %>
-           <%= ts('No address recorded') %>
-        <% else %>
-           <%= @work.ip_address %>
-        <% end %>
+          <% if @work.ip_address.nil? %>
+             <%= ts('No address recorded') %>
+          <% else %>
+             <%= @work.ip_address %>
+          <% end %>
         </dd>
       <% end %>
   </dl>
