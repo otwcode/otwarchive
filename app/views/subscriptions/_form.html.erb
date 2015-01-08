@@ -10,5 +10,5 @@
   }) do |f| %>
   <%= f.hidden_field :subscribable_id %>
   <%= f.hidden_field :subscribable_type %>
-  <%= f.submit subscription.new_record? ts('Subscribe') : ts('Unsubscribe') %>
+  <%= f.submit subscription.new_record? ? ts('Subscribe') : ts('Unsubscribe') %>
 <% end %>
