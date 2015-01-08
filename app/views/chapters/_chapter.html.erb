@@ -9,11 +9,11 @@
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work} %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show") do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v2") do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">
-      <% if !current_page?(:controller => 'chapters', :action => 'show') %><%= link_to chapter.chapter_header, [chapter.work, chapter] %><% else %><%= chapter.chapter_header %><% end %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
+      <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
     </h3>
 
     <!-- only display byline if different from the main byline -->

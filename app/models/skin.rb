@@ -77,7 +77,7 @@ class Skin < ActiveRecord::Base
   end
 
   validates :ie_condition, :inclusion => {:in => IE_CONDITIONS, :allow_nil => true, :allow_blank => true}
-  validates :role, :inclusion => {:in => ALL_ROLES, :allow_nil => true, :allow_blank => true}
+  validates :role, :inclusion => {:in => ALL_ROLES, :allow_blank => true, :allow_nil => true }
 
   validate :valid_public_preview
   def valid_public_preview

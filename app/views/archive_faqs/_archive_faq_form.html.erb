@@ -1,37 +1,67 @@
-<div id="faq-form" class="post create faq">
-  <%= form_for(@archive_faq) do |f| %>
-    <%= error_messages_for @archive_faq %>
-    <dl class="text">
-      <dt><%= f.label :title, ts("Title") %></dt>
-      <dd><%= f.text_field :title, :id => "title" %>
-        <%= live_validation_for_field('title', :failureMessage => ts("Please enter a title.")) %>
-      </dd>
-      <dt><%= f.label :content, ts("FAQ Subsection") %></dt>
-      <dd>
-        <ul class="hidden rtf-html-switch actions" role="menu">
-          <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
-          <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
-        </ul>
-        <p class="rtf-html-instructions note">
-          <span class="html-notes"><%= allowed_html_instructions %></span>
-          <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
+<noscript>
+  <% if Globalize.locale.to_s == "en" %>
+    <%= form_tag({}, {:method => :get}) do %>
+      <fieldset>
+        <legend><%= ts("Add Questions") %></legend>
+        <h3 class="landmark heading"><%= ts("Add Questions") %></h3>
+        <p class="notes">
+          <%= ts("Since you don't have JavaScript turned on, please tell us how many questions you want this category to have. (This must be greater than the current number of questions, which is %{num}.) ", :num => @archive_faq.questions.count) %>
         </p>
-        <% use_tinymce %>
-        <div class="rtf-html-field">
-          <%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content" %>
-          <%= live_validation_for_field('content',
-              :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
-                :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} letters long.", :max => ArchiveConfig.CONTENT_MAX.to_s),
-                :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} letters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
-                :failureMessage => ts("You need to post some content here."))
-          %>
-          <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
-        </div>
+        <p>
+          <%= label_tag "num_questions", ts("Questions:") %>
+          <%= text_field_tag "num_questions", params["num_questions"], :class => "number" %>
+        </p>
+        <p class="submit"><%= submit_tag ts('Update Form') %></p>
+      </fieldset>
+    <% end %>
+    <% end %>
+</noscript>
+
+<%= form_for(@archive_faq, :html => {:class => "create faq"}) do |form| %>
+  <%= error_messages_for @archive_faq %>
+  <p class="required notice"><%= ts('* Required information') %></p>
+  <fieldset>
+    <legend><%= ts("Set Preferences") %></legend>
+    <h3 class="landmark heading"><%= ts("Set Preferences") %></h3>
+    <dl>
+      <dt class="required">
+        <%= form.label :title, ts("Category name") + "*" %>
+      </dt>
+      <dd class="required">
+        <%= form.text_field :title %>
+        <%= live_validation_for_field(field_id(form, "title").to_sym, :failureMessage => ts("Please enter a category name.")) %>
       </dd>
-      <dt class="landmark">("Post") %></dt>
-      <dd class="submit actions">
-        <%= submit_tag ts("Post"), :name => 'post_button' %>
+      <dt>
+        <%= form.check_box :notify_translations %>
+      </dt>
+      <dd>
+        <%= form.label :notify_translations, ts("Notify Translation Committee of changes you made in this FAQ category?") %>
       </dd>
     </dl>
-  <% end %>
-</div>
+  </fieldset>
+
+  <% # TODO: If you have the form set up to create 3 questions and you only fill in 2, you get an error instead of the totally empty section being ignored. This is the same with requests/offers in challenge signups. %>
+  <fieldset>
+    <legend><%= ts("Questions") %></legend>
+    <h3 class="landmark heading"><%= ts("Questions") %></h3>
+
+    <% form.object.questions.each_with_index do |question, index| %>
+      <%= form.fields_for :questions, question do |question_form| %>
+        <%= render 'question_answer_fields', :form => question_form, :index => index %>
+      <% end %>
+    <% end %>
+    <% if Globalize.locale.to_s == "en" %>
+      <p class="actions" role="button">
+        <%= link_to_add_section("Add Question", form, :questions, "question_answer_fields") %>
+      </p>
+    <% end %>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= ts("Submit") %></legend>
+    <h3 class="landmark heading"><%= ts("Submit") %></h3>
+    <p class="submit actions">
+      <%= submit_tag ts('Post'), :name => 'post_button' %>
+    </p>
+  </fieldset>
+<% end %>

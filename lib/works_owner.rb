@@ -1,6 +1,20 @@
 # Used to generate cache keys for any works index page
 # Include in models that can "own" works, eg ...tags/TAGNAME/works or users/LOGIN/works
 module WorksOwner
+
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+    # expire a bunch of keys without having to look up the objects in the database
+    def expire_ids(ids)
+      ids.each do |id|
+        klass = (self.superclass == Tag) ? 'tag' : self.to_s.underscore
+        REDIS_GENERAL.set("#{klass}_#{id}_windex", Time.now.to_i.to_s)
+      end
+    end
+  end
   
   # Used in works_controller to determine whether to expire the cache for this object's works index page
   # The timestamp should reflect the last update that would cause the list to need refreshing
@@ -31,7 +45,8 @@ module WorksOwner
   private
   
   def redis_works_index_key
-    "#{self.class.to_s.downcase}_#{self.id}_windex"
+    klass = self.is_a?(Tag) ? 'tag' : self.class.to_s.underscore
+    "#{klass}_#{self.id}_windex"
   end
   
 end

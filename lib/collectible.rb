@@ -125,7 +125,10 @@ module Collectible
   end
   
   def expire_item_caches(collection)
-    self.expire_caches if self.respond_to?(:expire_caches)
+    if self.respond_to?(:expire_caches)
+      CacheMaster.record(self.id, 'collection', collection.id)
+      self.expire_caches
+    end
   end
   
   

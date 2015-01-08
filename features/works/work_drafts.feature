@@ -112,12 +112,12 @@ Feature: Work Drafts
       When I follow "Windbag"
       Then I should see "My draft has changed!"
 
-    Scenario: Editing a draft and previewing it should warn of impending deletion
+    Scenario: Editing a draft and previewing it should warn that it has not been saved.
       Given I am logged in as "ringadingding"
         And the draft "Walking Into Mordor"
       When I edit the draft "Walking Into Mordor"
         And I press "Preview"
-      Then I should see "Draft was successfully created. It will be automatically deleted on"
+      Then I should see "Please post your work or save without posting if you want to keep them."
 
     Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
       Given I am logged in as "composer"

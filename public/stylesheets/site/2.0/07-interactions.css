@@ -163,6 +163,7 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
 
 .LV_validation_message {
   font-weight: 900;
+  position: absolute;
 }
 
 .LV_invalid {
@@ -171,7 +172,6 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   color: #900;
   margin: 0.643em auto;
   padding: 0.25em 0.375em;
-  position: absolute;
     box-shadow: 1px 1px 2px;
     border-radius: 0.25em;
 }
@@ -590,7 +590,7 @@ form.simple span.actions {
 
 /*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
 
-.post .required .warnings {
+.post .required .warnings, dd.required {
   font-weight: normal;
   color: #2a2a2a;
 }

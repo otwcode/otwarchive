@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
     parent =  find_parent
-    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
+    if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
   end

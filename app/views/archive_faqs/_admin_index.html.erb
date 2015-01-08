@@ -4,24 +4,30 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render :partial => 'admin/admin_nav' %>
+<%= render 'archive_faqs/filters' %>
+<%= render 'admin/admin_nav' %>
 <ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("New FAQ Section"), new_archive_faq_path %></li>
-  <li><%= link_to ts("Reorder FAQs"), manage_archive_faqs_path %></li>
+  <% if Globalize.locale.to_s == "en" %>
+    <li><%= link_to ts("New FAQ Category"), new_archive_faq_path %></li>
+    <li><%= link_to ts("Reorder FAQs"), manage_archive_faqs_path(:language_id => params[:language_id]) %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="heading"><%= ts("Manage Archive FAQs") %></h3>
+<h3 class="landmark heading"><%= ts("Manage Archive FAQs") %></h3>
 <dl class="faq index group">
   <% @archive_faqs.each do |archive_faq| %>
     <dt><%= link_to archive_faq.title, archive_faq %></dt>
     <dd>
-      <p class="datetime">Created at <%= archive_faq.created_at %> and updated at <%= archive_faq.updated_at %></p>
-      <ul class="actions">
+      <p class="datetime"><%= ts("Created at %{date_created} and updated at %{date_updated}", :date_created => archive_faq.created_at, :date_updated => archive_faq.updated_at) %></p>
+      <ul class="navigation actions">
         <li><%= link_to ts("Show"), archive_faq %></li>
         <li><%= link_to ts("Edit"), edit_archive_faq_path(archive_faq) %></li>
-        <li><%= link_to ts("Delete"), archive_faq, :confirm => 'Are you sure?', :method => :delete %></td>
+        <% if Globalize.locale.to_s == "en" %>
+          <li><%= link_to ts("Delete"), confirm_delete_archive_faq_path(archive_faq), :confirm => ts('Are you sure you want to delete this FAQ category?') %></li>
+        <% end %>
+      </ul>
     </dd>
   <% end %>
 </dl>

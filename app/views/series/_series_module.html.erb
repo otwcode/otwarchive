@@ -2,36 +2,37 @@
 
 <!--title etc-->
 <div class="header module">
-	<h4 class="heading" title="<%= ts('Series Title') %>">
-		<%= link_to series.title, series %>
-		<%= ts('by') %>
-		<%= byline(series) %>
-		<% if series.restricted %>
-			<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
-		<% end %>
-		<% if series.hidden_by_admin %>
-			<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
-		<% end %>
+  <h4 class="heading">
+    <%= link_to series.title, series %>
+    <%= ts('by') %>
+    <%= byline(series) %>
+    <% if series.restricted %>
+      <%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+    <% end %>
+    <% if series.hidden_by_admin %>
+      <%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
+    <% end %>
 	</h4>
-	<h5 class="heading" title="<%= ts('fandoms') %>">
+  <h5 class="heading">
+    <span class="landmark"><%= ts('Fandom') %>:</span>
     <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
-	<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
+  <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
 </div>
 
 <!--tags-->
 <ul class="tags commas">
   <%= blurb_tag_block(series) %>
 </ul>
-    
+
 <!--summary-->
 <% unless series.summary.blank? %>
-	<h6 class="landmark heading"><%= ts("Summary") %></h6>
-  <blockquote class="userstuff summary" title="<%= ts('summary') %>"><%=raw strip_images(sanitize_field(series, :summary)) %></blockquote>
+  <h6 class="landmark heading"><%= ts("Summary") %></h6>
+  <blockquote class="userstuff summary"><%=raw strip_images(sanitize_field(series, :summary)) %></blockquote>
 <% end %>
 <!--stats-->
-<dl class="stats" title="<%= ts('stats') %>">
+<dl class="stats">
   <dt><%= ts('Words:') %></dt> 
   <dd><%= number_with_delimiter(series.visible_word_count) %></dd>
   <dt><%= ts('Works:') %></dt> 
