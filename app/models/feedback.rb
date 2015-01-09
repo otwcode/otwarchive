@@ -48,21 +48,41 @@ class Feedback < ActiveRecord::Base
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
+  def email_and_send
+    AdminMailer.feedback(self.id).deliver
+    if self.email.present?
+      UserMailer.feedback(self.id).deliver
+    end
+    send_report
+  end
 
-# Category ids for 16bugs
- BUGS_ASSISTANCE = 11483
- BUGS_BUG = 11482
- BUGS_FEEDBACK = 11484
- BUGS_LANG = 11910
- BUGS_MISC = 11481
- BUGS_TAGS = 11485
+  def send_report
+    return unless %w(staging production).include?(Rails.env)
+    reporter = SupportReporter.new(
+      title: summary,
+      description: comment,
+      category: category,
+      email: email,
+      user_agent: user_agent,
+      site_revision: ArchiveConfig.REVISION.to_s
+    )
+    reporter.send_report!
+  end
 
-# Category names, used on form
- BUGS_ASSISTANCE_NAME = 'Help Using the Archive'
- BUGS_BUG_NAME = 'Bug Report'
- BUGS_FEEDBACK_NAME = 'Feedback/Suggestions'
- BUGS_LANG_NAME = 'Languages/Translation'
- BUGS_MISC_NAME = 'General/Other'
- BUGS_TAGS_NAME = 'Tags'
+  # Category ids for 16bugs
+  BUGS_ASSISTANCE = 11483
+  BUGS_BUG = 11482
+  BUGS_FEEDBACK = 11484
+  BUGS_LANG = 11910
+  BUGS_MISC = 11481
+  BUGS_TAGS = 11485
+
+  # Category names, used on form
+  BUGS_ASSISTANCE_NAME = 'Help Using the Archive'
+  BUGS_BUG_NAME = 'Bug Report'
+  BUGS_FEEDBACK_NAME = 'Feedback/Suggestions'
+  BUGS_LANG_NAME = 'Languages/Translation'
+  BUGS_MISC_NAME = 'General/Other'
+  BUGS_TAGS_NAME = 'Tags'
 
 end

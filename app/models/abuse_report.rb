@@ -41,4 +41,24 @@ class AbuseReport < ActiveRecord::Base
   BUGS_RATING_NAME = "Inappropriate content rating"
   BUGS_WARNING_NAME = "Insufficient content warning"
 
+  def email_and_send
+    AdminMailer.abuse_report(self.id).deliver
+    if email_copy?
+      UserMailer.abuse_report(self.id).deliver
+    end
+    send_report
+  end
+
+  def send_report
+    return unless %w(staging production).include?(Rails.env)
+    reporter = AbuseReporter.new(
+      title: url,
+      description: comment,
+      email: email,
+      category: category,
+      ip_address: ip_address
+    )
+    reporter.send_report!
+  end
+
 end
