@@ -1,6 +1,6 @@
 <% # expects subscription and current_user %>
 <%= form_for([current_user, subscription],
-  method: subscription.new_record? 'post' : 'delete',
+  method: subscription.new_record? ? 'post' : 'delete',
   html: { 
     class: 'ajax-create-destroy', 
     data: { 
