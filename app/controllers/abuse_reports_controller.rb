@@ -13,9 +13,9 @@ class AbuseReportsController < ApplicationController
     if @abuse_report.save
       @abuse_report.email_and_send
       flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
-      redirect_to ''
+      redirect_to ""
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 

@@ -42,9 +42,9 @@ class AbuseReport < ActiveRecord::Base
   BUGS_WARNING_NAME = "Insufficient content warning"
 
   def email_and_send
-    AdminMailer.abuse_report(self.id).deliver
+    AdminMailer.abuse_report(id).deliver
     if email_copy?
-      UserMailer.abuse_report(self.id).deliver
+      UserMailer.abuse_report(id).deliver
     end
     send_report
   end
@@ -60,5 +60,4 @@ class AbuseReport < ActiveRecord::Base
     )
     reporter.send_report!
   end
-
 end

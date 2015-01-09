@@ -49,9 +49,9 @@ class Feedback < ActiveRecord::Base
   end
 
   def email_and_send
-    AdminMailer.feedback(self.id).deliver
-    if self.email.present?
-      UserMailer.feedback(self.id).deliver
+    AdminMailer.feedback(id).deliver
+    if email.present?
+      UserMailer.feedback(id).deliver
     end
     send_report
   end

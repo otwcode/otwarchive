@@ -14,11 +14,13 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new(params[:feedback])
     if @feedback.save
       @feedback.email_and_send
-      flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
+      flash[:notice] = t("successfully_sent",
+        default: "Your message was sent to the archive team - thank you!")
       redirect_back_or_default(root_path)
     else
-      flash[:error] = t('failure_send', :default => 'Sorry, your message could not be saved - please try again!')
-      render :action => "new"
+      flash[:error] = t("failure_send",
+        default: "Sorry, your message could not be saved - please try again!")
+      render action: "new"
     end
   end
 
