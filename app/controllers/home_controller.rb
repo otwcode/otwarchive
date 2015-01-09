@@ -53,13 +53,12 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    
+
     @homepage = Homepage.new(@current_user)
-    
+
     @hide_dashboard = true
     render action: 'index', layout: 'application'
   end
-
 
   # Generate links to all the pages on the site
   def site_pages    

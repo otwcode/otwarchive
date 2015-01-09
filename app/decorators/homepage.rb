@@ -12,7 +12,7 @@ class Homepage
     if Rails.env.development?
       @admin_posts = AdminPost.non_translated.for_homepage.all
     else
-      @admin_posts = Rails.cache.fetch("home/index/home_admin_posts", expires_in: 20.minutes) { 
+      @admin_posts = Rails.cache.fetch("home/index/home_admin_posts", expires_in: 20.minutes) {
         AdminPost.non_translated.for_homepage.all
       }
     end
@@ -37,7 +37,7 @@ class Homepage
           where(toread: true).
           all
     else
-      @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") { 
+      @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") {
         @user.readings.order("RAND()").
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
           where(toread: true).
