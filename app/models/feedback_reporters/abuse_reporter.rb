@@ -5,7 +5,7 @@ class AbuseReporter < FeedbackReporter
   attr_accessor :ip_address
 
   def template
-    "abuse_reports/report.xml.erb"
+    "abuse_reports/report"
   end
 
 end
