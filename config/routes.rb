@@ -424,26 +424,8 @@ Otwarchive::Application.routes.draw do
     collection do
       get :set
     end
-    resources :translations do
-      collection do
-        post :assign
-      end
-    end
-    resources :translators do
-      resources :translations
-    end
-    resources :translation_notes
   end
 
-  resources :translations do
-    collection do
-      post :assign
-    end
-  end
-  resources :translators do
-    resources :translations
-  end
-  resources :translation_notes
 
   #### SESSIONS ####
 

@@ -39,7 +39,7 @@ class ChallengeSignupSweeper < ActionController::Caching::Sweeper
         expire_fragment("collection-#{collection.id}-request-#{request.id}")
         # expire the prompt summary too - done in the model
         # and the collection blurb, for the stats
-        expire_fragment("collection-blurb-#{collection.id}")
+        expire_fragment("collection-blurb-#{collection.id}-v2")
         expire_fragment("collection-profile-#{collection.id}")
       end
       # expire the signup summary, for prompt meme challenge prompts index
