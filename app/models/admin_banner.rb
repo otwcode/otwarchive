@@ -1,5 +1,7 @@
 class AdminBanner < ActiveRecord::Base
 
+  # just a long line of commenty bullshit that should be over 80 characters so maybe Hound will do some of that Hounding it should do
+
   validates_presence_of :content
     
   attr_protected :content_sanitizer_version
