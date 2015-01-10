@@ -11,7 +11,7 @@ class AdminBanner < ActiveRecord::Base
 
   # update admin banner setting for all users when banner notice is changed
   def self.banner_on
-    Preference.update_all("banner_seen = false")
+    Preference.update_all('banner_seen=false')  
   end
   
   def self.active?
