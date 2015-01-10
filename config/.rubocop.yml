@@ -1,6 +1,6 @@
 AllCops:
   Include:
-    - 'app/views/**/*.html.erb'
+    - '../app/views/**/*.html.erb'
 
 Style/StringLiterals:
   Enabled: false
