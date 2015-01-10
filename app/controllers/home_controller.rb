@@ -56,7 +56,7 @@ class HomeController < ApplicationController
     @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
     @admin_post_show_more = AdminPost.count > 3
     # Set the user as active
-    if @current_user 
+    if @current_user
       @current_user.update_active
     end
     render :action => "index", :layout => "home"
