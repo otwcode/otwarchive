@@ -1010,24 +1010,24 @@ public
       end
 
     {
-        pseuds: pseuds_to_apply,
-        post_without_preview: params[:post_without_preview],
-        importing_for_others: params[:importing_for_others],
-        restricted: params[:restricted],
-        override_tags: params[:override_tags],
-        fandom: params[:work][:fandom_string],
-        warning: params[:work][:warning_strings],
-        character: params[:work][:character_string],
-        rating: params[:work][:rating_string],
-        relationship: params[:work][:relationship_string],
-        category: params[:work][:category_string],
-        freeform: params[:work][:freeform_string],
-        encoding: params[:encoding],
-        external_author_name: params[:external_author_name],
-        external_author_email: params[:external_author_email],
-        external_coauthor_name: params[:external_coauthor_name],
-        external_coauthor_email: params[:external_coauthor_email],
-        language_id: params[:language_id]
+      pseuds: pseuds_to_apply,
+      post_without_preview: params[:post_without_preview],
+      importing_for_others: params[:importing_for_others],
+      restricted: params[:restricted],
+      override_tags: params[:override_tags],
+      fandom: params[:work][:fandom_string],
+      warning: params[:work][:warning_strings],
+      character: params[:work][:character_string],
+      rating: params[:work][:rating_string],
+      relationship: params[:work][:relationship_string],
+      category: params[:work][:category_string],
+      freeform: params[:work][:freeform_string],
+      encoding: params[:encoding],
+      external_author_name: params[:external_author_name],
+      external_author_email: params[:external_author_email],
+      external_coauthor_name: params[:external_coauthor_name],
+      external_coauthor_email: params[:external_coauthor_email],
+      language_id: params[:language_id]
     }
   end
 
