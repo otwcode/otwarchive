@@ -1,7 +1,5 @@
 class AdminBanner < ActiveRecord::Base
 
-  # just a long line of commenty bullshit that should be over 80 characters so maybe Hound will do some of that Hounding it should do
-
   validates_presence_of :content
     
   attr_protected :content_sanitizer_version
@@ -11,7 +9,7 @@ class AdminBanner < ActiveRecord::Base
 
   # update admin banner setting for all users when banner notice is changed
   def self.banner_on
-    Preference.update_all('banner_seen=false')  
+    Preference.update_all("banner_seen = false")
   end
   
   def self.active?
