@@ -1,5 +1,9 @@
-#Style/StringLiterals:
-  #Enabled: false
+AllCops:
+  Include:
+    - 'app/views/*.html.erb'
 
-#Metrics/LineLength:
-  #Max: 27
+Style/StringLiterals:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 27
