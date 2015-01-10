@@ -118,7 +118,7 @@ Feature: Edit chapters
     And I should see "Chapter 4"
     And I should see "last chapter" within "#chapter-4"
     And I should not see "original chapter two"
-  When I follow "View chapter by chapter"
+  When I follow "Chapter by Chapter"
     And I follow "Chapter Index"
   Then I should see "Chapter Index for New Epic Work by epicauthor"
     And I should see "Chapter 1"
