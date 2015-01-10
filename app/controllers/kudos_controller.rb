@@ -36,7 +36,8 @@ class KudosController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          msg = @kudo.dup? ? "You have already left kudos here. :)" : "We couldn't save your kudos, sorry!"
+          # give hound some trailing whitespace to yell about... it should ignore the quotes and the line length
+          msg = @kudo.dup? ? 'You have already left kudos here. :)' : "We couldn't save your kudos, sorry!"   
           flash[:comment_error] = ts(msg)
 
           redirect_to request.referer and return
