@@ -7,7 +7,7 @@ class KudosController < ApplicationController
   def index
     if params[:work_id]
       @work = Work.find(params[:work_id])
-      @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+      @kudos = @work.kudos.includes(pseud: :user).with_pseud
       @guest_kudos_count = @work.kudos.by_guest.count
     end
     if params[:user_id]
@@ -15,9 +15,9 @@ class KudosController < ApplicationController
       @check_ownership_of = @user
       check_ownership
       # collext a list of pseuds the user may have left kudos under
-      pseuds=Pseud.where(user_id: @user.id ).value_of(:id)
-      kudos_list = Kudo.where(:pseud_id => pseuds ).value_of(:commentable_id)
-      @kudos = Work.where(:id => kudos_list ).page(params[:page])
+      pseuds = Pseud.where(user_id: @user.id).value_of(:id)
+      kudos_list = Kudo.where(pseud_id: pseuds).value_of(:commentable_id)
+      @kudos = Work.where(id: kudos_list).page(params[:page])
     end
   end
 
