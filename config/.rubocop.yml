@@ -1,0 +1,9 @@
+# options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+# stop checking quotation marks
+Style/StringLiterals:
+  Enabled: false
+
+# stop checking line length
+Metrics/LineLength:
+  Enabled: false
