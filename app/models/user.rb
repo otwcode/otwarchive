@@ -546,7 +546,7 @@ class User < ActiveRecord::Base
           user.last_sign_in_at = login_time
           REDIS_GENERAL.del("last_login_#{username}")
         end
-        if username && active_time.present? && user 
+        if username && active_time.present? && user
           user.last_active_at = active_time
           REDIS_GENERAL.del("last_active_#{username}")
         end
