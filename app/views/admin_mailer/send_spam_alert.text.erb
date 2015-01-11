@@ -1,0 +1,15 @@
+<% content_for :message do %>
+
+The following accounts have a suspicous level of traffic:<
+ <%@spam_score.sort_by{|k,v| -1*v}.map do |pseud,score| %>
+ <% user = User.find(pseud) %>
+ User <%= user.login%> has a score of <%= score %>
+
+ <%@spam_works[pseud].each { |w| %>
+ <% work = Work.find(w) %>
+  * <%=work.title %>
+ <% } %>
+<% end %>
+
+<% end %>
+~              
