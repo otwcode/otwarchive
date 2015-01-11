@@ -81,7 +81,15 @@ class StatsController < ApplicationController
     # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
-    chart_title = @sort == "date" ? ts("Most Recent") : ts("Top Five By #{chart_col_title}")
+    if @sort == "date" && @dir == "ASC"
+      chart_title = ts("Oldest")
+    elsif @sort == "date" && @dir == "DESC"
+      chart_title = ts("Most Recent") 
+    elsif @dir == "ASC"
+      chart_title = ts("Bottom Five By #{chart_col_title}")
+    else
+      chart_title = ts("Top Five By #{chart_col_title}")
+    end
     @chart_data.new_column('number', chart_col_title)
       
     # Add Rows and Values 
