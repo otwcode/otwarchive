@@ -87,8 +87,8 @@ class AdminMailer < ActionMailer::Base
     @spam_score = spam_score
     @spam_works = spam_works
     mail(
-      to: 'james_@catbus.co.uk',
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}]"
+      to: 'zz9pzza@gmail.com',
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] suspect posts"
     )
   end
 

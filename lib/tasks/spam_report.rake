@@ -1,7 +1,7 @@
 namespace :spam do
-  period = 300.day.ago
-  history_period = 900.day.ago
-  threshold = 2
+  period = 1.day.ago
+  history_period = 14.day.ago
+  threshold = 10 
   spam_score = Hash.new
   spam_works = Hash.new
   desc "Print list of potential spammers"
