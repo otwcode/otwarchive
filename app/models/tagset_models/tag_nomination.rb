@@ -11,7 +11,7 @@ class TagNomination < ActiveRecord::Base
   validates_format_of :tagname,
     :if => "!tagname.blank?",
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => ts("^Tag nominations can't include the following restricted characters: , ^ * < > { } = ` \\ %")
+    :message => ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
 
   validate :type_validity
   def type_validity
