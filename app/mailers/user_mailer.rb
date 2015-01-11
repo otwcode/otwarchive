@@ -294,13 +294,13 @@ class UserMailer < BulletproofMailer::Base
   end
 
   # Sends email to authors when a creation is hidden by an Admin
-  def admin_hidden_work_notification(creation,user)
+  def admin_hidden_work_notification(creation, user)
     @user = user
     @work = creation
 
     mail(
         :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by an Admin"
+        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by Abuse"
     )
   end
 

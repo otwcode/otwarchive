@@ -1,7 +1,7 @@
 <% content_for :message do %>
     Dear <%= @user.default_pseud.byline %>,
 
-    Your work "<%= @work.title.html_safe %>" has been reported to the Abuse team as a violation of the Archive of Our Own's Terms of Service (<%= "http://www.archiveofourown.org/tos" %>). The Abuse team is investigating the matter and will contact you once our investigation has been completed.
+    Your work "<%= @work.title.html_safe %>" has been reported to the Abuse team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "/tos" %>). The Abuse team is investigating the matter and will contact you once our investigation has been completed.
 
     While the work is under investigation it has been hidden by our admins; only you will be able to access it.
 
@@ -9,4 +9,4 @@
 
     Sincerely,
     AO3 Abuse
-<% end %>
+<% end %>   
