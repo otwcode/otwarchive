@@ -76,7 +76,7 @@ class Admin::AdminUsersController < ApplicationController
         # find or create a fannish next of kin if the fields are filled in
         if params[:next_of_kin_name].present? && params[:next_of_kin_email].present?
           if @user.fannish_next_of_kin.nil?
-            @user.fannish_next_of_kin = FannishNextOfKin.new(:user_id => params[:user_login],
+            @user.fannish_next_of_kin = FannishNextOfKin.new(user_id: params[:user_login],
               :kin_id => submitted_kin_user.id,
               :kin_email => params[:next_of_kin_email])
             success_message << ts('Fannish next of kin added.')
