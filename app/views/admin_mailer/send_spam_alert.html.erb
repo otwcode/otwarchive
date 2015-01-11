@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <p>The following accounts have a suspicous level of traffic:</p>
+  <p>The following accounts have a suspicious level of traffic:</p>
      <%@spam_score.sort_by{|k,v| -1*v}.map do |pseud,score| %>
        <% user = User.find(pseud) %>
        <h3>User <%= style_link( user.login , root_url+user_works_path(user))%> has a score of <%= score %></h3>

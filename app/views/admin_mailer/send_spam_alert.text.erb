@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-The following accounts have a suspicous level of traffic:<
+The following accounts have a suspicious level of traffic:<
  <%@spam_score.sort_by{|k,v| -1*v}.map do |pseud,score| %>
  <% user = User.find(pseud) %>
  User <%= user.login%> has a score of <%= score %>
