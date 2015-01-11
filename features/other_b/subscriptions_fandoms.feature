@@ -9,9 +9,9 @@ Feature: Subscriptions
     And I post a work with category "M/F"
   When I am logged in as "reader"
     And I view the "F/F" works index
-  Then I should see "Subscribe to the feed"
+  Then I should see "RSS Feed"
   # TODO: If you uncomment the next line, it fails horribly. Is this a genuine bug, or a cucumber error?
-  # When I follow "Subscribe to the feed"
+  # When I follow "RSS Feed"
   # Then I should not see "My Work Title"
   #   And I should not see "Stargate SG-1"
     
@@ -21,8 +21,8 @@ Feature: Subscriptions
     And I post a work with category "F/F"
   When I am logged in as "reader"
     And I view the "F/F" works index
-  Then I should see "Subscribe to the feed"
-  When I follow "Subscribe to the feed"
+  Then I should see "RSS Feed"
+  When I follow "RSS Feed"
   Then I should see "My Work Title"
     And I should see "Stargate SG-1"
 
@@ -32,7 +32,7 @@ Feature: Subscriptions
     And I post a work with category "Multi"
   When I am logged in as "reader"
     And I view the "Multi" works index
-  Then I should not see "Subscribe to the feed"
+  Then I should not see "RSS Feed"
 
   Scenario: Mystery work is not shown in feed
   
@@ -49,7 +49,7 @@ Feature: Subscriptions
   When I am logged in as "author"
     And I post a work with category "F/F"
   When I view the "F/F" works index
-  When I follow "Subscribe to the feed"
+  When I follow "RSS Feed"
   Then I should not see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"
@@ -71,7 +71,7 @@ Feature: Subscriptions
   When I am logged in as "author"
     And I post a work with category "F/F"
   When I view the "F/F" works index
-  When I follow "Subscribe to the feed"
+  When I follow "RSS Feed"
   Then I should see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"

@@ -48,7 +48,7 @@ class CollectionSweeper < ActionController::Caching::Sweeper
     collections.each do |collection|
       
       # expire the collection blurb and dashboard and profile
-      expire_fragment("collection-blurb-#{collection.id}")
+      expire_fragment("collection-blurb-#{collection.id}-v2")
       expire_fragment("collection-profile-#{collection.id}")
 
     end

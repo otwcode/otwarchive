@@ -83,7 +83,7 @@ When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |w
   work = Work.find_by_title!(work)
   visit work_url(work)
   step %{I follow "Entire Work"} if mode == "full"
-  step %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
+  step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 
 When /^I view the work "([^\"]*)" with comments$/ do |work|

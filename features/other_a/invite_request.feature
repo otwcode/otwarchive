@@ -138,3 +138,10 @@ Feature: Invite requests
       And I should not see "Get an Invite"
       And I should not see "Create an Account"
       And I should see "Log In"
+
+  Scenario: Banned users cannot access their invitations page
+  
+    Given I am logged in as a banned user
+    When I go to my invitations page
+    Then I should be on my user page
+    And I should see "Your account has been banned."
