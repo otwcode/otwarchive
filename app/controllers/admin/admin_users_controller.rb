@@ -130,7 +130,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended = false
           @user.suspended_until = nil
           if !@user.suspended && @user.suspended_until.blank?
-            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id current_admin.id)
+            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
             success_message << ts('Suspension has been lifted.')
           end
         end
