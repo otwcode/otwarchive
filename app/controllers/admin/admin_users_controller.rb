@@ -121,7 +121,7 @@ class Admin::AdminUsersController < ApplicationController
         # create ban
         if params[:admin_action] == 'ban'
           @user.banned = true
-          @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id})
+          @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id)
           success_message << ts('User has been permanently suspended.')
         end
 
