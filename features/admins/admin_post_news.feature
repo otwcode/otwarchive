@@ -70,8 +70,8 @@ Feature: Admin Actions to Post News
     Given I have posted an admin post
     When I am logged in
       And I go to the admin-posts page
-    Then I should see "Subscribe to the feed"
-    When I follow "Subscribe to the feed"
+    Then I should see "RSS Feed"
+    When I follow "RSS Feed"
     Then I should see "Default Admin Post"
 
   Scenario: Make a translation of an admin post
