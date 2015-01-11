@@ -16,6 +16,7 @@ RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
 SPAM_ALERT_ADDRESS: 'otw-abuse-discuss@transformativeworks.org'
+SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'

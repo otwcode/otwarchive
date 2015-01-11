@@ -1,7 +1,7 @@
 namespace :spam do
   period = 1.day.ago
   history_period = 14.day.ago
-  threshold = 10 
+  threshold = ArchiveConfig.SPAM_THRESHOLD
   spam_score = Hash.new
   spam_works = Hash.new
   desc "Print list of potential spammers"
@@ -40,7 +40,7 @@ namespace :spam do
        end
     }
     if spam_score.length > 0
-      AdminMailer.send_spam_alert(spam_score,spam_works).deliver
+      AdminMailer.send_spam_alert(spam_score, spam_works).deliver
     end
   end
 end
