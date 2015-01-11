@@ -82,4 +82,13 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
+  # Sends a spam report
+  def send_spam_alert(spam_score, spam_works)
+    @spam_score = spam_score
+    @spam_works = spam_works
+    mail(
+      to: ArchiveConfig.SPAM_ALERT_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
+    )
+  end
 end
