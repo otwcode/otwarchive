@@ -77,8 +77,8 @@ class Admin::AdminUsersController < ApplicationController
         if params[:next_of_kin_name].present? && params[:next_of_kin_email].present?
           if @user.fannish_next_of_kin.nil?
             @user.fannish_next_of_kin = FannishNextOfKin.new(user_id: params[:user_login],
-              :kin_id => submitted_kin_user.id,
-              :kin_email => params[:next_of_kin_email])
+              kin_id: submitted_kin_user.id,
+              kin_email: params[:next_of_kin_email])
             success_message << ts('Fannish next of kin added.')
           else
             @user.fannish_next_of_kin = @user.fannish_next_of_kin
@@ -105,7 +105,7 @@ class Admin::AdminUsersController < ApplicationController
 
         # create warning
         if params[:admin_action] == 'warn'
-          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
+          @user.create_log_item(action: ArchiveConfig.ACTION_WARN, note: @admin_note, admin_id: current_admin.id)
           success_message << ts('Warning was recorded.')
         end
 
@@ -114,14 +114,14 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended = true
           @suspension_days = params[:suspend_days].to_i
           @user.suspended_until = @suspension_days.days.from_now
-          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
+          @user.create_log_item(action: ArchiveConfig.ACTION_SUSPEND, note: @admin_note, admin_id: current_admin.id, enddate: @user.suspended_until)
           success_message << ts('User has been temporarily suspended.')
         end
 
         # create ban
         if params[:admin_action] == 'ban'
           @user.banned = true
-          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
+          @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id})
           success_message << ts('User has been permanently suspended.')
         end
 
@@ -130,7 +130,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.suspended = false
           @user.suspended_until = nil
           if !@user.suspended && @user.suspended_until.blank?
-            @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id current_admin.id)
             success_message << ts('Suspension has been lifted.')
           end
         end
@@ -139,7 +139,7 @@ class Admin::AdminUsersController < ApplicationController
         if params[:admin_action] == 'unban' && @user.banned?
           @user.banned = false
           if !@user.banned?
-            @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+            @user.create_log_item(action: ArchiveConfig.ACTION_UNSUSPEND, note: @admin_note, admin_id: current_admin.id)
             success_message << ts('Suspension has been lifted.')
           end
         end
