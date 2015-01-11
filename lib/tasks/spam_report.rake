@@ -1,4 +1,5 @@
 namespace :spam do
+
   desc "Print list of potential spammers"
   task(:print_possible => :environment) do
     period = 1.day.ago
@@ -14,27 +15,49 @@ namespace :spam do
     pseud_list.each { |pseud|
       new = []
       ips = Hash.new
-      old = 0
+      score = 0
       begin
         user=User.find(pseud)
       rescue ActiveRecord::RecordNotFound => e
         user = nil
       end
       if  !user.nil? 
-        user.works.visible_to_registered_user.each { |w|
-          if w.created_at > period
-            new << w.id
-            ips[w.ip_address] = "true"
+        user.works.visible_to_registered_user.each { |work|
+          if work.akismet_score.nil? #&& Rails.env.production?
+            content = work.chapters_in_order.map{ |c| c.content }.join
+            work.akismet_score = Akismetor.spam?(
+              :comment_type => 'Fan Fiction',
+              :key => ArchiveConfig.AKISMET_KEY,
+              :blog => ArchiveConfig.AKISMET_NAME,
+              :user_ip => work.ip_address,
+              :comment_date_gmt => work.created_at.to_time.iso8601,
+              :blog_lang => work.language.short,
+              :comment_author => user.login,
+              :comment_author_email => user.email,
+              :comment_content => content
+            )
+            unless work.akismet_score.nil?
+              work.save 
+            end
           end
-          if w.created_at > history_period and  w.created_at <= period
-              old += 1
+          if work.created_at > period
+            new << work.id
+            ips[work.ip_address] = "true"
+            if work.akismet_score = false
+              score = score + 1
+            else
+              score = score + 4
+            end
+          end
+          if work.created_at > history_period and  work.created_at <= period
+            if work.akismet_score = false
+              score = score -2
+            end
           end
          }
-         # Simple scoring function
-         # Add the number of ip address used during the period to the number of works posted
-         # 
-         if ips.length+new.length-old > threshold
-           spam_score[pseud] = new.length-old
+         puts score
+         if ips.length+score > threshold
+           spam_score[pseud] = ips.length+score
            spam_works[pseud] = new
          end
        end

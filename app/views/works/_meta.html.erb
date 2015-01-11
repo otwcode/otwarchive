@@ -73,6 +73,16 @@
              <%= @work.ip_address %>
           <% end %>
         </dd>
+        <dt class="akismetspam">
+          <%= ts('Akismet reported as spam:') %>
+        </dt>
+        <dd class="akismetspam">
+          <% if @work.akismet_score.nil? %>
+             <%= ts('No result recorded') %>
+          <% else %>
+             <%= @work.akismet_score %>
+          <% end %>
+        </dd>
       <% end %>
   </dl>
 </div>

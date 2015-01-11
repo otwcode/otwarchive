@@ -7,7 +7,7 @@
        <ul>
           <%@spam_works[pseud].each { |w| %>
             <% work = Work.find(w) %>
-          <li><%=  style_link( work.title, work_url(work) ) %></li>
+          <li><%=  style_link( work.title, work_url(work) ) %> <% if work.akismet_score %><%= ts('Flagged as spam') %><% end %></li>
           <% } %>
        </ul>
      <% end %>
