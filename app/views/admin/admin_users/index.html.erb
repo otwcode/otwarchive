@@ -48,7 +48,7 @@
           <tbody>
             <% @users.each do |user| %>
               <tr id="user_<%= user.id %>">
-                <%= render :partial => 'user_form', :locals => {:user => user} %>
+                <%= render 'user_form', user: user %>
               </tr>
             <% end %>
           </tbody>

@@ -121,8 +121,8 @@ Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, us
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as an admin}
   step %{I go to the abuse administration page for "#{user}"}
-  fill_in("Fannish next of kin's username", :with => "#{kin}")
-  fill_in("Fannish next of kin's email", :with => "testing@foo.com")
+  fill_in("Fannish next of kin's username", with: "#{kin}")
+  fill_in("Fannish next of kin's email", with: "testing@foo.com")
   click_button("Update")
 end
 
@@ -131,8 +131,8 @@ Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{I am logged in as an admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_suspend")
-  fill_in("suspend_days", :with => 30)
-  fill_in("Notes", :with => "Why they are suspended")
+  fill_in("suspend_days", with: 30)
+  fill_in("Notes", with: "Why they are suspended")
   click_button("Update")
 end
 
@@ -141,7 +141,7 @@ Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{I am logged in as an admin}
   step %{I go to the abuse administration page for "#{user}"}
   choose("admin_action_ban")
-  fill_in("Notes", :with => "Why they are banned")
+  fill_in("Notes", with: "Why they are banned")
   click_button("Update")
 end
 
