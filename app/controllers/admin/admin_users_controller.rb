@@ -43,7 +43,7 @@ class Admin::AdminUsersController < ApplicationController
       @admin_note = params[:admin_note]
       @user = User.find_by_login(params[:user_login])
       submitted_kin_user = User.find_by_login(params[:next_of_kin_name])
- 
+
       # there is a next of kin username, but no email
       if params[:next_of_kin_name].present? && params[:next_of_kin_email].blank?
         flash[:error] = ts('Fannish next of kin email is missing.')
@@ -59,7 +59,7 @@ class Admin::AdminUsersController < ApplicationController
         flash[:error] = ts('Fannish next of kin user is invalid.')
         redirect_to request.referer || root_path
 
-      # there is an admin action selected, but no note entered  
+      # there is an admin action selected, but no note entered
       elsif params[:admin_action].present? && @admin_note.blank?
         flash[:error] = ts('You must include notes in order to perform this action.')
         redirect_to request.referer || root_path
@@ -96,7 +96,7 @@ class Admin::AdminUsersController < ApplicationController
           @user.fannish_next_of_kin.kin_email = params[:next_of_kin_email]
           success_message << ts('Fannish next of kin email updated.')
         end
-        
+
         # delete the next of kin if the fields are blank and changed
         if params[:next_of_kin_user].blank? && params[:next_of_kin_email].blank? && @user.fannish_next_of_kin
           @user.fannish_next_of_kin.destroy
@@ -143,11 +143,11 @@ class Admin::AdminUsersController < ApplicationController
             success_message << ts('Suspension has been lifted.')
           end
         end
-    
+
         @user.save
         flash[:notice] = success_message
         redirect_to request.referer || root_path
-  
+
       end
     end
   end
