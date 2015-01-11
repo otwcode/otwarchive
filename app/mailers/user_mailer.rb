@@ -299,8 +299,8 @@ class UserMailer < BulletproofMailer::Base
     @work = creation
 
     mail(
-        :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by Abuse"
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by Abuse"
     )
   end
 
