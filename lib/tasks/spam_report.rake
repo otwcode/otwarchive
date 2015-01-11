@@ -1,11 +1,11 @@
 namespace :spam do
-  period = 1.day.ago
-  history_period = 14.day.ago
-  threshold = ArchiveConfig.SPAM_THRESHOLD
-  spam_score = Hash.new
-  spam_works = Hash.new
   desc "Print list of potential spammers"
   task(:print_possible => :environment) do
+    period = 1.day.ago
+    history_period = 14.day.ago
+    threshold = ArchiveConfig.SPAM_THRESHOLD
+    spam_score = Hash.new
+    spam_works = Hash.new
     new_works = Work.where("created_at > :week and hidden_by_admin = 'false' ", {:week => period})
     pseud_list = new_works.collect { |w|  unless  w.pseuds.first.nil? 
                                                   w.pseuds.first.user_id  
