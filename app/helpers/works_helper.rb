@@ -4,9 +4,9 @@ module WorksHelper
   def work_meta_list(work, chapter = nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts("Published:"), 'published', localize(published_date)],
-            [ts("Words:"), 'words', work.word_count],
-            [ts("Chapters:"), 'chapters', work.chapter_total_display]]
+    list = [[ts('Published:'), 'published', localize(published_date)],
+            [ts('Words:'), 'words', work.word_count],
+            [ts('Chapters:'), 'chapters', work.chapter_total_display]]
 
     if (comment_count = work.count_visible_comments) > 0
       list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
@@ -19,21 +19,21 @@ module WorksHelper
     if (bookmark_count = work.bookmarks.is_public.count) > 0
       list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[ts("Hits:"), 'hits', work.hits]]) if show_hit_count?(work)
+    list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
-      prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
+      prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
       latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
       list.insert(1, [prefix, 'status', localize(latest_date)])
     end
-    list = list.map {|list_item| content_tag(:dt, list_item.first, class: list_item.second) + content_tag(:dd, list_item.last.to_s, class: list_item.second)}.join.html_safe
+    list = list.map { |list_item| content_tag(:dt, list_item.first, class: list_item.second) + content_tag(:dd, list_item.last.to_s, class: list_item.second) }.join.html_safe
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
   def show_hit_count?(work)
     return false if logged_in? && current_user.preference.try(:hide_all_hit_counts)
     author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.try(:hide_private_hit_count)
-    all_authors_want_public_hits = work.users.select {|u| u.preference.try(:hide_public_hit_count)}.empty?
+    all_authors_want_public_hits = work.users.select { |u| u.preference.try(:hide_public_hit_count) }.empty?
     author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
   end
 
@@ -43,7 +43,7 @@ module WorksHelper
 
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
-    work.gifts.map {|gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name))}.join(", ").html_safe
+    work.gifts.map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
   # select the default warning if this is a new work
@@ -107,9 +107,9 @@ module WorksHelper
   def get_endnotes_link
     if current_page?(:controller => 'chapters', :action => 'show')
       if @work.posted?
-        chapter_path(@work.last_posted_chapter.id, :anchor => 'work_endnotes')
+        chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
-        chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')
+        chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
       end
     else 
       "#work_endnotes"
