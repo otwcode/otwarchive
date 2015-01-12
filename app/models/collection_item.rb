@@ -35,7 +35,7 @@ class CollectionItem < ActiveRecord::Base
   validate :collection_is_open, :on => :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add_to_base ts("Collection %{title} is currently closed.", :title => self.collection.title)
+      errors.add(:base, ts("The collection %{title} is not currently open.", :title => self.collection.title))
     end
   end
 
