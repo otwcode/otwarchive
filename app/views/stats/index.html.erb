@@ -27,9 +27,9 @@
       <% if stat == :word_count
           html_class = 'words'
         else
-         html_class = stat.to_s.humanize.downcase
+          html_class = stat.to_s.humanize.downcase
         end
-      %> 
+      %>
       <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
@@ -59,7 +59,7 @@
     <li><%= sort_link ts('Subscriptions'), "subscriptions.count", {:desc_default => true} %></li>
     <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
   </ul>
-  
+
   <ul class="view actions" role="menu">
     <li><%= span_if_current ts("Fandoms View"), url_for(params.merge :flat_view => nil), params[:flat_view].blank? %></li>
     <li><%= span_if_current ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
@@ -101,7 +101,7 @@
                   <dd class="bookmarks"><%= work.bookmarks.count %></dd>
                   <% # dt ts("Newest Link") /dt %>
                     <% # dd %>
-                    <% # work.work_links.last.try(:url) || ts("none yet") %> 
+                    <% # work.work_links.last.try(:url) || ts("none yet") %>
                     <% # ( link_to ts("see all"), work_links_path(:work_id => work.id) /a ) %>
                   <% # /dd %>
                 </dl>
