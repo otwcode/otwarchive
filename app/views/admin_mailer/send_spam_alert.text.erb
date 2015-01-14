@@ -1,15 +1,14 @@
 <% content_for :message do %>
 
-The following accounts have a suspicious level of traffic:<
- <%@spam_score.sort_by{|k,v| -1*v}.map do |pseud,score| %>
- <% user = User.find(pseud) %>
- User <%= user.login%> has a score of <%= score %>
+The following accounts have a suspicious level of traffic:
+<%@spam_score.sort_by{|k,v| -1*v}.map do |pseud,score| %>
+<% user = User.find(pseud) %>
+User <%= user.login %> ( <%= root_url+user_works_path(user) %> ) has a score of <%= score %>
 
- <%@spam_works[pseud].each { |w| %>
- <% work = Work.find(w) %>
-  * <%=work.title %> <% if work.akismet_score %>(<%= ts('Flagged as spam') %>)<% end %>
- <% } %>
+<%@spam_works[pseud].each do |w| %>
+<% work = Work.find(w) %>
+ * <%=work.title %> ( <%= work_url(work) %> ) <% if work.akismet_score %>(<%= ts('Flagged as spam') %>)<% end %>
+<% end %>
 <% end %>
 
 <% end %>
-~              
