@@ -55,7 +55,6 @@ namespace :spam do
             end
           end
          }
-         puts score
          if ips.length+score > threshold
            spam_score[pseud] = ips.length+score
            spam_works[pseud] = new
