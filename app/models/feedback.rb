@@ -22,12 +22,12 @@ class Feedback < ActiveRecord::Base
 
   def akismet_attributes
     {
-      :key => ArchiveConfig.AKISMET_KEY,
-      :blog => ArchiveConfig.AKISMET_NAME,
-      :user_ip => ip_address,
-      :user_agent => user_agent,
-      :comment_author_email => email,
-      :comment_content => comment
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      user_agent: user_agent,
+      comment_author_email: email,
+      comment_content: comment
     }
   end
 
@@ -69,20 +69,15 @@ class Feedback < ActiveRecord::Base
     reporter.send_report!
   end
 
-  # Category ids for 16bugs
-  BUGS_ASSISTANCE = 11483
-  BUGS_BUG = 11482
-  BUGS_FEEDBACK = 11484
-  BUGS_LANG = 11910
-  BUGS_MISC = 11481
-  BUGS_TAGS = 11485
-
   # Category names, used on form
-  BUGS_ASSISTANCE_NAME = 'Help Using the Archive'
-  BUGS_BUG_NAME = 'Bug Report'
-  BUGS_FEEDBACK_NAME = 'Feedback/Suggestions'
-  BUGS_LANG_NAME = 'Languages/Translation'
-  BUGS_MISC_NAME = 'General/Other'
-  BUGS_TAGS_NAME = 'Tags'
+  CATEGORIES = [
+    ["Help Using the Archive", 11483],
+    ["Bug Report", 11482],
+    ["Feedback/Suggestions", 11484],
+    ["Languages/Translation", 11910],
+    ["General/Other", 11481],
+    ["Tags", 11485]
+  ]
 
+  DEFAULT_CATEGORY = 11481
 end
