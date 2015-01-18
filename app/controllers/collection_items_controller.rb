@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
   before_filter :load_collection
-  before_filter :load_user, :only => [:update_multiple]
-  before_filter :load_item_and_collection, :only => [:destroy]
-  before_filter :load_collectible_item, :only => [ :new, :create ]
-  before_filter :allowed_to_destroy, :only => [:destroy]
+  before_filter :load_user, only: [:update_multiple]
+  before_filter :load_item_and_collection, only: [:destroy]
+  before_filter :load_collectible_item, only: [ :new, :create ]
+  before_filter :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 
@@ -27,25 +27,25 @@ class CollectionItemsController < ApplicationController
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case
-      when params[:approved]
-        @collection_items.approved_by_collection
-      when params[:rejected]
-        @collection_items.rejected_by_collection
-      when params[:invited]
-        @collection_items.invited_by_collection
-      else
-        @collection_items.unreviewed_by_collection
-      end
+                            when params[:approved]
+                              @collection_items.approved_by_collection
+                            when params[:rejected]
+                              @collection_items.rejected_by_collection
+                            when params[:invited]
+                              @collection_items.invited_by_collection
+                            else
+                              @collection_items.unreviewed_by_collection
+                          end
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
-      when params[:approved]
-        @collection_items.approved_by_user.approved_by_collection
-      when params[:rejected]
-        @collection_items.rejected_by_user
-      else
-        @collection_items.unreviewed_by_user
-      end
+                            when params[:approved]
+                              @collection_items.approved_by_user.approved_by_collection
+                            when params[:rejected]
+                              @collection_items.rejected_by_user
+                            else
+                              @collection_items.unreviewed_by_user
+                          end
     else
       flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
@@ -73,7 +73,7 @@ class CollectionItemsController < ApplicationController
     #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     # end
 
-    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+    @collection_items = @collection_items.order(sort).paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
   def load_collectible_item
@@ -93,7 +93,6 @@ class CollectionItemsController < ApplicationController
   def add
     # TODO: Find some way to let mods add works from inside the collection
   end
-
 
   def new
   end
@@ -118,13 +117,13 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if !collection
-        errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", :name => collection_name)
+        errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", name: collection_name)
       elsif @item.collections.include?(collection)
-        errors << ts("%{collection_title}, because this item has already been submitted to it.", :collection_title => collection.title)
+        errors << ts("%{collection_title}, because this item has already been submitted to it.", collection_title: collection.title)
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-        errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
+        errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
-        errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", :collection_title => collection.title)
+        errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       # add the work to a collection, and try to save it
       elsif @item.add_to_collection(collection) && @item.save
         # approved_by_user and approved_by_collection are both true
@@ -142,7 +141,7 @@ class CollectionItemsController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
+        errors << ts("Something went wrong trying to add collection %{name}, sorry!", name: collection_name)
       end
     end
 
@@ -156,14 +155,14 @@ class CollectionItemsController < ApplicationController
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless invited_collections.empty?
-       invited_collections.each do |needs_user_approval|
-         flash[:notice] ||= ""
-         flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">Invited</a> to your collection (#{needs_user_approval.title}).").html_safe
-       end
+      invited_collections.each do |needs_user_approval|
+        flash[:notice] ||= ""
+        flash[:notice] = ts("This work has been <a href=\"#{collection_items_path(needs_user_approval)}?invited=true\">Invited</a> to your collection (#{needs_user_approval.title}).").html_safe
+      end
     end
     unless unapproved_collections.empty?
       flash[:notice] ||= ""
-      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", :all_collections => unapproved_collections.map { |f| f.title }.join(', '))
+      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
