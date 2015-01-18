@@ -26,8 +26,8 @@ class UserMailer < BulletproofMailer::Base
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-        :to => @user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
     )
   end
 
@@ -38,8 +38,8 @@ class UserMailer < BulletproofMailer::Base
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-        :to => @user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
     )
   end
 

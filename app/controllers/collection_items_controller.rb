@@ -2,7 +2,7 @@ class CollectionItemsController < ApplicationController
   before_filter :load_collection
   before_filter :load_user, only: [:update_multiple]
   before_filter :load_item_and_collection, only: [:destroy]
-  before_filter :load_collectible_item, only: [ :new, :create ]
+  before_filter :load_collectible_item, only: [:new, :create]
   before_filter :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
@@ -27,24 +27,24 @@ class CollectionItemsController < ApplicationController
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case
-                            when params[:approved]
-                              @collection_items.approved_by_collection
-                            when params[:rejected]
-                              @collection_items.rejected_by_collection
-                            when params[:invited]
-                              @collection_items.invited_by_collection
-                            else
-                              @collection_items.unreviewed_by_collection
+                          when params[:approved]
+                            @collection_items.approved_by_collection
+                          when params[:rejected]
+                            @collection_items.rejected_by_collection
+                          when params[:invited]
+                            @collection_items.invited_by_collection
+                          else
+                            @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
       @collection_items = CollectionItem.for_user(@user).includes(:collection)
       @collection_items = case
-                            when params[:approved]
-                              @collection_items.approved_by_user.approved_by_collection
-                            when params[:rejected]
-                              @collection_items.rejected_by_user
-                            else
-                              @collection_items.unreviewed_by_user
+                          when params[:approved]
+                            @collection_items.approved_by_user.approved_by_collection
+                          when params[:rejected]
+                            @collection_items.rejected_by_user
+                          else
+                            @collection_items.unreviewed_by_user
                           end
     else
       flash[:error] = ts("You don't have permission to see that, sorry!")
