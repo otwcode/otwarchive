@@ -15,7 +15,7 @@ SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672f
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
-SPAM_ALERT_ADDRESS: 'otw-abuse-discuss@transformativeworks.org'
+SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
