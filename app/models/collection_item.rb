@@ -52,31 +52,31 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def self.approved_by_user
-    where(:user_approval_status => APPROVED)
+    where(user_approval_status: APPROVED)
   end
 
   def self.rejected_by_user
-    where(:user_approval_status => REJECTED)
+    where(user_approval_status: REJECTED)
   end
 
   def self.unreviewed_by_user
-    where(:user_approval_status => NEUTRAL)
+    where(user_approval_status: NEUTRAL)
   end
   
   def self.approved_by_collection
-    where(:collection_approval_status => APPROVED).where(:user_approval_status => APPROVED)
+    where(collection_approval_status: APPROVED).where(user_approval_status: APPROVED)
   end
 
   def self.invited_by_collection
-    where(:collection_approval_status => APPROVED).where(:user_approval_status => NEUTRAL)
+    where(collection_approval_status: APPROVED).where(user_approval_status: NEUTRAL)
   end
 
   def self.rejected_by_collection
-    where(:collection_approval_status => REJECTED)
+    where(collection_approval_status: REJECTED)
   end
   
   def self.unreviewed_by_collection
-    where(:collection_approval_status => NEUTRAL)    
+    where(collection_approval_status: NEUTRAL)
   end
 
   before_save :set_anonymous_and_unrevealed
