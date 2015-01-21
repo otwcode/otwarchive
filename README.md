@@ -36,5 +36,5 @@ You can also submit a pull request; we'll get back to you as soon as we can!
 
 License
 ----------
-
+ 
 Code is licensed under [GPL](http://www.gnu.org/licenses/gpl-2.0.html) by the [Organization for Transformative Works](http://transformativeworks.org).
