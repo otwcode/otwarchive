@@ -17,7 +17,6 @@ server "ao3-app08.ao3.org",  :app , :workers , :schedulers
 server "ao3-app98.ao3.org",  :app , :workers , :schedulers
 server "ao3-app99.ao3.org",  :app , :workers , :schedulers
 server "ao3-front01.ao3.org", :web
-server "ao3-front02.ao3.org", :web
 
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:
@@ -42,7 +41,7 @@ namespace :production_only do
 
   desc "Rebalance nginx and squid"
   task :rebalance_unicorns, :roles => :web do
-    logger.info "Rebalancing in a minute"
+    logger.info "Rebalancing the unicorns in a minute"
     sleep(60)
     run "/usr/bin/sudo /var/cfengine/files/scripts/rebalance"
     logger.info "Rebalancing complete"
