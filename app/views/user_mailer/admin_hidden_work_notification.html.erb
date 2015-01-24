@@ -1,11 +1,11 @@
 <% content_for :message do %>
     <p>Dear <%= @user.default_pseud.byline %>,</p>
 
-    <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> has been reported to the Abuse team as a violation of the Archive of Our Own's <%= style_link("Terms of Service", tos_path) %>. The Abuse team is investigating the matter and will contact you once our investigation has been completed.</p>
+    <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> has been reported to the Abuse Team as a violation of the Archive of Our Own's <%= style_link("Terms of Service", tos_path) %>. The Abuse Team is investigating the matter and will contact you once our investigation has been completed.</p>
 
     <p>While the work is under investigation it has been hidden by our admins; only you will be able to access it.</p>
 
-    <p>If you have any questions, please <%= abuse_link("contact our Abuse Committee") %>.</p>
+    <p>If you have any questions, please <%= abuse_link("contact our Abuse Team") %>.</p>
 
     <p>Sincerely,</p>
     <p><%= style_bold("AO3 Abuse") %></p>

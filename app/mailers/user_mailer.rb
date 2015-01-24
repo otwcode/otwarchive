@@ -300,7 +300,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Committee"
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
     )
   end
 
