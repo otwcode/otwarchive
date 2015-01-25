@@ -90,6 +90,19 @@ Given /^I am logged in as a banned user$/ do
   assert UserSession.find
 end
 
+Given /^user "([^\"]*)" is banned$/ do |login|
+  user = User.where(login: login).first
+  if user.nil?
+    user = FactoryGirl.create(
+      :user,
+      { login: login, password: DEFAULT_PASSWORD }
+    )
+    user.activate
+  end
+  user.banned = true
+  user.save
+end
+
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find
