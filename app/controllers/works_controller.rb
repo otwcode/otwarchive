@@ -140,8 +140,8 @@ class WorksController < ApplicationController
         @facets = @works.facets
 
         if logged_in? && @tag
-          @favorite_tag = @current_user.favorite_tags.find(:first, :conditions => { :tag_id => @tag.id }) ||
-                            FavoriteTag.new(:tag_id => @tag.id, :user_id => @current_user.id)
+          @favorite_tag = @current_user.favorite_tags.where(tag_id: @tag.id).first ||
+                            FavoriteTag.new(tag_id: @tag.id, user_id: @current_user.id)
         end
       end
     elsif use_caching?
