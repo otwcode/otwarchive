@@ -53,7 +53,7 @@ module ApplicationHelper
   end
   
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
+    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, :title => "RSS Feed", :class => "rss"
   end
   
   #1: default shows just the link to help

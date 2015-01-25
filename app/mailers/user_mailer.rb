@@ -293,6 +293,17 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  # Sends email to authors when a creation is hidden by an Admin
+  def admin_hidden_work_notification(creation, user)
+    @user = user
+    @work = creation
+
+    mail(
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+    )
+  end
+
   def delete_signup_notification(user, challenge_signup)
     @user = user
     @signup = challenge_signup
