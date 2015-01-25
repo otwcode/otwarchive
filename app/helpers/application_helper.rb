@@ -558,5 +558,4 @@ module ApplicationHelper
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
   end
-
 end # end of ApplicationHelper

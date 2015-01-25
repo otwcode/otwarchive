@@ -72,5 +72,4 @@ class AdminPost < ActiveRecord::Base
       Rails.cache.delete("home/index/home_admin_posts")
     end
   end
-
 end

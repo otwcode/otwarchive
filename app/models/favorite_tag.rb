@@ -10,8 +10,8 @@ class FavoriteTag < ActiveRecord::Base
   after_destroy :expire_cached_home_favorite_tags
 
   def within_limit
-    if self.user.favorite_tags(:reload).count >= ArchiveConfig.MAX_FAVORITE_TAGS
-      errors.add(:base, ts('Sorry, you can only save %{maximum} favorite tags.', :maximum => ArchiveConfig.MAX_FAVORITE_TAGS))
+    if user.favorite_tags(:reload).count >= ArchiveConfig.MAX_FAVORITE_TAGS
+      errors.add(:base, ts('Sorry, you can only save %{maximum} favorite tags.', maximum: ArchiveConfig.MAX_FAVORITE_TAGS))
     end
   end
 

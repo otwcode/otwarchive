@@ -49,5 +49,4 @@ class Homepage
     return unless logged_in?
     @inbox_comments ||= @user.inbox_comments.for_homepage
   end
-
 end
