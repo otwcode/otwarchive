@@ -23,8 +23,8 @@ class InboxComment < ActiveRecord::Base
   }
 
   scope :for_homepage, conditions: { read: false },
-                      order: "created_at DESC",
-                      limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+                       order: "created_at DESC",
+                       limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
 
   # Gets the number of unread comments
   def self.count_unread

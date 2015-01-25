@@ -140,8 +140,8 @@ end
 
 When /^I make an admin post without paragraphs$/ do
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Admin Post Without Paragraphs")
-  fill_in("content", :with => "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
   click_button("Post")
 end
 
