@@ -472,7 +472,7 @@ class StoryParser
       @chapter_contents = []
       if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
         site = $1
-        storyid = $2        
+        storyid = $2
         chapnum = 1
         last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
@@ -551,9 +551,7 @@ class StoryParser
       storytext = element.inner_html
 
       meta = {}
-      unless storyhead.blank?
-        meta.merge!(scan_text_for_meta(storyhead))
-      end
+      meta.merge!(scan_text_for_meta(storyhead)) unless storyhead.blank?
       meta.merge!(scan_text_for_meta(story))
       meta[:title] ||= @doc.css('title').inner_html
       work_params[:chapter_attributes][:title] = meta.delete(:chapter_title)
@@ -815,29 +813,34 @@ class StoryParser
 
       meta = {}
       metapatterns = META_PATTERNS
-      is_tag = {}
-      ["fandom_string", "relationship_string", "freeform_string", "rating_string"].each do |c|
-        is_tag[c.to_sym] = true
-      end
+      is_tag = Hash.new.tap { |h|
+        %w(fandom_string relationship_string freeform_string rating_string warning_string).each do |c|
+          h[c.to_sym] = true
+        end
+      }
+      handler = Hash.new.tap { |h|
+        %w(rating_string revised_at).each do |c|
+          h[c.to_sym] = "convert_#{c.to_s.downcase}"
+        end
+      }
+
+      # 1. Look for Pattern: (whatever), optionally followed by a closing p or div tag
+      # 2. Set meta[:metaname] = whatever
+      # eg, if it finds Fandom: Stargate SG-1 it will set meta[:fandom] = Stargate SG-1
+      # 3. convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
       metapatterns.each do |metaname, pattern|
-        # what this does is look for pattern: (whatever)
-        # and then sets meta[:metaname] = whatever
-        # eg, if it finds Fandom: Stargate SG-1 it will set meta[:fandom] = Stargate SG-1
-        # then it runs it through convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
-        metapattern = Regexp.new("(#{pattern}|#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
+        metapattern = Regexp.new("(?:#{pattern}|#{pattern.pluralize})\s*:\s*(.*?)(?:</(?:p|div)>)?$", Regexp::IGNORECASE)
         if text.match(metapattern)
-          value = $2
+          value = $1
           value = clean_tags(value) if is_tag[metaname]
           value = clean_close_html_tags(value)
           value.strip! # lose leading/trailing whitespace
-          begin
-            value = eval("convert_#{metaname.to_s.downcase}(value)")
-          rescue NameError
-          end
+          value = send(handler[metaname], value) if handler[metaname]
+
           meta[metaname] = value
         end
       end
-      return meta
+      return post_process_meta meta
     end
 
     def download_with_timeout(location, limit = 10)
@@ -949,7 +952,7 @@ class StoryParser
 
     # Convert the common ratings into whatever ratings we're
     # using on this archive.
-    def convert_rating(rating)
+    def convert_rating_string(rating)
       rating = rating.downcase
       if rating.match(/^(nc-?1[78]|x|ma|explicit)/)
         ArchiveConfig.RATING_EXPLICIT_TAG_NAME
@@ -962,10 +965,6 @@ class StoryParser
       else
         ArchiveConfig.RATING_DEFAULT_TAG_NAME
       end
-    end
-
-    def convert_rating_string(rating)
-      return convert_rating(rating)
     end
 
     def convert_revised_at(date_string)
@@ -981,6 +980,24 @@ class StoryParser
       rescue ArgumentError, TypeError
         return ''
       end
+    end
+
+    # Additional processing for meta - currently to make sure warnings
+    # that aren't Archive warnings become additional tags instead
+    def post_process_meta(meta)
+      if meta[:warning_string]
+        new_warning = ''
+        meta[:warning_string].split(/\s?,\s?/).each do |warning|
+          if Warning.is_warning? warning
+            new_warning += ', ' unless new_warning.blank?
+            new_warning += warning
+          else
+            meta[:freeform_string] = (meta[:freeform_string] || '') + ", #{warning}"
+          end
+        end
+        meta[:warning_string] = new_warning.blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : new_warning
+      end
+      meta
     end
     
     # tries to find appropriate existing collections and converts them to comma-separated collection names only
