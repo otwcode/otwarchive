@@ -558,7 +558,7 @@ class StoryParser
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
 
-      return work_params
+      work_params
     end
 
     # Parses a story from livejournal or a livejournal equivalent (eg, dreamwidth, insanejournal)
@@ -699,13 +699,13 @@ class StoryParser
     def parse_story_from_lotrfanfiction(story)
       work_params = parse_story_from_modified_efiction(story, "lotrfanfiction")
       work_params[:fandom_string] = "Lord of the Rings"
-      return work_params
+      work_params
     end
 
     def parse_story_from_twilightarchives(story)
       work_params = parse_story_from_modified_efiction(story, "twilightarchives")
       work_params[:fandom_string] = "Twilight"
-      return work_params
+      work_params
     end
 
     def parse_story_from_modified_efiction(story, site = "")
