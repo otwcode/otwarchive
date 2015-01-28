@@ -48,7 +48,7 @@ class SpamReport
     score = 0
     works = user.works.
                  visible_to_registered_user.
-                 where("created_at > ?", new_date)
+                 where("works.created_at > ?", new_date)
     works.each do |work|
       unless work.spam_checked?
         work.check_for_spam
@@ -65,7 +65,11 @@ class SpamReport
       end
     end
 
-    count = Work.where(created_at: recent_date..new_date).posted.not_spam.count
+    count = user.works.
+                 where("works.created_at > ? AND works.created_at < ?",
+                       recent_date,
+                       new_date).
+                 posted.not_spam.count
     score -= (count * 2)
     score += ips.uniq.length
     return [new_works, score]
