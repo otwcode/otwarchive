@@ -1006,6 +1006,7 @@ class Work < ActiveRecord::Base
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
   scope :posted, where(:posted => true)
   scope :unposted, where(:posted => false)
+  scope :not_spam, where(spam: false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
   scope :hidden, where(:hidden_by_admin => true)
