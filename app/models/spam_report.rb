@@ -1,9 +1,8 @@
 class SpamReport
-
   attr_reader :recent_date, :new_date
 
   def self.run
-    self.new.run
+    new.run
   end
 
   def initialize
@@ -19,7 +18,7 @@ class SpamReport
         spam[user.id] = { score: score, work_ids: new_works }
       end
     end
-    spam = Hash[spam.sort_by { |user_id, info| info[:score] }.reverse]
+    spam = Hash[spam.sort_by { |_user_id, info| info[:score] }.reverse]
     puts spam.inspect
     if spam.length > 0
       AdminMailer.send_spam_alert(spam).deliver
@@ -33,7 +32,7 @@ class SpamReport
   end
 
   def users
-    all_new_works.map{ |w| w.users }.flatten.uniq
+    all_new_works.map { |w| w.users }.flatten.uniq
   end
 
   # Scoring rules:
@@ -72,7 +71,6 @@ class SpamReport
                  posted.not_spam.count
     score -= (count * 2)
     score += ips.uniq.length
-    return [new_works, score]
+    [new_works, score]
   end
-
 end

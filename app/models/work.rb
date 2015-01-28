@@ -1232,7 +1232,7 @@ class Work < ActiveRecord::Base
 
   def check_for_spam
     return unless %w(staging production).include?(Rails.env)
-    content = chapters_in_order.map{ |c| c.content }.join
+    content = chapters_in_order.map { |c| c.content }.join
     user = users.first
     self.spam = Akismetor.spam?(
       comment_type: 'Fan Fiction',
@@ -1246,7 +1246,7 @@ class Work < ActiveRecord::Base
       comment_content: content
     )
     self.spam_checked_at = Time.now
-    self.save
+    save
   end
 
   #############################################################################
