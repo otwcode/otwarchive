@@ -11,11 +11,10 @@ module Pseudable
         possible_pseuds = Pseud.parse_byline(name, assume_matching_login: true)
       end
       pseud = possible_pseuds.first
-      user = pseud.user
       if pseud.nil?
         errors.add(:base, 
                    ts("We couldn't find the pseud {{name}}.", name: name))
-      elsif user.banned?
+      elsif pseud.user.banned?
         errors.add(:base, 
                    ts("{{name}} has been banned and cannot be listed as a co-creator",
                       name: name)
