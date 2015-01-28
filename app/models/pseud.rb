@@ -275,6 +275,7 @@ class Pseud < ActiveRecord::Base
       banned = pseuds.select { |pseud| pseud.user.banned? }
       if banned.present?
         pseuds = pseuds - banned
+        banned = banned.map(&:byline)
       end
       if pseuds.length == 1
         valid_pseuds << pseuds.first
@@ -288,7 +289,7 @@ class Pseud < ActiveRecord::Base
       pseuds: valid_pseuds, 
       ambiguous_pseuds: ambiguous_pseuds, 
       invalid_pseuds: failures,
-      banned: banned.map(&:byline)
+      banned: banned
     }
   end
   
