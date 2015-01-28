@@ -23,7 +23,7 @@ class Admin::UserCreationsController < ApplicationController
       users = creation.pseuds.map(&:user).uniq
       users.each do |user|
         unless user == orphan_account
-          UserMailer.admin_hidden_work_notification(creation, user).deliver
+          UserMailer.admin_hidden_work_notification(creation.id, user.id).deliver
         end
       end
      redirect_to(creation)
