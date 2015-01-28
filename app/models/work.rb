@@ -1221,6 +1221,31 @@ class Work < ActiveRecord::Base
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
 
+  ########################################################################
+  # SPAM CHECKING
+  ########################################################################
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    content = chapters_in_order.map{ |c| c.content }.join
+    user = users.first
+    self.spam = Akismetor.spam?(
+      comment_type: 'Fan Fiction',
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_date_gmt: created_at.to_time.iso8601,
+      blog_lang: language.short,
+      comment_author: user.login,
+      comment_author_email: user.email,
+      comment_content: content
+    )
+    self.spam_checked_at = Time.now
+    self.save
+  end
 
   #############################################################################
   #

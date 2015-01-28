@@ -77,10 +77,10 @@
           <%= ts('Akismet Reported As Spam:') %>
         </dt>
         <dd class="akismetspam">
-          <% if @work.akismet_score.nil? %>
+          <% if !@work.spam_checked? %>
              <%= ts('No result recorded') %>
           <% else %>
-             <%= @work.akismet_score %>
+             <%= @work.spam? %>
           <% end %>
         </dd>
       <% end %>
