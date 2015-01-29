@@ -389,9 +389,9 @@ Feature: Admin tasks
   Then I should be on the home page
     And I should see "Account creation is suspended at the moment. Please check back with us later."
     # Check to see if the buttons are correct on the main page
-    And I should see "Log in or Get an Invite"
+    And I should see "Log in or Get an Invitation"
     # Check to see if the buttons are correct in the login popup
-    And I should see "Forgot password? Get an Invite" within "div#small_login"
+    And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, Invite required, Queue enabled
   Given the following admin exists
