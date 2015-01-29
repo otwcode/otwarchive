@@ -272,10 +272,10 @@ class Pseud < ActiveRecord::Base
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned = pseuds.select { |pseud| pseud.user.banned? }
-      if banned.present?
-        pseuds = pseuds - banned
-        banned = banned.map(&:byline)
+      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? }
+      if banned_pseuds.present?
+        pseuds = pseuds - banned_pseuds
+        banned_pseuds = banned_pseuds.map(&:byline)
       end
       if pseuds.length == 1
         valid_pseuds << pseuds.first
@@ -289,7 +289,7 @@ class Pseud < ActiveRecord::Base
       pseuds: valid_pseuds, 
       ambiguous_pseuds: ambiguous_pseuds, 
       invalid_pseuds: failures,
-      banned: banned
+      banned_pseuds: banned_pseuds
     }
   end
   
