@@ -338,7 +338,7 @@ class Work < ActiveRecord::Base
         self.errors.add(
           :base, 
           ts("%{name} has been banned and cannot be listed as a co-creator",
-             name: results[:banned].to_sentence
+             name: results[:banned_pseuds].to_sentence
           )
         )
       end
