@@ -19,7 +19,6 @@ class SpamReport
       end
     end
     spam = Hash[spam.sort_by { |_user_id, info| info[:score] }.reverse]
-    puts spam.inspect
     if spam.length > 0
       AdminMailer.send_spam_alert(spam).deliver
     end
