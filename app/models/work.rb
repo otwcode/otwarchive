@@ -334,6 +334,14 @@ class Work < ActiveRecord::Base
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      if results[:banned_pseuds].present?
+        self.errors.add(
+          :base, 
+          ts("%{name} has been banned and cannot be listed as a co-creator",
+             name: results[:banned_pseuds].to_sentence
+          )
+        )
+      end
     end
     self.authors.flatten!
     self.authors.uniq!
