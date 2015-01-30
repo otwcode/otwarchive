@@ -92,7 +92,7 @@
       <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
-
+  <% if @work.posted?  %>
   <li class="download" aria-haspopup="true">
     <a href="#"><%= ts("Download") %></a>
     <ul class="expandable secondary">
@@ -102,6 +102,7 @@
       <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
     </ul>
   </li>
+  <% end %>
 </ul>
 <!-- END navigation -->
 
