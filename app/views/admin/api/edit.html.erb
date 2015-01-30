@@ -1,0 +1,18 @@
+<%= form_for @api_key, url: admin_api_path(@api_key) do |f| %>
+  <dl>
+    <dt><%= f.label :name, ts("Name") %></dt>
+    <dd>
+      <%= f.text_field :name %>
+      <%= live_validation_for_field("api_key_name", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX) %>
+    </dd>
+    <dt><%= f.label :access_token, ts("Token (automatically generated)") %></dt>
+    <dd>
+      <%= f.text_field :access_token, readonly: true %>
+    </dd>
+    <ul class="actions">
+      <legend class="landmark"><%= f.label :update, ts("Update") %></legend>
+      <li class="submit"><%= f.submit ts('Update') %></li>
+      <li class="submit"><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
+    </ul>
+  </dl>
+<% end %>

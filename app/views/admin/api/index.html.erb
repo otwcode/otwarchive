@@ -1,0 +1,38 @@
+<div class="admin">
+  <h2 class="heading"><%= ts('API Tokens') %></h2>
+
+  <ul class="navigation actions" role="navigation">
+    <li><%= span_if_current ts('Create a Token'), new_admin_api_path %></li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Token</td>
+        <td>Created</td>
+        <td>Updated</td>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+    <% @api_keys.each do |api_key| %>
+      <tr>
+        <td><%= api_key.name %></td>
+        <td><%= api_key.access_token %></td>
+        <td><%= api_key.created_at %></td>
+        <td><%= api_key.updated_at %></td>
+        <td>
+          <ul class="navigation actions">
+            <li><%= link_to ts("Edit"), edit_admin_api_path(api_key) %></li>
+            <li>
+            <%= link_to ts("Delete"), admin_api_path(api_key), :confirm => 'Are you sure?', :method => :delete %>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>
