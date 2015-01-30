@@ -3,7 +3,7 @@ Feature: Admin Actions for Works and Bookmarks
   As an admin
   I should be able to perform special actions on works
 
-  Scenario: Can hide works
+  Scenario: Can hide and unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
@@ -14,7 +14,14 @@ Feature: Admin Actions for Works and Bookmarks
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
-      And the email should contain "While the work is under investigation"
+      And the email should contain "We are investigating the matter and will contact you"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+    And I follow "Make Visibible"
+    Then I should see "Item is no longer hidden."
+    And logged out users should see the unhidden work "ToS Violation" by "regular_user"
+    And logged in users should see the unhidden work "ToS Violation" by "regular_user"
+    And 0 emails should be delivered
 
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
