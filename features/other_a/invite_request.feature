@@ -79,7 +79,7 @@ Feature: Invite requests
       And I try to invite a friend from my user page
     When all emails have been delivered
       And I fill in "Email address" with "test@archiveofourown.org"
-      And I press "Send invitation"
+      And I press "Send Invitation"
     Then 1 email should be delivered to test@archiveofourown.org
       And the email should contain "has invited you to join our beta!"
 
