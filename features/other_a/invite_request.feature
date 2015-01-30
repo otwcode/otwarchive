@@ -79,7 +79,7 @@ Feature: Invite requests
       And I try to invite a friend from my user page
     When all emails have been delivered
       And I fill in "Email address" with "test@archiveofourown.org"
-      And I press "Send invite"
+      And I press "Send invitation"
     Then 1 email should be delivered to test@archiveofourown.org
       And the email should contain "has invited you to join our beta!"
 
@@ -126,7 +126,7 @@ Feature: Invite requests
       And I am a visitor
     When I go to the homepage
     Then I should not see "Invite a Friend"
-      And I should see "Get an Invite"
+      And I should see "Get an Invitation"
       And I should see "Log In"
 
   Scenario: When not logged in, there is only a Log In button when account creation is disabled
@@ -135,7 +135,7 @@ Feature: Invite requests
       And I am a visitor
     When I go to the homepage
     Then I should not see "Invite a Friend"
-      And I should not see "Get an Invite"
+      And I should not see "Get an Invitation"
       And I should not see "Create an Account"
       And I should see "Log In"
 
