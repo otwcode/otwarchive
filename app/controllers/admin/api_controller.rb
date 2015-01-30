@@ -1,7 +1,6 @@
 class Admin::ApiController < ApplicationController
-
   before_filter :admin_only
-  before_filter :check_for_cancel, :only => [:create, :update]
+  before_filter :check_for_cancel, only: [:create, :update]
 
   def index
     @api_keys = ApiKey.all
@@ -46,6 +45,7 @@ class Admin::ApiController < ApplicationController
   end
 
   private
+
   def check_for_cancel
     if params[:cancel_button]
       redirect_to action: 'index'
