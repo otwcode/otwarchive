@@ -20,14 +20,14 @@ describe UnsortedTag do
   it "should be created from a bookmark" do
     Bookmark.create(:bookmarkable_type => "Work", :bookmarkable_id => @work.id, :pseud_id => @bookmarker.pseuds.first.id, :tag_string => "bookmark tag")
     tag = Tag.find_by_name("bookmark tag")
-    tag.should be_a(UnsortedTag)
+    expect(tag).to be_a(UnsortedTag)
   end
 
   describe "recategorize" do
     %w(Fandom Character Relationship Freeform).each do |new_type|
       it "should return a tag of type #{new_type}" do
         tag = FactoryGirl.create(:unsorted_tag)
-        tag.recategorize(new_type).should be_a(new_type.constantize)
+        expect(tag.recategorize(new_type)).to be_a(new_type.constantize)
       end
     end
   end

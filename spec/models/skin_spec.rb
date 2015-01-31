@@ -101,7 +101,7 @@ describe Skin do
     }.each_pair do |condition, css|
       it condition do 
         @skin.css = css
-        @skin.save.should be_true
+        expect(@skin.save).to be_truthy
       end
     end
 
@@ -109,7 +109,7 @@ describe Skin do
     # TODO: fix across environments?
     xit "should save CSS3 box shadows with multiple shadows" do
       @skin.css = "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
-      @skin.save.should be_true
+      expect(@skin.save).to be_truthy
     end
     
     # bad bad bad css
@@ -133,51 +133,51 @@ describe Skin do
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
-        @skin.save.should_not be_true
-        @skin.errors[:base].should_not be_empty
+        expect(@skin.save).not_to be_truthy
+        expect(@skin.errors[:base]).not_to be_empty
       end
     end
 
     it "should have a unique title" do
-      @skin.save.should be_true
+      expect(@skin.save).to be_truthy
       skin2 = Skin.new(:title => "Test Skin")
-      skin2.save.should_not be_true
-      skin2.errors[:title].should_not be_empty
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
     end
       
     it "should require a preview image if public" do
       @skin.css = "body {background: #fff;}"
       @skin.public = true
-      @skin.save.should_not be_true
-      @skin.errors[:base].should_not be_empty
-      @skin.errors[:base].join(' ').match(/upload a screencap/).should be_true
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:base]).not_to be_empty
+      expect(@skin.errors[:base].join(' ').match(/upload a screencap/)).to be_truthy
     end
     
     it "should only allow valid media types" do
       @skin.media = ["foobar"]
-      @skin.save.should_not be_true
-      @skin.errors[:base].should_not be_empty
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:base]).not_to be_empty
       @skin.media = %w(screen print)
-      @skin.save.should be_true
-      @skin.errors[:base].should be_empty
+      expect(@skin.save).to be_truthy
+      expect(@skin.errors[:base]).to be_empty
     end
       
     it "should only allow valid roles" do
       @skin.role = "foobar"
-      @skin.save.should_not be_true
-      @skin.errors[:role].should_not be_empty
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:role]).not_to be_empty
       @skin.role = "override"
-      @skin.save.should be_true
-      @skin.errors[:role].should be_empty
+      expect(@skin.save).to be_truthy
+      expect(@skin.errors[:role]).to be_empty
     end
       
     it "should only allow valid ie-only conditions" do
       @skin.ie_condition = "foobar"
-      @skin.save.should_not be_true
-      @skin.errors[:ie_condition].should_not be_empty
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:ie_condition]).not_to be_empty
       @skin.ie_condition = "IE8_or_lower"
-      @skin.save.should be_true
-      @skin.errors[:ie_condition].should be_empty
+      expect(@skin.save).to be_truthy
+      expect(@skin.errors[:ie_condition]).to be_empty
     end    
   end
     
@@ -193,15 +193,15 @@ describe Skin do
     
     it "should have a valid style block" do
       style_regex = Regexp.new('<style type="text/css" media="all">')
-      @style.match(style_regex).should be_true
+      expect(@style.match(style_regex)).to be_truthy
     end
     
     it "should include the css" do
-      @style.match(/background: purple;/).should be_true
+      expect(@style.match(/background: purple;/)).to be_truthy
     end
     
     it "should include links to the default archive skin" do
-      @style.match(/<link rel="stylesheet" type="text\/css"/).should be_true
+      expect(@style.match(/<link rel="stylesheet" type="text\/css"/)).to be_truthy
     end
     
   end

@@ -21,7 +21,7 @@ describe AdminMailer do
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      email.encoded.should =~ /#{text}/
+      expect(email.encoded).to match(/#{text}/)
     end
   end
 end

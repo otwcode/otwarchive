@@ -33,7 +33,7 @@ describe "resque rake tasks" do
       @task_name = "resque:run_failures"
     end
     it "should have 'environment' as a prereq" do
-      @rake[@task_name].prerequisites.should include("environment")
+      expect(@rake[@task_name].prerequisites).to include("environment")
     end
     it "should clear out passing jobs" do
       Resque::Failure.create(:exception => Exception.new(ActiveRecord::RecordNotFound),

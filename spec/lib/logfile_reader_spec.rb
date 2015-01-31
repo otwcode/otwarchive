@@ -56,25 +56,25 @@ describe LogfileReader do
 
     it "gets the correct logfiles with no start date" do
       results = self.class.logfiles_to_read
-      results.size.should == 2
-      results.should include(LogfileReader::LOGFILE_DIR + "default.log.1")
-      results.should include(LogfileReader::LOGFILE_DIR + "default.log.2")
+      expect(results.size).to eq(2)
+      expect(results).to include(LogfileReader::LOGFILE_DIR + "default.log.1")
+      expect(results).to include(LogfileReader::LOGFILE_DIR + "default.log.2")
     end
     
     it "gets the correct logfiles given a start date" do
       start_date = Date.parse("16/Feb/2012").to_time
       results = self.class.logfiles_to_read(start_date)
-      results.size.should == 1
-      results.first.should == LogfileReader::LOGFILE_DIR + "default.log.2"
+      expect(results.size).to eq(1)
+      expect(results.first).to eq(LogfileReader::LOGFILE_DIR + "default.log.2")
     end
     
     it "reads rows correctly with various patterns" do
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", "GET")
-      rows.size.should == 16 # number of rows in first logfile
+      expect(rows.size).to eq(16) # number of rows in first logfile
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", "GET /downloads")
-      rows.size.should == 6
+      expect(rows.size).to eq(6)
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", 'GET /(?:works|chapters)/[0-9]+(?:/chapters/[0-9]+)?/?(?:\s|\?)')
-      rows.size.should == 8
+      expect(rows.size).to eq(8)
     end
     
     

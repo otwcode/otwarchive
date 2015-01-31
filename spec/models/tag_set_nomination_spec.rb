@@ -9,7 +9,7 @@ describe TagSetNomination do
     end
     
     it "should save a basic tag set nomination" do
-      @tag_set_nomination.save.should be_true
+      expect(@tag_set_nomination.save).to be_truthy
     end
     
   end

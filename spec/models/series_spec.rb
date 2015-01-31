@@ -13,19 +13,19 @@ describe Series do
   it "should be unrestricted when it has unrestricted works" do
     @series.works = [unrestricted_work]
     @series.reload
-    @series.restricted.should_not be_true
+    expect(@series.restricted).not_to be_truthy
   end
   
   it "should be restricted when it has no unrestricted works" do
     @series.works = [restricted_work]
     @series.reload
-    @series.restricted.should be_true
+    expect(@series.restricted).to be_truthy
   end
   
   it "should be unrestricted when it has both restricted and unrestricted works" do
     @series.works = [restricted_work, unrestricted_work]
     @series.reload
-    @series.restricted.should_not be_true
+    expect(@series.restricted).not_to be_truthy
   end
   
 end

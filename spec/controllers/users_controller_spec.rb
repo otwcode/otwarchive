@@ -21,9 +21,9 @@ describe UsersController do
       it "should be successful" do
         post :create, :user => valid_user_attributes
 
-        response.should be_success
-        assigns(:user).should be_a(User)
-        assigns(:user).should eq(User.last)
+        expect(response).to be_success
+        expect(assigns(:user)).to be_a(User)
+        expect(assigns(:user)).to eq(User.last)
       end
     end
 

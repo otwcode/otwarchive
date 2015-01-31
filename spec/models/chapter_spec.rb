@@ -11,7 +11,7 @@ describe Chapter do
     end
     
     it "should save minimalistic chapter" do
-      @chapter.save.should be_true
+      expect(@chapter.save).to be_truthy
     end
     
   end

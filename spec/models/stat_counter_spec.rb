@@ -8,7 +8,7 @@ describe StatCounter do
   end
 
   it "should be created for a new work" do
-    @work.stat_counter.nil?.should_not be_true
+    expect(@work.stat_counter.nil?).not_to be_truthy
   end
   
 end
