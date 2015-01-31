@@ -30,7 +30,7 @@
           html_class = stat.to_s.humanize.downcase
         end
       %>
-      <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
+      <dt class="<%= html_class %>"><%= (stat == :comments) ? ts("Comment Threads") : stat.to_s.titleize %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
@@ -80,7 +80,7 @@
               <dt>
                 <%= link_to work.title, work_path(:id => work.id) %> 
                 <% if params[:flat_view] %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
-                <span class="words">(<%= ts("%{wordcount} words", :wordcount => work.word_count) %>)</span>
+                <span class="words">(<%= ts("%{wordcount} words", wordcount: work.word_count) %>)</span>
               </dt>
               <dd>
                 <dl class="stats">
