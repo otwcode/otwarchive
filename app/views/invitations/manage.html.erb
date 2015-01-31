@@ -12,7 +12,7 @@
       manage_user_invitations_path(@user, :status => :unsent)) %>
   </li>
   <li>
-    <%= span_if_current(ts("Sent But Not Used (%{count})", :count => @user.invitations.unredeemed.count.to_s), 
+    <%= span_if_current(ts("Sent But Unused (%{count})", :count => @user.invitations.unredeemed.count.to_s), 
       manage_user_invitations_path(@user, :status => :unredeemed)) %>
   </li>
   <li>
