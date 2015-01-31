@@ -27,8 +27,8 @@ class Admin::UserCreationsController < ApplicationController
             UserMailer.admin_hidden_work_notification(creation.id, user.id).deliver
           end
         end
-        redirect_to(creation)
-      end
+       end
+      redirect_to(creation)
     end
   end
 
