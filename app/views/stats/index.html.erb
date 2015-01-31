@@ -30,11 +30,11 @@
           html_class = stat.to_s.humanize.downcase
         end
       %>
-      <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
+      <dt class="<%= html_class %>"><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads:") : stat.to_s.titleize + ":" %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
-      <dt class="hits"><%= ts("Hits") %></dt>
+      <dt class="hits"><%= ts("Hits:") %></dt>
       <dd class="hits"><%= @totals[:hits] %></dd>
     <% end %>
   </dl>
@@ -85,21 +85,21 @@
               <dd>
                 <dl class="stats">
                   <% if (work_subscriber_count = Subscription.where(:subscribable_id => work.id, :subscribable_type => 'Work').count) > 0 %>
-                    <dt class="subscriptions"><%= ts("Subscriptions") %></dt>
+                    <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
                     <dd class="subscriptions"><%= work_subscriber_count %></dd>
                   <% end %>
                   <% unless @user.preference.hide_hit_counts %>
-                    <dt class="hits"><%= ts("Hits") %></dt>
+                    <dt class="hits"><%= ts("Hits:") %></dt>
                     <dd class="hits"><%= work.hits %></dd>
                   <% end %>
-                  <% # dt ts("Downloads") /dt dd work.downloads /dd %>
-                  <dt class="kudos"><%= ts("Kudos") %></dt>
+                  <% # dt ts("Downloads:") /dt dd work.downloads /dd %>
+                  <dt class="kudos"><%= ts("Kudos:") %></dt>
                   <dd class="kudos"><%= work.kudos.count %></dd>
-                  <dt class="comments"><%= ts("Comment Threads") %></dt>
+                  <dt class="comments"><%= ts("Comment Threads:") %></dt>
                   <dd class="comments"><%= work.comments.count %></dd>
-                  <dt class="bookmarks"><%= ts("Bookmarks") %></dt>
+                  <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
                   <dd class="bookmarks"><%= work.bookmarks.count %></dd>
-                  <% # dt ts("Newest Link") /dt %>
+                  <% # dt ts("Newest Link:") /dt %>
                     <% # dd %>
                     <% # work.work_links.last.try(:url) || ts("none yet") %>
                     <% # ( link_to ts("see all"), work_links_path(:work_id => work.id) /a ) %>
