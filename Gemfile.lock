@@ -411,7 +411,7 @@ DEPENDENCIES
   rest-client
   rollout
   rpm_contrib
-  rspec-rails (>= 2.99)
+  rspec-rails (>= 3.1.0)
   rvm-capistrano
   sanitize
   shoulda

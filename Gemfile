@@ -102,7 +102,7 @@ gem 'kgio'
 
 
 group :test do
-  gem 'rspec-rails', '>=2.99'
+  gem 'rspec-rails', '>=3.1.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
