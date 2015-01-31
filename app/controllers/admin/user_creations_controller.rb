@@ -18,7 +18,7 @@ class Admin::UserCreationsController < ApplicationController
     elsif creation_class == ExternalWork
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      unless action == "unhide"
+      unless action && action == "unhide"
         # Email users so they're aware of Abuse action
         orphan_account = User.orphan_account
         users = creation.pseuds.map(&:user).uniq
@@ -28,8 +28,7 @@ class Admin::UserCreationsController < ApplicationController
           end
         end
         redirect_to(creation)
-      end   
-
+      end
     end
   end
   
