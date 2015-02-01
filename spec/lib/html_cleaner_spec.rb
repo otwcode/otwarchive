@@ -783,9 +783,9 @@ describe HtmlCleaner do
     %w(b big cite code del dfn em i ins kbd q s samp
      small span strike strong sub sup tt u var).each do |tag|
       it "should wrap consecutive #{tag} inline tags in one paragraph " do
-        if tag == "sup" || tag == "sub"
-          pending "Opened bug report with Nokogiri"
-        end
+        #if tag == "sup" || tag == "sub"
+          #pending "Opened bug report with Nokogiri"
+        #end
         result = add_paragraphs_to_text("<#{tag}>hey</#{tag}> <#{tag}>ho</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to eq("hey") 

@@ -72,6 +72,7 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
+  #config.raise_errors_for_deprecations!
   config.include FactoryGirl::Syntax::Methods
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
@@ -87,8 +88,6 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.include Capybara::DSL
 
