@@ -272,7 +272,7 @@ describe HtmlCleaner do
         value = "<iframe src=http://ha.ckers.org/scriptlet.html <"
         result = sanitize_value(:content, value)
         expect(result).not_to match(/iframe/i)
-          expect(result).not_to match(/ha.ckers.org/)
+        expect(result).not_to match(/ha.ckers.org/)
       end
 
       ["<IMG SRC=\"javascript:alert('XSS');\">",
@@ -560,7 +560,7 @@ describe HtmlCleaner do
 
         result = add_paragraphs_to_text(html)
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./#{tag}/li[1]").children.to_s.strip).to eq("A") 
+        expect(doc.xpath("./#{tag}/li[1]").children.to_s.strip).to eq("A")
         expect(doc.xpath("./#{tag}/li[2]").children.to_s.strip).to eq("B")
         expect(doc.xpath(".//br")).to be_empty
       end
@@ -582,10 +582,10 @@ describe HtmlCleaner do
       
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./table/tr[1]/th[1]").children.to_s.strip).to eq("A") 
-      expect(doc.xpath("./table/tr[1]/th[2]").children.to_s.strip).to eq("B") 
-      expect(doc.xpath("./table/tr[2]/td[1]").children.to_s.strip).to eq("C") 
-      expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D") 
+      expect(doc.xpath("./table/tr[1]/th[1]").children.to_s.strip).to eq("A")
+      expect(doc.xpath("./table/tr[1]/th[2]").children.to_s.strip).to eq("B")
+      expect(doc.xpath("./table/tr[2]/td[1]").children.to_s.strip).to eq("C")
+      expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D")
       expect(doc.xpath(".//br")).to be_empty
     end
 
@@ -601,10 +601,10 @@ describe HtmlCleaner do
       
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./dl/dt[1]").children.to_s.strip).to eq("A") 
-      expect(doc.xpath("./dl/dd[1]").children.to_s.strip).to eq("aaa") 
-      expect(doc.xpath("./dl/dt[2]").children.to_s.strip).to eq("B") 
-      expect(doc.xpath("./dl/dd[2]").children.to_s.strip).to eq("bbb") 
+      expect(doc.xpath("./dl/dt[1]").children.to_s.strip).to eq("A")
+      expect(doc.xpath("./dl/dd[1]").children.to_s.strip).to eq("aaa")
+      expect(doc.xpath("./dl/dt[2]").children.to_s.strip).to eq("B")
+      expect(doc.xpath("./dl/dd[2]").children.to_s.strip).to eq("bbb")
       expect(doc.xpath(".//br")).to be_empty
     end
 
@@ -783,9 +783,6 @@ describe HtmlCleaner do
     %w(b big cite code del dfn em i ins kbd q s samp
      small span strike strong sub sup tt u var).each do |tag|
       it "should wrap consecutive #{tag} inline tags in one paragraph " do
-        #if tag == "sup" || tag == "sub"
-          #pending "Opened bug report with Nokogiri"
-        #end
         result = add_paragraphs_to_text("<#{tag}>hey</#{tag}> <#{tag}>ho</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to eq("hey") 

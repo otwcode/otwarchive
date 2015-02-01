@@ -39,7 +39,7 @@ describe WorksController do
         work2 = FactoryGirl.create(:work, :posted => true)
         work2.index.refresh
         get :index
-        expect(assigns(:works)).not_to include(work2) 
+        expect(assigns(:works)).not_to include(work2)
       end
       
       describe "with an owner tag" do

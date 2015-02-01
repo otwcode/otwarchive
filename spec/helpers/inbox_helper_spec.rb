@@ -17,7 +17,7 @@ describe InboxHelper do
       it "should return a link to the Comment on the Tag" do
         @commentable = FactoryGirl.create(:tag_comment)
         string = commentable_description_link(@commentable)
-        expect(string.gsub("%20"," ")).to eq "<a href=\"/tags/#{@commentable.ultimate_parent.name}/comments/#{@commentable.id}\">#{@commentable.ultimate_parent.name}</a>"
+        expect(string.gsub("%20", " ")).to eq "<a href=\"/tags/#{@commentable.ultimate_parent.name}/comments/#{@commentable.id}\">#{@commentable.ultimate_parent.name}</a>"
       end
     end
 

@@ -67,7 +67,7 @@ describe Collectible do
           end
       
           it "should not be #{state}" do
-            expect(collection.send("#{state}?")).not_to be_truthy          
+            expect(collection.send("#{state}?")).not_to be_truthy
             expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
           end
         end
