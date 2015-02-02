@@ -36,9 +36,13 @@ class KudosController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          msg = @kudo.dup? ? "You have already left kudos here. :)" :
-                @kudo.creator_of_work? ? "You can't leave kudos on your own work." :
-                "We couldn't save your kudos, sorry!"
+          if @kudo.dup?
+            msg = "You have already left kudos here. :)"
+          elsif @kudo.creator_of_work?
+            msg = "You can't leave kudos on your own work."
+          else
+            msg = "We couldn't save your kudos, sorry!"
+          end
           flash[:comment_error] = ts(msg)
 
           redirect_to request.referer and return
