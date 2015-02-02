@@ -56,11 +56,33 @@
       </dd>
     <% end %>
 
-    <dt class="stats"><%= ts("Stats") %>:</dt>
+    <dt class="stats"><%= ts("Stats:") %></dt>
     <dd class="stats">
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
-    </dd>
+      </dd>
+      <% if logged_in_as_admin? %>
+        <dt class="ip">
+          <%= ts('IP Address:') %>
+        </dt>
+        <dd class="ip">
+          <% if @work.ip_address.nil? %>
+             <%= ts('No address recorded') %>
+          <% else %>
+             <%= @work.ip_address %>
+          <% end %>
+        </dd>
+        <dt class="akismet">
+          <%= ts('Akismet Reported As Spam:') %>
+        </dt>
+        <dd class="akismet">
+          <% if !@work.spam_checked? %>
+             <%= ts('No result recorded') %>
+          <% else %>
+             <%= @work.spam? %>
+          <% end %>
+        </dd>
+      <% end %>
   </dl>
 </div>
