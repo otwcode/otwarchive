@@ -43,5 +43,4 @@ class Kudo < ActiveRecord::Base
   def creator_of_work?
     errors.values.to_s.match /your own work/
   end
-
 end

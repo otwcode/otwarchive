@@ -50,5 +50,4 @@ class KudosController < ApplicationController
       end
     end
   end
-
 end
