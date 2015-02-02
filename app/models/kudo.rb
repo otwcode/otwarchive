@@ -40,7 +40,7 @@ class Kudo < ActiveRecord::Base
     end
   end
   
-  def is_creator_of_work
+  def is_creator_of_work?
     errors.values.to_s.match /your own work/
   end
 
