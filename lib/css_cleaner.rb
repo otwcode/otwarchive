@@ -52,7 +52,8 @@ module CssCleaner
             errors.add(:base, ts("We don't allow the @font-face feature."))
             next
           end
-          sel = selector.gsub(/\n/, '').strip
+          # remove whitespace and convert &gt; entities back to the > direct child selector
+          sel = selector.gsub(/\n/, '').gsub('&gt;', '>').strip
           (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
         end
         clean_declarations = ""
