@@ -7,3 +7,11 @@ Style/StringLiterals:
 # stop checking line length
 Metrics/LineLength:
   Enabled: false
+
+# stop checking for nested ternary operators
+Style/NestedTernaryOperator:
+  Enabled: false
+
+# stop checking for multiline ternary operators
+Style/MultilineTernaryOperator:
+  Enabled: false
