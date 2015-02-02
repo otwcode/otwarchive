@@ -32,12 +32,12 @@ class Kudo < ActiveRecord::Base
 
   def cannot_be_author
     if pseud
-      commentable = commentable_type.classify.constantize
-                    .find_by_id(commentable_id)
+      commentable = commentable_type.classify.constantize.
+                    find_by_id(commentable_id)
       kudos_giver = User.find_by_id(pseud.user_id)
       if kudos_giver.is_author_of?(commentable)
         errors.add(:cannot_be_author,
-                  ts("^You can't leave kudos on your own work."))
+                   ts("^You can't leave kudos on your own work."))
       end
     end
   end
