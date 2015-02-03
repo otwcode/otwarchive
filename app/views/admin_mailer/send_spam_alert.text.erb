@@ -1,0 +1,14 @@
+<% content_for :message do %>
+
+  The following accounts have a suspicious level of traffic:
+
+  <% @spam.each_pair do |user_id, info| %>
+    <% user = User.find(user_id) %>
+    User <%= user.login %> (<%= root_url + user_works_path(user) %>) has a score of <%= info["score"] %>
+
+    <% Work.where(id: info["work_ids"]).each do |work| %>
+      * <%= work.title %> (<%= work_url(work) %>) <% if work.spam? %>(<%= ts('Flagged as spam') %>)<% end %>
+    <% end %>
+
+  <% end %>
+<% end %>

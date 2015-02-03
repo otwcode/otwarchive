@@ -127,7 +127,7 @@ module WorksHelper
   end
 
   def download_url_for_work(work, format)
-    url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')
+    url_for ("/#{work.download_folder}/#{work.download_title}.#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
 
   # Generates a list of a work's tags and details for use in feeds
