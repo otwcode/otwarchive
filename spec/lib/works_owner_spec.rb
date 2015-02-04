@@ -179,8 +179,8 @@ describe WorksOwner do
           before do
             @fandom2 = FactoryGirl.create(:fandom)
             Delorean.time_travel_to "1 second from now"
-            @work2 = FactoryGirl.create(:work, :fandom_string => @fandom2.name, :collection_names => @owner.name, :posted => true)
-            @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
+            @work2 = FactoryGirl.create(:work, fandom_string: @fandom2.name, collection_names: @owner.name, posted: true)
+            @owner.collection_items.each { |ci| ci.approve(nil); ci.save }
             Delorean.back_to_the_present
           end
 
@@ -200,7 +200,7 @@ describe WorksOwner do
     describe "for a user" do
       before do
         @owner = FactoryGirl.create(:user)
-        @work = FactoryGirl.create(:work, :authors => [@owner.default_pseud], :posted => true)
+        @work = FactoryGirl.create(:work, authors: [@owner.default_pseud], posted: true)
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"
@@ -209,8 +209,8 @@ describe WorksOwner do
     describe "for a pseud" do
       before do
         user = FactoryGirl.create(:user)
-        @owner = FactoryGirl.create(:pseud, :user => user)
-        @work = FactoryGirl.create(:work, :authors => [@owner], :posted => true)
+        @owner = FactoryGirl.create(:pseud, user: user)
+        @work = FactoryGirl.create(:work, authors: [@owner], posted: true)
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"

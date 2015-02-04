@@ -76,9 +76,5 @@ describe LogfileReader do
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", 'GET /(?:works|chapters)/[0-9]+(?:/chapters/[0-9]+)?/?(?:\s|\?)')
       expect(rows.size).to eq(8)
     end
-
-
-
   end
-
 end

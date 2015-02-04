@@ -206,14 +206,14 @@ describe HtmlCleaner do
       end
 
       %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com
-          viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
-          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
+         viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
+         embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
 
-            it "should allow embeds from #{source}" do
-              html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
-              result = sanitize_value(:content, html)
-              expect(result).to include(html)
-            end
+           it "should allow embeds from #{source}" do
+             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
+             result = sanitize_value(:content, html)
+             expect(result).to include(html)
+           end
       end
 
       it "should allow google player embeds" do
@@ -440,7 +440,6 @@ describe HtmlCleaner do
         end
       end
 
-
       # TODO: Ones with all types of quote marks:
       # "<IMG SRC=`javascript:alert("RSnake says, 'XSS'")`>"
 
@@ -488,7 +487,6 @@ describe HtmlCleaner do
       expect(fix_bad_characters("A\xE2\x81\xA0A")).to eq("AA")
     end
   end
-
 
   describe "add_paragraphs_to_text" do
 
@@ -845,7 +843,6 @@ describe HtmlCleaner do
       expect(doc.xpath("./table/tr[2]/td[1]").children.to_s.strip).to eq("C")
       expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D")
     end
-
 
     %w(script style).each do |tag|
       it "should keep #{tag} tags as is" do
