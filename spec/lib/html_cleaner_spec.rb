@@ -209,11 +209,11 @@ describe HtmlCleaner do
          viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
 
-           it "should allow embeds from #{source}" do
-             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
-             result = sanitize_value(:content, html)
-             expect(result).to include(html)
-           end
+        it "should allow embeds from #{source}" do
+          html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
+          result = sanitize_value(:content, html)
+          expect(result).to include(html)
+        end
       end
 
       it "should allow google player embeds" do

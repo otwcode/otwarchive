@@ -39,7 +39,7 @@ describe "resque rake tasks" do
       Resque::Failure.create(exception: Exception.new(ActiveRecord::RecordNotFound),
                              worker: @worker,
                              queue: 'tests',
-                             payload: {'class' => 'PassingJob', 'args' => 'retry found me'})
+                             payload: { 'class' => 'PassingJob', 'args' => 'retry found me' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].invoke
 
@@ -49,7 +49,7 @@ describe "resque rake tasks" do
       Resque::Failure.create(exception: Exception.new(ActiveRecord::RecordNotFound),
                              worker: @worker,
                              queue: 'tests',
-                             payload: {'class' => 'FailingJob', 'args' => 'still missing on retry'})
+                             payload: { 'class' => 'FailingJob', 'args' => 'still missing on retry' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].execute
 
@@ -59,7 +59,7 @@ describe "resque rake tasks" do
       Resque::Failure.create(exception: Exception.new(NoMethodError),
                              worker: @worker,
                              queue: 'tests',
-                             payload: {'class' => 'BrokenJob', 'args' => 'will never work'})
+                             payload: { 'class' => 'BrokenJob', 'args' => 'will never work' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].execute rescue nil
 
