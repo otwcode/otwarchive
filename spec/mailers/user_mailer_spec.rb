@@ -13,7 +13,7 @@ describe UserMailer do
       @work2 = FactoryGirl.create(:work, title: title2, authors: [@author.pseuds.first])
     end
 
-    let(:email) { UserMailer.claim_notification(@author.id, [@work.id, @work2.id], true).deliver}
+    let(:email) { UserMailer.claim_notification(@author.id, [@work.id, @work2.id], true).deliver }
 
     # Shared content tests for both email types
     shared_examples_for 'claim content' do
@@ -89,7 +89,7 @@ describe UserMailer do
       FactoryGirl.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
     end
 
-    let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver}
+    let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver }
 
     # Shared content tests for both email types
     shared_examples_for 'invitation to claim content' do
