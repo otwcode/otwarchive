@@ -13,15 +13,25 @@ class Admin::UserCreationsController < ApplicationController
     flash[:notice] = creation.hidden_by_admin? ? 
                         ts('Item has been hidden.') :
                         ts('Item is no longer hidden.')
-    if creation_class == Comment 
+    if creation_class == Comment
       redirect_to(creation.ultimate_parent) 
     elsif creation_class == ExternalWork
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-     redirect_to(creation)
+      unless action  == "unhide"
+        # Email users so they're aware of Abuse action
+        orphan_account = User.orphan_account
+        users = creation.pseuds.map(&:user).uniq
+        users.each do |user|
+          unless user == orphan_account
+            UserMailer.admin_hidden_work_notification(creation.id, user.id).deliver
+          end
+        end
+       end
+      redirect_to(creation)
     end
   end
-  
+
   def destroy
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])

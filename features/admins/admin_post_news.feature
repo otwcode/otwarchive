@@ -54,7 +54,7 @@ Feature: Admin Actions to Post News
     Then 1 email should be delivered to "testadmin@example.org"
     # notification to the admin list for admin post
       And 1 email should be delivered to "admin@example.org"
-    
+
     # regular user edits their comment
     Given all emails have been delivered    
     When I follow "Edit"
@@ -66,14 +66,14 @@ Feature: Admin Actions to Post News
   
   # TODO: this is something the user does, not the admin, and should be in another test?
   Scenario: User views RSS of admin posts
-  
+
     Given I have posted an admin post
     When I am logged in
       And I go to the admin-posts page
-    Then I should see "Subscribe to the feed"
-    When I follow "Subscribe to the feed"
+    Then I should see "RSS Feed"
+    When I follow "RSS Feed"
     Then I should see "Default Admin Post"
-  
+
   Scenario: Make a translation of an admin post
     Given I have posted an admin post
       And basic languages
@@ -81,6 +81,17 @@ Feature: Admin Actions to Post News
     When I make a translation of an admin post
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
+
+  Scenario: Make a translation of an admin post stop being a translation
+    Given I have posted an admin post
+      And basic languages
+      And I am logged in as an admin
+      And I make a translation of an admin post
+    When I follow "Edit Post"
+      And I fill in "Translation of" with ""
+      And I press "Post"
+    When I am logged in as "ordinaryuser"
+    Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
     Given I have no users

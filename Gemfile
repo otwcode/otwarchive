@@ -47,6 +47,7 @@ gem 'paperclip'
 gem 'fastimage'
 
 gem 'authlogic'
+gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -94,6 +95,11 @@ gem 'rollout'
 gem 'newrelic_rpm', "3.9.3.241"
 gem 'newrelic-redis'
 
+#   Use update memcached client with kinder, gentler I/O for Ruby
+gem 'connection_pool'
+gem 'dalli'
+gem 'kgio'
+
 
 group :test do
   gem 'rspec-rails', '>=2.6.0'
@@ -126,5 +132,4 @@ gem 'rvm-capistrano'
 group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
-  gem "memcache-client"
 end

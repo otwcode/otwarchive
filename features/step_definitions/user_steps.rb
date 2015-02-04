@@ -76,6 +76,33 @@ Given /^I am logged in as a random user$/ do
   assert UserSession.find
 end
 
+Given /^I am logged in as a banned user$/ do
+  step("I am logged out")
+  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
+  user.activate
+  user.banned = true
+  user.save
+  visit login_path
+  fill_in "User name", :with => "banned"
+  fill_in "Password", :with => DEFAULT_PASSWORD
+  check "Remember Me"
+  click_button "Log In"
+  assert UserSession.find
+end
+
+Given /^user "([^\"]*)" is banned$/ do |login|
+  user = User.where(login: login).first
+  if user.nil?
+    user = FactoryGirl.create(
+      :user,
+      { login: login, password: DEFAULT_PASSWORD }
+    )
+    user.activate
+  end
+  user.banned = true
+  user.save
+end
+
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find

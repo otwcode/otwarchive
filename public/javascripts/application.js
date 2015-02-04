@@ -430,6 +430,10 @@ $j(document).ready(function() {
         if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
           msg = "You have already left kudos here. :)";
         }
+        
+        if (data.errors && data.errors.cannot_be_author) {
+          msg = "You can't leave kudos on your own work.";
+        }
 
         $j('#kudos_message').addClass('comment_error').text(msg);
       },
@@ -456,6 +460,9 @@ function thermometer() {
     var banner_content = $j(this).find('blockquote')
         banner_goal_text = banner_content.find('span.goal').text()
         banner_progress_text = banner_content.find('span.progress').text()
+        if ($j(this).find('span.goal').hasClass('stretch')){ 
+          stretch = true
+        } else { stretch = false }
 
         goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
         progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
@@ -465,11 +472,22 @@ function thermometer() {
     banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
 
     // set the progress indicator
-    // green for 100% and up
+    // darker green for over 100% stretch goals
+    // green for 100%
     // yellow-green for 85-99%
     // yellow for 30-84%
     // orange for 0-29%
-     if (percentage_amount >= 100) {
+    if ( stretch == true ) {
+      banner_content.find('div.track').css({
+        'background': '#8eb92a',
+        'background-image': 'linear-gradient(to bottom, #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%)'
+      });
+      banner_content.find('div.progress').css({
+        'width': percentage_amount + '%',
+        'background': '#4d7c10',
+        'background-image': 'linear-gradient(to bottom, #6e992f 0%, #4d7c10 50%, #3b7000 51%, #5d8e13 100%)'
+      });     
+    } else if (percentage_amount >= 100) {
       banner_content.find('div.progress').css({
         'width': '100%',
         'background': '#8eb92a',

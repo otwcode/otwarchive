@@ -4,8 +4,20 @@
   <% unless params[:show] %>
     <h4 class="landmark heading"><%= ts('Notes') %></h4>
     <ul class="notes">
-      <li><%= ts("Make tags canonical according to <a href=\"#{archive_faqs_path + "/31"}\">the wrangling guidelines</a>.".html_safe) %></li>
-      <li><%= ts("For more information on wrangling and volunteer guidelines, see <a href=\"http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee\">the internal OTW wiki</a>. If you have trouble accessing the wiki, or any other questions, please <a href=\"mailto: tagwranglers-staff@transformativeworks.org\">email the wrangling staff</a>.".html_safe) %></li>
+      <li>Make tags canonical according to the <%= link_to 'wrangling guidelines', wrangling_guidelines_path %>.</li>
+      <li>If you have trouble accessing the wiki, please <a href="mailto:tagwranglers-personnel@transformativeworks.org">email tag wranglers personnel</a>. For any other questions relating to tag wrangling, please <a href="mailto:tagwranglers-staff@transformativeworks.org">email wrangling staff</a>, or for confidential issues please <a href="mailto:tagwranglers-chair@transformativeworks.org">email tag wrangling chairs</a>.</li>
+    </ul>
+    <h3 class="heading">Additional Resources:</h3>
+    <ul>
+      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee">Tag Wrangling Committee</a> - Full collection of wiki links &amp; policies</li>
+      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangler_Training">Tag Wrangling Training</a> - New wranglers, start here!</li>
+      <li><a href="http://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_FAQ">Tag Wrangling FAQ</a> - Please check here before emailing Staff</li>
+      <li><a href="http://code.google.com/p/otwarchive/issues/list?can=2&q=roadmap=TagWrangling">Tag Wrangling gCode</a> - Known bugs</li>
+      <li><a href="https://secure.transformativeworks.org/mailman/private/tagwranglers/">Tag Wrangler Mailing List Archives</a> (For more information please see <a href="http://wiki.transformativeworks.org/mediawiki/Tag_Wrangler_Mailing_List">Tag Wrangler Mailing List</a>)</li>
+      <li><a href="https://fanarchive.campfirenow.com/">Campfire Chat</a> (For more information please see <a href="http://wiki.transformativeworks.org/mediawiki/How_to_Use_Campfire_-_An_Interactive_Tutorial">Chat Instructions</a>)</li>
+      <li><a href="http://wiki.transformativeworks.org/mediawiki/Fandoms_in_need_of_Cowranglers">Fandoms in need of Cowranglers and fandoms up for grabs</a></li>
+      <li><%= link_to "Unassigned Fandoms", unassigned_fandoms_path(sort: "count") %></li>
+      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Fandoms_%26_Megafandoms">Fandom &amp; Megafandom notes</a></li>
     </ul>
   <% end %>
 
@@ -55,8 +67,9 @@
               <col class="name" />
               <col span="3" />
             </colgroup>
-
+            
             <thead role="navigation">
+              
               <tr>
                 <th scope="col">
                   <%= sort_link ts('Tag Name'), :name %>

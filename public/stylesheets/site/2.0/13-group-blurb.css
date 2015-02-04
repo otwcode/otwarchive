@@ -77,6 +77,10 @@ li.blurb:after, .blurb .blurb:after {
   float: right;
 }
 
+.blurb .fandoms .landmark {
+  position: absolute;
+}
+
 .blurb dl.stats + .heading.landmark { 
   display: inline;
 }

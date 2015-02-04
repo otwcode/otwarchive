@@ -1,6 +1,6 @@
 Phrase.configure do |config|
   # Enable or disable the PhraseApp context editor in general
-  if ArchiveConfig.PHRASEAPP_ENABLE == "true" then
+  if ENV['AO3_PHRASE_APP'] == 'true' || ArchiveConfig.PHRASEAPP_ENABLE == 'true' then
     config.enabled = true 
   else 
     config.enabled = false 
