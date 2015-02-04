@@ -9,8 +9,8 @@ describe UserMailer do
     before(:each) do
       @author = FactoryGirl.create(:user)
 
-      @work = FactoryGirl.create(:work, :title => title, :authors => [@author.pseuds.first])
-      @work2 = FactoryGirl.create(:work, :title => title2, :authors => [@author.pseuds.first])
+      @work = FactoryGirl.create(:work, title: title, authors: [@author.pseuds.first])
+      @work2 = FactoryGirl.create(:work, title: title2, authors: [@author.pseuds.first])
     end
 
     let(:email) { UserMailer.claim_notification(@author.id, [@work.id, @work2.id], true).deliver}
@@ -42,11 +42,11 @@ describe UserMailer do
       end
 
       it 'should list the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', :text => title)
+        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
       end
 
       it 'should list the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', :text => title2)
+        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
       end
 
       it 'should only have style_to links in the HTML body' do
@@ -60,7 +60,7 @@ describe UserMailer do
       end
 
       it 'should list the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', :text => title)
+        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
       end
 
       it 'should list the second imported work with a leading hyphen' do
@@ -78,15 +78,15 @@ describe UserMailer do
       @author = FactoryGirl.create(:user)
       @archivist = FactoryGirl.create(:user)
       @external_author = FactoryGirl.create(:external_author)
-      @external_author_name = FactoryGirl.create(:external_author_name, :external_author_id => @external_author.id, :name => 'External Author')
+      @external_author_name = FactoryGirl.create(:external_author_name, external_author_id: @external_author.id, name: 'External Author')
 
-      @invitation = FactoryGirl.create(:invitation, :token => token, :external_author_id => @external_author.id)
+      @invitation = FactoryGirl.create(:invitation, token: token, external_author_id: @external_author.id)
       @fandom1 = FactoryGirl.create(:fandom)
 
-      @work = FactoryGirl.create(:work, :title => title, :fandoms => [@fandom1], :authors => [@author.pseuds.first])
-      @work2 = FactoryGirl.create(:work, :title => title2, :fandoms => [@fandom1], :authors => [@author.pseuds.first])
-      FactoryGirl.create(:external_creatorship, :creation_id => @work.id, :external_author_name_id => @external_author_name.id)
-      FactoryGirl.create(:external_creatorship, :creation_id => @work2.id, :external_author_name_id => @external_author_name.id)
+      @work = FactoryGirl.create(:work, title: title, fandoms: [@fandom1], authors: [@author.pseuds.first])
+      @work2 = FactoryGirl.create(:work, title: title2, fandoms: [@fandom1], authors: [@author.pseuds.first])
+      FactoryGirl.create(:external_creatorship, creation_id: @work.id, external_author_name_id: @external_author_name.id)
+      FactoryGirl.create(:external_creatorship, creation_id: @work2.id, external_author_name_id: @external_author_name.id)
     end
 
     let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver}
@@ -118,11 +118,11 @@ describe UserMailer do
       end
 
       it 'should list the first imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', :text => title)
+        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title)
       end
 
       it 'should list the second imported work in an unordered list in the HTML body' do
-        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', :text => title2)
+        expect(get_message_part(email, /html/)).to have_xpath('//ul/li', text: title2)
       end
 
       it 'should only have style_to links in the HTML body' do
@@ -136,7 +136,7 @@ describe UserMailer do
       end
 
       it 'should list the first imported work as plain text' do
-        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', :text => title)
+        expect(get_message_part(email, /plain/)).not_to have_xpath('//ul/li', text: title)
       end
 
       it 'should list the second imported work with a leading hyphen' do

@@ -9,7 +9,7 @@ describe ShareHelper do
         @collection = FactoryGirl.create(:collection)
         @collection.collection_preference.send("anonymous=", true)
         @collection.collection_preference.save
-        @work = FactoryGirl.create(:work, :collection_names => @collection.name)
+        @work = FactoryGirl.create(:work, collection_names: @collection.name)
         expect(get_embed_link_title(@work)).to include("by Anonymous")
       end
     end

@@ -7,7 +7,7 @@ describe Chapter do
 
     before(:each) do
       @work = FactoryGirl.create(:work)
-      @chapter = Chapter.new(:work => @work, :content => "Cool story, bro!")
+      @chapter = Chapter.new(work: @work, content: "Cool story, bro!")
     end
 
     it "should save minimalistic chapter" do

@@ -53,14 +53,14 @@ describe WorksOwner do
 
     shared_examples_for "an owner tag" do
       it "should change after a new work is created" do
-        new_work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
+        new_work = FactoryGirl.create(:work, fandom_string: @owner.name, posted: true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
     end
 
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
-        new_work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
+        new_work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true)
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
@@ -70,7 +70,7 @@ describe WorksOwner do
     shared_examples_for "an owner user" do
       it "should change after a new work is created" do
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
-        new_work = FactoryGirl.create(:work, :authors => [author], :posted => true)
+        new_work = FactoryGirl.create(:work, authors: [author], posted: true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
 
@@ -84,8 +84,8 @@ describe WorksOwner do
     describe "for a canonical tag" do
       before do
         Delorean.time_travel_to "10 minutes ago"
-        @owner = FactoryGirl.create(:fandom, :canonical => true)
-        @work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
+        @owner = FactoryGirl.create(:fandom, canonical: true)
+        @work = FactoryGirl.create(:work, fandom_string: @owner.name, posted: true)
         @original_cache_key = @owner.works_index_cache_key
         Delorean.back_to_the_present
       end
@@ -95,11 +95,11 @@ describe WorksOwner do
       describe "with a synonym" do
         before do
           Delorean.time_travel_to "10 minutes ago"
-          @syn_tag = FactoryGirl.create(:fandom, :canonical => false)
+          @syn_tag = FactoryGirl.create(:fandom, canonical: false)
           @syn_tag.syn_string = @owner.name
           @syn_tag.save
           @work2 = @work
-          @work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
+          @work = FactoryGirl.create(:work, fandom_string: @syn_tag.name, posted: true)
           @original_cache_key = @owner.works_index_cache_key
           Delorean.back_to_the_present
         end
@@ -107,7 +107,7 @@ describe WorksOwner do
         it_should_behave_like "an owner tag"
 
         it "should change after a new work is created in the synonym" do
-          new_work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
+          new_work = FactoryGirl.create(:work, fandom_string: @syn_tag.name, posted: true)
           expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
         end
 
@@ -118,7 +118,7 @@ describe WorksOwner do
       before do
         Delorean.time_travel_to "10 minutes ago"
         @owner = FactoryGirl.create(:collection)
-        @work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
+        @work = FactoryGirl.create(:work, collection_names: @owner.name, posted: true)
 
         # we have to approve the collection items before we get a change in
         # the cache key, since it uses approved works
@@ -135,11 +135,11 @@ describe WorksOwner do
           Delorean.time_travel_to "10 minutes ago"
           # Stub out User.current_user to get past the collection needing to be owned by same person as parent
           allow(User).to receive(:current_user).and_return(@owner.owners.first.user)
-          @child = FactoryGirl.create(:collection, :parent_name => @owner.name)
+          @child = FactoryGirl.create(:collection, parent_name: @owner.name)
           # reload the parent collection
           @owner.reload
           @work1 = @work
-          @work = FactoryGirl.create(:work, :collection_names => @child.name, :posted => true)
+          @work = FactoryGirl.create(:work, collection_names: @child.name, posted: true)
           @child.collection_items.each {|ci| ci.approve(nil); ci.save}
           @original_cache_key = @owner.works_index_cache_key
           Delorean.back_to_the_present
@@ -164,7 +164,7 @@ describe WorksOwner do
         describe "when a new work is added with that tag" do
           before do
             Delorean.time_travel_to "1 second from now"
-            @work2 = FactoryGirl.create(:work, :fandom_string => @fandom.name, :collection_names => @owner.name, :posted => true)
+            @work2 = FactoryGirl.create(:work, fandom_string: @fandom.name, collection_names: @owner.name, posted: true)
             @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             Delorean.back_to_the_present
           end

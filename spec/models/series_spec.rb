@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe Series do
 
-  let(:unrestricted_work) { FactoryGirl.create(:work, :restricted => false) }
-  let(:restricted_work) { FactoryGirl.create(:work, :restricted => true) }
+  let(:unrestricted_work) { FactoryGirl.create(:work, restricted: false) }
+  let(:restricted_work) { FactoryGirl.create(:work, restricted: true) }
 
   before(:each) do
     @series = FactoryGirl.create(:series)

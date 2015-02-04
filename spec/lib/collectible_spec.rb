@@ -24,7 +24,7 @@ describe Collectible do
   context "being posted to a collection", focus: true do
     let(:collection) { create(:collection) }
     # build but don't save so we can change the collection settings
-    let(:work) { build(:work, :collection_names => collection.name) }
+    let(:work) { build(:work, collection_names: collection.name) }
     subject { work }
 
     describe "once added" do

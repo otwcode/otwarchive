@@ -5,7 +5,7 @@ describe Skin do
   describe "save" do
 
     before(:each) do
-      @skin = Skin.new(:title => "Test Skin")
+      @skin = Skin.new(title: "Test Skin")
     end
 
     # good css
@@ -140,7 +140,7 @@ describe Skin do
 
     it "should have a unique title" do
       expect(@skin.save).to be_truthy
-      skin2 = Skin.new(:title => "Test Skin")
+      skin2 = Skin.new(title: "Test Skin")
       expect(skin2.save).not_to be_truthy
       expect(skin2.errors[:title]).not_to be_empty
     end
@@ -186,7 +186,7 @@ describe Skin do
     before(:each) do
       Skin.load_site_css
       @css = "body {background: purple;}"
-      @skin = Skin.new(:title => "Test Skin", :css => @css)
+      @skin = Skin.new(title: "Test Skin", css: @css)
       @skin.save
       @style = @skin.get_style
     end

@@ -34,7 +34,7 @@ describe ChallengeAssignment do
       before do
         @assignment.send_out
         @author = @assignment.offer_signup.pseud
-        @work = create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
+        @work = create(:work, authors: [@author], posted: false, collection_names: @collection.name, challenge_assignment_ids: [@assignment.id])
         @assignment.reload
       end
 
