@@ -25,7 +25,7 @@ describe CacheMaster do
 
   it "should not retain data after expiring caches" do
     cache_master.expire
-    expect(cache_master.get_hash).to eq()
+    expect(cache_master.get_hash).to eq(" ")
   end
 
 end
