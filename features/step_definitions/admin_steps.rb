@@ -58,11 +58,11 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  german=Language.find_or_create_by_short_and_name("DE", "Deutsch")
-  de=Locale.new
-  de.iso='de'
-  de.name='Deutsch'
-  de.language_id=german.id
+  german = Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  de = Locale.new
+  de.iso = 'de'
+  de.name = 'Deutsch'
+  de.language_id = german.id
   de.save!
 end
 
