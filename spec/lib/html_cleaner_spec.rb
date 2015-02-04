@@ -35,7 +35,7 @@ describe HtmlCleaner do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
         expect(stack.open_paragraph_tags).to eq("<p><i><s>")
       end
-      
+
       it "should open tags" do
         stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
         expect(stack.open_paragraph_tags).to eq("<p><s>")
@@ -50,7 +50,7 @@ describe HtmlCleaner do
         stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
         expect(stack.open_paragraph_tags).to eq("<p><s>")
       end
-      
+
       it "should return empty string when not inside paragraph" do
         stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
         expect(stack.open_paragraph_tags).to eq("")
@@ -63,7 +63,7 @@ describe HtmlCleaner do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
         expect(stack.close_paragraph_tags).to eq("</s></i></p>")
       end
-      
+
       it "should close tags" do
         stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
         expect(stack.close_paragraph_tags).to eq("</s></p>")
@@ -84,7 +84,7 @@ describe HtmlCleaner do
         expect(stack.close_paragraph_tags).to eq("")
       end
     end
-    
+
     describe "close_and_pop_last" do
       it "should close tags" do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]]])
@@ -94,7 +94,7 @@ describe HtmlCleaner do
     end
 
   end
-  
+
   describe "close_unclosed_tag" do
 
     it "should close tag at end of line" do
@@ -115,17 +115,17 @@ describe HtmlCleaner do
         expect(result).to eq("don't <#{tag}> close")
       end
     end
-    
+
     it "should close tag before next opening tag" do
       result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
       expect(result).to eq("some <i>more</i><s>text</s>")
     end
-    
+
     it "should close tag before next closing tag" do
       result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
       expect(result).to eq("some <s><i>more text</i></s>")
     end
-    
+
     it "should close tag before next closing tag" do
       result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
       expect(result).to eq("some <s><i>more text</i></s>")
@@ -159,7 +159,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, "„‚nörmäl’—téxt‘“")
         expect(result).to match(/„‚nörmäl’—téxt‘“/)
       end
-      
+
       it "should allow classes with letters, numbers and hyphens" do
         result = sanitize_value(:content, '<p class="f-5">foobar</p>')
         doc = Nokogiri::HTML.fragment(result)
@@ -205,10 +205,10 @@ describe HtmlCleaner do
         expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
       end
 
-      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com 
-          viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com 
-          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|  
-                      
+      %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com blip.tv static.ning.com ning.com dailymotion.com
+          viddler.com metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com
+          embed.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com}.each do |source|
+
             it "should allow embeds from #{source}" do
               html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
               result = sanitize_value(:content, html)
@@ -221,7 +221,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, html)
         expect(result).to include(html)
       end
-      
+
       it "should not allow embeds with unknown source" do
         html = '<embed src="http://www.evil.org"></embed>'
         result = sanitize_value(:content, html)
@@ -233,7 +233,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, html)
         expect(result).to be_empty
       end
-      
+
       ["'';!--\"<XSS>=&{()}",
        '<XSS STYLE="behavior: url(xss.htc);">'
       ].each do |value|
@@ -289,14 +289,14 @@ describe HtmlCleaner do
        "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
        "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
       ].each do |value|
-        
+
         it "should strip javascript in img src attribute: #{value[0..40]}" do
           result = sanitize_value(:content, value)
           expect(result).not_to match(/xss/i)
           expect(result).not_to match(/javascript/i)
         end
       end
-       
+
       ['<META HTTP-EQUIV="Link" Content="<http://ha.ckers.org/xss.css>; REL=stylesheet">',
        "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0;url=javascript:alert('XSS');\">",
        '<META HTTP-EQUIV="refresh" CONTENT="0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K">',
@@ -309,7 +309,7 @@ describe HtmlCleaner do
           expect(result).not_to match(/xss/i)
         end
       end
-       
+
       it "should strip xss inside tags" do
         value = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">'
         result = sanitize_value(:content, value)
@@ -323,7 +323,7 @@ describe HtmlCleaner do
         expect(result).not_to match(/xss/i)
         expect(result).not_to match(/ha.ckers.org/)
       end
-      
+
       it "should strip script/src tags" do
         value = '<SCRIPT/SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
         result = sanitize_value(:content, value)
@@ -337,7 +337,7 @@ describe HtmlCleaner do
         result = sanitize_value(:content, value)
         expect(result).not_to match(/xss/i)
       end
-      
+
       ["<BODY ONLOAD=alert('XSS')>",
        '<BODY onload!#$%&()*~+-_.,:;?@[/|\]^`=alert("XSS")>',
       ].each do |value|
@@ -440,7 +440,7 @@ describe HtmlCleaner do
         end
       end
 
-      
+
       # TODO: Ones with all types of quote marks:
       # "<IMG SRC=`javascript:alert("RSnake says, 'XSS'")`>"
 
@@ -449,16 +449,16 @@ describe HtmlCleaner do
         result = sanitize_value(:content, "& &amp;")
         expect(result).to match(/&amp; &amp;/)
       end
-    
+
     end
 
-    # TODO: other fields 
+    # TODO: other fields
 
   end
-  
+
 
   describe "fix_bad_characters" do
-    
+
     it "should not touch normal text" do
       expect(fix_bad_characters("normal text")).to eq("normal text")
     end
@@ -489,7 +489,7 @@ describe HtmlCleaner do
     end
   end
 
-  
+
   describe "add_paragraphs_to_text" do
 
     %w(a abbr acronym address).each do |tag|
@@ -516,7 +516,7 @@ describe HtmlCleaner do
         expect(doc.xpath(".//br")).to be_empty
       end
     end
-    
+
     %w(blockquote center div).each do |tag|
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
@@ -525,20 +525,20 @@ describe HtmlCleaner do
         expect(doc.xpath(".//br")).to be_empty
       end
     end
-    
+
     it "should not convert linebreaks after br tags" do
       result = add_paragraphs_to_text("A<br>B<br>\n\nC<br>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//p").size).to eq(1)
       expect(doc.xpath(".//br").size).to eq(3)
-    end    
+    end
 
     it "should not convert linebreaks after hr tags" do
       result = add_paragraphs_to_text("A<hr>B<hr>\n\nC<hr>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath(".//p").size).to eq(3)
       expect(doc.xpath(".//br")).to be_empty
-    end    
+    end
 
     %w(dl h1 h2 h3 h4 h5 h6 ol pre table ul).each do |tag|
       it "should not wrap #{tag} in p tags" do
@@ -577,9 +577,9 @@ describe HtmlCleaner do
           <td>C</td>
           <td>D</td>
         </tr>
-      </table> 
+      </table>
       """
-      
+
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./table/tr[1]/th[1]").children.to_s.strip).to eq("A")
@@ -596,9 +596,9 @@ describe HtmlCleaner do
         <dd>aaa</dd>
         <dt>B</dt>
         <dd>bbb</dd>
-      </dl> 
+      </dl>
       """
-      
+
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./dl/dt[1]").children.to_s.strip).to eq("A")
@@ -627,43 +627,43 @@ describe HtmlCleaner do
     it "should wrap plain text in p tags" do
       result = add_paragraphs_to_text("some text")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some text") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some text")
     end
 
     it "should convert single linebreak to br" do
       result = add_paragraphs_to_text("some\ntext")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to match(/some<br\/?>text/) 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to match(/some<br\/?>text/)
     end
 
     it "should convert double linebreaks to paragraph break" do
       result = add_paragraphs_to_text("some\n\ntext")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("text") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("text")
     end
 
     it "should convert triple linebreaks into blank paragraph" do
       result = add_paragraphs_to_text("some\n\n\ntext")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;") 
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
-  
+
     it "should convert double br tags into paragraph break" do
       result = add_paragraphs_to_text("some<br/>\n<br/>text")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("text") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("text")
     end
 
     it "should convert triple br tags into blank paragraph" do
       result = add_paragraphs_to_text("some<br/>\n<br/>\n<br/>text")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;") 
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")
+      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("text")
     end
 
     it "should not convert double br tags inside p tags" do
@@ -686,7 +686,7 @@ describe HtmlCleaner do
       it "should handle #{tag} inline tags spanning double line breaks" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[1]/#{tag}").children.to_s.strip).to eq("some") 
+        expect(doc.xpath("./p[1]/#{tag}").children.to_s.strip).to eq("some")
         expect(doc.xpath("./p[2]/#{tag}").children.to_s.strip).to eq("text")
       end
     end
@@ -695,7 +695,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("<i>have <b>some\n\ntext</b> yay</i>")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]/i").children.to_s.strip).to match(/\Ahave/)
-      expect(doc.xpath("./p[1]/i/b").children.to_s.strip).to eq("some") 
+      expect(doc.xpath("./p[1]/i/b").children.to_s.strip).to eq("some")
       expect(doc.xpath("./p[2]/i/b").children.to_s.strip).to eq("text")
       expect(doc.xpath("./p[2]/i").children.to_s.strip).to match(/ yay\Z/)
     end
@@ -704,7 +704,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("have <em>some\n\ntext</em> yay")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to match(/\Ahave/)
-      expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("some") 
+      expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("some")
       expect(doc.xpath("./p[2]/em").children.to_s.strip).to eq("text")
       expect(doc.xpath("./p[2]").children.to_s.strip).to match(/ yay\Z/)
     end
@@ -713,17 +713,17 @@ describe HtmlCleaner do
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("some") 
-        expect(doc.xpath("./#{tag}/p[2]").children.to_s.strip).to eq("text") 
+        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("some")
+        expect(doc.xpath("./#{tag}/p[2]").children.to_s.strip).to eq("text")
       end
     end
 
     it "should wrap text in p before and after existing p tag" do
       result = add_paragraphs_to_text("boom\n\n<p>da</p>\n\nyadda")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("boom") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("da") 
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("boom")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("da")
+      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
     end
 
     it "should keep attributes of block elements" do
@@ -749,13 +749,13 @@ describe HtmlCleaner do
 
     it "should close unclosed inline tags before double linebreak" do
       html = """Here is an unclosed <em>em tag.
-    
+
       Here is an unclosed <strong>strong tag.
 
       Stuff."""
 
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
-      expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.") 
+      expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.")
       expect(doc.xpath("./p[2]/strong").children.to_s.strip).to eq("strong tag.")
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("Stuff.")
     end
@@ -770,14 +770,14 @@ describe HtmlCleaner do
     it "should re-nest mis-nested tags" do
       html = "some <em><strong>text</em></strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
-      expect(doc.xpath("./p[1]/em/strong").children.to_s.strip).to eq("text") 
+      expect(doc.xpath("./p[1]/em/strong").children.to_s.strip).to eq("text")
     end
 
     it "should handle mixed uppercase/lowecase html tags" do
       result = add_paragraphs_to_text("<em>mixed</EM> <EM>stuff</em>")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./p[1]/em[1]").children.to_s.strip).to eq("mixed") 
-      expect(doc.xpath("./p[1]/em[2]").children.to_s.strip).to eq("stuff") 
+      expect(doc.xpath("./p[1]/em[1]").children.to_s.strip).to eq("mixed")
+      expect(doc.xpath("./p[1]/em[2]").children.to_s.strip).to eq("stuff")
     end
 
     %w(b big cite code del dfn em i ins kbd q s samp
@@ -785,7 +785,7 @@ describe HtmlCleaner do
       it "should wrap consecutive #{tag} inline tags in one paragraph " do
         result = add_paragraphs_to_text("<#{tag}>hey</#{tag}> <#{tag}>ho</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to eq("hey") 
+        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to eq("hey")
         expect(doc.xpath("./p[1]/#{tag}[2]").children.to_s.strip).to eq("ho")
         expect(doc.xpath("./p[1]/text()").to_s).to eq(" ")
       end
@@ -795,7 +795,7 @@ describe HtmlCleaner do
       it "should handle #{entity}" do
         result = add_paragraphs_to_text("#{entity}")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("#{entity}") 
+        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("#{entity}")
       end
     end
 
@@ -803,9 +803,9 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("A<p>B</p><p>C</p>")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p").size).to eq(3)
-      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("A") 
-      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("B") 
-      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("C") 
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("A")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("B")
+      expect(doc.xpath("./p[3]").children.to_s.strip).to eq("C")
     end
 
     it "should not leave p inside i" do
@@ -817,20 +817,20 @@ describe HtmlCleaner do
     xit "should deal with br tags at the beginning" do
       result = add_paragraphs_to_text("<br/></br>text")
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath(".//p").children.to_s.strip).to eq("text") 
+      expect(doc.xpath(".//p").children.to_s.strip).to eq("text")
     end
 
 
     it "should handle table tags that don't need closing" do
       html = """
-      <table> 
+      <table>
         <colgroup align=\"left\"><col width=\"20\"></colgroup>
         <colgroup align=\"right\">
-        <tr> 
-          <th>A</th> 
-          <th>B</th> 
-        </tr> 
-        <tr> 
+        <tr>
+          <th>A</th>
+          <th>B</th>
+        </tr>
+        <tr>
           <td>C</td>
           <td>D</td>
         </tr>
@@ -840,13 +840,13 @@ describe HtmlCleaner do
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./table/colgroup[@align='left']/col[@width='20']").size).to eq(1)
       expect(doc.xpath("./table/colgroup[@align='right']").size).to eq(1)
-      expect(doc.xpath("./table/tr[1]/th[1]").children.to_s.strip).to eq("A") 
-      expect(doc.xpath("./table/tr[1]/th[2]").children.to_s.strip).to eq("B") 
-      expect(doc.xpath("./table/tr[2]/td[1]").children.to_s.strip).to eq("C") 
-      expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D") 
+      expect(doc.xpath("./table/tr[1]/th[1]").children.to_s.strip).to eq("A")
+      expect(doc.xpath("./table/tr[1]/th[2]").children.to_s.strip).to eq("B")
+      expect(doc.xpath("./table/tr[2]/td[1]").children.to_s.strip).to eq("C")
+      expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D")
     end
 
-    
+
     %w(script style).each do |tag|
       it "should keep #{tag} tags as is" do
         result = add_paragraphs_to_text("<#{tag}>keep me</#{tag}>")
@@ -863,7 +863,7 @@ describe HtmlCleaner do
       expect(node.attribute("href").value).not_to match(/strong/)
       expect(node.text.strip).to eq("mylink")
     end
-    
+
     it "should fail gracefully for missing starting quotation marks" do
       result = add_paragraphs_to_text('<strong><a href=ao3.org">mylink</a></strong>')
       doc = Nokogiri::HTML.fragment(result)
@@ -872,5 +872,5 @@ describe HtmlCleaner do
       expect(node.text.strip).to eq("mylink")
     end
 
-  end  
+  end
 end

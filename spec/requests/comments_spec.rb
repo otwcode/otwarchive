@@ -101,7 +101,7 @@ describe "Comments" do
       visit login_path
       within("div#small_login") do
         fill_in "User name:",with: "#{@user.login}" ,  exact: true
-        fill_in "Password", with: "password" 
+        fill_in "Password", with: "password"
         check "Remember Me"
         click_button "Log In"
       end

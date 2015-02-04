@@ -6,7 +6,7 @@ describe Tag do
   before(:each) do
     @tag = Tag.new
   end
-  
+
   after(:each) do
     User.current_user = nil
   end
@@ -188,7 +188,7 @@ describe Tag do
       expect(tag.can_change_type?).to be_truthy
 
       work = FactoryGirl.create(:work, :fandom_string => tag.name)
-      expect(tag.can_change_type?).to be_falsey      
+      expect(tag.can_change_type?).to be_falsey
     end
 
     it "should be false for a tag used on a work" do
@@ -206,7 +206,7 @@ describe Tag do
     it "should be true for a tag used on a bookmark" do
       tag = FactoryGirl.create(:unsorted_tag)
       expect(tag.can_change_type?).to be_truthy
-      
+
       # TODO: use factories when they stop giving validation errors and stack too deep errors
       creator = User.new(:terms_of_service => '1', :age_over_13 => '1')
       creator.login = "Creator"; creator.email = "creator@muse.net"
@@ -381,7 +381,7 @@ describe Tag do
       tag = Tag.find(tag.id)
       expect(tag).to be_a(Character)
     end
-  end      
+  end
 
   describe "multiple tags of the same type" do
     before do
@@ -390,7 +390,7 @@ describe Tag do
       @syn_tag = FactoryGirl.create(:fandom)
       @sub_tag = FactoryGirl.create(:fandom)
     end
-    
+
     it "should let you make a tag the synonym of a canonical one" do
       @syn_tag.syn_string = @canonical_tag.name
       @syn_tag.save
@@ -399,21 +399,21 @@ describe Tag do
       @canonical_tag = Tag.find(@canonical_tag.id)
       expect(@canonical_tag.mergers).to eq([@syn_tag])
     end
-    
+
     it "should let you make a canonical tag the subtag of another canonical one" do
       @sub_tag.meta_tag_string = @canonical_tag.name
 
       expect(@canonical_tag.sub_tags).to eq([@sub_tag])
       expect(@sub_tag.meta_tags).to eq([@canonical_tag])
     end
-    
+
     describe "with a synonym and a subtag" do
       before do
         @syn_tag.syn_string = @canonical_tag.name
         @syn_tag.save
         @sub_tag.meta_tag_string = @canonical_tag.name
       end
-      
+
       describe "and works under each" do
         before do
           # create works with all three tags
@@ -421,20 +421,20 @@ describe Tag do
           @syn_work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name)
           @sub_work = FactoryGirl.create(:work, :fandom_string => @sub_tag.name)
         end
-        
-        xit "should find all works that would need to be reindexed" do      
+
+        xit "should find all works that would need to be reindexed" do
           # get all the work ids that it would queue
           expect(@syn_tag.all_filtered_work_ids).to eq([@syn_work.id])
           expect(@sub_tag.all_filtered_work_ids).to eq([@sub_work.id])
           expect(@canonical_tag.all_filtered_work_ids).to eq([@direct_work.id, @syn_work.id, @sub_work.id])
-      
+
           # make sure the canonical tag continues to have the right ids even if set to non-canonical
           @canonical_tag.canonical = false
           expect(@canonical_tag.all_filtered_work_ids).to match_array([@direct_work.id, @syn_work.id, @sub_work.id])
-      
+
         end
       end
-      
+
       describe "and bookmarks under each" do
         before do
           # create bookmarks with all three tags
@@ -442,7 +442,7 @@ describe Tag do
           @syn_bm = FactoryGirl.create(:bookmark, :tag_string => @syn_tag.name)
           @sub_bm = FactoryGirl.create(:bookmark, :tag_string => @sub_tag.name)
         end
-        
+
         it "should find all bookmarks that would need to be reindexed" do
           expect(@syn_tag.all_bookmark_ids).to eq([@syn_bm.id])
           expect(@sub_tag.all_bookmark_ids).to eq([@sub_bm.id])
@@ -451,5 +451,5 @@ describe Tag do
       end
     end
   end
- 
+
 end

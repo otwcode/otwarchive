@@ -20,7 +20,7 @@ describe ChallengeAssignment do
     it "should be unsent" do
       expect(@collection.assignments.sent).not_to include(@assignment)
     end
-    
+
     describe "after being sent" do
       before do
         @assignment.send_out
@@ -28,8 +28,8 @@ describe ChallengeAssignment do
       it "should be sent" do
         expect(@collection.assignments.sent).to include(@assignment)
       end
-    end      
-    
+    end
+
     describe "when it has an unposted creation" do
       before do
         @assignment.send_out
@@ -37,7 +37,7 @@ describe ChallengeAssignment do
         @work = create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
         @assignment.reload
       end
-      
+
       it "should be started but not posted fulfilled or defaulted" do
         expect(@assignment.started?).to be_truthy
         expect(@assignment.posted?).to be_falsey
@@ -51,7 +51,7 @@ describe ChallengeAssignment do
           @work.save
           @assignment.reload
         end
-        
+
         it "should be posted and fulfilled and undefaulted" do
           # note: if this collection is moderated then fulfilled shouldn't be true
           # until the item is approved
@@ -59,22 +59,22 @@ describe ChallengeAssignment do
           expect(@assignment.fulfilled?).to be_truthy
           expect(@assignment.defaulted?).to be_falsey
         end
-        
+
         describe "that is destroyed" do
           before do
             @work.destroy
             @assignment.reload
           end
-          
+
           it "should be unposted and unfulfilled again" do
             expect(@assignment.posted?).to be_falsey
             expect(@assignment.fulfilled?).to be_falsey
             expect(@assignment.defaulted?).to be_falsey
           end
         end
-        
+
       end
-      
+
     end
   end
 

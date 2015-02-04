@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe WorksOwner do
-  
+
   before do
     @tag = Tag.new
     @tag.id = 666
@@ -11,53 +11,53 @@ describe WorksOwner do
     @tag.update_works_index_timestamp!
     Delorean.back_to_the_present
   end
-  
+
   describe "works_index_timestamp" do
     it "should retrieve the owner's timestamp" do
       expect(@tag.works_index_timestamp).to eq(@time_string)
     end
   end
-  
+
   describe "works_index_cache_key" do
     it "should return the full cache key" do
       expect(@tag.works_index_cache_key).to eq("works_index_for_tag_666_#{@time_string}")
     end
-    
+
     it "should accept a tag argument and return the tag's timestamp" do
       collection = Collection.new
       collection.id = 42
       expect(collection.works_index_cache_key(@tag)).to eq("works_index_for_collection_42_tag_666_#{@time_string}")
     end
   end
-  
+
   describe "update_works_index_timestamp!" do
     it "should update the timestamp for the owner" do
       @tag.update_works_index_timestamp!
       expect(@tag.works_index_timestamp).not_to eq(@time_string)
     end
   end
-  
+
   describe "index_cache_key" do
-    
+
     shared_examples_for "an owner" do
       it "should change after a work is updated" do
         @work.save
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
-      
+
       xit "should change after a work is deleted" do
         @work.destroy
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
-      end      
+      end
     end
-    
+
     shared_examples_for "an owner tag" do
       it "should change after a new work is created" do
         new_work = FactoryGirl.create(:work, :fandom_string => @owner.name, :posted => true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
-    end  
-    
+    end
+
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
         new_work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
@@ -65,22 +65,22 @@ describe WorksOwner do
         @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
-    end  
-    
-    shared_examples_for "an owner user" do 
+    end
+
+    shared_examples_for "an owner user" do
       it "should change after a new work is created" do
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
         new_work = FactoryGirl.create(:work, :authors => [author], :posted => true)
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
-      
+
       it "should change after a work is orphaned" do
         author = @owner.is_a?(Pseud) ? @owner : @owner.default_pseud
         Creatorship.orphan([author], [@work])
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
     end
-        
+
     describe "for a canonical tag" do
       before do
         Delorean.time_travel_to "10 minutes ago"
@@ -91,7 +91,7 @@ describe WorksOwner do
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner tag"
-      
+
       describe "with a synonym" do
         before do
           Delorean.time_travel_to "10 minutes ago"
@@ -105,31 +105,31 @@ describe WorksOwner do
         end
         it_should_behave_like "an owner"
         it_should_behave_like "an owner tag"
-        
+
         it "should change after a new work is created in the synonym" do
           new_work = FactoryGirl.create(:work, :fandom_string => @syn_tag.name, :posted => true)
           expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
         end
-        
+
       end
     end
-    
+
     describe "for a collection" do
       before do
         Delorean.time_travel_to "10 minutes ago"
         @owner = FactoryGirl.create(:collection)
         @work = FactoryGirl.create(:work, :collection_names => @owner.name, :posted => true)
-      
+
         # we have to approve the collection items before we get a change in
         # the cache key, since it uses approved works
         @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
-      
+
         @original_cache_key = @owner.works_index_cache_key
         Delorean.back_to_the_present
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner collection"
-            
+
       describe "with a child" do
         before do
           Delorean.time_travel_to "10 minutes ago"
@@ -147,7 +147,7 @@ describe WorksOwner do
         it_should_behave_like "an owner"
         it_should_behave_like "an owner collection"
       end
-      
+
       describe "with a subtag" do
         before do
           @fandom = FactoryGirl.create(:fandom)
@@ -156,11 +156,11 @@ describe WorksOwner do
           @original_cache_key = @owner.works_index_cache_key(@fandom)
           @original_cache_key_without_subtag = @owner.works_index_cache_key
         end
-        
+
         it "should have a different key than without the subtag" do
           expect(@original_cache_key).not_to eq(@original_cache_key_without_subtag)
         end
-        
+
         describe "when a new work is added with that tag" do
           before do
             Delorean.time_travel_to "1 second from now"
@@ -168,13 +168,13 @@ describe WorksOwner do
             @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             Delorean.back_to_the_present
           end
-          
+
           it "should update both the cache keys" do
             expect(@original_cache_key_without_subtag).not_to eq(@owner.works_index_cache_key)
             # @original_cache_key.should_not eq(@owner.works_index_cache_key(@fandom))
           end
-        end            
-        
+        end
+
         describe "when a new work is added without that tag" do
           before do
             @fandom2 = FactoryGirl.create(:fandom)
@@ -183,29 +183,29 @@ describe WorksOwner do
             @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             Delorean.back_to_the_present
           end
-          
+
           it "should update the main cache key without the tag" do
             expect(@original_cache_key_without_subtag).not_to eq(@owner.works_index_cache_key)
           end
-        
+
           it "should not update the cache key with the tag" do
             expect(@owner.works_index_cache_key(@fandom)).to eq(@original_cache_key)
           end
-        end 
-        
+        end
+
       end
-      
+
     end
-  
+
     describe "for a user" do
       before do
         @owner = FactoryGirl.create(:user)
-        @work = FactoryGirl.create(:work, :authors => [@owner.default_pseud], :posted => true)        
+        @work = FactoryGirl.create(:work, :authors => [@owner.default_pseud], :posted => true)
       end
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"
     end
-    
+
     describe "for a pseud" do
       before do
         user = FactoryGirl.create(:user)
@@ -215,8 +215,8 @@ describe WorksOwner do
       it_should_behave_like "an owner"
       it_should_behave_like "an owner user"
     end
-    
+
   end
-  
+
 
 end

@@ -9,11 +9,11 @@ describe Chapter do
       @work = FactoryGirl.create(:work)
       @chapter = Chapter.new(:work => @work, :content => "Cool story, bro!")
     end
-    
+
     it "should save minimalistic chapter" do
       expect(@chapter.save).to be_truthy
     end
-    
+
   end
 
 end

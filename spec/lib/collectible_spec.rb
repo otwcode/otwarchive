@@ -6,10 +6,10 @@ def update_collection_setting(collection, setting, value)
 end
 
 describe Collectible do
-  
-  # TO-DO: update this to test the code for all types of collectibles, 
+
+  # TO-DO: update this to test the code for all types of collectibles,
   # bookmarks, works, etc
-  
+
   it "should not be put into a nonexistent collection" do
     fake_name = "blah_blah_blah_not_an_existing_name"
     work = create(:work)
@@ -19,25 +19,25 @@ describe Collectible do
     expect(work.save).to be_truthy
     work.reload
     expect(work.collection_names).not_to include(fake_name)
-  end  
-  
+  end
+
   context "being posted to a collection", focus: true do
     let(:collection) { create(:collection) }
     # build but don't save so we can change the collection settings
     let(:work) { build(:work, :collection_names => collection.name) }
     subject { work }
-    
+
     describe "once added" do
       before do
         work.save
       end
-    
+
       it "should be in that collection" do
         work.save
         expect(work.collections).to include(collection)
         expect(collection.works).to include(work)
       end
-    
+
       it "should be removable" do
         # collection_names= exercises collections_to_(add/remove) methods
         work.collection_names = ""
@@ -54,31 +54,31 @@ describe Collectible do
           update_collection_setting(collection, state, true)
           work.save!
         end
-      
+
         it "should be #{state}" do
           expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).to be_truthy
         end
-      
+
         describe "and when the collection is no longer #{state}" do
           before do
             collection.collection_preference.send("#{state}=",false)
             collection.collection_preference.save
             work.reload
           end
-      
+
           it "should not be #{state}" do
             expect(collection.send("#{state}?")).not_to be_truthy
             expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
           end
         end
-      
+
         describe "when the work is removed from the collection" do
           before do
             work.collection_names = ""
             work.save
             work.reload
           end
-      
+
           it "should not be #{state}" do
             expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
           end
@@ -90,7 +90,7 @@ describe Collectible do
             ci.save
             work.reload
           end
-          
+
           xit "should no longer be #{state}" do
             expect(work.send("in_#{state == 'anonymous' ? 'anon' : state}_collection")).not_to be_truthy
           end
