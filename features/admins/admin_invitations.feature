@@ -224,7 +224,7 @@ Feature: Admin Actions to Manage Invitations
     When I go to account creation page
     Then I should be on the home page
       And I should see "Account creation is suspended at the moment. Please check back with us later."
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
   Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
