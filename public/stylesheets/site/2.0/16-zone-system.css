@@ -60,10 +60,6 @@ SUBSECTIONS:
 
 /* module: browse */
 
-.splash .browse li:nth-of-type(1), .splash .browse li:nth-of-type(2) {
-  margin-top: 0;
-}
-
 .splash .browse li {
   margin: 0.375em 0;
   padding: 0.375em 0;
@@ -74,6 +70,10 @@ SUBSECTIONS:
   color: #900;
   content: "\00BB";
   padding: 0 0.25em 0 0;
+}
+
+.splash .browse li:nth-of-type(1), .splash .browse li:nth-of-type(2) {
+  margin-top: 0;
 }
 
 .splash .browse li:nth-of-type(odd) {
