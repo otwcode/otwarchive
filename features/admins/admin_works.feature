@@ -14,7 +14,8 @@ Feature: Admin Actions for Works and Bookmarks
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
-      And the email should contain "While the work is under investigation"
+      And the email should contain "We are investigating the matter and will contact you"
+
 
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
@@ -23,10 +24,12 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the work "ToS Violation"
       And I follow "Hide"
     Then I should see "Item has been hidden."
+      And all emails have been delivered
     When I follow "Make Visible"
     Then I should see "Item is no longer hidden."      
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
+      And 0 emails should be delivered
 
   Scenario: Can delete works
     Given I am logged in as "regular_user"

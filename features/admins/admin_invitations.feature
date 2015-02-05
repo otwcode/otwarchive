@@ -58,7 +58,7 @@ Feature: Admin Actions to Manage Invitations
     When I go to account creation page
     Then I should be on invite requests page
       And I should see "To create an account, you'll need an invitation. One option is to add your name to the automatic queue below."
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
@@ -105,7 +105,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should be on the home page
       And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
       And I should see "Forgot password?" within "div#small_login"
-      And I should not see "Get an Invite" within "div#small_login"
+      And I should not see "Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
