@@ -856,7 +856,7 @@ class StoryParser
           curl.follow_location = true
           curl.max_redirects = 10
           curl.perform
-          story=curl.body_str
+          story = curl.body_str
         rescue Errno::ECONNREFUSED
           nil
         rescue SocketError
