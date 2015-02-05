@@ -60,8 +60,12 @@ SUBSECTIONS:
 
 /* module: browse */
 
+.splash .browse li:nth-of-type(1), .splash .browse li:nth-of-type(2) {
+  margin-top: 0;
+}
+
 .splash .browse li {
-  margin: 0.643em 0;
+  margin: 0.375em 0;
   padding: 0.375em 0;
   width: 50%;
 }
