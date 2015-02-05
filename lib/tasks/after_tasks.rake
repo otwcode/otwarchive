@@ -386,6 +386,26 @@ namespace :After do
     end
   end
 
+  desc "Set up available locales"
+  task(:locale_setup => :environment) do
+    I18n.available_locales.each do |iso|
+      next if Locale.where(iso: iso).exists?
+      iso = iso.to_s
+      short = iso.split('-').first
+      lang = Language.find_by_short(short)
+      if lang.present?
+        Locale.create(
+          iso: iso, 
+          short: short, 
+          name: lang.name, 
+          language_id: lang.id
+        )
+      else
+        puts "No language found for #{short}"
+      end
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -396,4 +416,4 @@ end # this is the end that you have to put new tasks above
 desc "Run all current migrate tasks"
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
 # 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => []
+task :After => ['After:locale_setup']

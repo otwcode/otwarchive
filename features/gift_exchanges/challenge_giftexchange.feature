@@ -52,10 +52,10 @@ Feature: Gift Exchange Challenge
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    When I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
+    When I select "(GMT+10:00) Port Moresby" from "gift_exchange_time_zone"
       And I submit
     Then I should see "Challenge was successfully updated"
-    Then I should see "AKDT"
+    Then I should see "PGT"
 
   Scenario: Add a co-mod
     Given the following activated users exist

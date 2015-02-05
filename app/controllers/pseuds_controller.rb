@@ -26,18 +26,16 @@ class PseudsController < ApplicationController
   # GET /users/:user_id/pseuds/:id
   def show
     if @user.blank?
-      flash[:error] = ts("Sorry, could not find this user.")
-      redirect_to people_path and return
+      raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
     end
     @pseud = @user.pseuds.find_by_name(params[:id])
     unless @pseud
-      flash[:error] = ts("Sorry, could not find this pseud.")
-      redirect_to people_path and return
+      raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:id]}'"
     end
     @page_subtitle = @pseud.name
 
     # very similar to show under users - if you change something here, change it there too
-    if current_user.nil?
+    if !(logged_in? || logged_in_as_admin?)
       # hahaha omg so ugly BUT IT WORKS :P
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).

@@ -10,7 +10,8 @@ module WorksOwner
     # expire a bunch of keys without having to look up the objects in the database
     def expire_ids(ids)
       ids.each do |id|
-        REDIS_GENERAL.set("#{self.to_s.downcase}_#{id}_windex", Time.now.to_i.to_s)
+        klass = (self.superclass == Tag) ? 'tag' : self.to_s.underscore
+        REDIS_GENERAL.set("#{klass}_#{id}_windex", Time.now.to_i.to_s)
       end
     end
   end
@@ -44,7 +45,8 @@ module WorksOwner
   private
   
   def redis_works_index_key
-    "#{self.class.to_s.downcase}_#{self.id}_windex"
+    klass = self.is_a?(Tag) ? 'tag' : self.class.to_s.underscore
+    "#{klass}_#{self.id}_windex"
   end
   
 end

@@ -107,6 +107,8 @@ module NavigationHelpers
       user_related_works_path(User.current_user)
     when /my inbox page/
       user_inbox_path(User.current_user)
+    when /my invitations page/
+      user_invitations_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
@@ -134,9 +136,15 @@ module NavigationHelpers
     when /^the works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_path(Tag.find_by_name($1))
+    when /^the bookmarks tagged "(.*)"$/i
+      Bookmark.tire.index.refresh
+      tag_bookmarks_path(Tag.find_by_name($1))
     when /^the url for works tagged "(.*)"$/i
       Work.tire.index.refresh
       tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+    when /^the bookmarks in collection "(.*)"$/i
+      Bookmark.tire.index.refresh
+      collection_bookmarks_path(Collection.find_by_title($1))
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       Work.tire.index.refresh
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
@@ -153,10 +161,14 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
+    when /^the Wrangling Guidelines reorder page$/i
+      manage_wrangling_guidelines_path
     when /^the tos page$/i
       tos_path
     when /^the faq page$/i
       archive_faqs_path
+    when /^the wrangling guidelines page$/i
+      wrangling_guidelines_path
     when /^the support page$/i
       new_feedback_report_path
     when /^the new tag ?set page$/i

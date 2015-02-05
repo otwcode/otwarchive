@@ -41,7 +41,20 @@ FactoryGirl.define do
 
   factory :archive_faq do |f|
     f.sequence(:title) { |n| "The #{n} FAQ" }
-    f.sequence(:content) { |n| "This is the #{n} FAQ" }
+
+    after(:build) do |question|
+      FactoryGirl.build(:question)
+    end
+  end
+
+  factory :question do |f|
+    f.sequence(:question) { |n| "The #{n} Question"}
+    f.sequence(:content) { |n| "The #{n} Content that is long enough to validate."}
+  end
+
+  factory :wrangling_guideline do |f|
+    f.sequence(:title) { |n| "The #{n} Wrangling Guideline" }
+    f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
   end
 
   factory :tag do |f|
@@ -207,4 +220,10 @@ end
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
   end
+
+  factory :language do
+    short 'nl'
+    name  'Dutch'
+  end
+
 end

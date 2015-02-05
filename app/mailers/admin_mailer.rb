@@ -16,6 +16,26 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
+  def created_faq(archive_faq_id, admin)
+    @admin = admin
+    @archive_faq = ArchiveFaq.find(archive_faq_id)
+    @email = "translation@transformativeworks.org"
+    mail(
+      :to => @email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
+    )
+  end
+
+  def edited_faq(archive_faq_id, admin)
+    @admin = admin
+    @archive_faq = ArchiveFaq.find(archive_faq_id)
+    @email = "translation@transformativeworks.org"
+    mail(
+      :to => @email,
+      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
+         )
+  end
+
   def feedback(feedback_id)
     feedback = Feedback.find(feedback_id)
     @summary = feedback.summary
@@ -62,4 +82,12 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
+  # Sends a spam report
+  def send_spam_alert(spam)
+    @spam = spam
+    mail(
+      to: ArchiveConfig.SPAM_ALERT_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Potential spam alert"
+    )
+  end
 end

@@ -7,6 +7,7 @@ Otwarchive::Application.routes.draw do
   match '/422', :to => 'errors#422'
   match '/500', :to => 'errors#500'
 
+
   #### DOWNLOADS ####
 
   match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
@@ -126,6 +127,11 @@ Otwarchive::Application.routes.draw do
 
   namespace :admin do
     resources :activities, :only => [:index, :show]
+    resources :banners do
+      member do
+        get :confirm_delete
+      end
+    end
     resources :settings
     resources :skins do
       collection do
@@ -418,26 +424,8 @@ Otwarchive::Application.routes.draw do
     collection do
       get :set
     end
-    resources :translations do
-      collection do
-        post :assign
-      end
-    end
-    resources :translators do
-      resources :translations
-    end
-    resources :translation_notes
   end
 
-  resources :translations do
-    collection do
-      post :assign
-    end
-  end
-  resources :translators do
-    resources :translations
-  end
-  resources :translation_notes
 
   #### SESSIONS ####
 
@@ -492,20 +480,32 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :known_issues
-  resources :archive_faqs do
+  resources :archive_faqs, :path => "faq" do
+    member do
+      get :confirm_delete
+    end
     collection do
       get :manage
       post :reorder
     end
   end
-
+  resources :wrangling_guidelines do
+    member do
+      get :confirm_delete
+    end
+    collection do
+      get :manage
+      post :reorder
+    end
+  end
+  
   resource :redirect, :controller => "redirect", :only => [:show] do
     member do
       get :do_redirect
     end
   end
 
-  resources :abuse_reports
+  resources :abuse_reports, only: [:new, :create] 
   resources :external_authors do
     resources :external_author_names
   end
@@ -529,6 +529,7 @@ Otwarchive::Application.routes.draw do
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
+  match 'lost_cookie' => 'home#lost_cookie'
   match 'about' => 'home#about'
 	match 'menu/browse' => 'menu#browse'
 	match 'menu/fandoms' => 'menu#fandoms'

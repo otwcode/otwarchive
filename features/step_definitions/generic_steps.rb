@@ -42,7 +42,6 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
-
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
@@ -197,15 +196,15 @@ end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them
 Then /^I should see the text with tags "(.*)"$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the text with tags '(.*)'$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see the text with tags '(.*)'$/ do |text|
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the page title "(.*)"$/ do |text|
@@ -221,15 +220,14 @@ end
 
 Then /^I should see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
-
