@@ -314,9 +314,9 @@ class StoryParser
       work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
 
       # set collection name if present
-      # set default language (English)
       work.collection_names = get_collection_names(options[:collection_names]) if !options[:collection_names].blank?
 
+      # set default language (English)
       work.language_id = options[:language_id] || Language.default.id
 
       # set default value for title
