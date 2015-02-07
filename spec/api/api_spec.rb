@@ -6,9 +6,9 @@ describe "API ImportController" do
   # Let the test get at external sites, but stub out anything containing "foo"
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
-      to_return(status: 200, body: "stubbed response", headers: {})
+    to_return(status: 200, body: "stubbed response", headers: {})
   WebMock.stub_request(:any, /bar/).
-      to_return(status: 404, headers: {})
+    to_return(status: 404, headers: {})
 
   # set up a valid token and some headers
   def valid_headers
@@ -30,7 +30,7 @@ describe "API ImportController" do
 
     it "should return 403 Forbidden if the specified user isn't an archivist" do
       post "/api/v1/import",
-           {archivist: "mr_nobody"}.to_json,
+           { archivist: "mr_nobody" }.to_json,
            valid_headers
       assert_equal 403, response.status
     end
@@ -48,10 +48,10 @@ describe "API ImportController" do
     it "should return 201 Created when all stories are created" do
       user = create(:user)
       post "/api/v1/import",
-           {archivist: user.login,
-            works: [{external_author_name: "bar",
-                     external_author_email: "bar@foo.com",
-                     chapter_urls: ["http://foo"]}]
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://foo"] }]
            }.to_json,
            valid_headers
       assert_equal 201, response.status
@@ -60,10 +60,10 @@ describe "API ImportController" do
     it "should return 422 Unprocessable Entity when no stories are created" do
       user = create(:user)
       post "/api/v1/import",
-           {archivist: user.login,
-            works: [{external_author_name: "bar",
-                     external_author_email: "bar@foo.com",
-                     chapter_urls: ["http://bar"]}]
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://bar"] }]
            }.to_json,
            valid_headers
       assert_equal 422, response.status
@@ -72,13 +72,13 @@ describe "API ImportController" do
     it "should return 207 Multi-Status when only some stories are created" do
       user = create(:user)
       post "/api/v1/import",
-           {archivist: user.login,
-            works: [{external_author_name: "bar",
-                     external_author_email: "bar@foo.com",
-                     chapter_urls: ["http://foo"]},
-                    {external_author_name: "bar2",
-                     external_author_email: "bar2@foo.com",
-                     chapter_urls: ["http://foo"]}]
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://foo"] },
+                     { external_author_name: "bar2",
+                       external_author_email: "bar2@foo.com",
+                       chapter_urls: ["http://foo"] }]
            }.to_json,
            valid_headers
       assert_equal 207, response.status
@@ -87,7 +87,7 @@ describe "API ImportController" do
     it "should return 400 Bad Request if no works are specified" do
       user = create(:user)
       post "/api/v1/import",
-           {archivist: user.login}.to_json,
+           { archivist: user.login }.to_json,
            valid_headers
       assert_equal 400, response.status
     end
