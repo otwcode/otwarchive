@@ -520,7 +520,7 @@ Otwarchive::Application.routes.draw do
   # API end points
   namespace :api do
     namespace :v1 do
-      resources :import, only: [:create], defaults: {format: :json}
+      resources :import, only: [:create], defaults: { format: :json }
     end
   end
 

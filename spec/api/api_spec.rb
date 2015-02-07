@@ -13,9 +13,11 @@ describe "API ImportController" do
   # set up a valid token and some headers
   def valid_headers
     api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
-    {"HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials(api.access_token),
-     "HTTP_ACCEPT" => "application/json",
-     "CONTENT_TYPE" => "application/json"}
+    {
+      "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials(api.access_token),
+      "HTTP_ACCEPT" => "application/json",
+      "CONTENT_TYPE" => "application/json"
+    }
   end
 
 
@@ -34,7 +36,7 @@ describe "API ImportController" do
     end
   end
 
-# Override is_archivist so all users are archivists from this point on
+  # Override is_archivist so all users are archivists from this point on
   class User < ActiveRecord::Base
     def is_archivist?
       true
