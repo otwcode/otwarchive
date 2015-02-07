@@ -24,10 +24,10 @@ class Api::V1::ImportController < Api::V1::BaseController
       # To be added if required
       # send_external_invites(@works)
 
-      #set final response code and message depending on the flags
+      # set final response code and message depending on the flags
       status, messages = response_code(messages)
     end
-    render status: status, json: {message: messages, works: works_responses}
+    render status: status, json: { message: messages, works: works_responses }
   end
 
   private
@@ -73,10 +73,12 @@ class Api::V1::ImportController < Api::V1::BaseController
       end
     end
 
-    {status: work_status,
-     url: work_url,
-     original_url: original_url,
-     messages: work_messages}
+    {
+      status: work_status,
+      url: work_url,
+      original_url: original_url,
+      messages: work_messages
+    }
   end
 
   # Top-level error handling: returns a 403 forbidden if a valid archivist isn't supplied and a 400
@@ -114,24 +116,24 @@ class Api::V1::ImportController < Api::V1::BaseController
 
   def options(archivist, params)
     {
-        archivist: archivist,
-        import_multiple: 'chapters',
-        importing_for_others: true,
-        do_not_set_current_author: true,
-        restricted: params[:restricted],
-        override_tags: params[:override_tags],
-        fandom: params[:fandoms],
-        warning: params[:warnings],
-        character: params[:characters],
-        rating: params[:rating],
-        relationship: params[:relationships],
-        category: params[:categories],
-        freeform: params[:additional_tags],
-        encoding: params[:encoding],
-        external_author_name: params[:external_author_name],
-        external_author_email: params[:external_author_email],
-        external_coauthor_name: params[:external_coauthor_name],
-        external_coauthor_email: params[:external_coauthor_email]
+      archivist: archivist,
+      import_multiple: 'chapters',
+      importing_for_others: true,
+      do_not_set_current_author: true,
+      restricted: params[:restricted],
+      override_tags: params[:override_tags],
+      fandom: params[:fandoms],
+      warning: params[:warnings],
+      character: params[:characters],
+      rating: params[:rating],
+      relationship: params[:relationships],
+      category: params[:categories],
+      freeform: params[:additional_tags],
+      encoding: params[:encoding],
+      external_author_name: params[:external_author_name],
+      external_author_email: params[:external_author_email],
+      external_coauthor_name: params[:external_coauthor_name],
+      external_coauthor_email: params[:external_coauthor_email]
     }
   end
 end
