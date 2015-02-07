@@ -9,29 +9,29 @@ shared_examples_for "an autocompleting tag" do
       expect(auto.autocomplete_prefixes).to include("autocomplete_tag_all")
     end
   end
-    
+
   describe '#autocomplete_search_string' do
     it "should be equal to its name" do
       expect(auto.autocomplete_search_string).to eq(auto.name)
     end
   end
-  
+
   describe '#autocomplete_value' do
     it "should include id and name" do
       "#{auto.id}: #{auto.name}"
     end
   end
-  
+
   describe '#autocomplete_score' do
     it "should return zero" do
       expect(auto.autocomplete_score).to eq(0)
     end
   end
-  
+
   describe '#add_to_autocomplete' do
     it "should add itself to the autocomplete"
   end
-  
+
   describe '#remove_from_autocomplete' do
     it "should remove itself from the autocomplete"
   end

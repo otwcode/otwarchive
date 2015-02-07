@@ -119,7 +119,7 @@ describe StoryParser do
     it "should convert relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
       # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
-      {      
+      {
        ['http://foo.com/bar.html', 'thisdir.html'] => 'http://foo.com/thisdir.html',
        ['http://foo.com/bar.html?hello=foo', 'thisdir.html'] => 'http://foo.com/thisdir.html',
        ['http://foo.com/bar.html', './thisdir.html'] => 'http://foo.com/thisdir.html',

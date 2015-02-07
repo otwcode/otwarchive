@@ -4,7 +4,7 @@ describe TagsController do
   include LoginMacros
 
   before do
-    fake_login            
+    fake_login
     @current_user.roles << Role.new(name: 'tag_wrangler')
   end
 

@@ -69,6 +69,6 @@ describe WordCounter do
   it "should handle common punctuation" do
     word_counter.text = "\Hey Bob,\" said Alice, 'Yay?!?'"
     expect(word_counter.count).to eq(5)
-  end  
-   
+  end
+
 end

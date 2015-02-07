@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Collection do
-  
+
   before do
     @collection = FactoryGirl.create(:collection)
   end

@@ -13,7 +13,7 @@ describe Work do
         @work = build(:work)
         @work.save!
       }.to change{ StatCounter.all.count }.by(1)
-      expect(StatCounter.where(:work_id => @work.id)).to exist
+      expect(StatCounter.where(work_id: @work.id)).to exist
     end
   end
 
@@ -136,7 +136,7 @@ describe Work do
       @fandom1 = create(:fandom)
       @chapter1 = create(:chapter)
 
-      @work = Work.new(:title => "Title")
+      @work = Work.new(title: "Title")
       @work.fandoms << @fandom1
       @work.authors = [@author.pseuds.first]
       @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
@@ -164,5 +164,5 @@ describe Work do
 
   end
 
-    
+
 end
