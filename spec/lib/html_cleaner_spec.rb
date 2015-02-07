@@ -650,14 +650,14 @@ describe HtmlCleaner do
     end
 
     it "should convert double br tags into paragraph break" do
-      result = add_paragraphs_to_text("some<br/>\n<br/>text")
+      result = add_paragraphs_to_text("some<br/><br/>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
       expect(doc.xpath("./p[2]").children.to_s.strip).to eq("text")
     end
 
     it "should convert triple br tags into blank paragraph" do
-      result = add_paragraphs_to_text("some<br/>\n<br/>\n<br/>text")
+      result = add_paragraphs_to_text("some<br/><br/><br/>text")
       doc = Nokogiri::HTML.fragment(result)
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("some")
       expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&#160;")

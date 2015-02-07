@@ -15,7 +15,7 @@ describe CacheMaster do
   it "should combine multiple deleted associations" do
     cache_master.record('tag', 6)
     cache_master.record('pseud', 7)
-    expect(cache_master.get_hash).to eq({ "tag" => "5, 6", "pseud" => "7" })
+    expect(cache_master.get_hash).to eq({ "tag" => "5,6", "pseud" => "7" })
   end
 
   it "should expire caches" do
@@ -25,7 +25,7 @@ describe CacheMaster do
 
   it "should not retain data after expiring caches" do
     cache_master.expire
-    expect(cache_master.get_hash).to eq(" ")
+    expect(cache_master.get_hash).to eq({})
   end
 
 end

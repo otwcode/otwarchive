@@ -92,7 +92,7 @@ describe Work do
     end
   end
 
-  describe "work_skin_allowed", :pending do
+  describe "work_skin_allowed"  do
     context "public skin"
 
     context "private skin" do
@@ -111,7 +111,7 @@ describe Work do
       end
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
-      it "cannot be used by another user" do
+      xit "cannot be used by another user" do
         puts @skin_author.login
         puts @skin_author.pseuds.first.name
         puts @second_author.login
@@ -125,7 +125,7 @@ describe Work do
   #TODO: Move to a collection mailer spec
   it "should send an email when added to collection"
 
-  describe "new recipients virtual attribute", :pending do
+  describe "new recipients virtual attribute"  do
 
     before(:each) do
       @author = create(:user)
@@ -147,7 +147,7 @@ describe Work do
       expect(@work.new_recipients).to eq(@work.recipients)
     end
 
-    it "should only contain the new recipients when more are added" do
+    xit "should only contain the new recipients when more are added" do
       @work.recipients += "," + @recipient3.pseuds.first.name
       expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
     end
@@ -157,7 +157,7 @@ describe Work do
       expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
     end
 
-    it "should be empty if one or more of the original recipients are removed" do
+    xit "should be empty if one or more of the original recipients are removed" do
       @work.recipients = @recipient2.pseuds.first.name
       expect(@work.new_recipients).to be_empty
     end
