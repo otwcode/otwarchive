@@ -1272,8 +1272,10 @@ class Work < ActiveRecord::Base
   end
 
   def to_indexed_json
-    to_json(methods:
-      [ :rating_ids,
+    to_json(
+      except: [:spam, :spam_checked_at],
+      methods: [
+        :rating_ids,
         :warning_ids,
         :category_ids,
         :fandom_ids,

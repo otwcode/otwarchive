@@ -36,9 +36,9 @@ Feature: Admin Actions to Manage Invitations
     Then I should be on the home page
       And I should see "Account creation is suspended at the moment. Please check back with us later."
       # Check to see if the buttons are correct on the main page
-      And I should see "Log in or Get an Invite"
+      And I should see "Log in or Get an Invitation"
       # Check to see if the buttons are correct in the login popup
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, Invite required, Queue enabled
     Given I am logged in as an admin
@@ -53,9 +53,9 @@ Feature: Admin Actions to Manage Invitations
       And I should see "To create an account, you'll need an invitation. One option is to add your name to the automatic queue below."
     Then I go to the home page
       # Check to see if the buttons are correct on the main page
-      And I should see "Log in or Get an Invite"
+      And I should see "Log in or Get an Invitation"
       # Check to see if the buttons are correct in the login popup
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
   Scenario: Account creation enabled, Invite is required, Queue is disabled
     Given I am logged in as an admin
@@ -70,7 +70,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
       # Check to see if the buttons are correct on the main page
       And I should see "Log in" within "p#signup"
-      And I should not see "Get an Invite" within "p#signup"
+      And I should not see "Get an Invitation" within "p#signup"
       # Check to see if the buttons are correct in the login popup
       And I should see "Forgot password?" within "div#small_login"
-      And I should not see "Get an Invite" within "div#small_login"
+      And I should not see "Get an Invitation" within "div#small_login"
