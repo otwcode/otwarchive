@@ -1,6 +1,7 @@
 language: ruby
 env:
   - TEST_GROUP="./script/check_syntax"
+  - TEST_GROUP="rspec spec -b"
 rvm:
   - "1.9.3"
 services:
