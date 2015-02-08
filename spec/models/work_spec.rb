@@ -43,7 +43,10 @@ describe Work do
 
     let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect { create(:work, title: "     #{too_short}")}.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      expect {
+        @work = create(:work, title: "     #{too_short}")
+        @work.reload
+      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
