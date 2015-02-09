@@ -108,7 +108,7 @@ end
 
 When /^I request some invites$/ do
   step %{I try to invite a friend from my user page}
-  step %{I follow "Request more"}
+  step %{I follow "Request invitations"}
   step %{I fill in "user_invite_request_quantity" with "3"}
   step %{I fill in "user_invite_request_reason" with "I want them for a friend"}
   step %{I press "Send Request"}
