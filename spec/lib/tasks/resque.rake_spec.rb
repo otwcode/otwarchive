@@ -23,7 +23,11 @@ describe "resque rake tasks" do
   before do
     (Resque::Failure.count-1).downto(0).each { |i| Resque::Failure.remove(i) }
     @rake = Rake.application
-    @rake.init
+    begin
+      @rake.init
+    rescue SystemExit
+    end
+    #@rake.init
     @rake.load_rakefile
     @worker = Resque::Worker.new(:tests)
   end
