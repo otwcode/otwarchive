@@ -27,7 +27,6 @@ describe "resque rake tasks" do
       @rake.init
     rescue SystemExit
     end
-    #@rake.init
     @rake.load_rakefile
     @worker = Resque::Worker.new(:tests)
   end
