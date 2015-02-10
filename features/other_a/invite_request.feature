@@ -14,7 +14,7 @@ Feature: Invite requests
     Given invitations are required
       And I am logged in as "user1"
     When I try to invite a friend from my user page
-      And I follow "Request more"
+      And I follow "Request invitations"
     When I fill in "user_invite_request_quantity" with "3"
       And I fill in "user_invite_request_reason" with "I want them for a friend"
       And I press "Send Request"
