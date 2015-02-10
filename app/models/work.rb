@@ -334,6 +334,14 @@ class Work < ActiveRecord::Base
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      if results[:banned_pseuds].present?
+        self.errors.add(
+          :base, 
+          ts("%{name} has been banned and cannot be listed as a co-creator",
+             name: results[:banned_pseuds].to_sentence
+          )
+        )
+      end
     end
     self.authors.flatten!
     self.authors.uniq!
@@ -1006,6 +1014,7 @@ class Work < ActiveRecord::Base
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
   scope :posted, where(:posted => true)
   scope :unposted, where(:posted => false)
+  scope :not_spam, where(spam: false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
   scope :hidden, where(:hidden_by_admin => true)
@@ -1221,6 +1230,32 @@ class Work < ActiveRecord::Base
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
 
+  ########################################################################
+  # SPAM CHECKING
+  ########################################################################
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    content = chapters_in_order.map { |c| c.content }.join
+    user = users.first
+    self.spam = Akismetor.spam?(
+      comment_type: 'Fan Fiction',
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_date_gmt: created_at.to_time.iso8601,
+      blog_lang: language.short,
+      comment_author: user.login,
+      comment_author_email: user.email,
+      comment_content: content
+    )
+    self.spam_checked_at = Time.now
+    save
+  end
 
   #############################################################################
   #
@@ -1237,8 +1272,10 @@ class Work < ActiveRecord::Base
   end
 
   def to_indexed_json
-    to_json(methods:
-      [ :rating_ids,
+    to_json(
+      except: [:spam, :spam_checked_at],
+      methods: [
+        :rating_ids,
         :warning_ids,
         :category_ids,
         :fandom_ids,

@@ -1,5 +1,4 @@
 class Homepage
-
   def initialize(user)
     @user = user
   end
@@ -12,9 +11,9 @@ class Homepage
     if Rails.env.development?
       @admin_posts = AdminPost.non_translated.for_homepage.all
     else
-      @admin_posts = Rails.cache.fetch("home/index/home_admin_posts", expires_in: 20.minutes) { 
+      @admin_posts = Rails.cache.fetch("home/index/home_admin_posts", expires_in: 20.minutes) do
         AdminPost.non_translated.for_homepage.all
-      }
+      end
     end
   end
 
@@ -23,9 +22,9 @@ class Homepage
     if Rails.env.development?
       @favorite_tags ||= @user.favorite_tags
     else
-      @favorite_tags ||= Rails.cache.fetch("home/index/#{@user.id}/home_favorite_tags") {
+      @favorite_tags ||= Rails.cache.fetch("home/index/#{@user.id}/home_favorite_tags") do
         @user.favorite_tags
-      }
+      end
     end
   end
 
@@ -37,12 +36,12 @@ class Homepage
           where(toread: true).
           all
     else
-      @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") { 
+      @readings ||= Rails.cache.fetch("home/index/#{@user.id}/home_marked_for_later") do
         @user.readings.order("RAND()").
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
           where(toread: true).
           all
-      }
+      end
     end
   end
 
@@ -50,5 +49,4 @@ class Homepage
     return unless logged_in?
     @inbox_comments ||= @user.inbox_comments.for_homepage
   end
-
 end

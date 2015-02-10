@@ -14,7 +14,7 @@ Feature: Admin Actions to Manage Invitations
       And I press "Update"
     Then I should not see "Invite from queue number must be greater than 0."
 
-  Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is enabled 2
+  Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -28,7 +28,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create An Account"
 
-  Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is disabled 3
+  Scenario: Account creation enabled, invitations required, users can request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -42,7 +42,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is enabled 4
+  Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -58,9 +58,9 @@ Feature: Admin Actions to Manage Invitations
     When I go to account creation page
     Then I should be on invite requests page
       And I should see "To create an account, you'll need an invitation. One option is to add your name to the automatic queue below."
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
-  Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is enabled 5
+  Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -74,7 +74,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should see "Create an Account!"
 
-  Scenario: Account creation disabled, invitations required, users can request invitations, and the queue is enabled 6
+  Scenario: Account creation disabled, invitations required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -88,7 +88,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is disabled 7
+  Scenario: Account creation enabled, invitations required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -105,9 +105,9 @@ Feature: Admin Actions to Manage Invitations
     Then I should be on the home page
       And I should see "Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account."
       And I should see "Forgot password?" within "div#small_login"
-      And I should not see "Get an Invite" within "div#small_login"
+      And I should not see "Get an Invitation" within "div#small_login"
 
-  Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is enabled 8
+  Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -121,7 +121,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should see "Create an Account!"
 
-  Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is enabled 9
+  Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -135,7 +135,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is disabled 10
+  Scenario: Account creation enabled, invitations not required, users can request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -149,7 +149,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should see "Create an Account!"
 
-  Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is enabled 11
+  Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -163,7 +163,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled 12
+  Scenario: Account creation enabled, invitations not required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I check "Account creation enabled"
@@ -180,7 +180,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should be on account creation page
       And I should see "Create Account"
 
-  Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is disabled 13
+  Scenario: Account creation disabled, invitations required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -194,7 +194,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is disabled 14
+  Scenario: Account creation disabled, invitations not required, users can request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -208,7 +208,7 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "While the site is in beta, you can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!"
       And I should not see "Create an Account!"
 
-  Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is enabled 15
+  Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is enabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"
@@ -224,9 +224,9 @@ Feature: Admin Actions to Manage Invitations
     When I go to account creation page
     Then I should be on the home page
       And I should see "Account creation is suspended at the moment. Please check back with us later."
-      And I should see "Forgot password? Get an Invite" within "div#small_login"
+      And I should see "Forgot password? Get an Invitation" within "div#small_login"
 
-  Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is disabled 16
+  Scenario: Account creation disabled, invitations not required, users cannot request invitations, and the queue is disabled
     Given I am logged in as an admin
       And I go to the admin-settings page
       And I uncheck "Account creation enabled"

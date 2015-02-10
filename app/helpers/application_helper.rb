@@ -53,7 +53,7 @@ module ApplicationHelper
   end
   
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
+    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, :title => "RSS Feed", :class => "rss"
   end
   
   #1: default shows just the link to help
@@ -545,7 +545,7 @@ module ApplicationHelper
     end
     nil
   end
-  
+
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
     paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
@@ -558,5 +558,4 @@ module ApplicationHelper
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
   end
-    
 end # end of ApplicationHelper

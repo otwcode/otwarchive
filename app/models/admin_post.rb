@@ -32,7 +32,7 @@ class AdminPost < ActiveRecord::Base
   scope :non_translated, where('translated_post_id IS NULL')
 
   scope :for_homepage, order: "created_at DESC",
-    limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+                       limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
 
   after_save :expire_cached_home_admin_posts
   after_destroy :expire_cached_home_admin_posts
@@ -72,5 +72,4 @@ class AdminPost < ActiveRecord::Base
       Rails.cache.delete("home/index/home_admin_posts")
     end
   end
-
 end

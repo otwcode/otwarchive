@@ -36,14 +36,8 @@
     <dl>
       <dt class="required"><%= f.label :category, ts("What is your feedback about") %></dt>
       <dd>
-        <%= f.select("category", [ 
-            [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], 
-            [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK],  
-            [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], 
-            [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], 
-            [Feedback::BUGS_LANG_NAME, Feedback::BUGS_LANG], 
-            [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], 
-          :selected => Feedback::BUGS_MISC) %>
+        <%= f.select("category", Feedback::CATEGORIES, 
+                     selected: Feedback::DEFAULT_CATEGORY) %>
       </dd>
       <dt class="required"><%= f.label :summary, ts("Brief summary (required)") %></dt>
       <dd>
