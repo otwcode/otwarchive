@@ -7,7 +7,7 @@ class Admin::ApiController < ApplicationController
   end
 
   def show
-    redirect_to action: 'index'
+    redirect_to action: "index"
   end
 
   def new
@@ -17,10 +17,10 @@ class Admin::ApiController < ApplicationController
   def create
     @api_key = ApiKey.new(params[:api_key])
     if @api_key.save
-      flash[:notice] = ts('New token successfully created')
-      redirect_to action: 'index'
+      flash[:notice] = ts("New token successfully created")
+      redirect_to action: "index"
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -31,8 +31,8 @@ class Admin::ApiController < ApplicationController
   def update
     @api_key = params[:api_key]
     if ApiKey.update(params[:id], @api_key)
-      flash[:notice] = ts('Access token name was successfully updated')
-      redirect_to action: 'index'
+      flash[:notice] = ts("Access token name was successfully updated")
+      redirect_to action: "index"
     else
       render 'edit'
     end
@@ -48,7 +48,7 @@ class Admin::ApiController < ApplicationController
 
   def check_for_cancel
     if params[:cancel_button]
-      redirect_to action: 'index'
+      redirect_to action: "index"
     end
   end
 end

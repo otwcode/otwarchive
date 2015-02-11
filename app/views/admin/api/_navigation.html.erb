@@ -1,0 +1,5 @@
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("API Tokens"), admin_api_index_path %></li>
+  <li><%= span_if_current ts("New API Token"), new_admin_api_path %></li>
+  <li><%= span_if_current ts("Delete API Token"), admin_api_path(@api_key), :confirm => ts("Are you sure you want to delete this API key?"), :method => :delete %></li>
+</ul>

@@ -1,14 +1,13 @@
-<%= form_for @api_key, url: new_admin_api_path do |f| %>
-  <dl>
-    <dt><%= f.label :name, ts("Name *"), :class => "required" %></dt>
-    <dd>
-      <%= f.text_field :name %>
-      <%= live_validation_for_field("api_key_name", :presence => true) %>
-    </dd>
-    <ul class="actions">
-      <legend class="landmark"><%= f.label :create, ts("Create") %></legend>
-      <li class="submit"><%= f.submit ts('Create') %></li>
-      <li class="submit"><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
-    </ul>
-  </dl>
-<% end %>
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= ts("New API Token") %></h2>
+  <!--/descriptions-->
+
+  <!--subnav-->
+  <%= render "navigation" %>
+  <!--/subnav-->
+
+  <!--main content-->
+  <%= render "api_key_form" %>
+  <!--/content-->
+</div>

@@ -1,38 +1,48 @@
 <div class="admin">
-  <h2 class="heading"><%= ts('API Tokens') %></h2>
+  <h2 class="heading"><%= ts("API Tokens") %></h2>
 
-  <ul class="navigation actions" role="navigation">
-    <li><%= span_if_current ts('Create a Token'), new_admin_api_path %></li>
-  </ul>
+  <!--subnav-->
+  <%= render "navigation" %>
+  <!--/subnav-->
 
-  <table>
+  <%= will_paginate @api_keys %>
+
+  <!--main content-->
+  <table summary="<%= ts("Existing API tokens along with the dates they were created and updated and options for editing them.") %>">
+    <caption><%= ts("API Tokens") %></caption>
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Token</td>
-        <td>Created</td>
-        <td>Updated</td>
-        <td></td>
+        <th scope="col"><%= ts("Name") %></th>
+        <th scope="col"><%= ts("Token") %></th>
+        <th scope="col"><%= ts("Created") %></th>
+        <th scope="col"><%= ts("Updated") %></th>
+        <th scope="col"><%= ts("Actions") %></th>
       </tr>
     </thead>
     <tbody>
-    <% @api_keys.each do |api_key| %>
-      <tr>
-        <td><%= api_key.name %></td>
-        <td><%= api_key.access_token %></td>
-        <td><%= api_key.created_at %></td>
-        <td><%= api_key.updated_at %></td>
-        <td>
-          <ul class="navigation actions">
-            <li><%= link_to ts("Edit"), edit_admin_api_path(api_key) %></li>
-            <li>
-            <%= link_to ts("Delete"), admin_api_path(api_key), :confirm => 'Are you sure?', :method => :delete %>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    <% end %>
+      <% @api_keys.each do |api_key| %>
+        <tr>
+          <th scope="row"><%= api_key.name %></th>
+          <td><%= api_key.access_token %></td>
+          <td><%= api_key.created_at %></td>
+          <td><%= api_key.updated_at %></td>
+          <td>
+            <ul class="actions">
+              <li><%= link_to ts("Edit"), edit_admin_api_path(api_key) %></li>
+              <li>
+                <%= link_to ts("Delete"),
+                            admin_api_path(api_key),
+                            :confirm => ts("Are you sure you want to delete this API key?"),
+                            :method => :delete %>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
+  <!--/content-->
+
+  <%= will_paginate @api_keys %>
 
 </div>
