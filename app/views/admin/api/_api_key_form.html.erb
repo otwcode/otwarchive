@@ -1,4 +1,6 @@
-<%= form_for @api_key, url: admin_api_path(@api_key), html: { class: "post" } do |f| %>
+<%= form_for @api_key,
+             url: @api_key.new_record? ? new_admin_api_path(@api_key) : admin_api_path(@api_key),
+             html: { class: "post" } do |f| %>
   <%= error_messages_for @api_key %>
 
   <p class="required notice">* <%= ts("Required information") %></p>
@@ -27,7 +29,7 @@
     <h3 class="landmark heading"><%= ts("Actions") %></h3>
 
     <p class="actions">
-      <%= f.submit @admin_banner.new_record? ? ts("Create API Token") : ts("Update API Token") %>
+      <%= f.submit @api_key.new_record? ? ts("Create API Token") : ts("Update API Token") %>
     </p>
   </fieldset>
 <% end %>
