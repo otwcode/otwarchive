@@ -157,10 +157,10 @@ protected
     @mobi = true
     html = render_to_string(:template => "downloads/#{template}.html", :layout => 'barebones.html')
     html.encode!(Encoding::UTF_8,
-                Encoding::ISO_8859_1,
-                :invalid => :replace,
-                :undef => :replace,
-                :replace => '')
+                 Encoding::ISO_8859_1,
+                 :invalid => :replace,
+                 :undef => :replace,
+                 :replace => '')
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 
