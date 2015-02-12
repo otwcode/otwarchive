@@ -10,7 +10,6 @@ class InvitationsController < ApplicationController
   end
 
   def index
-    @page_title = ts('Request an Invitation')
     @unsent_invitations = @user.invitations.unsent.limit(5)
   end
   
