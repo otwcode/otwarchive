@@ -23,6 +23,7 @@ gem 'redis-namespace'
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
+gem 'psych' 
 
 gem 'httparty'
 gem 'htmlentities'

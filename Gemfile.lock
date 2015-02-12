@@ -126,8 +126,6 @@ GEM
       multi_json (~> 1.3)
     gherkin (2.12.0-x86-mingw32)
       multi_json (~> 1.3)
-    gherkin (2.12.2-x86-mingw32)
-      multi_json (~> 1.3)
     globalize (3.1.0)
       activemodel (>= 3.1.0, < 4.0.0)
       activerecord (>= 3.1.0, < 4.0.0)
@@ -215,6 +213,7 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
       win32console (~> 1.3)
+    psych (2.0.12)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -398,6 +397,7 @@ DEPENDENCIES
   phrase
   pickle
   pry
+  psych
   rack-dev-mark
   rails (= 3.2.18)
   redis (>= 3.0)
