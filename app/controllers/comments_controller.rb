@@ -104,7 +104,7 @@ class CommentsController < ApplicationController
       end
     else
       if logged_in_as_admin?
-        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
+        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
       else
         redirect_back_or_default(root_path)
         flash[:error] = ts("Sorry, you don't have permission to access that page.")
