@@ -65,7 +65,7 @@ class Api::V1::ImportController < Api::V1::BaseController
         @some_success = true
         work_status = :created
         work_url = work_url(work)
-        work_messages << 'Successfully created work "' + work.title + '"'
+        work_messages << "Successfully created work '' + work.title + "''
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
@@ -90,7 +90,7 @@ class Api::V1::ImportController < Api::V1::BaseController
 
     unless archivist && archivist.is_archivist?
       status = :forbidden
-      errors << "Only an Archive archivist can import works through the API."
+      errors << "The 'archivist' field must specify the name of an Archive user with archivist privileges."
     end
 
     if external_works.nil? || external_works.empty?
@@ -108,7 +108,8 @@ class Api::V1::ImportController < Api::V1::BaseController
     if urls.nil?
       errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
     elsif urls.length >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-      errors << "Some works contain too many external links. The Archive limit is #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }"
+      errors << "Some works contain too many chapter URLs. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
+                "chapters can be imported per work."
     end
     status = :ok if errors.empty?
     [status, errors]
@@ -117,7 +118,7 @@ class Api::V1::ImportController < Api::V1::BaseController
   def options(archivist, params)
     {
       archivist: archivist,
-      import_multiple: 'chapters',
+      import_multiple: "chapters",
       importing_for_others: true,
       do_not_set_current_author: true,
       restricted: params[:restricted],
