@@ -3,7 +3,7 @@ class Admin::ApiController < ApplicationController
   before_filter :check_for_cancel, only: [:create, :update]
 
   def index
-    @api_keys = ApiKey.order("name").paginate(:page => params[:page])
+    @api_keys = ApiKey.order("name").paginate(page: params[:page])
   end
 
   def show
@@ -31,7 +31,7 @@ class Admin::ApiController < ApplicationController
   def update
     @api_key = params[:api_key]
     if ApiKey.update(params[:id], @api_key)
-      flash[:notice] = ts("Access token name was successfully updated")
+      flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
     else
       render 'edit'
