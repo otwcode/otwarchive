@@ -31,12 +31,6 @@
           <td>
             <ul class="actions">
               <li><%= link_to ts("Edit"), edit_admin_api_path(api_key) %></li>
-              <li>
-                <%= link_to ts("Delete"),
-                            admin_api_path(api_key),
-                            :confirm => ts("Are you sure you want to delete this API key?"),
-                            :method => :delete %>
-              </li>
             </ul>
           </td>
         </tr>

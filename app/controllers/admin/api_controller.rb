@@ -29,8 +29,8 @@ class Admin::ApiController < ApplicationController
   end
 
   def update
-    @api_key = params[:api_key]
-    if ApiKey.update(params[:id], @api_key)
+    @api_key = ApiKey.find(params[:id])
+    if @api_key.update_attributes(params[:api_key])
       flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
     else
