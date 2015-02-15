@@ -16,9 +16,9 @@
                                       :presence => true,
                                       :maximum_length => Profile::PROFILE_TITLE_MAX) %>
       </dd>
-      <dt><%= f.label :banned, ts("Banned?") %></dt>
+      <dt><%= f.check_box :banned %></dt>
       <dd>
-        <%= f.check_box :banned %>
+        <%= f.label :banned, ts("Banned?") %>
       </dd>
       <dt>
         <%= f.label :access_token, ts("Token (automatically generated)") %>
