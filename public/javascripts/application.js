@@ -430,6 +430,10 @@ $j(document).ready(function() {
         if (data.errors && (data.errors.pseud_id || data.errors.ip_address)) {
           msg = "You have already left kudos here. :)";
         }
+        
+        if (data.errors && data.errors.cannot_be_author) {
+          msg = "You can't leave kudos on your own work.";
+        }
 
         $j('#kudos_message').addClass('comment_error').text(msg);
       },
