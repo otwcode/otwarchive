@@ -303,8 +303,8 @@ class UserMailer < BulletproofMailer::Base
     @signup = challenge_signup
     signup_copy = generate_attachment_content_from_signup(@signup)
     filename = @signup.collection.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: signup_copy}
-    attachments["#{filename}.html"] = {content: signup_copy}
+    attachments["#{filename}.txt"] = { content: signup_copy }
+    attachments["#{filename}.html"] = { content: signup_copy }
 
     mail(
       to: user.email,
@@ -340,8 +340,8 @@ class UserMailer < BulletproofMailer::Base
   def work_attachment(work)
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/, '')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    attachments["#{filename}.txt"] = { content: work_copy }
+    attachments["#{filename}.html"] = { content: work_copy }
   end
 
   def generate_attachment_content_from_work(work)
@@ -375,20 +375,19 @@ class UserMailer < BulletproofMailer::Base
       attachment_string += "Offer " + index+1 + ":<br />\n"
       attachment_string = request_offer_content(attachment_string, prompt)
     end
-    return attachment_string
   end
 
   def request_offer_content(attachment_string, prompt)
     any_types = TagSet::TAG_TYPES.select { |type| prompt.send("any_#{type}") }
     if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
       attachment_string += "Tags: "
-      attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
+      attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works = true) + (any_types.empty? ? "" : ", ") : ""
       unless any_types.empty?
         attachment_string += any_types.map { |type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
       end
       if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
         attachment_string += "<br />\nOptional: "
-        attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
+        attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works = true)
       end
       attachment_string += "<br />\n"
     end
