@@ -1,12 +1,11 @@
 /* MEDIA: only screen and (max-width: 640px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
-linearise content, suppress large images, suppress custom fonts and other large downloads
-pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
+linearise content, suppress large images, suppress custom fonts and other large downloads */
 
 #outer {
   font-size: 14px;
 }
 
-/*regions */
+/* regions */
 
 #header .logo {
   height: 1.75em;
@@ -73,7 +72,7 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   background: #900;
 }
 
-/*types and groups*/
+/* types and groups */
 
 h1, h2, h3 {
     word-break: break-all;
@@ -96,12 +95,27 @@ h1, h2, h3 {
   display: block;
 }
 
-/*zone: home*/
+/* zone: home */
 
 #inbox-form {
   clear: both;
   float: none;
   width: auto;
+}
+
+/* zone: system */
+
+.splash div.module, .logged-in .splash .module {
+  width: 98%;
+}
+
+.splash .intro {
+  padding-top: 0;
+}
+
+.splash .intro h2 {
+  font-size: 1.5em;
+    word-break: normal;
 }
 
 /* system: messages */
@@ -129,7 +143,6 @@ h1, h2, h3 {
 }
 
 /*SKIN: Dash Line */
-
 /* DESCRIPTION: Horizontal dash inline*/
 
 #outer #dashboard {

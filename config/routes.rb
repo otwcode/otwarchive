@@ -210,11 +210,13 @@ Otwarchive::Application.routes.draw do
     resources :external_authors do
       resources :external_author_names
     end
+    resources :favorite_tags, only: [:create, :destroy]
     resources :gifts, :only => [:index]
     resource :inbox, :controller => "inbox" do
       member do
         get :reply
         get :cancel_reply
+        post :delete
       end
     end
     resources :invitations do

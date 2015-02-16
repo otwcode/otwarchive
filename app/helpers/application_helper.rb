@@ -545,5 +545,17 @@ module ApplicationHelper
     end
     nil
   end
-    
+
+  def first_paragraph(full_text, placeholder_text = 'No preview available.')
+    # is there a paragraph that does not have a child image?
+    paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
+    if paragraph.present?
+      # if so, get its text and put it in a fresh p tag
+      paragraph_text = paragraph.text
+      return content_tag(:p, paragraph_text)
+    else
+      # if not, put the placeholder text in a p tag with the placeholder class
+      return content_tag(:p, ts(placeholder_text), class: 'placeholder')
+    end
+  end
 end # end of ApplicationHelper
