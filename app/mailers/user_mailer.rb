@@ -1,3 +1,4 @@
+# noinspection ALL
 class UserMailer < BulletproofMailer::Base
   include Resque::Mailer # see README in this directory
 
@@ -354,7 +355,7 @@ class UserMailer < BulletproofMailer::Base
     attachment_string += "Revised at: " + work.revised_at.to_s + "<br/>\n" unless work.revised_at.blank?
 
     work.chapters.each do |chapter|
-      attachment_string += "<br/>Chapter " + chapter.position.to_s unless !work.chaptered?
+      attachment_string += "<br/>Chapter " + chapter.position.to_s if work.chaptered?
       attachment_string += ": " + chapter.title unless chapter.title.blank?
       attachment_string += "\n<br/>by: " + chapter.pseuds.collect(&:name).join(", ") + "<br />\n" unless chapter.pseuds.sort == work.pseuds.sort
       attachment_string += "<br/>Summary: " + chapter.summary + "<br/>\n" unless chapter.summary.blank?
@@ -362,7 +363,6 @@ class UserMailer < BulletproofMailer::Base
       attachment_string += "<br/>End Notes: " + chapter.endnotes + "<br/>\n" unless chapter.endnotes.blank?
       attachment_string += "<br/>" + chapter.content + "<br />\n"
     end
-    return attachment_string
   end
 
   def generate_attachment_content_from_signup(signup)
@@ -381,7 +381,11 @@ class UserMailer < BulletproofMailer::Base
     any_types = TagSet::TAG_TYPES.select { |type| prompt.send("any_#{type}") }
     if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
       attachment_string += "Tags: "
-      attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works = true) + (any_types.empty? ? "" : ", ") : ""
+      attachment_string += prompt.tag_set && !if prompt.tag_set.tags.empty?
+                                                tag_link_list(prompt.tag_set.tags, link_to_works = true) + (any_types.empty? ? "" : ", ")
+                                              else
+                                                ""
+                                              end
       unless any_types.empty?
         attachment_string += any_types.map { |type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
       end
@@ -391,12 +395,12 @@ class UserMailer < BulletproofMailer::Base
       end
       attachment_string += "<br />\n"
     end
-    unless prompt.url.blank?
+    if prompt.url.present?
       url_label = prompt.collection.challenge.send("request_url_label")
       attachment_string += url_label.blank? ? "URL" : url_label
       attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
     end
-    unless prompt.description.blank?
+    if prompt.description.present?
       desc_label = prompt.collection.challenge.send("request_description_label")
       attachment_string += desc_label.blank? ? ts("Details") : desc_label
       attachment_string += ": " + prompt.description + "<br />\n"
