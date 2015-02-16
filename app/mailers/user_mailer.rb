@@ -265,10 +265,7 @@ class UserMailer < BulletproofMailer::Base
   def delete_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    work_attachment(work)
 
     mail(
       to: user.email,
@@ -282,10 +279,7 @@ class UserMailer < BulletproofMailer::Base
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {content: work_copy}
-    attachments["#{filename}.html"] = {content: work_copy}
+    work_attachment(work)
 
     mail(
       to: user.email,
@@ -343,6 +337,13 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
+  def work_attachment(work)
+    work_copy = generate_attachment_content_from_work(work)
+    filename = work.title.gsub(/[*:?<>|\/\\\"]/, '')
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
+  end
+
   def generate_attachment_content_from_work(work)
     attachment_string =  "Title: " + work.title + "<br />" + "by " + work.pseuds.collect(&:name).join(", ") + "<br />\n"
     attachment_string += "<br/>Tags: " + work.tags.collect(&:name).join(", ") + "<br/>\n" unless work.tags.blank?
@@ -368,63 +369,43 @@ class UserMailer < BulletproofMailer::Base
     attachment_string =  "Collection: " + signup.collection + "<br />\n"
     signup.requests.each_with_index do |prompt, index|
       attachment_string += "Request " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
+      attachment_string = request_offer_content(attachment_string, prompt)
     end
     signup.offers.each_with_index do |offer, index|
       attachment_string += "Offer " + index+1 + ":<br />\n"
-      any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")}
-      if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
-        attachment_string += "Tags: "
-        attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
-        end
-        if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
-          attachment_string += "<br />\nOptional: "
-          attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
-        end
-        attachment_string += "<br />\n"
-      end
-      unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label")
-        attachment_string += url_label.blank? ? "URL" : url_label
-        attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
-      end
-      unless prompt.description.blank?
-        desc_label = prompt.collection.challenge.send("request_description_label")
-        attachment_string += desc_label.blank? ? ts("Details") : desc_label
-        attachment_string += ": " +  prompt.description + "<br />\n"
-      end
-      if prompt.anonymous?
-        attachment_string += "Anonymous request" + "<br />\n"
-      end
+      attachment_string = request_offer_content(attachment_string, prompt)
     end
     return attachment_string
+  end
+
+  def request_offer_content(attachment_string, prompt)
+    any_types = TagSet::TAG_TYPES.select { |type| prompt.send("any_#{type}") }
+    if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
+      attachment_string += "Tags: "
+      attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
+      unless any_types.empty?
+        attachment_string += any_types.map { |type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
+      end
+      if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
+        attachment_string += "<br />\nOptional: "
+        attachment_string += tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)
+      end
+      attachment_string += "<br />\n"
+    end
+    unless prompt.url.blank?
+      url_label = prompt.collection.challenge.send("request_url_label")
+      attachment_string += url_label.blank? ? "URL" : url_label
+      attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
+    end
+    unless prompt.description.blank?
+      desc_label = prompt.collection.challenge.send("request_description_label")
+      attachment_string += desc_label.blank? ? ts("Details") : desc_label
+      attachment_string += ": " + prompt.description + "<br />\n"
+    end
+    if prompt.anonymous?
+      attachment_string += "Anonymous request" + "<br />\n"
+    end
+    attachment_string
   end
 
   protected
