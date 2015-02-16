@@ -18,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
@@ -27,8 +27,8 @@ class UserMailer < BulletproofMailer::Base
     @invitation = Invitation.find(invitation_id)
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
-      :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
+      to: @invitation.invitee_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation"
     )
   end
 
@@ -39,8 +39,8 @@ class UserMailer < BulletproofMailer::Base
     @archivist = archivist_login || "An archivist"
     @token = @invitation.token
     mail(
-      :to => @invitation.invitee_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
+      to: @invitation.invitee_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Invitation to claim works"
     )
   end
 
@@ -52,10 +52,10 @@ class UserMailer < BulletproofMailer::Base
       creator = ExternalAuthor.find(creator_id)
     end
     @external_email = creator.email
-    @claimed_works = Work.where(:id => claimed_work_ids)
+    @claimed_works = Work.where(id: claimed_work_ids)
     mail(
-      :to => creator.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+      to: creator.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
     )
   end  
   
@@ -67,7 +67,7 @@ class UserMailer < BulletproofMailer::Base
     # look up all the creations that have generated updates for this subscription
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
-      creation = creation_type.constantize.where(:id => creation_id).first
+      creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
       next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
@@ -88,8 +88,8 @@ class UserMailer < BulletproofMailer::Base
     end
     
     mail(
-      :to => @subscription.user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
+      to: @subscription.user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
     )
   end
 
@@ -98,8 +98,8 @@ class UserMailer < BulletproofMailer::Base
     @user = User.find(user_id)
     @total = total
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] New Invitations"
     )
   end
 
@@ -109,8 +109,8 @@ class UserMailer < BulletproofMailer::Base
     @total = total
     @reason = reason
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Additional Invite Code Request Declined"
     )
   end
 
@@ -120,8 +120,8 @@ class UserMailer < BulletproofMailer::Base
     @message = message
     @admin_login = admin_login
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Message - #{subject}"
     )
   end
 
@@ -136,8 +136,8 @@ class UserMailer < BulletproofMailer::Base
     @message = message
     @collection = Collection.find(collection_id)
     mail(
-      :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
+      to: @collection.get_maintainers_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
   
@@ -145,16 +145,16 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
     mail(
-      :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
+      to: @collection.get_maintainers_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid Sign-ups Found"
     )
   end
 
   def potential_match_generation_notification(collection_id)
     @collection = Collection.find(collection_id)
     mail(
-      :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
+      to: @collection.get_maintainers_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
     )
   end
 
@@ -164,8 +164,8 @@ class UserMailer < BulletproofMailer::Base
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
     mail(
-      :to => @assigned_user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your Assignment!"
+      to: @assigned_user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Your Assignment!"
     )
   end
 
@@ -173,8 +173,8 @@ class UserMailer < BulletproofMailer::Base
   def signup_notification(user_id)
     @user = User.find(user_id)
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
     )
   end
 
@@ -183,8 +183,8 @@ class UserMailer < BulletproofMailer::Base
     @user = User.find(user_id)
     @password = activation_code
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Generated password"
     )
   end
 
@@ -194,8 +194,8 @@ class UserMailer < BulletproofMailer::Base
 		@old_email= old_email
 		@new_email= new_email
     mail(
-      :to => @old_email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
+      to: @old_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Email changed"
     )
   end
 
@@ -206,8 +206,8 @@ class UserMailer < BulletproofMailer::Base
     @user = User.find(user_id)
     @creation = creation_class_name.constantize.find(creation_id)
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Co-Author Notification"
     )
   end
 
@@ -215,11 +215,11 @@ class UserMailer < BulletproofMailer::Base
   def related_work_notification(user_id, related_work_id)
     @user = User.find(user_id)
     @related_work = RelatedWork.find(related_work_id)
-    @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
-    @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
+    @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
+    @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
     )
   end
 
@@ -229,8 +229,8 @@ class UserMailer < BulletproofMailer::Base
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
     mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Work For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
 
@@ -241,8 +241,8 @@ class UserMailer < BulletproofMailer::Base
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
       mail(
-        :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
       )
     end
   end
@@ -254,8 +254,8 @@ class UserMailer < BulletproofMailer::Base
     @user = user
     @work = work
     mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been updated"
+      to: user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been updated"
     )
   end
 
@@ -267,12 +267,12 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
 
     mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
+      to: user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted"
     )
   end
 
@@ -284,12 +284,12 @@ class UserMailer < BulletproofMailer::Base
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => work_copy}
-    attachments["#{filename}.html"] = {:content => work_copy}
+    attachments["#{filename}.txt"] = {content: work_copy}
+    attachments["#{filename}.html"] = {content: work_copy}
 
     mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+      to: user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
     )
   end
 
@@ -309,12 +309,12 @@ class UserMailer < BulletproofMailer::Base
     @signup = challenge_signup
     signup_copy = generate_attachment_content_from_signup(@signup)
     filename = @signup.collection.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = {:content => signup_copy}
-    attachments["#{filename}.html"] = {:content => signup_copy}
+    attachments["#{filename}.txt"] = {content: signup_copy}
+    attachments["#{filename}.html"] = {content: signup_copy}
 
     mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
+      to: user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your sign-up for #{@signup.collection.title} has been deleted"
     )
   end
 
@@ -327,8 +327,8 @@ class UserMailer < BulletproofMailer::Base
     @summary = feedback.summary
     @comment = feedback.comment
     mail(
-      :to => feedback.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
+      to: feedback.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
@@ -338,8 +338,8 @@ class UserMailer < BulletproofMailer::Base
     @url = abuse_report.url
     @comment = abuse_report.comment
     mail(
-        :to => abuse_report.email,
-        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+        to: abuse_report.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 
@@ -373,7 +373,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
         unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
+          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
           attachment_string += "<br />\nOptional: "
@@ -402,7 +402,7 @@ class UserMailer < BulletproofMailer::Base
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
         unless any_types.empty?
-          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
+          attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", type: type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
           attachment_string += "<br />\nOptional: "
