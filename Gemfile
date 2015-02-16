@@ -123,6 +123,7 @@ end
 
 group :test, :development do
   gem 'pry'
+  gem 'whiny_validation'
 end
 
 # Deploy with Capistrano
