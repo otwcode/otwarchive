@@ -4,8 +4,10 @@ class Admin::ApiController < ApplicationController
 
   def index
     @api_keys = if params[:query]
-                  query = "%" + params[:query] + "%"
-                  ApiKey.where("name LIKE ?", query).order("name").paginate(page: params[:page])
+                  sql_query = "%" + params[:query] + "%"
+                  ApiKey.where("name LIKE ?", sql_query)
+                        .order("name")
+                        .paginate(page: params[:page])
                 else
                   ApiKey.order("name").paginate(page: params[:page])
                 end
@@ -39,7 +41,7 @@ class Admin::ApiController < ApplicationController
       flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -47,10 +49,6 @@ class Admin::ApiController < ApplicationController
     @api_key = ApiKey.find(params[:id])
     @api_key.destroy
     redirect_to(admin_api_path)
-  end
-
-  def search
-    @api_keys = ApiKey.search params[:query]
   end
 
   private

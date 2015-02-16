@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'webmock'
 
 describe "API ImportController" do
-
   # Let the test get at external sites, but stub out anything containing "foo"
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
@@ -20,9 +19,7 @@ describe "API ImportController" do
     }
   end
 
-
   describe "API import with invalid request" do
-
     it "should return 401 Unauthorized if no token is supplied" do
       post "/api/v1/import"
       assert_equal 401, response.status
@@ -44,7 +41,6 @@ describe "API ImportController" do
   end
 
   describe "API import with a valid archivist" do
-
     it "should return 201 Created when all stories are created" do
       user = create(:user)
       post "/api/v1/import",
