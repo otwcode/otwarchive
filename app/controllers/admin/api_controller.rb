@@ -3,7 +3,12 @@ class Admin::ApiController < ApplicationController
   before_filter :check_for_cancel, only: [:create, :update]
 
   def index
-    @api_keys = ApiKey.order("name").paginate(page: params[:page])
+    @api_keys = if params[:query]
+                  query = "%" + params[:query] + "%"
+                  ApiKey.where("name LIKE ?", query).order("name").paginate(page: params[:page])
+                else
+                  ApiKey.order("name").paginate(page: params[:page])
+                end
   end
 
   def show
@@ -42,6 +47,10 @@ class Admin::ApiController < ApplicationController
     @api_key = ApiKey.find(params[:id])
     @api_key.destroy
     redirect_to(admin_api_path)
+  end
+
+  def search
+    @api_keys = ApiKey.search params[:query]
   end
 
   private
