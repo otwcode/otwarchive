@@ -3,10 +3,10 @@ class FavoriteTag < ActiveRecord::Base
   belongs_to :tag
 
   validates :user_id, presence: true
-  validates :tag_id, presence: true, uniqueness: { scope: :user_id,
-                                                   message: ts("is already in
-                                                           your favorite tags.")
-                                                }
+  validates :tag_id, presence: true,
+                     uniqueness: { scope: :user_id,
+                                   message: ts("is already in your favorite tags.")
+                                 }
 
   validate :within_limit, on: :create
 
