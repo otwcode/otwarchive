@@ -29,7 +29,7 @@ class Homepage
   end
 
   def readings
-    return unless logged_in?
+    return unless logged_in? && @user.preference.try(:history_enabled?)
     if Rails.env.development?
       @readings ||= @user.readings.order("RAND()").
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).

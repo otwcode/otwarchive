@@ -27,14 +27,11 @@ Feature: Reading count
     When I go to fandomer's reading page
     Then I should see "some work"
       And I should see "Viewed once"
-      And I should see "Last viewed: 25 May 2010"
-      And I follow "Preferences"
+      And I should see "Last viewed: 25 May 2010"    
+    When I follow "Preferences"
       And I uncheck "Turn on Viewing History"
       And I press "Update"
     Then I should not see "My History"
-    When I go to the homepage
-    Then I should not see "Is it later already?"
-      And I should not see "Some works you've marked for later."
     When I am on writer's works page
       And I follow "some work"
     When I am on writer's works page
@@ -171,6 +168,17 @@ Feature: Reading count
   Then I should see "Is it later already?"
     And I should see "Some works you've marked for later."
     And I should see "Maybe Tomorrow"
+
+  Scenario: A user cannot see works marked for later on the homepage if they have their reading history disabled
+
+  Given the work "Maybe Tomorrow"
+    And I am logged in as "testy"
+  When I mark the work "Maybe Tomorrow" for later
+    And I set my preferences to turn off viewing history
+  When I go to the homepage
+  Then I should not see "Is it later already?"
+    And I should not see "Some works you've marked for later."
+    And I should not see "Maybe Tomorrow"
 
   Scenario: A user can delete a work marked for later from their history on the homepage
 
