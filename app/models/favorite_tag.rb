@@ -4,6 +4,11 @@ class FavoriteTag < ActiveRecord::Base
 
   validates :user_id, presence: true
   validates :tag_id, presence: true
+
+  validates_uniqueness_of :tag_id,
+    scope: [:user_id],
+    message: ts("is already in your favorite tags.")
+
   validate :within_limit, on: :create
 
   after_save :expire_cached_home_favorite_tags
