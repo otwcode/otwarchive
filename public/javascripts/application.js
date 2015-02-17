@@ -537,6 +537,12 @@ $j(document).ready(function() {
       error: function(xhr, textStatus, errorThrown) {
         flashContainer.empty();
         flashContainer.addClass('error notice');
+        try {
+          jQuery.parseJSON(xhr.responseText);
+        } catch (e) {
+          flashContainer.append("We're sorry! Something went wrong.");
+          return;
+        }
         $j.each(jQuery.parseJSON(xhr.responseText).errors, function(index, error) {
           flashContainer.append(error + " ");
         });
