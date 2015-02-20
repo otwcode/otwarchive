@@ -184,6 +184,9 @@ class CommentsController < ApplicationController
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
+              elsif request.referer == "#{root_url}"
+                # replying on the homepage
+                redirect_to root_path
               else
                 redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end

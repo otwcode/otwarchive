@@ -20,10 +20,10 @@ class Homepage
   def favorite_tags
     return unless logged_in?
     if Rails.env.development?
-      @favorite_tags ||= @user.favorite_tags
+      @favorite_tags ||= @user.favorite_tags.to_a.sort_by { |favorite_tag| favorite_tag.tag.name.downcase }
     else
       @favorite_tags ||= Rails.cache.fetch("home/index/#{@user.id}/home_favorite_tags") do
-        @user.favorite_tags
+        @user.favorite_tags.to_a.sort_by { |favorite_tag| favorite_tag.tag.name.downcase }
       end
     end
   end
