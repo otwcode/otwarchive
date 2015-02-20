@@ -112,6 +112,13 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
 
+    if logged_in? && @tag
+      @favorite_tag = @current_user.favorite_tags.
+                      where(tag_id: @tag.id).first ||
+                      FavoriteTag.
+                      new(tag_id: @tag.id, user_id: @current_user.id)
+    end
+
     if @owner.present?
       if @admin_settings.disable_filtering?
         @works = Work.list_without_filters(@owner, options)
@@ -138,11 +145,6 @@ class WorksController < ApplicationController
         end
 
         @facets = @works.facets
-
-        if logged_in? && @tag
-          @favorite_tag = @current_user.favorite_tags.where(tag_id: @tag.id).first ||
-                            FavoriteTag.new(tag_id: @tag.id, user_id: @current_user.id)
-        end
       end
     elsif use_caching?
       @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
