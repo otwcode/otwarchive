@@ -406,6 +406,19 @@ namespace :After do
     end
   end
 
+  desc "Set initial values for sortable tag names for tags that aren't fandoms"
+  task(:more_sortable_tag_names => :environment) do
+  
+    [Category, Character, Freeform, Relationship, Warning].each do |klass|
+      puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
+      klass.by_name.find(:all, :conditions => "canonical = 1").each do |tag|
+        tag.set_sortable_name
+        puts tag.sortable_name
+        tag.save
+      end
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
