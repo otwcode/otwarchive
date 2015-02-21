@@ -31,7 +31,6 @@
       <ol class="comment index group">
         <% @inbox_comments.each do |inbox_comment| %>
           <% feedback_comment = inbox_comment.feedback_comment %>
-          <% next if feedback_comment.nil? || feedback_comment.is_deleted? %>
 
           <!-- START of single comment -->
           <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">

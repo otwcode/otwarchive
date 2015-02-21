@@ -31,4 +31,17 @@ class InboxComment < ActiveRecord::Base
     self.count(:conditions => {:read => false})
   end
 
+  # Get only the comments with a feedback_comment that exists
+  def self.with_feedback_comment
+    # Get an array of the ids of inbox comments that have existing feedback_comments
+    inbox_comments_with_feedback_comment = []
+    find_each do |inbox_comment|
+      unless inbox_comment.feedback_comment.nil? ||
+             inbox_comment.feedback_comment.is_deleted?
+        inbox_comments_with_feedback_comment << inbox_comment
+      end
+    end
+    # Get the ActiveRecord Relation objects based on that array
+    where(id: inbox_comments_with_feedback_comment)
+  end
 end
