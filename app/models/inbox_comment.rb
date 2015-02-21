@@ -41,8 +41,7 @@ class InboxComment < ActiveRecord::Base
         inbox_comments_with_feedback_comment << inbox_comment
       end
     end
-    # Turn that array into ActiveRecord Relation objects
-    inbox_comments_with_feedback_comment.map(&:id)
+    # Get the ActiveRecord Relation objects based on that array
     where(id: inbox_comments_with_feedback_comment)
   end
 end
