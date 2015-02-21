@@ -20,6 +20,10 @@ gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
+
+# Lograge is opinionated, very opinionated.
+gem "lograge" # https://github.com/roidrage/lograge
+
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'

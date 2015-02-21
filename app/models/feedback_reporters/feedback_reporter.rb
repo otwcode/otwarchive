@@ -1,4 +1,5 @@
 class FeedbackReporter
+  include HtmlCleaner
 
   attr_accessor :title, 
     :description, 
@@ -9,6 +10,14 @@ class FeedbackReporter
     attrs.each_pair do |key, val|
       self.send("#{key}=", val)
     end
+  end
+
+  def title
+    strip_html_breaks_simple(@title)
+  end
+
+  def description
+    strip_html_breaks_simple(@description)
   end
 
   def send_report!
