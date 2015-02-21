@@ -33,15 +33,16 @@ class InboxComment < ActiveRecord::Base
 
   # Get only the comments with a feedback_comment that exists
   def self.with_feedback_comment
-    # Get an array of the ids of inbox comments that have existing feedback_comments 
+    # Get an array of the ids of inbox comments that have existing feedback_comments
     inbox_comments_with_feedback_comment = []
-    self.find_each do |inbox_comment|
-      unless inbox_comment.feedback_comment.nil? || inbox_comment.feedback_comment.is_deleted?
+    find_each do |inbox_comment|
+      unless inbox_comment.feedback_comment.nil? ||
+             inbox_comment.feedback_comment.is_deleted?
         inbox_comments_with_feedback_comment << inbox_comment
-      end    
+      end
     end
-     # Turn that array into ActiveRecord Relation objects
-    inbox_comments_with_feedback_comment.map{ |i| i.id }
-    self.where(id: inbox_comments_with_feedback_comment)
+    # Turn that array into ActiveRecord Relation objects
+    inbox_comments_with_feedback_comment.map(&:id)
+    where(id: inbox_comments_with_feedback_comment)
   end
 end
