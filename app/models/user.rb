@@ -189,7 +189,7 @@ class User < ActiveRecord::Base
   end
   def unread_inbox_comments_count
     inbox_comments.with_feedback_comment.count(:all,
-                                                conditions: { read: false })
+                                               conditions: { read: false })
   end
 
   scope :alphabetical, :order => :login
