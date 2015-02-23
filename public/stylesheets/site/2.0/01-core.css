@@ -47,7 +47,7 @@ li.blurb, fieldset, form dl {
   display: inline;
 }
 
-.actions input {
+.actions input[type="submit"] {
   margin: 0;
 }
 
