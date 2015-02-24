@@ -17,7 +17,7 @@
       <% if @work.restricted %>
         <%= image_tag("lockblue.png", size: "15x15",
                                      alt: ts("(Restricted)"),
-                                     title: ts("Restricted") %>
+                                     title: ts("Restricted")) %>
       <% end %>
       <% if @work.hidden_by_admin %>
         <%= image_tag("lockred.png", size: "15x15",
