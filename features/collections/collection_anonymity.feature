@@ -411,3 +411,12 @@ Feature: Collection
       And I follow "Entire Work"
     Then I should not see "Jessica" within "div.preface"
       And I should not see "Amos" within "div.preface"
+
+  Scenario: An admin can see the creator's name on an anonymous work
+    Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
+      And I am logged in as "actualname"
+      And I post the work "Troll Work"
+      And I add my work to the collection
+    When I am logged in as an admin
+      And I view the work "Troll Work"
+    Then I should see "actualname"
