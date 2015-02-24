@@ -409,8 +409,9 @@ Feature: Collection
       And I fill in "pseud_byline" with "Amos"
       And I press "Post Without Preview"
       And I follow "Entire Work"
-    Then I should not see "Jessica" within "div.preface"
-      And I should not see "Amos" within "div.preface"
+    Then I should see "Anonymous" within "div.preface"
+      And I should see "Jessica" within "div.preface"
+      And I should see "Amos" within "div.preface"
 
   Scenario: An admin can see the creator's name on an anonymous work
     Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
