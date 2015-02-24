@@ -9,7 +9,7 @@
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work} %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v2") do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v3") do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">
@@ -18,7 +18,7 @@
 
     <!-- only display byline if different from the main byline -->
     <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) || @preview_mode %>
-      <h4 class="heading byline"><%= ts('Chapter by') %> <%= byline(chapter) %></h4>
+      <h4 class="heading byline"><%= ts('Chapter by') %> <%= byline(chapter).html_safe %></h4>
     <% end %>
 
     <% if (@work.number_of_posted_chapters > 1) || @work.chaptered? %>
