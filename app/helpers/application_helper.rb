@@ -90,9 +90,9 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
-        end
+      end
       return anon_byline
     end
     non_anonymous_byline(creation)
@@ -131,12 +131,12 @@ module ApplicationHelper
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
-  
-   # A plain text version of the byline, for when we don't want to deliver a linkified version.
+
+  # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
       return anon_byline
