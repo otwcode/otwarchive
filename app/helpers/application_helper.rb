@@ -51,7 +51,7 @@ module ApplicationHelper
   end
 
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, :title => "RSS Feed", :class => "rss"
+    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
   #1: default shows just the link to help
@@ -170,12 +170,12 @@ module ApplicationHelper
     pseud.byline
   end
 
-   def link_to_modal(content="",options = {})
-     options[:class] ||= ""
-     options[:for] ||= ""
-     options[:title] ||= options[:for]
+  def link_to_modal(content = "", options = {})
+    options[:class] ||= ""
+    options[:for] ||= ""
+    options[:title] ||= options[:for]
 
-     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}
+     html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
      link_to content, options[:for], html_options
    end 
 
@@ -190,7 +190,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
@@ -216,9 +216,9 @@ module ApplicationHelper
     keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map {|flash_item| content_tag(:li, h(flash_item))}.join("\n").html_safe), :class => "flash #{key}")
+          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), :class => "flash #{key}")
+          content_tag(:div, h(flash[key]), class: "flash #{key}")
         end
       end
     }.join.html_safe
@@ -391,11 +391,11 @@ module ApplicationHelper
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
-    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", :checkboxes_size => checkboxes_size),
-                              :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
+    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", checkboxes_size: checkboxes_size),
+                              class: "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), :style => "display: none;",
-                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
+    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), style: "display: none;",
+                              class: "toggle #{checkboxes_id}_hide", href: "##{checkboxes_id}") +
                               "\n".html_safe
 
     css_class = checkbox_section_css_class(checkboxes_size)
