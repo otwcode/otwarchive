@@ -177,7 +177,7 @@ module ApplicationHelper
 
     html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
     link_to content, options[:for], html_options
-  end 
+  end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -395,10 +395,10 @@ module ApplicationHelper
                               class: "toggle #{checkboxes_id}_show") + "\n".html_safe
 
     toggle_hide = content_tag(:a, ts("Collapse Checkboxes"),
-                                 style: "display: none;",
-                                 class: "toggle #{checkboxes_id}_hide",
-                                 href: "##{checkboxes_id}") +
-                                 "\n".html_safe
+                                  style: "display: none;",
+                                  class: "toggle #{checkboxes_id}_hide",
+                                  href: "##{checkboxes_id}")
+                + "\n".html_safe
 
     css_class = checkbox_section_css_class(checkboxes_size)
 
