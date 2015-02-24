@@ -175,9 +175,9 @@ module ApplicationHelper
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-     html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
-     link_to content, options[:for], html_options
-   end 
+    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    link_to content, options[:for], html_options
+  end 
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -185,7 +185,7 @@ module ApplicationHelper
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
     #end
-    
+
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
@@ -394,9 +394,11 @@ module ApplicationHelper
     toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", checkboxes_size: checkboxes_size),
                               class: "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), style: "display: none;",
-                              class: "toggle #{checkboxes_id}_hide", href: "##{checkboxes_id}") +
-                              "\n".html_safe
+    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"),
+                                 style: "display: none;",
+                                 class: "toggle #{checkboxes_id}_hide",
+                                 href: "##{checkboxes_id}") +
+                                 "\n".html_safe
 
     css_class = checkbox_section_css_class(checkboxes_size)
 
