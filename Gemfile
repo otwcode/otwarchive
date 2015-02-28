@@ -106,7 +106,7 @@ gem 'kgio'
 
 
 group :test do
-  gem 'rspec-rails', '>=2.6.0'
+  gem 'rspec-rails'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
@@ -127,6 +127,7 @@ end
 
 group :test, :development do
   gem 'pry'
+  gem 'whiny_validation'
 end
 
 # Deploy with Capistrano

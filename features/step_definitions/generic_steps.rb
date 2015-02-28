@@ -123,7 +123,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |lab
   with_scope(selector) do
     field_disabled = find_field(label, :disabled => true)
     if field_disabled.respond_to? :should
-      field_disabled.should be_true
+      field_disabled.should be_truthy
     else
       assert field_disabled
     end
@@ -134,7 +134,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
   with_scope(selector) do
     field_disabled = find_field(label)['disabled']
     if field_disabled.respond_to? :should
-      field_disabled.should be_false
+      field_disabled.should be_falsey
     else
       assert !field_disabled
     end

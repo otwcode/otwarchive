@@ -16,12 +16,11 @@ describe AdminMailer do
       @message = "This is a fancy message"
     end
 
-    let(:email) { UserMailer.archive_notification(@admin,@user,@subject,@message).deliver }
-
+    let(:email) { UserMailer.archive_notification(@admin, @user, @subject, @message).deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      email.encoded.should =~ /#{text}/
+      expect(email.encoded).to match(/#{text}/)
     end
   end
 end
