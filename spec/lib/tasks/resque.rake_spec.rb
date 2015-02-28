@@ -23,7 +23,10 @@ describe "resque rake tasks" do
   before do
     (Resque::Failure.count-1).downto(0).each { |i| Resque::Failure.remove(i) }
     @rake = Rake.application
-    @rake.init
+    begin
+      @rake.init
+    rescue SystemExit
+    end
     @rake.load_rakefile
     @worker = Resque::Worker.new(:tests)
   end
@@ -33,33 +36,33 @@ describe "resque rake tasks" do
       @task_name = "resque:run_failures"
     end
     it "should have 'environment' as a prereq" do
-      @rake[@task_name].prerequisites.should include("environment")
+      expect(@rake[@task_name].prerequisites).to include("environment")
     end
     it "should clear out passing jobs" do
-      Resque::Failure.create(:exception => Exception.new(ActiveRecord::RecordNotFound),
-                             :worker => @worker,
-                             :queue => 'tests',
-                             :payload => {'class' => 'PassingJob', 'args' => 'retry found me'})
+      Resque::Failure.create(exception: Exception.new(ActiveRecord::RecordNotFound),
+                             worker: @worker,
+                             queue: 'tests',
+                             payload: { 'class' => 'PassingJob', 'args' => 'retry found me' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].invoke
 
       assert_equal 0, Resque::Failure.count
     end
     it "should clear out failing jobs if they're RecordNotFound" do
-      Resque::Failure.create(:exception => Exception.new(ActiveRecord::RecordNotFound),
-                             :worker => @worker,
-                             :queue => 'tests',
-                             :payload => {'class' => 'FailingJob', 'args' => 'still missing on retry'})
+      Resque::Failure.create(exception: Exception.new(ActiveRecord::RecordNotFound),
+                             worker: @worker,
+                             queue: 'tests',
+                             payload: { 'class' => 'FailingJob', 'args' => 'still missing on retry' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].execute
 
       assert_equal 0, Resque::Failure.count
     end
     it "should not clear out failing jobs if they're not RecordNotFound" do
-      Resque::Failure.create(:exception => Exception.new(NoMethodError),
-                             :worker => @worker,
-                             :queue => 'tests',
-                             :payload => {'class' => 'BrokenJob', 'args' => 'will never work'})
+      Resque::Failure.create(exception: Exception.new(NoMethodError),
+                             worker: @worker,
+                             queue: 'tests',
+                             payload: { 'class' => 'BrokenJob', 'args' => 'will never work' })
       assert_equal 1, Resque::Failure.count
       @rake[@task_name].execute rescue nil
 

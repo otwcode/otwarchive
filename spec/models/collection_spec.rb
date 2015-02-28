@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Collection do
-  
+
   before do
     @collection = FactoryGirl.create(:collection)
   end
@@ -20,8 +20,8 @@ describe Collection do
           end
 
           it "should correctly identify the collection challenge type" do
-            @collection.gift_exchange?.should eq(@challenge.is_a?(GiftExchange))
-            @collection.prompt_meme?.should eq(@challenge.is_a?(PromptMeme))
+            expect(@collection.gift_exchange?).to eq(@challenge.is_a?(GiftExchange))
+            expect(@collection.prompt_meme?).to eq(@challenge.is_a?(PromptMeme))
           end
 
           describe "with open signup" do
@@ -37,7 +37,7 @@ describe Collection do
               end
 
               it "should be listed as open" do
-                Collection.signup_open(@challenge.class.name).should include(@collection)
+                expect(Collection.signup_open(@challenge.class.name)).to include(@collection)
               end
             end
 
@@ -52,7 +52,7 @@ describe Collection do
               end
 
               it "should not be listed as open" do
-                Collection.signup_open(@challenge.class.name).should_not include(@collection)
+                expect(Collection.signup_open(@challenge.class.name)).not_to include(@collection)
               end
 
             end
@@ -65,7 +65,7 @@ describe Collection do
             end
 
             it "should not be listed as open" do
-              Collection.signup_open(@challenge.class.name).should_not include(@collection)
+              expect(Collection.signup_open(@challenge.class.name)).not_to include(@collection)
             end
           end
         end

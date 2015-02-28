@@ -53,15 +53,16 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
-    @admin_post_show_more = AdminPost.count > 3
+
     # Set the user as active
     if @current_user
       @current_user.update_active
     end
-    render :action => "index", :layout => "home"
-  end
+    @homepage = Homepage.new(@current_user)
 
+    @hide_dashboard = true
+    render action: 'index', layout: 'application'
+  end
 
   # Generate links to all the pages on the site
   def site_pages    
