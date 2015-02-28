@@ -4,7 +4,6 @@ describe Challenge::PromptMemeController do
   include LoginMacros
 
   describe "destroy" do
-
     before(:each) do
       @collection = FactoryGirl.create(:collection, challenge: PromptMeme.new)
       @collection.save
@@ -24,6 +23,5 @@ describe Challenge::PromptMemeController do
     it "redirects to the collection's main page" do
       response.should redirect_to(@collection)
     end
-
   end
 end

@@ -70,7 +70,7 @@ class Challenge::GiftExchangeController < ChallengesController
   def initializing_tag_sets?
     # uuughly :P but check params to see if we're initializing 
     !params[:gift_exchange][:offer_restriction_attributes].keys.
-      select { |k| k=~ /init_(less|greater)/ }.
+      select { |k| k =~ /init_(less|greater)/ }.
       select { |k| params[:gift_exchange][:offer_restriction_attributes][k] == '1' }.
       empty?
   end
