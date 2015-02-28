@@ -19,22 +19,12 @@
 
       <dt><%= f.label :category, ts("Most abuse reports fall into the following categories. Please select your concern if it is listed here.") %>   <%= link_to_help('abuse-report-help')%></dt>
       <dd>
-        <%= f.select("category", 
-          [ [AbuseReport::BUGS_COPPA_NAME, AbuseReport::BUGS_COPPA], 
-            [AbuseReport::BUGS_HARASSMENT_NAME, AbuseReport::BUGS_HARASSMENT], 
-            [AbuseReport::BUGS_NONFANWORK_NAME, AbuseReport::BUGS_NONFANWORK], 
-            [AbuseReport::BUGS_RATING_NAME, AbuseReport::BUGS_RATING], 
-            [AbuseReport::BUGS_WARNING_NAME, AbuseReport::BUGS_WARNING], 
-            [AbuseReport::BUGS_NEXTKIN_NAME, AbuseReport::BUGS_NEXTKIN], 
-            [AbuseReport::BUGS_OPENDOORS_NAME, AbuseReport::BUGS_OPENDOORS],  
-            [AbuseReport::BUGS_OUTING_NAME, AbuseReport::BUGS_OUTING], 
-            [AbuseReport::BUGS_PLAGIARISM_NAME, AbuseReport::BUGS_PLAGIARISM], 
-            [AbuseReport::BUGS_FAIRUSE_NAME, AbuseReport::BUGS_FAIRUSE], 
-            [AbuseReport::BUGS_SPAM_NAME, AbuseReport::BUGS_SPAM] ],
-        :include_blank => true) %>
+        <%= f.select("category", AbuseReport::CATEGORIES, include_blank: true) %>
       </dd>
     
-      <dt class="required"><%= f.label :comment, ts("Describe your concern (required)") %></dt>
+      <dt class="required">
+        <%= f.label :comment, ts("Describe your concern (required)") %>
+      </dt>
       <dd class="required">
         <p>
           <%= ts("Please include all relevant URLs and what about the content violates the Archive %{tos_link}.", 

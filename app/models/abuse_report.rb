@@ -14,31 +14,39 @@ class AbuseReport < ActiveRecord::Base
   
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
   validates_format_of :url, :with => app_url_regex, :message => ts('does not appear to be on this site.')
-  
-  # id numbers for categories on 16bugs
-  BUGS_COPPA = 11468
-  BUGS_FAIRUSE = 11469
-  BUGS_NONFANWORK = 11471
-  BUGS_PLAGIARISM = 11470
-  BUGS_OPENDOORS = 11516
-  BUGS_HARASSMENT = 11473
-  BUGS_NEXTKIN = 11514
-  BUGS_OUTING = 11472
-  BUGS_SPAM = 11515
-  BUGS_RATING = 11475
-  BUGS_WARNING = 11476
-  
+    
   # Category names for form
-  BUGS_COPPA_NAME = "Children's Online Privacy and Protection Act"
-  BUGS_FAIRUSE_NAME = "Reproduction of copyrighted or trademarked material (unfair use)"
-  BUGS_NONFANWORK_NAME = "Illegal or non-fanwork content"
-  BUGS_PLAGIARISM_NAME = "Plagiarism"
-  BUGS_OPENDOORS_NAME = "Open Doors"
-  BUGS_HARASSMENT_NAME = "Harassment"
-  BUGS_NEXTKIN_NAME = "Next-of-kin claim"
-  BUGS_OUTING_NAME = "Personal information (outing)"
-  BUGS_SPAM_NAME = "Spam or commercial promotion"
-  BUGS_RATING_NAME = "Inappropriate content rating"
-  BUGS_WARNING_NAME = "Insufficient content warning"
+  CATEGORIES = [
+    ["Children's Online Privacy and Protection Act", 11468],
+    ["Reproduction of copyrighted or trademarked material (unfair use)", 11469],
+    ["Illegal or non-fanwork content", 11471],
+    ["Plagiarism", 11470],
+    ["Open Doors", 11516],
+    ["Harassment", 11473],
+    ["Next-of-kin claim", 11514],
+    ["Personal information (outing)", 11472],
+    ["Spam or commercial promotion", 11515],
+    ["Inappropriate content rating", 11475],
+    ["Insufficient content warning", 11476]
+  ]
 
+  def email_and_send
+    AdminMailer.abuse_report(id).deliver
+    if email_copy?
+      UserMailer.abuse_report(id).deliver
+    end
+    send_report
+  end
+
+  def send_report
+    return unless %w(staging production).include?(Rails.env)
+    reporter = AbuseReporter.new(
+      title: url,
+      description: comment,
+      email: email,
+      category: category,
+      ip_address: ip_address
+    )
+    reporter.send_report!
+  end
 end
