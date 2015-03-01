@@ -1,5 +1,3 @@
-require 'iconv'
-
 class DownloadsController < ApplicationController
 
   include XhtmlSplitter
