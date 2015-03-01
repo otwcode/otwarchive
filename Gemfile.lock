@@ -140,6 +140,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    iconv (1.0.4)
     journey (1.0.4)
     jquery-rails (3.0.1)
       railties (>= 3.0, < 5.0)
@@ -396,6 +397,7 @@ DEPENDENCIES
   google_visualr (>= 2.1)
   htmlentities
   httparty
+  iconv
   jquery-rails (>= 0.2.6)
   kgio
   launchy
