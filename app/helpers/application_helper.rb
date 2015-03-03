@@ -397,8 +397,7 @@ module ApplicationHelper
     toggle_hide = content_tag(:a, ts("Collapse Checkboxes"),
                                   style: "display: none;",
                                   class: "toggle #{checkboxes_id}_hide",
-                                  href: "##{checkboxes_id}")
-                             + "\n".html_safe
+                                  href: "##{checkboxes_id}") + "\n".html_safe
 
     css_class = checkbox_section_css_class(checkboxes_size)
 
