@@ -4,12 +4,13 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 
 /*TYPE: TAGS */
 
+/* change border back to 1px after Safari gets it together (Issue 4260) */
 a.tag {
   color: #111;
   line-height: 1.5;
   text-decoration: none;
   padding: 0;
-  border-bottom: 1px dotted;
+  border-bottom: 0.1em dotted;
 }
 
 a.tag:hover, .listbox .heading a.tag:visited:hover {
