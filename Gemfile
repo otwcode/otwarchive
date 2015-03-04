@@ -20,9 +20,6 @@ gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
-# Move to the iconv gem...
-gem 'iconv'
-
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
 
