@@ -6,7 +6,7 @@ Given /^I have no tags$/ do
 end
 
 Given /^basic tags$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,     
+  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
              ArchiveConfig.RATING_GENERAL_TAG_NAME,
              ArchiveConfig.RATING_TEEN_TAG_NAME,
              ArchiveConfig.RATING_MATURE_TAG_NAME,
@@ -25,7 +25,7 @@ Given /^basic tags$/ do
 end
 
 Given /^the default ratings exist$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,     
+  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
              ArchiveConfig.RATING_GENERAL_TAG_NAME,
              ArchiveConfig.RATING_TEEN_TAG_NAME,
              ArchiveConfig.RATING_MATURE_TAG_NAME,
