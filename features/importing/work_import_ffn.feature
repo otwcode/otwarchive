@@ -3,6 +3,8 @@ Feature: Import Works from fanfiction.net
   In order to have an archive full of works
   As an author
   I want to create new works by importing them from fanfiction.net
+Background: Given the default ratings exist
+
   @import_ffn
   Scenario: Importing a new work from an FFN story
     Given I am logged in as "cosomeone" with password "something"

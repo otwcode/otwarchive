@@ -1,5 +1,6 @@
 @users @admin @archivist_import
 Feature: Archivist bulk imports
+Background: Given the default ratings exist
 
   Scenario: Non-archivist cannot import for others
   
