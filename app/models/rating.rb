@@ -10,7 +10,7 @@ class Rating < Tag
                ArchiveConfig.RATING_TEEN_TAG_NAME,
                ArchiveConfig.RATING_MATURE_TAG_NAME,
                ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-    ratings_by_id = Rating.where(name: ratings).inject({}) do |result, rating| 
+    ratings_by_id = Rating.where(name: ratings).inject({}) do |result, rating|
       result[rating.name] = rating
       result
     end
