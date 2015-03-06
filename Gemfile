@@ -29,7 +29,7 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
-gem 'psych' 
+gem 'psych' , '1.3.4'
 
 gem 'httparty'
 gem 'htmlentities'
