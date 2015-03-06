@@ -28,7 +28,7 @@
             <li><%= span_if_current ts('My History', key: 'header'), user_readings_path(current_user) %></li>
           <% end %>
           <li><%= span_if_current ts('My Preferences', key: 'header'), user_preferences_path(current_user) %></li>
-          <% if permit?('opendoors') %>
+          <% if permit?('opendoors', :get_user_method => 'current_user') %>
             <li><%= span_if_current ts('Open Doors', key: 'header'), opendoors_tools_path %></li>
           <% end %>
           <% if current_user.is_tag_wrangler? %>

@@ -2,7 +2,7 @@
   <% if @user %>
     <li><%= span_if_current ts("External Authors"), user_external_authors_path(@user) %></li>
     <li><%= span_if_current ts("Profile"), user_profile_path(@user) %>
-  <% elsif permit?("opendoors") %>
+  <% elsif permit?("opendoors", :get_user_method => 'current_user') %>
     <li><%= span_if_current ts("External Authors"), opendoors_external_authors_path %></li>
     <li class="search" role="search">
       <%= form_tag opendoors_external_authors_path, :class => "simple search", :method => :get do |form| %>
