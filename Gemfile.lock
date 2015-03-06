@@ -407,7 +407,7 @@ DEPENDENCIES
   mysql2
   newrelic-redis
   newrelic_rpm (= 3.9.3.241)
-  nokogiri (>= 1.4.2)
+  nokogiri (>= 1.6.6.2)
   paperclip
   permit_yo
   phrase

@@ -2,7 +2,7 @@ class LocalesController < ApplicationController
   before_filter :check_permission, :only => [:new, :create, :update, :edit]
 
   def check_permission
-    logged_in_as_admin? || permit?("translation_admin", :get_user_method => 'current_user') || access_denied
+    logged_in_as_admin? || permit?("translation_admin", get_user_method: 'current_user') || access_denied
   end
   
   def set

@@ -34,7 +34,7 @@ gem 'psych'
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.4.2'
+gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
