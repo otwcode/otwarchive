@@ -7,15 +7,19 @@
     <%= ts('by') %>
     <%= byline(series) %>
     <% if series.restricted %>
-      <%= image_tag("lockblue.png", size: "15x15", alt: ts("(Restricted)"), title: ts("Restricted")) %>
+      <%= image_tag("lockblue.png", size: "15x15", alt: ts("(Restricted)"),
+                                    title: ts("Restricted")) %>
     <% end %>
     <% if series.hidden_by_admin %>
-      <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"), title: ts("Hidden by Administrator")) %>
+      <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
+                                   title: ts("Hidden by Administrator")) %>
     <% end %>
   </h4>
   <h5 class="fandoms heading">
     <span class="landmark"><%= ts('Fandom') %>:</span>
-    <%= series.work_tags.select{ |tag| tag.type == "Fandom" }.sort.collect{ |tag| link_to_tag_works(tag) }.join(', ').html_safe %>
+    <%= series.work_tags.select{ |tag| tag.type == "Fandom" }.
+                         sort.collect{ |tag| link_to_tag_works(tag) }.
+                         join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
   <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
