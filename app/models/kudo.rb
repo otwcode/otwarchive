@@ -46,12 +46,11 @@ class Kudo < ActiveRecord::Base
   def guest_cant_restricted
     commentable = commentable_type.classify.constantize.
                   find_by_id(commentable_id)
-    if self.pseud.nil? && commentable.restricted?
-      errors.add(:guest_on_restricted, 
-                  ts("^You can't leave guest kudos on a restricted work"))
+    if pseud.nil? && commentable.restricted?
+      errors.add(:guest_on_restricted,
+                 ts("^You can't leave guest kudos on a restricted work"))
     end
   end
-
 
   def creator_of_work?
     errors.values.to_s.match /your own work/
