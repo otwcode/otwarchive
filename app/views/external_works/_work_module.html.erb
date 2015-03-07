@@ -14,11 +14,12 @@
 
   <h5 class="fandoms heading">
     <span class="landmark"><%= ts('Fandom') %>:</span>
-    <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
-    &nbsp;
+    <%= external_work.fandom_tags.collect{ |tag| link_to_tag_works(tag) }.join(', ').html_safe %>
   </h5>
-    
-  <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
+
+  <p class="notice">
+    <%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %>
+  </p>
 
   <%= get_symbols_for(external_work) %>
   <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
@@ -45,7 +46,7 @@
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
   <% end %>
 
-  <% if external_work.related_works.count > 0 %>	
+  <% if external_work.related_works.count > 0 %>
     <dt><%= ts("Related Works:") %></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work %></dd>
   <% end %>
