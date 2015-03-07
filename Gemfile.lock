@@ -413,7 +413,7 @@ DEPENDENCIES
   phrase
   pickle
   pry
-  psych
+  psych (>= 2.0.5)
   rack-dev-mark
   rails (= 3.2.21)
   redis (>= 3.0)
