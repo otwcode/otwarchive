@@ -73,7 +73,7 @@ protected
 
   def current_admin_session
     return @current_admin_session if defined?(@current_admin_session)
-    @current_admin_session = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    @current_admin_session = Rails.cache.fetch("admin_settings") { AdminSetting.first }
   end
 
   def current_admin
