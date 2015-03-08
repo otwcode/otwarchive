@@ -740,20 +740,25 @@ class Work < ActiveRecord::Base
     string = string.to_ascii 
     string.gsub(/[^[\w _-]]+/, '')
   end
+
   def display_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
+    string = string.to_ascii
   end
+
   # need the next two to be filesystem safe and not overly long
   def download_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
     string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_title
     string = self.title.to_ascii.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_basename
     "#{self.download_dir}/#{self.download_title}"
   end
