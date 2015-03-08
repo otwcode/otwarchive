@@ -20,8 +20,9 @@ gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
-# Move to the iconv gem...
-gem 'iconv'
+# Used to convert strings to ascii
+gem 'unicode'
+gem 'unidecoder'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
