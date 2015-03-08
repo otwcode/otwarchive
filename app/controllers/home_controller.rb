@@ -131,7 +131,7 @@ protected
       when "nomination"
         TagSetNomination.for_tag_set(OwnedTagSet.find(@last_id)).owned_by(user).first
       when "setting"
-        AdminSetting.first
+        Rails.cache.fetch("admin_settings"){AdminSetting.first}
       when "assignment", "claim", "signup"
         klass = "challenge_#{classname}".classify.constantize
         query = classname == "assignment" ? klass.by_offering_user(user) :
