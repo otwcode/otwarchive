@@ -127,7 +127,7 @@ module WorksHelper
   end
 
   def download_url_for_work(work, format)
-    base=Rails.cache.fetch("download_base_#{work.id}", race_condition_ttl: 10, expires_in: 1.day) { "/#{work.download_folder}/#{work.download_title}." }
+    base = Rails.cache.fetch("download_base_#{work.id}", race_condition_ttl: 10, expires_in: 1.day) { "/#{work.download_folder}/#{work.download_title}." }
     url_for ("#{base}#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
   
