@@ -27,7 +27,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       # set final response code and message depending on the flags
       status, messages = response_code(messages)
     end
-    render status: status, json: { message: messages, works: works_responses }
+    render status: status, json: { status: status, messages: messages, works: works_responses }
   end
 
   private
@@ -65,7 +65,7 @@ class Api::V1::ImportController < Api::V1::BaseController
         @some_success = true
         work_status = :created
         work_url = work_url(work)
-        work_messages << "Successfully created work '' + work.title + "''
+        work_messages << "Successfully created work \"" + work.title + "\""
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
@@ -95,6 +95,9 @@ class Api::V1::ImportController < Api::V1::BaseController
 
     if external_works.nil? || external_works.empty?
       errors << "No work URLs were provided."
+    elsif external_works.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
+      errors << "This request contains too many works. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
+                "works can be imported in one go by an archivist."
     end
     status = :ok if errors.empty?
     [status, errors]
@@ -107,8 +110,8 @@ class Api::V1::ImportController < Api::V1::BaseController
     urls = work[:chapter_urls]
     if urls.nil?
       errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
-    elsif urls.length >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-      errors << "Some works contain too many chapter URLs. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
+    elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
+      errors << "This work contains too many chapter URLs. A maximum of #{ ArchiveConfig.IMPORT_MAX_CHAPTERS }" +
                 "chapters can be imported per work."
     end
     status = :ok if errors.empty?
@@ -123,6 +126,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       do_not_set_current_author: true,
       restricted: params[:restricted],
       override_tags: params[:override_tags],
+      collection_names: params[:collection_names],
       fandom: params[:fandoms],
       warning: params[:warnings],
       character: params[:characters],

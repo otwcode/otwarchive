@@ -5,9 +5,7 @@ class Admin::ApiController < ApplicationController
   def index
     @api_keys = if params[:query]
                   sql_query = "%" + params[:query] + "%"
-                  ApiKey.where("name LIKE ?", sql_query)
-                        .order("name")
-                        .paginate(page: params[:page])
+                  ApiKey.where("name LIKE ?", sql_query).order("name").paginate(page: params[:page])
                 else
                   ApiKey.order("name").paginate(page: params[:page])
                 end
