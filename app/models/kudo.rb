@@ -48,7 +48,7 @@ class Kudo < ActiveRecord::Base
                   find_by_id(commentable_id)
     if pseud.nil? && commentable.restricted?
       errors.add(:guest_on_restricted,
-                 ts("^You can't leave guest kudos on a restricted work"))
+                 ts("^You can't leave guest kudos on a restricted work."))
     end
   end
 
