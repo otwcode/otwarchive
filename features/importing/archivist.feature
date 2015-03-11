@@ -93,9 +93,9 @@ Feature: Archivist bulk imports
     Given I have an archivist "elynross"
     When I am logged in as "elynross"
     And I go to the import page
-    And I import the work "http://cesy.dreamwidth.org/154770.html" by "rando!m-t??estname" with email "otwstephanie@thepotionsmaster.net"
+    And I import the work "http://cesy.dreamwidth.org/154770.html" by "ra_ndo!m-t??est n@me." with email "otwstephanie@thepotionsmaster.net"
     Then I should see import confirmation
-    And I should see "random-testname"
+    And I should see "ra_ndom-test n@me."
     When the system processes jobs
     Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
 
