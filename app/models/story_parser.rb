@@ -296,7 +296,7 @@ class StoryParser
               # we're not allowed to import works from this address
               raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
             end
-            work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
+            work.external_creatorships.build(external_author_name: external_author_name, archivist: (options[:archivist] || User.current_user))
           end
         end
       end
