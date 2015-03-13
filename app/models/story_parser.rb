@@ -53,7 +53,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet thearchive_net efiction)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet thearchive_net efiction quotev)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -65,6 +65,7 @@ class StoryParser
   SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
   SOURCE_THEARCHIVE_NET = 'the\-archive\.net'
   SOURCE_EFICTION = 'viewstory\.php'
+  SOURCE_QUOTEV = 'quotev\.com'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
@@ -455,6 +456,10 @@ class StoryParser
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
       raise Error, "Sorry, Fanfiction.net does not allow imports from their site."
+    end
+
+    def download_chaptered_from_quotev(location)
+      raise Error, "Sorry, Quotev.com does not allow imports from their site."
     end
     
     # this is an efiction archive but it doesn't handle chapters normally
