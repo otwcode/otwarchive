@@ -454,11 +454,11 @@ class StoryParser
     end
 
     # grab all the chapters of the story from ff.net
-    def download_chaptered_from_ffnet(location)
+    def download_chaptered_from_ffnet(_location)
       raise Error, "Sorry, Fanfiction.net does not allow imports from their site."
     end
 
-    def download_chaptered_from_quotev(location)
+    def download_chaptered_from_quotev(_location)
       raise Error, "Sorry, Quotev.com does not allow imports from their site."
     end
     
