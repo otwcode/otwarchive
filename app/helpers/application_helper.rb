@@ -1,20 +1,18 @@
-
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  
   include HtmlCleaner
 
   # Generates class names for the main div in the application layout
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
-    
+
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
-    
+
     if page_has_filters?
       class_names += " filtered"
     end
-    
+
     if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
       class_names = "system support " + controller.controller_name + ' ' + controller.action_name
     end
@@ -27,10 +25,10 @@ module ApplicationHelper
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name
     end
-    
+
     class_names
   end
-  
+
   def page_has_filters?
     @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
   end
@@ -40,7 +38,7 @@ module ApplicationHelper
     unless html_options[:href]
       html_options[:href] = url_for(options[:url])
     end
-    
+
     link_to_function(name, remote_function(options), html_options)
   end
 
@@ -51,11 +49,11 @@ module ApplicationHelper
     link_code = title_attribute_default_text.nil? ? link_to(link_to_default_text, path) : link_to(link_to_default_text, path, title: "#{title_attribute_default_text}")
     is_current ? span_tag.html_safe : link_code
   end
-  
+
   def link_to_rss(link_to_feed)
-    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, :title => "RSS Feed", :class => "rss"
+    link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
-  
+
   #1: default shows just the link to help
   #2: show_text = true: shows "plain text with limited html" and link to help
   #3 show_list = true: plain text and limited html, link to help, list of allowed html
@@ -67,13 +65,12 @@ module ApplicationHelper
       ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td,
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
   end
-  
-  
+
   def allowed_css_instructions
     h(ts("Limited CSS properties and values allowed")) + 
     link_to_help("css-help")
   end
-  
+
   # This helper needs to be used in forms that may appear multiple times in the same
   # page (eg the comment form) since all the fields must have unique ids
   # see http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the-same-page-causes-duplicate-ids
@@ -81,8 +78,7 @@ module ApplicationHelper
       field_id = "#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}"
       form.send( field_type, field_name, :id => field_id )
   end
-  
-    
+
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds
   # and on Feb 24 09 to sort alphabetically for great justice
@@ -90,14 +86,14 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
-        end
+      end
       return anon_byline
     end
     non_anonymous_byline(creation)
   end
-      
+
   def non_anonymous_byline(creation)
     if creation.respond_to?(:author)
       creation.author
@@ -106,7 +102,7 @@ module ApplicationHelper
       pseuds << creation.authors if creation.authors
       pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
       pseuds = pseuds.flatten.uniq.sort
-    
+
       archivists = {}
       if creation.is_a?(Work)
         external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
@@ -115,7 +111,7 @@ module ApplicationHelper
           archivists[archivist_pseud] = ec.author_name
         end
       end
-    
+
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
             pseud_link(pseud) :
@@ -131,19 +127,19 @@ module ApplicationHelper
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
     end
   end
-  
-   # A plain text version of the byline, for when we don't want to deliver a linkified version.
+
+  # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
       return anon_byline
     end
     non_anonymous_text_byline(creation)
   end
-      
+
   def non_anonymous_text_byline(creation)
     if creation.respond_to?(:author)
       creation.author
@@ -161,9 +157,9 @@ module ApplicationHelper
           archivists[archivist_pseud] = ec.external_author_name.name
         end
       end
-    
-      pseuds.collect { |pseud| 
-        archivists[pseud].nil? ? 
+
+      pseuds.collect { |pseud|
+        archivists[pseud].nil? ?
             pseud_text(pseud) :
             archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
       }.join(', ').html_safe
@@ -171,17 +167,17 @@ module ApplicationHelper
   end
 
   def pseud_text(pseud)
-      pseud.byline
+    pseud.byline
   end
 
-   def link_to_modal(content="",options = {})   
-     options[:class] ||= ""
-     options[:for] ||= ""
-     options[:title] ||= options[:for]
-     
-     html_options = {"class" => options[:class] +" modal", "title" => options[:title], "aria-controls" => "#modal"}     
-     link_to content, options[:for], html_options
-   end 
+  def link_to_modal(content = "", options = {})
+    options[:class] ||= ""
+    options[:for] ||= ""
+    options[:title] ||= options[:for]
+
+    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    link_to content, options[:for], html_options
+  end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -189,15 +185,15 @@ module ApplicationHelper
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
     #end
-    
+
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
-    
-    " ".html_safe + link_to_modal(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "help symbol question").html_safe
+
+    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
   end
-  
-  # Inserts the flash alert messages for flash[:key] wherever 
+
+  # Inserts the flash alert messages for flash[:key] wherever
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
   #       flash[:error] = "OMG ERRORZ AIE"
@@ -214,20 +210,20 @@ module ApplicationHelper
   #
   # You can also have multiple possible flash alerts in a single location with:
   #       <%= flash_div :error, :caution, :notice %>
-  # (These are the three varieties currently defined.) 
+  # (These are the three varieties currently defined.)
   #
   def flash_div *keys
-    keys.collect { |key| 
+    keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map {|flash_item| content_tag(:li, h(flash_item))}.join("\n").html_safe), :class => "flash #{key}") 
+          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), :class => "flash #{key}") 
+          content_tag(:div, h(flash[key]), class: "flash #{key}")
         end
       end
     }.join.html_safe
   end
-  
+
   # For setting the current locale
   def locales_menu    
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locales') + "\">\n" 
@@ -237,8 +233,8 @@ module ApplicationHelper
     result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"
     result << "</form>"
     return result
-  end  
-  
+  end
+
   # Generates sorting links for index pages, with column names and directions
   def sort_link(title, column=nil, options = {})
     condition = options[:unless] if options.has_key?(:unless)
@@ -255,7 +251,7 @@ module ApplicationHelper
       else
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
-      link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe, 
+      link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe,
           request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class, :title => (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
       link_to_unless params[:sort_column].nil?, title, url_for(params.merge :sort_column => nil, :sort_direction => nil)
@@ -264,16 +260,16 @@ module ApplicationHelper
 
   ## Allow use of tiny_mce WYSIWYG editor
   def use_tinymce
-    @content_for_tinymce = "" 
+    @content_for_tinymce = ""
     content_for :tinymce do
       javascript_include_tag "tinymce/tinymce.min.js"
     end
-    @content_for_tinymce_init = "" 
+    @content_for_tinymce_init = ""
     content_for :tinymce_init do
       javascript_include_tag "mce_editor.min.js"
     end
-  end  
-  
+  end
+
   # check for pages that allow tiny_mce before loading the massive javascript
   def allow_tinymce?(controller)
     %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
@@ -290,14 +286,14 @@ module ApplicationHelper
     span = content_tag(:span, max, :id => "#{field_id}_counter", :class => "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
     content_tag(:p, span + ts(' characters left'), :class => "character_counter")
   end
-  
-  # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc) 
+
+  # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
   def expand_contract_all(target="index")
     expand_all = content_tag(:a, ts("Expand All"), :href=>"#", :class => "expand_all", "target_class" => target, :role => "button")
     contract_all = content_tag(:a, ts("Contract All"), :href=>"#", :class => "contract_all", "target_class" => target, :role => "button")
     content_tag(:span, expand_all + "\n".html_safe + contract_all, :class => "actions hidden showme", :role => "menu")
   end
-  
+
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
@@ -307,11 +303,11 @@ module ApplicationHelper
     <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
     (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
   end
-  
+
   # returns the default autocomplete attributes, all of which can be overridden
   # note: we do this and put the message defaults here so we can use translation on them
   def autocomplete_options(method, options={})
-    {      
+    {
       :class => "autocomplete",
       :autocomplete_method => (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
       :autocomplete_hint_text => ts("Start typing for suggestions!"),
@@ -337,7 +333,7 @@ module ApplicationHelper
     form.hidden_field(:_destroy) + "\n" +
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
   end
-  
+
   def time_in_zone(time, zone=nil, user=User.current_user)
     return ts("(no time specified)") if time.blank?
     zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
@@ -346,7 +342,7 @@ module ApplicationHelper
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
                                                  <span class="time">%I:%M%p</span>').html_safe + 
                                           " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> ".html_safe
-    
+
     user_time_string = "".html_safe
     if user.is_a?(User) && user.preference.time_zone
       if user.preference.time_zone != zone
@@ -357,10 +353,10 @@ module ApplicationHelper
         user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)
       end
     end
-    
+
     time_in_zone_string + user_time_string
   end
-  
+
   def mailto_link(user, options={})
     "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
       <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
@@ -376,7 +372,7 @@ module ApplicationHelper
   def name_to_id(name)
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
-  
+
   def field_id(form, attribute)
     name_to_id(field_name(form, attribute))
   end
@@ -384,7 +380,7 @@ module ApplicationHelper
   def field_name(form, attribute)
     "#{form.object_name}[#{field_attribute(attribute)}]"
   end
-  
+
   def nested_field_id(form, nested_object, attribute)
     name_to_id(nested_field_name(form, nested_object, attribute))
   end
@@ -392,19 +388,19 @@ module ApplicationHelper
   def nested_field_name(form, nested_object, attribute)
     "#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
   end
-  
-  
+
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
-    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", :checkboxes_size => checkboxes_size), 
-                              :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
+    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", checkboxes_size: checkboxes_size),
+                              class: "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"), :style => "display: none;",
-                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
-                              "\n".html_safe
-    
+    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"),
+                                  style: "display: none;",
+                                  class: "toggle #{checkboxes_id}_hide",
+                                  href: "##{checkboxes_id}") + "\n".html_safe
+
     css_class = checkbox_section_css_class(checkboxes_size)
- 
+
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
         "$j('##{checkboxes_id}').find('.actions').show();\n" +
@@ -426,7 +422,7 @@ module ApplicationHelper
       toggle_hide + 
       (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions", :style => "display: none;")
   end
-  
+
   # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
   # attribute: the attribute being set 
@@ -451,7 +447,7 @@ module ApplicationHelper
       :include_blank => true,
       :concise => false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
     }.merge(options)
-    
+
     field_name = options[:field_name] || field_name(form, attribute)
     field_name += '[]'
     base_id = options[:field_id] || field_id(form, attribute)
@@ -465,8 +461,8 @@ module ApplicationHelper
       else
         form.object.send(options[:checked_method]) || []
       end
-    
-    checkboxes = choices.map do |choice|      
+
+    checkboxes = choices.map do |choice|
       is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
       display_name = case
         when options[:name_helper_method]
@@ -495,24 +491,24 @@ module ApplicationHelper
     if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
       toggle = checkbox_section_toggle(checkboxes_id, size)
     end
-      
+
     # We wrap the whole thing in a div
     return content_tag(:div, checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id)
   end
-  
+
   def checkbox_section_css_class(size, concise=false)
     css_class = "options index group"
-    
+
     if concise
       css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
     else
       css_class += " many" if size > ArchiveConfig.OPTIONS_TO_SHOW
       css_class += " lots" if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
     end
-    
+
     css_class
   end
-  
+
   def check_all_none(all_text="All", none_text="None", id_filter=nil)
     filter_attrib = (id_filter ? " data-checkbox-id-filter=\"#{id_filter}\"" : '')    
     ('<ul class="actions">
@@ -521,16 +517,16 @@ module ApplicationHelper
       '<li><a href="#" class="check_none"' + 
       "#{filter_attrib}>#{none_text}</a></li></ul>").html_safe
   end
-  
+
   def submit_button(form=nil, button_text=nil)
     button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
     content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=> "submit")
   end
-    
+
   def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
   end
-  
+
   # Cache fragments of a view if +condition+ is true
   #
   # <%= cache_if admin?, project do %>

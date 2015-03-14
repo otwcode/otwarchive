@@ -127,7 +127,8 @@ module WorksHelper
   end
 
   def download_url_for_work(work, format)
-    url_for ("/#{work.download_folder}/#{work.download_title}.#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
+    base = Rails.cache.fetch("download_base_#{work.id}", race_condition_ttl: 10, expires_in: 1.day) { "/#{work.download_folder}/#{work.download_title}." }
+    url_for ("#{base}#{format}?updated_at=#{work.updated_at.to_i}").gsub(' ', '%20')
   end
   
   # Generates a list of a work's tags and details for use in feeds

@@ -2,14 +2,16 @@
 <% chapter_id = "chapter-#{chapter.position.to_s}" %>
 <div class="chapter<%= ' draft' if (!chapter.posted? || @preview_mode) %>" id="<%= chapter_id %>">
   <% unless chapter.posted? || @preview_mode %>
-    <p class="draft-chapter notice"><%= ts("This chapter is a draft and hasn't been posted yet!") %></p>
+    <p class="draft-chapter notice">
+      <%= ts("This chapter is a draft and hasn't been posted yet!") %>
+    </p>
   <% end %>
-<!-- chapter management -->
+  <!-- chapter management -->
   <% if is_author_of?(@work) && !@downloading && !@preview_mode%>
-    <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work} %>
+    <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v2") do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v3") do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
     <h3 class="title">
@@ -18,7 +20,9 @@
 
     <!-- only display byline if different from the main byline -->
     <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) || @preview_mode %>
-      <h4 class="heading byline"><%= ts('Chapter by') %> <%= byline(chapter) %></h4>
+      <h4 class="heading byline">
+        <%= ts('Chapter by') %> <%= byline(chapter).html_safe %>
+      </h4>
     <% end %>
 
     <% if (@work.number_of_posted_chapters > 1) || @work.chaptered? %>
@@ -26,8 +30,8 @@
         <div id="summary" class="summary module">
           <h3 class="heading"><%= ts('Summary:') %></h3>
           <blockquote class="userstuff">
-      	    <%=raw sanitize_field(chapter, :summary) %>
-      	  </blockquote>
+            <%=raw sanitize_field(chapter, :summary) %>
+          </blockquote>
         </div>
       <% end %>
 
@@ -54,17 +58,21 @@
   <!--main content-->
   <div class="userstuff module" role="article">
     <% unless @downloading %>
-  	  <h3 class="landmark heading" id="work">Chapter Text</h3>
+      <h3 class="landmark heading" id="work"><%= ts("Chapter Text") %></h3>
     <% end %>
     <%=raw sanitize_field(chapter, :content) %>
   </div>
   <!--/main-->
 
   <% unless chapter.endnotes.blank? %>
-    <div class="chapter preface group"><div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
-     <h3 class="heading"><%=h ts('Notes:') %></h3>
-        <blockquote class="userstuff"><%=raw sanitize_field(chapter, :endnotes) %></blockquote>
-    </div></div>
+    <div class="chapter preface group">
+      <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
+        <h3 class="heading"><%=h ts('Notes:') %></h3>
+        <blockquote class="userstuff">
+          <%=raw sanitize_field(chapter, :endnotes) %>
+        </blockquote>
+      </div>
+    </div>
   <% end %>
 
 </div>

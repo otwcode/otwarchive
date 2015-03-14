@@ -21,7 +21,7 @@
       <%= ts('by') %>
         
       <!-- do not cache -->
-      <%= byline(work) %>
+      <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide #### %>
 <% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v5") do %>
