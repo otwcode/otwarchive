@@ -8,6 +8,7 @@ class Api::V1::ImportController < Api::V1::BaseController
     archivist = User.find_by_login(params[:archivist])
     external_works = params[:works]
     works_responses = []
+    @works = []
 
     # check for top-level errors (not an archivist, no works...)
     status, messages = batch_errors(archivist, external_works)
@@ -62,6 +63,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       begin
         work = storyparser.download_and_parse_chapters_into_story(urls, options)
         work.save
+        @works << work
         @some_success = true
         work_status = :created
         work_url = work_url(work)
@@ -134,6 +136,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       relationship: params[:relationships],
       category: params[:categories],
       freeform: params[:additional_tags],
+      summary: params[:summary],
       encoding: params[:encoding],
       external_author_name: params[:external_author_name],
       external_author_email: params[:external_author_email],
