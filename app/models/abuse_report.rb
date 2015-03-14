@@ -1,11 +1,9 @@
 class AbuseReport < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :url
-  #validates :url, uniqueness: true, if: 'url.match(/works/)'
   validates :email, :email_veracity => {:allow_blank => true}
   attr_accessor :cc_me
   validates :email, :presence => {:message => ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, :if => "email_copy?"
-
   validate :work_is_not_over_reported
 
   scope :by_date, order("created_at DESC")
@@ -15,10 +13,10 @@ class AbuseReport < ActiveRecord::Base
   def email_copy?
    cc_me == "1"
   end
-  
+
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
   validates_format_of :url, :with => app_url_regex, :message => ts('does not appear to be on this site.')
-    
+
   # Category names for form
   CATEGORIES = [
     ["Children's Online Privacy and Protection Act", 11468],
@@ -59,9 +57,15 @@ class AbuseReport < ActiveRecord::Base
   def work_is_not_over_reported
     if url.match(/works\/\d+/)
       work_params_only = url.match(/works\/\d+/).to_s
-      existing_reports_total = AbuseReport.where("created_at > ? AND url LIKE ?", 1.week.ago, "%#{work_params_only}%").count
+      existing_reports_total = AbuseReport.where("created_at > ? AND
+                                                 url LIKE ?",
+                                                 1.week.ago,
+                                                 "%#{work_params_only}%").
+                                           count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX + 1
-        errors[:base] << ts("URL has already been reported. To make sure the Abuse Team can handle reports quickly and efficiently, we limit the number of times a URL can be reported.")
+        errors[:base] << ts("URL has already been reported. To make sure the Abuse Team
+                            can handle reports quickly and efficiently, we limit the
+                            number of times a URL can be reported.")
       end
     end
   end
