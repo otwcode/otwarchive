@@ -1,9 +1,13 @@
 class AbuseReport < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :url
+  #validates :url, uniqueness: true, if: 'url.match(/works/)'
   validates :email, :email_veracity => {:allow_blank => true}
   attr_accessor :cc_me
   validates :email, :presence => {:message => ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, :if => "email_copy?"
+
+  validate :work_is_not_over_reported
+
   scope :by_date, order("created_at DESC")
 
   attr_protected :comment_sanitizer_version
@@ -48,5 +52,17 @@ class AbuseReport < ActiveRecord::Base
       ip_address: ip_address
     )
     reporter.send_report!
+  end
+
+  # if the URL being reported belongs to a work
+  # then make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times
+  def work_is_not_over_reported
+    if url.match(/works\/\d+/)
+      work_params_only = url.match(/works\/\d+/).to_s
+      existing_reports_total = AbuseReport.where("created_at > ? AND url LIKE ?", 1.week.ago, "%#{work_params_only}%").count
+      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX + 1
+        errors[:base] << ts("URL has already been reported. To make sure the Abuse Team can handle reports quickly and efficiently, we limit the number of times a URL can be reported.")
+      end
+    end
   end
 end
