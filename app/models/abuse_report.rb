@@ -53,13 +53,14 @@ class AbuseReport < ActiveRecord::Base
   end
 
   # if the URL being reported belongs to a work
-  # then make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times
+  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times in a month
   def work_is_not_over_reported
     if url.match(/works\/\d+/)
+      # use "works/123" instead of just the id to avoid confusion with chapter ids
       work_params_only = url.match(/works\/\d+/).to_s
       existing_reports_total = AbuseReport.where("created_at > ? AND
                                                  url LIKE ?",
-                                                 1.week.ago,
+                                                 1.month.ago,
                                                  "%#{work_params_only}%").
                                            count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX + 1
