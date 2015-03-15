@@ -284,11 +284,11 @@ class StoryParser
       # handle importing works for others
       # build an external creatorship for each author
       if options[:importing_for_others]
-        external_author_names = options[:external_author_names] || parse_author(location,options[:external_author_name],options[:external_author_email])
+        external_author_names = options[:external_author_names] || parse_author(location, options[:external_author_name], options[:external_author_email])
         # convert to an array if not already one
         external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
-        if options[:external_coauthor_name] != nil
-          external_author_names << parse_author(location,options[:external_coauthor_name],options[:external_coauthor_email])
+        if options[:external_coauthor_name].present?
+          external_author_names << parse_author(location, options[:external_coauthor_name], options[:external_coauthor_email])
         end
         external_author_names.each do |external_author_name|
           if external_author_name && external_author_name.external_author
@@ -296,7 +296,7 @@ class StoryParser
               # we're not allowed to import works from this address
               raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
             end
-            ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
+            work.external_creatorships.build(external_author_name: external_author_name, archivist: (options[:archivist] || User.current_user))
           end
         end
       end
@@ -400,14 +400,16 @@ class StoryParser
     end
 
     def parse_author_common(email, name)
+      # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
+      name = name.to_ascii.gsub(/[^\w[ \-@\.]]/u, "")
       external_author = ExternalAuthor.find_or_create_by_email(email)
       unless name.blank?
-        external_author_name = ExternalAuthorName.find(:first, :conditions => {:name => name, :external_author_id => external_author.id}) ||
-                                  ExternalAuthorName.new(:name => name)
+        external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
+                               ExternalAuthorName.new(name: name)
         external_author.external_author_names << external_author_name
         external_author.save
       end
-      return external_author_name || external_author.default_name
+      external_author_name || external_author.default_name
     end
 
     def get_chapter_from_work_params(work_params)
