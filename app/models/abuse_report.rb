@@ -10,6 +10,20 @@ class AbuseReport < ActiveRecord::Base
 
   attr_protected :comment_sanitizer_version
 
+  # if the URL ends like "works/123", add a / at the end
+  # if the URL contains "works/123?", remove the parameters and add a /
+  # work_is_not_over_reported uses the / so "works/1234" isn't a match for "works/123"
+  before_validation :clean_work_url, on: :create
+  def clean_work_url
+    if url.match(/(works\/\d+)$/)
+      self.url = url + "/"
+    elsif url.match(/(works\/\d+\?)/)
+      self.url = url.split("?").first + "/"
+    else
+      self.url
+    end
+  end
+
   def email_copy?
    cc_me == "1"
   end
@@ -52,18 +66,18 @@ class AbuseReport < ActiveRecord::Base
     reporter.send_report!
   end
 
-  # if the URL being reported belongs to a work
-  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times in a month
+  # if the URL clearly belongs to a work (i.e. contains "works/123")
+  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times per month
   def work_is_not_over_reported
     if url.match(/works\/\d+/)
-      # use "works/123" instead of just the id to avoid confusion with chapter ids
-      work_params_only = url.match(/works\/\d+/).to_s
+      # use "works/123/" instead of just the id to avoid confusion with chapter ids
+      work_params_only = url.match(/works\/\d+\//).to_s
       existing_reports_total = AbuseReport.where("created_at > ? AND
                                                  url LIKE ?",
                                                  1.month.ago,
                                                  "%#{work_params_only}%").
                                            count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX + 1
+      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
         errors[:base] << ts("URL has already been reported. To make sure the Abuse Team
                             can handle reports quickly and efficiently, we limit the
                             number of times a URL can be reported.")
