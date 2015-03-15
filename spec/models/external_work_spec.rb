@@ -8,9 +8,9 @@ describe ExternalWork do
     INVALID_URLS.each do |url|
       let(:invalid_url) {build(:external_work, url: url)}
       xit "is not saved" do
-        invalid_url.save.should be_false
-        invalid_url.errors[:url].should_not be_empty
-        invalid_url.errors[:url].should include("does not appear to be a valid URL.")
+        expect(invalid_url.save).to be_falsey
+        expect(invalid_url.errors[:url]).not_to be_empty
+        expect(invalid_url.errors[:url]).to include("does not appear to be a valid URL.")
       end
     end
   end
@@ -20,8 +20,8 @@ describe ExternalWork do
     INACTIVE_URLS.each do |url|
       let(:inactive_url) {build(:external_work, url: url)}
       xit "is not saved" do
-        inactive_url.save.should be_false
-        inactive_url.errors[:url].should include("could not be reached. If the URL is correct and the site is currently down, please try again later.")
+        expect(inactive_url.save).to be_falsey
+        expect(inactive_url.errors[:url]).to include("could not be reached. If the URL is correct and the site is currently down, please try again later.")
       end
     end
   end
@@ -32,7 +32,7 @@ describe ExternalWork do
     URLS.each do |url|
       let(:valid_url) {build(:external_work, url: url)}
       xit "saves the external work" do
-        valid_url.save.should be_true
+        expect(valid_url.save).to be_truthy
       end
     end
   end

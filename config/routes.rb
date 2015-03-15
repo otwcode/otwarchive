@@ -159,8 +159,10 @@ Otwarchive::Application.routes.draw do
         get :find
       end
     end
+    resources :api
   end
 
+  match '/admin/api/new', to: 'admin/api#create', via: :post
 
   #### USERS ####
 
@@ -210,11 +212,13 @@ Otwarchive::Application.routes.draw do
     resources :external_authors do
       resources :external_author_names
     end
+    resources :favorite_tags, only: [:create, :destroy]
     resources :gifts, :only => [:index]
     resource :inbox, :controller => "inbox" do
       member do
         get :reply
         get :cancel_reply
+        post :delete
       end
     end
     resources :invitations do
@@ -515,6 +519,13 @@ Otwarchive::Application.routes.draw do
     end
   end
 
+  # API end points
+  namespace :api do
+    namespace :v1 do
+      resources :import, only: [:create], defaults: { format: :json }
+    end
+  end
+
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
@@ -531,10 +542,10 @@ Otwarchive::Application.routes.draw do
   match 'donate' => 'home#donate'
   match 'lost_cookie' => 'home#lost_cookie'
   match 'about' => 'home#about'
-	match 'menu/browse' => 'menu#browse'
-	match 'menu/fandoms' => 'menu#fandoms'
-	match 'menu/search' => 'menu#search'
-	match 'menu/about' => 'menu#about'
+  match 'menu/browse' => 'menu#browse'
+  match 'menu/fandoms' => 'menu#fandoms'
+  match 'menu/search' => 'menu#search'
+  match 'menu/about' => 'menu#about'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

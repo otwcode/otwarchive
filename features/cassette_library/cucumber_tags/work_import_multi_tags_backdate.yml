@@ -7,30 +7,30 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Wed, 19 Jun 2013 19:39:51 GMT
-      server: 
+      Date: 
+      - Tue, 30 Sep 2014 02:04:34 GMT
+      Server: 
       - Apache
-      last-modified: 
+      Last-Modified: 
       - Sat, 27 Mar 2010 03:42:34 GMT
-      etag: 
+      Etag: 
       - "\"1b7b-482c011fd7e80\""
-      accept-ranges: 
+      Accept-Ranges: 
       - bytes
-      content-length: 
+      Content-Length: 
       - "7035"
-      vary: 
+      Vary: 
       - Accept-Encoding
-      content-type: 
+      Content-Type: 
       - text/html
     body: 
       encoding: ASCII-8BIT
@@ -90,8 +90,8 @@ http_interactions:
         </center>\n\n\n\
         <p><a href=\"../\">Main fanfic page</a></p>\n\n\
         </div></body></html>\n\n"
-    http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 19:39:52 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:04:34 GMT
 - request: 
     method: get
     uri: http://www.intimations.org/fanfic/idol/Stardust.html
@@ -99,30 +99,30 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Wed, 19 Jun 2013 19:39:53 GMT
-      server: 
+      Date: 
+      - Tue, 30 Sep 2014 02:04:34 GMT
+      Server: 
       - Apache
-      last-modified: 
+      Last-Modified: 
       - Mon, 30 Nov 2009 14:30:59 GMT
-      etag: 
+      Etag: 
       - "\"3c8e-479977d79cec0\""
-      accept-ranges: 
+      Accept-Ranges: 
       - bytes
-      content-length: 
+      Content-Length: 
       - "15502"
-      vary: 
+      Vary: 
       - Accept-Encoding
-      content-type: 
+      Content-Type: 
       - text/html
     body: 
       encoding: ASCII-8BIT
@@ -203,6 +203,6 @@ http_interactions:
         </center>\n\n\n\
         <p><a href=\"../\">Main fanfic page</a></p>\n\n\
         </div></body></html>\n\n"
-    http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 19:39:54 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:04:35 GMT
 recorded_with: VCR 2.5.0

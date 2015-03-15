@@ -1,13 +1,14 @@
-<% if current_user && subscription %>
-  <% if subscription.new_record? %>
-    <%= form_for [current_user, subscription] do |f| %>
-      <%= f.hidden_field :subscribable_id %>
-      <%= f.hidden_field :subscribable_type %>
-      <%= f.submit ts("Subscribe") %>
-    <% end %>
-  <% else %>
-    <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-      <%= f.submit ts("Unsubscribe") %>
-    <% end %>
-  <% end %>
+<% # expects subscription and current_user %>
+<%= form_for([current_user, subscription],
+  method: subscription.new_record? ? 'post' : 'delete',
+  html: { 
+    class: 'ajax-create-destroy', 
+    data: { 
+      create_value: ts('Subscribe'),
+      destroy_value: ts('Unsubscribe')
+    }
+  }) do |f| %>
+  <%= f.hidden_field :subscribable_id %>
+  <%= f.hidden_field :subscribable_type %>
+  <%= f.submit subscription.new_record? ? ts('Subscribe') : ts('Unsubscribe') %>
 <% end %>

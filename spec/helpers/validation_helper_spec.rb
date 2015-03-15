@@ -42,7 +42,7 @@ describe ValidationHelper do
 
       output = helper.live_validation_for_field(10, options)
 
-      output.should == expected
+      expect(output).to eq(expected)
     end
 
     it 'should generate JavaScript for default options' do
@@ -67,7 +67,7 @@ describe ValidationHelper do
 
       output = helper.live_validation_for_field(10, options)
 
-      output.should == expected
+      expect(output).to eq(expected)
     end
 
     it 'should generate nothing if presence set to false' do
@@ -88,7 +88,7 @@ describe ValidationHelper do
 
       output = helper.live_validation_for_field(10, options)
 
-      output.should == expected
+      expect(output).to eq(expected)
     end
   end
 end

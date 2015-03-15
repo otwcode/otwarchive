@@ -75,6 +75,8 @@ module Otwarchive
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
 
+    # Bring the log under control
+    config.lograge.enabled = true
+
   end
 end
-
