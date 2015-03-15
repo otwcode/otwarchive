@@ -20,7 +20,7 @@ class AbuseReport < ActiveRecord::Base
     elsif url.match(/(works\/\d+\?)/)
       self.url = url.split("?").first + "/"
     else
-      self.url
+      url
     end
   end
 
