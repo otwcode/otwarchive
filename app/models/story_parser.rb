@@ -315,6 +315,9 @@ class StoryParser
 
       work.summary = options[:summary] if !options[:summary].blank?
 
+      # set collection name if present
+      work.collection_names = get_collection_names(options[:collection_names]) if !options[:collection_names].blank?
+
       # set default language (English)
       work.language_id = options[:language_id] || Language.default.id
 
