@@ -12,7 +12,7 @@ class AbuseReport < ActiveRecord::Base
 
   # if the URL ends like "works/123", add a / at the end
   # if the URL contains "works/123?", remove the parameters and add a /
-  # work_is_not_over_reported uses the / so "works/1234" isn't a match for "works/123"
+  # work_is_not_over_reported uses the / so "/works/1234" isn't a match for "/works/123"
   before_validation :clean_work_url, on: :create
   def clean_work_url
     if url.match(/(works\/\d+)$/)
@@ -66,12 +66,12 @@ class AbuseReport < ActiveRecord::Base
     reporter.send_report!
   end
 
-  # if the URL clearly belongs to a work (i.e. contains "works/123")
+  # if the URL clearly belongs to a work (i.e. contains "/works/123")
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX times per month
   def work_is_not_over_reported
-    if url.match(/works\/\d+/)
-      # use "works/123/" instead of just the id to avoid confusion with chapter ids
-      work_params_only = url.match(/works\/\d+\//).to_s
+    if url.match(/\/works\/\d+/)
+      # use "/works/123/" instead of just the id to avoid confusion with chapter ids
+      work_params_only = url.match(/\/works)\/\d+\//).to_s
       existing_reports_total = AbuseReport.where("created_at > ? AND
                                                  url LIKE ?",
                                                  1.month.ago,
