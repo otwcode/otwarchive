@@ -19,7 +19,7 @@ class Api::V1::ImportController < Api::V1::BaseController
 
       # Process the works, updating the flags
       external_works.each do |external_work|
-        works_responses << import_work(archivist, external_work)
+        works_responses << import_work(archivist, external_work.merge(params))
       end
 
       # Send claim notification emails if required
