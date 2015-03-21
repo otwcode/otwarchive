@@ -16,7 +16,6 @@ Feature: Admin Actions for Works and Bookmarks
       And 1 email should be delivered
       And the email should contain "We are investigating the matter and will contact you"
 
-
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
@@ -87,9 +86,9 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the external work "External Changes"
       And I follow "Edit"
-    When I fill in "Author" with "Admin-Added Creator"
+    When I fill in "Creator" with "Admin-Added Creator"
       And I fill in "Title" with "Admin-Added Title"
-      And I fill in "Author's Summary" with "Admin-added summary"
+      And I fill in "Creator's Summary" with "Admin-added summary"
       And I select "Mature" from "Rating"
       And I fill in "Fandoms" with "Admin-Added Fandom"
       And I fill in "Relationships" with "Admin-Added Relationship"
@@ -104,7 +103,18 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Admin-Added Fandom"
       And I should see "Admin-Added Character"
       And I should see "Admin-Added Freeform"
-      And I should see "M/M"      
+      And I should see "M/M"
+
+  Scenario: Can delete external works
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as an admin
+      And I view the external work "External Changes"
+      And I follow "Edit"
+      And I follow "Delete External Work"
+    When I press "Yes, Delete External Work"
+    Then I should see "External work successfully deleted."
   
   Scenario: Can mark a comment as spam
     Given I have no works or comments
