@@ -79,5 +79,4 @@ class ExternalWorksController < ApplicationController
     flash[:notice] = ts("External work successfully deleted.")
     redirect_to root_path
   end
-
 end
