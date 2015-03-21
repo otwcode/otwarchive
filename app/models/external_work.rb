@@ -6,7 +6,7 @@ class ExternalWork < ActiveRecord::Base
 
   attr_protected :summary_sanitizer_version
   
-  has_many :related_works, :as => :parent  
+  has_many :related_works, as: :parent, dependent: :destroy
 
   belongs_to :language
   

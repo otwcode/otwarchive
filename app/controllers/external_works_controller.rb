@@ -67,5 +67,17 @@ class ExternalWorksController < ApplicationController
       redirect_to compare_external_works_path
     end
   end
-  
+
+  def confirm_delete
+    @external_work = ExternalWork.find(params[:id])
+  end
+
+  def destroy
+    @external_work = ExternalWork.find(params[:id])
+    @external_work.destroy
+
+    flash[:notice] = ts("External work successfully deleted.")
+    redirect_to root_path
+  end
+
 end

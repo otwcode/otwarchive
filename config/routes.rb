@@ -324,6 +324,9 @@ Otwarchive::Application.routes.draw do
       post :merge
       get :fetch
     end
+    member do
+      get :confirm_delete
+    end
     resources :bookmarks
     resources :related_works
   end
