@@ -138,7 +138,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       import_multiple: "chapters",
       importing_for_others: true,
       do_not_set_current_author: true,
-      post_without_preview: params[:post_without_preview],
+      post_without_preview: params[:post_without_preview].blank? ? true : params[:post_without_preview],
       restricted: params[:restricted],
       override_tags: params[:override_tags],
       collection_names: params[:collection_names],
