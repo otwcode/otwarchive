@@ -3,7 +3,11 @@ class Api::V1::ImportController < Api::V1::BaseController
 
   # Imports multiple works with their meta from external URLs
   # Params:
-  # +params+:: a JSON object containing the login of an archivist and an array of works
+  # +params+:: a JSON object containing the following:
+  # - archivist: username of an existing archivist
+  # - post_without_preview: false = import as drafts, true = import and post
+  # - send_claim_emails: false = don't send emails (for testing), true = send emails
+  # - array of works to import
   def create
     archivist = User.find_by_login(params[:archivist])
     external_works = params[:works]
