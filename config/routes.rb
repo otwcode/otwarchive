@@ -447,7 +447,7 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :import, only: [:create, :check], defaults: { format: :json }
+      resources :import, only: [:create], defaults: { format: :json }
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
