@@ -93,8 +93,11 @@ describe "API ImportController" do
 end
 
 describe "API WorksController" do
+  before do
+    @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
+  end
+
   describe "valid work URL request" do
-    work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
     it "should return 200 OK" do
       post "/api/v1/works/urls",
            { original_urls: %w(bar foo)
@@ -110,8 +113,8 @@ describe "API WorksController" do
            valid_headers
       parsed_body = JSON.parse(response.body)
       expect(parsed_body.first["status"]).to eq "ok"
-      expect(parsed_body.first["work_url"]).to eq work_url(work)
-      expect(parsed_body.first["created"]).to eq work.created_at
+      expect(parsed_body.first["work_url"]).to eq work_url(@work)
+      expect(parsed_body.first["created"]).to eq @work.created_at.as_json
     end
 
     it "should return an error for a work that wasn't imported" do
