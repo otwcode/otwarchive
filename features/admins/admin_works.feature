@@ -86,10 +86,10 @@ Feature: Admin Actions for Works and Bookmarks
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
       And I view the external work "External Changes"
-      And I follow "Edit"
-    When I fill in "Author" with "Admin-Added Creator"
+      And I follow "Edit External Work"
+    When I fill in "Creator" with "Admin-Added Creator"
       And I fill in "Title" with "Admin-Added Title"
-      And I fill in "Author's Summary" with "Admin-added summary"
+      And I fill in "Creator's Summary" with "Admin-added summary"
       And I select "Mature" from "Rating"
       And I fill in "Fandoms" with "Admin-Added Fandom"
       And I fill in "Relationships" with "Admin-Added Relationship"
@@ -105,6 +105,15 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Admin-Added Character"
       And I should see "Admin-Added Freeform"
       And I should see "M/M"      
+
+  Scenario: Can delete external works
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as an admin
+      And I view the external work "External Changes"
+      And I follow "Delete"
+    Then I should see "Item successfully deleted."
   
   Scenario: Can mark a comment as spam
     Given I have no works or comments
