@@ -30,7 +30,7 @@
   <%= blurb_tag_block(external_work) %>
 </ul>
 
-<!--summary-->	
+<!--summary-->
 <% unless external_work.summary.blank? %>
   <h6 class="landmark heading"><%= ts("Summary") %></h6>
   <blockquote class="userstuff summary">
@@ -45,15 +45,8 @@
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
   <% end %>
 
-  <% if external_work.related_works.count > 0 %>	
+  <% if external_work.related_works.count > 0 %>
     <dt><%= ts("Related Works:") %></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work %></dd>
   <% end %>
 </dl>
-
-<% if logged_in_as_admin? %>
-  <h6 class="landmark heading"><%= ts("Admin Actions") %></h6>
-  <ul class="actions" role="navigation">
-    <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
-  </ul>
-<% end %>
