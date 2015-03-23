@@ -111,7 +111,7 @@ describe "API WorksController" do
       parsed_body = JSON.parse(response.body)
       expect(parsed_body.first["status"]).to eq "ok"
       expect(parsed_body.first["work_url"]).to eq work_url(work)
-      expect(parsed_body.first["created_at"]).to eq work.created_at
+      expect(parsed_body.first["created"]).to eq work.created_at
     end
 
     it "should return an error for a work that wasn't imported" do
