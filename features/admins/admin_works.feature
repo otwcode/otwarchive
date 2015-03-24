@@ -127,7 +127,7 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the external work "External Changes"
       And I follow "Delete External Work"
-    Then I should see "Item successfully deleted."
+    Then I should see "Item was successfully deleted."
   
   Scenario: Can mark a comment as spam
     Given I have no works or comments
