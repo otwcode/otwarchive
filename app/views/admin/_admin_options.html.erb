@@ -9,7 +9,7 @@
         <%= link_to ts('Make %{item} Visible', item: item_type_name),
                     { :controller => "admin/user_creations",
                       :action => "hide",
-                      :id=> item,
+                      :id => item,
                       :creation_type => item.class,
                       :hidden => 'false' } %>
       </li>
