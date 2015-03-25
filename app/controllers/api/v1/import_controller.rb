@@ -71,7 +71,7 @@ class Api::V1::ImportController < Api::V1::BaseController
         @some_success = true
         work_status = :created
         work_url = work_url(work)
-        work_messages << "Successfully created work \"" + work.title + "\""
+        work_messages << "Successfully created work \"" + work.title + "\"."
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity

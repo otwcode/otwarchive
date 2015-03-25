@@ -12,7 +12,7 @@ class Api::V1::WorksController < Api::V1::BaseController
     if original_urls.nil? || original_urls.blank? || original_urls.size == 0
       results << { error: "Please provide a list of URLs to find." }
     elsif original_urls.size >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      results << { error: "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find" }
+      results << { error: "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find." }
     else
       status = :ok
       original_urls.each do |original_url|
