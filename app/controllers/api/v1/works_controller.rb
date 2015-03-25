@@ -15,25 +15,31 @@ class Api::V1::WorksController < Api::V1::BaseController
       results << { error: "Please provide no more than #{ ArchiveConfig.IMPORT_MAX_CHAPTERS } URLs to find." }
     else
       status = :ok
-      original_urls.each do |original_url|
-        work_result = work_url_from_external(original_url)
-        if work_result[:work].nil?
-          results << { status: :not_found,
-                       original_url: original_url,
-                       error: work_result[:error] }
-        else
-          work = work_result[:work]
-          results << { status: :ok,
-                       original_url: original_url,
-                       work_url: work_url(work),
-                       created: work.created_at }
-        end
-      end
+      results = process_batch_url(original_urls)
     end
     render status: status, json: results
   end
 
   private
+
+  def process_batch_url(original_urls)
+    results = []
+    original_urls.each do |original_url|
+      work_result = work_url_from_external(original_url)
+      if work_result[:work].nil?
+        results << { status: :not_found,
+                     original_url: original_url,
+                     error: work_result[:error] }
+      else
+        work = work_result[:work]
+        results << { status: :ok,
+                     original_url: original_url,
+                     work_url: work_url(work),
+                     created: work.created_at }
+      end
+    end
+    results
+  end
 
   def work_url_from_external(original_url)
     work = nil
