@@ -1,6 +1,16 @@
 require 'spec_helper'
 require 'webmock'
 
+# set up a valid token and some headers
+def valid_headers
+  api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
+  {
+    "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials(api.access_token),
+    "HTTP_ACCEPT" => "application/json",
+    "CONTENT_TYPE" => "application/json"
+  }
+end
+
 describe "API ImportController" do
   # Let the test get at external sites, but stub out anything containing "foo"
   WebMock.allow_net_connect!
@@ -8,16 +18,6 @@ describe "API ImportController" do
     to_return(status: 200, body: "stubbed response", headers: {})
   WebMock.stub_request(:any, /bar/).
     to_return(status: 404, headers: {})
-
-  # set up a valid token and some headers
-  def valid_headers
-    api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
-    {
-      "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials(api.access_token),
-      "HTTP_ACCEPT" => "application/json",
-      "CONTENT_TYPE" => "application/json"
-    }
-  end
 
   describe "API import with invalid request" do
     it "should return 401 Unauthorized if no token is supplied" do
@@ -90,4 +90,41 @@ describe "API ImportController" do
   end
 
   WebMock.allow_net_connect!
+end
+
+describe "API WorksController" do
+  before do
+    @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
+  end
+
+  describe "valid work URL request" do
+    it "should return 200 OK" do
+      post "/api/v1/works/urls",
+           { original_urls: %w(bar foo)
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+    end
+
+    it "should return the work URL for an imported work" do
+      post "/api/v1/works/urls",
+           { original_urls: %w(foo)
+           }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body.first["status"]).to eq "ok"
+      expect(parsed_body.first["work_url"]).to eq work_url(@work)
+      expect(parsed_body.first["created"]).to eq @work.created_at.as_json
+    end
+
+    it "should return an error for a work that wasn't imported" do
+      post "/api/v1/works/urls",
+           { original_urls: %w(bar)
+           }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body.first["status"]).to eq("not_found")
+      expect(parsed_body.first).to include("error")
+    end
+  end
 end
