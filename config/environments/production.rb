@@ -35,6 +35,7 @@ Otwarchive::Application.configure do
                                      YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL4'],
                                      YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL5'],
                                      YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL6'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL6'],
                           { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
 
   # Disable Rails's static asset server
