@@ -50,9 +50,9 @@ class HomeController < ApplicationController
 
   # home page itself
   def index
-    @user_count = Rails.cache.fetch('User_count', expires_in: ArchiveConfig.HOMEPAGE_CACHE_TIME, race_condition_ttl: 5) { User.count }
-    @work_count = Rails.cache.fetch('Work_count', expires_in: ArchiveConfig.HOMEPAGE_CACHE_TIME, race_condition_ttl: 5) { Work.posted.count }
-    @fandom_count = Rails.cache.fetch('Fandom_count', expires_in: ArchiveConfig.HOMEPAGE_CACHE_TIME, race_condition_ttl: 5) { Fandom.canonical.count }
+    @user_count = Rails.cache.fetch('user_count', expires_in: ArchiveConfig.HOMEPAGE_COUNTS_CACHE_TIME, race_condition_ttl: 5) { User.count }
+    @work_count = Rails.cache.fetch('work_count', expires_in: ArchiveConfig.HOMEPAGE_COUNTS_CACHE_TIME, race_condition_ttl: 5) { Work.posted.count }
+    @fandom_count = Rails.cache.fetch('fandom_count', expires_in: ArchiveConfig.HOMEPAGE_COUNTS_CACHE_TIME, race_condition_ttl: 5) { Fandom.canonical.count }
 
     @homepage = Homepage.new(@current_user)
 
