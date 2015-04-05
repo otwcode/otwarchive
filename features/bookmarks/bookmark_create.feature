@@ -51,7 +51,8 @@ Scenario: Create a bookmark
     
   @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
-    Given I am logged in as "first_bookmark_user"
+    Given basic tags
+      And I am logged in as "first_bookmark_user"
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
@@ -72,6 +73,7 @@ Scenario: Create a bookmark
       | login           | password   |
       | first_bookmark_user   | password   |
       And I am logged in as "first_bookmark_user"
+      And the default ratings exist
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
