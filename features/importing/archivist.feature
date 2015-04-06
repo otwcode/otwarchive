@@ -100,13 +100,14 @@ Feature: Archivist bulk imports
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
 
     Given I have an archivist "elynross"
+      And the default ratings exist
     When I am logged in as "elynross"
-    And I go to the import page
-    And I import the work "http://cesy.dreamwidth.org/154770.html" by "ra_ndo!m-t??est n@me." with email "otwstephanie@thepotionsmaster.net"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "ra_ndo!m-t??est n@me." with email "otwstephanie@thepotionsmaster.net"
     Then I should see import confirmation
-    And I should see "ra_ndom-test n@me."
+      And I should see "ra_ndom-test n@me."
     When the system processes jobs
-    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+      Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
 
   Scenario: Claim a work and create a new account in response to an invite
   # TODO
