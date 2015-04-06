@@ -35,7 +35,7 @@ Feature: Basic collection navigation
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
     And all search indexes are updated
-  Then I should see "Work for my collection by mod"
+  Then the collection's work index should contain "Work for my collection"
     And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"
   Then I should see "0 Bookmarks"

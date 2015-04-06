@@ -134,3 +134,11 @@ end
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
 end
+
+Then /^the "([^"]*)" collection should be in the work meta$/ do |collection_title|
+  page.find("dd.collections").should have_content(collection_title)
+end
+
+Then /^the collection's work index should contain "([^"]*)"$/ do |work_title|
+  page.find("ol.work.index.group").should have_content(work_title)
+end
