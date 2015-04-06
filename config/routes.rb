@@ -442,6 +442,17 @@ Otwarchive::Application.routes.draw do
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
+
+  #### API ####
+
+  namespace :api do
+    namespace :v1 do
+      resources :import, only: [:create], defaults: { format: :json }
+      match 'works/urls', to: 'works#batch_urls', via: :post
+    end
+  end
+
+
   #### MISC ####
 
   resources :comments do
@@ -519,12 +530,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  # API end points
-  namespace :api do
-    namespace :v1 do
-      resources :import, only: [:create], defaults: { format: :json }
-    end
-  end
 
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]

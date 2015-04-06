@@ -437,6 +437,9 @@ $j(document).ready(function() {
         if (data.errors && data.errors.cannot_be_author) {
           msg = "You can't leave kudos on your own work.";
         }
+        if (data.errors && data.errors.guest_on_restricted) {
+          msg = "You can't leave guest kudos on a restricted work.";
+        }
 
         $j('#kudos_message').addClass('comment_error').text(msg);
       },

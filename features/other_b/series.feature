@@ -9,6 +9,7 @@ Feature: Create and Edit Series
       | login         | password   |
       | author        | password   |
       And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
+      And the default ratings exist
     When I am logged in as "author" with password "password"
       And I go to the new work page
       And I select "Not Rated" from "Rating"
@@ -97,6 +98,7 @@ Feature: Create and Edit Series
       | login         | password   |
       | author        | password   |
       And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
+      And the default ratings exist
     When I am logged in as "author" with password "password"
       And "author" creates the default pseud "Pointless Pseud"
     When I go to the new work page

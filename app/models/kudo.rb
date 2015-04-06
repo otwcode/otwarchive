@@ -3,6 +3,7 @@ class Kudo < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true
 
   validate :cannot_be_author
+  validate :guest_cannot_kudos_restricted_work
 
   validates_uniqueness_of :pseud_id,
     :scope => [:commentable_id, :commentable_type],
@@ -39,6 +40,15 @@ class Kudo < ActiveRecord::Base
         errors.add(:cannot_be_author,
                    ts("^You can't leave kudos on your own work."))
       end
+    end
+  end
+
+  def guest_cannot_kudos_restricted_work
+    commentable = commentable_type.classify.constantize.
+                  find_by_id(commentable_id)
+    if pseud.nil? && commentable.restricted?
+      errors.add(:guest_on_restricted,
+                 ts("^You can't leave guest kudos on a restricted work."))
     end
   end
 
