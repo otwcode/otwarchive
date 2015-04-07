@@ -103,7 +103,12 @@ class CommentsController < ApplicationController
         @commentable = @commentable.ultimate_parent
       end
     else
-      @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
+      if logged_in_as_admin?
+        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
+      else
+        redirect_back_or_default(root_path)
+        flash[:error] = ts("Sorry, you don't have permission to access that page.")
+      end
     end
   end
 
@@ -179,6 +184,9 @@ class CommentsController < ApplicationController
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
+              elsif request.referer == "#{root_url}"
+                # replying on the homepage
+                redirect_to root_path
               else
                 redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end

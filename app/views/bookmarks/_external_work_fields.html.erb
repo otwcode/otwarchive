@@ -62,7 +62,12 @@
       <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
     </dt>
     <dd class="rating">
-      <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
+      <%= ew.collection_select :rating_string,
+                               Rating.defaults_by_severity,
+                               :name,
+                               :name,
+                               selected: ArchiveConfig.RATING_DEFAULT_TAG_NAME 
+                               %>
     </dd>
     <dt>
       <%= Category::NAME %> <%= link_to_help "categories-help" %>

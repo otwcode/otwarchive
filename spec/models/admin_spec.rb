@@ -4,27 +4,27 @@ describe Admin, :ready do
 
 
   it "can be created" do
-    create(:admin).should be_valid
+    expect(create(:admin)).to be_valid
   end
 
   context "invalid" do
 
     let(:admin_without_login) {build(:admin, login: nil)}
     it 'is invalid without a user name' do
-      admin_without_login.save.should be_false
-      admin_without_login.errors[:login].should_not be_empty
+      expect(admin_without_login.save).to be_falsey
+      expect(admin_without_login.errors[:login]).not_to be_empty
     end
 
     it 'is invalid without an email address' do
-      build(:admin, email: nil).should be_invalid
+      expect(build(:admin, email: nil)).to be_invalid
     end
 
     it 'is invalid without a password' do
-      build(:admin, password: nil).should be_invalid
+      expect(build(:admin, password: nil)).to be_invalid
     end
 
     it 'is invalid without a password confirmation' do
-      build(:admin, password_confirmation: nil).should be_invalid
+      expect(build(:admin, password_confirmation: nil)).to be_invalid
     end
   end
   #
@@ -62,11 +62,11 @@ describe Admin, :ready do
     let(:existing_user) {create(:admin)}
 
     it "is invalid if login is not unique" do
-      build(:admin, login: existing_user.login).should be_invalid
+      expect(build(:admin, login: existing_user.login)).to be_invalid
     end
 
     it "is invalid if email already exists" do
-      build(:admin, email: existing_user.email).should be_invalid
+      expect(build(:admin, email: existing_user.email)).to be_invalid
     end
 
   end

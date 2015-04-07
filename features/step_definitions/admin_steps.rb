@@ -116,6 +116,12 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^I have posted an admin post without paragraphs$/ do
+  step("I am logged in as an admin")
+  step("I make an admin post without paragraphs")
+  step("I am logged out as an admin")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -129,6 +135,13 @@ When /^I make an admin post$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
+  click_button("Post")
+end
+
+When /^I make an admin post without paragraphs$/ do
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
   click_button("Post")
 end
 

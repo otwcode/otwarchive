@@ -42,4 +42,55 @@ Feature: Get messages in the inbox
     When I am logged in as "boxer" with password "10987tko"
       And I go to my inbox page
     Then I should see "guest on Down for the Count"
-      And I should see "less than 1 minute ago"  
+      And I should see "less than 1 minute ago"
+
+  Scenario: A user can see some of their unread comments on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Pre-Fight Coverage"
+    When I am logged in as "cutman"
+      And I post the comment "That's a haymaker? I actually never knew that." on the work "Pre-Fight Coverage"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "Unread messages"
+      And I should see "My Inbox"
+      And I should see "The latest unread items from your inbox."
+      And I should see "cutman on Pre-Fight Coverage"
+      And I should see "That's a haymaker? I actually never knew that."
+
+  Scenario: A user can delete an unread comment on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "The Gladiators of Old"
+    When I am logged in as "cutman"
+      And I post the comment "I can still make you cry, you know." on the work "The Gladiators of Old"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "cutman on The Gladiators of Old"
+      And I should see "I can still make you cry, you know."
+      And I should see a "Delete" button
+    When I press "Delete"
+    Then I should see "Inbox successfully updated."
+      And I should be on the homepage
+      And I should not see "Unread messages"
+      And I should not see "My Inbox"
+      And I should not see "The latest unread items from your inbox."
+      And I should not see "cutman on the Gladiators of Old"
+      And I should not see "I can still make you cry, you know."
+  
+  Scenario: A user can mark an unread comment read on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Special Coverage"
+    When I am logged in as "cutman"
+      And I post the comment "Is there anything we can do to make the fight go longer?" on the work "Special Coverage"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "cutman on Special Coverage"
+      And I should see "Is there anything we can do to make the fight go longer?"
+      And I should see a "Mark Read" button
+    When I press "Mark Read"
+    Then I should see "Inbox successfully updated."
+      And I should be on the homepage
+      And I should not see "Unread messages"
+      And I should not see "My Inbox"
+      And I should not see "The latest unread items from your inbox."
+      And I should not see "cutman on Special Coverage"
+      And I should not see "Is there anything we can do to make the fight go longer?"

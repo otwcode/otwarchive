@@ -12,7 +12,7 @@ describe User do
 
       it "marks invitation redeemed" do
         @invite = Invitation.find_by_token(@invite.token)
-        @invite.redeemed_at.should_not be_nil
+        expect(@invite.redeemed_at).not_to be_nil
       end
     end
 
@@ -24,12 +24,12 @@ describe User do
 
       it "marks invitation redeemed" do
         @invite = Invitation.find_by_token(@invite.token)
-        @invite.redeemed_at.should_not be_nil
+        expect(@invite.redeemed_at).not_to be_nil
       end
 
       it "removes the user from invitation queue" do
         @invite_request = InviteRequest.find_by_email(@user.email)
-        @invite_request.should be_nil
+        expect(@invite_request).to be_nil
       end
     end
   end
