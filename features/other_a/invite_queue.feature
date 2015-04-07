@@ -31,9 +31,9 @@ Feature: Invite queue management
       And I press "Update"
     When I am logged out as an admin
       And I am on the homepage
-    Then I should see "Get an Invite"
-    When I follow "Get an Invite"
-    Then I should see "Request an Invite"
+    Then I should see "Get an Invitation"
+    When I follow "Get an Invitation"
+    Then I should see "Request an Invitation"
 
   Scenario: Visitors can join the queue and check status when invitations are required and the queue is enabled
 
@@ -43,7 +43,7 @@ Feature: Invite queue management
       And the invitation queue is enabled
     When I am on the homepage
       And all emails have been delivered
-      And I follow "Get an Invite"
+      And I follow "Get an Invitation"
     Then I should see "We are sending out 10 invitations per day."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
@@ -83,7 +83,7 @@ Feature: Invite queue management
       And the invite_from_queue_at is yesterday
     When I am on the homepage
       And all emails have been delivered
-      And I follow "Get an Invite"
+      And I follow "Get an Invitation"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
       And the check_queue rake task is run

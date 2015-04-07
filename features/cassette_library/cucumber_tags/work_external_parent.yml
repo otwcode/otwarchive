@@ -7,40 +7,40 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 301
       message: Moved Permanently
     headers: 
-      location: 
+      Location: 
       - http://www.google.com/
-      content-type: 
+      Content-Type: 
       - text/html; charset=UTF-8
-      date: 
-      - Sun, 13 Oct 2013 20:34:57 GMT
-      expires: 
-      - Tue, 12 Nov 2013 20:34:57 GMT
-      cache-control: 
+      Date: 
+      - Tue, 30 Sep 2014 02:52:25 GMT
+      Expires: 
+      - Thu, 30 Oct 2014 02:52:25 GMT
+      Cache-Control: 
       - public, max-age=2592000
-      server: 
+      Server: 
       - gws
-      content-length: 
+      Content-Length: 
       - "219"
-      x-xss-protection: 
+      X-Xss-Protection: 
       - 1; mode=block
-      x-frame-options: 
+      X-Frame-Options: 
       - SAMEORIGIN
-      alternate-protocol: 
-      - 80:quic
+      Alternate-Protocol: 
+      - 80:quic,p=0.01
     body: 
       encoding: US-ASCII
       string: ""
-    http_version: "1.1"
-  recorded_at: Sun, 13 Oct 2013 20:34:51 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:52:26 GMT
 - request: 
     method: head
     uri: http://testarchive.transformativeworks.org/
@@ -48,30 +48,30 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 302
       message: Moved Temporarily
     headers: 
-      server: 
-      - nginx/1.4.1
-      date: 
-      - Sun, 13 Oct 2013 20:35:02 GMT
-      content-type: 
+      Server: 
+      - nginx/1.5.6
+      Date: 
+      - Tue, 30 Sep 2014 02:52:27 GMT
+      Content-Type: 
       - text/html
-      content-length: 
+      Content-Length: 
       - "160"
-      connection: 
+      Connection: 
       - keep-alive
-      location: 
+      Location: 
       - http://test.archiveofourown.org/
     body: 
       encoding: US-ASCII
       string: ""
-    http_version: "1.1"
-  recorded_at: Sun, 13 Oct 2013 20:34:56 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:52:27 GMT
 recorded_with: VCR 2.5.0

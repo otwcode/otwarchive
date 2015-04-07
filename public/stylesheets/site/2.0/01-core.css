@@ -37,10 +37,18 @@ li.blurb, fieldset, form dl {
   overflow: hidden;
 }
 
-.blurb li, .actions>*, .stats>*, .meta ul li, .actions form {
+.blurb li, .actions>*, .stats>*, .meta ul li {
   list-style: none;
   display: inline;
   padding-left: 0.25em;
+}
+
+.actions form {
+  display: inline;
+}
+
+.actions input[type="submit"] {
+  margin: 0;
 }
 
 /*END== */

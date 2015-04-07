@@ -406,6 +406,27 @@ namespace :After do
     end
   end
 
+  desc "Set initial values for sortable tag names for tags that aren't fandoms"
+  task(:more_sortable_tag_names => :environment) do
+    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+      puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
+      klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
+        tag.set_sortable_name
+        puts tag.sortable_name
+        tag.save
+      end
+    end
+  end
+
+  desc "Clean up work URLs for abuse reports from the last month"
+  task(:clean_abuse_report_work_urls => :environment) do
+    AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
+      report.clean_work_url
+      puts report.url
+      report.save
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
