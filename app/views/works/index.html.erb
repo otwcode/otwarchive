@@ -7,13 +7,11 @@
 <!--Subnavigation, sorting and actions.-->
 <% if (@collection && @collection.gift_exchange?) || @tag || @user %>
   <div class="navigation actions module">
-
-    <h3 class="landmark heading"><%= ts("Navigation, Sorting and Actions") %></h3>
+    <h3 class="landmark heading"><%= ts("Navigation and Actions") %></h3>
     <!--gift search subnav-->
     <% if @collection && @collection.gift_exchange? %>
-      <%= render :partial => 'gifts/gift_search' %>
+      <%= render 'gifts/gift_search' %>
     <% end %>
-
     <!--user role subnav-->
     <% if @tag || @user %>
       <ul class="user navigation actions" role="navigation">
@@ -34,9 +32,12 @@
         <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
           <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
         <% end %>
+        <% if @facets.present? %>
+          <% # Filters button for mobile jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+          <li class="mobile-shown hidden"><a href="#work-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+        <% end %>
       </ul>
     <% end %>
-  
   </div>
 <% end %>
 <!---/subnav-->
@@ -53,21 +54,19 @@
 <h3 class="landmark heading"><%= ts("Listing Works") %></h3>
 <ol class="work index group">
   <% for work in @works %>
-    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+    <% if work %><%= render 'work_blurb', work: work %><% end %>
   <% end %>
 </ol>
-  
+
 <!--/content-->
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render :partial => 'filters' %>
+  <%= render 'filters' %>
 <% end %>
 <!---/subnav-->
 
 <% if @works.respond_to?(:total_pages) %>
   <%= will_paginate @works %>
 <% end %>
-
-
 

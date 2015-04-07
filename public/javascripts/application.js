@@ -23,6 +23,8 @@ $j(document).ready(function() {
 
     prepareDeleteLinks();
     thermometer();
+    // add a mobile class to the body so we can do mobile-specific styles
+    $j('body').addClass('mobile');
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -369,7 +371,7 @@ function setupDropdown(){
 }
 
 // Accordion-style collapsible widgets
-// The pane element can be showen or hidden using the expander (link)
+// The pane element can be shown or hidden using the expander (link)
 // Apply hidden to the pane element if it shouldn't be visible when JavaScript is disabled
 // Typical set up:
 // <li aria-haspopup="true">
