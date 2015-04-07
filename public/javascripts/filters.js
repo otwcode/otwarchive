@@ -25,7 +25,7 @@ function showFilters() {
 }; //showfilters
 
 function addFilterCloser() {
-  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><a href="#" class="close action">&times;</a></p>') );
+  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><button class="close action">&times;</button></p>') );
 };
 
 function setupMobileFilters() {
@@ -38,9 +38,7 @@ function setupMobileFilters() {
     e.preventDefault();
     filters.removeClass('mobile-hidden');
     outer.addClass('filtering'); 
-    outer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
-      hide_link.first().focus();
-    });
+    hide_link.first().focus();
   });
     
   hide_link.each(function() {

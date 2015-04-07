@@ -235,13 +235,18 @@ body .mobile-shown {
 }
 
 .mobile .filters #leave_filters {
+  background: rgba(0, 0, 0, 0.5);
   border-bottom: none;
-  position: absolute;
+  position: fixed;
   top: -101em;
   bottom: -101em;
-  left: 0;
-  right: 0;
+  left: -10em;
+  right: -10em;
   z-index: 0;
+}
+
+.mobile #leave-filters:focus {
+  outline: none;
 }
 
 .mobile .filtering form.filters {

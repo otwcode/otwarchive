@@ -41,6 +41,10 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
     box-shadow: none;
 }
 
+button {
+  box-sizing: content-box;
+}
+
 label.action {
   padding: 0.15em 0.375em;
 }
