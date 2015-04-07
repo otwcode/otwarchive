@@ -87,11 +87,7 @@
 <!--/content-->
 
 <!--subnav-->
-<<<<<<< HEAD
-<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
-=======
 <%= form_tag(user_inbox_path(@user), method: :get, class: 'mobile-hidden filters', id: 'inbox-filters') do %>
->>>>>>> ba4f106448ce8f0482a566105a7f716a570e7b96
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
     <dl class="filters" role="menu">
