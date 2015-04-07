@@ -29,7 +29,7 @@ Feature: Collection
     And I press "Post Without Preview"
     And all search indexes are updated
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Collections: Hidden Treasury"
+    And the "Hidden Treasury" collection should be in the work meta
     And I should see "Old Snippet"
     
   # Post to collection without preview
@@ -177,7 +177,7 @@ Feature: Collection
     And I press "Post Without Preview"
     And all search indexes are updated
   Then I should see "Old Snippet"
-    And I should see "Collections: Anonymous Hugs"
+    And the "Anonymous Hugs" collection should be in the work meta
   When I log out
     And I go to "Anonymous Hugs" collection's page
   Then I should not see "first_user"
