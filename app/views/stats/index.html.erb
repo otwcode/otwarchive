@@ -23,7 +23,7 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
+    <% [:user_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
       <dt><%= (stat.to_s.titleize == "Comments") ? ts("Comment Threads") : stat.to_s.titleize %></dt>
       <dd><%= @totals[stat] %></dd>
     <% end %>

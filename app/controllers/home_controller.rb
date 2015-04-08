@@ -53,11 +53,12 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.posted.count
     @fandom_count = Fandom.canonical.count
-    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
-    @admin_post_show_more = AdminPost.count > 3
-    render :action => "index", :layout => "home"
-  end
 
+    @homepage = Homepage.new(@current_user)
+
+    @hide_dashboard = true
+    render action: 'index', layout: 'application'
+  end
 
   # Generate links to all the pages on the site
   def site_pages    
@@ -130,7 +131,7 @@ protected
       when "nomination"
         TagSetNomination.for_tag_set(OwnedTagSet.find(@last_id)).owned_by(user).first
       when "setting"
-        AdminSetting.first
+        Rails.cache.fetch("admin_settings") { AdminSetting.first }
       when "assignment", "claim", "signup"
         klass = "challenge_#{classname}".classify.constantize
         query = classname == "assignment" ? klass.by_offering_user(user) :
@@ -142,7 +143,7 @@ protected
         query.first
       when "item", "participant"
         "collection_#{classname}".classify.constantize.where(:collection_id => @last_id).first
-      when "tag_wrangling", "user_creation", "translator", "translation"
+      when "tag_wrangling", "user_creation"
         # not real objects
         nil
       else

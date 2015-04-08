@@ -2,25 +2,21 @@ class User < ActiveRecord::Base
 
   include WorksOwner
 
-## used in app/views/users/new.html.erb
-  validates_length_of :login, :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
-
-  # allow nil so can save existing users
-  validates_length_of :password, :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
-                      :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
-
-
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
-    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
+    if (ArchiveConfig.BCRYPT  || "true") == "true" then
+      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
+    else
+      config.crypto_provider = Authlogic::CryptoProviders::Sha512
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
+    end
+    # Use our own validations for login
+    config.validate_login_field = false
     config.validates_length_of_password_field_options = {:on => :update,
                                                          :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
                                                          :if => :has_no_credentials?}
@@ -51,6 +47,8 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
+  has_many :favorite_tags, dependent: :destroy
+
   # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
   before_destroy :remove_pseud_from_kudos
 
@@ -68,6 +66,7 @@ class User < ActiveRecord::Base
 
   before_create :create_default_associateds
 
+  after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
   has_many :collection_participants, :through => :pseuds
@@ -153,10 +152,6 @@ class User < ActiveRecord::Base
 
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
 
-  has_many :translations, :foreign_key => 'translator_id'
-  has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
-  has_many :translation_notes
-
   has_many :subscriptions, :dependent => :destroy
   has_many :followings,
             :class_name => 'Subscription',
@@ -193,7 +188,8 @@ class User < ActiveRecord::Base
     inbox_comments.find(:all, :conditions => {:read => false})
   end
   def unread_inbox_comments_count
-    inbox_comments.count(:all, :conditions => {:read => false})
+    inbox_comments.with_feedback_comment.count(:all,
+                                               conditions: { read: false })
   end
 
   scope :alphabetical, :order => :login
@@ -201,11 +197,28 @@ class User < ActiveRecord::Base
   scope :valid, :conditions => {:banned => false, :suspended => false}
   scope :out_of_invites, :conditions => {:out_of_invites => true}
 
+  ## used in app/views/users/new.html.erb
+  validates_length_of :login, 
+    :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+    :too_short => ts("is too short (minimum is %{min_login} characters)", 
+      :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_login} characters)", 
+      :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
+
+  # allow nil so can save existing users
+  validates_length_of :password, 
+    :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
+    :allow_nil => true,
+    :too_short => ts("is too short (minimum is %{min_pwd} characters)", 
+      :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_pwd} characters)", 
+      :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
+
   validates_format_of :login,
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   # done by authlogic
-  # validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
+  validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
   validates :email, :email_veracity => true
 
@@ -490,6 +503,27 @@ class User < ActiveRecord::Base
       Rails.logger.fatal "You must have a User with the login 'orphan_account'. Please create one."
     end
     orphan_account
+  end
+
+  def update_pseud_name
+    return unless login_changed? && login_was.present?
+    old_pseud = self.pseuds.where(name: login_was).first
+    if login.downcase == login_was.downcase
+      old_pseud.name = login
+      old_pseud.save!
+    else
+      new_pseud = self.pseuds.where(name: login).first
+      # do nothing if they already have the matching pseud
+      return if new_pseud.present?
+
+      if old_pseud.present?
+        # change the old pseud to match
+        old_pseud.update_attribute(:name, login)
+      else
+        # shouldn't be able to get here, but just in case
+        Pseud.create(name: login, user_id: self.id)
+      end
+    end
   end
 
    def log_change_if_login_was_edited

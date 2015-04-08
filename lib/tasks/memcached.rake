@@ -13,7 +13,7 @@ namespace :memcached do
       |warn|
       %w( nofreeform showfreeform ).each {
         |freeform|
-         Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v3"
+         Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v5"
       }
     }
    }

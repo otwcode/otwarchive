@@ -16,8 +16,8 @@ Feature: User Authentication
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "login" with "sam"
-      And I press "Reset password"
+    When I fill in "reset_password_for" with "sam"
+      And I press "Reset Password"
     Then 1 email should be delivered
 
     # old password should still work
@@ -69,8 +69,8 @@ Feature: User Authentication
     Given I have loaded the "users" fixture
     When I am on the home page
     And I follow "Forgot password?"
-    When I fill in "login" with "testuser"
-      And I press "Reset password"
+    When I fill in "reset_password_for" with "testuser"
+      And I press "Reset Password"
     Then I should see "Check your email"
       And 1 email should be delivered
 
@@ -117,7 +117,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below."
 
   Scenario: Logged out
     Given I have no users

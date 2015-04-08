@@ -4,7 +4,7 @@ ruby '1.9.3'
 
 gem 'bundler'
 
-gem 'rails', '3.2.18'
+gem 'rails', '3.2.21'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -20,9 +20,17 @@ gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
+# Used to convert strings to ascii
+gem 'unicode'
+gem 'unidecoder'
+
+# Lograge is opinionated, very opinionated.
+gem "lograge" # https://github.com/roidrage/lograge
+
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
+gem 'psych' , '1.3.4'
 
 gem 'httparty'
 gem 'htmlentities'
@@ -47,6 +55,7 @@ gem 'paperclip'
 gem 'fastimage'
 
 gem 'authlogic'
+gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -94,9 +103,14 @@ gem 'rollout'
 gem 'newrelic_rpm', "3.9.3.241"
 gem 'newrelic-redis'
 
+#   Use update memcached client with kinder, gentler I/O for Ruby
+gem 'connection_pool'
+gem 'dalli'
+gem 'kgio'
+
 
 group :test do
-  gem 'rspec-rails', '>=2.6.0'
+  gem 'rspec-rails'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
@@ -117,6 +131,7 @@ end
 
 group :test, :development do
   gem 'pry'
+  gem 'whiny_validation'
 end
 
 # Deploy with Capistrano
@@ -126,5 +141,4 @@ gem 'rvm-capistrano'
 group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
-  gem "memcache-client"
 end

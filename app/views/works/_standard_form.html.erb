@@ -265,6 +265,7 @@
         <span class="html-notes"><%= allowed_html_instructions %></span>
         <span class="hidden rtf-notes"><%= ts('Type or paste formatted text.') %><%= link_to_help "rte-help" %></span>
       </p>
+      <p class="notice"><%= ts("<strong>Note:</strong> Text entered in the posting form is <strong>not</strong> automatically saved. Always keep a backup copy of your work.").html_safe %></p>
 
       <% use_tinymce %>
         <div class="rtf-html-field">

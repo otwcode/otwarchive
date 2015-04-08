@@ -44,13 +44,11 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
   end
 
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
   end
 
   # POST /admin_posts

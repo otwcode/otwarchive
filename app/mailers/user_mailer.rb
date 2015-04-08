@@ -178,15 +178,6 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Emails a user to confirm that their account is validated and activated
-  def activation(user_id)
-    @user = User.find(user_id)
-    mail(
-      :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your account has been activated."
-    )
-  end
-
   # Sends a temporary password to the user
   def reset_password(user_id, activation_code)
     @user = User.find(user_id)
@@ -299,6 +290,17 @@ class UserMailer < BulletproofMailer::Base
     mail(
       :to => user.email,
       :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been deleted by an Admin"
+    )
+  end
+
+  # Sends email to authors when a creation is hidden by an Admin
+  def admin_hidden_work_notification(creation_id, user_id)
+    @user = User.find_by_id(user_id)
+    @work = Work.find_by_id(creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
     )
   end
 

@@ -22,6 +22,7 @@ class FilterTagging < ActiveRecord::Base
     if self.filter && self.filterable.respond_to?(:expire_caches)
       CacheMaster.record(filterable_id, 'tag', filter_id)
     end
+    return true
   end
 
   # Is this a valid filter tagging that should actually exist?
@@ -44,6 +45,24 @@ class FilterTagging < ActiveRecord::Base
       rescue
         "Problem with filter tagging id:#{filter_tagging.id} filter_id:#{filter_tagging.filter_id}"
       end
+    end
+  end
+
+  def self.filter_cleanup(work)
+    correct_filters = work.tags.map(&:filter).compact.uniq
+    correct_filters += correct_filters.map(&:meta_tags).flatten.compact
+    correct_filters.uniq!
+    work.filters.each do |tag|
+      unless correct_filters.include?(tag)
+        ft = work.filter_taggings.where(filter_id: tag.id).first
+        unless ft.destroy
+          raise "can't destroy filter tagging #{ft.id}"
+        end
+      end
+    end
+    missing_filters = correct_filters - work.filters
+    missing_filters.each do |tag|
+      work.filter_taggings.create!(filter_id: tag.id)
     end
   end
 

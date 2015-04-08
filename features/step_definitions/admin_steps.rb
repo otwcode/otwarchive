@@ -116,6 +116,12 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^I have posted an admin post without paragraphs$/ do
+  step("I am logged in as an admin")
+  step("I make an admin post without paragraphs")
+  step("I am logged out as an admin")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -129,6 +135,13 @@ When /^I make an admin post$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
+  click_button("Post")
+end
+
+When /^I make an admin post without paragraphs$/ do
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
   click_button("Post")
 end
 
@@ -205,7 +218,7 @@ When (/^I make a translation of an admin post$/) do
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
+  fill_in("admin_post_translated_post_id", :with => AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
@@ -217,4 +230,54 @@ Then (/^I should see a translated admin post$/) do
   step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
+end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+end
+
+Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+end
+
+Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+  step(%{I am logged in as "#{user}"})
+  step(%{I am on my works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see the image "title" text "Hidden by Administrator"})
+end
+
+Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "#{work}"})
 end
