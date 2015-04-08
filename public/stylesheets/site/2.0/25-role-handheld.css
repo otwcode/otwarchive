@@ -72,22 +72,6 @@ linearise content, suppress large images, suppress custom fonts and other large 
   background: #900;
 }
 
-/* interactions */
-
-#modal-wrap {
-  overflow-x: hidden;
-  overflow-y: visible;
-}
-
-#modal.tall {
-  height: auto;
-  max-height: none;
-}
-
-#modal.tall .content {
-  position: static;
-}
-
 /* types and groups */
 
 h1, h2, h3 {
