@@ -12,16 +12,16 @@ describe Challenge::GiftExchangeController do
     end
 
     it "remove challenge variables on Collection" do
-      @collection.reload.challenge_id.should eq(nil)
-      @collection.reload.challenge_type.should eq(nil)
+      expect(@collection.reload.challenge_id).to eq(nil)
+      expect(@collection.reload.challenge_type).to eq(nil)
     end
 
     it "sets a flash message" do
-      flash[:notice].should eq("Challenge settings were deleted.")
+      expect(flash[:notice]).to eq("Challenge settings were deleted.")
     end
 
     it "redirects to the collection's main page" do
-      response.should redirect_to(@collection)
+      expect(response).to redirect_to(@collection)
     end
   end
 end
