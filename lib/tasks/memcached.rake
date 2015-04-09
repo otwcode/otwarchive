@@ -6,15 +6,12 @@ namespace :memcached do
  desc "Clear memcached"
  task :clear_work => :environment  do
   works=ENV['WORKS'] || 'id=1'
-  Work.where(works).find_each do 
-    |work|
+  Work.where(works).find_each do |work|
     puts "Clear memcached #{work.id}"
-    %w( nowarn showwarn ).each do
-      |warn|
-      %w( nofreeform showfreeform ).each do
-        |freeform|
+    %w( nowarn showwarn ).each do |warn|
+      %w( nofreeform showfreeform ).each do |freeform|
          Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v5"
-     end 
+      end 
     end 
   end 
  end
