@@ -4,7 +4,7 @@ namespace :memcached do
  # WORKS="posted = 0" rake memcached:clear_work
  #
  desc "Clear memcached"
- task :clear_work => :environment  do
+ task :expire_work_blurbs => :environment  do
   works=ENV['WORKS'] || 'id=1'
   Work.where(works).find_each do |work|
     puts "Clear memcached #{work.id}"
