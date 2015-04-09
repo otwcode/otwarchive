@@ -536,6 +536,7 @@ Otwarchive::Application.routes.draw do
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'unicorn_test' => 'home#unicorn_test'
   match 'dmca' => 'home#dmca'
   match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
