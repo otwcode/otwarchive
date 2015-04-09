@@ -54,12 +54,5 @@ class ChallengesController < ApplicationController
     @challenge = @collection.challenge
     no_challenge and return unless @challenge
   end
-
-  # When Challenges are deleted, there are two references left behind that need to be reset to nil
-  def clear_challenge_references
-    @collection.challenge_id = nil
-    @collection.challenge_type = nil
-    @collection.save!
-  end
   
 end
