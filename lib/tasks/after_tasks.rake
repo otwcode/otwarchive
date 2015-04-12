@@ -423,9 +423,11 @@ namespace :After do
   task(:remove_old_challenge_variables_from_collections => :environment) do
     Collection.find_each do |collection|
       unless collection.challenge?
-        puts "Fixing collection: #{collection.name}"
-        collection.challenge_id = nil
-        collection.challenge_type = nil
+        if collection.challenge_id.present? || collection.challenge_type.present?
+          puts "Fixing collection: #{collection.name}"
+          collection.challenge_id = nil
+          collection.challenge_type = nil
+        end
       end
     end
   end
