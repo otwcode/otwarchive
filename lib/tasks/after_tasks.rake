@@ -419,6 +419,17 @@ namespace :After do
     end
   end
 
+  desc "Clean up challenge_id and challenge_type in Collections with deleted Challenges"
+  task(:remove_old_challenge_variables_from_collections => :environment) do
+    Collection.find_each do |collection|
+      unless collection.challenge?
+        puts "Fixing collection: #{collection.name}"
+        collection.challenge_id = nil
+        collection.challenge_type = nil
+      end
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
