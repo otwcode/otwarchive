@@ -371,3 +371,5 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
+
+DASHBOARD_MENU_CACHE_TIME: 2.hour
