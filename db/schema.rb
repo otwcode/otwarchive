@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141004123421) do
+ActiveRecord::Schema.define(:version => 20150217034225) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -439,6 +439,13 @@ ActiveRecord::Schema.define(:version => 20141004123421) do
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.integer  "language_id"
   end
+
+  create_table "favorite_tags", :force => true do |t|
+    t.integer "user_id"
+    t.integer "tag_id"
+  end
+
+  add_index "favorite_tags", ["user_id", "tag_id"], :name => "index_favorite_tags_on_user_id_and_tag_id", :unique => true
 
   create_table "feedbacks", :force => true do |t|
     t.text     "comment",                                                   :null => false
@@ -1214,6 +1221,8 @@ ActiveRecord::Schema.define(:version => 20141004123421) do
     t.boolean  "out_of_invites",     :default => true,  :null => false
     t.string   "persistence_token",                     :null => false
     t.integer  "failed_login_count"
+    t.datetime "last_sign_in_at"
+    t.datetime "last_active_at"
   end
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
@@ -1277,11 +1286,15 @@ ActiveRecord::Schema.define(:version => 20141004123421) do
     t.boolean  "in_anon_collection",                       :default => false, :null => false
     t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
     t.boolean  "anon_commenting_disabled",                 :default => false, :null => false
+    t.string   "ip_address"
+    t.boolean  "akismet_score"
   end
 
+  add_index "works", ["akismet_score"], :name => "index_works_on_akismet_score"
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"
   add_index "works", ["delta"], :name => "index_works_on_delta"
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"
+  add_index "works", ["ip_address"], :name => "index_works_on_ip_address"
   add_index "works", ["language_id"], :name => "index_works_on_language_id"
   add_index "works", ["restricted", "posted", "hidden_by_admin"], :name => "visible_works"
   add_index "works", ["revised_at"], :name => "index_works_on_revised_at"

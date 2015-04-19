@@ -65,7 +65,7 @@ CREATE TABLE `admin_posts` (
   PRIMARY KEY (`id`),
   KEY `index_admin_posts_on_created_at` (`created_at`),
   KEY `index_admin_posts_on_post_id` (`translated_post_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=900 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=902 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `admin_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -103,7 +103,7 @@ CREATE TABLE `admins` (
   `salt` varchar(255) DEFAULT NULL,
   `persistence_token` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `archive_faq_translations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -231,7 +231,7 @@ CREATE TABLE `chapters` (
   PRIMARY KEY (`id`),
   KEY `index_chapters_on_work_id` (`work_id`),
   KEY `works_chapter_index` (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3570769 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3570776 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collection_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -363,7 +363,7 @@ CREATE TABLE `common_taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_common_tags` (`common_tag_id`,`filterable_type`,`filterable_id`),
   KEY `index_common_taggings_on_filterable_id` (`filterable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3847309 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3847313 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `creatorships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -375,7 +375,7 @@ CREATE TABLE `creatorships` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `creation_id_creation_type_pseud_id` (`creation_id`,`creation_type`,`pseud_id`),
   KEY `index_creatorships_pseud` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5645360 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5645374 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `delayed_jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -460,6 +460,14 @@ CREATE TABLE `external_works` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35801 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `favorite_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `tag_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_favorite_tags_on_user_id_and_tag_id` (`user_id`,`tag_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comment` text NOT NULL,
@@ -487,7 +495,7 @@ CREATE TABLE `filter_counts` (
   UNIQUE KEY `index_filter_counts_on_filter_id` (`filter_id`),
   KEY `index_public_works_count` (`public_works_count`),
   KEY `index_unhidden_works_count` (`unhidden_works_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `filter_taggings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -500,7 +508,7 @@ CREATE TABLE `filter_taggings` (
   PRIMARY KEY (`id`,`filter_id`),
   KEY `index_filter_taggings_on_filter_id_and_filterable_type` (`filter_id`,`filterable_type`),
   KEY `index_filter_taggings_filterable` (`filterable_id`,`filterable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gift_exchanges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -604,7 +612,7 @@ CREATE TABLE `invite_requests` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_invite_requests_on_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `known_issues` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -629,7 +637,7 @@ CREATE TABLE `kudos` (
   KEY `index_kudos_on_commentable_id_and_commentable_type_and_pseud_id` (`commentable_id`,`commentable_type`,`pseud_id`),
   KEY `index_kudos_on_ip_address` (`ip_address`),
   KEY `index_kudos_on_pseud_id` (`pseud_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61145990 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61145996 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -653,7 +661,7 @@ CREATE TABLE `locales` (
   KEY `index_locales_on_iso` (`iso`),
   KEY `index_locales_on_language_id` (`language_id`),
   KEY `index_locales_on_short` (`short`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `log_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1109,7 +1117,7 @@ CREATE TABLE `skin_parents` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `skins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1154,7 +1162,7 @@ CREATE TABLE `skins` (
   KEY `index_skins_on_public_and_official` (`public`,`official`),
   KEY `index_skins_on_title` (`title`),
   KEY `index_skins_on_type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=17211 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17213 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `stat_counters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1168,7 +1176,7 @@ CREATE TABLE `stat_counters` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hit_counters_on_work_id` (`work_id`),
   KEY `index_hit_counters_on_hit_count` (`hit_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=1675300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1675307 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1247,7 +1255,7 @@ CREATE TABLE `taggings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_taggings_polymorphic` (`tagger_id`,`tagger_type`,`taggable_id`,`taggable_type`),
   KEY `index_taggings_taggable` (`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=24095514 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24095537 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1272,7 +1280,7 @@ CREATE TABLE `tags` (
   KEY `index_tags_on_merger_id` (`merger_id`),
   KEY `index_tags_on_sortable_name` (`sortable_name`),
   KEY `index_tags_on_type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=2026414 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2026418 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_invite_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1305,6 +1313,8 @@ CREATE TABLE `users` (
   `out_of_invites` tinyint(1) NOT NULL DEFAULT '1',
   `persistence_token` varchar(255) NOT NULL,
   `failed_login_count` int(11) DEFAULT NULL,
+  `last_sign_in_at` datetime DEFAULT NULL,
+  `last_active_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_activation_code` (`activation_code`),
@@ -1372,14 +1382,18 @@ CREATE TABLE `works` (
   `in_anon_collection` tinyint(1) NOT NULL DEFAULT '0',
   `in_unrevealed_collection` tinyint(1) NOT NULL DEFAULT '0',
   `anon_commenting_disabled` tinyint(1) NOT NULL DEFAULT '0',
+  `ip_address` varchar(255) DEFAULT NULL,
+  `akismet_score` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `complete_works` (`complete`,`posted`,`hidden_by_admin`),
   KEY `index_works_on_delta` (`delta`),
   KEY `index_works_on_imported_from_url` (`imported_from_url`),
   KEY `index_works_on_language_id` (`language_id`),
   KEY `visible_works` (`restricted`,`posted`,`hidden_by_admin`),
-  KEY `index_works_on_revised_at` (`revised_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=1677529 DEFAULT CHARSET=utf8;
+  KEY `index_works_on_revised_at` (`revised_at`),
+  KEY `index_works_on_ip_address` (`ip_address`),
+  KEY `index_works_on_akismet_score` (`akismet_score`)
+) ENGINE=InnoDB AUTO_INCREMENT=1677536 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `wrangling_assignments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1930,6 +1944,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140327111111');
 
 INSERT INTO schema_migrations (version) VALUES ('20140406043239');
 
+INSERT INTO schema_migrations (version) VALUES ('20140808220904');
+
 INSERT INTO schema_migrations (version) VALUES ('20140922024405');
 
 INSERT INTO schema_migrations (version) VALUES ('20140922025054');
@@ -1941,3 +1957,11 @@ INSERT INTO schema_migrations (version) VALUES ('20141003204623');
 INSERT INTO schema_migrations (version) VALUES ('20141003205439');
 
 INSERT INTO schema_migrations (version) VALUES ('20141004123421');
+
+INSERT INTO schema_migrations (version) VALUES ('20150101133905');
+
+INSERT INTO schema_migrations (version) VALUES ('20150106211421');
+
+INSERT INTO schema_migrations (version) VALUES ('20150111203000');
+
+INSERT INTO schema_migrations (version) VALUES ('20150217034225');
