@@ -5,7 +5,29 @@ linearise content, suppress large images, suppress custom fonts and other large 
   font-size: 14px;
 }
 
-/* regions */
+h1, h2, h3 {
+    word-break: break-all;
+}
+
+/* non-JavaScript states
+.narrow-shown: should be displayed when this stylesheet is in use  */
+
+body .narrow-shown {
+  display: block;
+}
+
+.actions li.narrow-shown {
+  display: inline;
+}
+
+/* JavaScript states
+.javascript .narrow-hidden: should not be displayed when JS is enabled and this stylesheet is in use */
+
+.javascript .narrow-hidden {
+  display: none;
+}
+
+/* 03 region header */
 
 #header .logo {
   height: 1.75em;
@@ -49,97 +71,9 @@ linearise content, suppress large images, suppress custom fonts and other large 
   margin-left: 45px;
 }
 
-#main, #main.dashboard {
-  float: none;
-  margin: auto;
-  width: auto;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
-#dashboard, #main.dashboard .index, .dashboard form.filters, #main .filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  float: none;
-}
-
-#main dl.filters {
-  width: auto;
-}
-
-/* types and groups */
-
-h1, h2, h3 {
-    word-break: break-all;
-}
-
-#main .actions a {
-  margin: auto;
-}
-
-.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {
-  width: auto;
-  float: none;
-}
-
-.blurb dl.tags dd, dl.meta dd {
-  margin-left: 1em;
-}
-
-.alphabet .listbox li {
-  display: block;
-}
-
-/* zone: home */
-
-#inbox-form {
-  clear: both;
-  float: none;
-  width: auto;
-}
-
-/* zone: system */
-
-.splash div.module, .logged-in .splash .module {
-  width: 98%;
-}
-
-.splash .intro {
-  padding-top: 0;
-}
-
-.splash .intro h2 {
-  font-size: 1.5em;
-    word-break: normal;
-}
-
-/* system: messages */
-
-.announcement .userstuff {
-  margin: 1%;
-}
-
-.announcement p.submit {
-  bottom: -0.5em;
-  right: 1%;
-}
-
-.announcement .thermometer-content {
-  width: 80%;
-}
-
-.announcement .goal .amount {
-  display: none;
-}
-
-.announcement .thermometer .progress .amount {
-  left: 0;
-  right: auto;
-}
-
+/* 04 region dashboard */
 /* SKIN: Dash Line */
-/* DESCRIPTION: Horizontal dash inline*/
+/* DESCRIPTION: Horizontal dash inline */
 
 #outer #dashboard {
   padding: 0;
@@ -168,7 +102,46 @@ h1, h2, h3 {
   clear: both;
 }
 
-/* comments */
+/* 05 region main */
+
+#main, #main.dashboard {
+  float: none;
+  margin: auto;
+  width: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+#dashboard, #main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  float: none;
+}
+
+/* 08 actions */
+
+#main .actions a {
+  margin: auto;
+}
+
+/* 10 types and groups */
+
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {
+  width: auto;
+  float: none;
+}
+
+.blurb dl.tags dd, dl.meta dd {
+  margin-left: 1em;
+}
+
+.alphabet .listbox li {
+  display: block;
+}
+
+/* 15 group: comments */
+
 .thread .thread {
   margin-left: 1em;
 }
@@ -191,22 +164,33 @@ h1, h2, h3 {
   padding-left: 58px;
 }
 
-/* non-JavaScript states
-.narrow-shown: should be displayed when mobile stylesheet is in use  */
+/* 16 zone: system */
 
-body .narrow-shown {
-  display: block;
+.splash div.module, .logged-in .splash .module {
+  width: 98%;
 }
 
-.actions li.narrow-shown {
-  display: inline;
+.splash .intro {
+  padding-top: 0;
 }
 
-/* JavaScript states
-.javascript .narrow-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
+.splash .intro h2 {
+  font-size: 1.5em;
+    word-break: normal;
+}
 
-.javascript .narrow-hidden {
-  display: none;
+/* 17 zone: home */
+
+#inbox-form {
+  clear: both;
+  float: none;
+  width: auto;
+}
+
+/* 18 zone: search browse */
+
+form.filters dl {
+  width: auto;
 }
 
 /* Filters with JavaScript */
@@ -246,4 +230,28 @@ body .narrow-shown {
 
 .javascript .filtering form.filters {
   visibility: visible;
+}
+
+/* 22 system: messages */
+
+.announcement .userstuff {
+  margin: 1%;
+}
+
+.announcement p.submit {
+  bottom: -0.5em;
+  right: 1%;
+}
+
+.announcement .thermometer-content {
+  width: 80%;
+}
+
+.announcement .goal .amount {
+  display: none;
+}
+
+.announcement .thermometer .progress .amount {
+  left: 0;
+  right: auto;
 }
