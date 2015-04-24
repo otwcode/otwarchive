@@ -83,8 +83,10 @@
       <%= hidden_field_tag("user_id", @user.login) if @user %>
     </div>
   <% end %>
-  <% # On mobile, link jumps to top of index when JavaScript is disabled and close filters when JavaScript is enabled %>
+  <% # On mobile, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="mobile-shown hidden">
-    <a href="#main" id="leave_filters" class="close"><%= ts("Top of Bookmark Index") %></a>
+    <a href="#main" id="leave_filters" class="close">
+      <%= ts("Top of Bookmark Index") %>
+    </a>
   </p>
 <% end %>
