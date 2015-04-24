@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% # Filters button for mobile jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+<% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
 <p class="narrow-shown hidden actions">
   <a href="#inbox-filters" id="go_to_filters"><%= ts("Filters") %></a>
 </p>
@@ -144,7 +144,7 @@
       <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
     </dl>
   <% end %>
-  <% # On mobile, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
+  <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">
     <a href="#main" id="leave_filters" class="close">
       <%= ts("Top of Inbox") %>
