@@ -76,11 +76,11 @@ ol.pagination, div.pagination, ol.year {
   margin: 0.643em auto;
 }
 
-.actions a:visited {
+.actions a:visited, .action:visited {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover {
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;

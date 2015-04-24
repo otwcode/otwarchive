@@ -68,10 +68,6 @@ linearise content, suppress large images, suppress custom fonts and other large 
   width: auto;
 }
 
-#footer {
-  background: #900;
-}
-
 /* types and groups */
 
 h1, h2, h3 {
@@ -82,7 +78,7 @@ h1, h2, h3 {
   margin: auto;
 }
 
-.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {
   width: auto;
   float: none;
 }
@@ -142,7 +138,7 @@ h1, h2, h3 {
   right: auto;
 }
 
-/*SKIN: Dash Line */
+/* SKIN: Dash Line */
 /* DESCRIPTION: Horizontal dash inline*/
 
 #outer #dashboard {
@@ -196,20 +192,20 @@ h1, h2, h3 {
 }
 
 /* non-JavaScript states
-.mobile-shown: should be displayed when mobile stylesheet is in use  */
+.narrow-shown: should be displayed when mobile stylesheet is in use  */
 
-body .mobile-shown {
+body .narrow-shown {
   display: block;
 }
 
-.actions li.mobile-shown {
+.actions li.narrow-shown {
   display: inline;
 }
 
 /* JavaScript states
-.javascript .mobile-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
+.javascript .narrow-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
 
-.javascript .mobile-hidden {
+.javascript .narrow-hidden {
   display: none;
 }
 

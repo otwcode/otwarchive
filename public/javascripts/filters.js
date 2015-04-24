@@ -22,11 +22,11 @@ function showFilters() {
       } //is checked
     }); //tags each
   }); //filters each 
-}; //showfilters
+} //showfilters
 
 function addFilterCloser() {
-  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><button class="close action" aria-label="close">&times;</button></p>') );
-};
+  $j('dl.filters').before( $j('<p class="narrow-shown hidden"><button class="close action" aria-label="close">&times;</button></p>') );
+}
 
 function setupMobileFilters() {
   var filters = $j('form.filters');
@@ -36,7 +36,7 @@ function setupMobileFilters() {
 
   show_link.click(function(e) {
     e.preventDefault();
-    filters.removeClass('mobile-hidden');
+    filters.removeClass('narrow-hidden');
     outer.addClass('filtering'); 
     hide_link.first().focus();
     filters.trap();
@@ -45,7 +45,7 @@ function setupMobileFilters() {
   hide_link.each(function() {
     $j(this).click(function(e) {
       e.preventDefault();
-      filters.addClass('mobile-hidden');
+      filters.addClass('narrow-hidden');
       show_link.focus();
       outer.removeClass('filtering');
     });

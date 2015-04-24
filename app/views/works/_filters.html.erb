@@ -2,7 +2,7 @@
   url: (@collection ? collection_works_path(@collection) : works_path), 
   html: { 
     method: :get, 
-    class: 'mobile-hidden filters', 
+    class: 'narrow-hidden filters', 
     id: 'work-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
@@ -80,7 +80,7 @@
     </div>
   <% end %>
   <% # On mobile, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
-  <p class="mobile-shown hidden">
+  <p class="narrow-shown hidden">
     <a href="#main" id="leave_filters" class="close">
       <%= ts("Top of Work Index") %>
     </a>
