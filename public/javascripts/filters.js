@@ -25,7 +25,7 @@ function showFilters() {
 }; //showfilters
 
 function addFilterCloser() {
-  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><button class="close action">&times;</button></p>') );
+  $j('dl.filters').before( $j('<p class="mobile-shown hidden"><button class="close action" aria-label="close">&times;</button></p>') );
 };
 
 function setupMobileFilters() {
