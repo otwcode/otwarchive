@@ -208,7 +208,7 @@ body .mobile-shown {
 
 /* JavaScript states
 .mobile is ALWAYS applied to the page body when JS is enabled, but should ONLY be used within this stylesheet
-.mobile .mobile-hidden: should not be displayed when JS is enabled */
+.mobile .mobile-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
 
 .mobile .mobile-hidden {
   display: none;
