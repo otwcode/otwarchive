@@ -245,7 +245,7 @@ body .mobile-shown {
   z-index: 0;
 }
 
-.mobile #leave-filters:focus {
+.mobile #leave_filters:focus {
   outline: none;
 }
 
