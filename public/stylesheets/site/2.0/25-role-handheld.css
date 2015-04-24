@@ -207,16 +207,15 @@ body .mobile-shown {
 }
 
 /* JavaScript states
-.mobile is ALWAYS applied to the page body when JS is enabled, but should ONLY be used within this stylesheet
-.mobile .mobile-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
+.javascript .mobile-hidden: should not be displayed when JS is enabled and mobile stylesheet is in use */
 
-.mobile .mobile-hidden {
+.javascript .mobile-hidden {
   display: none;
 }
 
 /* Filters with JavaScript */
 
-.mobile form.filters {
+.javascript form.filters {
   margin: 0;
   position: absolute;
   top: 0;
@@ -225,16 +224,16 @@ body .mobile-shown {
   z-index: 400;
 }
 
-.mobile .filters fieldset {
+.javascript .filters fieldset {
   position: relative;
   z-index: 450;
 }
 
-.mobile .filters p.mobile-shown {
+.javascript .filters p.mobile-shown {
   position: relative; 
 }
 
-.mobile .filters #leave_filters {
+.javascript .filters #leave_filters {
   background: rgba(0, 0, 0, 0.5);
   border-bottom: none;
   position: fixed;
@@ -245,10 +244,10 @@ body .mobile-shown {
   z-index: 0;
 }
 
-.mobile #leave_filters:focus {
+.javascript #leave_filters:focus {
   outline: none;
 }
 
-.mobile .filtering form.filters {
+.javascript .filtering form.filters {
   visibility: visible;
 }

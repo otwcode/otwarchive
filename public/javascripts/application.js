@@ -23,9 +23,7 @@ $j(document).ready(function() {
 
     prepareDeleteLinks();
     thermometer();
-
-    // add a class to the body for doing mobile-specific JavaScript and styles
-    $j('body').addClass('mobile');
+    $j('body').addClass('javascript');
 });
 
 ///////////////////////////////////////////////////////////////////
