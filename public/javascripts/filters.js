@@ -7,7 +7,7 @@ $j(document).ready(function() {
 
 function showFilters() {
   var filters = $j('dd.tags');
-    
+
   filters.each(function(index, filter) {
     var tags = $j(filter).find('input');
     var node = $j(filter);
@@ -21,7 +21,7 @@ function showFilters() {
         $j(close_toggles).show();
       } //is checked
     }); //tags each
-  });  //filters each 
+  }); //filters each 
 }; //showfilters
 
 function addFilterCloser() {
@@ -33,7 +33,7 @@ function setupMobileFilters() {
   var outer = $j('#outer');
   var show_link = $j('#go_to_filters');
   var hide_link = $j(filters).find('.close');
-  
+
   show_link.click(function(e) {
     e.preventDefault();
     filters.removeClass('mobile-hidden');
@@ -41,7 +41,7 @@ function setupMobileFilters() {
     hide_link.first().focus();
     filters.trap();
   });
-    
+
   hide_link.each(function() {
     $j(this).click(function(e) {
       e.preventDefault();
