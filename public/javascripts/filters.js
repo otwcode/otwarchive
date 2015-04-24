@@ -39,6 +39,7 @@ function setupMobileFilters() {
     filters.removeClass('mobile-hidden');
     outer.addClass('filtering'); 
     hide_link.first().focus();
+    filters.trap();
   });
     
   hide_link.each(function() {
