@@ -99,10 +99,6 @@ body .narrow-shown {
   float: left;
 }
 
-.dashboard .landmark {
-  clear: both;
-}
-
 /* 05 region main */
 
 #main, #main.dashboard {
@@ -118,6 +114,10 @@ body .narrow-shown {
   max-width: 100%;
   min-width: 0;
   float: none;
+}
+
+.dashboard .landmark {
+  clear: both;
 }
 
 /* 08 actions */
