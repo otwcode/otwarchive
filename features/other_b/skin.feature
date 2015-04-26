@@ -236,6 +236,7 @@ Feature: creating and editing skins
 
   Scenario: Users should be able to create and use a work skin
   Given I am logged in as "skinner"
+    And the default ratings exist
   When I am on skin's new page
     And I select "Work Skin" from "skin_type"
     And I fill in "Title" with "Awesome Work Skin"

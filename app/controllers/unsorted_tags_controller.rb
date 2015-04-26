@@ -10,11 +10,11 @@ class UnsortedTagsController < ApplicationController
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
     end
   end
-  
+
   def mass_update
     unless params[:tags].blank?
       params[:tags].delete_if {|tag_id, tag_type| tag_type.blank? }
-      tags = UnsortedTag.find(params[:tags].keys)
+      tags = UnsortedTag.where(id: params[:tags].keys)
       tags.each do |tag|
         new_type = params[:tags][tag.id.to_s]
         if %w(Fandom Character Relationship Freeform).include?(new_type)
@@ -27,5 +27,5 @@ class UnsortedTagsController < ApplicationController
     end
     redirect_to unsorted_tags_path(page: params[:page])
   end
-  	
+
 end

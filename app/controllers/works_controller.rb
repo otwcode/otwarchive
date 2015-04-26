@@ -112,6 +112,13 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
 
+    if logged_in? && @tag
+      @favorite_tag = @current_user.favorite_tags.
+                      where(tag_id: @tag.id).first ||
+                      FavoriteTag.
+                      new(tag_id: @tag.id, user_id: @current_user.id)
+    end
+
     if @owner.present?
       if @admin_settings.disable_filtering?
         @works = Work.list_without_filters(@owner, options)
@@ -517,7 +524,7 @@ class WorksController < ApplicationController
       flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
-    
+
     # is external author information entered when import for others is not checked?
     if (params[:external_author_name].present? || params[:external_author_email].present?) && !params[:importing_for_others]
       flash.now[:error] = ts("You have entered an external author name or e-mail address but did not select \"Import for others.\" Please select the \"Import for others\" option or remove the external author information to continue.")
@@ -1012,23 +1019,24 @@ public
       end
 
     {
-      :pseuds => pseuds_to_apply,
-      :post_without_preview => params[:post_without_preview],
-      :importing_for_others => params[:importing_for_others],
-      :restricted => params[:restricted],
-      :override_tags => params[:override_tags],
-      :fandom => params[:work][:fandom_string],
-      :warning => params[:work][:warning_strings],
-      :character => params[:work][:character_string],
-      :rating => params[:work][:rating_string],
-      :relationship => params[:work][:relationship_string],
-      :category => params[:work][:category_string],
-      :freeform => params[:work][:freeform_string],
-      :encoding => params[:encoding],
-      :external_author_name => params[:external_author_name],
-      :external_author_email => params[:external_author_email],
-      :external_coauthor_name => params[:external_coauthor_name],
-      :external_coauthor_email => params[:external_coauthor_email]
+      pseuds: pseuds_to_apply,
+      post_without_preview: params[:post_without_preview],
+      importing_for_others: params[:importing_for_others],
+      restricted: params[:restricted],
+      override_tags: params[:override_tags],
+      fandom: params[:work][:fandom_string],
+      warning: params[:work][:warning_strings],
+      character: params[:work][:character_string],
+      rating: params[:work][:rating_string],
+      relationship: params[:work][:relationship_string],
+      category: params[:work][:category_string],
+      freeform: params[:work][:freeform_string],
+      encoding: params[:encoding],
+      external_author_name: params[:external_author_name],
+      external_author_email: params[:external_author_email],
+      external_coauthor_name: params[:external_coauthor_name],
+      external_coauthor_email: params[:external_coauthor_email],
+      language_id: params[:language_id]
     }
   end
 

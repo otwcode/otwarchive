@@ -7,13 +7,13 @@ describe Chapter do
 
     before(:each) do
       @work = FactoryGirl.create(:work)
-      @chapter = Chapter.new(:work => @work, :content => "Cool story, bro!")
+      @chapter = Chapter.new(work: @work, content: "Cool story, bro!")
     end
-    
+
     it "should save minimalistic chapter" do
-      @chapter.save.should be_true
+      expect(@chapter.save).to be_truthy
     end
-    
+
   end
 
 end

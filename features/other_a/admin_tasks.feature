@@ -342,6 +342,7 @@ Feature: Admin tasks
   When I edit known issues
   Then I should see "Known issue was successfully updated"
 
+<<<<<<< HEAD
 
   Scenario: Admin can set invite from queue number to a number greater than or equal to 1
 
@@ -444,7 +445,7 @@ Feature: Admin tasks
   Given the following language exists
       | name       | short |
       | Dutch      | nl    |
-    And I am logged in as an admin
+  And I am logged in as an admin
   When I go to the locales page
   Then I should see "English (US)"
   When I follow "New Locale"
