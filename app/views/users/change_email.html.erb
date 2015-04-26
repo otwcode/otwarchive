@@ -13,6 +13,7 @@
   <% if @user.recently_reset? %>
     <p><%= ts("You used a temporary password to log in. Please change it now as it will expire in a week.") %></p>
   <% end %>
+  <p>Your current email address is: <%= @user.email %></p>
   <dl>
 
     <dt><%= label_tag :new_email, ts("New Email") %></dt>
