@@ -4,6 +4,10 @@ class HomeController < ApplicationController
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
   skip_before_filter :store_location, :only => [:first_login_help]
   
+  # unicorn_test
+  def unicorn_test
+  end
+
   # terms of service
   def tos
     render :action => "tos", :layout => "application"
