@@ -75,31 +75,28 @@ body .narrow-shown {
 /* SKIN: Dash Line */
 /* DESCRIPTION: Horizontal dash inline */
 
-#outer #dashboard {
-  padding: 0;
-}
-
-#outer #dashboard, #main, #main.dashboard {
+#dashboard {
+  clear: both;
   float: none;
-  width: auto;
   max-width: 100%;
   margin: 1%;
-  clear: both;
+  padding: 0;
+  width: auto;
 }
 
-#dashboard ul.navigation, #dashboard ul.navigation li, #dashboard ul.navigation li a, #dashboard ul.navigation li .current {
+#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
   text-align: left;
   display: inline;
-  border: 0;
+  border: none;
+}
+
+#dashboard ul {
+  padding: 0;
 }
 
 #dashboard .landmark {
   clear: none;
   float: left;
-}
-
-.dashboard .landmark {
-  clear: both;
 }
 
 /* 05 region main */
@@ -112,11 +109,15 @@ body .narrow-shown {
   padding-right: 0.5em;
 }
 
-#dashboard, #main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
+#main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
   width: 100%;
   max-width: 100%;
   min-width: 0;
   float: none;
+}
+
+.dashboard .landmark {
+  clear: both;
 }
 
 /* 08 actions */
