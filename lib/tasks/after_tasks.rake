@@ -426,8 +426,13 @@ namespace :After do
           puts "Fixing collection: #{collection.name}"
           collection.challenge_id = nil
           collection.challenge_type = nil
+          collection.save
         end
       end
+    end
+  end
+
+
   desc "Clean up work URLs for abuse reports from the last month"
   task(:clean_abuse_report_work_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
