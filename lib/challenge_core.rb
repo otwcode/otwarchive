@@ -43,9 +43,9 @@ module ChallengeCore
 
   # When Challenges are deleted, there are two references left behind that need to be reset to nil
   def clear_challenge_references
-    self.collection.challenge_id = nil
-    self.collection.challenge_type = nil
-    self.collection.save!
+    collection.challenge_id = nil
+    collection.challenge_type = nil
+    collection.save!
   end
   
   # a couple of handy shorthand methods

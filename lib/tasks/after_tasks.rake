@@ -424,9 +424,9 @@ namespace :After do
       unless collection.challenge?
         if collection.challenge_id.present? || collection.challenge_type.present?
           puts "Fixing collection: #{collection.name}"
-          collection.challenge_id = nil
-          collection.challenge_type = nil
-          collection.save
+          puts "Which is a #{collection}"
+          collection.update_column(:challenge_id, nil)
+          collection.update_column(:challenge_type, nil)
         end
       end
     end
