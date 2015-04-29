@@ -5,7 +5,7 @@
 <!-- /end descriptions-->
 
 <!--Subnavigation, sorting and actions.-->
-<% if (@collection && @collection.gift_exchange?) || @tag || @user %>
+<% if @collection || @tag || @user %>
   <div class="navigation actions module">
     <h3 class="landmark heading"><%= ts("Navigation and Actions") %></h3>
     <!--gift search subnav-->
@@ -13,7 +13,7 @@
       <%= render 'gifts/gift_search' %>
     <% end %>
     <!--user role subnav-->
-    <% if @tag || @user %>
+    <% if @tag || @user || @collection %>
       <ul class="user navigation actions" role="navigation">
         <% if @user %>
           <% if @user == current_user %>
