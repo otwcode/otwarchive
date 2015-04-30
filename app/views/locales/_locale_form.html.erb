@@ -15,10 +15,10 @@
       <dd class="required"><%= f.select(:language_id, @languages.collect { |language| [ language.name, language.id ] }) %></dd>
 
       <dt><%= f.check_box :email_enabled %></dt>
-      <dd><%= f.label :email_enabled, t('.enable_email', :default => "Use this locale to send email")%></dd>
+      <dd><%= f.label :email_enabled, t('.enable_email', :default => "Use this locale to send email") %></dd>
 
       <dt><%= f.check_box :interface_enabled %></dt>
-      <dd><%= f.label :interface_enabled, t('.enable_interface', :default => "Use this locale for the interface")%></dd>
+      <dd><%= f.label :interface_enabled, t('.enable_interface', :default => "Use this locale for the interface") %></dd>
 
     </dl>
   </fieldset>
