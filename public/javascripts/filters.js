@@ -1,7 +1,6 @@
 // Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
   showFilters();
-  addFilterCloser();
   setupMobileFilters();
 });
 
@@ -24,30 +23,21 @@ function showFilters() {
   }); //filters each 
 } //showfilters
 
-function addFilterCloser() {
-  $j('dl.filters').before( $j('<p class="narrow-shown hidden"><button class="close action" aria-label="close">&times;</button></p>') );
-}
-
 function setupMobileFilters() {
   var filters = $j('form.filters');
   var outer = $j('#outer');
-  var show_link = $j('#go_to_filters');
-  var hide_link = $j(filters).find('.close');
+  var filters_link = $j('#go_to_filters');
+  var leave_filters = $j('#leave_filters').find('a');
+  var focusable_item = filters.find(':focusable').first();
 
-  show_link.click(function(e) {
-    e.preventDefault();
-    filters.removeClass('narrow-hidden');
+  filters_link.click(function(e) {
     outer.addClass('filtering'); 
-    hide_link.first().focus();
-    filters.trap();
+    focusable_item.focus();
+  });
+  
+  leave_filters.click(function() {
+    outer.removeClass('filtering');
+    filters_link.focus();
   });
 
-  hide_link.each(function() {
-    $j(this).click(function(e) {
-      e.preventDefault();
-      filters.addClass('narrow-hidden');
-      show_link.focus();
-      outer.removeClass('filtering');
-    });
-  });
 }

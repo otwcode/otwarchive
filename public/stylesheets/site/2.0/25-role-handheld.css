@@ -194,45 +194,6 @@ form.filters dl {
   width: auto;
 }
 
-/* Filters with JavaScript */
-
-.javascript form.filters {
-  margin: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  visibility: hidden;
-  z-index: 400;
-}
-
-.javascript .filters fieldset {
-  position: relative;
-  z-index: 450;
-}
-
-.javascript .filters p.mobile-shown {
-  position: relative; 
-}
-
-.javascript .filters #leave_filters {
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: none;
-  position: fixed;
-  top: -101em;
-  bottom: -101em;
-  left: -10em;
-  right: -10em;
-  z-index: 0;
-}
-
-.javascript #leave_filters:focus {
-  outline: none;
-}
-
-.javascript .filtering form.filters {
-  visibility: visible;
-}
-
 /* 22 system: messages */
 
 .announcement .userstuff {
