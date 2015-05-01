@@ -5,7 +5,7 @@
 <!-- /descriptions-->
 
 <!--subnav-->
-<% if current_user.is_a?(User) || @user || @tag || @collection %>
+<% if current_user.is_a?(User) || @tag || @facets.present? %>
   <ul class="navigation actions" role="navigation">
     <% if logged_in? && (@user == current_user || (@owner.blank? && @bookmarkable.blank?) || @collection) %>
       <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
