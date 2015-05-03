@@ -3,14 +3,14 @@
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Fanfiction.net does not allow imports from their site.") %>
+    <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
   <p>
     <%= ts("If you have trouble importing from another site, ") %> 
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
   </p>
-  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/importing-and-mass-editing" %><%= ts(" useful.") %></p>
 </div>
 
 <!--/descriptions-->

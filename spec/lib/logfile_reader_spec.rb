@@ -45,40 +45,36 @@ describe LogfileReader do
       180.190.200.210 - - [17/Feb/2012:00:43:29 +0000] "GET /chapters/158429?page=1&show_comments=true HTTP/1.1" 302 161 "http://www.facebook.com/l.php?u=http%3A%2F%2Fwww.archiveofourown.org%2Fchapters%2F158429%3Fpage%3D1%26show_comments%3Dtrue%23comment_616914&h=7AQHqhN-RAQFBJju-SZ2-9OGSvvowsua_Ypd48ZpNNqs1hA&enc=AZMQee5SSDaIt_JRTwX7WKDZzgpEQOlASLnitYgM8pzngcpbzuImqAmOUMif4kpRW2HZJ7g-e628j1JgJU37cdfLOWjFZdwttBg-Vi16Z0bGY1RZ5Nba0Pnf18dCYOQPwvw" "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7"
       190.200.210.220 - - [17/Feb/2012:14:55:32 +0000] "GET /chapters/513801?show_comments=true HTTP/1.1" 408 0 "http://archiveofourown.org/works/319556?add_comment_reply_id=618220&show_comments=true" "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7"
       '
-      
+
       # set up the logfiles with mtimes slightly more recent than their content
       content_for_file("default.log.1", logfile_content_feb_14)
       content_for_file("default.log.2", logfile_content_feb_17)
       mtime_for_file("default.log.1", Date.parse("15/Feb/2012").to_time)
       mtime_for_file("default.log.2", Date.parse("18/Feb/2012").to_time)
-      
+
     end
 
     it "gets the correct logfiles with no start date" do
       results = self.class.logfiles_to_read
-      results.size.should == 2
-      results.should include(LogfileReader::LOGFILE_DIR + "default.log.1")
-      results.should include(LogfileReader::LOGFILE_DIR + "default.log.2")
+      expect(results.size).to eq(2)
+      expect(results).to include(LogfileReader::LOGFILE_DIR + "default.log.1")
+      expect(results).to include(LogfileReader::LOGFILE_DIR + "default.log.2")
     end
-    
+
     it "gets the correct logfiles given a start date" do
       start_date = Date.parse("16/Feb/2012").to_time
       results = self.class.logfiles_to_read(start_date)
-      results.size.should == 1
-      results.first.should == LogfileReader::LOGFILE_DIR + "default.log.2"
+      expect(results.size).to eq(1)
+      expect(results.first).to eq(LogfileReader::LOGFILE_DIR + "default.log.2")
     end
-    
+
     it "reads rows correctly with various patterns" do
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", "GET")
-      rows.size.should == 16 # number of rows in first logfile
+      expect(rows.size).to eq(16) # number of rows in first logfile
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", "GET /downloads")
-      rows.size.should == 6
+      expect(rows.size).to eq(6)
       rows = self.class.rows_from_logfile(LogfileReader::LOGFILE_DIR + "default.log.1", 'GET /(?:works|chapters)/[0-9]+(?:/chapters/[0-9]+)?/?(?:\s|\?)')
-      rows.size.should == 8
+      expect(rows.size).to eq(8)
     end
-    
-    
-    
   end
-  
 end

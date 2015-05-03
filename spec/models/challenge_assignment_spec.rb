@@ -9,40 +9,40 @@ describe ChallengeAssignment do
     end
 
     it "should initially be unposted and unfulfilled and undefaulted" do
-      @assignment.posted?.should be_false
-      @assignment.fulfilled?.should be_false
-      @assignment.defaulted?.should be_false
-      @collection.assignments.unstarted.should include(@assignment)
-      @collection.assignments.unposted.should include(@assignment)
-      @collection.assignments.unfulfilled.should include(@assignment)
+      expect(@assignment.posted?).to be_falsey
+      expect(@assignment.fulfilled?).to be_falsey
+      expect(@assignment.defaulted?).to be_falsey
+      expect(@collection.assignments.unstarted).to include(@assignment)
+      expect(@collection.assignments.unposted).to include(@assignment)
+      expect(@collection.assignments.unfulfilled).to include(@assignment)
     end
 
     it "should be unsent" do
-      @collection.assignments.sent.should_not include(@assignment)
+      expect(@collection.assignments.sent).not_to include(@assignment)
     end
-    
+
     describe "after being sent" do
       before do
         @assignment.send_out
       end
       it "should be sent" do
-        @collection.assignments.sent.should include(@assignment)
+        expect(@collection.assignments.sent).to include(@assignment)
       end
-    end      
-    
+    end
+
     describe "when it has an unposted creation" do
       before do
         @assignment.send_out
         @author = @assignment.offer_signup.pseud
-        @work = create(:work, :authors => [@author], :posted => false, :collection_names => @collection.name, :challenge_assignment_ids => [@assignment.id])
+        @work = create(:work, authors: [@author], posted: false, collection_names: @collection.name, challenge_assignment_ids: [@assignment.id])
         @assignment.reload
       end
-      
+
       it "should be started but not posted fulfilled or defaulted" do
-        @assignment.started?.should be_true
-        @assignment.posted?.should be_false
-        @assignment.fulfilled?.should be_false
-        @assignment.defaulted?.should be_false
+        expect(@assignment.started?).to be_truthy
+        expect(@assignment.posted?).to be_falsey
+        expect(@assignment.fulfilled?).to be_falsey
+        expect(@assignment.defaulted?).to be_falsey
       end
 
       describe "that gets posted" do
@@ -51,30 +51,30 @@ describe ChallengeAssignment do
           @work.save
           @assignment.reload
         end
-        
+
         it "should be posted and fulfilled and undefaulted" do
           # note: if this collection is moderated then fulfilled shouldn't be true
           # until the item is approved
-          @assignment.posted?.should be_true
-          @assignment.fulfilled?.should be_true
-          @assignment.defaulted?.should be_false
+          expect(@assignment.posted?).to be_truthy
+          expect(@assignment.fulfilled?).to be_truthy
+          expect(@assignment.defaulted?).to be_falsey
         end
-        
+
         describe "that is destroyed" do
           before do
             @work.destroy
             @assignment.reload
           end
-          
+
           it "should be unposted and unfulfilled again" do
-            @assignment.posted?.should be_false
-            @assignment.fulfilled?.should be_false
-            @assignment.defaulted?.should be_false
+            expect(@assignment.posted?).to be_falsey
+            expect(@assignment.fulfilled?).to be_falsey
+            expect(@assignment.defaulted?).to be_falsey
           end
         end
-        
+
       end
-      
+
     end
   end
 
