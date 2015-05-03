@@ -107,6 +107,17 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
     t.string   "persistence_token", :null => false
   end
 
+  create_table "api_keys", :force => true do |t|
+    t.string   "name",                            :null => false
+    t.string   "access_token",                    :null => false
+    t.boolean  "banned",       :default => false, :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "api_keys", ["access_token"], :name => "index_api_keys_on_access_token", :unique => true
+  add_index "api_keys", ["name"], :name => "index_api_keys_on_name", :unique => true
+
   create_table "archive_faq_translations", :force => true do |t|
     t.integer  "archive_faq_id"
     t.string   "locale",         :null => false
