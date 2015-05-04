@@ -227,7 +227,11 @@ form.filters dl {
   position: relative; 
 }
 
-.javascript .filters #leave_filters {
+.filtering {
+  right: 14em;
+}
+
+.filtering .filters #leave_filters {
   background: transparent none;
   border-bottom: none;
   position: fixed;
@@ -238,12 +242,8 @@ form.filters dl {
   z-index: 0;
 }
 
-.javascript #leave_filters:focus {
+.filtering #leave_filters:focus {
   outline: none;
-}
-
-.filtering {
-  right: 14em;
 }
 
 /* 22 system: messages */
