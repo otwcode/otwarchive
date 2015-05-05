@@ -9,10 +9,10 @@ class FavoriteTagsController < ApplicationController
   # POST /favorites_tags
   def create
     @favorite_tag = current_user.favorite_tags.build(params[:favorite_tag])
-    success_message = ts('You have successfully added %{tag_name} to your favorite tags.', tag_name: @favorite_tag.tag_name)
+    success_message = ts("You have successfully added %{tag_name} to your favorite tags. You can find them on the <a href='#{root_path}'>Archive homepage</a>.", tag_name: @favorite_tag.tag_name)
     if @favorite_tag.save
       respond_to do |format|
-        format.html { redirect_to tag_works_path(tag_id: @favorite_tag.tag.to_param), notice: success_message }
+        format.html { redirect_to tag_works_path(tag_id: @favorite_tag.tag.to_param), notice: success_message.html_safe }
         format.json { render json: { item_id: @favorite_tag.id, item_success_message: success_message }, status: :created }
       end
     else

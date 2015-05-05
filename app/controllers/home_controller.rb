@@ -4,6 +4,10 @@ class HomeController < ApplicationController
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
   skip_before_filter :store_location, :only => [:first_login_help]
   
+  # unicorn_test
+  def unicorn_test
+  end
+
   # terms of service
   def tos
     render :action => "tos", :layout => "application"
@@ -135,7 +139,7 @@ protected
       when "nomination"
         TagSetNomination.for_tag_set(OwnedTagSet.find(@last_id)).owned_by(user).first
       when "setting"
-        AdminSetting.first
+        Rails.cache.fetch("admin_settings") { AdminSetting.first }
       when "assignment", "claim", "signup"
         klass = "challenge_#{classname}".classify.constantize
         query = classname == "assignment" ? klass.by_offering_user(user) :

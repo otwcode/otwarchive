@@ -44,11 +44,13 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # POST /admin_posts
