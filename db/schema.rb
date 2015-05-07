@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
     t.string   "action"
     t.text     "summary"
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
   end
 
   create_table "admin_banners", :force => true do |t|
@@ -287,15 +287,15 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 16777215
-    t.text     "faq",                     :limit => 16777215
-    t.text     "rules",                   :limit => 16777215
+    t.text     "intro",                   :limit => 2147483647
+    t.text     "faq",                     :limit => 2147483647
+    t.text     "rules",                   :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -608,7 +608,9 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
     t.string   "name"
     t.boolean  "main"
     t.datetime "updated_at"
-    t.integer  "language_id", :null => false
+    t.integer  "language_id",                          :null => false
+    t.boolean  "interface_enabled", :default => false, :null => false
+    t.boolean  "email_enabled",     :default => false, :null => false
   end
 
   add_index "locales", ["iso"], :name => "index_locales_on_iso"
@@ -768,6 +770,7 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
     t.boolean  "kudos_emails_off",                  :default => false,                     :null => false
     t.boolean  "disable_share_links",               :default => false,                     :null => false
     t.boolean  "banner_seen",                       :default => false,                     :null => false
+    t.integer  "preferred_locale",                  :default => 1,                         :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -979,15 +982,6 @@ ActiveRecord::Schema.define(:version => 20150217034225) do
 
   add_index "roles_users", ["role_id", "user_id"], :name => "index_roles_users_on_role_id_and_user_id"
   add_index "roles_users", ["user_id", "role_id"], :name => "index_roles_users_on_user_id_and_role_id"
-
-  create_table "saved_works", :force => true do |t|
-    t.integer  "user_id",    :null => false
-    t.integer  "work_id",    :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "saved_works", ["user_id", "work_id"], :name => "index_saved_works_on_user_id_and_work_id", :unique => true
 
   create_table "searches", :force => true do |t|
     t.integer  "user_id"
