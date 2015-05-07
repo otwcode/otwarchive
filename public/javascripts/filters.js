@@ -1,8 +1,7 @@
 // Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
   showFilters();
-  addFilterCloser();
-  setupMobileFilters();
+  setupNarrowScreenFilters();
 });
 
 function showFilters() {
@@ -24,30 +23,24 @@ function showFilters() {
   }); //filters each 
 } //showfilters
 
-function addFilterCloser() {
-  $j('dl.filters').before( $j('<p class="narrow-shown hidden"><button class="close action" aria-label="close">&times;</button></p>') );
-}
-
-function setupMobileFilters() {
+function setupNarrowScreenFilters() {
   var filters = $j('form.filters');
   var outer = $j('#outer');
   var show_link = $j('#go_to_filters');
-  var hide_link = $j(filters).find('.close');
+  var hide_link = $j('#leave_filters');
 
   show_link.click(function(e) {
     e.preventDefault();
     filters.removeClass('narrow-hidden');
-    outer.addClass('filtering'); 
-    hide_link.first().focus();
+    outer.addClass('filtering');
+    filters.find(':focusable').first().focus();
     filters.trap();
   });
 
-  hide_link.each(function() {
-    $j(this).click(function(e) {
-      e.preventDefault();
-      filters.addClass('narrow-hidden');
-      show_link.focus();
-      outer.removeClass('filtering');
-    });
+  hide_link.click(function(e) {
+    e.preventDefault();
+    outer.removeClass('filtering');
+    filters.addClass('narrow-hidden');
+    show_link.focus();
   });
 }
