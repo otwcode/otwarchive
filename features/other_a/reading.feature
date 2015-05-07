@@ -156,7 +156,7 @@ Feature: Reading count
   When the reading rake task is run
     And I go to fandomer's reading page
   Then I should see "some work"
-    And I should see "Viewed 3 times"
+    And I should see "Viewed 4 times"
     And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage
