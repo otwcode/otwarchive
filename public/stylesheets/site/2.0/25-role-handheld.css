@@ -208,6 +208,7 @@ form.filters dl {
 
 .javascript form.filters {
   margin: 0;
+  max-width: 95%;
   position: absolute;
   top: 0;
   right: -16em;
