@@ -116,47 +116,40 @@ Feature: Reading count
   Then I should not see "Mark for Later"
     And I should not see "Mark as Read"
 
-  Scenario: Read a multi-chapter work
+  Scenario: Multi-chapter works are added to history, can be deleted from history, are updated every time the user accesses a chapter, and can be marked for later
 
   Given I am logged in as "writer"
-    And I post the work "some work"
-    And a chapter is added to "some work"
-  Then I should see "some work"
+    And I post the work "multichapter work"
+    And a chapter is added to "multichapter work"
+  Then I should see "multichapter work"
   When I am logged out
     And I am logged in as "fandomer"
-    And I go to the works page
-    And I follow "some work"
+    And I view the work "multichapter work"
   When the reading rake task is run
     And I go to fandomer's reading page
-  Then I should see "some work"
+  Then I should see "multichapter work"
     And I should see "Viewed once"
   When I press "Delete from History"
   Then I should see "Work successfully deleted from your history."
-  When I go to the works page
-    And I follow "some work"
-  Then I should not see "la la la la la la la la la la la"
-  When the reading rake task is run
-    And I go to fandomer's reading page
-  Then I should see "some work"
+  When I view the work "multichapter work"
+    And the reading rake task is run
+  When I go to fandomer's reading page
+  Then I should see "multichapter work"
     And I should see "Viewed once"
-  When I go to the works page
-    And I follow "some work"
+  When I view the work "multichapter work"
     And I follow "Next Chapter"
-  Then I should see "la la la la la la la la la la la"
-  When the reading rake task is run
-    And I go to fandomer's reading page
-  Then I should see "some work"
-    And I should see "Viewed 2 times"
-  When I go to the works page
-    And I follow "some work"
+    And the reading rake task is run
+  When I go to fandomer's reading page
+  Then I should see "multichapter work"
+    And I should see "Viewed 3 times"
+  When I view the work "multichapter work"
     And I follow "Next Chapter"
-  Then I should see "la la la la la la la la la la la"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
   When the reading rake task is run
     And I go to fandomer's reading page
-  Then I should see "some work"
-    And I should see "Viewed 4 times"
+  Then I should see "multichapter work"
+    And I should see "Viewed 5 times"
     And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage
