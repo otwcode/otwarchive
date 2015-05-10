@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default from:  "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
@@ -41,7 +41,7 @@ class AdminMailer < ActionMailer::Base
     @summary = feedback.summary
     @comment = feedback.comment
     mail(
-      from:  feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
+      from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
       to: ArchiveConfig.FEEDBACK_ADDRESS,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - " + feedback.summary,
     )
