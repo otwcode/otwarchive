@@ -17,7 +17,7 @@ class KudoMailer < ActionMailer::Base
       )
     end
     ensure
-     I18n.locale = I18n.default_locale
+      I18n.locale = I18n.default_locale
   end
   
   # send a batched-up notification 
@@ -42,7 +42,7 @@ class KudoMailer < ActionMailer::Base
       )
     end
     ensure
-     I18n.locale = I18n.default_locale
+      I18n.locale = I18n.default_locale
   end
 
 end
