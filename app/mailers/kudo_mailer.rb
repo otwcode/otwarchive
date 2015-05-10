@@ -12,8 +12,8 @@ class KudoMailer < ActionMailer::Base
     @commentable = kudo.commentable
     I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
       mail(
-        :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
     ensure
@@ -37,8 +37,8 @@ class KudoMailer < ActionMailer::Base
     end
     I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
       mail(
-        :to => user.email,
-        :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
       )
     end
     ensure
