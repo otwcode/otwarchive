@@ -109,7 +109,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(Locale.find(@user.preference.prefered_locale).iso) do
       mail(
         to: @user.email,
-        subject: "#{t 'user_mailer.invite_increase_notification.subject' ,app_name: ArchiveConfig.APP_SHORT_NAME}"
+        subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
       )
     end
     ensure
@@ -220,8 +220,8 @@ class UserMailer < BulletproofMailer::Base
   # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)
-    @old_email= old_email
-    @new_email= new_email
+    @old_email = old_email
+    @new_email = new_email
     I18n.with_locale(Locale.find(@user.preference.prefered_locale).iso) do
       mail(
         to: @old_email,
