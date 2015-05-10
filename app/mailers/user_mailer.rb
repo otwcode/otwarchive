@@ -220,8 +220,8 @@ class UserMailer < BulletproofMailer::Base
   # Confirms to a user that their email was changed
   def change_email(user_id, old_email, new_email)
     @user = User.find(user_id)
-    @old_email= old_email
-    @new_email= new_email
+    @old_email = old_email
+    @new_email = new_email
     I18n.with_locale(Locale.find(@user.preference.prefered_locale).iso) do
       mail(
         to: @old_email,
@@ -400,8 +400,8 @@ class UserMailer < BulletproofMailer::Base
     @url = abuse_report.url
     @comment = abuse_report.comment
     mail(
-        to: abuse_report.email,
-        :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      to: abuse_report.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

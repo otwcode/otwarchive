@@ -18,7 +18,7 @@ module I18n
         if  options.has_key?(:fullkey)
            key =  options[:fullkey]
         end
-        #Rails.logger.error "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
+        # Rails.logger.error "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
         # add the default string as an option, and hand off to translate.
         options.merge!(:default => default_string)
         translate(key.to_sym, options)
@@ -107,8 +107,8 @@ module ActionView
             key = options[:key] + "."
           end
           key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
-          if  options.has_key?(:fullkey)
-             key =  options[:fullkey]
+          if options.has_key?(:fullkey)
+            key =  options[:fullkey]
           end
           #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
           # add the default string as an option, and hand off to translate.
