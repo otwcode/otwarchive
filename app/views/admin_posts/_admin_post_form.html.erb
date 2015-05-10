@@ -43,14 +43,17 @@
         </dt>
         <dd>
           <select id="admin_post_language_id" name="admin_post[language_id]">
-            <%= options_from_collection_for_select(Language.default_order, :id, :name, @admin_post.language_id || Language.default.id) %>
+            <%= options_from_collection_for_select(@news_languages, :id, :name, @admin_post.language_id || Language.default.id) %>
           </select>
         </dd>
         <dt>
-          <%= f.label :translated_post_id, ts("Is this a translation of another post?") %>
+          <%= f.label :translated_post_id, ts("Translation of") %>
         </dt>
         <dd>
-          <%= f.collection_select(:translated_post_id, @translatable_posts, :id, :title, {:include_blank => true}) %>
+          <%= f.text_field :translated_post_id,
+          autocomplete_options('admin_posts', 
+                          title: ts('translation of'),
+                          autocomplete_token_limit: 1) %>
         </dd>
       </dl>
     </fieldset>

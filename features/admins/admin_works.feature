@@ -4,13 +4,107 @@ Feature: Admin Actions for Works and Bookmarks
   I should be able to perform special actions on works
 
   Scenario: Can hide works
-    pending
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Hide"
+    Then I should see "Item has been hidden."
+      And logged out users should not see the hidden work "ToS Violation" by "regular_user"
+      And logged in users should not see the hidden work "ToS Violation" by "regular_user"
+      And "regular_user" should see their work "ToS Violation" is hidden
+      And 1 email should be delivered
+      And the email should contain "We are investigating the matter and will contact you"
+
+
+  Scenario: Can unhide works
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Hide"
+    Then I should see "Item has been hidden."
+      And all emails have been delivered
+    When I follow "Make Visible"
+    Then I should see "Item is no longer hidden."      
+      And logged out users should see the unhidden work "ToS Violation" by "regular_user"
+      And logged in users should see the unhidden work "ToS Violation" by "regular_user"
+      And 0 emails should be delivered
 
   Scenario: Can delete works
-    pending
-
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as an admin
+      And I view the work "ToS Violation"
+      And I follow "Delete"
+    Then I should see "Item was successfully deleted."
+      And 1 email should be delivered
+      And the email should contain "deleted from the Archive by a site admin"
+    When I am logged out
+      And I am on regular_users's works page
+    Then I should not see "ToS Violation"
+    When I am logged in
+      And I am on regular_users's works page
+    Then I should not see "ToS Violation"  
+      
   Scenario: Can hide bookmarks
     pending
+
+  Scenario: Can edit tags on works
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
+    When I am logged in as an admin
+      And I view the work "Changes"
+      And I follow "Edit Tags"
+    When I select "Mature" from "Rating"
+      And I uncheck "No Archive Warnings Apply"
+      And I check "Choose Not To Use Archive Warnings"
+      And I fill in "Fandoms" with "Admin-Added Fandom"
+      And I fill in "Relationships" with "Admin-Added Relationship"
+      And I fill in "Characters" with "Admin-Added Character"
+      And I fill in "Additional Tags" with "Admin-Added Freeform"
+      And I uncheck "M/M"
+      And I check "Other"
+    When I press "Post Without Preview"
+    Then I should not see "User-Added Fandom"
+      And I should see "Admin-Added Fandom"
+      And I should not see "User-Added Freeform"
+      And I should see "Admin-Added Freeform"
+      And I should not see "M/M"
+      And I should see "Other"
+      And I should not see "No Archive Warnings Apply"
+      And I should see "Creator Chose Not To Use Archive Warnings"
+      And I should not see "Not Rated"
+      And I should see "Mature"
+      And I should see "Admin-Added Relationship"
+      And I should see "Admin-Added Character"
+  
+  Scenario: Can edit external works
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as an admin
+      And I view the external work "External Changes"
+      And I follow "Edit"
+    When I fill in "Author" with "Admin-Added Creator"
+      And I fill in "Title" with "Admin-Added Title"
+      And I fill in "Author's Summary" with "Admin-added summary"
+      And I select "Mature" from "Rating"
+      And I fill in "Fandoms" with "Admin-Added Fandom"
+      And I fill in "Relationships" with "Admin-Added Relationship"
+      And I fill in "Characters" with "Admin-Added Character"
+      And I fill in "Additional Tags" with "Admin-Added Freeform"
+      And I check "M/M"
+    When I press "Update External work"
+    Then I should see "Admin-Added Creator"
+      And I should see "Admin-Added Title"
+      And I should see "Admin-added summary"
+      And I should see "Mature"
+      And I should see "Admin-Added Fandom"
+      And I should see "Admin-Added Character"
+      And I should see "Admin-Added Freeform"
+      And I should see "M/M"      
   
   Scenario: Can mark a comment as spam
     Given I have no works or comments

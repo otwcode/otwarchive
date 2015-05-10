@@ -43,8 +43,9 @@ class StatsController < ApplicationController
     @years = ["All Years"] + user_works.value_of(:revised_at).map {|date| date.year.to_s}.uniq.sort
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
     if @current_year != "All Years"
+      next_year = @current_year.to_i + 1
       start_date = DateTime.parse("01/01/#{@current_year}")
-      end_date = DateTime.parse("31/12/#{@current_year}")
+      end_date = DateTime.parse("01/01/#{next_year}")
       work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
     end
     # NOTE: eval is used here instead of send only because you can't send "bookmarks.count" -- avoid eval
@@ -71,7 +72,7 @@ class StatsController < ApplicationController
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
-    @totals[:author_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
+    @totals[:user_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new    
@@ -80,7 +81,15 @@ class StatsController < ApplicationController
     # TODO: If current_user.preference_hide_hit_counts is true, we probably shouldn't graph hits here
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
-    chart_title = @sort == "date" ? ts("Most Recent") : ts("Top Five By #{chart_col_title}")
+    if @sort == "date" && @dir == "ASC"
+      chart_title = ts("Oldest")
+    elsif @sort == "date" && @dir == "DESC"
+      chart_title = ts("Most Recent") 
+    elsif @dir == "ASC"
+      chart_title = ts("Bottom Five By #{chart_col_title}")
+    else
+      chart_title = ts("Top Five By #{chart_col_title}")
+    end
     @chart_data.new_column('number', chart_col_title)
       
     # Add Rows and Values 

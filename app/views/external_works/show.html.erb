@@ -1,6 +1,6 @@
 <% unless @external_work.blank? %>
-  <h3 class="landmark heading">External Work</h3>
+  <h3 class="landmark heading"><%= ts('External Work') %></h3>
   <ol class="work index group">
-    <li><%= render :partial => 'external_works/blurb', :locals => {:external_work => @external_work} %></li>
+    <%= render 'external_works/blurb', external_work: @external_work %>
   </ol>
 <% end %>

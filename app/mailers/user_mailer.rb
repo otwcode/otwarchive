@@ -352,6 +352,17 @@ class UserMailer < BulletproofMailer::Base
      I18n.locale = I18n.default_locale
   end
 
+  # Sends email to authors when a creation is hidden by an Admin
+  def admin_hidden_work_notification(creation_id, user_id)
+    @user = User.find_by_id(user_id)
+    @work = Work.find_by_id(creation_id)
+
+    mail(
+        to: @user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Abuse Team"
+    )
+  end
+
   def delete_signup_notification(user, challenge_signup)
     @user = user
     @signup = challenge_signup
