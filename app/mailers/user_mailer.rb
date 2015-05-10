@@ -259,7 +259,7 @@ class UserMailer < BulletproofMailer::Base
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
       )
-   end
+    end
     ensure
       I18n.locale = I18n.default_locale
   end
@@ -290,7 +290,7 @@ class UserMailer < BulletproofMailer::Base
           to: user.email,
           subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
         )
-       end
+      end
     end
     ensure
       I18n.locale = I18n.default_locale
@@ -400,8 +400,8 @@ class UserMailer < BulletproofMailer::Base
     @url = abuse_report.url
     @comment = abuse_report.comment
     mail(
-        to: abuse_report.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      to: abuse_report.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
     )
   end
 

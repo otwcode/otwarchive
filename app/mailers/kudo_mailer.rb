@@ -17,8 +17,8 @@ class KudoMailer < ActionMailer::Base
       kudos_hash.each_pair do |commentable_info, kudo_givers|
         commentable_type, commentable_id, guest_count = commentable_info.split('_')
         commentable = commentable_type.constantize.find_by_id(commentable_id)
-        if guest_count.to_i == 1 then kudo_givers << "#{t 'mailer.kudos.guest'}" end 
-        if guest_count.to_i > 1 then kudo_givers << "#{guest_count} #{t 'mailer.kudos.guests'}" end 
+        if guest_count.to_i == 1 then kudo_givers << "#{t 'mailer.kudos.guest'}" end
+        if guest_count.to_i > 1 then kudo_givers << "#{guest_count} #{t 'mailer.kudos.guests'}" end
         next unless commentable
         @commentables << commentable
         @kudo_givers[commentable_id] = kudo_givers
