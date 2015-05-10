@@ -15,7 +15,7 @@ class KudoMailer < ActionMailer::Base
     kudos_hash = JSON.parse(user_kudos)
     I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
       kudos_hash.each_pair do |commentable_info, kudo_givers|
-        commentable_type, commentable_id, guest_count  = commentable_info.split('_')
+        commentable_type, commentable_id, guest_count = commentable_info.split('_')
         commentable = commentable_type.constantize.find_by_id(commentable_id)
         if guest_count.to_i == 1 then kudo_givers << "#{t 'mailer.kudos.guest'}" end 
         if guest_count.to_i > 1 then kudo_givers << "#{guest_count} #{t 'mailer.kudos.guests'}" end 
