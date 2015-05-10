@@ -8,11 +8,11 @@ describe KudoMailer do
       @user = FactoryGirl.create(:user)
     end
 
-    let(:email) { KudoMailer.kudo_notification(@user.id,@kudos.id).deliver }
+    let(:email) { KudoMailer.kudo_notification(@user.id, @kudos.id).deliver }
 
     it "should have a valid from line" do
       text = "From: Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>"
-      email.encoded.should =~ /#{text}/
+      expect(email.encoded).to match(/#{text}/)
     end
   end
 end

@@ -15,6 +15,8 @@ SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672f
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
+SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
+SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'
@@ -113,10 +115,14 @@ IMPORT_MAX_WORKS: 25
 IMPORT_MAX_CHAPTERS: 200
 IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
+# max number of abuse reports to accept for a given work URL
+ABUSE_REPORTS_PER_WORK_MAX: 5
+
 # number of items in various displays
 ITEMS_PER_PAGE: 25
 # must be less than ITEMS_PER_PAGE above
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
+NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE: 3
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
 TAGS_IN_CLOUD: 200
@@ -126,6 +132,7 @@ TAG_LIST_LIMIT: 300
 OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 20
 MAX_KUDOS_TO_SHOW: 50
+MAX_FAVORITE_TAGS: 20
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20

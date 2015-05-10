@@ -195,12 +195,14 @@ Feature: Create Works
       And a category exists with name: "Gen", canonical: true
       And a category exists with name: "F/M", canonical: true
       And the following activated users exist
-        | login          | password    | email                 |
-        | coauthor       | something   | coauthor@example.org  |
-        | cosomeone      | something   | cosomeone@example.org |
-        | giftee         | something   | giftee@example.org    |
-        | recipient      | something   | recipient@example.org |
+        | login          | password    | email                   |
+        | coauthor       | something   | coauthor@example.org    |
+        | cosomeone      | something   | cosomeone@example.org   |
+        | badcoauthor    | something   | badcoauthor@example.org |
+        | giftee         | something   | giftee@example.org      |
+        | recipient      | something   | recipient@example.org   |
       And I am logged in as "thorough" with password "something"
+      And user "badcoauthor" is banned
     When I go to thorough's user page
       And I follow "Profile"
       And I follow "Manage My Pseuds"
@@ -238,6 +240,10 @@ Feature: Create Works
     # Collections are now parsed by collectible.rb which only shows the first failing collection and nothing else
     # And I should see a collection not found message for "collection2"
     When I fill in "work_collection_names" with ""
+      And I fill in "pseud_byline" with "badcoauthor"
+      And I press "Preview"
+    Then I should see "badcoauthor has been banned"
+    When I fill in "pseud_byline" with "coauthor"
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
     Then I should see "try using less than 100 characters or using commas to separate your tags"
@@ -315,7 +321,8 @@ Feature: Create Works
       And I should not see "This is a preview"
 
   Scenario: RTE and HTML buttons are separate
-  Given I am logged in as "newbie"
+  Given the default ratings exist
+    And I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
     And I should see "Rich Text" within ".rtf-html-switch"

@@ -194,6 +194,18 @@ class AutocompleteController < ApplicationController
     end
   end
 
+  # admin posts for translations, formatted as Admin Post Title (Post #id)
+  def admin_posts
+    if params[:term].present?
+      search_param = '%' + params[:term] + '%'
+      results = AdminPost.non_translated.where("title LIKE ?", search_param).limit(ArchiveConfig.MAX_RECENT).map do |result|
+        {id: (post_id = result.id),
+        name: result.title + " (Post ##{post_id})" }
+      end
+      respond_with(results)
+    end
+  end
+
   def admin_post_tags
     if params[:term].present?
       search_param = '%' + params[:term].strip + '%'

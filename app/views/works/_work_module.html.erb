@@ -21,10 +21,10 @@
       <%= ts('by') %>
         
       <!-- do not cache -->
-      <%= byline(work) %>
+      <%= byline(work, visibility: "public") %>
 
-<% #### CACHE show/hide #### %>
-<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v4") do %>
+<% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v5") do %>
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
   
@@ -47,6 +47,9 @@
     <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
   </div>
 	  
+  <% if !work.posted? %>
+   <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{time}', time: time_in_zone(work.created_at + 1.month)).html_safe %></p>
+  <% end %>
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts("Tags") %></h6>
   <ul class="tags commas">

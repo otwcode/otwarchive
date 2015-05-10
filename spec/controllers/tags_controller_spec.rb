@@ -4,7 +4,7 @@ describe TagsController do
   include LoginMacros
 
   before do
-    fake_login            
+    fake_login
     @current_user.roles << Role.new(name: 'tag_wrangler')
   end
 
@@ -19,7 +19,7 @@ describe TagsController do
       it "should show those freeforms" do
         get :wrangle, id: @fandom.name, show: 'freeforms', status: 'unwrangled'
 
-        assigns(:tags).should include(@freeform1)
+        expect(assigns(:tags)).to include(@freeform1)
       end
     end
   end
@@ -47,10 +47,10 @@ describe TagsController do
         put :mass_update, id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id]
 
         get :wrangle, id: @fandom1.name, show: 'freeforms', status: 'unwrangled'
-        assigns(:tags).should_not include(@freeform1)
+        expect(assigns(:tags)).not_to include(@freeform1)
 
         @freeform1.reload
-        @freeform1.fandoms.should include(@fandom2)
+        expect(@freeform1.fandoms).to include(@fandom2)
       end
     end
 
@@ -59,8 +59,8 @@ describe TagsController do
         put :mass_update, id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id]
 
         @freeform1.reload
-        @freeform1.fandoms.should include(@fandom2)
-        @freeform1.fandoms.should_not include(@fandom3)
+        expect(@freeform1.fandoms).to include(@fandom2)
+        expect(@freeform1.fandoms).not_to include(@fandom3)
       end
     end
 
@@ -69,8 +69,8 @@ describe TagsController do
         put :mass_update, id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id]
 
         @character1.reload
-        @character1.fandoms.should include(@fandom1)
-        @character1.fandoms.should include(@fandom2)
+        expect(@character1.fandoms).to include(@fandom1)
+        expect(@character1.fandoms).to include(@fandom2)
       end
     end
 
@@ -79,8 +79,8 @@ describe TagsController do
         put :mass_update, id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id]
 
         @character1.reload
-        @character1.fandoms.should include(@fandom1)
-        @character1.should be_canonical
+        expect(@character1.fandoms).to include(@fandom1)
+        expect(@character1).to be_canonical
       end
     end
 
@@ -89,8 +89,8 @@ describe TagsController do
         put :mass_update, id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id]
 
         @character2.reload
-        @character2.fandoms.should include(@fandom2)
-        @character2.should_not be_canonical
+        expect(@character2.fandoms).to include(@fandom2)
+        expect(@character2).not_to be_canonical
       end
     end
   end
@@ -108,7 +108,7 @@ describe TagsController do
         put :update, id: @tag.name, tag: { fix_taggings_count: true }
 
         @tag.reload
-        @tag.taggings_count.should eq(0)
+        expect(@tag.taggings_count).to eq(0)
       end
     end
   end
