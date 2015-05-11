@@ -14,11 +14,11 @@ Archive of Our Own
 <%= t 'mailer.general.footer.general.text', support_url: root_url+"support", donate_url: donate_url %>
 <% if content_for?(:sent_at) %>
 
-<%= t 'mailer.general.footer.sentat' %>  <%= yield(:sent_at) %>.
+<%= t 'mailer.general.footer.sentat', sent_at: :sent_at %>
 
 <% end %>
 <% if content_for?(:sent_by) %>
 
-<%= t 'mailer.general.footer.sentby'%>  <%= yield(:sent_by) %>.
+<%= t 'mailer.general.footer.sentby.text', sent_by: :sent_by %>
 
 <% end %>
