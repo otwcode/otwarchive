@@ -9,7 +9,7 @@ class CommentMailer < ActionMailer::Base
   def comment_notification(user_id, comment_id)
     user = User.find(user_id)
     @comment = Comment.find(comment_id)
-    I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
@@ -23,7 +23,7 @@ class CommentMailer < ActionMailer::Base
   def edited_comment_notification(user_id, comment_id)
     user = User.find(user_id)
     @comment = Comment.find(comment_id)
-    I18n.with_locale(Locale.find(user.preference.prefered_locale).iso) do
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")

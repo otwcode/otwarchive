@@ -282,7 +282,7 @@ public
   ### GLOBALIZATION ###
 
 #  before_filter :load_locales
-#  before_filter :set_prefered_locale
+#  before_filter :set_preferred_locale
 
 #  I18n.backend = I18nDB::Backend::DBBased.new
 #  I18n.record_missing_keys = false # if you want to record missing translations
@@ -293,7 +293,7 @@ public
   end
 
   # Sets the locale
-  def set_prefered_locale
+  def set_preferred_locale
     # Loading the current locale
     if session[:locale] && @loaded_locales.detect { |loc| loc.iso == session[:locale]}
       set_locale session[:locale].to_sym
