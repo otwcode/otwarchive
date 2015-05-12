@@ -66,7 +66,7 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
   Scenario: invalid user
-    Given I have loaded the "users" fixture
+    Given I have loaded the fixtures
     When I am on the home page
     And I follow "Forgot password?"
     When I fill in "reset_password_for" with "testuser"

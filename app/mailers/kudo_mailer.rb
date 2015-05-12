@@ -10,10 +10,14 @@ class KudoMailer < ActionMailer::Base
     kudo = Kudo.find(kudo_id)
     @pseud = kudo.pseud
     @commentable = kudo.commentable
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
-    )
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+      mail(
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      )
+    end
+    ensure
+      I18n.locale = I18n.default_locale
   end
   
   # send a batched-up notification 
@@ -31,10 +35,14 @@ class KudoMailer < ActionMailer::Base
       @commentables << commentable
       @kudo_givers[commentable_info] = kudo_givers
     end
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
-    )
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+      mail(
+        to: user.email,
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
+      )
+    end
+    ensure
+      I18n.locale = I18n.default_locale
   end
 
 end
