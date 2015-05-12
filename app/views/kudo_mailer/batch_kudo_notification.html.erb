@@ -2,7 +2,7 @@
 
   <% @commentables.each_with_index do |commentable, index| %>
     <% givers_list = @kudo_givers["#{commentable.id}"] %>
-    <%= if ! givers_list.nil? then givers_list.each_with_index.map {|g,i| style_bold(( i == 0) ? g.capitalize : g)}.to_sentence.html_safe end  %>
+    <%= if ! givers_list.nil? then givers_list.each_with_index.map {|g,i| style_bold((i == 0) ? g.capitalize : g)}.to_sentence.html_safe end  %>
 
     <%=  t 'mailer.kudos.leftkudos' %> 
     
