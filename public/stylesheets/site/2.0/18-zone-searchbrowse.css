@@ -78,6 +78,10 @@ form.filters dl {
   padding: 0;
 }
 
+.filters dt, .filters select {
+  min-width: 0;
+}
+
 .filters dt a {
   border: none;
 }
