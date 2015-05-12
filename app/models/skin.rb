@@ -232,7 +232,7 @@ class Skin < ActiveRecord::Base
       case
       when m.match(/max-width: 44em/)
         "narrow"
-      when m.match(/max-width: 64px/)
+      when m.match(/max-width: 64em/)
         "midsize"
       else
         m
