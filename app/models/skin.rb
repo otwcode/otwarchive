@@ -231,7 +231,7 @@ class Skin < ActiveRecord::Base
   def get_media_for_filename
     ((media.nil? || media.empty?) ? DEFAULT_MEDIA : media).map {|m|
       case
-      when m.match(/max-width: 49em/)
+      when m.match(/max-width: 48em/)
         "narrow"
       when m.match(/max-width: 64px/)
         "midsize"
@@ -242,7 +242,7 @@ class Skin < ActiveRecord::Base
   end
 
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 49em)').gsub('.', ', ')
+    media_string.gsub(/narrow/, 'only screen and (max-width: 48em)').gsub('.', ', ')
     media_string.gsub(/midsize/, 'only screen and (max-width: 64em)').gsub('.', ', ')
   end
 
