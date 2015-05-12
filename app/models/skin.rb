@@ -3,7 +3,6 @@ include HtmlCleaner
 include CssCleaner
 
 class Skin < ActiveRecord::Base
-
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
                    [ts("Work Skin"), "WorkSkin"],
@@ -503,5 +502,4 @@ class Skin < ActiveRecord::Base
     skin.save!
     skin
   end
-
 end
