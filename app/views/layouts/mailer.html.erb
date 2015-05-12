@@ -98,11 +98,11 @@
                           <%= t 'mailer.general.footer.general.html', support_url: root_url+"support", donate_url: donate_url %>
 
                           <% if content_for?(:sent_at) %>
-                            <p><%= t 'mailer.general.footer.sentat'%><%= yield(:sent_at) %>.</p>
+                            <p><%= t 'mailer.general.footer.sentat', sent_at: :sent_at %></p>
                           <% end %>
 
                           <% if content_for?(:sent_by) %>
-                            <p><%= t 'mailer.general.footer.sentby'%><b><%= yield(:sent_by) %></b>.</p>
+                            <p><%= t 'mailer.general.footer.sentby.html', sent_by: :sent_by %></p>
                           <% end %>
 <!-- /footer -->
 
