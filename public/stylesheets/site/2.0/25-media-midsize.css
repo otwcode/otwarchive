@@ -35,3 +35,13 @@
   padding-left: 0.5em;
   padding-right: 0.5em;
 }
+
+/* 18 zone searchbrowse */
+
+form.filters {
+  width: 24%;
+}
+
+.filters fieldset {
+  margin-right: 0;
+}
