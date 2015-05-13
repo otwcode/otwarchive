@@ -309,7 +309,7 @@ end
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
-  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
+  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("Url", :with => url_of_work)
 end
 
