@@ -6,11 +6,11 @@
   <dt>Font and Font Family</dt>
   <dd id="css_fonts">
     <p>
-      Unfortunately, you cannot use the font shorthand in your CSS. All font properties have to be specified separately, e.g., 
-      <tt>font-size: 1.1em; font-weight: bold; font-family: Cambria, Constantia, Palatino, Georgia, serif;</tt>
+      Unfortunately, you cannot use the <code>font</code> shorthand in your CSS. All font properties have to be specified separately, e.g., 
+      <code>font-size: 1.1em; font-weight: bold; font-family: Cambria, Constantia, Palatino, Georgia, serif;</code>
     </p>
     <p>
-      In the font-family property, we allow you to specify any font with an alphanumeric name. 
+      In the <code>font-family</code> property, we allow you to specify any font with an alphanumeric name. 
       You can (but don't have to) specify the name with single or double quotes
       around it, just make sure the quotes match. (e.g., 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.)
       Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use 
@@ -18,8 +18,8 @@
       See <a href="http://www.fonttester.com/help/list_of_web_safe_fonts.html">a set of web-safe fonts with fallbacks</a>.
     </p>
     <p>
-      We CANNOT allow the font-face attribute. Sorry! If you have an uncommon font that you want to 
-      use in a skin you would like to share, we suggest adding a comment in your skin with a pointer to a place for users 
+      We <strong>cannot</strong> allow the <code>@font-face</code> attribute. Sorry! If you have an uncommon font that you want to 
+      use in a skin you would like to share, we suggest adding a comment in the skin's "Description" field with a pointer to a place for users 
       to download the font themselves, and using web-safe fonts as fallbacks.
     </p>
   </dd>
@@ -28,25 +28,59 @@
   <dd id="css_shorthand_properties">
     We allow the following properties including all their variations (and shorthand values): <br />
     <code>
-background, border, box-shadow, column, cue, font, layer-background, layout-grid, list-style, margin, marker, opacity, outline, overflow, padding, page-break, pause, scrollbar, text, transform, transition
+      background, border, column, cue, font, layer-background, layout-grid, 
+      list-style, margin, marker, outline, overflow, padding, page-break, pause, 
+      scrollbar, text, transform, transition
     </code>
   </dd>
   <dd id="css_properties">
     We also allow the following specific properties: <br />
     <code>
--moz-user-select, -replace, -use-link-source, accelerator, alignment-adjust, alignment-baseline, appearance, azimuth, baseline-shift, behavior, binding, bookmark-label, bookmark-level, bookmark-target, bottom, box-align, box-direction, box-flex, box-flex-group, box-lines, box-orient, box-pack, box-sizing, caption-side, clear, clip, color, color-profile, content, counter-increment, counter-reset, crop, cue, cue-after, cue-before, cursor, direction, display, dominant-baseline, drop-initial-after-adjust, drop-initial-after-align, drop-initial-before-adjust, drop-initial-before-align, drop-initial-size, drop-initial-value, elevation, empty-cells, filter, fit, fit-position, float, float-offset, font, font-effect, font-emphasize, font-emphasize-position, font-emphasize-style, font-family, font-size, font-size-adjust, font-smooth, font-stretch, font-style, font-variant, font-weight, grid-columns, grid-rows, hanging-punctuation, height, hyphenate-after, hyphenate-before, hyphenate-character, hyphenate-lines, hyphenate-resource, hyphens, icon, image-orientation, image-resolution, ime-mode, include-source, inline-box-align, layout-flow, left, letter-spacing, line-break, line-height, line-stacking, line-stacking-ruby, line-stacking-shift, line-stacking-strategy, mark, mark-after, mark-before, marks, marquee-direction, marquee-play-count, marquee-speed, marquee-style, max-height, max-width, min-height, min-width, move-to, nav-down, nav-index, nav-left, nav-right, nav-up, opacity, orphans, page, page-policy, phonemes, pitch, pitch-range, play-during, position, presentation-level, punctuation-trim, quotes, rendering-intent, resize, rest, rest-after, rest-before, richness, right, rotation, rotation-point, ruby-align, ruby-overhang, ruby-position, ruby-span, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, string-set, tab-side, table-layout, target, target-name, target-new, target-position, top, unicode-bibi, unicode-bidi, vertical-align, visibility, voice-balance, voice-duration, voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress, voice-volume, volume, white-space, white-space-collapse, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index
+      -replace, -use-link-source, accelerator, alignment-adjust, 
+      alignment-baseline, appearance, azimuth, baseline-shift, behavior, 
+      binding, bookmark-label, bookmark-level, bookmark-target, bottom, 
+      box-align, box-direction, box-flex, box-flex-group, box-lines, box-orient, 
+      box-pack, box-shadow, box-sizing, caption-side, clear, clip, color, 
+      color-profile, content, counter-increment, counter-reset, crop, cue, 
+      cue-after, cue-before, cursor, direction, display, dominant-baseline, 
+      drop-initial-after-adjust, drop-initial-after-align, 
+      drop-initial-before-adjust, drop-initial-before-align, drop-initial-size, 
+      drop-initial-value, elevation, empty-cells, filter, fit, fit-position, 
+      float, float-offset, font, font-effect, font-emphasize, 
+      font-emphasize-position, font-emphasize-style, font-family, font-size, 
+      font-size-adjust, font-smooth, font-stretch, font-style, font-variant, 
+      font-weight, grid-columns, grid-rows, hanging-punctuation, height, 
+      hyphenate-after, hyphenate-before, hyphenate-character, hyphenate-lines, 
+      hyphenate-resource, hyphens, icon, image-orientation, image-resolution, 
+      ime-mode, include-source, inline-box-align, layout-flow, left, 
+      letter-spacing, line-break, line-height, line-stacking, 
+      line-stacking-ruby, line-stacking-shift, line-stacking-strategy, mark, 
+      mark-after, mark-before, marks, marquee-direction, marquee-play-count, 
+      marquee-speed, marquee-style, max-height, max-width, min-height, 
+      min-width, move-to, nav-down, nav-index, nav-left, nav-right, nav-up, 
+      opacity, orphans, page, page-policy, phonemes, pitch, pitch-range, 
+      play-during, position, presentation-level, punctuation-trim, quotes, 
+      rendering-intent, resize, rest, rest-after, rest-before, richness, right, 
+      rotation, rotation-point, ruby-align, ruby-overhang, ruby-position, 
+      ruby-span, size, speak, speak-header, speak-numeral, speak-punctuation, 
+      speech-rate, stress, string-set, tab-side, table-layout, target, 
+      target-name, target-new, target-position, top, unicode-bibi, unicode-bidi, 
+      user-select, vertical-align, visibility, voice-balance, voice-duration, 
+      voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress, 
+      voice-volume, volume, white-space, white-space-collapse, widows, width, 
+      word-break, word-spacing, word-wrap, writing-mode, z-index
     </code>
   </dd>
 
   <dt>URLs</dt>
   <dd id="css_urls">
-    We allow external image URLs (specified as url('http://somesite.com/my_awesome_image.jpg')) in JPG, GIF, and PNG formats. 
-    Please note, however, that skins using external images will not be approved for public use.  
+    We allow external image URLs (specified as <code>url('http://somesite.com/my_awesome_image.jpg')</code>) in JPG, GIF, and PNG formats.
+    Please note, however, that skins using external images will not be approved for public use.
   </dd> 
 
   <dt>Keywords</dt>
   <dd id="css_keywords">
-    We allow all standard CSS keyword values (e.g., <tt>absolute</tt>, <tt>bottom</tt>, <tt>center</tt>, <tt>underline</tt>, etc.). 
+    We allow all standard CSS keyword values (e.g., <code>absolute</code>, <code>bottom</code>, <code>center</code>, <code>underline</code>, etc.). 
   </dd>
   
   <dt>Numeric Values</dt>
@@ -63,7 +97,7 @@ background, border, box-shadow, column, cue, font, layer-background, layout-grid
 
   <dt>Colors</dt> 
   <dd id="css_colors">
-    You can specify colors using hex values (eg, #000000 is black in hex) or with RGB or RGBA values (e.g., rgb(0,0,0) and rgba(0,0,0,0) both give you black). 
+    You can specify colors using hex values (eg, <code>#000000</code> is black in hex) or with RGB or RGBA values (e.g., <code>rgb(0,0,0)</code> and <code>rgba(0,0,0,0)</code> both give you black). 
     This may be safer since not all browsers will necessarily support all color names. However, color names are more
     readable and easier to remember, so we also allow color names. (We suggest you stick to 
     <a href="http://www.w3schools.com/css/css_colornames.asp">the set of commonly-supported color names</a>.)        
@@ -72,26 +106,14 @@ background, border, box-shadow, column, cue, font, layer-background, layout-grid
   <dt>Scale</dt>
   <dd id="css_scale">
     <p>
-      You can specify scale (for the "transform" property) as <code>scale(numeric value)</code> where the numeric value can be 
+      You can specify scale (for the <code>transform</code> property) as <code>scale(numeric value)</code> where the numeric value can be 
       specified up to two decimal places. 
     </p>
   </dd>
   
   <dt>Comments</dt>
   <dd id="css_comments">
-    <p>You can use comments either before or after a complete block of CSS, but not in the middle. (PS: comments are awesome!)</p>
-    <p>This will work fine:<br />
-    <code>
-      /* here is a comment before my awesome code */<br />
-      body {background: #fff;}<br />
-      /* here is a comment after my  awesome code */
-    </code>
-    </p>
-    <p>This will not work:<br />
-      <code>
-        body {/* comment in the middle of my code */ background: #fff;}
-      </code>
-    </p>
+    <p>Comments are stripped from CSS.</p>
   </dd>
     
 </dl>

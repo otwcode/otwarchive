@@ -5,6 +5,10 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+<p class="narrow-shown hidden actions">
+  <a href="#inbox-filters" id="go_to_filters"><%= ts("Filters") %></a>
+</p>
 <!--/subnav-->
 
 <!--main content-->
@@ -12,7 +16,7 @@
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user, :filters => params[:filters]), :method => :put, :id => 'inbox-form' do %>
+  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form' do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
@@ -31,38 +35,11 @@
       <ol class="comment index group">
         <% @inbox_comments.each do |inbox_comment| %>
           <% feedback_comment = inbox_comment.feedback_comment %>
-          <% next if feedback_comment.nil? || feedback_comment.is_deleted? %>
 
           <!-- START of single comment -->
           <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
-            <h4 class="heading byline">
-              <% if !feedback_comment.pseud.nil? %>
-                <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-                  <%= ts('Anonymous Creator on') %> <%= commentable_description_link(feedback_comment) %>
-                <% else %>
-                  <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
-                <% end %>
-              <% else %>
-                <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts("on") %> <%= commentable_description_link(feedback_comment) %>
-              <% end %>
-              <span class="posted datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></span>
-            </h4>
 
-            <div class="icon">
-              <% if !feedback_comment.pseud.nil? %>
-                <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
-                  <span class="visitor icon"><!-- visitor icon holder --></span>
-                <% else %>
-                  <%= icon_display(feedback_comment.pseud.user, feedback_comment.pseud) %>
-                <% end %>
-              <% else %>
-                <span class="visitor icon"><!-- visitor icon holder --></span>
-              <% end %>
-            </div>
-
-            <blockquote class="userstuff">
-              <%= raw sanitize_field(feedback_comment, :content) %>
-            </blockquote>
+            <%= render 'inbox_comment_contents', feedback_comment: feedback_comment %>
 
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
@@ -75,9 +52,8 @@
                   <span class="replied" title="<%= ts("replied to") %>"><%= ts("&#10004;").html_safe %></span>
                 <% end %>
 
-                <% unless feedback_comment.ultimate_parent.blank? %>
-                  <%= link_to ts("Reply"), reply_user_inbox_path(current_user, :comment_id => feedback_comment, :filters => params[:filters]), :remote => true %>
-                <% end %>
+                <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
+
               </li>
               <li class="action">
                 <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>
@@ -111,7 +87,7 @@
 <!--/content-->
 
 <!--subnav-->
-<%= form_tag(user_inbox_path(@user), method: :get, class: 'filters', id: 'inbox-filters') do %>
+<%= form_tag(user_inbox_path(@user), method: :get, class: 'narrow-hidden filters', id: 'inbox-filters') do %>
   <h3 class="landmark heading"><%= ts("Filter") %></h3>
   <%= field_set_tag do %>
     <dl class="filters" role="menu">
@@ -168,6 +144,12 @@
       <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
     </dl>
   <% end %>
+  <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
+  <p class="narrow-shown hidden">
+    <a href="#main" id="leave_filters" class="close">
+      <%= ts("Top of Inbox") %>
+    </a>
+  </p>
 <% end %>
 <!--/subnav-->
 

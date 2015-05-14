@@ -159,8 +159,10 @@ Otwarchive::Application.routes.draw do
         get :find
       end
     end
+    resources :api
   end
 
+  match '/admin/api/new', to: 'admin/api#create', via: :post
 
   #### USERS ####
 
@@ -210,11 +212,13 @@ Otwarchive::Application.routes.draw do
     resources :external_authors do
       resources :external_author_names
     end
+    resources :favorite_tags, only: [:create, :destroy]
     resources :gifts, :only => [:index]
     resource :inbox, :controller => "inbox" do
       member do
         get :reply
         get :cancel_reply
+        post :delete
       end
     end
     resources :invitations do
@@ -438,6 +442,17 @@ Otwarchive::Application.routes.draw do
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
+
+  #### API ####
+
+  namespace :api do
+    namespace :v1 do
+      resources :import, only: [:create], defaults: { format: :json }
+      match 'works/urls', to: 'works#batch_urls', via: :post
+    end
+  end
+
+
   #### MISC ####
 
   resources :comments do
@@ -515,11 +530,13 @@ Otwarchive::Application.routes.draw do
     end
   end
 
+
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
+  match 'unicorn_test' => 'home#unicorn_test'
   match 'dmca' => 'home#dmca'
   match 'diversity' => 'home#diversity'
   match 'site_map' => 'home#site_map'
@@ -531,10 +548,10 @@ Otwarchive::Application.routes.draw do
   match 'donate' => 'home#donate'
   match 'lost_cookie' => 'home#lost_cookie'
   match 'about' => 'home#about'
-	match 'menu/browse' => 'menu#browse'
-	match 'menu/fandoms' => 'menu#fandoms'
-	match 'menu/search' => 'menu#search'
-	match 'menu/about' => 'menu#about'
+  match 'menu/browse' => 'menu#browse'
+  match 'menu/fandoms' => 'menu#fandoms'
+  match 'menu/search' => 'menu#search'
+  match 'menu/about' => 'menu#about'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

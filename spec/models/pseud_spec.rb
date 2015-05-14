@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe Pseud do 
+describe Pseud do
 
   it "has a valid factory" do
-    build(:pseud).should be_valid
+    expect(build(:pseud)).to be_valid
   end
 
   it "is invalid without a name" do
-    build(:pseud, name: nil).should be_invalid
+    expect(build(:pseud, name: nil)).to be_invalid
   end
 
   it "is invalid if there are special characters" do
-      build(:pseud, name: '*pseud*').should be_invalid
+      expect(build(:pseud, name: '*pseud*')).to be_invalid
   end
 
   # TODO: add more tests

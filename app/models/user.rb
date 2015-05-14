@@ -50,6 +50,8 @@ class User < ActiveRecord::Base
   has_many :fannish_next_of_kins, foreign_key: 'kin_id', dependent: :destroy
   has_one :fannish_next_of_kin, dependent: :destroy
 
+  has_many :favorite_tags, dependent: :destroy
+
   # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
   before_destroy :remove_pseud_from_kudos
 
@@ -189,7 +191,8 @@ class User < ActiveRecord::Base
     inbox_comments.find(:all, :conditions => {:read => false})
   end
   def unread_inbox_comments_count
-    inbox_comments.count(:all, :conditions => {:read => false})
+    inbox_comments.with_feedback_comment.count(:all,
+                                               conditions: { read: false })
   end
 
   scope :alphabetical, :order => :login

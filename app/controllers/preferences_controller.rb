@@ -14,6 +14,7 @@ class PreferencesController < ApplicationController
     @user = User.find_by_login(params[:user_id])
     @preference = @user.preference || Preference.create(:user_id => @user.id)
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_locales = Locale.where(email_enabled: true)
   end
 
   def update

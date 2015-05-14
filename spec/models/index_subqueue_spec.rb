@@ -6,15 +6,15 @@ describe IndexSubqueue do
 
   it "should have ids added to it" do
     subqueue.add_ids([1,2,3,4])
-    subqueue.ids.should == %w(1 2 3 4)
+    expect(subqueue.ids).to eq(%w(1 2 3 4))
   end
 
   it "should get its target class from the name" do
-    subqueue.klass.should == Work
+    expect(subqueue.klass).to eq(Work)
   end
 
   it "should get its label from the name" do
-    subqueue.label.should == "main"
+    expect(subqueue.label).to eq("main")
   end
 
 end
