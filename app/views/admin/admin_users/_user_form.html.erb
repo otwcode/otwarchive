@@ -5,7 +5,7 @@
   <%= hidden_field_tag :role, params[:role] %>
   <%= hidden_field_tag "id", user.login %>
   <th scope="row"><%= link_to user.login, user_path(user) %></th>
-  <td><%= text_field_tag "user[email]", user.email, title: t('admin.admin_users.index.results_table.body.email_title') %></td>
+  <td><%= text_field_tag "user[email]", user.email, title: t('admin.admin_users.index.results_table.body.email_title', default: "Email") %></td>
   <% for role in @roles %>
     <td>
       <%= check_box_tag "user[roles][]", role.id, user.roles.include?(role), :title => role.name, :id => "user_roles_#{role.id}" %>
@@ -16,6 +16,6 @@
       <%= link_to user.fannish_next_of_kin.kin_name, user_path(user.fannish_next_of_kin.kin_name) %>
     <% end %>
   </td>
-  <td class="actions"><%= submit_tag t('admin.admin_users.index.results_table.body.submit') %></td>
-  <td class="actions"><%= link_to t('admin.admin_users.index.results_table.body.details'), admin_user_path(user) %></td>
+  <td class="actions"><%= submit_tag t('admin.admin_users.index.results_table.body.submit', default: "Update") %></td>
+  <td class="actions"><%= link_to t('admin.admin_users.index.results_table.body.details', default: "Details"), admin_user_path(user) %></td>
 <% end %>
