@@ -124,7 +124,7 @@ Feature: Admin Actions to manage users
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
   When I go to the abuse administration page for "mrparis"
-    And I choose "Record Warning"
+    And I choose "Record warning"
     And I fill in "Notes" with "Next time, the brig."
   When I press "Update"
   Then I should see "Warning was recorded."
@@ -135,7 +135,7 @@ Feature: Admin Actions to manage users
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin
   When I go to the abuse administration page for "mrparis"
-    And I choose "Record Warning"
+    And I choose "Record warning"
   When I press "Update"
   Then I should see "You must include notes in order to perform this action."
 
