@@ -26,7 +26,7 @@ Feature: Leave kudos
       And 0 emails should be delivered
     When kudos are sent
       Then 1 email should be delivered to "myname1@foo.com"
-      And the email should contain "Myname2"
+      And the email should contain "myname2"
       And the email should contain "left kudos"
       And the email should contain "."
       And all emails have been delivered
@@ -119,7 +119,7 @@ Feature: Leave kudos
       And I leave kudos on "Another Awesome Story"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
-      And the email should contain "Myname2"
+      And the email should contain "myname2"
       And the email should contain "someone_else"
       And the email should contain "guest"
       And the email should contain "Awesome Story"
