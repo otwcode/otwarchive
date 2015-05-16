@@ -29,7 +29,7 @@ class RedisMailQueue
         prefix, author, commentable_type, commentable_id = key.split("_")
 
         # batch it
-        user_kudos["#{commentable_type}_#{commentable_id}"] = {names: names, guest_count: guest_count}
+        user_kudos["#{ commentable_type }_#{ commentable_id }"] = {names: names, guest_count: guest_count}
       end
 
       next if user_kudos.blank?
