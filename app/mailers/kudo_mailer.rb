@@ -34,7 +34,6 @@ class KudoMailer < ActionMailer::Base
         else
           kudo_givers << guest_kudos(guest_count).capitalize unless guest_count == 0
         end
-        kudo_givers << "there were #{guest_count} I beleive this will be 0 as it does not go though the hash"
         next if kudo_givers.empty?
 
         @commentables << commentable
@@ -51,8 +50,8 @@ class KudoMailer < ActionMailer::Base
 
   def guest_kudos(guest_count)
     if guest_count.to_i == 1
-      return "1111 #{t 'mailer.kudos.guest'}"
+      return "#{t 'mailer.kudos.guest'}"
     end
-    return "1111 #{guest_count} #{t 'mailer.kudos.guests'}"
+    return "#{guest_count} #{t 'mailer.kudos.guests'}"
   end
 end
