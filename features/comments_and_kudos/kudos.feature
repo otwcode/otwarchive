@@ -41,7 +41,7 @@ Feature: Leave kudos
     Then I should see "You have already left kudos here. :)"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
-      And the email should contain "a guest"
+      And the email should contain "A guest"
       And the email should contain "left kudos"
       And the email should contain "."
     When I am logged in as "myname3"
