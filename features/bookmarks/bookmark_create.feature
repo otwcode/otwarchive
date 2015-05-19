@@ -92,7 +92,7 @@ Scenario: Create a bookmark
     When I follow "Edit"
     Then I should see "Editing bookmark for Stuck with You"
     When I fill in "Notes" with "I wish this author would join AO3"
-      And I fill in "Your Tags" with "WIP"
+      And I fill in "Your tags" with "WIP"
       And I press "Update"
     Then I should see "Bookmark was successfully updated"
     
@@ -160,7 +160,7 @@ Scenario: extra commas in bookmark form (Issue 2284)
   Given I am logged in as "bookmarkuser"
     And I post the work "Some Work"
   When I follow "Bookmark"
-    And I fill in "Your Tags" with "Good tag, ,, also good tag, "
+    And I fill in "Your tags" with "Good tag, ,, also good tag, "
     And I press "Create"
   Then I should see "created"
 

@@ -17,7 +17,7 @@ Given /^I set up an external work$/ do
   fill_in("Title", :with => DEFAULT_EXTERNAL_TITLE)
   step %{I fill in basic external work tags}
   fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
-  fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
 end
 
 Given /^I bookmark the external work "([^\"]*)"$/ do |title|
@@ -27,7 +27,7 @@ Given /^I bookmark the external work "([^\"]*)"$/ do |title|
   fill_in("Title", :with => title)
   step %{I fill in basic external work tags}
   fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
-  fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
   click_button("Create")
 end
 
