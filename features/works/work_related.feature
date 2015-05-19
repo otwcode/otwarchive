@@ -258,7 +258,7 @@ Scenario: Listing external works as inspirations
     And I fill in "Work Title" with "Followup"
     And I fill in "content" with "That could be an amusing crossover."
     And I check "parent-options-show"
-    And I fill in "Url" with "google.com"
+    And I fill in "URL" with "google.com"
     And I press "Preview"
   Then I should see a save error message
     And I should see "A parent work outside the archive needs to have a title."
@@ -273,7 +273,7 @@ Scenario: Listing external works as inspirations
     And I should see "A translation of Worldbuilding by BNF"
   When I edit the work "Followup"
     And I check "parent-options-show"
-    And I fill in "Url" with "testarchive.transformativeworks.org"
+    And I fill in "URL" with "testarchive.transformativeworks.org"
     And "issue 1806" is fixed
     # And I press "Preview"
   # Then I should see a save error message
@@ -292,7 +292,7 @@ Scenario: Listing external works as inspirations
   #invalid URL should give a helpful message (issue 1786)
   When I edit the work "Followup"
     And I check "parent-options-show"
-    And I fill in "Url" with "this.is.an.invalid/url"
+    And I fill in "URL" with "this.is.an.invalid/URL"
     And I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
@@ -311,7 +311,7 @@ Scenario: External work language
     And I fill in "Work Title" with "Followup 4"
     And I fill in "content" with "That could be an amusing crossover."
     And I check "parent-options-show"
-    And I fill in "Url" with "www.google.com"
+    And I fill in "URL" with "www.google.com"
     And I fill in "Title" with "German Worldbuilding"
     And I fill in "Author" with "BNF"
     And I select "Deutsch" from "Language"
@@ -362,8 +362,8 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   Then 1 email should be delivered to "misterdeejay"
     And the email should contain "You have been listed as a coauthor on the following work"
   Then 1 email should be delivered to "inspiration"
-    And the email should link to inspired's user url
+    And the email should link to inspired's user URL
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
-    And the email should link to misterdeejay's user url
+    And the email should link to misterdeejay's user URL
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
   
