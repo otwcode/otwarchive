@@ -26,10 +26,10 @@ class KudoMailer < ActionMailer::Base
         # If we have a commentable, extract names and process guest kudos text - skip if no kudos givers
         names = kudo_givers_hash['names']
         guest_count = kudo_givers_hash['guest_count']
-        kudo_givers = ""
+        kudo_givers = []
 
         if !names.nil? && names.size > 0
-          kudo_givers = names.to_sentence
+          kudo_givers = names
           kudo_givers << guest_kudos(guest_count) unless guest_count == 0
         else
           kudo_givers << guest_kudos(guest_count).capitalize unless guest_count == 0
@@ -37,7 +37,7 @@ class KudoMailer < ActionMailer::Base
         next if kudo_givers.empty?
 
         @commentables << commentable
-        @kudo_givers[commentable_info] = kudo_givers
+        @kudo_givers[commentable_info] = kudo_givers.to_sentance
       end
       mail(
         to: user.email,
