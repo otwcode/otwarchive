@@ -17,7 +17,7 @@
       <% end %>
 
       <dt class="required">
-        <%= collection_form.label :name, ts("Collection name" + " *") %>
+        <%= collection_form.label :name, ts("Collection name" + "*") %>
         <%= link_to_help "collection-name" %>
       </dt>
       <dd>
@@ -28,7 +28,7 @@
       </dd>
 
       <dt class="required">
-        <%= collection_form.label :title, ts("Display title") + " *" %>
+        <%= collection_form.label :title, ts("Display title") + "*" %>
       </dt>
       <dd>
         <%= collection_form.text_field :title, "aria-describedby" => "title-field-notes" %>
