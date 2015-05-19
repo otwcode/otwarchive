@@ -18,7 +18,9 @@
         <p class="footnote" id="url-field-description"><%= ts("If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %></p>
       </dd>
 
-      <dt><%= f.label :category, ts("Most abuse reports fall into the following categories. Please select your concern if it is listed here.") %>   <%= link_to_help('abuse-report-help')%></dt>
+      <dt>
+        <%= f.label :category, ts("Most abuse reports fall into the following categories. Please select your concern if it is listed here.") %>
+        <%= link_to_help('abuse-report-help')%></dt>
       <dd>
         <%= f.select("category", AbuseReport::CATEGORIES, include_blank: true) %>
       </dd>
@@ -44,7 +46,7 @@
           <%= f.label :cc_me, ts("Email me a copy of my message (optional)") %>
         </p>
         <%= f.hidden_field :ip_address, :value => request.remote_ip %>
-      </dd>		
+      </dd>
       <dt class="landmark"><%= ts("Send to Abuse Team") %></dt>
       <dd class="submit actions"><%= f.submit ts("Submit") %></dd>
     </dl>
