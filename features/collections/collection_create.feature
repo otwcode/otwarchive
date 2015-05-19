@@ -90,7 +90,7 @@ Scenario: Fill out new collection form with faulty data
    And I fill in the following:
    | Collection name                 | faulty name         |
    | Display title                   | Awesome Collection  |
-   | Email                           | fangirl@example.org |
+   | Collection email                | fangirl@example.org |
    | Brief description               | My Description      |
    | Introduction                    | My Introduction     |
    | FAQ                             | My FAQ              |
@@ -103,15 +103,15 @@ Scenario: Fill out new collection form with faulty data
    And I submit
 
    Then I should see a save error message
-   And I should see "faulty name" in the "Collection Name" input
-   And I should see "Awesome Collection" in the "Display Title" input
-   And I should see "fangirl@example.org" in the "Email" input
-   And I should see "My Description" in the "Brief Description" input
+   And I should see "faulty name" in the "Collection name" input
+   And I should see "Awesome Collection" in the "Display title" input
+   And I should see "fangirl@example.org" in the "Collection email" input
+   And I should see "My Description" in the "Brief description" input
    And I should see "My Introduction" in the "Introduction" input
    And I should see "My FAQ" in the "FAQ" input
    And I should see "My Rules" in the "Rules" input
-   And I should see "My Message" in the "Assignment Notification Message" input
-   And I should see "My Other Message" in the "Gift Notification Message" input
+   And I should see "My Message" in the "Assignment notification message" input
+   And I should see "My Other Message" in the "Gift notification message" input
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
 
