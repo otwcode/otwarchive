@@ -94,10 +94,12 @@
         <fieldset id="parent-options">
           <dl>
             <%= fields_for "work[parent_attributes]" do |p| %>
-              <dt><%= p.label :url %></dt>
+              <dt><%= p.label :url, ts("URL") %></dt>
               <dd>
-                <%= p.text_field :url, :value => work_parent_value(:url) %>
-                <p class="important"><%= ts('For a work in the Archive, only the URL is required.') %></p>
+                <%= p.text_field :url, value: work_parent_value(:url), "aria-describedby" => "parent-attributes-url-field-description" %>
+                <p class="important footnote" id="parent-attributes-url-field-description">
+                  <%= ts('For a work in the Archive, only the URL is required.') %>
+                </p>
               </dd>
 
               <dt><%= p.label :title %></dt>
