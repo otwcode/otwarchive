@@ -24,10 +24,10 @@
 <%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
-    <p class="notice"><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></p>
+    <p class="notice" id="email-field-description"><%= ts("We value anonymous feedback, but if you'd like a personal reply to your question or comment, we need your email address to contact you. Our spam filter does collect IP addresses, but we never see them.") %></p>
     <dl>
       <dt><%= f.label :email, ts("Your email (optional)") %></dt>
-      <dd><%= f.text_field :email, :size => 60 %></dd>
+      <dd><%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %></dd>
     </dl>
   </fieldset>
   
@@ -47,9 +47,9 @@
       </dd>
       <dt class="required"><%= f.label :comment, ts("Your comment (required)") %></dt>
       <dd>
-        <%= f.text_area :comment, :cols => 60 %>
+        <%= f.text_area :comment, cols: 60, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field('feedback_comment', :failureMessage => ts("Please enter your feedback")) %>
-        <p class="footnote"><%= ts("Please be as specific as possible, including error messages and/or links") %></p>
+        <p class="footnote" id="comment-field-description"><%= ts("Please be as specific as possible, including error messages and/or links") %></p>
       </dd>
     </dl>
   </fieldset>
