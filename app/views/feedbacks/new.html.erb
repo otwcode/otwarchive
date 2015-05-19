@@ -30,7 +30,7 @@
       <dd><%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %></dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Describe Your Feedback') %></legend>
     <dl>
@@ -53,13 +53,13 @@
       </dd>
     </dl>
   </fieldset>
-  
+
   <fieldset>
     <legend><%= ts('Send Your Feedback') %></legend>
     <%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
     <%= f.hidden_field :ip_address, :value => request.remote_ip %>
     <p class="submit actions"><%= f.submit ts("Send"), :disable_with => ts("Please wait...") %></p>
   </fieldset>
-  
+
 <% end %>
 <!--/content-->
