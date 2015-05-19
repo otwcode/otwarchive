@@ -10,14 +10,15 @@
     <h3 class="landmark heading"><%= ts('Preface') %></h3>
     <dl>
       <dt class="title required">
-        <%= f.label :title, ts('Work Title') + "*", class: "required" %>
+        <%= f.label :title, ts('Work Title') + "*" %>
       </dt>
       <dd class="title required">
         <%= f.text_field :title, class: "observe_textlength text" %>
         <%= live_validation_for_field('work_title',
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
-              failureMessage: ts('We need a title! (At least %{min_length} characters long, please.)', min_length: ArchiveConfig.TITLE_MIN.to_s))
+              failureMessage: ts('We need a title! (At least %{min_length} characters long, please.)',
+                min_length: ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
@@ -30,7 +31,8 @@
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, class: "observe_textlength" %>
-        <%= live_validation_for_field('work_summary', presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
+        <%= live_validation_for_field('work_summary', presence: false,
+              maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
 
@@ -56,6 +58,7 @@
                 :checked_method => "challenge_assignments", :name_method => "title" %>
         </dd>
       <% end %>
+
       <% if !(@claims = current_user.request_claims.unstarted).empty? || !@work.challenge_claims.empty? %>
         <!-- if the user has open claims? -->
         <dt class="collection">
@@ -91,7 +94,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag 'parent-options-show', ts('This work is a remix, a translation, a podfic, or was inspired by another work') %> 
+        <%= label_tag 'parent-options-show', ts('This work is a remix, a translation, a podfic, or was inspired by another work') %>
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -100,7 +103,8 @@
             <%= fields_for "work[parent_attributes]" do |p| %>
               <dt><%= p.label :url, ts("URL") %></dt>
               <dd>
-                <%= p.text_field :url, value: work_parent_value(:url), "aria-describedby" => "parent-attributes-url-field-description" %>
+                <%= p.text_field :url, value: work_parent_value(:url),
+                      "aria-describedby" => "parent-attributes-url-field-description" %>
                 <p class="important footnote" id="parent-attributes-url-field-description">
                   <%= ts('For a work in the Archive, only the URL is required.') %>
                 </p>
@@ -116,7 +120,9 @@
                 <%= p.label :language_id, ts('Language') %>
                 <%= link_to_help "languages-help" %>
               </dt>
-              <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") %></dd>
+              <dd>
+                <%= p.collection_select(:language_id, Language.all(order: :short), :id, :name, prompt: " ") %>
+              </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
@@ -131,7 +137,9 @@
                 <% if related_work.parent %>
                   <dd>
                     <ul class="actions" role="navigation">
-                      <li><%= link_to related_work.parent.title, related_work.parent %></li>
+                      <li>
+                        <%= link_to related_work.parent.title, related_work.parent %>
+                      </li>
                       <li>
                         <%= link_to ts('Remove'), related_work,
                                 confirm: ts('Are you sure you want to delete the connection to this work?'),
@@ -163,6 +171,7 @@
               <dd>
                 <%= s.collection_select(:id, @series, :id, :title, { :prompt => true }) %>
               </dd>
+
               <dt><%= s.label :title, ts('Or create and use a new one:') %></dt>
               <dd><%= s.text_field :title %></dd>
             <% end %>
@@ -172,7 +181,9 @@
               <% for serial in @serial_works %>
                 <dd>
                   <ul class="actions" role="navigation">
-                    <li><%= link_to serial.series.title, serial.series %></li>
+                    <li>
+                      <%= link_to serial.series.title, serial.series %>
+                    </li>
                     <li>
                       <%= link_to ts('Remove'), serial_work_path(serial),
                               method: :delete %>
@@ -227,22 +238,30 @@
             </dl>
           </fieldset>
         </dd>
+
         <dt class="language">
           <%= f.label :language_id, ts('Choose a language') %>
           <%= link_to_help "languages-help" %>
         </dt>
         <dd class="language">
           <select id="work_language_id" name="work[language_id]">
-            <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
+            <%= options_from_collection_for_select(Language.all(order: :short), :id, :name,
+                  @work.language_id || Language.default.id) %>
           </select>
         </dd>
+
         <dt class="skin">
           <%= f.label :work_skin_id, ts('Select Work Skin') %>
           <%= link_to_help "work-skins" %>
         </dt>
         <dd class="skin">
-          <%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
-          <p class="actions" role="navigation"><%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %></p>
+          <%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title),
+                :id,
+                :title,
+                { :selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), include_blank: true } %>
+          <p class="actions" role="navigation">
+            <%= link_to ts('Public Work Skins'), skins_path(:skin_type => 'WorkSkin') %>
+          </p>
         </dd>
       </dl>
 
@@ -257,10 +276,12 @@
       <dt class="restrict">
         <%= f.check_box :restricted %>
       </dt>
+
       <dd class="restrict">
         <%= f.label :restricted, ts('Only show your work to registered users') %>
         <%= link_to_help "registered-users" %>
       </dd>
+
       <dt class="anonymous comments">
         <%= f.check_box :anon_commenting_disabled %>
       </dt>
@@ -291,7 +312,8 @@
       <% use_tinymce %>
         <div class="rtf-html-field">
           <h4 class="landmark heading"><%= ts('Work Text') %>*</h4>
-          <%= c.text_area :content, value: @chapter.content, class: "mce-editor observe_textlength large", id: "content" %>
+          <%= c.text_area :content, value: @chapter.content,
+                class: "mce-editor observe_textlength large", id: "content" %>
           <%= live_validation_for_field('content',
             maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
             minimum_length: ArchiveConfig.CONTENT_MIN,
@@ -314,11 +336,20 @@
     <legend><%= ts('Post') %></legend>
     <ul class="actions">
       <% unless @work.new_record? || @work.posted? %>
-        <li><%= submit_tag ts('Save Without Posting'), name: 'save_button' %></li>
+        <li>
+          <%= submit_tag ts('Save Without Posting'), name: 'save_button' %>
+        </li>
       <% end %>
-      <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
-      <li><%= submit_tag ts('Post Without Preview'), name: 'post_button', disable_with: ts('Please wait...') %></li>
-      <li><%= submit_tag ts('Cancel'), name: 'cancel_button' %></li>
+      <li>
+        <%= submit_tag ts('Preview'), name: 'preview_button' %>
+      </li>
+      <li>
+        <%= submit_tag ts('Post Without Preview'), name: 'post_button',
+              disable_with: ts('Please wait...') %>
+      </li>
+      <li>
+        <%= submit_tag ts('Cancel'), name: 'cancel_button' %>
+      </li>
     </ul>
   </fieldset>
 <% end %> <!-- end of form_for -->
