@@ -21,7 +21,7 @@
 
   <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
     <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
-      <p class="required notice"><%= ts('* Required information') %></p>
+      <p class="required notice">* <%= ts('Required information') %></p>
     <% end %>
     <fieldset>
       <legend><%= ts("Bookmark") %></legend>
@@ -76,7 +76,7 @@
             <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
           </dd>
 
-          <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
+          <dt><%= f.label :tag_string, ts("Your tags") %></dt>
           <dd>
             <% if bookmarkable.class != ExternalWork %>
               <p class="footnote" id="tag-string-description">
@@ -89,7 +89,7 @@
             </p>
           </dd>
 
-          <dt><%= f.label :collection_names, ts("Add to Collections") %></dt>
+          <dt><%= f.label :collection_names, ts("Add to collections") %></dt>
           <dd>
             <%= f.text_field :collection_names, autocomplete_options('open_collection_names', :size => (in_page ? 60 : 80)) %>
           </dd>
@@ -99,8 +99,8 @@
       <fieldset>
         <legend><%= ts("Choose Type and Post") %></legend>
         <p> 
-          <%= f.check_box :private %> <%= f.label :private, ts("Private bookmark?") %>
-          <%= f.check_box :rec %> <%= f.label :rec, ts("Rec?") %>
+          <%= f.check_box :private %> <%= f.label :private, ts("Private bookmark") %>
+          <%= f.check_box :rec %> <%= f.label :rec, ts("Rec") %>
         </p>
         <p class="submit actions">
           <%= f.submit(button_name) %>
