@@ -6,13 +6,13 @@
 %>
 <div class="<% if bookmark.new_record? && bookmarkable.class == ExternalWork %>verbose <% end %>post bookmark" id="bookmark-form">
   <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
-  
+
   <% bookmark ||= Bookmark.new %>
   <% bookmarkable ||= bookmark.bookmarkable %>
-  
+
   <% in_page ||= false %>
   <% dynamic ||= false %>
-  
+
   <% bookmark_form_id = (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}") %>
   <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmark_form_id}" : "") %>
 
@@ -28,10 +28,10 @@
       <% if in_page %>
         <p class="close actions">
           <% if dynamic %>
-            <a id="bookmark_form_close_for_<%= bookmark_form_id %>" title="<%= ts('cancel') %>">&times;</a>
+            <a id="bookmark_form_close_for_<%= bookmark_form_id %>" aria-label="<%= ts('cancel') %>">&times;</a>
           <% else %>
-            <a class="bookmark_form_placement_close" href="#comments" title="<%= ts('cancel') %>">&times;</a>
-          <% end %>        
+            <a class="bookmark_form_placement_close" href="#comments" aria-label="<%= ts('cancel') %>">&times;</a>
+          <% end %>
         </p>
       <% end %>
 
