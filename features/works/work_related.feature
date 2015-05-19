@@ -362,8 +362,8 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   Then 1 email should be delivered to "misterdeejay"
     And the email should contain "You have been listed as a coauthor on the following work"
   Then 1 email should be delivered to "inspiration"
-    And the email should link to inspired's user URL
+    And the email should link to inspired's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
-    And the email should link to misterdeejay's user URL
+    And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
   
