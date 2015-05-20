@@ -37,7 +37,7 @@ class KudoMailer < ActionMailer::Base
         next if kudo_givers.empty?
 
         @commentables << commentable
-        @kudo_givers[commentable_info] = kudo_givers.to_sentance
+        @kudo_givers[commentable_info] = kudo_givers.to_sentence
       end
       mail(
         to: user.email,
