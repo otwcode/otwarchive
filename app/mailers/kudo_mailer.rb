@@ -50,8 +50,9 @@ class KudoMailer < ActionMailer::Base
 
   def guest_kudos(guest_count)
     if guest_count.to_i == 1
-      return "#{t 'mailer.kudos.guest'}"
+      "#{t 'mailer.kudos.guest'}"
+    else
+      "#{guest_count} #{t 'mailer.kudos.guests'}"
     end
-    return "#{guest_count} #{t 'mailer.kudos.guests'}"
   end
 end
