@@ -29,7 +29,7 @@ en:
           text: "Sent by %{sent_by}."
   user_mailer:
     invite_increase_notification:
-      subject: "%{app_name} New Invitations"
+      subject: "[%{app_name}] New Invitations"
       html:  "<p> Hi %{login}! </p>\n\
           <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
           <p> Cheers, <br> %{archive_name} </p>"
