@@ -1,8 +1,13 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en: 
   mailer: 
+    kudos:
+      guest: a guest
+      guests: guests
+      leftkudos_html: "%{givers_list} left kudos on %{commentable_link}."
+      kudoson: Kudos on
+      youhave: You've got kudos!
     general: 
       footer: 
         general: 
@@ -15,9 +20,9 @@ en:
                The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
               </p>
           text: |-
-              If you've received this message in error, please contact Support at %{support_url} .
+              If you've received this message in error, please contact Support at %{support_url}.
               
-              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url} .
+              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
         sentat: "Sent at %{sent_at}."
         sentby: 
           html: "Sent by <b>%{sent_by}</b>."

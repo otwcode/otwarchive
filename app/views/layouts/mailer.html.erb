@@ -95,7 +95,7 @@
                             <p><%= yield(:footer_note) %></p>
                           <% end %>
 
-                          <%= t 'mailer.general.footer.general.html', support_url: root_url+"support", donate_url: donate_url %>
+                          <%= t 'mailer.general.footer.general.html', support_url: root_url + "support", donate_url: donate_url %>
 
                           <% if content_for?(:sent_at) %>
                             <p><%= t 'mailer.general.footer.sentat', sent_at: :sent_at %></p>
