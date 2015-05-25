@@ -12,7 +12,7 @@ require 'resque'
  Resque.redis = redis_configs['redis_resque'][rails_env]
 
  # in-process performing of jobs (for testing) doesn't require a redis server
- Resque.inline = true
+ Resque.inline = ENV['RAILS_ENV'] == "test"
 
  Resque.after_fork do
    Resque.redis.client.reconnect
