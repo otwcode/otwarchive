@@ -46,7 +46,7 @@ en:
       faq: "FAQ"
       admin_post: "Archive admin posts"
       subject: "[%{app_name}] Confirmation"
-      welcome: "Welcome to the Archive of Our Own, %{username}!"
+      welcome: "Welcome to the Archive of Our Own, %{user}!"
       activate: "Please activate your account at: %{link}"
       bye: "We hope you enjoy using the Archive."
       html:
