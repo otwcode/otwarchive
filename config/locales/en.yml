@@ -40,3 +40,11 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    signup_notification:
+      subject: "[%{app_name}] Confirmation"
+      html:
+        welcome: "Welcome to the Archive of Our Own, %{username}!"
+      text:
+        welcome: "Welcome to the Archive of Our Own, %{username}!"
+
+
