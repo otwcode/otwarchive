@@ -42,6 +42,7 @@ en:
           %{archive_name}
     coauthor_notification:
       subject: "[%{app_name}] Co-Author Notification"
+      edit_the: "Edit the %{type}"
       part1: "You have been listed as a coauthor on the following %{type}:"
       html:
         part2: "%{edit} to remove yourself as author if you've been added in error or don't want to be listed as an author."
