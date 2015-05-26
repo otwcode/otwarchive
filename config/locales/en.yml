@@ -40,3 +40,10 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    coauthor_notification:
+      subject: "[%{app_name}] Co-Author Notification"
+      part1: "You have been listed as a coauthor on the following %{type}:"
+      html:
+        part2: "%{edit} to remove yourself as author if you've been added in error or don't want to be listed as an author."
+      text:
+        part2: "Edit the %{type} to remove yourself as an author if you've been added in error or don't want to be listed as an author: %{url}"
