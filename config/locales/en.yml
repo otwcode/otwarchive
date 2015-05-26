@@ -40,3 +40,6 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    edit_work_notification:
+      subject: "[%{app_name}] Your story has been updated"
+      part1: "You successfully edited the following story:"
