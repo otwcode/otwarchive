@@ -1,9 +1,9 @@
 <% content_for :message do %>
-  <p>Dear <%= @user.default_pseud.byline %>,</p>
+  <p><%= t 'user_mailer.delete_work_notification.hello', user: @user.default_pseud.byline %></p>
 
-  <p>Your work <i><%= style_bold(@work.title.html_safe) %></i> was deleted at <%= (@work.pseuds.count > 1 && @user != User.current_user) ? (ts("the request of ") + style_pseud_link(User.current_user.default_pseud)).html_safe : "your request" %>.</p>
+  <p><%= t('user_mailer.delete_work_notification.html.part1', title: style_bold(@work.title.html_safe), deleted_by: (@work.pseuds.count > 1 && @user != User.current_user) ? (t('user_mailer.delete_work_notification.request_of') + style_pseud_link(User.current_user.default_pseud)).html_safe : t('user_mailer.delete_work_notification.your_request') ).html_safe %></p>
   
-  <p>If you have questions, please <%= support_link("contact Support") %>.</p>  
+  <p><%= t('user_mailer.delete_work_notification.html.support', support: support_link(t 'user_mailer.delete_work_notification.support')).html_safe %></p>
   
-  <p>Attached is a copy of your work for your reference.</p>
+  <p><%= t('user_mailer.delete_work_notification.bye') %></p>
 <% end %>
