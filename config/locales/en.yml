@@ -40,3 +40,8 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    delete_signup_notification:
+      subject: "[%{app_name}] Your sign-up for %{collection} has been deleted"
+      hello: "Dear %{user},"
+      html:
+       part1: "Your work <i>%{title}</i> was deleted at"
