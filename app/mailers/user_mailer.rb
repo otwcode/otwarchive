@@ -58,7 +58,7 @@ class UserMailer < BulletproofMailer::Base
     I18n.with_locale(locale) do
       mail(
         to: creator.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+        subject: t('user_mailer.claim_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure
