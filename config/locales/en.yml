@@ -43,8 +43,8 @@ en:
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
       hello: "Dear %{user},"
-      request_of: "the request of "
-      your_request: "your request"
+      request_of: "the request of %{pseud}."
+      your_request: "your request."
       support: "contact Support"
       bye: "Attached is a copy of your work for your reference."
       html:
