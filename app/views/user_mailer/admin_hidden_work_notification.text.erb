@@ -1,19 +1,12 @@
+<% content_for :message do %>
+    <%= t('user_mailer.admin_hidden_work_notification.hello', user: @user.default_pseud.byline) %>
 
-    Dear <%= @user.default_pseud.byline %>,
+    <%= t('user_mailer.admin_hidden_work_notification.text.part1', title: @work.title, tos_url: root_url + "tos" ) %> 
 
-    Your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) has been reported to the Abuse Team as a violation of the Archive of Our Own's Terms of Service (<%= root_url + "tos" %>).
+    <%= t('user_mailer.admin_hidden_work_notification.part2') %>
 
-    We are investigating the matter and will contact you once the investigation has been completed. While the work is under investigation it has been hidden; only you will be able to access it.
-
-    If you have any questions, please contact our Abuse Team (<%= root_url + "abuse_reports/new" %>).
+    <%= t('user_mailer.admin_hidden_work_notification.textl.part3', abuse: root_url + "abuse_reports/new" ) %>
 
     <%= t('user_mailer.admin_hidden_work_notification.sincerely') %>
-    <%= t'user_mailer.admin_hidden_work_notification.ao3_abuse') %> 
+    <%= t('user_mailer.admin_hidden_work_notification.ao3_abuse') %> 
 <% end %>   
-    <p><%= t('user_mailer.admin_hidden_work_notification.hello', user: @user.default_pseud.byline) %></p>
-
-    <p><%= t('user_mailer.admin_hidden_work_notification.html.part1', title: style_link(@work.title.html_safe, work_url(@work)), tos: style_link('user_mailer.admin_hidden_work_notification.tos', tos_url).html_safe).html_safe%>
-
-    <p><%=t('user_mailer.admin_hidden_work_notification.part2') %></p>
-
-    <p><%= t('user_mailer.admin_hidden_work_notification.html.part3',abuse_link(t('user_mailer.admin_hidden_work_notification.abuse'))).html_safe %></p>

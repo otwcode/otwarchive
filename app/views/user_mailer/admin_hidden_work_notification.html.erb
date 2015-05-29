@@ -5,7 +5,7 @@
 
     <p><%=t('user_mailer.admin_hidden_work_notification.part2') %></p>
 
-    <p><%= t('user_mailer.admin_hidden_work_notification.html.part3',abuse_link(t('user_mailer.admin_hidden_work_notification.abuse'))).html_safe %></p>
+    <p><%= t('user_mailer.admin_hidden_work_notification.html.part3', abuse: abuse_link(t('user_mailer.admin_hidden_work_notification.abuse'))).html_safe %></p>
     <p><%= t('user_mailer.admin_hidden_work_notification.sincerely') %></p>
     <p><%= style_bold(t('user_mailer.admin_hidden_work_notification.ao3_abuse')) %></p>
 <% end %>
