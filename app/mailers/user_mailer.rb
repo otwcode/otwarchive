@@ -359,7 +359,7 @@ class UserMailer < BulletproofMailer::Base
 
     mail(
         to: @user.email,
-        subject: "#{t 'user_mailer.delete_signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME, collection: @signup.collection.title}"
+        subject: t('user_mailer.admin_hidden_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
