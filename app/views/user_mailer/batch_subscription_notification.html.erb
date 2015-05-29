@@ -6,7 +6,7 @@
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
 
-    <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> <$= t 'user_mailer.batch_subscription_notification.posted_a' %> 
+    <%= this_work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe %> <%= t 'user_mailer.batch_subscription_notification.posted_a' %> 
     <% if creation.is_a?(Work) %>
       <%= if this_work.backdate then t 'user_mailer.batch_subscription_notification.backdated' else t 'user_mailer.batch_subscription_notification.new' end  %> <%= t 'user_mailer.batch_subscription_notification.work' %>
     <% else %>
@@ -53,7 +53,6 @@
 
       <% @seen[this_work.id] = true %>
     <% end %>
-u
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
         <p>
           <%= style_bold(t 'user_mailer.summary') %>
