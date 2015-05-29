@@ -7,9 +7,9 @@
 
   <%= t 'user_mailer.claim_notification.text.part3' %>
 
-  <%= t 'user_mailer.claim_notification.text.part4', support: root_url + "support"' %>
+  <%= t 'user_mailer.claim_notification.text.part4', support: root_url + "support" %>
 
-  <%= t 'user_mailer.claim_notification.html.part5', email: @external_email %>
+  <%= t 'user_mailer.claim_notification.text.part5', email: @external_email %>
   <% @claimed_works.each do |work| %>
     - <%= work.title.html_safe %>  <%= work_url(work) %> <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %>
   <% end %>
@@ -20,7 +20,7 @@
 
   <%= t 'user_mailer.claim_notification.html.part8' %>
 
-  <%= t 'user_mailer.claim_notification.html.part9', support: root_url + "support"' %>
+  <%= t 'user_mailer.claim_notification.html.part9', support: root_url + "support" %>
  
-  <%= t 'user_mailer.claim_notification.html.part10 %>
+  <%= t 'user_mailer.claim_notification.html.part10' %>
 <% end %>
