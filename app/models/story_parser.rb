@@ -989,8 +989,8 @@ class StoryParser
           # probably seconds since the epoch
           date = Time.at($1.to_i)
         end
-        date ||= Date.parse(date_string)
-        return '' if date > Date.today
+        date ||= DateTime.parse(date_string)
+        return '' if date > DateTime.now
         return date
       rescue ArgumentError, TypeError
         return ''
