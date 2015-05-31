@@ -126,5 +126,17 @@ describe "API WorksController" do
       expect(parsed_body.first["status"]).to eq("not_found")
       expect(parsed_body.first).to include("error")
     end
+
+    it "should only do an exact match on the original url" do
+      post "/api/v1/works/urls",
+           { original_urls: %w(fo food)
+           }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body.first["status"]).to eq("not_found")
+      expect(parsed_body.first).to include("error")
+      expect(parsed_body.second["status"]).to eq("not_found")
+      expect(parsed_body.second).to include("error")
+    end
   end
 end
