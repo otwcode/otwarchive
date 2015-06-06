@@ -30,7 +30,6 @@ REVISION
 
 # /db/
 /db/*.sqlite3
-/db/*.sql
 /db/backup
 /db/sphinx
 /db/seed

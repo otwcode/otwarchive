@@ -140,7 +140,6 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
-    iconv (1.0.4)
     journey (1.0.4)
     jquery-rails (3.0.1)
       railties (>= 3.0, < 5.0)
@@ -339,10 +338,13 @@ GEM
       unf_ext
     unf_ext (0.0.6)
     unf_ext (0.0.6-x86-mingw32)
+    unicode (0.4.4.2)
+    unicode (0.4.4.2-x86-mingw32)
     unicorn (4.6.3)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    unidecoder (1.1.2)
     uuidtools (2.1.4)
     valium (0.5.0)
       activerecord (>= 3.0.2)
@@ -398,7 +400,6 @@ DEPENDENCIES
   google_visualr (>= 2.1)
   htmlentities
   httparty
-  iconv
   jquery-rails (>= 0.2.6)
   kgio
   launchy
@@ -431,7 +432,9 @@ DEPENDENCIES
   simplecov
   timeliness
   tire
+  unicode
   unicorn
+  unidecoder
   valium
   vcr (~> 2.5.0)
   webmock (~> 1.8.8)
