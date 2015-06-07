@@ -127,7 +127,7 @@ protected
       when "restricted_work"
         Work.where(:restricted => true).in_collection(Collection.find(@last_id)).first
       when "tag_wrangler"
-        if permit?("tag_wrangler")
+        if permit?("tag_wrangler", get_user_method: 'current_user')
           user
         else
           Role.find_by_name("tag_wrangler").users.first
