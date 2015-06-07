@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
 gem 'bundler'
 
@@ -30,12 +30,11 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
-gem 'psych' , '1.3.4'
 
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.4.2'
+gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
