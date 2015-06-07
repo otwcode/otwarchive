@@ -11,7 +11,7 @@
       </li>
       -->
     <% end %>
-    <% if permit?("opendoors") %>
+    <% if permit?("opendoors", get_user_method: 'current_user') %>
       <% # opendoors staff can modify %>
       <li><%= link_to ts('Edit'), edit_opendoors_external_author_path(external_author) %></li>
     <% end %>
