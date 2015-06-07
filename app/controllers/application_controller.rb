@@ -162,7 +162,7 @@ public
 
   # Filter method - requires user to have opendoors privs
   def opendoors_only
-    (logged_in? && permit?("opendoors", get_user_method: 'current_user')) || access_denied
+    (logged_in? && permit?("opendoors")) || access_denied
   end
 
   # Redirect as appropriate when an access request fails.
@@ -390,7 +390,7 @@ public
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else
-      logged_in_as_admin? || permit?("tag_wrangler", get_user_method: 'current_user') || access_denied
+      logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
 
