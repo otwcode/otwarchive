@@ -77,6 +77,5 @@ module Otwarchive
 
     # Bring the log under control
     config.lograge.enabled = true
-
   end
 end
