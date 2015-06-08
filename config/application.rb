@@ -78,7 +78,7 @@ module Otwarchive
     # Bring the log under control
     config.lograge.enabled = true
 
-    config.permit_yo.current_user_method = "current_user"
+    config.permit_yo.current_user_method = :current_user
 
   end
 end

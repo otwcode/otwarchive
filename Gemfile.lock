@@ -438,6 +438,3 @@ DEPENDENCIES
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
-
-BUNDLED WITH
-   1.10.3
