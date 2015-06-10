@@ -36,10 +36,14 @@ describe TagsController do
       @work = FactoryGirl.create(:work, posted: true, fandom_string: "#{@fandom1.name}", character_string: "#{@character1.name},#{@character2.name}", freeform_string: "#{@freeform1.name}")
     end
 
-    xit "should redirect to the wrangle action for that tag" do
-      expect {
-        put :mass_update, id: @fandom1.name, show: 'freeforms', status: 'unwrangled'
-      }.to redirect_to wrangle_tag_path(id: @fandom1.name, show: 'freeforms', status: 'unwrangled')
+    it "should redirect to the wrangle action for that tag" do
+      expect(put :mass_update, id: @fandom1.name, show: 'freeforms', status: 'unwrangled').
+          to redirect_to wrangle_tag_path(id: @fandom1.name,
+                                          show: 'freeforms',
+                                          status: 'unwrangled',
+                                          page: 1,
+                                          sort_column: 'name',
+                                          sort_direction: 'ASC')
     end
 
     context "with one canonical fandom in the fandom string and a selected freeform" do
