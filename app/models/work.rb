@@ -920,7 +920,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for parent work, via related_works
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
-      if attributes[:url].include?(ArchiveConfig.APP_URL)
+      if attributes[:url].include?(ArchiveConfig.APP_HOST)
         if attributes[:url].match(/\/works\/(\d+)/)
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
