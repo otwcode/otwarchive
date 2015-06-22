@@ -269,10 +269,11 @@ class StoryParser
       raise Error, "Work could not be downloaded" if work.nil?
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
+      work.revised_at = work.chapters.last.published_at
 
       # set authors for the works
       pseuds = []
-      pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
+      pseuds << User.current_user.default_pseud unless (options[:do_not_set_current_author] || User.current_user.nil?)
       pseuds << options[:archivist].default_pseud if options[:archivist]
       pseuds += options[:pseuds] if options[:pseuds]
       pseuds = pseuds.uniq
@@ -336,7 +337,7 @@ class StoryParser
         # ack! causing the chapters to exist even if work doesn't get created!
         # chapter.save
       end
-      return work
+      work
     end
 
     def parse_author_from_lj(location)
