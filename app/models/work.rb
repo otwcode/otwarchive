@@ -310,12 +310,12 @@ class Work < ActiveRecord::Base
     url = UrlFormatter.new(url)
     Work.where(:imported_from_url => url.original).first ||
       Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.find { |w|
+      Work.find do |w|
         work_url = UrlFormatter.new(w.imported_from_url)
         ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].map { |method|
           work_url.send(method) == url.send(method)
         }.include? true
-      }
+      end
   end
 
   ########################################################################

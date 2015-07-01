@@ -100,8 +100,8 @@ describe StoryParser do
 
   describe "check_for_previous_import" do
     let(:location_with_www) { "http://www.testme.org/welcome_to_test_vale.html" }
-    let(:location_no_www)   { "http://testme.org/welcome_to_test_vale.html" }
-    let(:location_partial_match)   { "http://testme.org/welcome_to_test_vale/12345" }
+    let(:location_no_www) { "http://testme.org/welcome_to_test_vale.html" }
+    let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
@@ -118,7 +118,7 @@ describe StoryParser do
     it "should not perform a partial match on work import locations" do
       @work = create(:work, imported_from_url: location_partial_match)
 
-      expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123")}.to_not raise_exception
+      expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
     end
   end
 

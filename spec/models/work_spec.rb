@@ -108,17 +108,11 @@ describe Work do
       let(:work_author) {@skin_author}
       let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "can be used by the work skin author" do
-        puts work_author.login
-        puts work_author.pseuds.first.name
         expect(work.save).to be_truthy
       end
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
       xit "cannot be used by another user" do
-        puts @skin_author.login
-        puts @skin_author.pseuds.first.name
-        puts @second_author.login
-        puts @second_author.pseuds.first.name
         expect(work.save).to be_falsey
          expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
       end
@@ -168,7 +162,6 @@ describe Work do
   end
 
   describe "#find_by_url" do
-
     it "should find imported works with various URL formats" do
       [
         'http://foo.com/bar.html', 'http://foo.com/bar', 'http://lj-site.com/bar/foo?color=blue'
@@ -195,8 +188,5 @@ describe Work do
       expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
       work.destroy
     end
-
   end
-
-
 end
