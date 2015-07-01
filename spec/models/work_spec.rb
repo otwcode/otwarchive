@@ -155,7 +155,6 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name
       expect(@work.new_recipients).to be_empty
     end
-
   end
 
   describe "#find_by_url" do
