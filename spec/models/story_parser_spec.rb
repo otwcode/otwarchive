@@ -88,10 +88,10 @@ describe StoryParser do
         expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
-      it "should match a folder style link to an individual user on journalfen"  do
-         url = "http://www.journalfen.net/users/username"
-         expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
-       end
+      it "should match a folder style link to an individual user on journalfen" do
+        url = "http://www.journalfen.net/users/username"
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
+      end
     end
 
     # TODO: KNOWN_STORY_PARSERS

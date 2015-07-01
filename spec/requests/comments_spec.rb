@@ -11,7 +11,7 @@ end
 # This code block is used for logged out users and logged in users, on unrestricted works
 shared_examples_for "on unrestricted works", :pending do
     before do
-      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "false" )
+      @work2 = create(:work, posted: true, fandom_string: "Merlin (TV)", title: "My title is long enough", restricted: "false")
       @work2.index.refresh
       @comment2 = create(:comment)
       @work2.comments << @comment2

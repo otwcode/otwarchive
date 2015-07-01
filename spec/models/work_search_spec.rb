@@ -249,6 +249,5 @@ describe WorkSearch do
       end
     end
   end
-
 end
 
