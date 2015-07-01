@@ -10,9 +10,9 @@ describe StoryParser do
   # Let the test get at external sites, but stub out anything containing "foo1" and "foo2"
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo1/).
-      to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+    to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
   WebMock.stub_request(:any, /foo2/).
-      to_return(status: 200, body: "Date: 2001-01-22 12:29\nstubbed response", headers: {})
+    to_return(status: 200, body: "Date: 2001-01-22 12:29\nstubbed response", headers: {})
 
   describe "get_source_if_known:" do
 
@@ -148,10 +148,10 @@ describe StoryParser do
   describe "#download_and_parse_chapters_into_story" do
     it "should import times as well as dates" do
       user = create(:user)
-      urls = [ "http://foo1", "http://foo2" ]
-      work = @sp.download_and_parse_chapters_into_story(urls, {pseuds: [user.default_pseud], do_not_set_current_author:false})
+      urls = ["http://foo1", "http://foo2"]
+      work = @sp.download_and_parse_chapters_into_story(urls, pseuds: [user.default_pseud], do_not_set_current_author: false)
       work.save
-      expect(work.revised_at.strftime('%FT%T%:z')).to eq(DateTime.new(2001,1,22,7,29,0,'-5').strftime('%FT%T%:z'))
+      expect(work.revised_at.strftime('%FT%T%:z')).to eq(DateTime.new(2001, 1, 22, 7, 29, 0, '-5').strftime('%FT%T%:z'))
     end
   end
 end

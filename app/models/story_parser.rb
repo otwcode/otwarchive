@@ -273,7 +273,7 @@ class StoryParser
 
       # set authors for the works
       pseuds = []
-      pseuds << User.current_user.default_pseud unless (options[:do_not_set_current_author] || User.current_user.nil?)
+      pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?
       pseuds << options[:archivist].default_pseud if options[:archivist]
       pseuds += options[:pseuds] if options[:pseuds]
       pseuds = pseuds.uniq

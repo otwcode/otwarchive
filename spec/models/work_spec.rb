@@ -78,7 +78,6 @@ describe Work do
   end
 
   context "validate authors" do
-
     # TODO: testing specific invalid pseuds should take place in pseud_spec
     # However, we still want to make sure we can't save works without a valid pseud
     it "does not save an invalid pseud with *", :pending do
@@ -129,7 +128,6 @@ describe Work do
   it "should send an email when added to collection"
 
   describe "new recipients virtual attribute"  do
-
     before(:each) do
       @author = create(:user)
       @recipient1 = create(:user)
@@ -164,8 +162,5 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name
       expect(@work.new_recipients).to be_empty
     end
-
   end
-
-
 end
