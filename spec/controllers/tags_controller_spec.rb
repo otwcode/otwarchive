@@ -33,7 +33,8 @@ describe TagsController do
       @freeform1 = FactoryGirl.create(:freeform, canonical: false)
       @character1 = FactoryGirl.create(:character, canonical: false)
       @character2 = FactoryGirl.create(:character, canonical: false, merger: FactoryGirl.create(:character, canonical: true))
-      @work = FactoryGirl.create(:work, posted: true,
+      @work = FactoryGirl.create(:work,
+                                 posted: true,
                                  fandom_string: "#{@fandom1.name}",
                                  character_string: "#{@character1.name},#{@character2.name}",
                                  freeform_string: "#{@freeform1.name}")
