@@ -25,7 +25,7 @@ Feature: Edit preferences
     And I should see "Hide additional tags (you can still choose to show them)."
     And I should see "Hide work skins (you can still choose to show them)."
     And I should see "Your site skin"
-    And I should see "Your time zone:"
+    And I should see "Your time zone"
     And I should see "Browser page title format"
     And I should see "Don't show me any hit counts."
     And I should see "Don't show me hits on my works."

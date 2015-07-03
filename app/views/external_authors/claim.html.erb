@@ -14,7 +14,7 @@
 <p class="message">
   <%= ts("If you want to take another look at your work(s) before you make your decision, but don’t have an Archive
   account,") %>
-  <%= link_to ts("contact Open Doors"), "http://opendoors.transformativeworks.org/contact/open%20doors" %>
+  <%= link_to ts("contact Open Doors"), "http://transformativeworks.org/contact/open%20doors" %>
   <%= ts("with your pseud and the titles of your work(s) and we will send you a copy.") %>
 </p>
 
@@ -22,8 +22,13 @@
   <h3 id="claim"><%= ts("Claim All Works") %></h3>
 
   <% if logged_in? %>
+    <p class="message">
+      <%= ts("Claim your works with your logged-in account. If you would like to claim
+      these works under a different account (or create a new account to claim them with), log out and reload this
+      page first.") %>
+    </p>
     <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %></p>
-  <% else %>  
+  <% else %>
     <p class="message">
       <%= ts("We invite you to join our beta and create an account! The works will automatically be added
       to your account and you will have full control over them.") %>

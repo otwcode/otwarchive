@@ -1,5 +1,3 @@
-require 'iconv'
-
 class Work < ActiveRecord::Base
 
   include Taggable
@@ -739,25 +737,28 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = string.to_ascii 
     string.gsub(/[^[\w _-]]+/, '')
   end
+
   def display_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
+    string.to_ascii
   end
+
   # need the next two to be filesystem safe and not overly long
   def download_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_title
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = title.to_ascii.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_basename
     "#{self.download_dir}/#{self.download_title}"
   end
@@ -919,7 +920,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for parent work, via related_works
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
-      if attributes[:url].include?(ArchiveConfig.APP_URL)
+      if attributes[:url].include?(ArchiveConfig.APP_HOST)
         if attributes[:url].match(/\/works\/(\d+)/)
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
@@ -1272,8 +1273,10 @@ class Work < ActiveRecord::Base
   end
 
   def to_indexed_json
-    to_json(methods:
-      [ :rating_ids,
+    to_json(
+      except: [:spam, :spam_checked_at],
+      methods: [
+        :rating_ids,
         :warning_ids,
         :category_ids,
         :fandom_ids,

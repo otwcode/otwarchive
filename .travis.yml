@@ -16,14 +16,15 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
 rvm:
-  - "1.9.3"
+  - "2.0.0"
 services:
   - elasticsearch
   - redis-server
   - memcached
 script:
-  - bundle exec rake db:create:all --trace
-  - bundle exec rake db:schema:load --trace
+  - rm -f structure.sql
+  - RAILS_ENV=test bundle exec rake db:create:all --trace
+  - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec $TEST_GROUP
 before_script:
@@ -41,4 +42,4 @@ notifications:
    channels:
      - "irc.freenode.org#otw-dev"
    on_success: change
-   on_failure: always
+   on_failure: change
