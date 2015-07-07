@@ -75,3 +75,9 @@ When /^I set my preferences to turn off viewing history$/ do
   user.preference.history_enabled = false
   user.preference.save
 end
+
+When /^I set my time zone to "([^"]*)"$/ do |time_zone|
+  user = User.current_user
+  user.preference.time_zone = time_zone
+  user.preference.save
+end
