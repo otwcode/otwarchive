@@ -2,7 +2,9 @@
 
     <% @commentables.each_with_index do |commentable, index| %>
         <%
-           givers_list = style_bold(@kudo_givers["#{commentable.class.name}_#{commentable.id}"]).html_safe
+           givers_list = @kudo_givers["#{commentable.class.name}_#{commentable.id}"].
+             map { |k| style_bold(k) }.
+             to_sentence.html_safe
            commentable_link = style_bold(style_link(commentable.commentable_name.html_safe, polymorphic_url(commentable)))
         %>
 
