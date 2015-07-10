@@ -125,9 +125,6 @@ describe Work do
     end
   end
 
-  #TODO: Move to a collection mailer spec
-  it "should send an email when added to collection"
-
   describe "new recipients virtual attribute"  do
 
     before(:each) do
