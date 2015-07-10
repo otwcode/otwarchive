@@ -2,7 +2,7 @@
 <h2 class="heading"><%= ts("Request Invitations") %></h2>
 <p>
   <%= ts("We don't normally grant more than 3 invitations at a time for personal use, and the maximum you can request through this form is %{max}. Requests are manually reviewed and may take several days to be approved. Please ", :max => ArchiveConfig.MAX_USER_INVITE_REQUEST.to_s) %>
-  <%= link_to ts('contact Support'), new_feedback_report_path %> <%= ts("if you need more than 10 invites for a challenge, or if your challenge or collection is opening soon.") %>
+  <%= link_to ts('contact Support'), new_feedback_report_path %> <%= ts("if you need more than 10 invitations for a challenge, or if your challenge or collection is opening soon.") %>
 </p>
 <!--/descriptions-->
 

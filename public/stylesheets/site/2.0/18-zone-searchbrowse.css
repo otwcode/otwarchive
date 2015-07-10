@@ -94,6 +94,10 @@ form.filters dl {
   width: 100%;
 }
 
+.filters input[type="radio"] + label, .filters input[type="checkbox"] + label {
+  padding-left: 0.375em;
+}
+
 .filters .submit {
   text-align: center;
   padding-right: 0;
