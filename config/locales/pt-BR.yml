@@ -264,8 +264,8 @@
               <p>
               O Archive of Our Own – AO3 (Nosso Próprio Arquivo) é um arquivo gerido e sustentado por fãs que depende das <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">suas doações</a>.
               </p>
-        sentat: "Enviado em %{sent_at}."
-        sentby: 
+        sent_at: "Enviado em %{sent_at}."
+        sent_by: 
           html: "Enviado por <b>%{sent_by}</b>."
           text: "Enviado por %{sent_by}."
   user_mailer:

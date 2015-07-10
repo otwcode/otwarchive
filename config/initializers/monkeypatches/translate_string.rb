@@ -12,11 +12,11 @@ module I18n
         default_string = args.shift
         key = "#{self.class.name}."
         if options.has_key?(:key)
-           key = options[:key] + "."
+          key = options[:key] + "."
         end
         key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
         if options.has_key?(:fullkey)
-          key =  options[:fullkey]
+          key = options[:fullkey]
         end
         # Rails.logger.error "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
         # add the default string as an option, and hand off to translate.
@@ -108,7 +108,7 @@ module ActionView
           end
           key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
           if options.has_key?(:fullkey)
-            key =  options[:fullkey]
+            key = options[:fullkey]
           end
           #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
           # add the default string as an option, and hand off to translate.
