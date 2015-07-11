@@ -42,7 +42,6 @@ Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
 
-
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
@@ -124,7 +123,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |lab
   with_scope(selector) do
     field_disabled = find_field(label, :disabled => true)
     if field_disabled.respond_to? :should
-      field_disabled.should be_true
+      field_disabled.should be_truthy
     else
       assert field_disabled
     end
@@ -135,7 +134,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
   with_scope(selector) do
     field_disabled = find_field(label)['disabled']
     if field_disabled.respond_to? :should
-      field_disabled.should be_false
+      field_disabled.should be_falsey
     else
       assert !field_disabled
     end
@@ -197,15 +196,15 @@ end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them
 Then /^I should see the text with tags "(.*)"$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the text with tags '(.*)'$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see the text with tags '(.*)'$/ do |text|
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the page title "(.*)"$/ do |text|
@@ -221,15 +220,14 @@ end
 
 Then /^I should see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
-

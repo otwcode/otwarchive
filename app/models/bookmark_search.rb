@@ -36,6 +36,29 @@ class BookmarkSearch < Search
   attr_accessor :bookmarks_parent, :faceted
   
   after_initialize :process_options
+
+  #################
+  # CLASS METHODS
+  #################
+
+  def self.count_for_pseuds(pseuds)
+    terms = [
+      { term: { hidden_by_admin: 'F' } },
+      { terms: { pseud_id: pseuds.map(&:id) } }
+    ]
+    unless pseuds.map(&:user).uniq == [User.current_user]
+      terms << { term: { :private => 'F' } }
+    end
+    query = { bool: { must: terms } }
+    response = ElasticsearchSimpleClient.perform_count(Bookmark.index_name, 'bookmark', query)
+    if response.code == 200
+      JSON.parse(response.body)['count']
+    end
+  end
+
+  ####################
+  # INSTANCE METHODS
+  ####################
   
   # For various reasons, some options come in needing processing/cleanup
   # before we use them for searching. May be indicative of code that needs

@@ -51,7 +51,8 @@ Scenario: Create a bookmark
     
   @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
-    Given I am logged in as "first_bookmark_user"
+    Given basic tags
+      And I am logged in as "first_bookmark_user"
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
@@ -72,6 +73,7 @@ Scenario: Create a bookmark
       | login           | password   |
       | first_bookmark_user   | password   |
       And I am logged in as "first_bookmark_user"
+      And the default ratings exist
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
@@ -360,3 +362,38 @@ Scenario: Delete bookmarks of a work and a series
   When I follow "Delete"
     And I press "Yes, Delete Bookmark"
   Then I should see "Bookmark was successfully deleted."
+
+Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
+  Given a fandom exists with name: "Testing BEW Button", canonical: true
+    And I am logged in as "markie" with password "theunicorn"
+    And I create the collection "Testing BEW Collection"
+  When I go to my bookmarks page
+  Then I should see "Bookmark External Work"
+  When I go to the bookmarks page
+  Then I should see "Bookmark External Work"
+  When I go to the bookmarks in collection "Testing BEW Collection"
+  Then I should see "Bookmark External Work"
+  When I log out
+    And I go to markie's bookmarks page
+  Then I should not see "Bookmark External Work"
+  When I go to the bookmarks page
+  Then I should not see "Bookmark External Work"
+  When I go to the bookmarks tagged "Testing BEW Button"
+  Then I should not see "Bookmark External Work"
+  When I go to the bookmarks in collection "Testing BEW Collection"
+  Then I should not see "Bookmark External Work"
+  
+Scenario: Editing a bookmark's tags should update the bookmark blurb
+  Given I am logged in as "some_user"
+    And I post the work "Really Good Thing"
+  When I am logged in as "bookmarker"
+    And I view the work "Really Good Thing"
+    And I follow "Bookmark"
+    And I fill in "bookmark_notes" with "I liked this story"
+    And I fill in "bookmark_tag_string" with "Tag 1, Tag 2"
+  When I press "Create"
+  Then I should see "Bookmark was successfully created"
+  When I follow "Edit"
+    And I fill in "bookmark_tag_string" with "New Tag"
+  When I press "Update"
+  Then I should see "New Tag"

@@ -63,3 +63,15 @@ When /^I set my preferences to turn on copies of my own comments$/ do
   user.preference.comment_copy_to_self_off = false
   user.preference.save
 end
+
+When /^I set my preferences to turn off the banner showing on every page$/ do
+  user = User.current_user
+  user.preference.banner_seen = true
+  user.preference.save
+end
+
+When /^I set my preferences to turn off viewing history$/ do
+  user = User.current_user
+  user.preference.history_enabled = false
+  user.preference.save
+end

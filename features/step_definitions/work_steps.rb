@@ -71,6 +71,11 @@ Given /^the chaptered work with comments setup$/ do
   step "I am logged out"
 end
 
+Given /^the work "([^\"]*)"$/ do |work|
+  step %{I have a work "#{work}"}
+  step %{I am logged out}
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
@@ -83,7 +88,7 @@ When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |w
   work = Work.find_by_title!(work)
   visit work_url(work)
   step %{I follow "Entire Work"} if mode == "full"
-  step %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
+  step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 
 When /^I view the work "([^\"]*)" with comments$/ do |work|
@@ -304,7 +309,7 @@ end
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
-  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
+  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
   fill_in("Url", :with => url_of_work)
 end
 
@@ -411,6 +416,13 @@ When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
   step %{I post the work without preview}
+end
+
+When /^I mark the work "([^\"]*)" for later$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  step %{I follow "Mark for Later"}
+  Reading.update_or_create_in_database
 end
 
 ### THEN

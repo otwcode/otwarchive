@@ -2,6 +2,7 @@ Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
     step %{I fill in "Your Tags" with "#{DEFAULT_BOOKMARK_TAGS}"}
     step %{I press "Create"}
+    Bookmark.tire.index.refresh
 end
 
 When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
@@ -10,6 +11,7 @@ When /^I bookmark the work "([^\"]*)"(?: as "([^"]*)")?$/ do |title, pseud|
     select(pseud, :from => "bookmark_pseud_id")
   end
   click_button("Create")
+  Bookmark.tire.index.refresh
 end
 
 When /^I start a new bookmark for "([^\"]*)"$/ do |title|
@@ -39,8 +41,8 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   visit work_url(work)
 end
 
-When /^I add my bookmark to the collection$/ do
+When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", :with => "Various_Penguins")
+    fill_in("collection_names", :with => "#{collection_name}")
     click_button("Add")
 end

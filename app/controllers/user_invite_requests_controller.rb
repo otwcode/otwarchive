@@ -1,5 +1,6 @@
 class UserInviteRequestsController < ApplicationController
   before_filter :admin_only, :except => [:new, :create]
+  before_filter :check_user_status, :only => [:new, :create]
 
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
@@ -10,6 +11,7 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests/new
   # GET /user_invite_requests/new.xml
   def new
+    @page_title = ts('New User Invitation Request')
     if AdminSetting.request_invite_enabled?
       if logged_in?
         @user = current_user

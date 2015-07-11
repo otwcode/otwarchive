@@ -19,17 +19,17 @@ class AdminPostsController < ApplicationController
       @tags = AdminPostTag.order(:name)
     end
     @admin_posts = @admin_posts.order('created_at DESC').page(params[:page])
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1
   def show
     admin_posts = AdminPost.non_translated
-    @admin_posts = admin_posts.order('created_at DESC').limit(8)
     @admin_post = AdminPost.find_by_id(params[:id])
     unless @admin_post
-      flash[:error] = ts("We couldn't find that admin post.")
-      redirect_to admin_posts_path and return
+      raise ActiveRecord::RecordNotFound, "Couldn't find admin post '#{params[:id]}'"
     end
+    @admin_posts = admin_posts.order('created_at DESC').limit(8)
     @previous_admin_post = admin_posts.order('created_at DESC').where('created_at < ?', @admin_post.created_at).first
     @next_admin_post = admin_posts.order('created_at ASC').where('created_at > ?', @admin_post.created_at).first
     @commentable = @admin_post
@@ -45,13 +45,13 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # POST /admin_posts

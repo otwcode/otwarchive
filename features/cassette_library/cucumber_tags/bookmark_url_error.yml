@@ -7,32 +7,32 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 200
       message: OK
     headers: 
-      server: 
+      Server: 
       - nginx/1.2.1
-      date: 
-      - Sat, 19 Oct 2013 14:40:40 GMT
-      content-type: 
+      Date: 
+      - Fri, 31 Oct 2014 23:26:08 GMT
+      Content-Type: 
       - text/html
-      content-length: 
+      Content-Length: 
       - "6368"
-      last-modified: 
+      Last-Modified: 
       - Fri, 15 Mar 2013 17:30:28 GMT
-      connection: 
+      Connection: 
       - keep-alive
-      accept-ranges: 
+      Accept-Ranges: 
       - bytes
     body: 
       encoding: US-ASCII
       string: ""
-    http_version: "1.1"
-  recorded_at: Sat, 19 Oct 2013 14:40:39 GMT
+    http_version: 
+  recorded_at: Fri, 31 Oct 2014 23:26:08 GMT
 recorded_with: VCR 2.5.0
