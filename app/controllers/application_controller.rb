@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
+  def current_user
+    @current_user ||= current_user_session && current_user_session.record
+  end
+
 protected
 
   def record_not_found (exception)
@@ -62,13 +66,6 @@ protected
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
-  end
-
-  def current_user
-    @current_user = current_user_session && current_user_session.record
-    # if Rails.env.development? && params[:force_current_user].present?
-    #   @current_user = User.find_by_login(params[:force_current_user])
-    # end
   end
 
   def current_admin_session
@@ -222,6 +219,12 @@ public
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
+    unless current_user.nil?
+      @current_user_subscriptions_count, @current_user_visible_work_count, @current_user_bookmarks_count, @current_user_owned_collections_count, @current_user_challenge_signups_count, @current_user_offer_assignments, @current_user_unposted_works_size=
+             Rails.cache.fetch("user_menu_counts_#{current_user.id}",
+                               expires_in: 2.hours,
+                               race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
+    end
   end
 
   def load_collection
@@ -365,7 +368,8 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      store_location
+      redirect_to login_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else

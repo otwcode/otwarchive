@@ -3,7 +3,11 @@ class Api::V1::ImportController < Api::V1::BaseController
 
   # Imports multiple works with their meta from external URLs
   # Params:
-  # +params+:: a JSON object containing the login of an archivist and an array of works
+  # +params+:: a JSON object containing the following:
+  # - archivist: username of an existing archivist
+  # - post_without_preview: false = import as drafts, true = import and post
+  # - send_claim_emails: false = don't send emails (for testing), true = send emails
+  # - array of works to import
   def create
     archivist = User.find_by_login(params[:archivist])
     external_works = params[:works]
@@ -19,11 +23,13 @@ class Api::V1::ImportController < Api::V1::BaseController
 
       # Process the works, updating the flags
       external_works.each do |external_work|
-        works_responses << import_work(archivist, external_work)
+        works_responses << import_work(archivist, external_work.merge(params))
       end
 
-      # To be added if required
-      # send_external_invites(@works)
+      # Send claim notification emails if required
+      if params[:send_claim_emails] && !@works.empty?
+        send_external_invites(@works, archivist)
+      end
 
       # set final response code and message depending on the flags
       status, messages = response_code(messages)
@@ -67,7 +73,7 @@ class Api::V1::ImportController < Api::V1::BaseController
         @some_success = true
         work_status = :created
         work_url = work_url(work)
-        work_messages << "Successfully created work \"" + work.title + "\""
+        work_messages << "Successfully created work \"" + work.title + "\"."
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
@@ -120,12 +126,23 @@ class Api::V1::ImportController < Api::V1::BaseController
     [status, errors]
   end
 
+  # send invitations to external authors for a given set of works
+  def send_external_invites(works, archivist)
+    external_authors = works.collect(&:external_authors).flatten.uniq
+    unless external_authors.empty?
+      external_authors.each do |external_author|
+        external_author.find_or_invite(archivist)
+      end
+    end
+  end
+
   def options(archivist, params)
     {
       archivist: archivist,
       import_multiple: "chapters",
       importing_for_others: true,
       do_not_set_current_author: true,
+      post_without_preview: params[:post_without_preview].blank? ? true : params[:post_without_preview],
       restricted: params[:restricted],
       override_tags: params[:override_tags],
       collection_names: params[:collection_names],

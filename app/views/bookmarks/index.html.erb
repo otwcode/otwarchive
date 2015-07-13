@@ -5,7 +5,7 @@
 <!-- /descriptions-->
 
 <!--subnav-->
-<% if current_user.is_a?(User) || @tag %>
+<% if current_user.is_a?(User) || @tag || @facets.present? %>
   <ul class="navigation actions" role="navigation">
     <% if logged_in? && (@user == current_user || (@owner.blank? && @bookmarkable.blank?) || @collection) %>
       <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
@@ -25,6 +25,10 @@
     <% if @tag %>
       <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
       <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+    <% end %>
+    <% if @facets.present? %>
+      <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+      <li class="narrow-shown hidden"><a href="#bookmark-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
     <% end %>
   </ul>
 <% end %>
