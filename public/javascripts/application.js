@@ -414,7 +414,7 @@ $j(document).ready(function() {
     $j('.kudos_expanded').show();
   });
 
-  $j('#kudos_collapser').find('a').css('color', 'blue').click(function(e) {
+  $j('#kudos_collapser').click(function(e) {
     e.preventDefault();
     $j('#kudos_summary').show();
     $j('.kudos_expanded').hide();
