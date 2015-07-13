@@ -1,26 +1,33 @@
 <!-- BEGIN admin options -->
 <div class="admin">
-  <% item_type_name = item.class == ExternalWork ? "External Work" :
-                      item.class.to_s.humanize.titleize %>
+
+  <% if item.class == ExternalWork %>
+    <% item_type_name = ts("External Work") %>
+  <% elsif item.class == Bookmark %>
+    <% item_type_name = ts("Bookmark") %>
+  <% else %>
+    <% item_type_name = ts("Work") %>
+  <% end %>
+
   <h3 class="landmark heading"><%= ts("Admin Actions") %></h3>
   <ul class="management actions" role="menu">
     <% if item.hidden_by_admin? %>
       <li>
         <%= link_to ts("Make %{item} Visible", item: item_type_name),
-                    { :controller => "admin/user_creations",
-                      :action => "hide",
-                      :id => item,
-                      :creation_type => item.class,
-                      :hidden => 'false' } %>
+                    { controller: "admin/user_creations",
+                      action: "hide",
+                      id: item,
+                      creation_type: item.class,
+                      hidden: 'false' } %>
       </li>
     <% else %>
       <li>
         <%= link_to ts("Hide %{item}", item: item_type_name),
-                    { :controller => "admin/user_creations",
-                      :action => "hide",
-                      :id => item,
-                      :creation_type => item.class,
-                      :hidden => 'true' } %>
+                    { controller: "admin/user_creations",
+                      action: "hide",
+                      id: item,
+                      creation_type: item.class,
+                      hidden: 'true' } %>
       </li>
     <% end %>
     <% if @work.present? %>
@@ -30,10 +37,10 @@
       <li><%= link_to ts("Edit External Work"), edit_external_work_path(item) %></li>
     <% end %>
     <li><%= link_to ts("Delete %{item}", item: item_type_name),
-                    { :controller => "admin/user_creations",
-                      :action => "destroy",
-                      :id => item,
-                      :creation_type => item.class },
+                    { controller: "admin/user_creations",
+                      action: "destroy",
+                      id: item,
+                      creation_type: item.class },
                     confirm: ts("Are you sure you want to delete this?"),
                     method: :delete %>
     </li>
