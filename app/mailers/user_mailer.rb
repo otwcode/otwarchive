@@ -18,7 +18,7 @@ class UserMailer < BulletproofMailer::Base
   helper :series
   include HtmlCleaner
 
-  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
@@ -291,22 +291,6 @@ class UserMailer < BulletproofMailer::Base
           subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A Response to your Prompt"
         )
       end
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
-  # Sends email to coauthors when a work is edited
-  # NOTE: this must be sent synchronously! otherwise the new version will be sent.
-  # TODO refactor to make it asynchronous by passing the content in the method
-  def edit_work_notification(user, work)
-    @user = user
-    @work = work
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your story has been updated"
-      )
     end
     ensure
       I18n.locale = I18n.default_locale

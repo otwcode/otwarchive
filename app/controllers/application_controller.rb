@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
+  def current_user
+    @current_user ||= current_user_session && current_user_session.record
+  end
+
 protected
 
   def record_not_found (exception)
@@ -62,13 +66,6 @@ protected
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
-  end
-
-  def current_user
-    @current_user = current_user_session && current_user_session.record
-    # if Rails.env.development? && params[:force_current_user].present?
-    #   @current_user = User.find_by_login(params[:force_current_user])
-    # end
   end
 
   def current_admin_session
@@ -371,7 +368,8 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      store_location
+      redirect_to login_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
