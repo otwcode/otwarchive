@@ -23,14 +23,14 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% [:user_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
-      <% if stat == :word_count
-          html_class = 'words'
-        else
-          html_class = stat.to_s.humanize.downcase
-        end
-      %>
-      <dt class="<%= html_class %>"><%= (stat == :comments) ? ts("Comment Threads:") : stat.to_s.titleize %></dt>
+    <% { user_subscriptions: ts("User Subscriptions:"), 
+         kudos: ts("Kudos:"), 
+         comments: ts("Comment Threads:"), 
+         bookmarks: ts("Bookmarks:"), 
+         subscriptions: ts("Subscriptions:"), 
+         word_count: ts("Word Count:") }.each do |stat, stat_text| %>
+      <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
+      <dt class="<%= html_class %>"><%= stat_text %></dt>
       <dd class="<%= html_class %>"><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
