@@ -24,8 +24,8 @@ class UserSessionsController < ApplicationController
         @current_user = @user_session.record
         Rails.logger.debug "Returning not really"
         if params[:return_to_url]
-         Rails.logger.debug "Returning setting default to #{params[:return_to_url]}"
-         redirect_back_or_default(params[:return_to_url])
+          Rails.logger.debug "Returning setting default to #{params[:return_to_url]}"
+          redirect_back_or_default(params[:return_to_url])
         end
         redirect_back_or_default(@current_user)
       else
