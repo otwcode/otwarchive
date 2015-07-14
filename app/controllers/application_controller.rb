@@ -134,8 +134,15 @@ public
   # Redirect to the URI stored by the most recent store_location call or
   # to the passed default.
   def redirect_back_or_default(default = root_path)
+    if params[:user_session] 
+      back_url = params[:user_session][:return_to_url]
+    end
     back = session[:return_to]
     session.delete(:return_to)
+    if back_url
+      Rails.logger.debug "Returning over riding return to #{back} with #{back_url}"
+      back = back_url
+    end
     if back
       Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
@@ -369,7 +376,7 @@ public
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
       store_location
-      redirect_to login_path(restricted: true, return_to: request.fullpath )
+      redirect_to login_path(restricted: true, return_to_url: request.fullpath )
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
