@@ -418,6 +418,21 @@ namespace :After do
     end
   end
 
+  desc "Clean up challenge_id and challenge_type in Collections with deleted Challenges"
+  task(:remove_old_challenge_variables_from_collections => :environment) do
+    Collection.find_each do |collection|
+      unless collection.challenge?
+        if collection.challenge_id.present? || collection.challenge_type.present?
+          puts "Fixing collection: #{collection.name}"
+          puts "Which is a #{collection}"
+          collection.update_column(:challenge_id, nil)
+          collection.update_column(:challenge_type, nil)
+        end
+      end
+    end
+  end
+
+
   desc "Clean up work URLs for abuse reports from the last month"
   task(:clean_abuse_report_work_urls => :environment) do
     AbuseReport.where("created_at > ?", 1.month.ago).each do |report|

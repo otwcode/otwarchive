@@ -3,7 +3,7 @@ class AdminMailer < ActionMailer::Base
 
   layout 'mailer'
   helper :mailer
-  default :from => "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
+  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
@@ -11,8 +11,8 @@ class AdminMailer < ActionMailer::Base
     @url = abuse_report.url
     @comment = abuse_report.comment
     mail(
-      :to => ArchiveConfig.ABUSE_ADDRESS,
-      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+      to: ArchiveConfig.ABUSE_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
     )
   end
 
@@ -21,8 +21,8 @@ class AdminMailer < ActionMailer::Base
     @archive_faq = ArchiveFaq.find(archive_faq_id)
     @email = "translation@transformativeworks.org"
     mail(
-      :to => @email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
+      to: @email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Creation",
     )
   end
 
@@ -31,8 +31,8 @@ class AdminMailer < ActionMailer::Base
     @archive_faq = ArchiveFaq.find(archive_faq_id)
     @email = "translation@transformativeworks.org"
     mail(
-      :to => @email,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
+      to: @email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] FAQ Edit",
          )
   end
 
@@ -41,9 +41,9 @@ class AdminMailer < ActionMailer::Base
     @summary = feedback.summary
     @comment = feedback.comment
     mail(
-      :from => feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
-      :to => ArchiveConfig.FEEDBACK_ADDRESS,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Support - " + feedback.summary,
+      from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
+      to: ArchiveConfig.FEEDBACK_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - " + feedback.summary,
     )
   end
 
@@ -57,8 +57,8 @@ class AdminMailer < ActionMailer::Base
       user_ids.size.to_s + " users, including: " + User.limit(20).find(user_ids).map(&:login).join(", ")
     end
     mail(
-      :to => ArchiveConfig.WEBMASTER_ADDRESS,
-      :subject  => "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
+      to: ArchiveConfig.WEBMASTER_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Archive Notification Sent - #{subject}"
     )
   end
   
@@ -67,8 +67,8 @@ class AdminMailer < ActionMailer::Base
     # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      :to => ArchiveConfig.ADMIN_ADDRESS,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+      to: ArchiveConfig.ADMIN_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
@@ -77,8 +77,8 @@ class AdminMailer < ActionMailer::Base
     # admin = Admin.find(admin_id)
     @comment = Comment.find(comment_id)
     mail(
-      :to => ArchiveConfig.ADMIN_ADDRESS,
-      :subject => "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+      to: ArchiveConfig.ADMIN_ADDRESS,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
