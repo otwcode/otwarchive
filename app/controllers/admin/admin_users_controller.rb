@@ -84,12 +84,14 @@ class Admin::AdminUsersController < ApplicationController
         # update the next of kin user if the field is present and changed
         if params[:next_of_kin_name].present? && !(submitted_kin_user.id == @user.fannish_next_of_kin.kin_id)
           @user.fannish_next_of_kin.kin_id = submitted_kin_user.id
+          @user.fannish_next_of_kin.save
           success_message << ts('Fannish next of kin user updated.')
         end
 
         # update the next of kin email is the field is present and changed
         if params[:next_of_kin_email].present? && !(params[:next_of_kin_email] == @user.fannish_next_of_kin.kin_email)
           @user.fannish_next_of_kin.kin_email = params[:next_of_kin_email]
+          @user.fannish_next_of_kin.save
           success_message << ts('Fannish next of kin email updated.')
         end
 
