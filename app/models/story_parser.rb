@@ -56,7 +56,7 @@ class StoryParser
   CHAPTERED_STORY_LOCATIONS = %w(ffnet thearchive_net efiction quotev)
 
   # regular expressions to match against the URLS
-  SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
+  SOURCE_LJ = '((live|dead|insane)journal\.com)|journalfen(\.net|\.com)|dreamwidth\.org'
   SOURCE_DW = 'dreamwidth\.org'
   SOURCE_FFNET = '(^|[^A-Za-z0-9-])fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'

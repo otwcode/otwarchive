@@ -171,7 +171,7 @@ li.relationships a {
   float: none;
 }
 
-.kudos {
+p.kudos {
   background: url("/images/imageset.png") no-repeat -110px -580px;
   padding: 0.5em 0.5em 0.5em 60px;
   margin: 2em 0;
@@ -216,10 +216,6 @@ dl.stats dd {
 
 .statistics .index li:nth-of-type(even) {
   background: #eee;
-}
-
-.statistics dt:after {
-  content: ":";
 }
 
 .concise li { 

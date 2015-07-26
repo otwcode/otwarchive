@@ -19,7 +19,7 @@ describe ExternalWork do
   context "inactive url" do
     INACTIVE_URLS.each do |url|
       let(:inactive_url) {build(:external_work, url: url)}
-      xit "is not saved" do
+      it "is not saved" do
         expect(inactive_url.save).to be_falsey
         expect(inactive_url.errors[:url]).to include("could not be reached. If the URL is correct and the site is currently down, please try again later.")
       end
@@ -31,7 +31,7 @@ describe ExternalWork do
 
     URLS.each do |url|
       let(:valid_url) {build(:external_work, url: url)}
-      xit "saves the external work" do
+      it "saves the external work" do
         expect(valid_url.save).to be_truthy
       end
     end
