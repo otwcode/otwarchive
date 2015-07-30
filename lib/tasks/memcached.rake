@@ -10,7 +10,7 @@ namespace :memcached do
     puts "Clear memcached #{work.id}"
     %w( nowarn showwarn ).each do |warn|
       %w( nofreeform showfreeform ).each do |freeform|
-         Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v5"
+         Rails.cache.delete "#{work.cache_key}-#{warn}-#{freeform}-v6"
       end 
     end 
   end 
