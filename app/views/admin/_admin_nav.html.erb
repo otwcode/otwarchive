@@ -6,7 +6,7 @@
   <li>
     <%= span_if_current ts('Post AO3 News', key: 'header'), new_admin_post_path %>
   </li>
-  <% if current_page?(action: 'edit') %>
+  <% if current_page?(controller: 'admin_posts', action: 'edit') %>
     <li>
       <%= link_to t('admin.admin_nav.delete', default: 'Delete Post'), @admin_post, confirm: 'Are you sure you want to delete this news post?', method: :delete %>
     </li>
