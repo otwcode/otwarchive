@@ -286,12 +286,12 @@ class Work < ActiveRecord::Base
     url = UrlFormatter.new(url)
     Work.where(:imported_from_url => url.original).first ||
       Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select do |w|
         work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].map { |method|
+        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].map do |method|
           work_url.send(method) == url.send(method)
-        }.include? true
-      }.first
+        end.include? true
+      end.first
   end
 
   ########################################################################
