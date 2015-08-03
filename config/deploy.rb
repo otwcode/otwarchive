@@ -67,11 +67,8 @@ namespace :deploy do
   task :restart  do
     find_servers(:roles => :app).each do |server|
       puts "restart on #{server.host}"
-      run "/home/ao3app/bin/unicorns_reload"
-      unless servers.last == server
-        puts "Sleeping for 15 seconds #{server.host}"
-        sleep(15)
-      end
+      run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
+      sleep(60)
     end
   end
 
