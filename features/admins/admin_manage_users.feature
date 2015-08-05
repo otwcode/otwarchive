@@ -120,6 +120,22 @@ Feature: Admin Actions to manage users
     And I press "Find"
   Then I should see "libby"
 
+  Scenario: A Fannish Next of Kin can update even after an invalid user is entered
+  Given the fannish next of kin "libby" for the user "harrykim"
+    And the user "harrysmom" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "harrykim"
+    And I fill in "Fannish next of kin's username" with "libbylibby"
+    And I fill in "Fannish next of kin's email" with "libbylibby@example.com"
+    And I press "Update"
+  Then I should see "Fannish next of kin user is invalid."
+  When I fill in "Fannish next of kin's username" with "harrysmom"
+    And I fill in "Fannish next of kin's email" with "harrysmom@example.com"
+    And I press "Update"
+  Then I should see "Fannish next of kin user updated."
+    And the "Fannish next of kin's username" field should contain "harrysmom"
+    And the "Fannish next of kin's email" field should contain "harrysmom@example.com"
+
   Scenario: A user is given a warning with a note
   Given the user "mrparis" exists and is activated
     And I am logged in as an admin

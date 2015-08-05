@@ -29,13 +29,13 @@
           <%= label_tag 'next_of_kin_name', t('admin.admin_users.show.form.fnok.name', default: "Fannish next of kin's username") %>
         </dt>
         <dd>
-          <%= text_field_tag 'next_of_kin_name', @user.fannish_next_of_kin.try(:kin_name) %>
+          <%= text_field_tag 'next_of_kin_name', @user.fannish_next_of_kin.try(:kin_name), autocomplete: "off" %>
         </dd>
         <dt>
           <%= label_tag 'next_of_kin_email', t('admin.admin_users.show.form.fnok.email', default: "Fannish next of kin's email") %>
         </dt>
         <dd>
-          <%= text_field_tag 'next_of_kin_email', @user.fannish_next_of_kin.try(:kin_email) %>
+          <%= text_field_tag 'next_of_kin_email', @user.fannish_next_of_kin.try(:kin_email), autocomplete: "off" %>
         </dd>
       </dl>
     </fieldset>
