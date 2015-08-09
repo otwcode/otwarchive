@@ -222,4 +222,59 @@
         <<: *errors_template
 
       full_messages:
-        format: "%{attribute} %{message}"
+        format: "{{attribute}} {{message}}"
+      models:
+        # Overrides default messages
+      attributes:
+        # Overrides model and default messages.
+
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%e/%m/%Y"
+      short: "%e de %b"
+      long: "%e de %B de %Y"
+
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
+    # Used in date_select and datime_select.
+    order:
+
+  time:
+    formats:
+      default: "%A, %e de %B de %Y %H:%M:%S %z"
+      short: "%e de %b %H:%M"
+      long: "%e de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
+
+# Used in array.to_sentence.
+  support:
+    select:
+      # default value for :prompt => true in FormOptionsHelper
+      prompt: "Por favor seleccione"
+    array:
+      # Rails <= v.2.2.2
+      # sentence_connector: "y"
+      # Rails >= v.2.3
+      words_connector: ", "
+      two_words_connector: " y "
+      last_word_connector: " y "
+
+  user_mailer:
+    invite_increase_notification:
+      html:  "<p> ¡Hola, %{login}! </p>\n\
+          <p>Tienes %{total} nueva(s) invitacion(es) que puedes usar para crear una cuenta en el AO3. Para invitar a alguien, entra a %{invitation_page}. </p>\n\
+          <p> Saludos, <br> %{archive_name} </p>"
+      txt: |-
+          ¡Hola, %{login}!
+          Tienes %{total} nueva(s) invitacion(es)
+          que puedes usar para crear una cuenta en el AO3. Para invitar a alguien, entra a %{invitation_page}.
+          Saludos, 
+          %{archive_name}

@@ -72,7 +72,11 @@
         <%= f.label :rating_ids, ts('Rating') %>
       </dt>
       <dd>
-        <%= f.collection_select :rating_ids, Rating.canonical, :id, :name, include_blank: true %>
+        <%= f.collection_select :rating_ids,
+                                Rating.defaults_by_severity,
+                                :id,
+                                :name,
+                                include_blank: true %>
       </dd>
       <dt>
         <%= ts('Warnings') %>
