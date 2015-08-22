@@ -177,6 +177,10 @@ module NavigationHelpers
       edit_tag_set_path(OwnedTagSet.find_by_title($1))    
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by_title($1))
+    when /^the manage users page$/
+      admin_users_path
+    when /^the abuse administration page for "(.*)"$/i
+      admin_user_path(User.find_by_login($1))
       
     # Here is an example that pulls values out of the Regexp:
     #

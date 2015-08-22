@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
 gem 'bundler'
 
@@ -12,6 +12,8 @@ gem 'rails', '3.2.21'
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
+#https://github.com/qertoip/transaction_retry
+gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -30,12 +32,11 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
-gem 'psych' , '1.3.4'
 
 gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.4.2'
+gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
@@ -94,6 +95,7 @@ gem 'phrase'
 
 # For URL mangling
 gem 'addressable'
+gem "audited-activerecord", "~> 3.0"
 
 # For controlling application behavour dynamically
 gem 'rollout'

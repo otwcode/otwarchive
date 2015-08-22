@@ -23,6 +23,7 @@ $j(document).ready(function() {
 
     prepareDeleteLinks();
     thermometer();
+    $j('body').addClass('javascript');
 });
 
 ///////////////////////////////////////////////////////////////////
@@ -369,7 +370,7 @@ function setupDropdown(){
 }
 
 // Accordion-style collapsible widgets
-// The pane element can be showen or hidden using the expander (link)
+// The pane element can be shown or hidden using the expander (link)
 // Apply hidden to the pane element if it shouldn't be visible when JavaScript is disabled
 // Typical set up:
 // <li aria-haspopup="true">
@@ -407,15 +408,15 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('a#kudos_summary').click(function(e) {
+  $j('#kudos_summary').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').hide();
+    $j(this).hide();
     $j('.kudos_expanded').show();
   });
 
-  $j('.kudos_expanded a').click(function(e) {
+  $j('#kudos_collapser').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').show();
+    $j('#kudos_summary').show();
     $j('.kudos_expanded').hide();
   });
 
