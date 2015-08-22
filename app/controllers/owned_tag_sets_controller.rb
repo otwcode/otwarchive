@@ -9,7 +9,7 @@ class OwnedTagSetsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to look at?")
+      flash[:notice] = ts("What Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
@@ -31,15 +31,15 @@ class OwnedTagSetsController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login params[:user_id]
-      @tag_sets = OwnedTagSet.owned_by(@user).visible
+      @tag_sets = OwnedTagSet.owned_by(@user)
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
-      @tag_sets = OwnedTagSet.visible.in_prompt_restriction(@restriction)
+      @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
       if @tag_sets.count == 1
         redirect_to tag_set_path(@tag_sets.first, :tag_type => (params[:tag_type] || "fandom")) and return
       end
     else
-      @tag_sets = OwnedTagSet.visible
+      @tag_sets = OwnedTagSet
       if params[:query]
         @query = params[:query]
         @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
@@ -54,7 +54,7 @@ class OwnedTagSetsController < ApplicationController
   def show_options
     @restriction = PromptRestriction.find(params[:restriction])
     unless @restriction
-      flash[:error] = ts("Which tag set did you want to look at?")
+      flash[:error] = ts("Which Tag Set did you want to look at?")
       redirect_to tag_sets_path and return
     end
     @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
@@ -144,7 +144,7 @@ class OwnedTagSetsController < ApplicationController
     @tag_set = OwnedTagSet.new(params[:owned_tag_set])
     @tag_set.add_owner(current_user.default_pseud)
     if @tag_set.save
-      flash[:notice] = ts('Tag set was successfully created.')
+      flash[:notice] = ts('Tag Set was successfully created.')
       redirect_to tag_set_path(@tag_set)
     else 
       render :action => "new"
@@ -157,7 +157,7 @@ class OwnedTagSetsController < ApplicationController
   
   def update
     if @tag_set.update_attributes(params[:owned_tag_set]) && @tag_set.tag_set.save
-      flash[:notice] = ts("Tag set was successfully updated.")
+      flash[:notice] = ts("Tag Set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else
       get_parent_child_tags
@@ -165,9 +165,18 @@ class OwnedTagSetsController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+
   def destroy
-    @tag_set.destroy
-    flash[:notice] = ts("Tag set was successfully deleted.")
+    @tag_set = OwnedTagSet.find(params[:id])
+    begin
+      name = @tag_set.title
+      @tag_set.destroy
+      flash[:notice] = ts("Your Tag Set %{name} was deleted.", :name => name)
+    rescue
+      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
+    end
     redirect_to tag_sets_path
   end
 
@@ -176,7 +185,7 @@ class OwnedTagSetsController < ApplicationController
   
   def do_batch_load
     if params[:batch_associations]
-      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationship] ? true : false))
+      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationships] ? true : false))
       if failed.empty?
         flash[:notice] = ts("Tags and associations loaded!")
         redirect_to tag_set_path(@tag_set) and return      

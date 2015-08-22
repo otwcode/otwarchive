@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("New tag") %></h2>
+<h2 class="heading"><%= ts('New Tag') %></h2>
 
 <%= error_messages_for :tag %>
 
-<p><%= ts("Once you have created the tag, the attributes that are particular for that tag category will be available for editing") %></p>
+<p><%= ts('Once you have created the tag, the attributes that are particular for that tag category will be available for editing.') %></p>
 
 <!--/descriptions-->
 
@@ -11,15 +11,15 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for @tag, :as => :tag, :url => { :action => "create" }  do |f| %>
+<%= form_for @tag, as: :tag, url: { action: "create" }  do |f| %>
   <dl>
-    <dt><%= f.label :name, ts("Name") %></dt>
-    <dd><%= f.text_field :name, :size => ArchiveConfig.TAG_MAX %></dd>
+    <dt><%= f.label :name, ts('Name') %></dt>
+    <dd><%= f.text_field :name, size: ArchiveConfig.TAG_MAX %></dd>
 
-    <dt><%= f.label :canonical, ts("Canonical") %></dt>
+    <dt><%= f.label :canonical, ts('Canonical') %></dt>
     <dd><%= f.check_box :canonical %></dd>
 
-    <dt><%= ts("Category") %></dt>
+    <dt><%= ts('Category') %></dt>
     <dd>
       <% if logged_in_as_admin? %>
         <% types = Tag::TYPES  %>
@@ -27,15 +27,19 @@
         <% types = Tag::USER_DEFINED %>
       <% end %>
       <ul>
-		<% types.each do |type| %>
-        <li><%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %></li>
-	</ul>
-      <% end %>
+        <% types.each do |type| %>
+          <li>
+            <%= f.radio_button("type", type) %>
+            <%= f.label("type_#{type.downcase}", type) %>
+          </li>
+        <% end %>
+      </ul>
     </dd>
   </dl>
 
-<p class="submit actions">
-<%= f.submit %></p>
+  <p class="submit actions">
+    <%= f.submit %>
+  </p>
 <% end %>
 <!--/content-->
 

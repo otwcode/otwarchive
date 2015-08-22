@@ -26,7 +26,34 @@ Feature: creating and editing tag sets
   Then I should see an update confirmation message
     And I should see "wheee"
     
-  Scenario: If a set is not visible, only a moderator should be able to see the tags in the set
+  Scenario: If a tag set does not have a visible tag list, only a moderator should be able to see the tags in the set, but everyone should be able to see the tag set
+  Given I am logged in as "tagsetter"
+    And I set up the tag set "Tag Set with Non-visible Tag List" with an invisible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
+  When I go to the tagsets page
+  Then I should see "Tag Set with Non-visible Tag List"
+  When I log out
+    And I go to the tagsets page
+  Then I should see "Tag Set with Non-visible Tag List"
+  When I follow "Tag Set with Non-visible Tag List"
+  Then I should not see "Dallas"
+    And I should not see "Knots Landing"
+    And I should not see "Models Inc"
+    And I should see "The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway)."
+    
+  Scenario: If a tag set has a visible tag list, everyone should be able to see the tags in the set
+  Given I am logged in as "tagsetter"
+    And I set up the tag set "Tag Set with Visible Tag List" with a visible tag list and the fandom tags "Dallas, Knots Landing, Models Inc"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
+  When I log out
+    And I view the tag set "Tag Set with Visible Tag List"
+  Then I should see "Dallas"
+    And I should see "Knots Landing"
+    And I should see "Models Inc"
 
   Scenario: A moderator should be able to manually set up associations between tags in their set on the main tag set edit page
 
@@ -65,7 +92,7 @@ Feature: creating and editing tag sets
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
     And I nominate fandom "Floobry" and character "Barblah" in "Nominated Tags"
     And I review nominations for "Nominated Tags"
-  Then I should find "Floobry" within ".tagset"
+  Then I should see "Floobry" within ".tagset"
   When I check "fandom_approve_Floobry"
     And I check "character_approve_Barblah"
     And I submit
@@ -83,7 +110,7 @@ Feature: creating and editing tag sets
   When I check "fandom_reject_Floobry"
     And I submit
   Then I should see "Successfully rejected: Floobry"
-    And I should not find "Floobry" within ".tagset"
+    And I should not see "Floobry" within ".tagset"
     And I should not see "Barblah"
     
   Scenario: Tags with brackets should work with replacement
@@ -116,7 +143,23 @@ Feature: creating and editing tag sets
     And I am logged in as "tagsetter"
     And I go to the "Nominated Tags" tag set page
   Then I should see the tags with Unicode characters
-  
+
+  # Note this is now testing the non-JS method for deleting your own nominations
+  Scenario: You should be able to delete your nominations
+    Given I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
+    Given I nominate 3 fandoms and 3 characters in the "Nominated Tags" tag set as "nominator"
+      And I submit
+    When I should see "Your nominations were successfully submitted"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+      And I should see "My Nominations for Nominated Tags"
+      And I follow "Delete"
+      And I should see "Delete Tag Set Nomination?"
+    When I press "Yes, Delete Tag Set Nominations"
+    Then I should see "Your nominations were deleted."
+
+
   # ASSOCIATIONS
   Scenario: If a nominated tag and its parent are approved they should appear on the associations page
   Given I nominate and approve fandom "Floobry" and character "Zarrr" in "Nominated Tags"
@@ -142,5 +185,65 @@ Feature: creating and editing tag sets
     
   Scenario: Tags with brackets should work in associations
   
-  
-    
+  Scenario: Batch load character tags should successfully load characters that are canonical and return characters that are not
+  Given a fandom exists with name: "MASH (TV)", canonical: true
+    And a fandom exists with name: "Dallas (TV)", canonical: true
+    And a character exists with name: "Hawkeye Pierce", canonical: true
+    And a character exists with name: "Maxwell Klinger", canonical: true
+    And a character exists with name: "Henry Blake", canonical: true
+    And a character exists with name: "J. R. Ewing", canonical: true
+    And a character exists with name: "Sue Ellen Ewing", canonical: true
+  When I am logged in as "tagsetter"
+    And I set up the tag set "Batch Loading Characters" with a visible tag list
+    And I follow "Batch Load"
+  When I fill in "Batch Load Tag Associations" with
+    """
+    MASH (TV),Hawkeye Pierce,Maxwell Klinger,Henry Blake
+    Dallas (TV), J. R. Ewing, Sue Ellen Ewing, Pam Ewing
+    """
+    And I press "Submit"
+  Then I should see "We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!"
+    And I should see "Dallas (TV),Pam Ewing"
+    And I should not see "MASH (TV),Hawkeye Pierce,Maxwell Klinger,Henry Blake"
+    And I should not see "Dallas (TV), J. R. Ewing, Sue Ellen Ewing, Pam Ewing"
+  When I go to the "Batch Loading Characters" tag set page
+  Then I should see "MASH (TV)"
+    And I should see "Hawkeye Pierce"
+    And I should see "Maxwell Klinger"
+    And I should see "Henry Blake"
+    And I should see "Dallas (TV)"
+    And I should see "J. R. Ewing"
+    And I should see "Sue Ellen Ewing"
+    And I should not see "Pam Ewing"
+
+  Scenario: Batch load relationship tags should successfully load relationships that are canonical and return characters that are not
+  Given a fandom exists with name: "MASH (TV)", canonical: true
+    And a fandom exists with name: "Dallas (TV)", canonical: true
+    And a relationship exists with name: "BJ/Hawkeye", canonical: true
+    And a relationship exists with name: "Hawkeye/Margaret Houlihan", canonical: true
+    And a relationship exists with name: "Hawkeye & Radar", canonical: true
+    And a relationship exists with name: "J. R. Ewing/Sue Ellen Ewing", canonical: true
+    And a relationship exists with name: "Ann Ewing/Bobby Ewing", canonical: true
+  When I am logged in as "tagsetter"
+    And I set up the tag set "Batch Loading Relationships" with a visible tag list
+    And I follow "Batch Load"
+  When I fill in "Batch Load Tag Associations" with
+    """
+    MASH (TV), BJ/Hawkeye, Hawkeye/Margaret Houlihan, Hawkeye & Radar
+    Dallas (TV),J. R. Ewing/Sue Ellen Ewing,Ann Ewing/Sue Ellen Ewing,Ann Ewing/Bobby Ewing
+    """
+    And I check "Relationships instead?"
+    And I press "Submit"
+  Then I should see "We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!"
+    And I should see "Dallas (TV),Ann Ewing/Sue Ellen Ewing"
+    And I should not see "MASH (TV), BJ/Hawkeye, Hawkeye/Margaret Houlihan, Hawkeye & Radar"
+    And I should not see "Dallas (TV),J. R. Ewing/Sue Ellen Ewing,Ann Ewing/Sue Ellen Ewing,Ann Ewing/Bobby Ewing"
+  When I go to the "Batch Loading Relationships" tag set page
+  Then I should see "MASH (TV)"
+    And I should see "BJ/Hawkeye"
+    And I should see "Hawkeye/Margaret Houlihan"
+    And I should see "Hawkeye & Radar"
+    And I should see "Dallas (TV)"
+    And I should see "J. R. Ewing/Sue Ellen Ewing"
+    And I should see "Ann Ewing/Bobby Ewing"
+    And I should not see "Ann Ewing/Sue Ellen Ewing"

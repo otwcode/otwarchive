@@ -106,11 +106,7 @@ end
 
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(text)
-    else
-      assert page.has_content?(text)
-    end
+    page.should have_content(text)
   end
 end
 
@@ -229,6 +225,8 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
+
+
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
   with_scope(selector) do
     has_checked_field?(label)
@@ -248,6 +246,10 @@ Then /^(?:|I )should be on (.+)$/ do |page_name|
   else
     assert_equal path_to(page_name), current_path
   end
+end
+
+Then /^(?:|The )url should include (.+)$/ do |url|
+  current_url.should include(url)
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|

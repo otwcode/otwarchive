@@ -30,7 +30,7 @@ end
 
 
 When /^I enter an incorrect password$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "passw")
@@ -39,7 +39,7 @@ end
 
 
 When /^I change my email$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "password")
@@ -55,7 +55,7 @@ end
 
 		
 When /^I enter an invalid email$/ do
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "bob.bob.bob")
   fill_in("Confirm New Email", :with => "bob.bob.bob")
   fill_in("Password", :with => "password")
@@ -66,7 +66,7 @@ end
 When /^I enter a duplicate email$/ do
   user = FactoryGirl.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
   user.activate
-  click_link("Email")
+  click_link("Change Email")
   fill_in("New Email", :with => "foo@ao3.org")
   fill_in("Confirm New Email", :with => "foo@ao3.org")
   fill_in("Password", :with => "password")
@@ -75,11 +75,10 @@ end
 
 
 When /^I enter a birthdate that shows I am under age$/ do
-  time = Time.new
-  under_age_year = time.year - 13
-  select("#{under_age_year}", :from => "profile_attributes[date_of_birth(1i)]")
-  select("December", :from => "profile_attributes[date_of_birth(2i)]")
-  select("31", :from => "profile_attributes[date_of_birth(3i)]")
+  date = 13.years.ago + 1.day
+  select(date.year, :from => "profile_attributes[date_of_birth(1i)]")
+  select(date.strftime("%B"), :from => "profile_attributes[date_of_birth(2i)]")
+  select(date.day, :from => "profile_attributes[date_of_birth(3i)]")
   click_button("Update")
 end
 	

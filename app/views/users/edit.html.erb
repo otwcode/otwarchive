@@ -5,20 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
-  <li>
-  <% if @user.crypted_password %>
-    <%= link_to ts("Password"), change_password_user_path(@user) %>
-  <% else %>
-    <%= link_to ts("Add a Password"), change_password_user_path(@user) %>
-  <% end %>
-  </li>
-  <li>
-  <%= link_to ts("Email"), change_email_user_path(@user) %>
-  </li>
-</ul>
+<%= render 'edit_header_navigation' %>
 <!--/subnav-->
 
 <!--main content-->
@@ -41,7 +28,7 @@
         </dd>
 
         <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
-        <dd class="datetime"><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
+        <dd class="datetime"><%= p.date_select :date_of_birth, :start_year => 12.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
 
         <dt><%= p.label :about_me, "About Me" %></dt>
         <dd class="description">

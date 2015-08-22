@@ -1,15 +1,15 @@
 <!-- BEGIN footer -->
 <div id="footer" role="contentinfo" class="region">
-	<h3 class="landmark heading"><%= ts('Footer') %></h3>
+	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
       <li class="module group">
-        <h4 class="heading"><%= ts('Customize') %></h4>
+        <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
         <ul class="menu">
           <li aria-haspopup="true">
-            <a href="#"><%= ts("Choose Skin") %></a>
+            <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
             <ul id="skin_chooser" class="expandable secondary">
-              <li><%= link_to ts("Default"), unset_skins_path %></li>
+              <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
                 <li><%= link_to s.title, set_skin_path(s) %></li>
               <% end %>
@@ -19,22 +19,23 @@
       </li>
     <% end %>
     <li class="module group">
-      <h4 class="heading"><%= ts('About the Archive') %></h4>
+      <h4 class="heading"><%= ts('About the Archive', key: 'footer') %></h4>
       <ul class="menu">
-        <li><%= link_to ts('Site Map'), site_map_path %></li>
-        <li><%= link_to ts('Diversity Statement'), diversity_path %></li>
-        <li><%= link_to ts('Terms of Service'), tos_path %></li>
+        <li><%= link_to ts('Site Map', key: 'footer'), site_map_path %></li>
+        <li><%= link_to ts('Diversity Statement', key: 'footer'), diversity_path %></li>
+        <li><%= link_to ts('Terms of Service', key: 'footer'), tos_path %></li>
+        <li><%= link_to ts('DMCA Policy', key: 'footer'), dmca_path %> </li>
       </ul>
     </li>
     <li class="module group">
-      <h4 class="heading"><%= ts('Contact Us') %></h4>
+      <h4 class="heading"><%= ts('Contact Us', key: 'footer') %></h4>
       <ul class="menu">
-        <li><%= link_to ts('Report Abuse'), new_abuse_report_path %></li>
-        <li><%= link_to ts('Technical Support and Feedback'), new_feedback_report_path %></li>
+        <li><%= link_to ts('Report Abuse', key: 'footer'), new_abuse_report_path %></li>
+        <li><%= link_to ts('Technical Support and Feedback', key: 'footer'), new_feedback_report_path %></li>
       </ul>
     </li>
     <li class="module group">
-      <h4 class="heading"><%= ts('Development') %></h4>
+      <h4 class="heading"><%= ts('Development', key: 'footer') %></h4>
       <ul class="menu">
         <% unless ArchiveConfig.REVISION.blank? %>
           <li><%= link_to ts('otwarchive %{rev_number}', :rev_number => ArchiveConfig.REVISION), "https://github.com/otwcode/otwarchive/commits/#{ArchiveConfig.REVISION}" %></li>
@@ -42,58 +43,10 @@
         <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
           <li><%= link_to 'Devmode', devmode_path %></li>
         <% end %>
-        <li><%= link_to ts('Known Issues'), known_issues_path %></li>
-        <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="<%= ts('View License') %>">GPL/CC</a> <%= ts('by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
+        <li><%= link_to ts('Known Issues', key: 'footer'), known_issues_path %></li>
+        <li><a href="http://www.gnu.org/licenses/gpl-2.0.html" title="<%= ts('View License', key: 'footer') %>">GPL</a> <%= ts('by the', key: 'footer') %> <a href="http://transformativeworks.org/" title="<%= ts('The Organization for Transformative Works', key: 'footer') %>"><%= ts('OTW', key: 'footer') %></a></li>
       </ul>
     </li>
   </ul>
 </div>
 <!-- END footer -->
-<% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
-<div id="debug">
-  <h1>Development Notice</h1>
-  <p>
-    This is a development site. That means, please don't put in
-    anything you need to keep secure or want to preserve.
-    All the contents of this site (including user accounts) can and
-    probably will be wiped without notice as we work.
-  </p>
-  <p>
-    Please <strong>do</strong>
-    help us out and <a href="http://code.google.com/p/otwarchive/issues/list">report any problems</a>!
-  </p>
-  <p>
-    These links below here are just to provide debugging info for your friendly neighborhood coders,
-    please ignore.
-  </p>
-  <script language="javascript">document.cookie = 'profile=No; path=/; expires=1900-01-01T00:00:00 '</script>
-  <!-- <a href="#" onclick="document.cookie = 'profile=' + (new Date()).toGMTString() + '; path=/; '; return false;">Profile next request</a> -->
-  <dl class="debug_navigation">
-    <dt>
-      <a href="#" onclick="Element.toggle('params_debug_info'); return false;">params</a>
-    </dt>
-    <dd id="params_debug_info" class="debug_info" style="display:none">
-      <%= debug(params) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('session_debug_info'); return false;">session</a>
-    </dt>
-    <dd id="session_debug_info" class="debug_info" style="display:none">
-      <%= debug(session) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('env_debug_info'); return false;">env</a>
-    </dt>
-    <dd id="env_debug_info" class="debug_info" style="display:none">
-      <%= debug(request.env) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('request_debug_info'); return false;">request</a>
-    </dt>
-    <dd id="request_debug_info" class="debug_info" style="display:none">
-      <%= debug(request) %>
-    </dd>
-  </dl>
-</div>
-<% end %>
-

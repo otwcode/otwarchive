@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
-  
+
   # Title helpers
   helper_method :process_title
 
@@ -27,18 +27,21 @@ class ApplicationController < ActionController::Base
     cookies[:flash_is_set] = 1 unless flash.empty?
   end
 
-  # So if there is not a user_credentials cookie and the user appears to be logged in then 
+  # So if there is not a user_credentials cookie and the user appears to be logged in then
   # redirect to the logout page
   before_filter :logout_if_not_user_credentials
   def logout_if_not_user_credentials
     if logged_in? && cookies[:user_credentials]==nil && controller_name != "user_sessions"
       logger.error "Forcing logout"
-      # You can only have one flash message, so you can't set a helpful error  message here.
-      redirect_to '/logout' and return
+      @user_session = UserSession.find
+      if @user_session
+        @user_session.destroy
+      end
+      redirect_to '/lost_cookie' and return
     end
   end
 
-  
+
   # mark the flash as being set (called when flash is set)
   def set_flash_cookie(key=nil, msg=nil)
     cookies[:flash_is_set] = 1
@@ -47,18 +50,22 @@ class ApplicationController < ActionController::Base
   # def setflash (this is here in case someone is grepping for the definition of the method)
   alias :setflash :set_flash_cookie
 
+  def current_user
+    @current_user ||= current_user_session && current_user_session.record
+  end
+
 protected
+
+  def record_not_found (exception)
+    @message=exception.message
+    respond_to do |f|
+      f.html{ render :template => "errors/404", :status => 404 }
+    end
+  end
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
-  end
-
-  def current_user
-    @current_user = current_user_session && current_user_session.record
-    # if Rails.env.development? && params[:force_current_user].present?
-    #   @current_user = User.find_by_login(params[:force_current_user])
-    # end
   end
 
   def current_admin_session
@@ -77,17 +84,17 @@ protected
   def logged_in_as_admin?
     current_admin.nil? ? false : true
   end
-  
+
   def guest?
     !(logged_in? || logged_in_as_admin?)
   end
-  
+
   def process_title(string)
   	string = string.humanize.titleize
-  
+
   	string = string.sub("Faq", "FAQ")
   	string = string.sub("Tos", "TOS")
-  	
+  	string = string.sub("Dmca", "DMCA")
   	return string
   end
 
@@ -97,14 +104,17 @@ public
   def fetch_admin_settings
     if Rails.env.development?
       @admin_settings = AdminSetting.first
-      unless @admin_settings.banner_text.blank?
-        @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
-      end
     else
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-      unless @admin_settings.banner_text.blank?
-        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
-      end
+    end
+  end
+  
+  before_filter :load_admin_banner
+  def load_admin_banner
+    if Rails.env.development?
+      @admin_banner = AdminBanner.where(:active => true).last
+    else
+      @admin_banner = Rails.cache.fetch("admin_banner"){AdminBanner.where(:active => true).last}
     end
   end
 
@@ -145,8 +155,8 @@ public
   def users_only
     logged_in? || access_denied
   end
-  
-  # Filter method - requires user to have opendoors privs 
+
+  # Filter method - requires user to have opendoors privs
   def opendoors_only
     (logged_in? && permit?("opendoors")) || access_denied
   end
@@ -194,7 +204,7 @@ public
       redirect_to root_path
     end
   end
-  
+
   # Hide admin banner via cookies
   before_filter :hide_banner
   def hide_banner
@@ -209,6 +219,12 @@ public
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
+    unless current_user.nil?
+      @current_user_subscriptions_count, @current_user_visible_work_count, @current_user_bookmarks_count, @current_user_owned_collections_count, @current_user_challenge_signups_count, @current_user_offer_assignments, @current_user_unposted_works_size=
+             Rails.cache.fetch("user_menu_counts_#{current_user.id}",
+                               expires_in: 2.hours,
+                               race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
+    end
   end
 
   def load_collection
@@ -227,7 +243,7 @@ public
     flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
-  
+
 
   @over_anon_threshold = true if @over_anon_threshold.nil?
 
@@ -252,7 +268,7 @@ public
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title.html_safe
   end
-  
+
   # Define media for fandoms menu
   before_filter :set_media
   def set_media
@@ -267,7 +283,6 @@ public
 
 #  I18n.backend = I18nDB::Backend::DBBased.new
 #  I18n.record_missing_keys = false # if you want to record missing translations
-
   protected
 
   def load_locales
@@ -315,7 +330,7 @@ public
     return true if current_user.preference && current_user.preference.adult
     return false
   end
-  
+
   def use_caching?
     %w(staging production).include?(Rails.env) && @admin_settings.enable_test_caching?
   end
@@ -326,10 +341,10 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t('suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
-     else
-        flash[:error] = t('ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
-     end
+        flash[:error] = t('suspension_notice', default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+      else
+        flash[:error] = t('ban_notice', default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+      end
       redirect_to current_user
     end
   end
@@ -357,8 +372,8 @@ public
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
-      is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) || 
-                  (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) || 
+      is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) ||
+                  (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)

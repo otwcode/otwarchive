@@ -23,13 +23,10 @@ When /^I add (?:the work )?"([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]
     select(pseud, :from => "work_author_attributes_ids_")
   end
   
-  check("series-options-show")  
-  if Series.find_by_title(series_title)
-    step %{I select "#{series_title}" from "work_series_attributes_id"}
-  else
-    fill_in("work_series_attributes_title", :with => series_title)
-  end
+  step %{I add the series "#{series_title}"}
   click_button("Post Without Preview")
+  step "I should see \"Work was successfully posted.\""
+  Work.tire.index.refresh
 end
 
 When /^I add (?:the work )?"([^\"]*)" to (?:the )?"(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|
@@ -43,6 +40,8 @@ When /^I add (?:the work )?"([^\"]*)" to (?:the )?"(\d+)" series "([^\"]*)"$/ do
     check("series-options-show")
     fill_in("work_series_attributes_title", :with => series_title + i.to_s)
     click_button("Post Without Preview")
+    step "I should see \"Work was successfully posted.\""
+    Work.tire.index.refresh
   end
 end
 

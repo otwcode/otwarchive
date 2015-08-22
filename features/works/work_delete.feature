@@ -7,13 +7,7 @@ Feature: Delete Works
       And I post the work "All Hell Breaks Loose"
     When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
-      And "newbie" should be emailed
-      # TODO: Figure out why these steps aren't working even though the feature is fine (multipart email?)
-      # And the email should contain "All Hell Breaks Loose"
-      # And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
-      # And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
-      # And the email should contain "Attached is a copy of your work for your reference."
-      # And the email should contain "Bad things happen, etc."
+      And "newbie" should be notified by email about the deletion of "All Hell Breaks Loose"
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page
@@ -96,7 +90,7 @@ Feature: Delete Works
       And 2 email should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
       And 1 email should be delivered to "recipient@example.org"
-      And the email should contain "A gift story has been posted for you"
+      And the email should contain "A gift work has been posted for you"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -104,8 +98,7 @@ Feature: Delete Works
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
       And I should see "No Archive Warnings Apply"
-      And "warning redesign" is fixed
-      #And I should not see "Choose Not To Use Archive Warnings"
+      And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
@@ -122,7 +115,7 @@ Feature: Delete Works
       And I should see "My new series"
       And I should see "Bad things happen, etc."
     When I follow "Add Chapter"
-      And I fill in "title" with "This is my second chapter"
+      And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
@@ -146,7 +139,8 @@ Feature: Delete Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".autocomplete"
+    When "autocomplete tests with JavaScript" is fixed
+#      Then I should see "cosomeone" in the autocomplete
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -157,7 +151,7 @@ Feature: Delete Works
       And 1 email should be delivered to "cosomeone@example.org"
     When all emails have been delivered
       And I follow "Edit"
-      And I fill in "work_recipients" with "giftee"
+      And I give the work to "giftee"
       And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"

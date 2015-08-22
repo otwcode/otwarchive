@@ -28,8 +28,15 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL']
-  require 'memcache'
+  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL0'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL1'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL2'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL3'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL4'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL5'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL6'],
+                                     YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL7'],
+                          {  :namespace =>  'ao3-v1', :expires_in => 0,  :compress => true , :pool_size => 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -50,6 +57,11 @@ Otwarchive::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Make it clear we are on staging
+  config.rack_dev_mark.enable = true
+  config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', fixed: 'true', color: 'orange' )]
+
 
 #  # run after initialization so have access to ArchiveConfig
 #  config.after_initialize do

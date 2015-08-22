@@ -2,7 +2,7 @@
   <%= ts('This work could have adult content. If you proceed you have agreed that you are willing to see such content.') %>
 </p>
 
-<ul class="navigation actions" role="navigation">
+<ul class="actions" role="navigation">
   <li>
     <%= link_to ts('Proceed'), url_for(params.merge :view_adult => true, :anchor => params[:anchor]) %>
   </li>
@@ -22,4 +22,6 @@
 
 <div class="clear"></div>
 
-<%= render 'works/work_blurb', :work => @work %>
+<ol class="work index group">
+  <%= render 'works/work_blurb', work: @work %>
+</ol>

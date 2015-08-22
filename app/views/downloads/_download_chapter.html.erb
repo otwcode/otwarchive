@@ -2,7 +2,7 @@
 
 <div class="meta group">
   <h2 class="chapter"><%= @chapter.chapter_title.html_safe %></h2>
-  <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds)) %>
+  <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>
     <%# only display byline if different from the main byline %>
     <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter) %></p>
   <% end %>

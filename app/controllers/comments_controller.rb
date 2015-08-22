@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
     parent =  find_parent
-    if parent.respond_to?(:restricted) && parent.restricted? && !logged_in?
+    if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
   end
@@ -103,7 +103,12 @@ class CommentsController < ApplicationController
         @commentable = @commentable.ultimate_parent
       end
     else
-      @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
+      if logged_in_as_admin?
+        @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select { |c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user) }
+      else
+        redirect_back_or_default(root_path)
+        flash[:error] = ts("Sorry, you don't have permission to access that page.")
+      end
     end
   end
 
@@ -158,6 +163,7 @@ class CommentsController < ApplicationController
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(params[:comment])
+      @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env['HTTP_USER_AGENT']
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
@@ -179,10 +185,9 @@ class CommentsController < ApplicationController
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
-              elsif request.referer.match(/static/)
-                # came here from a static page
-                # so go back to the comments page instead of reloading full work
-                redirect_to comment_path(@comment)
+              elsif request.referer == "#{root_url}"
+                # replying on the homepage
+                redirect_to root_path
               else
                 redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end

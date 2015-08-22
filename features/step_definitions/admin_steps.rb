@@ -1,15 +1,35 @@
+default_settings = {
+  :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+  :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  :account_creation_enabled => true,
+  :creation_requires_invite => true,
+  :request_invite_enabled => true,
+  :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+}
+
+def update_settings(settings)
+  admin_settings = AdminSetting.first_or_create
+  admin_settings.update_attributes(settings)
+  admin_settings.save(:validate => false)
+end
+
 ### GIVEN
 
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
-    settings = AdminSetting.new(
-      :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-      :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-      :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-      :account_creation_enabled => ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-      :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
+    settings = AdminSetting.new(default_settings)
     settings.save(:validate => false)
   end
+end
+
+Given /^the following admin settings are configured:$/ do |table|
+  settings = default_settings.merge(table.rows_hash.symbolize_keys)
+  update_settings settings
+end
+
+Given /^default admin settings$/ do
+  update_settings settings = {}
 end
 
 Given /the following admins? exists?/ do |table|
@@ -36,13 +56,14 @@ Given /^I am logged out as an admin$/ do
   assert !AdminSession.find
 end
 
-Given /^This is the end of the scenario$/ do
-  Rails.logger.debug "THIS IS THE END OF THE SCENARIO. DATABASE CLEANER BETTER TRUCATE THIS SHIT"
-end
-
 Given /^basic languages$/ do
   Language.default
-  Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  german = Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  de = Locale.new
+  de.iso = 'de'
+  de.name = 'Deutsch'
+  de.language_id = german.id
+  de.save!
 end
 
 Given /^advanced languages$/ do
@@ -100,6 +121,41 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
+  step %{the user "#{kin}" exists and is activated}
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  fill_in("Fannish next of kin's username", with: "#{kin}")
+  fill_in("Fannish next of kin's email", with: "testing@foo.com")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is suspended$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_suspend")
+  fill_in("suspend_days", with: 30)
+  fill_in("Notes", with: "Why they are suspended")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is banned$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_ban")
+  fill_in("Notes", with: "Why they are banned")
+  click_button("Update")
+end
+
+Given /^I have posted an admin post without paragraphs$/ do
+  step("I am logged in as an admin")
+  step("I make an admin post without paragraphs")
+  step("I am logged out as an admin")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -116,11 +172,20 @@ When /^I make an admin post$/ do
   click_button("Post")
 end
 
+When /^I make an admin post without paragraphs$/ do
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
+  click_button("Post")
+end
+
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("title", :with => "Number #{n} FAQ")
+  fill_in("Question*", :with => "Number #{n} Question.")
+  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", :with => "Number #{n} FAQ")
+  fill_in("Anchor name*", :with => "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -144,7 +209,7 @@ When /^there are (\d+) Admin Posts$/ do |n|
   end
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|	
+When /^(\d+) Archive FAQs? exists?$/ do |n|
   (1..n.to_i).each do |i|
     FactoryGirl.create(:archive_faq, id: i)
   end
@@ -174,18 +239,24 @@ When /^I edit known issues$/ do
     step(%{I press "Post"})
 end
 
+Given(/^the following language exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(:language, hash)
+  end
+end
+
 ### THEN
 
-When /^I make a translation of an admin post$/ do
+When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
+  fill_in("admin_post_translated_post_id", :with => AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
-Then /^I should see a translated admin post$/ do
+Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
     step(%{I should not see "Deutsch Ankuendigung"})
@@ -193,4 +264,54 @@ Then /^I should see a translated admin post$/ do
   step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
   step(%{I follow "Deutsch Ankuendigung"})
   step(%{I should see "Deutsch Woerter"})
+end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+end
+
+Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+end
+
+Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+  step(%{I am logged in as "#{user}"})
+  step(%{I am on my works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see the image "title" text "Hidden by Administrator"})
+end
+
+Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "#{work}"})
 end

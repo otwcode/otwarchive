@@ -60,7 +60,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should not see "Synonyms"
-  When I follow "First Doctor"
+  When I follow "Edit First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
     And I should see "The First Doctor"
@@ -83,15 +83,16 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "1st Doctor"
     And I follow "Edit"
     And I fill in "Synonym of" with "First"
-  Then I should find "First Doctor" within ".autocomplete"
-    But I should not find "The First Doctor" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "First Doctor" in the autocomplete
+#    But I should not see "The First Doctor" in the autocomplete
   When I fill in "Synonym of" with "First Doctor"
     And I fill in "Fandoms" with "Doc"
     
     # don't we want this to pull the fandom as well? if it doesn't already, I think we should add it
-    
-    And I should find "Doctor Who" within ".autocomplete"
-    And I fill in "Fandoms" with "Doctor Who"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Doctor Who" in the autocomplete
+  When I fill in "Fandoms" with "Doctor Who"
     And I press "Save changes"
   Then I should see "Tag was updated"
   
@@ -100,7 +101,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should see "Doctor Who"
     And the "tag_canonical" checkbox should be disabled
   When I fill in "tag_merger_string" with "One"
-  Then I should find "One" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "One" in the autocomplete
   When I fill in "tag_merger_string" with "One"
     And I fill in "Relationships" with "First Doctor/TARDIS"
     And I press "Save changes"
@@ -123,7 +125,8 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I choose "Character"
     And I press "Create Tag"
     And I fill in "SubTags" with "First "
-  Then I should find "First Doctor" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "First Doctor" in the autocomplete
   When I fill in "SubTags" with "First Doctor"
     And I press "Save changes"
   Then I should see "Tag was updated"

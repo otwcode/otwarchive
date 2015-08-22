@@ -1,10 +1,10 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  before_filter :users_only, :except => [ :index, :show, :destroy, :confirm_delete ]
   before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
   before_filter :check_visibility, :only => [ :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
@@ -34,7 +34,11 @@ class ChaptersController < ApplicationController
     if params[:selected_id]
       redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
     end
-    @chapter = @work.chapters.find(params[:id])
+    @chapter = @work.chapters.find_by_id(params[:id])
+    unless @chapter
+      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+      redirect_to work_path(@work) and return
+    end
     @chapters = @work.chapters_in_order(false)
     if !logged_in? || !current_user.is_author_of?(@work)
       @chapters = @chapters.select(&:posted)
@@ -42,8 +46,8 @@ class ChaptersController < ApplicationController
     if !@chapters.include?(@chapter)
       access_denied
     else
+      chapter_position = @chapters.index(@chapter)
       if @chapters.length > 1
-        chapter_position = @chapters.index(@chapter)
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
         @next_chapter = @chapters[chapter_position+1]
       end
@@ -62,10 +66,11 @@ class ChaptersController < ApplicationController
                                                          :subscribable_type => 'Work').first ||
                         current_user.subscriptions.build(:subscribable => @work)
       end
+      # update the history.
+      Reading.update_or_create(@work, current_user) if current_user
 
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
       if chapter_position == 0
-        Reading.update_or_create(@work, current_user) if current_user
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
@@ -93,11 +98,7 @@ class ChaptersController < ApplicationController
   end
 
   def draft_flash_message(work)
-    delete_schedule = work.posted ? "" : " (unposted work drafts are automatically deleted one " +
-      "month after creation; this chapter's work is scheduled for deletion at " +
-      "#{view_context.date_in_user_time_zone(work.created_at + 1.month)})"
-      # "#{(work.created_at + 1.week).in_time_zone(User.current_user.preference.time_zone)})"
-    flash[:notice] = ts("This is a draft showing what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting. The chapter draft will be stored until you post or discard it, or until its parent work is deleted#{delete_schedule}.")
+    flash[:notice] = work.posted ? ts("This is a draft chapter in a posted work. It will be kept unless the work is deleted.") : ts("This is a draft chapter in an unposted work. The work will be <strong>automatically deleted</strong> on #{view_context.time_in_zone(work.created_at + 1.month)}.").html_safe
   end
 
   # POST /work/:work_id/chapters
@@ -207,6 +208,10 @@ class ChaptersController < ApplicationController
     end
   end
 
+  # GET /work/:work_id/chapters/1/confirm_delete
+  def confirm_delete
+  end
+  
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
@@ -240,7 +245,11 @@ class ChaptersController < ApplicationController
 
   # fetch work these chapters belong to from db
   def load_work
-    @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
+    @work = params[:work_id] ? Work.find_by_id(params[:work_id]) : Chapter.find_by_id(params[:id]).try(:work)
+    unless @work.present?
+      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
+      redirect_to root_path and return
+    end
     @check_ownership_of = @work
     @check_visibility_of = @work
   end

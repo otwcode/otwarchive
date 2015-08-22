@@ -1,5 +1,5 @@
 /*==GROUP: BLURB
-http://media.transformativeworks.org/training/front_end_coding/blurb.html
+http://otwcode.github.com/docs/front_end_coding/patterns/blurb
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -13,7 +13,7 @@ by overriding the rules in the marked off section.
 Perhaps we can make a wizard for this specific task.
 */
 
-.blurb ul li, .blurb dd ul li, .blurb ul.type {
+.blurb ul li, .blurb dd ul li {
   display: inline;
 }
 
@@ -23,11 +23,9 @@ li.blurb, .blurb .blurb {
   clear: left;
   padding: 0.429em 0.75em;
   overflow: visible;
-    box-shadow: inset 1px 1px 3px #ccc;
-    border-radius: 0.15em;
 }
 
-li.blurb:after {
+li.blurb:after, .blurb .blurb:after {
   content: " ";
   display: block;
   height: 0;
@@ -62,11 +60,27 @@ li.blurb:after {
 }
 
 .blurb .header p.notice, .blurb ul.series {
-  margin: 0.875em 0 0 0;
+  margin: 1.25em 0 0;
+}
+
+.blurb ul.series {
+  margin-bottom: 0.875em;
 }
 
 .blurb .heading {
   display: block;
+}
+
+.blurb dl.stats {
+  float: right;
+}
+
+.blurb .fandoms .landmark {
+  position: absolute;
+}
+
+.blurb dl.stats + .heading.landmark { 
+  display: inline;
 }
 
 /* ==START icon block rules*/
@@ -221,10 +235,6 @@ li.blurb:after {
   text-align: justify;
 }
 
-.blurb.own dl.stats {
-  padding-left: 12.15em;
-}
-
 /*modification: PICTURE 
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
@@ -255,6 +265,10 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 /*various little mods*/
+
+.collection .name {
+    word-wrap: break-word;
+}
 
 .prompt h6 {
   float: left;
@@ -288,6 +302,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   right: 0.25em;
   width: 60px;
   margin-top: 0.429em;
+  z-index: 1;
 }
 
 .bookmark .status span, .bookmark .status a {
@@ -327,6 +342,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 .bookmark .user {
   border: 1px solid #ccc;
   clear: right;
+  margin-top: 0.643em;
   overflow: hidden;
 }
 
@@ -335,6 +351,10 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	font-family: Georgia, serif;
 	font-size: 0.875em;
 	line-height: 2;
+}
+
+.bookmark .actions {
+  clear: both;
 }
 
 /* line break between types of meta */
@@ -368,12 +388,22 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 /* mod: READING */
 
+.reading .user { 
+  float: left;
+}
+
 .reading h4.viewed {
   background: #ddd;
 }
 
 .reading .deleted h4.viewed {
   background: transparent;
+}
+
+/* mod: SKIN */
+
+.skin .blurb .header p {
+  margin-left: 65px;
 }
 
 /*END== */

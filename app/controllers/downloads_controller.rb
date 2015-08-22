@@ -13,6 +13,14 @@ class DownloadsController < ApplicationController
   # the others are derived from a hash of the id and are there to spread the downloads around
   # GET /downloads/:download_slice1/:download_slice2/:download_slice3/:download_slice4/:download_slice5/:id/:download_title.:format
   def show
+    @work = Work.find(params[:id])
+    @check_visibility_of = @work
+
+    if @work.unrevealed?
+      flash[:error] = ts("Sorry, you can't download an unrevealed work")
+      redirect_back_or_default works_path and return
+    end
+
     # Generate the download
     # the dont_generate_download option is here to facilitate testing for the error message
     @download_filename = @work.generate_download(@type) unless params[:dont_generate_download].present?
@@ -78,3 +86,4 @@ class DownloadsController < ApplicationController
   end
   
 end
+

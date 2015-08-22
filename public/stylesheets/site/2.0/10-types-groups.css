@@ -1,14 +1,14 @@
 /*==TYPES OF DATA, GROUPS OF DATA 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 */
 
 /*TYPE: TAGS */
 
-a.tag, .tags a {
+a.tag {
   color: #111;
   line-height: 1.5;
   text-decoration: none;
-  padding: 0 0.125em;
+  padding: 0;
   border-bottom: 1px dotted;
 }
 
@@ -19,6 +19,8 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
 
 .tags li {
   display: inline;
+  padding-left: 0;
+  padding-right: 0.25em;
 }
 
 .filters .tags li, .review .tags {
@@ -106,7 +108,7 @@ a.cloud8 {
   width: 100%;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/patterns/pattern-index.html*/
+/*http://otwcode.github.com/docs/front_end_coding/patterns/pattern-index*/
 
 dl.index {
   margin: 0.643em 0;
@@ -130,18 +132,14 @@ dl.index dd {
   background: #ededed;
 }
 
-dl.index dd:after {
-  content: " ";
-  display: block;
-  height: 0;
-  font-size: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-dl.index dd p, dl.index dd .heading, dl.index ul {
-  display: inline-block;
-}
+dl.index > dd:after {
+   content: " ";
+   display: block;
+   height: 0;
+   font-size: 0;
+   clear: both;
+   visibility: hidden;
+ }
 
 dl.index dd .userstuff p {
   display: block;
@@ -164,7 +162,7 @@ a.work {
   font-weight: bold;
 }
 
-li.relationships {
+li.relationships a {
   background: #eee;
 }
 
@@ -173,7 +171,7 @@ li.relationships {
   float: none;
 }
 
-.kudos {
+p.kudos {
   background: url("/images/imageset.png") no-repeat -110px -580px;
   padding: 0.5em 0.5em 0.5em 60px;
   margin: 2em 0;
@@ -210,6 +208,21 @@ dl.stats {
 dl.stats dd {
   white-space: nowrap;
   padding-right: 0.5em;
+}
+
+.statistics .index li {
+ padding: 0.643em 0.375em;
+}
+
+.statistics .index li:nth-of-type(even) {
+  background: #eee;
+}
+
+.concise li { 
+  width: 45%; 
+  float: left; 
+  clear: none; 
+  margin-right: 1.5em
 }
 
 /*END== */

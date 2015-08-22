@@ -1,14 +1,14 @@
 /*==GROUP: COMMENTS
-http://media.transformativeworks.org/training/front_end_coding/patterns/comments
+http://otwcode.github.com/docs/front_end_coding/patterns/comments
 
-Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list. 
+Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list.
 The comment form generally belongs to the class "post".
 Comments are also shown in user home: inbox and that containing view is styled in zone-home.
 Wrangler discussion boards are not grouped with comments and they only show up in the Tag Zone.
 test note: have put clearfixes on listbox, blurb and comments here, to allow for dynamic content and for skins robustness, but it's an eleventh hour change and needs testing in ie7*/
 
 #feedback {
-  margin: 0 2.5em auto;
+  margin: 0 0 auto;
 }
 
 div.comment, li.comment {
@@ -17,7 +17,8 @@ div.comment, li.comment {
   overflow: visible;
 }
 
-.comment:after {
+.comment:after,
+.comment h4.byline:after {
   content: " ";
   display: block;
   height: 0;
@@ -48,16 +49,8 @@ div.comment, li.comment {
   margin: 0 auto -0.25em;
 }
 
-.comment p {
-  clear: none;
-}
-
-.comment ul {
-  margin-top: -1.286em;
-}
-
 .thread .thread {
-  margin-left: 3em;
+  margin-left: 3%;
 }
 
 .thread .even {
@@ -65,18 +58,47 @@ div.comment, li.comment {
   margin: 0;
 }
 
-fieldset.comments, .comment blockquote.userstuff {
+fieldset.comments, .comment .userstuff {
   background: transparent;
   border: none;
     box-shadow: none;
+}
+
+.comment .userstuff {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  min-height: 3.3em;
 }
 
 .comment fieldset {
   margin: 0;
 }
 
-.comment .datetime {
-  margin: 0 11em 0 1.286em;
+.comment .posted {
+  float: right;
+}
+
+.comment .edited {
+  margin: 1.286em 0.643em 0.25em;
+}
+
+/* mods */
+
+.abbreviated .icon {
+  height: 75px;
+  width: 75px;
+}
+
+.abbreviated .icon .anonymous {
+  background: url("/images/imageset.png") no-repeat 0px -450px;
+}
+
+.abbreviated .icon .visitor {
+  background: url("/images/imageset.png") no-repeat 0px -375px;
+}
+
+.abbreviated h4.byline {
+  padding-left: 83px;
 }
 
 /*END== */

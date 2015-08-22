@@ -6,16 +6,33 @@ Given /^I have no tags$/ do
 end
 
 Given /^basic tags$/ do
+  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+             ArchiveConfig.RATING_GENERAL_TAG_NAME,
+             ArchiveConfig.RATING_TEEN_TAG_NAME,
+             ArchiveConfig.RATING_MATURE_TAG_NAME,
+             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
+  ratings.each do |rating|
+    Rating.find_or_create_by_name_and_canonical(rating, true)
+  end
   Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
   Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
-  Rating.find_or_create_by_name_and_canonical("Not Rated", true)
-  Rating.find_or_create_by_name_and_canonical("Explicit", true)
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
   Category.find_or_create_by_name_and_canonical("Other", true)
   Category.find_or_create_by_name_and_canonical("F/F", true)
   Category.find_or_create_by_name_and_canonical("Multi", true)
   Category.find_or_create_by_name_and_canonical("M/F", true)
   Category.find_or_create_by_name_and_canonical("M/M", true)
+end
+
+Given /^the default ratings exist$/ do
+  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+             ArchiveConfig.RATING_GENERAL_TAG_NAME,
+             ArchiveConfig.RATING_TEEN_TAG_NAME,
+             ArchiveConfig.RATING_MATURE_TAG_NAME,
+             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
+  ratings.each do |rating|
+    Rating.find_or_create_by_name_and_canonical(rating, true)
+  end
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
@@ -113,6 +130,11 @@ Given /^the unsorted tags setup$/ do
   end
 end
 
+Given /^I have posted a Wrangling Guideline$/ do
+  step("I am logged in as an admin")
+  step(%{I make a 1st Wrangling Guideline})
+end
+
 ### WHEN
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
@@ -160,8 +182,50 @@ When /^I view tag wrangling discussions$/ do
   step %{I follow "Discussion"}
 end
 
+When /^I add "([^\"]*)" to my favorite tags$/ do |tag|
+  step %{I view the "#{tag}" works index}
+  step %{I press "Favorite Tag"}
+end
+
+When /^I remove "([^\"]*)" from my favorite tags$/ do |tag|
+  step %{I view the "#{tag}" works index}
+  step %{I press "Unfavorite Tag"}
+end
+
+When /^the tag "([^\"]*)" is decanonized$/ do |tag|
+  tag = Tag.find_by_name!(tag)
+  tag.canonical = false
+  tag.save
+end
+
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
+  n ||= 1
+  visit new_wrangling_guideline_path
+  fill_in("Guideline text", :with => "Number #{n} posted Wrangling Guideline, this is.")
+  fill_in("Title", :with => "Number #{n} Wrangling Guideline")
+  click_button("Post")
+end
+
+When /^(\d+) Wrangling Guidelines? exists?$/ do |n|	
+  (1..n.to_i).each do |i|
+    FactoryGirl.create(:wrangling_guideline, id: i)
+  end
+end
+
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
   step %{I should see "wrangler" within "fieldset dl"}
+end
+
+Then /^I should see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/ do |result, selector|
+    with_scope(selector) do
+      page.has_text?(result)
+    end
+end
+
+Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/ do |result, selector|
+    with_scope(selector) do
+      page.has_no_text?(result)
+    end
 end

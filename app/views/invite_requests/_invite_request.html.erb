@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<p>You are currently number <strong><%= invite_request.position %></strong> on our waiting list! 
+<p>You are currently number <strong><%= InviteRequest.where("position <= #{invite_request.position}").count %></strong> on our waiting list! 
 
 <% if @admin_settings.invite_from_queue_enabled? %>
 At our current rate, you should receive an invitation on or around: <%= l(invite_request.proposed_fill_date, :format => :long) %>

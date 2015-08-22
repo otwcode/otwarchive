@@ -2,10 +2,11 @@ class InvitationsController < ApplicationController
 
   before_filter :check_permission
   before_filter :admin_only, :only => [:create, :destroy]
+  before_filter :check_user_status, :only => [:index, :manage, :invite_friend, :update]
 
   def check_permission
     @user = User.find_by_login(params[:user_id])
-    access_denied unless logged_in_as_admin? || @user == current_user
+    access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
   end
 
   def index

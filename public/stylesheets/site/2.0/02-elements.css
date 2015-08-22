@@ -39,7 +39,7 @@ a:hover {
   color: #999;
 }
 
-a:active, a:focus {
+a:active, a:focus, button:focus {
   outline: 1px dotted;
 }
 
@@ -183,7 +183,7 @@ sup {
   line-height: 0;
 }
 
-/*http://media.transformativeworks.org/training/front_end_coding/accessible-tables.html*/
+/*http://otwcode.github.com/docs/front_end_coding/accessible-tables*/
 
 table {
   background: #ddd;
@@ -243,7 +243,6 @@ th, tr:hover, col.name {
 
 th a, th a:visited, th a:link {
   text-decoration: none;
-  border: 0;
 }
 
 tbody tr th {

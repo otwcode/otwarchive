@@ -1,7 +1,8 @@
 class Tag < ActiveRecord::Base
   
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
+  include Searchable
   include StringCleaner
   include WorksOwner
 
@@ -42,6 +43,8 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  attr_accessor :fix_taggings_count
+
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
@@ -78,6 +81,9 @@ class Tag < ActiveRecord::Base
   has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'
   has_many :approved_collections, :through => :filtered_works
 
+  # TODO Update favorite_tags for this tag_id when a canonical tag becomes a synonym of a new canonical tag
+  has_many :favorite_tags, dependent: :destroy
+
   has_many :set_taggings, :dependent => :destroy
   has_many :tag_sets, :through => :set_taggings
   has_many :owned_tag_sets, :through => :tag_sets
@@ -93,7 +99,7 @@ class Tag < ActiveRecord::Base
     :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    :message => 'of a tag cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_presence_of :sortable_name
     
@@ -177,6 +183,7 @@ class Tag < ActiveRecord::Base
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :synonymous, noncanonical.where("merger_id IS NOT NULL")
   scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
   scope :unwrangleable, where(:unwrangleable => true)
 
@@ -348,31 +355,6 @@ class Tag < ActiveRecord::Base
   # Class methods
 
 
-  # Get tags that are either above or below the average popularity
-  def self.with_popularity_relative_to_average(options = {})
-    options.reverse_merge!({:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
-    comparison = "<"
-    comparison = ">" if options[:greater_than]
-
-    if options[:include_meta]
-      tags = select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
-                  joins(:filter_count).
-                  where(:canonical => true).
-                  where("filter_counts.unhidden_works_count #{comparison} (select avg(unhidden_works_count) from filter_counts) * ?", options[:factor]).
-                  order("count ASC")
-    else
-      meta_tag_ids = select("DISTINCT tags.id").joins(:sub_taggings).where(:canonical => true)
-      non_meta_ids = meta_tag_ids.empty? ? select("tags.id").where(:canonical => true) : select("tags.id").where(:canonical => true).where("id NOT IN (#{meta_tag_ids.collect(&:id).join(',')})")
-      tags = non_meta_ids.empty? ? [] :
-                select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
-                  joins(:filter_count).
-                  where(:canonical => true).
-                  where("tags.id IN (#{non_meta_ids.collect(&:id).join(',')})").
-                  where("filter_counts.unhidden_works_count #{comparison} (select AVG(unhidden_works_count) from filter_counts where filter_id in (#{non_meta_ids.collect(&:id).join(',')})) * ?", options[:factor]).
-                  order("count ASC")
-    end
-  end
-  
   def self.in_prompt_restriction(restriction)
     joins("INNER JOIN set_taggings ON set_taggings.tag_id = tags.id
            INNER JOIN tag_sets ON tag_sets.id = set_taggings.tag_set_id
@@ -443,7 +425,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -453,7 +435,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -462,7 +444,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
+        REDIS_GENERAL.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value_was) if parent.is_a?(Fandom)
       end
     end
   end
@@ -489,10 +471,10 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       if search_param.blank?
         # just return ALL the characters
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+        results += REDIS_GENERAL.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
     if options[:fallback] && results.empty? && search_param.length > 0
@@ -957,11 +939,12 @@ class Tag < ActiveRecord::Base
     sub_tag.update_meta_filters(self)
   end
 
-  # If we're making a tag non-canonical, we need to update its synonyms and children
+  # If we're making a tag non-canonical, we need to update its synonyms and children and favorite tags
   before_update :check_canonical
   def check_canonical
     if self.canonical_changed? && !self.canonical?
       self.async(:remove_canonical_associations)
+      async(:remove_favorite_tags)
     elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
@@ -973,6 +956,10 @@ class Tag < ActiveRecord::Base
     self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
     self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
     self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
+  end
+
+  def remove_favorite_tags
+    favorite_tags.destroy_all
   end
 
   attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string

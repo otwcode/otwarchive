@@ -374,6 +374,73 @@ namespace :After do
       fandom.save
     end
   end
+  
+  desc "Increase skins' width threshold for handheld devices to 640px"
+  task(:increase_handheld_width => :environment) do
+    hh_width_media = "only screen and (max-width: 480px)"
+    hh_skins = Skin.select { |s| s.media.include? hh_width_media }
+    hh_skins.each do |skin|
+      new_media = skin.media.map { |m| m == hh_width_media ? "only screen and (max-width: 640px)" : m }
+      skin.media = new_media
+      skin.save
+    end
+  end
+
+  desc "Set up available locales"
+  task(:locale_setup => :environment) do
+    I18n.available_locales.each do |iso|
+      next if Locale.where(iso: iso).exists?
+      iso = iso.to_s
+      short = iso.split('-').first
+      lang = Language.find_by_short(short)
+      if lang.present?
+        Locale.create(
+          iso: iso, 
+          short: short, 
+          name: lang.name, 
+          language_id: lang.id
+        )
+      else
+        puts "No language found for #{short}"
+      end
+    end
+  end
+
+  desc "Set initial values for sortable tag names for tags that aren't fandoms"
+  task(:more_sortable_tag_names => :environment) do
+    [Category, Character, Freeform, Rating, Relationship, Warning].each do |klass|
+      puts "Adding sortable names for #{klass.to_s.downcase.pluralize}"
+      klass.by_name.find_each(:conditions => "canonical = 1 AND sortable_name = ''") do |tag|
+        tag.set_sortable_name
+        puts tag.sortable_name
+        tag.save
+      end
+    end
+  end
+
+  desc "Clean up challenge_id and challenge_type in Collections with deleted Challenges"
+  task(:remove_old_challenge_variables_from_collections => :environment) do
+    Collection.find_each do |collection|
+      unless collection.challenge?
+        if collection.challenge_id.present? || collection.challenge_type.present?
+          puts "Fixing collection: #{collection.name}"
+          puts "Which is a #{collection}"
+          collection.update_column(:challenge_id, nil)
+          collection.update_column(:challenge_type, nil)
+        end
+      end
+    end
+  end
+
+
+  desc "Clean up work URLs for abuse reports from the last month"
+  task(:clean_abuse_report_work_urls => :environment) do
+    AbuseReport.where("created_at > ?", 1.month.ago).each do |report|
+      report.clean_work_url
+      puts report.url
+      report.save
+    end
+  end
 
 end # this is the end that you have to put new tasks above
 
@@ -385,4 +452,4 @@ end # this is the end that you have to put new tasks above
 desc "Run all current migrate tasks"
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all',
 # 'skins:load_site_skins', 'After:convert_existing_skins', 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => []
+task :After => ['After:locale_setup']

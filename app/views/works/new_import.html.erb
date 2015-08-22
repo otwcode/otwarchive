@@ -3,20 +3,20 @@
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Imports from fanfiction.net are no longer available because of a block on their end.") %>
+    <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
   <p>
     <%= ts("If you have trouble importing from another site, ") %> 
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
   </p>
-  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/importing-and-mass-editing" %><%= ts(" useful.") %></p>
 </div>
 
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="actions" role="menu">
+<ul class="navigation actions" role="menu">
   <% if @unposted %>
     <li id='restore-link'>
       <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
@@ -25,9 +25,10 @@
   <li id="form-link">
      <%= link_to( ts("Post New Work Instead?"),
        {:url => {:controller => :works, :action => :new, :import => false}},
-       :href => url_for(:controller => :works, :action => :new, :import => false)) %>
+       :href => url_for(:controller => :works, :action => :new, :import => nil)) %>
   </li>
 </ul>
+<!--/subnav-->
 
 <!-- This partial renders a form for importing a work from an existing URL -->
   

@@ -4,7 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection and post to it
 
-Scenario: Create a collection
+Scenario: Create a collection then edit its name
 
   Given I am logged in as "first_user"
   When I post the work "Test work thingy"
@@ -30,6 +30,13 @@ Scenario: Create a collection
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a collection" within "#faq"
     And I should see "Be nice to people" within "#rules"
+  Then I follow "Collection Settings"
+    And I fill in "Collection Name" with " "
+    And I submit
+    And I should see "Please enter a name for your collection"
+  Then I fill in "Collection Name" with "collection_thing2"
+    And I submit
+    And I should see "Collection was successfully updated"
     
 Scenario: Post to collection from the work edit page
   Given I have the collection "My Collection Thing" with name "collection_thing"
@@ -107,3 +114,55 @@ Scenario: Fill out new collection form with faulty data
    And I should see "My Other Message" in the "Gift Notification Message" input
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
+
+Scenario: Create a collection with a malformed header URL
+
+Given I have the collection "Scotts Collection" with name "scotts_collection"
+  And I am logged in as "moderator"
+  And I am on "Scotts Collection" collection's page
+  And I follow "Collection Settings"
+  And I fill in "collection_header_image_url" with "fc00.deviantart.net/fs13/f/2007/004/a/7/Flooded_by_bingeling.jpg"
+  And I press "Update"
+  And I should see "Collection was successfully updated"
+
+  Scenario: Delete a subcollection and then its parent collection
+  
+  Given I am logged in as "collector"
+    And I create the collection "Temporary Top" with name "temporary_top_collection"
+  When I go to the collections page
+    And I follow "New Collection"
+    And I fill in "collection_parent_name" with "temporary_top_collection"
+    And I fill in "Display Title" with "Temporary Subcollection"
+    And I fill in "Collection Name" with "temporary_subcollection"
+    And I press "Submit"
+  Then I should see "Collection was successfully created"
+  When I follow "Collection Settings"
+    And I follow "Delete Collection"
+    And I press "Yes, Delete Collection"
+  Then I should see "Collection was successfully deleted."
+    And I should see "Temporary Top"
+  When I follow "Temporary Top"
+    And I follow "Collection Settings"
+  When I follow "Delete Collection"
+    And I press "Yes, Delete Collection"
+  Then I should see "Collection was successfully deleted."
+    And I should not see "Temporary Top"
+    
+  Scenario: Delete a collection that has subcollections
+  
+  Given I am logged in as "collector"
+    And I create the collection "Parent" with name "parent_collection"
+  When I go to the collections page
+    And I follow "New Collection"
+    And I fill in "collection_parent_name" with "parent_collection"
+    And I fill in "Display Title" with "Child"
+    And I fill in "Collection Name" with "child_collection"
+    And I press "Submit"
+  Then I should see "Collection was successfully created"
+  When I go to the collections page
+    And I follow "Parent"
+    And I follow "Collection Settings"
+  When I follow "Delete Collection"
+    And I press "Yes, Delete Collection"
+  Then I should see "Collection was successfully deleted."
+    And I should not see "Parent"

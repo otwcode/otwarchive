@@ -3,7 +3,7 @@ require 'vcr'
 VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir     = 'features/cassette_library'
-  c.hook_into                :typhoeus
+  c.hook_into                :webmock
   c.allow_http_connections_when_no_cassette = true
 
   #use this after setup...
@@ -52,11 +52,8 @@ VCR.cucumber_tags do |t|
   t.tags '@import_lj_multi_chapter'
   t.tags '@import_lj_underscores'
 
-  t.tags '@import_yt'
-  t.tags '@import_yt_no_notes'
-  t.tags '@import_yt_ny'
-
   t.tags '@work_external_parent'
   t.tags '@work_external_language'
+
 end
 

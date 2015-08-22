@@ -1,15 +1,23 @@
 <% # expects "work" and "reading" %>
 <li <% unless reading.work.nil? %>id="work_<%= work.id %>"<% end %> class="<% if reading.work.nil? %>deleted <% end %><% if is_author_of?(work) %>own <% end %>reading work blurb group" role="article">
 
-  <% if reading.work.nil? %>
-    <h4 class="viewed heading"><%= ts("(deleted work, last viewed %{date})", :date => set_format_for_date(reading.last_viewed)) %></h4>
-  <% else %>
-  
+  <% unless reading.work.nil? %>
+
     <%= render 'works/work_module', :work => reading.work %>
- 
-    <div class="user module group">
-      <h4 class="viewed heading">
-        <span><%= ts("Last viewed:") %></span> <%= set_format_for_date(reading.last_viewed) %>
+
+  <% end %>
+
+  <div class="user module group">
+    <h4 class="viewed heading">
+
+      <% if reading.work.nil? %>
+
+        <%= ts('(Deleted work, last viewed %{date})', :date => set_format_for_date(reading.last_viewed)) %>
+
+      <% else %>
+
+        <span><%= ts('Last viewed:') %></span> <%= set_format_for_date(reading.last_viewed) %>
+
         <% if reading.major_version_read != reading.work.major_version %>
           <%= ts('(Update available.)') %>
         <% elsif reading.minor_version_read != reading.work.minor_version %>
@@ -17,20 +25,33 @@
         <% else %>
           <%= ts('(Latest version.)') %>
         <% end %>
-        <% if reading.view_count == 1 %>
-          <%= ts("Viewed once")%>
-        <% else %>
-          <%= ts("Viewed %{count} times", :count => reading.view_count) %>
-        <% end %>
-        <% if reading.toread? %><%= ts('(Marked for Later.)') %><% end %>
-        <% if reading.toskip? %><%= ts('(Flagged to skip.)') %><% end %>
-      </h4>
-  
-      <ul class="navigation actions" role="menu">
-        <li><%= link_to ts("Delete"), user_reading_path(current_user, reading), :confirm => ts('Are you sure?'), :method => :delete %></li>
-      </ul>
-    </div>
 
-  <% end %>
+        <% if reading.view_count == 1 %>
+          <%= ts('Viewed once') %>
+        <% else %>
+          <%= ts('Viewed %{count} times', :count => reading.view_count) %>
+        <% end %>
+
+        <% if reading.toread? %>
+          <%= ts('(Marked for Later.)') %>
+        <% end %>
+        <% if reading.toskip? %>
+          <%= ts('(Flagged to skip.)') %>
+        <% end %>
+
+      <% end %>
+
+    </h4>
+
+    <ul class="actions" role="menu">
+      <li>
+        <%= form_tag user_reading_path(current_user, reading, page: params[:page]), method: 'delete', class: 'ajax-remove' do |f| %>
+          <%= hidden_field_tag :reading, reading.id %>
+          <%= submit_tag ts('Delete from History') %>
+        <% end %>
+      </li>
+    </ul>
+
+  </div>
 
 </li>

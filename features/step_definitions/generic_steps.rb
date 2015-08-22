@@ -3,8 +3,11 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  breakpoint
-  0
+  binding.pry
+end
+
+Then /^tell me I got (.*)$/ do |spot|
+  puts "got #{spot}"
 end
 
 Then /^show me the response$/ do
@@ -38,7 +41,6 @@ end
 Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
   puts "\n" + page.all("#main form")[(index.to_i-1)].native.inner_html
 end
-
 
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
@@ -86,43 +88,31 @@ Then /^I should see a success message$/ do
   step %{I should see "success"}
 end
 
-Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+# img attributes
+Then /^I should see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.all(text)
+    page.should have_xpath("//img[@#{attribute}='#{text}']")
   end
 end
 
-Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
+Then /^I should not see the image "([^"]*)" text "([^"]*)"(?: within "([^"]*)")?$/ do |attribute, text, selector|
   with_scope(selector) do
-    page.all(text)
-  end
-end
-
-Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.all(text)
-  end
-end
-
-Then /^I should see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_xpath("//img[@alt='#{text}']")) : (page.should have_xpath("//img[@title='#{text}']"))
-  end
-end
-
-Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
-  with_scope(selector) do
-    (texttype == "alt") ? (page.should have_no_xpath("//img[@alt='#{text}']")) : (page.should have_no_xpath("//img[@title='#{text}']"))
+    page.should_not have_xpath("//img[@#{attribute}='#{text}']")
   end
 end
 
 Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   page.has_select?(field, :selected => value).should == true
-  #find_field(field).xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
+end
+
+Then /^I should see (a|an) "([^"]*)" button(?: within "([^"]*)")?$/ do |article, text, selector|
+  with_scope(selector) do
+    page.should have_xpath("//input[@value='#{text}']")
+  end
 end
 
 When /^"([^\"]*)" is fixed$/ do |what|
@@ -133,7 +123,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |lab
   with_scope(selector) do
     field_disabled = find_field(label, :disabled => true)
     if field_disabled.respond_to? :should
-      field_disabled.should be_true
+      field_disabled.should be_truthy
     else
       assert field_disabled
     end
@@ -144,7 +134,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
   with_scope(selector) do
     field_disabled = find_field(label)['disabled']
     if field_disabled.respond_to? :should
-      field_disabled.should be_false
+      field_disabled.should be_falsey
     else
       assert !field_disabled
     end
@@ -176,6 +166,10 @@ When /^I check the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do
   check(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
 end
 
+When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, id_string|
+  uncheck(page.all("input[type='checkbox']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'])
+end
+
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
   fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], :with => value)
 end
@@ -202,25 +196,21 @@ end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them
 Then /^I should see the text with tags "(.*)"$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the text with tags '(.*)'$/ do |text|
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see the text with tags '(.*)'$/ do |text|
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should see the page title "(.*)"$/ do |text|
   within('head title') do
     page.should have_content(text)
   end
-end
-
-Given /^I have no prompts$/ do
-  Prompt.delete_all
 end
 
 Then /^I should find a checkbox "([^\"]*)"$/ do |name|
@@ -230,10 +220,14 @@ end
 
 Then /^I should see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should =~ /#{text}/m
+  page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
-  page.body.should_not =~ /#{text}/m
+  page.body.should_not =~ /#{Regexp.escape(text)}/m
+end
+
+When /^I want to search for exactly one term$/ do
+  Capybara.exact = true
 end

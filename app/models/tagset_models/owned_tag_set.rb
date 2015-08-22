@@ -44,7 +44,7 @@ class OwnedTagSet < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :title,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => '^The title of a tag set can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    :message => '^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_length_of :description,
     :allow_blank => true,
@@ -66,7 +66,7 @@ class OwnedTagSet < ActiveRecord::Base
   def no_midstream_nomination_changes
     if !self.tag_set_nominations.empty? && 
       %w(fandom_nomination_limit character_nomination_limit relationship_nomination_limit freeform_nomination_limit).any? {|field| self.changed.include?(field)}
-      errors.add(:base, ts("^You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
+      errors.add(:base, ts("You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
     end
   end
   
