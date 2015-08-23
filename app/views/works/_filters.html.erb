@@ -1,4 +1,4 @@
-<%= form_for @search, 
+<%= form_for @search, as: :work_search,
   url: (@collection ? collection_works_path(@collection) : works_path), 
   html: { 
     method: :get, 
@@ -55,9 +55,13 @@
           <% end %>
         </dl>
       </dd>
-      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other Tags") %><%= link_to_help "filters-tags-help" %></dt>
+      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other tags to include") %><%= link_to_help "filters-tags-help" %></dt>
       <dd class="autocomplete">
         <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
+      </dd>
+      <dt class="autocomplete"><%= f.label 'excluded_tag_names', ts("Tags to exclude") %></dt>
+      <dd class="autocomplete">
+        <%= f.text_field 'excluded_tag_names', autocomplete_options("tag") %>
       </dd>
       <dt><%= f.label :query, ts("Search within results") %><%= link_to_help "work-search-text-help" %></dt>
       <dd><%= f.text_field :query %></dd>

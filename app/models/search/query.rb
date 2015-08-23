@@ -1,5 +1,13 @@
 class Query
 
+  extend ActiveModel::Naming
+  include ActiveModel::Conversion
+  include ActiveModel::Validations
+
+  def persisted?
+    false
+  end
+
   attr_reader :options
 
   def initialize(options={})
@@ -14,9 +22,31 @@ class Query
     )
   end
 
+  def search_results
+    response = search
+    QueryResult.new(klass, response, options.slice(:page, :per_page))
+  end
+
+  def query
+  end
+
+  # Sort by relevance by default, override in subclasses as necessary
+  def sort
+    { "_score" => { order: "desc" }}
+  end
+
   # Search query with filters
   def generated_query
-    { query: { filtered: filtered_query } }
+    q = { 
+      query: { filtered: filtered_query },
+      size: per_page,
+      from: pagination_offset,
+      sort: sort
+    }
+    if aggregations.present?
+      q.merge!(aggregations)
+    end
+    q
   end
 
   # Combine the filters and queries
@@ -30,7 +60,12 @@ class Query
 
   # Boolean filter
   def filter_bool
-    { bool: { must: filters } } if filters.present?
+    return unless filters.present?
+    bool = { bool: { must: filters } }
+    if exclusion_filters.present?
+      bool[:bool].merge!(must_not: exclusion_filters)
+    end
+    bool
   end
 
   # Boolean query
@@ -43,13 +78,28 @@ class Query
   def filters
   end
 
+  def exclusion_filters
+  end
+
   def queries
+  end
+
+  def aggregations
   end
 
   def index_name
   end
 
   def document_type
+  end
+
+  def per_page
+    options[:per_page] || 20
+  end
+
+  def pagination_offset
+    page = options[:page] || 1
+    (page * per_page) - per_page
   end
 
 end
