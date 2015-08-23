@@ -4,6 +4,7 @@ class Pseud < ActiveRecord::Base
   # include Tire::Model::Callbacks
   include Searchable
   include WorksOwner
+  include DownloadableOwner
 
   attr_protected :description_sanitizer_version
 
@@ -18,8 +19,8 @@ class Pseud < ActiveRecord::Base
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
 
-  NAME_LENGTH_MIN = 1
-  NAME_LENGTH_MAX = 40
+  NAME_LENGTH_MIN = ArchiveConfig.PSEUD_NAME_MIN
+  NAME_LENGTH_MAX = ArchiveConfig.PSEUD_NAME_MAX
   DESCRIPTION_MAX = 500
 
   belongs_to :user
@@ -325,6 +326,8 @@ class Pseud < ActiveRecord::Base
   # Options: skip_series -- if you begin by changing ownership of the series, you don't
   # want to go back up again and get stuck in a loop
   def change_ownership(creation, pseud, options={})
+    # we have to remove downloads FIRST so long as download dir is based on author name
+    creation.remove_outdated_downloads if creation.respond_to?(:remove_outdated_downloads)
     creation.pseuds.delete(self)
     creation.pseuds << pseud rescue nil
     if creation.is_a?(Work)

@@ -7,10 +7,9 @@ Otwarchive::Application.routes.draw do
   match '/422', :to => 'errors#422'
   match '/500', :to => 'errors#500'
 
-
   #### DOWNLOADS ####
 
-  match 'downloads/:download_prefix/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
+  match 'downloads/:download_slice1/:download_slice2/:download_slice3/:download_slice4/:download_slice5/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
   #### OPEN DOORS ####
   namespace :opendoors do

@@ -5,8 +5,7 @@
   <dl class="tags">
     <% Tag::VISIBLE.each do |type| %>
       <% tags = @work.tag_groups[type] %>
-      <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" && 
-hide_freeform?(@work)) %>
+      <% unless tags.blank? %>
         <dt><%= type.constantize::NAME %>:</dt>
         <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
       <% end %>

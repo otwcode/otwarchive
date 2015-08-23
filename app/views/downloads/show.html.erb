@@ -1,9 +1,10 @@
-<%= render 'download_preface.html' %>
+<% # expects instance vars @work, @chapters, @page_title %>
+<%= render 'downloads/download_preface', :formats => [:html] %>
 
 <div id="chapters" class="userstuff">
   <% if @chapters.size > 1 %>
     <% for chapter in @chapters %>
-      <%= render 'download_chapter.html', :chapter => chapter %>
+      <%= render 'downloads/download_chapter', :formats => [:html], :chapter => chapter %>
     <% end %>
   <% else %>
     <div class="userstuff">
@@ -12,4 +13,4 @@
   <% end %>
 </div>
 
-<%= render 'download_afterword.html' %>
+<%= render 'downloads/download_afterword', :formats => [:html] %>

@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   audited
   include WorksOwner
+  include DownloadableOwner
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user

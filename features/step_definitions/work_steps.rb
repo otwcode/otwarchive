@@ -349,9 +349,10 @@ When /^I delete the work "([^\"]*)"$/ do |work|
   Work.tire.index.refresh
 end
 
-When /^I add my work to the collection$/ do
+When /^I add my work to the collection "([^\"]*)"$/ do |collection_title|
   step %{I follow "Add To Collection"}
-  fill_in("collection_names", :with => "Various_Penguins")
+  collection = Collection.find_by_title(collection_title)
+  fill_in("collection_names", :with => collection.name)
   click_button("Add")
 end
 
