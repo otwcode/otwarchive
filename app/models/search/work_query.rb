@@ -4,24 +4,6 @@ class WorkQuery < Query
     'Work'
   end
 
-  [ :fandom_ids,
-    :rating_ids,
-    :category_ids,
-    :warning_ids,
-    :character_names,
-    :character_ids,
-    :relationship_names,
-    :relationship_ids,
-    :freeform_names,
-    :freeform_ids,
-    :other_tag_names,
-    :excluded_tag_names,
-    :language_id,
-    :complete,
-    :query].each do |filterable|
-      define_method(filterable) { options[filterable] }
-    end
-
   def index_name
     WorkIndexer.index_name
   end
@@ -56,11 +38,16 @@ class WorkQuery < Query
   def process_owner
     return unless (parent = options[:works_parent]).present?
     case parent
-    when Tag 
+    when Tag
       options[:filter_ids] ||= []
       options[:filter_ids] << parent.id
-    when Pseud 
-    when User 
+    when Pseud
+      options[:pseud_ids] ||= []
+      options[:pseud_ids] << parent.id
+    when User
+      options[:pseud_ids] ||= []
+      options[:pseud_ids] += parent.pseuds.value_of(:id)
+    when Collection
     end
   end
 
@@ -184,8 +171,8 @@ class WorkQuery < Query
   end
 
   def sort
-    column = options[:sort_column] || 'revised_at'
-    direction = options[:sort_direction] || 'desc'
+    column = options[:sort_column].present? ? options[:sort_column] : 'revised_at'
+    direction = options[:sort_direction].present? ? options[:sort_direction] : 'desc'
     { column => { order: direction } }
   end
 
@@ -250,7 +237,9 @@ class WorkQuery < Query
     return @filter_ids if @filter_ids.present?
     @filter_ids = options[:filter_ids] || []
     %w(fandom rating warning category character relationship freeform).each do |tag_type|
-      @filter_ids += options["#{tag_type}_ids".to_sym] || []
+      if options["#{tag_type}_ids".to_sym].present?
+        @filter_ids += options["#{tag_type}_ids".to_sym]
+      end
     end
     @filter_ids += named_tags
     @filter_ids.uniq
@@ -277,46 +266,6 @@ class WorkQuery < Query
     names = options[:excluded_tag_names].split(",")
     Tag.where(name: names, canonical: true).value_of(:id)
   end
-
-  ###############
-  # SORTING
-  ###############
-
-    SORT_OPTIONS = [
-    ['Author', 'authors_to_sort_on'],
-    ['Title', 'title_to_sort_on'],
-    ['Date Posted', 'created_at'],
-    ['Date Updated', 'revised_at'],
-    ['Word Count', 'word_count'],
-    ['Hits', 'hits'],
-    ['Kudos', 'kudos_count'],
-    ['Comments', 'comments_count'],
-    ['Bookmarks', 'bookmarks_count']
-  ]
   
-  def sort_options
-    SORT_OPTIONS
-  end
-  
-  def sort_values
-    sort_options.map{ |option| option.last }
-  end
-
-  def sort_column
-    options[:sort_column] || 'revised_at'
-  end
-  
-  # extract the pretty name
-  def name_for_sort_column(sort_column)
-    Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
-  end
-  
-  def sort_direction(sort_column)
-    if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
-      'asc'
-    else
-      'desc'
-    end
-  end
 
 end

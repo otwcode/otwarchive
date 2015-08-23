@@ -1,13 +1,5 @@
 class Query
 
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  include ActiveModel::Validations
-
-  def persisted?
-    false
-  end
-
   attr_reader :options
 
   def initialize(options={})
@@ -25,9 +17,6 @@ class Query
   def search_results
     response = search
     QueryResult.new(klass, response, options.slice(:page, :per_page))
-  end
-
-  def query
   end
 
   # Sort by relevance by default, override in subclasses as necessary
