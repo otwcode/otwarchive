@@ -401,7 +401,7 @@ Feature: Collection
       And I am logged in as "Amos"
       And I am logged in as "Jessica"
       And I post the chaptered work "Cone of Silence"
-    When I add my work to the collection
+    When I add my work to the collection "Various Penguins"
     Then I should see "Added"
       And I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
@@ -417,7 +417,7 @@ Feature: Collection
     Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
       And I am logged in as "actualname"
       And I post the work "Troll Work"
-      And I add my work to the collection
+      And I add my work to the collection "Hidden Treasury"
     When I am logged in as an admin
       And I view the work "Troll Work"
     Then I should see "actualname"
