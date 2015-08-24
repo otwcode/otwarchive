@@ -42,6 +42,7 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
 }
 
 button {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont', sans-serif;
   box-sizing: content-box;
 }
 

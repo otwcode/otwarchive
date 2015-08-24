@@ -60,55 +60,109 @@ li.search fieldset {
 
 /* INTERACTION: FILTER */
 
-form.filters {
+.filters {
   width: 22.5%;
   float: right;
 }
 
-.filters .tags {
-  display: block;
+/*.filters fieldset {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+    box-shadow: none;
+}*/
+
+.filters dl {
+  margin-top: 0.375em;
+  padding: 0;
+}
+
+.filters dt {
+  padding: 0;
+}
+
+.filters dd {
+  margin: 0;
+}
+
+.filters dd, .filters dt, .filters input[type="submit"], .filters .expander {
+  width: 100%;
+}
+
+.filters button {
+  background: none transparent;
+  border: none;
+  outline: none;
+  padding: 0.25em 0;
+  text-align: left;
+    border-radius: 0;
+}
+
+.filters input[type="submit"] {
+  text-align: center;
+  margin: 1em 0;
+  padding-right: 0;
+}
+
+.filters input[type="radio"] + label, .filters input[type="checkbox"] + label {
+  padding-left: 0;
+}
+
+.filters dl dl {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .filters dt.autocomplete {
   margin-top: 1.286em;
 }
 
-form.filters dl {
-  margin-top: 0.375em;
-  padding: 0;
+.filters dt.tags button {
+  font-weight: 700;
 }
 
-.filters dt a {
-  border: none;
+.filters dd.tags {
+  font-size: 0.8571em;
 }
 
-.filters dt a:hover {
-  color: #111;
+.filters .tags dt {
+  border-bottom-color: #eee;
 }
 
-.filters dt a:focus img {
-  outline: none;
+.filters .tags .collapsed, .filters .tags .expandable {
+  border-bottom: 1px solid #eee;
 }
 
-.filters dd, .filters dt, .filters .submit input {
-  width: 100%;
+.filters .tags .expanded {
+  border-bottom: none;
 }
 
-.filters input[type="radio"] + label, .filters input[type="checkbox"] + label {
-  padding-left: 0.375em;
+/* .filters dt.tags {
+  margin-top: 1.286em;
 }
 
-.filters .submit {
-  text-align: center;
-  padding-right: 0;
+/*.filters .tags button:hover, .filters .tags button:focus {
+  background: #e0e0e0;
 }
 
-form.filters dl dl {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  box-shadow: none;
+.filters dt.expanded {
+  border-bottom: none;
+}
+
+.filters dd.expandable {
+  border-bottom: 1px solid #f3efec;
+}*/
+
+.filters .warnings {
+  font-weight: 500;
+}
+
+.filters .collapsed:after, .filters .expanded:after { 
+  content: none;
 }
 
 /*END== */
