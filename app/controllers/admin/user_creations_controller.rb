@@ -38,15 +38,17 @@ class Admin::UserCreationsController < ApplicationController
   
   
   def set_spam
+    action = "mark as " + (params[:spam] == "true" ? "spam" : "not spam")
     if @creation_class == Work
+      AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
       if params[:spam]=="true"
         @creation.mark_as_spam!
-        AdminActivity.log_action(current_admin, @creation, action: 'mark as spam', summary: @creation.inspect)
-        flash[:notice] = ts("Work was marked as spam.")
+        @creation.update_attribute(:hidden_by_admin, true)
+        flash[:notice] = ts("Work was marked as spam and hidden.")
       else
         @creation.mark_as_ham!
-        AdminActivity.log_action(current_admin, @creation, action: 'mark not spam', summary: @creation.inspect)
-        flash[:notice] = ts("Work was marked not spam.")
+        @creation.update_attribute(:hidden_by_admin, false)
+        flash[:notice] = ts("Work was marked not spam and unhidden.")
       end
     else 
       flash[:error] = ts("You can only mark works as spam currently.")

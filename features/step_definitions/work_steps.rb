@@ -81,6 +81,7 @@ Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I am logged out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
+  w.update_attribute(:hidden_by_admin, true)
 end
 
 ### WHEN
