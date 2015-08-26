@@ -5,18 +5,18 @@
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
 <% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
 <% work_link =  work_url(this_work) %>
+<% title = creation.is_a?(Work) ? this_work.title.html_safe : (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")) %>
 <% link = creation.is_a?(Work) ? work_link : work_chapter_url(this_work, creation) %>
   <% if creation.is_a?(Work) %>
       <%= if this_work.backdate then
             t('user_mailer.batch_subscription_notification.text.work_backdated', pseud: pseud )
           else
-            t('user_mailer.batch_subscription_notification.text.work_new', pseud: pseud )
+            t('user_mailer.batch_subscription_notification.text.work_new', pseud: pseud)
           end  %>
     <% else %>
-      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")) %>
       <%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of', work_link: link, word_count: this_work.word_count %>
     <% end %>
-       <%=t('user_mailer.batch_subscription_notification.text.word_count', link: link, word_count: creation.word_count) %>
+       <%=t('user_mailer.batch_subscription_notification.text.word_count', link: link, word_count: creation.word_count, title: title) %>
       <% unless @seen[this_work.id] %>
         <%=t('user_mailer.batch_subscription_notification.text.collected_by',  pseud: pseud ) %>
       <% end %>
