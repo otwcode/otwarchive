@@ -499,3 +499,9 @@ end
 Then /^I should not find a list for associations$/ do
   page.should_not have_xpath("//ul[@class=\"associations\"]")
 end
+
+Then /^the work "([^\"]*)" should be deleted$/ do |work|
+  assert Work.where(title: work).count == 0
+end
+
+
