@@ -241,3 +241,50 @@ Feature: Admin Actions to manage users
     And I choose "Lift permanent suspension, effective immediately."
   When I press "Update"
   Then I should see "You must include notes in order to perform this action."
+
+  Scenario: A spammer can be permabanned and all their works destroyed
+  Given I have a work "Not Spam"
+    And I am logged in as "Spamster"
+    And I post the work "Loads of Spam"
+    And I post the work "Even More Spam"
+    And I post the work "Spam 3: Tokyo Drift"
+    And I create the collection "Spam Collection"
+    And I bookmark the work "Not Spam"
+    And I add the work "Loads of Spam" to series "One Spam After Another"
+    And I post the comment "I like spam" on the work "Not Spam"
+    And I am logged in as an admin
+  When I go to the abuse administration page for "Spamster"
+    And I choose "Spammer: ban and delete all works"
+    And I press "Update"
+  Then I should see "permanently suspended"
+    And the user "Spamster" should be permanently banned
+    And I should see "All creations will be destroyed (CANNOT BE REVERSED)"
+    And I should see "Loads of Spam"
+    And I should see "Even More Spam"
+    And I should see "Spam 3: Tokyo Drift"
+    And I should see "Spam Collection"
+    And I should see "Series: 1"
+    And I should see "Bookmarks: 1"
+    And I should see "Comments: 1"
+  When I press "Confirm Deletion"
+  Then I should see "All creations by user Spamster have been deleted."
+    And the work "Loads of Spam" should be deleted
+    And the work "Even More Spam" should be deleted
+    And the work "Spam 3: Tokyo Drift" should be deleted
+    And the series "One Spam After Another" should be deleted
+    And the work "Not Spam" should not be deleted
+    And there should be no bookmarks on the work "Not Spam"
+    And there should be no comments on the work "Not Spam"
+
+  Scenario: A user's works cannot be destroyed unless they are banned
+  Given I am logged in as "Spamster"
+    And I post the work "Loads of Spam"
+    And I am logged in as an admin
+    And I go to the abuse administration page for "Spamster"
+    And I choose "Spammer: ban and delete all works"
+    And I press "Update"
+    And the user "Spamster" is unbanned in the background
+    And I press "Confirm Deletion"
+  Then I should see "That user is not banned"
+    And the work "Loads of Spam" should not be deleted
+  

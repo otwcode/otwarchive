@@ -67,6 +67,10 @@
             <%= label_tag 'admin_action_ban', t('admin.admin_users.show.form.admin_actions.ban_label', default: "Suspend permanently (ban user)") %>
           <% end %>
         </li>
+        <li>
+          <%= radio_button_tag 'admin_action', 'spamban', false, disabled: @user.banned? %>
+          <%= label_tag 'admin_action_spamban', ts("Spammer: ban and delete all creations") %>
+        </li>
       </ul>
     </fieldset>
     <fieldset>

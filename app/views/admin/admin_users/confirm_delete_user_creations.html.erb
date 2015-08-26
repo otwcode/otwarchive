@@ -1,0 +1,33 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Delete Spammer Creations") %></h2>
+
+<!--main content-->
+<p class="caution notice">
+  <%= ts("All creations will be destroyed (CANNOT BE REVERSED)") %>
+</p>
+
+<% if @works.count > 0 %>
+  <h3 class="heading"><%= ts("Works")%></h3>
+  <%= render "works/work_abbreviated_list", :works => @works %>
+<% end %>
+
+<% if @collections.count > 0 %>
+  <h3 class="heading"><%= ts("Collections") %></h3>
+  <ul>
+    <% @collections.each do |c| %><li><%= c.title %> (<%= c.name %>)</li><% end %>
+  </ul>
+<% end %>
+
+<h3 class="heading"><%= ts("Bookmarks: ")%><%= @bookmarks.count %></h3>
+
+<h3 class="heading"><%= ts("Series: ")%><%= @series.count %></h3>
+
+<h3 class="heading"><%= ts("Comments: ")%><%= @comments.count %></h3>
+
+<%= form_tag destroy_user_creations_admin_user_path(@user), :method => :post do %>
+  <p class="submit actions"><%= submit_tag ts("Confirm Deletion"), :confirm => ts("Are you sure? Remember this will destroy ALL these objects!") %></p>
+<% end %>
+    
+
+
+<!--/content-->

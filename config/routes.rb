@@ -146,6 +146,10 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :users, :controller => 'admin_users' do
+      member do
+        get :confirm_delete_user_creations
+        post :destroy_user_creations
+      end
       collection do
         get :notify
         post :send_notification
