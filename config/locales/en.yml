@@ -30,6 +30,23 @@ en:
           html: "Sent by <b>%{sent_by}</b>."
           text: "Sent by %{sent_by}."
   user_mailer:
+    any: "Any"
+    hello: "Dear %{user},"
+    chapters: "Chapters:"
+    fandom: "Fandom:"
+    rating: "Rating:"
+    warning: "Warning:"
+    warnings: "Warnings:"
+    relationships: "Relationships:"
+    characters: "Characters:"
+    additional_tags: "Additional Tags:"
+    optional_tags: "Optional Tags:"
+    series: "Series:"
+    summary: "Summary:"
+    recipient: "Recipient:"
+    prompts: "Prompts:"
+    category: "Category:"
+    description: "Description:"
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
       html:  "<p> Hi %{login}! </p>\n\
@@ -42,3 +59,20 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    batch_subscription_notification:
+      subject_linker: "and %{extra} more"
+      chapter_summary: "Chapter Summary:"
+      text:
+        footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates: %{url}"
+        work_new: "%{pseud} posted a new work"
+        work_backdated: "%{pseud} backdated a work"
+        word_count: "%{link} (%{word_count} words)"
+        collected_by: "by %{pseud}"
+        new_chapter_of: "new chapter of %{work_link} (%{word_count} words)"
+      html:
+        footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
+        work_new: "%{pseud} posted a new work"
+        work_backdated: "%{pseud} backdated a work"
+        word_count: "<i>%{link}</i> (%{word_count} words)"
+        collected_by: "<br>by %{pseud}"
+        new_chapter_of: "new chapter of <i><b>%{work_link}</i></b> (%{word_count} words)"
