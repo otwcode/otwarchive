@@ -3,19 +3,27 @@
 <% @seen_summary = {} %>
 <% @creations.each_with_index do |creation, index| %>
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-<%= this_work.pseuds.map{|p| p.byline}.to_sentence.html_safe %> <%= t 'user_mailer.batch_subscription_notification.posted_a' %> <% if creation.is_a?(Work) then %><%= if this_work.backdate then t 'user_mailer.batch_subscription_notification.backdated' else t 'user_mailer.batch_subscription_notification.new' end %> <%= t 'user_mailer.batch_subscription_notification.work' %> <% else %> <%= t 'user_mailer.batch_subscription_notification.new_chapter_of' %> <%= this_work.title %> (<%= this_work.word_count %> words):<% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %><% end %>
-<%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
-
-<%= creation.is_a?(Work) ? this_work.title.html_safe : chapter_title %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
-by <%= this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %><% end %>
-
-<% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-<%= t 'user_mailer.batch_subscription_notification.chapter_summary' %><%= raw to_plain_text(sanitize_field(creation, :summary)) %>
-<% end %>
+<% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
+<% work_link =  work_url(this_work) %>
+<% link = creation.is_a?(Work) ? work_link : work_chapter_url(this_work, creation) %>
+  <% if creation.is_a?(Work) %>
+      <%= if this_work.backdate then
+            t('user_mailer.batch_subscription_notification.text.work_backdated', pseud: pseud )
+          else
+            t('user_mailer.batch_subscription_notification.text.work_new', pseud: pseud )
+          end  %>
+    <% else %>
+      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")) %>
+      <%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of', work_link: link, word_count: this_work.word_count %>
+    <% end %>
+       <%=t('user_mailer.batch_subscription_notification.text.word_count', link: link, word_count: creation.word_count) %>
+      <% unless @seen[this_work.id] %>
+        <%=t('user_mailer.batch_subscription_notification.text.collected_by',  pseud: pseud ) %>
+      <% end %>
 
 <% unless @seen[this_work.id] %>
 <%= t 'user_mailer.chapters' %> <%= this_work.chapter_total_display %>
-<%= t 'user_mailer.fandom' %> <%= this_work.fandoms.map{|f| f.name}.to_sentence.html_safe %>
+<%= t 'user_mailer.fandom' %> <%= this_work.fandoms.map{|f| f.name}.to_sentence %>
 <%= t 'user_mailer.rating' %> <%= this_work.rating_string %>
 <%= t 'user_mailer.warning' %> <%= this_work.warning_string %>
 <% if this_work.relationship_string && !this_work.relationship_string.blank? then %><%= t 'user_mailer.relationships' %> <%= this_work.relationship_string %><% end %>

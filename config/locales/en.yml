@@ -59,13 +59,18 @@ en:
           %{archive_name}
     batch_subscription_notification:
       subject_linker: "and %{extra} more"
-      backdated: "backdated"
-      new: "new"
-      posted_a: "posted a"
-      new_chapter_of: "new chapter of"
-      work: "work:"
       chapter_summary: "Chapter Summary:"
       text:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates: %{url}"
+        work_new: "%{pseud} posted a new work"
+        work_backdated: "%{pseud} backdated a work"
+        word_count: "%{link} (%{word_count} words)"
+        collected_by: "by %{pseud}"
+        new_chapter_of: "new chapter of %{work_link} (%{word_count} words)"
       html:
         footer: "You're receiving this email because you've subscribed to %{who}. Follow the link to unsubscribe if you no longer wish to receive updates."
+        work_new: "%{pseud} posted a new work"
+        work_backdated: "%{pseud} backdated a work"
+        word_count: "<i>%{link}</i> (%{word_count} words)"
+        collected_by: "<br>by %{pseud}"
+        new_chapter_of: "new chapter of <i><b>%{work_link}</i></b> (%{word_count} words)"
