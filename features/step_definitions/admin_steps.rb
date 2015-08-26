@@ -315,3 +315,13 @@ Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
   step(%{I view the work "#{work}"})
   step(%{I should see "#{work}"})
 end
+
+Then /^the work "([^\"]*)" should be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert w.spam?
+end
+
+Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.spam?
+end

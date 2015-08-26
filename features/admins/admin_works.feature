@@ -161,3 +161,25 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments"
       Then I should not see "rolex"
+      
+      
+  Scenario: can mark a work as spam
+  Given the work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark As Spam"
+  When I follow "Mark As Spam"
+  Then I should see "marked as spam"
+    And I should see "Mark Not Spam"
+    And the work "Spammity Spam" should be marked as spam
+  
+  
+  Scenario: can mark a spam work as not-spam
+  Given the spam work "Spammity Spam"
+    And I am logged in as an admin
+    And I view the work "Spammity Spam"
+  Then I should see "Mark Not Spam"
+  When I follow "Mark Not Spam"
+  Then I should see "marked not spam"
+    And I should see "Mark As Spam"
+    And the work "Spammity Spam" should not be marked as spam
