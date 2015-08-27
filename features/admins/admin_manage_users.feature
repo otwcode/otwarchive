@@ -281,7 +281,7 @@ Feature: Admin Actions to manage users
     And I post the work "Loads of Spam"
     And I am logged in as an admin
     And I go to the abuse administration page for "Spamster"
-    And I choose "Spammer: ban and delete all works"
+    And I choose "Spammer: ban and delete all creations"
     And I press "Update"
     And the user "Spamster" is unbanned in the background
     And I press "Confirm Deletion"
