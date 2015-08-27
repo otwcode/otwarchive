@@ -5,7 +5,7 @@
   <% comments.each do |comment| %>
     <dt>
       <%= ts("Comment on") %>  <%= link_to_comment_ultimate_parent(comment) %>
-      <span title="datetime"><%= time_in_zone(comment.created_at) %></span>
+      <span class="datetime"><%= time_in_zone(comment.created_at) %></span>
     </dt>
     <dd>
       <%= truncate(comment.content, length: 100, separator: ' ') %>
