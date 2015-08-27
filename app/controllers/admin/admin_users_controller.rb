@@ -167,10 +167,10 @@ class Admin::AdminUsersController < ApplicationController
   end
   
   def confirm_delete_user_creations
-    @works = @user.works
+    @works = @user.works.paginate(page: params[:works_page])
+    @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
     @collections = @user.collections
-    @comments = @user.comments
     @series = @user.series
   end
 
