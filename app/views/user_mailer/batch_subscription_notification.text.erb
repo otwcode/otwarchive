@@ -4,9 +4,13 @@
 <% @creations.each_with_index do |creation, index| %>
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
 <% pseud = this_work.pseuds.map{|p| p.name}.to_sentence %>
-<% work_link =  work_url(this_work) %>
-<% title = creation.is_a?(Work) ? this_work.title.html_safe : (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")) %>
-<% link = creation.is_a?(Work) ? work_link : work_chapter_url(this_work, creation) %>
+<% if creation.is_a?(Work) then
+     title = this_work.title
+     link  = work_url(this_work)
+   else
+     title = creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")
+     link  = work_chapter_url(this_work, creation)
+   end %> 
   <% if creation.is_a?(Work) %>
       <%= if this_work.backdate then
             t('user_mailer.batch_subscription_notification.text.work_backdated', pseud: pseud )
