@@ -23,10 +23,10 @@ end %>
 <% else %>
 <%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of',byline: byline, title: title, link: link, word_count: word_count, chapter_title: chapter_title %>
 <%end%>
-by <%= this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
+<%= t 'user_mailer.batch_subscription_notification.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-Chapter Summary: <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+<%= t 'user_mailer.batch_subscription_notification.chapter_summary'%> <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 <% end %>
 
 <% unless @seen[this_work.id] %>
@@ -41,7 +41,7 @@ Chapter Summary: <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 <% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-Summary:
+<%= t 'user_mailer.batch_subscription_notification.summary' %>
     <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>
