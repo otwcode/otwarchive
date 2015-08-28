@@ -20,12 +20,6 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INTERACTION: SEARCH */
 
-.search input[type="text"] {
-  border-top-color: #999;
-  padding: 0.15em 0.25em;
-    border-radius: 1em;
-}
-
 .search p, li.search form p {
   position: relative;
 }
