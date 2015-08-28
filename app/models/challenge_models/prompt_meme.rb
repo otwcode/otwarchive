@@ -45,6 +45,9 @@ class PromptMeme < ActiveRecord::Base
   #FIXME hack because time zones are being html encoded. couldn't figure out why.
   before_save :fix_time_zone
 
+  #  When Challenges are deleted, there are two references left behind that need to be reset to nil
+  before_destroy :clear_challenge_references
+
   def user_allowed_to_see_signups?(user)
     return true
   end

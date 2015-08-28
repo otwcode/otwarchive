@@ -408,15 +408,15 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('a#kudos_summary').click(function(e) {
+  $j('#kudos_summary').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').hide();
+    $j(this).hide();
     $j('.kudos_expanded').show();
   });
 
-  $j('.kudos_expanded a').click(function(e) {
+  $j('#kudos_collapser').click(function(e) {
     e.preventDefault();
-    $j('a#kudos_summary').show();
+    $j('#kudos_summary').show();
     $j('.kudos_expanded').hide();
   });
 
