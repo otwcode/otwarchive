@@ -35,10 +35,6 @@ GEM
     akismetor (1.0.0)
     ansi (1.4.3)
     arel (3.0.3)
-    audited (3.0.0)
-    audited-activerecord (3.0.0)
-      activerecord (~> 3.0)
-      audited (= 3.0.0)
     authlogic (3.3.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
@@ -272,6 +268,7 @@ GEM
       redis
     rpm_contrib (2.1.11)
       newrelic_rpm (>= 3.1.1)
+      newrelic_rpm (>= 3.1.1)
     rspec-core (3.2.0)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.0)
@@ -381,7 +378,6 @@ DEPENDENCIES
   acts_as_list
   addressable
   akismetor
-  audited-activerecord (~> 3.0)
   authlogic
   aws-sdk
   bcrypt
@@ -449,6 +445,3 @@ DEPENDENCIES
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
-
-BUNDLED WITH
-   1.10.6
