@@ -28,7 +28,7 @@
     </p>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <%= style_bold("Chapter Summary:") %> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
+      <%= style_bold(t 'user_mailer.batch_subscription_notification.chapter_summary' ) %> <%= style_quote(raw strip_tags(sanitize_field(creation, :summary))) %>
     <% end %>
 
     <% unless @seen[this_work.id] %>
