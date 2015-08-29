@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  audited
+
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user

@@ -501,7 +501,7 @@ Otwarchive::Application.routes.draw do
     end
     collection do
       get :manage
-      post :update_positions
+      post :reorder
     end
   end
   resources :wrangling_guidelines do
