@@ -12,7 +12,6 @@
    else
      link  = work_chapter_url(this_work, creation)
      chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe
-     work_count = creation.word_count
    end %>
 <% if creation.is_a?(Work) %>
 <%= if this_work.backdate then
@@ -21,7 +20,7 @@ else
 t('user_mailer.batch_subscription_notification.text.work_new', byline: byline, title: title, link: link, word_count: word_count)
 end %>
 <% else %>
-<%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of',byline: byline, title: title, link: link, word_count: word_count, chapter_title: chapter_title %>
+<%= t 'user_mailer.batch_subscription_notification.text.new_chapter_of',byline: byline, title: title, link: link, word_count: creation.word_count, chapter_title: chapter_title %>
 <%end%>
 <%= t 'user_mailer.batch_subscription_notification.text.collected_by', pseud: this_work.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe %>
 
