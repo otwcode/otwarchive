@@ -33,21 +33,21 @@
 
     <% unless @seen[this_work.id] %>
       <p>
-        <%= style_bold("Chapters:") %> <%= this_work.chapter_total_display %>
-        <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
-        <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
-        <br><%= style_bold("Warnings:") %> <%= this_work.warning_string %>
+        <%= style_bold(t 'user_mailer.chapters') %> <%= this_work.chapter_total_display %>
+        <br><%= style_bold(t 'user_mailer.fandom') %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
+        <br><%= style_bold(t 'user_mailer.rating') %> <%= this_work.rating_string %>
+        <br><%= style_bold(t 'user_mailer.warning') %> <%= this_work.warning_string %>
         <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
-          <br><%= style_bold("Relationships:") %> <%= this_work.relationship_string %>
+          <br><%= style_bold(t 'user_mailer.relationships') %> <%= this_work.relationship_string %>
         <% end %>
         <% if this_work.character_string && !this_work.character_string.blank? %>
-          <br><%= style_bold("Characters:") %> <%= this_work.character_string %>
+          <br><%= style_bold(t 'user_mailer.characters') %> <%= this_work.character_string %>
         <% end %>
         <% if this_work.freeform_string && !this_work.freeform_string.blank? %>
-          <br><%= style_bold("Additional Tags:") %> <%= this_work.freeform_string %>
+          <br><%= style_bold(t 'user_mailer.additional_tags') %> <%= this_work.freeform_string %>
         <% end %>
         <% if this_work.series.count > 0 %>
-          <br><%= style_bold("Series:") %> <%= series_list_for_feeds(this_work).html_safe %>
+          <br><%= style_bold(t 'user_mailer.series') %> <%= series_list_for_feeds(this_work).html_safe %>
         <% end %>
       </p>
 
@@ -56,7 +56,7 @@
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
         <p>
-          <%= style_bold("Summary:") %>
+          <%= style_bold(t 'user_mailer.summary') %>
           <%= style_quote(raw strip_tags(sanitize_field(this_work, :summary))) %>
         </p>
         <% @seen_summary[this_work.id] = true %>
@@ -71,5 +71,5 @@
 
 
 <% content_for :footer_note do %>
-  You're receiving this email because you've subscribed to <%= style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable)) %>. Follow the link to unsubscribe if you no longer wish to receive updates.
+<%=t 'user_mailer.batch_subscription_notification.html.footer', who: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable)) %>
 <% end %>
