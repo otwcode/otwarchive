@@ -46,6 +46,12 @@
 
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
+    <% if (gift = @work.gifts.where(:pseud_id => current_user.pseuds.value_of(:id)).first) %>
+      <li class="gift">
+        <%= link_to (gift.rejected? ? ts("Accept Gift") : ts("Refuse Gift")), toggle_rejected_gift_path(gift), method: :post %>
+      </li>
+    <% end %>
+  
     <% @bookmark ||= bookmark_if_exists(@work) %>
     <li class="bookmark">
       <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>

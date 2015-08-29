@@ -36,4 +36,19 @@ class GiftsController < ApplicationController
     @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
   
+  def toggle_rejected
+    @gift = Gift.find(params[:id])
+    # have to have the gift, be logged in, and the owner of the gift
+    if @gift && current_user && @gift.user == current_user
+      @gift.toggle!(:rejected)
+      if @gift.rejected?
+        flash[:notice] = ts("This work will no longer be listed among your gifts.")
+      else
+        flash[:notice] = ts("This work will now be listed among your gifts.")
+      end
+    end
+    redirect_to @gift.work and return
+  end
+
+  
 end

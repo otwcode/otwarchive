@@ -83,6 +83,14 @@
              <%= @work.spam? %>
           <% end %>
         </dd>
+        <% if @work.gifts.are_rejected.exists? %>
+          <dt class="gift">
+            <%= ts('Rejected As Gift:') %>
+          </dt>
+          <dd class="gift">
+            <%= @work.gifts.are_rejected.map {|g| g.recipient }.join(", ") %>
+          </dd>
+        <% end %>
       <% end %>
   </dl>
 </div>
