@@ -64,8 +64,12 @@ set :deploy_via, :remote_cache
 # overwrite default capistrano deploy tasks
 namespace :deploy do
   desc "Restart the unicorns"
-  task :restart, :roles => :app do
-    run "/home/ao3app/bin/unicorns_reload"
+  task :restart  do
+    find_servers(:roles => :app).each do |server|
+      puts "restart on #{server.host}"
+      run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
+      sleep(60)
+    end
   end
 
   desc "Restart the resque workers"

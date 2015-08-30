@@ -2,7 +2,9 @@
 linearise content, suppress large images, suppress custom fonts and other large downloads */
 
 #outer {
+  background: #fff;
   font-size: 14px;
+  position: relative;
 }
 
 h1, h2, h3 {
@@ -101,6 +103,10 @@ body .narrow-shown {
 
 /* 05 region main */
 
+#main {
+  position: static;
+}
+
 #main, #main.dashboard {
   float: none;
   margin: auto;
@@ -196,26 +202,38 @@ form.filters dl {
 
 /* Filters with JavaScript */
 
+.javascript {
+  background: #ddd;
+}
+
 .javascript form.filters {
   margin: 0;
+  max-width: 95%;
   position: absolute;
   top: 0;
-  right: 0;
-  visibility: hidden;
+  right: -16em;
+  width: 16em; /* 14em/0.875em */
   z-index: 400;
 }
 
 .javascript .filters fieldset {
+  border: none;
+  margin: 0;
   position: relative;
   z-index: 450;
+    box-shadow: none;
 }
 
-.javascript .filters p.mobile-shown {
+.javascript .filters p.narrow-shown {
   position: relative; 
 }
 
-.javascript .filters #leave_filters {
-  background: rgba(0, 0, 0, 0.5);
+.filtering {
+  right: 14em;
+}
+
+.filtering .filters #leave_filters {
+  background: transparent none;
   border-bottom: none;
   position: fixed;
   top: -101em;
@@ -225,12 +243,8 @@ form.filters dl {
   z-index: 0;
 }
 
-.javascript #leave_filters:focus {
+.filtering #leave_filters:focus {
   outline: none;
-}
-
-.javascript .filtering form.filters {
-  visibility: visible;
 }
 
 /* 22 system: messages */
