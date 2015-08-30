@@ -18,3 +18,11 @@ run_stats_reindex_queue:
   queue: utilities
   args: stats 
   description: "Kick off a reindex of works with stats updates"
+
+run_login_information:
+  every: 10m
+  class: "User"
+  queue: utilities
+  args: update_last_login 
+  description: "Take login information out of redis and put it in mysql"
+

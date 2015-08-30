@@ -539,6 +539,14 @@ class User < ActiveRecord::Base
      create_log_item( options = {:action => ArchiveConfig.ACTION_RENAME, :note => "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
    end
 
+  def self.perform(operation)
+   case operation
+     when 'update_last_login'
+       self.update_last_login
+   end
+  end
+
+
   # called from rake
   def self.update_last_login
     User.transaction do
