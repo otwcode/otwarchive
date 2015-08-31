@@ -40,7 +40,7 @@ class Pseud < ActiveRecord::Base
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
-  has_many :gifts
+  has_many :gifts, :conditions => {rejected: false}
   has_many :gift_works, :through => :gifts, :source => :work
 
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]

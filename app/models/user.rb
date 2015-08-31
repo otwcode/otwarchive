@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id', :inverse_of => :claiming_user
-  has_many :gifts, :through => :pseuds
+  has_many :gifts, :through => :pseuds, :conditions => {rejected: false}
   has_many :gift_works, :through => :pseuds, :uniq => true
 
   has_many :readings, :dependent => :destroy
