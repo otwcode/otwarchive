@@ -252,6 +252,26 @@ When /^I fulfill my assignment$/ do
   step %{I should see "Work was successfully posted"}
 end
 
+
+When /^an assignment has been fulfilled in a gift exchange$/ do
+  step %{I am logged in as "mod1"}
+  step %{I have created the gift exchange "Awesome Gift Exchange"}
+  step %{I open signups for "Awesome Gift Exchange"}
+  step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
+  step %{I have generated matches for "Awesome Gift Exchange"}
+  step %{I have sent assignments for "Awesome Gift Exchange"}
+  step %{I am logged in as "myname1"}
+  step %{I fulfill my assignment}
+end
+
+# we're not testing the process of rejection here, just that 
+# it doesn't affect the completion status of the challenge assignment
+When /^I reject my gift story "(.*?)"/ do |work|
+  w = Work.find_by_title(work)
+  w.gifts.first.toggle!(:rejected)
+end
+  
+
 ### WHEN we need the author attribute to be set
 When /^I fulfill my assignment and the author is "([^\"]*)"$/ do |new_user|
   step %{I start to fulfill my assignment}

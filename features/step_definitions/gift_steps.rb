@@ -17,3 +17,24 @@ Given(/^I have rejected the work/) do
   step %{I view the work "GiftStory1"}
   step %{I follow "Refuse Gift"}
 end
+
+When /^I have removed the recipients/ do 
+  fill_in("work_recipients", :with => "")
+  step %{I post the work without preview}
+end
+
+Then /^"(.*?)" should be listed as a recipient in the form/ do |recipient|
+  recipients = page.find("input#work_recipients")['value']
+  assert recipients =~ /#{recipient}/
+end
+
+Then /^"(.*?)" should not be listed as a recipient in the form/ do |recipient|
+  recipients = page.find("input#work_recipients")['value']
+  assert recipients !~ /#{recipient}/
+end
+
+Then(/^the gift for "(.*?)" should still exist on "(.*?)"$/) do |recipient, work|
+  w = Work.find_by_title(work)
+  assert w.gifts.map(&:recipient).include?(recipient)
+end
+

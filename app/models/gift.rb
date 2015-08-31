@@ -27,8 +27,8 @@ class Gift < ActiveRecord::Base
   # Don't allow giving the same gift to the same user more than once
   validate :has_not_given_to_user
   def has_not_given_to_user
-    if self.pseud 
-      other_pseuds = Gift.where(work_id: self.work.id).value_of(:pseud_id)
+    if self.pseud && self.work
+      other_pseuds = Gift.where(work_id: self.work_id).value_of(:pseud_id)
       if Pseud.where(:id => other_pseuds).value_of(:user_id).include?(self.pseud.user.id)
         errors.add(:base, ts("You seem to already have given this work to that user."))
       end

@@ -406,15 +406,14 @@ class Work < ActiveRecord::Base
   def recipients=(recipient_names)
     new_recipients = [] # collect names of new recipients
     gifts = [] # rebuild the list of associated gifts using the new list of names
-    # we don't let users delete rejected gifts in order to prevent regifting,
-    # but those names don't appear in the list
+    # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
     recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
-    recip_names.each do |name|
+    recip_names.uniq.each do |name|
       name.strip!
       gift = self.gifts.for_name_or_byline(name).first
       if gift
         gifts << gift # new gifts are added after saving, not now
-        new_recipients << name unless self.posted # all gifts are new if work not posted
+        new_recipients << name unless self.posted # all recipients are new if work not posted
       else
         # check that the gift would be valid
         g = Gift.new(work: self, recipient: name)
@@ -429,15 +428,15 @@ class Work < ActiveRecord::Base
     self.gifts = gifts
   end
 
-  def recipients
-    names = self.gifts.not_rejected.collect(&:recipient)
+  def recipients(for_form=false)
+    names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
     unless self.new_recipients.blank?
       self.new_recipients.split(",").each do |name|
         names << name unless names.include? name
       end
     end
     names.join(",")
-  end
+  end    
 
   def save_new_recipients
     unless self.new_recipients.blank?
@@ -1042,7 +1041,7 @@ class Work < ActiveRecord::Base
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
-  scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
+  scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name).where("gifts.rejected = FALSE")}
 
   scope :non_anon, where(:in_anon_collection => false)
   scope :unrevealed, where(:in_unrevealed_collection => true)

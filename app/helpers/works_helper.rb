@@ -163,7 +163,7 @@ module WorksHelper
   def show_work_notes?(work)
     work.notes.present? ||
     work.endnotes.present? ||
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
@@ -171,7 +171,7 @@ module WorksHelper
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.approved_related_works.where(translation: true).exists? ||
     work.parent_work_relationships.exists? ||
     work.challenge_claims.present?
