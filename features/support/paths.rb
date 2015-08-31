@@ -109,6 +109,8 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when  /my gifts page/
+      user_gifts_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/

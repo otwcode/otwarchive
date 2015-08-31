@@ -50,17 +50,18 @@ class CreationObserver < ActiveRecord::Observer
 
   # notify recipients that they have gotten a story!
   # we also need to check to see if the work is in a collection
+  # only notify a recipient once for each work
   def notify_recipients(work)
     if work.posted && !work.new_recipients.blank? && !work.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
-      recipient_pseuds.each do |pseud|
+      recipient_pseuds.collect(&:user_id).uniq.each do |userid|
         if work.collections.empty?
-          UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+          UserMailer.recipient_notification(userid, work.id).deliver
         else
           if work.collections.first.nil?
-            UserMailer.recipient_notification(pseud.user.id, work.id).deliver
+            UserMailer.recipient_notification(userid, work.id).deliver
           else
-            UserMailer.recipient_notification(pseud.user.id, work.id, work.collections.first.id).deliver
+            UserMailer.recipient_notification(userid, work.id, work.collections.first.id).deliver
           end
         end
       end
