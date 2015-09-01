@@ -227,9 +227,14 @@ Feature: Create Gifts
       And I go to my gifts page
     Then I should see "GiftStory1"
       And I should see "Refuse Gift"
+      And I should see "Refused Gifts"
     When I follow "Refuse Gift"
     Then I should see "This work will no longer be listed among your gifts."
       And I should not see "GiftStory1"
+    When I follow "Refused Gifts"
+    Then show me the page
+    Then I should see "GiftStory1"
+      And I should not see "by gifter for associate"
     When I view the work "GiftStory1"
     Then I should not see "For associate"
       And I should not see "For ."
@@ -240,11 +245,14 @@ Feature: Create Gifts
       And I am on my gifts page
       And I follow "Refused Gifts"
     Then I should see "Accept Gift"
+      And I should not see "by gifter for giftee1"
     When I follow "Accept Gift"
     Then I should see "This work will now be listed among your gifts."
-      And I should see "For giftee1"
-    When I go to my gifts page
-    Then I should see "GiftStory1"
+      And I should see "GiftStory1"
+      # TODO: Touch work so the blurb updates with recip info when gift is re-accepted
+      # And I should see "by gifter for giftee1"
+    When I view the work "GiftStory1"
+    Then I should see "For giftee1"
 
   Scenario: An admin should see that a gift has been rejected
 
