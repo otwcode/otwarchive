@@ -190,7 +190,6 @@ Feature: Create Gifts
       And the email should link to gifter's user url
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter/pseuds/gifter&quot;"
       And the email should link to gifter2's user url 
-      #' 
       And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/gifter2/pseuds/gifter2&quot;"
 
   Scenario: A gift work should have an associations list
