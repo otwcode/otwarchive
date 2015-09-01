@@ -3,8 +3,8 @@ class Gift < ActiveRecord::Base
 
   belongs_to :work
   belongs_to :pseud
-  has_one :user, :through => :pseud
-  
+  has_one :user, through: :pseud
+
   validates_length_of :recipient_name,
     :maximum => NAME_LENGTH_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => NAME_LENGTH_MAX),

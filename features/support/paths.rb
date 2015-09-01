@@ -112,7 +112,7 @@ module NavigationHelpers
     when /my gifts page/
       user_gifts_path(User.current_user)
     when /^(.*)'s gifts page/
-      user_gifts_path(:user_id => $1)
+      user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
