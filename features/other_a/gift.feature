@@ -222,7 +222,7 @@ Feature: Create Gifts
       And I am logged in as "someone_else"
       And I am on associate's gifts page
     Then I should not see "Refuse Gift"
-      And I should not see "Rejected Gifts"
+      And I should not see "Refused Gifts"
     When I am logged in as "associate" with password "something"
       And I go to my gifts page
     Then I should see "GiftStory1"
@@ -238,7 +238,7 @@ Feature: Create Gifts
   
     Given I have rejected the work
       And I am on my gifts page
-      And I follow "Rejected Gifts"
+      And I follow "Refused Gifts"
     Then I should see "Accept Gift"
     When I follow "Accept Gift"
     Then I should see "This work will now be listed among your gifts."
