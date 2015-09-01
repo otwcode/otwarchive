@@ -232,7 +232,6 @@ Feature: Create Gifts
     Then I should see "This work will no longer be listed among your gifts."
       And I should not see "GiftStory1"
     When I follow "Refused Gifts"
-    Then show me the page
     Then I should see "GiftStory1"
       And I should not see "by gifter for associate"
     When I view the work "GiftStory1"
