@@ -221,24 +221,25 @@ Feature: Create Gifts
 
     Given I have given the work to "associate"
       And I am logged in as "someone_else"
-      And I view the work "GiftStory1"
+      And I am on associate's gifts page
     Then I should not see "Refuse Gift"
+      And I should not see "Rejected Gifts"
     When I am logged in as "associate" with password "something"
       And I go to my gifts page
     Then I should see "GiftStory1"
-    When I view the work "GiftStory1"
-    Then I should see "Refuse Gift"
+      And I should see "Refuse Gift"
     When I follow "Refuse Gift"
     Then I should see "This work will no longer be listed among your gifts."
-      And I should not see "For associate"
+      And I should not see "GiftStory1"
+    When I view the work "GiftStory1"
+    Then I should not see "For associate"
       And I should not see "For ."
-    When I go to my gifts page
-    Then I should not see "GiftStory1"
         
   Scenario: A user should be able to re-accept a gift
   
     Given I have rejected the work
-      And I view the work "GiftStory1"
+      And I am on my gifts page
+      And I follow "Rejected Gifts"
     Then I should see "Accept Gift"
     When I follow "Accept Gift"
     Then I should see "This work will now be listed among your gifts."

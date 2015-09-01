@@ -5,7 +5,7 @@ class GiftsController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
-    @page_subtitle = ts("for %{name}", :name => (@user ? @user.login : @recipient_name))
+    @page_subtitle = ts("Gifts for %{name}", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
       flash[:error] = ts("Whose gifts did you want to see?")
       redirect_to(@collection || root_path) and return
@@ -14,7 +14,11 @@ class GiftsController < ApplicationController
       if current_user.nil?
         @works = @user.gift_works.visible_to_all
       else
-        @works = @user.gift_works.visible_to_registered_user
+        if @user == current_user && params[:refused]
+          @works = @user.rejected_gift_works.visible_to_registered_user
+        else
+          @works = @user.gift_works.visible_to_registered_user
+        end
       end
     else
       pseud = Pseud.parse_byline(@recipient_name, :assume_matching_login => true).first
@@ -47,7 +51,7 @@ class GiftsController < ApplicationController
         flash[:notice] = ts("This work will now be listed among your gifts.")
       end
     end
-    redirect_to @gift.work and return
+    redirect_to user_gifts_url(current_user) and return
   end
 
   
