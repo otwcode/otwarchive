@@ -1,7 +1,7 @@
 class Gift < ActiveRecord::Base
   NAME_LENGTH_MAX = 100
 
-  belongs_to :work
+  belongs_to :work, touch: true
   belongs_to :pseud
   has_one :user, through: :pseud
 
