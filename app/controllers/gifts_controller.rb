@@ -39,7 +39,7 @@ class GiftsController < ApplicationController
     @works = @works.in_collection(@collection) if @collection
     @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
-  
+
   def toggle_rejected
     @gift = Gift.find(params[:id])
     # have to have the gift, be logged in, and the owner of the gift
@@ -54,5 +54,4 @@ class GiftsController < ApplicationController
     redirect_to user_gifts_url(current_user) and return
   end
 
-  
 end

@@ -14,14 +14,14 @@ class Gift < ActiveRecord::Base
     :message => ts("must contain at least one letter or number."),
     :with => /[a-zA-Z0-9]/,
     :allow_blank => true
-    
+
   validate :has_name_or_pseud
   def has_name_or_pseud
     unless self.pseud || !self.recipient_name.blank?
       errors.add(:base, ts("A gift must have a recipient specified."))
     end
   end
-  
+
   validates_uniqueness_of :pseud_id, scope: [:work_id], message: ts("You can't give a gift to the same person twice.")
 
   # Don't allow giving the same gift to the same user more than once
@@ -29,7 +29,7 @@ class Gift < ActiveRecord::Base
   def has_not_given_to_user
     if self.pseud && self.work
       other_pseuds = Gift.where(work_id: self.work_id).value_of(:pseud_id)
-      if Pseud.where(:id => other_pseuds).value_of(:user_id).include?(self.pseud.user.id)
+      if Pseud.where(id: other_pseuds).value_of(:user_id).include?(self.pseud.user.id)
         errors.add(:base, ts("You seem to already have given this work to that user."))
       end
     end
@@ -67,5 +67,5 @@ class Gift < ActiveRecord::Base
   def recipient
     pseud ? pseud.byline : recipient_name
   end
-  
+
 end
