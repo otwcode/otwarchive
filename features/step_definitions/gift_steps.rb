@@ -14,7 +14,7 @@ end
 Given(/^I have rejected the work/) do
   step %{I have given the work to "giftee1"}
   step %{I am logged in as "giftee1" with password "something"}
-  step %{I view the work "GiftStory1"}
+  step %{I go to my gifts page}
   step %{I follow "Refuse Gift"}
 end
 
