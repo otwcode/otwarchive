@@ -51,6 +51,6 @@ class GiftsController < ApplicationController
         flash[:notice] = ts("This work will now be listed among your gifts.")
       end
     end
-    redirect_to user_gifts_url(current_user) && return
+    redirect_to user_gifts_url(current_user) and return
   end
 end
