@@ -54,7 +54,7 @@ class Gift < ActiveRecord::Base
   scope :name_only, :select => :recipient_name
   
   scope :include_pseuds, includes(:work => [:pseuds])
-  
+
   scope :not_rejected, where(rejected: false)
 
   scope :are_rejected, where(rejected: true)
