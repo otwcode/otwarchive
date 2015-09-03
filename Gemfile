@@ -133,6 +133,7 @@ end
 
 group :test, :development do
   gem 'pry'
+  gem 'pry-debugger'
   gem 'whiny_validation'
 end
 
