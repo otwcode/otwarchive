@@ -223,13 +223,6 @@ module CommentsHelper
     end
   end
   
-  def review_comment_link(comment)
-    link_to(
-      ts("Approve"),
-      review_comment_path(comment), method: :put,
-      :remote => true)
-  end
-
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(

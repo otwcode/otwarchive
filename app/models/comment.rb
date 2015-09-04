@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
 
   include HtmlCleaner
 
-  attr_protected :content_sanitizer_version
+  attr_protected :content_sanitizer_version, :unreviewed
 
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
@@ -71,7 +71,9 @@ class Comment < ActiveRecord::Base
   def set_parent_and_unreviewed
     self.parent = self.reply_comment? ? self.commentable.parent : self.commentable
     # we only mark comments as unreviewed if moderated commenting is enabled on their parent
-    self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) && self.parent.moderated_commenting_enabled?
+    self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) && 
+                      self.parent.moderated_commenting_enabled? && 
+                      !User.current_user.try(:is_author_of?, self.ultimate_parent)
     return true # because if reviewed is the return value, when it's false the record won't save!
   end
   

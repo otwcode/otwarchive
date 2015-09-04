@@ -103,7 +103,7 @@ end
 
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
-    step %{I follow "Yes, delete!"}
+  step %{I follow "Yes, delete!"}
 end
 
 Given(/^the moderated work "(.*?)" by "(.*?)"$/) do |work, user|
@@ -126,4 +126,9 @@ end
 Then /^the comment on "(.*?)" should not be marked as unreviewed/ do |work|
   w = Work.find_by_title(work)
   assert !w.comments.first.unreviewed?
+end
+
+When /^I view the unreviewed comments page for "(.*?)"/ do |work|
+  w = Work.find_by_title(work)
+  visit unreviewed_work_comments_path(w)
 end

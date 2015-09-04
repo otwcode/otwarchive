@@ -1,14 +1,17 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Unreviewed Comments") %></h2> 
+<h2 class="heading"><%= ts("Unreviewed Comments On ") %><%= link_to(@commentable.commentable_name, @commentable) %></h2> 
 <!--/descriptions-->
 
 <!--main content-->
-<%= will_paginate @comments %>
-<% @comments.each do |comment| %>
-  <%= render :partial => 'comments/single_comment', :object => comment %>
+<% if @comments.count > 0 %>
+  <%= will_paginate @comments %>
+  <% @comments.each do |comment| %>
+    <%= render :partial => 'comments/single_comment', :object => comment %>
+  <% end %>
+  <%= will_paginate @comments %>
+<% else %>
+  <p class="message"><%= ts("No unreviewed comments.")%></p>
 <% end %>
-<%= will_paginate @comments %>
-
 <!--main content-->
 
 <!--subnav-->

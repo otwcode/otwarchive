@@ -132,7 +132,7 @@ class CommentsController < ApplicationController
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
     else
-      @comments = @commentable.comments.unreviewed_only.page(params[:page])
+      @comments = @commentable.find_all_comments.unreviewed_only.page(params[:page])
     end
   end
 
@@ -253,11 +253,16 @@ class CommentsController < ApplicationController
   def destroy
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
+    unreviewed = @comment.unreviewed?
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
       flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
+    elsif unreviewed
+      # go back to the rest of the unreviewed comments
+      flash[:notice] = ts("Comment deleted.")
+      redirect_to :back
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -289,7 +294,12 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.paginate(:page => params[:page])
+    if @commentable.respond_to?(:moderated_commenting_enabled?) && @commentable.moderated_commenting_enabled?
+      # only reviewed comments
+      @comments = @commentable.comments.reviewed.page(params[:page])
+    else
+      @comments = @commentable.comments.page(params[:page])
+    end
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
