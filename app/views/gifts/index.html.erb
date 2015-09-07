@@ -1,11 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <% if @user && @user == current_user && params[:refused] %>
-    <%= ts("Refused Gifts for %{recipient}", :recipient => @user ? @user.login : h(@recipient_name)) %>
+    <%= ts("Refused Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
   <% else %>
-    <%= ts("Gifts for %{recipient}", :recipient => @user ? @user.login : h(@recipient_name)) %>
+    <%= ts("Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
   <% end %>
-  <%= @collection ? ts("in %{collection}", :collection => h(@collection.title)) : "" %>
+  <%= @collection ? ts("in %{collection}", collection: h(@collection.title)) : "" %>
 </h2>
 <!--/descriptions-->
 
