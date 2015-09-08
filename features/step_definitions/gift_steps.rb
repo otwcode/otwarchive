@@ -11,7 +11,7 @@ When /^I have given the work to "(.*?)"/ do |recipient|
   step %{I post the work without preview}
 end
 
-Given(/^I have rejected the work/) do
+Given(/^I have refused the work/) do
   step %{I have given the work to "giftee1"}
   step %{I am logged in as "giftee1" with password "something"}
   step %{I go to my gifts page}

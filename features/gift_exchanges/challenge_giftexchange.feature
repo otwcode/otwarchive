@@ -346,11 +346,11 @@ Feature: Gift Exchange Challenge
     Then I should see "myname1"
       And I should see "Fulfilled Story"
       
-  Scenario: Rejected story should still fulfill the assignment
+  Scenario: Refused story should still fulfill the assignment
   
     Given an assignment has been fulfilled in a gift exchange
       And I reveal works for "Awesome Gift Exchange"
-      And I reject my gift story "Fulfilled Story"
+      And I refuse my gift story "Fulfilled Story"
       And I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
       And I follow "Complete"

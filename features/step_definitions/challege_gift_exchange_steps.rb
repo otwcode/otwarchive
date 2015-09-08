@@ -265,7 +265,7 @@ end
 
 # we're not testing the process of rejection here, just that
 # it doesn't affect the completion status of the challenge assignment
-When /^I reject my gift story "(.*?)"/ do |work|
+When /^I refuse my gift story "(.*?)"/ do |work|
   w = Work.find_by_title(work)
   w.gifts.first.toggle!(:rejected)
 end

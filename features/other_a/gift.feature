@@ -240,7 +240,7 @@ Feature: Create Gifts
         
   Scenario: A user should be able to re-accept a gift
   
-    Given I have rejected the work
+    Given I have refused the work
       And I am on my gifts page
       And I follow "Refused Gifts"
     Then I should see "Accept Gift"
@@ -253,16 +253,16 @@ Feature: Create Gifts
     When I view the work "GiftStory1"
     Then I should see "For giftee1"
 
-  Scenario: An admin should see that a gift has been rejected
+  Scenario: An admin should see that a gift has been refused
 
-    Given I have rejected the work
+    Given I have refused the work
       And I am logged in as an admin
       And I view the work "GiftStory1"
-    Then I should see "Rejected As Gift: giftee1"
+    Then I should see "Refused As Gift: giftee1"
 
-  Scenario: Can't remove a recipient who has rejected the gift
+  Scenario: Can't remove a recipient who has refused the gift
   
-    Given I have rejected the work
+    Given I have refused the work
       And I am logged in as "gifter"
     When I edit the work "GiftStory1"
     Then "giftee1" should not be listed as a recipient in the form
