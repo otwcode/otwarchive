@@ -382,6 +382,7 @@ class UserMailer < BulletproofMailer::Base
     abuse_report = AbuseReport.find(abuse_report_id)
     @email = abuse_report.email
     @url = abuse_report.url
+    @message = abuse_report.metadata
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
