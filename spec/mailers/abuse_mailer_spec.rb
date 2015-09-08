@@ -15,7 +15,15 @@ describe AdminMailer do
     it "delivers from the correct address" do
       expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
     end
+   
+    it "body text contains the title of the reported work" do
+      expect(mail).to have_body_text(/#{report.metadata["title"]}/)
+    end
 
+    it "body text contains the author of the reported work" do
+      expect(mail).to have_body_text(/#{report.metadata["author"]}/)
+    end
+    
     it "body text contains the comment" do
       expect(mail).to have_body_text(/#{report.comment}/)
     end
@@ -48,6 +56,14 @@ describe AdminMailer do
 
     it "delivers from the correct address" do
       expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+    end
+
+    it "body text contains the title of the reported work" do
+      expect(mail).to have_body_text(/#{report.metadata["title"]}/)
+    end
+
+    it "body text contains the author of the reported work" do
+      expect(mail).to have_body_text(/#{report.metadata["author"]}/)
     end
 
     it "body text contains the comment" do
@@ -84,10 +100,18 @@ describe AdminMailer do
      expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
    end
 
+   it "body text contains the title of the reported work" do
+     expect(mail).to have_body_text(/#{report.metadata["title"]}/)
+   end
+
+   it "body text contains the author of the reported work" do
+     expect(mail).to have_body_text(/#{report.metadata["author"]}/)
+   end
+
    it "body text contains the comment" do
      expect(mail).to have_body_text(/#{report.comment}/)
    end
-
+   
    it "has the url of the page with abuse" do
      expect(mail.html_part).to have_body_text(report.url)
    end
