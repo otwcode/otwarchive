@@ -9,7 +9,9 @@ class AdminMailer < ActionMailer::Base
     abuse_report = AbuseReport.find(abuse_report_id)
     @email = abuse_report.email
     @url = abuse_report.url
-    @message = abuse_report.metadata
+    meta = abuse_report.metadata
+    @author = meta["author"]
+    @title = meta["title"]
     @comment = abuse_report.comment
     mail(
       to: ArchiveConfig.ABUSE_ADDRESS,

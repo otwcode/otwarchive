@@ -4,7 +4,9 @@
   </p>
   
   <p>
-    <%= style_bold("URL of the page the abuse is on:") %> <%= style_link(@url, @url) %>
+    <%= style_bold("URL of the page the abuse is on:") %> <%= style_link(@url, @url) %><br/>
+    <%= style_bold("Title of the work:") %> <%= @title.html_safe %><br/>
+    <%= style_bold("Author(s) of the work:") %> <%= @author.html_safe %><br/>
   </p>
   
   <%= style_bold("Description of the abuse:") %>
