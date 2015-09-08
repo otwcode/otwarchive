@@ -28,10 +28,12 @@ class AbuseReport < ActiveRecord::Base
 
   before_save :get_work_info
   def get_work_info
-    id = url.match('(?<=works/)[0-9]+')[0]
-    w = Work.find_by_id id
-    if w
-      self.metadata =  { author: w.authors_to_sort_on, title: w.title } 
+    if url.include? "works"
+      work_id = match('(?<=works/)[0-9]+')[0]
+      w = Work.find_by_id work_id
+      if w
+        self.metadata =  { author: w.authors_to_sort_on, title: w.title } 
+      end
     end
   end
 
