@@ -30,7 +30,7 @@ Volunteers are always welcome both for coding and testing!
 
 You can also submit a pull request; we'll get back to you as soon as we can!
 
-* Bug Tracking: https://code.google.com/p/otwarchive/issues/list
+* Bug Tracking: https://otwarchive.atlassian.net/projects/AO3/issues
 * Developer Documentation: https://github.com/otwcode/otwarchive/wiki
 * Beta Website: http://archiveofourown.org
 
