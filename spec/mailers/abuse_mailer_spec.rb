@@ -95,7 +95,8 @@ describe AdminMailer do
 
   
   context "abuse_reports contains creator and title if reporting a work" do
-   let(:report) {create(:abuse_report, url: "http://archiveofourown.org/works/3753052?view_full_work=true")}
+   let(:work) {create(:work)}
+   let(:report) {create(:abuse_report, url: work.url)}
    let(:mail) {AdminMailer.abuse_report(report.id)}
 
    it "has the correct subject" do
@@ -105,7 +106,6 @@ describe AdminMailer do
    it "delivers to the correct address" do
      expect(mail).to deliver_to ArchiveConfig.ABUSE_ADDRESS
    end
-
    it "delivers from the correct address" do
      expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
    end
