@@ -373,4 +373,4 @@ DUMP_COLLECTION_SEEDS: [
 ]
 
 # Languages we offer support in
-SUPPORT_LANGUAGES: "العربية, Bahasa Indonesia, català, čeština, dansk, Deutsch, English, español, français, 한국어, italiano, magyar, Nederlands, polski, português, Русский, suomi, svenska, 中文"
+SUPPORT_LANGUAGES: "العربية, Bahasa Indonesia, català, čeština, dansk, Deutsch, English, español, français, 한국어, italiano, magyar, Nederlands, polski, português, Русский, suomi, svenska, Tiếng Việt, 中文"
