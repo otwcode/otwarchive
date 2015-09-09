@@ -16,14 +16,6 @@ describe AdminMailer do
       expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
     end
    
-    it "body text contains the title of the reported work" do
-      expect(mail).to have_body_text(/#{report.metadata["title"]}/)
-    end
-
-    it "body text contains the author of the reported work" do
-      expect(mail).to have_body_text(/#{report.metadata["author"]}/)
-    end
-    
     it "body text contains the comment" do
       expect(mail).to have_body_text(/#{report.comment}/)
     end
@@ -56,14 +48,6 @@ describe AdminMailer do
 
     it "delivers from the correct address" do
       expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
-    end
-
-    it "body text contains the title of the reported work" do
-      expect(mail).to have_body_text(/#{report.metadata["title"]}/)
-    end
-
-    it "body text contains the author of the reported work" do
-      expect(mail).to have_body_text(/#{report.metadata["author"]}/)
     end
 
     it "body text contains the comment" do
@@ -100,6 +84,32 @@ describe AdminMailer do
      expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
    end
 
+   it "body text contains the comment" do
+     expect(mail).to have_body_text(/#{report.comment}/)
+   end
+   
+   it "has the url of the page with abuse" do
+     expect(mail.html_part).to have_body_text(report.url)
+   end
+  end
+
+  
+  context "abuse_reports contains creator and title if reporting a work" do
+   let(:report) {create(:abuse_report, url: "http://archiveofourown.org/works/3753052?view_full_work=true")}
+   let(:mail) {AdminMailer.abuse_report(report.id)}
+
+   it "has the correct subject" do
+     expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
+   end
+
+   it "delivers to the correct address" do
+     expect(mail).to deliver_to ArchiveConfig.ABUSE_ADDRESS
+   end
+
+   it "delivers from the correct address" do
+     expect(mail).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
+   end
+
    it "body text contains the title of the reported work" do
      expect(mail).to have_body_text(/#{report.metadata["title"]}/)
    end
@@ -116,6 +126,5 @@ describe AdminMailer do
      expect(mail.html_part).to have_body_text(report.url)
    end
   end
-
 
 end
