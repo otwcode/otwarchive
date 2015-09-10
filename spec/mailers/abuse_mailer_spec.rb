@@ -96,7 +96,7 @@ describe AdminMailer do
   
   context "abuse_reports contains creator and title if reporting a work" do
    let(:work) {create(:work)}
-   let(:report) {create(:abuse_report, url: work.url)}
+   let(:report) {create(:abuse_report, url: work_url(work.url)}
    let(:mail) {AdminMailer.abuse_report(report.id)}
 
    it "has the correct subject" do
