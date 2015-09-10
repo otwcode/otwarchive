@@ -1290,7 +1290,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    When "Issue 3461" is fixed
+    When "AO3-3455" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I view the work "Existing work"
@@ -1375,7 +1375,7 @@ Feature: Prompt Meme Challenge
     And I check "Battle 12"
     And I press "Preview"
   Then I should see "In response to a prompt by"
-    When "Issue 3461" is fixed
+    When "AO3-3455" is fixed
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
