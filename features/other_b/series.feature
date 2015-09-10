@@ -203,8 +203,7 @@ Feature: Create and Edit Series
     Given I am logged in as "whoever" with password "whatever"
       And I add the work "public" to series "be_public"
       And I follow "be_public"
-      And "AO3-2166" is fixed
-  # Then I should not see the "title" text "Restricted" within "h2"
+    Then I should not see the image "title" text "Restricted" within "h2"
 
   Scenario: View user's series index
 
