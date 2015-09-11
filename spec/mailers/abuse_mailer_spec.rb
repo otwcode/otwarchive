@@ -1,8 +1,8 @@
 require 'spec_helper'
 describe AdminMailer do
   context "abuse_reports with email" do
-    let(:report) { create(:abuse_report) }
-    let(:mail) { AdminMailer.abuse_report(report.id) }
+    let(:report) {create(:abuse_report)}
+    let(:mail) {AdminMailer.abuse_report(report.id)}
 
     it "has the correct subject" do
       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
@@ -31,8 +31,8 @@ describe AdminMailer do
   end
 
   context "abuse_reports without email" do
-    let(:report) { create(:abuse_report) }
-    let(:mail) { AdminMailer.abuse_report(report.id) }
+    let(:report) {create(:abuse_report)}
+    let(:mail) {AdminMailer.abuse_report(report.id)}
 
     it "has the correct subject" do
       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
@@ -61,9 +61,9 @@ describe AdminMailer do
   end
 
   context "abuse_reports sends copy if cc_me is checked" do
-    let(:report) { create(:abuse_report, email: "cc_me@email.com", cc_me: "1") }
-    let(:mail) { AdminMailer.abuse_report(report.id) }
-    let(:mail2) { UserMailer.abuse_report(report.id) }
+    let(:report) {create(:abuse_report, email: "cc_me@email.com", cc_me: "1")}
+    let(:mail) {AdminMailer.abuse_report(report.id)}
+    let(:mail2) {UserMailer.abuse_report(report.id)}
 
     it "has the correct subject" do
       puts report.email_copy?
@@ -94,9 +94,9 @@ describe AdminMailer do
   end
 
   context "abuse_reports contains creator and title if reporting a work" do
-    let(:work) { create(:work) }
-    let(:report) { create(:abuse_report, url: work_url(work.url)) }
-    let(:mail) { AdminMailer.abuse_report(report.id) }
+    let(:work) {create(:work)}
+    let(:report) {create(:abuse_report, url: work_url(work))}
+    let(:mail) {AdminMailer.abuse_report(report.id)}
 
     it "has the correct subject" do
       expect(mail).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Admin Abuse Report"
