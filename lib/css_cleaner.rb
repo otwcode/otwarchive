@@ -12,8 +12,11 @@ module CssCleaner
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
   
-  FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotate|matrix', Regexp::IGNORECASE)
+  FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotatex?y?|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
+
+  SHAPE_NAME_REGEX = Regexp.new('rect', Regexp::IGNORECASE)
+  SHAPE_FUNCTION_REGEX =  Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
   RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
   COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s)
@@ -27,7 +30,7 @@ module CssCleaner
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
-  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}")
+  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}")
 
 
   # For use in ActiveRecord models
