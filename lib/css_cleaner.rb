@@ -11,12 +11,12 @@ module CssCleaner
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
-  
+
   FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotatex?y?|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
   SHAPE_NAME_REGEX = Regexp.new('rect', Regexp::IGNORECASE)
-  SHAPE_FUNCTION_REGEX =  Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
+  SHAPE_FUNCTION_REGEX = Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
   RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
   COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s)
@@ -82,12 +82,12 @@ module CssCleaner
     end
     return clean_css
   end
-  
+
   def is_legal_property(property)
     ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
       property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
   end
-  
+
   def is_legal_shorthand_property(property)
     property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
   end
@@ -234,6 +234,6 @@ module CssCleaner
       return ""
     end
   end
-  
+
 
 end
