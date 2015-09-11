@@ -33,14 +33,14 @@ class AbuseReport < ActiveRecord::Base
       if work_id
         w = Work.find_by_id work_id[0]
         if w
-          self.metadata =  { author: w.authors_to_sort_on, title: w.title } 
+          self.metadata = { author: w.authors_to_sort_on, title: w.title }
         end
       end
     end
   end
 
   def email_copy?
-   cc_me == "1"
+    cc_me == "1"
   end
 
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
