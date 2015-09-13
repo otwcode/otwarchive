@@ -89,7 +89,7 @@ describe Skin do
                     	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
                     	-webkit-transform: scale(2.1) rotate(-90deg)
         }
-        #main .rotatvert {transform: rotatey(180deg);}
+        #main .rotatevert {transform: rotatey(180deg);}
         .rotatehoriz {transform: rotatex(50deg)}",
 
         "should allow multiple valid values for a single property" =>
