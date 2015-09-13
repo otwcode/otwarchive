@@ -88,11 +88,10 @@ describe StoryParser do
         expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
-      # TODO: uncomment and remove this comment when (if) fixing the bug
-      it "should match a folder style link to an individual user on journalfen" # do
-      #   url = "http://www.journalfen.net/users/username"
-      #   @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
-      # end
+      it "should match a folder style link to an individual user on journalfen" do
+        url = "http://www.journalfen.net/users/username"
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
+      end
     end
 
     # TODO: KNOWN_STORY_PARSERS
@@ -100,7 +99,8 @@ describe StoryParser do
 
   describe "check_for_previous_import" do
     let(:location_with_www) { "http://www.testme.org/welcome_to_test_vale.html" }
-    let(:location_no_www)   { "http://testme.org/welcome_to_test_vale.html" }
+    let(:location_no_www) { "http://testme.org/welcome_to_test_vale.html" }
+    let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
@@ -112,6 +112,12 @@ describe StoryParser do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+    end
+
+    it "should not perform a partial match on work import locations" do
+      @work = create(:work, imported_from_url: location_partial_match)
+
+      expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
     end
   end
 

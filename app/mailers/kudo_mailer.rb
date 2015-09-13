@@ -37,11 +37,11 @@ class KudoMailer < ActionMailer::Base
         next if kudo_givers.empty?
 
         @commentables << commentable
-        @kudo_givers[commentable_info] = kudo_givers.to_sentence
+        @kudo_givers[commentable_info] = kudo_givers
       end
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{t 'mailer.kudos.you_have'}"
+        subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure

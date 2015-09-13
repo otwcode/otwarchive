@@ -12,6 +12,8 @@ gem 'rails', '3.2.21'
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
+#https://github.com/qertoip/transaction_retry
+gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -93,6 +95,7 @@ gem 'phrase'
 
 # For URL mangling
 gem 'addressable'
+gem "audited-activerecord", "~> 3.0"
 
 # For controlling application behavour dynamically
 gem 'rollout'
