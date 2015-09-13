@@ -24,8 +24,7 @@
 
 <% if params[:invited] %>
   <p class="notice">
-    <%= ts("Works listed here have already been approved for this collection.") %>
-    <%= ts("Once a work's owner has approved inclusion in this collection, the work will be moved to 'Approved'.") %>
+    <%= ts("Works listed here have already been approved for this collection. Once a work's owner has approved inclusion in this collection, the work will be moved to 'Approved'.") %>
   </p>
 <% end %>
 <% if @collection_items.count < 1 %>
