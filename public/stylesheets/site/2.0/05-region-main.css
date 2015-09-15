@@ -28,12 +28,8 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   padding: 2em 7.5em 3.5em;
 }
 
-#main.error, #main.slow, #main.maintenance {
+#main.errors, #main.slow, #main.maintenance {
   background: url("/images/ao3_logos/sadface.png") top right no-repeat;
-  border: 0;
-  color: #222;
-    border-radius: 0;
-    box-shadow: none;
 }
 
 #main.slow {
@@ -44,7 +40,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   background: url("/images/ao3_logos/logo-ruby.png") top right no-repeat;
 }
 
-#main.error p {
+#main.errors p {
   margin-right: 400px;
 }
 

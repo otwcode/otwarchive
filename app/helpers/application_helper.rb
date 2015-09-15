@@ -25,6 +25,12 @@ module ApplicationHelper
     if controller.controller_name == "home"
       class_names = "system docs " + controller.action_name
     end
+    if controller.controller_name == "errors"
+      class_names = "system " + controller.controller_name + " " + controller.action_name
+      if controller.action_name == "502"
+        class_names += " slow"
+      end
+    end
 
     class_names
   end
