@@ -36,7 +36,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   background: url("/images/ao3_logos/ao3-502.png") top right no-repeat;
 }
 
-#main.maintenance-503 {
+#main.error-503-maintenance {
   background: url("/images/ao3_logos/logo-ruby.png") top right no-repeat;
 }
 
