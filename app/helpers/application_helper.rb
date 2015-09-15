@@ -26,10 +26,7 @@ module ApplicationHelper
       class_names = "system docs " + controller.action_name
     end
     if controller.controller_name == "errors"
-      class_names = "system " + controller.controller_name + " " + controller.action_name
-      if controller.action_name == "502"
-        class_names += " slow"
-      end
+      class_names = "system " + controller.controller_name + " error-" + controller.action_name
     end
 
     class_names

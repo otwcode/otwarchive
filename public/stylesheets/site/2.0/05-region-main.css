@@ -32,7 +32,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   background: url("/images/ao3_logos/sadface.png") top right no-repeat;
 }
 
-#main.slow {
+#main.error-502 {
   background: url("/images/ao3_logos/ao3-502.png") top right no-repeat;
 }
 
