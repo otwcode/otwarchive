@@ -371,3 +371,7 @@ DUMP_COLLECTION_SEEDS: [
           "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
           "Remix2011", "PornBattleXII"
 ]
+
+
+# Languages we offer support in
+SUPPORT_LANGUAGES: "العربية, Bahasa Indonesia, català, čeština, dansk, Deutsch, English, español, français, 한국어, italiano, magyar, Nederlands, polski, português, Русский, suomi, svenska, Tiếng Việt, Türkçe, 中文"
