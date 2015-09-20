@@ -23,9 +23,10 @@
       <%= @admin_post.title.html_safe %>
     </h3>
       <h4 class="heading">
-        Published: <%= @admin_post.created_at %>  
+        Published: <%= @admin_post.created_at %>
         <% if logged_in_as_admin? %>
-            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'action' %>
+            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), class: 'action' %>
+            <%= link_to t('admin.admin_nav.delete', default: 'Delete Post'), @admin_post, confirm: 'Are you sure you want to delete this news post?', method: :delete, class: 'action' %>
         <% end %>
       </h4>
     <% if @admin_post.translated_post %>

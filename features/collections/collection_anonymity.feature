@@ -261,7 +261,7 @@ Feature: Collection
   # check the series
   When I follow "Another Snippet"
     And I follow "New series"
-    And "Issue 1253" is fixed
+    And "AO3-1250" is fixed
   Then I should see "Anonymous"
     # And I should not see "first_user"
   
@@ -383,7 +383,7 @@ Feature: Collection
   When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
     And I submit
   # Issue 2243: emails don't get sent for individual reveals
-  When "Issue 2243" is fixed
+  When "AO3-2240" is fixed
     #Then 1 email should be delivered
     
   # first fic now visible, second still not

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-
+  audited
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user
@@ -46,6 +46,9 @@ class User < ActiveRecord::Base
 
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
+
+  has_many :fannish_next_of_kins, foreign_key: 'kin_id', dependent: :destroy
+  has_one :fannish_next_of_kin, dependent: :destroy
 
   has_many :favorite_tags, dependent: :destroy
 
