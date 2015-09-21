@@ -3,7 +3,7 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+      @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)] - [Media.find_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)]
       @page_subtitle = @collection.title
       if params[:medium_id]
         @medium = Media.find_by_name(params[:medium_id])
