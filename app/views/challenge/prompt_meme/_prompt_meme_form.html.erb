@@ -11,7 +11,7 @@
 <h3 class="landmark heading"><%= ts("Notes") %></h3>
 <ul class="notes">
   <li><%= ts("The more options you allow here, the more complicated your sign-up form will be.") %></li>
-  <li><%= ts('If you set the "Required" value higher than the corresponding "Allowed" value, we will 
+  <li><%= ts('If you set the "Required" value higher than the corresponding "Allowed" value, we will
     automatically assume that you want the allowed value to be the same as the required value. You only need to manually
     set the "Allowed" number if you want more allowed than required.') %></li>
 </ul>
@@ -31,7 +31,7 @@
       <p class="note">(Participants can override)</p>
       </dd>
       <dt><%= f.label :requests_num_required, ts("Number of prompts per sign-up:") %></dt>
-      <%= required_and_allowed(f, "requests", false) %>
+      <%= required_and_allowed(f, "requests", @collection.prompts.empty?, false) %>
 
     </dl>
   </fieldset>

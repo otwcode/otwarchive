@@ -173,7 +173,7 @@ Scenario: Editing an existing work to add an inspiration (parent work) should se
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should see "Inspired by Worldbuilding Two by inspiration"
-    And "issue 1509" is fixed
+    And "AO3-1506" is fixed
     # And 1 email should be delivered
 
 Scenario: Remixer receives comments on remix, creator of original work doesn't
@@ -274,7 +274,7 @@ Scenario: Listing external works as inspirations
   When I edit the work "Followup"
     And I check "parent-options-show"
     And I fill in "Url" with "testarchive.transformativeworks.org"
-    And "issue 1806" is fixed
+    And "AO3-1803" is fixed
     # And I press "Preview"
   # Then I should see a save error message
     # And I should see "A parent work outside the archive needs to have a title."

@@ -80,7 +80,7 @@ Feature: Leave kudos
     # Then I should see "barfoo (myname3) left kudos on this work!"
     When "myname3" deletes their account
       And I view the work "Awesome Story"
-      And "issue 2198" is fixed
+      And "AO3-2195" is fixed
     # Then I should see "1 guest left kudos on this work!"
 
   Scenario: redirection when kudosing on a middle chapter, with default preferences
