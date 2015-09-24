@@ -96,7 +96,7 @@ Feature: Admin Actions to manage users
   Given the fannish next of kin "libby" for the user "harrykim"
     And I am logged in as "libby"
   When I visit the change username page for libby
-    And I fill in "New User Name" with "newlibby"
+    And I fill in "New user name" with "newlibby"
     And I fill in "Password" with "password"
     And I press "Change User Name"
   Then I should get confirmation that I changed my username
@@ -110,7 +110,7 @@ Feature: Admin Actions to manage users
   Given the fannish next of kin "libby" for the user "harrykim"
     And I am logged in as "harrykim"
   When I visit the change username page for harrykim
-    And I fill in "New User Name" with "harrykim2"
+    And I fill in "New user name" with "harrykim2"
     And I fill in "Password" with "password"
     And I press "Change User Name"
   Then I should get confirmation that I changed my username

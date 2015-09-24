@@ -15,8 +15,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -163,8 +163,8 @@ Feature: Collection
     And I am logged in as "second_user"
   When I go to the collections page
     And I follow "New Collection"
-    And I fill in "Display Title" with "Anonymous Hugs"
-    And I fill in "Collection Name" with "anonyhugs"
+    And I fill in "Display title" with "Anonymous Hugs"
+    And I fill in "Collection name" with "anonyhugs"
     And I check "This collection is anonymous"
     And I submit
   Then I should see "Collection was successfully created"
@@ -318,8 +318,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
