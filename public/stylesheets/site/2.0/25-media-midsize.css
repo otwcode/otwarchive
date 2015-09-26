@@ -1,0 +1,47 @@
+/* MEDIA: only screen and (max-width: 62em), handheld ENDMEDIA */
+
+/* 04 region dashboard */
+
+#dashboard {
+  clear: both;
+  float: none;
+  max-width: 100%;
+  margin: 1%;
+  padding: 0;
+  width: auto;
+}
+
+#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
+  text-align: left;
+  display: inline;
+  border: none;
+}
+
+#dashboard ul {
+  padding: 0;
+}
+
+#dashboard .landmark {
+  clear: none;
+  float: left;
+}
+
+/* 05 region main */
+
+#main, #main.dashboard {
+  float: none;
+  margin: auto;
+  width: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+/* 18 zone searchbrowse */
+
+form.filters {
+  width: 24%;
+}
+
+.filters fieldset {
+  margin-right: 0;
+}

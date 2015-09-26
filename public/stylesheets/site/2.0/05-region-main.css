@@ -21,7 +21,8 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 }
 
 #main.dashboard {
-  margin: 0.5em auto 1em 15em;
+  padding-left: 2em;
+  margin: 0.5em auto 1em 14em;
 }
 
 #main.home {
