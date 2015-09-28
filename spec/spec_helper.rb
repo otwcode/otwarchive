@@ -1,10 +1,5 @@
 ENV["RAILS_ENV"] ||= 'test'
 
-# Coverals needs to work here too
-require 'coveralls'
-Coveralls.wear_merged!('rails')
-SimpleCov.merge_timeout 3600
-
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'rspec/rails'
@@ -12,49 +7,10 @@ require 'factory_girl'
 require 'database_cleaner'
 require 'email_spec'
 
-
-
-# SimpleCov integration
-
-require 'simplecov'
-require 'coveralls'
-
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start 'rails' do
-  add_filter '/features/'
-  add_filter '/spec/'
-  add_filter '/config/'
-  add_filter '/vendor/'
-
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Views', 'app/views'
-
-end
-
-
 DatabaseCleaner.start
 
 DatabaseCleaner.clean
 
-
-# SimpleCov integration
-
-require 'simplecov'
-
-SimpleCov.start 'rails' do
-  add_filter '/features/'
-  add_filter '/spec/'
-  add_filter '/config/'
-  add_filter '/vendor/'
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Views', 'app/views'
-end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
