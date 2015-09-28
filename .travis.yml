@@ -30,8 +30,6 @@ script:
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
-after_script:
-  - bundle exec rake coveralls:push
 notifications:
   email:
     recipients:
