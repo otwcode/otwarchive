@@ -242,7 +242,7 @@ Feature: Create Works
     When I fill in "work_collection_names" with ""
       And I fill in "pseud_byline" with "badcoauthor"
       And I press "Preview"
-    Then I should see "badcoauthor has been banned"
+    Then I should see "badcoauthor is currently banned"
     When I fill in "pseud_byline" with "coauthor"
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
