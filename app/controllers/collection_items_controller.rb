@@ -52,27 +52,6 @@ class CollectionItemsController < ApplicationController
     end
 
     sort = "created_at DESC"
-    # case params[:sort]
-    # when "item"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.title}
-    # when "collection"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
-    # when "word_count"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }
-    # when "creator"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
-    # when "member"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }
-    # when "user_approval"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
-    # when "collection_approval"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
-    # when "recipient"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
-    # when "date"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
-    # end
-
     @collection_items = @collection_items.order(sort).paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
   end
 
@@ -88,10 +67,6 @@ class CollectionItemsController < ApplicationController
     unless @collection
       @user = User.current_user
     end
-  end
-
-  def add
-    # TODO: Find some way to let mods add works from inside the collection
   end
 
   def new
@@ -172,18 +147,6 @@ class CollectionItemsController < ApplicationController
   end
 
   def update_multiple
-    # whoops, not working because it freezes the hash
-    # not_allowed = CollectionItem.where(:id => params[:collection_items].keys)
-    # if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
-    #   # TODO should rewrite this as query
-    #   not_allowed = not_allowed.reject {|item| @user.is_author_of?(item)}
-    # elsif @collection && @collection.user_is_maintainer?(current_user)
-    #   not_allowed = not_allowed.where("collection_id != ?", @collection.id)
-    # end
-    # unless not_allowed.empty?
-    #   flash[:error] = ts("You are not allowed to modify that!")
-    #   redirect_to root_path and return
-    # end
     @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
     if @collection_items.empty?
       flash[:notice] = ts("Collection status updated!")
