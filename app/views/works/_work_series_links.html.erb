@@ -1,6 +1,6 @@
-<!--series links, backwards and forwards, ideally incorporated with chapter control in top subnav-->
+<!--series links, backwards and forwards-->
 <div id="series" class="series module">
-  <h3 class="heading"><%= ts('Series this work belongs to:') %></h4>
+  <h3 class="heading"><%= ts('Series this work belongs to:') %></h3>
   <ul>
     <% series_data_for_work(@work).each do |series_info| %>
       <li><%= series_info %></li>

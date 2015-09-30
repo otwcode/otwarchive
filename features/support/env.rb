@@ -4,11 +4,6 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-# Code Coverage - Coveralls.io
-require 'coveralls'
-Coveralls.wear_merged!('rails')
-SimpleCov.merge_timeout 3600
-
 require 'cucumber/rails'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')

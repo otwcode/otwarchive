@@ -1,6 +1,6 @@
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
-    step %{I fill in "Your Tags" with "#{DEFAULT_BOOKMARK_TAGS}"}
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
     step %{I press "Create"}
     Bookmark.tire.index.refresh
 end
