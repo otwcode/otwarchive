@@ -145,7 +145,7 @@ class BookmarksController < ApplicationController
     params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if collection.nil?
-        errors << ts("%{collection} does not exist.", collection: collection_name)
+        errors << ts("#{collection_name} does not exist.")
       else
         if @bookmark.collections.include?(collection)
           next

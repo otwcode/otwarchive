@@ -263,7 +263,7 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
 
-Scenario: Adding bookmark to non-existant collection (AO3-4338)
+Scenario: Adding bookmark to non-existent collection (AO3-4338)
   Given I am logged in as "moderator" with password "password"
     And I post the work "Programmed for Murder"
     And I view the work "Programmed for Murder"
