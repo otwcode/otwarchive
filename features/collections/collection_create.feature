@@ -115,6 +115,31 @@ Scenario: Fill out new collection form with faulty data
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
 
+  Scenario: Unrevealed works is viewed in Unrevealed and Revealed collections (Issue 1202)
+    Given I have the collection "Revealed Collection" with name "revealed_collection"
+      And I have the hidden collection "Unrevealed Collection" with name "unrevealed_collection"
+      And I am logged in as "workauthor" with password "password"
+      And I post the work "A Complicated Story"
+      And I view the work "A Complicated Story"
+      And I follow "Add To Collections"
+      And I fill in "collection_names" with "revealed_collection, unrevealed_collection"
+      And I press "Add"
+    Then I should see "Added to collection(s): Revealed Collection, Unrevealed Collection"
+      And I am logged out
+    When I am logged in as "moderator" with password "password"
+      And I go to "Unrevealed Collection" collection's page
+      And I follow "Manage Items"
+      And I follow "Approved"
+    Then I should see "A Complicated Story"
+      And I should see "workauthor"
+      And I should see "Mystery Work"
+    When I go to "Revealed Collection" collection's page
+      And I follow "Manage Items"
+      And I follow "Approved"
+      And I should not see "A Complicated Story"
+      And I should see "workauthor"
+      And I should see "Mystery Work"
+
 Scenario: Create a collection with a malformed header URL
 
 Given I have the collection "Scotts Collection" with name "scotts_collection"
