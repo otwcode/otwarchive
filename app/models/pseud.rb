@@ -272,7 +272,7 @@ class Pseud < ActiveRecord::Base
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
-      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? }
+      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
       if banned_pseuds.present?
         pseuds = pseuds - banned_pseuds
         banned_pseuds = banned_pseuds.map(&:byline)

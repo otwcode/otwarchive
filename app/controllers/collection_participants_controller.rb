@@ -109,7 +109,14 @@ class CollectionParticipantsController < ApplicationController
     end
     
     if @participants_invited.empty? && @participants_added.empty?
-      flash[:error] = ts("We couldn't find anyone new by that name to add.")
+      if pseud_results[:banned_pseuds].present?
+        flash[:error] =
+            ts("%{name} is currently banned and cannot participate in challenges.",
+               name: pseud_results[:banned_pseuds].to_sentence
+        )
+      else
+        flash[:error] = ts("We couldn't find anyone new by that name to add.")
+      end
     else
       flash[:notice] = ""
     end
