@@ -263,6 +263,18 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
 
+Scenario: Adding bookmark to non-existent collection (AO3-4338)
+  Given I am logged in as "moderator" with password "password"
+    And I post the work "Programmed for Murder"
+    And I view the work "Programmed for Murder"
+    And I follow "Bookmark"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+  Then I follow "Edit"
+    And I fill in "bookmark_collection_names" with "some_nonsense_collection"
+    And I press "Update"
+    And I should see "does not exist."
+
 Scenario: Adding bookmarks to closed collections (Issue 3083)
   Given I am logged in as "moderator" with password "password"
     And I have a closed collection "Unsolved Mysteries" with name "unsolved_mysteries"
