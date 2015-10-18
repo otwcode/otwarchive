@@ -1,0 +1,17 @@
+<%= error_messages_for :language %>
+
+<%= form_for(@language) do |f| %>
+  <dl>
+    <dt><%= f.label :name, t('.name', :default => "Name:") %></dt>
+    <dd><%= f.text_field :name %></dd>
+    
+    <dt><%= f.label :short, t('.short', :default => "Abbreviation:") %></dt>
+    <dd><%= f.text_field :short %></dd>
+
+    <dt><%= f.label :support_available, t('.support_available', :default => "Support Available:") %></dt>
+    <dd><%= f.check_box :support_available %></dd>
+  </dl>
+  <p class="submit actions"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
+<% end %>
+
+

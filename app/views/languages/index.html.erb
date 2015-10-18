@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <p class="navigation actions" role="navigation">
-<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
+<% if logged_in_as_admin? %>
   <%= link_to ts('Add a Language'), new_language_path %>
 <% else %>
   <%= link_to ts('Suggest a Language'), new_feedback_report_path %>

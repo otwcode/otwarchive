@@ -1,5 +1,5 @@
 class LanguagesController < ApplicationController
-  before_filter :check_permission, :only => [:new, :create]
+  before_filter :check_permission, :only => [:new, :create, :edit, :update]
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
@@ -25,6 +25,20 @@ class LanguagesController < ApplicationController
       redirect_to languages_path
     else
       render :action => "new"
-    end      
-  end 
+    end
+  end
+
+  def edit
+    @language = Language.find_by_short(params[:id])
+  end
+
+  def update
+    @language = Language.find_by_short(params[:id])
+    if @language.update_attributes(params[:language])
+      flash[:notice] = t('successfully_updated', :default => 'Language was successfully updated.')
+      redirect_to @language
+    else
+      render :action => "new"
+    end
+  end
 end

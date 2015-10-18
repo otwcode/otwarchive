@@ -1,5 +1,6 @@
 class FeedbacksController < ApplicationController
   skip_before_filter :store_location
+  before_filter :load_support_languages
 
   def new
     @feedback = Feedback.new
@@ -22,6 +23,10 @@ class FeedbacksController < ApplicationController
         default: "Sorry, your message could not be saved - please try again!")
       render action: "new"
     end
+  end
+
+  def load_support_languages
+    @support_languages = Language.where(support_available: true).order(:name)
   end
 
 end
