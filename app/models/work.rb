@@ -423,9 +423,9 @@ class Work < ActiveRecord::Base
     unless self.new_recipients.blank?
       self.new_recipients.split(',').each do |name|
         gift = self.gifts.for_name_or_byline(name).first
-        unless gift
+        unless gift.present?
           g = Gift.new(recipient: name, work: self)
-          g.save if g.valid?
+          g.save
         end
       end
     end
