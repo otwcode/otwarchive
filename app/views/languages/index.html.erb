@@ -25,9 +25,11 @@
       <dt><%= link_to language.name, language %></dt>
       <dd>
         <%= link_to ts("%{count} works", count: language.works.count), language_works_path(language) %>
-        <ul class="actions">
-          <li><%= link_to ts("Edit"), edit_language_path(language) %></li>
-        </ul>
+        <% if logged_in_as_admin? %>
+          <p class="actions">
+            <%= link_to ts("Edit"), edit_language_path(language) %>
+          </p>
+        <% end %>
       </dd>
     <% end %>
 

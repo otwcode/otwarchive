@@ -190,4 +190,8 @@ dd.any label.action {
   margin-left: 0.5625em;
 }
 
+dl.index p.actions {
+  margin: 0;
+}
+
 /*END== */
