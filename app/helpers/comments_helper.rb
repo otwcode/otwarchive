@@ -222,7 +222,7 @@ module CommentsHelper
       delete_comment_link(comment)
     end
   end
-
+  
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
