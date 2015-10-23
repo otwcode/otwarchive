@@ -70,6 +70,11 @@
             <%= tag_comment_as_spam_link single_comment %>
           </li>
         <% end %>
+        <% if single_comment.unreviewed? && is_author_of?(single_comment.ultimate_parent) %>
+          <li id="review_comment_link_<%= single_comment.id %>">
+            <%= link_to(ts("Approve"), review_comment_path(single_comment), method: :put) %>
+          </li>
+        <% end %>
         <% if logged_in_as_admin? || is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>
           <li id="delete_comment_link_<%= single_comment.id %>">
             <%= do_cancel_delete_comment_link single_comment %>

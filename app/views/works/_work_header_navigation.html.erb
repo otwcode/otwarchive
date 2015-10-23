@@ -55,6 +55,7 @@
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
       <li class="mark"><%= marktoread_link(@work) %></li>
     <% end %>
+
   <% end %>
 
   <li class="comments" id="show_comments_link_top">
@@ -66,6 +67,13 @@
       <%= link_to ts("Comments"), "#comments" %>
     <% end %>
   </li>
+
+  <% # for author or admin, review comments if moderating them %>
+  <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
+    <li class="comments" id="review_comments">
+      <%= link_to ts("Unreviewed Comments") + " (" + @work.find_all_comments.unreviewed_only.count.to_s + ")" , unreviewed_work_comments_path(@work) %>
+    </li>
+  <% end %>
   
   <% # allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
