@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Unreviewed Comments On ") %><%= link_to(@commentable.commentable_name, @commentable) %></h2> 
+<h2 class="heading"><%= ts("Unreviewed Comments on") %> <%= link_to(@commentable.commentable_name, @commentable) %></h2> 
 <!--/descriptions-->
 
 <!--main content-->
@@ -10,7 +10,7 @@
   <% end %>
   <%= will_paginate @comments %>
 <% else %>
-  <p class="message"><%= ts("No unreviewed comments.")%></p>
+  <p class="notice"><%= ts("No unreviewed comments.")%></p>
 <% end %>
 <!--main content-->
 
