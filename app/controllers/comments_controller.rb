@@ -201,7 +201,7 @@ class CommentsController < ApplicationController
             cookies[:comment_email] = @comment.email[0..100]
           end
           if @comment.unreviewed?
-            flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the author has approved it.")
+            flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
           else
             flash[:comment_notice] = ts('Comment created!')
           end
