@@ -106,28 +106,6 @@ class Api::V1::ImportController < Api::V1::BaseController
     }
   end
 
-  # Top-level error handling: returns a 403 forbidden if a valid archivist isn't supplied and a 400
-  # if no works are supplied. If there is neither a valid archivist nor valid works, a 400 is returned
-  # ith both errors as a message
-  def batch_errors(archivist, external_works)
-    status = :bad_request
-    errors = []
-
-    unless archivist && archivist.is_archivist?
-      status = :forbidden
-      errors << "The 'archivist' field must specify the name of an Archive user with archivist privileges."
-    end
-
-    if external_works.nil? || external_works.empty?
-      errors << "No work URLs were provided."
-    elsif external_works.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-      errors << "This request contains too many works. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
-                "works can be imported in one go by an archivist."
-    end
-    status = :ok if errors.empty?
-    [status, errors]
-  end
-
   # Work-level error handling for requests that are incomplete or too large
   def work_errors(work)
     status = :bad_request

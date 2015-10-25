@@ -123,6 +123,67 @@ stubbed response", headers: {})
     end
 
     it "should return 400 Bad Request if no works are specified" do
+      user = create(:user)
+      post "/api/v1/import",
+           { archivist: user.login }.to_json,
+           valid_headers
+      assert_equal 400, response.status
+    end
+  end
+
+  WebMock.allow_net_connect!
+end
+
+describe "API BookmarksController" do
+
+  # Override is_archivist so all users are archivists from this point on
+  class User < ActiveRecord::Base
+    def is_archivist?
+      true
+    end
+  end
+
+  describe "API import with a valid archivist" do
+    it "should return 201 Created when all bookmarks are created" do
+      user = create(:user)
+      post "/api/v1/bookmarks/import",
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       bookmark_urls: ["http://foo"] }]
+           }.to_json,
+           valid_headers
+      assert_equal 201, response.status
+    end
+
+    it "should return 422 Unprocessable Entity when no bookmarks are created" do
+      user = create(:user)
+      post "/api/v1/bookmarks/import",
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://bar"] }]
+           }.to_json,
+           valid_headers
+      assert_equal 422, response.status
+    end
+
+    it "should return 207 Multi-Status when only some bookmarks are created" do
+      user = create(:user)
+      post "/api/v1/bookmarks/import",
+           { archivist: user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://foo"] },
+                     { external_author_name: "bar2",
+                       external_author_email: "bar2@foo.com",
+                       chapter_urls: ["http://foo"] }]
+           }.to_json,
+           valid_headers
+      assert_equal 207, response.status
+    end
+
+    it "should return 400 Bad Request if no works are specified" do
       post "/api/v1/import",
            { archivist: @user.login }.to_json,
            valid_headers
