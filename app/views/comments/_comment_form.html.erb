@@ -26,8 +26,14 @@
         <%= hidden_field_tag :page, params[:page] %>
       <% end %>
 
+      <% if comments_are_moderated(commentable) && !current_user_is_work_creator(commentable) %>
+        <p class="notice">
+          <%= ts("This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been by approved by the creator.") %>
+        </p>
+      <% end %>
+
       <% if logged_in? %>
-        <% if ultimate_parent_is_anonymous_work_owned_by_commenter(commentable) %>
+        <% if current_user_is_anonymous_creator(commentable) %>
           <p class="notice">
            <%= ts("While this work is anonymous, comments you post will also be listed anonymously.") %>
           </p>

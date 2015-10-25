@@ -291,11 +291,37 @@ module CommentsHelper
 
   end
 
-  # determine if the creator of the commentable item is anonymous and if the person leaving the comment is the owner
-  def ultimate_parent_is_anonymous_work_owned_by_commenter(commentable)
-    commentable.is_a?(Work) && current_user.is_author_of?(commentable) && commentable.anonymous? ||
-    commentable.is_a?(Chapter) && current_user.is_author_of?(commentable) && commentable.work.anonymous? ||
-    commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent)
+  # find the parent of the commentable
+  def find_parent(commentable)
+    if commentable.is_a?(Comment)
+      commentable.ultimate_parent
+    elsif commentable.respond_to?(:work)
+      commentable.work
+    else
+      commentable
+    end
+  end
+
+  # if parent commentable is a work, determine if current user created it
+  def current_user_is_work_creator(commentable)
+    if logged_in?
+      parent = find_parent(commentable)
+      parent.is_a?(Work) && current_user.is_author_of?(parent)
+    end
+  end
+
+  # if parent commentable is an anonymous work, determine if current user created it
+  def current_user_is_anonymous_creator(commentable)
+    if logged_in?
+      parent = find_parent(commentable)
+      parent.respond_to?(:work) && parent.anonymous? && current_user.is_author_of?(parent)
+    end
+  end
+
+  # determine if the parent has its comments set to moderated
+  def comments_are_moderated(commentable)
+    parent = find_parent(commentable)
+    parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
 
 end
