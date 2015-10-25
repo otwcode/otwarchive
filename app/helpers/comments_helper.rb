@@ -291,4 +291,11 @@ module CommentsHelper
 
   end
 
+  # determine if the creator of the commentable item is anonymous and if the person leaving the comment is the owner
+  def ultimate_parent_is_anonymous_work_owned_by_commenter(commentable)
+    commentable.is_a?(Work) && current_user.is_author_of?(commentable) && commentable.anonymous? ||
+    commentable.is_a?(Chapter) && current_user.is_author_of?(commentable) && commentable.work.anonymous? ||
+    commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent)
+  end
+
 end

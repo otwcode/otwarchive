@@ -27,16 +27,10 @@
       <% end %>
 
       <% if logged_in? %>
-        <% # The following two notices show on the top-level comment box on either a: Work (full view) or Chapter by Chapter page %>
-        <% if commentable.is_a?(Work) && current_user.is_author_of?(commentable) && commentable.anonymous? %>
-          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
-        <% elsif commentable.is_a?(Chapter) && current_user.is_author_of?(commentable) && commentable.work.anonymous? %>
-          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
-        <% end %>
-
-        <% # When the thing that we are commenting on is a comment (read: replying to) then we use this statement. Shows in user Inbox and nested reply %>
-        <% if commentable.is_a?(Comment) && commentable.ultimate_parent.is_a?(Work) && commentable.ultimate_parent.anonymous? && current_user.is_author_of?(commentable.ultimate_parent) %>
-          <p class="notice">While this work is anonymous, comments you post will also be listed anonymously.</p>
+        <% if ultimate_parent_is_anonymous_work_owned_by_commenter(commentable) %>
+          <p class="notice">
+           <%= ts("While this work is anonymous, comments you post will also be listed anonymously.") %>
+          </p>
         <% end %>
 
         <% if current_user.pseuds.count > 1 %>
