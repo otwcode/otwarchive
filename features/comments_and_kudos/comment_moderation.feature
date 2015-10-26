@@ -27,7 +27,7 @@ Feature: Comment Moderation
     Given the moderated work "Moderation" by "author"
     When I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Moderation"
-    Then I should see "Your comment was received! It will appear publicly after the work creator approved it."
+    Then I should see "Your comment was received! It will appear publicly after the work creator has approved it."
       And the comment on "Moderation" should be marked as unreviewed
       And I should not see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
@@ -43,7 +43,7 @@ Feature: Comment Moderation
     Given the moderated work "Moderation" by "author"
     When I am logged in as "author"
       And I post the comment "Fail comment" on the work "Moderation"
-    Then I should not see "It will appear publicly after the work creator approved it"
+    Then I should not see "It will appear publicly after the work creator has approved it."
       And the comment on "Moderation" should not be marked as unreviewed
       And I should see "Comment created"
       And I should not see "Unreviewed Comments (1)"
