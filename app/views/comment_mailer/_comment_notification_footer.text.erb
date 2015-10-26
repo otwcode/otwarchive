@@ -1,6 +1,7 @@
 <%= text_divider %>
 Posted: <%= @comment.created_at %><% unless @comment.edited_at.blank? %>
 Last edited: <%= @comment.edited_at %><% end %>
+
 <% if @comment.unreviewed? %>
 Comments on this work are moderated and will not appear until approved by the work creator.
 <% end %>
