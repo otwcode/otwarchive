@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
-  before_filter :check_permission_to_review, :only => [:unreviewed]
+  before_filter :check_permission_to_review, :only => [:unreviewed, :show]
 
   cache_sweeper :comment_sweeper
 
@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
-    parent =  find_parent
+    parent = find_parent
     if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
@@ -46,7 +46,7 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
   def check_anonymous_comment_preference
-    parent =  find_parent
+    parent = find_parent
     if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
       flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
@@ -57,7 +57,11 @@ class CommentsController < ApplicationController
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
       flash[:error] = ts("Sorry, you don't have permission to see that.")
-      redirect_to login_path and return
+      if logged_in?
+        redirect_to root_path and return
+      else
+        redirect_to login_path and return
+      end
     end
   end
 
