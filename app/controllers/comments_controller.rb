@@ -14,7 +14,8 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
-  before_filter :check_permission_to_review, :only => [:unreviewed, :show]
+  before_filter :check_permission_to_review, :only => [:unreviewed]
+  before_filter :check_permission_to_access_single_unreviewed, only: [:show]
 
   cache_sweeper :comment_sweeper
 
@@ -61,6 +62,20 @@ class CommentsController < ApplicationController
         redirect_to root_path and return
       else
         redirect_to login_path and return
+      end
+    end
+  end
+
+  def check_permission_to_access_single_unreviewed
+    if @comment.unreviewed?
+      parent = find_parent
+      unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+        flash[:error] = ts("Sorry, you don't have permission to see that.")
+        if logged_in?
+          redirect_to root_path and return
+        else
+          redirect_to login_path and return
+        end
       end
     end
   end
