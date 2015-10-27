@@ -22,6 +22,23 @@ Feature: Comment Moderation
       And I check "Comments moderated"
       And I post the work without preview
     Then comment moderation should be enabled on "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+    Then I should see "has chosen to moderate comments"
+    
+  Scenario: Turn off moderation
+    Given I am logged in as "author"
+      And I set up the draft "Moderation"
+      And I check "Comments moderated"
+      And I post the work without preview
+    Then comment moderation should be enabled on "Moderation"
+    When I edit the work "Moderation"
+      And I uncheck "Comments moderated"
+      And I post the work without preview
+    Then comment moderation should not be enabled on "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+    Then I should not see "has chosen to moderate comments"
     
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"

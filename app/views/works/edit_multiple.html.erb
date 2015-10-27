@@ -62,13 +62,42 @@
           </li>
         </ul>
       </dd>
-      <dt><%= ts("Comment Settings") %><%= link_to_help "anonymous-commenting" %></dt>
+      <dt><%= ts("Anonymous Commenting") %><%= link_to_help "comments-anonymous" %></dt>
       <dd>
-        <label for="work_anon_commenting_disabled">
-          <%= form.check_box :anon_commenting_disabled %>
-          <%= ts("Anonymous commenting disabled") %>
-        </label>
+        <ul>
+          <li>
+            <label for="work_anon_commenting_disabled">
+              <%= form.check_box :anon_commenting_disabled %>
+              <%= ts("Anonymous commenting disabled") %>
+            </label>
+          </li>
+          <li>
+            <label for="work_anon_commenting_enabled">
+              <%= form.check_box :anon_commenting_enabled %>
+              <%= ts("Anonymous commenting enabled") %>
+            </label>
+          </li>
+        </ul>
       </dd>
+      <dt><%= ts("Comment Moderation") %><%= link_to_help "comments-moderated" %></dt>
+      <dd>
+        <ul>
+          <li>
+            <label for="work_moderated_commenting_enabled">
+              <%= form.check_box :moderated_commenting_enabled %>
+              <%= ts("Comments moderated") %>
+            </label>
+          </li>
+          <li>
+            <label for="work_moderated_commenting_disabled">
+              <%= form.check_box :moderated_commenting_disabled %>
+              <%= ts("Comments not moderated") %>
+            </label>
+          </li>
+        </ul>
+      </dd>
+
+
     </dl>
   </fieldset>
 

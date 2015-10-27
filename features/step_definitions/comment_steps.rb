@@ -118,6 +118,11 @@ Then /^comment moderation should be enabled on "(.*?)"/ do |work|
   assert w.moderated_commenting_enabled?
 end
 
+Then /^comment moderation should not be enabled on "(.*?)"/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.moderated_commenting_enabled?
+end
+
 Then /^the comment on "(.*?)" should be marked as unreviewed/ do |work|
   w = Work.find_by_title(work)
   assert w.comments.first.unreviewed?
