@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
 
   include HtmlCleaner
 
-  attr_protected :content_sanitizer_version, :unreviewed
+  attr_protected :content_sanitizer_version
 
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
@@ -32,8 +32,6 @@ class Comment < ActiveRecord::Base
   scope :top_level, :conditions => ["commentable_type in (?)", ["Chapter", "Bookmark"]]
   scope :include_pseud, :include => :pseud
   scope :not_deleted, :conditions => {:is_deleted => false}
-  scope :reviewed, conditions: {unreviewed: false}
-  scope :unreviewed_only, conditions: {unreviewed: true}
 
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable
@@ -53,7 +51,7 @@ class Comment < ActiveRecord::Base
 
   before_create :set_depth
   before_create :set_thread_for_replies
-  before_create :set_parent_and_unreviewed
+  before_create :set_parent
   after_create :update_thread
   before_create :adjust_threading, :if => :reply_comment?
 
@@ -67,18 +65,9 @@ class Comment < ActiveRecord::Base
     self.thread = self.commentable.thread if self.reply_comment?
   end
 
-  # Save the ultimate parent and reviewed status
-  def set_parent_and_unreviewed
+  # Save the ultimate parent
+  def set_parent
     self.parent = self.reply_comment? ? self.commentable.parent : self.commentable
-    # we only mark comments as unreviewed if moderated commenting is enabled on their parent
-    self.unreviewed = self.parent.respond_to?(:moderated_commenting_enabled?) && 
-                      self.parent.moderated_commenting_enabled? && 
-                      !User.current_user.try(:is_author_of?, self.ultimate_parent)
-    return true # because if reviewed is the return value, when it's false the record won't save!
-  end
-  
-  def moderated_commenting_enabled?
-    parent.respond_to?(:moderated_commenting_enabled?) && parent.moderated_commenting_enabled?
   end
 
   # We need a unique thread id for replies, so we'll make use of the fact

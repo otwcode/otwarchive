@@ -305,9 +305,6 @@ Otwarchive::Application.routes.draw do
         put :approve
         put :reject
       end
-      collection do
-        get :unreviewed
-      end
     end
     resources :kudos, :only => [:index]
     resources :links, :controller => "work_links", :only => [:index]
@@ -462,7 +459,6 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :reject
-      put :review
     end
     collection do
       get :hide_comments

@@ -103,32 +103,5 @@ end
 
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
-  step %{I follow "Yes, delete!"}
-end
-
-Given(/^the moderated work "(.*?)" by "(.*?)"$/) do |work, user|
-  step %{I am logged in as "#{user}"}
-  step %{I set up the draft "#{work}"}
-  step %{I check "Comments moderated"}
-  step %{I post the work without preview}
-end
-
-Then /^comment moderation should be enabled on "(.*?)"/ do |work|
-  w = Work.find_by_title(work)
-  assert w.moderated_commenting_enabled?
-end
-
-Then /^the comment on "(.*?)" should be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
-  assert w.comments.first.unreviewed?
-end
-
-Then /^the comment on "(.*?)" should not be marked as unreviewed/ do |work|
-  w = Work.find_by_title(work)
-  assert !w.comments.first.unreviewed?
-end
-
-When /^I view the unreviewed comments page for "(.*?)"/ do |work|
-  w = Work.find_by_title(work)
-  visit unreviewed_work_comments_path(w)
+    step %{I follow "Yes, delete!"}
 end

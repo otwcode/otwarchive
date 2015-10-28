@@ -85,10 +85,6 @@ class Chapter < ActiveRecord::Base
     end
   end
 
-  def moderated_commenting_enabled?
-    work && work.moderated_commenting_enabled?
-  end
-
   # strip leading spaces from title
   def strip_title
     unless self.title.blank?
