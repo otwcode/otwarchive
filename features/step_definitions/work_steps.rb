@@ -260,10 +260,10 @@ end
 
 When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
   # check if the works have been posted yet
-  unless (Work.where(title: title1).exists?)
+  unless Work.where(title: title1).exists?
     step %{I post the work "#{title1}"}
   end
-  unless (Work.where(title: title2).exists?)
+  unless Work.where(title: title2).exists?
     step %{I post the work "#{title2}"}
   end
   step %{I go to my edit multiple works page}
