@@ -109,13 +109,18 @@ end
 Given(/^the moderated work "(.*?)" by "(.*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}
-  step %{I check "Comments moderated"}
+  check("work_moderated_commenting_enabled")
   step %{I post the work without preview}
 end
 
 Then /^comment moderation should be enabled on "(.*?)"/ do |work|
   w = Work.find_by_title(work)
   assert w.moderated_commenting_enabled?
+end
+
+Then /^comment moderation should not be enabled on "(.*?)"/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.moderated_commenting_enabled?
 end
 
 Then /^the comment on "(.*?)" should be marked as unreviewed/ do |work|

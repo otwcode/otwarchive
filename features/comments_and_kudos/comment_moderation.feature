@@ -8,7 +8,7 @@ Feature: Comment Moderation
   Scenario: Turn off comments from anonymous users who can still leave kudos
     Given I am logged in as "author"
       And I set up the draft "No Anons"
-      And I check "Anonymous commenting disabled"
+      And I check "Disable anonymous commenting"
       And I post the work without preview
       And I am logged out
     When I view the work "No Anons"
@@ -19,9 +19,26 @@ Feature: Comment Moderation
   Scenario: Turn on moderation
     Given I am logged in as "author"
       And I set up the draft "Moderation"
-      And I check "Comments moderated"
+      And I check "Enable comment moderation"
       And I post the work without preview
     Then comment moderation should be enabled on "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+    Then I should see "has chosen to moderate comments"
+    
+  Scenario: Turn off moderation
+    Given I am logged in as "author"
+      And I set up the draft "Moderation"
+      And I check "Enable comment moderation"
+      And I post the work without preview
+    Then comment moderation should be enabled on "Moderation"
+    When I edit the work "Moderation"
+      And I uncheck "Enable comment moderation"
+      And I post the work without preview
+    Then comment moderation should not be enabled on "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+    Then I should not see "has chosen to moderate comments"
     
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"
