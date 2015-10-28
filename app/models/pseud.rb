@@ -71,6 +71,7 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
+  after_update :expire_caches
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -378,6 +379,12 @@ class Pseud < ActiveRecord::Base
     if !self.is_default? && self.user.pseuds.to_enum.find(&:is_default?) == nil
       default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
       default_pseud.update_attribute(:is_default, true)
+    end
+  end
+
+  def expire_caches
+    if name_changed?
+      self.works.each{ |work| work.touch }
     end
   end
 

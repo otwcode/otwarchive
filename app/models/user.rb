@@ -178,6 +178,14 @@ class User < ActiveRecord::Base
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
 
+  after_update :expire_caches
+
+  def expire_caches
+    if login_changed?
+      self.works.each{ |work| work.touch }
+    end
+  end
+
   def remove_pseud_from_kudos
     ids = self.pseuds.collect(&:id).join(',')
     # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
