@@ -747,13 +747,11 @@ public
     work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
     
     # manually allow switching of anon/moderated comments
-    if work_params[:anon_commenting_enabled] == "1"
+    if work_params[:anon_commenting_disabled] == "allow_anon"
       work_params[:anon_commenting_disabled] = "0"
-      work_params.delete(:anon_commenting_enabled)
     end
-    if work_params[:moderated_commenting_disabled] == "1"
+    if work_params[:moderated_commenting_enabled] == "not_moderated"
       work_params[:moderated_commenting_enabled] = "0"
-      work_params.delete(:moderated_commenting_disabled)
     end
 
     @works.each do |work|

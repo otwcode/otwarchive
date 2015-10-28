@@ -35,7 +35,7 @@ Feature: Edit Multiple Works
   Scenario: I can disable anon commenting on multiple works at once
   Given I am logged in as "author"
     And I edit the multiple works "Glorious" and "Excellent"
-  When I check "Anonymous commenting disabled"
+  When I choose "Disable anonymous comments"
     And I press "Update All Works"
     And I am logged out
     And I view the work "Glorious"
@@ -43,10 +43,10 @@ Feature: Edit Multiple Works
   When I view the work "Excellent"    
   Then I should see "doesn't allow non-Archive users to comment"
 
-  Scenario: I can enable moderated commenting on multiple works at once
+  Scenario: I can enable comment moderation on multiple works at once
   Given I am logged in as "author"
     And I edit the multiple works "Glorious" and "Excellent"
-    And I check "Comments moderated"
+    And I choose "Enable comment moderation"
     And I press "Update All Works"
   When I am logged in as "commenter"
     And I view the work "Glorious"
@@ -57,23 +57,47 @@ Feature: Edit Multiple Works
   Scenario: I can enable anon commenting on multiple works at once
   Given I am logged in as "author"
     And I edit the multiple works "Glorious" and "Excellent"
-    And I check "Anonymous commenting disabled"
+    And I choose "Disable anonymous comments"
     And I press "Update All Works"
     And I edit the multiple works "Glorious" and "Excellent"
-    And I check "Anonymous commenting enabled"
+    And I choose "Enable anonymous comments"
     And I press "Update All Works"
   When I am logged out
     And I view the work "Glorious"
   Then I should not see "doesn't allow non-Archive users to comment"
   
-  Scenario: I can disable moderated commenting on multiple works at once
+  Scenario: I can disable comment moderation on multiple works at once
   Given I am logged in as "author"
     And I edit the multiple works "Glorious" and "Excellent"
-    And I check "Comments moderated"
+    And I choose "Enable comment moderation"
     And I press "Update All Works"
     And I edit the multiple works "Glorious" and "Excellent"
-    And I check "Comments not moderated"
+    And I choose "Disable comment moderation"
     And I press "Update All Works"
   When I am logged out
     And I view the work "Glorious"
   Then I should not see "has chosen to moderate comments"
+
+  Scenario: I can keep different comment moderation settings on different works when I edit them at once
+  Given I am logged in as "author"
+    And I edit multiple works with different comment moderation settings
+  When I set the fandom to "Random"
+    And I choose "Keep current comment moderation settings"
+    And I press "Update All Works"
+  When I am logged out
+    And I view the work "Work with Comment Moderation Enabled"
+  Then I should see "has chosen to moderate comments"
+  When I view the work "Work with Comment Moderation Disabled"
+  Then I should not see "has chosen to moderate comments"
+
+  Scenario: I can keep different anonymous commenting settings on different works when I edit them at once
+  Given I am logged in as "author"
+    And I edit multiple works with different anonymous commenting settings
+  When I set the fandom to "Random"
+    And I choose "Keep current anonymous comment settings"
+    And I press "Update All Works"
+  When I am logged out
+    And I view the work "Work with Anonymous Commenting Disabled"
+  Then I should see "doesn't allow non-Archive users to comment"
+  When I view the work "Work with Anonymous Commenting Enabled"
+  Then I should not see "doesn't allow non-Archive users to comment"

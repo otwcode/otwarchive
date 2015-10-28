@@ -272,6 +272,28 @@ When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
   step %{I press "Edit"}
 end
 
+When /^I edit multiple works with different comment moderation settings$/ do
+  step %{I set up the draft "Work with Comment Moderation Enabled"} 
+  check("work_moderated_commenting_enabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Comment Moderation Disabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Comment Moderation Enabled" for editing}
+  step %{I select "Work with Comment Moderation Disabled" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works with different anonymous commenting settings$/ do
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"} 
+  check("work_anon_commenting_disabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Anonymous Commenting Enabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Anonymous Commenting Disabled" for editing}
+  step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I press "Edit"}
+end
+
 When /^I set up the draft "([^\"]*)"$/ do |title|
   step "basic tags"
   visit new_work_url
