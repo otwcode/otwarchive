@@ -121,7 +121,7 @@ class UsersController < ApplicationController
 
     unless session.valid?
       flash[:error] = ts("Your password was incorrect")
-      render :change_username
+      render :change_username and return
     end
 
     @user.login = @new_login
