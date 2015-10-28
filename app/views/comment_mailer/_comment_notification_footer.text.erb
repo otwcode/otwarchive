@@ -1,10 +1,6 @@
 <%= text_divider %>
 Posted: <%= @comment.created_at %><% unless @comment.edited_at.blank? %>
 Last edited: <%= @comment.edited_at %><% end %>
-
-<% if @comment.unreviewed? %>
-Comments on this work are moderated and will not appear until approved by the work creator.
-<% end %>
 <% if @comment.ultimate_parent.is_a?(Tag) %>
 Read all comments on <%= @comment.ultimate_parent.name %>: <%= url_for(:controller => :comments, :action => :index, :tag_id => @comment.ultimate_parent, :only_path => false) %><% unless @noreply %>
 Reply to this comment: <%= url_for(:controller => :comments, :action => :index, :tag_id => @comment.ultimate_parent, :only_path => false, :add_comment_reply_id => @comment.id, :anchor => "comment_#{@comment.id}") %><% end %>

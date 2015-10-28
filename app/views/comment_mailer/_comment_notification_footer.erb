@@ -5,10 +5,6 @@
   <% end %>
 </p>
 
-<% if @comment.unreviewed? %>
-  <p>Comments on this work are moderated and will not appear until approved by the work creator.</p>
-<% end %>
-
 <% if @comment.ultimate_parent.is_a?(Tag) %>
 
   <%= style_link("Read all comments on " + @comment.ultimate_parent.name, 
