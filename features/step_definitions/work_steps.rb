@@ -249,51 +249,6 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   click_button("Preview")
 end
 
-When /^I set the fandom to "([^\"]*)"$/ do |fandom|
-  fill_in("Fandoms", with: fandom)
-end
-
-When /^I select "([^\"]*)" for editing$/ do |title|
-  id = Work.find_by_title(title).id
-  check("work_ids_#{id}")
-end
-
-When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
-  # check if the works have been posted yet
-  unless Work.where(title: title1).exists?
-    step %{I post the work "#{title1}"}
-  end
-  unless Work.where(title: title2).exists?
-    step %{I post the work "#{title2}"}
-  end
-  step %{I go to my edit multiple works page}
-  step %{I select "#{title1}" for editing}
-  step %{I select "#{title2}" for editing}
-  step %{I press "Edit"}
-end
-
-When /^I edit multiple works with different comment moderation settings$/ do
-  step %{I set up the draft "Work with Comment Moderation Enabled"}
-  check("work_moderated_commenting_enabled")
-  step %{I post the work without preview}
-  step %{I post the work "Work with Comment Moderation Disabled"}
-  step %{I go to my edit multiple works page}
-  step %{I select "Work with Comment Moderation Enabled" for editing}
-  step %{I select "Work with Comment Moderation Disabled" for editing}
-  step %{I press "Edit"}
-end
-
-When /^I edit multiple works with different anonymous commenting settings$/ do
-  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
-  check("work_anon_commenting_disabled")
-  step %{I post the work without preview}
-  step %{I post the work "Work with Anonymous Commenting Enabled"}
-  step %{I go to my edit multiple works page}
-  step %{I select "Work with Anonymous Commenting Disabled" for editing}
-  step %{I select "Work with Anonymous Commenting Enabled" for editing}
-  step %{I press "Edit"}
-end
-
 When /^I set up the draft "([^\"]*)"$/ do |title|
   step "basic tags"
   visit new_work_url

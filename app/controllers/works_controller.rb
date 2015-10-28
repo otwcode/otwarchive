@@ -746,14 +746,6 @@ public
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
     work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
 
-    # manually allow switching of anon/moderated comments
-    if work_params[:anon_commenting_disabled] == "allow_anon"
-      work_params[:anon_commenting_disabled] = "0"
-    end
-    if work_params[:moderated_commenting_enabled] == "not_moderated"
-      work_params[:moderated_commenting_enabled] = "0"
-    end
-
     @works.each do |work|
       # now we can just update each work independently, woo!
       unless work.update_attributes(work_params)
