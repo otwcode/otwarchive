@@ -109,7 +109,7 @@ end
 Given(/^the moderated work "(.*?)" by "(.*?)"$/) do |work, user|
   step %{I am logged in as "#{user}"}
   step %{I set up the draft "#{work}"}
-  step %{I check "Comments moderated"}
+  check("work_moderated_commenting_enabled")
   step %{I post the work without preview}
 end
 
