@@ -179,11 +179,11 @@ Otwarchive::Application.routes.draw do
     member do
       get :browse
       get :change_email
-      post :change_email
+      post :changed_email
       get :change_password
-      post :change_password
+      post :changed_password
       get :change_username
-      post :change_username
+      post :changed_username
       post :end_first_login
       post :end_banner
     end
