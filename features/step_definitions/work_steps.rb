@@ -250,20 +250,20 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
 end
 
 When /^I set the fandom to "([^\"]*)"$/ do |fandom|
-  fill_in("Fandoms", :with => fandom)
+  fill_in("Fandoms", with: fandom)
 end
 
 When /^I select "([^\"]*)" for editing$/ do |title|
   id = Work.find_by_title(title).id
   check("work_ids_#{id}")
-end  
+end
 
 When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
   # check if the works have been posted yet
-  if !(Work.where(title: title1).exists?)
+  unless (Work.where(title: title1).exists?)
     step %{I post the work "#{title1}"}
   end
-  if !(Work.where(title: title2).exists?)
+  unless (Work.where(title: title2).exists?)
     step %{I post the work "#{title2}"}
   end
   step %{I go to my edit multiple works page}
@@ -273,7 +273,7 @@ When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
 end
 
 When /^I edit multiple works with different comment moderation settings$/ do
-  step %{I set up the draft "Work with Comment Moderation Enabled"} 
+  step %{I set up the draft "Work with Comment Moderation Enabled"}
   check("work_moderated_commenting_enabled")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
@@ -284,7 +284,7 @@ When /^I edit multiple works with different comment moderation settings$/ do
 end
 
 When /^I edit multiple works with different anonymous commenting settings$/ do
-  step %{I set up the draft "Work with Anonymous Commenting Disabled"} 
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
   check("work_anon_commenting_disabled")
   step %{I post the work without preview}
   step %{I post the work "Work with Anonymous Commenting Enabled"}
