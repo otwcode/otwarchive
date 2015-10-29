@@ -6,7 +6,7 @@ end
   
 When /^I edit the pseud "([^\"]*)"/ do |pseud| 
   p = Pseud.where(name: pseud, user_id: User.current_user.id).first
-  visit edit_user_pseud_path(User.current_user, pseud)
+  visit edit_user_pseud_path(User.current_user, p)
 end
 
 When /^I add the pseud "([^\"]*)"/ do |pseud| 
