@@ -1,5 +1,5 @@
 <!-- START of single comment -->
-<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+<li class="<% if single_comment.unreviewed? %>unreviewed <% end %>comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
     <!-- we're editing this comment -->
     <%= render 'comments/comment_form',
@@ -29,6 +29,11 @@
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
             <span class='parent'>
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
+            </span>
+          <% end %>
+          <% if single_comment.unreviewed? %>
+            <span class="unreviewed status">
+              <%= ts("(Unreviewed)") %>
             </span>
           <% end %>
           <span class="posted datetime">
@@ -68,6 +73,11 @@
         <% if single_comment.pseud.nil? and (logged_in_as_admin? || is_author_of?(single_comment.ultimate_parent)) %>
           <li id="tag_comment_as_spam_link_<%= single_comment.id %>">
             <%= tag_comment_as_spam_link single_comment %>
+          </li>
+        <% end %>
+        <% if single_comment.unreviewed? && is_author_of?(single_comment.ultimate_parent) %>
+          <li id="review_comment_link_<%= single_comment.id %>">
+            <%= link_to(ts("Approve"), review_comment_path(single_comment), method: :put) %>
           </li>
         <% end %>
         <% if logged_in_as_admin? || is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>

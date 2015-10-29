@@ -92,7 +92,7 @@ span.offered.requested {
 
 /* CONTEXTS */
 
-.dashboard .own {
+.dashboard .own, .comment span.unreviewed {
   background: transparent;
     opacity: 1.0;
 }
