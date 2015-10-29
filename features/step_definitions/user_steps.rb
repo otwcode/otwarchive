@@ -267,3 +267,4 @@ end
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
+ 

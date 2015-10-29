@@ -7,3 +7,7 @@ Style/StringLiterals:
 # stop checking line length
 Metrics/LineLength:
   Enabled: false
+  
+# stop checking for trailing whitespace
+Style/TrailingWhitespace:
+  Enabled: false
