@@ -50,3 +50,40 @@ Scenario: Collection autocomplete shows Collection Title and Name
     And I fill in "collection_names" with "Issue"
   Then I should see "jb_fletcher" in the autocomplete
     And I should see "robert_stack" in the autocomplete
+
+Scenario: Pseuds should be added and removed from autocomplete as they are changed
+  Given I have flushed Redis
+    And I am logged in as "new_user"
+  Then the pseud autocomplete should contain "new_user"
+  When I add the pseud "extra"
+  Then the pseud autocomplete should contain "extra (new_user)"
+  When I change the pseud "extra" to "funny"
+    And I go to my pseuds page
+  Then I should not see "extra"
+    And I should see "funny"
+    And the pseud autocomplete should not contain "extra (new_user)"
+    And the pseud autocomplete should contain "funny (new_user)"
+  When I delete the pseud "funny"
+  Then the pseud autocomplete should not contain "funny (different_user)"
+    And the pseud autocomplete should contain "different_user"
+    
+Scenario: Pseuds should be added and removed from autocomplete as usernames change
+  Given I have flushed Redis
+    And I am logged in as "new_user"
+    And I add the pseud "funny"
+  When I change my username to "different_user"
+  Then the pseud autocomplete should not contain "funny (new_user)"
+    And the pseud autocomplete should not contain "new_user"
+    And the pseud autocomplete should contain "different_user"
+    And the pseud autocomplete should contain "funny (different_user)"
+  When I change my username to "funny"
+  Then the pseud autocomplete should not contain "funny (different_user)"
+    And the pseud autocomplete should contain "funny"
+    And the pseud autocomplete should contain "different_user (funny)"
+  When I try to delete my account as funny
+  Then a user account should not exist for "funny"
+    And the pseud autocomplete should not contain "funny"
+    And the pseud autocomplete should not contain "different_user (funny)"
+    
+    
+  
