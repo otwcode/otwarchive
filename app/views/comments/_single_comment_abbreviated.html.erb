@@ -1,4 +1,4 @@
-<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+<li class="<% if single_comment.unreviewed? %>unreviewed <% end %>comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <h4 class="heading byline">
     <%= h(ts('Posted on')) + ' ' + link_to_comment_ultimate_parent(single_comment) + ' ' + h(ts('by')) + ' ' %>
     <% if !single_comment.pseud.nil? %>
