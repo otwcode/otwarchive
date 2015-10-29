@@ -3,7 +3,7 @@ When /^I change the pseud "([^\"]*)" to "([^\"]*)"/ do |old_pseud, new_pseud|
   fill_in("Name", with: new_pseud)
   click_button("Update")
 end
-  
+
 When /^I edit the pseud "([^\"]*)"/ do |pseud| 
   p = Pseud.where(name: pseud, user_id: User.current_user.id).first
   visit edit_user_pseud_path(User.current_user, p)

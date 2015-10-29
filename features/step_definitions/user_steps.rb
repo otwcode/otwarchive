@@ -256,7 +256,7 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
   step %{I should not see "#{title}"}
 end
 
-When /^I change my username to "([^\"]*)"/ do |new_name|
+When (/^I change my username to "([^\"]*)"/) do |new_name|
   visit change_username_user_path(User.current_user)
   fill_in("New user name", with: new_name)
   fill_in("Password", with: "password")

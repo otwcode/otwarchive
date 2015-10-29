@@ -222,11 +222,11 @@ Then /^the tag autocomplete fields should have the entered values$/ do
 end
 
 Then(/^the pseud autocomplete should contain "([^\"]*)"$/) do |pseud|
-  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)}
+  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) }
   assert results.include?(pseud)
 end
 
 Then(/^the pseud autocomplete should not contain "([^\"]*)"$/) do |pseud|
-  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)}
+  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) }
   assert !results.include?(pseud)
 end
