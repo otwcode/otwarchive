@@ -248,7 +248,8 @@ class Pseud < ActiveRecord::Base
   # get the former byline
   def byline_was
     past_name = name_was.blank? ? name : name_was
-    past_user_name = user.login_was.blank? ? user.login : user.login_was
+    # if we have a user and their login has changed get the old one
+    past_user_name = user.blank? ? "" : (user.login_was.blank? ? user.login : user.login_was)
     (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
   end
 
