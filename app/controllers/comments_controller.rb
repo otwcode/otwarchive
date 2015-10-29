@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
                                               :cancel_comment_reply, :cancel_comment_edit,
-                                              :delete_comment, :cancel_comment_delete ]
+                                              :delete_comment, :cancel_comment_delete, :unreviewed ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
@@ -14,6 +14,8 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
+  before_filter :check_permission_to_review, :only => [:unreviewed]
+  before_filter :check_permission_to_access_single_unreviewed, only: [:show]
 
   cache_sweeper :comment_sweeper
 
@@ -37,7 +39,7 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
-    parent =  find_parent
+    parent = find_parent
     if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
@@ -45,10 +47,36 @@ class CommentsController < ApplicationController
 
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
   def check_anonymous_comment_preference
-    parent =  find_parent
+    parent = find_parent
     if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
       flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
+    end
+  end
+  
+  def check_permission_to_review
+    parent = find_parent
+    unless logged_in_as_admin? || current_user_owns?(parent)
+      flash[:error] = ts("Sorry, you don't have permission to see that.")
+      if logged_in?
+        redirect_to root_path and return
+      else
+        redirect_to login_path and return
+      end
+    end
+  end
+
+  def check_permission_to_access_single_unreviewed
+    if @comment.unreviewed?
+      parent = find_parent
+      unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+        flash[:error] = ts("Sorry, you don't have permission to see that.")
+        if logged_in?
+          redirect_to root_path and return
+        else
+          redirect_to login_path and return
+        end
+      end
     end
   end
 
@@ -62,7 +90,7 @@ class CommentsController < ApplicationController
   def check_permission_to_delete
     access_denied(:redirect => @comment) unless logged_in_as_admin? || current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent)
   end
-
+  
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
@@ -97,7 +125,13 @@ class CommentsController < ApplicationController
 
   def index
     if !@commentable.nil?
-      @comments = @commentable.comments.page(params[:page])
+      # check for moderation
+      if @commentable.respond_to?(:moderated_commenting_enabled?) && @commentable.moderated_commenting_enabled?
+        # only reviewed comments
+        @comments = @commentable.comments.reviewed.page(params[:page])
+      else
+        @comments = @commentable.comments.page(params[:page])
+      end
       if @commentable.class == Comment
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
@@ -109,6 +143,15 @@ class CommentsController < ApplicationController
         redirect_back_or_default(root_path)
         flash[:error] = ts("Sorry, you don't have permission to access that page.")
       end
+    end
+  end
+
+  def unreviewed
+    if @commentable.nil?
+      flash[:error] = ts("What did you want to review comments on?")
+      redirect_back_or_default(root_path)
+    else
+      @comments = @commentable.find_all_comments.unreviewed_only.page(params[:page])
     end
   end
 
@@ -176,7 +219,11 @@ class CommentsController < ApplicationController
             cookies[:comment_name] = @comment.name[0..100]
             cookies[:comment_email] = @comment.email[0..100]
           end
-          flash[:comment_notice] = ts('Comment created!')
+          if @comment.unreviewed?
+            flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
+          else
+            flash[:comment_notice] = ts('Comment created!')
+          end
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
@@ -199,6 +246,7 @@ class CommentsController < ApplicationController
           redirect_back_or_default(root_path)
         end
       else
+        flash[:error] = ts("Couldn't save comment!")
         render :action => "new"
       end
     end
@@ -224,11 +272,16 @@ class CommentsController < ApplicationController
   def destroy
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
+    unreviewed = @comment.unreviewed?
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
       flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
+    elsif unreviewed
+      # go back to the rest of the unreviewed comments
+      flash[:notice] = ts("Comment deleted.")
+      redirect_to :back
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -236,6 +289,15 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {:show_comments => true})
     end
+  end
+  
+  def review
+    @comment = Comment.find(params[:id])
+    if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
+      @comment.toggle!(:unreviewed)
+      flash[:notice] = ts("Comment approved.")
+    end
+    redirect_to unreviewed_work_comments_path(@comment.ultimate_parent)
   end
 
   def approve
@@ -251,7 +313,12 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments.paginate(:page => params[:page])
+    if @commentable.respond_to?(:moderated_commenting_enabled?) && @commentable.moderated_commenting_enabled?
+      # only reviewed comments
+      @comments = @commentable.comments.reviewed.page(params[:page])
+    else
+      @comments = @commentable.comments.page(params[:page])
+    end
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
