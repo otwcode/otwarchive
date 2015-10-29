@@ -6,6 +6,11 @@
     <% else %>
       <%= get_commenter_pseud_or_name(single_comment) %>
     <% end %>
+    <% if single_comment.unreviewed? %>
+      <span class="unreviewed status">
+        <%= ts("(Unreviewed)") %>
+      </span>
+    <% end %>
     <span class="posted datetime">
       <%= time_in_zone(single_comment.created_at) %>
     </span>

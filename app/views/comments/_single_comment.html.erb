@@ -31,6 +31,11 @@
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
             </span>
           <% end %>
+          <% if single_comment.unreviewed? %>
+            <span class="unreviewed status">
+              <%= ts("(Unreviewed)") %>
+            </span>
+          <% end %>
           <span class="posted datetime">
             <%= time_in_zone(single_comment.created_at) %>
           </span>
