@@ -28,8 +28,8 @@ api_fields =
     external_author_email: "bar@foo.com", notes: "This is an <i>API note</i>."
   }
 
-describe "API ImportController" do
-  # Let the test get at external sites, but stub out anything containing "foo"
+# Let the test get at external sites, but stub out anything containing "foo" or "bar"
+def mock_external
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
     to_return(status: 200,
@@ -59,6 +59,11 @@ stubbed response", headers: {})
 
   WebMock.stub_request(:any, /bar/).
     to_return(status: 404, headers: {})
+end
+
+
+describe "API ImportController" do
+  mock_external
 
   describe "API import with invalid request" do
     it "should return 401 Unauthorized if no token is supplied" do
@@ -135,6 +140,7 @@ stubbed response", headers: {})
 end
 
 describe "API BookmarksController" do
+  mock_external
 
   # Override is_archivist so all users are archivists from this point on
   class User < ActiveRecord::Base
@@ -143,14 +149,32 @@ describe "API BookmarksController" do
     end
   end
 
+  external_work = {
+    url: "http://foo.com",
+    author: "Thing",
+    title: "Title Thing",
+    summary: "<p>blah blah blah</p>",
+    fandom_string: "Testing",
+    rating_string: "General Audiences",
+    category_string: ["M/M"],
+    relationship_string: "Starsky/Hutch",
+    character_string: "Starsky,hutch"
+  }
+
+  bookmark = { pseud_id: "30805",
+               external: external_work,
+               notes: "<p>Notes</p>",
+               tag_string: "youpi",
+               collection_names: "",
+               private: "0",
+               rec: "0" }
+
   describe "API import with a valid archivist" do
     it "should return 201 Created when all bookmarks are created" do
       user = create(:user)
       post "/api/v1/bookmarks/import",
            { archivist: user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       bookmark_urls: ["http://foo"] }]
+             bookmarks: [ bookmark ]
            }.to_json,
            valid_headers
       assert_equal 201, response.status
@@ -160,9 +184,7 @@ describe "API BookmarksController" do
       user = create(:user)
       post "/api/v1/bookmarks/import",
            { archivist: user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://bar"] }]
+             bookmarks: [ bookmark ]
            }.to_json,
            valid_headers
       assert_equal 422, response.status
@@ -172,18 +194,32 @@ describe "API BookmarksController" do
       user = create(:user)
       post "/api/v1/bookmarks/import",
            { archivist: user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] },
-                     { external_author_name: "bar2",
-                       external_author_email: "bar2@foo.com",
-                       chapter_urls: ["http://foo"] }]
+             bookmarks: [ bookmark, bookmark ]
            }.to_json,
            valid_headers
       assert_equal 207, response.status
     end
 
-    it "should return 400 Bad Request if no works are specified" do
+    it "should create bookmarks associated with the archivist" do
+      pseud_id = @user.default_pseud.id
+      post "/api/v1/bookmarks/import",
+           { archivist: @user.login,
+             bookmarks: [ bookmark, bookmark ]
+           }.to_json,
+           valid_headers
+      bookmarks = Bookmark.find_all_by_pseud_id(pseud_id)
+      assert_equal bookmarks.count, 2
+    end
+
+    it "should return 400 Bad Request if an invalid URL is specified" do
+      post "/api/v1/import",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.merge!( { external: external_work.merge!( { url: "http://bar.com" })}) ] }.to_json,
+           valid_headers
+      assert_equal 400, response.status
+    end
+
+    it "should return 400 Bad Request if no bookmarks are specified" do
       post "/api/v1/import",
            { archivist: @user.login }.to_json,
            valid_headers
@@ -386,16 +422,14 @@ describe "API WorksController" do
   describe "valid work URL request" do
     it "should return 200 OK" do
       post "/api/v1/works/urls",
-           { original_urls: %w(bar foo)
-           }.to_json,
+           { original_urls: %w(bar foo) }.to_json,
            valid_headers
       assert_equal 200, response.status
     end
 
     it "should return the work URL for an imported work" do
       post "/api/v1/works/urls",
-           { original_urls: %w(foo)
-           }.to_json,
+           { original_urls: %w(foo) }.to_json,
            valid_headers
       parsed_body = JSON.parse(response.body)
       expect(parsed_body.first["status"]).to eq "ok"
@@ -405,8 +439,7 @@ describe "API WorksController" do
 
     it "should return an error for a work that wasn't imported" do
       post "/api/v1/works/urls",
-           { original_urls: %w(bar)
-           }.to_json,
+           { original_urls: %w(bar) }.to_json,
            valid_headers
       parsed_body = JSON.parse(response.body)
       expect(parsed_body.first["status"]).to eq("not_found")
@@ -415,8 +448,7 @@ describe "API WorksController" do
 
     it "should only do an exact match on the original url" do
       post "/api/v1/works/urls",
-           { original_urls: %w(fo food)
-           }.to_json,
+           { original_urls: %w(fo food) }.to_json,
            valid_headers
       parsed_body = JSON.parse(response.body)
       expect(parsed_body.first["status"]).to eq("not_found")
