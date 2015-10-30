@@ -32,26 +32,23 @@ class Api::V1::ImportController < Api::V1::BaseController
       end
 
       # set final response code and message depending on the flags
-      status, messages = response_code(messages)
+      messages = response_message(messages)
     end
-    render status: status, json: { status: status, messages: messages, works: works_responses }
+    render status: status, json: { messages: messages, works: works_responses }
   end
 
   private
 
-  # Set HTTP responses based on success and error flags
-  def response_code(messages)
+  # Set messages based on success and error flags
+  def response_message(messages)
     if @some_success && @some_errors
-      status = :multi_status
       messages << "At least one work was not imported. Please check the works array for further information."
     elsif !@some_success && @some_errors
-      status = :unprocessable_entity
       messages << "None of the works were imported. Please check the works array for further information."
     else
-      status = :created
       messages << "All works were successfully imported."
     end
-    [status, messages]
+    messages
   end
 
   # Use the story parser to import works from the chapter URLs,
@@ -60,7 +57,7 @@ class Api::V1::ImportController < Api::V1::BaseController
   def import_work(archivist, external_work)
     work_status, work_messages = work_errors(external_work)
     work_url = ""
-    original_url = []
+    original_url = ""
     if work_status == :ok
       urls = external_work[:chapter_urls]
       original_url = urls.first

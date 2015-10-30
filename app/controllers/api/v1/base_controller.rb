@@ -17,7 +17,7 @@ module Api
 
       # Top-level error handling: returns a 403 forbidden if a valid archivist isn't supplied and a 400
       # if no works are supplied. If there is neither a valid archivist nor valid works, a 400 is returned
-      # ith both errors as a message
+      # with both errors as a message
       def batch_errors(archivist, import_items)
         status = :bad_request
         errors = []
@@ -28,10 +28,10 @@ module Api
         end
 
         if import_items.nil? || import_items.empty?
-          errors << "No work URLs were provided."
+          errors << "No items to import were provided."
         elsif import_items.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
-          errors << "This request contains too many works. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
-            "works can be imported in one go by an archivist."
+          errors << "This request contains too many items to import. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
+            "items can be imported in one go by an archivist."
         end
         status = :ok if errors.empty?
         [status, errors]
