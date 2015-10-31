@@ -79,7 +79,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :bookmarks
     resources :comments
-	end
+  end
 
   resources :tag_sets, :controller => 'owned_tag_sets' do
     resources :nominations, :controller => 'tag_set_nominations' do
@@ -450,10 +450,11 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :import, only: [:create], defaults: { format: :json }
       resources :bookmarks, only: [:create], defaults: { format: :json}
+      resources :works, only: [:create], defaults: { format: :json }
       match 'bookmarks/import', to: 'bookmarks#create', via: :post
-      match 'works/import', to: 'import#create', via: :post
+      match 'import', to: 'works#create', via: :post
+      match 'works/import', to: 'works#create', via: :post
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
