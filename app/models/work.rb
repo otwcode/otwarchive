@@ -316,7 +316,7 @@ class Work < ActiveRecord::Base
       if results[:banned_pseuds].present?
         self.errors.add(
           :base, 
-          ts("%{name} has been banned and cannot be listed as a co-creator",
+          ts("%{name} is currently banned and cannot be listed as a co-creator.",
              name: results[:banned_pseuds].to_sentence
           )
         )

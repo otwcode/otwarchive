@@ -84,9 +84,6 @@ gem "google_visualr", ">= 2.1"
 # Globalize for translations
 gem 'globalize', '~> 3.1.0'
 
-# Coveralls for code test coverage
-gem 'coveralls', require: false
-
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark"
 

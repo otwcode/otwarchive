@@ -3,13 +3,14 @@ include HtmlCleaner
 include CssCleaner
 
 class Skin < ActiveRecord::Base
+  
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
                    [ts("Work Skin"), "WorkSkin"],
                  ]
-
+    
   # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
-  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 44em)'] + ['only screen and (max-width: 64em)']
+  MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 640px)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
   ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
@@ -18,13 +19,13 @@ class Skin < ActiveRecord::Base
   DEFAULT_ROLE = "user"
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
   DEFAULT_MEDIA = ["all"]
-
+  
   SKIN_PATH = '/stylesheets/skins/'
   SITE_SKIN_PATH = '/stylesheets/site/'
-
+  
   belongs_to :author, :class_name => 'User'
   has_many :preferences
-
+  
   serialize :media, Array
 
   # a skin can be both parent and child
@@ -32,11 +33,11 @@ class Skin < ActiveRecord::Base
                           :class_name => 'SkinParent',
                           :dependent => :destroy, :inverse_of => :child_skin
   has_many :parent_skins, :through => :skin_parents, :order => "skin_parents.position ASC", :inverse_of => :child_skins
-
+  
   has_many :skin_children, :foreign_key => 'parent_skin_id',
                                   :class_name => 'SkinParent', :dependent => :destroy, :inverse_of => :parent_skin
   has_many :child_skins, :through => :skin_children, :inverse_of => :parent_skins
-
+                          
   accepts_nested_attributes_for :skin_parents, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:position].blank? }
 
   has_attached_file :icon,
@@ -58,7 +59,7 @@ class Skin < ActiveRecord::Base
 
   validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
-
+    
   before_validation :clean_media
   def clean_media
     # handle bizarro cucumber-only error that prevents media from deserializing correctly when attachments are made
@@ -67,7 +68,7 @@ class Skin < ActiveRecord::Base
       self.media = new_media
     end
   end
-
+    
   validate :valid_media
   def valid_media
     if media && media.is_a?(Array) && media.any? {|m| !MEDIA.include?(m)}
@@ -123,19 +124,19 @@ class Skin < ActiveRecord::Base
   scope :unapproved_skins, where(:public => true, :official => false, :rejected => false)
   scope :rejected_skins, where(:public => true, :official => false, :rejected => true)
   scope :site_skins, where(:type => nil)
-
+  
   def self.cached
     where(:cached => true)
   end
-
+  
   def self.in_chooser
     where(:in_chooser => true)
   end
-
+  
   def self.featured
     where(:featured => true)
   end
-
+  
   def self.approved_or_owned_by(user=User.current_user)
     if user.nil?
       where(:public => true, :official => true)
@@ -143,15 +144,15 @@ class Skin < ActiveRecord::Base
       where("(public = 1 AND official = 1) OR author_id = ?", user.id)
     end
   end
-
+  
   def self.usable
     where(:unusable => false)
   end
-
+  
   def self.sort_by_recent
     order("updated_at DESC")
-  end
-
+  end  
+  
   def self.sort_by_recent_featured
     order("featured DESC, updated_at DESC")
   end
@@ -179,7 +180,7 @@ class Skin < ActiveRecord::Base
       ArchiveConfig.APP_SHORT_NAME
     end
   end
-
+  
 
   # create the minimal number of files we can, containing all the css for this entire skin
   def cache!
@@ -214,43 +215,40 @@ class Skin < ActiveRecord::Base
     self.cached = true
     save!
   end
-
+  
   def clear_cache!
     skin_dir = Skin.skins_dir + skin_dirname
-    FileUtils.rm_rf skin_dir # clear out old if exists
+    FileUtils.rm_rf skin_dir # clear out old if exists    
     self.cached = false
     save!
   end
-
+  
   def get_sheet_role
     "#{get_role}_#{get_media_for_filename}_#{ie_condition}"
   end
-
+  
   # have to handle any media types that aren't a single alphanumeric word here
   def get_media_for_filename
     ((media.nil? || media.empty?) ? DEFAULT_MEDIA : media).map {|m|
-      case
-      when m.match(/max-width: 44em/)
-        "narrow"
-      when m.match(/max-width: 64em/)
-        "midsize"
+      case 
+      when m.match(/max-width/)
+        "maxwidth"
       else
         m
       end
     }.join('.')
   end
-
+  
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 44em)').gsub('.', ', ')
-    media_string.gsub(/midsize/, 'only screen and (max-width: 64em)').gsub('.', ', ')
+    media_string.gsub(/maxwidth/, 'only screen and (max-width: 640px)').gsub('.', ', ')
   end
-
+  
   def parse_sheet_role(role_string)
     (sheet_role, sheet_media, sheet_ie_condition) = role_string.split('_')
     sheet_media = parse_media_from_filename(sheet_media)    
     [sheet_role, sheet_media, sheet_ie_condition]
   end
-
+  
   def get_css
     if self.filename
       File.read(Rails.public_path + self.filename)
@@ -258,15 +256,15 @@ class Skin < ActiveRecord::Base
       self.css
     end
   end
-
+  
   def get_media(separator=", ")
     ((media.nil? || media.empty?) ? DEFAULT_MEDIA : media).join(separator)
   end
-
+  
   def get_role
     self.role || DEFAULT_ROLE
   end
-
+  
   def get_all_parents
     all_parents = []
     parent_skins.each do |parent|
@@ -275,7 +273,7 @@ class Skin < ActiveRecord::Base
     end
     all_parents
   end
-
+  
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
     style = ""
@@ -304,7 +302,7 @@ class Skin < ActiveRecord::Base
     if self.margin.present?
       style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
     end
-
+  
     if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
       style += "body, #main	{
         #{self.background_color.present? ? "background: #{self.background_color};" : ''}
@@ -317,7 +315,7 @@ class Skin < ActiveRecord::Base
       end
       style += "}\n"
     end
-
+    
     if self.paragraph_margin.present?
       style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n"
     end
@@ -330,10 +328,10 @@ class Skin < ActiveRecord::Base
     if self.accent_color.present?
       style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n"
     end
-
+    
     style
   end
-
+  
   def get_style_block(roles_to_include)
     block = ""
     if self.cached?
@@ -344,7 +342,7 @@ class Skin < ActiveRecord::Base
       parent_skins.each do |parent|
         block += parent.get_style_block(roles_to_include) + "\n"
       end
-
+      
       # finally get this skin
       if roles_to_include.include?(get_role)
         if self.filename.present?
@@ -372,11 +370,11 @@ class Skin < ActiveRecord::Base
     end
     block    
   end
-
+    
   def stylesheet_link(file, media)
     '<link rel="stylesheet" type="text/css" media="' + media + '" href="' + file + '" />'
   end
-
+  
   def self.naturalized(string)
     string.scan(/[^\d]+|[\d]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
   end  
@@ -409,13 +407,13 @@ class Skin < ActiveRecord::Base
           if firstline.match(/IE_CONDITION: (\w+)/)
             skin_ie = $1
           end
-
+          
           full_title = "Archive #{version}: (#{position}) #{title}"
           skin = Skin.find_by_title(full_title)
           if skin.nil?
             skin = Skin.new
           end
-
+          
           # update the attributes
           skin.title ||= full_title
           skin.filename = filename
@@ -431,7 +429,7 @@ class Skin < ActiveRecord::Base
 
           skins << skin
         end
-
+        
         # set up the parent relationship of all the skins in this version
         top_skin = Skin.find_by_title("Archive #{version}")
         if top_skin
@@ -454,29 +452,29 @@ class Skin < ActiveRecord::Base
       end
     end
   end
-
+  
   # get the directory name for the skin file
   def skin_dirname
     "skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/".downcase
   end
-
+    
   def self.skins_dir
     Rails.public_path + SKIN_PATH
   end
-
+  
   def self.skin_dir_entries(dir, regex)
     Dir.entries(dir).select {|f| f.match(regex)}.sort_by {|f| Skin.naturalized(f.to_s)}
   end
-
+  
   def self.site_skins_dir
     Rails.public_path + SITE_SKIN_PATH
   end
-
+  
   # Get the most recent version and find the topmost skin
   def self.get_current_version
     Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).last
   end
-
+  
   def self.get_current_site_skin
     current_version = Skin.get_current_version
     if current_version
@@ -502,4 +500,5 @@ class Skin < ActiveRecord::Base
     skin.save!
     skin
   end
+  
 end
