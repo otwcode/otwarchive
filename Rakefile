@@ -7,3 +7,4 @@ require 'resque/tasks'
 
 include Rake::DSL
 Otwarchive::Application.load_tasks
+

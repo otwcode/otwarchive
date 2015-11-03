@@ -1,0 +1,31 @@
+<h4 class="heading byline">
+  <% if !feedback_comment.pseud.nil? %>
+    <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
+      <%= ts('Anonymous Creator on') %> <%= commentable_description_link(feedback_comment) %>
+    <% else %>
+      <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts('on') %> <%= commentable_description_link(feedback_comment) %>
+    <% end %>
+  <% else %>
+    <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts('on') %> <%= commentable_description_link(feedback_comment) %>
+  <% end %>
+  <span class="posted datetime">
+    <%= distance_of_time_in_words_to_now(feedback_comment.created_at) %>
+  </span>
+</h4>
+
+<div class="icon">
+  <% if !feedback_comment.pseud.nil? %>
+    <% if feedback_comment.pseud.user.is_author_of?(feedback_comment.ultimate_parent) && feedback_comment.ultimate_parent.anonymous? %>
+      <span class="anonymous icon"><!-- anonymous creator icon holder --></span>
+    <% else %>
+      <%= icon_display(feedback_comment.pseud.user, feedback_comment.pseud) %>
+    <% end %>
+  <% else %>
+    <span class="visitor icon"><!-- visitor icon holder --></span>
+  <% end %>
+</div>
+
+<% # This feedback_comment used to be inbox_comment... not sure why %>
+<blockquote class="userstuff">
+  <%= raw sanitize_field(feedback_comment, :content) %>
+</blockquote>

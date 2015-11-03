@@ -13,5 +13,5 @@
 <!--/content-->
 
 <!--subnav-->
-<p class="navigation actions" role="navigation"><!--INVESTIGATE this baffling link--><%= link_to ts("Back"), @commentable.is_a?(Tag) ? tag_path(@commentable) : polymorphic_path(@commentable) %></p>
+<p class="navigation actions" role="navigation"><!--TODO: INVESTIGATE this baffling link--><%= link_to ts("Back"), @commentable.is_a?(Tag) ? tag_path(@commentable) : polymorphic_path(@commentable) %></p>
 <!--/subnav-->

@@ -36,6 +36,51 @@ class WorkSearch < Search
   attr_accessor :works_parent, :faceted, :collected
   
   after_initialize :process_options
+
+  #################
+  # CLASS METHODS
+  #################
+
+  def self.user_count(user)
+    cached_count(user) || count_for_pseuds(user.pseuds)
+  end
+
+  def self.pseud_count(pseud)
+    cached_count(pseud) || count_for_pseuds([pseud])
+  end
+
+  # If we already have the works response cached, use that
+  def self.cached_count(owner)
+    status = User.current_user ? 'logged_in' : 'logged_out'
+    key = "#{owner.works_index_cache_key}_#{status}_page"
+    works = Rails.cache.read(key)
+    if works.present?
+      works.total_entries
+    end
+  end
+
+  # Make a direct request to the elasticsearch count api
+  def self.count_for_pseuds(pseuds)
+    terms = [
+      { term: { posted: 'T' } },
+      { term: { hidden_by_admin: 'F' } },
+      { term: { in_unrevealed_collection: 'F' } },
+      { term: { in_anon_collection: 'F' } },
+      { terms: { pseud_ids: pseuds.map(&:id) } }
+    ]
+    unless User.current_user.present?
+      terms << { term: { restricted: 'F' } }
+    end
+    query = { bool: { must: terms } }
+    response = ElasticsearchSimpleClient.perform_count(Work.index_name, 'work', query)
+    if response.code == 200
+      JSON.parse(response.body)['count']
+    end
+  end
+
+  ####################
+  # INSTANCE METHODS
+  ####################
   
   # For various reasons, some options come in needing processing/cleanup
   # before we use them for searching. May be indicative of code that needs

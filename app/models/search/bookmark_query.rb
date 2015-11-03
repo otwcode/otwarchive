@@ -1,0 +1,2 @@
+class BookmarkQuery < Query
+end

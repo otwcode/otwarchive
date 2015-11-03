@@ -6,22 +6,22 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current ts("Full History"), user_readings_path(@user), params[:show].blank? %>
+    <%= span_if_current ts('Full History'), user_readings_path(@user), params[:show].blank? %>
   </li>
   <li>
-    <%= span_if_current ts("Marked for Later"), user_readings_path(@user, :show => 'to-read') %>
+    <%= span_if_current ts('Marked for Later'), user_readings_path(@user, :show => 'to-read'), params[:show] == "to-read" %>
   </li>
   <li>
-  <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure?'), :method => :post %>
+    <%= link_to ts('Clear History'), clear_user_readings_path(current_user), :confirm => ts('Are you sure you want to clear your History and Marked for Later lists? This cannot be undone!'), :method => :post %>
   </li>
 </ul>
 <% end %>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading"><%= ts("List of History Items") %></h3>
+<h3 class="landmark heading"><%= ts('List of History Items') %></h3>
 <% if logged_in? && @readings.present? %>
-  <ol class="reading index">
+  <ol class="reading work index group">
     <% @readings.each do |reading| %>
       <%= render 'reading_blurb', :work => reading.work, :reading => reading %>
     <% end %>
@@ -30,5 +30,5 @@
 <!--/content-->
 
 <!--subnav-->
-	  <%= will_paginate @readings %>
+<%= will_paginate @readings %>
 <!--/subnav-->

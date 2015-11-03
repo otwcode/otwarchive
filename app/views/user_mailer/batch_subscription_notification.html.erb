@@ -11,12 +11,13 @@
       <%= this_work.backdate ? "backdated" : "new" %> work:
     <% else %>
       new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
+      <% chapter_title = (creation.chapter_header + (creation.title.blank? ? "" : ": #{creation.title}")).html_safe %>
     <% end %>
 
     <p>
       <i>
         <%= style_bold(creation.is_a?(Work) ? work_link :
-          style_link(@subscription.chapter_name(creation), work_chapter_url(this_work, creation))) %>
+          style_link(chapter_title, work_chapter_url(this_work, creation))) %>
       </i> (<%= creation.word_count%> words)
 
       <% unless @seen[this_work.id] %>

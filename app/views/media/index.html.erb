@@ -5,7 +5,7 @@
 <!--main content-->
 <ul class="media fandom index group">
 <% for medium in @media %>
-  <li id="medium_<%= medium.id %>" class="medium listbox group <%= cycle :odd, :even %>">
+  <li id="medium_<%= medium.id %>" class="medium listbox group">
     <h3 class="heading"><%= link_to medium.name, medium_fandoms_path(medium) %></h3>
 
     <ol class="index group">
@@ -20,7 +20,7 @@
     </ol>
 
     <% unless @fandom_listing[medium].size < 5 %>
-    <p class="navigation actions" role="navigation"><%= link_to ts("All %{media_type}...", :media_type => medium.name), medium_fandoms_path(medium) %></p>
+    <p class="actions" role="navigation"><%= link_to ts("All %{media_type}...", :media_type => medium.name), medium_fandoms_path(medium) %></p>
     <% end %>
   </li>
 <% end %>

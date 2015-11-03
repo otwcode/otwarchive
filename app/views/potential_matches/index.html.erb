@@ -16,149 +16,31 @@
     <%= ts("You need at least two people to sign up before you can make assignments.") %>
   </p>
 <% elsif @in_progress %>
-
+  <%= render "in_progress"%>
+<% elsif @assignment_in_progress %>
+  <h3><%= ts("Assignments Generating") %> <%= link_to_help "challenge-matching" %></h3>
   <p class="note">
-    <%= ts("The archive is generating potential matches for this challenge. This can take a long time,
-    especially for a large challenge! We'll send an email to the collection maintainers when
-    all potential matches have been generated.") %>
+    <%= ts("We're now in the process of generating assignments. This should take less time than potential matching.") %>
   </p>
-
-  <p>
-    <%= ts("Currently generating potential matches for:") %> <%= @current_position %> (<%= @progress %>%)
-  </p>
-
-  <p class="actions" role="button"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
-
 <% elsif @collection.potential_matches.empty? %>
+  <h3><%= ts("Potential Match Generation") %> <%= link_to_help "challenge-matching" %></h3>
 
-  <%= render "match_navigation", :top => true %>
-
+  <%= render "match_navigation" %>
   <p class="note">
-    <%= ts("No potential matches generated yet!") %>
+    <%= ts("No potential matches yet!") %>
   </p>
 
   <% if !@settings || @settings.no_match_required? %>
-    <p class="note">
-      <%= ts("Your challenge doesn't have any match settings defined, so the matching 
-      will be purely random. 
-      (You can adjust the assignments by hand afterwards, though!)
-      If you want participants matched up on the tags they signed up with, 
-      please update your ") %> 
-      <strong><%= link_to ts("challenge match settings"), 
-        eval("edit_collection_#{challenge_class_name(@collection)}_path(@collection, :anchor => 'match_settings')") %></strong>. 
-    </p>
+    <%= render "no_match_required" %>
   <% end %>
-
-<% elsif @assignments_with_no_potential_requests.size > 0 %>
-  <div class="matching listbox group">  
-    <h3 class="heading"><%= ts("Participants with No Potential Recipients") %></h3>
-    <p class="caution note">
-      <strong><%= ts("Warning!") %></strong> <%= ts("No one has requested anything that matches what these people have offered.") %>
-    </p>
-    <p class="note">
-      <%= ts("Everyone needs at least one potential recipient. Either edit your match settings or edit their sign-ups (or delete them). Then regenerate potential matches to continue.") %>
-    </p>
-
-    <dl class="index group">
-      <% @assignments_with_no_potential_requests.each do |assignment| %>
-        <dt class="byline" title="<%= ts("pseud") %>"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
-        <dd>
-          <ul class="actions" role="menu">
-            <li title="<%= ts("email") %>"><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></li>
-            <li><%= link_to ts("Edit"), edit_collection_signup_path(@collection, assignment.offer_signup) %></li>
-            <li role="button"><%= link_to ts("Delete"), 
-                collection_signup_path(@collection, assignment.offer_signup), :confirm => ts('Are you sure?'), :method => :delete %></li></ul>
-        </dd>
-      <% end %>
-    </dl>
-    <p class="navigation actions" role="button"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
-  </div>
   
-<% else %>
-
-  <!-- list all the requesters with their potential matches -->
-  <%= form_tag set_collection_assignments_path, :method => :put do %>
-
-    <%= render "match_navigation", :top => true %>
-
-    <% # the people with no one to write for - this is the hardest problem to solve %>
-    <% if @assignments_with_no_request.size > 0 %>
-   
-      <div class="matching listbox group">
-        <h3 class="heading"><%= ts("Participants with Missing Recipients") %></h3>
-        <p class="note">
-          <%= ts("These people could not be assigned a recipient. 
-          Try shuffling the assigned givers in the") %>
-          <a href="#main-assignments"><%= ts("main assignments") %></a> <%= ts("(the newly matched will disappear from this section after you update), 
-          or  manually assign a pinch recipient.") %> <%= link_to_help "challenge-pinch-recipient" %>
-        </p>
-        <dl class="index group">
-        <% @assignments_with_no_request.each do |assignment| %>
-          <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
-        <% end %>
-        </dl>
-      </div>    
-    <% end %>
-
-    <% # the people with no-one writing for them %>
-    <% if @assignments_with_no_offer.size > 0 %>
-      <h3 id="missing-givers" class="heading"><%= ts("Participants with Missing Givers") %></h3>
-      <p class="note">
-        <%= ts("These people could not be assigned a giver. You can shuffle the") %> <a href="#main-assignments"><%= ts("main assignments") %></a> <%= ts("to free someone up, or you can assign a pinch hitter. 
-        (Note: the form") %> <em><%= ts("will") %></em> <%= ts("allow you to double-assign people, but remember to make sure they can write two assignments first!)") %>
-      </p>
-      <!--TABLEWATCH!!-->
-      <table summary="<%= ts("Lists assignments with no giver and provides information and options for assigning a pinch hitter.") %>">
-        <caption><%= ts("Assignments with No Giver") %></caption>
-        <thead>
-          <tr>
-            <th scope="col"><%= ts("Pseud") %></th>
-            <th scope="col"><%= ts("Assigned Recipient") %></th>
-            <th scope="col"><%= ts("Assigned Giver") %></th>
-            <th scope="col"><%= ts("Potential Givers") %> <%= link_to_help "challenge-potential-giver" %></th>
-            <th scope="col"><%= ts("Write-In Pinch Hitter") %> <%= link_to_help "challenge-pinch-hitter" %></th>
-          </tr>
-        </thead>
-
-        <% @assignments_with_no_offer.each do |assignment| %>
-          <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
-        <% end %>
-      </table>
-    <% end %>
-    
-    
-    <% # the successful assignments %>
-    <% if @assignments_with_request_and_offer.count > 0 %>
-      <h3 id="main-assignments" class="heading"><%= ts("Main Assignments") %></h3>
-      <p class="note">
-        <%= ts("You can shuffle these assignments around as much as you want. 
-        Circular matches (where A is assigned to B and B is assigned to A)
-        will happen sometimes randomly.") %> 
-      </p>
-  <!--TABLEWATCH!!-->   
-      <table summary="<%= ts("Lists assignments with giver and provides options to reassign.") %>">
-        <caption><%= ts("Assignments with an Assigned Giver") %></caption>
-        <thead>
-          <tr>
-            <th scope="col"><%= ts("Pseud") %></th>
-            <th scope="col"><%= ts("Assigned Recipient") %></th>
-            <th scope="col"><%= ts("Assigned Giver") %></th>
-            <th scope="col"><%= ts("Potential Givers") %> <%= link_to_help "challenge-potential-giver" %></th>
-            <th scope="col"><%= ts("Write-In Pinch Hitter") %> <%= link_to_help "challenge-pinch-hitter" %></th>
-          </tr>
-        </thead>
-
-        <% @assignments_with_request_and_offer.each do |assignment| %>
-          <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
-        <% end %>
-      </table>
-    
-      <%= will_paginate @assignments_with_request_and_offer %>
-    <% end %>
-
-    <%= render "match_navigation", :top => false %>
-
+  <% if @invalid_signups %>
+    <%= render "invalid_signups" %>
   <% end %>
+
+<% else %>
+  <% # we have potential matches! %>
+  <%= render "potential_matches/potential_matches" %>
   
 <% end %>
 <!--/content-->

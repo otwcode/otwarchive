@@ -2,7 +2,7 @@
 <% fandoms.each do |fandom| %>
   <% unless @tagnames_seen[fandom.tagname] %>
     <% cast = TagNomination.for_tag_set(@tag_set).where(:parent_tagname => fandom.tagname).unreviewed.order(:type, :tagname) %>
-    <li class="fandom listbox group<%= cycle :odd, :even %>">
+    <li class="fandom listbox group">
       <h3 class="heading">
         <%= fandom.tagname %></h3>
       <%= render "review_individual_nom", :nom => fandom %>

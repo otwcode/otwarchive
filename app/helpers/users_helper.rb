@@ -65,12 +65,12 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user, pseud=nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
-    total = (logged_in_as_admin? || current_user == user) ? @user.bookmarks.count : @user.bookmarks.visible.size
+    total = BookmarkSearch.count_for_pseuds(user.pseuds)
 	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
   end
 	
   def print_pseud_bookmarks_link(pseud)
-    total = (logged_in_as_admin? || current_user == pseud.user) ? pseud.bookmarks.count : pseud.bookmarks.visible.count
+    total = BookmarkSearch.count_for_pseuds([pseud])
 	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
   
@@ -78,12 +78,12 @@ module UsersHelper
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user, pseud=nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
-    total = user.visible_work_count
+    total = WorkSearch.user_count(user)
 	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
   end
   
   def print_pseud_works_link(pseud)
-    total = pseud.visible_works_count
+    total = WorkSearch.pseud_count(pseud)
 	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
   end
 

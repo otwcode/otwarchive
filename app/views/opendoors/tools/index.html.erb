@@ -1,3 +1,4 @@
+<!--Descriptive page names, messages and instructions-->
 <% unless @imported_from_url.blank? %>
   <p class="important">
     <%= ts('Test redirect: ') %>
@@ -6,9 +7,13 @@
 <% end %>
 
 <h2><%= ts("Open Doors Tools") %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <%= render "opendoors/tools/tools_navigation" %>
+<!--/subnav-->
 
+<!--main content-->
 <%= form_tag url_for(:controller => 'opendoors/tools', :action => 'url_update') do %>
   <fieldset>
     <legend>Update Redirect URL</legend>
@@ -38,3 +43,4 @@
     <%= submit_button(f) %>
   </fieldset>
 <% end %>
+<!--/content-->

@@ -3,13 +3,12 @@
 # browsing and filtering purposes. Filter = tag, filterable = thing that's been tagged.
 class FilterTagging < ActiveRecord::Base
   self.primary_key = 'id'
-  
-  belongs_to :filter, :class_name => 'Tag'
+
+  belongs_to :filter, :class_name => 'Tag' # , :dependent => :destroy # TODO: poke this separately
   belongs_to :filterable, :polymorphic => true
 
   validates_presence_of :filter, :filterable
-  
-  after_create :expire_caches
+
   before_destroy :expire_caches
 
   def self.find(*args)
@@ -18,9 +17,12 @@ class FilterTagging < ActiveRecord::Base
   def self.find_by_id(id)
     raise "id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id"
   end
-  
+
   def expire_caches
-    self.filter.update_works_index_timestamp!
+    if self.filter && self.filterable.respond_to?(:expire_caches)
+      CacheMaster.record(filterable_id, 'tag', filter_id)
+    end
+    return true
   end
 
   # Is this a valid filter tagging that should actually exist?
@@ -32,10 +34,10 @@ class FilterTagging < ActiveRecord::Base
 
   # Remove all invalid filter taggings
   def self.remove_invalid
-    i = self.count
+    i = filter_tagging_count = self.count
     self.find_each do |filter_tagging|
       begin
-        puts "Checking #{i}"
+        puts "Checking #{i} of #{filter_tagging_count}"
         unless filter_tagging.should_exist?
           filter_tagging.destroy
         end
@@ -46,9 +48,27 @@ class FilterTagging < ActiveRecord::Base
     end
   end
 
+  def self.filter_cleanup(work)
+    correct_filters = work.tags.map(&:filter).compact.uniq
+    correct_filters += correct_filters.map(&:meta_tags).flatten.compact
+    correct_filters.uniq!
+    work.filters.each do |tag|
+      unless correct_filters.include?(tag)
+        ft = work.filter_taggings.where(filter_id: tag.id).first
+        unless ft.destroy
+          raise "can't destroy filter tagging #{ft.id}"
+        end
+      end
+    end
+    missing_filters = correct_filters - work.filters
+    missing_filters.each do |tag|
+      work.filter_taggings.create!(filter_id: tag.id)
+    end
+  end
+
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
-    Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|
+    Tagging.where(taggable_type: 'Work').each do |tagging|
       print "." if tagging.id.modulo(10) == 0; STDOUT.flush
       if tagging.tagger && tagging.taggable
         tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger

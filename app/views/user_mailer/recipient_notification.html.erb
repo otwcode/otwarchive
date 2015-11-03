@@ -3,7 +3,7 @@
   <p>Hello, <%= style_bold(@user.login) %>!</p>
 
   <p>
-    A gift story has been posted for you <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
+    A gift work has been posted for you <%= @collection ? " in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
   </p>
 
   <p>
@@ -13,7 +13,7 @@
       <i><b><%= style_link(@work.title.html_safe, collection_work_url(@collection, @work)) %></b></i> <%= "(#{@work.word_count} words)" %>
     <% end %>
     <br>
-    by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence) %>
+    by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| style_pseud_link(p)}.to_sentence.html_safe) %>
     <br>
     <% unless @work.fandom_string.blank? %>
       <%= style_bold("Fandom:") %> <%= @work.fandom_string %>

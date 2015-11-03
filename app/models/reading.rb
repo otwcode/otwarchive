@@ -2,23 +2,26 @@ class Reading < ActiveRecord::Base
   belongs_to :user
   belongs_to :work
 
+  after_save :expire_cached_home_marked_for_later, if: :toread_changed?
+  after_destroy :expire_cached_home_marked_for_later, if: :toread?
+
   # called from show in work controller
   def self.update_or_create(work, user)
     if user && user.preference.try(:history_enabled) && !user.is_author_of?(work)
       reading_json = [user.id, Time.now, work.id, work.major_version, work.minor_version, false].to_json
-      $redis.sadd("Reading:new", reading_json)
+      REDIS_GENERAL.sadd("Reading:new", reading_json)
     end
   end
 
   # called from reading controller
   def self.mark_to_read_later(work, user)
     reading_json = [user.id, Time.now, work.id, work.major_version, work.minor_version, true].to_json
-    $redis.sadd("Reading:new", reading_json)
+    REDIS_GENERAL.sadd("Reading:new", reading_json)
   end
 
   # called from rake
   def self.update_or_create_in_database
-    $redis.smembers("Reading:new").reverse.each do |reading_json|
+    REDIS_GENERAL.smembers("Reading:new").reverse.each do |reading_json|
       Reading.reading_object(reading_json)
     end
   end
@@ -42,7 +45,15 @@ class Reading < ActiveRecord::Base
       end
     end
     reading.save
-    $redis.srem("Reading:new", reading_json)
+    REDIS_GENERAL.srem("Reading:new", reading_json)
     return reading
+  end
+
+  private
+
+  def expire_cached_home_marked_for_later
+    unless Rails.env.development?
+      Rails.cache.delete("home/index/#{user_id}/home_marked_for_later")
+    end
   end
 end

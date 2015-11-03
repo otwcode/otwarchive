@@ -6,11 +6,21 @@ FactoryGirl.define do
     f.terms_of_service '1'
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+
+    factory :duplicate_user do
+      login nil
+      email nil
+    end
   end
+
 
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
     f.association :user
+  end
+
+  factory :invitation do |f|
+    f.sequence(:invitee_email) { |n| "invitation#{n}@archiveofourown.org" }
   end
 
   factory :admin do |f|
@@ -31,7 +41,20 @@ FactoryGirl.define do
 
   factory :archive_faq do |f|
     f.sequence(:title) { |n| "The #{n} FAQ" }
-    f.sequence(:content) { |n| "This is the #{n} FAQ" }
+
+    after(:build) do |question|
+      FactoryGirl.build(:question)
+    end
+  end
+
+  factory :question do |f|
+    f.sequence(:question) { |n| "The #{n} Question"}
+    f.sequence(:content) { |n| "The #{n} Content that is long enough to validate."}
+  end
+
+  factory :wrangling_guideline do |f|
+    f.sequence(:title) { |n| "The #{n} Wrangling Guideline" }
+    f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
   end
 
   factory :tag do |f|
@@ -109,6 +132,19 @@ FactoryGirl.define do
     end
   end
 
+  factory :external_author do |f|
+    f.sequence(:email) { |n| "foo#{n}@external.com" }
+  end
+
+  factory :external_author_name do |f|
+    f.association :external_author
+  end
+
+  factory :external_creatorship do |f|
+    f.creation_type 'Work'
+    f.association :external_author_name
+  end
+
   factory :collection_participant do |f|
     f.association :pseud
     f.participant_role "Owner"
@@ -125,7 +161,7 @@ FactoryGirl.define do
   factory :collection do |f|
     f.sequence(:name) {|n| "basic_collection_#{n}"}
     f.sequence(:title) {|n| "Basic Collection #{n}"}
-      
+
     after(:build) do |collection|
       collection.collection_participants.build(pseud_id: FactoryGirl.create(:pseud).id, participant_role: "Owner")
     end
@@ -136,6 +172,23 @@ FactoryGirl.define do
     f.subscribable_type "Series"
     f.subscribable_id { FactoryGirl.create(:series).id }
   end
+
+  factory :comment do |f|
+    f.sequence(:content) {|n| "Comment content #{n}"}
+    f.sequence(:name) {|o| "GuestName#{o}"}
+    f.sequence(:email)  {|p| "guest#{p}email@example.org"}
+
+    after(:build) do |comment|
+      comment.commentable_type = "Work"
+      comment.commentable_id = FactoryGirl.create(:work).id
+    end
+  end
+
+  factory :kudo do |f|
+    f.commentable_id { FactoryGirl.create(:work).id }
+    f.commentable_type  "Work"
+end
+
 
   factory :owned_tag_set do |f|
     f.sequence(:title) {|n| "Owned Tag Set #{n}"}
@@ -151,7 +204,7 @@ FactoryGirl.define do
     f.association :pseud
   end
 
-  factory :challenge_assignment do |f| 
+  factory :challenge_assignment do |f|
     after(:build) do |assignment|
       assignment.collection_id = FactoryGirl.create(:collection, :challenge => GiftExchange.new).id unless assignment.collection_id
       assignment.request_signup = FactoryGirl.create(:challenge_signup, :collection_id => assignment.collection_id)
@@ -167,4 +220,10 @@ FactoryGirl.define do
       signup.requests.build(pseud_id: signup.pseud_id, collection_id: signup.collection_id)
     end
   end
+
+  factory :language do
+    short 'nl'
+    name  'Dutch'
+  end
+
 end

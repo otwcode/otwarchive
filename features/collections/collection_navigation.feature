@@ -5,8 +5,8 @@ Feature: Basic collection navigation
   When I am logged in as "mod" with password "password"
     And I go to the collections page
     And I follow "New Collection"
-    And I fill in "Collection Name" with "my_collection"
-    And I fill in "Display Title" with "My Collection"
+    And I fill in "Collection name" with "my_collection"
+    And I fill in "Display title" with "My Collection"
     And I submit
   Then I should see "Collection was successfully created."
     And I should see "Works (0)"
@@ -34,6 +34,7 @@ Feature: Basic collection navigation
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
+    And all search indexes are updated
   Then I should see "Work for my collection by mod"
     And I should see "1 Work in My Collection"
   When I follow "Bookmarks (0)"

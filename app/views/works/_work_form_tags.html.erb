@@ -1,85 +1,104 @@
 <fieldset class="work meta">
-  <legend><%= ts("Tags") %></legend>
-  <h3 class="landmark">Tags</h3>
- <p class="note"><%= ts("Tags are comma separated, %{max} characters per tag.", :max => ArchiveConfig.TAG_MAX) %></p>
+  <legend><%= ts('Tags') %></legend>
+  <h3 class="landmark heading"><%= ts('Tags') %></h3>
+  <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
 
   <dl>
     <dt class="rating required">
-      <label for="work_rating_string"><%= Rating::NAME %>* <%= link_to_help "rating-help" %></label>
+      <label for="work_rating_string"><%= Rating::NAME %>*</label>
+      <%= link_to_help "rating-help" %>
     </dt>
     <dd class="rating required">
-      <select id="work_rating_string" name="work[rating_string]">
-      <%= options_for_select((include_blank ? [""] : []) +  [ArchiveConfig.RATING_DEFAULT_TAG_NAME, ArchiveConfig.RATING_GENERAL_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_EXPLICIT_TAG_NAME], :selected => include_blank ? nil : rating_selected(@work) ) %>
-      </select>
+      <%= collection_select :work,
+                            :rating_string,
+                            Rating.defaults_by_severity,
+                            :name,
+                            :name, 
+                            include_blank: include_blank, 
+                            selected: include_blank ? nil :   
+                                      rating_selected(@work) %>
     </dd>
 
     <dt class="warning required">
-      <label><%= Warning::NAME.pluralize %>* <%= link_to_help "warning-help" %></label>
+      <label><%= Warning::NAME.pluralize %>*</label>
+      <%= link_to_help "warning-help" %>
     </dt>
     <dd class="warning required">
-      	<fieldset class="warnings">
-			<!--<legend class="landmark">Warning</legend>-->
-			<ul>
-        <% for tag in Warning.canonical.by_name %>
-        <li><%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
-        <%= label_tag "work_warning_strings_#{tag.id}", tag.name %></li>
-        <% end %>
-      </ul>
-	</fieldset>
+      <fieldset class="warnings">
+        <!--<legend class="landmark">Warning</legend>-->
+        <ul>
+          <% for tag in Warning.canonical.by_name %>
+            <li>
+              <%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %>
+              <%= label_tag "work_warning_strings_#{tag.id}", tag.name %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
     </dd>
 
     <dt class="fandom required">
-      <label for="work_fandom" title="fandom"><%= Fandom::NAME.pluralize %>* <%= link_to_help "fandom-help" %></label>
+      <label for="work_fandom" title="<%= ts('fandoms') %>"><%= Fandom::NAME.pluralize %>*</label>
+      <%= link_to_help "fandom-help" %>
     </dt>
-    <dd class="fandom required" title="fandom">
+    <dd class="fandom required" title="<%= ts('fandoms') %>">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
                          autocomplete_options('fandom', 
-                          :id => "work_fandom") %>
-    <p class="footnote"><%= ts("If this is the first work for a fandom, it may not show up in the fandoms page for a day or two") %></p>
-	</dd>
-    
+                          :id => "work_fandom",
+                          :title => ts('fandoms')) %>
+      <p class="footnote"><%= ts('If this is the first work for a fandom, it may not show up in the fandoms page for a day or two.') %></p>
+    </dd>
 
     <dt class="category">
-      <label><%= Category::NAME %>  <%= link_to_help "categories-help" %></label>
+      <label><%= Category::NAME %></label>
+      <%= link_to_help "categories-help" %>
     </dt>
     <dd class="category">
       <fieldset>
-		<!--<legend class="landmark">Category</legend>-->
-		<ul>
-        <% for tag in Category.canonical.by_name %>
-        <% cycle_class = cycle("odd", "even") %>
-        <li class="<%= cycle_class %>"><%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
-        <%= label_tag "work_category_string_#{tag.id}", tag.name %></li>
-        <% end %>
-      </ul>
-	</fieldset>
+        <!--<legend class="landmark">Category</legend>-->
+        <ul>
+          <% for tag in Category.canonical.by_name.sort %>
+            <li>
+              <%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %>
+              <%= label_tag "work_category_string_#{tag.id}", tag.name %>
+            </li>
+          <% end %> 
+        </ul>
+      </fieldset>
     </dd>
 
-    <dt class="relationship">
-      <label for="work_relationship"><%= Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %></label>
+    <dt class="relationship" title="<%= ts('relationships') %>">
+      <label for="work_relationship"><%= Relationship::NAME.pluralize %></label>
+      <%= link_to_help "relationships-help" %>
     </dt>
-    <dd class="relationship" title="relationships">
+    <dd class="relationship" title="<%= ts('relationships') %>">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
                            :id => "work_relationship",
- 							:title => "relationship",
+ 							             :title => ts('relationships'),
                            :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
-    <dt class="character">
-      <label for="work_character"><%= Character::NAME.pluralize %> <%= link_to_help "characters-help" %></label>
+    <dt class="character" title="<%= ts('characters') %>">
+      <label for="work_character"><%= Character::NAME.pluralize %></label>
+      <%= link_to_help "characters-help" %>
     </dt>
-    <dd class="character" title="characters">
+    <dd class="character" title="<%= ts('characters') %>">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
-                          :id => "work_character", :title => "character", :autocomplete_live_params => 'fandom=work_fandom') %>
+                          :id => "work_character",
+                          :title => ts('characters'),
+                          :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
-    <dt class="freeform">
-      <label for="work_freeform"><%= Freeform::NAME %> <%=	 link_to_help "additional-tags-help" %></label>
+    <dt class="freeform" title="<%= ts('additional tags') %>">
+      <label for="work_freeform"><%= Freeform::NAME %></label>
+      <%= link_to_help "additional-tags-help" %>
     </dt>
-    <dd class="freeform" title="additional tags">
-      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform', :id => "work_freeform", :title => "freeform") %>
+    <dd class="freeform" title="<%= ts('additional tags') %>">
+      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform',
+                          :id => "work_freeform",
+                          :title => ts('additional tags')) %>
     </dd>
 
   </dl>

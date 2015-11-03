@@ -1,17 +1,21 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts("Tag Nominations for %{title}", :title => @tag_set_nomination.owned_tag_set.title) %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <ul class="navigation actions" role="navigation">
-	  <li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
-    <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
-  </ul>
-  
+	<li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
+  <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
+</ul>
+<!--/subnav-->
+
+<!--main content-->  
 <ul class="notes">
-  <li>The autocomplete lists canonical tags for you. Please choose the canonical version of your tag if there is one. </li>
-  <li>The tag set moderators might change or leave out your nominations (sometimes just because a different form of your nomination was included)</li>
-  <li>Nominations are not forever! Don't be confused if you come back in a few months and they are gone: they may have been cleaned up.</li>
+  <li><%= ts('The autocomplete lists canonical tags for you. Please choose the canonical version of your tag if there is one.') %></li>
+  <li><%= ts('The tag set moderators might change or leave out your nominations (sometimes just because a different form of your nomination was included).') %></li>
+  <li><%= ts('Nominations are not forever! Don\'t be confused if you come back in a few months and they are gone: they may have been cleaned up.') %></li>
 </ul>
 
-<!--main content-->
 <h3 class="landmark heading"><%= ts("Nominate Tags Form") %></h3>
 
 <%= error_messages_for :tag_set_nomination %>
@@ -63,4 +67,4 @@
     </p>
   </fieldset>
 <% end %>
-
+<!--/content-->

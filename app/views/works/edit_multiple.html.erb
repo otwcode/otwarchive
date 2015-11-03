@@ -1,79 +1,83 @@
-<!--main content-->
-<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
-<%= render "users/header_navigation" %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Edit Multiple Works") %></h2>
+<!--/descriptions-->
 
-<p class="caution">
-  Your edits will be applied to <strong>all</strong> of the following works:
+<!--subnav-->
+<%= render "users/header_navigation" %>
+<!--/subnav-->
+
+<!--main content-->
+<p class="caution notice">
+  <%= ts("Your edits will be applied to") %> <strong><%= ts("all") %></strong> <%= ts("of the following works:") %>
 </p>
 
 <%= render "works/work_abbreviated_list", :works => @works %>
 
-<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
-  <p class="required message">
+<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put, :class => "post" } do |form| %>
+  <p class="required notice">
     <%= ts("* Required information") %>
     <% @works.each do |work| %>
       <%= hidden_field_tag "work_ids[]", work.id %>
     <% end %>
   </p>
 
-  <div id="work-form" class="edit work post">
-    <%= render 'work_form_tags', :include_blank => true %>
-  </div>
+  <%= render 'work_form_tags', :include_blank => true %>
 
   <fieldset>
-    <legend>Associations</legend>
-    <h3 class="landmark">Associations</h3>
+    <legend><%= ts("Associations") %></legend>
+    <h3 class="landmark heading"><%= ts("Associations") %></h3>
     <dl>
       <%= render "works/work_form_pseuds", :form => form, :works => @works %>
-
       <%= render "collectibles/collectible_form", :form => form, :collectibles => @works %>
-
     </dl>
   </fieldset>
 
   <fieldset>
-    <legend>Settings</legend>
-    <h3 class="landmark">Settings</h3>
+    <legend><%= ts("Settings") %></legend>
+    <h3 class="landmark heading"><%= ts("Settings") %></h3>
     <dl>
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>
         <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
       </dd>
-
-      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dt><%= form.label :work_skin_id, ts("Select Work Skin") %> <%= link_to_help "work-skins" %></dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
             {:include_blank => true} %>
       </dd>
       <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
       <dd>
-        <label for="work_restricted">
-          <%= ts("Only show to registered users") %>
-          <%= form.check_box :restricted %>
-        </label>
-        <label for="work_unrestricted">
-          <%= ts("Show to all") %>
-          <%= form.check_box :unrestricted %>
-        </label>
+        <ul>
+          <li>
+            <label for="work_restricted">
+              <%= form.check_box :restricted %>
+              <%= ts("Only show to registered users") %>
+            </label>
+          </li>
+          <li>
+            <label for="work_unrestricted">
+              <%= form.check_box :unrestricted %>
+              <%= ts("Show to all") %>
+            </label>
+          </li>
+        </ul>
       </dd>
-
       <dt><%= ts("Comment Settings") %><%= link_to_help "anonymous-commenting" %></dt>
       <dd>
         <label for="work_anon_commenting_disabled">
-          <%= ts("Anonymous commenting disabled") %>
           <%= form.check_box :anon_commenting_disabled %>
+          <%= ts("Anonymous commenting disabled") %>
         </label>
       </dd>
     </dl>
   </fieldset>
 
-  <p class="caution">
-    Your edits will <strong>replace</strong> the existing values!
-    (If you leave a field blank it will remain unchanged.)
+  <p class="caution notice">
+    <%= ts("Your edits will") %> <strong><%= ts("replace") %></strong> <%= ts("the existing values!
+    (If you leave a field blank it will remain unchanged.)") %>
   </p>
 
   <p class="submit actions"><%= submit_tag ts("Update All Works"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>
 
 <% end %>
 <!--/content-->
-</div>

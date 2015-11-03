@@ -1,0 +1,6 @@
+#!/bin/sh
+ERRORS=`find app -iname "*.rb" -print0 | xargs -0 -n 1 ./script/check_syntax_file`
+if [ -z "${ERRORS}" ] ; then 
+  exit 0
+fi
+exit 1

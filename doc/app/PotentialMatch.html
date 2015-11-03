@@ -698,7 +698,7 @@
           <div class="method-source-code" id="cancel_generation-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">cancel_generation</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-string">&quot;1&quot;</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-string">&quot;1&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- cancel_generation-source -->
           
@@ -728,7 +728,7 @@
           <div class="method-source-code" id="canceled-3F-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canceled?</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>)) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;1&quot;</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>)) <span class="ruby-operator">==</span> <span class="ruby-string">&quot;1&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- canceled-3F-source -->
           
@@ -789,10 +789,10 @@
           <div class="method-source-code" id="finish_generation-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">finish_generation</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">byline_key</span>(<span class="ruby-identifier">collection</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">byline_key</span>(<span class="ruby-identifier">collection</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">canceled?</span>(<span class="ruby-identifier">collection</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">del</span> <span class="ruby-identifier">interrupt_key</span>(<span class="ruby-identifier">collection</span>)
     <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">clear!</span>(<span class="ruby-identifier">collection</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">delayed_generate</span>(<span class="ruby-identifier">collection</span>)
@@ -856,7 +856,7 @@
           <div class="method-source-code" id="generate_for_signup-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">generate_for_signup</span>(<span class="ruby-identifier">collection</span>, <span class="ruby-identifier">request_signup</span>, <span class="ruby-identifier">settings</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-identifier">request_signup</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-identifier">request_signup</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
   <span class="ruby-identifier">collection</span>.<span class="ruby-identifier">signups</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pseud</span>, <span class="ruby-value">:offers</span> =<span class="ruby-operator">&gt;</span> [{<span class="ruby-value">:tag_set</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:tags</span>}]).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">offer_signup</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">request_signup</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">offer_signup</span>
     <span class="ruby-identifier">potential_match</span> = <span class="ruby-identifier">request_signup</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">offer_signup</span>, <span class="ruby-identifier">settings</span>)
@@ -927,7 +927,7 @@
           <div class="method-source-code" id="in_progress-3F-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">in_progress?</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>))
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>))
     <span class="ruby-keyword">if</span> <span class="ruby-constant">PotentialMatch</span>.<span class="ruby-identifier">canceled?</span>(<span class="ruby-identifier">collection</span>)
       <span class="ruby-keyword">self</span>.<span class="ruby-identifier">finish_generation</span>(<span class="ruby-identifier">collection</span>)
       <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
@@ -994,7 +994,7 @@
           <div class="method-source-code" id="position-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 97</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">position</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">get</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- position-source -->
           
@@ -1025,16 +1025,16 @@
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 101</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">collection</span>)
   <span class="ruby-comment"># the index of our current signup person in the full index of signup participants</span>
-  <span class="ruby-identifier">current_byline</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>))
+  <span class="ruby-identifier">current_byline</span> = <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>))
   <span class="ruby-identifier">key</span> = <span class="ruby-identifier">byline_key</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">exists</span>(<span class="ruby-identifier">key</span>)
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">exists</span>(<span class="ruby-identifier">key</span>)
     <span class="ruby-identifier">score</span> = <span class="ruby-value">0</span>
     <span class="ruby-identifier">collection</span>.<span class="ruby-identifier">signups</span>.<span class="ruby-identifier">order_by_pseud</span>.<span class="ruby-identifier">pseud_only</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pseud</span><span class="ruby-operator">|</span>
-      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zadd</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">score</span>, <span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
+      <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zadd</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">score</span>, <span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
       <span class="ruby-identifier">score</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">progress</span> = (<span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrank</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">current_byline</span>)<span class="ruby-operator">/</span><span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zcount</span>(<span class="ruby-identifier">key</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&quot;+inf&quot;</span>)) * <span class="ruby-value">100</span>
+  <span class="ruby-identifier">progress</span> = (<span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrank</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">current_byline</span>)<span class="ruby-operator">/</span><span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zcount</span>(<span class="ruby-identifier">key</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&quot;+inf&quot;</span>)) * <span class="ruby-value">100</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- progress-source -->
           
@@ -1064,7 +1064,7 @@
           <div class="method-source-code" id="set_up_generating-source">
             <pre><span class="ruby-comment"># File app/models/potential_match.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">set_up_generating</span>(<span class="ruby-identifier">collection</span>)
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-identifier">collection</span>.<span class="ruby-identifier">signups</span>.<span class="ruby-identifier">order_by_pseud</span>.<span class="ruby-identifier">pseud_only</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">progress_key</span>(<span class="ruby-identifier">collection</span>), <span class="ruby-identifier">collection</span>.<span class="ruby-identifier">signups</span>.<span class="ruby-identifier">order_by_pseud</span>.<span class="ruby-identifier">pseud_only</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- set_up_generating-source -->
           

@@ -118,9 +118,13 @@ Feature: Import Works
     And I follow "Next Chapter →"
   Then I should see "Chapter 2"
 
-  @work_import_efiction_nonprintable
-  Scenario: Import a work from an efiction site which keeps giving identical chapters and has a broken printable format
-  When I import "http://thehexfiles.net/viewstory.php?sid=15563"
-  Then I should see "Preview"
-    And I should see "Chapters:1/1"
-  
+  # @work_import_efiction_nonprintable
+  # Scenario: Import a work from an efiction site which keeps giving identical chapters and has a broken printable format
+  # When I import "http://thehexfiles.net/viewstory.php?sid=15563"
+  # Then I should see "Preview"
+  #  And I should see "Chapters:1/1"
+
+  Scenario: Imported works should be English language by default
+    When I import "http://www.intimations.org/fanfic/idol/Huddling.html"
+    Then I should see "Preview"
+      And I should see "English"

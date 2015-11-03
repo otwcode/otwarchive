@@ -1,7 +1,0 @@
-<h2 class="heading"><%= ts("Welcome to %{collection_title}!", :collection_title => @collection.title) %></h2>
-
-<div><%=raw sanitize_field(@collection, :description) %></div>
-
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to ts("Profile"), collection_profile_path(@collection) %></li>
-</ul>

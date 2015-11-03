@@ -4,10 +4,6 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-# Code Coverage - Coveralls.io
-require 'coveralls'
-Coveralls.wear!('rails')
-
 require 'cucumber/rails'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
@@ -34,10 +30,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 #
 ActionController::Base.allow_rescue = false
 
-# Some config options to help with the upgrade from 1.0 to 2.1 (lets never wait this long again)
+# Config options for Capybara, including increased timeout to minimise failures on CI servers
+# ring-fence with if ENV['CI'] if this becomes a problem locally
 Capybara.configure do |config|
   config.match = :prefer_exact
   config.ignore_hidden_elements = false
+  config.default_wait_time = 15
 end
 
 

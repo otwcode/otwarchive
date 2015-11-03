@@ -16,8 +16,8 @@ Feature: Collection
     | myname4        | password   |
     | pinchhitter    | password    |
     And I am logged in as "mod1"
+    And I have no collections
     And I have Yuletide challenge tags setup
-    And I have no challenge assignments
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
     And I add the fandom "Starsky & Hutch" to the character "John Sheppard"
     And I add the fandom "Tiny fandom" to the character "John Sheppard"
@@ -33,8 +33,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Yuletide"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Yuletide"
-    And I fill in "Collection Name" with "yule2011"
+    And I fill in "Display title" with "Yuletide"
+    And I fill in "Collection name" with "yule2011"
     And I fill in "Introduction" with "Welcome to the exchange"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a gift exchange-y thing</dd></dl>"
     And I fill in "Rules" with "Be even nicer to people"
@@ -55,7 +55,8 @@ Feature: Collection
     # 0-2 characters allowed in request
     # 2-3 characters required in offer
     # unique fandoms required in offers and requests
-    # "any" option available in offers
+    # "any" option available in character offers
+    # restrict character to fandom only
     # match on 1 fandom and 1 character
     And I check "gift_exchange_request_restriction_attributes_url_allowed"
     And I uncheck "gift_exchange_offer_restriction_attributes_description_allowed"
@@ -78,6 +79,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Sign-up open?"
+    And I set up the challenge dates
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
@@ -90,10 +92,10 @@ Feature: Collection
   Then I should see "About Yuletide (yule2011)"
     And I should see "Sign-up:" within ".collection .meta"
     And I should see "Open" within ".collection .meta"
-    And I should see "Sign-up closes:" within ".collection .meta"
-    And I should see "Assignments due:" within ".collection .meta"
-    And I should see "Works revealed:" within ".collection .meta"
-    And I should see "Authors revealed:" within ".collection .meta"
+    And I should see "Sign-up Closes:" within ".collection .meta"
+    And I should see "Assignments Due:" within ".collection .meta"
+    And I should see "Works Revealed:" within ".collection .meta"
+    And I should see "Authors Revealed:" within ".collection .meta"
     And I should see "Signed up:" within ".collection .meta"
     And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
@@ -122,7 +124,7 @@ Feature: Collection
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
     And I should see "Characters (2 - 3)"
-    And I should see "Any?"
+    And I should see "Any Character" within "dd.any.option"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
@@ -136,13 +138,13 @@ Feature: Collection
     And I press "Submit"
   Then I should see a save error message
     # errors for the empty request
-    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
+    And I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
     # errors for the not-quite-filled offer
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 1 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 1 character tags in your current Offer"
     And I should see a not-in-fandom error message
     # errors for the empty offer
-    And I should see "Offer: your Offer must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Offer"
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 0 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 0 character tags in your current Offer"
   # Over-fill the remaining missing fields and duplicate fandoms
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
     And I check the 2nd checkbox with the value "Tiny fandom"
@@ -153,22 +155,30 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see a save error message
-    And I should see "Request: your Request must include between 0 and 2 character tags, but you have included 3 character tags in your current Request"
+    And I should see "Request: Your Request must include between 0 and 2 character tags, but you have included 3 character tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person" in "Stargate Atlantis"
-    And I should see "Request: your Request must include exactly 1 fandom tags, but you have included 2 fandom tags in your current Request"
+    And I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 2 fandom tags in your current Request"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard" in "Care Bears"
-    And I should see "Offer: your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
+    And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
+  
+  
   # now fill in correctly
+  # We have six participants who sign up as follows:
+  
+  # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
+  #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
+  # (is the only person who can write for myname2 and should therefore be assigned to them)
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
     And I uncheck the 2nd checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person"
     And I uncheck the 3rd checkbox with the value "Care Bears"
     And I check the 3rd checkbox with the value "Tiny fandom"
     And I uncheck the 4th checkbox with the value "Care Bears"
-    And I check the 4th checkbox with the value "Starsky & Hutch"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
+    And I check the 4th checkbox with the value "Yuletide Hippos RPF"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with ""
+    And I check "challenge_signup_offers_attributes_1_any_character"
     And I press "Submit"
   Then I should see "Sign-up was successfully created"
     And I should see "Sign-up for myname1"
@@ -187,14 +197,40 @@ Feature: Collection
   # before signing up, you can check who else has already signed up
   Then I should see "Signed up:" within ".collection .meta"
     And I should see "1" within ".collection .meta"
+
+  # myname2 requests: Unoffered (no chars), Hippos (no chars)
+  #         offers: S&H (JS, TE), SGA (JS, TE)
+  # can only get from myname1 
   When I follow "Sign Up"
+    And I check the 1st checkbox with value "Unoffered"
+    And I check the 2nd checkbox with value "Yuletide Hippos RPF"
+    And I check the 3rd checkbox with value "Starsky & Hutch"
+    And I check the 4th checkbox with value "Stargate Atlantis"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I press "Submit"
+  Then I should see a save error message
+    And I should see a not-in-fandom error message for "Any" in "Unoffered"
+  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
+    And I press "Submit"
+  Then I should see "Sign-up was successfully created"
+
+  # and a third person signs up
+  # myname3 requests: S&H (JS), Tiny fandom; 
+  #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
+  When I log out
+    And I am logged in as "myname3"
+  When I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Sign Up"
   When I check the 1st checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I check the 2nd checkbox with the value "Tiny fandom"
     And I check the 3rd checkbox with the value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I check the 4th checkbox with the value "Yuletide Hippos RPF"
-    And I check "challenge_signup_offers_attributes_1_any_character"
+    And I check the 4th checkbox with the value "Starsky & Hutch"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is
     # a workaround because otherwise it would display a duplicate number
     # These three commented out so it can run on the command-line
@@ -204,27 +240,9 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Sign-up was successfully created"
 
-  # and a third person signs up
-  When I log out
-    And I am logged in as "myname3"
-  When I go to the collections page
-    And I follow "Yuletide"
-    And I follow "Sign Up"
-    And I check the 1st checkbox with value "Starsky & Hutch"
-    And I check the 2nd checkbox with value "Tiny fandom"
-    And I check the 3rd checkbox with value "Starsky & Hutch"
-    And I check the 4th checkbox with value "Stargate Atlantis"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
-    And I press "Submit"
-  Then I should see a save error message
-    And I should see a not-in-fandom error message for "Any" in "Starsky & Hutch"
-  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
-    And I press "Submit"
-  Then I should see "Sign-up was successfully created"
-
   # fourth person signs up
+  # myname4 requests SGA, S&H (JS, TE)
+  #     offers Tiny (Obscure, JS), S&H (Foo, JS)
   When I log out
     And I am logged in as "myname4"
   When I go to the collections page
@@ -250,6 +268,8 @@ Feature: Collection
     And I should not see "Stargate Atlantis"
 
   # fifth person signs up
+  # myname5 requests SGA, S&H
+  #   offers Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname5"
   When I go to the collections page
@@ -272,11 +292,13 @@ Feature: Collection
   When I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch 4 3"
+    And I should see "Starsky & Hutch 3 3"
     And I should see "Stargate Atlantis 3 3"
-    And I should see "Tiny fandom 3 3"
+    And I should see "Tiny fandom 2 3"
 
   # signup summary changes when another person signs up
+  # myname6 requests: SGA, S&H
+  #    offers: Tiny (Foo, Obscure), SGA (JS, TE)
   When I log out
     And I am logged in as "myname6"
   When I go to the collections page
@@ -295,9 +317,9 @@ Feature: Collection
     And I follow "Sign-up Summary"
   Then I should see "Sign-up Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch 5 3"
+    And I should see "Starsky & Hutch 4 3"
     And I should see "Stargate Atlantis 4 4"
-    And I should see "Tiny fandom 3 4"
+    And I should see "Tiny fandom 2 4"
 
   # mod can view signups
   When I log out
@@ -326,18 +348,19 @@ Feature: Collection
   When I follow "Matching"
   Then I should see "Matching for Yuletide"
     And I should see "Generate Potential Matches"
-    And I should see "No potential matches generated yet!"
+    And I should see "No potential matches yet"
   When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
-    And I should not see "Missing Recipients"
-    And I should not see "Missing Givers"
+  Then I should see "Reviewing Assignments"
+    And I should see "Complete"
+    And I should not see "No Recipient"
+    And I should not see "No Giver"
     And I should see "Regenerate Assignments"
-    And I should see "Regenerate Potential Matches"
+    And I should see "Regenerate All Potential Matches"
     And I should see "Send Assignments"
     And 1 email should be delivered
 
@@ -348,9 +371,9 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  Then I should see "Main Assignments"
-    And I should not see "Missing Recipients"
-    And I should not see "Missing Givers"
+  Then I should see "Complete"
+    And I should not see "No Recipient"
+    And I should not see "No Giver"
     And 1 email should be delivered
 
   # mod sends assignments out
@@ -371,6 +394,25 @@ Feature: Collection
       # 6 users and the mod should get emails :)
       And 7 emails should be delivered
 
+
+  # Notes for understanding the matching here:
+  #
+  # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
+  #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
+  # myname2 requests: Unoffered (no chars), Hippos (no chars)
+  #         offers: S&H (JS, TE), SGA (JS, TE)
+  # myname3 requests: S&H (JS), Tiny fandom; 
+  #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
+  # myname4 requests SGA, S&H (JS, TE)
+  #     offers Tiny (Obscure, JS), S&H (Foo, JS)
+  # myname5 requests SGA, S&H
+  #   offers Tiny (Foo, Obscure), SGA (JS, TE)
+  # myname6 requests: SGA, S&H
+  #    offers: Tiny (Foo, Obscure), SGA (JS, TE)
+  #
+  # so myname1 is the only person who can write for myname2 and therefore myname2 should be their assignment
+  #
+  
   # first user starts posting
   When I log out
     And I am logged in as "myname1"
@@ -466,78 +508,11 @@ Feature: Collection
   # Then I should see "Work was successfully updated"
 
   # post works for all the assignments
-  When I am logged in as "myname2"
-    And I go to myname2's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 2"
-    And I fill in "Fandoms" with "Stargate Atlantis"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about Atlantis"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  When I am logged in as "myname3"
-    And I go to myname3's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 3"
-    And I fill in "Fandoms" with "Tiny Fandom"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about a tiny little group of people"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  When I am logged in as "myname4"
-    And I go to myname4's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story 4"
-    And I fill in "Fandoms" with "Starsky & Hutch, Tiny Fandom"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "I am not good at inventing stories"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-
-  # user leaves it as a draft
-  When I am logged in as "myname5"
-    And I go to myname5's user page
-    #' stop annoying syntax highlighting after apostrophe
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Draft Story"
-    And I fill in "Fandoms" with "Starsky & Hutch"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "Coding late at night is bad for the brain."
-    And I press "Preview"
-  Then I should not see "Work was successfully posted"
-    And I should see "For myname"
-    And I should see "Collections:"
-    And I should see "Yuletide" within ".meta"
-    And I should see "Anonymous"
-  When I log out
+  When "myname2" posts the fulfilling story "Fulfilling Story 2" in "Stargate Atlantis"
+    And "myname3" posts the fulfilling story "Fulfilling Story 3" in "Tiny Fandom"
+    And "myname4" posts the fulfilling story "Fulfilling Story 4" in "Starsky & Hutch, Tiny Fandom"
+    And "myname5" posts the fulfilling draft "Fulfilling Story 5" in "Starsky & Hutch"
+    And I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
@@ -568,19 +543,8 @@ Feature: Collection
   Then I should see "pinchhitter"
 
   # pinch hitter writes story
-  When I am logged in as "pinchhitter"
-    And I go to pinchhitter's user page
-    And I follow "Assignments"
-    And I follow "Fulfill"
-    And I fill in "Work Title" with "Fulfilling Story pinch"
-    And I fill in "Fandoms" with "Starsky & Hutch"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "Coding late at night is bad for the brain."
-    And I press "Post Without Preview"
-  Then I should see "Work was successfully posted"
-  
-  When I am logged in as "mod1"
+  When "pinchhitter" posts the fulfilling story "Fulfilling Story pinch" in "Starsky & Hutch"
+    And I am logged in as "mod1"
     And I go to "Yuletide" collection's page
     And I follow "Assignments"
     And I follow "Pinch Hits"
@@ -603,7 +567,7 @@ Feature: Collection
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
-    And the email should contain "A gift story has been posted for you"
+    And the email should contain "A gift work has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
     And the email should contain "by an anonymous responder"
@@ -613,18 +577,6 @@ Feature: Collection
     And the email should not contain "by myname4"
     And the email should not contain "by myname5"
     And the email should not contain "by myname6"
-
-  # someone views the story they wrote and it is anonymous
-  # When I am logged in as "myname1"
-  #   And I go to myname1's user page
-  #   #'
-  # Then I should see "Fulfilling Story 1"
-  #   And I should see "Anonymous"
-  # When I follow "Fulfilling Story 1"
-  # Then I should see "For myname"
-  #   And I should see "Collections:"
-  #   And I should see "Yuletide" within ".meta"
-  #   And I should see "Anonymous"
 
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
@@ -663,7 +615,7 @@ Feature: Collection
     And I press "Update"
   Then I should see "Collection was successfully updated"
 
-  # someone can now see their writer: will fail intermittently until pinch hitting is fixed above
+  # someone can now see their writer
   When I log out
     And I am logged in as "myname1"
     And the system processes jobs

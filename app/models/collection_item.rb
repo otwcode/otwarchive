@@ -14,7 +14,7 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[REJECTED], REJECTED] ]
 
   belongs_to :collection, :inverse_of => :collection_items
-  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
+  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items, touch: true
   belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
 
@@ -35,7 +35,7 @@ class CollectionItem < ActiveRecord::Base
   validate :collection_is_open, :on => :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add_to_base ts("Collection %{title} is currently closed.", :title => self.collection.title)
+      errors.add(:base, ts("The collection %{title} is not currently open.", :title => self.collection.title))
     end
   end
 
@@ -166,12 +166,11 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
-  after_save :expire_caches
   after_destroy :expire_caches
   
   def expire_caches
     if self.item.respond_to?(:expire_caches)
-      self.item.expire_caches
+      CacheMaster.record(item_id, 'collection', collection_id)
     end
   end
 

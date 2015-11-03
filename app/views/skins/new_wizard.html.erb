@@ -1,12 +1,25 @@
 <!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
-<h2 class="heading"><%= ts('Create New Archive Skin')  %></h2>
+<!--Descriptive page names, messages and instructions-->
+<h2 class="heading"><%= ts('Site Skin Wizard')  %></h2>
+
+<%= render :partial => 'skin_top_navigation' %>
 
 <%= error_messages_for :skin %>
 
-<%= render :partial => "skin_top_navigation" %>
+<p class="notes">
+  <%= ts('This wizard only creates site skins. You can also %{link} which can be used to add styling to works that you post.', :link => link_to(ts('create a work skin'), url_for(:skin_type => 'WorkSkin'))).html_safe %>
+  <%= link_to_help 'skins-basics' %>
+</p>
+<!--/descriptions-->
 
-<h3 class="landmark heading">New Archive Skin Wizard</h3>
+<!--subnav-->
+<%= render :partial => 'skin_type_navigation' %>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark heading"><%= ts('Site Skin Wizard') %></h3>
 
 <%= form_for @skin do |f| %>
   <%= render 'wizard_form', :f => f %>
 <% end %>
+<!--/content-->

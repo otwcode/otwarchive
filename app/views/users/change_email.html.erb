@@ -4,36 +4,35 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% # BACK END FIX THIS PLEASE SHOULD SHOW THE PAGE WE'RE ON AND MOVE NAV INTO PARTIAL %>
-<ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Edit My Profile"), edit_user_path(@user) %></li>
-  <li><%= span_if_current ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
-  <li><%= span_if_current ts("Change Password"), change_password_user_path(@user) %></li>
-</ul> 
+<%= render 'edit_header_navigation' %>
 <!--/subnav-->
 
 <!--main content-->
-<%= form_tag change_email_user_path(@user) do %> 
-<% if @user.recently_reset? %>
-  <p><%= ts("You used a temporary password to log in. Please change it now as it will expire in a week.") %></p>
-<% end %>
+<%= form_tag changed_email_user_path(@user) do %> 
+  <% if @user.recently_reset? %>
+    <p><%= ts("You used a temporary password to log in. Please change it now as it will expire in a week.") %></p>
+  <% end %>
   <dl>
-    <% unless @user.recently_reset? %>
-      <dt><%= label_tag :password_check, ts("Password") %></dt>
-      <dd><%= password_field_tag :password_check%></dd>
-    <% end %>
+
+    <dt><%= ts("Current Email") %></dt>
+    <dd><%= @user.email %></dd>
 
     <dt><%= label_tag :new_email, ts("New Email") %></dt>
     <dd><%= email_field_tag :new_email %></dd>
 
     <dt><%= label_tag :email_confirmation, ts("Confirm New Email") %></dt>
     <dd><%= email_field_tag :email_confirmation %></dd>
-  	<dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
-	<dd class="submit actions">
-    <%= submit_tag "Change Email" %>
-  </dd>
-</dl>
+
+    <% unless @user.recently_reset? %>
+      <dt><%= label_tag :password_check, ts("Password") %></dt>
+      <dd><%= password_field_tag :password_check%></dd>
+    <% end %>
+
+    <dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
+    <dd class="submit actions">
+      <%= submit_tag ts("Change Email") %>
+    </dd>
+  </dl>
 <% end %>
 
 <!--/content-->

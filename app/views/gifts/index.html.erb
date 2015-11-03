@@ -11,6 +11,10 @@
 <% end %>
 <!--subnav-->
 
+<% if @works.respond_to?(:total_pages) %>
+    <%= will_paginate @works %>
+<% end %>
+
 <!--main content-->
 <ul class="gift work index group">
   <% for work in @works %>
@@ -18,3 +22,6 @@
   <% end %>
 </ul>
 <!--/content-->
+<% if @works.respond_to?(:total_pages) %>
+    <%= will_paginate @works %>
+<% end %>

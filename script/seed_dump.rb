@@ -15,7 +15,7 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 
 
 # N determines how many users, works, bookmarks, etc. are dumped if they aren't all dumped
-N = 10
+N = 5
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
@@ -80,6 +80,7 @@ end
 # take an instance and cleanse it,
 # then write to a file the sql statement which would re-create it
 def write_model(thing)
+  return if thing.nil?
   raise "#{thing} is not a model!!!" if thing.is_a?(Array)
   raise "#{thing} is not a model!!!" unless thing
   file = thing.class.name.underscore + ".sql"
@@ -217,6 +218,7 @@ def user_associations(users)
     # comments need associations
     u.inbox_comments.find_in_batches(:batch_size => u.inbox_comments.size/N + 1) do |batch|
       inbox_comment = batch.sample
+      next if inbox_comment.nil? or inbox_comment.feedback_comment.nil? or inbox_comment.feedback_comment.ultimate_parent.nil?
       write_model(inbox_comment)
       write_model(inbox_comment.feedback_comment)
       commentable = inbox_comment.feedback_comment.ultimate_parent
@@ -229,7 +231,7 @@ def user_associations(users)
           write_model(commentable)
         end
       end
-      PSEUDS[inbox_comment.feedback_comment.pseud.id] = inbox_comment.feedback_comment.pseud if inbox_comment.feedback_comment.pseud
+      PSEUDS[inbox_comment.feedback_comment.pseud.id] = inbox_comment.feedback_comment.pseud if !inbox_comment.feedback_comment.nil? and inbox_comment.feedback_comment.pseud
       commentable = inbox_comment.feedback_comment.ultimate_parent
       WORKS[commentable.id] = commentable if (MULTI && commentable.is_a?(Work))
     end
@@ -439,7 +441,9 @@ end
 
 # return an array of records associated with the pseuds
 def pseud_associations(pseuds)
+  return if pseuds.nil? or pseuds.each_value.nil?
   pseuds.each_value do |p|
+    next if p.nil? or p.user.nil?
     write_model(p)
     write_model(p.user)
     write_model(p.user.preference)

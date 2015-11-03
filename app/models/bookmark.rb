@@ -1,8 +1,9 @@
 class Bookmark < ActiveRecord::Base
 
   include Collectible
+  include Searchable
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
 
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
@@ -125,9 +126,14 @@ class Bookmark < ActiveRecord::Base
 
   def tag_string=(tag_string)
     self.tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      if !string.blank?
+
+    # Replace unicode full-width commas
+    tag_string.gsub!(/\uff0c|\u3001/, ',')
+    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
+
+    tag_array.each do |string|
+      string.strip!
+      unless string.blank?
         tag = Tag.find_by_name(string)
         if tag
           self.tags << tag

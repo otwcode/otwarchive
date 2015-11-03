@@ -2,7 +2,7 @@
 <% @collection_item ||= CollectionItem.new %>
 <% in_page ||= false %>
 <div id="collection-form">
-  <h3 class="heading"><%= ts("Add %{title} to collections", :title => item.respond_to?(:title) ? item.title : item.class.name) %></h3>
+  <h3 class="heading"><%= ts("Add %{title} to collections", :title => item.respond_to?(:title) ? item.title : item.class.name).html_safe %></h3>
   <%
     # when in the works controller, such as for a non-multi-chapter work, form_for does not set work_id
     # so the create action of the collection_items controller fails to find the targetted work

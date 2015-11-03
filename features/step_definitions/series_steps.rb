@@ -2,6 +2,15 @@ When /^I view the series "([^\"]*)"$/ do |series|
   visit series_url(Series.find_by_title!(series))
 end
 
+When /^I add the series "([^\"]*)"$/ do |series_title|
+  check("series-options-show")  
+  if Series.find_by_title(series_title)
+    step %{I select "#{series_title}" from "work_series_attributes_id"}
+  else
+    fill_in("work_series_attributes_title", :with => series_title)
+  end
+end
+
 When /^I add the work "([^\"]*)" to series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
   work = Work.find_by_title(work_title)
   if work.blank?
@@ -10,6 +19,7 @@ When /^I add the work "([^\"]*)" to series "([^\"]*)"(?: as "([^"]*)")?$/ do |wo
     visit preview_work_url(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
+    Work.tire.index.refresh
   end
 
   if pseud.blank?
@@ -22,13 +32,14 @@ When /^I add the work "([^\"]*)" to series "([^\"]*)"(?: as "([^"]*)")?$/ do |wo
     select(pseud, :from => "work_author_attributes_ids_")
   end
   
-  check("series-options-show")  
-  if Series.find_by_title(series_title)
-    step %{I select "#{series_title}" from "work_series_attributes_id"}
-  else
-    fill_in("work_series_attributes_title", :with => series_title)
-  end
+  step %{I add the series "#{series_title}"}
   click_button("Post Without Preview")
+end
+
+When /^I add the draft "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_title|
+  step %{I edit the work "#{work_title}"}
+  step %{I add the series "#{series_title}"}
+  click_button("Save Without Posting")
 end
 
 When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|
@@ -39,6 +50,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     visit preview_work_url(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
+    Work.tire.index.refresh
   end
   
   count.to_i.times do |i|

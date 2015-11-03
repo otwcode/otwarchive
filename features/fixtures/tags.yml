@@ -44,3 +44,19 @@ ghostsoup:
   name: Ghost Soup
   type: Fandom
   canonical: true
+rating1:
+  id: 11
+  name: General Audiences
+  type: Rating
+rating2:
+  id: 12
+  name: Teen And Up Audiences
+  type: Rating
+rating3:
+  id: 13
+  name: Mature
+  type: Rating
+rating4:
+  id: 14
+  name: Explicit
+  type: Rating

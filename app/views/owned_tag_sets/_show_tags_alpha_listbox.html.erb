@@ -18,7 +18,7 @@
   <ol class="index group">
     <% slice_index = 0 %>
     <% tagname_list.each_slice(itemcount) do |tagnames| %>
-      <li class="<%= tag_type %> letter range listbox <%= cycle :odd, :even %>">
+      <li class="<%= tag_type %> letter range listbox">
         <h3 class="expander_parent heading">
           <span class="range">
             <%= tagnames.first %>

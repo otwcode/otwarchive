@@ -1,0 +1,1 @@
+$elasticsearch = Elasticsearch::Client.new host: ArchiveConfig.ELASTICSEARCH_1_URL

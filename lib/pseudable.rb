@@ -2,14 +2,26 @@
 module Pseudable
 
   def pseuds_to_add=(pseud_names)
-    pseud_names.split(',').reject {|name| name.blank?}.map {|name| name.strip}.each do |name|
+    names = pseud_names.split(',').
+                        reject { |name| name.blank? }.
+                        map { |name| name.strip }
+    names.each do |name|
       possible_pseuds = Pseud.parse_byline(name)
       if possible_pseuds.size > 1
-        possible_pseuds = Pseud.parse_byline(name, :assume_matching_login => true)
+        possible_pseuds = Pseud.parse_byline(name, assume_matching_login: true)
       end
-      p = possible_pseuds.first
-      errors.add(:base, ts("We couldn't find the pseud {{name}}.", :name => name)) and return if p.nil?
-      add_pseud(p)
+      pseud = possible_pseuds.first
+      if pseud.nil?
+        errors.add(:base, 
+                   ts("We couldn't find the pseud {{name}}.", name: name))
+      elsif pseud.user.banned?
+        errors.add(:base, 
+                   ts("{{name}} has been banned and cannot be listed as a co-creator",
+                      name: name)
+                   )
+      else
+        add_pseud(pseud)
+      end
     end
   end
   

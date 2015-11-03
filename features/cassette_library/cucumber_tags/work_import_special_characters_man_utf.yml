@@ -7,30 +7,30 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Wed, 19 Jun 2013 19:40:16 GMT
-      server: 
+      Date: 
+      - Tue, 30 Sep 2014 02:04:50 GMT
+      Server: 
       - Apache/2.2.22
-      last-modified: 
+      Last-Modified: 
       - Fri, 14 Jan 2011 08:59:57 GMT
-      etag: 
+      Etag: 
       - "\"3ee03ec-115-499caa88b7d40\""
-      accept-ranges: 
+      Accept-Ranges: 
       - bytes
-      content-length: 
+      Content-Length: 
       - "277"
-      connection: 
+      Connection: 
       - close
-      content-type: 
+      Content-Type: 
       - text/html
     body: 
       encoding: ASCII-8BIT
@@ -43,6 +43,6 @@ http_interactions:
         <p>\xC3\x84 \xC3\x96 \xC3\x9C \xC3\xA9 \xC3\xA8 \xC3\x88 \xC3\x89 \xC3\xBC \xC3\xB6 \xC3\xA4 \xC3\x9F \xC3\xB1</p>\n\
         </body>\n\
         </html>\n"
-    http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 19:40:16 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:04:51 GMT
 recorded_with: VCR 2.5.0

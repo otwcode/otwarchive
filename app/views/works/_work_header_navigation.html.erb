@@ -5,7 +5,7 @@
     <li class="add"><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
     <li class="edit"><%= link_to ts("Edit"), edit_work_path(@work) %></li>
     <li class="edit tag"><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
-    <li class="del"><%= link_to ts("Delete Work"), confirm_delete_work_path(@work) %></li>
+    <li class="del"><%= link_to ts("Delete Work"), confirm_delete_work_path(@work), :confirm => ts("Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!") %></li>
   <% end %>
 
 
@@ -16,11 +16,11 @@
     <% if @previous_chapter %>
       <li class="chapter previous"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
     <% end %>
-    
+
     <% if @next_chapter %>
       <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
-    
+
     <li class="chapter" aria-haspopup="true">
       <noscript>
         <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
@@ -39,25 +39,35 @@
         <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
       </ul>
     </li>
-  <% elsif @chapters %>
-    <li class="chapter bychapter"><%= link_to ts("View chapter by chapter"), [@work, @chapter] %></li>
+  <% elsif @chapters && @chapters.length > 1 %>
+    <li class="chapter bychapter"><%= link_to ts("Chapter by Chapter"), [@work, @chapter] %></li>
   <% end %>
 
 
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
-    <li class="bookmark"><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
-    <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
+    <li class="bookmark">
+      <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+      <%= link_to ts("Cancel Bookmark"), "#", :class => "hidden bookmark_form_placement_close" %>
+    </li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false || marked_for_later?(@work) %>
       <li class="mark"><%= marktoread_link(@work) %></li>
     <% end %>
   <% end %>
 
-  <li class="comments"><%= link_to ts("Comments"), (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
-
-<!-- allow user to disable style on work if it has been customized -->
+  <li class="comments" id="show_comments_link_top">
+    <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
+    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %> 
+    <% if commentable.count_visible_comments > 0 %>
+      <%= show_hide_comments_link(commentable) %>
+    <% else %>
+      <%= link_to ts("Comments"), "#comments" %>
+    <% end %>
+  </li>
+  
+  <% # allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
     <li class="style">
       <% if Preference.disable_work_skin?(params[:style]) %>
@@ -70,25 +80,33 @@
     </li>
   <% end %>
 
-  <li class="share hidden">
-    <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
-    <%= render 'share/share', :shareable => @work %>
-  </li>
+  <% unless @work.users.all? {|u| u.preference.disable_share_links?} %>
+    <li class="share hidden">
+      <%= link_to_modal ts("Share"), :for => "#share", :title => ts("Share Work") %>
+      <%= render 'share/share', :shareable => @work %>
+    </li>
+  <% end %>
   
   <% if current_user && @subscription %>
     <li class="subscribe">
       <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
-
-  <li class="download" aria-haspopup="true">
-    <a href="#"><%= ts("Download") %></a>
-    <ul class="expandable secondary">
-      <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
-      <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
-      <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
-      <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-    </ul>
-  </li>
+  <% if @work.posted? %>
+    <li class="download" aria-haspopup="true">
+      <a href="#"><%= ts("Download") %></a>
+      <ul class="expandable secondary">
+        <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
+        <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
+        <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
+        <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
+      </ul>
+    </li>
+  <% end %>
 </ul>
 <!-- END navigation -->
+
+<% # FRONTEND NOTE: Twitter widget JavaScript included here for share/_share to ensure it is only loaded once per page %>
+<% content_for :footer_js do %>
+  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<% end %>

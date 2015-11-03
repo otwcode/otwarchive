@@ -15,6 +15,8 @@ SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672f
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
+SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
+SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'
@@ -50,6 +52,7 @@ OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
 ELASTICSEARCH_URL: 'http://localhost:9200'
+ELASTICSEARCH_1_URL: 'http://localhost:9200'
 MEMCACHED_URL: '127.0.0.1'
 
 # tag settings
@@ -83,30 +86,43 @@ CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
 LOGNOTE_MIN: 5
 LOGNOTE_MAX: 1250
-FEEDBACK_SUMMARY_MAX: 100
+FEEDBACK_SUMMARY_MAX_DISPLAYED: 100
+FEEDBACK_SUMMARY_MAX: 107
 INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+LOGIN_LENGTH_MIN: 3
+LOGIN_LENGTH_MAX: 40
+PASSWORD_LENGTH_MIN: 6
+PASSWORD_LENGTH_MAX: 40
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
 PROMPT_TAGS_MAX: 20
+
+# max number of potential matches to generate
+POTENTIAL_MATCHES_MAX: 50
 
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
 # max for prompt memes (can be much higher than for gift exchanges, as there is no matching)
 PROMPT_MEME_PROMPTS_MAX: 50
 
+
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25
 IMPORT_MAX_CHAPTERS: 200
 IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
+# max number of abuse reports to accept for a given work URL
+ABUSE_REPORTS_PER_WORK_MAX: 5
+
 # number of items in various displays
 ITEMS_PER_PAGE: 25
 # must be less than ITEMS_PER_PAGE above
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
+NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE: 3
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
 TAGS_IN_CLOUD: 200
@@ -114,7 +130,9 @@ TAG_LIST_LIMIT: 300
 # how many options there should be before we show a scrollable window, and how many there
 # can be before we just use an autocomplete instead
 OPTIONS_TO_SHOW: 3
-MAX_OPTIONS_TO_SHOW: 500
+MAX_OPTIONS_TO_SHOW: 20
+MAX_KUDOS_TO_SHOW: 50
+MAX_FAVORITE_TAGS: 20
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
@@ -122,7 +140,7 @@ MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
 WARNING_DEFAULT_TAG_NAME: 'Choose Not To Use Archive Warnings'
-WARNING_DEFAULT_TAG_DISPLAY_NAME: 'Author Chose Not To Use Archive Warnings'
+WARNING_DEFAULT_TAG_DISPLAY_NAME: 'Creator Chose Not To Use Archive Warnings'
 WARNING_NONE_TAG_NAME: 'No Archive Warnings Apply'
 WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
@@ -206,8 +224,8 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date", "bookmark
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
 #
-FIELDS_ALLOWING_HTML: ["about_me", "banner_text", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
-  "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
+FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
+  "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary", "screencast"]
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
@@ -323,14 +341,16 @@ ACTION_NEW_EMAIL: 9
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 DUMP_SEEDS: [
-          "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
-          "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
-          "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", 
-          "open_doors", "Rebecca", "RKlyne", "Rustler", "Sidra", 
-          "staranise", "Stowaway", "testy", "Tel", "tomatopudding", 
-          "velocitygrass", "xparrot", "zelempa", "zoemathemata", 
-          "Zooey_Glass", "zlabya", "zz9pzza"
+            "Amancham", "Anneli", "ariana_paris", "astolat", "Atalan", "awils1",
+            "aworldinside", "bingeling", "Cesy", "cesytest", "Celandine",
+            "Chandri", "daymarket",  "eel", "elz", "erda", "Enigel",
+            "fairywearsbootz", "hele", "Hope", "insomniac_amy", "Jaetion",
+            "jennyst", "Jenn_Calaelen", "justira", "jetta_e_rus", "karanguni",
+            "Kitsune", "krytella", "Lal", "lim", "Lisztful", "macey_muse", "mumble", 
+            "open_doors", "Rebecca", "RKlyne", "Rustler", "Shay_Guy", "Sidra",
+            "signalvsnoise", "staranise", "Stowaway", "testy", "Tel",
+            "tomatopudding", "tuff_ghost", "velocitygrass", "xparrot", "yaobikuni",
+            "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza"
 ]
 
 # seeds who want their email address preserved for testing
@@ -352,3 +372,6 @@ DUMP_COLLECTION_SEEDS: [
           "Remix2011", "PornBattleXII"
 ]
 
+
+# Languages we offer support in
+SUPPORT_LANGUAGES: "العربية, Bahasa Indonesia, català, čeština, dansk, Deutsch, English, español, français, 한국어, italiano, magyar, Nederlands, polski, português, Русский, suomi, svenska, Tiếng Việt, Türkçe, 中文"

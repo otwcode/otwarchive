@@ -1,11 +1,11 @@
 <h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
-  <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
+  <li><%= span_if_current(ts('Wrangling Home'), tag_wrangler_path(current_user)) %></li>
   <% end %>
-  <li><%= span_if_current('Mass Wrangling', tag_wranglings_path) %></li>
-  <li><%= span_if_current('Wranglers', tag_wranglers_path) %></li>  
-  <li><%= span_if_current('Discuss', discuss_tag_wranglings_path) %></li>		
-  <li><%= span_if_current('Search Tags', search_tags_path) %></li> 
-  <li><%= span_if_current('New Tag', new_tag_path) %></li> 
+  <li><%= span_if_current(ts('Mass Wrangling'), tag_wranglings_path) %></li>
+  <li><%= span_if_current(ts('Wranglers'), tag_wranglers_path) %></li>  
+  <li><%= span_if_current(ts('Discuss'), discuss_tag_wranglings_path) %></li>		
+  <li><%= span_if_current(ts('Search Tags'), search_tags_path) %></li> 
+  <li><%= span_if_current(ts('New Tag'), new_tag_path) %></li> 
 </ul>

@@ -32,8 +32,8 @@ class GiftsController < ApplicationController
         end
       end
     end
-    @works = (@works & @collection.approved_works) if @collection && (@user || @recipient_name)
-    @works = @works.order('revised_at DESC')
+    @works = @works.in_collection(@collection) if @collection
+    @works = @works.order('revised_at DESC').paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
   
 end

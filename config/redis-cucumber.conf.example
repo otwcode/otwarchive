@@ -7,7 +7,7 @@ timeout 300
 save 900 1
 save 300 10
 save 60 10000
-dbfilename log/redis-cucumber-dump.rdb
+dbfilename redis-cucumber-dump.rdb
 dir .
 loglevel debug
 logfile stdout

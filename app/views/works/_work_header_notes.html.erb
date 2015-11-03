@@ -1,7 +1,10 @@
 <div class="notes module" role="complementary">
   <h3 class="heading"><%= ts("Notes:") %></h3>
 
-  <ul class="associations">
+  <% # We don't want the ul tag hanging around when it's empty (i.e. when there are no recipients, parent works, or claims) but we can't skip this entire section because line 25 generates the link to child works that appear under any notes. We repeat this logic on line 63 to close the ul. %>
+  <% if show_associations?(@work) %>
+    <ul class="associations">
+  <% end %>
     <% # dedication %>
     <% unless @work.recipients.blank? %>
       <li><%= ts("For") %> <%= recipients_link(@work) %>.</li>
@@ -13,9 +16,9 @@
         <li>
           <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
           <% if related_work.work.restricted? && !logged_in? %>
-            <%= ts("[Restricted Work] by ") %><%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
+            <%= ts("[Restricted Work] by") %> <%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
           <% else %>
-            <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+            <%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
           <% end %>
         </li>
       <% else %>
@@ -38,7 +41,7 @@
           <% elsif related_work.parent.restricted? && !logged_in? %>
             <%= ts("[Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
           <% else %>
-            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+            <%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>.
           <% end %>
         </li>
       <% end %>
@@ -57,7 +60,9 @@
         </li>
       <% end %>
     <% end %>
-  </ul>
+  <% if show_associations?(@work) %>
+    </ul>
+  <% end %>
 
   <% # notes %>
   <% unless @work.notes.blank? %>

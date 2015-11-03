@@ -31,7 +31,7 @@ div.admin + h3.landmark {
   clear: none;
 }
 
-.admin .navigation a {
+.admin .management a {
   border-bottom: 3px solid #066;
 }
 

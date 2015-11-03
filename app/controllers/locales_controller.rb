@@ -1,19 +1,13 @@
 class LocalesController < ApplicationController
-  before_filter :check_permission, :only => [:new, :create]
+  before_filter :check_permission, :only => [:new, :create, :update, :edit]
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
-  end  
+  end
   
   def set
     if params[:locale_id]
       session[:locale] = params[:locale_id]     
-    end
-    # Temporary message for non-default locales for launch of open beta
-    unless params[:locale_id] == ArchiveConfig.DEFAULT_LOCALE_ISO
-      flash[:notice] = "We're working on making the <a href='http://archiveofourown.org/archive_faqs#locales'>AO3 
-      available in your language</a>, too! \\o/ If you want to help us add more languages, 
-      <a href='http://transformativeworks.org/node/540'>please consider volunteering</a>."
     end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
@@ -30,6 +24,24 @@ class LocalesController < ApplicationController
     @locale = Locale.new
     @languages = Language.default_order
   end
+
+  # GET /locales/en/edit
+  def edit
+    @locale = Locale.find_by_iso(params[:id])
+    @languages = Language.default_order
+  end
+
+  def update
+    @locale = Locale.find_by_iso(params[:id])
+    @locale.attributes = params[:locale]
+    if @locale.save
+      flash[:notice] = ts('Your locale was successfully updated.')
+    else
+      flash[:error] = ts('Sorry, something went wrong. Please try that again.')
+    end
+    redirect_to action: 'index', status: 303
+  end
+
   
   def create   
     @locale = Locale.new(params[:locale])

@@ -9,42 +9,43 @@
 
 <!--subnav-->
 <% if logged_in_as_admin? %>
-<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+  <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 <% end %>
 <!--/subnav-->
 
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
-<!-- BEGIN work -->
-<div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
-  <%= render :partial => 'works/work_header' %>
+  <!-- BEGIN work -->
+  <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
+    <%= render :partial => 'works/work_header' %>
 
-  <div id="chapters">
-    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
-  </div>
+    <div id="chapters">
+      <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+    </div>
   
-  <% inspired_by = get_inspired_by(@work) %>
-  <% if @chapter == @work.last_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty?) %>
-  <!--afterword-->
-  <div class="afterword preface group" role="complementary">  
-    <% if !@work.endnotes.blank? %>
-      <%= render :partial => 'works/work_endnotes' %>
+    <% inspired_by = get_inspired_by(@work) %>
+    <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
+    <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
+      <!--afterword-->
+      <div class="afterword preface group" role="complementary">  
+        <% if !@work.endnotes.blank? %>
+          <%= render :partial => 'works/work_endnotes' %>
+        <% end %>
+        <% unless @preview_mode || @work.series.blank? %>
+          <%= render :partial => 'works/work_series_links' %>
+        <% end %>
+        <% unless inspired_by.empty? %>
+          <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
+        <% end %>
+      </div>
+      <!--/afterword-->
     <% end %>
-    <% unless @preview_mode || @work.series.blank? %>
-      <%= render :partial => 'works/work_series_links' %>
-    <% end %>
-    <% unless inspired_by.empty? %>
-      <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
-    <% end %>
-  </div>
-  <!--/afterword-->
-  <% end %>
   
+    </div>
+    <!-- END work skin -->
   </div>
-  <!-- END work skin -->
-</div>
-<!-- END work -->
+  <!-- END work -->
 
-<!-- BEGIN comment section -->
-<%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
-<!-- END comment section -->
+  <!-- BEGIN comment section -->
+  <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
+  <!-- END comment section -->
 <% end %>

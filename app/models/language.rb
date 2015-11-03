@@ -6,6 +6,7 @@ class Language < ActiveRecord::Base
   has_many :works
   has_many :locales
   has_many :admin_posts
+  has_many :archive_faqs
   
   scope :default_order, order(:short)
   

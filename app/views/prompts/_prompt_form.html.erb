@@ -33,8 +33,12 @@
   
     <dl>
       <% if restriction.title_allowed %>
-        <dt class="<%= restriction.title_required ? 'required' : '' %>">
-          <%= form.label :title, ts("Title: ") %>
+        <dt<%= restriction.title_required ? ' class="required"'.html_safe : '' %>>
+          <% if restriction.title_required %>
+            <%= form.label :title, (ts("Title:") + " *") %>
+          <% else %>
+            <%= form.label :title, ts("Title:") %>
+          <% end %>
         </dt>
         <dd><%= form.text_field :title %></dd>
       <% end %>    
@@ -43,17 +47,25 @@
       <%= render "prompts/prompt_form_tag_options", :form => form, :restriction => restriction %>
     
       <% if restriction.url_allowed %>
-        <dt class="<%= restriction.url_required ? 'required' : '' %>">
+        <dt<%= restriction.url_required ? ' class="required"'.html_safe : '' %>>
           <% url_label = @challenge.send("#{prompt_type}_url_label") %>
-          <%= form.label :url , (url_label.blank? ? ts("Prompt URL: ") : url_label) %>
+          <% if restriction.url_required %>
+            <%= form.label :url , (url_label.blank? ? (ts("Prompt URL:") + " *") : url_label + " *") %>
+          <% else %>
+            <%= form.label :url , (url_label.blank? ? ts("Prompt URL:") : url_label) %>
+          <% end %>
         </dt>
         <dd><%= form.text_field :url %></dd>
       <% end %>
 
       <% if restriction.description_allowed  %>
-        <dt class="<%= restriction.description_required ? 'required' : '' %>">
+        <dt<%= restriction.description_required ? ' class="required"'.html_safe : '' %>>
           <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
-          <%= form.label :description, (desc_label.blank? ? ts("Description: ") : desc_label) %>
+          <% if restriction.description_required %>
+            <%= form.label :description, (desc_label.blank? ? (ts("Description:") + " *") : desc_label + " *") %>
+          <% else %>
+            <%= form.label :description, (desc_label.blank? ? ts("Description:") : desc_label) %>
+          <% end %>
         </dt>
         <dd><%= form.text_area :description, :rows => 6, :cols => 50, :class => "observe_textlength" %>
         <%= live_validation_for_field(field_id(form, "description").to_sym, :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
@@ -65,7 +77,7 @@
         <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
         <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
           <dt>
-            <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
+            <%= optional_tag_set_form.label :tagnames, ts("Optional Tags:") %> <%= link_to_help("challenge-optional-tags-user")%>
           </dt>
           <dd>
             <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag?type=all", :value => form.object.optional_tag_set.tagnames) %>
@@ -78,10 +90,10 @@
            # (currently the prompt memes don't allow a mod to specify no anonymity allowed)
            # and should probably be done via an Anonymous user like the Orphan user.  
         %>
-        <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
+        <dt><%= form.label :anonymous, ts("Semi-anonymous Prompt?") %></dt>
         <dd>
           <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? true : form.object.anonymous %>
-  	      <p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p>
+  	      <p class="footnote"><%= ts("(Note: This is not totally secure, and is still guessable in some places.)") %></p>
   	    </dd>
       <% end %>     
     </dl>

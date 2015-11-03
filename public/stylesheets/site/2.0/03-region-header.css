@@ -1,5 +1,5 @@
 /*==REGION: HEADER is #1 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
 
 #header input, #header #search>*, #header #search .submit {
@@ -214,11 +214,16 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 }
 
 #small_login .footnote {
+  float: left;
   font-size: 0.857em;
   padding: 0.375em 0;
 }
 
-#header .dropdown .login .footnote a {
+#small_login .footnote li {
+  padding: 0 0.25em;
+}
+
+.dropdown #small_login .footnote a {
   background: transparent;
   border-bottom: 1px solid;
 }
@@ -256,6 +261,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 #header .search {
   float: right;
   color: #2a2a2a;
+  margin-right: 0.25em;
 }
 
 #header #search input:focus {
@@ -269,13 +275,11 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 
 /* 0.2857em x 14px = 4px because the input has a padding of 0.15em x 14px = 2px and it needs to match 0.429em x 14px = 6px */
 #header #search .text {
-  margin: 0.2857em 0.375em;
+  margin: 0.2857em 0.429em;
 }
  
 #header #search .button {
   height: auto;
-  margin-bottom: 0;
-  margin-top: 0;
 }
  
 /*CONTEXT: collections*/

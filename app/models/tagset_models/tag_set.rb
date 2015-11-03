@@ -287,22 +287,22 @@ class TagSet < ActiveRecord::Base
   end
 
   def remove_from_autocomplete
-    $redis.del("autocomplete_tagset_#{self.id}")
+    REDIS_GENERAL.del("autocomplete_tagset_#{self.id}")
   end
   
   def add_tags_to_autocomplete(tags_to_add)
     tags_to_add.each do |tag| 
       value = tag.autocomplete_value
-      $redis.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
-      $redis.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
+      REDIS_GENERAL.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
+      REDIS_GENERAL.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
     end
   end
   
   def remove_tags_from_autocomplete(tags_to_remove)
     tags_to_remove.each do |tag| 
       value = tag.autocomplete_value
-      $redis.zrem("autocomplete_tagset_all_#{self.id}", value)
-      $redis.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
+      REDIS_GENERAL.zrem("autocomplete_tagset_all_#{self.id}", value)
+      REDIS_GENERAL.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
     end
   end
     
@@ -320,14 +320,14 @@ class TagSet < ActiveRecord::Base
     
     if options[:in_any]
       # get the union since we want tags in ANY of these sets
-      $redis.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
     else
       # take the intersection of ALL of these sets
-      $redis.zinterstore(combo_key, keys_to_lookup, :aggregate => :max)
+      REDIS_GENERAL.zinterstore(combo_key, keys_to_lookup, :aggregate => :max)
     end
-    results = $redis.zrevrange(combo_key, 0, -1)
+    results = REDIS_GENERAL.zrevrange(combo_key, 0, -1)
     # expire fast
-    $redis.expire combo_key, 1
+    REDIS_GENERAL.expire combo_key, 1
     
     unless search_param.blank?
       search_regex = Tag.get_search_regex(search_param)

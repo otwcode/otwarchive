@@ -12,37 +12,37 @@ module AlphabetHelper
     previous_letter = alphabet[active_letter_index-1]
     next_letter = alphabet[active_letter_index+1]
 
-    block = '<div class="pagination">'
+    block = '<ol class="pagination actions" role="navigation">'
     # if there is no "previous" page, don't link
     unless active_letter_index == 0
-      block << '<span class="prev_page">'
-      block << link_to_letter(previous_letter, '&laquo; '.html_safe + h(ts('Previous')))
-      block << '</span>'
+      block << '<li class="previous">'
+      block << link_to_letter(previous_letter, '&#8592; '.html_safe + h(ts('Previous')))
+      block << '</li>'
     else
-      block << '<span class="disabled prev_page">&laquo; ' + h(ts('Previous')) + '</span>'
+      block << '<li class="previous"><span class="disabled">&#8592; ' + h(ts('Previous')) + '</span></li>'
     end
 
     # Link all the letters
     alphabet.each do |letter|
       unless letter == active_letter
-        block << " " + link_to_letter(letter.upcase)
+        block << ' <li>' + link_to_letter(letter.upcase) + '</li>'
       else
-        block << ' <span class="current">' + letter.upcase + '</span>'
+        block << ' <li><span class="current">' + letter.upcase + '</span></li>'
       end
     end
 
     unless active_letter_index == (alphabet.size-1)
-      block << ' <span class="next_page">'
-      block << link_to_letter(next_letter, h(ts('Next')) + ' &raquo;'.html_safe)
-      block << '</span>'
+      block << ' <li class="next">'
+      block << link_to_letter(next_letter, h(ts('Next')) + ' &#8594;'.html_safe)
+      block << '</li>'
     else
-      block << ' <span class="disabled prev_page">' + h(ts('Next')) + ' &raquo;</span>'
+      block << ' <li class="next"><span class="disabled">' + h(ts('Next')) + ' &#8594;</span></li>'
     end
 
-    block << "</div>"
+    block << "</ol>"
     block.html_safe
   end
-
+  
   def people_paginated_section(type)
     active_letter = params[:id].upcase
     block = '<div class="pagination">'

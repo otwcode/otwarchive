@@ -1,40 +1,28 @@
 class User < ActiveRecord::Base
-
+  audited
   include WorksOwner
-
-#### used to be in acts_as_authentable
-## used in app/views/users/new.html.erb
-## TODO move to ArchiveConfig
-  LOGIN_LENGTH_MIN = 3
-  LOGIN_LENGTH_MAX = 40
-
-  validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => LOGIN_LENGTH_MAX)
-
-  PASSWORD_LENGTH_MIN = 6
-  PASSWORD_LENGTH_MAX = 40
-
-  # allow nil so can save existing users
-  validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => PASSWORD_LENGTH_MAX)
-
-####
-
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 
-  # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
-  # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
-
   # Authlogic gem
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
-    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
-    config.validates_length_of_password_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
+    if (ArchiveConfig.BCRYPT  || "true") == "true" then
+      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
+    else
+      config.crypto_provider = Authlogic::CryptoProviders::Sha512
+      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
+    end
+    # Use our own validations for login
+    config.validate_login_field = false
+    config.validates_length_of_password_field_options = {:on => :update,
+                                                         :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                         :if => :has_no_credentials?}
+    config.validates_length_of_password_confirmation_field_options = {:on => :update,
+                                                                      :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                                      :if => :has_no_credentials?}
   end
 
   def has_no_credentials?
@@ -59,7 +47,13 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
-  before_destroy :remove_pseud_from_kudos # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+  has_many :fannish_next_of_kins, foreign_key: 'kin_id', dependent: :destroy
+  has_one :fannish_next_of_kin, dependent: :destroy
+
+  has_many :favorite_tags, dependent: :destroy
+
+  # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
+  before_destroy :remove_pseud_from_kudos
 
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
@@ -75,6 +69,7 @@ class User < ActiveRecord::Base
 
   before_create :create_default_associateds
 
+  after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
   has_many :collection_participants, :through => :pseuds
@@ -160,10 +155,6 @@ class User < ActiveRecord::Base
 
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
 
-  has_many :translations, :foreign_key => 'translator_id'
-  has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
-  has_many :translation_notes
-
   has_many :subscriptions, :dependent => :destroy
   has_many :followings,
             :class_name => 'Subscription',
@@ -177,7 +168,7 @@ class User < ActiveRecord::Base
             :through => :followings,
             :source => :user
 
-  has_many :wrangling_assignments
+  has_many :wrangling_assignments, :dependent => :destroy
   has_many :fandoms, :through => :wrangling_assignments
   has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
 
@@ -200,7 +191,8 @@ class User < ActiveRecord::Base
     inbox_comments.find(:all, :conditions => {:read => false})
   end
   def unread_inbox_comments_count
-    inbox_comments.count(:all, :conditions => {:read => false})
+    inbox_comments.with_feedback_comment.count(:all,
+                                               conditions: { read: false })
   end
 
   scope :alphabetical, :order => :login
@@ -208,11 +200,28 @@ class User < ActiveRecord::Base
   scope :valid, :conditions => {:banned => false, :suspended => false}
   scope :out_of_invites, :conditions => {:out_of_invites => true}
 
+  ## used in app/views/users/new.html.erb
+  validates_length_of :login, 
+    :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+    :too_short => ts("is too short (minimum is %{min_login} characters)", 
+      :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_login} characters)", 
+      :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
+
+  # allow nil so can save existing users
+  validates_length_of :password, 
+    :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
+    :allow_nil => true,
+    :too_short => ts("is too short (minimum is %{min_pwd} characters)", 
+      :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_pwd} characters)", 
+      :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
+
   validates_format_of :login,
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   # done by authlogic
-  # validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
+  validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
   validates :email, :email_veracity => true
 
@@ -471,7 +480,7 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user was invited, update the invitation
+  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
       invitation = Invitation.find_by_token(self.invitation_token)
@@ -497,6 +506,27 @@ class User < ActiveRecord::Base
       Rails.logger.fatal "You must have a User with the login 'orphan_account'. Please create one."
     end
     orphan_account
+  end
+
+  def update_pseud_name
+    return unless login_changed? && login_was.present?
+    old_pseud = self.pseuds.where(name: login_was).first
+    if login.downcase == login_was.downcase
+      old_pseud.name = login
+      old_pseud.save!
+    else
+      new_pseud = self.pseuds.where(name: login).first
+      # do nothing if they already have the matching pseud
+      return if new_pseud.present?
+
+      if old_pseud.present?
+        # change the old pseud to match
+        old_pseud.update_attribute(:name, login)
+      else
+        # shouldn't be able to get here, but just in case
+        Pseud.create(name: login, user_id: self.id)
+      end
+    end
   end
 
    def log_change_if_login_was_edited

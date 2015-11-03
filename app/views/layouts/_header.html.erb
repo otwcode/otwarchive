@@ -1,7 +1,7 @@
 <!-- BEGIN BETA CAVEATS! -->
 <noscript>
   <p id="javascript-warning">
-    <%= ts("While we've done our best to make the core functionality of this site accessible without javascript, it will work better with it enabled. Please consider turning it on!") %>
+    <%= ts('While we\'ve done our best to make the core functionality of this site accessible without javascript, it will work better with it enabled. Please consider turning it on!', key: 'header' ) %>
   </p>
 </noscript>
 <!-- END BETA CAVEATS! --> 
@@ -31,28 +31,28 @@
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In'), {:controller => :user_sessions, :action => 'new'} %>
+        <%= link_to ts('Log In', key: 'header'), {:controller => :user_sessions, :action => 'new'} %>
       </p>
       <%= render 'user_sessions/login' %>
     </div>
   <% end %>
 
-  <h3 class="landmark heading"><%= ts("Site Navigation") %></h3>
+  <h3 class="landmark heading"><%= ts('Site Navigation', key: 'header') %></h3>
   <ul class="primary navigation actions" role="navigation">
     <li class="dropdown">
-      <%= link_to ts('Fandoms'), menu_fandoms_path %>
+      <%= link_to ts('Fandoms', key: 'header'), menu_fandoms_path %>
       <%= render 'menu/menu_fandoms' %>
     </li>
     <li class="dropdown">
-      <%= link_to ts('Browse'), menu_browse_path %>
+      <%= link_to ts('Browse', key: 'header'), menu_browse_path %>
       <%= render 'menu/menu_browse' %>
     </li>
     <li class="dropdown">
-      <%= link_to ts('Search'), menu_search_path %>
+      <%= link_to ts('Search', key: 'header'), menu_search_path %>
       <%= render 'menu/menu_search' %>
     </li>
     <li class="dropdown">
-      <%= link_to ts('About'), menu_about_path %>
+      <%= link_to ts('About', key: 'header'), menu_about_path %>
       <%= render 'menu/menu_about' %>
     </li>
 	  <li class="search"><%= render 'works/search_box' %></li>
@@ -65,7 +65,7 @@
   <% if @collection %>
     <h2 class="collections">
       <% unless @collection.header_image_url.present? %>
-        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %>
+        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts('New Collection', key: 'header')) %>
       <% end %>
     </h2>
   <% end %>

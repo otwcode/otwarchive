@@ -11,8 +11,14 @@ module I18n
         options = args.last.is_a?(Hash) ? args.pop : {}
         default_string = args.shift
         key = "#{self.class.name}."
+        if options.has_key?(:key)
+          key = options[:key] + "."
+        end
         key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
-
+        if options.has_key?(:fullkey)
+          key = options[:fullkey]
+        end
+        # Rails.logger.error "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
         # add the default string as an option, and hand off to translate.
         options.merge!(:default => default_string)
         translate(key.to_sym, options)
@@ -97,8 +103,14 @@ module ActionView
           else
             key = "#{self.class.name}."
           end
+          if options.has_key?(:key)
+            key = options[:key] + "."
+          end
           key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
-
+          if options.has_key?(:fullkey)
+            key = options[:fullkey]
+          end
+          #Rails.logger.info "XXXXXXXXXXXX #{key.to_sym} XXXXXXXXXXXX #{default_string} XXXXXXXXXXXX"
           # add the default string as an option, and hand off to translate.
           options.merge!(:default => default_string)
           translate(key.to_sym, options)

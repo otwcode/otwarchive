@@ -1,5 +1,5 @@
 module TagsHelper
-  
+
   def tag_type_label(tag_type)
     case tag_type
     when 'tag'
@@ -15,23 +15,37 @@ module TagsHelper
   def tag_link_list(tags, link_to_works=false)
     tags = tags.uniq.compact.map {|tag| content_tag(:li, link_to_works ? link_to_tag_works(tag) : link_to_tag(tag))}.join.html_safe
   end
-  
+
   def description(tag)
     tag.name + " (" + tag.class.name + ")"
   end
 
   # Adds the appropriate css classes for the tag index page
   def tag_cloud(tags, classes)
-    max, min = 0, 0
+    max, min = -1.0/0, 1.0/0
     tags.each { |t|
-      max = t.count.to_i if t.count.to_i > max
-      min = t.count.to_i if t.count.to_i < min
+      next if t.count.to_i == 0 # 0s make log scales sad
+      max = Math.log(t.count.to_i) if Math.log(t.count.to_i) > max
+      min = Math.log(t.count.to_i) if Math.log(t.count.to_i) < min
     }
 
-    divisor = ((max - min) / classes.size) + 1
-
+    divisor = ((max - min) / classes.size)
     tags.each { |t|
-      yield t, classes[(t.count.to_i - min) / divisor]
+      if divisor.infinite?
+        # all counts were 0
+        yield t, classes[0]
+      else
+        class_idx = ((Math.log(t.count.to_i) - min) / divisor)
+        # handle lower edge case to prevent OOB access
+        if class_idx.nan?
+          class_idx = 0.0
+        end
+        # handle upper edge case to prevent OOB access
+        if class_idx >= classes.size
+          class_idx = classes.size - 1
+        end
+        yield t, classes[class_idx.floor]
+      end
     }
   end
 
@@ -60,7 +74,7 @@ module TagsHelper
   def link_to_tag_works(tag, options = {})
     link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
   end
-  
+
   def link_to_tag_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
   end
@@ -68,7 +82,7 @@ module TagsHelper
   def link_to_edit_tag(tag, options = {})
     link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
   end
-  
+
   def tag_with_link_to_edit(tag, options = {})
     options.reverse_merge!({:target => "_blank"})
     content_tag(:span, tag.name, :class=>"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
@@ -127,8 +141,8 @@ module TagsHelper
   end
 
   # Makes filters show warnings display name
-  def label_for_filter(type, tag_info)
-    name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+  def label_for_filter(tag_type, tag_info)
+    name = (tag_type == "warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
   end
 
@@ -158,7 +172,7 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag.type + ": " + link_to_tag(tag) + " &lrm;(#{tag.taggings_count})</span>"
       span.html_safe
     end
   end
@@ -175,12 +189,12 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    can_wrangle? && 
+    can_wrangle? &&
     (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
     (@tag && controller.controller_name == 'comments'))
   end
 
-  # Returns a nested list of meta tags 
+  # Returns a nested list of meta tags
   def meta_tag_tree(tag)
     meta_ul = "".html_safe
     unless tag.direct_meta_tags.empty?
@@ -200,10 +214,11 @@ module TagsHelper
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.each do |sub|
-        sub_ul << "<li>" + link_to_tag(sub) + "</li>"
+        sub_ul << "<li>" + link_to_tag(sub)
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)
         end
+        sub_ul << "</li>"
       end
       sub_ul << "</ul>"
     end

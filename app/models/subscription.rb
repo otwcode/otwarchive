@@ -29,22 +29,10 @@ class Subscription < ActiveRecord::Base
   
   def subject_text(creation)
     authors = creation.pseuds.map{ |p| p.byline }.to_sentence
-    "#{authors} posted #{creation_name(creation)}"
-  end
-
-  def creation_name(creation)
-    if creation.is_a?(Chapter)
-      "#{chapter_name(creation)} of #{creation.work.title}"
-    elsif subscribable_type == 'User'
-      creation.title
-    elsif subscribable_type == 'Series'
-      "#{creation.title} in #{self.name} series"
-    end      
-  end
-
-  def chapter_name(creation)
-    title = creation.chapter_title
-    title.match(/^Chapter /) ? title : "Chapter #{title}"
+    chapter_text = creation.is_a?(Chapter) ? "#{creation.chapter_header} of " : ""
+    work_title = creation.is_a?(Chapter) ? creation.work.title : creation.title
+    text = "#{authors} posted #{chapter_text}#{work_title}"
+    text += subscribable_type == "Series" ? " in the #{self.name} series" : ""
   end
     
 end

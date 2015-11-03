@@ -784,14 +784,14 @@ specified tag sets</p>
   
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:in_any</span>]
     <span class="ruby-comment"># get the union since we want tags in ANY of these sets</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zunionstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment"># take the intersection of ALL of these sets</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zinterstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zinterstore</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-identifier">keys_to_lookup</span>, <span class="ruby-value">:aggregate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:max</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">results</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrevrange</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-value">0</span>, <span class="ruby-value">-1</span>)
+  <span class="ruby-identifier">results</span> = <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrevrange</span>(<span class="ruby-identifier">combo_key</span>, <span class="ruby-value">0</span>, <span class="ruby-value">-1</span>)
   <span class="ruby-comment"># expire fast</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key</span>, <span class="ruby-value">1</span>
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">expire</span> <span class="ruby-identifier">combo_key</span>, <span class="ruby-value">1</span>
   
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">search_param</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">search_regex</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">get_search_regex</span>(<span class="ruby-identifier">search_param</span>)
@@ -896,8 +896,8 @@ specified tag sets</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_tags_to_autocomplete</span>(<span class="ruby-identifier">tags_to_add</span>)
   <span class="ruby-identifier">tags_to_add</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> 
     <span class="ruby-identifier">value</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">autocomplete_value</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_tagset_all_#{self.id}&quot;</span>, <span class="ruby-value">0</span>, <span class="ruby-identifier">value</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{tag.type.downcase}_#{self.id}&quot;</span>, <span class="ruby-value">0</span>, <span class="ruby-identifier">value</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_tagset_all_#{self.id}&quot;</span>, <span class="ruby-value">0</span>, <span class="ruby-identifier">value</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{tag.type.downcase}_#{self.id}&quot;</span>, <span class="ruby-value">0</span>, <span class="ruby-identifier">value</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- add_tags_to_autocomplete-source -->
@@ -1363,7 +1363,7 @@ one of the tag sets may actually be an activequery object</p>
           <div class="method-source-code" id="remove_from_autocomplete-source">
             <pre><span class="ruby-comment"># File app/models/tag_set.rb, line 289</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_from_autocomplete</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">del</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{self.id}&quot;</span>)
+  <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">del</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{self.id}&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- remove_from_autocomplete-source -->
           
@@ -1395,8 +1395,8 @@ one of the tag sets may actually be an activequery object</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_tags_from_autocomplete</span>(<span class="ruby-identifier">tags_to_remove</span>)
   <span class="ruby-identifier">tags_to_remove</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> 
     <span class="ruby-identifier">value</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">autocomplete_value</span>
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_tagset_all_#{self.id}&quot;</span>, <span class="ruby-identifier">value</span>)
-    <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{tag.type.downcase}_#{self.id}&quot;</span>, <span class="ruby-identifier">value</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_tagset_all_#{self.id}&quot;</span>, <span class="ruby-identifier">value</span>)
+    <span class="ruby-identifier">REDIS_GENERAL</span>.<span class="ruby-identifier">zrem</span>(<span class="ruby-node">&quot;autocomplete_tagset_#{tag.type.downcase}_#{self.id}&quot;</span>, <span class="ruby-identifier">value</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- remove_tags_from_autocomplete-source -->

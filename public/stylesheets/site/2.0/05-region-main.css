@@ -1,5 +1,5 @@
 /*==REGION: MAIN is #3 of the 4 regions shown on every page 
-http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 */
 
 #main {
@@ -28,23 +28,19 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
   padding: 2em 7.5em 3.5em;
 }
 
-#main.error, #main.slow, #main.maintenance {
+#main.errors {
   background: url("/images/ao3_logos/sadface.png") top right no-repeat;
-  border: 0;
-  color: #222;
-    border-radius: 0;
-    box-shadow: none;
 }
 
-#main.slow {
+#main.error-502 {
   background: url("/images/ao3_logos/ao3-502.png") top right no-repeat;
 }
 
-#main.maintenance {
+#main.error-503-maintenance {
   background: url("/images/ao3_logos/logo-ruby.png") top right no-repeat;
 }
 
-#main.error p {
+#main.errors p {
   margin-right: 400px;
 }
 

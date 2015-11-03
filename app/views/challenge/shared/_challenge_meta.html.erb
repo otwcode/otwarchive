@@ -5,15 +5,15 @@
   <dt><%= ts("Sign-up:")%></dt>
   <dd><strong><%= link_to ts("Open"), new_collection_signup_path(@collection) %></strong></dd>
 
-  <dt><%= ts("Sign-up closes:")%></dt>
+  <dt><%= ts("Sign-up Closes:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < (challenge.signups_open_at || 1.day.ago) %>
 
-  <dt><%= ts("Sign-up opens:")%></dt>
+  <dt><%= ts("Sign-up Opens:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.signups_open_at, zone) %></dd>
 
-  <dt><%= ts("Sign-up closes:")%></dt>
+  <dt><%= ts("Sign-up Closes:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < (challenge.signups_close_at || 1.day.ago) %>
@@ -22,16 +22,16 @@
     <span class="datetime">(on <%= time_in_zone(challenge.signups_close_at, zone) %>)</span></dd>
 <% end %>
 
-<dt><%= ts("Assignments due:")%></dt>
+<dt><%= ts("Assignments Due:")%></dt>
 <dd class="datetime"><%= time_in_zone(challenge.assignments_due_at, zone) %></dd>
 
 <% if @collection.unrevealed? %>
-  <dt><%= ts("Works revealed:")%></dt>
+  <dt><%= ts("Works Revealed:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.works_reveal_at, zone) %></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
-  <dt><%= ts("Authors revealed:")%></dt>
+  <dt><%= ts("Authors Revealed:")%></dt>
   <dd class="datetime"><%= time_in_zone(challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 

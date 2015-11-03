@@ -54,7 +54,7 @@
     <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
     <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
     <li><%= span_if_current ts("Claims (%{claim_number})", :claim_number => (@user.request_claims.unposted.count)), user_claims_path(@user) %></li>
-    <li><%= span_if_current ts("Related Works (%{related_works_number})", :related_works_number => (@user.related_works.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>
+    <li><%= span_if_current ts("Related Works (%{related_works_number})", :related_works_number => (@user.related_works.posted.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>
   <% end %>
   <li><%= print_gifts_link(@user) %></li> 
 </ul>

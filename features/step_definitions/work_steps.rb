@@ -71,6 +71,11 @@ Given /^the chaptered work with comments setup$/ do
   step "I am logged out"
 end
 
+Given /^the work "([^\"]*)"$/ do |work|
+  step %{I have a work "#{work}"}
+  step %{I am logged out}
+end
+
 ### WHEN
 
 When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
@@ -83,7 +88,7 @@ When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |w
   work = Work.find_by_title!(work)
   visit work_url(work)
   step %{I follow "Entire Work"} if mode == "full"
-  step %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
+  step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 
 When /^I view the work "([^\"]*)" with comments$/ do |work|
@@ -91,9 +96,23 @@ When /^I view the work "([^\"]*)" with comments$/ do |work|
   visit work_url(work, :anchor => "comments", :show_comments => true)
 end
 
+When /^I view a deleted work$/ do
+  visit "/works/12345/chapters/12345"
+end
+
+When /^I view a deleted chapter$/ do
+  step "the draft \"DeletedChapterWork\""
+  work = Work.find_by_title("DeletedChapterWork")
+  visit "/works/#{work.id}/chapters/12345"
+end
+
 When /^I edit the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
+end
+
+When /^I edit the draft "([^\"]*)"$/ do |draft|
+  step %{I edit the work "#{draft}"}
 end
 
 When /^I post the chaptered work "([^\"]*)"$/ do |title|
@@ -103,6 +122,11 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   click_button("Preview")
   step %{I press "Post"}
   Work.tire.index.refresh
+end
+
+When /^I post the chaptered draft "([^\"]*)"$/ do |title|
+  step %{the draft "#{title}"}
+  step %{a draft chapter is added to "#{title}"}
 end
 
 When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, collection|
@@ -197,8 +221,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Your Tags", :with => DEFAULT_FREEFORM)
+  fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
+  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
 # the (?: ) construct means: do not use the stuff in () as a capture/match
@@ -262,11 +286,31 @@ When /^the locked draft "([^\"]*)"$/ do |title|
   click_button("Preview")
 end
 
+When /^I lock the work$/ do
+  check("work_restricted")
+end
+
+When /^I lock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I lock the work}
+  step %{I post the work}
+end
+
+When /^I unlock the work$/ do
+  uncheck("work_restricted")
+end
+
+When /^I unlock the work "([^\"]*)"$/ do |work|
+  step %{I edit the work "#{work}"}
+  step %{I unlock the work}
+  step %{I post the work}
+end
+
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
-  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
-  fill_in("Url", :with => url_of_work)
+  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
+  fill_in("work_parent_attributes_url", with: url_of_work)
 end
 
 When /^I set the publication date to today$/ do
@@ -330,6 +374,57 @@ When /^I post the work$/ do
   click_button "Post"
   # Work.tire.index.refresh
 end
+
+When /^the statistics_tasks rake task is run$/ do
+  StatCounter.hits_to_database
+  StatCounter.stats_to_database
+end
+
+When /^I add the co-author "([^\"]*)" to the work "([^\"]*)"$/ do |coauthor, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the co-author "#{coauthor}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the co-author "([^\"]*)"$/ do |coauthor|
+  step %{the user "#{coauthor}" exists and is activated}
+  check("Add co-authors?")
+  fill_in("pseud_byline", :with => "#{coauthor}")
+end
+
+When /^I give the work to "([^\"]*)"$/ do |recipient|
+  fill_in("work_recipients", :with => "#{recipient}")
+end
+
+When /^I add the beginning notes "([^\"]*)"$/ do |notes|
+  check("at the beginning")
+  fill_in("work_notes", :with => "#{notes}")
+end
+
+When /^I add the end notes "([^\"]*)"$/ do |notes|
+  check("at the end")
+  fill_in("work_endnotes", :with => "#{notes}")
+end
+
+When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the beginning notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
+When /^I add the end notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
+  step %{I edit the work "#{work}"}
+  step %{I add the end notes "#{notes}"}
+  step %{I post the work without preview}
+end
+
+When /^I mark the work "([^\"]*)" for later$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  step %{I follow "Mark for Later"}
+  Reading.update_or_create_in_database
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -352,3 +447,10 @@ Then /^I should not see Completed today$/ do
   step "I should not see \"Completed:#{today}\""
 end
 
+Then /^I should find a list for associations$/ do
+  page.should have_xpath("//ul[@class=\"associations\"]")
+end
+
+Then /^I should not find a list for associations$/ do
+  page.should_not have_xpath("//ul[@class=\"associations\"]")
+end

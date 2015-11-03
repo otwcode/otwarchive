@@ -22,6 +22,7 @@ Feature: Create Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
+      And I should see "Deutsch" within "dd.language"
     When I go to the works page
     Then I should see "Überraschende Überraschung"
     When I follow "Weiß Kreuz"

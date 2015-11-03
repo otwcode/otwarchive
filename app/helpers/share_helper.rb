@@ -59,18 +59,18 @@ module ShareHelper
       [work_embed, bookmark_meta].compact.join
     end
   end
-  
+
   # get work title, word count, and creator and add app short name, but do not add formatting so it can be link text for Tumblr sharing
   def get_tumblr_embed_link_title(work)
-    title = work.title + " (#{work.word_count} #{ts('words')})".html_safe
+    title = work.title + " (#{work.word_count} #{ts('words')})"
     if work.anonymous?
       pseud = ts("Anonymous")
     else
-      pseud = work.pseuds.map {|pseud| (pseud.name)}.join(', ').html_safe
+      pseud = work.pseuds.map {|pseud| (pseud.name)}.join(', ')
     end
-    title + ts(" by ") + pseud + ts(" [#{ArchiveConfig.APP_SHORT_NAME}]")
+    "#{title} #{ts("by")} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
   end
-  
+
   # combine work information and bookmark information to make body of link post for Tumblr sharing
   def get_tumblr_bookmark_embed_link(bookmark)
     if bookmark.bookmarkable.is_a?(Work)

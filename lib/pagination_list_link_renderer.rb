@@ -48,13 +48,13 @@ class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
       if page
         tag(:li, link(text, page, {:"data-remote" => remote}), :class => classname, :title => classname)
       else
-        tag(:li, text, :class => classname + ' disabled', :title => classname)
+        tag(:li, tag(:span, text, :class => "disabled"), :class => classname, :title => classname)
       end
     end
 
     def html_container(html)
       tag(:h4, "Pages Navigation", :class => "landmark heading") +
-        tag(:ol, html, container_attributes.merge(:class => "navigation pagination actions", :role => "navigation", :title => "pagination"))
+        tag(:ol, html, container_attributes.merge(:class => "pagination actions", :role => "navigation", :title => "pagination"))
     end
 
 end

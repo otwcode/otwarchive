@@ -58,11 +58,13 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I follow "SG1"
     And I follow "Edit"
     And I fill in "Synonym of" with "Stargate"
-  Then I should find "Stargate Atlantis" within ".autocomplete"
-    And I should find "Stargate SG-1" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Stargate Atlantis" in the autocomplete
+#    And I should see "Stargate SG-1" in the autocomplete
   When I fill in "Synonym of" with "Stargate SG-1"
     And I fill in "tag_media_string" with "TV"
-    And I should find "TV Shows" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "TV Shows" int the autocomplete
     And I fill in "tag_media_string" with "TV Shows"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -73,9 +75,10 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I should see "SG-1"
     And the "tag_canonical" checkbox should be disabled
   When I fill in "tag_merger_string" with "Stargate"
-  Then I should find "Stargates SG-1" within ".autocomplete"
-    And I should find "the whole Stargate franchise" within ".autocomplete"
-    And I should not find "Stargate SG-1" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Stargates SG-1" in the autocomplete
+#      And I should see "the whole Stargate franchise" in the autocomplete
+#      And I should not see "Stargate SG-1" in the autocomplete
   When I fill in "tag_merger_string" with "Stargates SG-1"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -96,7 +99,8 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I press "Create Tag"
     And I fill in "tag_media_string" with "TV Shows"
     And I fill in "SubTags" with "Stargate Atlantis"
-  Then I should find "Stargate Atlantis" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Stargate Atlantis" in the autocomplete
   When I fill in "SubTags" with "Stargate Atlantis"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -106,7 +110,8 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Stargate Franchise" within "div#parent_MetaTag_associations_to_remove_checkboxes"
   When I edit the tag "Stargate SG-1"
     And I fill in "MetaTags" with "Stargate Franchise"
-    And I should find "Stargate Franchise" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "Stargate Franchise" in the autocomplete
     And I fill in "MetaTags" with "Stargate Franchise"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -203,7 +208,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Fandoms" within "h2"
   When I follow "Uncategorized Fandoms"
   Then I should see "B C N W Y" within ".alphabet"
-    And I should see "A weird thing" within "#letter-W .tags .odd"
-    And I should see "Be a second B fandom" within "#letter-B .tags .odd"
-    And I should see "Be another thing" within "#letter-B .tags .even"
+    And I should see "A weird thing" within "#letter-W .tags"
+    And I should see "Be a second B fandom" within "#letter-B .tags"
+    And I should see "Be another thing" within "#letter-B .tags"
 

@@ -5,7 +5,7 @@ Feature: Edit Works Dates
   I want to edit existing works
 
   Scenario: Editing dates on a work
-    When "Issue 2542" is fixed
+    When "AO3-2539" is fixed
 #    Given I have loaded the fixtures
 #      And I am logged in as "testuser" with password "testuser"
 #      And all search indexes are updated
@@ -36,7 +36,7 @@ Feature: Edit Works Dates
 #    When I follow "Add Chapter"
 #      And I fill in "content" with "this is my second chapter"
 #      And I press "Preview"
-#    Then I should see "This is a draft showing what this chapter will look like"
+#    Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
 #    When I press "Post"
 #    Then I should see "Chapter was successfully posted."
 #      And I should see "Published:2010-04-30"

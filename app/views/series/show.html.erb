@@ -9,62 +9,54 @@
 
 <!--subnav-->
 <% if logged_in? %>
-<ul class="navigation actions" role="navigation">
-  <% if @subscription %>
-    <li>
-      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
-    </li>
-  <% end %>
-  <% @bookmark ||= bookmark_if_exists(@series) %>
-  <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
-  <% if is_author_of?(@series) %>
-    <li><%= link_to ts("Edit"), edit_series_path(@series) %></li>
-    <li><%= link_to ts('Delete Series'), @series, :confirm => ts('Are you sure you want to delete this series? This will NOT delete the individual works.'), :method => :delete %></li>
-    <li><%= link_to ts("Reorder Series"), manage_series_path(@series) %></li>
-    <li><%= link_to ts('Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>    	
-    <% unless (@series.pseuds - current_user.pseuds).empty? %>
-      <li><%= link_to ts('Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) %></li>
-    <% end %>
-  <% end %>
-</ul>
+  <%= render "series/series_navigation" %>
 <% end %>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading">Series Metadata</h3>
+<h3 class="landmark heading"><%= ts("Series Metadata") %></h3>
 <div class="wrapper">
-	<dl class="series meta group">
-    <dt><%= 'Series begun:' %></dt>
-    <dd><%= @series.published_at.to_date %></dd>
-    <dt><%= 'Series updated: ' %></dt>
-    <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
-
-    <dt><%= 'Works included:' %></dt>
-    <dd><%= @series.visible_work_count %></dd>
-
-    <dt><%= 'Complete:' %></dt>
-    <dd><%= @series.complete? ? "Yes" : "No" %></dd>
-
-    <dt><%= 'Word count:' %></dt>
-    <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
+  <dl class="series meta group">
 
     <% if @series.pseuds.many?%>
-      <dt><%= 'Authors:' %></dt>
+      <dt><%= ts('Creators:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% else %>
-      <dt><%= 'Author:' %></dt>
+      <dt><%= ts('Creator:') %></dt>
       <dd><%= byline(@series) %></dd>
     <% end %>
 
-  <% unless @series.summary.blank? %>
-      <dt><%= 'Description:' %></dt>
+    <dt><%= ts('Series Begun:') %></dt>
+    <dd><%= @series.published_at.to_date %></dd>
+    <dt><%= ts('Series Updated:') %></dt>
+    <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
+
+    <% unless @series.summary.blank? %>
+      <dt><%= ts('Description:') %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
-	<% end %>
-	<% unless @series.notes.blank? %>
-      <dt><%= 'Notes:' %></dt>
+    <% end %>
+    <% unless @series.notes.blank? %>
+      <dt><%= ts('Notes:') %></dt>
       <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
-	<% end %>
-</dl>
+    <% end %>
+
+    <dt class="stats"><%= ts('Stats:') %></dt>
+    <dd class="stats"> 
+      <dl class="stats">
+        <dt><%= ts('Words:') %></dt>
+        <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
+        <dt><%= ts('Works:') %></dt>
+        <dd><%= @series.visible_work_count %></dd>
+        <dt><%= ts('Complete:') %></dt>
+        <dd><%= @series.complete? ? ts("Yes") : ts("No") %></dd>
+        <% if (bookmark_count = @series.bookmarks.is_public.count) > 0 %>
+          <dt><%= ts('Bookmarks:') %></dt>
+          <dd><%= link_to_bookmarkable_bookmarks(@series, bookmark_count.to_s) %></dd>
+        <% end %>
+      </dl>
+    </dd>
+
+  </dl>
 </div>
 <% if logged_in? %>
   <div id="bookmark_form_placement" class="wrapper toggled">
@@ -78,10 +70,10 @@
 
 <% if logged_in_as_admin? %>
 <!-- BEGIN admin options -->
-<%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
+  <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>
 
-<h3 class="landmark heading">Listing Series</h3>
+<h3 class="landmark heading"><%= ts("Listing Series") %></h3>
 <ul class="series work index group">
   <% for serial in @serial_works %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>

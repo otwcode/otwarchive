@@ -4,10 +4,11 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
   before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
   
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]
@@ -125,10 +126,12 @@ class BookmarksController < ApplicationController
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
     end
-    if @bookmarkable.save && @bookmark.save
-      flash[:notice] = ts('Bookmark was successfully created.')
-      redirect_to(@bookmark) and return
-    end 
+    if @bookmark.errors.empty?
+      if @bookmarkable.save && @bookmark.save
+        flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
+        redirect_to(@bookmark) and return
+      end
+    end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
     render :action => "new" and return
   end
@@ -136,13 +139,60 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    if @bookmark.update_attributes(params[:bookmark])
-      flash[:notice] = ts("Bookmark was successfully updated.")
-      redirect_to(@bookmark) 
-    else
-      @bookmarkable = @bookmark.bookmarkable
-      render :action => :edit
+    new_collections = []
+    unapproved_collections = []
+    errors = []
+    params[:bookmark][:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+      collection = Collection.find_by_name(collection_name)
+      if collection.nil?
+        errors << ts("#{collection_name} does not exist.")
+      else
+        if @bookmark.collections.include?(collection)
+          next
+        elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
+          errors << ts("#{collection.title} is closed to new submissions.")
+        elsif @bookmark.add_to_collection(collection) && @bookmark.save
+          if @bookmark.approved_collections.include?(collection)
+            new_collections << collection
+          else
+            unapproved_collections << collection
+          end
+        else
+          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+        end
+      end
     end
+
+    # messages to the user
+    unless errors.empty?
+      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+    end
+    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    unless new_collections.empty?
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
+                          :collections => new_collections.collect(&:title).join(", "))
+    end
+    unless unapproved_collections.empty?
+      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
+                                      :moderated => unapproved_collections.collect(&:title).join(", "))
+    end
+
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+
+    if errors.empty?
+      if @bookmark.update_attributes(params[:bookmark])
+        flash[:notice] = ts("Bookmark was successfully updated.")
+        redirect_to(@bookmark)
+      end
+    else
+      @bookmark.update_attributes(params[:bookmark])
+      @bookmarkable = @bookmark.bookmarkable
+      render :edit and return
+    end
+  end
+
+  def confirm_delete
   end
 
   # DELETE /bookmarks/1
@@ -177,13 +227,19 @@ class BookmarksController < ApplicationController
   def load_owner
     if params[:user_id].present?
       @user = User.find_by_login(params[:user_id])
+      unless @user 
+        raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
+      end
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @pseud 
+          raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
+        end
       end
     end
     if params[:tag_id]
       @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag && @tag.is_a?(Tag)
+      unless @tag 
         raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
       end
       unless @tag.canonical?

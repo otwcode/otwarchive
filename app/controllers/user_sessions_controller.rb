@@ -41,13 +41,13 @@ class UserSessionsController < ApplicationController
            
               message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
             else
-              message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+              message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
             end
           else
             message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
           end
         else
-          message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+          message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])

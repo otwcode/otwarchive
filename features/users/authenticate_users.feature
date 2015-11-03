@@ -16,8 +16,8 @@ Feature: User Authentication
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "login" with "sam"
-      And I press "Reset password"
+    When I fill in "reset_password_for" with "sam"
+      And I press "Reset Password"
     Then 1 email should be delivered
 
     # old password should still work
@@ -36,8 +36,8 @@ Feature: User Authentication
     And I should see "Change My Password"
 
     # and I should be able to change the password
-    When I fill in "New Password" with "newpass"
-    And I fill in "Confirm New Password" with "newpass"
+    When I fill in "New password" with "newpass"
+    And I fill in "Confirm new password" with "newpass"
     And I press "Change Password"
     Then I should see "Your password has been changed"
 
@@ -66,11 +66,11 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
   Scenario: invalid user
-    Given I have loaded the "users" fixture
+    Given I have loaded the fixtures
     When I am on the home page
     And I follow "Forgot password?"
-    When I fill in "login" with "testuser"
-      And I press "Reset password"
+    When I fill in "reset_password_for" with "testuser"
+      And I press "Reset Password"
     Then I should see "Check your email"
       And 1 email should be delivered
 
@@ -82,8 +82,8 @@ Feature: User Authentication
     And I should see "Change My Password"
 
     # and I should be able to change the password
-    When I fill in "New Password" with "newpas"
-    And I fill in "Confirm New Password" with "newpas"
+    When I fill in "New password" with "newpas"
+    And I fill in "Confirm new password" with "newpas"
     And I press "Change Password"
     Then I should see "Your password has been changed"
 
@@ -117,7 +117,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below."
 
   Scenario: Logged out
     Given I have no users
@@ -127,6 +127,7 @@ Feature: User Authentication
       And I should not see "Log Out"
       And I should not see "Preferences"
 
+  # TODO make this an actual test - it's been 4 years...
   Scenario Outline: Show or hide preferences link
     Given I have no users
       And the following activated users exist

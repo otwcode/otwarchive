@@ -1,5 +1,7 @@
-/* replace the "Comments" link with "Hide Comments" */
-$j("#show_comments_link").html("<%= escape_javascript(hide_comments_link(@commentable)) %>");
+/* replace the top "Comments" link on works with "Hide Comments" */
+$j("#show_comments_link_top").html("<%= escape_javascript(show_hide_comments_link(@commentable, :link_type => "hide")) %>");
+/* replace the top "Comments (#)" link with "Hide Comments (#)" */
+$j("#show_comments_link").html("<%= escape_javascript(show_hide_comments_link(@commentable, :link_type => "hide", :show_count => true)) %>");
 /* load up the comments in their placeholder div */
 $j("#comments_placeholder").html("<%= escape_javascript(will_paginate(@comments, {:remote => true})) %>");
 $j("#comments_placeholder").append("<%= escape_javascript(render "comments/comment_thread", {:comments => @comments, :depth => 0}) %>");

@@ -25,8 +25,8 @@ Feature: Import Works from DW
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
-      And I should not see the "alt" text "Add to memories"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories"
+      And I should not see the image "alt" text "Next Entry"
       And I should not see "location"
       And I should not see "music"
       And I should not see "mood"
@@ -35,8 +35,8 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
+
   @import_dw_tables
   Scenario: Creating a new work from an DW story that has tables
   # This is to make sure that we don't accidentally strip other tables than
@@ -62,8 +62,8 @@ Feature: Import Works from DW
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
-      And I should not see the "alt" text "Add to memories"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories"
+      And I should not see the image "alt" text "Next Entry"
       And I should see "My location"
       And I should see "My music"
       And I should see "My mood"
@@ -71,7 +71,6 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
 
   @import_dw_tables_no_backdate
@@ -98,8 +97,8 @@ Feature: Import Works from DW
     When I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "Importing Test" within "h2.title"
-      And I should not see the "alt" text "Add to memories!"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories!"
+      And I should not see the image "alt" text "Next Entry"
 
   @import_dw_comm
   Scenario: Creating a new work from an DW story that is posted to a community
@@ -120,19 +119,18 @@ Feature: Import Works from DW
       And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
       And I should see "more to their friendship than he'd thought." within "div.summary"
       And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should find "stanwood_title_400.png" within "img[src]"
+      And I should see the image "src" text "http://www.rbreu.de/fan/stanwood_title_400.png"
       And I should see "Follow me to AO3"
       And I should not see "Rare Literature Fanfiction"
       And I should not see "rarelitfic"
       And I should not see "rebecca2525"
-      And I should not see the "alt" text "Add to memories"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories"
+      And I should not see the image "alt" text "Next Entry"
       And I should not see "mood"
       And I should not see "Entry tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Mrs Stanwood's Birthday Party"
 
   @import_dw_multi_chapter
@@ -173,6 +171,5 @@ Feature: Import Works from DW
       And I should see "MOAR TESTING! :)" within "div.notes"
       And I should see "Importing Test Part 2" within "h3.title"
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
 

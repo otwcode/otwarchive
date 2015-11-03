@@ -103,6 +103,7 @@ class TagSetNominationsController < ApplicationController
     end
   end
 
+
   def update
     if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
       flash[:notice] = ts("Your nominations were successfully updated.")
@@ -184,6 +185,9 @@ class TagSetNominationsController < ApplicationController
       flash[:notice] = ts("No nominations to review!")
     end
   end
+
+  def confirm_destroy_multiple
+  end
   
   def destroy_multiple
     unless @tag_set.user_is_owner?(current_user)
@@ -192,7 +196,7 @@ class TagSetNominationsController < ApplicationController
     end
 
     @tag_set.clear_nominations!
-    flash[:notice] = ts("All nominations for this tag set have been cleared.")
+    flash[:notice] = ts("All nominations for this Tag Set have been cleared.")
     redirect_to tag_set_path(@tag_set)
   end
 

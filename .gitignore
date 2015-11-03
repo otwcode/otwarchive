@@ -1,3 +1,4 @@
+*.swp
 .DS_Store
 .bundle
 .idea
@@ -29,7 +30,6 @@ REVISION
 
 # /db/
 /db/*.sqlite3
-/db/*.sql
 /db/backup
 /db/sphinx
 /db/seed
@@ -62,3 +62,11 @@ features/cassette_library/cucumber_tags/work_import_special_characters_auto_lati
 features/cassette_library/cucumber_tags/work_import_special_characters_man_cp.yml
 features/cassette_library/cucumber_tags/work_import_special_characters_man_latin.yml
 features/cassette_library/cucumber_tags/import_lj_comm.yml
+
+spec/results.html
+spec/results
+features_report.html
+coverage
+
+.simplecov
+.rspec

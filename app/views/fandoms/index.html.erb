@@ -8,26 +8,26 @@
 <% end %>
 <p>You can search this page by pressing <kbd>ctrl F</kbd> / <kbd>cmd F</kbd> and typing in what you are looking for.</p>
 <% if @collection %>
-<div class="filters">
-	<h3 class="landmark heading"><%= ts('Filters') %></h3>
-  <%= form_tag '', :method => :get do %>
-    <fieldset><p title="Choose media type"><%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
-    <%= submit_tag "Show" %></p></fieldset>
-  <% end %>
-</div>
+  <div class="filters">
+    <h3 class="landmark heading"><%= ts('Filters') %></h3>
+    <%= form_tag '', :method => :get do %>
+      <fieldset><p title="Choose media type"><%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
+      <%= submit_tag "Show" %></p></fieldset>
+    <% end %>
+  </div>
 <% end %>
 <!--/descriptions-->
 
 <!--main content-->
 <% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
   <h3 class="landmark heading"><%= ts('Alphabet Navigation') %></h3>
-<ul class="alphabet navigation actions" id="alphabet" role="navigation">
+  <ul class="alphabet actions" id="alphabet" role="navigation">
     <% for letter in @fandoms_by_letter.keys %>
       <li><%= link_to letter, "#letter-#{letter}" %></li>
     <% end %>
   </ul>
   <h3 class="landmark heading"><%= ts('Alphabetised List of Fandoms') %></h3>
-<ol class="alphabet fandom index group <%= 'collection' if @collection %>">
+  <ol class="alphabet fandom index group <%= 'collection' if @collection %>">
     <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
       <li id='letter-<%= letter %>' class='letter listbox group'>
         <h3 class="heading">
@@ -36,12 +36,12 @@
         </h3>
         <ul class="tags index group">
           <% for fandom in fandoms %>
-          <li class='<%= cycle('odd', 'even', :name => "letter-#{letter}") %>'>
-            <%= link_to_tag_works_with_text(fandom, fandom.name) %>
-            <% if fandom.respond_to?(:count) %>
-              (<%= fandom.count %>)
-            <% end %>
-          </li>
+            <li>
+              <%= link_to_tag_works_with_text(fandom, fandom.name) %>
+              <% if fandom.respond_to?(:count) %>
+                (<%= fandom.count %>)
+              <% end %>
+            </li>
           <% end %>
         </ul>
       </li>

@@ -34,3 +34,9 @@ chapter6:
   work_id: 5
   content: something something something
   published_at: 2011-06-30
+chapter7:
+  id: 7
+  posted: true
+  work_id: 6
+  content: This is some content for a work with a fandom, rating, and warning tag and character entities.
+  published_at: 2013-04-30

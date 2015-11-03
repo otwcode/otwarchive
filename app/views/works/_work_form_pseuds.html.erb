@@ -4,11 +4,9 @@
 <% pseuds = works.collect(&:pseuds).flatten.uniq %>
 <% unless pseuds.size <= 1 %>
   <dt><%= form.label :pseuds_to_remove, ts("Current Authors") %></dt>
-  <dd>
-    <fieldset class="listbox">
-      <h4 class="heading">Check to remove</h4>
-      <%= checkbox_section(form, :pseuds_to_remove, pseuds) %>
-    </fieldset>
+  <dd class="pseuds listbox group">
+    <h4 class="heading"><%= ts("Check to remove") %></h4>
+    <%= checkbox_section(form, :pseuds_to_remove, pseuds) %>
   </dd>
 <% end %>      
 <dt><%= form.label :pseuds_to_add, ts("Add Authors") %></dt>

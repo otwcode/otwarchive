@@ -2,10 +2,10 @@
 <li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
     <!-- we're editing this comment -->
-    <%= render 'comments/comment_form', 
-        :comment => single_comment, 
-        :commentable => single_comment.commentable, 
-        :button_name => ts('Update') %>	  
+    <%= render 'comments/comment_form',
+        :comment => single_comment,
+        :commentable => single_comment.commentable,
+        :button_name => ts('Update') %>
   <% else %>
     <% if single_comment.is_deleted %>
       <p>
@@ -31,6 +31,9 @@
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
             </span>
           <% end %>
+          <span class="posted datetime">
+            <%= time_in_zone(single_comment.created_at) %>
+          </span>
         </h4>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
@@ -44,18 +47,15 @@
           <% end %>
         </div>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
-        <p class="datetime">
-          <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
-        </p>
         <% unless single_comment.edited_at.blank? %>
-          <p class="datetime edited">
+          <p class="edited datetime">
             <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
           </p>
         <% end %>
       <% end %><!-- end caching -->
       <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-      <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
+      <ul class="actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
         <% unless single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anon_commenting_disabled && !logged_in? %>
           <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
         <% end %>
@@ -91,9 +91,9 @@
       <!-- if not, we will render the comment form if this is the comment we are replying to. -->
       <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>" title="<%= ts("reply to this comment") %>">
-          <%= render 'comments/comment_form', 
-            :comment => Comment.new, 
-            :commentable => single_comment, 
+          <%= render 'comments/comment_form',
+            :comment => Comment.new,
+            :commentable => single_comment,
             :button_name => ts("Comment") %>
       <% else %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>" style="display: none;">

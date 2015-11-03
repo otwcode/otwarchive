@@ -1,11 +1,2 @@
 <%= nomination_status(tag) %>
-<% tagobj = tag.type.gsub(/Nomination/, '').constantize.find_by_name(tag.tagname) %>
-<% if tagobj.try(:canonical) %>
-  <%= link_to_tag_works(tagobj) %>
-<% elsif tagobj.try(:merger) %>
-  <%= tag.tagname %> (<%= link_to_tag_works(tagobj.merger) %>)
-<% elsif tagobj %>
-  <span class="unwrangled" tooltip="<%= ts("This isn't an official archive tag.") %>"><%= tag.tagname %></span>                  
-<% else %>
-  <span class="nonexistent" tooltip="<%= ts("This tag doesn't exist at all on the archive.") %>"><%= tag.tagname %></span>
-<% end %>
+<%= nomination_tag_information(tag) %>

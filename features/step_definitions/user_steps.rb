@@ -28,6 +28,14 @@ Given /the following activated tag wranglers? exists?/ do |table|
   end
 end
 
+Given /^the user "([^\"]*)" exists and is activated$/ do |login|
+  user = User.find_by_login(login)
+  if user.blank?
+    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
+    user.activate
+  end
+end
+
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   step("I am logged out")
   user = User.find_by_login(login)
@@ -68,6 +76,33 @@ Given /^I am logged in as a random user$/ do
   assert UserSession.find
 end
 
+Given /^I am logged in as a banned user$/ do
+  step("I am logged out")
+  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
+  user.activate
+  user.banned = true
+  user.save
+  visit login_path
+  fill_in "User name", :with => "banned"
+  fill_in "Password", :with => DEFAULT_PASSWORD
+  check "Remember Me"
+  click_button "Log In"
+  assert UserSession.find
+end
+
+Given /^user "([^\"]*)" is banned$/ do |login|
+  user = User.where(login: login).first
+  if user.nil?
+    user = FactoryGirl.create(
+      :user,
+      { login: login, password: DEFAULT_PASSWORD }
+    )
+    user.activate
+  end
+  user.banned = true
+  user.save
+end
+
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find
@@ -92,6 +127,7 @@ Given /^"([^\"]*)" deletes their account/ do |username|
 end
 
 Given /^I am a visitor$/ do
+  step(%{I am logged out as an admin})
   step(%{I am logged out})
 end
 
@@ -115,7 +151,6 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
-  # " '
   user = User.find_by_login(login)
   fill_in "Password", :with => user.activation_code
 end
@@ -132,7 +167,7 @@ When /^I create the pseud "([^\"]*)"$/ do |newpseud|
   click_button "Create"
 end
 
-When(/^I fill in the sign up form with valid data$/) do
+When /^I fill in the sign up form with valid data$/ do
   step(%{I fill in "user_login" with "#{NEW_USER}"})
   step(%{I fill in "user_email" with "test@archiveofourown.org"})
   step(%{I fill in "user_password" with "password1"})
@@ -141,14 +176,19 @@ When(/^I fill in the sign up form with valid data$/) do
   step(%{I check "user_terms_of_service"})
 end
 
-When(/^I try to delete my account as (.*)$/) do |login|
+When /^I try to delete my account as (.*)$/ do |login|
   step (%{I go to #{login}\'s user page})
   step (%{I follow "Profile"})
   step (%{I follow "Delete My Account"})
 end
 
-When(/^I try to delete my account$/) do
+When /^I try to delete my account$/ do
   step (%{I try to delete my account as #{DEFAULT_USER}})
+end
+
+When /^I visit the change username page for (.*)$/ do |login|
+  user = User.find_by_login(login)
+  visit change_username_user_path(user) 
 end
 
 # THEN
@@ -157,32 +197,32 @@ Then /^I should get the error message for wrong username or password$/ do
   step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
 end
 
-Then (/^I should get an activation email for "(.*?)"$/) do |login|
+Then /^I should get an activation email for "(.*?)"$/ do |login|
   step(%{1 email should be delivered})
   step(%{the email should contain "Welcome to the Archive of Our Own,"})
   step(%{the email should contain "#{login}"})
   step(%{the email should contain "Please activate your account"})
 end
 
-Then (/^I should get a new user activation email$/) do
+Then /^I should get a new user activation email$/ do
   step(%{I should get an activation email for "#{NEW_USER}"})
 end
 
-Then(/^a user account should exist for "(.*?)"$/) do |login|
+Then /^a user account should exist for "(.*?)"$/ do |login|
    user = User.find_by_login(login)
    assert !user.blank?
 end
 
-Then(/^a user account should not exist for "(.*)"$/) do |login|
+Then /^a user account should not exist for "(.*)"$/ do |login|
   user = User.find_by_login(login)
   assert user.blank?
 end
 
-Then(/^a new user account should exist$/) do
-  step(%{a user account should exist for "#{NEW_USER}"})
+Then /^a new user account should exist$/ do
+  step %{a user account should exist for "#{NEW_USER}"}
 end
 
-Then(/^I should be logged out$/) do
+Then /^I should be logged out$/ do
   assert !UserSession.find
 end
 
@@ -214,4 +254,8 @@ end
 Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) "([^\"]*)"/ do |age, type, classname, name|
   title = (type == "work" ? get_work_name(age, classname, name) : get_series_name(age, classname, name))
   step %{I should not see "#{title}"}
+end
+
+Then /^I should get confirmation that I changed my username$/ do
+  step(%{I should see "Your user name has been successfully updated."})
 end

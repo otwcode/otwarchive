@@ -1,5 +1,5 @@
 /*==ACTIONS: buttons!
-http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
+http://otwcode.github.com/docs/front_end_coding/patterns/actions
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -41,6 +41,10 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
     box-shadow: none;
 }
 
+button {
+  box-sizing: content-box;
+}
+
 label.action {
   padding: 0.15em 0.375em;
 }
@@ -72,11 +76,11 @@ ol.pagination, div.pagination, ol.year {
   margin: 0.643em auto;
 }
 
-.actions a:visited {
+.actions a:visited, .action:visited {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover {
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -95,6 +99,7 @@ ol.pagination, div.pagination, ol.year {
 }
 
 .delete a, span.delete {
+  border: 0;
   color: #900;
   font-weight: 900;
   margin-right: 0.375em;
@@ -102,6 +107,11 @@ ol.pagination, div.pagination, ol.year {
   cursor: pointer;
     box-shadow: -1px -1px 2px rgba(0,0,0,0.75);
     border-radius: 0.875em;
+}
+
+span.delete a {
+  margin: 0 0.2em;
+    box-shadow: none;
 }
 
 ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
@@ -139,12 +149,10 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + h6 + .actions {
+dl.stats + .landmark + .actions {
+  clear: none;
   float: left;
-}
-
-dl.stats + h6 + .actions, li.news .actions {
-  margin: -1.75em auto 0;
+  margin: 0 auto;
 }
 
 .actions .secondary .submit, .nomination .actions {
@@ -167,6 +175,19 @@ dl.stats + h6 + .actions, li.news .actions {
   border: 0;
   background: none;
   padding: 0 0 0.15em 0;
+}
+
+.many p.actions { 
+  float: none; 
+  text-align: right; 
+}
+
+.concise label.action { 
+  float: left; 
+}
+
+dd.any label.action {
+  margin-left: 0.5625em;
 }
 
 /*END== */

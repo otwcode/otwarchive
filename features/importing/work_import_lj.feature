@@ -22,8 +22,8 @@ Feature: Import Works from LJ
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
-      And I should not see the "alt" text "Add to memories!"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories!"
+      And I should not see the image "alt" text "Next Entry"
       And I should not see "location"
       And I should not see "music"
       And I should not see "mood"
@@ -31,8 +31,8 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
+
   @import_lj_tables
   Scenario: Creating a new work from an LJ story that has tables
   # This is to make sure that we don't accidentally strip other tables than
@@ -55,8 +55,8 @@ Feature: Import Works from LJ
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
-      And I should not see the "alt" text "Add to memories!"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories!"
+      And I should not see the image "alt" text "Next Entry"
       And I should see "My location"
       And I should see "My music"
       And I should see "My mood"
@@ -64,7 +64,6 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"
 
   @import_lj_no_backdate
@@ -88,38 +87,38 @@ Feature: Import Works from LJ
     When I press "Post"
     Then I should see "Work was successfully posted."
       And I should see "Importing Test" within "h2.title"
-      And I should not see the "alt" text "Add to memories!"
-      And I should not see the "alt" text "Next Entry"
+      And I should not see the image "alt" text "Add to memories!"
+      And I should not see the image "alt" text "Next Entry"
 
   @import_lj_comm
   Scenario: Creating a new work from an LJ story that is posted to a community
     Given basic tags
       And I am logged in as "cosomeone"
-    When I go to the import page
-      And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
-    When I press "Import"
-    Then I should see "Preview"
-      And I should see "Poirot - Agatha Christie" within "dd.fandom"
-      And I should see "General Audiences" within "dd.rating"
-      And I should see "Published:2010-10-23"
-      And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
-      And I should not see "[Poirot]" within "h2.title"
-      And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
-      And I should see "more to their friendship than he'd thought." within "div.summary"
-      And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
-      And I should find "stanwood_title_400.png" within "img[src]"
-      And I should see "Follow me to AO3"
-      And I should not see "rarelitslash"
-      And I should not see "rebecca2525"
-      And I should not see the "alt" text "Add to memories!"
-      And I should not see the "alt" text "Next Entry"
-      And I should not see "mood"
-      And I should not see "Entry tags"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page
-      #'
-      Then I should see "Mrs Stanwood's Birthday Party"
+    When "AO3-4179" is fixed
+    #When I go to the import page
+    #  And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
+    #When I press "Import"
+    #Then I should see "Preview"
+    #  And I should see "Poirot - Agatha Christie" within "dd.fandom"
+    #  And I should see "General Audiences" within "dd.rating"
+    #  And I should see "Published:2010-10-23"
+    #  And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
+    #  And I should not see "[Poirot]" within "h2.title"
+    #  And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
+    #  And I should see "more to their friendship than he'd thought." within "div.summary"
+    #  And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
+    #  And I should see the image "src" text "http://www.rbreu.de/fan/stanwood_title_400.png"
+    #  And I should see "Follow me to AO3"
+    #  And I should not see "rarelitslash"
+    #  And I should not see "rebecca2525"
+    #  And I should not see the image "alt" text "Add to memories!"
+    #  And I should not see the image "alt" text "Next Entry"
+    #  And I should not see "mood"
+    #  And I should not see "Entry tags"
+    #When I press "Post"
+    #Then I should see "Work was successfully posted."
+    #When I am on cosomeone's user page
+    #  Then I should see "Mrs Stanwood's Birthday Party"
       
   @import_lj_underscores
   Scenario: Importing from a journal with underscores in the name
@@ -128,8 +127,7 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://zooey_glass04.livejournal.com/99054.html"
     When I press "Import"
-    # Then show me the html
-    Then I should see "Preview"  
+      Then I should see "Preview"
 
   @import_lj_multi_chapter
   Scenario: Creating a new multichapter work from an LJ story
@@ -166,5 +164,4 @@ Feature: Import Works from LJ
       And I should see "MOAR TESTING! :)" within "div.notes"
       And I should see "Importing Test Part 2" within "h3.title"
     When I am on cosomeone's user page
-      #'
       Then I should see "Importing Test"

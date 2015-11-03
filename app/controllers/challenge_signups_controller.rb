@@ -6,8 +6,8 @@ class ChallengeSignupsController < ApplicationController
   before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
-  before_filter :allowed_to_destroy, :only => [:destroy]
+  before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
+  before_filter :allowed_to_destroy, :only => [:destroy, :confirm_delete]
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
@@ -132,7 +132,10 @@ class ChallengeSignupsController < ApplicationController
     end
   end
 
-  def show
+  def show    
+    unless @challenge_signup.valid?
+      flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
+    end
   end
 
   protected
@@ -180,7 +183,7 @@ class ChallengeSignupsController < ApplicationController
     @challenge_signup.collection = @collection
     # we check validity first to prevent saving tag sets if invalid
     if @challenge_signup.valid? && @challenge_signup.save
-      flash[:notice] = 'Sign-up was successfully created.'
+      flash[:notice] = ts('Sign-up was successfully created.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :new
@@ -189,11 +192,14 @@ class ChallengeSignupsController < ApplicationController
 
   def update
     if @challenge_signup.update_attributes(params[:challenge_signup])
-      flash[:notice] = 'Sign-up was successfully updated.'
+      flash[:notice] = ts('Sign-up was successfully updated.')
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :edit
     end
+  end
+
+  def confirm_delete
   end
 
   def destroy

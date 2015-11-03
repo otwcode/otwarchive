@@ -78,7 +78,6 @@
           <dd>
             <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
-            <%= f.hidden_field :ip_address, :value => "#{request.remote_ip}", :id => "comment_ip_address_for_#{commentable.id}" %>
           </dd>
         </dl>
 

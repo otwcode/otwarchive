@@ -14,7 +14,7 @@
 
     <% unless @user %>
       <% # mod version %>
-      <h5 class="heading" title="<%= ts('by') %>">
+      <h5 class="heading">
         <% collection_item.item_creator_pseuds.each do |pseud| %>
           <%= pseud.byline %>
             <% if collection_item.collection.user_is_posting_participant?(pseud.user) %>
@@ -37,7 +37,7 @@
         </h5>
       <% end %>
 
-      <p class="datetime" title="<%= ts('added') %>"><%= collection_item.item_date.to_date %></p>
+      <p class="datetime"><%= collection_item.item_date.to_date %></p>
       <div class="icon">
         <%= image_tag(collection_item.collection.icon.url(:standard), :size => "100x100", :alt => collection_item.collection.icon_alt_text, :class => "icon") %>
       </div> 

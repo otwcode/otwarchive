@@ -11,19 +11,19 @@ end
 describe UsersController do
 
   def valid_user_attributes
-    { :email => "sna.foo@gmail.com", :login => "myname", :age_over_13 => "1",
-      :terms_of_service => "1", :password => "password" }
+    { email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
+      terms_of_service: "1", password: "password" }
   end
 
   describe "create" do
 
     context "with valid parameters" do
       it "should be successful" do
-        post :create, :user => valid_user_attributes
+        post :create, user: valid_user_attributes
 
-        response.should be_success
-        assigns(:user).should be_a(User)
-        assigns(:user).should eq(User.last)
+        expect(response).to be_success
+        expect(assigns(:user)).to be_a(User)
+        expect(assigns(:user)).to eq(User.last)
       end
     end
 

@@ -4,7 +4,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if !@challenge_assignment.fulfilled? && @challenge_assignment.offering_pseud.user == current_user %>
+<% if !@challenge_assignment.fulfilled? && @challenge_assignment.try(:offering_pseud).try(:user) == current_user %>
   <ul class="navigation actions" role="menu">
     <li>
       <% if @challenge_assignment.defaulted? %>
@@ -23,7 +23,6 @@
 <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %> 
 
 <% if request %>
-  <h3 class="heading"><%=h ts("Requests by %{requester}", :requester => request.pseud.byline) %></h3>
   <%= render "challenge_signups/show_requests", :challenge_signup => request %>
 <% else %>
   <h3 class="heading"><%= ts("No request!") %></h3>
@@ -31,7 +30,6 @@
 <% end %>
     
 <% if @challenge_assignment.offer_signup %>
-  <h3 class="heading"><%=h ts("Offers from %{offerer}", :offerer => @challenge_assignment.offer_byline) %></h3>
   <%= render "challenge_signups/show_offers", :challenge_signup => @challenge_assignment.offer_signup %>
 <% elsif @challenge_assignment.pinch_hitter %>
   <p class="note"><%= ts("Pinch Hitter") %></p>

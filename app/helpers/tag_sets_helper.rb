@@ -42,40 +42,63 @@ module TagSetsHelper
   def noncanonical_info_class(form)
     ((form.object.new_record? || form.object.canonical) ? ' hideme' : '')
   end
-  
+
   def nomination_status(nomination=nil)
-    if nomination && nomination.approved
-      '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#10004;</span></span>'.html_safe
-    elsif nomination && nomination.rejected
-      '<span class="symbol rejected" tooltip="This nomination was rejected (but another version may have been approved instead)."><span>&#10006;</span></span>'.html_safe
-    else
-      '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>?!</span></span>'.html_safe
+    symbol = "?!"
+    status = "unreviewed"
+    tooltip = ts('This nomination has not been reviewed yet.')
+    if nomination
+      if nomination.approved
+        symbol = "&#10004;"
+        status = "approved"
+        tooltip = ts('This nomination has been approved!')
+      elsif nomination.rejected
+        symbol = "&#10006;"
+        status = "rejected"
+        tooltip = ts('This nomination was rejected (but another version may have been approved instead).')
+      elsif @tag_set.nominated
+        symbol = "?!"
+        status = "unreviewed"
+        tooltip = ts('This nomination has not been reviewed yet and can still be changed.')
+      end
     end
+
+    return content_tag(:span, content_tag(:span, "#{symbol}".html_safe), class: "#{status} symbol", data: {tooltip: "#{tooltip}"})
   end
-  
-#BACK END, I attempted to put titles in but it's rendering as oldtitle
-  def nomination_status_span(nom)
+
+  def nomination_tag_information(nominated_tag)
+    tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
     status = "nonexistent"
-    tooltip = ts("This tag has never been used on the archive before. Check the spelling!")
+    tooltip = ts("This tag has never been used before. Check the spelling!")
     title = ts("nonexistent tag")
+    span_content = nominated_tag.tagname
+    synonym_for = ""
     case
-    when nom.canonical
-      if nom.parented
+    when nominated_tag.canonical
+      if nominated_tag.parented
         status = "canonical"
-        tooltip = ts("This is a canonical archive tag.")
+        tooltip = ts("This is a canonical tag.")
         title = ts("canonical tag")
+        span_content = link_to_tag_works(tag_object)
       else
         status = "unparented"
-        tooltip = ts("This is a canonical archive tag but not associated with the fandom.")
+        tooltip = ts("This is a canonical tag but not associated with the specified fandom.")
         title = ts("canonical tag without parent")
+        span_content = link_to_tag_works(tag_object)
       end
-    when nom.exists
+    when nominated_tag.synonym
+      status = "synonym"
+      tooltip = ts("This is a synonym of a canonical tag.")
+      title = ts("tag synonym")
+      synonym_for = content_tag(:span, " (#{link_to_tag_works(tag_object.merger, class: "canonical")})".html_safe)
+    when nominated_tag.exists
       status = "unwrangled"
-      tooltip = ts("This is not an official archive tag.")
-      title = ts("unofficial tag")
+      tooltip = ts("This is not a canonical tag.")
+      title = ts("non-canonical tag")
     end
-    
-    return "<span class='nomination #{status}' title='#{title}' tooltip='#{tooltip}'>".html_safe
+ 
+    return content_tag(:span, "#{span_content}".html_safe, class: "#{status} nomination", title: "#{title}", data: {tooltip: "#{tooltip}"}) + synonym_for
+
   end
   
   def tag_relation_to_list(tag_relation)

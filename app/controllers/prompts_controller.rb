@@ -36,7 +36,7 @@ class PromptsController < ApplicationController
   end
   
   def no_signup
-    flash[:error] = ts("Please submit a basic signup with the required fields first.")
+    flash[:error] = ts("Please submit a basic sign-up with the required fields first.")
     redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' 
     false
   end

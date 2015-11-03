@@ -1,14 +1,13 @@
-require 'iconv'
-
 class Work < ActiveRecord::Base
 
   include Taggable
   include Collectible
   include Bookmarkable
   include Pseudable
+  include Searchable
   include WorkStats
   include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Tire::Model::Callbacks
 
   ########################################################################
   # ASSOCIATIONS
@@ -17,7 +16,7 @@ class Work < ActiveRecord::Base
   # creatorships can't have dependent => destroy because we email the
   # user in a before_destroy callback
   has_many :creatorships, :as => :creation
-  has_many :pseuds, :through => :creatorships
+  has_many :pseuds, :through => :creatorships, after_remove: :expire_pseud
   has_many :users, :through => :pseuds, :uniq => true
 
   has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
@@ -46,57 +45,6 @@ class Work < ActiveRecord::Base
   has_many :challenge_assignments, :as => :creation
   has_many :challenge_claims, :as => :creation
   accepts_nested_attributes_for :challenge_claims
-
-  has_many :filter_taggings, :as => :filterable
-  has_many :filters, :through => :filter_taggings
-  has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
-  has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
-
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-
-  has_many :ratings,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Rating'"
-  has_many :categories,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Category'"
-  has_many :warnings,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Warning'"
-  has_many :fandoms,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Fandom'"
-  has_many :relationships,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Relationship'"
-  has_many :characters,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Character'"
-  has_many :freeforms,
-    :through => :taggings,
-    :source => :tagger,
-    :source_type => 'Tag',
-    :before_remove => :remove_filter_tagging,
-    :conditions => "tags.type = 'Freeform'"
 
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
@@ -134,6 +82,11 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :should_reset_filters
   attr_accessor :new_recipients
+
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
 
   ########################################################################
   # VALIDATION
@@ -249,6 +202,36 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def expire_pseud(pseud)
+    CacheMaster.record(self.id, 'pseud', pseud.id)
+    CacheMaster.record(self.id, 'user', pseud.user_id)
+  end
+
+  # When works are done being reindexed, expire the appropriate caches
+  def self.successful_reindex(ids)
+    CacheMaster.expire_caches(ids)
+    tag_ids = FilterTagging.where(filterable_id: ids, filterable_type: 'Work').
+                            group(:filter_id).
+                            value_of(:filter_id)
+
+    collection_ids = CollectionItem.where(item_id: ids, item_type: 'Work').
+                                    group(:collection_id).
+                                    value_of(:collection_id)
+
+    pseuds = Pseud.select("pseuds.id, pseuds.user_id").
+                    joins(:creatorships).
+                    where(creatorships: {
+                      creation_id: ids, 
+                      creation_type: 'Work'
+                      }
+                    )
+
+    pseuds.each { |p| p.update_works_index_timestamp! }
+    User.expire_ids(pseuds.map(&:user_id).uniq)
+    Tag.expire_ids(tag_ids)
+    Collection.expire_ids(collection_ids)
+  end
+
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
@@ -291,43 +274,24 @@ class Work < ActiveRecord::Base
     Resque.enqueue(Work, id, method, *args)
   end
 
-  # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
-
-  ########################################################################
-  # ERRORS
-  ########################################################################
-  # class Error < DuplicateError; end
-  # class Error < DraftSaveError; end
-  # class Error < PostingError; end
-
-
   ########################################################################
   # IMPORTING
   ########################################################################
-  # def self.import_from_url(url)
-  #   storyparser = StoryParser.new
-  #   if Work.find_by_imported_from_url(url)
-  #     raise DuplicateWorkError(t('already_imported', :default => "Work already imported from this url."))
-  #
-  #   work = storyparser.download_and_parse_story(url)
-  #   work.imported_from_url = url
-  #   work.expected_number_of_chapters = work.chapters.length
-  #   work.pseuds << current_user.default_pseud unless work.pseuds.include?(current_user.default_pseud)
-  #   chapters_saved = 0
-  #   work.chapters.each do |uploaded_chapter|
-  #     uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
-  #     uploaded_chapter.posted = true
-  #     chapters_saved += uploaded_chapter.save ? 1 : 0
-  #   end
-  #
-  #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
-  # end
-  
+
+  # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
+  # 1. first exact match
+  # 2. first exact match with variants of the provided url
+  # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
   def self.find_by_url(url)
     url = UrlFormatter.new(url)
     Work.where(:imported_from_url => url.original).first ||
       Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+        work_url = UrlFormatter.new(w.imported_from_url)
+        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+          work_url.send(method) == url.send(method)
+        }
+      }.first
   end
 
   ########################################################################
@@ -349,6 +313,14 @@ class Work < ActiveRecord::Base
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      if results[:banned_pseuds].present?
+        self.errors.add(
+          :base, 
+          ts("%{name} is currently banned and cannot be listed as a co-creator.",
+             name: results[:banned_pseuds].to_sentence
+          )
+        )
+      end
     end
     self.authors.flatten!
     self.authors.uniq!
@@ -385,7 +357,7 @@ class Work < ActiveRecord::Base
     # if this is fulfilling a challenge, add the collection and recipient
     challenge_assignments.each do |assignment|
       add_to_collection(assignment.collection)
-      self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
+      self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (assignment.requesting_pseud.blank? || recipients && recipients.include?(assignment.request_byline))
     end
   end
 
@@ -746,25 +718,28 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = string.to_ascii 
     string.gsub(/[^[\w _-]]+/, '')
   end
+
   def display_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
+    string.to_ascii
   end
+
   # need the next two to be filesystem safe and not overly long
   def download_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_title
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = title.to_ascii.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_basename
     "#{self.download_dir}/#{self.download_title}"
   end
@@ -926,7 +901,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for parent work, via related_works
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
-      if attributes[:url].include?(ArchiveConfig.APP_URL)
+      if attributes[:url].include?(ArchiveConfig.APP_HOST)
         if attributes[:url].match(/\/works\/(\d+)/)
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
@@ -1021,6 +996,7 @@ class Work < ActiveRecord::Base
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
   scope :posted, where(:posted => true)
   scope :unposted, where(:posted => false)
+  scope :not_spam, where(spam: false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
   scope :hidden, where(:hidden_by_admin => true)
@@ -1131,9 +1107,9 @@ class Work < ActiveRecord::Base
   # Note: these scopes DO include the works in the children of the specified collection
   scope :in_collection, lambda {|collection|
     select("DISTINCT works.*").
-    joins(:collection_items, :collections).
-    where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-          [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
+        joins(:collection_items).
+        where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
+              [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
   def self.in_series(series)
@@ -1236,6 +1212,32 @@ class Work < ActiveRecord::Base
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
 
+  ########################################################################
+  # SPAM CHECKING
+  ########################################################################
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    content = chapters_in_order.map { |c| c.content }.join
+    user = users.first
+    self.spam = Akismetor.spam?(
+      comment_type: 'Fan Fiction',
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_date_gmt: created_at.to_time.iso8601,
+      blog_lang: language.short,
+      comment_author: user.login,
+      comment_author_email: user.email,
+      comment_content: content
+    )
+    self.spam_checked_at = Time.now
+    save
+  end
 
   #############################################################################
   #
@@ -1252,8 +1254,10 @@ class Work < ActiveRecord::Base
   end
 
   def to_indexed_json
-    to_json(methods:
-      [ :rating_ids,
+    to_json(
+      except: [:spam, :spam_checked_at],
+      methods: [
+        :rating_ids,
         :warning_ids,
         :category_ids,
         :fandom_ids,
@@ -1272,45 +1276,25 @@ class Work < ActiveRecord::Base
       ])
   end
 
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (tags + filters).uniq.map{ |t| t.name }
-  end
-
-  # Index all the filters for pulling works
-  def filter_ids
-    filters.value_of :id
-  end
-
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= filters.where("filter_taggings.inherited = 0")
-  end
-  def rating_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
-  end
-  def warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Warning' }.map{ |t| t.id }
-  end
-  def category_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
-  end
-  def fandom_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
-  end
-  def character_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
-  end
-  def relationship_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
-  end
-  def freeform_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+  def bookmarkable_json
+    as_json(
+      root: false,
+      only: [:id, :title, :summary, :hidden_by_admin, :restricted, :posted,
+        :created_at, :revised_at, :language_id, :word_count],
+      methods: [:tag, :filter_ids, :rating_ids, :warning_ids, :category_ids, 
+        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids, 
+        :pseud_ids, :creators, :collection_ids, :work_types]
+    ).merge(
+      anonymous: anonymous?, 
+      unrevealed: unrevealed?,
+      bookmarkable_type: 'Work'
+    )
   end
 
   def pseud_ids
     creatorships.value_of :pseud_id
   end
+
   def collection_ids
     approved_collections.value_of(:id, :parent_id).flatten.uniq.compact
   end
@@ -1325,6 +1309,7 @@ class Work < ActiveRecord::Base
     self.stat_counter.bookmarks_count
   end
 
+  # Deprecated: old search
   def creator
     names = ""
     if anonymous?
@@ -1338,6 +1323,51 @@ class Work < ActiveRecord::Base
       end
     end
     names
+  end
+
+  # New version
+  def creators
+    if anonymous?
+      ["Anonymous"]
+    else
+      pseuds.map(&:byline) + external_author_names.value_of(:name)
+    end
+  end
+
+  # A work with multiple fandoms which are not related
+  # to one another can be considered a crossover
+  def crossover
+    filters.by_type('Fandom').first_class.count > 1
+  end
+
+  # Does this work have only one relationship tag?
+  def otp
+    filters.by_type('Relationship').first_class.count == 1
+  end
+
+  # Quick and dirty categorization of the most obvious stuff
+  # To be replaced by actual categories
+  def work_types
+    types = []
+    video_ids = [44011] # Video
+    audio_ids = [70308] # Podfic
+    art_ids = [7844, 125758] # Fanart, Arts
+    types << "Video" if (filter_ids & video_ids).present?
+    types << "Audio" if (filter_ids & audio_ids).present?
+    types << "Art" if (filter_ids & art_ids).present?
+    # Very arbitrary cut off here, but wanted to make sure we
+    # got fic + art/podfic/video tagged as text as well
+    if types.empty? || (word_count && word_count > 200)
+      types << "Text"
+    end
+    types
+  end
+
+  # To be replaced by actual category
+  # Can't use the 'Meta' tag since that has too many different uses
+  def nonfiction
+    nonfiction_tags = [125773, 66586, 123921] # Essays, Nonfiction, Reviews
+    (filter_ids & nonfiction_tags).present?
   end
 
 end

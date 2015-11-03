@@ -26,5 +26,13 @@ class PotentialMatchSettings < ActiveRecord::Base
   def no_match_required?
     REQUIRED_TAG_ATTRIBUTES.all? {|attrib| self.send("#{attrib}") == 0}
   end
+  
+  def required_types
+    TagSet::TAG_TYPES.select {|type| self.send("num_required_#{type.pluralize}") != 0}
+  end
+
+  def topmost_required_type
+    required_types.first
+  end
 
 end

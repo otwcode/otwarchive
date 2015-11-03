@@ -27,7 +27,15 @@ class AdminPost < ActiveRecord::Base
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
     :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
+  validate :translated_post_must_exist
+
   scope :non_translated, where('translated_post_id IS NULL')
+
+  scope :for_homepage, order: "created_at DESC",
+                       limit: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE
+
+  after_save :expire_cached_home_admin_posts
+  after_destroy :expire_cached_home_admin_posts
   
   # Return the name to link comments to for this object
   def commentable_name
@@ -51,4 +59,17 @@ class AdminPost < ActiveRecord::Base
       }.compact
   end
 
+  def translated_post_must_exist
+    if translated_post_id.present? && AdminPost.find_by_id(translated_post_id).nil?
+      errors.add(:translated_post_id, 'does not exist')
+    end
+  end
+
+  private
+
+  def expire_cached_home_admin_posts
+    unless Rails.env.development?
+      Rails.cache.delete("home/index/home_admin_posts")
+    end
+  end
 end

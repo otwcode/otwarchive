@@ -31,9 +31,6 @@ module SkinsHelper
   def get_skin_cache(skin)
     return "" unless skin
     roles = []
-    if controller && (controller.controller_name == 'translations' || controller.controller_name == 'translation_notes')
-      roles << "translator"
-    end
     if logged_in_as_admin?
       roles << "admin"
     end
@@ -48,7 +45,7 @@ module SkinsHelper
   def show_advanced_skin?(skin)
     !skin.new_record? && 
       (skin.role != Skin::DEFAULT_ROLE ||
-        skin.media != Skin::DEFAULT_MEDIA ||
+        (skin.media.present? && skin.media != Skin::DEFAULT_MEDIA) ||
         skin.ie_condition.present? ||
         skin.unusable? ||
         !skin.skin_parents.empty?)

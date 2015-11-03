@@ -1,48 +1,56 @@
-<%= render :partial => 'layouts/header' %>
-<div id="inner" class="wrapper">
-  
-  <div id="main" class="splash system region" role="main">
-    <%= flash_div :error, :caution, :notice %>
-  
-    <div class="intro module">
-      <h2 class="heading"><%= ts('Welcome to the Archive of Our Own!') %></h2>
-      <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, fan videos, and podfic. We currently have %{fandom_count} fandoms, %{user_count} registered users, and %{work_count} works.", :fandom_count => content_tag(:span, @fandom_count, class: "count"), :user_count => content_tag(:span, @user_count, class: "count"), :work_count => content_tag(:span, @work_count, class:"count")).html_safe %></p>
-      <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
-      <p><%= ts("The Archive of Our Own is a project of the ") %><%= link_to ts("Organization for Transformative Works"), "http://transformativeworks.org" %>.</p>
-      <p id="signup" class="navigation actions" role="navigation">
-        <% if logged_in? %>
-          <%= link_to ts('Invite a friend'), user_invitations_path(current_user) %> 
-        <% else %>
-          <% if @admin_settings.account_creation_enabled? %>
-            <%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %>
-          <% elsif @admin_settings.invite_from_queue_enabled? %>
-            <%= link_to ts('Get an Invite'), invite_requests_path %>
-          <% else %>
-            <%= link_to ts('Log in'), login_path %></p>
-          <% end %>
-        <% end %>
-      </p>
-    </div>
+<div class="splash">
+  <% if !logged_in? %>
+    <%= render 'intro_module' %>
+  <% end %>
 
-    <% if @admin_posts %>
-      <div class="news latest module">
-        <h3 class="heading"><%= ts("News") %></h3>
-        <% @admin_posts.each do |f| %>
-          <p><%= link_to f.title, f %></p>
+  <% if logged_in? && @homepage.favorite_tags.present? %>
+    <div class="favorite module">
+      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+      <ul>
+        <% @homepage.favorite_tags.each do |favorite_tag| %>
+          <li>
+            <%= link_to_tag_works(favorite_tag.tag) %>
+          </li>
         <% end %>
-        <% if @admin_post_show_more %>
-          <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>
-        <% end %>
-      </div>
-    <% end %>
-  
-    
-    <div class="tweets latest module">
-      <h3 class="heading"><%= ts("Tweets") %></h3>
-      <a class="twitter-timeline" href="https://twitter.com/otw_status/otw-tweets" data-widget-id="382983150978076672" height="300"><%= ts("Tweets from @otw_status/otw-tweets") %></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
+      </ul>
     </div>
-    
+  <% else %>
+    <div class="browse module">
+      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+      <% if logged_in? %>
+        <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', maximum: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
+      <% end %>
+      <%= render 'menu/menu_fandoms' %>
+    </div>
+  <% end %>
+
+  <% if @homepage.admin_posts.present? %>
+    <%= render 'news_module', admin_posts: @homepage.admin_posts %>
+  <% end %>
+
+  <% if logged_in? && @homepage.readings.present? %>
+    <div class="random readings module">
+      <h3 class="heading">
+        <span class="title"><%= ts('Is it later already?') %></span>
+        <span class="link"><%= link_to ts('My History'), user_readings_path(current_user) %></span>
+      </h3>
+      <div class="flash"></div>
+      <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
+      <ul class="readings works index group">
+        <% @homepage.readings.each do |reading| %>
+          <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if logged_in? && @homepage.inbox_comments.present? %>
+    <%= render 'inbox_module', inbox_comments: @homepage.inbox_comments %>
+  <% end %>
+
+  <div class="latest tweets module">
+    <h3 class="heading"><%= ts('Tweets') %></h3>
+    <a class="twitter-timeline" href="https://twitter.com/otw_status/lists/otw-tweets" data-widget-id="382983150978076672"><%= ts('Tweets from https://twitter.com/otw_status/lists/otw-tweets') %></a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   </div>
-
 </div>

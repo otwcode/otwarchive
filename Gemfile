@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.21'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -12,6 +12,8 @@ gem 'rails', '3.2.13'
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
+#https://github.com/qertoip/transaction_retry
+gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -20,20 +22,30 @@ gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
+# Used to convert strings to ascii
+gem 'unicode'
+gem 'unidecoder'
+
+# Lograge is opinionated, very opinionated.
+gem "lograge" # https://github.com/roidrage/lograge
+
 gem 'will_paginate', '>=3.0.2'
 gem 'acts_as_list'
 gem 'akismetor'
 
+gem 'httparty'
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri', '>=1.4.2'
+gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
+gem 'elasticsearch'
 gem 'aws-sdk'
 gem 'css_parser'
 
@@ -44,6 +56,7 @@ gem 'paperclip'
 gem 'fastimage'
 
 gem 'authlogic'
+gem 'bcrypt'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -68,19 +81,35 @@ gem "google_visualr", ">= 2.1"
 # Copycopter to aid translation
 # gem 'copycopter_client', '~> 2.0.1'
 
-# Coveralls for code test coverage
-gem 'coveralls', require: false
+# Globalize for translations
+gem 'globalize', '~> 3.1.0'
 
-#  Place the New Relic gem as low in the list as possible, allowing the 
-#  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm', "3.7.2.192"
-gem 'newrelic-redis'
+# Add a clean notifier that shows we are on dev or test
+gem "rack-dev-mark"
+
+#Phrase-app
+gem 'phrase'
 
 # For URL mangling
 gem 'addressable'
+gem "audited-activerecord", "~> 3.0"
+
+# For controlling application behavour dynamically
+gem 'rollout'
+
+#  Place the New Relic gem as low in the list as possible, allowing the 
+#  frameworks above it to be instrumented when the gem initializes.
+gem 'newrelic_rpm', "3.9.3.241"
+gem 'newrelic-redis'
+
+#   Use update memcached client with kinder, gentler I/O for Ruby
+gem 'connection_pool'
+gem 'dalli'
+gem 'kgio'
+
 
 group :test do
-  gem 'rspec-rails', '>=2.6.0'
+  gem 'rspec-rails'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
@@ -89,16 +118,19 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
-  # automatically record http requests and save them to make
-  # cuke fast
-  gem 'typhoeus'
-  gem "vcr", "~> 2.5.0"
   gem 'delorean'
   gem 'faker'
+  # Record and replay data from external URLs
+  gem "vcr", "~> 2.5.0"
+  gem 'webmock', '~> 1.8.8'
+  # Code coverage
+  gem 'simplecov', :require => false
+  gem 'email_spec'
 end
 
 group :test, :development do
   gem 'pry'
+  gem 'whiny_validation'
 end
 
 # Deploy with Capistrano
@@ -108,5 +140,4 @@ gem 'rvm-capistrano'
 group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
-  gem "memcache-client"
 end

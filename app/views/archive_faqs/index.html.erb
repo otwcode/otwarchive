@@ -1,24 +1,5 @@
-<!--Descriptive page name, messages and instructions-->
 <% if logged_in_as_admin? %>
-  <%= render :partial => "admin_index" %>
+  <%= render "admin_index" %>
 <% else %>
-  <h2 class="heading"><%= ts("Archive FAQ") %></h2>
-  <!--/descriptions-->
-
-  <!--main content-->
-  <div class="admin userstuff">
-    <p>Some commonly asked questions about the Archive are answered here. 
-    Questions and answers about our Terms of Service can be found in the <%= link_to "TOS FAQ", tos_faq_path %>. 
-    You may also like to check out our <%= link_to "Known Issues", known_issues_path %>. 
-    If you need more help, please submit a <%= link_to "support request", feedbacks_path %>.</p>
-
-    <% unless @archive_faqs.blank?  %>
-      <h3 id="categories">Available Categories</h3>
-      <ol role="navigation">
-        <% for faq in @archive_faqs %>
-        <li><%= link_to faq.title, faq %></li>
-        <% end %>
-      </ol>
-    <% end %>
-  </div>
+  <%= render "faq_index" %>
 <% end %>

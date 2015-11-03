@@ -708,13 +708,13 @@
          
             <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your account has been locked for 5 minutes due to too many failed login attempts.&quot;</span>)
           <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.&quot;</span>)
+            <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href="http://archiveofourown.org/admin_posts/1277">Problems When Logging In</a> for help.&quot;</span>)
           <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">else</span>
           <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You'll need to activate your account before you can log in. Please check your email or contact support.&quot;</span>)
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">else</span>
-        <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.&quot;</span>)
+        <span class="ruby-identifier">message</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href="http://archiveofourown.org/admin_posts/1277">Problems When Logging In</a> for help.&quot;</span>)
       <span class="ruby-keyword">end</span>
       <span class="ruby-identifier">setflash</span>; <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">message</span>
       <span class="ruby-ivar">@user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_session</span>])

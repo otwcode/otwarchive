@@ -1,14 +1,19 @@
+<!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= ts('Search Results') %></h2>
 
-<h4>
+<h4 class="heading">
   <%= ts("You searched for:") %>
   <%= strip_tags @search.summary %>
 </h4>
+<!--/descriptions-->
 
-<ul class="user navigation actions" role="navigation">
+<!--subnav-->
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts("Edit Your Search"), url_for(params.merge(edit_search: true)) %></li>
 </ul>
+<!--/subnav-->
 
+<!--main content-->
 <% if @works.blank? %>
   <p><%= ts("No results found. You may want to edit your search to make it less specific.") %></p>
 <% else %>
@@ -25,3 +30,4 @@
  
  <%= will_paginate @works %>
 <% end %>
+<!--/content-->

@@ -1,5 +1,0 @@
-<th scope="row"><%=h abuse_report.id %></th>
-<td><%= abuse_report.email.blank? ? ts("Anonymous") : mail_to(abuse_report.email) %></td>
-<td><%= link_to abuse_report.url, abuse_report.url %></td>
-<td><%= time_ago_in_words abuse_report.created_at %></td>
-<td><%= link_to ts("Detail"), abuse_report_path(abuse_report) %></td>

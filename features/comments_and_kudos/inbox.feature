@@ -1,0 +1,96 @@
+Feature: Get messages in the inbox 
+  In order to stay informed about activity concerning my works and comments
+  As a user
+  I'd like to get messages in my inbox
+
+  Scenario: I should not receive comments in my inbox if I have set my preferences to "Turn off messages to your inbox about comments."
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Another Round"
+      And I set my preferences to turn off messages to my inbox about comments
+    When I am logged in as "cutman"
+      And I post the comment "You should not receive this in your inbox." on the work "Another Round"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to my inbox page
+    Then I should not see "cutman on Another Round"
+      And I should not see "You should not receive this in your inbox."
+  
+  Scenario: I should receive comments in my inbox if I haven't set my preferences to "Turn off messages to your inbox about comments."
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "The Fight"
+      And I set my preferences to turn on messages to my inbox about comments
+    When I am logged in as "cutman"
+      And I post the comment "You should receive this in your inbox." on the work "The Fight"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to my inbox page
+    Then I should see "cutman on The Fight"
+      And I should see "You should receive this in your inbox."
+    
+  Scenario: Logged in comments in my inbox should have timestamps
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Down for the Count"
+    When I am logged in as "cutman"
+      And I post the comment "It was a right hook... with a bit of a jab. (And he did it with his left hand.)" on the work "Down for the Count"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to my inbox page
+    Then I should see "cutman on Down for the Count"
+      And I should see "less than 1 minute ago"
+      
+  Scenario: Logged in comments in my inbox should have timestamps
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Down for the Count"
+    When I post the comment "The fight game's complex." on the work "Down for the Count" as a guest
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to my inbox page
+    Then I should see "guest on Down for the Count"
+      And I should see "less than 1 minute ago"
+
+  Scenario: A user can see some of their unread comments on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Pre-Fight Coverage"
+    When I am logged in as "cutman"
+      And I post the comment "That's a haymaker? I actually never knew that." on the work "Pre-Fight Coverage"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "Unread messages"
+      And I should see "My Inbox"
+      And I should see "The latest unread items from your inbox."
+      And I should see "cutman on Pre-Fight Coverage"
+      And I should see "That's a haymaker? I actually never knew that."
+
+  Scenario: A user can delete an unread comment on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "The Gladiators of Old"
+    When I am logged in as "cutman"
+      And I post the comment "I can still make you cry, you know." on the work "The Gladiators of Old"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "cutman on The Gladiators of Old"
+      And I should see "I can still make you cry, you know."
+      And I should see a "Delete" button
+    When I press "Delete"
+    Then I should see "Inbox successfully updated."
+      And I should be on the homepage
+      And I should not see "Unread messages"
+      And I should not see "My Inbox"
+      And I should not see "The latest unread items from your inbox."
+      And I should not see "cutman on the Gladiators of Old"
+      And I should not see "I can still make you cry, you know."
+  
+  Scenario: A user can mark an unread comment read on the homepage
+    Given I am logged in as "boxer" with password "10987tko"
+      And I post the work "Special Coverage"
+    When I am logged in as "cutman"
+      And I post the comment "Is there anything we can do to make the fight go longer?" on the work "Special Coverage"
+    When I am logged in as "boxer" with password "10987tko"
+      And I go to the homepage
+    Then I should see "cutman on Special Coverage"
+      And I should see "Is there anything we can do to make the fight go longer?"
+      And I should see a "Mark Read" button
+    When I press "Mark Read"
+    Then I should see "Inbox successfully updated."
+      And I should be on the homepage
+      And I should not see "Unread messages"
+      And I should not see "My Inbox"
+      And I should not see "The latest unread items from your inbox."
+      And I should not see "cutman on Special Coverage"
+      And I should not see "Is there anything we can do to make the fight go longer?"

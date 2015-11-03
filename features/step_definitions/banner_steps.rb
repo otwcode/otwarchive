@@ -1,54 +1,120 @@
+# encoding: UTF-8
+
 ### GIVEN
 
-Given /^I have turned off the banner$/ do
-  step "I turn off the banner"
+Given /^there are no banners$/ do
+  AdminBanner.delete_all
 end
 
 ### WHEN
 
-When /^an admin sets a custom banner notice$/ do
+When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
   step %{I am logged in as an admin}
-  step %{I go to the admin-settings page}
-  step %{I fill in "Banner notice" with "Custom notice words"}
-    step %{I press "Update"}
-    # Changing from null to empty string counts as a change to the banner
-  step %{I should see "Setting banner back on for all users. This may take some time"}
+  visit(new_admin_banner_path)
+  fill_in("admin_banner_content", :with => "This is some banner text")
+  if banner_type.present?
+    if banner_type == "alert"
+      choose("admin_banner_banner_type_alert")
+    elsif banner_type == "event"
+      choose("admin_banner_banner_type_event")
+    else
+      choose("admin_banner_banner_type_")
+    end
+  end
+  check("admin_banner_active")
+  click_button("Create Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
 end
 
-When /^an admin sets a custom banner notice with a link$/ do
+When /^an admin deactivates the banner$/ do
   step %{I am logged in as an admin}
-  step %{I go to the admin-settings page}
-  step %{I fill in "Banner notice" with "Please donate to the <a href=support>OTWtest</a>"}
-    step %{I press "Update"}
-  step %{I should see "Setting banner back on for all users. This may take some time"}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  uncheck("admin_banner_active")
+  click_button("Update Banner")
+  step %{I should see "Banner successfully updated."}
 end
 
-When /^an admin sets a different banner notice$/ do
+When /^an admin edits the active banner$/ do
   step %{I am logged in as an admin}
-  step %{I go to the admin-settings page}
-  step %{I fill in "Banner notice" with "Other words"}
-    step %{I press "Update"}
-  step %{I should see "Setting banner back on for all users. This may take some time"}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  fill_in("admin_banner_content", :with => "This is some edited banner text")
+  click_button("Update Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
+end
+
+When /^an admin creates a different active banner$/ do
+  step %{I am logged in as an admin}
+  visit(new_admin_banner_path)
+  fill_in("admin_banner_content", :with => "This is new banner text")
+  check("admin_banner_active")
+  click_button("Create Banner")
+  step %{I should see "Setting banner back on for all users. This may take some time."}
 end
 
 When /^I turn off the banner$/ do
   step %{I am logged in as "newname"}
   step %{I am on my user page}
-  step %{I press "Hide this banner"}
+  click_button("×")
 end
 
 ### THEN
 
-Then /^the banner notice for a logged-in user should be set to "([^\"]*)"$/ do |words|
-  step %{I am logged in as "newname"}
-  step %{I am on the works page}
-  step %{I should see "#{words}"}
+Then /^a logged-in user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
+  step %{I am logged in as "ordinaryuser"}
+  visit(works_path)
+  if banner_type.present?
+    if banner_type == "alert"
+      page.should have_xpath("//div[@class=\"alert announcement group\"]")
+    elsif banner_type == "event"
+      page.should have_xpath("//div[@class=\"event announcement group\"]")
+    else
+      page.should have_xpath("//div[@class=\"announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"alert announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"event\"]")
+    end
+  end
+  step %{I should see "This is some banner text"}
 end
 
-Then /^the banner notice for a logged-out user should be set to "([^\"]*)"$/ do |words|
+Then /^a logged-out user should see the(?: "([^\"]*)")? banner$/ do |banner_type|
   step %{I am logged out}
-  step %{I am on the works page}
-  step %{I should see "#{words}"}
+  visit(works_path)
+  if banner_type.present?
+    if banner_type == "alert"
+      page.should have_xpath("//div[@class=\"alert announcement group\"]")
+    elsif banner_type == "event"
+      page.should have_xpath("//div[@class=\"event announcement group\"]")
+    else
+      page.should have_xpath("//div[@class=\"announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"alert announcement group\"]")
+      page.should_not have_xpath("//div[@class=\"event announcement group\"]")
+    end
+  end
+  step %{I should see "This is some banner text"}
+end
+
+Then /^a logged-in user should see the edited active banner$/ do
+  step %{I am logged in as "ordinaryuser"}
+  visit(works_path)
+  step %{I should see "This is some edited banner text"}
+end
+
+Then /^a logged-out user should see the edited active banner$/ do
+  step %{I am logged out}
+  visit(works_path)
+  step %{I should see "This is some edited banner text"}
+end
+
+Then /^a logged-in user should not see a banner$/ do
+  step %{I am logged in as "ordinaryuser"}
+  page.should_not have_xpath("//div[@class=\"announcement group\"]")
+end
+
+Then /^a logged-out user should not see a banner$/ do
+  step %{I am logged out}
+  page.should_not have_xpath("//div[@class=\"announcement group\"]")
 end
 
 Then /^I should see the first login banner$/ do

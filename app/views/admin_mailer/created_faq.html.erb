@@ -1,0 +1,20 @@
+<% content_for :message do %>
+  <p>
+    <%= style_bold("Dear Translation Committee:") %>
+  </p>
+  <p>
+    <%= style_bold(@admin) %> has created a new FAQ Category!
+  </p>
+
+  <h3><%= style_bold("Category name:") %> <%= @archive_faq.title.html_safe %></h3>
+  <p>
+    <% for q in @archive_faq.questions %>
+      <%= style_bold("Question: "+ q.question) %>
+      <%= style_quote(raw sanitize_field(q, :content)) %>
+    <% end %>
+  </p>
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= Time.now.to_s(:time_for_mailers) %>
+<% end %>

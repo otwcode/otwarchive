@@ -220,8 +220,9 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Sign Up"
-    Then I should see "Cabin Pressure" in the autocomplete
-      And I should see "From Eroica with Love" in the autocomplete
+    When "autocomplete tests with JavaScript" is fixed
+#      Then I should see "Cabin Pressure" in the autocomplete
+#      And I should see "From Eroica with Love" in the autocomplete
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "From Eroica with Love"

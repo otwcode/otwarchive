@@ -7,7 +7,7 @@ class PasswordsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_login(params[:login]) || User.find_by_email(params[:login])
+    @user = User.find_by_login(params[:reset_password_for]) || User.find_by_email(params[:reset_password_for])
     if @user.nil?
       flash[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
       render :action => "new"

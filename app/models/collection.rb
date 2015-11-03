@@ -130,7 +130,7 @@ class Collection < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name,
-    :message => ts('must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
@@ -152,13 +152,18 @@ class Collection < ActiveRecord::Base
       title.match(/\,/)
   end
 
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    read_attribute(:title).try(:html_safe)
+  end
+
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
-  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("Not a valid URL.")
-  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("Only gif, jpg, png files allowed.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => ts("is not a valid URL.")
+  validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => ts("can only point to a gif, jpg, or png file.")
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
@@ -167,13 +172,21 @@ class Collection < ActiveRecord::Base
   scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
+  scope :no_challenge, where(challenge_type: nil)
+  scope :gift_exchange, where(challenge_type: 'GiftExchange')
+  scope :prompt_meme, where(challenge_type: 'PromptMeme')
   scope :name_only, select("collections.name")
   scope :by_title, order(:title)
+
+  before_validation :cleanup_url
+  def cleanup_url
+    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+  end
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
     table = challenge_type.tableize
-    unmoderated.not_closed.where(:challenge_type => challenge_type).
+    not_closed.where(:challenge_type => challenge_type).
       joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
       where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
   end
@@ -196,7 +209,7 @@ class Collection < ActiveRecord::Base
     group("collections.id")
 
   def to_param
-    name
+   name_was
   end
 
   # Change membership of collection(s) from a particular pseud to the orphan account
@@ -430,6 +443,15 @@ class Collection < ActiveRecord::Base
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
+    if filters[:challenge_type].present?
+      if filters[:challenge_type] == "gift_exchange"
+        query = query.gift_exchange
+      elsif filters[:challenge_type] == "prompt_meme"
+        query = query.prompt_meme
+      elsif filters[:challenge_type] == "no_challenge"
+        query = query.no_challenge
+      end
+    end
     query = query.order(sort)
 
     if !filters[:fandom].blank?

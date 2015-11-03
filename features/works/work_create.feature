@@ -120,7 +120,7 @@ Feature: Create Works
       And 2 emails should be delivered to "coauthor@example.org"
       And the email should contain "You have been listed as a coauthor"
        And 1 email should be delivered to "recipient@example.org"
-       And the email should contain "A gift story has been posted for you"
+       And the email should contain "A gift work has been posted for you"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -128,8 +128,7 @@ Feature: Create Works
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
       And I should see "No Archive Warnings Apply"
-      And "warning redesign" is fixed
-      #And I should not see "Choose Not To Use Archive Warnings"
+      And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
@@ -147,7 +146,7 @@ Feature: Create Works
       And I should see "My new series"
       And I should see "Bad things happen, etc."
     When I follow "Add Chapter"
-      And I fill in "title" with "This is my second chapter"
+      And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
@@ -169,7 +168,8 @@ Feature: Create Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".autocomplete"
+    When "autocomplete tests with JavaScript" is fixed
+#      Then I should see "cosomeone" in the autocomplete
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -180,7 +180,7 @@ Feature: Create Works
       And 1 email should be delivered to "cosomeone@example.org"
     When all emails have been delivered
       And I follow "Edit"
-      And I fill in "work_recipients" with "giftee"
+      And I give the work to "giftee"
       And I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -195,12 +195,14 @@ Feature: Create Works
       And a category exists with name: "Gen", canonical: true
       And a category exists with name: "F/M", canonical: true
       And the following activated users exist
-        | login          | password    | email                 |
-        | coauthor       | something   | coauthor@example.org  |
-        | cosomeone      | something   | cosomeone@example.org |
-        | giftee         | something   | giftee@example.org    |
-        | recipient      | something   | recipient@example.org |
+        | login          | password    | email                   |
+        | coauthor       | something   | coauthor@example.org    |
+        | cosomeone      | something   | cosomeone@example.org   |
+        | badcoauthor    | something   | badcoauthor@example.org |
+        | giftee         | something   | giftee@example.org      |
+        | recipient      | something   | recipient@example.org   |
       And I am logged in as "thorough" with password "something"
+      And user "badcoauthor" is banned
     When I go to thorough's user page
       And I follow "Profile"
       And I follow "Manage My Pseuds"
@@ -233,11 +235,15 @@ Feature: Create Works
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see a save error message
+    Then I should see "Sorry! We couldn't save this work because:"
       And I should see a collection not found message for "collection1"
     # Collections are now parsed by collectible.rb which only shows the first failing collection and nothing else
     # And I should see a collection not found message for "collection2"
     When I fill in "work_collection_names" with ""
+      And I fill in "pseud_byline" with "badcoauthor"
+      And I press "Preview"
+    Then I should see "badcoauthor is currently banned"
+    When I fill in "pseud_byline" with "coauthor"
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
     Then I should see "try using less than 100 characters or using commas to separate your tags"
@@ -251,6 +257,7 @@ Feature: Create Works
     Given basic tags
       And I am logged in
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural, Smallville"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
@@ -265,6 +272,7 @@ Feature: Create Works
     Given basic tags
     When I am logged in as "newbie" with password "password"
       And I go to the new work page
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "4 > 3 and 2 < 5"
       And I fill in "content" with "Bad things happen, etc."
@@ -305,7 +313,7 @@ Feature: Create Works
       And I press "Post Without Preview"
     Then I should see "Work was successfully posted"
     When I follow "Add Chapter"
-      And I fill in "title" with "This is my second chapter"
+      And I fill in "Chapter Title" with "This is my second chapter"
       And I fill in "content" with "Let's write another story"
       And I press "Post Without Preview"
     Then I should see "Chapter 2: This is my second chapter"
@@ -313,7 +321,8 @@ Feature: Create Works
       And I should not see "This is a preview"
 
   Scenario: RTE and HTML buttons are separate
-  Given I am logged in as "newbie"
+  Given the default ratings exist
+    And I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
     And I should see "Rich Text" within ".rtf-html-switch"
@@ -337,4 +346,20 @@ Feature: Create Works
   Then I should see "Published:1990-01-01"
   When I go to the works page
   Then "This One Stays On Top" should appear before "Backdated"
-  
+        
+  Scenario: Users must set something as a warning and Author Chose Not To Use Archive Warnings should not be added automatically
+    Given basic tags
+      And I am logged in as "triggerfinger" with password "everyoneinthephonebook"
+    When I go to the new work page
+      And I fill in "Fandoms" with "Dallas"
+      And I fill in "Work Title" with "I Shot J.R.: Kristin's Story"
+      And I fill in "content" with "It wasn't my fault, you know."
+      And I press "Post Without Preview"
+    Then I should see "We couldn't save this work"
+      And I should see "Please add all required tags. Warning is missing."
+    When I check "No Archive Warnings Apply"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully posted."
+      And I should see "No Archive Warnings Apply"
+      And I should not see "Author Chose Not To Use Archive Warnings"
+      And I should see "It wasn't my fault, you know."

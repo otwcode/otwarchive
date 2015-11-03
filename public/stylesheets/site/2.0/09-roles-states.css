@@ -1,5 +1,5 @@
 /*==ROLES AND STATES 
-http://media.transformativeworks.org/training/front_end_coding/patterns/modifiers.html
+http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
 */
 
 .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
@@ -46,12 +46,20 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   display: none;
 }
 
-.draggable, .droppable, span.requested {
+.draggable, .droppable, span.requested, .nominations .rejected {
   color: #900;
 }
 
-span.offered, .replied {
+span.offered, .replied, .nominations .approved {
   color: #008000;
+}
+
+.nominations .approved {
+  background: #d1f0d1;
+}
+
+.nominations .rejected {
+  background: #efd1d1;
 }
 
 span.offered.requested {

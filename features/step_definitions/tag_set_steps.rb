@@ -5,12 +5,17 @@ When /^I follow the add new tag ?set link$/ do
 end
 
 # This takes strings like:
+# ...with a visible tag list
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
-When /^I set up the tag ?set "([^\"]*)" with (.*)$/ do |title, tags|
+# ...with an invisible tag list and the freeform tags "m, n, o"
+When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
   unless OwnedTagSet.find_by_title("#{title}").present?
     step %{I go to the new tag set page}
       fill_in("owned_tag_set_title", :with => title)
       fill_in("owned_tag_set_description", :with => "Here's my tagset")
+      visibility ||= "invisible"
+      check("owned_tag_set_visible") if visibility == "visible"
+      uncheck("owned_tag_set_visible") if visibility == "invisible"
       tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, tags|
         fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", :with => tags)
       end
@@ -129,4 +134,9 @@ When /^I should see the tags with Unicode characters/ do
   tags.each do |tag|
     step %{I should see "#{tag}"}
   end
+end
+
+When /^I view the tag set "([^\"]*)"/ do |tagset|
+  tagset = OwnedTagSet.find_by_title!(tagset)
+  visit tag_set_path(tagset)
 end

@@ -49,6 +49,9 @@ class ChallengeSignup < ActiveRecord::Base
   scope :order_by_date, order("updated_at DESC")
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
+  
+  scope :no_potential_offers, where("id NOT IN (SELECT offer_signup_id FROM potential_matches)")
+  scope :no_potential_requests, where("id NOT IN (select request_signup_id FROM potential_matches)")
 
   ### VALIDATION
 

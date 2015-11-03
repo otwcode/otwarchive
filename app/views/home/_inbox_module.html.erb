@@ -1,0 +1,28 @@
+<% # expects inbox_comments %>
+<div class="latest messages module">
+  <h3 class="heading">
+    <span class="title"><%= ts('Unread messages') %></span>
+    <span class="link"><%= link_to ts('My Inbox'), user_inbox_path(current_user) %></span>
+  </h3>
+  <div class="flash"></div>
+  <p class="note"><%= ts('The latest unread items from your inbox.') %></p>
+  <ul class="abbreviated comment group">
+    <% inbox_comments.each do |inbox_comment| %>
+      <li class="unread comment group">
+        <%= render 'inbox/inbox_comment_contents', feedback_comment: inbox_comment.feedback_comment %>
+        <ul class="actions">
+          <li>
+            <%= render 'inbox/delete_form', inbox_comment: inbox_comment, current_user: current_user %>
+          </li>
+          <li>
+            <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
+          </li>
+          <li>
+            <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
+          </li>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+  <div id="reply-to-comment" class="dynamic hidden"></div>
+</div>

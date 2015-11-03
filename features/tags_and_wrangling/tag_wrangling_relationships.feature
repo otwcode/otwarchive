@@ -80,13 +80,16 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Jack/Ianto"
     And I follow "Edit"
     And I fill in "Synonym of" with "Jack H"
-  Then I should find "Jack Harkness/Ianto Jones" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Jack Harkness/Ianto Jones" in the autocomplete
   When I fill in "Synonym of" with "Jack Harkness/Ianto Jones"
     And I fill in "Characters" with "Jack H"
-    And I should find "Jack Harkness" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "Jack Harkness" in the autocomplete
     And I fill in "Characters" with "Jack Harkness, Ianto Jones"
     And I fill in "Fandoms" with "Tor"
-    And I should find "Torchwood" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    And I should see "Torchwood" in the autocomplete
     And I fill in "Fandoms" with "Torchwood"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -98,8 +101,9 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Torchwood"
     And I should see "Jack/Ianto"
     And the "tag_canonical" checkbox should be disabled
-  When I fill in "tag_merger_string" with "Jant"
-  Then I should find "Janto" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    When I fill in "tag_merger_string" with "Jant"
+#    Then I should see "Janto" in the autocomplete
   When I fill in "tag_merger_string" with "Janto"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -121,7 +125,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I choose "Relationship"
     And I press "Create Tag"
     And I fill in "SubTags" with "Jack Harkness"
-  Then I should find "Jack Harkness/Ianto Jones" within ".autocomplete"
+  When "autocomplete tests with JavaScript" is fixed
+#    Then I should see "Jack Harkness/Ianto Jones" in the autocomplete
   When I fill in "SubTags" with "Jack Harkness/Ianto Jones"
     And I press "Save changes"
   Then I should see "Tag was updated"

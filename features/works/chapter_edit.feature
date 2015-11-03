@@ -35,11 +35,11 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "chapter_wip_length" with "100"
     And I fill in "content" with "original chapter two"
-    And "Issue 3306" is fixed
+    And "AO3-3300" is fixed
     # All the commented out bits in the following examples need to be changed
-    # back once Issue 3306 has bee fixed.
+    # back once AO3-3300 has bee fixed.
     #And I press "Preview"
-  #Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+  #Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
   #When I press "Post"
   When I press "Post Without Preview"
     Then I should see "2/100"
@@ -71,6 +71,7 @@ Feature: Edit chapters
   When I follow "Edit"
     And I follow "2"
     And I follow "Delete Chapter"
+    And I press "Yes, Delete Chapter"
   Then I should see "The chapter was successfully deleted."
     And I should see "3/17"
     And I should see "Words:14"
@@ -92,7 +93,7 @@ Feature: Edit chapters
     And I fill in "chapter_wip_length" with "4"
     And I fill in "content" with "last chapter"
     #And I press "Preview"
-    And I press "Update Without Preview"
+    And I press "Post Without Preview"
   Then I should see "Chapter 4"
   #When I press "Update"
   Then I should see "Chapter was successfully updated"
@@ -117,7 +118,7 @@ Feature: Edit chapters
     And I should see "Chapter 4"
     And I should see "last chapter" within "#chapter-4"
     And I should not see "original chapter two"
-  When I follow "View chapter by chapter"
+  When I follow "Chapter by Chapter"
     And I follow "Chapter Index"
   Then I should see "Chapter Index for New Epic Work by epicauthor"
     And I should see "Chapter 1"
@@ -152,17 +153,13 @@ Feature: Edit chapters
 
   # create a draft chapter and post it
   When I am logged in as "epicauthor" with password "password"
-    And I view the work "New Epic Work"
-    And I follow "Add Chapter"
-    And I fill in "Chapter title" with "My title"
-    And I fill in "content" with "some more epic context"
-    And I press "Preview"
-    And I view the work "New Epic Work"
+    And a draft chapter is added to "New Epic Work"
+  When I view the work "New Epic Work"
     And I follow "Edit"
   Then I should see "5 (Draft)"
   When I view the work "New Epic Work"
     Then I should see "4/5"
-  When I select "5. My title" from "selected_id"
+  When I select "5." from "selected_id"
     And I press "Go"
     Then I should see "This chapter is a draft and hasn't been posted yet!"
   When I press "Post"
@@ -171,7 +168,7 @@ Feature: Edit chapters
     Then I should not see "Draft"
     And I should not see "draft"
   When I view the work "New Epic Work"
-    And I select "5. My title" from "selected_id"
+    And I select "5." from "selected_id"
     And I press "Go"
     Then I should not see "Draft"
     And I should not see "draft"
@@ -180,10 +177,10 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
     And I view the work "New Epic Work"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "Chapter Title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
-  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+  Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
   When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Post Without Preview"
@@ -194,10 +191,10 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
     And I view the work "New Epic Work"
     And I follow "Add Chapter"
-    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "Chapter Title" with "6(66) The Number of the Beast"
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
-  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+  Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
   When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Preview"
@@ -205,28 +202,8 @@ Feature: Edit chapters
   When I press "Post"
     Then I should see "Chapter was successfully posted."
     And I should not see "This chapter is a draft and hasn't been posted yet!"
-
-
-  Scenario: view chapter title info pop up
-
-  Given the following activated user exists
-    | login         | password   |
-    | epicauthor    | password   |
-    And basic tags
-  When I am logged in as "epicauthor"
-    And I go to epicauthor's user page
-    And I follow "New Work"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "New Fandom"
-    And I fill in "Work Title" with "New Epic Work"
-    And I fill in "content" with "Well, maybe not so epic."
-    And I press "Post"
-    And I follow "Add Chapter"
-    And I follow "Chapter title"
-  Then I should see "You can add a chapter title"
   
-  
+
   Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
   Given basic tags
     And I am logged in as "moose" with password "muffin"  
@@ -243,7 +220,7 @@ Feature: Edit chapters
   When I follow "Add Chapter"
     And I fill in "content" with "And then they will request more features for it."
     And I press "Preview"
-  Then I should see "This is a draft showing what this chapter will look like when it's posted to the Archive."
+  Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
     And I should see "And then they will request more features for it."
   When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
@@ -301,4 +278,3 @@ Feature: Edit chapters
       And I press "Post Without Preview"
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
-    

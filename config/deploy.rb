@@ -31,12 +31,14 @@ require 'new_relic/recipes'
 require 'bundler/capistrano'
 
 # deploy to different environments with tags
+require 'capistrano/ext/multistage'
+set :stages, ["staging", "production", "i18n"]
 set :default_stage, "staging"
-require 'capistrano/gitflow_version'
+#require 'capistrano/gitflow_version'
 
 # use rvm
 require "rvm/capistrano"    
-set :rvm_ruby_string,  ENV['GEM_HOME'].gsub(/.*\//,"")
+set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//, "")
 set :rvm_type, :user
 
 # user settings
@@ -56,51 +58,57 @@ set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativework
 
 # git settings
 set :scm, :git
-set :repository,  "git://github.com/otwcode/otwarchive.git"
+set :repository, "git://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do
   desc "Restart the unicorns"
-  task :restart, :roles => :app do
-    run "/home/ao3app/bin/unicorns_reload"
+  task :restart  do
+    find_servers(:roles => :app).each do |server|
+      puts "restart on #{server.host}"
+      run "cd ~/app/current ; bundle exec rake skins:load_site_skins RAILS_ENV=#{rails_env}" , :hosts => server.host
+      run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
+      sleep(90)
+    end
   end
 
   desc "Restart the resque workers"
-  task :restart_workers, :roles => :web do
+  task :restart_workers, :roles => :workers do
     run "/home/ao3app/bin/workers_reload"
   end
 
-  desc "Get the config files "
-  task :update_configs, :roles => :app do
-    run "/home/ao3app/bin/create_links_on_install"
-  end
-  
-  desc "Update the web-related whenever tasks"
-  task :update_cron_web, :roles => :web do
-    run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
+  desc "Restart the schedulers"
+  task :restart_schedulers, :roles => :schedulers do
+    run "/home/ao3app/bin/scheduler_reload"
   end
 
+  desc "Get the config files"
+  task :update_configs, :roles => [ :app , :web ] do
+    run "/home/ao3app/bin/create_links_on_install"
+  end
+
+  desc "Update the web-related whenever tasks"
+  task :update_cron_web, :roles => :web do
+    # run "bundle exec whenever --update-crontab web -f config/schedule_web.rb"
+    run "echo cron entries are currently managed by hand"
+  end
 
   # This should only be one machine 
   desc "update the crontab for whatever machine should run the scheduled tasks"
   task :update_cron, :roles => :app, :only => {:primary => true} do
-    run "bundle exec whenever --update-crontab #{application}"
+    # run "bundle exec whenever --update-crontab #{application}"
+    run "echo cron entries are currently managed by hand"
   end
-end
 
-# our tasks which are staging specific
-namespace :stage_only do
-  task :notify_testers do
-    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
-  end
-end
-
-# our tasks which are production specific
-namespace :production_only do
-  desc "Send out notification "
-  task :notify_testers do
-    system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
+  # Needs to run on web (front-end) servers, but they must also have rails installed
+  desc "Re-caches the site skins"
+  task :reload_site_skins do
+    find_servers(:roles => :web).each do |server|
+      puts "Caching skins on #{server.host}"
+      run "cd ~/app/current ; bundle exec rake skins:load_site_skins RAILS_ENV=#{rails_env}", :hosts => server.host
+      sleep (10)
+    end
   end
 end
 
@@ -127,5 +135,6 @@ after "deploy:restart", "deploy:update_cron_web"
 #after "deploy:restart", "deploy:cleanup"
 
 after "deploy:restart", "deploy:restart_workers"
+after "deploy:restart", "deploy:restart_schedulers"
 after "deploy:symlink", "deploy:update_configs"
 after "deploy:update", "newrelic:notice_deployment"

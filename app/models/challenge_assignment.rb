@@ -8,6 +8,18 @@ class ChallengeAssignment < ActiveRecord::Base
   belongs_to :pinch_hitter, :class_name => "Pseud"
   belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
   belongs_to :creation, :polymorphic => true
+  
+  # Make sure that the signups are an actual match if we're in the process of assigning
+  # (post-sending, all potential matches have been deleted!)
+  validate :signups_match, :on => :update
+  def signups_match
+    if self.sent_at.nil? && 
+      self.request_signup.present? &&
+      self.offer_signup.present? && 
+      !self.request_signup.request_potential_matches.value_of(:offer_signup_id).include?(self.offer_signup_id)
+      errors.add(:base, ts("does not match. Did you mean to write-in a giver?"))
+    end
+  end
 
   scope :for_request_signup, lambda {|signup| where('request_signup_id = ?', signup.id)}
 
@@ -23,10 +35,10 @@ class ChallengeAssignment < ActiveRecord::Base
   
   scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
 
-  scope :with_offer, where("offer_signup_id IS NOT NULL")
+  scope :with_offer, where("offer_signup_id IS NOT NULL OR pinch_hitter_id IS NOT NULL")
   scope :with_request, where("request_signup_id IS NOT NULL")
   scope :with_no_request, where("request_signup_id IS NULL")
-  scope :with_no_offer, where("offer_signup_id IS NULL")
+  scope :with_no_offer, where("offer_signup_id IS NULL AND pinch_hitter_id IS NULL")
 
   # sorting by request/offer
   
@@ -81,7 +93,17 @@ class ChallengeAssignment < ActiveRecord::Base
     posted_ids = ChallengeAssignment.in_collection(collection).posted.value_of(:id)
     posted_ids.empty? ? in_collection(collection) : in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
   end    
-    
+  
+  def self.duplicate_givers(collection)
+    ids = in_collection(collection).group("challenge_assignments.offer_signup_id HAVING count(DISTINCT id) > 1").value_of(:offer_signup_id).compact
+    ChallengeAssignment.where(:offer_signup_id => ids)
+  end
+  
+  def self.duplicate_recipients(collection)
+    ids = in_collection(collection).group("challenge_assignments.request_signup_id HAVING count(DISTINCT id) > 1").value_of(:request_signup_id).compact
+    ChallengeAssignment.where(:request_signup_id => ids)
+  end
+
   # has to be a left join to get assignments that don't have a collection item
   scope :unfulfilled,
     joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
@@ -154,6 +176,41 @@ class ChallengeAssignment < ActiveRecord::Base
     self.offer_byline.downcase <=> other.offer_byline.downcase
   end
 
+  def offer_signup_pseud=(pseud_byline)
+    if pseud_byline.blank?
+      self.offer_signup = nil
+    else
+      pseuds = Pseud.parse_byline(pseud_byline)
+      if pseuds.size == 1
+        pseud = pseuds.first
+        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        self.offer_signup = signup if signup
+      end  
+    end
+  end
+  
+  def offer_signup_pseud
+    self.offer_signup.try(:pseud).try(:byline) || ""
+  end
+    
+  def request_signup_pseud=(pseud_byline)
+    if pseud_byline.blank?
+      self.request_signup = nil
+    else
+      pseuds = Pseud.parse_byline(pseud_byline)
+      if pseuds.size == 1
+        pseud = pseuds.first
+        signup = ChallengeSignup.in_collection(self.collection).where(:pseud_id => pseud.id).first
+        # If there's an existing assignment then this is a pinch recipient
+        self.request_signup = signup if signup
+      end
+    end
+  end
+
+  def request_signup_pseud
+    self.request_signup.try(:pseud).try(:byline) || ""
+  end
+
   def title
     "#{self.collection.title} (#{self.request_byline})"
   end
@@ -169,6 +226,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def requesting_pseud
     request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
   end
+  
 
   def offer_byline
     offer_signup && offer_signup.pseud ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
@@ -255,13 +313,23 @@ class ChallengeAssignment < ActiveRecord::Base
   # generate automatic match for a collection
   # this requires potential matches to already be generated
   def self.generate(collection)
+    REDIS_GENERAL.set(progress_key(collection), 1)
     Resque.enqueue(ChallengeAssignment, :delayed_generate, collection.id)
   end
 
+  def self.progress_key(collection)
+    "challenge_assignment_in_progress_for_#{collection.id}"
+  end
+
+  def self.in_progress?(collection)
+    REDIS_GENERAL.get(progress_key(collection)) ? true : false
+  end
+  
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
     settings = collection.challenge.potential_match_settings
 
+    REDIS_GENERAL.set(progress_key(collection), 1)
     ChallengeAssignment.clear!(collection)
 
     # we sort signups into buckets based on how many potential matches they have
@@ -290,8 +358,8 @@ class ChallengeAssignment < ActiveRecord::Base
 
     # now that we have the buckets, we go through assigning people in order
     # of people with the fewest options first.
-    # if someone has no potential matches they still get an assignment, just with no
-    # match.
+    # (if someone has no potential matches they get a placeholder assignment with no
+    # matches.)
     0.upto(@max_match_count) do |count|
       if @request_match_buckets[count]
         @request_match_buckets[count].sort_by {rand}.each do |request_signup|
@@ -310,6 +378,7 @@ class ChallengeAssignment < ActiveRecord::Base
         end
       end
     end
+    REDIS_GENERAL.del(progress_key(collection))
     UserMailer.potential_match_generation_notification(collection.id).deliver
   end
 
@@ -401,23 +470,32 @@ class ChallengeAssignment < ActiveRecord::Base
   # (this is for after manual updates have left some users without an
   # assignment)
   def self.update_placeholder_assignments!(collection)
+    # delete any assignments that have neither an offer nor a request associated
+    collection.assignments.each do |assignment|
+      assignment.destroy if assignment.offer_signup.blank? && assignment.request_signup.blank?
+    end
+    
     collection.signups.each do |signup|
+      # if this signup has at least one giver now, get rid of any leftover placeholders
       if signup.request_assignments.count > 1
-        # get rid of empty placeholders no longer needed
         signup.request_assignments.each do |assignment|
           assignment.destroy if assignment.offer_signup.blank?
         end
       end
-      if signup.request_assignments.empty?
-        # not assigned to giver anymore! :(
-        assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
-        assignment.save
-      end
+      # if this signup has at least one recipient now, get rid of any leftover placeholders
       if signup.offer_assignments.count > 1
         signup.offer_assignments.each do |assignment|
           assignment.destroy if assignment.request_signup.blank?
         end
       end
+      
+      # if this signup doesn't have any giver now, create a placeholder
+      if signup.request_assignments.empty?
+        assignment = ChallengeAssignment.new(:collection => collection, :request_signup => signup)
+        assignment.save
+      end
+      
+      # if this signup doesn't have any recipient now, create a placeholder
       if signup.offer_assignments.empty?
         assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => signup)
         assignment.save

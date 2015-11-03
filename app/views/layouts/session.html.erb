@@ -3,6 +3,7 @@
   <head>
     <meta name="generator" content="HTML Tidy, see www.w3.org" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%= render 'layouts/phraseapp' %>
     <title>
       <% if defined?(@page_title) %>
         <%= @page_title %>
@@ -19,7 +20,7 @@
     </title>
     <%= render :partial => 'layouts/includes' %>
   </head>
-  <body onload="hideFormFields(); initSelect('languages_menu')">
+  <body>
     <%= render :partial => 'layouts/header' %>
     <!-- BEGIN main -->
     <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region">

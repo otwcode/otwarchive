@@ -20,3 +20,18 @@ Feature: Share Works
       And I should not see "Relationships:" within "#share"
       And I should not see "Characters:" within "#share"
       And I should not see "Summary:" within "#share"
+
+  Scenario: Share option should be disabled if all creators have set the option to disable sharing on their works
+  
+  Given I am logged in as "PrivaC"
+    And I set my preferences to hide the share buttons on my work
+    And I post the work "Don't Lie When You're Hurting Inside"
+  When I view the work "Don't Lie When You're Hurting Inside"
+  Then I should not see "Share"
+  When I add the co-author "EitherWay" to the work "Don't Lie When You're Hurting Inside"
+    And I view the work "Don't Lie When You're Hurting Inside"
+  Then I should see "Share"
+  When I am logged in as "EitherWay"
+    And I set my preferences to hide the share buttons on my work
+    And I view the work "Don't Lie When You're Hurting Inside"
+  Then I should not see "Share"

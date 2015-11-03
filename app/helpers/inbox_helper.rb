@@ -14,14 +14,5 @@ module InboxHelper
   end
   
   # get_commenter_pseud_or_name can be found in comments_helper
-  
-  def inbox_reply_link(comment)
-    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      fallback_url = url_for(comment_path(comment, :add_comment_reply_id => comment.id, :anchor => 'comment_' + comment.id.to_s))
-    else
-      fallback_url = fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
-    end    
-    link_to "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, :remote => true, :href => fallback_url
-  end
-  
+
 end

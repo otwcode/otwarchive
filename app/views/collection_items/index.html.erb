@@ -6,12 +6,16 @@
 <% end %>
 <!--/descriptions-->
 <!--subnav-->
-<% base_path = @user ? user_collection_items_path(@user) : collection_items_path(@collection) %>
+<%
+  base_path = @user ? user_collection_items_path(@user) : collection_items_path(@collection)
+  approved_path = @user ? user_collection_items_path(@user, approved: true) : collection_items_path(@collection, approved: true)
+  rejected_path = @user ? user_collection_items_path(@user, rejected: true) : collection_items_path(@collection, rejected: true)
+%>
 
 <ul class="navigation actions" role="navigation">
   <li><%= span_if_current ts("Awaiting Approval"), base_path, !(params[:rejected] || params[:approved]) %></li>
-  <li><%= span_if_current ts("Rejected"), base_path + "?rejected=true" %></li>
-  <li><%= span_if_current ts("Approved"), base_path + "?approved=true" %></li>
+  <li><%= span_if_current ts("Rejected"), rejected_path %></li>
+  <li><%= span_if_current ts("Approved"), approved_path %></li>
 </ul>
 <!--/subnav-->
 

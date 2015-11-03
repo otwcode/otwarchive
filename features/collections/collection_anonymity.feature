@@ -15,8 +15,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -27,6 +27,7 @@ Feature: Collection
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I press "Post Without Preview"
+    And all search indexes are updated
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
     And I should see "Old Snippet"
@@ -36,6 +37,7 @@ Feature: Collection
   Given all emails have been delivered
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -50,6 +52,7 @@ Feature: Collection
   # Post to collection with preview
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -160,8 +163,8 @@ Feature: Collection
     And I am logged in as "second_user"
   When I go to the collections page
     And I follow "New Collection"
-    And I fill in "Display Title" with "Anonymous Hugs"
-    And I fill in "Collection Name" with "anonyhugs"
+    And I fill in "Display title" with "Anonymous Hugs"
+    And I fill in "Collection name" with "anonyhugs"
     And I check "This collection is anonymous"
     And I submit
   Then I should see "Collection was successfully created"
@@ -172,6 +175,7 @@ Feature: Collection
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "anonyhugs"
     And I press "Post Without Preview"
+    And all search indexes are updated
   Then I should see "Old Snippet"
     And I should see "Collections: Anonymous Hugs"
   When I log out
@@ -183,6 +187,7 @@ Feature: Collection
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -198,6 +203,7 @@ Feature: Collection
   When I am logged in as "first_user"
     And I go to "Anonymous Hugs" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Another Snippet"
     And I fill in "content" with "This is another new snippet written for this hidden challenge"
@@ -255,7 +261,7 @@ Feature: Collection
   # check the series
   When I follow "Another Snippet"
     And I follow "New series"
-    And "Issue 1253" is fixed
+    And "AO3-1250" is fixed
   Then I should see "Anonymous"
     # And I should not see "first_user"
   
@@ -312,8 +318,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -324,6 +330,7 @@ Feature: Collection
   Given all emails have been delivered
   When I go to "Hidden Treasury" collection's page
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -340,6 +347,7 @@ Feature: Collection
   # post to collection for day 2
   When I follow "Hidden Treasury"
     And I follow "Post to Collection"
+    And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "New Snippet 2"
     And I fill in "content" with "This is a new snippet written for this hidden challenge"
@@ -370,18 +378,46 @@ Feature: Collection
     And I follow "Approved"
   Then I should see "Items in Hidden Treasury"
     And I should see "first_user"
-  # TODO: Fix a way of referring to these buttons
-  #When I check "unreveal_15261"
-  #  And I press "submit_15261"
-  When "Issue 2241" is fixed
-  # Then 1 email should be delivered
+    And I should see "New Snippet"
+  # Works are in reverse date order, so unchecking the second checkbox will reveal work 1
+  When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
+    And I submit
+  # Issue 2243: emails don't get sent for individual reveals
+  When "AO3-2240" is fixed
+    #Then 1 email should be delivered
     
   # first fic now visible, second still not
-  #When I log out
-  #  And I am logged in as "third_user"
-  #When I view the work "New Snippet"
-  #Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-  #  And I should see "Purim Day 1"
-  #When I view the work "New Snippet 2"
-  #Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-  #  And I should not see "Purim Day 2"
+    When I log out
+      And I am logged in as "third_user"
+    When I view the work "New Snippet"
+    Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+      And I should see "Purim Day 1"
+    When I view the work "New Snippet 2"
+    Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+      And I should not see "Purim Day 2"
+
+  Scenario: Create an anon collection, add chaptered work. Add co-author to one chapter, should still be anonymous
+    Given I have an anonymous collection "Various Penguins" with name "Various_Penguins"
+      And I am logged in as "Amos"
+      And I am logged in as "Jessica"
+      And I post the chaptered work "Cone of Silence"
+    When I add my work to the collection
+    Then I should see "Added"
+      And I edit the work "Cone of Silence"
+      And I follow "2" within "div#main.works-edit.region"
+      And I check "Add co-authors?"
+      And I fill in "pseud_byline" with "Amos"
+      And I press "Post Without Preview"
+      And I follow "Entire Work"
+    Then I should see "Anonymous" within "div.preface"
+      And I should see "Jessica" within "div.preface"
+      And I should see "Amos" within "div.preface"
+
+  Scenario: An admin can see the creator's name on an anonymous work
+    Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
+      And I am logged in as "actualname"
+      And I post the work "Troll Work"
+      And I add my work to the collection
+    When I am logged in as an admin
+      And I view the work "Troll Work"
+    Then I should see "actualname"

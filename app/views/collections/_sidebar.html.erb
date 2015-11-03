@@ -1,19 +1,19 @@
 <div id="dashboard" class="region" role="navigation region">
   <h3 class="landmark heading">Dashboard</h3>
   <ul class="navigation actions">
-    <li><%= span_if_current ts("Dashboard"), @collection %></li>
-    <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
+    <li><%= span_if_current ts('Dashboard', key: 'dashboard'), @collection %></li>
+    <li><%= span_if_current ts('Profile', key: 'dashboard'), collection_profile_path(@collection) %></li>
     <% if !@collection.collection_profile.faq.blank? %>
-      <li><%= span_if_current ts("FAQ"), collection_profile_path(@collection, :anchor => "faq") %></li>
+      <li><%= span_if_current ts('FAQ', key: 'dashboard'), collection_profile_path(@collection, :anchor => "faq") %></li>
     <% end %>
     <% if !@collection.collection_profile.rules.blank? %>
-      <li><%= span_if_current ts("Rules"), collection_profile_path(@collection, :anchor => "rules") %></li>
+      <li><%= span_if_current ts('Rules', key: 'dashboard'), collection_profile_path(@collection, :anchor => "rules") %></li>
     <% end %>
   
     <% if @collection.parent %>
-      <li><%= link_to ts("Parent Collection"), collection_path(@collection.parent) %></li>
+      <li><%= link_to ts('Parent Collection', key: 'dashboard'), collection_path(@collection.parent) %></li>
     <% else %>
-      <li><%= span_if_current ts("Subcollections (%{count})", :count => @collection.children.count), collection_collections_path(@collection) %></li>
+      <li><%= span_if_current ts("Subcollections (%{count})", key: 'dashboard', :count => @collection.children.count), collection_collections_path(@collection) %></li>
     <% end %>
   </ul>
 
@@ -24,11 +24,11 @@
 
   <h4 class="landmark heading">Contents</h4>
   <ul class="navigation actions">
-        <li><%= span_if_current ts("Fandoms (%{count})", :count => @collection.all_fandoms_count), collection_fandoms_path(@collection) %></li>
+        <li><%= span_if_current ts("Fandoms (%{count})", key: 'dashboard', :count => @collection.all_fandoms_count), collection_fandoms_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Works (%{count})", :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
+    <li><%= span_if_current ts("Works (%{count})", key: 'dashboard', :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
 
-    <li><%= span_if_current ts("Bookmarks (%{count})", :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li>
+    <li><%= span_if_current ts("Bookmarks (%{count})", key: 'dashboard', :count => @collection.all_approved_bookmarks_count), collection_bookmarks_path(@collection) %></li>
 
     <li>
       <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>
@@ -38,19 +38,19 @@
       <%= link_to 'Random Items', collection_path(@collection, :show_random => true) %>
       <% end %>
     </li>
-    <li><%= span_if_current ts("People"), collection_people_path(@collection) %></li>
-    <li><%= span_if_current ts("Tags"), collection_tags_path(@collection) %></li>
+    <li><%= span_if_current ts('People', key: 'dashboard'), collection_people_path(@collection) %></li>
+    <li><%= span_if_current ts('Tags', key: 'dashboard'), collection_tags_path(@collection) %></li>
   </ul>  
 
   <% if @collection.user_is_maintainer?(current_user)%>
     <h4 class="landmark heading">Choices</h4>
     <ul class="navigation actions">
-      <li><%= span_if_current(ts("Manage Items"), collection_items_path(@collection)) %></li>
+      <li><%= span_if_current(ts('Manage Items', key: 'dashboard'), collection_items_path(@collection)) %></li>
       <% if @collection.user_is_owner?(current_user) %>
         <% if @collection.challenge %>
-          <li><%= span_if_current ts("Challenge Settings"), eval("edit_collection_#{challenge_class_name(@collection)}_path(@collection)") %></li>
+          <li><%= span_if_current ts('Challenge Settings', key: 'dashboard'), eval("edit_collection_#{challenge_class_name(@collection)}_path(@collection)") %></li>
       	<% end %>
-    	  <li><%= span_if_current ts("Collection Settings"), edit_collection_path(@collection) %></li>
+    	  <li><%= span_if_current ts('Collection Settings', key: 'dashboard'), edit_collection_path(@collection) %></li>
       <% end %>
     </ul>
   <% end %>

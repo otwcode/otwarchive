@@ -6,3 +6,15 @@ first:
 
 second:
   collection: second
+
+third:
+  collection: third
+  
+fourth:
+  collection: fourth
+  
+fifth:
+  collection: fifth
+
+sixth:
+  collection: sixth

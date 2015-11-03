@@ -14,97 +14,12 @@ It has to be purple, see wiki, ADT meeting 25
 .shiny-happy-people table {display:table-cell; 
 background:purple; color:#555;}
 
-*/
-
-/*OPERA 11 HEADER SEARCH TEMP FIX*/
-
-@media not screen and (1) { 
-    #header fieldset {
-      margin-bottom: -0.643em
-    }
-}
-
-/* TEMP FIX Issue 2652 -- don't integrate this*/
-
-span.delete a {
-  margin: 0 0.2em;
-  border: 0;
-  padding: 0;
-  line-height: 0.5;
-    box-shadow: none;
-}
-
-/* fix for scrolling checkboxes */
-.many p.actions { 
-    float: none; 
-    text-align: right; 
-}
-.tags .options .tag { 
-    margin-right: 0.643em; 
-}
-.concise li { 
-    width: 45%; 
-    float:left; 
-    clear:none; 
-    margin-right:1.5em
-}
-.concise label.action { 
-    float: left; 
-}
-
-/* new stats page */
-.statistics .even { background: #eee; }
-.statistics .index li {
- padding: 0.643em 0.375em;
-}
-.statistics dt:after {content: ":";}
-
-/* INTERACTIONS MODE: VERBOSE
-forms with more than three fieldsets 
-(01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme
-but I suggest simple and verbose views, with simple as default and verbose as child of simple, especially for .post (work, bookmark, challenge etc)*/
-
-.verbose legend {
-  height: auto;
-  width: auto;
-  font-size: 100%;
-  background: #fff;
-  border: 2px solid #ddd;
-  padding: 0.5em;
-    box-shadow: 1px 2px 3px #999;
-    opacity: 1;
-}
-
-/* MODE: SIMPLE, 3 or fewer
-experimental, developing here, (may combine with .toggled rules)
-drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643em auto; padding:0.643em}*/
-
-.simple span.actions {
-  float: none
-}
-
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
 
-/* Messing with header */
-#header .actions a.unbuttoned {
-  border: none;
-  background: none;
-  color: #eee;
-  font-size: .8em;
-  padding: 0;
-  box-shadow: none;
-  text-shadow: none;
-}
-#header .actions a.unbuttoned:hover {
-  box-shadow: none;
-  text-decoration: underline;
-}
-
-/* CLAIMS form (Issue
-Needs nested ul to be indented
+/* Issue 3243 needs nested ul to be indented in external_authors/claim
 */
 .edit_external_author ul ul {
-  margin-left: 40px;
+  margin-left: 2.75em;
 }
