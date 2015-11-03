@@ -62,5 +62,5 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
 end
 
 Then /^the series "(.*)" should be deleted/ do |series|
-  assert Series.where(:title => series).first.nil?
+  assert Series.where(title: series).first.nil?
 end

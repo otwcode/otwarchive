@@ -136,5 +136,5 @@ Then /^I should see a collection not found message for "([^\"]+)"$/ do |collecti
 end
 
 Then /^the collection "(.*)" should be deleted/ do |collection|
-  assert Collection.where(:title => collection).first.nil?
+  assert Collection.where(title: collection).first.nil?
 end
