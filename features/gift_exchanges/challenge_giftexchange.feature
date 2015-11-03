@@ -127,9 +127,7 @@ Feature: Gift Exchange Challenge
       And I should see "Alternate Universe - Historical"
     
   Scenario: Mod can search signups by pseud
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
     And everyone has signed up for the gift exchange "Awesome Gift Exchange"
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
