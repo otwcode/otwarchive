@@ -157,12 +157,12 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
   
-  before_filter :user_is_banned, :only => [:confirm_delete_user_creations, :destroy_user_creations]  
+  before_filter :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]  
   def user_is_banned
     @user = User.find_by_login(params[:id])
     unless @user && @user.banned?
       flash[:error] = ts("That user is not banned!")
-      redirect_to admin_users_path and return
+      redirect_to admin_users_path && return
     end
   end
   
@@ -181,7 +181,7 @@ class Admin::AdminUsersController < ApplicationController
       creation.mark_as_spam! if creation.respond_to?(:mark_as_spam!)
       creation.destroy
     end
-    flash[:notice] = ts("All creations by user %{login} have been deleted.", :login => @user.login)
+    flash[:notice] = ts("All creations by user %{login} have been deleted.", login: @user.login)
     redirect_to(admin_users_path)
   end
 
