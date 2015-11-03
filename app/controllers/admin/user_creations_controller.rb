@@ -2,27 +2,37 @@ class Admin::UserCreationsController < ApplicationController
   
   before_filter :admin_only
   before_filter :get_creation
+  before_filter :can_be_marked_as_spam, only: [:set_spam]
   
   def get_creation
     @creation_class = params[:creation_type].constantize
     @creation = @creation_class.find(params[:id])
   end
   
+  def can_be_marked_as_spam
+    unless @creation_class && @creation_class == Work
+      flash[:error] = ts("You can only mark works as spam currently.")
+      redirect_to @creation and return
+    end
+  end
+  
   # Removes an object from public view
   def hide
     @creation.hidden_by_admin = (params[:hidden] == "true")
-    @creation.save(:validate => false)
+    @creation.save(validate: false)
     action = @creation.hidden_by_admin? ? "hide" : "unhide"
     AdminActivity.log_action(current_admin, @creation, action: action)
-    flash[:notice] = @creation.hidden_by_admin? ? 
-                        ts('Item has been hidden.') :
-                        ts('Item is no longer hidden.')
+    if @creation.hidden_by_admin?
+      flash[:notice] = ts('Item has been hidden.')
+    else
+      flash[:notice] = ts('Item is no longer hidden.')
+    end
     if @creation_class == Comment
       redirect_to(@creation.ultimate_parent) 
     elsif @creation_class == ExternalWork || @creation_class == Bookmark
       redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
-      unless action  == "unhide"
+      unless action == "unhide"
         # Email users so they're aware of Abuse action
         orphan_account = User.orphan_account
         users = @creation.pseuds.map(&:user).uniq
@@ -34,28 +44,22 @@ class Admin::UserCreationsController < ApplicationController
        end
       redirect_to(@creation)
     end
-  end
-  
+  end  
   
   def set_spam
     action = "mark as " + (params[:spam] == "true" ? "spam" : "not spam")
-    if @creation_class == Work
-      AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
-      if params[:spam]=="true"
-        @creation.mark_as_spam!
-        @creation.update_attribute(:hidden_by_admin, true)
-        flash[:notice] = ts("Work was marked as spam and hidden.")
-      else
-        @creation.mark_as_ham!
-        @creation.update_attribute(:hidden_by_admin, false)
-        flash[:notice] = ts("Work was marked not spam and unhidden.")
-      end
-    else 
-      flash[:error] = ts("You can only mark works as spam currently.")
+    AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
+    if params[:spam] == "true"
+      @creation.mark_as_spam!
+      @creation.update_attribute(:hidden_by_admin, true)
+      flash[:notice] = ts("Work was marked as spam and hidden.")
+    else
+      @creation.mark_as_ham!
+      @creation.update_attribute(:hidden_by_admin, false)
+      flash[:notice] = ts("Work was marked not spam and unhidden.")
     end
     redirect_to(@creation)
   end
-  
   
   def destroy
     AdminActivity.log_action(current_admin, @creation, action: 'destroy', summary: @creation.inspect)
@@ -69,5 +73,6 @@ class Admin::UserCreationsController < ApplicationController
      redirect_to works_path
     end
   end
+  
   
 end
