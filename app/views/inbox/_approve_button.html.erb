@@ -1,5 +1,3 @@
 <% # expects feedback_comment %>
 <% # it would be nice if this was ajaxy and replaced itself with reply-button but we'll settle for this for now %>
-<li id="review_comment_link_<%= feedback_comment.id %>">
-  <%= link_to(ts("Approve"), review_comment_path(feedback_comment, came_from_inbox: true, page: params[:page]), method: :put) %>
-</li>
+<%= link_to(ts("Approve"), review_comment_path(feedback_comment, came_from_inbox: true, page: params[:page]), method: :put) %>

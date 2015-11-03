@@ -47,17 +47,23 @@
               <% unless inbox_comment.read? %>
                 <li><span class="unread"><%= ts("Unread") %></span></li>
               <% end %>
-              <li>
-                <% if inbox_comment.replied_to? %>
-                  <span class="replied" title="<%= ts("replied to") %>"><%= ts("&#10004;").html_safe %></span>
-                <% end %>
-                <% if feedback_comment.unreviewed? %>
+              <% if inbox_comment.replied_to? %>
+                <li>
+                  <span class="replied" title="<%= ts("replied to") %>">
+                    <%= ts("&#10004;").html_safe %>
+                  </span>
+                </li>
+              <% end %>
+              <% if feedback_comment.unreviewed? %>
+                <li id="review_comment_link_<%= feedback_comment.id %>">
                   <%= render 'inbox/approve_button', feedback_comment: feedback_comment %>
-                <% else %>
+                </li>
+              <% else %>
+                <li>
                   <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
-                <% end %>
+                </li>
+              <% end %>
 
-              </li>
               <li class="action">
                 <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>
               </li>
