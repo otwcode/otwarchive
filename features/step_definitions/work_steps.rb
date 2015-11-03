@@ -501,7 +501,7 @@ Then /^I should not find a list for associations$/ do
 end
 
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
-  assert Work.where(title: work).count == 0
+  assert !Work.where(title: work).exists?
 end
 
 
