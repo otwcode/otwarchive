@@ -37,7 +37,7 @@
           <% feedback_comment = inbox_comment.feedback_comment %>
 
           <!-- START of single comment -->
-          <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
+          <li class="<% if feedback_comment.unreviewed? %>unreviewed <% end %><%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
 
             <%= render 'inbox_comment_contents', feedback_comment: feedback_comment %>
 
@@ -51,8 +51,11 @@
                 <% if inbox_comment.replied_to? %>
                   <span class="replied" title="<%= ts("replied to") %>"><%= ts("&#10004;").html_safe %></span>
                 <% end %>
-
-                <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
+                <% if feedback_comment.unreviewed? %>
+                  <%= render 'inbox/approve_button', feedback_comment: feedback_comment %>
+                <% else %>
+                  <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
+                <% end %>
 
               </li>
               <li class="action">
