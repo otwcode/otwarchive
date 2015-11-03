@@ -108,7 +108,11 @@ module CommentsHelper
 
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
-
+  
+  def no_anon_reply(comment)
+    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+  end
+  
   def add_cancel_comment_reply_link(comment)
     if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
       cancel_comment_reply_link(comment)

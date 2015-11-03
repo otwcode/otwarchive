@@ -21,7 +21,7 @@
     
   <br />
   
-  <% unless @noreply %>
+  <% unless (@comment.unreviewed? || @noreply) %>
     <%= style_link("Reply to this comment",
       {
         :controller => :comments, 

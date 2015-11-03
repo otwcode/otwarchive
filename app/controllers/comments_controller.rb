@@ -14,6 +14,7 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   before_filter :check_anonymous_comment_preference, :only => [:new, :create, :add_comment_reply]
+  before_filter :check_unreviewed, :only => [:add_comment_reply]
   before_filter :check_permission_to_review, :only => [:unreviewed]
   before_filter :check_permission_to_access_single_unreviewed, only: [:show]
 
@@ -51,6 +52,19 @@ class CommentsController < ApplicationController
     if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
       flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
+    end
+  end
+  
+  def check_unreviewed
+    parent = find_parent
+    if parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled && 
+      @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
+      flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
+      if logged_in?
+        redirect_to root_path and return
+      else
+        redirect_to login_path and return
+      end
     end
   end
   
@@ -297,7 +311,11 @@ class CommentsController < ApplicationController
       @comment.toggle!(:unreviewed)
       flash[:notice] = ts("Comment approved.")
     end
-    redirect_to unreviewed_work_comments_path(@comment.ultimate_parent)
+    if params[:came_from_inbox]
+      redirect_to user_inbox_path(current_user, page: params[:page])
+    else
+      redirect_to unreviewed_work_comments_path(@comment.ultimate_parent)
+    end
   end
 
   def approve
