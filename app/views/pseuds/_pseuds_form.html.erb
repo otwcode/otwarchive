@@ -15,7 +15,7 @@
   
   <dt><%= f.label :description, ts("Description") %></dt>
   <dd>
-    <code>a href, em, strong, i, b</code>
+    <p><%= allowed_html_instructions %></p>
     <%= f.text_area :description, :rows => 4, :cols => 60, :class => "observe_textlength" %>
     <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) %>
   </dd>

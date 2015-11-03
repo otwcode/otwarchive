@@ -15,8 +15,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -163,8 +163,8 @@ Feature: Collection
     And I am logged in as "second_user"
   When I go to the collections page
     And I follow "New Collection"
-    And I fill in "Display Title" with "Anonymous Hugs"
-    And I fill in "Collection Name" with "anonyhugs"
+    And I fill in "Display title" with "Anonymous Hugs"
+    And I fill in "Collection name" with "anonyhugs"
     And I check "This collection is anonymous"
     And I submit
   Then I should see "Collection was successfully created"
@@ -261,7 +261,7 @@ Feature: Collection
   # check the series
   When I follow "Another Snippet"
     And I follow "New series"
-    And "Issue 1253" is fixed
+    And "AO3-1250" is fixed
   Then I should see "Anonymous"
     # And I should not see "first_user"
   
@@ -318,8 +318,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -383,7 +383,7 @@ Feature: Collection
   When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
     And I submit
   # Issue 2243: emails don't get sent for individual reveals
-  When "Issue 2243" is fixed
+  When "AO3-2240" is fixed
     #Then 1 email should be delivered
     
   # first fic now visible, second still not

@@ -274,43 +274,24 @@ class Work < ActiveRecord::Base
     Resque.enqueue(Work, id, method, *args)
   end
 
-  # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
-
-  ########################################################################
-  # ERRORS
-  ########################################################################
-  # class Error < DuplicateError; end
-  # class Error < DraftSaveError; end
-  # class Error < PostingError; end
-
-
   ########################################################################
   # IMPORTING
   ########################################################################
-  # def self.import_from_url(url)
-  #   storyparser = StoryParser.new
-  #   if Work.find_by_imported_from_url(url)
-  #     raise DuplicateWorkError(t('already_imported', :default => "Work already imported from this url."))
-  #
-  #   work = storyparser.download_and_parse_story(url)
-  #   work.imported_from_url = url
-  #   work.expected_number_of_chapters = work.chapters.length
-  #   work.pseuds << current_user.default_pseud unless work.pseuds.include?(current_user.default_pseud)
-  #   chapters_saved = 0
-  #   work.chapters.each do |uploaded_chapter|
-  #     uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
-  #     uploaded_chapter.posted = true
-  #     chapters_saved += uploaded_chapter.save ? 1 : 0
-  #   end
-  #
-  #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
-  # end
-  
+
+  # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
+  # 1. first exact match
+  # 2. first exact match with variants of the provided url
+  # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
   def self.find_by_url(url)
     url = UrlFormatter.new(url)
     Work.where(:imported_from_url => url.original).first ||
       Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+        work_url = UrlFormatter.new(w.imported_from_url)
+        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+          work_url.send(method) == url.send(method)
+        }
+      }.first
   end
 
   ########################################################################
@@ -335,7 +316,7 @@ class Work < ActiveRecord::Base
       if results[:banned_pseuds].present?
         self.errors.add(
           :base, 
-          ts("%{name} has been banned and cannot be listed as a co-creator",
+          ts("%{name} is currently banned and cannot be listed as a co-creator.",
              name: results[:banned_pseuds].to_sentence
           )
         )

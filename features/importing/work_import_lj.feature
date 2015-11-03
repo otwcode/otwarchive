@@ -94,7 +94,7 @@ Feature: Import Works from LJ
   Scenario: Creating a new work from an LJ story that is posted to a community
     Given basic tags
       And I am logged in as "cosomeone"
-    When "Issue 4817" is fixed
+    When "AO3-4179" is fixed
     #When I go to the import page
     #  And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
     #When I press "Import"

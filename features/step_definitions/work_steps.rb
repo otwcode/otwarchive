@@ -229,8 +229,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Your Tags", :with => DEFAULT_FREEFORM)
+  fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
+  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
 # the (?: ) construct means: do not use the stuff in () as a capture/match
@@ -318,7 +318,7 @@ When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
-  fill_in("Url", :with => url_of_work)
+  fill_in("work_parent_attributes_url", with: url_of_work)
 end
 
 When /^I set the publication date to today$/ do

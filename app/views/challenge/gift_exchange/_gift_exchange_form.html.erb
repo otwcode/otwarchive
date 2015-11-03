@@ -27,16 +27,16 @@
       <dd><%= f.check_box :requests_summary_visible %></dd>
 
       <dt><%= f.label :requests_num_required, ts("Number of requests per sign-up:") %></dt>
-      <%= required_and_allowed(f, "requests", false) %>
+      <%= required_and_allowed(f, "requests", @collection.prompts.empty?, false) %>
 
       <dt><%= f.label :offers_num_required, ts("Number of offers per sign-up:") %></dt>
-      <%= required_and_allowed(f, "offers", false) %>
+      <%= required_and_allowed(f, "offers", @collection.prompts.empty?, false) %>
     </dl>
   </fieldset>
 
   <!-- restrictions for requests -->
   <%= render "prompt_restrictions/prompt_restriction_form", :challenge_form => f, :is_offer => false, :show_tag_options => false, :type => "gift_exchange" %>
-  
+
   <!-- restrictions for offers -->
   <%= render "prompt_restrictions/prompt_restriction_form", :challenge_form => f, :is_offer => true, :show_tag_options => true, :type => "gift_exchange" %>
 

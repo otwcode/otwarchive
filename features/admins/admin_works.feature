@@ -8,7 +8,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
-      And I follow "Hide"
+      And I follow "Hide Work"
     Then I should see "Item has been hidden."
       And logged out users should not see the hidden work "ToS Violation" by "regular_user"
       And logged in users should not see the hidden work "ToS Violation" by "regular_user"
@@ -16,16 +16,15 @@ Feature: Admin Actions for Works and Bookmarks
       And 1 email should be delivered
       And the email should contain "We are investigating the matter and will contact you"
 
-
   Scenario: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
-      And I follow "Hide"
+      And I follow "Hide Work"
     Then I should see "Item has been hidden."
       And all emails have been delivered
-    When I follow "Make Visible"
+    When I follow "Make Work Visible"
     Then I should see "Item is no longer hidden."      
       And logged out users should see the unhidden work "ToS Violation" by "regular_user"
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
@@ -36,7 +35,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
-      And I follow "Delete"
+      And I follow "Delete Work"
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
@@ -48,7 +47,22 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should not see "ToS Violation"  
       
   Scenario: Can hide bookmarks
-    pending
+    Given basic tags
+      And I am logged in as "regular_user" with password "password1"
+      And I post the work "A Nice Work"
+    When I am logged in as "bad_user"
+      And I view the work "A Nice Work"
+    When I follow "Bookmark"
+      And I fill in "bookmark_notes" with "Rude comment"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I am logged in as an admin
+      And I am on bad_user's bookmarks page
+    When I follow "Hide Bookmark"
+    Then I should see "Item has been hidden."
+    When I am logged in as "regular_user" with password "password1"
+      And I am on bad_user's bookmarks page
+    Then I should not see "Rude comment" 
 
   Scenario: Can edit tags on works
     Given basic tags
@@ -86,10 +100,10 @@ Feature: Admin Actions for Works and Bookmarks
       And I bookmark the external work "External Changes"
     When I am logged in as an admin
       And I view the external work "External Changes"
-      And I follow "Edit"
-    When I fill in "Author" with "Admin-Added Creator"
+      And I follow "Edit External Work"
+    When I fill in "Creator" with "Admin-Added Creator"
       And I fill in "Title" with "Admin-Added Title"
-      And I fill in "Author's Summary" with "Admin-added summary"
+      And I fill in "Creator's Summary" with "Admin-added summary"
       And I select "Mature" from "Rating"
       And I fill in "Fandoms" with "Admin-Added Fandom"
       And I fill in "Relationships" with "Admin-Added Relationship"
@@ -105,6 +119,15 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Admin-Added Character"
       And I should see "Admin-Added Freeform"
       And I should see "M/M"      
+
+  Scenario: Can delete external works
+    Given basic tags
+      And I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as an admin
+      And I view the external work "External Changes"
+      And I follow "Delete External Work"
+    Then I should see "Item was successfully deleted."
   
   Scenario: Can mark a comment as spam
     Given I have no works or comments

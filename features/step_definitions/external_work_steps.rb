@@ -12,22 +12,22 @@ end
 
 Given /^I set up an external work$/ do
   visit new_external_work_path
-  fill_in("URL", :with => DEFAULT_EXTERNAL_URL)
-  fill_in("Creator", :with => DEFAULT_EXTERNAL_CREATOR)
-  fill_in("Title", :with => DEFAULT_EXTERNAL_TITLE)
+  fill_in("bookmark_external_url", with: DEFAULT_EXTERNAL_URL)
+  fill_in("bookmark_external_author", with: DEFAULT_EXTERNAL_CREATOR)
+  fill_in("bookmark_external_title", with: DEFAULT_EXTERNAL_TITLE)
   step %{I fill in basic external work tags}
-  fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
-  fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
+  fill_in("bookmark_notes", with: DEFAULT_BOOKMARK_NOTES)
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
 end
 
 Given /^I bookmark the external work "([^\"]*)"$/ do |title|
   visit new_external_work_path
-  fill_in("URL", :with => DEFAULT_EXTERNAL_URL)
-  fill_in("Creator", :with => DEFAULT_EXTERNAL_CREATOR)
-  fill_in("Title", :with => title)
+  fill_in("bookmark_external_url", with: DEFAULT_EXTERNAL_URL)
+  fill_in("bookmark_external_author", with: DEFAULT_EXTERNAL_CREATOR)
+  fill_in("bookmark_external_title", with: title)
   step %{I fill in basic external work tags}
-  fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
-  fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
+  fill_in("bookmark_notes", with: DEFAULT_BOOKMARK_NOTES)
+  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
   click_button("Create")
 end
 
