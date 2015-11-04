@@ -162,7 +162,7 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     unless @user && @user.banned?
       flash[:error] = ts("That user is not banned!")
-      redirect_to admin_users_path && return
+      redirect_to admin_users_path and return
     end
   end
   

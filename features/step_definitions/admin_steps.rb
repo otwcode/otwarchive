@@ -323,7 +323,7 @@ end
 
 Then(/^the work "(.*?)" should not be deleted$/) do |work|
   w = Work.find_by_title(work)
-  assert w.posted?
+  assert w && w.posted?
 end
 
 Then(/^there should be no bookmarks on the work "(.*?)"$/) do |work|
