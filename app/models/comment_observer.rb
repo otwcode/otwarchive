@@ -50,7 +50,16 @@ class CommentObserver < ActiveRecord::Observer
   def after_update(comment)
     users = []
     admins = []
-    if comment.edited_at_changed? || comment.unreviewed_changed?
+
+    if comment.content_changed? && comment.moderated_commenting_enabled?
+      # we might need to put it back into moderation
+      if content_too_different?(comment.content, comment.content_was)
+        # we use update_column because we don't want to invoke this callback again
+        comment.update_column(:unreviewed, true)
+      end
+    end
+
+    if comment.edited_at_changed? || (comment.unreviewed_changed? && !comment.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
       # Potentially we are notifying the original commenter of a newly-approved reply to their comment
       if (parent_comment_owner = notify_parent_comment_owner(comment))
@@ -135,6 +144,37 @@ class CommentObserver < ActiveRecord::Observer
       parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
       return (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
                   (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
+    end
+    
+    def content_too_different?(new_content, old_content)
+      # we added more than the threshold # of chars, just return
+      return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
+
+      # quick and dirty iteration to compare the two strings 
+      cost = 0
+      new_i = 0
+      old_i = 0
+      while new_i < new_content.length && old_i < old_content.length
+        if new_content[new_i] == old_content[old_i]
+          new_i += 1; old_i +=1; next
+        end
+        
+        cost += 1
+        # interrupt as soon as we have changed > threshold chars
+        return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+        
+        # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
+        if new_content[new_i + 1] == old_content[old_i]
+          new_i += 1
+        elsif new_content[new_i] == old_content[old_i + 1]
+          old_i += 1
+        else
+          # just keep going
+          new_i += 1; old_i +=1 
+        end
+      end
+      
+      return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
     end
   
     def add_feedback_to_inbox(user, comment)

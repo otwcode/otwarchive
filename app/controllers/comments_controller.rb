@@ -56,9 +56,7 @@ class CommentsController < ApplicationController
   end
   
   def check_unreviewed
-    parent = find_parent
-    if parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled && 
-      @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
+    if @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
       flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
       if logged_in?
         redirect_to root_path and return
@@ -71,7 +69,7 @@ class CommentsController < ApplicationController
   def check_permission_to_review
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
-      flash[:error] = ts("Sorry, you don't have permission to see that.")
+      flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
       if logged_in?
         redirect_to root_path and return
       else
@@ -83,8 +81,8 @@ class CommentsController < ApplicationController
   def check_permission_to_access_single_unreviewed
     if @comment.unreviewed?
       parent = find_parent
-      unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
-        flash[:error] = ts("Sorry, you don't have permission to see that.")
+      unless logged_in_as_admin? || current_user_owns?(parent)
+        flash[:error] = ts("Sorry, that comment is currently in moderation.")
         if logged_in?
           redirect_to root_path and return
         else
@@ -309,16 +307,16 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
       @comment.toggle!(:unreviewed)
+      flash[:notice] = ts("Comment approved.")
       respond_to do |format|
         format.html do
           if params[:approved_from] == "inbox"
-            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters])
+            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters]) and return
           elsif params[:approved_from] == "home"
-            redirect_to root_path
+            redirect_to root_path and return
           else
-            unreviewed_work_comments_path(@comment.ultimate_parent)
+            redirect_to unreviewed_work_comments_path(@comment.ultimate_parent) and return
           end
-          flash[:notice] = ts("Comment approved.")
         end
         format.js
       end

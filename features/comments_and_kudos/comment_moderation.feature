@@ -36,7 +36,12 @@ Feature: Comment Moderation
       And I should not see "Unreviewed Comments (1)"
       And I should not see "Comments:1"
       And "author" should be emailed
+      And the email to "author" should contain "will not appear until you approve"
+      And the email to "author" should contain "Review comments on"
+      And the email to "author" should not contain "Reply"
       And "commenter" should be emailed
+      And the email to "commenter" should contain "will not appear until approved"
+      And the email to "commenter" should not contain "Go to the thread starting from"
     When I am logged out
       And I view the work "Moderation"
     Then I should not see "Fail comment"
@@ -83,6 +88,21 @@ Feature: Comment Moderation
     When I follow "Approve"
     Then I should see "Reply"
       And I should not see "Approve"
+    When I view the work "Moderation"
+    Then I should see "Comments (1)"
+      And I should not see "Unreviewed Comments (1)"
+
+  Scenario: Comments can be approved from the home page inbox
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "Test comment" on the work "Moderation"
+    When I am logged in as "author"
+      And I go to the home page
+    Then I should see "Test comment"
+      And I should see "Unreviewed"
+      And I should see "Approve"
+    When I follow "Approve"
+    Then I should see "Reply"
     When I view the work "Moderation"
     Then I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
@@ -189,5 +209,26 @@ Feature: Comment Moderation
     When I follow "Comments (1)"
     Then I should see "New Comment"
       And I should not see "Interesting Comment"
-
     
+  Scenario: When a comment is edited significantly it gets moderated again
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "Interesting Comment" on the work "Moderation"      
+      And I am logged in as "author"
+      And I view the unreviewed comments page for "Moderation"
+      And I follow "Approve"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Edit"
+      And I fill in "Comment" with "Interesting Commentary"
+      And I press "Update"
+    Then I should see "Comments (1)"
+      And I should see "Interesting Commentary"
+    When I follow "Edit"
+      And I fill in "Comment" with "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
+      And I press "Update"
+    Then I should not see "Comments (1)"
+      And I should not see "Interesting Comment"
+      And I should not see "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
+      And the comment on "Moderation" should be marked as unreviewed

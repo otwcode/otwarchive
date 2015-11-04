@@ -1,2 +1,2 @@
 <% # expects feedback_comment and approved_from %>
-<%= link_to(ts("Approve"), review_comment_path(feedback_comment, approved_from: approved_from.to_s, page: params[:page], filters: params[:filters]), method: :put, remote: true) %>
+<%= button_to(ts("Approve"), review_comment_path(feedback_comment, approved_from: approved_from.to_s, page: params[:page], filters: params[:filters]), method: :put, remote: true) %>

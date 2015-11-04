@@ -19,7 +19,7 @@
   <% end %>
   <% if comment.unreviewed? && is_author_of?(comment.ultimate_parent) %>
     <li id="review_comment_link_<%= comment.id %>">
-      <%= link_to(ts("Approve"), review_comment_path(comment), method: :put) %>
+      <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
     </li>
   <% end %>
   <% if logged_in_as_admin? || is_author_of?(comment) || is_author_of?(comment.ultimate_parent) %>
