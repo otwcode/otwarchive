@@ -10,17 +10,17 @@ require 'capistrano/gitflow_version'
 server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app98.ao3.org",  :app , :workers , :schedulers
 server "ao3-app02.ao3.org",  :app , :primary => true
-server "ao3-app03.ao3.org",  :app , :workers , :schedulers
+#server "ao3-app03.ao3.org",  :app , :workers , :schedulers
 server "ao3-app04.ao3.org",  :app
 server "ao3-app99.ao3.org",  :app , :workers , :schedulers
 server "ao3-app05.ao3.org",  :app
+#server "ao3-app08.ao3.org",  :app , :workers , :schedulers
 server "ao3-app06.ao3.org",  :app
 server "ao3-app09.ao3.org",  :app , :workers , :schedulers
 server "ao3-app07.ao3.org",  :app
 server "ao3-app10.ao3.org",  :app , :workers , :schedulers
 server "ao3-front01.ao3.org", :web
-#server "ao3-front02.ao3.org", :web
-server "ao3-front03.ao3.org", :web
+server "ao3-front02.ao3.org", :web
 
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:
