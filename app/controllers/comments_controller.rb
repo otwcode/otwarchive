@@ -309,12 +309,16 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
       @comment.toggle!(:unreviewed)
-      success_message = ts("Comment approved.")
-    end
-    if @comment.save
       respond_to do |format|
-        format.html { redirect_to (params[:came_from_inbox] ? user_inbox_path(current_user, page: params[:page]) : unreviewed_work_comments_path(@comment.ultimate_parent)), notice: success_message }
-        format.js {}
+        format.html do
+          if params[:came_from_inbox]
+            redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters])
+          else
+            unreviewed_work_comments_path(@comment.ultimate_parent)
+          end
+          flash[:notice] = ts("Comment approved.")
+        end
+        format.js
       end
     end
   end
