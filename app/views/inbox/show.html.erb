@@ -55,7 +55,7 @@
                 </li>
               <% end %>
               <% if feedback_comment.unreviewed? %>
-                <li id="review_comment_link_<%= feedback_comment.id %>" class="review-to-reply">
+                <li id="review_comment_link_<%= feedback_comment.id %>">
                   <%= render 'inbox/approve_button', feedback_comment: feedback_comment %>
                 </li>
               <% else %>

@@ -17,9 +17,15 @@
           <li>
             <%= render 'inbox/read_form', inbox_comment: inbox_comment, current_user: current_user %>
           </li>
-          <li>
-            <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
-          </li>
+          <% if inbox_comment.feedback_comment.unreviewed? %>
+            <li id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
+              <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment %>
+            </li>
+          <% else %>
+            <li>
+              <%= render 'inbox/reply_button', feedback_comment: inbox_comment.feedback_comment %>
+            </li>
+          <% end %>
         </ul>
       </li>
     <% end %>
