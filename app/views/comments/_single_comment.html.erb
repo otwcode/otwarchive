@@ -1,5 +1,5 @@
 <!-- START of single comment -->
-<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+<li class="<% if single_comment.unreviewed? %>unreviewed <% end %>comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
     <!-- we're editing this comment -->
     <%= render 'comments/comment_form',
@@ -31,6 +31,11 @@
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
             </span>
           <% end %>
+          <% if single_comment.unreviewed? %>
+            <span class="unreviewed status">
+              <%= ts("(Unreviewed)") %>
+            </span>
+          <% end %>
           <span class="posted datetime">
             <%= time_in_zone(single_comment.created_at) %>
           </span>
@@ -53,52 +58,9 @@
           </p>
         <% end %>
       <% end %><!-- end caching -->
-      <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-      <ul class="actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
-        <% unless single_comment.ultimate_parent.is_a?(Work) && single_comment.ultimate_parent.anon_commenting_disabled && !logged_in? %>
-          <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
-        <% end %>
-          <li><%= link_to ts("Thread"), single_comment %></li>
-        <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
-          <li id="edit_comment_link_<%= single_comment.id %>">
-            <%= edit_comment_link single_comment %>
-          </li>
-        <% end %>
-        <% if single_comment.pseud.nil? and (logged_in_as_admin? || is_author_of?(single_comment.ultimate_parent)) %>
-          <li id="tag_comment_as_spam_link_<%= single_comment.id %>">
-            <%= tag_comment_as_spam_link single_comment %>
-          </li>
-        <% end %>
-        <% if logged_in_as_admin? || is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>
-          <li id="delete_comment_link_<%= single_comment.id %>">
-            <%= do_cancel_delete_comment_link single_comment %>
-          </li>
-        <% end %>
-      </ul>
+      <%= render "comments/comment_actions", comment: single_comment %>
 
-      <!-- this is where the comment delete confirmation will be displayed if we have javascript -->
-      <!-- if not, here is where we will render the delete-comment form -->
-      <% if params[:delete_comment_id] && params[:delete_comment_id] == single_comment.id.to_s %>
-        <div id="delete_comment_placeholder_<%= single_comment.id %>">
-          <%= render 'comments/confirm_delete', :comment => single_comment %>
-      <% else %>
-        <div id="delete_comment_placeholder_<%= single_comment.id %>" style="display:none;">
-      <% end %>
-        </div>
-
-      <!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->
-      <!-- if not, we will render the comment form if this is the comment we are replying to. -->
-      <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s %>
-        <div id="add_comment_reply_placeholder_<%= single_comment.id %>" title="<%= ts("reply to this comment") %>">
-          <%= render 'comments/comment_form',
-            :comment => Comment.new,
-            :commentable => single_comment,
-            :button_name => ts("Comment") %>
-      <% else %>
-        <div id="add_comment_reply_placeholder_<%= single_comment.id %>" style="display: none;">
-      <% end %>
-        </div>
     <% end %>
   <% end %>
 </li>
