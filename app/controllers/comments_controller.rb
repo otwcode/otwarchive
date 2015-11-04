@@ -311,8 +311,10 @@ class CommentsController < ApplicationController
       @comment.toggle!(:unreviewed)
       respond_to do |format|
         format.html do
-          if params[:came_from_inbox]
+          if params[:approved_from] == "inbox"
             redirect_to user_inbox_path(current_user, page: params[:page], filters: params[:filters])
+          elsif params[:approved_from] == "home"
+            redirect_to root_path
           else
             unreviewed_work_comments_path(@comment.ultimate_parent)
           end

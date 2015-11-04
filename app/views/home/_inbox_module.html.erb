@@ -19,7 +19,7 @@
           </li>
           <% if inbox_comment.feedback_comment.unreviewed? %>
             <li id="review_comment_link_<%= inbox_comment.feedback_comment.id %>">
-              <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment %>
+              <%= render 'inbox/approve_button', feedback_comment: inbox_comment.feedback_comment, approved_from: "home" %>
             </li>
           <% else %>
             <li>
