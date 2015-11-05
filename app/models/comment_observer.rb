@@ -51,7 +51,7 @@ class CommentObserver < ActiveRecord::Observer
     users = []
     admins = []
 
-    if comment.content_changed? && comment.moderated_commenting_enabled?
+    if comment.edited_at_changed? && comment.content_changed? && comment.moderated_commenting_enabled? && !comment.is_creator_comment?
       # we might need to put it back into moderation
       if content_too_different?(comment.content, comment.content_was)
         # we use update_column because we don't want to invoke this callback again

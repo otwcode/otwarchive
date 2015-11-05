@@ -77,6 +77,11 @@ class Comment < ActiveRecord::Base
     return true # because if reviewed is the return value, when it's false the record won't save!
   end
   
+  # is this a comment by the creator of the ultimate parent
+  def is_creator_comment?
+    pseud && pseud.user && pseud.user.try(:is_author_of?, ultimate_parent)
+  end
+  
   def moderated_commenting_enabled?
     parent.respond_to?(:moderated_commenting_enabled?) && parent.moderated_commenting_enabled?
   end

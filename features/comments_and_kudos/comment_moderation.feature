@@ -29,7 +29,6 @@ Feature: Comment Moderation
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"
     When I am logged in as "commenter"
-      And I set my preferences to turn on copies of my own comments
       And I post the comment "Fail comment" on the work "Moderation"
     Then I should see "Your comment was received! It will appear publicly after the work creator has approved it."
       And the comment on "Moderation" should be marked as unreviewed
@@ -39,9 +38,6 @@ Feature: Comment Moderation
       And the email to "author" should contain "will not appear until you approve"
       And the email to "author" should contain "Review comments on"
       And the email to "author" should not contain "Reply"
-      And "commenter" should be emailed
-      And the email to "commenter" should contain "will not appear until approved"
-      And the email to "commenter" should not contain "Go to the thread starting from"
     When I am logged out
       And I view the work "Moderation"
     Then I should not see "Fail comment"
@@ -67,7 +63,7 @@ Feature: Comment Moderation
       And the comment on "Moderation" should be marked as unreviewed
     When I follow "Unreviewed Comments (1)"
     Then I should see "Test comment"
-    When I follow "Approve"
+    When I press "Approve"
     Then I should see "Comment approved"
     When I am logged out
       And I view the work "Moderation"
@@ -83,11 +79,9 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I go to my inbox page
     Then I should see "Test comment"
-      And I should see "Approve"
       And I should not see "Reply"
-    When I follow "Approve"
+    When I press "Approve"
     Then I should see "Reply"
-      And I should not see "Approve"
     When I view the work "Moderation"
     Then I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
@@ -100,8 +94,8 @@ Feature: Comment Moderation
       And I go to the home page
     Then I should see "Test comment"
       And I should see "Unreviewed"
-      And I should see "Approve"
-    When I follow "Approve"
+      And I should not see "Reply"
+    When I press "Approve"
     Then I should see "Reply"
     When I view the work "Moderation"
     Then I should see "Comments (1)"
@@ -134,7 +128,7 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should see "A moderated reply"
-    When I follow "Approve"
+    When I press "Approve"
     Then I should see "Comment approved"
     When I view the work "Moderation"
       And I follow "Comments (2)"
@@ -147,10 +141,19 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should not see "Reply"
-    When I go to my inbox page
+      
+  Scenario: The commenter can edit their unapproved comment
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I set my preferences to turn on copies of my own comments
+      And I post the comment "Test comment" on the work "Moderation"
+    Then "commenter" should be emailed
+      And the email to "commenter" should contain "will not appear until approved"
+    When I visit the thread for the comment on "Moderation"
     Then I should see "Test comment"
-      And I should not see "Reply"
-      And I should see "Approve"
+      And I should see "Delete"
+    When I edit a comment
+    Then I should see "Comment was successfully updated"
       
   Scenario: Users should not see unapproved replies to their own comments
     Given the moderated work "Moderation" by "author" with the approved comment "Test comment" by "commenter"
@@ -176,7 +179,7 @@ Feature: Comment Moderation
       And I should not see "A moderated reply"
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
-      And I follow "Approve"
+      And I press "Approve"
     Then "commenter" should be emailed
       And "author" should not be emailed
       And "new_commenter" should not be emailed
@@ -198,7 +201,6 @@ Feature: Comment Moderation
       And I should not see "Comments:1"
     When I go to my inbox page
     Then I should not see "Reply"
-      And I should see "Approve"
     When I am logged in as "commenter"
       And I view the work "Moderation"
     Then I should not see "has chosen to moderate comments"
@@ -210,13 +212,13 @@ Feature: Comment Moderation
     Then I should see "New Comment"
       And I should not see "Interesting Comment"
     
-  Scenario: When a comment is edited significantly it gets moderated again
+  Scenario: When an approved comment is edited significantly it gets moderated again
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
       And I post the comment "Interesting Comment" on the work "Moderation"      
       And I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
-      And I follow "Approve"
+      And I press "Approve"
     When I am logged in as "commenter"
       And I view the work "Moderation"
       And I follow "Comments (1)"
@@ -232,3 +234,18 @@ Feature: Comment Moderation
       And I should not see "Interesting Comment"
       And I should not see "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
       And the comment on "Moderation" should be marked as unreviewed
+      
+  Scenario: I can approve multiple comments at once
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "One Comment" on the work "Moderation"
+      And I post the comment "Two Comment" on the work "Moderation"
+      And I post the comment "Three Comment" on the work "Moderation"
+      And I post the comment "Four Comment" on the work "Moderation"
+    When I am logged in as "author"
+      And I view the unreviewed comments page for "Moderation"
+      And I press "Approve All"
+    Then I should see "All moderated comments approved."
+    When I view the work "Moderation"
+    Then I should see "Comments (4)"
+            

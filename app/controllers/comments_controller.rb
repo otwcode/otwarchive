@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
                                               :cancel_comment_reply, :cancel_comment_edit,
-                                              :delete_comment, :cancel_comment_delete, :unreviewed ]
+                                              :delete_comment, :cancel_comment_delete, :unreviewed, :review_all ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
@@ -81,7 +81,7 @@ class CommentsController < ApplicationController
   def check_permission_to_access_single_unreviewed
     if @comment.unreviewed?
       parent = find_parent
-      unless logged_in_as_admin? || current_user_owns?(parent)
+      unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
         flash[:error] = ts("Sorry, that comment is currently in moderation.")
         if logged_in?
           redirect_to root_path and return
@@ -321,6 +321,18 @@ class CommentsController < ApplicationController
         format.js
       end
     end
+  end
+  
+  def review_all
+    unless @commentable && current_user_owns?(@commentable)
+      flash[:error] = ts("What did you want to review comments on?")
+      redirect_back_or_default(root_path) and return
+    end
+
+    @comments = @commentable.find_all_comments.unreviewed_only
+    @comments.each { |c| c.toggle!(:unreviewed) }
+    flash[:notice] = ts("All moderated comments approved.")
+    redirect_to @commentable and return
   end
 
   def approve

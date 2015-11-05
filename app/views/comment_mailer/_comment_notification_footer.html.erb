@@ -6,7 +6,7 @@
 </p>
 
 <% if @comment.ultimate_parent.is_a?(Tag) %>
-  <%= render "comment_notification_footer_for_tag" %>
+  <%= render "comment_mailer/comment_notification_footer_for_tag" %>
 <% else %>
-  <%= render "comment_notification_footer_for_other" %>
+  <%= render "comment_mailer/comment_notification_footer_for_other" %>
 <% end %>

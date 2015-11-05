@@ -138,12 +138,21 @@ When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
   visit unreviewed_work_comments_path(w)
 end
 
+When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  visit comment_path(w.comments.first)
+end
+
+Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
+  w = Work.find_by_title(work)
+  assert w.find_all_comments.count == num.to_i
+end
+
 Given /^the moderated work "([^\"]*)" by "([^\"]*)" with the approved comment "([^\"]*)" by "([^\"]*)"/ do |work, author, comment, commenter|
   step %{the moderated work "#{work}" by "#{author}"}
   step %{I am logged in as "#{commenter}"}
   step %{I post the comment "#{comment}" on the work "#{work}"}
   step %{I am logged in as "#{author}"}
   step %{I view the unreviewed comments page for "#{work}"}
-  step %{I follow "Approve"}
+  step %{I press "Approve"}
 end
-  
