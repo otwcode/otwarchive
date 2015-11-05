@@ -137,13 +137,7 @@ class CommentsController < ApplicationController
 
   def index
     if !@commentable.nil?
-      # check for moderation
-      if @commentable.respond_to?(:moderated_commenting_enabled?) && @commentable.moderated_commenting_enabled?
-        # only reviewed comments
-        @comments = @commentable.comments.reviewed.page(params[:page])
-      else
-        @comments = @commentable.comments.page(params[:page])
-      end
+      @comments = @commentable.comments.reviewed.page(params[:page])
       if @commentable.class == Comment
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
@@ -348,12 +342,8 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    if @commentable.respond_to?(:moderated_commenting_enabled?) && @commentable.moderated_commenting_enabled?
-      # only reviewed comments
-      @comments = @commentable.comments.reviewed.page(params[:page])
-    else
-      @comments = @commentable.comments.page(params[:page])
-    end
+    @comments = @commentable.comments.reviewed.page(params[:page])
+
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
