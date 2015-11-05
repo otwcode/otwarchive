@@ -53,7 +53,8 @@ Feature: Subscriptions
   Then I should not see "Old Snippet"
     And I should not see "myname1"
     And I should see "author"
-  
+
+  @disable_caching
   Scenario: Author of anonymous work is not shown in feed
     
   Given basic tags
