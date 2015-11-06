@@ -117,7 +117,7 @@ class CommentObserver < ActiveRecord::Observer
         end
         
         # send notification to the owner of the original comment if they're not the same as the commenter
-        if (have_different_parent_owner?(comment, parent_comment)) 
+        if (have_different_owner?(comment, parent_comment)) 
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || comment.ultimate_parent.is_a?(Tag)
             if comment.edited_at_changed?
               CommentMailer.edited_comment_reply_notification(parent_comment.id, comment.id).deliver
@@ -140,10 +140,12 @@ class CommentObserver < ActiveRecord::Observer
       return nil
     end
     
-    def have_different_parent_owner?(comment, parent_comment)
-      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
-      return (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
-                  (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
+    def have_different_owner?(comment, parent_comment)
+      return not_user_commenter?(parent_comment) || (parent_comment.comment_owner != comment.comment_owner)
+    end
+    
+    def not_user_commenter?(parent_comment)
+      (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
     end
     
     def content_too_different?(new_content, old_content)
@@ -156,7 +158,9 @@ class CommentObserver < ActiveRecord::Observer
       old_i = 0
       while new_i < new_content.length && old_i < old_content.length
         if new_content[new_i] == old_content[old_i]
-          new_i += 1; old_i +=1; next
+          new_i += 1
+          old_i += 1
+          next
         end
         
         cost += 1
@@ -170,7 +174,8 @@ class CommentObserver < ActiveRecord::Observer
           old_i += 1
         else
           # just keep going
-          new_i += 1; old_i +=1 
+          new_i += 1
+          old_i += 1 
         end
       end
       

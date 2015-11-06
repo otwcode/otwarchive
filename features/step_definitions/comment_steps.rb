@@ -156,3 +156,8 @@ Given /^the moderated work "([^\"]*)" by "([^\"]*)" with the approved comment "(
   step %{I view the unreviewed comments page for "#{work}"}
   step %{I press "Approve"}
 end
+
+When /^I reload the comments on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  w.find_all_comments.each { |c| c.reload }
+end
