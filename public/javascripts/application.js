@@ -21,6 +21,9 @@ $j(document).ready(function() {
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
+    // make Approve buttons on inbox items visible
+    $j('#inbox-form').find('.unreviewed').find('.review').find('a').removeClass('hidden');
+
     prepareDeleteLinks();
     thermometer();
     $j('body').addClass('javascript');
