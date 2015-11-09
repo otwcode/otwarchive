@@ -22,7 +22,7 @@ $j(document).ready(function() {
     $j('.actions').children('.share').removeClass('hidden');
 
     // make Approve buttons on inbox items visible
-    $j('#inbox-form').find('.unreviewed').find('.review').find('a').removeClass('hidden');
+    $j('#inbox-form, .messages').find('.unreviewed').find('.review').find('a').removeClass('hidden');
 
     prepareDeleteLinks();
     thermometer();
