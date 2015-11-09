@@ -9,6 +9,7 @@
 <% if @comment.unreviewed? && @owner %>
   <%= style_link("Review comments on <i>"  + @comment.ultimate_parent.commentable_name + "</i>", 
     unreviewed_work_comments_url(@comment.ultimate_parent)) %>
+    <br />
 <% end %>
 
 <% unless (@comment.unreviewed? || @noreply) %>
