@@ -241,6 +241,10 @@ class CommentsController < ApplicationController
               elsif request.referer == "#{root_url}"
                 # replying on the homepage
                 redirect_to root_path
+              elsif @comment.unreviewed? && current_user
+                redirect_to comment_path(@comment)
+              elsif @comment.unreviewed?
+                redirect_to_all_comments(@commentable)
               else
                 redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end
@@ -265,7 +269,10 @@ class CommentsController < ApplicationController
     if @comment.update_attributes(params[:comment])
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
-        format.html { redirect_to_comment(@comment) }
+        format.html do 
+          redirect_to comment_path(@comment) and return if @comment.unreviewed? 
+          redirect_to_comment(@comment)
+        end
         format.js # updating the comment in place
       end
     else
@@ -301,6 +308,8 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     if @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
       @comment.toggle!(:unreviewed)
+      # mark associated inbox comments as read
+      InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true)
       flash[:notice] = ts("Comment approved.")
       respond_to do |format|
         format.html do

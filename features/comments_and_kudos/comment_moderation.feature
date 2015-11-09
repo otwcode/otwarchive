@@ -31,6 +31,10 @@ Feature: Comment Moderation
     When I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Moderation"
     Then I should see "Your comment was received! It will appear publicly after the work creator has approved it."
+      And I should see "Edit"
+      And I should see "Delete"
+      And I should see "Fail comment"
+      And I should not see "by author"
       And the comment on "Moderation" should be marked as unreviewed
       And I should not see "Unreviewed Comments (1)"
       And I should not see "Comments:1"
@@ -38,11 +42,28 @@ Feature: Comment Moderation
       And the email to "author" should contain "will not appear until you approve"
       And the email to "author" should contain "Review comments on"
       And the email to "author" should not contain "Reply"
-    When I am logged out
-      And I view the work "Moderation"
-    Then I should not see "Fail comment"
+    When I post the comment "another comment" on the work "Moderation" as a guest
+    Then I should see "will appear publicly after the work creator has approved"
+      And I should be on the "Moderation" work page
       And I should not see "Comments:1"
-      And I should not see "Unreviewed Comments"
+      And I should not see "Comments:2"
+      And I should not see "another comment"
+      And I should not see "Edit"
+      And I should not see "Delete"
+
+  Scenario: Edit a moderated comment
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "Fail comment" on the work "Moderation"
+    When I follow "Edit"
+      And I fill in "Comment" with "Edited unfail comment"
+      And I press "Update"
+    Then I should see "Comment was successfully updated"
+    When I reload the comments on "Moderation"
+      And I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+    Then I should see "Edited unfail comment"
       
   Scenario: Author comments do not need to be approved
     Given the moderated work "Moderation" by "author"
@@ -52,6 +73,7 @@ Feature: Comment Moderation
       And the comment on "Moderation" should not be marked as unreviewed
       And I should see "Comment created"
       And I should not see "Unreviewed Comments (1)"
+      And I should see "Comments:1"
       
   Scenario: Moderated comments can be approved by the author
     Given the moderated work "Moderation" by "author"
@@ -80,8 +102,14 @@ Feature: Comment Moderation
       And I go to my inbox page
     Then I should see "Test comment"
       And I should not see "Reply"
-    When I press "Approve"
+      And I should see "Unreviewed"
+    # we can only test the non-javascript version here
+    When I follow "Unreviewed Comments"
+      And I press "Approve"
+      And I go to my inbox page
     Then I should see "Reply"
+      And I should not see "Unreviewed"
+      And I should not see "Unread"
     When I view the work "Moderation"
     Then I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
@@ -95,9 +123,10 @@ Feature: Comment Moderation
     Then I should see "Test comment"
       And I should see "Unreviewed"
       And I should not see "Reply"
-    When I press "Approve"
-    Then I should see "Reply"
-    When I view the work "Moderation"
+    # we can only test the non-javascript version here
+    When I follow "Unreviewed Comments"
+      And I press "Approve"
+      And I view the work "Moderation"
     Then I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
     
@@ -124,7 +153,8 @@ Feature: Comment Moderation
       And I fill in "Comment" with "A moderated reply" within ".odd"
       And I press "Comment" within ".odd"
     Then I should see "It will appear publicly"
-      And I should not see "A moderated reply"
+      And I should see "A moderated reply"
+      And I should not see "Test comment"
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should see "A moderated reply"
@@ -233,10 +263,7 @@ Feature: Comment Moderation
     When I follow "Edit"
       And I fill in "Comment" with "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
       And I press "Update"
-    Then I should not see "Comments (1)"
-      And I should not see "Interesting Comment"
-      And I should not see "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
-      And the comment on "Moderation" should be marked as unreviewed
+    Then the comment on "Moderation" should be marked as unreviewed
       
   Scenario: I can approve multiple comments at once
     Given the moderated work "Moderation" by "author"
