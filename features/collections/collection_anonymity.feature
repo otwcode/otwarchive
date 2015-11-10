@@ -4,6 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection with anonymity and hidden-until-reveal works
 
+  @disable_caching
   Scenario: Create a hidden collection, add new and existing works to it, reveal works
 
   Given basic tags
@@ -156,7 +157,8 @@ Feature: Collection
   Then I should see "List of Bookmarks"
     And I should not see "Mystery Work"
     And I should see "Another Snippet"
-  
+
+  @disable_caching
   Scenario: Create an anonymous collection, add new and existing works to it, reveal authors
   
   Given basic tags

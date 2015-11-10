@@ -51,6 +51,7 @@ Feature: Comment Moderation
       And I should not see "Edit"
       And I should not see "Delete"
 
+  @disable_caching
   Scenario: Edit a moderated comment
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -278,4 +279,3 @@ Feature: Comment Moderation
     Then I should see "All moderated comments approved."
     When I view the work "Moderation"
     Then I should see "Comments (4)"
-            

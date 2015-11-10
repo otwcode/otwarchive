@@ -3,6 +3,7 @@ Feature: Comment on tag
 As a tag wrangler
 I'd like to comment on a tag'
 
+  @disable_caching
   Scenario: Comment on a tag and get taken to right page and see right date
 
     Given the following activated tag wranglers exist
