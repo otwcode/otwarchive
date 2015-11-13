@@ -46,3 +46,10 @@ When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
     fill_in("collection_names", :with => "#{collection_name}")
     click_button("Add")
 end
+
+Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
+  work = Work.find_by_title(title)
+  bookmark = work.bookmarks.first
+  bookmark.reload
+  bookmark.tags.collect(&:name).include?(tag)
+end
