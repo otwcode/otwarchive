@@ -10,7 +10,7 @@ require 'capistrano/gitflow_version'
 server "ao3-app01.ao3.org",  :app , :db
 server "ao3-app98.ao3.org",  :app , :workers , :schedulers
 server "ao3-app02.ao3.org",  :app , :primary => true
-#server "ao3-app03.ao3.org",  :app , :workers , :schedulers
+server "ao3-app03.ao3.org",  :app , :workers , :schedulers
 server "ao3-app04.ao3.org",  :app
 server "ao3-app99.ao3.org",  :app , :workers , :schedulers
 server "ao3-app05.ao3.org",  :app
