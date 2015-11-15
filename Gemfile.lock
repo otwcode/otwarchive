@@ -182,8 +182,7 @@ GEM
     multi_test (0.1.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.4.1)
-    mysql2 (0.4.1-x86-mingw32)
+    mysql2 (0.3.10)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     net-scp (1.1.1)
@@ -429,7 +428,7 @@ DEPENDENCIES
   launchy
   lograge
   mechanize
-  mysql2
+  mysql2 (= 0.3.10)
   newrelic-redis
   newrelic_rpm (= 3.14.0.305)
   nokogiri (>= 1.6.6.2)
