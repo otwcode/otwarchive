@@ -3,7 +3,8 @@
 Feature: Collectible items email
   As a moderator
   I want to get notifications when items are added to my collection
-  
+
+  @disable_caching
   Scenario: Work added to collection sends notification email
     Given I am logged in as "first_user"
       And all emails have been delivered

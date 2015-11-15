@@ -1,0 +1,4 @@
+Read all comments on <%= @comment.ultimate_parent.name %>: <%= url_for(:controller => :comments, :action => :index, :tag_id => @comment.ultimate_parent, :only_path => false) %><% unless @noreply %>
+Reply to this comment: <%= url_for(:controller => :comments, :action => :index, :tag_id => @comment.ultimate_parent, :only_path => false, :add_comment_reply_id => @comment.id, :anchor => "comment_#{@comment.id}") %><% end %>
+Go to the thread starting from this comment: <%= url_for(:controller => :comments,  :action => :index,  :tag_id => @comment.ultimate_parent,  :only_path => false,  :anchor => "comment_#{@comment.id}") %><% unless @comment.id == @comment.thread %>
+Go to the thread to which this comment belongs: <%= url_for(:controller => :comments, :action => :index, :tag_id => @comment.ultimate_parent, :anchor => "comment_#{@comment.thread}", :only_path => false) %><% end %>

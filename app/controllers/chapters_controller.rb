@@ -52,7 +52,7 @@ class ChaptersController < ApplicationController
         @next_chapter = @chapters[chapter_position+1]
       end
       @commentable = @work
-      @comments = @chapter.comments
+      @comments = @chapter.comments.reviewed
 
       @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
         get_page_title(@work.fandoms.string,

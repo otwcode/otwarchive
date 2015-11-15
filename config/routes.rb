@@ -179,11 +179,11 @@ Otwarchive::Application.routes.draw do
     member do
       get :browse
       get :change_email
-      post :change_email
+      post :changed_email
       get :change_password
-      post :change_password
+      post :changed_password
       get :change_username
-      post :change_username
+      post :changed_username
       post :end_first_login
       post :end_banner
     end
@@ -304,6 +304,10 @@ Otwarchive::Application.routes.draw do
       member do
         put :approve
         put :reject
+      end
+      collection do
+        get :unreviewed
+        put :review_all
       end
     end
     resources :kudos, :only => [:index]
@@ -459,6 +463,7 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :reject
+      put :review
     end
     collection do
       get :hide_comments
