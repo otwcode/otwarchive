@@ -241,7 +241,7 @@ public
       end
     end
     rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
-    return -1 if rank == nil # something's wrong
+    return -1 if rank.nil? # something's wrong
     progress = (rank  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
   end
 
