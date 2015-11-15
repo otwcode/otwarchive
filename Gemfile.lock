@@ -39,7 +39,7 @@ GEM
     audited-activerecord (3.0.0)
       activerecord (~> 3.0)
       audited (= 3.0.0)
-    authlogic (3.4.6)
+    authlogic (3.3.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
       request_store (~> 1.0)
