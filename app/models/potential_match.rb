@@ -241,8 +241,10 @@ public
       end
     end
     rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
+    number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
     return -1 if rank.nil? # something's wrong
-    progress = (rank  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+    # we want a percentage: multiply by 100 first so we can keep this an integer calculation
+    return (rank * 100) / number_of_bylines 
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
