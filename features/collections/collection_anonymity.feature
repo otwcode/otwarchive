@@ -100,30 +100,26 @@ Feature: Collection
     Then I should not see "Mystery Work"
       And I should see "Hiding Work"
     
-  Scenario: The authors in an anonymous collection should only be visible to themselves
+  Scenario: The authors in an anonymous collection should only be visible to themselves and admins
     Given I have the anonymous collection "Anonymous Hugs"
       And I am logged in as "first_user"
       And I post the work "Old Snippet" to the collection "Anonymous Hugs"
       And all search indexes are updated
     When I view the work "Old Snippet"
     Then the author of "Old Snippet" should be visible to me on the work page
+    When I am logged out
+    Then the author of "Old Snippet" should be hidden from me
+    When I am logged in as "second_user"
+    Then the author of "Old Snippet" should be hidden from me
+    When I am logged in as an admin
+    Then the author of "Old Snippet" should be visible to me on the work page
+    # special case for moderator: can't see name on the work (to avoid unwanted spoilers)
+    # but can see names + titles on in the collection items management area
     When I am logged in as "moderator"
     Then the author of "Old Snippet" should be hidden from me
     When I view the approved collection items page for "Anonymous Hugs"
     Then I should see "Old Snippet"
       And I should see "first_user"
-    When I am logged out
-    Then the author of "Old Snippet" should be hidden from me
-    When I am logged in as "second_user"
-    Then the author of "Old Snippet" should be hidden from me
-
-  Scenario: An admin can see the creator's name on an anonymous work
-    Given I have an anonymous collection "Hidden Treasury"
-      And I am logged in as "actualname"
-      And I post the work "Troll Work" to the collection "Hidden Treasury"
-    When I am logged in as an admin
-      And I view the work "Troll Work"
-    Then I should see "actualname"
   
   Scenario: Bookmarks should not reveal the authors of anonymous works
     Given I have the anonymous collection "Anonymous Hugs"
@@ -179,7 +175,7 @@ Feature: Collection
       And the email to "second_user" should not contain "Second Snippet"
     When I am logged out
     Then the author of "First Snippet" should be publicly visible
-      And the author of "Second Snippet" should not be publicly visible
+      And the author of "Second Snippet" should be hidden from me
 
   Scenario: Works should not be visible in series if unrevealed
     Given I have the hidden collection "Hidden Treasury"
