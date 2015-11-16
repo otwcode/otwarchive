@@ -23,6 +23,12 @@ When /^I start a new bookmark$/ do
   step %{I start a new bookmark for "#{DEFAULT_TITLE}"}
 end
 
+When /^I bookmark the works "([^\"]*)"$/ do |worklist|
+  worklist.split(/, ?/).each do |work_title|
+    step %{I bookmark the work "#{work_title}"}
+  end
+end
+
 When /^I edit the bookmark for "([^\"]*)"$/ do |title|
   step %{I open the bookmarkable work "#{title}"}
   click_link("Edit Bookmark")

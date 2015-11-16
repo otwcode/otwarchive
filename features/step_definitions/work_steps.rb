@@ -71,6 +71,12 @@ Given /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"
   click_button("Preview")
 end
 
+When /^I post the works "([^\"]*)"$/ do |worklist|
+  worklist.split(/, ?/).each do |work_title|
+    step %{I post the work "#{work_title}"}
+  end
+end    
+
 ### GIVEN
 
 Given /^I have no works or comments$/ do
