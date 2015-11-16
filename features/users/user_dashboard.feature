@@ -36,9 +36,9 @@ Feature: User dashboard
     
   When I am logged in as "bookmarkuser1" with password "password"
   Then I should see "Hi, bookmarkuser1!"
-  When I go to bookmarkuser2's user page
+  When I go to bookmarkuser2 user page
   Then I should see "There are no works or bookmarks under this name yet"
-  When I go to bookmarkuser1's user page
+  When I go to bookmarkuser1 user page
   Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
@@ -47,7 +47,7 @@ Feature: User dashboard
     And I post the work "Revenge of the Sith"
   When I go to the bookmarks page
   Then I should not see "Revenge of the Sith"
-  When I go to bookmarkuser2's user page
+  When I go to bookmarkuser2 user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -60,7 +60,7 @@ Feature: User dashboard
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-  When I go to bookmarkuser2's user page
+  When I go to bookmarkuser2 user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -79,7 +79,7 @@ Feature: User dashboard
     And I post the work "Newest Work"
   
   # Check the Works link for the user
-  When I go to meatloaf's user page
+  When I go to meatloaf user page
   Then I should see "Recent works"
     And I should see "Newest Work"
     And I should not see "Oldest Work"
@@ -107,10 +107,6 @@ Feature: User dashboard
   Then I should see "meatloaf's Series"
     And I should see "Oldest Series"
     And I should see "Newest Series"
-  
-  # Create a pseud
-  When I create the pseud "gravy"
-  Then I should see "You don't have anything posted under this name yet."
   
   # Create a work and series for the pseud and make sure the user's work count doesn't carry over
   When I add the work "Pseud's Work 1" to series "Pseud Series A" as "gravy"
