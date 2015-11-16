@@ -42,7 +42,7 @@ Given /^mod1 lives in Alaska$/ do
     step %{I press "Update"}
 end
 
-Given /^I have (?:an?|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)? collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
+Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   step %{I am logged in as "moderator"}
   step %{I set up the collection "#{title}" with name "#{name}"}
   check("This collection is unrevealed") unless hidden.blank?
@@ -183,7 +183,7 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   page.should have_content("by <a href=\"#{user_url(work.users.first)}\"><strong>#{work.users.first.pseuds.first.byline}")
   if work.collections.first 
     visit collection_path(work.collections.first) 
-    page.should have_content("by #{work.users.first.pseuds.first.byline}")
+    page.should have_content("#{title} by #{work.users.first.pseuds.first.byline}")
   end
 end
 
@@ -193,8 +193,8 @@ Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   page.should_not have_content(work.users.first.pseuds.first.byline)
   page.should have_content("by Anonymous")
   visit collection_path(work.collections.first) 
-  page.should_not have_content(work.users.first.pseuds.first.byline)
-  page.should have_content("by Anonymous")
+  page.should_not have_content("#{title} by #{work.users.first.pseuds.first.byline}")
+  page.should have_content("#{title} by Anonymous")
   visit user_path(work.users.first)
   page.should_not have_content(title)
 end

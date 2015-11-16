@@ -12,23 +12,20 @@ When /^I add the series "([^\"]*)"$/ do |series_title|
 end
 
 When /^I add the work "([^\"]*)" to series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
-  work = Work.find_by_title(work_title)
-  if work.blank?
-    step "the draft \"#{work_title}\""
-    work = Work.find_by_title(work_title)
-    visit preview_work_url(work)
-    click_button("Post")
-    step "I should see \"Work was successfully posted.\""
-    Work.tire.index.refresh
+  unless pseud.blank? && Pseud.where(name: pseud).exists?    
+    step %{I create the pseud "#{pseud}"}
   end
   
-  step "I edit the work \"#{work_title}\""
-
-  unless pseud.blank?
-    step %{I create the pseud "#{pseud}"}
+  if Work.where(title: work_title).exists?
+    # an existing work
+    step %{I edit the work "#{work_title}"}
+  else
+    # a new work
+    step "I set up the draft \"#{work_title}\""
+  end
+  if pseud
     select(pseud, :from => "work_author_attributes_ids_")
   end
-  
   step %{I add the series "#{series_title}"}
   click_button("Post Without Preview")
 end
@@ -100,14 +97,15 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link over it$
   neighbors = SerialWork.where(series_id: series, position: [position-1, position+1])
   neighbors.each_with_index do |neighbor, index|
     visit work_path(neighbor.work)
-    page.should_not have_content(work_url(work))
-    # instead the neighbors should link to each other if they both exist
+    # the neighbors should link to each other if they both exist
     if neighbors.count > 1 && index == 0
-      page.should have_content("&raquo;")      
-      page.should have_content(work_url(neighbors[1].work))
+      click_link("»")
+      page.should_not have_content(work_title)
+      page.should have_content(neighbors[1].work.title)
     elsif neighbors.count > 1 && index == 1
-      page.should have_content("&laquo;")      
-      page.should have_content(work_url(neighbors[0].work))
+      click_link("«")
+      page.should_not have_content(work_title)
+      page.should have_content(neighbors[0].work.title)
     end
   end  
 end
@@ -119,11 +117,12 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link to it$/ 
   neighbors = SerialWork.where(series_id: series, position: [position-1, position+1])
   neighbors.each do |neighbor|
     visit work_path(neighbor.work)
-    page.should have_content(work_url(work))
     if neighbor.position > position
-      page.should have_content("&laquo;")
+      click_link("«")
+      page.should have_content(work_title)
     else      
-      page.should have_content("&raquo;")
+      click_link("»")
+      page.should have_content(work_title)
     end
   end
 end

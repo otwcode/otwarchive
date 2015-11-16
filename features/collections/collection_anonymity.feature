@@ -186,8 +186,8 @@ Feature: Collection
       And I add the work "Hiding Work" to series "New series"
       And I post the work "After"
       And I add the work "After" to series "New series"
-    When "AO3-1250: series anonymity fixes" is fixed
-    # everyone including the author should not see the work in the series
+    When "AO3-1250: series anonymity issues" is fixed
+    ### even the author should not see the work listed within the series
     # Then the work "Hiding Work" should be part of the "New series" series in the database
     #   And the work "Hiding Work" should not be visible on the "New series" series page
     #   And the series "New series" should not be visible on the "Hiding Work" work page
@@ -196,7 +196,9 @@ Feature: Collection
     Then the work "Hiding Work" should be part of the "New series" series in the database
       And the work "Hiding Work" should not be visible on the "New series" series page
       And the series "New series" should not be visible on the "Hiding Work" work page
-      And the neighbors of "Hiding Work" in the "New series" series should link over it
+    When "AO3-1250: series anonymity issues" is fixed
+    #  And I should not see "Mystery Work"
+    #  And the neighbors of "Hiding Work" in the "New series" series should link over it
     When I reveal works for "Hidden Treasury"
       And I am logged out
     Then the work "Hiding Work" should be visible on the "New series" series page
@@ -212,22 +214,23 @@ Feature: Collection
       And I add the work "Anon Work" to series "New series"
       And I post the work "After"
       And I add the work "After" to series "New series"
-    When "AO3-1250: series anonymity fixes" is fixed
-    # everyone including the author should not see the work in the series
     Then the work "Anon Work" should be part of the "New series" series in the database
-      And the work "Anon Work" should not be visible on the "New series" series page
-      And the series "New series" should not be visible on the "Anon Work" work page
-      And the neighbors of "Anon Work" in the "New series" series should link over it
+    When "AO3-1250: series anonymity fixes" is fixed
+      # even the author should not see the work in the series
+      # And the work "Anon Work" should not be visible on the "New series" series page
+      # And the series "New series" should not be visible on the "Anon Work" work page
+      # And the neighbors of "Anon Work" in the "New series" series should link over it
     When I am logged out
     Then the work "Anon Work" should be part of the "New series" series in the database
-      And the work "Anon Work" should not be visible on the "New series" series page
-      And the series "New series" should not be visible on the "Anon Work" work page
-      And the neighbors of "Anon Work" in the "New series" series should link over it
+    When "AO3-1250: series anonymity fixes" is fixed
+      # And the work "Anon Work" should not be visible on the "New series" series page
+      # And the series "New series" should not be visible on the "Anon Work" work page
+      # And the neighbors of "Anon Work" in the "New series" series should link over it
     When I reveal authors for "Anon Treasury"
       And I am logged out
-    Then the work "Hiding Work" should be visible on the "New series" series page
-      And the series "New series" should be visible on the "Hiding Work" work page
-      And the neighbors of "Hiding Work" in the "New series" series should link to it
+    Then the work "Anon Work" should be visible on the "New series" series page
+      And the series "New series" should be visible on the "Anon Work" work page
+      And the neighbors of "Anon Work" in the "New series" series should link to it
 
   Scenario: Adding a co-author to (one chapter of) an anonymous work should still keep it anonymous
     Given I have the anonymous collection "Various Penguins"
