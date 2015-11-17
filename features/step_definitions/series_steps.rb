@@ -62,7 +62,6 @@ Then /^the work "([^\"]*)" should be part of the "([^\"]*)" series in the databa
 end
 
 Then /^the work "([^\"]*)" should not be visible on the "([^\"]*)" series page$/ do |work_title, series_title|
-  work = Work.find_by_title(work_title)
   series = Series.find_by_title(series_title)
   visit series_path(series)
   page.should_not have_content(work_title)
@@ -70,13 +69,11 @@ end
 
 Then /^the series "([^\"]*)" should not be visible on the "([^\"]*)" work page$/ do |series_title, work_title|
   work = Work.find_by_title(work_title)
-  series = Series.find_by_title(series_title)
   visit work_path(work)
   page.should_not have_content(series_title)
 end
 
 Then /^the work "([^\"]*)" should be visible on the "([^\"]*)" series page$/ do |work_title, series_title|
-  work = Work.find_by_title(work_title)
   series = Series.find_by_title(series_title)
   visit series_path(series)
   page.should have_content(work_title)
