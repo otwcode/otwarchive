@@ -15,7 +15,7 @@ end
 
 When /^I add my work to the collection$/ do
   step %{I follow "Add To Collection"}
-  fill_in("collection_names", :with => "Various_Penguins")
+  fill_in("collection_names", with: "Various_Penguins")
   click_button("Add")
 end
 
@@ -24,7 +24,7 @@ When /^I add the work "([^\"]*)" to the collection "([^\"]*)"$/ do |work_title, 
   c = Collection.find_by_title(collection_title)
   visit work_path(w)
   click_link "Add To Collection"
-  fill_in("collection_names", :with => c.name)
+  fill_in("collection_names", with: c.name)
   click_button("Add")
 end
 
@@ -34,12 +34,10 @@ When(/^I view the approved collection items page for "(.*?)"$/) do |collection|
 end
 
 Given /^mod1 lives in Alaska$/ do
-  step %{I am logged in as "mod1" with password "something"}
-  
-  step %{I go to mod1's preferences page}
-  #'
+  step %{I am logged in as "mod1"}
+  step %{I go to mod1 preferences page}
   step %{I select "(GMT-09:00) Alaska" from "preference_time_zone"}
-    step %{I press "Update"}
+  step %{I press "Update"}
 end
 
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
@@ -90,8 +88,8 @@ end
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   visit new_collection_url
-  fill_in("collection_name", :with => name.blank? ? title.gsub(/[^\w]/, '_') : name)
-  fill_in("collection_title", :with => title)
+  fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
+  fill_in("collection_title", with: title)
 end
 
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
