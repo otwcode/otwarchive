@@ -12,8 +12,8 @@ DEFAULT_CATEGORY = "Other"
 When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
-  fill_in("Work Title", :with => title)
-  fill_in("content", :with => DEFAULT_CONTENT)
+  fill_in("Work Title", with: title)
+  fill_in("content", with: DEFAULT_CONTENT)
 end
 
 # Here we set up a draft and can then post it as a draft, preview and post, post without preview, 
@@ -38,13 +38,13 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with f
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
   check(category.blank? ? DEFAULT_CATEGORY : category)
-  fill_in("Fandoms", :with => fandom.blank? ? DEFAULT_FANDOM : fandom)
-  fill_in("Additional Tags", :with => freeform.blank? ? DEFAULT_FREEFORM : freeform)
+  fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
+  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform))
   unless collection.blank?
     c = Collection.find_by_title(collection)
-    fill_in("Collections", :with => c.name)
+    fill_in("Collections", with: c.name)
   end
-  fill_in("work_recipients", :with => "#{recipient}") unless recipient.blank?
+  fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
 end
 
 # This is the same regexp as above
