@@ -95,7 +95,7 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link over it$
   work = Work.find_by_title(work_title)
   series = Series.find_by_title(series_title)
   position = SerialWork.where(series_id: series, work_id: work).first.position
-  neighbors = SerialWork.where(series_id: series, position: [position-1, position+1])
+  neighbors = SerialWork.where(series_id: series, position: [position - 1, position + 1])
   neighbors.each_with_index do |neighbor, index|
     visit work_path(neighbor.work)
     # the neighbors should link to each other if they both exist
@@ -115,7 +115,7 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link to it$/ 
   work = Work.find_by_title(work_title)
   series = Series.find_by_title(series_title)
   position = SerialWork.where(series_id: series, work_id: work).first.position
-  neighbors = SerialWork.where(series_id: series, position: [position-1, position+1])
+  neighbors = SerialWork.where(series_id: series, position: [position - 1, position + 1])
   neighbors.each do |neighbor|
     visit work_path(neighbor.work)
     if neighbor.position > position
