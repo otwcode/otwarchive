@@ -6,23 +6,19 @@ class PseudSweeper < ActionController::Caching::Sweeper
   end
   
   def before_update(record)
-    if record.changed.include?("name") || record.changed.include?("login")
+    if record.changed.include?(:name)
       if record.is_a?(User)
-        record.pseuds.each(&:remove_stale_from_autocomplete)
+        record.pseuds.each {|pseud| pseud.remove_from_autocomplete}
       else
-        record.remove_stale_from_autocomplete
+        record.remove_from_autocomplete
       end
     end
   end
   
   def after_update(record)
-    if record.changed.include?("name") || record.changed.include?("login")
+    if record.changed.include?(:name)
       if record.is_a?(User)
-        record.pseuds.each do |pseud|
-          # have to reload the pseud from the db otherwise it has the outdated login
-          pseud.reload
-          pseud.add_to_autocomplete
-        end
+        record.pseuds.each {|pseud| pseud.add_to_autocomplete}
       else
         record.add_to_autocomplete
       end
