@@ -131,6 +131,7 @@ end
 group :test, :development do
   gem 'pry'
   gem 'whiny_validation'
+  gem 'bullet'
 end
 
 group :test, :development, :staging  do
