@@ -1,20 +1,20 @@
-		<h2 class="heading"><%= ts("Account Created!") %></h2>
+<h2 class="heading"><%= ts("Account Created!") %></h2>
 <!-- Boilerplate text for account creation confirmation -->
-		<p>
-			<%= ts("Within 24 hours, you should receive an email at the address you gave us.") %>
-			<%= ts("This will have the URL you need to go to in order to verify your account and complete the account creation process.") %>
-			<%= ts("You might want to add") %>
-			<strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong> 
-			<%= ts("to your address book to make sure you get the mail.") %>
-		</p>
-		<p>
-			<%= ts("If you don't hear from us within 24 hours, and you don't find our email in your spam filter, please drop us a line at") %>
-			<%= "Support (http://archiveofourown.org/support)" %>.
-		</p>
-		<p>
-			<strong><%= ts("Important!") %></strong>
-			<%= ts("You must verify your account within 14 days, or your registration will expire.") %>
-		</p>
-		<p>
-			<%= link_to ts('Return to archive front page'), root_path %>
-		</p>
+<p>
+  <%= ts("Within 24 hours, you should receive an email at the address you gave us.") %>
+  <%= ts("This will have the URL you need to go to in order to verify your account and complete the account creation process.") %>
+  <%= ts("You might want to add") %>
+  <strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong>
+  <%= ts("to your address book to make sure you get the mail.") %>
+</p>
+<p>
+  <%= ts("If you don't hear from us within 24 hours, and you don't find our email in your spam filter, please drop us a line at") %>
+  <%= "Support (http://archiveofourown.org/support)" %>.
+</p>
+<p>
+  <strong><%= ts("Important!") %></strong>
+  <%= ts("You must verify your account within 14 days, or your registration will expire.") %>
+</p>
+<p>
+  <%= link_to ts('Return to archive front page'), root_path %>
+</p>
