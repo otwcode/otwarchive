@@ -395,8 +395,7 @@ Scenario: Bookmark External Work link should be available to logged in users, bu
   When I go to the bookmarks in collection "Testing BEW Collection"
   Then I should not see "Bookmark External Work"
 
-@disable_caching
-Scenario: Editing a bookmark's tags should update the bookmark
+Scenario: Editing a bookmark's tags should expire the bookmark cache
   Given I am logged in as "some_user"
     And I post the work "Really Good Thing"
   When I am logged in as "bookmarker"
@@ -404,9 +403,6 @@ Scenario: Editing a bookmark's tags should update the bookmark
     And I follow "Bookmark"
     And I fill in "bookmark_notes" with "I liked this story"
     And I fill in "bookmark_tag_string" with "Tag 1, Tag 2"
-  When I press "Create"
+    And I press "Create"
   Then I should see "Bookmark was successfully created"
-  When I follow "Edit"
-    And I fill in "bookmark_tag_string" with "New Tag"
-    And I press "Update"
-  Then the bookmark on "Really Good Thing" should have tag "New Tag"
+    And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
