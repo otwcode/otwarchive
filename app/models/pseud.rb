@@ -245,6 +245,14 @@ class Pseud < ActiveRecord::Base
     (name != user_name) ? name + " (" + user_name + ")" : name
   end
 
+  # get the former byline
+  def byline_was
+    past_name = name_was.blank? ? name : name_was
+    # if we have a user and their login has changed get the old one
+    past_user_name = user.blank? ? "" : (user.login_was.blank? ? user.login : user.login_was)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
   # Parse a string of the "pseud.name (user.login)" format into a pseud
   def self.parse_byline(byline, options = {})
     pseud_name = ""
@@ -302,6 +310,10 @@ class Pseud < ActiveRecord::Base
 
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
+  end
+
+  def autocomplete_value_was
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
 
   ## END AUTOCOMPLETE
