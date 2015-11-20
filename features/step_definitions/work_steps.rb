@@ -421,28 +421,28 @@ end
 When /^I add the co-author "([^\"]*)"$/ do |coauthor|
   step %{the user "#{coauthor}" exists and is activated}
   check("Add co-authors?")
-  fill_in("pseud_byline", :with => "#{coauthor}")
+  fill_in("pseud_byline", with: "#{coauthor}")
 end
 
 When /^I give the work to "([^\"]*)"$/ do |recipient|
-  fill_in("work_recipients", :with => "#{recipient}")
+  fill_in("work_recipients", with: "#{recipient}")
 end
 
 When /^I give the work "([^\"]*)" to the user "([^\"]*)"$/ do |work_title, recipient|
   step %{the user "#{recipient}" exists and is activated}
   visit edit_work_path(Work.find_by_title(work_title))
-  fill_in("work_recipients", :with => "#{recipient}")
+  fill_in("work_recipients", with: "#{recipient}")
   click_button("Post Without Preview")
 end
 
 When /^I add the beginning notes "([^\"]*)"$/ do |notes|
   check("at the beginning")
-  fill_in("work_notes", :with => "#{notes}")
+  fill_in("work_notes", with: "#{notes}")
 end
 
 When /^I add the end notes "([^\"]*)"$/ do |notes|
   check("at the end")
-  fill_in("work_endnotes", :with => "#{notes}")
+  fill_in("work_endnotes", with: "#{notes}")
 end
 
 When /^I add the beginning notes "([^\"]*)" to the work "([^\"]*)"$/ do |notes, work|
