@@ -59,3 +59,14 @@ Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   bookmark.reload
   bookmark.tags.collect(&:name).include?(tag)
 end
+
+Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bookmark tags$/ do |title|
+  work = Work.find_by_title(title)
+  bookmark = work.bookmarks.first
+  orig_cache_key = bookmark.cache_key
+  visit edit_bookmark_path(bookmark)
+  fill_in("bookmark_tag_string", with: "New Tag")
+  click_button("Update")
+  bookmark.reload
+  assert orig_cache_key != bookmark.cache_key
+end
