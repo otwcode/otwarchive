@@ -9,7 +9,7 @@ module PseudsHelper
   # used in the sidebar
   def print_pseud_selector(pseuds)
     pseuds -= [@pseud] if @pseud && @pseud.new_record?
-    list = pseuds.sort.collect {|pseud| "<li>" + span_if_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("").html_safe
+    list = pseuds.includes(:user).sort.collect {|pseud| "<li>" + span_if_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("").html_safe
   end
 
   # For tag list on /people page

@@ -35,7 +35,7 @@ class InboxComment < ActiveRecord::Base
   def self.with_feedback_comment
     # Get an array of the ids of inbox comments that have existing feedback_comments
     inbox_comments_with_feedback_comment = []
-    find_each do |inbox_comment|
+    self.includes(:feedback_comment).find_each do |inbox_comment|
       unless inbox_comment.feedback_comment.nil? ||
              inbox_comment.feedback_comment.is_deleted?
         inbox_comments_with_feedback_comment << inbox_comment
