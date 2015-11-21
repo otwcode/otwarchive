@@ -357,7 +357,7 @@ class Skin < ActiveRecord::Base
      return get_cached_style(roles_to_include)
    else
      block = ""
-     @stack=self.parent_skins
+     @stack = self.parent_skins
      block += get_style_block_single(roles_to_include)
      while ( @stack.size != 0 ) do
        current=@stack.pop
