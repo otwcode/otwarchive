@@ -52,9 +52,6 @@ GEM
       jquery-rails
       rails (~> 3.1)
     builder (3.0.4)
-    bullet (4.14.10)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
     capistrano (2.15.4)
       highline
       net-scp (>= 1.0.0)
@@ -345,7 +342,6 @@ GEM
       rack
       raindrops (~> 0.7)
     unidecoder (1.1.2)
-    uniform_notifier (1.9.0)
     uuidtools (2.1.4)
     valium (0.5.0)
       activerecord (>= 3.0.2)
@@ -380,7 +376,6 @@ DEPENDENCIES
   aws-sdk
   bcrypt
   best_in_place
-  bullet
   bundler
   capistrano-gitflow_version (>= 0.0.3)
   capybara
