@@ -188,6 +188,7 @@ class Skin < ActiveRecord::Base
     self.public = true
     self.official = true
     save!
+    Rails.cache.increment('skins_generation')
     css_to_cache = ""
     last_role = ""
     file_count = 1
@@ -214,6 +215,7 @@ class Skin < ActiveRecord::Base
     end
     self.cached = true
     save!
+    Rails.cache.increment('skins_generation')
   end
   
   def clear_cache!
@@ -221,6 +223,7 @@ class Skin < ActiveRecord::Base
     FileUtils.rm_rf skin_dir # clear out old if exists    
     self.cached = false
     save!
+    Rails.cache.increment('skins_generation')
   end
   
   def get_sheet_role
@@ -276,12 +279,14 @@ class Skin < ActiveRecord::Base
   
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    style = ""
-    if self.get_role != "override" && self.get_role != "site"
-      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.includes(:parent_skins).get_current_site_skin ? Skin.includes(:parent_skins).get_current_site_skin.get_style(roles_to_include) : '')
+    Rails.cache.fetch('Skins_html/v1/'+self.get_role+'/'+AdminSetting.default_skin.updated_at.to_s+'/'+Skin.default.updated_at.to_s+'/'+Skin.get_current_version+'/'+Rails.cache.fetch('skins_generation')) do 
+      style = ""
+      if self.get_role != "override" && self.get_role != "site"
+        style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.includes(:parent_skins).get_current_site_skin ? Skin.includes(:parent_skins).get_current_site_skin.get_style(roles_to_include) : '')
+      end
+      style += self.get_style_block(roles_to_include)
+      style.html_safe
     end
-    style += self.get_style_block(roles_to_include)
-    style.html_safe
   end
 
   def get_ie_comment(style, ie_condition = self.ie_condition)
@@ -433,6 +438,7 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
+          Rails.cache.increment('skins_generation')
 
           skins << skin
         end
@@ -449,9 +455,11 @@ class Skin < ActiveRecord::Base
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
+        Rails.cache.increment('skins_generation')
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
+          Rails.cache.increment('skins_generation')
         end
         if %w(staging production).include? Rails.env
           top_skin.cache!
@@ -505,6 +513,7 @@ class Skin < ActiveRecord::Base
     end
     skin.official = true
     skin.save!
+    Rails.cache.increment('skins_generation')
     skin
   end
   

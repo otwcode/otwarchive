@@ -3,6 +3,7 @@
 	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
+      <% cache('Skins_menu/v1/'.Rails.cache.fetch('skins_generation')) do %>
       <li class="module group">
         <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
         <ul class="menu">
@@ -17,6 +18,7 @@
           </li>
         </ul>
       </li>
+      <% end %>
     <% end %>
     <li class="module group">
       <h4 class="heading"><%= ts('About the Archive', key: 'footer') %></h4>
