@@ -398,7 +398,7 @@ class Work < ActiveRecord::Base
   end
 
   def recipients
-    names = self.gifts.collect(&:recipient)
+    names = self.gifts.includes(:pseud).collect(&:recipient)
     unless self.new_recipients.blank?
       self.new_recipients.split(",").each do |name|
         names << name unless names.include? name
