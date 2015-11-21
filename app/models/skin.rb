@@ -279,7 +279,7 @@ class Skin < ActiveRecord::Base
   
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    Rails.cache.fetch('Skins_html/v1/'+self.get_role+'/'+self.id.to_s+'/'+AdminSetting.default_skin.updated_at.to_s+'/'+Skin.default.updated_at.to_s+'/'+Skin.get_current_version+'/'+(Rails.cache.fetch('skins_generation') || '0')) do 
+    Rails.cache.fetch('skins_style_tags/v1/'+self.get_role+'/'+self.id.to_s+'/'+AdminSetting.default_skin.updated_at.to_s+'/'+Skin.default.updated_at.to_s+'/'+Skin.get_current_version+'/'+(Rails.cache.fetch('skins_generation') || '0')) do 
       style = ""
       if self.get_role != "override" && self.get_role != "site"
         style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.includes(:parent_skins).get_current_site_skin ? Skin.includes(:parent_skins).get_current_site_skin.get_style(roles_to_include) : '')
@@ -337,37 +337,36 @@ class Skin < ActiveRecord::Base
     style
   end
   
- def get_style_block_single(roles_to_include)
-   block = ""
-   if roles_to_include.include?(get_role)
-     if self.filename.present?
-       block += get_ie_comment(stylesheet_link(self.filename, get_media))
-     elsif self.css.present?
-       block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
-     elsif (wizard_block = get_wizard_settings).present?
-       block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+  def get_style_block_single(roles_to_include)
+    block = ""
+    if roles_to_include.include?(get_role)
+      if self.filename.present?
+        block += get_ie_comment(stylesheet_link(self.filename, get_media))
+      elsif self.css.present?
+        block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
+      elsif (wizard_block = get_wizard_settings).present?
+        block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+       end
+    end
+    return block
+  end
+
+  def get_style_block(roles_to_include)
+    if self.cached?
+      # cached skin in a directory
+      return get_cached_style(roles_to_include)
+    else
+      block = ""
+      @stack = self.parent_skins
+      block += get_style_block_single(roles_to_include)
+      while ( @stack.size != 0 ) do
+        current = @stack.pop
+        block = current.get_style_block_single(roles_to_include) + "\n" + block
+        @stack.concat current.parent_skins
       end
-   end
-   return block
- end
-
- def get_style_block(roles_to_include)
-   if self.cached?
-     # cached skin in a directory
-     return get_cached_style(roles_to_include)
-   else
-     block = ""
-     @stack = self.parent_skins
-     block += get_style_block_single(roles_to_include)
-     while ( @stack.size != 0 ) do
-       current=@stack.pop
-       block = current.get_style_block_single(roles_to_include) + "\n" + block
-       @stack.concat current.parent_skins
-     end
-     return block
-   end
- end
-
+      return block
+    end
+  end
 
   def get_cached_style(roles_to_include)
     block = ""
