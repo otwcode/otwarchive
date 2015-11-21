@@ -4,7 +4,7 @@
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) %>
       <% cache('Skins_menu/v1/'+(Rails.cache.fetch('skins_generation') || '0')) do %>
-        <% unless ( Skin.in_chooser.empty? ) %>
+        <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
               <ul class="menu">
@@ -13,7 +13,7 @@
                   <ul id="skin_chooser" class="expandable secondary">
                     <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
                     <% Skin.in_chooser.order(:title).each do |s| %>
-                  <li><%= link_to s.title, set_skin_path(s) %></li>
+                      <li><%= link_to s.title, set_skin_path(s) %></li>
                   <% end %>
                 </ul> 
               </li>
