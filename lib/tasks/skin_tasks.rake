@@ -168,9 +168,4 @@ namespace :skins do
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
 
-  desc "Debug skins1"
-  task(:debug1 => :environment) do
-    Skin.all.each{|skin| puts skin.id,skin.get_style_block(["user", "override", "site"]) }
-  end
-  
 end
