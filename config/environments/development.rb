@@ -29,4 +29,11 @@ Otwarchive::Application.configure do
   # Make it clear we are on Dev
   config.rack_dev_mark.enable = true
   config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', color: 'green' , fixed: 'true' )]
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.add_footer = true
+    Bullet.rails_logger = true
+  end
 end
