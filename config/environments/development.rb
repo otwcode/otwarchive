@@ -5,9 +5,6 @@ Otwarchive::Application.configure do
   # every request.  This slows down response time but is perfect for development
   # since you don't have to restart the webserver when you make code changes.
   config.cache_classes = false
-  config.action_controller.perform_caching = true
-  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
-                          { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
@@ -18,8 +15,6 @@ Otwarchive::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
