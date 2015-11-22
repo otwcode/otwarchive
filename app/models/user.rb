@@ -556,7 +556,7 @@ class User < ActiveRecord::Base
         REDIS_GENERAL.srem("last_login_list", username)
         user = User.find_by_login(username)
         if username && login_time.present? && user
-          user.last_sign_in_at = login_time
+          user.last_login_at = login_time
           REDIS_GENERAL.del("last_login_#{username}")
         end
         if username && active_time.present? && user

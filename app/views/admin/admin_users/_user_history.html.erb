@@ -26,10 +26,10 @@
       </tr>
       <tr>
         <td>
-          <% if @user.last_sign_in_at.nil? %>
+          <% if @user.last_login_at.nil? %>
             <%= ts('No logins recorded') %>
           <% else %>
-            <%= @user.last_sign_in_at %> (<abbr class="timeago" title="<%= @user.last_sign_in_at %>"><%= @user.last_sign_in_at.iso8601 %></abbr>) 
+            <%= @user.last_login_at %> (<abbr class="timeago" title="<%= @user.last_login_at %>"><%= @user.last_login_at.iso8601 %></abbr>) 
           <% end %>
         </td>
         <td><%= ts('Last Login') %></td>
