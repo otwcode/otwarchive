@@ -121,7 +121,7 @@ class WorksController < ApplicationController
 
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.includes(:tags).list_without_filters(@owner, options)
+        @works = Work.includes(:tags,:external_creatorships,:series,:language,:approved_collections,pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
