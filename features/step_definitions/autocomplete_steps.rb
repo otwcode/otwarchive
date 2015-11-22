@@ -220,3 +220,13 @@ Then /^the tag autocomplete fields should have the entered values$/ do
     step %{I should see "Lex Luthor" in the autocomplete}
     step %{I should see "Dean Winchester" in the autocomplete}
 end
+
+Then(/^the pseud autocomplete should contain "([^\"]*)"$/) do |pseud|
+  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) }
+  assert results.include?(pseud)
+end
+
+Then(/^the pseud autocomplete should not contain "([^\"]*)"$/) do |pseud|
+  results = Pseud.autocomplete_lookup(search_param: pseud, autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) }
+  assert !results.include?(pseud)
+end
