@@ -108,17 +108,11 @@ describe Work do
       let(:work_author) {@skin_author}
       let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "can be used by the work skin author" do
-        puts work_author.login
-        puts work_author.pseuds.first.name
         expect(work.save).to be_truthy
       end
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
       xit "cannot be used by another user" do
-        puts @skin_author.login
-        puts @skin_author.pseuds.first.name
-        puts @second_author.login
-        puts @second_author.pseuds.first.name
         expect(work.save).to be_falsey
          expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
       end
@@ -164,5 +158,36 @@ describe Work do
 
   end
 
+  describe "#find_by_url" do
+    it "should find imported works with various URL formats" do
+      [
+        'http://foo.com/bar.html',
+        'http://foo.com/bar',
+        'http://lj-site.com/bar/foo?color=blue',
+        'http://www.foo.com/bar'
+      ].each do |url|
+        work = create(:work, imported_from_url: url)
+        expect(Work.find_by_url(url)).to eq(work)
+        work.destroy
+      end
+    end
 
+    it "should not mix up imported works with similar URLs or significant query parameters" do
+      {
+        'http://foo.com/12345' => 'http://foo.com/123',
+        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
+        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
+      }.each do |import_url, find_url|
+        work = create(:work, imported_from_url: import_url)
+        expect(Work.find_by_url(find_url)).to_not eq(work)
+        work.destroy
+      end
+    end
+
+    it "should find works imported with irrelevant query parameters" do
+      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
+      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
+      work.destroy
+    end
+  end
 end

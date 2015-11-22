@@ -67,8 +67,9 @@ namespace :deploy do
   task :restart  do
     find_servers(:roles => :app).each do |server|
       puts "restart on #{server.host}"
+      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , :hosts => server.host
       run "/home/ao3app/bin/unicorns_reload", :hosts => server.host
-      sleep(60)
+      sleep(90)
     end
   end
 
@@ -81,7 +82,6 @@ namespace :deploy do
   task :restart_schedulers, :roles => :schedulers do
     run "/home/ao3app/bin/scheduler_reload"
   end
-
 
   desc "Get the config files"
   task :update_configs, :roles => [ :app , :web ] do
@@ -102,9 +102,13 @@ namespace :deploy do
   end
 
   # Needs to run on web (front-end) servers, but they must also have rails installed
-  desc "Re-caches the site skins and puts the new versions into the static files area"
-  task :reload_site_skins, :roles => :web do
-    run "cd ~/app/current ; bundle exec rake skins:load_site_skins RAILS_ENV=#{rails_env}"
+  desc "Re-caches the site skins"
+  task :reload_site_skins do
+    find_servers(:roles => :web).each do |server|
+      puts "Caching skins on #{server.host}"
+      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; ln -s `readlink -f current` web", :hosts => server.host
+      sleep (10)
+    end
   end
 end
 
