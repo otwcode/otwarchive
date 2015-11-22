@@ -40,7 +40,7 @@
           <% if @user.last_active_at.nil? %>
             <%= ts('No activity recorded') %>
           <% else %>
-            <%= @user.last_active_at %> (<abbr class="timeago" title="<%= @user.last_active_at =%>"><%= @user.last_active_at.iso8601 %></abbr>) 
+            <%= @user.last_active_at %> (<abbr class="timeago" title="<%= @user.last_active_at %>"><%= @user.last_active_at.iso8601 %></abbr>) 
           <% end %>
         </td>
         <td><%= ts('Last Activity') %></td>
