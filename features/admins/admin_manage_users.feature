@@ -271,6 +271,7 @@ Feature: Admin Actions to manage users
     And the work "Loads of Spam" should be deleted
     And the work "Even More Spam" should be deleted
     And the work "Spam 3: Tokyo Drift" should be deleted
+    And "Spamster" should receive 3 emails
     And the collection "Spam Collection" should be deleted
     And the series "One Spam After Another" should be deleted
     And the work "Not Spam" should not be deleted
