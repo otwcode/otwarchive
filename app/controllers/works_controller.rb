@@ -134,7 +134,7 @@ class WorksController < ApplicationController
           subtag = (@tag.present? && @tag != @owner) ? @tag : nil
           user = current_user.present? ? "logged_in" : "logged_out"
           @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}", expires_in: 20.minutes) do
-            results = @search.search_results.includes(:tags,:external_creatorships,:series,:language,:approved_collections:pseuds: [:user])
+            results = @search.search_results.includes(:tags,:external_creatorships,:series,:language,:approved_collections,pseuds: [:user])
             # calling this here to avoid frozen object errors
             results.items
             results.facets
