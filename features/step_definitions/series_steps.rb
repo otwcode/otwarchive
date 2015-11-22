@@ -60,3 +60,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     click_button("Post Without Preview")
   end
 end
+
+Then /^the series "(.*)" should be deleted/ do |series|
+  assert Series.where(title: series).first.nil?
+end
