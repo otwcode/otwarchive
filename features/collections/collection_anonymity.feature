@@ -4,6 +4,7 @@ Feature: Collection
   As a humble user
   I want to create a collection with anonymity and hidden-until-reveal works
 
+  @disable_caching
   Scenario: Create a hidden collection, add new and existing works to it, reveal works
 
   Given basic tags
@@ -15,8 +16,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -156,15 +157,16 @@ Feature: Collection
   Then I should see "List of Bookmarks"
     And I should not see "Mystery Work"
     And I should see "Another Snippet"
-  
+
+  @disable_caching
   Scenario: Create an anonymous collection, add new and existing works to it, reveal authors
   
   Given basic tags
     And I am logged in as "second_user"
   When I go to the collections page
     And I follow "New Collection"
-    And I fill in "Display Title" with "Anonymous Hugs"
-    And I fill in "Collection Name" with "anonyhugs"
+    And I fill in "Display title" with "Anonymous Hugs"
+    And I fill in "Collection name" with "anonyhugs"
     And I check "This collection is anonymous"
     And I submit
   Then I should see "Collection was successfully created"
@@ -261,7 +263,7 @@ Feature: Collection
   # check the series
   When I follow "Another Snippet"
     And I follow "New series"
-    And "Issue 1253" is fixed
+    And "AO3-1250" is fixed
   Then I should see "Anonymous"
     # And I should not see "first_user"
   
@@ -318,8 +320,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
+    And I fill in "Display title" with "Hidden Treasury"
+    And I fill in "Collection name" with "hidden_treasury"
     And I check "This collection is unrevealed"
     And I submit
   Then I should see "Collection was successfully created"
@@ -383,7 +385,7 @@ Feature: Collection
   When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
     And I submit
   # Issue 2243: emails don't get sent for individual reveals
-  When "Issue 2243" is fixed
+  When "AO3-2240" is fixed
     #Then 1 email should be delivered
     
   # first fic now visible, second still not
@@ -409,5 +411,15 @@ Feature: Collection
       And I fill in "pseud_byline" with "Amos"
       And I press "Post Without Preview"
       And I follow "Entire Work"
-    Then I should not see "Jessica" within "div.preface"
-      And I should not see "Amos" within "div.preface"
+    Then I should see "Anonymous" within "div.preface"
+      And I should see "Jessica" within "div.preface"
+      And I should see "Amos" within "div.preface"
+
+  Scenario: An admin can see the creator's name on an anonymous work
+    Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
+      And I am logged in as "actualname"
+      And I post the work "Troll Work"
+      And I add my work to the collection
+    When I am logged in as an admin
+      And I view the work "Troll Work"
+    Then I should see "actualname"

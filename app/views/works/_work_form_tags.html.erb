@@ -9,9 +9,14 @@
       <%= link_to_help "rating-help" %>
     </dt>
     <dd class="rating required">
-      <select id="work_rating_string" name="work[rating_string]">
-        <%= options_for_select((include_blank ? [""] : []) +  [ArchiveConfig.RATING_DEFAULT_TAG_NAME, ArchiveConfig.RATING_GENERAL_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_EXPLICIT_TAG_NAME], :selected => include_blank ? nil : rating_selected(@work) ) %>
-      </select>
+      <%= collection_select :work,
+                            :rating_string,
+                            Rating.defaults_by_severity,
+                            :name,
+                            :name, 
+                            include_blank: include_blank, 
+                            selected: include_blank ? nil :   
+                                      rating_selected(@work) %>
     </dd>
 
     <dt class="warning required">

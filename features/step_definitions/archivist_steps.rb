@@ -21,7 +21,7 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
     step(%{I press "Update"})
 end
 
-When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url,external_author_name,external_author_email|
+When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
   step(%{I fill in "urls" with "#{url}"})

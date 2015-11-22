@@ -103,5 +103,61 @@ end
 
 When /^I delete the comment$/ do
   step %{I follow "Delete" within ".odd"}
-    step %{I follow "Yes, delete!"}
+  step %{I follow "Yes, delete!"}
+end
+
+Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
+  step %{I am logged in as "#{user}"}
+  step %{I set up the draft "#{work}"}
+  check("work_moderated_commenting_enabled")
+  step %{I post the work without preview}
+end
+
+Then /^comment moderation should be enabled on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  assert w.moderated_commenting_enabled?
+end
+
+Then /^comment moderation should not be enabled on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.moderated_commenting_enabled?
+end
+
+Then /^the comment on "([^\"]*?)" should be marked as unreviewed/ do |work|
+  w = Work.find_by_title(work)
+  assert w.comments.first.unreviewed?
+end
+
+Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
+  w = Work.find_by_title(work)
+  assert !w.comments.first.unreviewed?
+end
+
+When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  visit unreviewed_work_comments_path(w)
+end
+
+When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  visit comment_path(w.comments.first)
+end
+
+Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
+  w = Work.find_by_title(work)
+  assert w.find_all_comments.count == num.to_i
+end
+
+Given /^the moderated work "([^\"]*)" by "([^\"]*)" with the approved comment "([^\"]*)" by "([^\"]*)"/ do |work, author, comment, commenter|
+  step %{the moderated work "#{work}" by "#{author}"}
+  step %{I am logged in as "#{commenter}"}
+  step %{I post the comment "#{comment}" on the work "#{work}"}
+  step %{I am logged in as "#{author}"}
+  step %{I view the unreviewed comments page for "#{work}"}
+  step %{I press "Approve"}
+end
+
+When /^I reload the comments on "([^\"]*?)"/ do |work|
+  w = Work.find_by_title(work)
+  w.find_all_comments.each { |c| c.reload }
 end

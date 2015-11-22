@@ -93,6 +93,8 @@ module NavigationHelpers
     when /my works page/
       Work.tire.index.refresh
       user_works_path(User.current_user)
+    when /my edit multiple works page/
+      show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)   
     when /my stats page/
@@ -177,6 +179,10 @@ module NavigationHelpers
       edit_tag_set_path(OwnedTagSet.find_by_title($1))    
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by_title($1))
+    when /^the manage users page$/
+      admin_users_path
+    when /^the abuse administration page for "(.*)"$/i
+      admin_user_path(User.find_by_login($1))
       
     # Here is an example that pulls values out of the Regexp:
     #

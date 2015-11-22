@@ -156,3 +156,8 @@ input, select, option, textarea, legend, label, .actions a {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2000000,endColorstr=#B2000000)";
 }
 
+/* splash page */
+
+.logged-in .splash .odd {
+  clear: left;
+}

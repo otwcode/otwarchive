@@ -18,61 +18,193 @@ SUBSECTIONS:
 
 /*1. ZONE: SYSTEM: SPLASH PAGE*/
 
-.splash .intro {
-  background: #ededed;
-  font: 1.571em Georgia, serif;
-  float: left;
-  max-width: 68%;
-  margin: 1em auto 1.5em 1%;
+.splash {
+  margin: auto;
+  max-width: 78em;
   overflow: hidden;
-    border-radius: 1em;
-    box-shadow: 1px 1px 3px #bbb;
-    background-image: -moz-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
-    background-image: -webkit-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
-    background-image: -o-linear-gradient(-45deg, #ededed 0%, #f6f6f6 100%);
-    background-image: linear-gradient(135deg, #ededed 0%, #f6f6f6 100%);
-
 }
 
-.splash .intro a, .splash .intro h2, .splash .intro em {
-  font-style: oblique;
-  font-weight: 700;
+.splash .module h3 {
+  border-bottom: 1px solid #c8c8c8;
+  color: #900;
+  font-size: 1.714em;
+}
+
+.splash span.link {
+  float: right;
+}
+
+.splash .link a {
+  font-size: 0.583em;
+}
+
+.splash .browse, .splash div.news {
+  width: 36%;
+}
+
+.splash .intro, .splash .tweets {
+  float: right;
+  width: 60%;
+}
+
+.splash .browse ul, .splash .browse li {
+  float: left;
+  width: 100%;
+    box-sizing: border-box;
+}
+
+.splash .browse li a, .splash .favorite a {
+  border-bottom: none;
+  display: block;
+}
+
+/* module: browse */
+
+.splash .browse li {
+  margin: 0.375em 0;
+  padding: 0.375em 0;
+  width: 50%;
+}
+
+.splash .browse li a:before {
+  color: #900;
+  content: "\00BB";
+  padding: 0 0.25em 0 0;
+}
+
+.splash .browse li:nth-of-type(1), .splash .browse li:nth-of-type(2) {
+  margin-top: 0;
+}
+
+.splash .browse li:nth-of-type(odd) {
+  padding-right: 0.375em;
+}
+
+/* module: favorite tags */
+
+.splash .favorite li {
+  margin: 0;
+}
+
+.splash .favorite a {
+  padding: 0.25em 0.375em;
+}
+
+.splash .favorite li:nth-of-type(odd) a {
+  background: #eee;
+}
+
+.splash .favorite li:nth-of-type(odd) a:hover, .splash .favorite li:nth-of-type(odd) a:focus {
+  background: #900;
+}
+
+/* module: intro */
+
+.splash .intro {
+  padding: 1em 0 2em;
 }
 
 .splash .intro h2 {
-  display: block;
-  font-size: 1.45em;
-  line-height: 1.75;
-  text-align: center;
-    text-shadow: none;
+  font-size: 2em;
+  line-height: 1.375;
 }
 
-.splash .intro p {
-  padding: 0 0.75em;
+.splash .intro .stats, .splash .parent {
+  text-align: center;
 }
 
 .splash .count {
   font-weight: 700;
 }
 
-.splash #signup {
-  width: 100%;
-    text-shadow: -1px -2px 3px #fff;
+.splash .module div.account {
+  background: #eaeaea;
+  border: 1px solid #ccc;
+    border-radius: 0.5em;
+    box-sizing: border-box;
 }
 
-.splash .module h3  {
-  color: #900;
-  border-bottom: 1px solid #c8c8c8;
-  font-size: 1.75em;
-  font-weight: 700;
+.splash .account .heading {
+  margin: 1em;
 }
 
-.splash .latest {
+.splash .account p {
+  margin-left: 1em;
+  margin-right: 1em; 
+}
+
+.splash .account ul {
+  margin-left: 4em;
+  margin-right: 1em;
+}
+
+.splash .account li {
+  list-style-type: disc;
+}
+
+.splash .account .actions {
+  float: none;
+  font-size: 1.143em;
+}
+
+/* module: news */
+
+.splash .news li {
+  border-bottom: 1px solid #eee;
+}
+
+.splash .news li:last-of-type {
+  border-bottom: none;
+}
+
+.splash .news .meta {
+  font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
+}
+
+.splash .jump {
+  text-align: right; 
+}
+
+.splash .placeholder {
+  font-style: italic;
+}
+
+/* module: marked for later */
+
+.splash .blurb blockquote {
+  margin: 0.643em auto;
+}
+
+/* module: unread messages */
+
+.splash .comment .userstuff {
+  margin: 1em;
+}
+
+/* module: twitter */
+
+.tweets iframe {
+  width: 100% !important;
+}
+
+/* mod: logged-in */
+
+.logged-in .splash .module {
   float: left;
-  margin: 1.571em 1% 1.571em 5%;
-  width: 25%;
+  margin: 0 1% 1.571em 1%;
+  width: 48%;
 }
 
+.logged-in .splash > div:nth-of-type(odd) {
+  clear: left;
+}
+
+/* misc */
+
+.splash .module .module, .splash .dynamic {
+  margin: 0;
+  width: 100%;
+}
 
 /* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
 

@@ -245,6 +245,14 @@ class Pseud < ActiveRecord::Base
     (name != user_name) ? name + " (" + user_name + ")" : name
   end
 
+  # get the former byline
+  def byline_was
+    past_name = name_was.blank? ? name : name_was
+    # if we have a user and their login has changed get the old one
+    past_user_name = user.blank? ? "" : (user.login_was.blank? ? user.login : user.login_was)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
   # Parse a string of the "pseud.name (user.login)" format into a pseud
   def self.parse_byline(byline, options = {})
     pseud_name = ""
@@ -272,6 +280,11 @@ class Pseud < ActiveRecord::Base
     bylines = list.split ","
     for byline in bylines
       pseuds = Pseud.parse_byline(byline, options)
+      banned_pseuds = pseuds.select { |pseud| pseud.user.banned? || pseud.user.suspended? }
+      if banned_pseuds.present?
+        pseuds = pseuds - banned_pseuds
+        banned_pseuds = banned_pseuds.map(&:byline)
+      end
       if pseuds.length == 1
         valid_pseuds << pseuds.first
       elsif pseuds.length > 1
@@ -280,7 +293,12 @@ class Pseud < ActiveRecord::Base
         failures << byline.strip
       end
     end
-    {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}
+    {
+      pseuds: valid_pseuds, 
+      ambiguous_pseuds: ambiguous_pseuds, 
+      invalid_pseuds: failures,
+      banned_pseuds: banned_pseuds
+    }
   end
   
   ## AUTOCOMPLETE
@@ -292,6 +310,10 @@ class Pseud < ActiveRecord::Base
 
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
+  end
+
+  def autocomplete_value_was
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
 
   ## END AUTOCOMPLETE

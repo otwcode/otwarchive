@@ -1,5 +1,44 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
-en:
-  hello: "Hello world"
+en: 
+  mailer: 
+    kudos:
+      guest: a guest
+      guests: guests
+      you_have: "[%{app_name}] You've got kudos!"
+      html:
+        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+      text:
+        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
+    general: 
+      footer: 
+        general: 
+          html: |-
+              <p>
+               If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
+              </p>
+              
+              <p>
+               The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
+              </p>
+          text: |-
+              If you've received this message in error, please contact Support at %{support_url}.
+              
+              The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.
+        sent_at: "Sent at %{sent_at}."
+        sent_by: 
+          html: "Sent by <b>%{sent_by}</b>."
+          text: "Sent by %{sent_by}."
+  user_mailer:
+    invite_increase_notification:
+      subject: "[%{app_name}] New Invitations"
+      html:  "<p> Hi %{login}! </p>\n\
+          <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>\n\
+          <p> Cheers, <br> %{archive_name} </p>"
+      txt: |-
+          Hi %{login}
+          We just wanted to let you know that you have %{total} new invitation(s),
+          which can be used to create new accounts at the archive. You can invite a
+          friend at %{invitation_page}.
+          Cheers, 
+          %{archive_name}

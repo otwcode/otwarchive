@@ -34,13 +34,13 @@
     <%= render 'layouts/phraseapp' %>
   </head>
 
-  <body>
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>">
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
       <%= render :partial => 'layouts/header' %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->
-        <% if @admin_posts %>
+        <% if @admin_posts && !@hide_dashboard %>
           <%= render :partial => 'admin_posts/sidebar' %>
         <% elsif @user && !@hide_dashboard %>
           <%= render :partial => 'users/sidebar' %>
@@ -54,7 +54,8 @@
         <!-- BEGIN main -->
         <div id="main" class="<%= classes_for_main %> region" role="main">
           <%= flash_div :error, :caution, :notice %>
-          <%= yield  %>
+          <div class="flash"></div>
+          <%= yield %>
           <div class="clear"><!--presentational--></div>
         </div>
         <!-- END main -->

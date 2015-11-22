@@ -40,7 +40,13 @@ module ChallengeCore
     try = self.time_zone.gsub('&amp;', '&')
     self.time_zone = try if ActiveSupport::TimeZone[try]
   end
-  
+
+  # When Challenges are deleted, there are two references left behind that need to be reset to nil
+  def clear_challenge_references
+    collection.challenge_id = nil
+    collection.challenge_type = nil
+    collection.save!
+  end
   
   # a couple of handy shorthand methods
   def required(type)

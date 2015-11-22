@@ -166,6 +166,7 @@ Feature: creating and editing skins
   When I select "public skin" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
+  When I am on skinuser's preferences page
     And "public skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -236,6 +237,7 @@ Feature: creating and editing skins
 
   Scenario: Users should be able to create and use a work skin
   Given I am logged in as "skinner"
+    And the default ratings exist
   When I am on skin's new page
     And I select "Work Skin" from "skin_type"
     And I fill in "Title" with "Awesome Work Skin"

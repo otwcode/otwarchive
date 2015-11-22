@@ -2,7 +2,7 @@
 <div class="header module">
 
   <h4 class="heading">
-    <% # so bookmarks go to the external work's page and not directly to the external link %>
+    <% # so bookmarks go to the external work page, not directly to the external link %>
     <% if external_work ||= @bookmarkable %>
       <%= link_to bookmarkable.title, bookmarkable %>
     <% else %>
@@ -12,13 +12,16 @@
     <%= byline(external_work) %>
   </h4>
 
-  <h5 class="heading">
+  <h5 class="fandoms heading">
     <span class="landmark"><%= ts('Fandom') %>:</span>
-    <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
-    &nbsp;
+    <%= external_work.fandom_tags.collect{ |tag| link_to_tag_works(tag) }.
+                                  join(', ').html_safe %>
   </h5>
-    
-  <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
+
+  <p class="notice">
+    <%= ts("This work isn't hosted on the Archive so this blurb might not be complete 
+           or accurate.") %>
+  </p>
 
   <%= get_symbols_for(external_work) %>
   <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
@@ -30,7 +33,7 @@
   <%= blurb_tag_block(external_work) %>
 </ul>
 
-<!--summary-->	
+<!--summary-->
 <% unless external_work.summary.blank? %>
   <h6 class="landmark heading"><%= ts("Summary") %></h6>
   <blockquote class="userstuff summary">
@@ -45,15 +48,8 @@
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
   <% end %>
 
-  <% if external_work.related_works.count > 0 %>	
+  <% if external_work.related_works.count > 0 %>
     <dt><%= ts("Related Works:") %></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work %></dd>
   <% end %>
 </dl>
-
-<% if logged_in_as_admin? %>
-  <h6 class="landmark heading"><%= ts("Admin Actions") %></h6>
-  <ul class="actions" role="navigation">
-    <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
-  </ul>
-<% end %>

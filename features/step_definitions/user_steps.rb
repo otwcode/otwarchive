@@ -90,6 +90,19 @@ Given /^I am logged in as a banned user$/ do
   assert UserSession.find
 end
 
+Given /^user "([^\"]*)" is banned$/ do |login|
+  user = User.where(login: login).first
+  if user.nil?
+    user = FactoryGirl.create(
+      :user,
+      { login: login, password: DEFAULT_PASSWORD }
+    )
+    user.activate
+  end
+  user.banned = true
+  user.save
+end
+
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find
@@ -243,6 +256,15 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
   step %{I should not see "#{title}"}
 end
 
+When /^I change my username to "([^\"]*)"/ do |new_name|
+  visit change_username_user_path(User.current_user)
+  fill_in("New user name", with: new_name)
+  fill_in("Password", with: "password")
+  click_button("Change User Name")
+  step %{I should get confirmation that I changed my username}
+end
+
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
+ 

@@ -1,5 +1,3 @@
-require 'iconv'
-
 class Work < ActiveRecord::Base
 
   include Taggable
@@ -276,43 +274,24 @@ class Work < ActiveRecord::Base
     Resque.enqueue(Work, id, method, *args)
   end
 
-  # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
-
-  ########################################################################
-  # ERRORS
-  ########################################################################
-  # class Error < DuplicateError; end
-  # class Error < DraftSaveError; end
-  # class Error < PostingError; end
-
-
   ########################################################################
   # IMPORTING
   ########################################################################
-  # def self.import_from_url(url)
-  #   storyparser = StoryParser.new
-  #   if Work.find_by_imported_from_url(url)
-  #     raise DuplicateWorkError(t('already_imported', :default => "Work already imported from this url."))
-  #
-  #   work = storyparser.download_and_parse_story(url)
-  #   work.imported_from_url = url
-  #   work.expected_number_of_chapters = work.chapters.length
-  #   work.pseuds << current_user.default_pseud unless work.pseuds.include?(current_user.default_pseud)
-  #   chapters_saved = 0
-  #   work.chapters.each do |uploaded_chapter|
-  #     uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
-  #     uploaded_chapter.posted = true
-  #     chapters_saved += uploaded_chapter.save ? 1 : 0
-  #   end
-  #
-  #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length
-  # end
-  
+
+  # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
+  # 1. first exact match
+  # 2. first exact match with variants of the provided url
+  # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
   def self.find_by_url(url)
     url = UrlFormatter.new(url)
     Work.where(:imported_from_url => url.original).first ||
       Work.where(:imported_from_url => [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ? OR imported_from_url LIKE ?", "%#{url.encoded}%", "%#{url.decoded}%").first
+      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+        work_url = UrlFormatter.new(w.imported_from_url)
+        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+          work_url.send(method) == url.send(method)
+        }
+      }.first
   end
 
   ########################################################################
@@ -334,6 +313,14 @@ class Work < ActiveRecord::Base
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
+      if results[:banned_pseuds].present?
+        self.errors.add(
+          :base, 
+          ts("%{name} is currently banned and cannot be listed as a co-creator.",
+             name: results[:banned_pseuds].to_sentence
+          )
+        )
+      end
     end
     self.authors.flatten!
     self.authors.uniq!
@@ -731,25 +718,28 @@ class Work < ActiveRecord::Base
 
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = string.to_ascii 
     string.gsub(/[^[\w _-]]+/, '')
   end
+
   def display_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
+    string.to_ascii
   end
+
   # need the next two to be filesystem safe and not overly long
   def download_authors
     string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = string.to_ascii.gsub(/[^[\w _-]]+/, '')
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_title
-    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
-    string = string.gsub(/[^[\w _-]]+/, '')
+    string = title.to_ascii.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/ +/, " ").strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
+
   def download_basename
     "#{self.download_dir}/#{self.download_title}"
   end
@@ -911,7 +901,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for parent work, via related_works
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
-      if attributes[:url].include?(ArchiveConfig.APP_URL)
+      if attributes[:url].include?(ArchiveConfig.APP_HOST)
         if attributes[:url].match(/\/works\/(\d+)/)
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
@@ -1006,6 +996,7 @@ class Work < ActiveRecord::Base
   scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
   scope :posted, where(:posted => true)
   scope :unposted, where(:posted => false)
+  scope :not_spam, where(spam: false)
   scope :restricted , where(:restricted => true)
   scope :unrestricted, where(:restricted => false)
   scope :hidden, where(:hidden_by_admin => true)
@@ -1221,6 +1212,32 @@ class Work < ActiveRecord::Base
     self.title_to_sort_on <=> another_work.title_to_sort_on
   end
 
+  ########################################################################
+  # SPAM CHECKING
+  ########################################################################
+
+  def spam_checked?
+    spam_checked_at.present?
+  end
+
+  def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
+    content = chapters_in_order.map { |c| c.content }.join
+    user = users.first
+    self.spam = Akismetor.spam?(
+      comment_type: 'Fan Fiction',
+      key: ArchiveConfig.AKISMET_KEY,
+      blog: ArchiveConfig.AKISMET_NAME,
+      user_ip: ip_address,
+      comment_date_gmt: created_at.to_time.iso8601,
+      blog_lang: language.short,
+      comment_author: user.login,
+      comment_author_email: user.email,
+      comment_content: content
+    )
+    self.spam_checked_at = Time.now
+    save
+  end
 
   #############################################################################
   #
@@ -1237,8 +1254,10 @@ class Work < ActiveRecord::Base
   end
 
   def to_indexed_json
-    to_json(methods:
-      [ :rating_ids,
+    to_json(
+      except: [:spam, :spam_checked_at, :moderated_commenting_enabled],
+      methods: [
+        :rating_ids,
         :warning_ids,
         :category_ids,
         :fandom_ids,

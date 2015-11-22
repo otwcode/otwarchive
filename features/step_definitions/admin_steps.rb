@@ -58,7 +58,12 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  german = Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  de = Locale.new
+  de.iso = 'de'
+  de.name = 'Deutsch'
+  de.language_id = german.id
+  de.save!
 end
 
 Given /^advanced languages$/ do
@@ -116,6 +121,41 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
+  step %{the user "#{kin}" exists and is activated}
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  fill_in("Fannish next of kin's username", with: "#{kin}")
+  fill_in("Fannish next of kin's email", with: "testing@foo.com")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is suspended$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_suspend")
+  fill_in("suspend_days", with: 30)
+  fill_in("Notes", with: "Why they are suspended")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is banned$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_ban")
+  fill_in("Notes", with: "Why they are banned")
+  click_button("Update")
+end
+
+Given /^I have posted an admin post without paragraphs$/ do
+  step("I am logged in as an admin")
+  step("I make an admin post without paragraphs")
+  step("I am logged out as an admin")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -129,6 +169,13 @@ When /^I make an admin post$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
+  click_button("Post")
+end
+
+When /^I make an admin post without paragraphs$/ do
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
   click_button("Post")
 end
 

@@ -36,8 +36,8 @@ Feature: User Authentication
     And I should see "Change My Password"
 
     # and I should be able to change the password
-    When I fill in "New Password" with "newpass"
-    And I fill in "Confirm New Password" with "newpass"
+    When I fill in "New password" with "newpass"
+    And I fill in "Confirm new password" with "newpass"
     And I press "Change Password"
     Then I should see "Your password has been changed"
 
@@ -66,7 +66,7 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
   Scenario: invalid user
-    Given I have loaded the "users" fixture
+    Given I have loaded the fixtures
     When I am on the home page
     And I follow "Forgot password?"
     When I fill in "reset_password_for" with "testuser"
@@ -82,8 +82,8 @@ Feature: User Authentication
     And I should see "Change My Password"
 
     # and I should be able to change the password
-    When I fill in "New Password" with "newpas"
-    And I fill in "Confirm New Password" with "newpas"
+    When I fill in "New password" with "newpas"
+    And I fill in "Confirm new password" with "newpas"
     And I press "Change Password"
     Then I should see "Your password has been changed"
 

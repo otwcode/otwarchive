@@ -3,7 +3,7 @@ class CollectionsController < ApplicationController
   before_filter :users_only, :only => [:new, :edit, :create, :update]
   before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy, :confirm_delete]
-
+  before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   cache_sweeper :collection_sweeper
 
   def load_collection_from_id

@@ -3,7 +3,7 @@
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Fanfiction.net does not allow imports from their site.") %>
+    <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
   <p>
     <%= ts("If you have trouble importing from another site, ") %> 
@@ -31,22 +31,24 @@
 <!--/subnav-->
 
 <!-- This partial renders a form for importing a work from an existing URL -->
-  
+
 <%= form_tag url_for(:controller => :works, :action => :import), :class => "import work post" do %>
   <fieldset>
     <legend><%= ts("Works URLs") %></legend>
     <dl>
       <dt class="required"><%= label_tag "urls", ts("URLs") + "*" %></dt>
-      <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
-  	    <p class="footnote"><%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong></p>
+      <dd class="required"><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", rows: 20, cols: 90, "aria-describedby" => "url-field-description" %>
+        <p class="footnote" id="url-field-description">
+          <%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong>
+        </p>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
       <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
       <dt><%= ts("Import as") %></dt>
       <dd>
         <ul>
-      	  <li>
-      	    <%= radio_button_tag "import_multiple", "works", true %>
+          <li>
+            <%= radio_button_tag "import_multiple", "works", true %>
             <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
           </li>
           <li>
@@ -73,9 +75,9 @@
           </fieldset>
         </dd>
       <% end %>
-    
+
       <dt><%= ts("Preferences") %></dt>
-	    <dd>
+      <dd>
         <ul>
           <li>
             <%= check_box_tag "post_without_preview" %>
@@ -103,7 +105,7 @@
   <fieldset>
     <legend><%= ts("Submit") %></legend>
     <p class="submit actions">
-    <%= submit_tag ts("Import") %>
+      <%= submit_tag ts("Import") %>
     </p>
   </fieldset>
 

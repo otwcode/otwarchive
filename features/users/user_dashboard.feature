@@ -67,6 +67,7 @@ Feature: User dashboard
     And I should not see "Stargatte SG-oops" within "#user-fandoms"
     And I should see "Stargatte SG-oops"
 
+  @disable_caching
   Scenario: When a user has more works, series, or bookmarks than the maximum displayed on dashboards (5), the "Recent" listbox for that type of item should contain a link to that user's page for that type of item (e.g. Works (6), Bookmarks (10)). The link should go to the user's works, series, or bookmarks page. That link should not exist for any pseuds belonging to that user until the pseud has 5 or more works/series/bookmarks, and then the pseud's link should go to the works/series/bookmarks page for that pseud.
   
   Given I am logged in as "meatloaf" with password "parad1s3"

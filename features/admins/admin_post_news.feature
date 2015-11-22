@@ -114,35 +114,6 @@ Feature: Admin Actions to Post News
       And I should see "toaster" within "div.admin.home"
       And I should see "futurama" within ".tags"
 
-  Scenario: Check AdminPost links on home page with only 3 total posts
-    Given I have no users
-      And the following admin exists
-        | login      | password |
-        | Scott      | secret   |
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Scott"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    When there are 3 Admin Posts
-      And I go to the home page
-    Then I should see "Amazing News"
-      And I should not see "More news"
-
-  Scenario: Check AdminPost links on home page with 4 total posts
-    Given I have no users
-    And the following admin exists
-      | login      | password |
-      | Scott      | secret   |
-
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Scott"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    When there are 4 Admin Posts
-      And I go to the home page
-    Then I should see "More news"
-      And I should see "Amazing News"
-
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
     Given I am logged in as an admin
     When I follow "Admin Posts"
@@ -162,3 +133,45 @@ Feature: Admin Actions to Post News
       And I go to the admin-posts page
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
+      
+  Scenario: Admin post should be shown on the homepage
+    Given I have posted an admin post
+    When I am on the homepage
+    Then I should see "News"
+      And I should see "All News"
+      And I should see "Default Admin Post"
+      And I should see "Published:"
+      And I should see "Comments:"
+      And I should see "Content of the admin post."
+      And I should see "Read more..."
+    When I follow "Read more..."
+    Then I should see "Default Admin Post"
+      And I should see "Content of the admin post."
+
+  Scenario: Admin posts without paragraphs should have placeholder preview text on the homepage
+    Given I have posted an admin post without paragraphs
+    When I am on the homepage
+    Then I should see "Admin Post Without Paragraphs"
+      And I should see "No preview is available for this news post."
+
+  Scenario: Edits to an admin post should appear on the homepage
+    Given I have posted an admin post without paragraphs
+      And I am logged in as an admin
+    When I go to the admin-posts page
+      And I follow "Edit"
+      And I fill in "admin_post_title" with "Edited Post"
+      And I fill in "content" with "<p>Look! A preview!</p>"
+      And I press "Post"
+    When I am on the homepage
+    Then I should see "Edited Post"
+      And I should see "Look! A preview!"
+      And I should not see "Admin Post Without Paragraphs"
+      And I should not see "No preview is available for this news post."
+
+  Scenario: A deleted admin post should be removed from the homepage
+    Given I have posted an admin post
+      And I am logged in as an admin
+    When I go to the admin-posts page
+      And I follow "Delete"
+    When I go to the homepage
+    Then I should not see "Default Admin Post"

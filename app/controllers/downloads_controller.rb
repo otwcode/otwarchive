@@ -1,5 +1,3 @@
-require 'iconv'
-
 class DownloadsController < ApplicationController
 
   include XhtmlSplitter
@@ -158,7 +156,7 @@ protected
   def render_mobi_html(template, basename)
     @mobi = true
     html = render_to_string(:template => "downloads/#{template}.html", :layout => 'barebones.html')
-    html = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", html)
+    html = html.to_ascii 
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 

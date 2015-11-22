@@ -39,7 +39,7 @@ a:hover {
   color: #999;
 }
 
-a:active, a:focus {
+a:active, a:focus, button:focus {
   outline: 1px dotted;
 }
 

@@ -12,42 +12,42 @@ describe StoryParser do
 
       it "should match http://fanfiction.net" do
         url = "http://fanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should eq("ffnet")
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to eq("ffnet")
       end
 
       it "should match fanfiction.net" do
         url = "fanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should eq("ffnet")
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to eq("ffnet")
       end
 
       it "should match http://www.fanfiction.net" do
         url = "http://www.fanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should eq("ffnet")
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to eq("ffnet")
       end
 
       it "should match www.fanfiction.net" do
         url = "www.fanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should  eq("ffnet")
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to  eq("ffnet")
       end
 
       it "should not match http://adultfanfiction.net" do
         url = "http://adultfanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should be_nil
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to be_nil
       end
 
       it "should not match adultfanfiction.net" do
         url = "adultfanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should be_nil
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to be_nil
       end
 
       it "should not match http://www.adultfanfiction.net" do
         url = "http://www.adultfanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should be_nil
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to be_nil
       end
 
       it "should not match www.adultfanfiction.net" do
         url = "www.adultfanfiction.net"
-        @sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url).should be_nil
+        expect(@sp.get_source_if_known(StoryParser::CHAPTERED_STORY_LOCATIONS, url)).to be_nil
       end
     end
 
@@ -55,44 +55,43 @@ describe StoryParser do
       # SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
       it "should match a regular domain on livejournal" do
         url = "http://mydomain.livejournal.com"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a domain with underscores within on livejournal" do
         url = "http://my_domain.livejournal.com"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a folder style link to an individual user on livejournal" do
         url = "http://www.livejournal.com/users/_underscore"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a folder style link to a community on livejournal" do
         url = "http://www.livejournal.com/community/underscore_"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a domain on dreamwidth" do
         url = "http://mydomain.dreamwidth.org"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a domain on deadjournal" do
         url = "http://mydomain.deadjournal.com"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
       it "should match a domain on insanejournal" do
         url = "http://mydomain.insanejournal.com"
-        @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
       end
 
-      # TODO: uncomment and remove this comment when (if) fixing the bug
-      it "should match a folder style link to an individual user on journalfen" # do
-      #   url = "http://www.journalfen.net/users/username"
-      #   @sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url).should eq("lj")
-      # end
+      it "should match a folder style link to an individual user on journalfen" do
+        url = "http://www.journalfen.net/users/username"
+        expect(@sp.get_source_if_known(StoryParser::KNOWN_STORY_LOCATIONS, url)).to eq("lj")
+      end
     end
 
     # TODO: KNOWN_STORY_PARSERS
@@ -100,7 +99,8 @@ describe StoryParser do
 
   describe "check_for_previous_import" do
     let(:location_with_www) { "http://www.testme.org/welcome_to_test_vale.html" }
-    let(:location_no_www)   { "http://testme.org/welcome_to_test_vale.html" }
+    let(:location_no_www) { "http://testme.org/welcome_to_test_vale.html" }
+    let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
@@ -113,13 +113,19 @@ describe StoryParser do
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
     end
+
+    it "should not perform a partial match on work import locations" do
+      @work = create(:work, imported_from_url: location_partial_match)
+
+      expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
+    end
   end
 
   describe "#parse_common" do
     it "should convert relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
       # ['http://foo.com/bar.html', 'search.php?here=is&a=query'] => 'http://foo.com/search.php?here=is&a=query',
-      {      
+      {
        ['http://foo.com/bar.html', 'thisdir.html'] => 'http://foo.com/thisdir.html',
        ['http://foo.com/bar.html?hello=foo', 'thisdir.html'] => 'http://foo.com/thisdir.html',
        ['http://foo.com/bar.html', './thisdir.html'] => 'http://foo.com/thisdir.html',

@@ -51,7 +51,8 @@ Scenario: Create a bookmark
     
   @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
-    Given I am logged in as "first_bookmark_user"
+    Given basic tags
+      And I am logged in as "first_bookmark_user"
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
@@ -72,6 +73,7 @@ Scenario: Create a bookmark
       | login           | password   |
       | first_bookmark_user   | password   |
       And I am logged in as "first_bookmark_user"
+      And the default ratings exist
     When I go to first_bookmark_user's bookmarks page
     Then I should not see "Stuck with You"
     When I follow "Bookmark External Work"
@@ -90,7 +92,7 @@ Scenario: Create a bookmark
     When I follow "Edit"
     Then I should see "Editing bookmark for Stuck with You"
     When I fill in "Notes" with "I wish this author would join AO3"
-      And I fill in "Your Tags" with "WIP"
+      And I fill in "Your tags" with "WIP"
       And I press "Update"
     Then I should see "Bookmark was successfully updated"
     
@@ -158,7 +160,7 @@ Scenario: extra commas in bookmark form (Issue 2284)
   Given I am logged in as "bookmarkuser"
     And I post the work "Some Work"
   When I follow "Bookmark"
-    And I fill in "Your Tags" with "Good tag, ,, also good tag, "
+    And I fill in "Your tags" with "Good tag, ,, also good tag, "
     And I press "Create"
   Then I should see "created"
 
@@ -260,6 +262,18 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I should not see "JBs Greatest" within "ul.meta"
     And I should see "Bookmarker's Collections: Mrs. Pots"
     And I should not see "The collection JBs Greatest is currently moderated."
+
+Scenario: Adding bookmark to non-existent collection (AO3-4338)
+  Given I am logged in as "moderator" with password "password"
+    And I post the work "Programmed for Murder"
+    And I view the work "Programmed for Murder"
+    And I follow "Bookmark"
+    And I press "Create"
+    And I should see "Bookmark was successfully created"
+  Then I follow "Edit"
+    And I fill in "bookmark_collection_names" with "some_nonsense_collection"
+    And I press "Update"
+    And I should see "does not exist."
 
 Scenario: Adding bookmarks to closed collections (Issue 3083)
   Given I am logged in as "moderator" with password "password"
@@ -381,4 +395,18 @@ Scenario: Bookmark External Work link should be available to logged in users, bu
   When I go to the bookmarks in collection "Testing BEW Collection"
   Then I should not see "Bookmark External Work"
 
-  
+@disable_caching
+Scenario: Editing a bookmark's tags should update the bookmark blurb
+  Given I am logged in as "some_user"
+    And I post the work "Really Good Thing"
+  When I am logged in as "bookmarker"
+    And I view the work "Really Good Thing"
+    And I follow "Bookmark"
+    And I fill in "bookmark_notes" with "I liked this story"
+    And I fill in "bookmark_tag_string" with "Tag 1, Tag 2"
+  When I press "Create"
+  Then I should see "Bookmark was successfully created"
+  When I follow "Edit"
+    And I fill in "bookmark_tag_string" with "New Tag"
+  When I press "Update"
+  Then I should see "New Tag"

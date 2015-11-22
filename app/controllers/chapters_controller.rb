@@ -52,7 +52,7 @@ class ChaptersController < ApplicationController
         @next_chapter = @chapters[chapter_position+1]
       end
       @commentable = @work
-      @comments = @chapter.comments
+      @comments = @chapter.comments.reviewed
 
       @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
         get_page_title(@work.fandoms.string,
@@ -66,10 +66,11 @@ class ChaptersController < ApplicationController
                                                          :subscribable_type => 'Work').first ||
                         current_user.subscriptions.build(:subscribable => @work)
       end
+      # update the history.
+      Reading.update_or_create(@work, current_user) if current_user
 
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
       if chapter_position == 0
-        Reading.update_or_create(@work, current_user) if current_user
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end

@@ -4,7 +4,7 @@ describe Work do
   # see lib/collectible_spec for collectio n-related tests
 
   it "creates a minimally work" do
-    create(:work).should be_valid
+    expect(create(:work)).to be_valid
   end
 
   context "create_stat_counter" do
@@ -13,21 +13,21 @@ describe Work do
         @work = build(:work)
         @work.save!
       }.to change{ StatCounter.all.count }.by(1)
-      StatCounter.where(:work_id => @work.id).should exist
+      expect(StatCounter.where(work_id: @work.id)).to exist
     end
   end
 
   context "invalid title" do
-    it { build(:work, title: nil).should be_invalid }
+    it { expect(build(:work, title: nil)).to be_invalid }
 
     let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
     it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
-      build(:work, title: Faker::Lorem.characters(too_short)).should be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
     end
 
     let(:too_long) {ArchiveConfig.TITLE_MAX + 1}
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
-      build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
@@ -38,12 +38,15 @@ describe Work do
     it "strips out leading spaces from the title" do
       @work = create(:work, title: "    Has Leading Spaces")
       @work.reload
-      @work.title.should == "Has Leading Spaces"
+      expect(@work.title).to eq("Has Leading Spaces")
     end
 
     let(:too_short) {ArchiveConfig.TITLE_MIN - 1}
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect { create(:work, title: "     #{too_short}")}.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      expect {
+        @work = create(:work, title: "     #{too_short}")
+        @work.reload
+      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
@@ -55,14 +58,14 @@ describe Work do
   context "invalid summary" do
     let(:too_long) {ArchiveConfig.SUMMARY_MAX + 1}
     it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
-      build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
   context "invalid notes" do
     let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
@@ -70,7 +73,7 @@ describe Work do
   context "invalid endnotes" do
     let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      build(:work, title: Faker::Lorem.characters(too_long)).should be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
     end
   end
 
@@ -81,18 +84,18 @@ describe Work do
     it "does not save an invalid pseud with *", :pending do
       @pseud = create(:pseud, name: "*pseud*")
       @work = Work.new(attributes_for(:work, authors: ["*pseud*"]))
-      @work.save.should be_false
-      @work.errors[:base].should include["These pseuds are invalid: *pseud*"]
+      expect(@work.save).to be_falsey
+      expect(@work.errors[:base]).to include["These pseuds are invalid: *pseud*"]
     end
 
     let(:invalid_work) { build(:no_authors) }
     it "does not save if author is blank" do
-      invalid_work.save.should be_false
-      invalid_work.errors[:base].should include "Work must have at least one author."
+      expect(invalid_work.save).to be_falsey
+      expect(invalid_work.errors[:base]).to include "Work must have at least one author."
     end
   end
 
-  describe "work_skin_allowed", :pending do
+  describe "work_skin_allowed"  do
     context "public skin"
 
     context "private skin" do
@@ -105,27 +108,18 @@ describe Work do
       let(:work_author) {@skin_author}
       let(:work){build(:custom_work_skin, authors: [work_author.pseuds.first], work_skin_id: @private_skin.id)}
       it "can be used by the work skin author" do
-        puts work_author.login
-        puts work_author.pseuds.first.name
-        work.save.should be_true
+        expect(work.save).to be_truthy
       end
 
       let(:work){build(:custom_work_skin, authors: [@second_author.pseuds.first], work_skin_id: @private_skin.id)}
-      it "cannot be used by another user" do
-        puts @skin_author.login
-        puts @skin_author.pseuds.first.name
-        puts @second_author.login
-        puts @second_author.pseuds.first.name
-        work.save.should be_false
-         work.errors[:base].should include("You do not have permission to use that custom work stylesheet.")
+      xit "cannot be used by another user" do
+        expect(work.save).to be_falsey
+         expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
       end
     end
   end
 
-  #TODO: Move to a collection mailer spec
-  it "should send an email when added to collection"
-
-  describe "new recipients virtual attribute", :pending do
+  describe "new recipients virtual attribute"  do
 
     before(:each) do
       @author = create(:user)
@@ -136,7 +130,7 @@ describe Work do
       @fandom1 = create(:fandom)
       @chapter1 = create(:chapter)
 
-      @work = Work.new(:title => "Title")
+      @work = Work.new(title: "Title")
       @work.fandoms << @fandom1
       @work.authors = [@author.pseuds.first]
       @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
@@ -144,25 +138,56 @@ describe Work do
     end
 
     it "should be the same as recipients when they are first added" do
-      @work.new_recipients.should eq(@work.recipients)
+      expect(@work.new_recipients).to eq(@work.recipients)
     end
 
-    it "should only contain the new recipients when more are added" do
+    xit "should only contain the new recipients when more are added" do
       @work.recipients += "," + @recipient3.pseuds.first.name
-      @work.new_recipients.should eq(@recipient3.pseuds.first.name)
+      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
     end
 
     it "should only contain the new recipient if replacing the previous recipient" do
       @work.recipients = @recipient3.pseuds.first.name
-      @work.new_recipients.should eq(@recipient3.pseuds.first.name)
+      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
     end
 
-    it "should be empty if one or more of the original recipients are removed" do
+    xit "should be empty if one or more of the original recipients are removed" do
       @work.recipients = @recipient2.pseuds.first.name
-      @work.new_recipients.should be_empty
+      expect(@work.new_recipients).to be_empty
     end
 
   end
 
-    
+  describe "#find_by_url" do
+    it "should find imported works with various URL formats" do
+      [
+        'http://foo.com/bar.html',
+        'http://foo.com/bar',
+        'http://lj-site.com/bar/foo?color=blue',
+        'http://www.foo.com/bar'
+      ].each do |url|
+        work = create(:work, imported_from_url: url)
+        expect(Work.find_by_url(url)).to eq(work)
+        work.destroy
+      end
+    end
+
+    it "should not mix up imported works with similar URLs or significant query parameters" do
+      {
+        'http://foo.com/12345' => 'http://foo.com/123',
+        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
+        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
+      }.each do |import_url, find_url|
+        work = create(:work, imported_from_url: import_url)
+        expect(Work.find_by_url(find_url)).to_not eq(work)
+        work.destroy
+      end
+    end
+
+    it "should find works imported with irrelevant query parameters" do
+      work = create(:work, imported_from_url: 'http://lj-site.com/thing1?style=mine')
+      expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
+      work.destroy
+    end
+  end
 end

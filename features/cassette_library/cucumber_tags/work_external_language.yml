@@ -1,45 +1,54 @@
---- 
-http_interactions: 
-- request: 
+---
+http_interactions:
+- request:
     method: head
     uri: http://www.google.com/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      accept: 
-      - "*/*"
-      user-agent: 
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
       - Ruby
-  response: 
-    status: 
-      code: 302
-      message: Found
-    headers: 
-      location: 
-      - http://www.google.co.uk/
-      cache-control: 
-      - private
-      content-type: 
-      - text/html; charset=UTF-8
-      set-cookie: 
-      - PREF=ID=f427b53d8d41b595:FF=0:TM=1371673750:LM=1371673750:S=qzdf-YiHDxgruk6n; expires=Fri, 19-Jun-2015 20:29:10 GMT; path=/; domain=.google.com
-      - NID=67=ZMF1PoniBxsYwHyR2RsHph1s5CCvjIg1I6nagSEHW1ewbHdFnZZan298RMMLwaqOHIsb8D8CpQlUzKedsOgiBM10XMJpsvcpZtsGpomT9kjF5xrxoOj4dpHexaoGy73a; expires=Thu, 19-Dec-2013 20:29:10 GMT; path=/; domain=.google.com; HttpOnly
-      p3p: 
-      - CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
-      date: 
-      - Wed, 19 Jun 2013 20:29:10 GMT
-      server: 
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 13 May 2015 04:58:27 GMT
+      Expires:
+      - '-1'
+      Cache-Control:
+      - private, max-age=0
+      Content-Type:
+      - text/html; charset=ISO-8859-1
+      Set-Cookie:
+      - NID=67=cgBkAtVa1rmyLu1tTp8t2VW6g2YsThIMOvSo5YuSzCw_nNR9CNUQMJG4RXp-KLpqkGeGMsU6UoNCD-GJ7d_i5hKjCVJPZrMRuZhYmOaw9vXcFZJCagM7mwKWhw8spJyjXEAUM_w4yud7ekxiZGeyO-JwVkVT;
+        expires=Thu, 12-Nov-2015 04:58:27 GMT; path=/; domain=.google.com; HttpOnly
+      - PREF=ID=9bfc35cbd6ca8c2a:FF=0:TM=1431493107:LM=1431493107:S=6g45h0GfD6_8MV4R;
+        expires=Fri, 12-May-2017 04:58:27 GMT; path=/; domain=.google.com
+      P3p:
+      - CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657
+        for more info."
+      Server:
       - gws
-      content-length: 
-      - "221"
-      x-xss-protection: 
+      X-Xss-Protection:
       - 1; mode=block
-      x-frame-options: 
+      X-Frame-Options:
       - SAMEORIGIN
-    body: 
+      Alternate-Protocol:
+      - 80:quic,p=1
+      Transfer-Encoding:
+      - chunked
+      Accept-Ranges:
+      - none
+      Vary:
+      - Accept-Encoding
+    body:
       encoding: US-ASCII
-      string: ""
-    http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 20:29:10 GMT
+      string: ''
+    http_version: 
+  recorded_at: Wed, 13 May 2015 04:58:27 GMT
 recorded_with: VCR 2.5.0

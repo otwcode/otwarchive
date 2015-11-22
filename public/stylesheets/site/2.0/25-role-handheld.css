@@ -1,12 +1,35 @@
 /* MEDIA: only screen and (max-width: 640px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
-linearise content, suppress large images, suppress custom fonts and other large downloads
-pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
+linearise content, suppress large images, suppress custom fonts and other large downloads */
 
 #outer {
+  background: #fff;
   font-size: 14px;
+  position: relative;
 }
 
-/*regions */
+h1, h2, h3 {
+    word-break: break-all;
+}
+
+/* non-JavaScript states
+.narrow-shown: should be displayed when this stylesheet is in use  */
+
+body .narrow-shown {
+  display: block;
+}
+
+.actions li.narrow-shown {
+  display: inline;
+}
+
+/* JavaScript states
+.javascript .narrow-hidden: should not be displayed when JS is enabled and this stylesheet is in use */
+
+.javascript .narrow-hidden {
+  display: none;
+}
+
+/* 03 region header */
 
 #header .logo {
   height: 1.75em;
@@ -50,6 +73,40 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   margin-left: 45px;
 }
 
+/* 04 region dashboard */
+/* SKIN: Dash Line */
+/* DESCRIPTION: Horizontal dash inline */
+
+#dashboard {
+  clear: both;
+  float: none;
+  max-width: 100%;
+  margin: 1%;
+  padding: 0;
+  width: auto;
+}
+
+#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
+  text-align: left;
+  display: inline;
+  border: none;
+}
+
+#dashboard ul {
+  padding: 0;
+}
+
+#dashboard .landmark {
+  clear: none;
+  float: left;
+}
+
+/* 05 region main */
+
+#main {
+  position: static;
+}
+
 #main, #main.dashboard {
   float: none;
   margin: auto;
@@ -58,32 +115,26 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   padding-right: 0.5em;
 }
 
-#dashboard, #main.dashboard .index, .dashboard form.filters, #main .filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
+#main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
   width: 100%;
   max-width: 100%;
   min-width: 0;
   float: none;
 }
 
-#main dl.filters {
-  width: auto;
+.dashboard .landmark {
+  clear: both;
 }
 
-#footer {
-  background: #900;
-}
-
-/*types and groups*/
-
-h1, h2, h3 {
-    word-break: break-all;
-}
+/* 08 actions */
 
 #main .actions a {
   margin: auto;
 }
 
-.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {
+/* 10 types and groups */
+
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {
   width: auto;
   float: none;
 }
@@ -96,7 +147,46 @@ h1, h2, h3 {
   display: block;
 }
 
-/*zone: home*/
+/* 15 group: comments */
+
+.thread .thread {
+  margin-left: 1em;
+}
+
+.comment .userstuff {
+  min-height: 0;
+}
+
+.comment .icon {
+  height: 50px;
+  margin-bottom: 0;
+  width: 50px;
+}
+
+.comment .icon .visitor {
+  background: url(/images/imageset.png) no-repeat 0px -525px transparent;
+}
+
+.comment h4.byline {
+  padding-left: 58px;
+}
+
+/* 16 zone: system */
+
+.splash div.module, .logged-in .splash .module {
+  width: 98%;
+}
+
+.splash .intro {
+  padding-top: 0;
+}
+
+.splash .intro h2 {
+  font-size: 1.5em;
+    word-break: normal;
+}
+
+/* 17 zone: home */
 
 #inbox-form {
   clear: both;
@@ -104,7 +194,60 @@ h1, h2, h3 {
   width: auto;
 }
 
-/* system: messages */
+/* 18 zone: search browse */
+
+form.filters dl {
+  width: auto;
+}
+
+/* Filters with JavaScript */
+
+.javascript {
+  background: #ddd;
+}
+
+.javascript form.filters {
+  margin: 0;
+  max-width: 95%;
+  position: absolute;
+  top: 0;
+  right: -16em;
+  width: 16em; /* 14em/0.875em */
+  z-index: 400;
+}
+
+.javascript .filters fieldset {
+  border: none;
+  margin: 0;
+  position: relative;
+  z-index: 450;
+    box-shadow: none;
+}
+
+.javascript .filters p.narrow-shown {
+  position: relative; 
+}
+
+.filtering {
+  right: 14em;
+}
+
+.filtering .filters #leave_filters {
+  background: transparent none;
+  border-bottom: none;
+  position: fixed;
+  top: -101em;
+  bottom: -101em;
+  left: -10em;
+  right: -10em;
+  z-index: 0;
+}
+
+.filtering #leave_filters:focus {
+  outline: none;
+}
+
+/* 22 system: messages */
 
 .announcement .userstuff {
   margin: 1%;
@@ -126,58 +269,4 @@ h1, h2, h3 {
 .announcement .thermometer .progress .amount {
   left: 0;
   right: auto;
-}
-
-/*SKIN: Dash Line */
-
-/* DESCRIPTION: Horizontal dash inline*/
-
-#outer #dashboard {
-  padding: 0;
-}
-
-#outer #dashboard, #main, #main.dashboard {
-  float: none;
-  width: auto;
-  max-width: 100%;
-  margin: 1%;
-  clear: both;
-}
-
-#dashboard ul.navigation, #dashboard ul.navigation li, #dashboard ul.navigation li a, #dashboard ul.navigation li .current {
-  text-align: left;
-  display: inline;
-  border: 0;
-}
-
-#dashboard .landmark {
-  clear: none;
-  float: left;
-}
-
-.dashboard .landmark {
-  clear: both;
-}
-
-/* comments */
-.thread .thread {
-  margin-left: 1em;
-}
-
-.comment .userstuff {
-  min-height: 0;
-}
-
-.comment .icon {
-  height: 50px;
-  margin-bottom: 0;
-  width: 50px;
-}
-
-.comment .icon .visitor {
-  background: url(/images/imageset.png) no-repeat 0px -525px transparent;
-}
-
-.comment h4.byline {
-  padding-left: 58px;
 }

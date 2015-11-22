@@ -1,14 +1,12 @@
 class InviteRequestsController < ApplicationController
-  before_filter :admin_only, :only => [:manage, :reorder, :destroy]
-  
+  before_filter :admin_only, only: [:manage, :reorder, :destroy]
+
   # GET /invite_requests
-  # GET /invite_requests.xml
   def index
     @invite_request = InviteRequest.new
   end
 
   # GET /invite_requests/1
-  # GET /invite_requests/1.xml
   def show
     @invite_request = InviteRequest.find_by_email(params[:email])
     unless (request.xml_http_request?) || @invite_request
@@ -22,21 +20,20 @@ class InviteRequestsController < ApplicationController
   end
 
   # POST /invite_requests
-  # POST /invite_requests.xml
   def create
     @invite_request = InviteRequest.new(params[:invite_request])
     if @invite_request.save
       flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
       redirect_to invite_requests_path
     else
-      render :action => :index
+      render action: :index
     end
   end
-  
+
   def manage
     @invite_requests = InviteRequest.order(:position).page(params[:page])
   end
-  
+
   def reorder
     if InviteRequest.reset_order
       flash[:notice] = "The queue has been successfully updated."
@@ -45,7 +42,7 @@ class InviteRequestsController < ApplicationController
     end
     redirect_to manage_invite_requests_url
   end
-  
+
   def destroy
     @invite_request = InviteRequest.find(params[:id])
     if @invite_request.destroy
@@ -53,6 +50,6 @@ class InviteRequestsController < ApplicationController
     else
       flash[:error] = "Request could not be removed. Please try again."
     end
-    redirect_to manage_invite_requests_url
+    redirect_to manage_invite_requests_url(page: params[:page])
   end
 end

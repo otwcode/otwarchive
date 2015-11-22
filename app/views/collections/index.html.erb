@@ -41,6 +41,10 @@
       <li><%= link_to ts("New Collection"), new_collection_path %></li>
     <% end %>
   <% end %>
+  <% if @sort_and_filter %>
+    <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+  <% end %>
 </ul>
 
 <% unless @collections.blank? %>
@@ -58,7 +62,7 @@
 
 <% if @sort_and_filter %>
   <!--filters subnav-->
-  <%= render :partial => 'collections/filters' %>
+  <%= render 'collections/filters' %>
   <!---/subnav-->
 <% end %> 
 
