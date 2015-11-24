@@ -5,7 +5,7 @@
   <% works.each do |work| %>
     <dt>
       <%= link_to work.title.html_safe, work %>
-      <span title="fandom">(<%= work.fandoms.collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>)</span>
+      (<%= work.fandoms.collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>)
     </dt>
     <dd>
     	<ul class="tags commas">
