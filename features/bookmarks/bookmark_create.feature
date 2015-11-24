@@ -406,4 +406,5 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And I fill in "bookmark_tag_string" with "Tag 1, Tag 2"
     And I press "Create"
   Then I should see "Bookmark was successfully created"
+    And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
