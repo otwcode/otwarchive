@@ -29,7 +29,7 @@ class Api::V1::WorksController < Api::V1::BaseController
   # - array of works to import
   def create
     archivist = User.find_by_login(params[:archivist])
-    external_works = params[:works]
+    external_works = params[:items] || params[:works]
     works_responses = []
     @works = []
 
