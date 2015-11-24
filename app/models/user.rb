@@ -185,14 +185,13 @@ class User < ActiveRecord::Base
   end
 
   def read_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => true})
+    inbox_comments.where(read: true)
   end
   def unread_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => false})
+    inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    inbox_comments.with_feedback_comment.count(:all,
-                                               conditions: { read: false })
+    unread_inbox_comments.with_feedback_comment.count
   end
 
   scope :alphabetical, :order => :login
