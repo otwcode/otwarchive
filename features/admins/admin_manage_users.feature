@@ -289,4 +289,15 @@ Feature: Admin Actions to manage users
     And I press "Yes, Delete All Spammer Creations"
   Then I should see "That user is not banned"
     And the work "Loads of Spam" should not be deleted
+    
+  Scenario: An already-banned user can have their works destroyed
+  Given the user "Spamster" is banned
+    And I am logged in as an admin
+  When I go to the abuse administration page for "Spamster"
+    And I choose "Spammer: ban and delete all creations"
+    And I press "Update"
+  Then I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Spammer Creations"
+  Then I should see "All creations by user Spamster have been deleted."
+  
   

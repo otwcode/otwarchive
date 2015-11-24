@@ -68,7 +68,7 @@
           <% end %>
         </li>
         <li>
-          <%= radio_button_tag 'admin_action', 'spamban', false, disabled: @user.banned? %>
+          <%= radio_button_tag 'admin_action', 'spamban', false %>
           <%= label_tag 'admin_action_spamban', ts("Spammer: ban and delete all creations") %>
         </li>
       </ul>
