@@ -395,6 +395,7 @@ Scenario: Bookmark External Work link should be available to logged in users, bu
   When I go to the bookmarks in collection "Testing BEW Collection"
   Then I should not see "Bookmark External Work"
 
+@disable_caching
 Scenario: Editing a bookmark's tags should expire the bookmark cache
   Given I am logged in as "some_user"
     And I post the work "Really Good Thing"
