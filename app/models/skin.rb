@@ -346,7 +346,7 @@ class Skin < ActiveRecord::Base
         block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
       elsif (wizard_block = get_wizard_settings).present?
         block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
-       end
+      end
     end
     return block
   end
