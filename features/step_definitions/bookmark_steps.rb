@@ -68,5 +68,15 @@ Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bo
   fill_in("bookmark_tag_string", with: "New Tag")
   click_button("Update")
   bookmark.reload
-  assert orig_cache_key != bookmark.cache_key
+  assert orig_cache_key != bookmark.cache_key, "Cache key #{orig_cache_key} matches #{bookmark.cache_key}."
+end
+
+Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not edited the bookmark$/ do |title|
+  work = Work.find_by_title(title)
+  bookmark = work.bookmarks.first
+  orig_cache_key = bookmark.cache_key
+  visit edit_bookmark_path(bookmark)
+  visit bookmark_path(bookmark)
+  bookmark.reload
+  assert orig_cache_key == bookmark.cache_key, "Cache key #{orig_cache_key} does not match #{bookmark.cache_key}."
 end
