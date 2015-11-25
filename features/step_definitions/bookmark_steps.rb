@@ -64,6 +64,7 @@ Then /^the cache of the bookmark on "([^\"]*)" should expire after I edit the bo
   work = Work.find_by_title(title)
   bookmark = work.bookmarks.first
   orig_cache_key = bookmark.cache_key
+  Kernel::sleep 1
   visit edit_bookmark_path(bookmark)
   fill_in("bookmark_tag_string", with: "New Tag")
   click_button("Update")
@@ -75,6 +76,7 @@ Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not e
   work = Work.find_by_title(title)
   bookmark = work.bookmarks.first
   orig_cache_key = bookmark.cache_key
+  Kernel::sleep 1
   visit edit_bookmark_path(bookmark)
   visit bookmark_path(bookmark)
   bookmark.reload
