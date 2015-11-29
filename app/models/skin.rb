@@ -284,6 +284,7 @@ class Skin < ActiveRecord::Base
                                              AdminSetting.default_skin.updated_at.to_s+'/'+\
                                              Skin.default.updated_at.to_s+'/'+\
                                              Skin.get_current_version+'/'+\
+                                             self.last.type.to_s+'/'+\
                                              (Rails.cache.fetch('skins_generation') || '0')
                      ) do 
       style = ""
