@@ -31,7 +31,7 @@ class WorkSkin < Skin
     File.open(Rails.public_path + '/images/skins/previews/basic_formatting.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
-    Rails.cache.increment('skins_generation/'+self.last.type.to_s)
+    Rails.cache.increment('skins_generation/'+self.type.to_s)
     skin
   end
 end
