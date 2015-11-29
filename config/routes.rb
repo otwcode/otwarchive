@@ -146,6 +146,10 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :users, :controller => 'admin_users' do
+      member do
+        get :confirm_delete_user_creations
+        post :destroy_user_creations
+      end
       collection do
         get :notify
         post :send_notification
@@ -179,11 +183,11 @@ Otwarchive::Application.routes.draw do
     member do
       get :browse
       get :change_email
-      post :change_email
+      post :changed_email
       get :change_password
-      post :change_password
+      post :changed_password
       get :change_username
-      post :change_username
+      post :changed_username
       post :end_first_login
       post :end_banner
     end
@@ -305,6 +309,10 @@ Otwarchive::Application.routes.draw do
         put :approve
         put :reject
       end
+      collection do
+        get :unreviewed
+        put :review_all
+      end
     end
     resources :kudos, :only => [:index]
     resources :links, :controller => "work_links", :only => [:index]
@@ -341,7 +349,12 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts
+  resources :gifts, only: [:index]  do
+    member do
+      post :toggle_rejected
+    end
+  end
+
   resources :prompts
   resources :collections do
     collection do
@@ -459,6 +472,7 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :reject
+      put :review
     end
     collection do
       get :hide_comments

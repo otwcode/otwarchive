@@ -31,5 +31,4 @@ end
 #after "db:reset_on_stage", "deploy:web:enable"
 
 # reload the site skins after each deploy since there may have been CSS changes
-after "deploy:restart", "deploy:reload_site_skins"
 after "deploy:restart", "stage_only:notify_testers"

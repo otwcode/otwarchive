@@ -93,6 +93,8 @@ module NavigationHelpers
     when /my works page/
       Work.tire.index.refresh
       user_works_path(User.current_user)
+    when /my edit multiple works page/
+      show_multiple_user_works_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)   
     when /my stats page/
@@ -109,6 +111,10 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /my gifts page/
+      user_gifts_path(User.current_user)
+    when /^(.*)'s gifts page/
+      user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/

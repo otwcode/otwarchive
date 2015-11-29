@@ -166,6 +166,7 @@ Feature: creating and editing skins
   When I select "public skin" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
+  When I am on skinuser's preferences page
     And "public skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"

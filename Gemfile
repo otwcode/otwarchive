@@ -11,7 +11,7 @@ gem 'rails', '3.2.21'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2'
+gem 'mysql2', '0.3.10'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 
@@ -83,9 +83,6 @@ gem "google_visualr", ">= 2.1"
 
 # Globalize for translations
 gem 'globalize', '~> 3.1.0'
-
-# Coveralls for code test coverage
-gem 'coveralls', require: false
 
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark"

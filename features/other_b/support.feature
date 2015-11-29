@@ -15,9 +15,8 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Your message was sent to the archive team - thank you!"
     And 2 emails should be delivered
-    And the email should contain "Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can."
-    And the email should contain "In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible."
-    And the email should contain "Just a brief note"
+    And the email should contain "We're working hard to reply to everyone, and we'll respond to you as soon as we can."
+    And the email should contain "If you have additional questions or information"
   When I follow "Support and Feedback"
     And I fill in "Brief summary" with "you suck"
     And I fill in "Your comment" with "blah blah blah"

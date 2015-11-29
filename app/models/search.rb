@@ -23,6 +23,7 @@ class Search < ActiveRecord::Base
   def self.range_to_search(option)
     option.gsub!("&gt;", ">")
     option.gsub!("&lt;", "<")
+    option.downcase!
     match = option.match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)
     range = {}
     if match

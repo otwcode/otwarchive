@@ -221,8 +221,8 @@ end
 
 When /^I fill in basic external work tags$/ do
   select(DEFAULT_RATING, :from => "Rating")
-  fill_in("Fandoms", :with => DEFAULT_FANDOM)
-  fill_in("Your Tags", :with => DEFAULT_FREEFORM)
+  fill_in("bookmark_external_fandom_string", with: DEFAULT_FANDOM)
+  fill_in("bookmark_tag_string", with: DEFAULT_FREEFORM)
 end
 
 # the (?: ) construct means: do not use the stuff in () as a capture/match
@@ -247,6 +247,51 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
+end
+
+When /^I set the fandom to "([^\"]*)"$/ do |fandom|
+  fill_in("Fandoms", with: fandom)
+end
+
+When /^I select "([^\"]*)" for editing$/ do |title|
+  id = Work.find_by_title(title).id
+  check("work_ids_#{id}")
+end
+
+When /^I edit the multiple works "([^\"]*)" and "([^\"]*)"/ do |title1, title2|
+  # check if the works have been posted yet
+  unless Work.where(title: title1).exists?
+    step %{I post the work "#{title1}"}
+  end
+  unless Work.where(title: title2).exists?
+    step %{I post the work "#{title2}"}
+  end
+  step %{I go to my edit multiple works page}
+  step %{I select "#{title1}" for editing}
+  step %{I select "#{title2}" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works with different comment moderation settings$/ do
+  step %{I set up the draft "Work with Comment Moderation Enabled"}
+  check("work_moderated_commenting_enabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Comment Moderation Disabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Comment Moderation Enabled" for editing}
+  step %{I select "Work with Comment Moderation Disabled" for editing}
+  step %{I press "Edit"}
+end
+
+When /^I edit multiple works with different anonymous commenting settings$/ do
+  step %{I set up the draft "Work with Anonymous Commenting Disabled"}
+  check("work_anon_commenting_disabled")
+  step %{I post the work without preview}
+  step %{I post the work "Work with Anonymous Commenting Enabled"}
+  step %{I go to my edit multiple works page}
+  step %{I select "Work with Anonymous Commenting Disabled" for editing}
+  step %{I select "Work with Anonymous Commenting Enabled" for editing}
+  step %{I press "Edit"}
 end
 
 When /^I set up the draft "([^\"]*)"$/ do |title|
@@ -310,7 +355,7 @@ When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   work = Work.find_by_title!(title)
   check("parent-options-show")
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_HOST)
-  fill_in("Url", :with => url_of_work)
+  fill_in("work_parent_attributes_url", with: url_of_work)
 end
 
 When /^I set the publication date to today$/ do
@@ -454,3 +499,9 @@ end
 Then /^I should not find a list for associations$/ do
   page.should_not have_xpath("//ul[@class=\"associations\"]")
 end
+
+Then /^the work "([^\"]*)" should be deleted$/ do |work|
+  assert !Work.where(title: work).exists?
+end
+
+

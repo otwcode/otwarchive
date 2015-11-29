@@ -112,7 +112,7 @@ Feature: Edit Works
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
       
   Scenario: Editing a work you created today should not bump its revised-at date
-      When "Issue 2542" is fixed    
+      When "AO3-2539" is fixed    
 # Given I am logged in as "testuser" with password "testuser"
 #      And I post the work "Don't Bump Me"
 #      And I post the work "This One Stays On Top"
