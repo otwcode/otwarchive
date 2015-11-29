@@ -443,7 +443,7 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
-          Rails.cache.increment('skins_generation/'+self.type.to_s)
+          Rails.cache.increment('skins_generation/'+skin.type.to_s)
           skins << skin
         end
         
@@ -459,11 +459,11 @@ class Skin < ActiveRecord::Base
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
-        Rails.cache.increment('skins_generation/'+self.type.to_s)
+        Rails.cache.increment('skins_generation/'+top_skin.type.to_s)
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
-          Rails.cache.increment('skins_generation/'+self.type.to_s)
+          Rails.cache.increment('skins_generation/'+skin_parent.type.to_s)
         end
         if %w(staging production).include? Rails.env
           top_skin.cache!
@@ -517,7 +517,7 @@ class Skin < ActiveRecord::Base
     end
     skin.official = true
     skin.save!
-    Rails.cache.increment('skins_generation/'+self.type.to_s)
+    Rails.cache.increment('skins_generation/'+skin.type.to_s)
     skin
   end
   
