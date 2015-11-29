@@ -188,7 +188,7 @@ class Skin < ActiveRecord::Base
     self.public = true
     self.official = true
     save!
-    Rails.cache.increment('skins_generation/'+self.type.to_s)
+    Rails.cache.increment('skins_generation/'+self.type.nil? ? ("site_skin") : self.id.to_s )
     css_to_cache = ""
     last_role = ""
     file_count = 1
@@ -215,7 +215,7 @@ class Skin < ActiveRecord::Base
     end
     self.cached = true
     save!
-    Rails.cache.increment('skins_generation/'+self.type.to_s)
+    Rails.cache.increment('skins_generation/'+self.type.nil? ? ("site_skin") : self.id.to_s )
   end
   
   def clear_cache!
@@ -223,7 +223,7 @@ class Skin < ActiveRecord::Base
     FileUtils.rm_rf skin_dir # clear out old if exists    
     self.cached = false
     save!
-    Rails.cache.increment('skins_generation/'+self.type.to_s)
+    Rails.cache.increment('skins_generation/'+self.type.nil? ? ("site_skin") : self.id.to_s )
   end
   
   def get_sheet_role
@@ -284,7 +284,7 @@ class Skin < ActiveRecord::Base
                                              AdminSetting.default_skin.updated_at.to_s+'/'+\
                                              Skin.default.updated_at.to_s+'/'+\
                                              Skin.get_current_version+'/'+\
-                                             (Rails.cache.fetch('skins_generation/'+self.type.to_s) || '0')
+                                             (Rails.cache.fetch('skins_generation/'+self.type.nil? ? ("site_skin") : self.id.to_s ) || '0')
                      ) do 
       style = ""
       if self.get_role != "override" && self.get_role != "site"
@@ -443,7 +443,7 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
-          Rails.cache.increment('skins_generation/'+skin.type.to_s)
+          Rails.cache.increment('skins_generation/'+skin.type.nil? ? ("site_skin") : skin.id.to_s )
           skins << skin
         end
         
@@ -459,7 +459,7 @@ class Skin < ActiveRecord::Base
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
-        Rails.cache.increment('skins_generation/'+top_skin.type.to_s)
+        Rails.cache.increment('skins_generation/'+top_skin.type.nil? ? ("site_skin") : top_skin.id.to_s )
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
@@ -516,7 +516,7 @@ class Skin < ActiveRecord::Base
     end
     skin.official = true
     skin.save!
-    Rails.cache.increment('skins_generation/'+skin.type.to_s)
+    Rails.cache.increment('skins_generation/'+skin.type.nil? ? ("site_skin") : skin.id.to_s )
     skin
   end
   
