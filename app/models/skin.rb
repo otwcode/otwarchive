@@ -463,7 +463,6 @@ class Skin < ActiveRecord::Base
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
-          Rails.cache.increment('skins_generation/'+skin_parent.type.to_s)
         end
         if %w(staging production).include? Rails.env
           top_skin.cache!
