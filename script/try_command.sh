@@ -8,3 +8,7 @@ until [ $n -ge $MAX_LOOP ]
     n=$[$n+1]
     sleep 5
 done
+if [ $n -eq $MAX_LOOP ] ;  then
+ exit 1
+fi
+exit 0
