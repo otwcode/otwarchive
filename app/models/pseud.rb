@@ -40,8 +40,10 @@ class Pseud < ActiveRecord::Base
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
-  has_many :gifts
-  has_many :gift_works, :through => :gifts, :source => :work
+  has_many :gifts, conditions: { rejected: false }
+  has_many :gift_works, through: :gifts, source: :work
+  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id",
@@ -245,6 +247,14 @@ class Pseud < ActiveRecord::Base
     (name != user_name) ? name + " (" + user_name + ")" : name
   end
 
+  # get the former byline
+  def byline_was
+    past_name = name_was.blank? ? name : name_was
+    # if we have a user and their login has changed get the old one
+    past_user_name = user.blank? ? "" : (user.login_was.blank? ? user.login : user.login_was)
+    (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
+  end
+
   # Parse a string of the "pseud.name (user.login)" format into a pseud
   def self.parse_byline(byline, options = {})
     pseud_name = ""
@@ -302,6 +312,10 @@ class Pseud < ActiveRecord::Base
 
   def autocomplete_value
     "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
+  end
+
+  def autocomplete_value_was
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline_was}"
   end
 
   ## END AUTOCOMPLETE

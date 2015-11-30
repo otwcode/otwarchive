@@ -134,3 +134,7 @@ end
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
 end
+
+Then /^the collection "(.*)" should be deleted/ do |collection|
+  assert Collection.where(title: collection).first.nil?
+end

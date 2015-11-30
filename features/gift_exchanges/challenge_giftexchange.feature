@@ -340,6 +340,23 @@ Feature: Gift Exchange Challenge
     Then I should see "Awesome Gift Exchange"
       And I should not see "Not yet posted"
       And I should see "Fulfilled Story"
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+      
+  Scenario: Refused story should still fulfill the assignment
+  
+    Given an assignment has been fulfilled in a gift exchange
+      And I reveal works for "Awesome Gift Exchange"
+      And I refuse my gift story "Fulfilled Story"
+      And I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+  
 
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
