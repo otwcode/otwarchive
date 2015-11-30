@@ -43,7 +43,7 @@ module WorksHelper
 
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
-    work.gifts.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
+    work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
   end
 
   # select the default warning if this is a new work
@@ -163,7 +163,7 @@ module WorksHelper
   def show_work_notes?(work)
     work.notes.present? ||
     work.endnotes.present? ||
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.challenge_claims.present? ||
     work.parent_work_relationships.present? ||
     work.approved_related_works.present?
@@ -171,7 +171,7 @@ module WorksHelper
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
-    work.recipients.present? ||
+    work.gifts.not_rejected.present? ||
     work.approved_related_works.where(translation: true).exists? ||
     work.parent_work_relationships.exists? ||
     work.challenge_claims.present?
