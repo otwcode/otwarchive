@@ -26,7 +26,7 @@ class DownloadsController < ApplicationController
     end
 
     unless @admin_settings.downloads_enabled?
-      flash[:error] = ts("Sorry, Downloads are currently disabled.")
+      flash[:error] = ts("Sorry, downloads are currently disabled.")
       redirect_back_or_default works_path 
       return
     end
