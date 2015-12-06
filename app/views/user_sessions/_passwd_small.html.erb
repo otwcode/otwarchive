@@ -1,5 +1,5 @@
 <% @user_session = UserSession.new unless @user_session %>
-<%= form_for @user_session do |f| %>
+<%= form_for @user_session, :url => user_sessions_url(:protocol => 'https')  do |f| %>
 	<dl>
     <dt><%= f.label :login, ts("User name:") %></dt>
     <dd><%= f.text_field :login, :class => 'text', :size => nil %></dd>
