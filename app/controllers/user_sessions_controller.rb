@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  force_ssl unless Rails.env.development?
+  force_ssl
 
 
   # I hope this isn't catching unwanted exceptions; it's hard to locate
