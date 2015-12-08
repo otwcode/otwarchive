@@ -221,3 +221,68 @@
         <<: *errors_template
       full_messages:
         format: "%{attribute} %{message}"
+  comment_mailer:
+    anonymous: Anonymous Creator
+    comment_notification:
+      edit_comment: edited the following comment on
+      footer:
+        comments_on: Read all comments on <i>%{comment}</i>
+        edited: 'Last edited : %{time}'
+        posted: 'Posted : %{time}'
+        read_all: Read all comments on %{comment}
+        reply_to: Reply to this comment
+        thread_belongs: Go to the thread to which this comment belongs
+        thread_starting: Go to the thread starting from this comment
+      left_comment: left the following comment on
+      subject: "[%{app_name}] Comment on %{the_tag} %{commentable}"
+    comment_reply:
+      replied_to: replied to your comment on
+      responded: Responded
+      subject: "[%{app_name}] Reply to your comment on %{the_tag} %{commentable}"
+      you_wrote: You wrote
+    comment_sent:
+      subject: "[%{app_name}] Comment you left on %{the_tag} %{commentable}"
+      you_left: You left the following comment on
+    edited_comment_notification:
+      subject: "[%{app_name}] Edited comment on %{the_tag} %{commentable}"
+    edited_reply:
+      edited_reply: "%{responder} edited their reply to your comment on"
+      edited_response: "%{responder} edited their response to"
+      subject: "[%{app_name}] Edited reply to your comment on %{the_tag} %{commentable}"
+      you_wrote: You wrote
+    the_tag: the tag
+  mailer:
+    general:
+      footer:
+        general:
+          html: |-
+            <p>
+             If you've received this message in error, please <a href="%{support_url}" style="color:#ffffff; text-decoration:underline">contact Support</a>.
+            </p>
+
+            <p>
+             The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="%{donate_url}" style="color:#ffffff; text-decoration:underline">your donations</a>.
+            </p>
+          text: |-
+            If you've received this message in error, please contact Support at %{support_url} .
+
+            The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url} .
+        sent_at: Sent at %{sent_at}.
+        sent_by:
+          html: Sent by <b>%{sent_by}</b>.
+          text: Sent by %{sent_by}.
+    kudos:
+      guest: A guest
+      kudos_on: Kudos on
+      left_kudos_html: "%{givers_list} left kudos on %{commentable_link}."
+      you_have: You've got kudos!
+  user_mailer:
+    invite_increase_notification:
+      html: |-
+        <p> Hi %{login}! </p>
+        <p> We just wanted to let you know that you have %{total} new invitation(s), which can be used to create new accounts at the archive. You can invite a friend at %{invitation_page}. </p>
+        <p> Cheers, <br> %{archive_name} </p>
+      subject: "%{app_name} New Invitations"
+      txt: "Hi %{login}\nWe just wanted to let you know that you have %{total} new
+        invitation(s),\nwhich can be used to create new accounts at the archive. You
+        can invite a\nfriend at %{invitation_page}.\nCheers, \n%{archive_name}"
