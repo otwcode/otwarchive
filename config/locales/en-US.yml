@@ -243,6 +243,7 @@
           text: Sent by %{sent_by}.
     kudos:
       guest: A guest
+      guests: guests
       kudos_on: Kudos on
       left_kudos_html: "%{givers_list} left kudos on %{commentable_link}."
       you_have: You've got kudos!
