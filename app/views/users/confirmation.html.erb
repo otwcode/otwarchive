@@ -1,20 +1,20 @@
-		<h2 class="heading"><%= ts("Account Created!") %></h2>
-<!-- Boilerplate text for account creation confirmation -->
-		<p>
-			<%= ts("Within 24 hours, you should receive an email at the address you gave us.") %>
-			<%= ts("This will have the URL you need to go to in order to verify your account and complete the account creation process.") %>
-			<%= ts("You might want to add") %>
-			<strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong> 
-			<%= ts("to your address book to make sure you get the mail.") %>
-		</p>
-		<p>
-			<%= ts("If you don't hear from us within 24 hours, and you don't find our email in your spam filter, please drop us a line at") %>
-			<%= "Support (http://archiveofourown.org/support)" %>.
-		</p>
-		<p>
-			<strong><%= ts("Important!") %></strong>
-			<%= ts("You must verify your account within 14 days, or your registration will expire.") %>
-		</p>
-		<p>
-			<%= link_to ts('Return to archive front page'), root_path %>
-		</p>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Account Created!") %></h2>
+<!--/descriptions-->
+<!--main content-->
+<div class="userstuff">
+  <p>
+    <%= ts("Within 24 hours, you should receive an email at the address you gave us. This will have the URL you need to go to in order to verify your account and complete the account creation process. You might want to add <strong>%{return_address}</strong> to your address book to make sure you get the mail.", return_address: ArchiveConfig.RETURN_ADDRESS).html_safe %>
+  </p>
+  <p>
+    <%= ts("If you don't hear from us within 24 hours, and you don't find our email in your spam filter, please <a href='%{support_path}'>drop us a line at Support</a>.", support_path: new_feedback_report_path).html_safe %>
+  </p>
+  <p>
+    <% # We do days_to_purge_unactivated * 7 because it's actually weeks %>
+    <%= ts("<strong>Important!</strong> You must verify your account within %{days_before_purge} days, or your registration will expire.", days_before_purge: AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED).html_safe %>
+  </p>
+  <p>
+    <%= link_to ts('Return to Archive front page'), root_path %>
+  </p>
+</div>
+<!--/content-->

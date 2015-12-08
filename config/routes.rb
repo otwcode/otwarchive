@@ -350,7 +350,12 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts
+  resources :gifts, only: [:index]  do
+    member do
+      post :toggle_rejected
+    end
+  end
+
   resources :prompts
   resources :collections do
     collection do

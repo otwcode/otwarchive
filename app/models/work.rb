@@ -387,18 +387,30 @@ class Work < ActiveRecord::Base
   def recipients=(recipient_names)
     new_recipients = [] # collect names of new recipients
     gifts = [] # rebuild the list of associated gifts using the new list of names
-    recipient_names.split(',').each do |name|
+    # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
+    recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
+    recip_names.uniq.each do |name|
       name.strip!
       gift = self.gifts.for_name_or_byline(name).first
-      new_recipients << name unless (gift && self.posted) # all recipients are new if work isn't posted
-      gifts << gift unless !gift # new gifts are added after saving, not now
+      if gift
+        gifts << gift # new gifts are added after saving, not now
+        new_recipients << name unless self.posted # all recipients are new if work not posted
+      else
+        # check that the gift would be valid
+        g = Gift.new(work: self, recipient: name)
+        if g.valid?
+          new_recipients << name # new gifts are added after saving, not now
+        else
+          errors.add(:base, ts("You cannot give a gift to the same user twice."))
+        end
+      end
     end
     self.new_recipients = new_recipients.uniq.join(",")
     self.gifts = gifts
   end
 
-  def recipients
-    names = self.gifts.collect(&:recipient)
+  def recipients(for_form = false)
+    names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
     unless self.new_recipients.blank?
       self.new_recipients.split(",").each do |name|
         names << name unless names.include? name
@@ -411,7 +423,10 @@ class Work < ActiveRecord::Base
     unless self.new_recipients.blank?
       self.new_recipients.split(',').each do |name|
         gift = self.gifts.for_name_or_byline(name).first
-        self.gifts << Gift.new(:recipient => name) unless gift
+        unless gift.present?
+          g = Gift.new(recipient: name, work: self)
+          g.save
+        end
       end
     end
   end
@@ -1007,7 +1022,7 @@ class Work < ActiveRecord::Base
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
-  scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
+  scope :giftworks_for_recipient_name, lambda { |name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name).where("gifts.rejected = FALSE") }
 
   scope :non_anon, where(:in_anon_collection => false)
   scope :unrevealed, where(:in_unrevealed_collection => true)
