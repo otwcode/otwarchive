@@ -1,0 +1,13 @@
+phraseapp:
+  project_id: 1e8d8ba0eb4c7a72bd536069be6e1f53
+  file_format: yml
+  push:
+    sources:
+    - file: ./config/locales/<locale_name>.yml
+      params:
+        file_format: yml
+  pull:
+    targets:
+    - file: ./config/locales/<locale_name>.yml
+      params:
+        file_format: yml

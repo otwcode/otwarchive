@@ -125,3 +125,10 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   fill_in("email", :with => "#{email}")
   click_button("Look me up")
 end
+
+### Then
+
+Then /^I should see how long I have to activate my account$/ do
+  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  step %{I should see "You must verify your account within #{days_to_activate} days"}
+end
