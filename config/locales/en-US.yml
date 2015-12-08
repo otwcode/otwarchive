@@ -220,7 +220,7 @@
       template:
         <<: *errors_template
       full_messages:
-        format: "%{attribute} %{message}"---
+        format: "%{attribute} %{message}"
   comment_mailer:
     anonymous: Anonymous Creator
     comment_notification:
