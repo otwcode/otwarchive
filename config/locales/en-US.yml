@@ -245,8 +245,11 @@
       guest: A guest
       guests: guests
       kudos_on: Kudos on
-      left_kudos_html: "%{givers_list} left kudos on %{commentable_link}."
-      you_have: You've got kudos!
+      you_have: "[%{app_name}] You've got kudos!"
+      html:
+        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+      text:
+        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
   user_mailer:
     invite_increase_notification:
       html: |-
