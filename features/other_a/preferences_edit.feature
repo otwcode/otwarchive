@@ -88,8 +88,6 @@ Feature: Edit preferences
     And I check "Show my date of birth to other people."
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  # When I follow "editname"
-  When I follow "Dashboard" within "div#dashboard"
   Then I should not see "Works History" within "div#dashboard"
   When I go to the works page
     And I follow "This has two chapters"
