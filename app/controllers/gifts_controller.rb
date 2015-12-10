@@ -44,12 +44,16 @@ class GiftsController < ApplicationController
     @gift = Gift.find(params[:id])
     # have to have the gift, be logged in, and the owner of the gift
     if @gift && current_user && @gift.user == current_user
-      @gift.toggle!(:rejected)
+      @gift.rejected = !@gift.rejected?
+      @gift.save!
       if @gift.rejected?
         flash[:notice] = ts("This work will no longer be listed among your gifts.")
       else
         flash[:notice] = ts("This work will now be listed among your gifts.")
       end
+    else
+      # user doesn't have permission
+      access_denied
     end
     redirect_to user_gifts_url(current_user) and return
   end
