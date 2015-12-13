@@ -15,16 +15,16 @@ end
 content_fields =
   {
     title: "Foo Title", summary: "Foo summary", fandoms: "Foo",  warnings: "Underage",
-    character: "foo 1, foo 2", rating: "Explicit", relationship: "foo 1/foo 2",
-    category: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
+    characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
+    categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com"
   }
 
 api_fields =
   {
     title: "Bar Title", summary: "Bar summary", fandoms: "Bar",  warnings: "Rape/Non-Con",
-    character: "bar 1, bar 2", rating: "General", relationship: "bar 1/bar 2",
-    category: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
+    characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
+    categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com"
   }
 
@@ -38,9 +38,9 @@ describe "API ImportController" do
 Summary:  #{content_fields[:summary]}
 Fandom:  #{content_fields[:fandoms]}
 Warnings:  #{content_fields[:warnings]}
-Characters:  #{content_fields[:character]}
-Pairings:  #{content_fields[:relationship]}
-Category:  #{content_fields[:category]}
+Characters:  #{content_fields[:characters]}
+Pairings:  #{content_fields[:relationships]}
+Category:  #{content_fields[:categories]}
 Tags:  #{content_fields[:freeform]}
 
 stubbed response", headers: {})
@@ -123,18 +123,19 @@ stubbed response", headers: {})
     end
 
     describe "should use API metadata for these fields:" do
-      before do
+      before(:all) do
+        user = create(:user)
         post "/api/v1/import",
-           { archivist: @user.login,
+           { archivist: user.login,
              works: [{ title: api_fields[:title],
                        summary: api_fields[:summary],
                        fandoms: api_fields[:fandoms],
                        warnings: api_fields[:warnings],
-                       character: api_fields[:character],
+                       characters: api_fields[:characters],
                        rating: api_fields[:rating],
-                       relationship: api_fields[:relationship],
-                       category: api_fields[:category],
-                       freeform: api_fields[:freeform],
+                       relationships: api_fields[:relationships],
+                       categories: api_fields[:categories],
+                       additional_tags: api_fields[:freeform],
                        external_author_name: api_fields[:external_author_name],
                        external_author_email: api_fields[:external_author_email],
                        chapter_urls: ["http://foo"] }]
@@ -143,6 +144,10 @@ stubbed response", headers: {})
 
         parsed_body = JSON.parse(response.body)
         @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+      end
+
+      after(:all) do
+        @work.destroy
       end
 
       it "Title" do
@@ -158,16 +163,16 @@ stubbed response", headers: {})
         expect(@work.warnings.first.name).to eq(api_fields[:warnings])
       end
       it "Characters" do
-        expect(@work.characters.flat_map { |c| c.name }).to eq(api_fields[:character].split(", "))
+        expect(@work.characters.flat_map { |c| c.name }).to eq(api_fields[:characters].split(", "))
       end
       it "Ratings" do
         expect(@work.ratings.first.name).to eq(api_fields[:rating])
       end
       it "Relationships" do
-        expect(@work.relationships.first.name).to eq(api_fields[:relationship])
+        expect(@work.relationships.first.name).to eq(api_fields[:relationships])
       end
       it "Categories" do
-        expect(@work.categories).to eq(api_fields[:category])
+        expect(@work.categories.first.name).to eq(api_fields[:categories])
       end
       it "Additional Tags" do
         expect(@work.freeforms.flat_map { |f| f.name }).to eq(api_fields[:freeform].split(", "))
@@ -178,9 +183,10 @@ stubbed response", headers: {})
     end
 
     describe "should use content metadata if no API metadata is supplied for these fields:" do
-      before do
+      before(:all) do
+        user = create(:user)
         post "/api/v1/import",
-             { archivist: @user.login,
+             { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
                          chapter_urls: ["http://foo"] }]
@@ -189,6 +195,10 @@ stubbed response", headers: {})
 
         parsed_body = JSON.parse(response.body)
         @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+      end
+
+      after(:all) do
+        @work.destroy
       end
 
       it "Title" do
@@ -204,16 +214,16 @@ stubbed response", headers: {})
         expect(@work.warnings.first.name).to eq(content_fields[:warnings])
       end
       it "Characters" do
-        expect(@work.characters.flat_map { |c| c.name }).to eq(content_fields[:character].split(", "))
+        expect(@work.characters.flat_map { |c| c.name }).to eq(content_fields[:characters].split(", "))
       end
       it "Ratings" do
         expect(@work.ratings.first.name).to eq(content_fields[:rating])
       end
       it "Relationships" do
-        expect(@work.relationships.first.name).to eq(content_fields[:relationship])
+        expect(@work.relationships.first.name).to eq(content_fields[:relationships])
       end
       it "Categories" do
-        expect(@work.categories).to eq(content_fields[:category])
+        expect(@work.categories.first.name).to eq(content_fields[:categories])
       end
       it "Additional Tags" do
         expect(@work.freeforms.flat_map { |f| f.name }).to eq(content_fields[:freeform].split(", "))
@@ -224,9 +234,10 @@ stubbed response", headers: {})
     end
 
     describe "should use fallback values or nil if no metadata is supplied for these fields:" do
-      before do
+      before(:all) do
+        user = create(:user)
         post "/api/v1/import",
-             { archivist: @user.login,
+             { archivist: user.login,
                works: [{ external_author_name: "bar",
                          external_author_email: "bar@foo.com",
                          chapter_urls: ["http://no-metadata"] }]
@@ -235,6 +246,10 @@ stubbed response", headers: {})
 
         parsed_body = JSON.parse(response.body)
         @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+      end
+
+      after(:all) do
+        @work.destroy
       end
 
       it "Title" do
