@@ -44,6 +44,12 @@ Category:  #{content_fields[:category]}
 Tags:  #{content_fields[:freeform]}
 
 stubbed response", headers: {})
+
+  WebMock.stub_request(:any, /no-metadata/).
+    to_return(status: 200,
+              body: "stubbed response",
+              headers: {})
+
   WebMock.stub_request(:any, /bar/).
     to_return(status: 404, headers: {})
 
@@ -171,19 +177,96 @@ stubbed response", headers: {})
       end
     end
 
-    xit "should use metadata detected in the content if no API metadata is supplied" do
-      post "/api/v1/import",
-           { archivist: @user.login,
-             works: [{ external_author_name: "bar",
-                       external_author_email: "bar@foo.com",
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+    describe "should use content metadata if no API metadata is supplied for these fields:" do
+      before do
+        post "/api/v1/import",
+             { archivist: @user.login,
+               works: [{ external_author_name: "bar",
+                         external_author_email: "bar@foo.com",
+                         chapter_urls: ["http://foo"] }]
+             }.to_json,
+             valid_headers
 
-      parsed_body = JSON.parse(response.body)
-      work = Work.find_by_url(parsed_body["works"].first["original_url"])
+        parsed_body = JSON.parse(response.body)
+        @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+      end
 
-    #   TODO
+      it "Title" do
+        expect(@work.title).to eq(content_fields[:title])
+      end
+      it "Summary" do
+        expect(@work.summary).to eq("<p>" + content_fields[:summary] + "</p>")
+      end
+      it "Fandoms" do
+        expect(@work.fandoms.first.name).to eq(content_fields[:fandoms])
+      end
+      it "Warnings" do
+        expect(@work.warnings.first.name).to eq(content_fields[:warnings])
+      end
+      it "Characters" do
+        expect(@work.characters.flat_map { |c| c.name }).to eq(content_fields[:character].split(", "))
+      end
+      it "Ratings" do
+        expect(@work.ratings.first.name).to eq(content_fields[:rating])
+      end
+      it "Relationships" do
+        expect(@work.relationships.first.name).to eq(content_fields[:relationship])
+      end
+      it "Categories" do
+        expect(@work.categories).to eq(content_fields[:category])
+      end
+      it "Additional Tags" do
+        expect(@work.freeforms.flat_map { |f| f.name }).to eq(content_fields[:freeform].split(", "))
+      end
+      it "Author pseud" do
+        expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
+      end
+    end
+
+    describe "should use fallback values or nil if no metadata is supplied for these fields:" do
+      before do
+        post "/api/v1/import",
+             { archivist: @user.login,
+               works: [{ external_author_name: "bar",
+                         external_author_email: "bar@foo.com",
+                         chapter_urls: ["http://no-metadata"] }]
+             }.to_json,
+             valid_headers
+
+        parsed_body = JSON.parse(response.body)
+        @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+      end
+
+      it "Title" do
+        expect(@work.title).to eq("Untitled Imported Work")
+      end
+      it "Summary" do
+        expect(@work.summary).to be_nil
+      end
+      it "Fandoms" do
+        expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      end
+      it "Warnings" do
+        expect(@work.warnings.first.name).to eq(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+      end
+      it "Characters" do
+        expect(@work.characters).to be_empty
+      end
+      it "Ratings" do
+        expect(@work.ratings.first.name).to eq(ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      end
+      it "Relationships" do
+        expect(@work.relationships).to be_empty
+      end
+      it "Categories" do
+        expect(@work.categories).to be_empty
+      end
+      it "Additional Tags" do
+        expect(@work.freeforms).to be_empty
+      end
+      it "Author pseud" do
+        expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
+      end
     end
   end
 
