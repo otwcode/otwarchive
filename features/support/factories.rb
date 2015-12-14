@@ -191,8 +191,9 @@ end
 
 
   factory :owned_tag_set do |f|
-    f.sequence(:title) {|n| "Owned Tag Set #{n}"}
+    f.sequence(:title) {|n| "Owned Tagss Set #{n}3"}
     f.nominated true
+    f.fandom_nomination_limit = 2
     after(:build) do |owned_tag_set|
       owned_tag_set.build_tag_set
       owned_tag_set.add_owner(FactoryGirl.create(:pseud))
@@ -202,7 +203,19 @@ end
   factory :tag_set_nomination do |f|
     f.association :owned_tag_set
     f.association :pseud
+    f.assocation :fandom_nomination
   end
+
+  factory :fandom_nomination do |f|
+    after(:build) do |fandom_nomination|
+      fandom_nomination.type = "FandomNomination"
+      fandom_nomination.tagname = FactoryGirl.create(:fandom).name
+      fandom_nomination.approved = true
+      fandom_nomination.rejected = false
+      fandom_nomination.canonical = true
+    end
+  end
+
 
   factory :challenge_assignment do |f|
     after(:build) do |assignment|
