@@ -61,6 +61,7 @@ class Api::V1::ImportController < Api::V1::BaseController
     work_status, work_messages = work_errors(external_work)
     work_url = ""
     original_url = []
+    work = nil
     if work_status == :ok
       urls = external_work[:chapter_urls]
       original_url = urls.first
@@ -78,6 +79,7 @@ class Api::V1::ImportController < Api::V1::BaseController
         @some_errors = true
         work_status = :unprocessable_entity
         work_messages << exception.message
+        work_messages << work.errors if work
       end
     end
 

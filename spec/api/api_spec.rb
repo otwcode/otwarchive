@@ -37,6 +37,7 @@ describe "API ImportController" do
                 "Title: #{content_fields[:title]}
 Summary:  #{content_fields[:summary]}
 Fandom:  #{content_fields[:fandoms]}
+Rating: #{content_fields[:rating]}
 Warnings:  #{content_fields[:warnings]}
 Characters:  #{content_fields[:characters]}
 Pairings:  #{content_fields[:relationships]}
@@ -223,7 +224,8 @@ stubbed response", headers: {})
         expect(@work.relationships.first.name).to eq(content_fields[:relationships])
       end
       it "Categories" do
-        expect(@work.categories.first.name).to eq(content_fields[:categories])
+        # Categories are not detected in the content as the name is more likely to mean tags
+        expect(@work.categories).to be_empty
       end
       it "Additional Tags" do
         expect(@work.freeforms.flat_map { |f| f.name }).to eq(content_fields[:freeform].split(", "))
@@ -256,7 +258,7 @@ stubbed response", headers: {})
         expect(@work.title).to eq("Untitled Imported Work")
       end
       it "Summary" do
-        expect(@work.summary).to be_nil
+        expect(@work.summary).to eq("")
       end
       it "Fandoms" do
         expect(@work.fandoms.first.name).to eq(ArchiveConfig.FANDOM_NO_TAG_NAME)

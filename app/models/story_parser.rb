@@ -314,7 +314,7 @@ class StoryParser
       work.category_string = meta_or_default(work.category_string, options[:category], [])
       work.character_string = meta_or_default(work.character_string, options[:character], [])
       work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
-      work.freeform_string = meta_or_default(work.freeform_string, options[:freeform])
+      work.freeform_string = meta_or_default(work.freeform_string, options[:freeform], [])
 
       # set default value for title
       work.title = meta_or_default(work.title, options[:title], "Untitled Imported Work")
@@ -1034,7 +1034,7 @@ class StoryParser
     def meta_or_default(work_field, field, default = nil)
       if @options[:override_tags] || work_field.blank?
         if field.blank?
-          work_field || default
+          work_field.blank? ? default : work_field
         else
           field
         end
