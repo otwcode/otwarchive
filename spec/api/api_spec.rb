@@ -14,7 +14,7 @@ end
 # Values in API fake content
 content_fields =
   {
-    title: "Foo Title", summary: "Foo summary", fandoms: "Foo",  warnings: "Underage",
+    title: "Foo Title", summary: "Foo summary", fandoms: "Foo", warnings: "Underage",
     characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
     categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com"
@@ -22,7 +22,7 @@ content_fields =
 
 api_fields =
   {
-    title: "Bar Title", summary: "Bar summary", fandoms: "Bar",  warnings: "Rape/Non-Con",
+    title: "Bar Title", summary: "Bar summary", fandoms: "Bar", warnings: "Rape/Non-Con",
     characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
     categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com"
@@ -127,21 +127,21 @@ stubbed response", headers: {})
       before(:all) do
         user = create(:user)
         post "/api/v1/import",
-           { archivist: user.login,
-             works: [{ title: api_fields[:title],
-                       summary: api_fields[:summary],
-                       fandoms: api_fields[:fandoms],
-                       warnings: api_fields[:warnings],
-                       characters: api_fields[:characters],
-                       rating: api_fields[:rating],
-                       relationships: api_fields[:relationships],
-                       categories: api_fields[:categories],
-                       additional_tags: api_fields[:freeform],
-                       external_author_name: api_fields[:external_author_name],
-                       external_author_email: api_fields[:external_author_email],
-                       chapter_urls: ["http://foo"] }]
-           }.to_json,
-           valid_headers
+             { archivist: user.login,
+               works: [{ title: api_fields[:title],
+                         summary: api_fields[:summary],
+                         fandoms: api_fields[:fandoms],
+                         warnings: api_fields[:warnings],
+                         characters: api_fields[:characters],
+                         rating: api_fields[:rating],
+                         relationships: api_fields[:relationships],
+                         categories: api_fields[:categories],
+                         additional_tags: api_fields[:freeform],
+                         external_author_name: api_fields[:external_author_name],
+                         external_author_email: api_fields[:external_author_email],
+                         chapter_urls: ["http://foo"] }]
+             }.to_json,
+             valid_headers
 
         parsed_body = JSON.parse(response.body)
         @work = Work.find_by_url(parsed_body["works"].first["original_url"])
@@ -164,7 +164,7 @@ stubbed response", headers: {})
         expect(@work.warnings.first.name).to eq(api_fields[:warnings])
       end
       it "Characters" do
-        expect(@work.characters.flat_map { |c| c.name }).to eq(api_fields[:characters].split(", "))
+        expect(@work.characters.flat_map(&:name)).to eq(api_fields[:characters].split(", "))
       end
       it "Ratings" do
         expect(@work.ratings.first.name).to eq(api_fields[:rating])
@@ -176,7 +176,7 @@ stubbed response", headers: {})
         expect(@work.categories.first.name).to eq(api_fields[:categories])
       end
       it "Additional Tags" do
-        expect(@work.freeforms.flat_map { |f| f.name }).to eq(api_fields[:freeform].split(", "))
+        expect(@work.freeforms.flat_map(&:name)).to eq(api_fields[:freeform].split(", "))
       end
       it "Author pseud" do
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
@@ -215,7 +215,7 @@ stubbed response", headers: {})
         expect(@work.warnings.first.name).to eq(content_fields[:warnings])
       end
       it "Characters" do
-        expect(@work.characters.flat_map { |c| c.name }).to eq(content_fields[:characters].split(", "))
+        expect(@work.characters.flat_map(&:name)).to eq(content_fields[:characters].split(", "))
       end
       it "Ratings" do
         expect(@work.ratings.first.name).to eq(content_fields[:rating])
@@ -228,7 +228,7 @@ stubbed response", headers: {})
         expect(@work.categories).to be_empty
       end
       it "Additional Tags" do
-        expect(@work.freeforms.flat_map { |f| f.name }).to eq(content_fields[:freeform].split(", "))
+        expect(@work.freeforms.flat_map(&:name)).to eq(content_fields[:freeform].split(", "))
       end
       it "Author pseud" do
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
