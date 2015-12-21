@@ -84,7 +84,7 @@ Feature: Invite requests
         | user_password_confirmation  | password1 |
       And I press "Create Account"
     Then I should see "Within 24 hours, you should receive an email at the address you gave us."
-      And I should see "You must verify your account within 14 days"
+      And I should see how long I have to activate my account
       And I should see "If you don't hear from us within 24 hours"
 
   Scenario: When not logged in, there is a Create an Account button

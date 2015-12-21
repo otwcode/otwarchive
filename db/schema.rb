@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20010101010101) do
+ActiveRecord::Schema.define(:version => 20150901132832) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -140,6 +140,27 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
 
   add_index "archive_faqs", ["position"], :name => "index_archive_faqs_on_position"
   add_index "archive_faqs", ["slug"], :name => "index_archive_faqs_on_slug", :unique => true
+
+  create_table "audits", :force => true do |t|
+    t.integer  "auditable_id"
+    t.string   "auditable_type"
+    t.integer  "associated_id"
+    t.string   "associated_type"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "username"
+    t.string   "action"
+    t.text     "audited_changes"
+    t.integer  "version",         :default => 0
+    t.string   "comment"
+    t.string   "remote_address"
+    t.datetime "created_at"
+  end
+
+  add_index "audits", ["associated_id", "associated_type"], :name => "associated_index"
+  add_index "audits", ["auditable_id", "auditable_type"], :name => "auditable_index"
+  add_index "audits", ["created_at"], :name => "index_audits_on_created_at"
+  add_index "audits", ["user_id", "user_type"], :name => "user_index"
 
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                               :null => false
@@ -346,6 +367,7 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
     t.integer  "parent_id"
     t.string   "parent_type"
     t.integer  "content_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.boolean  "unreviewed",                             :default => false, :null => false
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_commentable"
@@ -440,6 +462,14 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.integer  "language_id"
   end
+
+  create_table "fannish_next_of_kins", :force => true do |t|
+    t.integer "user_id"
+    t.integer "kin_id"
+    t.string  "kin_email"
+  end
+
+  add_index "fannish_next_of_kins", ["user_id"], :name => "index_fannish_next_of_kins_on_user_id"
 
   create_table "favorite_tags", :force => true do |t|
     t.integer "user_id"
@@ -608,7 +638,9 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
     t.string   "name"
     t.boolean  "main"
     t.datetime "updated_at"
-    t.integer  "language_id", :null => false
+    t.integer  "language_id",                          :null => false
+    t.boolean  "interface_enabled", :default => false, :null => false
+    t.boolean  "email_enabled",     :default => false, :null => false
   end
 
   add_index "locales", ["iso"], :name => "index_locales_on_iso"
@@ -768,6 +800,7 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
     t.boolean  "kudos_emails_off",                  :default => false,                     :null => false
     t.boolean  "disable_share_links",               :default => false,                     :null => false
     t.boolean  "banner_seen",                       :default => false,                     :null => false
+    t.integer  "preferred_locale",                  :default => 1,                         :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -1234,39 +1267,40 @@ ActiveRecord::Schema.define(:version => 20010101010101) do
   add_index "work_links", ["work_id", "url"], :name => "work_links_work_id_url", :unique => true
 
   create_table "works", :force => true do |t|
-    t.integer  "expected_number_of_chapters",              :default => 1
+    t.integer  "expected_number_of_chapters",               :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "major_version",                            :default => 1
-    t.integer  "minor_version",                            :default => 0
-    t.boolean  "posted",                                   :default => false, :null => false
+    t.integer  "major_version",                             :default => 1
+    t.integer  "minor_version",                             :default => 0
+    t.boolean  "posted",                                    :default => false, :null => false
     t.integer  "language_id"
-    t.boolean  "restricted",                               :default => false, :null => false
-    t.string   "title",                                                       :null => false
+    t.boolean  "restricted",                                :default => false, :null => false
+    t.string   "title",                                                        :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count"
-    t.boolean  "hidden_by_admin",                          :default => false, :null => false
-    t.boolean  "delta",                                    :default => false
+    t.boolean  "hidden_by_admin",                           :default => false, :null => false
+    t.boolean  "delta",                                     :default => false
     t.datetime "revised_at"
     t.string   "authors_to_sort_on"
     t.string   "title_to_sort_on"
-    t.boolean  "backdate",                                 :default => false, :null => false
+    t.boolean  "backdate",                                  :default => false, :null => false
     t.text     "endnotes"
     t.string   "imported_from_url"
-    t.integer  "hit_count_old",                            :default => 0,     :null => false
+    t.integer  "hit_count_old",                             :default => 0,     :null => false
     t.string   "last_visitor_old"
-    t.boolean  "complete",                                 :default => false, :null => false
-    t.integer  "summary_sanitizer_version",   :limit => 2, :default => 0,     :null => false
-    t.integer  "notes_sanitizer_version",     :limit => 2, :default => 0,     :null => false
-    t.integer  "endnotes_sanitizer_version",  :limit => 2, :default => 0,     :null => false
+    t.boolean  "complete",                                  :default => false, :null => false
+    t.integer  "summary_sanitizer_version",    :limit => 2, :default => 0,     :null => false
+    t.integer  "notes_sanitizer_version",      :limit => 2, :default => 0,     :null => false
+    t.integer  "endnotes_sanitizer_version",   :limit => 2, :default => 0,     :null => false
     t.integer  "work_skin_id"
-    t.boolean  "in_anon_collection",                       :default => false, :null => false
-    t.boolean  "in_unrevealed_collection",                 :default => false, :null => false
-    t.boolean  "anon_commenting_disabled",                 :default => false, :null => false
+    t.boolean  "in_anon_collection",                        :default => false, :null => false
+    t.boolean  "in_unrevealed_collection",                  :default => false, :null => false
+    t.boolean  "anon_commenting_disabled",                  :default => false, :null => false
     t.string   "ip_address"
-    t.boolean  "spam",                                     :default => false, :null => false
+    t.boolean  "spam",                                      :default => false, :null => false
     t.datetime "spam_checked_at"
+    t.boolean  "moderated_commenting_enabled",              :default => false, :null => false
   end
 
   add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"

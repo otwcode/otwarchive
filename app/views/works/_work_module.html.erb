@@ -28,7 +28,7 @@
 
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
 
-      <% unless work.recipients.blank? %>
+      <% if work.gifts.not_rejected.exists? %>
         <%= ts("for") %> <%= recipients_link(work) %>
       <% end %>
       <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>

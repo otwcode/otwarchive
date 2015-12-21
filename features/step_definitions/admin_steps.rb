@@ -150,6 +150,11 @@ Given /^the user "([^\"]*)" is banned$/ do |user|
   click_button("Update")
 end
 
+Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
+  u = User.find_by_login(user)
+  assert u.banned?
+end
+
 Given /^I have posted an admin post without paragraphs$/ do
   step("I am logged in as an admin")
   step("I make an admin post without paragraphs")
@@ -314,4 +319,24 @@ Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
   step(%{I should see "#{work}"})
   step(%{I view the work "#{work}"})
   step(%{I should see "#{work}"})
+end
+
+Then(/^the work "(.*?)" should not be deleted$/) do |work|
+  w = Work.find_by_title(work)
+  assert w && w.posted?
+end
+
+Then(/^there should be no bookmarks on the work "(.*?)"$/) do |work|
+  w = Work.find_by_title(work)
+  assert w.bookmarks.count == 0
+end
+
+Then(/^there should be no comments on the work "(.*?)"$/) do |work|
+  w = Work.find_by_title(work)
+  assert w.comments.count == 0
+end
+
+When(/^the user "(.*?)" is unbanned in the background/) do |user|
+  u = User.find_by_login(user)
+  u.update_attribute(:banned, false)
 end

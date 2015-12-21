@@ -1,5 +1,5 @@
 <% cache("#{work.cache_key}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-<h3 class="landmark heading">Work Header</h3>
+<h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
 
@@ -83,6 +83,14 @@
              <%= @work.spam? %>
           <% end %>
         </dd>
+        <% if @work.gifts.are_rejected.exists? %>
+          <dt class="gift">
+            <%= ts('Refused As Gift:') %>
+          </dt>
+          <dd class="gift">
+            <%= @work.gifts.are_rejected.map { |g| g.recipient }.join(", ") %>
+          </dd>
+        <% end %>
       <% end %>
   </dl>
 </div>
