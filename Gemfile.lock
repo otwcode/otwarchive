@@ -132,7 +132,7 @@ GEM
     highline (1.6.19)
     hike (1.2.3)
     htmlentities (4.3.4)
-    http-cookie (1.0.1)
+    http-cookie (1.0.2)
       domain_name (~> 0.5)
     httparty (0.13.1)
       json (~> 1.8)
