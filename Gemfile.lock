@@ -131,7 +131,7 @@ GEM
     hashr (0.0.22)
     highline (1.6.19)
     hike (1.2.3)
-    htmlentities (4.3.1)
+    htmlentities (4.3.4)
     http-cookie (1.0.1)
       domain_name (~> 0.5)
     httparty (0.13.1)
