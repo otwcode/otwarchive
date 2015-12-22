@@ -75,7 +75,6 @@ GEM
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
-    colorize (0.6.0)
     connection_pool (2.1.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -197,10 +196,10 @@ GEM
       mime-types
     permit_yo (2.1.4)
       activesupport (~> 3.0)
-    phrase (0.4.20)
-      colorize
+    phrase (0.4.33)
       i18n
       json
+      rainbow
     pickle (0.4.11)
       cucumber (>= 0.8)
       rake
@@ -240,6 +239,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
+    rainbow (2.0.0)
     raindrops (0.11.0)
     rake (10.4.2)
     rdoc (3.12.2)
