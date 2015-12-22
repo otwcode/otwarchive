@@ -98,7 +98,7 @@ GEM
       chronic
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.12)
+    domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     elasticsearch (1.0.5)
       elasticsearch-api (= 1.0.5)
@@ -331,10 +331,10 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.43)
-    unf (0.1.1)
+    unf (0.1.4)
       unf_ext
-    unf_ext (0.0.6)
-    unf_ext (0.0.6-x86-mingw32)
+    unf_ext (0.0.7.1)
+    unf_ext (0.0.7.1-x86-mingw32)
     unicode (0.4.4.2)
     unicode (0.4.4.2-x86-mingw32)
     unicorn (4.6.3)
