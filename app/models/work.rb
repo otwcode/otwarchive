@@ -410,7 +410,7 @@ class Work < ActiveRecord::Base
   end
 
   def recipients(for_form = false)
-    names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
+    names = (for_form ? self.gifts.not_rejected : self.gifts).includes(:pseud).collect(&:recipient)
     unless self.new_recipients.blank?
       self.new_recipients.split(",").each do |name|
         names << name unless names.include? name
