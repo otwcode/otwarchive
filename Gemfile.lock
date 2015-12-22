@@ -92,7 +92,7 @@ GEM
       cucumber (>= 1.2.0)
       nokogiri (>= 1.5.0)
       rails (~> 3.0)
-    dalli (2.7.2)
+    dalli (2.7.5)
     database_cleaner (1.0.1)
     delorean (2.1.0)
       chronic
