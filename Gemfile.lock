@@ -213,7 +213,7 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
       win32console (~> 1.3)
-    rack (1.4.5)
+    rack (1.4.7)
     rack-cache (1.2)
       rack (>= 0.4)
     rack-dev-mark (0.4.5)
