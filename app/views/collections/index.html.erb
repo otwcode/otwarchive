@@ -54,7 +54,7 @@
   <!--main content-->
   <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
   <ul class="collection picture index group">
-    <% @collections.each do |collection| %>
+    <% @collections.includes(:parent, :moderators, :children, :collection_preference, :challenge, owners: [:user]).each do |collection| %>
       <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
     <% end %>
   </ul>
