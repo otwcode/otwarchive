@@ -146,7 +146,7 @@ GEM
     kgio (2.8.0)
     launchy (2.3.0)
       addressable (~> 2.3)
-    lograge (0.3.1)
+    lograge (0.3.5)
       actionpack (>= 3)
       activesupport (>= 3)
       railties (>= 3)
