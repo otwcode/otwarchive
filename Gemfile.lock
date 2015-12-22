@@ -330,7 +330,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.43)
+    tzinfo (0.3.46)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
