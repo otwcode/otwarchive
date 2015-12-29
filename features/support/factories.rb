@@ -13,7 +13,6 @@ FactoryGirl.define do
     end
   end
 
-
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
     f.association :user
@@ -59,7 +58,7 @@ FactoryGirl.define do
   #tags
   factory :tag do |f|
     f.sequence(:id) { |n| n }
-	f.canonical true
+	  f.canonical true
     f.sequence(:name) { |n| "The #{n} Tag" }
   end
 
