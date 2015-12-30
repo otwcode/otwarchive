@@ -2,7 +2,8 @@ class TagsController < ApplicationController
   before_filter :load_collection
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search, :feed ]
   before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search, :feed ]
-  before_filter :load_tag, :only => [:show, :edit, :update, :wrangle, :mass_update]
+  before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
+  before_filter :load_tag_and_subtags, :only => [:show]
 
   caches_page :feed
 
@@ -10,6 +11,14 @@ class TagsController < ApplicationController
 
   def load_tag
     @tag = Tag.find_by_name(params[:id])
+    unless @tag && @tag.is_a?(Tag)
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
+    end
+  end
+
+  # improved performance for show page
+  def load_tag_and_subtags
+    @tag = Tag.includes(:direct_sub_tags).find_by_name(params[:id])
     unless @tag && @tag.is_a?(Tag)
       raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
     end
@@ -71,7 +80,7 @@ class TagsController < ApplicationController
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).includes(:direct_sub_tags).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
         unless tags.blank?
           children[child_type] = tags.to_a.uniq
         end
