@@ -71,7 +71,7 @@ class TagsController < ApplicationController
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        tags = @tag.send(child_type.underscore.pluralize).includes(:direct_sub_tags).order('taggings_count DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
         unless tags.blank?
           children[child_type] = tags.to_a.uniq
         end
