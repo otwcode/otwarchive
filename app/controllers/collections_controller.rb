@@ -60,11 +60,11 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
       visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
       # visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'bookmarks.created_at DESC')
       visible_bookmarks = Bookmark.in_collection(@collection).visible(:order => 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
