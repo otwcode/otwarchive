@@ -493,7 +493,7 @@ class Tag < ActiveRecord::Base
   def self.find_by_name(string)
     return unless string.is_a? String
     string = string.gsub('*s*', '/').gsub('*a*', '&').gsub('*d*', '.').gsub('*q*', '?').gsub('*h*', '#')
-    self.where('name = ?', string).first
+    self.where('tags.name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them
