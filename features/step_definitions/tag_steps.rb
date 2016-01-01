@@ -182,11 +182,11 @@ end
 
 When /^I post the comment "([^"]*)" on the period-containing tag "([^"]*)"$/ do |comment_text, tag|
   step "I am on the search tags page"
-  fill_in("tag_search", :with => tag)
+  fill_in("tag_search", with: tag)
   click_button "Search tags"
   click_link(tag)
   click_link(" comment")
-  fill_in("Comment", :with => comment_text)
+  fill_in("Comment", with: comment_text)
   click_button("Comment")
 end
 
