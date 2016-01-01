@@ -55,10 +55,10 @@ FactoryGirl.define do
     f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
   end
 
-  #tags
+  # tags
   factory :tag do |f|
     f.sequence(:id) { |n| n }
-	  f.canonical true
+    f.canonical true
     f.sequence(:name) { |n| "The #{n} Tag" }
   end
 
@@ -86,7 +86,7 @@ FactoryGirl.define do
     f.sequence(:name) { |n| "Freeform #{n}" }
   end
 
-  #works
+  # works
   factory :chapter do |f|
     f.content "Awesome content!"
     f.association :work

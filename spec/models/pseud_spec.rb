@@ -15,8 +15,8 @@ describe Pseud do
   end
 
   describe "save" do
-		before do
-			@user = User.new
+    before do
+      @user = User.new
       @user.login = "mynamepseud"
       @user.age_over_13 = "1"
       @user.terms_of_service = "1"
@@ -30,7 +30,7 @@ describe Pseud do
       @pseud.user_id = @user.id
       @pseud.name = "MyName"
     end
-    
+
     it "should save a minimalistic pseud" do
       @pseud.should be_valid_verbose
       expect(@pseud.save).to be_truthy
@@ -49,5 +49,4 @@ describe Pseud do
       @pseud.errors[:icon_comment_text].should_not be_empty
     end
   end
-
 end
