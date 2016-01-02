@@ -1,8 +1,9 @@
 # These methods return information about the given TagSetNomination or the
-# tags in a a TagSet.
+# tags in a a TagSet
 module TagSetsHelper
+
   def nomination_notes(limit)
-    message = ''
+    message = ""
     if limit[:fandom] > 0 
       if limit[:character] > 0
         if limit[:relationship] > 0
