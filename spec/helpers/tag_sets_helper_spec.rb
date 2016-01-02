@@ -204,7 +204,7 @@ describe TagSetsHelper do
       it 'should return a list of single-type tags' do
         @owned_tag_set = FactoryGirl.create(:owned_tag_set)
         expect(helper.tag_relation_to_list(@owned_tag_set.with_type(Fandom)))
-          .to include('<li>The 1 Fandom</li>')
+          .to include("<li>#{@owned_tag_set.tags.last.name}</li>")
       end
     end
   end
