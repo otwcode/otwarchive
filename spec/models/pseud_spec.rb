@@ -14,10 +14,7 @@ describe Pseud do
       expect(build(:pseud, name: '*pseud*')).to be_invalid
   end
 
-  # TODO: add more tests
-
   describe "save" do
-
 		before do
 			@user = User.new
       @user.login = "mynamepseud"
@@ -26,7 +23,7 @@ describe Pseud do
       @user.email = "foo1@archiveofourown.org"
       @user.password = "password"
       @user.save
-		end
+    end
 
     before(:each) do
       @pseud = Pseud.new
@@ -41,17 +38,16 @@ describe Pseud do
     end
 
     it "should not save pseud with too-long alt text for icon" do
-      @pseud.icon_alt_text = "Something that is too long blah blah blah blah blah blah blah blah blah blah blah blah blah blah"
+      @pseud.icon_alt_text = "Something that is too long blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah this needs 250 characters lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
       @pseud.save.should be_false
       @pseud.errors[:icon_alt_text].should_not be_empty
     end
-    
-    it "should not save pseud with too-long comment text for icon" #do
-      #@pseud.icon_comment_text = "Something that is too long blah blah blah blah blah blah blah blah blah blah blah blah blah blah"
-      #@pseud.save.should be_false
-      #@pseud.errors[:icon_comment_text].should_not be_empty
-    #end
 
+    it "should not save pseud with too-long comment text for icon" do
+      @pseud.icon_comment_text = "Something that is too long blah blah blah blah blah blah this needs a mere 50 characters"
+      @pseud.save.should be_false
+      @pseud.errors[:icon_comment_text].should_not be_empty
+    end
   end
 
 end
