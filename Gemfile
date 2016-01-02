@@ -112,7 +112,6 @@ group :test do
   gem 'rspec-rails'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'cucumber-rails', require: false
@@ -131,6 +130,11 @@ end
 group :test, :development do
   gem 'pry'
   gem 'whiny_validation'
+  gem 'factory_girl'
+end
+
+group :development do
+  gem 'factory_girl_rails'
 end
 
 group :test, :development, :staging  do
