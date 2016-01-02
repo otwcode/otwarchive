@@ -98,37 +98,35 @@ module ApplicationHelper
   end
 
   def non_anonymous_byline(creation)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = []
-      pseuds << creation.authors if creation.authors
-      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-      pseuds = pseuds.flatten.uniq.sort
+    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon") do
+      if creation.respond_to?(:author)
+        creation.author
+      else
+        pseuds = []
+        pseuds << creation.authors if creation.authors
+        pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+        pseuds = pseuds.flatten.uniq.sort
 
-      archivists = {}
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.author_name
+        archivists = {}
+        if creation.is_a?(Work)
+          external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+          external_creatorships.each do |ec|
+            archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+            archivists[archivist_pseud] = ec.author_name
+          end
         end
-      end
 
-      pseuds.collect { |pseud| 
-        archivists[pseud].nil? ? 
-            pseud_link(pseud) :
-            archivists[pseud] + " [" + ts("archived by %{name}", :name => pseud_link(pseud)) + "]"
-      }.join(', ').html_safe
+        pseuds.collect { |pseud| 
+          archivists[pseud].nil? ? 
+              pseud_link(pseud) :
+              archivists[pseud] + " [" + ts("archived by %{name}", :name => pseud_link(pseud)) + "]"
+        }.join(', ').html_safe
+      end
     end
   end
 
   def pseud_link(pseud)
-    if @downloading
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
-    else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :class => "login author", :rel => "author")
-    end
+    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
