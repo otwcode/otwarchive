@@ -132,3 +132,32 @@ Feature: Edit Works
     When I edit the work "Load of Typos"
       And I press "Preview"
     Then I should not see "draft"
+
+  Scenario: You can add a co-author to an already-posted work
+    Given the following activated users exist
+        | login          | password    | email                 |
+        | coauthor       | something   | coauthor@example.org  |
+      And I am logged in as "leadauthor"
+      And I post the work "Dialogue"
+    When I edit the work "Dialogue"
+      And I fill in "pseud_byline" with "coauthor"
+      And I press "Post Without Preview"
+    Then I should see "Work was successfully updated"
+      And I should see "coauthor, leadauthor" within ".byline"
+
+  Scenario: You can remove yourself as coauthor from a work
+    Given basic tags
+      And the following activated users exist
+        | login          |
+        | coolperson     |
+        | ex_friend      |
+      And I have coauthored a work as "coolperson" with "ex_friend"
+      And I am logged in as "coolperson"
+    When I view the work "Shared"
+    Then I should see "test pseud 1 (coolperson), test pseud 2 (ex_friend)" within ".byline"
+    When I edit the work "Shared"
+      And I follow "Remove Me As Author"
+    Then I should see "You have been removed as an author from the work"
+    When I view the work "Shared"
+    Then I should see "ex_friend" within ".byline"
+      And I should not see "coolperson" within ".byline"
