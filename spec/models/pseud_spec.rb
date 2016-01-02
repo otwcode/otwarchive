@@ -33,19 +33,19 @@ describe Pseud do
     
     it "should save a minimalistic pseud" do
       @pseud.should be_valid_verbose
-      @pseud.save.should be_true
+      expect(@pseud.save).to be_truthy
       @pseud.errors.should be_empty
     end
 
     it "should not save pseud with too-long alt text for icon" do
       @pseud.icon_alt_text = "Something that is too long blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah this needs 250 characters lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-      @pseud.save.should be_false
+      expect(@pseud.save).to be_falsey
       @pseud.errors[:icon_alt_text].should_not be_empty
     end
 
     it "should not save pseud with too-long comment text for icon" do
       @pseud.icon_comment_text = "Something that is too long blah blah blah blah blah blah this needs a mere 50 characters"
-      @pseud.save.should be_false
+      expect(@pseud.save).to be_falsey
       @pseud.errors[:icon_comment_text].should_not be_empty
     end
   end
