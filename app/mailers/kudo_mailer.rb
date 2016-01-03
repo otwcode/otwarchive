@@ -49,10 +49,6 @@ class KudoMailer < ActionMailer::Base
   end
 
   def guest_kudos(guest_count)
-    if guest_count.to_i == 1
-      "#{t 'mailer.kudos.guest'}"
-    else
-      "#{guest_count} #{t 'mailer.kudos.guests'}"
-    end
+     "#{t('mailer.kudos.guest', :count => guest_count.to_i)}"
   end
 end

@@ -3,8 +3,9 @@
 en: 
   mailer: 
     kudos:
-      guest: a guest
-      guests: guests
+      guest:
+        one: a guest
+        other: "%{count} guests"
       you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
