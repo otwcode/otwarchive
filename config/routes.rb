@@ -146,6 +146,10 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :users, :controller => 'admin_users' do
+      member do
+        get :confirm_delete_user_creations
+        post :destroy_user_creations
+      end
       collection do
         get :notify
         post :send_notification
@@ -345,7 +349,12 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts
+  resources :gifts, only: [:index]  do
+    member do
+      post :toggle_rejected
+    end
+  end
+
   resources :prompts
   resources :collections do
     collection do

@@ -7,6 +7,7 @@ Feature: Collection
   Scenario: When a collection has more works or bookmarks than the maximum displayed on dashboards (5), the listbox for that type of item should contain a link to the collection's page for that type of item (e.g. Works (6) or Bookmarks (10)).
   
   Given I have a collection "Dashboard Light" with name "dashboard_light"
+    And I am logged in as "user"
   When I post the work "Work 1" in the collection "Dashboard Light"
     And I post the work "Work 2" in the collection "Dashboard Light"
     And I post the work "Work 3" in the collection "Dashboard Light"

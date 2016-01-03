@@ -49,38 +49,6 @@ module NavigationHelpers
       new_user_path
     when /^invite requests page$/i
       invite_requests_path
-    when /^(.*)'s user page$/i
-      user_path(:id => $1)
-    when /^(.*)'s user url$/i
-      user_url(:id => $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
-    when /^(.*)'s works page$/i
-      Work.tire.index.refresh
-      user_works_path(:user_id => $1)
-    when /^the "(.*)" work page/
-      work_path(Work.find_by_title($1))
-    when /^the work page with title (.*)/
-      work_path(Work.find_by_title($1))
-    when /^(.*)'s bookmarks page$/i
-      Bookmark.tire.index.refresh
-      user_bookmarks_path(:user_id => $1)
-    when /^(.*)'s pseuds page$/i
-      user_pseuds_path(:user_id => $1)
-    when /^(.*)'s invitations page$/i
-      user_invitations_path(:user_id => $1)
-    when /^(.*)'s reading page$/i
-      user_readings_path(:user_id => $1)
-    when /^(.*)'s series page$/i
-      user_series_index_path(:user_id => $1)
-    when /^(.*)'s stats page$/i
-      user_stats_path(:user_id => $1)
-    when /^(.*)'s preferences page$/i
-      user_preferences_path(:user_id => $1)
-    when /^(.*)'s related works page$/i
-      user_related_works_path(:user_id => $1)
-    when /^the subscriptions page for "(.*)"$/i
-      user_subscriptions_path(:user_id => $1)
-    when /^(.*)'s profile page$/i
-      user_profile_path(:user_id => $1)
     when /my pseuds page/
       user_pseuds_path(User.current_user)
     when /my user page/
@@ -111,12 +79,48 @@ module NavigationHelpers
       user_inbox_path(User.current_user)
     when /my invitations page/
       user_invitations_path(User.current_user)
+    when /my gifts page/
+      user_gifts_path(User.current_user)
+    when /^(.*)'s gifts page/
+      user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
       skins_path(:skin_type => "WorkSkin")
+    when /^(.*?)(?:'s)? user page$/i
+      user_path(id: $1)
+    when /^(.*?)(?:'s)? user url$/i
+      user_url(id: $1).sub("http://www.example.com", "http://#{ArchiveConfig.APP_HOST}")
+    when /^(.*?)(?:'s)? works page$/i
+      Work.tire.index.refresh
+      user_works_path(user_id: $1)
+    when /^the "(.*)" work page/
+      work_path(Work.find_by_title($1))
+    when /^the work page with title (.*)/
+      work_path(Work.find_by_title($1))
+    when /^(.*?)(?:'s)? bookmarks page$/i
+      Bookmark.tire.index.refresh
+      user_bookmarks_path(user_id: $1)
+    when /^(.*?)(?:'s)? pseuds page$/i
+      user_pseuds_path(user_id: $1)
+    when /^(.*?)(?:'s)? invitations page$/i
+      user_invitations_path(user_id: $1)
+    when /^(.*?)(?:'s)? reading page$/i
+      user_readings_path(user_id: $1)
+    when /^(.*?)(?:'s)? series page$/i
+      user_series_index_path(user_id: $1)
+    when /^(.*?)(?:'s)? stats page$/i
+      user_stats_path(user_id: $1)
+    when /^(.*?)(?:'s)? preferences page$/i
+      user_preferences_path(user_id: $1)
+    when /^(.*?)(?:'s)? related works page$/i
+      user_related_works_path(user_id: $1)
+    when /^the subscriptions page for "(.*)"$/i
+      user_subscriptions_path(user_id: $1)
+    when /^(.*?)(?:'s)? profile page$/i
+      user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
-      skins_path(:user_id => $1)
+      skins_path(user_id: $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/

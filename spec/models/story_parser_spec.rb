@@ -2,6 +2,19 @@ require 'spec_helper'
 
 describe StoryParser do
 
+  # Temporarily make the methods we want to test public
+  before(:all) do
+    class StoryParser
+      public :get_source_if_known, :check_for_previous_import, :parse_common
+    end
+  end
+  
+  after(:all) do
+    class StoryParser
+      protected :get_source_if_known, :check_for_previous_import, :parse_common
+    end
+  end
+
   before(:each) do
     @sp = StoryParser.new
   end

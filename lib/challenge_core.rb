@@ -72,8 +72,7 @@ module ChallengeCore
   end
 
   def user_allowed_to_sign_up?(user)
-    self.collection.user_is_maintainer?(user) || 
-      (self.signup_open && (!self.collection.moderated? || self.collection.user_is_posting_participant?(user)))
+    self.collection.user_is_maintainer?(user) || self.signup_open
   end
   
   def user_allowed_to_see_prompt?(user, prompt)

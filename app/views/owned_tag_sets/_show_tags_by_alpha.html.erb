@@ -4,6 +4,6 @@
   <% if tags.count <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
     <%= render "show_tags_in_single_list", :tag_type => tag_type %>
   <% else %>
-    <% render "show_tags_alpha_listbox", :tagname_list => tags.by_name_without_articles.value_of(:name), :tag_type => tag_type %>
+    <%= render "show_tags_alpha_listbox", :tagname_list => tags.by_name_without_articles.value_of(:name), :tag_type => tag_type %>
   <% end %>
 <% end %>

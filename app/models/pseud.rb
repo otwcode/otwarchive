@@ -40,8 +40,10 @@ class Pseud < ActiveRecord::Base
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
-  has_many :gifts
-  has_many :gift_works, :through => :gifts, :source => :work
+  has_many :gifts, conditions: { rejected: false }
+  has_many :gift_works, through: :gifts, source: :work
+  has_many :rejected_gifts, class_name: "Gift", conditions: { rejected: true }
+  has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id",
@@ -71,6 +73,7 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
+  after_update :expire_caches
 
   scope :on_works, lambda {|owned_works|
     select("DISTINCT pseuds.*").
@@ -390,6 +393,12 @@ class Pseud < ActiveRecord::Base
     if !self.is_default? && self.user.pseuds.to_enum.find(&:is_default?) == nil
       default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
       default_pseud.update_attribute(:is_default, true)
+    end
+  end
+
+  def expire_caches
+    if name_changed?
+      self.works.each{ |work| work.touch }
     end
   end
 

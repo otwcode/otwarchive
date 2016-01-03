@@ -70,6 +70,7 @@ Feature: Gift Exchange Challenge
       And I press "Submit"
     Then I should see "New members invited: comod"
 
+
   Scenario: Sign up for a gift exchange
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
@@ -340,6 +341,23 @@ Feature: Gift Exchange Challenge
     Then I should see "Awesome Gift Exchange"
       And I should not see "Not yet posted"
       And I should see "Fulfilled Story"
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+      
+  Scenario: Refused story should still fulfill the assignment
+  
+    Given an assignment has been fulfilled in a gift exchange
+      And I reveal works for "Awesome Gift Exchange"
+      And I refuse my gift story "Fulfilled Story"
+      And I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Complete"
+    Then I should see "myname1"
+      And I should see "Fulfilled Story"
+  
 
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
@@ -378,6 +396,26 @@ Feature: Gift Exchange Challenge
       And I follow "Sign-up Summary"
     Then I should not see "Summary does not appear until at least"
       And I should see "Tags were not used in this Challenge, so there is no summary to display here."
+
+  Scenario: Sign-up Form link shows up in sidebar of moderated collections
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "Cabbot Cove"
+      And I open signups for "Cabbot Cove"
+    When  I am logged in as "Scott" with password "password"
+      And I go to "Cabbot Cove" collection's page
+      And I should see "Unmoderated"
+      And I should see "Sign-up Form"
+    Then  I am logged in as "mod1"
+      And I go to "Cabbot Cove" collection's page
+      And I follow "Collection Settings"
+      And I check "This collection is moderated"
+      And I press "Update"
+    Then I am logged in as "Scott" with password "password"
+      And I go to "Cabbot Cove" collection's page
+      And I should see "Moderated"
+      And I should see "Sign-up Form"
+
+
 
   Scenario: Tagsets show up in Challenge metadata
     Given I am logged in as "mod1"
