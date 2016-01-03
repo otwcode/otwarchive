@@ -134,14 +134,9 @@ Feature: Edit Works
     Then I should not see "draft"
 
   Scenario: You can add a co-author to an already-posted work
-    Given the following activated users exist
-        | login          | password    | email                 |
-        | coauthor       | something   | coauthor@example.org  |
-      And I am logged in as "leadauthor"
+    Given I am logged in as "leadauthor"
       And I post the work "Dialogue"
-    When I edit the work "Dialogue"
-      And I fill in "pseud_byline" with "coauthor"
-      And I press "Post Without Preview"
+    When I add the coauthor "coauthor" to the work "Dialogue"
     Then I should see "Work was successfully updated"
       And I should see "coauthor, leadauthor" within ".byline"
 
