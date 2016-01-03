@@ -15,11 +15,11 @@ class CollectionsController < ApplicationController
 
   def index
     if params[:work_id] && (@work = Work.find_by_id(params[:work_id]))
-      @collections = @work.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).approved_collections.by_title.paginate(:page => params[:page])
+      @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(:page => params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-      @collections = @collection.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).children.by_title.paginate(:page => params[:page])
+      @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(:page => params[:page])
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-      @collections = @user.maintained_collections.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).by_title.paginate(:page => params[:page])
+      @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(:page => params[:page])
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
