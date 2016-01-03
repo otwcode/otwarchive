@@ -7,13 +7,13 @@
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
-              <ul class="menu">
-                <li aria-haspopup="true">
-                  <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
-                  <ul id="skin_chooser" class="expandable secondary">
-                    <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
-                    <% Skin.in_chooser.order(:title).each do |s| %>
-                      <li><%= link_to s.title, set_skin_path(s) %></li>
+            <ul class="menu">
+              <li aria-haspopup="true">
+                <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
+                <ul id="skin_chooser" class="expandable secondary">
+                  <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
+                  <% Skin.in_chooser.order(:title).each do |s| %>
+                    <li><%= link_to s.title, set_skin_path(s) %></li>
                   <% end %>
                 </ul> 
               </li>
