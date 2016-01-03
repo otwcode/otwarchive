@@ -395,7 +395,7 @@ class User < ActiveRecord::Base
   # called to mark a user as "Active"
   def update_active
     REDIS_GENERAL.sadd("last_login_list", login)
-    REDIS_GENERAL.set("last_active_#{login}", Time.now)
+    REDIS_GENERAL.set("last_active_#{login}", Time.now.utc)
   end
 
   # Is this user an authorized translation admin?
