@@ -571,7 +571,7 @@ class User < ActiveRecord::Base
           user.last_active_at = active_time
           REDIS_GENERAL.del("last_active_#{username}")
         end
-        user.save
+        user.save unless user.nil?
       end
     end
   end

@@ -299,5 +299,15 @@ Feature: Admin Actions to manage users
   Then I should see "Are you sure you want to delete"
   When I press "Yes, Delete All Spammer Creations"
   Then I should see "All creations by user Spamster have been deleted."
-  
-  
+
+  Scenario: User's last login date is saved
+  Given the user "new_user" exists and is activated
+    And I am logged in as an admin
+  When I go to the abuse administration page for "new_user"
+  Then I should see "No logins recorded"
+  When I am logged in as "new_user"
+    And the last login information has been updated
+    And I am logged in as an admin
+    And I go to the abuse administration page for "new_user"
+  Then I should not see "No logins recorded"
+    And I should see the last login time for "new_user"
