@@ -7,9 +7,13 @@ en:
       guests: guests
       you_have: "[%{app_name}] You've got kudos!"
       html:
-        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
       text:
-        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
+        left_kudos:
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
     general: 
       footer: 
         general: 
