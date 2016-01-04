@@ -136,7 +136,7 @@ Feature: Edit Works
   Scenario: You can add a co-author to an already-posted work
     Given I am logged in as "leadauthor"
       And I post the work "Dialogue"
-    When I add the coauthor "coauthor" to the work "Dialogue"
+    When I add the co-author "coauthor" to the work "Dialogue"
     Then I should see "Work was successfully updated"
       And I should see "coauthor, leadauthor" within ".byline"
 
