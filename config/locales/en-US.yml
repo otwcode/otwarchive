@@ -260,3 +260,8 @@
       txt: "Hi %{login}\nWe just wanted to let you know that you have %{total} new
         invitation(s),\nwhich can be used to create new accounts at the archive. You
         can invite a\nfriend at %{invitation_page}.\nCheers, \n%{archive_name}"
+    abuse_report:
+      subject: "[%{app_name}] Your Abuse Report"
+      para1: "The following abuse report has been sent to the Abuse team:"
+      url_para: "URL of the page the abuse is on:"
+      description_para: "Description of the abuse:"
