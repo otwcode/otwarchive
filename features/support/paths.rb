@@ -187,6 +187,8 @@ module NavigationHelpers
       admin_users_path
     when /^the abuse administration page for "(.*)"$/i
       admin_user_path(User.find_by_login($1))
+    when /^the admin-stats page$/i
+      admin_stats_path
       
     # Here is an example that pulls values out of the Regexp:
     #
