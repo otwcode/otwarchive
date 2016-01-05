@@ -241,9 +241,8 @@ en:
           html: "Sent by <b>%{sent_by}</b>."
           text: "Sent by %{sent_by}."
     kudos:
-      guest:
-        one: "a guest"
-        other: "%{count} guests"
+      guest: a guest
+      guests: guests
       you_have: "[%{app_name}] You've got kudos!"
       html:
         left_kudos:
