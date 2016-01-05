@@ -242,7 +242,7 @@ en:
           text: "Sent by %{sent_by}."
     kudos:
       guest:
-        one: a guest
+        one: "a guest"
         other: "%{count} guests"
       you_have: "[%{app_name}] You've got kudos!"
       html:
