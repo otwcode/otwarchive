@@ -137,6 +137,10 @@ describe UserMailer do
       it 'only has style_to links in the HTML body' do
         expect(get_message_part(email, /html/)).not_to have_xpath('//a[not(@style)]')
       end
+
+      it 'does not have exposed HTML' do
+        expect(get_message_part(email, /html/)).not_to include("&lt;")
+      end
     end
 
     describe 'text version' do
@@ -205,6 +209,7 @@ describe UserMailer do
     token = 'abc123'
 
     before(:each) do
+      @user = FactoryGirl.create(:user)
       @invitation = FactoryGirl.create(:invitation, token: token)
     end
 
