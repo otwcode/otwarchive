@@ -12,6 +12,13 @@ Given /^I have pre-archivist setup for "([^\"]*)"$/ do |name|
     step(%{I have loaded the "roles" fixture})
 end
 
+Given /^I have an Open Doors committee member "([^\"]*)"$/ do |name|
+  step(%{I have pre-archivist setup for "#{name}"})
+  step(%{I am logged in as an admin})
+  step(%{I make "#{name}" an Open Doors committee member})
+  step(%{I log out})
+end
+
 ### WHEN
 
 When /^I make "([^\"]*)" an archivist$/ do |name|
@@ -19,6 +26,12 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
     step(%{I press "Find"})
   step(%{I check "user_roles_4"})
     step(%{I press "Update"})
+end
+
+When /^I make "([^\"]*)" an Open Doors committee member$/ do |name|
+  @user = User.find_by_login(name)
+  @role = Role.find_or_create_by_name("opendoors")
+  @user.roles = [@role]
 end
 
 When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|

@@ -135,3 +135,14 @@ Feature: Archivist bulk imports
     When I check the 1st checkbox with id matching "importing_for_others"
     And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
+
+  Scenario: Archivist can't see Open Doors tools, OD committee can
+
+  Given I have an archivist "elynross"
+    And I have an Open Doors committee member "Ariana"
+  When I am logged in as "elynross"
+    And I go to the Open Doors tools page
+  Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
+  When I am logged in as "Ariana"
+    And I go to the Open Doors tools page
+  Then I should see "Update Redirect URL"
