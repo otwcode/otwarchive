@@ -6,7 +6,79 @@ en:
       emails_found: 
         one: "one email found"
         other: "%{count} emails found"
-  
+
+  errors:
+    format: "%{attribute} %{message}"
+    messages: &errors_messages
+      inclusion: "is not included in the list"
+      exclusion: "is reserved"
+      invalid: "is invalid"
+      confirmation: "doesn't match confirmation"
+      accepted: "must be accepted"
+      empty: "can't be empty"
+      blank: "can't be blank" # this is a comment, can you see it in PhraseApp?
+      too_long:
+        one: "is too long (maximum is 1 character)"
+        other: "is too long (maximum is %{count} characters)"
+      too_short:
+        one: "is too short (minimum is 1 character)"
+        other: "is too short (minimum is %{count} characters)"
+      wrong_length:
+        one: "is the wrong length (should be 1 character)"
+        other: "is the wrong length (should be %{count} characters)"
+      not_a_number: "is not a number"
+      not_an_integer: "must be an integer"
+      greater_than: "must be greater than %{count}"
+      greater_than_or_equal_to: "must be greater than or equal to %{count}"
+      equal_to: "must be equal to %{count}"
+      less_than: "must be less than %{count}"
+      less_than_or_equal_to: "must be less than or equal to %{count}"
+      odd: "must be odd"
+      even: "must be even"
+      taken: "has already been taken"
+      record_invalid: "Validation failed: %{errors}"
+    template: &errors_template
+      header:
+        one: "1 error prohibited this %{model} from being saved"
+        other: "%{count} errors prohibited this %{model} from being saved"
+      body: "There were problems with the following fields:"
+  activerecord:
+    errors:
+      messages:
+        <<: *errors_messages
+      template:
+        <<: *errors_template
+      full_messages:
+        format: "%{attribute} %{message}"
+    models:
+      bookmark: "Bookmark"
+      category:
+        one: "Category"
+        other: "Categories"
+      chapter: "Chapter"
+      character:
+        one: "Character"
+        other: "Characters"
+      comment: "Comment"
+      fandom:
+        one: "Fandom"
+        other: "Fandoms"
+      freeform:
+        one: "Additional Tag"
+        other: "Additional Tags"
+      pseud: "Pseud"
+      rating: "Rating"
+      relationship:
+        one: "Relationship"
+        other: "Relationships"
+      tag:
+        one: "Tag"
+        other: "Tags"
+      warning:
+        one: "Warning"
+        other: "Warnings"
+      work: "Work"
+
   mailer:
     general: 
       footer: 
@@ -182,6 +254,25 @@ en:
         part13: "Best,"
         part14: "The Open Doors team"
         part15: "Organization for Transformative Works"
+    challenge_assignment_notification:
+      subject: "[%{app_name}][%{collection.title}] Your Assignment!"
+      recipient: "Recipient" # this is followed by a colon and the name of the gift recipient
+      recipient_missing: "None: contact a moderator for help!"
+      prompts: "Prompts"
+      optional_tags: "Optional Tags"
+      prompt_url: "Prompt URL"
+      description: "Description"
+      due: "This assignment is due at"
+      text:
+        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from your archive dashboard at %{link}."
+        footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please see %{profile_url}."
+      html:
+        part1: "You have been assigned the following request in the %{link} challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from %{link}."
+        look_up_link: "your archive dashboard"
+        footer: "You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{profile_url} %>."
+        footer_link: "the challenge profile page"
 
   validators:
     email:

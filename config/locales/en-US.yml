@@ -225,6 +225,29 @@
         <<: *errors_template
       full_messages:
         format: "%{attribute} %{message}"
+    models:
+      bookmark: "Bookmark"
+      chapter: "Chapter"
+      character:
+        one: "Character"
+        other: "Characters"
+      comment: "Comment"
+      fandom:
+        one: "Fandom"
+        other: "Fandoms"
+      pseud: "Pseud"
+      rating: "Rating"
+      relationship:
+        one: "Relationship"
+        other: "Relationships"
+      tag:
+        one: "Tag"
+        other: "Tags"
+      warning:
+        one: "Warning"
+        other: "Warnings"
+      work: "Work"
+
   mailer:
     general:
       footer:
@@ -325,8 +348,26 @@
         part13: "Best,"
         part14: "The Open Doors team"
         part15: "Organization for Transformative Works"
-    challenge_assignment:
-      subject:
+
+    challenge_assignment_notification:
+      subject: "[%{app_name}][%{collection.title}] Your Assignment!"
+      recipient: "Recipient" # this is followed by a colon and the name of the gift recipient
+      recipient_missing: "None: contact a moderator for help!"
+      prompts: "Prompts"
+      optional_tags: "Optional Tags"
+      prompt_url: "Prompt URL"
+      description: "Description"
+      due: "This assignment is due at"
+      text:
+        part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from your archive dashboard at %{link}."
+        footer: "You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please see %{profile_url}."
+      html:
+        part1: "You have been assigned the following request in the %{link} challenge at the Archive of Our Own!"
+        look_up: "You can look up this assignment from %{link}."
+        look_up_link: "your archive dashboard"
+        footer: "You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{profile_url} %>."
+        footer_link: "the challenge profile page"
 
   validators:
     email:
