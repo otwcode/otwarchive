@@ -1,3 +1,5 @@
+include CacheHelper
+
 class WorkSkin < Skin
 
   has_many :works
@@ -31,7 +33,7 @@ class WorkSkin < Skin
     File.open(Rails.public_path + '/images/skins/previews/basic_formatting.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
-    Rails.cache.increment('skins_generation/'+(skin.type.nil? ? ("site_skin") : skin.id.to_s) )
+    skin_cache(skin) 
     skin
   end
 end

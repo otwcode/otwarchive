@@ -1,8 +1,10 @@
 require 'fileutils'
 include HtmlCleaner
 include CssCleaner
+include CacheHelper
 
 class Skin < ActiveRecord::Base
+
   
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -188,7 +190,7 @@ class Skin < ActiveRecord::Base
     self.public = true
     self.official = true
     save!
-    Rails.cache.increment('skins_generation/'+(self.type.nil? ? ("site_skin") : self.id.to_s) )
+    skin_cache(self)
     css_to_cache = ""
     last_role = ""
     file_count = 1
@@ -215,7 +217,7 @@ class Skin < ActiveRecord::Base
     end
     self.cached = true
     save!
-    Rails.cache.increment('skins_generation/'+(self.type.nil? ? ("site_skin") : self.id.to_s) )
+    skin_cache(self)
   end
   
   def clear_cache!
@@ -223,7 +225,7 @@ class Skin < ActiveRecord::Base
     FileUtils.rm_rf skin_dir # clear out old if exists    
     self.cached = false
     save!
-    Rails.cache.increment('skins_generation/'+(self.type.nil? ? ("site_skin") : self.id.to_s) )
+    skin_cache(self)
   end
   
   def get_sheet_role
@@ -443,7 +445,7 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
-          Rails.cache.increment('skins_generation/'+(skin.type.nil? ? ("site_skin") : skin.id.to_s)  )
+          skin_cache(skin)
           skins << skin
         end
         
@@ -459,7 +461,7 @@ class Skin < ActiveRecord::Base
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
-        Rails.cache.increment('skins_generation/'+(top_skin.type.nil? ? ("site_skin") : top_skin.id.to_s) )
+        skin_cache(top_skin)
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
@@ -516,7 +518,7 @@ class Skin < ActiveRecord::Base
     end
     skin.official = true
     skin.save!
-    Rails.cache.increment('skins_generation/'+(skin.type.nil? ? ("site_skin") : skin.id.to_s) )
+    skin_cache(skin)
     skin
   end
   
