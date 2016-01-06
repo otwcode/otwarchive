@@ -4,7 +4,6 @@ include CssCleaner
 include CacheHelper
 
 class Skin < ActiveRecord::Base
-
   
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -286,7 +285,7 @@ class Skin < ActiveRecord::Base
                                              AdminSetting.default_skin.updated_at.to_s+'/'+\
                                              Skin.default.updated_at.to_s+'/'+\
                                              Skin.get_current_version+'/'+\
-                                             (Rails.cache.fetch('skins_generation/'+(self.type.nil? ? ("site_skin") : self.id.to_s )) || '0')
+                                             (Rails.cache.fetch(skin_cache_key(self) || '0')
                      ) do 
       style = ""
       if self.get_role != "override" && self.get_role != "site"
