@@ -280,11 +280,11 @@ class Skin < ActiveRecord::Base
   
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    Rails.cache.fetch('skins_style_tags/v1/'+self.get_role+'/'+\
-                                             self.id.to_s+'/'+\
-                                             AdminSetting.default_skin.updated_at.to_s+'/'+\
-                                             Skin.default.updated_at.to_s+'/'+\
-                                             Skin.get_current_version+'/'+\
+    Rails.cache.fetch('skins_style_tags/v1/' + self.get_role + '/' + \
+                                             self.id.to_s + '/' + \
+                                             AdminSetting.default_skin.updated_at.to_s + '/' + \
+                                             Skin.default.updated_at.to_s + '/' + \
+                                             Skin.get_current_version + '/' + \
                                              (Rails.cache.fetch(skin_cache_key(self) || '0')
                      ) do 
       style = ""
