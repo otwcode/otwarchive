@@ -110,13 +110,63 @@ Feature: Archivist bulk imports
       Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
 
   Scenario: Claim a work and create a new account in response to an invite
-  # TODO
+
+    Given I have an archivist "elynross"
+      And the default ratings exist
+      And account creation is enabled
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I press "Sign me up and give me my works! Yay!"
+    Then I should see "Create Account"
+    When I fill in the sign up form with valid data
+      And I press "Create Account"
+    Then I should see "Account Created!"
 
   Scenario: Orphan a work in response to an invite
-  # TODO
+
+    Given I have an archivist "elynross"
+      And the default ratings exist
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "imported_stories_orphan"
+    # TODO: This step fails with what looks like a genuine bug
+    #   And I press "Update"
+    # Then I should see "Your works have been orphaned"
 
   Scenario: Refuse all further contact
-  # TODO
+
+    Given I have an archivist "elynross"
+      And the default ratings exist
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "imported_stories_delete"
+      And I check "external_author_do_not_email"
+      And I press "Update"
+    Then I should see "Your imported stories have been deleted. Your preferences have been saved."
 
   Scenario: Importing straight into a collection
   # TODO
@@ -135,3 +185,12 @@ Feature: Archivist bulk imports
     When I check the 1st checkbox with id matching "importing_for_others"
     And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
+
+  Scenario: Update the URL on an imported work with a redirect
+
+  # Given I have an Open Doors committee member "Ariana"
+  # When I am logged in as "Ariana"
+  #   And I go to the Open Doors tools page
+  # Then I should see "Update Redirect URL"
+  # TODO
+  # Also do following a redirect and following an invalid redirect
