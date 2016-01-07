@@ -285,8 +285,7 @@ class Skin < ActiveRecord::Base
                                              AdminSetting.default_skin.updated_at.to_s + '/' + \
                                              Skin.default.updated_at.to_s + '/' + \
                                              Skin.get_current_version + '/' + \
-                                             (Rails.cache.fetch(skin_cache_key(self) || '0')
-                     ) do 
+                                             Rails.cache.fetch(skin_cache_key(self) || '0')) do 
       style = ""
       if self.get_role != "override" && self.get_role != "site"
         style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.includes(:parent_skins).get_current_site_skin ? Skin.includes(:parent_skins).get_current_site_skin.get_style(roles_to_include) : '')
