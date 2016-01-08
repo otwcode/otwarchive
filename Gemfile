@@ -133,6 +133,10 @@ group :test, :development do
   gem 'whiny_validation'
 end
 
+group :test, :development, :staging  do
+  gem 'bullet'
+end
+
 # Deploy with Capistrano
 gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
 gem 'rvm-capistrano'

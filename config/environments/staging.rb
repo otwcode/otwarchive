@@ -64,4 +64,13 @@ Otwarchive::Application.configure do
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
 
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.add_footer = false
+    Bullet.console = true
+    Bullet.rails_logger = true
+    Bullet.counter_cache_enable = false
+  end
+
 end
