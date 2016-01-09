@@ -300,6 +300,7 @@ Feature: creating and editing skins
       And I fill in "CSS" with ".myclass { -moz-box-sizing: border-box; -webkit-transition: opacity 2s; }"
       And I submit
     Then I should see "Skin was successfully created"
+    Then the cache of the skin on "skin with prefixed property" should expire after I save the skin
 
   Scenario: #workskin selector prefixing
     Given basic skins
