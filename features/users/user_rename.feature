@@ -124,7 +124,7 @@ Feature:
     Then I should see "newusername"
       And I should see "Epic story"
       And I should not see "oldusername"
-    # doesn't work if search indexes are not updated
+    # Has old name until indexes are updated
     When I search for works containing "oldusername"
     Then I should see "Epic story"
       And I should see "newusername"
