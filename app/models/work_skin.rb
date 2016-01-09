@@ -1,4 +1,4 @@
-include CacheHelper
+include SkinCacheHelper
 
 class WorkSkin < Skin
 

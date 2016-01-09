@@ -1,7 +1,7 @@
 require 'fileutils'
 include HtmlCleaner
 include CssCleaner
-include CacheHelper
+include SkinCacheHelper
 
 class Skin < ActiveRecord::Base
   
