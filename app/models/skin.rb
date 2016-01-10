@@ -279,7 +279,7 @@ class Skin < ActiveRecord::Base
   
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    Rails.cache.fetch(skin_cache_html_key(self,roles_to_include)) do 
+    Rails.cache.fetch(skin_cache_html_key(self, roles_to_include)) do 
       style = ""
       if self.get_role != "override" && self.get_role != "site"
         style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
@@ -359,7 +359,7 @@ class Skin < ActiveRecord::Base
       block = ""
       @stack = self.parent_skins
       block += get_style_block_single(roles_to_include)
-      while ( @stack.size != 0 ) do
+      while (@stack.size != 0) do
         current = @stack.pop
         block = current.get_style_block_single(roles_to_include) + "\n" + block
         @stack.concat current.parent_skins

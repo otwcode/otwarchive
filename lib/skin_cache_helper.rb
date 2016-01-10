@@ -1,16 +1,16 @@
 # note, if you modify this file you have to restart the server or console
 module SkinCacheHelper
-  def skin_cache_html_key(skin,roles_to_include)
+  def skin_cache_html_key(skin, roles_to_include)
     'skins_style_tags/v1/' + \
-    AdminSetting.default_skin.id.to_s + '/' + \
-    Skin.default.id.to_s + '/' + \
-    roles_to_include.to_s + '/' + \
-    skin_cache_value(skin)
+      AdminSetting.default_skin.id.to_s + '/' + \
+      Skin.default.id.to_s + '/' + \
+      roles_to_include.to_s + '/' + \
+      skin_cache_value(skin)
   end
 
   def skin_cache_footer_key
     'Skins_menu/v1/' + \
-    (Rails.cache.fetch('skins_generation/site_skin')|| 0).to_s
+    (Rails.cache.fetch('skins_generation/site_skin') || 0).to_s
   end
 
   def skin_cache_value(skin)
