@@ -33,7 +33,7 @@ GEM
       activerecord (>= 3.0)
     addressable (2.3.5)
     akismetor (1.0.0)
-    ansi (1.4.3)
+    ansi (1.5.0)
     arel (3.0.3)
     audited (3.0.0)
     audited-activerecord (3.0.0)
