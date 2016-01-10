@@ -137,12 +137,10 @@ end
 
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title| 
   skin = Skin.find_by_title(title)
-  orig_cache_key = (Rails.cache.fetch(skin_cache_key(skin)) || '0')
+  orig_cache_key = skin_cache_value(skin)
   Kernel::sleep 1 
   visit edit_skin_path(skin) 
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update") 
-  puts "orig_cache_key ",orig_cache_key
-  puts "other", (Rails.cache.fetch(skin_cache_key(skin)) || '0')
-  assert orig_cache_key != (Rails.cache.fetch(skin_cache_key(skin)) || '0'), "Cache key #{orig_cache_key} matches #{(Rails.cache.fetch(skin_cache_key(skin)) || '0')}." 
+  assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}." 
 end 

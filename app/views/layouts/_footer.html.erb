@@ -3,7 +3,7 @@
 	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
     <% unless !(logged_in? || logged_in_as_admin?) %>
-      <% cache('Skins_menu/v1/'+(Rails.cache.fetch('skins_generation/site_skin') || '0')) do %>
+      <% cache(skin_cache_footer_key) do %>
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>

@@ -146,6 +146,7 @@ Feature: creating and editing skins
     And I should see "(admin modified)"
     And I should see "#greeting.logged-in"
     And I should not see "#title"
+  Then the cache of the skin on "public skin" should expire after I save the skin
 
   Scenario: Users should not be able to edit their public approved skins
   Given the approved public skin "public skin"
@@ -262,6 +263,7 @@ Feature: creating and editing skins
     And I should not see "color: purple"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
+  Then the cache of the skin on "Awesome Work Skin" should expire after I save the skin
 
   Scenario: log out from my skins page (Issue 2271)
   Given I am logged in as "skinner"
