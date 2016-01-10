@@ -367,7 +367,7 @@ class Skin < ActiveRecord::Base
       return block
     end
   end
-  
+ 
   def get_cached_style(roles_to_include)
     block = ""
     self_skin_dir = Skin.skins_dir + self.skin_dirname
