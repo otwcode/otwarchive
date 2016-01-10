@@ -3,6 +3,7 @@ include SkinCacheHelper
 class WorkSkin < Skin
 
   has_many :works
+  after_save :skin_invalidate_cache
 
   # override parent's clean_css to append a prefix
   def clean_css
@@ -33,7 +34,6 @@ class WorkSkin < Skin
     File.open(Rails.public_path + '/images/skins/previews/basic_formatting.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
-    skin_cache(skin)
     skin
   end
 end

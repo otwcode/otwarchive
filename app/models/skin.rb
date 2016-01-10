@@ -50,6 +50,8 @@ class Skin < ActiveRecord::Base
                     :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
                     :default_url => "/images/skins/iconsets/default/icon_skins.png"
 
+  after_save :skin_invalidate_cache
+
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
@@ -189,7 +191,6 @@ class Skin < ActiveRecord::Base
     self.public = true
     self.official = true
     save!
-    skin_cache(self)
     css_to_cache = ""
     last_role = ""
     file_count = 1
@@ -216,7 +217,6 @@ class Skin < ActiveRecord::Base
     end
     self.cached = true
     save!
-    skin_cache(self)
   end
   
   def clear_cache!
@@ -224,7 +224,6 @@ class Skin < ActiveRecord::Base
     FileUtils.rm_rf skin_dir # clear out old if exists    
     self.cached = false
     save!
-    skin_cache(self)
   end
   
   def get_sheet_role
@@ -280,12 +279,14 @@ class Skin < ActiveRecord::Base
   
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    style = ""
-    if self.get_role != "override" && self.get_role != "site"
-      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+    Rails.cache.fetch(skin_cache_html_key(self,roles_to_include)) do 
+      style = ""
+      if self.get_role != "override" && self.get_role != "site"
+        style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+      end
+      style += self.get_style_block(roles_to_include)
+      style.html_safe
     end
-    style += self.get_style_block(roles_to_include)
-    style.html_safe
   end
 
   def get_ie_comment(style, ie_condition = self.ie_condition)
@@ -335,32 +336,38 @@ class Skin < ActiveRecord::Base
     
     style
   end
-  
-  def get_style_block(roles_to_include)
+
+  def get_style_block_single(roles_to_include)
     block = ""
-    if self.cached?
-      # cached skin in a directory
-      block = get_cached_style(roles_to_include)
-    else
-      # recursively get parents
-      parent_skins.each do |parent|
-        block += parent.get_style_block(roles_to_include) + "\n"
+    if roles_to_include.include?(get_role)
+      if self.filename.present?
+        block += get_ie_comment(stylesheet_link(self.filename, get_media))
+      elsif self.css.present?
+        block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
+      elsif (wizard_block = get_wizard_settings).present?
+        block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
       end
-      
-      # finally get this skin
-      if roles_to_include.include?(get_role)
-        if self.filename.present?
-          block += get_ie_comment(stylesheet_link(self.filename, get_media))
-        elsif self.css.present?
-          block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
-        elsif (wizard_block = get_wizard_settings).present?
-          block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
-        end
-      end    
     end
     return block
   end
 
+  def get_style_block(roles_to_include)
+    if self.cached?
+      # cached skin in a directory
+      return get_cached_style(roles_to_include)
+    else
+      block = ""
+      @stack = self.parent_skins
+      block += get_style_block_single(roles_to_include)
+      while ( @stack.size != 0 ) do
+        current = @stack.pop
+        block = current.get_style_block_single(roles_to_include) + "\n" + block
+        @stack.concat current.parent_skins
+      end
+      return block
+    end
+  end
+  
   def get_cached_style(roles_to_include)
     block = ""
     self_skin_dir = Skin.skins_dir + self.skin_dirname
@@ -430,7 +437,6 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
-          skin_cache(skin)
           skins << skin
         end
         
@@ -446,7 +452,6 @@ class Skin < ActiveRecord::Base
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
         top_skin.save!
-        skin_cache(top_skin)
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(:child_skin => top_skin, :parent_skin => skin, :position => index+1)
           skin_parent.save!
@@ -503,7 +508,6 @@ class Skin < ActiveRecord::Base
     end
     skin.official = true
     skin.save!
-    skin_cache(skin)
     skin
   end
   

@@ -24,4 +24,8 @@ module SkinCacheHelper
   def skin_cache(skin)
     Rails.cache.increment(skin_memcache_cache_key(skin))
   end
+
+  def skin_invalidate_cache
+    skin_cache(self)
+  end
 end
