@@ -48,9 +48,9 @@ GEM
       uuidtools (~> 2.1)
     bcrypt (3.1.10)
     bcrypt (3.1.10-x86-mingw32)
-    best_in_place (2.1.0)
-      jquery-rails
-      rails (~> 3.1)
+    best_in_place (3.1.0)
+      actionpack (>= 3.2)
+      railties (>= 3.2)
     builder (3.0.4)
     bullet (4.14.10)
       activesupport (>= 3.0.0)
