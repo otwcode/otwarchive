@@ -1,3 +1,5 @@
+include SkinCacheHelper
+
 class SkinsController < ApplicationController
 
   before_filter :users_only, :only => [:new, :create, :destroy]
@@ -128,6 +130,7 @@ class SkinsController < ApplicationController
   end
 
   def update
+    skin_cache(@skin)
     loaded = load_archive_parents
     if @skin.update_attributes(params[:skin])      
       @skin.cache! if @skin.cached?
