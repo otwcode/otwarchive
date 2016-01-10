@@ -210,6 +210,26 @@ I'd like to comment on a tag'
     Then I should see "Comment created"
       And I should see "Checking redirect after commenting on a tag"
 
+  Scenario: Comments pagination for a tag with slashes in the name
+
+    Given a tag "hack/sign" with 34 comments
+      And I am logged in as a tag wrangler
+    When I post the comment "And now things should not break!" on the tag "hack/sign"
+    Then I should see "Comment created"
+    # all it checks is that the pagination links aren't broken
+    When I follow "Next" within ".pagination"
+    Then I should see "And now things should not break!"
+
+   Scenario: Comments pagination for a tag with periods in the name
+
+    Given a period-containing tag "sign.me" with 34 comments
+      And I am logged in as a tag wrangler
+    When I post the comment "And now things should not break!" on the tag "sign.me"
+    Then I should see "Comment created"
+    # all it checks is that the pagination links aren't broken
+    When I follow "Next" within ".pagination"
+    Then I should see "And now things should not break!" 
+
   Scenario: Comments pagination for a tag with slashes and periods in the name
 
     Given a tag "hack/sign.me" with 34 comments
