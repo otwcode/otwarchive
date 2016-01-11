@@ -28,5 +28,13 @@ module SkinCacheHelper
 
   def skin_invalidate_cache
     skin_cache(self)
+    child_list = SkinParent.where(:parent_skin_id => self.id)
+    unless child_list.nil?
+      child_list.each do |child_skin| 
+        unless child_skin.child_skin_id == self.id
+          Skin.find(child_skin.child_skin_id).skin_invalidate_cache
+        end
+      end
+    end
   end
 end
