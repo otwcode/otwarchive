@@ -292,6 +292,7 @@ Feature: creating and editing skins
   Then I should see a create confirmation message
   When I check "add_site_parents"
     And I submit
+  Then show me the page
   Then I should see errors
 
   Scenario: Vendor-prefixed properties should be allowed
@@ -385,5 +386,19 @@ Feature: creating and editing skins
     And I press "Revert to Default Skin"
   When I am on skinner's preferences page
     Then "Default" should be selected within "preference_skin_id"
-  
-    
+
+  Scenario: The cache should be flushed with a parent and not when unrelated
+  Given I have loaded site skins
+    And I am logged in as "skinner"
+    And I set up the skin "Complex"
+    And I select "replace archive skin entirely" from "skin_role"
+    And I check "add_site_parents"
+    And I submit
+  Then I should see a create confirmation message
+  When I am on skin's new page
+    And I fill in "Title" with "my blinking skin"
+    And I fill in "CSS" with "#title { text-decoration: blink;}"
+    And I submit
+  Then I should see "Skin was successfully created"
+  Then the cache of the skin on "my blinking skin" should not expire after I save "Complex"
+  Then the cache of the skin on "Complex" should expire after I save a parent skin

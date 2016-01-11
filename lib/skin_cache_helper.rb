@@ -18,11 +18,12 @@ module SkinCacheHelper
   end
 
   def skin_memcache_cache_key(skin)
-    'skins_generation/' + (skin.type.nil? ? ("site_skin") : skin.id.to_s)
+    'skins_generation/' + (skin.type.nil? ? ("site_skin_#{skin.id.to_s}") : "work_skin_#{skin.id.to_s}")
   end
 
   def skin_cache(skin)
     Rails.cache.increment(skin_memcache_cache_key(skin))
+    Rails.cache.increment('skins_generation/site_skin')  # This is the general key used for the footer
   end
 
   def skin_invalidate_cache

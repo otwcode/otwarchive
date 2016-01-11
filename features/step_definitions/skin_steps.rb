@@ -144,3 +144,20 @@ Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/
   click_button("Update") 
   assert orig_cache_key != skin_cache_value(skin), "Cache key #{orig_cache_key} matches #{skin_cache_value(skin)}." 
 end 
+
+Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/) do |arg1, arg2|
+  skin = Skin.find_by_title(arg1)
+  save_me = Skin.find_by_title(arg2)
+  orig_skin_key = skin_cache_value(skin)
+  orig_save_me_key = skin_cache_value(save_me)
+  Kernel::sleep 1
+  visit edit_skin_path(save_me)
+  fill_in("CSS", with: "#random { text-decoration: blink;}")
+  click_button("Update")
+  assert orig_save_me_key != skin_cache_value(save_me), "Cache key #{orig_save_me_key} matches #{skin_cache_value(save_me)}"
+  assert orig_skin_key == skin_cache_value(skin),"Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
+end
+
+Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
