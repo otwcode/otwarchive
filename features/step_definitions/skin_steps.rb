@@ -138,7 +138,6 @@ end
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title| 
   skin = Skin.find_by_title(title)
   orig_cache_key = skin_cache_value(skin)
-  Kernel::sleep 1 
   visit edit_skin_path(skin) 
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update") 
@@ -150,14 +149,19 @@ Then(/^the cache of the skin on "(.*?)" should not expire after I save "(.*?)"$/
   save_me = Skin.find_by_title(arg2)
   orig_skin_key = skin_cache_value(skin)
   orig_save_me_key = skin_cache_value(save_me)
-  Kernel::sleep 1
   visit edit_skin_path(save_me)
   fill_in("CSS", with: "#random { text-decoration: blink;}")
   click_button("Update")
   assert orig_save_me_key != skin_cache_value(save_me), "Cache key #{orig_save_me_key} matches #{skin_cache_value(save_me)}"
-  assert orig_skin_key == skin_cache_value(skin),"Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
+  assert orig_skin_key == skin_cache_value(skin),"Cache key #{orig_skin_key} does not match #{skin_cache_value(skin)}"
 end
 
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
+  skin = Skin.find_by_title(arg1)
+  orig_skin_key = skin_cache_value(skin)
+  parent = Skin.find_by_title("Parent")
+  parent_id=SkinParent.where(:child_skin_id => skin.id).last.parent_skin_id
+  parent=Skin.find(parent_id)
+  parent.save!
+  assert orig_skin_key != skin_cache_value(skin),"Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
 end
