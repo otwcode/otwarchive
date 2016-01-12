@@ -292,7 +292,6 @@ Feature: creating and editing skins
   Then I should see a create confirmation message
   When I check "add_site_parents"
     And I submit
-  Then show me the page
   Then I should see errors
 
   Scenario: Vendor-prefixed properties should be allowed
