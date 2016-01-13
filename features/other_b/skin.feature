@@ -383,4 +383,13 @@ Feature: creating and editing skins
   When I am on skinner's preferences page
     Then "Default" should be selected within "preference_skin_id"
   
-    
+  Scenario: Users should be able to create skins using @media queries
+  Given I am logged in as "skinner"
+    And I set up the skin "Media Query Test Skin"
+    And I check "only screen and (max-width: 42em)"
+    And I check "only screen and (max-width: 62em)"
+  When I press "Submit"
+  Then I should see a create confirmation message
+    And I should see "only screen and (max-width: 42em), only screen and (max-width: 62em)"
+  When I press "Use"
+  Then the page should have a skin with the media query "only screen and (max-width: 42em), only screen and (max-width: 62em)"
