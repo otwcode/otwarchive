@@ -36,6 +36,12 @@
   padding-right: 0.5em;
 }
 
+/* 16 zone system */
+
+.splash {
+  padding: 0 1em;
+}
+
 /* 18 zone searchbrowse */
 
 form.filters {

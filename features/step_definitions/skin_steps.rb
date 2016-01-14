@@ -134,3 +134,7 @@ end
 Then /^I should see a different accent color on the dashboard and work meta$/ do
   step %{I should see "#header .icon, #dashboard ul, #main dl.meta {background: blue; border-color:blue;}" within "style"}
 end
+
+Then /^the page should have a skin with the media query "([^"]*)"$/ do |query|
+  page.should have_xpath("//style[@media='#{query}']")
+end

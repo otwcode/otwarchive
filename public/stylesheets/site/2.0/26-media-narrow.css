@@ -136,6 +136,10 @@ body .narrow-shown {
 
 /* 16 zone: system */
 
+.splash {
+  padding: 0;
+}
+
 .splash div.module, .logged-in .splash .module {
   width: 98%;
 }
