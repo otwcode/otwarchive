@@ -241,8 +241,7 @@ class Skin < ActiveRecord::Base
   end
 
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub('.', ', ')
-    media_string.gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
+    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
   end
 
   def parse_sheet_role(role_string)
