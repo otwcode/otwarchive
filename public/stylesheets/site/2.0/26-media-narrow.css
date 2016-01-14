@@ -140,7 +140,7 @@ body .narrow-shown {
   padding: 0;
 }
 
-.splash div.module, .logged-in .splash > .module {
+.splash div.module, .logged-in .splash .module {
   margin: auto 1%;
   width: 98%;
 }
