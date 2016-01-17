@@ -2,10 +2,10 @@
   <p><%= t 'user_mailer.challenge_assignment_notification.html.part1', link: style_link(@collection.title, collection_url(@collection)) %></p>
 
   <p>
-    <%= style_bold(t('user_mailer.challenge_assignment_notification.recipient')+":") %> <%= @request.nil? ? t('challenge_assignment_notification.recipient_missing') : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
+    <%= style_bold(t('user_mailer.challenge_assignment_notification.recipient')) %> <%= @request.nil? ? t('challenge_assignment_notification.recipient_missing') : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
   </p>
 
-  <%= style_bold(t('user_mailer.challenge_assignment_notification.prompts')+":") %>
+  <%= style_bold(t('user_mailer.challenge_assignment_notification.prompts')) %>
   
   <% @request.requests.each_with_index do |prompt, index| %>
     <% tag_groups = prompt.tag_groups %>
@@ -38,7 +38,7 @@
       <% if otags then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.optional_tags')}:") %> <%= otags %><br><% end %>
       <% if prompt.url && !prompt.url.blank? then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.prompt_url')}:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
       <% if prompt.description && !prompt.description.blank? %>
-        <%= style_bold("#{t('user_mailer.challenge_assignment_notification.description')}:") %>
+        <%= style_bold(t('user_mailer.challenge_assignment_notification.description')) %>
         <%= style_quote(prompt.description) %>
       <% end %>
     </p>
@@ -47,7 +47,7 @@
   <%= styled_divider %>
 
   <p>
-    <%= style_bold("#{t('user_mailer.challenge_assignment_notification.due')}:") %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
+    <%= style_bold(t('user_mailer.challenge_assignment_notification.due')) %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
   </p>
 
   <p><%= t 'user_mailer.challenge_assignment_notification.html.look_up', link: style_link(t('user_mailer.challenge_assignment_notification.html.look_up_link'), user_assignments_url(@assigned_user)) %></p>

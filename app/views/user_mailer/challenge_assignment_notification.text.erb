@@ -1,9 +1,9 @@
 <% content_for :message do %>
 <%= t 'user_mailer.challenge_assignment_notification.text.part1', collection_title: @collection.title, collection_url: collection_url(@collection) %>
 
-<%= t 'user_mailer.challenge_assignment_notification.recipient' %>: <%= @request.nil? ? t('challenge_assignment_notification.recipient_missing') : text_pseud(@request.pseud) %>
+<%= t 'user_mailer.challenge_assignment_notification.recipient' %> <%= @request.nil? ? t('challenge_assignment_notification.recipient_missing') : text_pseud(@request.pseud) %>
 
-<%= t 'user_mailer.challenge_assignment_notification.prompts' %>:
+<%= t 'user_mailer.challenge_assignment_notification.prompts' %>
 <% @request.requests.each_with_index do |prompt, index| %>
 <% tag_groups = prompt.tag_groups %>
 <% def tag_list(tags) %>
@@ -29,14 +29,14 @@
 <%= t('activerecord.models.warning', count: tag_groups["Warning"].count) %>: <%= warnings %><% end %><% if categories %>
 <%= t('activerecord.models.category', count: tag_groups["Category"].count) %>: <%= categories %><% end %><% if atags %>
 <%= t('activerecord.models.freeform', count: tag_groups["Freeform"].count) %>: <%= atags %><% end %><% if otags %>
-<%= t 'user_mailer.challenge_assignment_notification.optional_tags' %>: <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
-<%= t 'user_mailer.challenge_assignment_notification.prompt_url' %>: <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
-<%= t 'user_mailer.challenge_assignment_notification.description' %>:
+<%= t 'user_mailer.challenge_assignment_notification.optional_tags' %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
+<%= t 'user_mailer.challenge_assignment_notification.prompt_url' %> <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
+<%= t 'user_mailer.challenge_assignment_notification.description' %>
     <%= to_plain_text(prompt.description) %><% end %>
 
 <% end %><%= text_divider %>
 
-<%= t 'user_mailer.challenge_assignment_notification.due' %>: <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
+<%= t 'user_mailer.challenge_assignment_notification.due' %> <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
 <%= t 'user_mailer.challenge_assignment_notification.text.look_up', link: user_assignments_url(@assigned_user) %>
 <% if @collection && !@collection.assignment_notification.blank? %>

@@ -351,13 +351,13 @@
 
     challenge_assignment_notification:
       subject: "[%{app_name}][%{collection.title}] Your Assignment!"
-      recipient: "Recipient" # this is followed by a colon and the name of the gift recipient
+      recipient: "Recipient:" # this is followed by the name of the gift recipient
       recipient_missing: "None: contact a moderator for help!"
-      prompts: "Prompts"
-      optional_tags: "Optional Tags"
-      prompt_url: "Prompt URL"
-      description: "Description"
-      due: "This assignment is due at"
+      prompts: "Prompts:"
+      optional_tags: "Optional Tags:"
+      prompt_url: "Prompt URL:"
+      description: "Description:"
+      due: "This assignment is due at:"
       text:
         part1: "You have been assigned the following request in the %{collection_title} (%{collection_url}) challenge at the Archive of Our Own!"
         look_up: "You can look up this assignment from your archive dashboard at %{link}."
