@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <%= t 'user_mailer.invitation_to_claim.greeting', app_name: ArchiveConfig.APP_NAME %>
 
-  <%= t 'user_mailer.invitation_to_claim.text.part1', open_doors_link: "http://opendoors.transformativeworks.org", app_name: ArchiveConfig.APP_NAME, app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: root_url %>
+  <%= t 'user_mailer.invitation_to_claim.text.part1', open_doors_link: "http://opendoors.transformativeworks.org", app_name: ArchiveConfig.APP_NAME, app_short_name: ArchiveConfig.APP_SHORT_NAME, app_url: root_url %>
 
   <%= t 'user_mailer.invitation_to_claim.text.part2', news_link: root_url + "admin_posts?tag=18", open_doors_faq_link: "http://opendoors.transformativeworks.org/faq", open_doors_tutorial_link: "http://opendoors.transformativeworks.org/tutorials", support_link: root_url + "support" %>
 
