@@ -203,7 +203,7 @@ GEM
       i18n
       json
       rainbow
-    pickle (0.4.11)
+    pickle (0.5.1)
       cucumber (>= 0.8)
       rake
     polyglot (0.3.5)
