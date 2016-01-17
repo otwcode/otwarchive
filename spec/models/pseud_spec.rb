@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Pseud do
-
   it "has a valid factory" do
     expect(build(:pseud)).to be_valid
   end

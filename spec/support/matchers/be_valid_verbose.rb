@@ -4,7 +4,7 @@ RSpec::Matchers.define :be_valid_verbose do
   end
 
   failure_message_for_should do |model|
-    "#{model.class} expected to be valid but had errors:n #{model.errors.full_messages.join("n ")}"
+    "#{model.class} expected to be valid but had errors:n #{model.errors.full_messages.join('n ')}"
   end
 
   failure_message_for_should_not do |model|
