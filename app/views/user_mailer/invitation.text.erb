@@ -4,14 +4,14 @@
 <% if !@user_name.blank? %>
 <%= t 'user_mailer.invitation.has_invited', user_name: @user_name %>
 <% else %>
-<%= t 'user_mailer.invitation.been_invited' %>
+<%= t 'user_mailer.invitation.been_invited_html' %>
 <% end %>
 
-<%= t 'user_mailer.invitation.para1' %>
+<%= t 'user_mailer.invitation.part1' %>
 
-<%= t 'user_mailer.invitation.para2' %>
+<%= t 'user_mailer.invitation.part2' %>
 
-<%= t 'user_mailer.invitation.para3' %>
+<%= t 'user_mailer.invitation.part3_html' %>
 <%= signup_url(:invitation_token => @invitation.token) %>
 
 <%= t 'user_mailer.invitation.text.faq_link' %> <%= archive_faqs_url %>.

@@ -7,24 +7,24 @@
     <% if !@user_name.blank? %>
       <%= t 'user_mailer.invitation.has_invited', user_name: style_bold(@user_name) %>
     <% else %>
-      <%= t 'user_mailer.invitation.been_invited' %>
+      <%= t 'user_mailer.invitation.been_invited_html' %>
     <% end %>
   </p>
 
   <p>
-    <%= t 'user_mailer.invitation.para1' %>
+    <%= t 'user_mailer.invitation.part1' %>
   </p>
 
   <p>
-    <%= t 'user_mailer.invitation.para2' %>
+    <%= t 'user_mailer.invitation.part2' %>
   </p>
 
   <p>
-    <%= t 'user_mailer.invitation.para3' %>
+    <%= t 'user_mailer.invitation.part3_html' %>
     <%= style_link(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
   </p>
 
   <p>
-    <%= t 'user_mailer.invitation.html.faq_link' %> <%= style_link(t 'user_mailer.invitation.html.faq_link_text', archive_faqs_url) %>.
+    <%= t 'user_mailer.invitation.html.faq_link' %> <%= style_link(t('user_mailer.invitation.html.faq_link_text'), archive_faqs_url) %>.
   </p>
 <% end %>
