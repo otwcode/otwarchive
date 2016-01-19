@@ -11,14 +11,29 @@
   width: auto;
 }
 
-#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
+#dashboard ul, #dashboard li, #dashboard a, #dashboard .current {
   text-align: left;
   display: inline;
   border: none;
 }
 
-#dashboard ul {
-  padding: 0;
+#dashboard {
+  border-top: 15px solid #900;
+  border-bottom: 15px solid #900;
+  padding: 0.5em 0;
+    border-radius: 0.25em;
+}
+
+#dashboard ul { 
+  display: inline;*/
+}
+
+#dashboard li, #dashboard a, #dashboard .current {
+  display: inline-block;
+}
+
+#dashboard li {
+  margin: 0.25em 0;
 }
 
 #dashboard .landmark {
@@ -30,7 +45,7 @@
 
 #main, #main.dashboard {
   float: none;
-  margin: auto;
+  margin: auto 1%;
   width: auto;
   padding-left: 0.5em;
   padding-right: 0.5em;
@@ -50,4 +65,15 @@ form.filters {
 
 .filters fieldset {
   margin-right: 0;
+}
+
+form.filters dl {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
+/* 21 userstuff */
+
+#workskin {
+  margin: auto 5%;
 }
