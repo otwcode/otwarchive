@@ -18,14 +18,14 @@
 }
 
 #dashboard {
-  border-top: 15px solid #900;
-  border-bottom: 15px solid #900;
+  border-top: 10px solid #900;
+  border-bottom: 10px solid #900;
   padding: 0.5em 0;
     border-radius: 0.25em;
 }
 
 #dashboard ul { 
-  display: inline;*/
+  display: inline;
 }
 
 #dashboard li, #dashboard a, #dashboard .current {
