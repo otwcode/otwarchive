@@ -1,4 +1,4 @@
-@collections
+@collections @tag_sets
 Feature: Gift Exchange Challenge with Tag Sets
   In order to have more fics for my fandom
   As a humble user
@@ -29,3 +29,38 @@ Feature: Gift Exchange Challenge with Tag Sets
       And I should not see "Tag Set:"
       And I should not see "Standard Challenge Tags"
       And I should not see "Angela Lansbury"
+
+  Scenario: Run a single-fandom exchange
+
+  Given basic tags
+    And I have a canonical "Celebrities & Real People" fandom tag named "Hockey RPF"
+    And I have a canonical "Celebrities & Real People" fandom tag named "Bandom"
+    And a canonical character "Alexander Ovechkin" in fandom "Hockey RPF"
+    And a canonical character "Gerard Way" in fandom "Bandom"
+    And I am logged in as "mod1"
+    And I set up the tag set "HockeyExchangeTags" with the fandom tags "Hockey RPF"
+  When I go to the "HockeyExchangeTags" tag set page
+  Then I should see "About HockeyExchangeTags"
+    And I should see "Celebrities & Real People" within ".index"
+  When I follow "↓" within ".index"
+  Then I should see "Hockey RPF"
+  When I have set up the gift exchange "My Hockey Exchange"
+    And I fill in single-fandom gift exchange challenge options
+    And I fill in "Tag Sets To Use:" with "HockeyExchangeTags"
+    And I submit
+  Then I should see "Challenge was successfully created"
+  When I follow "Challenge Settings"
+  Then I should see "HockeyExchangeTags"
+  When I follow "Sign-up Form"
+    And I check the 1st checkbox with the value "Hockey RPF"
+    And I check the 2nd checkbox with the value "Hockey RPF"
+    And I fill in the 1st field with id matching "character_tagnames" with "Gerard Way"
+    # TODO: Once autocomplete testing is working again, check that it only shows characters from the right fandom
+    And I fill in the 2nd field with id matching "character_tagnames" with "Alexander Ovechkin"
+    And I submit
+  Then I should see "Sorry! We couldn't save this challenge signup because"
+    And I should see "These character tags in your request are not in the selected fandom(s), Hockey RPF: Gerard Way (Your moderator may be able to fix this.)"
+    And I should not see "Sign-up was successfully created."
+  When I fill in the 1st field with id matching "character_tagnames" with "Alexander Ovechkin"
+    And I submit
+  Then I should see "Sign-up was successfully created."
