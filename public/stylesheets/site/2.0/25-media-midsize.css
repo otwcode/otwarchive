@@ -21,6 +21,7 @@
 #dashboard ul {
   border: none;
   display: inline;
+  padding: 0;
   text-align: left;
 }
 
