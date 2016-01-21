@@ -220,7 +220,7 @@ class UserMailer < BulletproofMailer::Base
     @request = (assignment.request_signup || assignment.pinch_request_signup)
     mail(
       to: @assigned_user.email,
-      subject: "#{t 'user_mailer.challenge_assignment_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title}"
+      subject: t('user_mailer.challenge_assignment_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title).to_s
     )
   end
 
