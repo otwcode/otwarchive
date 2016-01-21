@@ -22,13 +22,13 @@
 
 <%= index + 1 %>. <%= prompt.title %>
 
-<% if fandoms then %><%= t('activerecord.models.fandom', count: tag_groups["Fandom"].count) %>: <%= fandoms %><% end %><% if chars %>
-<%= t('activerecord.models.character', count: tag_groups["Character"].count) %>: <%= chars %><% end %><% if ships %>
-<%= t('activerecord.models.relationship', count: tag_groups["Relationship"].count) %>: <%= ships %><% end %><% if ratings %>
-<%= t('activerecord.models.rating') %>: <%= ratings %><% end %><% if warnings %>
-<%= t('activerecord.models.warning', count: tag_groups["Warning"].count) %>: <%= warnings %><% end %><% if categories %>
-<%= t('activerecord.models.category', count: tag_groups["Category"].count) %>: <%= categories %><% end %><% if atags %>
-<%= t('activerecord.models.freeform', count: tag_groups["Freeform"].count) %>: <%= atags %><% end %><% if otags %>
+<% if fandoms then %><%= Fandom.human_attribute_name("name_with_colon", count: tag_groups["Fandom"].count) %> <%= fandoms %><% end %><% if chars %>
+<%= Character.human_attribute_name("name_with_colon", count: tag_groups["Character"].count) %> <%= chars %><% end %><% if ships %>
+<%= Relationship.human_attribute_name("name_with_colon", count: tag_groups["Relationship"].count) %> <%= ships %><% end %><% if ratings %>
+<%= Rating.human_attribute_name("name_with_colon") %> <%= ratings %><% end %><% if warnings %>
+<%= Warning.human_attribute_name("name_with_colon", count: tag_groups["Warning"].count) %> <%= warnings %><% end %><% if categories %>
+<%= Category.human_attribute_name("name_with_colon", count: tag_groups["Category"].count) %> <%= categories %><% end %><% if atags %>
+<%= Freeform.human_attribute_name("name_with_colon", count: tag_groups["Freeform"].count) %> <%= atags %><% end %><% if otags %>
 <%= t 'user_mailer.challenge_assignment_notification.optional_tags' %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
 <%= t 'user_mailer.challenge_assignment_notification.prompt_url' %> <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
 <%= t 'user_mailer.challenge_assignment_notification.description' %>

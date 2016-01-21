@@ -28,13 +28,13 @@
     <%= index + 1 %>. <%= style_bold(prompt.title) %>
 
     <p>
-      <% if fandoms then %><%= style_bold("#{t('activerecord.models.fandom', count: tag_groups["Fandom"].count)}:") %> <%= fandoms %><br><% end %>      
-      <% if chars then %><%= style_bold("#{t('activerecord.models.character', count: tag_groups["Character"].count)}:") %> <%= chars %><br><% end %>
-      <% if ships then %><%= style_bold("#{t('activerecord.models.relationship', count: tag_groups["Relationship"].count)}:") %> <%= ships %><br><% end %>
-      <% if ratings then %><%= style_bold("#{t('activerecord.models.rating')}:") %> <%= ratings %><br><% end %>
-      <% if warnings then %><%= style_bold("#{t('activerecord.models.warning', count: tag_groups["Warning"].count)}:") %> <%= warnings %><br><% end %>
-      <% if categories then %><%= style_bold("#{t('activerecord.models.category', count: tag_groups["Category"].count)}:") %> <%= categories %><br><% end %>
-      <% if atags then %><%= style_bold("#{t('activerecord.models.freeform', count: tag_groups["Freeform"].count)}:") %> <%= atags %><br><% end %>
+      <% if fandoms then %><%= style_bold(Fandom.human_attribute_name("name_with_colon", count: tag_groups["Fandom"].count)) %> <%= fandoms %><br><% end %>      
+      <% if chars then %><%= style_bold(Character.human_attribute_name("name_with_colon", count: tag_groups["Character"].count)) %> <%= chars %><br><% end %>
+      <% if ships then %><%= style_bold(Relationship.human_attribute_name("name_with_colon", count: tag_groups["Relationship"].count)) %> <%= ships %><br><% end %>
+      <% if ratings then %><%= style_bold(Rating.human_attribute_name("name_with_colon")) %> <%= ratings %><br><% end %>
+      <% if warnings then %><%= style_bold(Warning.human_attribute_name("name_with_colon", count: tag_groups["Warning"].count)) %> <%= warnings %><br><% end %>
+      <% if categories then %><%= style_bold(Category.human_attribute_name("name_with_colon", count: tag_groups["Category"].count)) %> <%= categories %><br><% end %>
+      <% if atags then %><%= style_bold(Freeform.human_attribute_name("name_with_colon", count: tag_groups["Freeform"].count)) %> <%= atags %><br><% end %>
       <% if otags then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.optional_tags')}:") %> <%= otags %><br><% end %>
       <% if prompt.url && !prompt.url.blank? then %><%= style_bold("#{t('user_mailer.challenge_assignment_notification.prompt_url')}:") %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
       <% if prompt.description && !prompt.description.blank? %>

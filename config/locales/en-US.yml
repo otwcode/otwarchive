@@ -247,6 +247,33 @@
         one: "Warning"
         other: "Warnings"
       work: "Work"
+    attributes:
+      category:
+        name_with_colon:
+          one: "Category:"
+          other: "Categories:"
+      character:
+        name_with_colon:
+          one: "Character:"
+          other: "Characters:"
+      fandom:
+        name_with_colon:
+          one: "Fandom:"
+          other: "Fandoms:"
+      freeform:
+        name_with_colon:
+          one: "Additional Tag:"
+          other: "Additional Tags:"
+      rating:
+        name_with_colon: "Rating:"
+      relationship:
+        name_with_colon:
+          one: "Relationship:"
+          other: "Relationships:"
+      warning:
+        name_with_colon:
+          one: "Warning:"
+          other: "Warnings:"
 
   mailer:
     general:
