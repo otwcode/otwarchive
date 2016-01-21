@@ -129,10 +129,11 @@ Feature: Archivist bulk imports
       And I press "Create Account"
     Then I should see "Account Created!"
 
-  Scenario: Orphan a work in response to an invite
+  Scenario: Orphan a work in response to an invite, leaving name on it
 
     Given I have an archivist "elynross"
       And the default ratings exist
+      And I have an orphan account
     When I am logged in as "elynross"
       And I go to the import page
       And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
@@ -144,9 +145,36 @@ Feature: Archivist bulk imports
     Then I should see "Claiming Your Imported Works"
       And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
     When I choose "imported_stories_orphan"
-    # TODO: This step fails with what looks like a genuine bug
-    #   And I press "Update"
-    # Then I should see "Your works have been orphaned"
+      And I press "Update"
+    Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
+    When I am logged in
+      And I view the work "cesy | Welcome"
+    Then I should see "randomtestname"
+      And I should see "orphan_account"
+
+  Scenario: Orphan a work in response to an invite, taking name off it
+
+    Given I have an archivist "elynross"
+      And the default ratings exist
+      And I have an orphan account
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
+      And the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@example.com"
+      And the email should contain "Claim or remove your works"
+    When I am logged out
+      And I follow "Claim or remove your works" in the email
+    Then I should see "Claiming Your Imported Works"
+      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
+    When I choose "imported_stories_orphan"
+      And I check "remove_pseud"
+      And I press "Update"
+    Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
+    When I am logged in
+      And I view the work "cesy | Welcome"
+    Then I should not see "randomtestname"
+      And I should see "orphan_account"
 
   Scenario: Refuse all further contact
 
