@@ -89,13 +89,13 @@ Feature: Archivist bulk imports
       And the default ratings exist
     When I am logged in as "elynross"
       And I go to the import page
-      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
     Then I should not see multi-story import messages
       And I should see "Welcome"
       And I should see "randomtestname"
       And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When the system processes jobs
-    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+    Then 1 email should be delivered to "otwstephanie@example.com"
 
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
 
@@ -103,11 +103,11 @@ Feature: Archivist bulk imports
       And the default ratings exist
     When I am logged in as "elynross"
       And I go to the import page
-      And I import the work "http://cesy.dreamwidth.org/154770.html" by "ra_ndo!m-t??est n@me." with email "otwstephanie@thepotionsmaster.net"
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "ra_ndo!m-t??est n@me." with email "otwstephanie@example.com"
     Then I should see import confirmation
       And I should see "ra_ndom-test n@me."
     When the system processes jobs
-      Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+      Then 1 email should be delivered to "otwstephanie@example.com"
 
   Scenario: Claim a work and create a new account in response to an invite
 
@@ -116,9 +116,9 @@ Feature: Archivist bulk imports
       And account creation is enabled
     When I am logged in as "elynross"
       And I go to the import page
-      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
       And the system processes jobs
-    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+    Then 1 email should be delivered to "otwstephanie@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
@@ -136,9 +136,9 @@ Feature: Archivist bulk imports
       And the default ratings exist
     When I am logged in as "elynross"
       And I go to the import page
-      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
       And the system processes jobs
-    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+    Then 1 email should be delivered to "otwstephanie@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
@@ -155,9 +155,9 @@ Feature: Archivist bulk imports
       And the default ratings exist
     When I am logged in as "elynross"
       And I go to the import page
-      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@thepotionsmaster.net"
+      And I import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
       And the system processes jobs
-    Then 1 email should be delivered to "otwstephanie@thepotionsmaster.net"
+    Then 1 email should be delivered to "otwstephanie@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
@@ -179,18 +179,9 @@ Feature: Archivist bulk imports
       And I go to the import page
       And I fill in "URLs*" with "http://cesy.dreamwidth.org/154770.html"
       And I fill in "Author Name*" with "cesy"
-      And I fill in "Author Email Address*" with "cesy@dreamwidth.org"
+      And I fill in "Author Email Address*" with "cesy@example.com"
     When I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
     And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
-
-  Scenario: Update the URL on an imported work with a redirect
-
-  # Given I have an Open Doors committee member "Ariana"
-  # When I am logged in as "Ariana"
-  #   And I go to the Open Doors tools page
-  # Then I should see "Update Redirect URL"
-  # TODO
-  # Also do following a redirect and following an invalid redirect
