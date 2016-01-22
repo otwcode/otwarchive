@@ -63,8 +63,7 @@ Feature: Admin Actions to Post News
     Then 1 email should be delivered to "testadmin@example.org"
     # notification to the admin list for admin post
       And 1 email should be delivered to "admin@example.org"
-  
-  # TODO: this is something the user does, not the admin, and should be in another test?
+
   Scenario: User views RSS of admin posts
 
     Given I have posted an admin post
