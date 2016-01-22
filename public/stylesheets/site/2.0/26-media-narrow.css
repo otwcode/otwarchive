@@ -72,6 +72,14 @@ body .narrow-shown {
   margin-left: 45px;
 }
 
+/* 04 region dashboard */
+
+#dashboard, #dashboard.own {
+  border-bottom-width: 7px;
+  border-top-width: 7px;
+  padding: 0.25em 0;
+}
+
 /* 05 region main */
 
 #main {

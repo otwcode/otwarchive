@@ -25,7 +25,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
     box-shadow: none;
 }
 
-#dashboard a:hover {
+#dashboard a:hover, #dashboard a:focus {
   background: #ddd;
   color: #900;
 }

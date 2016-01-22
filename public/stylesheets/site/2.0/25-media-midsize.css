@@ -5,15 +5,15 @@
 #dashboard {
   clear: both;
   float: none;
-  max-width: 100%;
   margin: 1%;
+  max-width: 100%;
   padding: 0;
   width: auto;
 }
 
 #dashboard, #dashboard.own {
-  border-top: 10px solid #900;
   border-bottom: 10px solid #900;
+  border-top: 10px solid #900;
   padding: 0.5em 0;
     border-radius: 0.25em;
 }
@@ -31,6 +31,20 @@
 
 #dashboard li {
   margin: 0.125em 0;
+  position: relative;
+}
+
+#dashboard .secondary {
+  background: #eee;
+  float: right;
+  padding: 0 0.5em;
+    border-radius: 0.25em;
+    box-shadow: inset 2px 2px 5px #bbb,
+    inset 0 0 1px #bbb;
+}
+
+#dashboard .secondary li {
+  margin: 0;
 }
 
 #dashboard .landmark {
