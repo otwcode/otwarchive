@@ -1,6 +1,24 @@
 require 'spec_helper'
 require 'webmock'
 
+# Values in API fake content
+def content_fields
+  {
+    title: "Foo Title", summary: "Foo summary", fandoms: "Foo", warnings: "Underage",
+    characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
+    categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
+    external_author_email: "bar@foo.com"
+  }
+end
+
+@api_fields =
+  {
+    title: "Bar Title", summary: "Bar summary", fandoms: "Bar", warnings: "Rape/Non-Con",
+    characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
+    categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
+    external_author_email: "bar@foo.com"
+  }
+
 # set up a valid token and some headers
 def valid_headers
   api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
@@ -13,19 +31,21 @@ end
 
 # Let the test get at external sites, but stub out anything containing "foo" or "bar"
 def mock_external
+  fields = content_fields
+
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
     to_return(status: 200,
               body:
-                "Title: #{content_fields[:title]}
-Summary:  #{content_fields[:summary]}
-Fandom:  #{content_fields[:fandoms]}
-Rating: #{content_fields[:rating]}
-Warnings:  #{content_fields[:warnings]}
-Characters:  #{content_fields[:characters]}
-Pairings:  #{content_fields[:relationships]}
-Category:  #{content_fields[:categories]}
-Tags:  #{content_fields[:freeform]}
+                "Title: #{fields[:title]}
+Summary:  #{fields[:summary]}
+Fandom:  #{fields[:fandoms]}
+Rating: #{fields[:rating]}
+Warnings:  #{fields[:warnings]}
+Characters:  #{fields[:characters]}
+Pairings:  #{fields[:relationships]}
+Category:  #{fields[:categories]}
+Tags:  #{fields[:freeform]}
 
 stubbed response", headers: {})
 
@@ -37,23 +57,6 @@ stubbed response", headers: {})
   WebMock.stub_request(:any, /bar/).
     to_return(status: 404, headers: {})
 end
-
-# Values in API fake content
-content_fields =
-  {
-    title: "Foo Title", summary: "Foo summary", fandoms: "Foo", warnings: "Underage",
-    characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
-    categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
-    external_author_email: "bar@foo.com"
-  }
-
-api_fields =
-  {
-    title: "Bar Title", summary: "Bar summary", fandoms: "Bar", warnings: "Rape/Non-Con",
-    characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
-    categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
-    external_author_email: "bar@foo.com"
-  }
 
 describe "API Authorization" do
   end_points = ["api/v1/import", "api/v1/works/import", "api/v1/bookmarks/import"]
