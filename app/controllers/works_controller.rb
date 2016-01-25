@@ -121,7 +121,7 @@ class WorksController < ApplicationController
 
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.list_without_filters(@owner, options)
+        @works = Work.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
@@ -148,10 +148,10 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
-        Work.latest.to_a
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
     end
   end
 
@@ -745,6 +745,14 @@ public
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
     work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
+
+    # manually allow switching of anon/moderated comments
+    if work_params[:anon_commenting_disabled] == "allow_anon"
+      work_params[:anon_commenting_disabled] = "0"
+    end
+    if work_params[:moderated_commenting_enabled] == "not_moderated"
+      work_params[:moderated_commenting_enabled] = "0"
+    end
 
     @works.each do |work|
       # now we can just update each work independently, woo!

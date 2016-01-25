@@ -20,7 +20,7 @@ server "ao3-app09.ao3.org",  :app , :workers , :schedulers
 server "ao3-app07.ao3.org",  :app
 server "ao3-app10.ao3.org",  :app , :workers , :schedulers
 server "ao3-front01.ao3.org", :web
-#server "ao3-front02.ao3.org", :web
+server "ao3-front02.ao3.org", :web
 
 # ORDER OF EVENTS
 # Calling "cap deploy" runs:
@@ -67,7 +67,6 @@ after "deploy:restart", "production_only:update_cron_email"
 after "deploy:update_code", "production_only:update_robots"
 after "deploy:restart", "production_only:notify_testers"
 after "deploy:restart", "production_only:rebalance_unicorns"
-after "deploy:restart", "deploy:reload_site_skins"
 
 
 # deploy from clean branch

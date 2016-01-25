@@ -11,7 +11,7 @@
 
 <!--main content-->
 
-<%= form_tag change_username_user_path(@user) do %>  
+<%= form_tag changed_username_user_path(@user) do %>  
   <dl>
     <dt><%= ts("Current user name") %></dt>
     <dd><span class="important"><%= @user.login %></span></dd>

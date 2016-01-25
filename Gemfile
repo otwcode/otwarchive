@@ -4,14 +4,14 @@ ruby '2.0.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.21'
+gem 'rails', '3.2.22'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2'
+gem 'mysql2', '0.3.10'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 
@@ -99,7 +99,7 @@ gem 'rollout'
 
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm', "3.9.3.241"
+gem 'newrelic_rpm'
 gem 'newrelic-redis'
 
 #   Use update memcached client with kinder, gentler I/O for Ruby
@@ -131,6 +131,10 @@ end
 group :test, :development do
   gem 'pry'
   gem 'whiny_validation'
+end
+
+group :test, :development, :staging  do
+  gem 'bullet'
 end
 
 # Deploy with Capistrano
