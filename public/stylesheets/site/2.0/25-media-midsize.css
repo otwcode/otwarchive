@@ -25,26 +25,23 @@
   text-align: left;
 }
 
-#dashboard li, #dashboard a, #dashboard .current {
-  display: inline-block;
+#dashboard li {
+  display: inline;
 }
 
-#dashboard li {
-  margin: 0.125em 0;
-  position: relative;
+#dashboard a, #dashboard .current {
+  display: inline-block;
+  margin: 0.25em 0;
 }
 
 #dashboard .secondary {
   background: #eee;
-  float: right;
-  padding: 0 0.5em;
-    border-radius: 0.25em;
-    box-shadow: inset 2px 2px 5px #bbb,
-    inset 0 0 1px #bbb;
+  padding: 0.375em 0 0.625em;
+    box-shadow: inset 2px 2px 5px #bbb;
 }
 
-#dashboard .secondary li {
-  margin: 0;
+#dashboard .secondary a {
+  margin: 0.125em 0;
 }
 
 #dashboard .landmark {
