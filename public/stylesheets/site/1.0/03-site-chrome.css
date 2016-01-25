@@ -625,75 +625,75 @@ li.blurb {
 /*icon image replacement*/
 
 .blurb .rating-general-audience {
-  background: url("/images/skins/iconsets/legacy/rating-general-audience.png");
+  background: url("/images/skins/iconsets/legacy/rating-general-audience-s.png");
 }
 
 .blurb .rating-explicit {
-  background: url("/images/skins/iconsets/legacy/rating-explicit.png");
+  background: url("/images/skins/iconsets/legacy/rating-explicit-s.png");
 }
 
 .blurb .rating-mature {
-  background: url("/images/skins/iconsets/legacy/rating-mature.png");
+  background: url("/images/skins/iconsets/legacy/rating-mature-s.png");
 }
 
 .blurb .rating-notrated {
-  background: url("/images/skins/iconsets/legacy/rating-notrated.png");
+  background: url("/images/skins/iconsets/legacy/rating-notrated-s.png");
 }
 
 .blurb .rating-teen {
-  background: url("/images/skins/iconsets/legacy/rating-teen.png");
+  background: url("/images/skins/iconsets/legacy/rating-teen-s.png");
 }
 
 .blurb .category-femslash {
-  background: url("/skins/iconsets/legacy/images/category-femslash.png");
+  background: url("/skins/iconsets/legacy/images/category-femslash-s.png");
 }
 
 .blurb .category-gen {
-  background: url("/images/skins/iconsets/legacy/category-gen.png");
+  background: url("/images/skins/iconsets/legacy/category-gen-s.png");
 }
 
 .blurb .category-slash {
-  background: url("/images/skins/iconsets/legacy/category-slash.png");
+  background: url("/images/skins/iconsets/legacy/category-slash-s.png");
 }
 
 .blurb .category-het {
-  background: url("/images/skins/iconsets/legacy/category-het.png");
+  background: url("/images/skins/iconsets/legacy/category-het-s.png");
 }
 
 .blurb .category-multi {
-  background: url("/images/skins/iconsets/legacy/category-multi.png");
+  background: url("/images/skins/iconsets/legacy/category-multi-s.png");
 }
 
 .blurb .category-other {
-  background: url("/images/skins/iconsets/legacy/category-other.png");
+  background: url("/images/skins/iconsets/legacy/category-other-s.png");
 }
 
 .blurb .category-none {
-  background: url("/images/skins/iconsets/legacy/category-none.png");
+  background: url("/images/skins/iconsets/legacy/category-none-s.png");
 }
 
 .blurb .complete-no {
-  background: url("/images/skins/iconsets/legacy/complete-no.png");
+  background: url("/images/skins/iconsets/legacy/complete-no-s.png");
 }
 
 .blurb .complete-yes {
-  background: url("/images/skins/iconsets/legacy/complete-yes.png");
+  background: url("/images/skins/iconsets/legacy/complete-yes-s.png");
 }
 
 .blurb .warning-yes {
-  background: url("/images/skins/iconsets/legacy/warning-yes.png");
+  background: url("/images/skins/iconsets/legacy/warning-yes-s.png");
 }
 
 .blurb .warning-no {
-  background: url("/images/skins/iconsets/legacy/warning-no.png");
+  background: url("/images/skins/iconsets/legacy/warning-no-s.png");
 }
 
 .blurb .warning-choosenotto {
-  background: url("/images/skins/iconsets/legacy/warning-choosenotto.png");
+  background: url("/images/skins/iconsets/legacy/warning-choosenotto-s.png");
 }
 
 .blurb .external-work {
-  background: url("/images/skins/iconsets/legacy/external-work.png");
+  background: url("/images/skins/iconsets/legacy/warning-external-work-s.png");
 }
 
 /*end icon image replacement */
@@ -770,7 +770,7 @@ li.blurb {
 }
 
 .bookmark p.count span {
-  background: url(/images/skins/iconsets/legacy/category-none.png) top left no-repeat;
+  background: url(/images/skins/iconsets/legacy/category-none-s.png) top left no-repeat;
   border: 1px solid #eee;
   display: block;
   float: left;
@@ -802,7 +802,7 @@ li.blurb {
 /* COLLECTION, ANON, MYSTERY */
 
 .blurb .mystery {
-  background: url(/images/skins/iconsets/legacy/mystery.png) 0 0 no-repeat;
+  background: url(/images/skins/iconsets/legacy/icon_mystery-s.png) 0 0 no-repeat;
 }
 
 /* STATS*/
