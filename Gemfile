@@ -65,8 +65,6 @@ gem 'permit_yo'
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
 
-gem 'jquery-rails', '>= 0.2.6'
-
 gem 'valium'
 
 gem 'best_in_place'

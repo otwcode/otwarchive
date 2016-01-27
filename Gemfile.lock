@@ -402,7 +402,6 @@ DEPENDENCIES
   google_visualr (>= 2.1)
   htmlentities
   httparty
-  jquery-rails (>= 0.2.6)
   kgio
   launchy
   lograge
