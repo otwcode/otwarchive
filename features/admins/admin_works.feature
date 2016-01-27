@@ -168,9 +168,8 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Spam"
     When I follow "Spam"
     Then I should see "Not Spam"
-    When I follow "Hide Comments"
-    # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
-    # Then I should see "Comments (1)"
+    # Admin can still see spam comment
+      And I should see "Hide Comments (2)"
 
     # comment should no longer be there
     When I follow "Comments"
@@ -178,9 +177,13 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Not Spam"
     When I am logged out as an admin
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
+      # user can't see spam comment
+    Then I should see "Comments (1)"
+    When I follow "Comments"
     Then I should not see "rolex"
+    # author can still see that spam comment exists, but can't see content of it
     When I am logged in as "author" with password "password"
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
-      Then I should not see "rolex"
+    Then I should see "Comments (2)"
+    When I follow "Comments"
+    Then I should not see "rolex"
