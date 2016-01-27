@@ -189,8 +189,6 @@ module NavigationHelpers
       admin_user_path(User.find_by_login($1))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
-    when /^the admin-stats page$/i
-      admin_stats_path
       
     # Here is an example that pulls values out of the Regexp:
     #
