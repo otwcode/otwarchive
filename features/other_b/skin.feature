@@ -401,3 +401,14 @@ Feature: creating and editing skins
   Then I should see "Skin was successfully created"
   Then the cache of the skin on "my blinking skin" should not expire after I save "Complex"
   Then the cache of the skin on "Complex" should expire after I save a parent skin
+  
+  Scenario: Users should be able to create skins using @media queries
+  Given I am logged in as "skinner"
+    And I set up the skin "Media Query Test Skin"
+    And I check "only screen and (max-width: 42em)"
+    And I check "only screen and (max-width: 62em)"
+  When I press "Submit"
+  Then I should see a create confirmation message
+    And I should see "only screen and (max-width: 42em), only screen and (max-width: 62em)"
+  When I press "Use"
+  Then the page should have a skin with the media query "only screen and (max-width: 42em), only screen and (max-width: 62em)"
