@@ -52,12 +52,24 @@ class HomeController < ApplicationController
     render :action => "first_login_help", :layout => false
   end
 
+  def estimate_number(number)
+    digits=[Math.log10(number).to_i-3,0].max
+    divide=10 ** digits
+    divide*(number/divide).to_i
+  end
+
   # home page itself
   def index
     unless logged_in?
-      @user_count = User.count
-      @work_count = Work.posted.count
-      @fandom_count = Fandom.canonical.count
+      @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
+        "about #{estimate_number(User.count)}"
+      end
+      @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
+        "about #{estimate_number(Work.posted.count)}"
+      end
+      @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
+        "about #{estimate_number(Work.posted.count)}"
+      end
     end
 
     @homepage = Homepage.new(@current_user)
