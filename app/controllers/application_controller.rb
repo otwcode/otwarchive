@@ -114,7 +114,18 @@ public
     if Rails.env.development?
       @admin_banner = AdminBanner.where(:active => true).last
     else
-      @admin_banner = Rails.cache.fetch("admin_banner"){AdminBanner.where(:active => true).last}
+      # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
+      # Basically we need to store a nil separately.
+      @admin_banner = Rails.cache.fetch("admin_banner"){
+           banner=AdminBanner.where(:active => true).last
+           if banner.nil? then
+             ""
+           else
+             banner
+           end}
+      if @admin_banner == "" then
+        @admin_banner = nil
+      end
     end
   end
 
