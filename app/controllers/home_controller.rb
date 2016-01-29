@@ -53,7 +53,7 @@ class HomeController < ApplicationController
   end
 
   def estimate_number(number)
-    digits=[Math.log10(number).to_i-3,0].max
+    digits=[Math.log10([number,1].max).to_i-3,0].max
     divide=10 ** digits
     divide*(number/divide).to_i
   end
