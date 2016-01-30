@@ -310,7 +310,7 @@ class Skin < ActiveRecord::Base
     end
 
     if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
-      style += "body, #main	{
+      style += "body, #main {
         #{self.background_color.present? ? "background: #{self.background_color};" : ''}
         #{self.foreground_color.present? ? "color: #{self.foreground_color};" : ''}"
       if self.base_em.present?
@@ -327,8 +327,42 @@ class Skin < ActiveRecord::Base
     end
 
     if self.headercolor.present?
-      style += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color:transparent;}\n"
-      style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none;}\n"
+      style += "
+        #header .primary,
+        #footer,
+        .autocomplete .dropdown ul li:hover,
+        li.selected,
+        a.tag:hover,
+        .listbox .heading a.tag:visited:hover,
+        .splash .favorite li:nth-of-type(odd) a:hover,
+        .splash .favorite li:nth-of-type(odd) a:focus { 
+          background-image: none;
+          background-color: #{self.headercolor};
+        }
+
+        #header .heading a,
+        #header .user a:hover,
+        #header .user a:focus,
+        #header .user .current,
+        #dashboard a:hover,
+        .actions a:hover,
+        .actions input:hover,
+        .actions a:focus,
+        .actions input:focus,
+        label.action:hover,
+        .action:hover,
+        .action:focus,
+        .blurb h4 a:link,
+        .splash .module h3,
+        .splash .browse li a:before {
+          color: #{self.headercolor};
+        }
+
+        #dashboard,
+        #dashboard.own {
+          border-color: #{self.headercolor};
+        }\n
+      "
     end
 
     if self.accent_color.present?
