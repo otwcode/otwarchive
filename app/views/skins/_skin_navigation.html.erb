@@ -20,7 +20,11 @@
     <% end %>
         
     <% if skin.editable? %>
-      <li><%= span_if_current ts('Edit'), edit_skin_url(skin) %></li>
+      <% if skin.wizard_settings? %>
+        <li><%= span_if_current ts('Edit'), edit_skin_url(skin, :wizard => true) %></li>
+      <% else %>
+        <li><%= span_if_current ts('Edit'), edit_skin_url(skin) %></li>
+      <% end %>
       <% unless logged_in_as_admin? %>
         <li><%= link_to ts('Delete'), skin, :confirm => ts('Are you sure?'), :method => :delete %></li>
       <% end %>

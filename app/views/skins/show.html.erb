@@ -43,7 +43,7 @@
     </div>
   <% end %>      
 
-  <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
+  <% if @skin.wizard_settings? %>
     <div class="wizard module">
       <h3 class="heading"><%= ts('Wizard Settings') %></h3>
       <p class="notes"><%= ts("(Can be overridden by custom <abbr title='cascading style sheets'>CSS</abbr>)").html_safe %></p>

@@ -184,6 +184,10 @@ class Skin < ActiveRecord::Base
     end
   end
 
+  def wizard_settings?
+    self.margin || !self.font.blank? || !self.background_color.blank? || !self.foreground_color.blank? || self.base_em || self.paragraph_margin || !self.headercolor.blank? || !self.accent_color.blank?
+  end
+
   # create the minimal number of files we can, containing all the css for this entire skin
   def cache!
     self.clear_cache!
@@ -306,7 +310,12 @@ class Skin < ActiveRecord::Base
   def get_wizard_settings
     style = ""
     if self.margin.present?
-      style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
+      style += "
+        #workskin {
+          margin: auto #{self.margin}%;
+          padding: 0.5em #{self.margin}% 0;
+        }
+        \n"
     end
 
     if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
@@ -320,6 +329,29 @@ class Skin < ActiveRecord::Base
         style += "\nfont-family: #{font};"
       end
       style += "}\n"
+    end
+
+    if self.font.present?
+     style += "
+        body,
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        .dropdown,
+        blockquote,
+        pre,
+        input,
+        textarea,
+        .heading .actions,
+        .heading .action,
+        .heading span.actions,
+        span.unread,
+        .replied,
+        span.claimed,
+        .actions span.defaulted {
+          font-family: #{self.font};
+        }
+      /n"
     end
 
     if self.paragraph_margin.present?
@@ -361,8 +393,8 @@ class Skin < ActiveRecord::Base
         #dashboard,
         #dashboard.own {
           border-color: #{self.headercolor};
-        }\n
-      "
+        }
+      \n"
     end
 
     if self.accent_color.present?
