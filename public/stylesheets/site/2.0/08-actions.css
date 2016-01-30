@@ -15,7 +15,7 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   text-align: center;
 }
 
-.actions a, .actions a:link, .action, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
