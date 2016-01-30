@@ -139,6 +139,7 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
         get :hide
