@@ -145,6 +145,10 @@ form dd.required {
   color: #2a2a2a;
 }
 
+form .footnote code {
+  display: inline;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
