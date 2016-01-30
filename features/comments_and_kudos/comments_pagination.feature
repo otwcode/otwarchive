@@ -32,4 +32,5 @@ Scenario: Multi-chapter work with many comments per chapter
   # Entire work shows all comments
   When I follow "Entire Work"
   Then I should see "Comments (52)"
-    And I should see "3" within ".pagination"
+  When I follow "Comments (52)"
+  Then I should see "3" within ".pagination"
