@@ -2,25 +2,21 @@
 <div id="footer" role="contentinfo" class="region">
 	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
-    <% unless !(logged_in? || logged_in_as_admin?) %>
-      <% cache(skin_cache_footer_key) do %>
-        <% unless Skin.in_chooser.empty? %>
-          <li class="module group">
-            <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
-            <ul class="menu">
-              <li aria-haspopup="true">
-                <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
-                <ul id="skin_chooser" class="expandable secondary">
-                  <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
-                  <% Skin.in_chooser.order(:title).each do |s| %>
-                    <li><%= link_to s.title, set_skin_path(s) %></li>
-                  <% end %>
-                </ul> 
-              </li>
-            </ul>
+    <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
+      <li class="module group">
+        <h4 class="heading"><%= ts('Customize', key: 'footer') %></h4>
+        <ul class="menu">
+          <li aria-haspopup="true">
+            <a href="#"><%= ts('Choose Skin', key: 'footer') %></a>
+            <ul id="skin_chooser" class="expandable secondary">
+              <li><%= link_to ts('Default', key: 'footer'), unset_skins_path %></li>
+              <% Skin.in_chooser.order(:title).each do |s| %>
+                <li><%= link_to s.title, set_skin_path(s) %></li>
+              <% end %>
+            </ul> 
           </li>
-        <% end %>
-      <% end %>
+        </ul>
+      </li>
     <% end %>
     <li class="module group">
       <h4 class="heading"><%= ts('About the Archive', key: 'footer') %></h4>
