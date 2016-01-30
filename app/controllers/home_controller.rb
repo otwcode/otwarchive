@@ -53,22 +53,22 @@ class HomeController < ApplicationController
   end
 
   def estimate_number(number)
-    digits=[Math.log10([number,1].max).to_i-3,0].max
-    divide=10 ** digits
-    divide*(number/divide).to_i
+    digits = [Math.log10([number, 1].max).to_i-3, 0].max
+    divide = 10**digits
+    divide * (number / divide).to_i
   end
 
   # home page itself
   def index
     unless logged_in?
       @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
-        "about #{estimate_number(User.count)}"
+        estimate_number(User.count)
       end
       @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
-        "about #{estimate_number(Work.posted.count)}"
+        estimate_number(Work.posted.count)
       end
       @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
-        "about #{estimate_number(Work.posted.count)}"
+        estimate_number(Work.posted.count)
       end
     end
 
