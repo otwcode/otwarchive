@@ -342,11 +342,41 @@ class Skin < ActiveRecord::Base
         tr:hover,
         col.name,
         div.dynamic,
+        fieldset fieldset,
+        fieldset dl dl,
+        form blockquote.userstuff,
         form.verbose legend,
         .verbose form legend,
+        #modal,
+        .own,
+        .draft,
+        .draft .wrapper,
+        .unread,
+        .child,
+        .unwrangled,
+        .unreviewed,
         .listbox .index,
         #outer {
           background: #{self.background_color};
+        }
+        
+        a.tag:hover,
+        .listbox .heading a.tag:visited:hover {
+          color: #{self.background_color};
+        }
+
+        #footer,
+        #modal {
+          border-color: #{self.background_color};
+        }
+
+        .listbox,
+        fieldset fieldset.listbox {
+            box-shadow: 0 0 0 1px #{self.background_color};
+        }
+        
+        .listbox .index {
+            box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
       "
     end
@@ -390,10 +420,47 @@ class Skin < ActiveRecord::Base
         .secondary,
         .dropdown,
         #header .search,
-        #header #search input:focus,
         form dd.required,
-        .post .required .warnings, dd.required {
+        .post .required .warnings,
+        dd.required {
           color: #{self.foreground_color};
+        }
+        
+        /* these  colors should be separate, but for now... */
+        a,
+        a:link,
+        a:visited,
+        a:hover,
+        #header a,
+        #header a:visited,
+        #header .current,
+        #header .primary .open a,
+        #header .primary .dropdown:hover a,
+        #header .primary .dropdown a:focus,
+        #header .menu .current,
+        #header .primary .menu a,
+        #header .primary .menu .current,
+        #dashboard a,
+        a.tag,
+        .listbox > .heading,
+        .listbox .heading a:visited,
+        .filters dt a:hover {
+          color: #{self.foreground_color};
+        }
+
+        form dt,
+        form.verbose legend,
+        .verbose form legend {
+          border-color: #{self.foreground_color};
+        }
+        
+        /* some things with background colors need to keep the default text color */
+        .notice:not(.required),
+        .comment_notice,
+        ul.notes,
+        .caution,
+        .notice a {
+          color: #2a2a2a;
         }
       "
     end
@@ -424,6 +491,15 @@ class Skin < ActiveRecord::Base
         label.action:hover,
         .action:hover,
         .action:focus,
+        a.cloud1,
+        a.cloud2,
+        a.cloud3,
+        a.cloud4,
+        a.cloud5,
+        a.cloud6,
+        a.cloud7,
+        a.cloud8,
+        a.work,
         .blurb h4 a:link,
         .splash .module h3,
         .splash .browse li a:before {
@@ -438,7 +514,65 @@ class Skin < ActiveRecord::Base
     end
 
     if self.accent_color.present?
-      style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n"
+      style += "
+        table,
+        thead td,
+        #header .actions a:hover,
+        #header .actions a:focus,
+        #header .dropdown:hover a,
+        #header .open a,
+        #header .menu,
+        #small_login,
+        #header .dropdown:hover .current + .menu,
+        fieldset,
+        form dl,
+        fieldset dl dl,
+        fieldset fieldset fieldset,
+        fieldset fieldset dl dl,
+        dd.hideme,
+        form blockquote.userstuff,
+        dl.index dd,
+        .statistics .index li:nth-of-type(even),
+        .listbox,
+        fieldset fieldset.listbox,
+        .reading h4.viewed,
+        .comment h4.byline,
+        .search [role=\"tooltip\"] {
+          background: #{self.accent_color};
+          border-color: #{self.accent_color};
+        }
+
+        li.relationships a {
+          background: #{self.accent_color};        
+        }
+
+        li.blurb,
+        fieldset,
+        form dl,
+        #dashboard ul,
+        div.comment,
+        li.comment,
+        .comment div.icon {
+          border-color: #{self.accent_color};
+        }
+        
+        fieldset,
+        form dl,
+        fieldset dl dl,
+        fieldset fieldset fieldset,
+        fieldset fieldset dl dl,
+        form blockquote.userstuff {
+            box-shadow: inset 1px 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        fieldset dl,
+        fieldset.actions,
+        fieldset dl fieldset dl,
+        form.verbose legend,
+        .verbose form legend {
+            box-shadow: none;
+        }
+      "
     end
 
     style
