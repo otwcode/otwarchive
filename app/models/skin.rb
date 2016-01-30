@@ -315,7 +315,7 @@ class Skin < ActiveRecord::Base
           margin: auto #{self.margin}%;
           padding: 0.5em #{self.margin}% 0;
         }
-        \n"
+      "
     end
 
     if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
@@ -329,6 +329,26 @@ class Skin < ActiveRecord::Base
         style += "\nfont-family: #{font};"
       end
       style += "}\n"
+    end
+
+    if self.background_color.present?
+      style += "
+        body,
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        .dropdown,
+        th,
+        tr:hover,
+        col.name,
+        div.dynamic,
+        form.verbose legend,
+        .verbose form legend,
+        .listbox .index,
+        #outer {
+          background: #{self.background_color};
+        }
+      "
     end
 
     if self.font.present?
@@ -351,11 +371,31 @@ class Skin < ActiveRecord::Base
         .actions span.defaulted {
           font-family: #{self.font};
         }
-      /n"
+      "
     end
 
     if self.paragraph_margin.present?
-      style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n"
+      style += "
+        .userstuff p {
+          margin-bottom: #{self.paragraph_margin}em;
+        }
+      "
+    end
+
+    if self.foreground_color.present?
+      style += "
+        body,
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        .dropdown,
+        #header .search,
+        #header #search input:focus,
+        form dd.required,
+        .post .required .warnings, dd.required {
+          color: #{self.foreground_color};
+        }
+      "
     end
 
     if self.headercolor.present?
@@ -394,7 +434,7 @@ class Skin < ActiveRecord::Base
         #dashboard.own {
           border-color: #{self.headercolor};
         }
-      \n"
+      "
     end
 
     if self.accent_color.present?
