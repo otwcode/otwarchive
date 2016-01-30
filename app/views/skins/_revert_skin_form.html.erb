@@ -1,0 +1,4 @@
+<%= form_for(current_user.preference, :url => { controller: :preferences, action: :update, user_id: current_user }, method: "put") do |f| %>
+  <%= f.hidden_field :skin_id, value: Skin.default.id %>
+  <%= f.submit ts("Revert to Default Skin") %>
+<% end %>
