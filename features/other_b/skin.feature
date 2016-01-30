@@ -146,7 +146,6 @@ Feature: creating and editing skins
     And I should see "(admin modified)"
     And I should see "#greeting.logged-in"
     And I should not see "#title"
-  Then the cache of the skin on "public skin" should expire after I save the skin
 
   Scenario: Users should not be able to edit their public approved skins
   Given the approved public skin "public skin"
@@ -263,7 +262,6 @@ Feature: creating and editing skins
     And I should not see "color: purple"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
-  Then the cache of the skin on "Awesome Work Skin" should expire after I save the skin
 
   Scenario: log out from my skins page (Issue 2271)
   Given I am logged in as "skinner"
@@ -302,7 +300,6 @@ Feature: creating and editing skins
       And I fill in "CSS" with ".myclass { -moz-box-sizing: border-box; -webkit-transition: opacity 2s; }"
       And I submit
     Then I should see "Skin was successfully created"
-    Then the cache of the skin on "skin with prefixed property" should expire after I save the skin
 
   Scenario: #workskin selector prefixing
     Given basic skins
@@ -385,22 +382,6 @@ Feature: creating and editing skins
     And I press "Revert to Default Skin"
   When I am on skinner's preferences page
     Then "Default" should be selected within "preference_skin_id"
-
-  Scenario: The cache should be flushed with a parent and not when unrelated
-  Given I have loaded site skins
-    And I am logged in as "skinner"
-    And I set up the skin "Complex"
-    And I select "replace archive skin entirely" from "skin_role"
-    And I check "add_site_parents"
-    And I submit
-  Then I should see a create confirmation message
-  When I am on skin's new page
-    And I fill in "Title" with "my blinking skin"
-    And I fill in "CSS" with "#title { text-decoration: blink;}"
-    And I submit
-  Then I should see "Skin was successfully created"
-  Then the cache of the skin on "my blinking skin" should not expire after I save "Complex"
-  Then the cache of the skin on "Complex" should expire after I save a parent skin
   
   Scenario: Users should be able to create skins using @media queries
   Given I am logged in as "skinner"
