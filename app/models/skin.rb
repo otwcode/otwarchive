@@ -318,17 +318,35 @@ class Skin < ActiveRecord::Base
       "
     end
 
-    if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
-      style += "body, #main {
-        #{self.background_color.present? ? "background: #{self.background_color};" : ''}
-        #{self.foreground_color.present? ? "color: #{self.foreground_color};" : ''}"
-      if self.base_em.present?
-        style += "font-size: #{self.base_em}%; line-height:1.125;"
-      end
-      if self.font.present?
-        style += "\nfont-family: #{font};"
-      end
-      style += "}\n"
+    if self.base_em.present?
+      style += "
+        body {
+          font-size: #{self.base_em}%;
+        }
+      "
+    end
+
+    if self.font.present?
+     style += "
+        body,
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        .dropdown,
+        blockquote,
+        pre,
+        input,
+        textarea,
+        .heading .actions,
+        .heading .action,
+        .heading span.actions,
+        span.unread,
+        .replied,
+        span.claimed,
+        .actions span.defaulted {
+          font-family: #{self.font};
+        }
+      "
     end
 
     if self.background_color.present?
@@ -355,11 +373,12 @@ class Skin < ActiveRecord::Base
         .child,
         .unwrangled,
         .unreviewed,
+        .thread .even,
         .listbox .index,
         #outer {
           background: #{self.background_color};
         }
-        
+
         a.tag:hover,
         .listbox .heading a.tag:visited:hover {
           color: #{self.background_color};
@@ -377,29 +396,6 @@ class Skin < ActiveRecord::Base
         
         .listbox .index {
             box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-      "
-    end
-
-    if self.font.present?
-     style += "
-        body,
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        .dropdown,
-        blockquote,
-        pre,
-        input,
-        textarea,
-        .heading .actions,
-        .heading .action,
-        .heading span.actions,
-        span.unread,
-        .replied,
-        span.claimed,
-        .actions span.defaulted {
-          font-family: #{self.font};
         }
       "
     end
@@ -453,8 +449,8 @@ class Skin < ActiveRecord::Base
         .verbose form legend {
           border-color: #{self.foreground_color};
         }
-        
-        /* some things with background colors need to keep the default text color */
+
+        /* some things with unchanging background colors need the default text color */
         .notice:not(.required),
         .comment_notice,
         ul.notes,
@@ -543,7 +539,7 @@ class Skin < ActiveRecord::Base
         }
 
         li.relationships a {
-          background: #{self.accent_color};        
+          background: #{self.accent_color};
         }
 
         li.blurb,
@@ -571,6 +567,19 @@ class Skin < ActiveRecord::Base
         form.verbose legend,
         .verbose form legend {
             box-shadow: none;
+        }
+        
+        @media only screen and (max-width: 62em) {
+          #dashboard .secondary {
+            background: #{self.accent_color};
+            box-shadow: none;
+          }
+        }
+        
+        @media only screen and (max-width: 42em) {
+          .javascript {
+            background: #{self.accent_color};
+          }
         }
       "
     end
