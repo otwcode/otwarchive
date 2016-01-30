@@ -161,6 +161,10 @@ SUBSECTIONS:
   font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
 }
 
+.splash .news blockquote {
+  float: left;
+}
+
 .splash .jump {
   text-align: right; 
 }
@@ -184,7 +188,8 @@ SUBSECTIONS:
 /* module: twitter */
 
 .tweets iframe {
-  width: 100% !important;
+  display: block !important;
+  margin: 0 auto;
 }
 
 /* mod: logged-in */
@@ -201,7 +206,7 @@ SUBSECTIONS:
 
 /* misc */
 
-.splash .module .module, .splash .dynamic {
+.splash .module .module, .splash .dynamic, .splash .news blockquote {
   margin: 0;
   width: 100%;
 }
