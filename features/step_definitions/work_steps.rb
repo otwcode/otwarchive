@@ -101,7 +101,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
     visit work_url(work)
-    fill_in("comment[content]", :with => "Bla bla")
+    fill_in("comment[content]", with: "Bla bla")
     click_button("Comment")
     step %{I am logged out}
   end
