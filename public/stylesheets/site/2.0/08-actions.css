@@ -76,7 +76,7 @@ ol.pagination, div.pagination, ol.year {
   margin: 0.643em auto;
 }
 
-.actions a:visited, .action:visited, .action a:visited {
+.actions a:visited, .action:visited, .action a:link, .action a:visited {
   color: #111;
 }
 

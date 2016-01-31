@@ -375,6 +375,7 @@ class Skin < ActiveRecord::Base
         .unreviewed,
         .thread .even,
         .listbox .index,
+        .nomination dt,
         #outer {
           background: #{self.background_color};
         }
@@ -389,6 +390,13 @@ class Skin < ActiveRecord::Base
         #footer,
         #modal {
           border-color: #{self.background_color};
+        }
+
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        .wrapper {
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
 
         .listbox,
@@ -458,6 +466,7 @@ class Skin < ActiveRecord::Base
         }
 
         /* some things with unchanging background colors need the default text color */
+        .qtip-content,
         .notice:not(.required),
         .comment_notice,
         ul.notes,
