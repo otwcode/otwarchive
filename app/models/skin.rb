@@ -449,6 +449,7 @@ class Skin < ActiveRecord::Base
         #header .primary .menu a,
         #header .primary .menu .current,
         #dashboard a,
+        #dashboard span,
         a.tag,
         .listbox > .heading,
         .listbox .heading a:visited,
@@ -473,6 +474,11 @@ class Skin < ActiveRecord::Base
         .caution,
         .notice a {
           color: #2a2a2a;
+        }
+
+        .current,
+        a.current {
+          color: #111;
         }
       "
     end
