@@ -384,6 +384,8 @@ class Skin < ActiveRecord::Base
           color: #{self.background_color};
         }
 
+        tbody tr,
+        thead td,
         #footer,
         #modal {
           border-color: #{self.background_color};
@@ -418,7 +420,9 @@ class Skin < ActiveRecord::Base
         #header .search,
         form dd.required,
         .post .required .warnings,
-        dd.required {
+        dd.required,
+        .required .autocomplete,
+        .userstuff h2 {
           color: #{self.foreground_color};
         }
         
@@ -446,7 +450,10 @@ class Skin < ActiveRecord::Base
 
         form dt,
         form.verbose legend,
-        .verbose form legend {
+        .verbose form legend,
+        .faq .categories h3,
+        .splash .module h3,
+        .userstuff h3 {
           border-color: #{self.foreground_color};
         }
 
@@ -531,8 +538,11 @@ class Skin < ActiveRecord::Base
         .statistics .index li:nth-of-type(even),
         .listbox,
         fieldset fieldset.listbox,
+        .item dl.visibility,
         .reading h4.viewed,
         .comment h4.byline,
+        .splash .favorite li:nth-of-type(odd) a,
+        .splash .module div.account,
         .search [role=\"tooltip\"] {
           background: #{self.accent_color};
           border-color: #{self.accent_color};
@@ -545,10 +555,23 @@ class Skin < ActiveRecord::Base
         li.blurb,
         fieldset,
         form dl,
+        thead,
+        tfoot,
+        tfoot td,
+        th,
+        tr:hover,
+        col.name,
         #dashboard ul,
+        .toggled form,
+        .dynamic form,
+        .secondary,
+        dl.meta,
+        .bookmark .user,
         div.comment,
         li.comment,
-        .comment div.icon {
+        .comment div.icon,
+        .splash .news li,
+        .userstuff blockquote {
           border-color: #{self.accent_color};
         }
         
