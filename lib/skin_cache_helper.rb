@@ -1,11 +1,12 @@
 # note, if you modify this file you have to restart the server or console
 module SkinCacheHelper
   def skin_cache_html_key(skin, roles_to_include)
-    'skins_style_tags/v1/' + \
+    'skins_style_tags/v3' + \
       AdminSetting.default_skin.id.to_s + '/' + \
       Skin.default.id.to_s + '/' + \
       roles_to_include.to_s + '/' + \
-      skin_cache_value(skin)
+      skin_cache_value(skin) + '/' + \
+      skin.id.to_s
   end
 
   def skin_cache_footer_key
