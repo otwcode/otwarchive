@@ -21,7 +21,6 @@ SUBSECTIONS:
 .splash {
   margin: auto;
   max-width: 78em;
-  overflow: hidden;
 }
 
 .splash .module h3 {
