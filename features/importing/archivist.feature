@@ -69,7 +69,7 @@ Feature: Archivist bulk imports
     And 1 email should be delivered to "cesy@dreamwidth.org"
     And the email should contain claim information
 
-  Scenario: Importing sends a backup email to open doors if it can't find the author
+  Scenario: Importing sends an email to a guessed address if it can't find the author
 
   Given I have an archivist "alice_ttlg"
     And the default ratings exist
@@ -78,10 +78,9 @@ Feature: Archivist bulk imports
   Then I should see import confirmation
     And I should see "Name change"
   When the system processes jobs
+  # Importer assumes dreamwidth email for works from there
   Then 1 email should be delivered to "jennyst@dreamwidth.org"
     And the email should contain invitation warnings from "alice ttlg" for work "Name change" in fandom "No Fandom"
-  # And 1 email should be delivered to "opendoors@transformativeworks.org"
-  # TODO
 
   Scenario: Import a single work as an archivist specifying author
 
@@ -119,8 +118,24 @@ Feature: Archivist bulk imports
   # TODO
 
   Scenario: Importing straight into a collection
-  # TODO
-  
+
+    Given I have an archivist "elynross"
+      And the default ratings exist
+      And I have a collection "Club"
+    When I am logged in as "elynross"
+      And I go to the import page
+      And I start to import the work "http://cesy.dreamwidth.org/154770.html" by "randomtestname" with email "otwstephanie@example.com"
+      And I press "Import"
+    Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
+    When I press "Edit"
+      And I fill in "work_collection_names" with "Club"
+      And I press "Post Without Preview"
+    Then I should see "Welcome"
+      And I should see "randomtestname"
+      And I should see "Club"
+    When the system processes jobs
+    Then 1 email should be delivered to "otwstephanie@example.com"
+
   Scenario: Should not be able to import for others unless the box is checked
   
     Given I have an archivist "elynross"
