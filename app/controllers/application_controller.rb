@@ -118,11 +118,9 @@ public
       # Basically we need to store a nil separately.
       @admin_banner = Rails.cache.fetch("admin_banner") do 
         banner=AdminBanner.where(:active => true).last
-        banner.nil? ?  "" : banner
+        banner.nil? ? "" : banner
       end
-      if @admin_banner == "" then
-        @admin_banner = nil
-      end
+      if @admin_banner == "" then @admin_banner = nil end
     end
   end
 
