@@ -138,7 +138,7 @@ end
 Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
   author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
   author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
-  work = FactoryGirl.create(:work, :authors => [author1, author2], :posted => true)
+  FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
 end
 
 # WHEN

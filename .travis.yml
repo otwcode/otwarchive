@@ -13,6 +13,7 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/other_b"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_a"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_b"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_c"
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"

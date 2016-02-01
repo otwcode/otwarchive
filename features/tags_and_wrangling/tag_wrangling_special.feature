@@ -2,6 +2,7 @@
 Feature: Tag Wrangling - special cases
 
   Scenario: Create a new tag that differs from an existing tag by accents or other markers
+    Rename a tag to change accents
 
   Given the following activated tag wrangler exists
     | login          |
@@ -54,6 +55,48 @@ Feature: Tag Wrangling - special cases
   When I fill in "Name" with "Amelie"
     And I press "Save changes"
   Then I should see "Tag was updated"
+  
+  Scenario: Works should be updated when capitalisation is changed
+    See AO3-4230 for a bug with the caching of this
+  
+  Given the following activated tag wrangler exists
+    | login          |
+    | wranglerette   |
+    And a fandom exists with name: "amelie", canonical: false
+    And I am logged in as "author"
+    And I post the work "wrong" with fandom "amelie"
+  When I am logged in as "wranglerette"
+    And I edit the tag "amelie"
+    And I fill in "Name" with "Amelie"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I view the work "wrong"
+  Then I should see "Amelie"
+  #  And I should not see "amelie"
+  When I am on the works page
+  Then I should see "amelie"
+  #  And I should not see "Amelie"
+  
+  Scenario: Works should be updated when accents are changed
+    See AO3-4230 for a bug with the caching of this
+  
+  Given the following activated tag wrangler exists
+    | login          |
+    | wranglerette   |
+    And a fandom exists with name: "Amelie", canonical: false
+    And I am logged in as "author"
+    And I post the work "wrong" with fandom "Amelie"
+  When I am logged in as "wranglerette"
+    And I edit the tag "Amelie"
+    And I fill in "Name" with "Amélie"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I view the work "wrong"
+  Then I should see "Amélie"
+  #  And I should not see "Amelie"
+  When I am on the works page
+  Then I should see "Amelie"
+  #  And I should not see "Amélie"
 
   Scenario: Tags with non-standard characters in them - question mark and period
   
