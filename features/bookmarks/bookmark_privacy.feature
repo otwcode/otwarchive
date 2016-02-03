@@ -120,8 +120,7 @@ Feature: Private bookmarks
       And I should not see "bookmarker"
 
     # Private bookmarks should not show on tag's page
-    When I view the tag "Stargate SG-1"
-      And I follow "filter bookmarks"
+    When I go to the bookmarks tagged "Stargate SG-1"
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"
       And I should not see "bookmarker"
