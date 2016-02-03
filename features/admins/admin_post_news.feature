@@ -35,7 +35,9 @@ Feature: Admin Actions to Post News
       And I fill in "Comment" with "Thank you very much!" within ".odd"
       And I press "Comment" within ".odd"
     Then I should see "Comment created"
-    # Someone can spoof being an admin by using the admin name and a different email, but their name will not be linked and their icon will not match
+    # Someone can spoof being an admin by using the admin name and a different email, but their icon will not match
+    # We want to improve this so that the name is linked and the spoof is more obvious
+    When "Issue AO3-3685" is fixed
     # notification to the admin list for admin post
       And 1 email should be delivered to "admin@example.org"
     # reply to the user
