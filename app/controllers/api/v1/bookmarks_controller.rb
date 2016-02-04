@@ -79,4 +79,29 @@ class Api::V1::BookmarksController < Api::V1::BaseController
     status = :ok if errors.empty?
     [status, errors]
   end
+
+  # Documenting the shape of the Json request
+  def bookmark_request(params)
+    { archivist: "testy",
+      bookmarks: [
+        { pseud_id: "1",
+          external: {
+          url: "http://foo",
+          author: "Thing",
+          title: "Title Thing",
+          summary: "<p>blah blah blah</p>",
+          fandom_string: "Testing",
+          rating_string: "General Audiences",
+          category_string: ["M/M"],
+          relationship_string: "Starsky/Hutch",
+          character_string: "Starsky,hutch"
+        },
+        notes: "<p>Notes</p>",
+        tag_string: "youpi",
+        collection_names: "",
+        private: "0",
+        rec: "0" }
+      ]
+    }
+  end
 end
