@@ -26,7 +26,7 @@ end
 Given /^account creation is enabled$/ do
   steps %Q{
     Given the following admin settings are configured:
-    | account_creation_enabled | 0 |
+    | account_creation_enabled | 1 |
   }
 end
 
