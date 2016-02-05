@@ -206,6 +206,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       restricted: params[:restricted],
       override_tags: params[:override_tags],
       collection_names: params[:collection_names],
+      title: params[:title],
       fandom: params[:fandoms],
       warning: params[:warnings],
       character: params[:characters],

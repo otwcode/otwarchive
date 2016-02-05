@@ -84,7 +84,8 @@ class Api::V1::BookmarksController < Api::V1::BaseController
   def bookmark_request(params)
     { archivist: "testy",
       bookmarks: [
-        { pseud_id: "1",
+        {
+          pseud_id: "1",
           external: {
           url: "http://foo",
           author: "Thing",
