@@ -14,7 +14,6 @@ Feature: Import Works from deviantart
       And I should see the image "src" text "http://orig03.deviantart.net/4707/f/2007/004/a/7/flooded_by_bingeling.jpg"
       And I should see "Digital Art" within "dd.freeform"
       And I should see "People" within "dd.freeform"
-      And I should see "People" within "dd.freeform"
       And I should see "Vector" within "dd.freeform"
       And I should see "Published:2007-01-04"
       # Importer picks up artist name as title instead of actual title
