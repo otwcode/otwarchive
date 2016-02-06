@@ -338,35 +338,29 @@ class Skin < ActiveRecord::Base
     style
   end
 
-  def get_style_block_single(roles_to_include)
+  def get_style_block(roles_to_include)
     block = ""
-    if roles_to_include.include?(get_role)
-      if self.filename.present?
-        block += get_ie_comment(stylesheet_link(self.filename, get_media))
-      elsif self.css.present?
-        block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
-      elsif (wizard_block = get_wizard_settings).present?
-        block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+    if self.cached?
+      # cached skin in a directory
+      block = get_cached_style(roles_to_include)
+    else
+      # recursively get parents
+      parent_skins.each do |parent|
+        block += parent.get_style_block(roles_to_include) + "\n"
+      end
+
+      # finally get this skin
+      if roles_to_include.include?(get_role)
+        if self.filename.present?
+          block += get_ie_comment(stylesheet_link(self.filename, get_media))
+        elsif self.css.present?
+          block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
+        elsif (wizard_block = get_wizard_settings).present?
+          block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+        end
       end
     end
     return block
-  end
-
-  def get_style_block(roles_to_include)
-    if self.cached?
-      # cached skin in a directory
-      return get_cached_style(roles_to_include)
-    else
-      block = ""
-      @stack = self.parent_skins
-      block += get_style_block_single(roles_to_include)
-      while (@stack.size != 0) do
-        current = @stack.pop
-        block = current.get_style_block_single(roles_to_include) + "\n" + block
-        @stack.concat current.parent_skins
-      end
-      return block
-    end
   end
 
   def get_cached_style(roles_to_include)
