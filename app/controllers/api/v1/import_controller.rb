@@ -70,15 +70,22 @@ class Api::V1::ImportController < Api::V1::BaseController
       begin
         work = storyparser.download_and_parse_chapters_into_story(urls, options)
         work.save
-        @works << work
-        @some_success = true
-        work_status = :created
-        work_url = work_url(work)
-        work_messages << "Successfully created work \"" + work.title + "\"."
+        if work && work.chapters.all? { |c| c.errors.empty? }
+          @works << work
+          @some_success = true
+          work_status = :created
+          work_url = work_url(work)
+          work_messages << "Successfully created work \"" + work.title + "\"."
+        else
+          @some_errors = true
+          work_status = :unprocessable_entity
+          work_messages << work.errors.messages.values.flatten if work
+          work_messages << work.chapters.map(&:errors).map { |e| e.messages.values }.flatten if work.chapters
+        end
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
-        work_messages << exception.message
+        work_messages << exception.message.to_json
         work_messages << work.errors if work
       end
     end
@@ -87,7 +94,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       status: work_status,
       url: work_url,
       original_url: original_url,
-      messages: work_messages
+      messages: work_messages.flatten
     }
   end
 

@@ -51,6 +51,11 @@ stubbed response", headers: {})
               body: "stubbed response",
               headers: {})
 
+  WebMock.stub_request(:any, /no-content/).
+    to_return(status: 200,
+              body: "",
+              headers: {})
+
   WebMock.stub_request(:any, /bar/).
     to_return(status: 404, headers: {})
 
@@ -121,6 +126,18 @@ stubbed response", headers: {})
            { archivist: @user.login }.to_json,
            valid_headers
       assert_equal 400, response.status
+    end
+
+    it "should return a helpful message if the external work contains no text" do
+      post "/api/v1/import",
+           { archivist: @user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://no-content"] }]
+           }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["works"].first["messages"].first).to start_with("\"We couldn't")
     end
 
     describe "should use API metadata for these fields:" do
@@ -285,6 +302,7 @@ stubbed response", headers: {})
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
       end
     end
+
   end
 
   WebMock.allow_net_connect!

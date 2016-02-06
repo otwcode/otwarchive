@@ -530,9 +530,11 @@ class StoryParser
     # form results) and returns the final sanitized hash.
     #
     def parse_common(story, location = nil, encoding = nil)
-      work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
+      work_params = {title: "UPLOADED WORK", chapter_attributes: { content: "" }}
 
-      @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
+      # Encode as HTML - the dummy <i> is to force plain text documents to be parsed as HTML with line
+      # breaks rather than one big blob
+      @doc = Nokogiri::HTML.parse(story.prepend("<i/>"), nil, encoding) rescue ""
 
       # Try to convert all relative links to absolute
       base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
@@ -548,6 +550,7 @@ class StoryParser
         end
       end
 
+      # Extract metadata
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
         params = eval("parse_story_from_#{source.downcase}(story)")
         work_params.merge!(params)
@@ -555,17 +558,24 @@ class StoryParser
         work_params.merge!(parse_story_from_unknown(story))
       end
 
-      return shift_chapter_attributes(sanitize_params(work_params))
+      shift_chapter_attributes(sanitize_params(work_params))
     end
 
     # our fallback: parse a story from an unknown source, so we have no special
     # rules.
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
+
       storyhead = @doc.css("head").inner_html if @doc.css("head")
+
       # Story content - Look for progressively less specific containers or grab everything
-      element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc
-      storytext = element.inner_html
+      storytext =
+        if @doc.errors.empty?
+          element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc || story
+          element.inner_html
+        else
+          story
+        end
 
       meta = {}
       meta.merge!(scan_text_for_meta(storyhead)) unless storyhead.blank?
