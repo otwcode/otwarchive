@@ -532,9 +532,9 @@ class StoryParser
     def parse_common(story, location = nil, encoding = nil)
       work_params = {title: "UPLOADED WORK", chapter_attributes: { content: "" }}
 
-      # Encode as HTML - the dummy <i> is to force plain text documents to be parsed as HTML with line
-      # breaks rather than one big blob
-      @doc = Nokogiri::HTML.parse(story.prepend("<i/>"), nil, encoding) rescue ""
+      # Encode as HTML - the dummy tag forces plain text documents to preserve line breaks and not be a big blob
+      # Rescue errors as it complains about things the sanitizer will fix later
+      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
 
       # Try to convert all relative links to absolute
       base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
@@ -569,13 +569,8 @@ class StoryParser
       storyhead = @doc.css("head").inner_html if @doc.css("head")
 
       # Story content - Look for progressively less specific containers or grab everything
-      storytext =
-        if @doc.errors.empty?
-          element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc || story
-          element.inner_html
-        else
-          story
-        end
+      element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc
+      storytext = element ? element.inner_html : story
 
       meta = {}
       meta.merge!(scan_text_for_meta(storyhead)) unless storyhead.blank?
