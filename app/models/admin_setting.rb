@@ -53,8 +53,8 @@ class AdminSetting < ActiveRecord::Base
     self.first ? self.first.guest_downloading_off? : false
   end
   def self.default_skin
-    default_skin=Rails.cache.fetch(default_skin_cache_key){Skin.default}
-    self.first ? (self.first.default_skin_id ? self.first.default_skin : default_skin) : default_skin
+    default_skin = Rails.cache.fetch( default_skin_cache_key ){ Skin.default }
+    self.first ? ( self.first.default_skin_id ? self.first.default_skin : default_skin ) : default_skin
   end
   def self.stats_updated_at
     self.first ? self.first.stats_updated_at : nil
