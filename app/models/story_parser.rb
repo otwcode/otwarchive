@@ -530,7 +530,7 @@ class StoryParser
     # form results) and returns the final sanitized hash.
     #
     def parse_common(story, location = nil, encoding = nil)
-      work_params = {title: "UPLOADED WORK", chapter_attributes: { content: "" }}
+      work_params = { title: "UPLOADED WORK", chapter_attributes: { content: "" } }
 
       # Encode as HTML - the dummy tag forces plain text documents to preserve line breaks and not be a big blob
       # Rescue errors as it complains about things the sanitizer will fix later
@@ -564,7 +564,7 @@ class StoryParser
     # our fallback: parse a story from an unknown source, so we have no special
     # rules.
     def parse_story_from_unknown(story)
-      work_params = {:chapter_attributes => {}}
+      work_params = { chapter_attributes: {} }
 
       storyhead = @doc.css("head").inner_html if @doc.css("head")
 

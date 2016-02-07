@@ -302,7 +302,6 @@ stubbed response", headers: {})
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
       end
     end
-
   end
 
   WebMock.allow_net_connect!
