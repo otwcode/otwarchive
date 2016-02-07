@@ -52,27 +52,12 @@ class HomeController < ApplicationController
     render :action => "first_login_help", :layout => false
   end
 
-  def estimate_number(number)
-    digits = [Math.log10([number, 1].max).to_i-3, 0].max
-    divide = 10**digits
-    divide * (number / divide).to_i
-  end
-
   # home page itself
   def index
-    unless logged_in?
-      @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
-        estimate_number(User.count)
-      end
-      @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
-        estimate_number(Work.posted.count)
-      end
-      @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
-        estimate_number(Work.posted.count)
-      end
-    end
-
     @homepage = Homepage.new(@current_user)
+    unless @homepage.logged_in?
+      @user_count, @work_count, @fandom_count = @homepage.rounded_counts
+    end
 
     @hide_dashboard = true
     render action: 'index', layout: 'application'
