@@ -29,7 +29,7 @@
   display: inline;
 }
 
-#dashboard a, #dashboard .current {
+#dashboard a, #dashboard span {
   display: inline-block;
   margin: 0.25em 0;
 }
