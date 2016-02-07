@@ -4,7 +4,7 @@ ruby '2.0.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22'
+gem 'rails', '3.2.22.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -64,8 +64,6 @@ gem 'permit_yo'
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
-
-gem 'jquery-rails', '>= 0.2.6'
 
 gem 'valium'
 
