@@ -11,7 +11,7 @@ class Homepage
       estimate_number(Work.posted.count)
     end
     @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
-      estimate_number(Work.posted.count)
+      estimate_number(Fandom.canonical.count)
     end
     return @user_count, @work_count, @fandom_count
   end
