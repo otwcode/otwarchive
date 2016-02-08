@@ -13,7 +13,7 @@ class Homepage
     @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
       estimate_number(Work.posted.count)
     end
-    @user_count, @work_count, @fandom_count
+    return @user_count, @work_count, @fandom_count
   end
 
   def logged_in?
