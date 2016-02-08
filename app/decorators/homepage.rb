@@ -13,7 +13,7 @@ class Homepage
     @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
       estimate_number(Work.posted.count)
     end
-    return @user_count, @work_count, @fandom_count
+    @user_count, @work_count, @fandom_count
   end
 
   def logged_in?
@@ -64,7 +64,7 @@ class Homepage
   end
 
   def estimate_number(number)
-    digits = [Math.log10([number, 1].max).to_i-3, 0].max
+    digits = [ (Math.log10([number, 1].max).to_i - 3), 0].max
     divide = 10**digits
     divide * (number / divide).to_i
   end
