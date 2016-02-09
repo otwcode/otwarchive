@@ -70,7 +70,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       begin
         work = storyparser.download_and_parse_chapters_into_story(urls, options)
         work.save
-        if work && work.chapters.all? { |c| c.errors.empty? }
+        if work.persisted? && work.chapters.all? { |c| c.errors.empty? }
           @works << work
           @some_success = true
           work_status = :created
@@ -80,7 +80,15 @@ class Api::V1::ImportController < Api::V1::BaseController
           @some_errors = true
           work_status = :unprocessable_entity
           work_messages << work.errors.messages.values.flatten if work
-          work_messages << work.chapters.map(&:errors).map { |e| e.messages.values }.flatten if work.chapters
+
+          # Extract work chapter errors and append the chapter number to them for readability
+          if work.chapters
+            chapter_errors = work.chapters.map(&:errors).each_with_index
+            chapter_messages = chapter_errors.map do |e, i|
+              e.messages.values.flatten.map { |s| s.prepend("Chapter #{i + 1} ") }
+            end
+            work_messages << chapter_messages.flatten
+          end
         end
       rescue => exception
         @some_errors = true
