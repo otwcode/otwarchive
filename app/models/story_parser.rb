@@ -532,8 +532,9 @@ class StoryParser
     def parse_common(story, location = nil, encoding = nil)
       work_params = { title: "UPLOADED WORK", chapter_attributes: { content: "" } }
 
-      # Encode as HTML - the dummy tag forces plain text documents to preserve line breaks and not be a big blob
-      # Rescue errors as it complains about things the sanitizer will fix later
+      # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
+      # preserve line breaks in plain text documents
+      # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
       @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
 
       # Try to convert all relative links to absolute
