@@ -291,7 +291,6 @@ Feature: creating and editing skins
     And I create and use a skin to make the header pink
   When I edit my pink header skin to have a purple logo
   Then I should see an update confirmation message
-  Then show me the page
     And I should see a pink header
     And I should see a purple logo
 
