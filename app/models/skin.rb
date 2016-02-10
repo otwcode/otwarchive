@@ -2,6 +2,7 @@ require 'fileutils'
 include HtmlCleaner
 include CssCleaner
 include SkinCacheHelper
+include SkinWizard
 
 class Skin < ActiveRecord::Base
 
@@ -307,322 +308,25 @@ class Skin < ActiveRecord::Base
     end
   end
 
+  # This builds the stylesheet, so the order is important
   def get_wizard_settings
     style = ""
-    if self.margin.present?
-      style += "
-        #workskin {
-          margin: auto #{self.margin}%;
-          padding: 0.5em #{self.margin}% 0;
-        }
-      "
-    end
 
-    if self.base_em.present?
-      style += "
-        body {
-          font-size: #{self.base_em}%;
-        }
-      "
-    end
+    style += font_size_styles(self.base_em) if self.base_em.present?
 
-    if self.font.present?
-     style += "
-        body,
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        .dropdown,
-        blockquote,
-        pre,
-        input,
-        textarea,
-        .heading .actions,
-        .heading .action,
-        .heading span.actions,
-        span.unread,
-        .replied,
-        span.claimed,
-        .actions span.defaulted {
-          font-family: #{self.font};
-        }
-      "
-    end
+    style += font_styles(self.font) if self.font.present?
 
-    if self.background_color.present?
-      style += "
-        body,
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        .dropdown,
-        th,
-        tr:hover,
-        col.name,
-        div.dynamic,
-        fieldset fieldset,
-        fieldset dl dl,
-        form blockquote.userstuff,
-        form.verbose legend,
-        .verbose form legend,
-        #modal,
-        .own,
-        .draft,
-        .draft .wrapper,
-        .unread,
-        .child,
-        .unwrangled,
-        .unreviewed,
-        .thread .even,
-        .listbox .index,
-        .nomination dt,
-        #outer {
-          background: #{self.background_color};
-        }
+    style += background_color_styles(self.background_color) if self.background_color.present?
 
-        a.tag:hover,
-        .listbox .heading a.tag:visited:hover {
-          color: #{self.background_color};
-        }
+    style += paragraph_margin_styles(self.paragraph_margin) if self.paragraph_margin.present?
 
-        tbody tr,
-        thead td,
-        #footer,
-        #modal {
-          border-color: #{self.background_color};
-        }
+    style += foreground_color_styles(self.foreground_color) if self.foreground_color.present?
 
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        .wrapper {
-            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
-        }
+    style += header_styles(self.headercolor) if self.headercolor.present?
 
-        .listbox,
-        fieldset fieldset.listbox {
-            box-shadow: 0 0 0 1px #{self.background_color};
-        }
-        
-        .listbox .index {
-            box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-      "
-    end
+    style += accent_color_styles(self.accent_color) if self.accent_color.present?
 
-    if self.paragraph_margin.present?
-      style += "
-        .userstuff p {
-          margin-bottom: #{self.paragraph_margin}em;
-        }
-      "
-    end
-
-    if self.foreground_color.present?
-      style += "
-        body,
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        .dropdown,
-        #header .search,
-        form dd.required,
-        .post .required .warnings,
-        dd.required,
-        .required .autocomplete,
-        .userstuff h2 {
-          color: #{self.foreground_color};
-        }
-        
-        /* these  colors should be separate, but for now... */
-        a,
-        a:link,
-        a:visited,
-        a:hover,
-        #header a,
-        #header a:visited,
-        #header .current,
-        #header .primary .open a,
-        #header .primary .dropdown:hover a,
-        #header .primary .dropdown a:focus,
-        #header .menu .current,
-        #header .primary .menu a,
-        #header .primary .menu .current,
-        #dashboard a,
-        #dashboard span,
-        a.tag,
-        .listbox > .heading,
-        .listbox .heading a:visited,
-        .filters dt a:hover {
-          color: #{self.foreground_color};
-        }
-
-        form dt,
-        form.verbose legend,
-        .verbose form legend,
-        .faq .categories h3,
-        .splash .module h3,
-        .userstuff h3 {
-          border-color: #{self.foreground_color};
-        }
-
-        /* some things with unchanging background colors need the default text color */
-        .qtip-content,
-        .notice:not(.required),
-        .comment_notice,
-        ul.notes,
-        .caution,
-        .notice a {
-          color: #2a2a2a;
-        }
-
-        .current,
-        a.current {
-          color: #111;
-        }
-      "
-    end
-
-    if self.headercolor.present?
-      style += "
-        #header .primary,
-        #footer,
-        .autocomplete .dropdown ul li:hover,
-        li.selected,
-        a.tag:hover,
-        .listbox .heading a.tag:visited:hover,
-        .splash .favorite li:nth-of-type(odd) a:hover,
-        .splash .favorite li:nth-of-type(odd) a:focus { 
-          background-image: none;
-          background-color: #{self.headercolor};
-        }
-
-        #header .heading a,
-        #header .user a:hover,
-        #header .user a:focus,
-        #header .user .current,
-        #dashboard a:hover,
-        .actions a:hover,
-        .actions input:hover,
-        .actions a:focus,
-        .actions input:focus,
-        label.action:hover,
-        .action:hover,
-        .action:focus,
-        a.cloud1,
-        a.cloud2,
-        a.cloud3,
-        a.cloud4,
-        a.cloud5,
-        a.cloud6,
-        a.cloud7,
-        a.cloud8,
-        a.work,
-        .blurb h4 a:link,
-        .splash .module h3,
-        .splash .browse li a:before {
-          color: #{self.headercolor};
-        }
-
-        #dashboard,
-        #dashboard.own {
-          border-color: #{self.headercolor};
-        }
-      "
-    end
-
-    if self.accent_color.present?
-      style += "
-        table,
-        thead td,
-        #header .actions a:hover,
-        #header .actions a:focus,
-        #header .dropdown:hover a,
-        #header .open a,
-        #header .menu,
-        #small_login,
-        #header .dropdown:hover .current + .menu,
-        fieldset,
-        form dl,
-        fieldset dl dl,
-        fieldset fieldset fieldset,
-        fieldset fieldset dl dl,
-        dd.hideme,
-        form blockquote.userstuff,
-        dl.index dd,
-        .statistics .index li:nth-of-type(even),
-        .listbox,
-        fieldset fieldset.listbox,
-        .item dl.visibility,
-        .reading h4.viewed,
-        .comment h4.byline,
-        .splash .favorite li:nth-of-type(odd) a,
-        .splash .module div.account,
-        .search [role=\"tooltip\"] {
-          background: #{self.accent_color};
-          border-color: #{self.accent_color};
-        }
-
-        li.relationships a {
-          background: #{self.accent_color};
-        }
-
-        li.blurb,
-        fieldset,
-        form dl,
-        thead,
-        tfoot,
-        tfoot td,
-        th,
-        tr:hover,
-        col.name,
-        #dashboard ul,
-        .toggled form,
-        .dynamic form,
-        .secondary,
-        dl.meta,
-        .bookmark .user,
-        div.comment,
-        li.comment,
-        .comment div.icon,
-        .splash .news li,
-        .userstuff blockquote {
-          border-color: #{self.accent_color};
-        }
-        
-        fieldset,
-        form dl,
-        fieldset dl dl,
-        fieldset fieldset fieldset,
-        fieldset fieldset dl dl,
-        form blockquote.userstuff {
-            box-shadow: inset 1px 0 5px rgba(0, 0, 0, 0.5);
-        }
-        
-        fieldset dl,
-        fieldset.actions,
-        fieldset dl fieldset dl,
-        form.verbose legend,
-        .verbose form legend {
-            box-shadow: none;
-        }
-        
-        @media only screen and (max-width: 62em) {
-          #dashboard .secondary {
-            background: #{self.accent_color};
-            box-shadow: none;
-          }
-        }
-        
-        @media only screen and (max-width: 42em) {
-          .javascript {
-            background: #{self.accent_color};
-          }
-        }
-      "
-    end
-
-    style
+    style += work_margin_styles(self.margin) if self.margin.present?
   end
 
   def get_style_block(roles_to_include)
