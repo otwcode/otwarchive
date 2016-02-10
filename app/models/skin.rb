@@ -327,6 +327,8 @@ class Skin < ActiveRecord::Base
     style += accent_color_styles(self.accent_color) if self.accent_color.present?
 
     style += work_margin_styles(self.margin) if self.margin.present?
+
+    style
   end
 
   def get_style_block(roles_to_include)
