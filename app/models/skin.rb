@@ -128,6 +128,17 @@ class Skin < ActiveRecord::Base
   scope :unapproved_skins, where(:public => true, :official => false, :rejected => false)
   scope :rejected_skins, where(:public => true, :official => false, :rejected => true)
   scope :site_skins, where(:type => nil)
+  scope :wizard_site_skins, where("type IS NULL AND (
+      margin IS NOT NULL OR
+      background_color IS NOT NULL OR
+      foreground_color IS NOT NULL OR
+      font IS NOT NULL OR
+      base_em IS NOT NULL OR
+      paragraph_margin IS NOT NULL OR
+      headercolor IS NOT NULL OR
+      accent_color IS NOT NULL
+    )
+  ")
 
   def self.cached
     where(:cached => true)
