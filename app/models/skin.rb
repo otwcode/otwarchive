@@ -197,7 +197,7 @@ class Skin < ActiveRecord::Base
   end
 
   def wizard_settings?
-    self.margin || !self.font.blank? || !self.background_color.blank? || !self.foreground_color.blank? || self.base_em || self.paragraph_margin || !self.headercolor.blank? || !self.accent_color.blank?
+    margin.present? || font.present? || background_color.present? || foreground_color.present? || base_em.present? || paragraph_margin.present? || headercolor.present? || accent_color.present?
   end
 
   # create the minimal number of files we can, containing all the css for this entire skin
@@ -323,21 +323,21 @@ class Skin < ActiveRecord::Base
   def get_wizard_settings
     style = ""
 
-    style += font_size_styles(self.base_em) if self.base_em.present?
+    style += font_size_styles(base_em) if base_em.present?
 
-    style += font_styles(self.font) if self.font.present?
+    style += font_styles(font) if font.present?
 
-    style += background_color_styles(self.background_color) if self.background_color.present?
+    style += background_color_styles(background_color) if background_color.present?
 
-    style += paragraph_margin_styles(self.paragraph_margin) if self.paragraph_margin.present?
+    style += paragraph_margin_styles(paragraph_margin) if paragraph_margin.present?
 
-    style += foreground_color_styles(self.foreground_color) if self.foreground_color.present?
+    style += foreground_color_styles(foreground_color) if foreground_color.present?
 
-    style += header_styles(self.headercolor) if self.headercolor.present?
+    style += header_styles(headercolor) if headercolor.present?
 
-    style += accent_color_styles(self.accent_color) if self.accent_color.present?
+    style += accent_color_styles(accent_color) if accent_color.present?
 
-    style += work_margin_styles(self.margin) if self.margin.present?
+    style += work_margin_styles(margin) if margin.present?
 
     style
   end
