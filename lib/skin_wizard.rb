@@ -156,7 +156,7 @@ module SkinWizard
         }
       "
     else
-     ""
+      ""
     end
   end
 
@@ -335,7 +335,7 @@ module SkinWizard
         }
       "
     else
-     ""
+      ""
     end
   end
 
