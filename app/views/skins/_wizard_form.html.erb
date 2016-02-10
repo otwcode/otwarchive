@@ -1,5 +1,5 @@
 <fieldset>
-  <legend><%= ts('About') %></legend>
+  <legend><%= ts("About") %></legend>
   <dl>
     <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
@@ -16,7 +16,12 @@
       <%= f.label :font, ts('Font family') %>
       <%= link_to_help('skins-wizard-font') %>
     </dt>
-    <dd><%= f.text_field :font %></dd>
+    <dd>
+      <%= f.text_field :font, "aria-describedby" => "font-field-notes" %>
+      <p class="footnote" id="font-field-notes">
+        <%= ts("Comma-separated list of font names.") %>
+      </p>
+    </dd>
 
     <dt>
       <%= f.label :base_em, ts('Percent of base font size') %> 
@@ -25,18 +30,17 @@
     <dd>
       <%= f.text_field :base_em, "aria-describedby" => "base-em-field-notes" %>
       <p class="footnote" id="base-em-field-notes">
-        <%= ts("Numbers only, treated as a percentage of the browser's default font size. Default: 100") %>
+        <%= ts("Numbers only, treated as a percentage of the browser's default font size. Default: <code>100</code>").html_safe %>
       </p>
     </dd>
 
     <dt>
-      <%= f.label :margin, ts('Margin width') %>
-      <%= link_to_help('skins-wizard-margin') %>
+      <%= f.label :margin, ts('Work margin width') %>
     </dt>
     <dd>
-      <%= f.text_field :margin, "aria-describedby" => "margin-width-field-notes" %>
-      <p class="footnote" id="margin-width-field-notes">
-        <%= ts("Numbers only, treated as a percentage of the page width. Default: 3") %>
+      <%= f.text_field :margin, "aria-describedby" => "margin-field-notes" %>
+      <p class="footnote" id="margin-field-notes">
+        <%= ts("Numbers only, treated as a percentage of the page width.") %>
       </p>
     </dd>
 
@@ -47,7 +51,7 @@
     <dd>
       <%= f.text_field :paragraph_margin %>
       <p class="footnote" id="paragraph-margin-field-notes">
-        <%= ts("Numbers only, treated as a percentage of the vertical gaps between paragraphs. Default: 1.125") %>
+        <%= ts("Numbers only, treated as a multipler of the paragraph font size. Default: <code>1.286</code>").html_safe %>
       </p>
     </dd>
   </dl>
