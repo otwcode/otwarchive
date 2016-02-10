@@ -226,7 +226,7 @@ module SkinWizard
     if ems.present?
       "
         .userstuff p {
-          margin-bottom: #{ems}em;
+          margin: #{ems}em auto;
         }
       "
     else
