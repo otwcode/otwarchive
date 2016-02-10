@@ -117,9 +117,14 @@ module SkinWizard
         .unreviewed,
         .thread .even,
         .listbox .index,
-        .nomination dt,
-        #outer {
+        .nomination dt {
           background: #{color};
+        }
+
+        @media only screen and (max-width: 42em) {
+          #outer {
+            background: #{color}
+          }
         }
 
         a.tag:hover,
