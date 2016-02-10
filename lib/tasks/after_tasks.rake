@@ -453,9 +453,9 @@ namespace :After do
     end
   end
 
-  desc "Generate custom CSS so people using an old wizard skin don't lose their skin"
-  task(:generate_css_from_old_wizard_settings => :environment) do
-    Skin.site_skins.each do |skin|
+  desc "Generate custom CSS so people using an old wizard skin don't lose it"
+  task(:generate_css_for_old_wizard_skins => :environment) do
+    Skin.wizard_site_skins.each do |skin|
       old_css = skin.css.present? ? skin.css : ""
 
       wizard_css = ""
@@ -487,21 +487,14 @@ namespace :After do
       end
 
       if skin.accent_color.present?
-        wizard_css += "#header .icon, #dashboard ul, #main dl.meta {background: #{skin.accent_color}; border-color:#{skin.accent_color};} "
+        wizard_css += "#header .icon, #dashboard ul, #main dl.meta {background: #{skin.accent_color}; border-color: #{skin.accent_color};} "
       end
 
       wizard_css += "#workskin {margin: auto #{skin.margin}%; padding: 0.5em #{skin.margin}% 0;} " if skin.margin.present?
 
       # clear out the wizard settings, prepend the wizard css to the user's custom css, and save
       unless wizard_css.blank?
-        skin.margin = nil
-        skin.background_color = nil
-        skin.foreground_color = nil
-        skin.font = nil
-        skin.base_em = nil
-        skin.paragraph_margin = nil
-        skin.headercolor = nil
-        skin.accent_color = nil
+        skin.margin, skin.background_color, skin.foreground_color, skin.font, skin.base_em, skin.paragraph_margin, skin.headercolor, skin.accent_color = nil
         skin.css = wizard_css + old_css
         skin.save
       end
