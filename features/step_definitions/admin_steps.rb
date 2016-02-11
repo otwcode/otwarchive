@@ -345,6 +345,6 @@ When(/^the last login information has been updated$/) do
   User.update_last_login
 end
 
-Then(/^I should see the last login time for "(.*?)"$/) do |arg1|
-  step('I should see "Last Login"')
+Then(/^I should see the last login time/) do
+  step('I should not see "No logins recorded"')
 end
