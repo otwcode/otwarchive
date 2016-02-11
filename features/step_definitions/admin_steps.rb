@@ -342,7 +342,7 @@ When(/^the user "(.*?)" is unbanned in the background/) do |user|
 end
 
 When(/^the last login information has been updated$/) do
-    User.update_last_login
+  User.update_last_login
 end
 
 Then(/^I should see the last login time for "(.*?)"$/) do |arg1|
