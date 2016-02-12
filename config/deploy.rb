@@ -136,6 +136,5 @@ after "deploy:restart", "deploy:update_cron_web"
 
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:restart_schedulers"
-after "deploy:restart", "deploy:reload_site_skins"
 after "deploy:symlink", "deploy:update_configs"
 after "deploy:update", "newrelic:notice_deployment"
