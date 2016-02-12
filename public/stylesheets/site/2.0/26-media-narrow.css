@@ -82,18 +82,19 @@ body .narrow-shown {
 
 /* 05 region main */
 
-#main {
+#main, #main.dashboard {
   position: static;
 }
 
-#main, #main.dashboard {
-  margin: auto;
-}
-
-#main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
+/* once we remove the meta class from the work form, we can remove the form .meta selectors here */
+.filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  float: none;
+}
+
+.dashboard .index {
   float: none;
 }
 
@@ -120,6 +121,12 @@ body .narrow-shown {
 
 .alphabet .listbox li {
   display: block;
+}
+
+/* 11 group: listbox */
+
+.listbox .index {
+  width: auto;
 }
 
 /* 15 group: comments */
