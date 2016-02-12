@@ -68,9 +68,9 @@
 /* 18 zone searchbrowse */
 
 form.filters {
+  width: auto;
   min-width: 23%;
   max-width: 24%;
-  width: auto;
 }
 
 .filters fieldset {
@@ -85,5 +85,5 @@ form.filters dl {
 /* 21 userstuff */
 
 #workskin {
-  margin: auto 5%;
+  margin: auto 1.5%;
 }
