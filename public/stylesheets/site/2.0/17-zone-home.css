@@ -79,6 +79,13 @@ form.inbox {
   width: 75%;
 }
 
+form.inbox fieldset {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .dashboard form.filters + h4.landmark {
   clear: left;
 }

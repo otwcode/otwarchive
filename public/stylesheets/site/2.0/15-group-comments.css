@@ -101,13 +101,4 @@ fieldset.comments, .comment .userstuff {
   padding-left: 83px;
 }
 
-/* inbox */
-
-form.inbox fieldset {
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
 /*END== */
