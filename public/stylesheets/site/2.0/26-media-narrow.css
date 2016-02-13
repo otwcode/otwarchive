@@ -176,7 +176,7 @@ body .narrow-shown {
 
 /* 17 zone: home */
 
-#inbox-form {
+form.inbox {
   clear: both;
   float: none;
   width: auto;

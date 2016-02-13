@@ -74,8 +74,7 @@ user home, collections and challenges home, tag home, admin comms home
 /*(with filters)*/
 
 /* wrap long text in Firefox (applied to inbox only to avoid weirdness on all forms in IE) */
-#inbox-form {
-  float: left;
+form.inbox {
   overflow-x: auto;
   width: 75%;
 }
