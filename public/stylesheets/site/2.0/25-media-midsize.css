@@ -61,8 +61,18 @@
 
 /* 16 zone system */
 
-.splash {
-  padding: 0 1em;
+.logged-in .splash > .module {
+  width: 48.5%
+}
+
+.logged-in .splash > div:nth-of-type(odd) {
+  margin-left: 0;
+  margin-right: 1.5%;
+}
+
+.logged-in .splash > div:nth-of-type(even) {
+  margin-left: 1.5%;
+  margin-right: 0;
 }
 
 /* 18 zone searchbrowse */
