@@ -5,6 +5,10 @@ Email of the person who reported the abuse, if given: <%= @email %>
 
 URL of the page the abuse is on: <%= @url %>
 
+<% if @has_metadata %>
+  Title of the work: <%= @title %>
+  Creator(s) of the work: <%= @author %>
+<% end %>
 Description of the abuse:
   
 "<%= to_plain_text(@comment) %>"

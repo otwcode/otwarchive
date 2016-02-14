@@ -4,6 +4,11 @@
   
   Email of the person who reported the abuse, if given: <%= style_email(@email, @email) %><br>
   URL of the page the abuse is on: <%= style_link(@url, @url) %><br>
+  
+  <% if @has_metadata %>
+    Title of the work: <%= @title.html_safe %><br/> 
+    Creator(s) of the work: <%= @author.html_safe %><br/> 
+  <% end %>
   Description of the abuse:
   
   <%= style_quote(@comment) %>

@@ -1,4 +1,6 @@
 class AbuseReport < ActiveRecord::Base
+  serialize :metadata, JSON
+
   validates_presence_of :comment
   validates_presence_of :url
   validates :email, :email_veracity => {:allow_blank => true}
@@ -24,8 +26,21 @@ class AbuseReport < ActiveRecord::Base
     end
   end
 
+  before_save :get_work_info
+  def get_work_info
+    if url.include? "works"
+      work_id = url.match('(?<=works/)[0-9]+')
+      if work_id
+        w = Work.find_by_id work_id[0]
+        if w
+          self.metadata = { author: w.authors_to_sort_on, title: w.title }
+        end
+      end
+    end
+  end
+
   def email_copy?
-   cc_me == "1"
+    cc_me == "1"
   end
 
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
