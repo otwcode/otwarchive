@@ -149,7 +149,7 @@ module ApplicationHelper
       pseuds << creation.authors if creation.authors
       pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
       pseuds = pseuds.flatten.uniq.sort
-    
+
       archivists = {}
       if creation.is_a?(Work)
         external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
@@ -226,7 +226,7 @@ module ApplicationHelper
   end
 
   # For setting the current locale
-  def locales_menu    
+  def locales_menu
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locales') + "\">\n" 
     result << "<div><select id=\"accessible_menu\" name=\"locale_id\" >\n"
     result << options_from_collection_for_select(@loaded_locales, :iso, :name, @current_locale.iso)
@@ -335,27 +335,64 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
   end
 
-  def time_in_zone(time, zone=nil, user=User.current_user)
-    return ts("(no time specified)") if time.blank?
-    zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
-    time_in_zone = time.in_time_zone(zone)
-    time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
-                                                 <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
-                                                 <span class="time">%I:%M%p</span>').html_safe + 
-                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> ".html_safe
+  def time_in_zone(*args, &block)
+    datetime_in_zone(*args, &block)
+  end
 
-    user_time_string = "".html_safe
-    if user.is_a?(User) && user.preference.time_zone
-      if user.preference.time_zone != zone
-        user_time = time.in_time_zone(user.preference.time_zone)
-        user_time_string = "(".html_safe + user_time.strftime('<span class="time">%I:%M%p</span>').html_safe +
-          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{user_time.zone}</abbr>)".html_safe
-      elsif !user.preference.time_zone
-        user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)
+  def date_in_zone(time, zone=nil, user=User.current_user)
+    datetime_in_zone(time, zone, user, 'DATE')
+  end
+
+  def datetime_in_zone(time, zone=nil, user=User.current_user, format='DATETIME')
+    return ts('(no time specified)') if time.blank?
+
+    show_time = format == 'DATETIME' || format == 'TIME'
+    show_date = format == 'DATETIME' || format == 'DATE'
+
+    user_zone = user && user.is_a?(User) && user.preference.time_zone
+    zone ||= user_zone || Time.zone.name
+
+    time_in_zone_string = ''
+    time_in_zone_string << _date_in_zone(time, zone) if show_date
+    time_in_zone_string << ' ' if show_date && show_time
+    time_in_zone_string << _time_in_zone(time, zone) if show_time
+    time_in_zone_string << ' ' + _timezone_in_zone(time, zone)
+
+    user_time_string = ''
+
+    if !user_zone
+      user_time_string << ' ' + (link_to ts('(set timezone)'), user_preferences_path(user))
+    elsif user_zone == zone
+      if show_date && _date_in_zone(time, zone) != _date_in_zone(time, user_zone)
+        # The date in the user's time zone differs from the date in the selected time zone:
+        # clarify the date to avoid being off by 24 hours.
+        user_time_string << _date_in_zone(time, user_zone) + ' '
       end
+      user_time_string << ' ' if user_time_string != '' && show_time
+      user_time_string << _time_in_zone(time, user_zone) if show_time
+      user_time_string = " ( #{user_time_string} " + _timezone_in_zone(time, user_zone) + ')' if !user_time_string.blank?
     end
 
-    time_in_zone_string + user_time_string
+    (time_in_zone_string + user_time_string).html_safe
+  end
+
+  def _timezone_in_zone(time, zone)
+    _format_datetime_for_zone(time, zone, %(<abbr class="timezone" title="#{zone}">%Z</abbr>))
+  end
+
+  def _time_in_zone(time, zone)
+    _format_datetime_for_zone(time, zone, '<span class="time">%I:%M%p</span>')
+  end
+
+  def _date_in_zone(time, zone)
+    _format_datetime_for_zone(time, zone, '<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> ' +
+                                          '<abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>')
+  end
+
+  def _format_datetime_for_zone(time, zone, fmt)
+    return nil if time.blank? || zone.blank? || fmt.blank?
+    time_in_zone = time.in_time_zone(zone)
+    time_in_zone.strftime(fmt)
   end
 
   def mailto_link(user, options={})
