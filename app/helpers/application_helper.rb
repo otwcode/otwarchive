@@ -88,7 +88,7 @@ module ApplicationHelper
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = ts("Anonymous").html_safe
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
       end
