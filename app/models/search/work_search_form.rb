@@ -47,7 +47,7 @@ class WorkSearchForm
 
   def initialize(options={})
     @options = options
-    @searcher = WorkQuery.new(options.delete_if { |k, v| v.nil? })
+    @searcher = WorkQuery.new(options.delete_if { |k, v| v.blank? })
   end
 
   def persisted?
@@ -76,6 +76,14 @@ class WorkSearchForm
     ['Comments', 'comments_count'],
     ['Bookmarks', 'bookmarks_count']
   ]
+
+  def sort_column
+    @sort_column || 'revised_at'
+  end
+
+  def sort_direction
+    @sort_direction || default_sort_direction
+  end
   
   def sort_options
     SORT_OPTIONS
@@ -90,7 +98,7 @@ class WorkSearchForm
     Hash[SORT_OPTIONS.collect {|v| [ v[1], v[0] ]}][sort_column]
   end
   
-  def sort_direction(sort_column)
+  def default_sort_direction
     if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
       'asc'
     else
