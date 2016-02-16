@@ -363,11 +363,11 @@ module ApplicationHelper
     if user.is_a?(User)
       if !user_zone
         user_time_string << ' ' << (link_to ts('(set timezone)'), user_preferences_path(user))
-        elsif user_zone == zone
+      elsif user_zone == zone
         if show_date && _date_in_zone(time, zone) != _date_in_zone(time, user_zone)
-            # The date in the user's time zone differs from the date in the selected time zone:
-            # clarify the date to avoid being off by 24 hours.
-            user_time_string << _date_in_zone(time, user_zone) << ' '
+          # The date in the user's time zone differs from the date in the selected time zone:
+          # clarify the date to avoid being off by 24 hours.
+          user_time_string << _date_in_zone(time, user_zone) << ' '
         end
         user_time_string << ' ' if user_time_string != '' && show_time
         user_time_string << _time_in_zone(time, user_zone) if show_time
