@@ -156,6 +156,15 @@ class Bookmark < ActiveRecord::Base
     end
     bookmarks = bookmarks.paginate(:page => options[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
+
+  before_destroy :save_parent_info
+
+  # Because of the way the elasticsearch parent/child index is set up, we need to know what the bookmarkable
+  # type and id was in order to delete the bookmark from the index after it's been deleted from the database
+  def save_parent_info
+    expire_time = (Time.now + 2.weeks).to_i
+    REDIS_GENERAL.setex("deleted_bookmark_parent_#{self.id}", expire_time, "#{bookmarkable_id}-#{bookmarkable_type.underscore}")
+  end
   
   #################################
   ## SEARCH #######################

@@ -4,6 +4,8 @@ class BookmarkIndexer < Indexer
     'Bookmark'
   end
 
+  # Create the bookmarkable index/mapping first
+  # Skip delete on the subclasses so it doesn't delete the ones we've just reindexed
   def self.index_all(options={})
     options[:skip_delete] = true
     BookmarkableIndexer.delete_index
@@ -47,14 +49,18 @@ class BookmarkIndexer < Indexer
   # INSTANCE METHODS
   ####################
 
-  # TODO: Make this work for deleted bookmarks
   def routing_info(id)
     object = objects[id.to_i]
+    if object.nil?
+      parent_id = deleted_bookmark_info(id)
+    else
+      parent_id = "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
+    end
     { 
       '_index' => index_name, 
       '_type' => document_type,
       '_id' => id,
-      'parent' => "#{object.bookmarkable_id}-#{object.bookmarkable_type.underscore}"
+      'parent' => parent_id
     }
   end
 
@@ -67,9 +73,14 @@ class BookmarkIndexer < Indexer
       except: [:notes_sanitizer_version, :delta],
       methods: [:bookmarker, :collection_ids, :with_notes]
     ).merge(
+      user_id: object.pseud.user_id,
       tag: (tags + filters).map(&:name).uniq,
       tag_ids: tags.map(&:id),
       filter_ids: filters.map(&:id)
     )
+  end
+
+  def deleted_bookmark_info(id)
+    REDIS_GENERAL.get("deleted_bookmark_parent_#{id}")
   end
 end
