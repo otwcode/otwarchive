@@ -13,6 +13,9 @@ class AsyncIndexer
     REDIS.del(name)
   end
 
+  def self.index(klass, ids, priority)
+  end
+
   ####################
   # INSTANCE METHODS
   ####################
