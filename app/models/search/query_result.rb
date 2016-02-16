@@ -58,7 +58,7 @@ class QueryResult
           tags = Tag.where(id: ids).group_by(&:id)
           results.each do |facet|
             unless tags[facet['key'].to_i].blank?
-              @facets[term] << SearchFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
+              @facets[term] << QueryFacet.new(facet['key'], tags[facet['key'].to_i].first.name, facet['doc_count'])
             end
           end
         elsif term == 'collections'
@@ -66,7 +66,7 @@ class QueryResult
           collections = Collection.where(id: ids).group_by(&:id)
           results.each do |facet|
             unless collections[facet['key'].to_i].blank?
-              @facets[term] << SearchFacet.new(facet['key'], collections[facet['key'].to_i].first.title, facet['doc_count'])
+              @facets[term] << QueryFacet.new(facet['key'], collections[facet['key'].to_i].first.title, facet['doc_count'])
             end
           end
         end
@@ -89,5 +89,5 @@ class QueryResult
   
 end
 
-class SearchFacet < Struct.new(:id, :name, :count)
+class QueryFacet < Struct.new(:id, :name, :count)
 end
