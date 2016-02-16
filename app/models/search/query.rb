@@ -2,6 +2,7 @@ class Query
 
   attr_reader :options
 
+  # Options: page, per_page, 
   def initialize(options={})
     @options = options
   end
@@ -65,6 +66,15 @@ class Query
   # Define specifics in subclasses
   
   def filters
+    @filters
+  end
+
+  def term_filter(field, value, options={})
+    { term: options.merge(field => value) }
+  end
+
+  def terms_filter(field, value, options={})
+    { terms: options.merge(field => value) }
   end
 
   def exclusion_filters
