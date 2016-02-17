@@ -5,6 +5,7 @@ class Work < ActiveRecord::Base
   include Bookmarkable
   include Pseudable
   include Searchable
+  include WorkBookmarkCountCaching
   include WorkStats
   include Tire::Model::Search
   # include Tire::Model::Callbacks
