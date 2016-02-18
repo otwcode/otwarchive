@@ -154,6 +154,17 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  after_save :queue_flush_work_cache
+  def queue_flush_work_cache
+    async(:flush_work_cache)
+  end
+
+  def flush_work_cache
+    Work.find_all_by_id(self.work_ids).find_in_batches do |works|
+      works.each { |work| unless work.nil? work.expire_work_tag_groups }
+    end
+  end
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?

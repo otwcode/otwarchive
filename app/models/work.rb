@@ -202,6 +202,14 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def expire_work_tag_groups
+   Rails.cache.delete(self.tag_groups_key)
+  end
+
+  def tag_groups_key
+    "/v1/work_tag_groups/#{self.cache_key}"
+  end
+
   def expire_pseud(pseud)
     CacheMaster.record(self.id, 'pseud', pseud.id)
     CacheMaster.record(self.id, 'user', pseud.user_id)
@@ -765,10 +773,12 @@ class Work < ActiveRecord::Base
   #######################################################################
 
   def tag_groups
-    if self.placeholder_tags
-      self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
-    else
-      self.tags.group_by { |t| t.type.to_s }
+    Rails.cache.fetch(self.tag_groups_key) do
+      if self.placeholder_tags
+        self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+      else
+        self.tags.group_by { |t| t.type.to_s }
+      end
     end
   end
 

@@ -26,7 +26,7 @@
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
 <% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v6") do %>
 
-      <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
+      <% tag_groups = work.tag_groups %>
 
       <% if work.gifts.not_rejected.exists? %>
         <%= ts("for") %> <%= recipients_link(work) %>
