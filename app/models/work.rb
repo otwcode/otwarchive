@@ -200,22 +200,24 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
+
+    self.expire_work_tag_groups
   end
 
-  def expire_work_tag_groups_id(id)
-    Rails.cache.delete(self.tag_groups_key_id(id))
+  def self.expire_work_tag_groups_id(id)
+    Rails.cache.delete(Work.tag_groups_key_id(id))
   end
 
   def expire_work_tag_groups
     Rails.cache.delete(self.tag_groups_key)
   end
 
-  def tag_groups_key_id(id)
+  def self.tag_groups_key_id(id)
     "/v1/work_tag_groups/#{id}"
   end
 
   def tag_groups_key
-    "/v1/work_tag_groups/#{self.cache_key}"
+    tag_groups_key_id(self.id)
   end
 
   def expire_pseud(pseud)
