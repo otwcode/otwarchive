@@ -69,7 +69,6 @@ describe Work do
     end
   end
 
-
   context "invalid endnotes" do
     let(:too_long) {ArchiveConfig.NOTES_MAX + 1}
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
@@ -78,7 +77,6 @@ describe Work do
   end
 
   context "validate authors" do
-
     # TODO: testing specific invalid pseuds should take place in pseud_spec
     # However, we still want to make sure we can't save works without a valid pseud
     it "does not save an invalid pseud with *", :pending do
@@ -155,7 +153,6 @@ describe Work do
       @work.recipients = @recipient2.pseuds.first.name
       expect(@work.new_recipients).to be_empty
     end
-
   end
 
   describe "#find_by_url" do

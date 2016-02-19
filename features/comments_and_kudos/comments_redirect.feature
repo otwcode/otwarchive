@@ -49,8 +49,8 @@ Scenario: Posting top level comment on a chaptered work, with view full work in 
     And I post a comment "Woohoo"
   Then I should see "Woohoo"
     And I should see "Chapter 2" within "div#chapters"
-  # TODO: determine desired behaviour, then add param for c-by-c mode if the below is really wanted
-    # And I should not see "Chapter 1" within "div#chapters"
+    # Once you've commented, it defaults back to your preference
+    And I should see "Chapter 1" within "div#chapters"
 
 # REPLY COMMENTS
 
@@ -104,17 +104,16 @@ Scenario: Posting reply comment on a chaptered work, with view full work in the 
     And I should see "Chapter 2" within "div#chapters"
     And I should see "Chapter 3" within "div#chapters"
 
-@wip
 Scenario: Posting top level comment on a middle chapter, while in temporary view by chapter mode, with view full work in the preferences
   Given the chaptered work with comments setup
     And I am logged in as a random user
     And I set my preferences to View Full Work mode by default
     And I view the work "BigBang" in chapter-by-chapter mode
     And I view the 2nd chapter
-  # TODO: determine if this opens comments on that chapter only, or if it redirects to full work
+    # this opens comments on that chapter only
     And I follow "Comments"
   When I reply to a comment with "Supercalifragelistic"
   Then I should see "Supercalifragelistic"
     And I should see "Chapter 2" within "div#chapters"
-  # TODO: determine desired behaviour, then add param for c-by-c mode if the below is really wanted
-    # And I should not see "Chapter 1" within "div#chapters"
+    # Once you've commented, it defaults back to your preference
+    And I should see "Chapter 1" within "div#chapters"
