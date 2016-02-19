@@ -217,7 +217,7 @@ class Work < ActiveRecord::Base
   end
 
   def tag_groups_key
-    tag_groups_key_id(self.id)
+    Work.tag_groups_key_id(self.id)
   end
 
   def expire_pseud(pseud)
