@@ -202,8 +202,16 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def expire_work_tag_groups_id(id)
+    Rails.cache.delete(self.tag_groups_key_id(id))
+  end
+
   def expire_work_tag_groups
-   Rails.cache.delete(self.tag_groups_key)
+    Rails.cache.delete(self.tag_groups_key)
+  end
+
+  def tag_groups_key_id(id)
+    "/v1/work_tag_groups/#{id}"
   end
 
   def tag_groups_key

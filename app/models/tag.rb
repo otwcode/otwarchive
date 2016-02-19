@@ -160,8 +160,9 @@ class Tag < ActiveRecord::Base
   end
 
   def flush_work_cache
-    Work.find_all_by_id(self.work_ids).each do |work|
-      unless work.nil? then work.expire_work_tag_groups end
+    w=Work.first
+    self.work_ids.each do |work|
+      w.expire_work_tag_groups_id(work)
     end
   end
 
