@@ -11,6 +11,6 @@ Feature: Import Works
     When I go to the import page
       And I fill in "urls" with "http://bogus.invalid"
     When I press "Import"
-    Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://bogus. Please make sure that the URL is correct and complete, and try again."
+    Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://bogus.invalid. Please make sure that the URL is correct and complete, and try again."
     When I go to the works page
     Then I should not see "bogus"
