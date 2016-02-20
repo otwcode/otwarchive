@@ -9,7 +9,7 @@ Feature: Import Works
     Given basic tags
       And I am logged in as a random user
     When I go to the import page
-      And I fill in "urls" with "http://bogus"
+      And I fill in "urls" with "http://bogus.invalid"
     When I press "Import"
     Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://bogus. Please make sure that the URL is correct and complete, and try again."
     When I go to the works page
