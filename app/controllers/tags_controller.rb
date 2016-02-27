@@ -89,24 +89,38 @@ class TagsController < ApplicationController
     end
   end
 
+  def key_for_feeds(id)
+    "/v1/rss_data_tags/#{id}"
+  end
+
   def feed
-    begin
-      @tag = Tag.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-       raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
-    end
-    if !@tag.canonical? && @tag.merger
-      @tag = @tag.merger
-    end
-    # Temp for testing
-    if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F"
-      if @tag.canonical?
-        @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
-      else
-        @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
+    array = Rails.cache.fetch(self.key_for_feeds(params[:id])) do
+      path = nil
+      @works = nil 
+      begin
+        @tag = Tag.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+         raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
       end
-    else
-      redirect_to tag_works_path(:tag_id => @tag.to_param) and return
+      if !@tag.canonical? && @tag.merger
+        @tag = @tag.merger
+      end
+      # Temp for testing
+      if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F"
+        if @tag.canonical?
+          @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
+        else
+          @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
+        end
+      else
+        path = tag_works_path(:tag_id => @tag.to_param)
+      end
+      [path,@works]
+    end
+    path=array[0]
+    @works=array[1]
+    unless redirect.nil? 
+      redirect_to path and return
     end
 
     respond_to do |format|
