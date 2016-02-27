@@ -1,6 +1,12 @@
 <fieldset class="work meta">
   <legend><%= ts('Tags') %></legend>
   <h3 class="landmark heading"><%= ts('Tags') %></h3>
+
+  <% if import %>
+    <%= check_box_tag "override_tags" %>
+    <%= label_tag "override_tags", ts("Set the following tags on all works, overriding whatever the importer finds.") %>
+  <% end %>
+
   <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
 
   <dl>
@@ -75,7 +81,7 @@
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
                            :id => "work_relationship",
- 							             :title => ts('relationships'),
+                           :title => ts('relationships'),
                            :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
