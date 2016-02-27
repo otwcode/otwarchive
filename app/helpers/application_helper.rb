@@ -155,7 +155,7 @@ module ApplicationHelper
         external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
         external_creatorships.each do |ec|
           archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.external_author_name.name
+          archivists[archivist_pseud] = ec.external_author_name.nil? ? nil : ec.external_author_name.name
         end
       end
 
