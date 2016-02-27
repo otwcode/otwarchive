@@ -2,14 +2,17 @@
   <legend><%= ts('Tags') %></legend>
   <h3 class="landmark heading"><%= ts('Tags') %></h3>
 
-  <% if import %>
-    <%= check_box_tag "override_tags" %>
-    <%= label_tag "override_tags", ts("Set the following tags on all works, overriding whatever the importer finds.") %>
-  <% end %>
-
   <p class="note"><%= ts('Tags are comma separated, %{max} characters per tag.', :max => ArchiveConfig.TAG_MAX) %></p>
 
   <dl>
+    <% import ||= false
+      if import %>
+      <dt><%= ts("Override") %></dt>
+      <dd>
+        <%= check_box_tag "override_tags" %>
+        <%= label_tag "override_tags", ts("Set the following tags and/or notes on all works, overriding whatever the importer finds.") %>
+      </dd>
+    <% end %>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME %>*</label>
       <%= link_to_help "rating-help" %>
