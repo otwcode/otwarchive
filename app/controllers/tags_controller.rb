@@ -94,7 +94,7 @@ class TagsController < ApplicationController
       begin
         tag = Tag.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-         raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
       end
       if !tag.canonical? && tag.merger
         tag = tag.merger
@@ -107,13 +107,13 @@ class TagsController < ApplicationController
           works = tag.works.visible_to_all.order("created_at DESC").limit(25).all
         end
       else
-        path = tag_works_path(:tag_id => tag.to_param)
+        path = tag_works_path(tag_id: tag.to_param)
       end
-      { :path => path, :works => works, :tag => tag }
+      { path: path, works: works, tag: tag }
     end
-    redirect=hash[:path]
-    @works=hash[:works]
-    @tag=hash[:tag]
+    redirect = hash[:path]
+    @works = hash[:works]
+    @tag = hash[:tag]
     unless redirect.nil? 
       redirect_to path and return
     end
