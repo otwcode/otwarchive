@@ -27,7 +27,7 @@ class UserMailer < BulletproofMailer::Base
     @collection = Collection.find(collection_id)
     mail(
          to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
     )
   end
 

@@ -150,11 +150,13 @@ class CollectionItem < ActiveRecord::Base
         users.each do |user|
           if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
             # if the work is being added by a collection maintainer and at
-            # least ONE of the works owners allows automatic inclusion in collections,
-            # add the work to the collection
+            # least ONE of the works owners allows automatic inclusion in
+            # collections, add the work to the collection
             approve_by_user
             users.each do |email_user|
-              UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+              unless email_user.preference.collection_emails_off
+                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver!
+              end
             end
             break
           end
@@ -170,7 +172,9 @@ class CollectionItem < ActiveRecord::Base
         # a maintainer is attempting to add this work to their collection
         # so we send an email to all the works owners
         item.users.each do |email_author|
-          UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+          unless email_author.preference.collection_emails_off
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver!
+          end
         end
       end
     end

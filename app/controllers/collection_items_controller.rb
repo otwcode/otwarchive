@@ -14,7 +14,7 @@ class CollectionItemsController < ApplicationController
       @collection_item = CollectionItem.find(params[:id])
     end
     not_allowed(@collection) and return unless @collection_item
-    @collection = @collection_item.collection
+    @collection = @collection_item.colcollection_item.lection
   end
 
 
@@ -94,7 +94,11 @@ class CollectionItemsController < ApplicationController
       if !collection
         errors << ts("%{name}, because we couldn't find a collection with that name. Make sure you are using the one-word name, and not the title.", name: collection_name)
       elsif @item.collections.include?(collection)
-        errors << ts("%{collection_title}, because this item has already been submitted to it.", collection_title: collection.title)
+        if @item.rejected_collections.include?(collection)
+          errors << ts("%{collection_title}, because the %{object_type}'s owner has rejected the invitation.", collection_title: collection.title, object_type: @item.class.name.humanize.downcase)
+        else
+          errors << ts("%{collection_title}, because this item has already been submitted.", collection_title: collection.title)
+        end
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
         errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer?(current_user)
@@ -122,7 +126,7 @@ class CollectionItemsController < ApplicationController
 
     # messages to the user
     unless errors.empty?
-      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
+      flash[:error] = ts("We couldn't add your submission to the following collection(s): ") + "<br><ul><li />" + errors.join("<li />") + "</ul>"
     end
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
