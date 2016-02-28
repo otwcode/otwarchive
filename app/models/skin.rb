@@ -1,6 +1,7 @@
 require 'fileutils'
 include HtmlCleaner
 include CssCleaner
+include SkinCacheHelper
 
 class Skin < ActiveRecord::Base
 
@@ -49,6 +50,8 @@ class Skin < ActiveRecord::Base
                     :bucket => %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
                     :default_url => "/images/skins/iconsets/default/icon_skins.png"
 
+  after_save :skin_invalidate_cache
+
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
@@ -88,6 +91,7 @@ class Skin < ActiveRecord::Base
 
   attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
 
+  validates_presence_of :title
   validates_uniqueness_of :title, :message => ts('must be unique')
 
   validates_numericality_of :margin, :base_em, :allow_nil => true
@@ -241,8 +245,7 @@ class Skin < ActiveRecord::Base
   end
 
   def parse_media_from_filename(media_string)
-    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub('.', ', ')
-    media_string.gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
+    media_string.gsub(/narrow/, 'only screen and (max-width: 42em)').gsub(/midsize/, 'only screen and (max-width: 62em)').gsub('.', ', ')
   end
 
   def parse_sheet_role(role_string)
@@ -278,12 +281,14 @@ class Skin < ActiveRecord::Base
 
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    style = ""
-    if self.get_role != "override" && self.get_role != "site"
-      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+    Rails.cache.fetch(skin_cache_html_key(self, roles_to_include)) do
+      style = ""
+      if self.get_role != "override" && self.get_role != "site"
+        style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+      end
+      style += self.get_style_block(roles_to_include)
+      style.html_safe
     end
-    style += self.get_style_block(roles_to_include)
-    style.html_safe
   end
 
   def get_ie_comment(style, ie_condition = self.ie_condition)
@@ -354,7 +359,7 @@ class Skin < ActiveRecord::Base
         elsif (wizard_block = get_wizard_settings).present?
           block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
         end
-      end    
+      end
     end
     return block
   end
@@ -428,17 +433,16 @@ class Skin < ActiveRecord::Base
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
           skin.save!
-
           skins << skin
         end
 
         # set up the parent relationship of all the skins in this version
         top_skin = Skin.find_by_title("Archive #{version}")
         if top_skin
-          top_skin.clear_cache! if top_skin.cached? 
+          top_skin.clear_cache! if top_skin.cached?
           top_skin.skin_parents.delete_all
         else
-          top_skin = Skin.new(:title => "Archive #{version}", :css => "", :description => "Version #{version} of the default Archive style.", 
+          top_skin = Skin.new(:title => "Archive #{version}", :css => "", :description => "Version #{version} of the default Archive style.",
                               :public => true, :role => "site", :media => ["screen"])
         end
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
@@ -502,4 +506,5 @@ class Skin < ActiveRecord::Base
     skin.save!
     skin
   end
+
 end
