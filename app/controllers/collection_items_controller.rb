@@ -14,7 +14,7 @@ class CollectionItemsController < ApplicationController
       @collection_item = CollectionItem.find(params[:id])
     end
     not_allowed(@collection) and return unless @collection_item
-    @collection = @collection_item.colcollection_item.lection
+    @collection = @collection_item.collection
   end
 
 
