@@ -382,7 +382,7 @@ end
 When /^I delete the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)
-  step %{I follow "Delete"}
+  step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
 end
