@@ -5,8 +5,6 @@ class TagsController < ApplicationController
   before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
   before_filter :load_tag_and_subtags, :only => [:show]
 
-  caches_page :feed
-
   cache_sweeper :tag_sweeper
 
   def load_tag
@@ -89,36 +87,33 @@ class TagsController < ApplicationController
     end
   end
 
-  def key_for_feeds(id)
-    "/v1/rss_data_tags/#{id}"
-  end
-
   def feed
-    array = Rails.cache.fetch(self.key_for_feeds(params[:id])) do
+    hash = Rails.cache.fetch(Tag.tag_key_for_feeds(params[:id])) do
       path = nil
-      @works = nil 
+      works = nil 
       begin
-        @tag = Tag.find(params[:id])
+        tag = Tag.find(params[:id])
       rescue ActiveRecord::RecordNotFound
          raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
       end
-      if !@tag.canonical? && @tag.merger
-        @tag = @tag.merger
+      if !tag.canonical? && tag.merger
+        tag = tag.merger
       end
       # Temp for testing
-      if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F"
-        if @tag.canonical?
-          @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
+      if %w(Fandom Character Relationship).include?(tag.type.to_s) || tag.name == "F/F"
+        if tag.canonical?
+          works = tag.filtered_works.visible_to_all.order("created_at DESC").limit(25).all
         else
-          @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
+          works = tag.works.visible_to_all.order("created_at DESC").limit(25).all
         end
       else
-        path = tag_works_path(:tag_id => @tag.to_param)
+        path = tag_works_path(:tag_id => tag.to_param)
       end
-      [path,@works]
+      { :path => path, :works => works, :tag => tag }
     end
-    path=array[0]
-    @works=array[1]
+    redirect=hash[:path]
+    @works=hash[:works]
+    @tag=hash[:tag]
     unless redirect.nil? 
       redirect_to path and return
     end

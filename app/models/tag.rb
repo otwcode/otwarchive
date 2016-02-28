@@ -354,6 +354,9 @@ class Tag < ActiveRecord::Base
 
   # Class methods
 
+  def self.tag_key_for_feeds(id)
+    "/v1/rss_data_tags/#{id}"
+  end
 
   def self.in_prompt_restriction(restriction)
     joins("INNER JOIN set_taggings ON set_taggings.tag_id = tags.id

@@ -22,7 +22,6 @@ class WorksController < ApplicationController
   before_filter :clean_work_search_params, :only => [ :search, :index, :collected ]
 
   cache_sweeper :collection_sweeper
-  cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params

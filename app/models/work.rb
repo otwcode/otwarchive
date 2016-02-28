@@ -186,8 +186,19 @@ class Work < ActiveRecord::Base
   after_update :adjust_series_restriction
   
   after_save :expire_caches
-  
+
+  def self.rss_work_summary_key(id)
+    "/v1/rss_data_tags/#{id}/summary"
+  end
+
+  def self.rss_work_byline_key(id)
+    "/v1/rss_data_tags/#{id}/byline"
+  end
+
   def expire_caches
+    Rails.cache.delete(Work.rss_work_summary_key(self.id))
+    Rails.cache.delete(Work.rss_work_byline_key(self.id))
+
     self.pseuds.each do |pseud|
       pseud.update_works_index_timestamp!
       pseud.user.update_works_index_timestamp!
@@ -199,6 +210,7 @@ class Work < ActiveRecord::Base
 
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
+      Rails.cache.delete(Tag.tag_key_for_feeds(tag.id))
     end
   end
 

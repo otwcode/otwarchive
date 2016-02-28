@@ -6,10 +6,10 @@ atom_feed do |feed|
     unless work.unrevealed?
       feed.entry work do |entry|
         entry.title work.title 
-        entry.summary feed_summary(work), :type => 'html'
+        entry.summary(Rails.cache.fetch(Work.rss_work_summary_key(work.id)) do feed_summary(work) end, type: 'html')
 
         entry.author do |author|
-          author.name text_byline(work, :visibility => 'public')
+          author.name Rails.cache.fetch(Work.rss_work_byline_key(work.id)) do text_byline(work, :visibility => 'public') end
         end
       end
     end
