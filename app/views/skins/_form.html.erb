@@ -1,20 +1,21 @@
+<p class="required notice">* <%= ts('Required information') %></p>
 <fieldset>
   <legend><%= ts('About') %></legend>
   <h3 class="landmark heading"><%= ts('About') %></h3>
   <dl>      
-    <dt><%= label_tag 'skin_type', ts('Type') %> <%= link_to_help 'skins-basics' %></dt>
-    <% if @skin.id %>
-      <% # don't let user change the type of an already-created skin %>
-      <dd><%= (@skin.type && @skin.type == 'WorkSkin') ? ts('Work Skin') : ts('Site Skin') %></dd>
-    <% else %>      
-      <dd>
+    <dt class="required"><%= label_tag 'skin_type', ts('Type') + "*" %> <%= link_to_help 'skins-basics' %></dt>
+    <dd class="required">
+      <% if @skin.id %>
+        <% # don't let user change the type of an already-created skin %>
+        <%= (@skin.type && @skin.type == 'WorkSkin') ? ts('Work Skin') : ts('Site Skin') %>
+      <% else %>      
         <%= select_tag 'skin_type', options_for_select(Skin::TYPE_OPTIONS, @skin.type || params[:skin_type] ),
           :onchange => 'if ($j(this).val() == "WorkSkin") {$j("#advanced_skin_fieldset").hide();} else {$j("#advanced_skin_fieldset").show();}' %>
-      </dd>
-    <% end %>
+      <% end %>
+    </dd>
   
-    <dt><%= f.label :title, ts('Title') %></dt>
-    <dd><%= f.text_field :title %></dd>
+    <dt class="required"><%= f.label :title, ts('Title') + "*" %></dt>
+    <dd class="required"><%= f.text_field :title %></dd>
 
     <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>

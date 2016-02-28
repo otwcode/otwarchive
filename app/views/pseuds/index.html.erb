@@ -4,14 +4,16 @@
 
 <!--subnav-->
 <% if current_user == @user %>
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
-</ul>
+  <h3 class="landmark heading"><%= ts("Navigation") %></h3>
+  <ul class="navigation actions" role="navigation">
+    <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
+  </ul>
 <% end %>
 <!--/subnav-->
 
 <!--main content-->
-<ul class="index group">
+<h3 class="landmark heading"><%= ts("List of Pseuds") %></h3>
+<ul class="pseud index group">
   <% @pseuds.each do |pseud| %>
     <%= render :partial => 'pseuds/pseud_blurb', :locals => {:pseud => pseud} %>
   <% end %>  

@@ -42,3 +42,8 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    abuse_report:
+      subject: "[%{app_name}] Your Abuse Report"
+      para1: "The following abuse report has been sent to the Abuse team:"
+      url_para: "URL of the page the abuse is on:"
+      description_para: "Description of the abuse:"

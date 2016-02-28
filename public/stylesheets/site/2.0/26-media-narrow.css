@@ -1,9 +1,8 @@
-/* MEDIA: only screen and (max-width: 640px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
-linearise content, suppress large images, suppress custom fonts and other large downloads */
+/* MEDIA: only screen and (max-width: 42em), handheld ENDMEDIA */
 
 #outer {
   background: #fff;
-  font-size: 14px;
+  font-size: 0.875em;
   position: relative;
 }
 
@@ -74,31 +73,11 @@ body .narrow-shown {
 }
 
 /* 04 region dashboard */
-/* SKIN: Dash Line */
-/* DESCRIPTION: Horizontal dash inline */
 
-#dashboard {
-  clear: both;
-  float: none;
-  max-width: 100%;
-  margin: 1%;
-  padding: 0;
-  width: auto;
-}
-
-#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
-  text-align: left;
-  display: inline;
-  border: none;
-}
-
-#dashboard ul {
-  padding: 0;
-}
-
-#dashboard .landmark {
-  clear: none;
-  float: left;
+#dashboard, #dashboard.own {
+  border-bottom-width: 7px;
+  border-top-width: 7px;
+  padding: 0.25em 0;
 }
 
 /* 05 region main */
@@ -108,11 +87,7 @@ body .narrow-shown {
 }
 
 #main, #main.dashboard {
-  float: none;
   margin: auto;
-  width: auto;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
 }
 
 #main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
@@ -173,7 +148,13 @@ body .narrow-shown {
 
 /* 16 zone: system */
 
-.splash div.module, .logged-in .splash .module {
+.splash {
+  padding: 0;
+}
+
+.splash div.module, .logged-in .splash > .module {
+  margin-left: 1%;
+  margin-right: 1%;
   width: 98%;
 }
 
@@ -245,6 +226,12 @@ form.filters dl {
 
 .filtering #leave_filters:focus {
   outline: none;
+}
+
+/* 21 userstuff */
+
+#workskin {
+  margin: auto;
 }
 
 /* 22 system: messages */

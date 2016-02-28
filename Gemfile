@@ -4,7 +4,7 @@ ruby '2.0.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.21'
+gem 'rails', '3.2.22.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -65,8 +65,6 @@ gem 'permit_yo'
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
 
-gem 'jquery-rails', '>= 0.2.6'
-
 gem 'valium'
 
 gem 'best_in_place'
@@ -99,7 +97,7 @@ gem 'rollout'
 
 #  Place the New Relic gem as low in the list as possible, allowing the 
 #  frameworks above it to be instrumented when the gem initializes.
-gem 'newrelic_rpm', "3.9.3.241"
+gem 'newrelic_rpm'
 gem 'newrelic-redis'
 
 #   Use update memcached client with kinder, gentler I/O for Ruby
