@@ -252,9 +252,9 @@ GEM
     rake (10.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
-    redis (3.0.4)
-    redis-namespace (1.3.0)
-      redis (~> 3.0.0)
+    redis (3.2.2)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     resque (1.24.1)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -421,8 +421,8 @@ DEPENDENCIES
   pry
   rack-dev-mark
   rails (= 3.2.22.1)
-  redis (>= 3.0)
-  redis-namespace
+  redis (>= 3.2.2)
+  redis-namespace (>= 1.5.2)
   resque (>= 1.14.0)
   resque-scheduler
   resque_mailer

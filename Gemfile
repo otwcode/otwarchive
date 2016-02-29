@@ -17,8 +17,8 @@ gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
-gem 'redis', ">=3.0"
-gem 'redis-namespace'
+gem 'redis', ">=3.2.2"
+gem 'redis-namespace', ">=1.5.2"
 
 # Here are all our application-specific gems
 
