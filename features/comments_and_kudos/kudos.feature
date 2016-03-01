@@ -124,3 +124,26 @@ Feature: Leave kudos
       And the email should contain "guest"
       And the email should contain "Awesome Story"
       And the email should contain "Another Awesome Story"
+
+  Scenario: pseud creation and playing and kudos
+
+    Given I am logged in as "myname1"
+      And I post the work "Yet Another Awesome Story"
+      And I am logged out
+      And I am logged in as "myself" with password "password"
+      And I go to myself's pseuds page
+    Then I should see "Default Pseud" within "div#main.pseuds-index"
+    When I follow "Edit"
+    Then I should see "cannot change your fallback pseud"
+      And the "pseud_is_default" checkbox should be checked
+      And the "pseud_is_default" checkbox should be disabled
+    When I follow "Back To Pseuds"
+      And I follow "New Pseud"
+      And I fill in "Name" with "Me"
+      And I check "pseud_is_default"
+      And I fill in "Description" with "Something's cute"
+      And I press "Create"
+    Then I should see "Pseud was successfully created."
+      And I view the work "Awesome Story"
+    When I press "Kudos ♥"
+    Then I should see "Me (myself) left kudos on this work!"
