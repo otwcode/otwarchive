@@ -381,8 +381,8 @@ end
 
 When /^I delete the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
-  step %{I follow "Delete"}
+  visit edit_work_url(work)
+  step %{I follow "Delete Work"}
   click_button("Yes, Delete Work")
   Work.tire.index.refresh
 end
@@ -497,5 +497,3 @@ end
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
-
-
