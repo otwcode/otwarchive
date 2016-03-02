@@ -1,0 +1,87 @@
+/* MEDIA: only screen and (max-width: 62em), handheld ENDMEDIA */
+
+/* 04 region dashboard */
+
+#dashboard {
+  clear: both;
+  float: none;
+  margin: 1%;
+  max-width: 100%;
+  padding: 0;
+  width: auto;
+}
+
+#dashboard, #dashboard.own {
+  border-bottom: 10px solid #900;
+  border-top: 10px solid #900;
+  padding: 0.5em 0;
+    border-radius: 0.25em;
+}
+
+#dashboard ul {
+  border: none;
+  display: inline;
+  padding: 0;
+  text-align: left;
+}
+
+#dashboard li {
+  display: inline;
+}
+
+#dashboard a, #dashboard span {
+  display: inline-block;
+  margin: 0.25em 0;
+}
+
+#dashboard .secondary {
+  background: #eee;
+  padding: 0.375em 0 0.625em;
+    box-shadow: inset 2px 2px 5px #bbb;
+}
+
+#dashboard .secondary a {
+  margin: 0.125em 0;
+}
+
+#dashboard .landmark {
+  clear: none;
+  float: left;
+}
+
+/* 05 region main */
+
+#main, #main.dashboard {
+  float: none;
+  margin: auto 1%;
+  width: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+/* 16 zone system */
+
+.splash {
+  padding: 0 1em;
+}
+
+/* 18 zone searchbrowse */
+
+form.filters {
+  width: 24%;
+}
+
+.filters fieldset {
+  margin-right: 0;
+}
+
+form.filters dl {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
+/* 21 userstuff */
+
+#workskin {
+  margin: auto 5%;
+}

@@ -13,18 +13,12 @@ Feature: Delete Works
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
-  # TODO: refactor the scenarios below >.<
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie"
       And "newbie" creates the default pseud "Pointless Pseud"
-    When I go to the new work page
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
+    When I set up the draft "All Hell Breaks Loose" with fandom "Supernatural"
       And I select "Pointless Pseud" from "work_author_attributes_ids_"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
       And I press "Preview"
       And I press "Post"
     Then I should see "Work was successfully posted."
@@ -51,17 +45,8 @@ Feature: Delete Works
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
-      And all emails have been delivered
-    When I go to thorough's user page
-      And I follow "Profile"
-      And I follow "Manage My Pseuds"
-      And I follow "New Pseud"
-      And I fill in "Name" with "Pseud2"
-      And I press "Create"
-    When I follow "Back To Pseuds"
-      And I follow "New Pseud"
-      And I fill in "Name" with "Pseud3"
-      And I press "Create"
+      And I add the pseud "Pseud2"
+      And I add the pseud "Pseud3"
     When I go to the new work page
       And all emails have been delivered
       And I select "Not Rated" from "Rating"
@@ -159,10 +144,9 @@ Feature: Delete Works
     When I am logged in as "someone_else" with password "something"
       And I view the work "All Something Breaks Loose"
       And I press "Kudos"
-      # Then show me the main content
-      # TODO: Figure out why this isn't working
     Then I should see "someone_else left kudos on this work!"
     When I follow "Bookmark"
+      And I fill in "Notes" with "My thoughts on the work"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
@@ -179,6 +163,10 @@ Feature: Delete Works
     Then I should not see "All Something Breaks Loose"
     When I go to thorough's user page
     Then I should not see "All Something Breaks Loose"
-    # TODO: Check this one with someone - is this correct?
+    # This is correct behaviour - bookmark details are preserved even though the work is gone
     When I go to the bookmarks page
     Then I should not see "All Something Breaks Loose"
+    When I go to someone_else's bookmarks page
+    Then I should not see "All Something Breaks Loose"
+      And I should see "This has been deleted, sorry!"
+      And I should see "My thoughts on the work"

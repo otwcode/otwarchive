@@ -442,6 +442,17 @@ namespace :After do
     end
   end
 
+  desc "Change handheld skins to narrow skins with a max-width of 44em"
+  task(:handheld_skin_to_narrow => :environment) do
+    current_width_media = "only screen and (max-width: 640px)"
+    skins_to_change = Skin.select { |s| s.media.include? current_width_media }
+    skins_to_change.each do |skin|
+      new_media = skin.media.map { |m| m == current_width_media ? "only screen and (max-width: 42em)" : m }
+      skin.media = new_media
+      skin.save
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
