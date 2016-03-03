@@ -11,8 +11,7 @@ gem 'rails', '3.2.22.2'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-#gem 'mysql2',  "~> 0.3.11"
-gem 'mysql2', '~> 0.4.3'
+gem 'mysql2', '~> 0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 
