@@ -205,8 +205,17 @@ class Work < ActiveRecord::Base
     self.expire_work_tag_groups
   end
 
+  def self.work_blurb_tag_cache_key(id)
+    "/v1/work_blurb_tag_cache_key/#{id}"
+  end
+
+  def self.work_blurb_tag_cache(id)
+    Rails.cache.fetch(Work.work_blurb_tag_cache_key(id)) do rand(1..100) end
+  end
+
   def self.expire_work_tag_groups_id(id)
     Rails.cache.delete(Work.tag_groups_key_id(id))
+    Rails.cache.increment(work_blurb_tag_cache_key(id))
   end
 
   def expire_work_tag_groups
