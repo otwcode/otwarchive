@@ -1,8 +1,9 @@
-<fieldset>
-  <legend><%= ts("About") %></legend>
+<p class="required notice">* <%= ts('Required information') %></p>
+<fieldset class="post skin wizard">
+  <legend><%= ts('About') %></legend>
   <dl>
-    <dt><%= f.label :title, ts('Title') %></dt>
-    <dd><%= f.text_field :title %></dd>
+    <dt class="required"><%= f.label :title, ts('Title') + "*" %></dt>
+    <dd class="required"><%= f.text_field :title %></dd>
 
     <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>

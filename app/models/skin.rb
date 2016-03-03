@@ -92,6 +92,7 @@ class Skin < ActiveRecord::Base
 
   attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
 
+  validates_presence_of :title
   validates_uniqueness_of :title, :message => ts('must be unique')
 
   validates_numericality_of :margin, :base_em, :allow_nil => true
