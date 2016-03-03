@@ -97,9 +97,12 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
   end
   step %{I am logged out}
   n_comments ||= 0
+  work = Work.find_by_title!(title)
   n_comments.to_i.times do |i|
     step %{I am logged in as a random user}
-    step %{I post the comment "Bla bla" on the work "#{title}"}
+    visit work_url(work)
+    fill_in("comment[content]", with: "Bla bla")
+    click_button("Comment")
     step %{I am logged out}
   end
 end
