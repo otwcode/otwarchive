@@ -1,4 +1,4 @@
-<% cache_if(false,"#{work.cache_key}-meta-#{Work.work_blurb_tag_cache(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<% cache("#{work.cache_key}-meta-#{Work.work_blurb_tag_cache(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
 <h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
