@@ -256,6 +256,8 @@ module SkinWizard
         fieldset dl dl,
         fieldset fieldset fieldset,
         fieldset fieldset dl dl,
+        .ui-sortable li,
+        .ui-sortable li:hover,
         dd.hideme,
         form blockquote.userstuff,
         dl.index dd,
@@ -272,6 +274,8 @@ module SkinWizard
           border-color: #{color};
         }
 
+        #dashboard a:hover,
+        #dashboard .current,
         li.relationships a {
           background: #{color};
         }
@@ -317,7 +321,8 @@ module SkinWizard
         }
 
         form.verbose legend,
-        .verbose form legend {
+        .verbose form legend,
+        .ui-sortable li:hover {
           box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
         }
 
