@@ -72,10 +72,10 @@ Feature: Tag Wrangling - special cases
   Then I should see "Tag was updated"
   When I view the work "wrong"
   Then I should see "Amelie"
-  #  And I should not see "amelie"
+    And I should not see "amelie"
   When I am on the works page
   Then I should see "amelie"
-  #  And I should not see "Amelie"
+    And I should not see "Amelie"
   
   Scenario: Works should be updated when accents are changed
     See AO3-4230 for a bug with the caching of this
@@ -93,10 +93,10 @@ Feature: Tag Wrangling - special cases
   Then I should see "Tag was updated"
   When I view the work "wrong"
   Then I should see "Amélie"
-  #  And I should not see "Amelie"
+    And I should not see "Amelie"
   When I am on the works page
   Then I should see "Amelie"
-  #  And I should not see "Amélie"
+    And I should not see "Amélie"
 
   Scenario: Tags with non-standard characters in them - question mark and period
   

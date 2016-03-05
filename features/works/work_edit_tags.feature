@@ -57,3 +57,4 @@ Feature: Edit tags on a work
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
     And I follow "Edit Tags"
   Then I should see "I am <strong>er Than Yesterday & Other Lies"
+
