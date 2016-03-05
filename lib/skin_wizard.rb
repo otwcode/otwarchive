@@ -357,3 +357,4 @@ module SkinWizard
     end
   end
 end
+
