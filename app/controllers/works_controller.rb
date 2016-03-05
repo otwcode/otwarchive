@@ -463,6 +463,7 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit_tags
     elsif params[:save_button]
+        Work.expire_work_tag_groups_id(@work.id)
         flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else
