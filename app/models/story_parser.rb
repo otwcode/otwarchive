@@ -271,6 +271,7 @@ class StoryParser
       @options = options
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
+      work.revised_at = work.chapters.last.published_at
 
       # set authors for the works
       pseuds = []

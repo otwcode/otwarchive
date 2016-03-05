@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'webmock'
 
 describe StoryParser do
 
@@ -18,6 +19,13 @@ describe StoryParser do
   before(:each) do
     @sp = StoryParser.new
   end
+
+  # Let the test get at external sites, but stub out anything containing "foo1" and "foo2"
+  WebMock.allow_net_connect!
+  WebMock.stub_request(:any, /foo1/).
+    to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+  WebMock.stub_request(:any, /foo2/).
+    to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
   describe "get_source_if_known:" do
 
@@ -131,6 +139,16 @@ describe StoryParser do
       @work = create(:work, imported_from_url: location_partial_match)
 
       expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
+    end
+  end
+
+  describe "#download_and_parse_chapters_into_story" do
+    it "should set the work revision date to the date of the last chapter" do
+      user = create(:user)
+      urls = %w(http://foo1 http://foo2)
+      work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
+      work.save
+      expect(work.revised_at).to eq(Date.new(2001, 1, 22).strftime('%FT%T%:z'))
     end
   end
 
