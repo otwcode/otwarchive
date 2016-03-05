@@ -242,14 +242,18 @@
           html: Sent by <b>%{sent_by}</b>.
           text: Sent by %{sent_by}.
     kudos:
-      guest: A guest
-      guests: guests
-      kudos_on: Kudos on
+      guest: "A guest"
+      guests: "guests"
       you_have: "[%{app_name}] You've got kudos!"
       html:
-        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
       text:
-        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
+        left_kudos:
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
+
   user_mailer:
     invite_increase_notification:
       html: |-
