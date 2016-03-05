@@ -6,7 +6,7 @@ class Admin::AdminUsersController < ApplicationController
     @roles = Role.assignable.uniq
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
     @role = Role.find_by_name(params[:role]) if params[:role]
-    @users = User.search_by_role(@role, params[:query], :inactive => params[:inactive], :page => params[:page])
+    @users = User.search_by_role(@role, params[:query], inactive: params[:inactive], page: params[:page])
   end
 
   # GET admin/users/1
@@ -15,7 +15,7 @@ class Admin::AdminUsersController < ApplicationController
     @hide_dashboard = true
     @user = User.find_by_login(params[:id])
     unless @user
-      redirect_to :action => "index", :query => params[:query], :role => params[:role]
+      redirect_to action: "index", query: params[:query], role: params[:role]
     end
     @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
@@ -24,7 +24,7 @@ class Admin::AdminUsersController < ApplicationController
   def edit
     @user = User.find_by_login(params[:id])
     unless @user
-      redirect_to :action => "index", :query => params[:query], :role => params[:role]
+      redirect_to action: "index", query: params[:query], role: params[:role]
     end
   end
 
@@ -36,7 +36,7 @@ class Admin::AdminUsersController < ApplicationController
         flash[:notice] = ts('User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
-        flash[:error] = ts('There was an error updating user %{name}', :name => params[:id])
+        flash[:error] = ts('There was an error updating user %{name}', name: params[:id])
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       end
     else
@@ -219,12 +219,12 @@ class Admin::AdminUsersController < ApplicationController
 
     if @users.nil? || @users.length == 0
       flash[:error] = ts("Who did you want to notify?")
-      redirect_to :action => :notify and return
+      redirect_to action: :notify and return
     end
 
     unless params[:subject] && !params[:subject].blank?
       flash[:error] = ts("Please enter a subject.")
-      redirect_to :action => :notify and return
+      redirect_to action: :notify and return
     else
       @subject = params[:subject]
     end
@@ -232,7 +232,7 @@ class Admin::AdminUsersController < ApplicationController
     # We need to use content because otherwise html will be stripped
     unless params[:content] && !params[:content].blank?
       flash[:error] = ts("What message did you want to send?")
-      redirect_to :action => :notify and return
+      redirect_to action: :notify and return
     else
       @message = params[:content]
     end
@@ -243,20 +243,20 @@ class Admin::AdminUsersController < ApplicationController
 
     AdminMailer.archive_notification(current_admin.login, @users.map(&:id), @subject, @message).deliver
 
-    flash[:notice] = ts("Notification sent to %{count} user(s).", :count => @users.size)
-    redirect_to :action => :notify
+    flash[:notice] = ts("Notification sent to %{count} user(s).", count: @users.size)
+    redirect_to action: :notify
   end
 
   def activate
     @user = User.find_by_login(params[:id])
     @user.activate
     if @user.active?
-      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE, :note => 'Manually Activated', :admin_id => current_admin.id})
-      flash[:notice] = t('activated', :default => "User Account Activated")
-      redirect_to :action => :show
+      @user.create_log_item( options = {action: ArchiveConfig.ACTION_ACTIVATE, note: 'Manually Activated', admin_id: current_admin.id})
+      flash[:notice] = t('activated', default: "User Account Activated")
+      redirect_to action: :show
     else
-      flash[:error] = t('activation_failed', :default => "Attempt to activate account failed.")
-      redirect_to :action => :show
+      flash[:error] = t('activation_failed', default: "Attempt to activate account failed.")
+      redirect_to action: :show
     end
   end
 
@@ -264,8 +264,8 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     # send synchronously to avoid getting caught in mail queue
     UserMailer.signup_notification(@user.id).deliver! 
-    flash[:notice] = t('activation_sent', :default => "Activation email sent")
-    redirect_to :action => :show
+    flash[:notice] = t('activation_sent', default: "Activation email sent")
+    redirect_to action: :show
   end
 
 end

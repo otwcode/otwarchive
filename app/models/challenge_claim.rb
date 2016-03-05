@@ -2,11 +2,11 @@ class ChallengeClaim < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching 
   ALL = -1
 
-  belongs_to :claiming_user, :class_name => "User", :inverse_of => :request_claims
+  belongs_to :claiming_user, class_name: "User", inverse_of: :request_claims
   belongs_to :collection
-  belongs_to :request_signup, :class_name => "ChallengeSignup"
-  belongs_to :request_prompt, :class_name => "Prompt"
-  belongs_to :creation, :polymorphic => true
+  belongs_to :request_signup, class_name: "ChallengeSignup"
+  belongs_to :request_prompt, class_name: "Prompt"
+  belongs_to :creation, polymorphic: true
   
   # have to override the == operator or else two claims by same user on same user's prompts are equal 
   def ==(other)
@@ -14,21 +14,21 @@ class ChallengeClaim < ActiveRecord::Base
   end
 
   scope :for_request_signup, lambda {|signup|
-    {:conditions => ['request_signup_id = ?', signup.id]}
+    {conditions: ['request_signup_id = ?', signup.id]}
   }
 
   scope :by_claiming_user, lambda {|user|
     {
-      :select => "DISTINCT challenge_claims.*",
-      :joins => "INNER JOIN users ON challenge_claims.claiming_user_id = users.id",
-      :conditions => ['users.id = ?', user.id]
+      select: "DISTINCT challenge_claims.*",
+      joins: "INNER JOIN users ON challenge_claims.claiming_user_id = users.id",
+      conditions: ['users.id = ?', user.id]
     }
   }
 
-  scope :in_collection, lambda {|collection| {:conditions => ['challenge_claims.collection_id = ?', collection.id] }}
+  scope :in_collection, lambda {|collection| {conditions: ['challenge_claims.collection_id = ?', collection.id] }}
   
-  scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
-  scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
+  scope :with_request, {conditions: ["request_signup_id IS NOT NULL"]}
+  scope :with_no_request, {conditions: ["request_signup_id IS NULL"]}
 
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_claims.request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
@@ -96,7 +96,7 @@ class ChallengeClaim < ActiveRecord::Base
   
   def get_collection_item
     return nil unless self.creation
-    CollectionItem.find(:first, :conditions => ["collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type])
+    CollectionItem.find(:first, conditions: ["collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type])
   end
   
   def fulfilled?

@@ -59,7 +59,7 @@ protected
   def record_not_found (exception)
     @message=exception.message
     respond_to do |f|
-      f.html{ render :template => "errors/404", :status => 404 }
+      f.html{ render template: "errors/404", status: 404 }
     end
   end
 
@@ -112,12 +112,12 @@ public
   before_filter :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
-      @admin_banner = AdminBanner.where(:active => true).last
+      @admin_banner = AdminBanner.where(active: true).last
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
       @admin_banner = Rails.cache.fetch("admin_banner") do 
-        banner = AdminBanner.where(:active => true).last
+        banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end
       @admin_banner = nil if @admin_banner == ""
@@ -316,7 +316,7 @@ public
   before_filter :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = url_for({:controller => 'session', :action => 'new'})
+    @logged_out_redirect = url_for({controller: 'session', action: 'new'})
   end
 
   def is_registered_user?
@@ -363,18 +363,18 @@ public
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-  	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+  	access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
   def check_ownership_or_admin
      return true if logged_in_as_admin?
-     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+     access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to login_path(:restricted => true)
+      redirect_to login_path(restricted: true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else

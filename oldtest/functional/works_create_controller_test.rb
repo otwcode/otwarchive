@@ -4,7 +4,7 @@ class WorksCreateControllerTest < ActionController::TestCase
   tests WorksController
 
   context "when not logged in" do
-    setup { post :create, :locale => 'en' }
+    setup { post :create, locale: 'en' }
     should_redirect_to("new session") {new_session_url}
   end
   context "when logged in" do
@@ -24,7 +24,7 @@ class WorksCreateControllerTest < ActionController::TestCase
       end
       context "without title" do
         setup do
-          post :create, :locale => 'en', "preview_button"=>"Preview", 
+          post :create, locale: 'en', "preview_button"=>"Preview", 
             "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>"", "fandom_string"=>@fandom, 
                     "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
         end
@@ -33,7 +33,7 @@ class WorksCreateControllerTest < ActionController::TestCase
       end
       context "without fandom" do
         setup do
-          post :create, :locale => 'en', "preview_button"=>"Preview", 
+          post :create, locale: 'en', "preview_button"=>"Preview", 
             "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>"", 
                     "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
         end
@@ -46,7 +46,7 @@ class WorksCreateControllerTest < ActionController::TestCase
       end
       context "without other required tags" do
         setup do
-          post :create, :locale => 'en', "preview_button"=>"Preview", 
+          post :create, locale: 'en', "preview_button"=>"Preview", 
             "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
                     "rating_string"=>"", "warning_strings"=>"", "wip_length"=>"1"}
           @work = Work.find_by_title(@title) 
@@ -59,7 +59,7 @@ class WorksCreateControllerTest < ActionController::TestCase
       end      
       context "with bare required attributes" do
         setup do
-          post :create, :locale => 'en', "preview_button"=>"Preview", 
+          post :create, locale: 'en', "preview_button"=>"Preview", 
             "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
                     "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
 
@@ -74,9 +74,9 @@ class WorksCreateControllerTest < ActionController::TestCase
       context "with collection to which the user can post" do
         setup do
           @collection = create_collection
-          post :create, :locale => 'en', "preview_button"=>"Preview", 
+          post :create, locale: 'en', "preview_button"=>"Preview", 
             "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
-                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", :collection_names => @collection.name}
+                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", collection_names: @collection.name}
           @work = Work.find_by_title(@title)                    
         end
         should_redirect_to("preview path") {preview_work_path(@work)}
@@ -101,13 +101,13 @@ class WorksCreateControllerTest < ActionController::TestCase
   #     @request.session[:user] = @user
   #   end
   #   context "creating an invalid work" do
-  #     setup { post :create, :controller => 'works', :locale => 'en' }
+  #     setup { post :create, controller: 'works', locale: 'en' }
   #     should_render_template 'new'
   #   end
   #   context "canceling a work" do
   #     setup do
-  #       @unposted = create_work(:created_at => 2.weeks.ago)
-  #       get :new, :controller => 'works', :locale => 'en'
+  #       @unposted = create_work(created_at: 2.weeks.ago)
+  #       get :new, controller: 'works', locale: 'en'
   #       form = select_form "new_work"
   #       form.cancel_button='Cancel'
   #       form.preview_button=nil
@@ -118,11 +118,11 @@ class WorksCreateControllerTest < ActionController::TestCase
   #   end
   #   context "creating a valid work" do
   #     setup do
-  #       @pseud = create_pseud(:user => @user)
+  #       @pseud = create_pseud(user: @user)
   #       @co_author_pseud = create_user.default_pseud
-  #       @related_work = create_work(:authors => [@co_author_pseud])
+  #       @related_work = create_work(authors: [@co_author_pseud])
   # 
-  #       get :new, :controller => 'works', :locale => 'en'
+  #       get :new, controller: 'works', locale: 'en'
   # 
   #       form = select_form "new_work"
   #       form.work.title="every field filled"

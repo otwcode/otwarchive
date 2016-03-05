@@ -8,7 +8,7 @@ rescue ActiveRecord::ConnectionNotEstablished
 rescue  
   # ArchiveConfig didn't work, try to set it manually
   if Language.table_exists? && Locale.table_exists?
-    language = Language.find_or_create_by_short_and_name(:short => 'en', :name => 'English')
-    Locale.set_base_locale(:iso => "en", :name => "English (US)", :language_id => language.id)
+    language = Language.find_or_create_by_short_and_name(short: 'en', name: 'English')
+    Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
   end
 end

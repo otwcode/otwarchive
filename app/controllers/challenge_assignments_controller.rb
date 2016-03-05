@@ -1,17 +1,17 @@
 class ChallengeAssignmentsController < ApplicationController
 
   before_filter :users_only
-  before_filter :load_collection, :except => [:index, :default]
-  before_filter :collection_owners_only, :except => [:index, :show, :default]
-  before_filter :load_assignment_from_id, :only => [:show, :default, :undefault, :cover_default, :uncover_default]
+  before_filter :load_collection, except: [:index, :default]
+  before_filter :collection_owners_only, except: [:index, :show, :default]
+  before_filter :load_assignment_from_id, only: [:show, :default, :undefault, :cover_default, :uncover_default]
 
-  before_filter :load_challenge, :except => [:index]
-  before_filter :check_signup_closed, :except => [:index]
-  before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :purge]
+  before_filter :load_challenge, except: [:index]
+  before_filter :check_signup_closed, except: [:index]
+  before_filter :check_assignments_not_sent, only: [:generate, :set, :send_out]
+  before_filter :check_assignments_sent, only: [:create, :default, :undefault, :cover_default, :uncover_default, :purge]
 
-  before_filter :load_user, :only => [:default]
-  before_filter :owner_only, :only => [:default]
+  before_filter :load_user, only: [:default]
+  before_filter :owner_only, only: [:default]
 
 
   # PERMISSIONS AND STATUS CHECKING
@@ -26,7 +26,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenge_assignments.no_challenge', :default => "What challenge did you want to work with?")
+    flash[:error] = t('challenge_assignments.no_challenge', default: "What challenge did you want to work with?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -37,7 +37,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_assignment
-    flash[:error] = t('challenge_assignments.no_assignment', :default => "What assignment did you want to work on?")
+    flash[:error] = t('challenge_assignments.no_assignment', default: "What assignment did you want to work on?")
     if @collection
       redirect_to collection_path(@collection) rescue redirect_to '/'
     else
@@ -52,14 +52,14 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def no_user
-    flash[:error] = t("challenge_assignments.no_user", :default => "What user were you trying to work with?")
+    flash[:error] = t("challenge_assignments.no_user", default: "What user were you trying to work with?")
     redirect_to "/" and return
     false
   end
 
   def owner_only
     unless @user == @challenge_assignment.offering_pseud.user
-      flash[:error] = t("challenge_assignments.not_owner", :default => "You aren't the owner of that assignment.")
+      flash[:error] = t("challenge_assignments.not_owner", default: "You aren't the owner of that assignment.")
       redirect_to "/" and return false
     end
   end
@@ -69,7 +69,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def signup_open
-    flash[:error] = t('challenge_assignments.signup_open', :default => "Signup is currently open, you cannot make assignments now.")
+    flash[:error] = t('challenge_assignments.signup_open', default: "Signup is currently open, you cannot make assignments now.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
@@ -79,7 +79,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_sent
-    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    flash[:error] = t('challenge_assignments.assignments_sent', default: "Assignments have already been sent! If necessary, you can purge them.")
     redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
     false
   end
@@ -89,7 +89,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def assignments_not_sent
-    flash[:error] = t('challenge_assignments.assignments_not_sent', :default => "Assignments have not been sent! You might want matching instead.")
+    flash[:error] = t('challenge_assignments.assignments_not_sent', default: "Assignments have not been sent! You might want matching instead.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -194,7 +194,7 @@ class ChallengeAssignmentsController < ApplicationController
     params.each_pair do |key, val|
       action, id = key.split(/_/)
       next unless %w(approve default undefault cover).include?(action)
-      assignment = ChallengeAssignment.where(:id => id).first
+      assignment = ChallengeAssignment.where(id: id).first
       unless assignment
         @errors << ts("Couldn't find assignment with id #{id}!")
         next
@@ -232,7 +232,7 @@ class ChallengeAssignmentsController < ApplicationController
   def default_all
     # mark all unfulfilled assignments as defaulted
     unfulfilled_assignments = ChallengeAssignment.unfulfilled_in_collection(@collection).readonly(false)
-    unfulfilled_assignments.update_all :defaulted_at => Time.now
+    unfulfilled_assignments.update_all defaulted_at: Time.now
     flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)
   end

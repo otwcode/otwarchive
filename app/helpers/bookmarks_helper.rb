@@ -5,9 +5,9 @@ module BookmarksHelper
   def bookmark_if_exists(bookmarkable)
     return nil unless logged_in?
     bookmarkable = bookmarkable.work if bookmarkable.class == Chapter
-    bookmarks = Bookmark.where(:bookmarkable_id => bookmarkable.id, :bookmarkable_type => bookmarkable.class.name.to_s, :pseud_id => current_user.pseuds.collect(&:id))
+    bookmarks = Bookmark.where(bookmarkable_id: bookmarkable.id, bookmarkable_type: bookmarkable.class.name.to_s, pseud_id: current_user.pseuds.collect(&:id))
     if bookmarks.count > 1
-      bookmarks.where(:pseud_id => current_user.default_pseud.id).first || bookmarks.last
+      bookmarks.where(pseud_id: current_user.default_pseud.id).first || bookmarks.last
     else
       bookmarks.last
     end
@@ -51,12 +51,12 @@ module BookmarksHelper
   
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
     id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-    link_to "You have saved multiple bookmarks for this item", {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true}
+    link_to "You have saved multiple bookmarks for this item", {controller: :bookmarks, action: :index, id_symbol => bookmarkable, existing: true}
   end
   
   # tag_bookmarks_path was behaving badly for tags with slashes
   def link_to_tag_bookmarks(tag)
-    {:controller => 'bookmarks', :action => 'index', :tag_id => tag}
+    {controller: 'bookmarks', action: 'index', tag_id: tag}
   end
   
   def link_to_bookmarkable_bookmarks(bookmarkable, link_text='')
@@ -89,7 +89,7 @@ module BookmarksHelper
       css_class = "public"
       title_string = "Public Bookmark"
     end
-    link_to_help('bookmark-symbols-key', content_tag(:span, content_tag(:span, title_string, :class => "text"), :class => css_class, :title => title_string))
+    link_to_help('bookmark-symbols-key', content_tag(:span, content_tag(:span, title_string, class: "text"), class: css_class, title: title_string))
   end
   
   def bookmark_form_path(bookmark, bookmarkable)

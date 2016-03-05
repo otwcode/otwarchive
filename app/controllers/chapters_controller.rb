@@ -1,12 +1,12 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :index, :show, :destroy, :confirm_delete ]
-  before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
+  before_filter :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_filter :load_work, except: [:index, :auto_complete_for_pseud_name, :update_positions]
+  before_filter :set_instance_variables, only: [ :new, :create, :edit, :update, :preview, :post, :confirm_delete ]
   # only authors of a work should be able to edit its chapters
-  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_filter :check_visibility, :only => [ :show]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_filter :check_visibility, only: [ :show]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
 
   cache_sweeper :feed_sweeper
 
@@ -28,11 +28,11 @@ class ChaptersController < ApplicationController
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
-      render "works/_adult", :layout => "application" and return
+      render "works/_adult", layout: "application" and return
     end
 
     if params[:selected_id]
-      redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
+      redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
     end
     @chapter = @work.chapters.find_by_id(params[:id])
     unless @chapter
@@ -54,17 +54,17 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments.reviewed
 
-      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
+      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", position: @chapter.position.to_s) :
         get_page_title(@work.fandoms.string,
           @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-      @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+      @kudos = @work.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
 
       if current_user.respond_to?(:subscriptions)
-        @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
-                                                         :subscribable_type => 'Work').first ||
-                        current_user.subscriptions.build(:subscribable => @work)
+        @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
+                                                         subscribable_type: 'Work').first ||
+                        current_user.subscriptions.build(subscribable: @work)
       end
       # update the history.
       Reading.update_or_create(@work, current_user) if current_user
@@ -175,13 +175,13 @@ class ChaptersController < ApplicationController
       flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
-        Chapter.update(id, :position => position + 1)
+        Chapter.update(id, position: position + 1)
         (@chapters ||= []) << Chapter.find(id)
       end
     end
     respond_to do |format|
       format.html { redirect_to(@work) and return }
-      format.js { render :nothing => true }
+      format.js { render nothing: true }
     end
   end
 
@@ -229,7 +229,7 @@ class ChaptersController < ApplicationController
       else
         flash[:error] = ts("Something went wrong. Please try again.")
       end
-      redirect_to :controller => 'works', :action => 'show', :id => @work
+      redirect_to controller: 'works', action: 'show', id: @work
     end
   end
 
@@ -275,7 +275,7 @@ class ChaptersController < ApplicationController
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
     else # new
-      @chapter = @work.chapters.build(:position => @work.number_of_chapters + 1)
+      @chapter = @work.chapters.build(position: @work.number_of_chapters + 1)
     end
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq

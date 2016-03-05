@@ -8,17 +8,17 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
-  META_PATTERNS = {:title => 'Title',
-                   :notes => 'Note',
-                   :summary => 'Summary',
-                   :freeform_string => 'Tag',
-                   :fandom_string => 'Fandom',
-                   :rating_string => 'Rating',
-                   :warning_string => 'Warning',
-                   :relationship_string => 'Relationship|Pairing',
-                   :character_string => 'Character',
-                   :revised_at => 'Date|Posted|Posted on|Posted at',
-                   :chapter_title => 'Chapter Title'
+  META_PATTERNS = {title: 'Title',
+                   notes: 'Note',
+                   summary: 'Summary',
+                   freeform_string: 'Tag',
+                   fandom_string: 'Fandom',
+                   rating_string: 'Rating',
+                   warning_string: 'Warning',
+                   relationship_string: 'Relationship|Pairing',
+                   character_string: 'Character',
+                   revised_at: 'Date|Posted|Posted on|Posted at',
+                   chapter_title: 'Chapter Title'
                    }
 
 
@@ -29,11 +29,11 @@ class StoryParser
   end
 
   # These attributes need to be moved from the work to the chapter
-  # format: {:work_attribute_name => :chapter_attribute_name} (can be the same)
+  # format: {work_attribute_name: :chapter_attribute_name} (can be the same)
   CHAPTER_ATTRIBUTES_ONLY = {}
 
   # These attributes need to be copied from the work to the chapter
-  CHAPTER_ATTRIBUTES_ALSO = {:revised_at => :published_at}
+  CHAPTER_ATTRIBUTES_ALSO = {revised_at: :published_at}
 
   ### NOTE ON KNOWN SOURCES
   # These lists will stop with the first one it matches, so put more-specific matches
@@ -332,7 +332,7 @@ class StoryParser
       work.chapters.each do |chapter|
         if chapter.content.length > ArchiveConfig.CONTENT_MAX
           # TODO: eventually: insert a new chapter
-          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, omission: "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", separator: "</p>")
         end
 
         chapter.posted = true
@@ -590,7 +590,7 @@ class StoryParser
     # it in format=light which is a stripped-down plaintext version.)
     #
     def parse_story_from_lj(story)
-      work_params = {:chapter_attributes => {}}
+      work_params = {chapter_attributes: {}}
 
       # in LJ "light" format, the story contents are in the second div
       # inside the body.
@@ -616,7 +616,7 @@ class StoryParser
     end
 
     def parse_story_from_dw(story)
-      work_params = {:chapter_attributes => {}}
+      work_params = {chapter_attributes: {}}
 
       body = @doc.css("body")
       content_divs = body.css("div.contents")
@@ -654,7 +654,7 @@ class StoryParser
     end
 
     def parse_story_from_deviantart(story)
-      work_params = {:chapter_attributes => {}}
+      work_params = {chapter_attributes: {}}
       storytext = ""
       notes = ""
 
@@ -733,7 +733,7 @@ class StoryParser
     end
 
     def parse_story_from_modified_efiction(story, site = "")
-      work_params = {:chapter_attributes => {}}
+      work_params = {chapter_attributes: {}}
       storytext = @doc.css("div.chapter").inner_html
       storytext = clean_storytext(storytext)
       work_params[:chapter_attributes][:content] = storytext
@@ -932,7 +932,7 @@ class StoryParser
 
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-      storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
+      storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 

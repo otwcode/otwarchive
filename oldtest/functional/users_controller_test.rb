@@ -6,7 +6,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      get :edit, :id => @user.login
+      get :edit, id: @user.login
     end
     should "not display a form" do
        assert_select "form", false
@@ -22,7 +22,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user.profile = @profile
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      put :update, :id => @user.login, :user => {"email" => @new_email}
+      put :update, id: @user.login, user: {"email" => @new_email}
     end
     should "not make the change" do
       assert_not_equal @new_email, @user.email
@@ -46,7 +46,7 @@ class UsersControllerTest < ActionController::TestCase
       end
       context "and loading the signup page" do
         setup do 
-          get :new, :invitation_token => @invitation.token
+          get :new, invitation_token: @invitation.token
         end        
         should_respond_with :success
         should "display a form" do
@@ -58,16 +58,16 @@ class UsersControllerTest < ActionController::TestCase
         setup do
           @test_email = random_email
           @test_password = random_password
-          post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => String.random,
-                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
-          get :new, :invitation_token => @invitation.token
+          post :create, user: {invitation_token: @invitation.token, email: @test_email, login: String.random,
+                        password: @test_password, password_confirmation: @test_password, age_over_13: "1", terms_of_service: "1"}
+          get :new, invitation_token: @invitation.token
         end
         should_redirect_to("the login page") {login_url}
         should_set_the_flash_to /already been used/
         context "but then purged" do
           setup do
             User.find_by_email(@test_email).destroy
-            get :new, :invitation_token => @invitation.token
+            get :new, invitation_token: @invitation.token
           end
           should_respond_with :success
           should "display a form" do
@@ -81,8 +81,8 @@ class UsersControllerTest < ActionController::TestCase
           @test_email = random_email
           @test_login = String.random
           @test_password = random_password
-          post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
-                            :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+          post :create, user: {invitation_token: @invitation.token, email: @test_email, login: @test_login, 
+                            password: @test_password, password_confirmation: @test_password, age_over_13: "1", terms_of_service: "1"}
           @user = User.find_by_email(@test_email)
         end
         should_assign_to :user
@@ -101,7 +101,7 @@ class UsersControllerTest < ActionController::TestCase
         context "and then activating" do
           setup do
             @activation_code = @user.activation_code
-            get :activate, :id => @activation_code
+            get :activate, id: @activation_code
             @user.reload
           end
           should_assign_to :user
@@ -129,15 +129,15 @@ class UsersControllerTest < ActionController::TestCase
   context "when activating a user account with an external author attached to the invitation" do
     setup do
       @external_author = create_external_author
-      @invitation = create_invitation(:external_author => @external_author, :invitee_email => @external_author.email)
+      @invitation = create_invitation(external_author: @external_author, invitee_email: @external_author.email)
       @test_email = random_email
       @test_login = String.random
       @test_password = random_password
-      post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
-                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+      post :create, user: {invitation_token: @invitation.token, email: @test_email, login: @test_login, 
+                        password: @test_password, password_confirmation: @test_password, age_over_13: "1", terms_of_service: "1"}
       @user = User.find_by_email(@test_email)
       @activation_code = @user.activation_code
-      get :activate, :id => @activation_code
+      get :activate, id: @activation_code
       @external_author.reload
       @user.reload
     end
@@ -151,14 +151,14 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       @test_email = random_email
       @invitation = create_invitation
-      @external_author = create_external_author(:email => @test_email)
+      @external_author = create_external_author(email: @test_email)
       @test_login = String.random
       @test_password = random_password
-      post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
-                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+      post :create, user: {invitation_token: @invitation.token, email: @test_email, login: @test_login, 
+                        password: @test_password, password_confirmation: @test_password, age_over_13: "1", terms_of_service: "1"}
       @user = User.find_by_email(@test_email)
       @activation_code = @user.activation_code
-      get :activate, :id => @activation_code
+      get :activate, id: @activation_code
       @external_author.reload
       @user.reload
     end
@@ -172,7 +172,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      get :edit, :id => @user.login
+      get :edit, id: @user.login
     end
     should_assign_to :user
     should "assign assign @user to user" do
@@ -195,7 +195,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      get :show, :id => @user.login
+      get :show, id: @user.login
     end
     
   end
@@ -204,7 +204,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      delete :destroy, :id => @user.login
+      delete :destroy, id: @user.login
     end
     should "destroy the record" do
       assert_raises(ActiveRecord::RecordNotFound) { @user.reload }
@@ -216,7 +216,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      delete :destroy, :id => @user.login
+      delete :destroy, id: @user.login
     end
     should "not destroy the record" do
       assert @user.reload
@@ -227,7 +227,7 @@ class UsersControllerTest < ActionController::TestCase
   context "on GET to :show" do
     setup do
       assert @user = create_user
-      get :show, :id => @user.login
+      get :show, id: @user.login
     end
     should_assign_to :user
     should_not_set_the_flash

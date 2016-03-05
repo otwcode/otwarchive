@@ -7,7 +7,7 @@ class AbuseReportsControllerTest < ActionController::TestCase
       setup do
         @url = random_url(ArchiveConfig.APP_URL)
         @request.env["HTTP_REFERER"] = @url
-        get :new, :locale => 'en'
+        get :new, locale: 'en'
       end
       should_assign_to :abuse_report
       should_respond_with :success
@@ -21,7 +21,7 @@ class AbuseReportsControllerTest < ActionController::TestCase
       setup do
         @user = create_user
         @request.session[:user] = @user
-        get :new, :locale => 'en'
+        get :new, locale: 'en'
       end
 
       should "preset user's email" do
@@ -33,7 +33,7 @@ class AbuseReportsControllerTest < ActionController::TestCase
   context "on POST to :create" do
     context "on failure" do
       setup do
-        put :create, :locale => 'en', :abuse_report=>{"email"=>"filled in"}
+        put :create, locale: 'en', abuse_report:{"email"=>"filled in"}
       end
       should_assign_to :abuse_report
       should "remember filled in fields" do
@@ -41,13 +41,13 @@ class AbuseReportsControllerTest < ActionController::TestCase
       end
       should_render_template :new
       should "show validation errors" do
-        assert_tag :tag => "div", :attributes => {:id => "error"}
+        assert_tag tag: "div", attributes: {id: "error"}
       end
     end
 
     context "on success" do
       setup do
-        put :create, :locale => 'en', :abuse_report =>
+        put :create, locale: 'en', abuse_report:
           {"url"=>ArchiveConfig.APP_URL,
            "comment"=>"a comment",
            "email"=>"user@google.com"}

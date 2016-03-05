@@ -6,8 +6,8 @@ class CollectionProfileTest < ActiveSupport::TestCase
       assert create_collection_profile
     end
     should_belong_to :collection
-    should_ensure_length_in_range :intro, 0..ArchiveConfig.INFO_MAX, :long_message => /must be less/
-    should_ensure_length_in_range :faq, 0..ArchiveConfig.INFO_MAX, :long_message => /must be less/
-    should_ensure_length_in_range :rules, 0..ArchiveConfig.INFO_MAX, :long_message => /must be less/
+    should_ensure_length_in_range :intro, 0..ArchiveConfig.INFO_MAX, long_message: /must be less/
+    should_ensure_length_in_range :faq, 0..ArchiveConfig.INFO_MAX, long_message: /must be less/
+    should_ensure_length_in_range :rules, 0..ArchiveConfig.INFO_MAX, long_message: /must be less/
   end
 end

@@ -6,7 +6,7 @@ class HomeControllerTest < ActionController::TestCase
       @work1 = create_work
       @work1.add_default_tags
       @work1.update_attribute(:posted, true)
-      @work2 = create_work(:restricted => true)
+      @work2 = create_work(restricted: true)
       @work2.add_default_tags
       @work2.update_attribute(:posted, true)
     end
@@ -35,21 +35,21 @@ class HomeControllerTest < ActionController::TestCase
     should_render_template :index
     should_not_set_the_flash
     should "have a title" do
-      assert_tag :title, :content => ArchiveConfig.TITLE
+      assert_tag :title, content: ArchiveConfig.TITLE
     end
     should "have a login" do
-      assert_tag :div, :attributes =>{ :id => "signin" }, :child => { :tag => "form" }
+      assert_tag :div, attributes:{ id: "signin" }, child: { tag: "form" }
     end
     
     # These are a bit different with the new i18n translations
     #should "have a people link" do
-    #  assert_tag :a, :content => "People", :attributes => { :href => "/en/users" }
+    #  assert_tag :a, content: "People", attributes: { href: "/en/users" }
     #end
     #should "have a fandom link" do
-    #  assert_tag :a, :content => "Fandoms", :attributes => { :href => "/en/media" }
+    #  assert_tag :a, content: "Fandoms", attributes: { href: "/en/media" }
     #end
     #should "have a works link" do
-    #  assert_tag :a, :content => "Works", :attributes => { :href => "/en/works" }
+    #  assert_tag :a, content: "Works", attributes: { href: "/en/works" }
     #end
   end
 end

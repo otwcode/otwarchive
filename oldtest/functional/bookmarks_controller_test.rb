@@ -15,8 +15,8 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @pseud = @user.default_pseud
-      @bookmark = create_bookmark(:pseud => @pseud)
-      get :index, :user_id => @user.login
+      @bookmark = create_bookmark(pseud: @pseud)
+      get :index, user_id: @user.login
     end
     should_assign_to :user
     should_assign_to :bookmarks
@@ -29,8 +29,8 @@ class BookmarksControllerTest < ActionController::TestCase
       @user = create_user
       @pseud = @user.default_pseud
       @request.session[:user] = @user
-      @bookmark = create_bookmark(:pseud => @pseud)
-      get :index, :user_id => @user.login
+      @bookmark = create_bookmark(pseud: @pseud)
+      get :index, user_id: @user.login
     end
     should_assign_to :user
     should_assign_to :bookmarks
@@ -41,11 +41,11 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when indexing bookmarks on a work" do
     setup do
       @work = create_work
-      @bookmark = create_bookmark(:private => false)      
+      @bookmark = create_bookmark(private: false)      
       @bookmark.bookmarkable = @work      
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
-      get :index, :work_id => @bookmark.bookmarkable_id
+      get :index, work_id: @bookmark.bookmarkable_id
     end
     should_respond_with :success
     should_render_template :index
@@ -58,7 +58,7 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark = create_bookmark
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should_respond_with :success
     should_render_template :show
@@ -69,11 +69,11 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @pseud = @user.default_pseud
-      @bookmark = create_bookmark(:pseud => @pseud, :private => true)
+      @bookmark = create_bookmark(pseud: @pseud, private: true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should_respond_with :success
     should_render_template :show
@@ -85,11 +85,11 @@ class BookmarksControllerTest < ActionController::TestCase
       @user = create_user
       @pseud = @user.default_pseud
       @request.session[:user] = @user
-      @bookmark = create_bookmark(:private => true)
+      @bookmark = create_bookmark(private: true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should "have error" do
       assert flash.has_key?(:error)
@@ -101,11 +101,11 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @pseud = @user.default_pseud
-      @bookmark = create_bookmark(:pseud => @pseud, :hidden_by_admin => true)
+      @bookmark = create_bookmark(pseud: @pseud, hidden_by_admin: true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should_respond_with :success
     should_render_template :show
@@ -117,11 +117,11 @@ class BookmarksControllerTest < ActionController::TestCase
       @user = create_user
       @pseud = @user.default_pseud
       @request.session[:user] = @user
-      @bookmark = create_bookmark(:hidden_by_admin => true)
+      @bookmark = create_bookmark(hidden_by_admin: true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should "have error" do
       assert flash.has_key?(:error)
@@ -137,7 +137,7 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @bookmark.bookmarkable.update_attribute(:restricted, true)
       @request.session[:user] = @user
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should_respond_with :success
     should_render_template :show
@@ -151,7 +151,7 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @bookmark.bookmarkable.update_attribute(:restricted, true)
       @request.session[:user] = nil
-      get :show, :id => @bookmark.id
+      get :show, id: @bookmark.id
     end
     should "have error" do
       assert flash.has_key?(:error)
@@ -163,10 +163,10 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @pseud = @user.default_pseud
-      @bookmark = create_bookmark(:pseud => @pseud)
+      @bookmark = create_bookmark(pseud: @pseud)
     end
     context "when not logged in" do
-      setup {delete :destroy, :id => @bookmark.id}
+      setup {delete :destroy, id: @bookmark.id}
       should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
       should_set_the_flash_to /have permission/
     end
@@ -174,7 +174,7 @@ class BookmarksControllerTest < ActionController::TestCase
       setup do
         @another_user = create_user
         @request.session[:user] = @another_user
-        delete :destroy, :id => @bookmark.id
+        delete :destroy, id: @bookmark.id
       end
       should_set_the_flash_to /have permission/
       should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
@@ -182,7 +182,7 @@ class BookmarksControllerTest < ActionController::TestCase
     context "of your own" do
       setup do
         @request.session[:user] = @user
-        delete :destroy, :id => @bookmark.id
+        delete :destroy, id: @bookmark.id
       end
       should_redirect_to("the user's bookmarks path") {user_bookmarks_path(@user)}
       should "destroy the work" do
@@ -195,7 +195,7 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when not logged in" do
     setup do
       @bookmark = create_bookmark
-      get :edit, :id => @bookmark.id
+      get :edit, id: @bookmark.id
     end
       should_set_the_flash_to /have permission/
       should_redirect_to("the login path") {new_session_path}
@@ -210,8 +210,8 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when editing your own bookmark" do
     setup do
       @pseud = @user.default_pseud
-      @bookmark = create_bookmark(:pseud => @pseud)
-      get :edit, :id => @bookmark.id
+      @bookmark = create_bookmark(pseud: @pseud)
+      get :edit, id: @bookmark.id
     end
     should_respond_with :success
     should_render_template :edit

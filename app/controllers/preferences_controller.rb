@@ -12,7 +12,7 @@ class PreferencesController < ApplicationController
   
   def index
     @user = User.find_by_login(params[:user_id])
-    @preference = @user.preference || Preference.create(:user_id => @user.id)
+    @preference = @user.preference || Preference.create(user_id: @user.id)
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
   end
@@ -33,7 +33,7 @@ class PreferencesController < ApplicationController
       redirect_to @user
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
-      render :action => :index
+      render action: :index
     end
   end
 end

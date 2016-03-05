@@ -5,7 +5,7 @@ class CharacterTest < ActiveSupport::TestCase
   context "a character Tag" do
     setup do
       @character = create_character
-      @fandom = create_fandom(:canonical => true)
+      @fandom = create_fandom(canonical: true)
       @character.add_association(@fandom)
     end
     should "have a display name" do
@@ -16,7 +16,7 @@ class CharacterTest < ActiveSupport::TestCase
     end
     context "with an added fandom" do
       setup do
-        @fandom2 = create_fandom(:canonical => true)
+        @fandom2 = create_fandom(canonical: true)
         @character.add_association(@fandom2)
       end
       should "have both fandoms" do
@@ -25,7 +25,7 @@ class CharacterTest < ActiveSupport::TestCase
     end
     context "which is canonical" do
       setup do
-        @character.update_attributes(:canonical => true)
+        @character.update_attributes(canonical: true)
       end
       context "which gets a relationship added" do
         setup do

@@ -11,9 +11,9 @@ class ProfileControllerTest < ActionController::TestCase
   #   setup do
   #     @old_email = random_email
   #     assert @old_email != @new_email
-  #     assert @user = create_user(:email => @old_email)
+  #     assert @user = create_user(email: @old_email)
   #     assert @request.session[:user] = @user
-  #     get :edit, :locale => 'en', :id => @user.login
+  #     get :edit, locale: 'en', id: @user.login
   #   end
   #   context "valid" do
   #     setup do
@@ -41,7 +41,7 @@ class ProfileControllerTest < ActionController::TestCase
   #       assert_not_equal @new_email, @user.email
   #     end
   #     should "have email error message" do
-  #      assert_tag :div, :content => /valid/, :attributes => { :id => 'error' }
+  #      assert_tag :div, content: /valid/, attributes: { id: 'error' }
   #     end
   #     should_render_template :edit
   #   end
@@ -57,7 +57,7 @@ class ProfileControllerTest < ActionController::TestCase
   #       assert_not_equal @new_email, @user.email
   #     end
   #     should "have email message" do
-  #      assert_tag :div, :content => /already being used/, :attributes => { :id => 'error' }
+  #      assert_tag :div, content: /already being used/, attributes: { id: 'error' }
   #     end
   #     should_render_template :edit
   #   end
@@ -66,9 +66,9 @@ class ProfileControllerTest < ActionController::TestCase
   # context "on PUT to :update self to password" do
   #   setup do
   #     @old_password = String.random
-  #     assert @user = create_user(:password => @old_password, :password_confirmation => @old_password)
+  #     assert @user = create_user(password: @old_password, password_confirmation: @old_password)
   #     assert @request.session[:user] = @user
-  #     get :edit, :locale => 'en', :id => @user.login
+  #     get :edit, locale: 'en', id: @user.login
   #   end
   #   context "which is valid" do
   #     setup do
@@ -110,7 +110,7 @@ class ProfileControllerTest < ActionController::TestCase
   #       assert form.submit
   #     end
   #     should "have error message" do
-  #      assert_tag :div, :content => /match/, :attributes => { :id => 'error' }
+  #      assert_tag :div, content: /match/, attributes: { id: 'error' }
   #     end
   #     should_render_template :edit
   #   end
@@ -120,26 +120,26 @@ class ProfileControllerTest < ActionController::TestCase
   #   setup do
   #     assert @user = create_user
   #     assert @request.session[:user] = @user
-  #     get :edit, :locale => 'en', :id => @user.login
+  #     get :edit, locale: 'en', id: @user.login
   #     form = select_form 'edit_user_' + @user.id.to_s
   #     form.profile_attributes.title = "A New Title"
   #     form.profile_attributes.location = "Somewhere"
   #     assert form.submit
   #   end
   #   should "have a title now" do
-  #     assert :p, :content => "A New Title"
+  #     assert :p, content: "A New Title"
   #   end
   #   should "have a location now" do
-  #     assert :p, :content => "Somewhere"
+  #     assert :p, content: "Somewhere"
   #   end
   # end
   # 
   # context "on PUT to :update self with new age" do
   #   setup do
-  #     assert @user = create_user(:profile => @profile)
+  #     assert @user = create_user(profile: @profile)
   #     assert @user.profile.update_attribute(:date_of_birth, '1960-11-09')
   #     assert @request.session[:user] = @user
-  #     get :edit, :locale => 'en', :id => @user.login
+  #     get :edit, locale: 'en', id: @user.login
   #   end
   #   context "greater than 13" do
   #     setup do
@@ -150,7 +150,7 @@ class ProfileControllerTest < ActionController::TestCase
   #       assert form.submit
   #     end
   #     should "have new birthday" do
-  #       assert :dd, :content => "1950-11-09", :attributes => { :id => 'birthday' }
+  #       assert :dd, content: "1950-11-09", attributes: { id: 'birthday' }
   #     end
   #   end
   #   # note, this test will fail on the 31st of December
@@ -163,7 +163,7 @@ class ProfileControllerTest < ActionController::TestCase
   #       assert form.submit
   #     end
   #     should "not have new birthday" do
-  #       assert :dd, :content => "1960-11-09", :attributes => { :id => 'birthday' }
+  #       assert :dd, content: "1960-11-09", attributes: { id: 'birthday' }
   #     end
   #   end
   # end

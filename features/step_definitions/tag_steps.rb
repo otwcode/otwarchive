@@ -91,7 +91,7 @@ end
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
   tw = User.find_by_login(user)
   if tw.blank?
-    tw = FactoryGirl.create(:user, {:login => user, :password => password})
+    tw = FactoryGirl.create(:user, {login: user, password: password})
     tw.activate
   else
     tw.password = password
@@ -102,14 +102,14 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   visit logout_path
   assert !UserSession.find
   visit login_path
-  fill_in "User name", :with => user
-  fill_in "Password", :with => password
+  fill_in "User name", with: user
+  fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
   assert UserSession.find
   fandom = Fandom.find_or_create_by_name_and_canonical(fandomname, true)
   visit tag_wranglers_url
-  fill_in "tag_fandom_string", :with => fandomname
+  fill_in "tag_fandom_string", with: fandomname
   click_button "Assign"
 end
 
@@ -162,7 +162,7 @@ When /^I view the tag "([^\"]*)"$/ do |tag|
 end
 
 When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
- tag = Fandom.new(:name => name)
+ tag = Fandom.new(name: name)
  tag.id = id.to_i
  tag.canonical = true
  tag.save
@@ -172,7 +172,7 @@ When /^I set up the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, t
   tag = Tag.find_by_name!(tag)
   visit tag_url(tag)
   click_link(" comment")
-  fill_in("Comment", :with => comment_text)
+  fill_in("Comment", with: comment_text)
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
@@ -222,8 +222,8 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Wrangling Guideline$/ do |n|
   n ||= 1
   visit new_wrangling_guideline_path
-  fill_in("Guideline text", :with => "Number #{n} posted Wrangling Guideline, this is.")
-  fill_in("Title", :with => "Number #{n} Wrangling Guideline")
+  fill_in("Guideline text", with: "Number #{n} posted Wrangling Guideline, this is.")
+  fill_in("Title", with: "Number #{n} Wrangling Guideline")
   click_button("Post")
 end
 

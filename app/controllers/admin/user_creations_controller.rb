@@ -7,7 +7,7 @@ class Admin::UserCreationsController < ApplicationController
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
-    creation.save(:validate => false)
+    creation.save(validate: false)
     action = creation.hidden_by_admin? ? "hide" : "unhide"
     AdminActivity.log_action(current_admin, creation, action: action)
     flash[:notice] = creation.hidden_by_admin? ? 

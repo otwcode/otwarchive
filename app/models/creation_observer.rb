@@ -53,7 +53,7 @@ class CreationObserver < ActiveRecord::Observer
   # only notify a recipient once for each work
   def notify_recipients(work)
     if work.posted && !work.new_recipients.blank? && !work.unrevealed?
-      recipient_pseuds = Pseud.parse_bylines(work.new_recipients, :assume_matching_login => true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(work.new_recipients, assume_matching_login: true)[:pseuds]
       recipient_pseuds.collect(&:user_id).uniq.each do |userid|
         if work.collections.empty?
           UserMailer.recipient_notification(userid, work.id).deliver

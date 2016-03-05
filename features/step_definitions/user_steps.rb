@@ -9,7 +9,7 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, :login => 'orphan_account')
+  user = FactoryGirl.create(:user, login: 'orphan_account')
   user.activate
 end
 
@@ -31,7 +31,7 @@ end
 Given /^the user "([^\"]*)" exists and is activated$/ do |login|
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
+    user = FactoryGirl.create(:user, {login: login, password: "#{DEFAULT_PASSWORD}"})
     user.activate
   end
 end
@@ -40,7 +40,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
+    user = FactoryGirl.create(:user, {login: login, password: password})
     user.activate
   else
     user.password = password
@@ -48,8 +48,8 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
     user.save
   end
   visit login_path
-  fill_in "User name", :with => login
-  fill_in "Password", :with => password
+  fill_in "User name", with: login
+  fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
   assert UserSession.find
@@ -66,11 +66,11 @@ end
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = FactoryGirl.create(:user, :login => name, :password => DEFAULT_PASSWORD)
+  user = FactoryGirl.create(:user, login: name, password: DEFAULT_PASSWORD)
   user.activate
   visit login_path
-  fill_in "User name", :with => name
-  fill_in "Password", :with => DEFAULT_PASSWORD
+  fill_in "User name", with: name
+  fill_in "Password", with: DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log In"
   assert UserSession.find
@@ -78,13 +78,13 @@ end
 
 Given /^I am logged in as a banned user$/ do
   step("I am logged out")
-  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
+  user = FactoryGirl.create(:user, {login: "banned", password: DEFAULT_PASSWORD})
   user.activate
   user.banned = true
   user.save
   visit login_path
-  fill_in "User name", :with => "banned"
-  fill_in "Password", :with => DEFAULT_PASSWORD
+  fill_in "User name", with: "banned"
+  fill_in "Password", with: DEFAULT_PASSWORD
   check "Remember Me"
   click_button "Log In"
   assert UserSession.find
@@ -136,8 +136,8 @@ Given /^I view the people page$/ do
 end
 
 Given(/^I have coauthored a work as "(.*?)" with "(.*?)"$/) do |login, coauthor|
-  author1 = FactoryGirl.create(:pseud, :user => User.find_by_login(login))
-  author2 = FactoryGirl.create(:pseud, :user => User.find_by_login(coauthor))
+  author1 = FactoryGirl.create(:pseud, user: User.find_by_login(login))
+  author2 = FactoryGirl.create(:pseud, user: User.find_by_login(coauthor))
   FactoryGirl.create(:work, authors: [author1, author2], posted: true, title: "Shared")
 end
 
@@ -145,25 +145,25 @@ end
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   check("pseud_is_default")
   click_button "Create"
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
   user = User.find_by_login(login)
-  fill_in "Password", :with => user.activation_code
+  fill_in "Password", with: user.activation_code
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
   visit new_user_pseud_path(username)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 
 When /^I create the pseud "([^\"]*)"$/ do |newpseud|
   visit new_user_pseud_path(User.current_user)
-  fill_in "Name", :with => newpseud
+  fill_in "Name", with: newpseud
   click_button "Create"
 end
 

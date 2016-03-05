@@ -4,15 +4,15 @@ class ChapterTest < ActiveSupport::TestCase
   context "a Chapter" do
     setup do
       @pseud1 = create_pseud
-      @chapter1 = new_chapter(:posted => true)
-      @work = create_work(:chapters => [@chapter1], :authors => [@pseud1], :posted => true)
+      @chapter1 = new_chapter(posted: true)
+      @work = create_work(chapters: [@chapter1], authors: [@pseud1], posted: true)
     end
     should_belong_to :work
     should_validate_presence_of :content
-    should_ensure_length_in_range :content, (1..500000), :short_message => "can't be blank", :long_message => /cannot be more/
-    should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX), :long_message => /must be less/
-    should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX), :long_message => /must be less/
-    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
+    should_ensure_length_in_range :content, (1..500000), short_message: "can't be blank", long_message: /cannot be more/
+    should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX), long_message: /must be less/
+    should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX), long_message: /must be less/
+    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), long_message: /must be less/
 
     should "not able to remove the only author" do
         @chapter1.pseuds -= @work.pseuds
@@ -46,18 +46,18 @@ class ChapterTest < ActiveSupport::TestCase
 
     context "which is not the first" do
       should_eventually "get the works authors if not otherwise specified" do
-        @chapter2 = create_chapter(:work => @work)
+        @chapter2 = create_chapter(work: @work)
         assert_equal @work.pseuds, @chapter2.pseuds
       end
       should "get an error if the authors are empty" do
-        @chapter2 = new_chapter(:work => @work, :authors => [], :position => 2)
+        @chapter2 = new_chapter(work: @work, authors: [], position: 2)
         assert !@chapter2.save
       end
     end
 
     context "whose work gets a new chapter" do
       setup do
-        assert @chapter2 = create_chapter(:work => @work, :authors => @work.pseuds, :position => 2, :posted => true)
+        assert @chapter2 = create_chapter(work: @work, authors: @work.pseuds, position: 2, posted: true)
       end
       should "know it is not the only chapter" do        
         assert !@chapter1.is_only_chapter?
@@ -102,7 +102,7 @@ class ChapterTest < ActiveSupport::TestCase
     # commentable: CommentableEntity methods find_all_comments & count_all_comments
     context "with a comment" do
       setup do
-        @comment = create_comment(:commentable => @chapter1)
+        @comment = create_comment(commentable: @chapter1)
       end
       should "find that comment" do
         assert_contains(@chapter1.find_all_comments, @comment)
@@ -117,7 +117,7 @@ class ChapterTest < ActiveSupport::TestCase
   def test_no_leading_spaces_in_title
     title = "should have no leading space"
     title_with_space = ' ' + title
-    chapter = create_chapter(:title => title_with_space)
+    chapter = create_chapter(title: title_with_space)
     assert_equal title, chapter.title
     assert chapter.valid?
 

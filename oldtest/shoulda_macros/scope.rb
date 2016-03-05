@@ -8,30 +8,30 @@ class Test::Unit::TestCase
   #
   # Example:
   #
-  #   should_have_scope :visible, :conditions => {:visible => true}
+  #   should_have_scope :visible, conditions: {visible: true}
   #
   # Passes for
   #
-  #   scope :visible, :conditions => {:visible => true}
+  #   scope :visible, conditions: {visible: true}
   #
   # Or for
   #
   #   def self.visible
-  #     scoped(:conditions => {:visible => true})
+  #     scoped(conditions: {visible: true})
   #   end
   #
   # You can test lambdas or methods that return ActiveRecord#scoped calls:
   #
-  #   should_have_scope 'recent(5)', :limit => 5
-  #   should_have_scope 'recent(1)', :limit => 1
+  #   should_have_scope 'recent(5)', limit: 5
+  #   should_have_scope 'recent(1)', limit: 1
   #
   # Passes for
-  #   scope :recent, lambda {|c| {:limit => c}}
+  #   scope :recent, lambda {|c| {limit: c}}
   #
   # Or for
   #
   #   def self.recent(c)
-  #     scoped(:limit => c)
+  #     scoped(limit: c)
   #   end
   #
   def self.should_have_scope(scope_call, *args)

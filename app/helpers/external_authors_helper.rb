@@ -2,8 +2,8 @@ module ExternalAuthorsHelper
 
   def add_name_link(form_builder)
     link_to_function 'add name' do |page|
-      form_builder.fields_for :external_author_names, ExternalAuthorName.new, :child_index => 'NEW_RECORD' do |f|
-        html = render(:partial => 'external_author_name', :locals => { :form => f })
+      form_builder.fields_for :external_author_names, ExternalAuthorName.new, child_index: 'NEW_RECORD' do |f|
+        html = render(partial: 'external_author_name', locals: { form: f })
         page << "$('external_author_names').insert({ bottom: '#{escape_javascript(html)}'.replace(/NEW_RECORD/g, new Date().getTime()) });"
       end
     end

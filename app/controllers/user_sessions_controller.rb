@@ -2,7 +2,7 @@ class UserSessionsController < ApplicationController
 
   # I hope this isn't catching unwanted exceptions; it's hard to locate
   # where exactly the exception is thrown in case of no cookies. --rebecca
-  rescue_from ActionController::InvalidAuthenticityToken, :with => :show_auth_error
+  rescue_from ActionController::InvalidAuthenticityToken, with: :show_auth_error
 
   layout "session"
   before_filter :admin_logout_required
@@ -55,7 +55,7 @@ class UserSessionsController < ApplicationController
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
-        render :action => 'new'
+        render action: 'new'
       end
     end
   end

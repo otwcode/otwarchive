@@ -2,8 +2,8 @@ module CommentableEntity
   
   def self.included(commentable)
     commentable.class_eval do      
-      has_many :comments, :as => :commentable, :dependent => :destroy
-      has_many :total_comments, :class_name => 'Comment', :as => :parent 
+      has_many :comments, as: :commentable, dependent: :destroy
+      has_many :total_comments, class_name: 'Comment', as: :parent 
       extend ClassMethods
     end
   end
@@ -13,7 +13,7 @@ module CommentableEntity
 
   # Returns all comments
   def find_all_comments
-    self.total_comments.find(:all, :order => 'thread, threaded_left')
+    self.total_comments.find(:all, order: 'thread, threaded_left')
   end
 
   # Returns the total number of comments

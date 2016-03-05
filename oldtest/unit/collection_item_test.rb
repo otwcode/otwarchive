@@ -18,7 +18,7 @@ class CollectionItemTest < ActiveSupport::TestCase
       @collection = create_collection
       @collection.collection_preference.closed = true
       @collection.save
-      @collection_item = CollectionItem.new(:collection => @collection, :item => create_work)
+      @collection_item = CollectionItem.new(collection: @collection, item: create_work)
     end
     should "not allow new items" do
       assert !@collection_item.valid?
@@ -41,8 +41,8 @@ class CollectionItemTest < ActiveSupport::TestCase
       setup do
         user = create_user
         User.current_user = user
-        work = create_work(:authors => [user.default_pseud])
-        @collection_item = create_collection_item(:item => work)
+        work = create_work(authors: [user.default_pseud])
+        @collection_item = create_collection_item(item: work)
         # unset this for future tests
         User.current_user = nil
       end
@@ -60,7 +60,7 @@ class CollectionItemTest < ActiveSupport::TestCase
       @collection = create_collection
       @collection.collection_preference.moderated = true
       @collection.save
-      @collection_item = CollectionItem.new(:collection => @collection, :item => create_work)
+      @collection_item = CollectionItem.new(collection: @collection, item: create_work)
     end
     should "not be approved or rejected by the collection" do
       assert !@collection_item.approved_by_collection?
@@ -74,10 +74,10 @@ class CollectionItemTest < ActiveSupport::TestCase
       setup do
         user = create_user
         User.current_user = user
-        @mod = create_collection_participant(:collection => @collection, :pseud => user.default_pseud, :participant_role => CollectionParticipant::MODERATOR)
+        @mod = create_collection_participant(collection: @collection, pseud: user.default_pseud, participant_role: CollectionParticipant::MODERATOR)
         @collection.reload
 
-        @collection_item = create_collection_item(:collection => @collection)
+        @collection_item = create_collection_item(collection: @collection)
         User.current_user = nil
       end
       should "be approved by the collection" do

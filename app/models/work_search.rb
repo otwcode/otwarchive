@@ -199,7 +199,7 @@ class WorkSearch < Search
       tag_names_key = "#{tag_type}_names".to_sym
       if options[tag_names_key].present?
         names = options[tag_names_key].split(",")
-        tags = Tag.where(:name => names, :canonical => true)
+        tags = Tag.where(name: names, canonical: true)
         unless tags.empty?
           options[:filter_ids] ||= []
           options[:filter_ids] += tags.map{ |tag| tag.id }
@@ -301,7 +301,7 @@ class WorkSearch < Search
       end
     end
     unless all_tag_ids.empty?
-      tags << Tag.where(:id => all_tag_ids).value_of(:name).join(", ")
+      tags << Tag.where(id: all_tag_ids).value_of(:name).join(", ")
     end
     unless tags.empty?
       summary << "Tags: #{tags.uniq.join(", ")}"

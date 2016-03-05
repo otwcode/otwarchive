@@ -8,7 +8,7 @@ class LogItem < ActiveRecord::Base
   validates_presence_of :note
   validates_presence_of :action
   
-  validates_length_of :note, :maximum => ArchiveConfig.LOGNOTE_MAX
+  validates_length_of :note, maximum: ArchiveConfig.LOGNOTE_MAX
   
   attr_protected :note_sanitizer_version
   

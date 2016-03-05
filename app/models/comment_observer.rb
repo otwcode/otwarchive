@@ -112,7 +112,7 @@ class CommentObserver < ActiveRecord::Observer
         # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
         if comment.comment_owner
           if (inbox_comment = comment.comment_owner.inbox_comments.find_by_feedback_comment_id(parent_comment.id))
-            inbox_comment.update_attributes(:replied_to => true, :read => true)
+            inbox_comment.update_attributes(replied_to: true, read: true)
           end
         end
         

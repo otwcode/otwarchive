@@ -10,7 +10,7 @@ class Creatorship < ActiveRecord::Base
       for new_orphan in orphans
         unless pseud.blank? || new_orphan.blank? || !new_orphan.pseuds.include?(pseud)
           orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(pseud.name)
-          options = (new_orphan.is_a?(Series)) ? {:skip_series => true} : {}
+          options = (new_orphan.is_a?(Series)) ? {skip_series: true} : {}
           pseud.change_ownership(new_orphan, orphan_pseud, options)
         end
       end

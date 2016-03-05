@@ -5,10 +5,10 @@ class Feedback < ActiveRecord::Base
   # class which holds the user's comments.
   validates_presence_of :comment
   validates_presence_of :summary
-  validates :email, :email_veracity => {:allow_blank => true}
-  validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+  validates :email, email_veracity: {allow_blank: true}
+  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
 
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   validate :check_for_spam
   def check_for_spam

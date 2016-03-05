@@ -8,7 +8,7 @@ class PreferencesControllerTest < ActionController::TestCase
       @request.session[:user] = @second_user
     end
     context "on POST to :edit " do
-      setup { get :index, :locale => 'en', :user_id => @user.login }
+      setup { get :index, locale: 'en', user_id: @user.login }
       should "not display a form" do
          assert_select "form", false
       end
@@ -17,7 +17,7 @@ class PreferencesControllerTest < ActionController::TestCase
     end
     context "on PUT to :update" do
       setup do
-        put :update, :locale => 'en', :user_id => @user.login, :user => { :preference => { :history_enabled => '0' } }
+        put :update, locale: 'en', user_id: @user.login, user: { preference: { history_enabled: '0' } }
       end
       should "not make the change" do
         assert @user.preference.history_enabled
@@ -31,7 +31,7 @@ class PreferencesControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      get :index, :locale => 'en', :user_id => @user.login
+      get :index, locale: 'en', user_id: @user.login
     end
     context "on edit" do
       should_respond_with :success

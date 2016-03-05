@@ -32,7 +32,7 @@ class DevmodeController < ApplicationController
     if params[:logname]
       # If fetching a specific log, just return the html in the log file.
       f = File.new(File.join(path, params[:logname]), 'rb')
-      render :text => f.read()
+      render text: f.read()
       f.close()
       return
     end
@@ -312,12 +312,12 @@ class DevmodeController < ApplicationController
         login = user_name.call i
 
         user = User.new(
-          :login => login,
-          :email => email,
-          :password => params[:password],
-          :password_confirmation => params[:password],
-          :age_over_13 => "1",
-          :terms_of_service => "1"
+          login: login,
+          email: email,
+          password: params[:password],
+          password_confirmation: params[:password],
+          age_over_13: "1",
+          terms_of_service: "1"
         )
         if user.save
           # Activation doesn't seem to work in a single save. We now need to 
@@ -389,35 +389,35 @@ class DevmodeController < ApplicationController
       content = new_chapter.call[0...500000]
       # Authorship + pseuds
       chapter = Chapter.new(
-        :authors => authors,
-        :content => content,
-        :position => position,
-        :title => title,
-        :posted => true
+        authors: authors,
+        content: content,
+        position: position,
+        title: title,
+        posted: true
       )
       chapter.set_word_count
       chapters.push chapter
     end
 
     work_params = {
-      :collection_ids => [],
-      :wip_length => chapter_count,
-      :series => [],
-      :title => name[0...255],
-      :chapters => chapters,
-      :authors => authors,
-      :summary => summary,
-      :fandoms => fandoms,
-      :ratings => ratings,
-      :characters => characters,
-      :relationships => relationships,
-      :warnings => warnings,
-      :notes => notes,
-      :endnotes => end_notes,
-#      :parent_url => nil,
-      :restricted => false,
-      :ratings => ratings,
-      :posted => true
+      collection_ids: [],
+      wip_length: chapter_count,
+      series: [],
+      title: name[0...255],
+      chapters: chapters,
+      authors: authors,
+      summary: summary,
+      fandoms: fandoms,
+      ratings: ratings,
+      characters: characters,
+      relationships: relationships,
+      warnings: warnings,
+      notes: notes,
+      endnotes: end_notes,
+#      parent_url: nil,
+      restricted: false,
+      ratings: ratings,
+      posted: true
     }
     work = Work.new(work_params)
     work.set_word_count
@@ -568,7 +568,7 @@ class DevmodeController < ApplicationController
       new_fandom_func = lambda {
         new_name = random_sentence(8 + (rand(4) * rand(4)))
         Fandom.new(
-          :name => new_name
+          name: new_name
         )
       }
 
@@ -588,7 +588,7 @@ class DevmodeController < ApplicationController
       new_relationship_func = lambda {
         new_name = [random_sentence(4 + rand(12)), random_sentence(4 + rand(12))].join('/')
         Relationship.new(
-          :name => new_name
+          name: new_name
         )
       }
 

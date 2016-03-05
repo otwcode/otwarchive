@@ -1,6 +1,6 @@
 class Subscription < ActiveRecord::Base
   belongs_to :user
-  belongs_to :subscribable, :polymorphic => true
+  belongs_to :subscribable, polymorphic: true
   
   validates_presence_of :user, :subscribable_id, :subscribable_type
   

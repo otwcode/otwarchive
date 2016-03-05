@@ -10,17 +10,17 @@ module SkinsHelper
   # we only actually display an image if there's a file
   def skin_preview_display(skin)
     if skin && skin.icon_file_name
-      link_to image_tag(skin.icon.url(:standard), :alt => skin.icon_alt_text, :class => "icon"), skin.icon.url(:original)
+      link_to image_tag(skin.icon.url(:standard), alt: skin.icon_alt_text, class: "icon"), skin.icon.url(:original)
     end
   end
     
   # we use ||= here so the skin can be set already for previewing purposes
   def set_site_skin
     if params[:site_skin]
-      @site_skin = Skin.approved_or_owned_by.usable.where(:id => params[:site_skin]).first
+      @site_skin = Skin.approved_or_owned_by.usable.where(id: params[:site_skin]).first
     end
     if (logged_in? || logged_in_as_admin?) && session[:site_skin]
-      @site_skin ||= Skin.approved_or_owned_by.usable.where(:id => session[:site_skin]).first
+      @site_skin ||= Skin.approved_or_owned_by.usable.where(id: session[:site_skin]).first
     end
     if logged_in? && current_user.preference
       @site_skin ||= current_user.preference.skin

@@ -5,8 +5,8 @@ class InboxCommentTest < ActiveSupport::TestCase
   context "An Inbox Comment" do
     setup do
       @user = create_user
-      @comment = create_comment(:pseud_id => @user.default_pseud.id)
-      @myinbox_comment = create_inbox_comment(:user_id => @user.id, :feedback_comment_id => @comment.id)
+      @comment = create_comment(pseud_id: @user.default_pseud.id)
+      @myinbox_comment = create_inbox_comment(user_id: @user.id, feedback_comment_id: @comment.id)
     end
     should_belong_to :user
     should_belong_to :feedback_comment

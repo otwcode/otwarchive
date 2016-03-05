@@ -11,7 +11,7 @@ end
 When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
-  fill_in("admin_banner_content", :with => "This is some banner text")
+  fill_in("admin_banner_content", with: "This is some banner text")
   if banner_type.present?
     if banner_type == "alert"
       choose("admin_banner_banner_type_alert")
@@ -39,7 +39,7 @@ When /^an admin edits the active banner$/ do
   step %{I am logged in as an admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
-  fill_in("admin_banner_content", :with => "This is some edited banner text")
+  fill_in("admin_banner_content", with: "This is some edited banner text")
   click_button("Update Banner")
   step %{I should see "Setting banner back on for all users. This may take some time."}
 end
@@ -47,7 +47,7 @@ end
 When /^an admin creates a different active banner$/ do
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
-  fill_in("admin_banner_content", :with => "This is new banner text")
+  fill_in("admin_banner_content", with: "This is new banner text")
   check("admin_banner_active")
   click_button("Create Banner")
   step %{I should see "Setting banner back on for all users. This may take some time."}

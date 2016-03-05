@@ -8,58 +8,58 @@ class OwnedTagSet < ActiveRecord::Base
   # being used in prompts.
   # -- NN May 2011 
   
-  belongs_to :tag_set, :dependent => :destroy
+  belongs_to :tag_set, dependent: :destroy
   accepts_nested_attributes_for :tag_set
   
   # delegate the tag set commands
-  delegate :tags, :with_type, :has_type?, :to => :tag_set, :allow_nil => true  
+  delegate :tags, :with_type, :has_type?, to: :tag_set, allow_nil: true  
   
-  has_many :tag_set_associations, :dependent => :destroy
-  accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, 
-    :reject_if => proc { |attrs| !attrs[:create_association] || attrs[:tag_id].blank? || (attrs[:parent_tag_id].blank? && attrs[:parent_tagname].blank?) }
+  has_many :tag_set_associations, dependent: :destroy
+  accepts_nested_attributes_for :tag_set_associations, allow_destroy: true, 
+    reject_if: proc { |attrs| !attrs[:create_association] || attrs[:tag_id].blank? || (attrs[:parent_tag_id].blank? && attrs[:parent_tagname].blank?) }
 
-  has_many :tag_set_nominations, :dependent => :destroy 
-  has_many :tag_nominations, :through => :tag_set_nominations, :dependent => :destroy
-  has_many :fandom_nominations, :through => :tag_set_nominations 
-  has_many :character_nominations, :through => :tag_set_nominations
-  has_many :relationship_nominations, :through => :tag_set_nominations
-  has_many :freeform_nominations, :through => :tag_set_nominations
+  has_many :tag_set_nominations, dependent: :destroy 
+  has_many :tag_nominations, through: :tag_set_nominations, dependent: :destroy
+  has_many :fandom_nominations, through: :tag_set_nominations 
+  has_many :character_nominations, through: :tag_set_nominations
+  has_many :relationship_nominations, through: :tag_set_nominations
+  has_many :freeform_nominations, through: :tag_set_nominations
 
   attr_protected :featured
 
-  has_many :tag_set_ownerships, :dependent => :destroy
-  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', false]
-  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+  has_many :tag_set_ownerships, dependent: :destroy
+  has_many :moderators, through: :tag_set_ownerships, source: :pseud, conditions: ['tag_set_ownerships.owner = ?', false]
+  has_many :owners, through: :tag_set_ownerships, source: :pseud, conditions: ['tag_set_ownerships.owner = ?', true]
   
-  has_many :owned_set_taggings, :dependent => :destroy
-  has_many :set_taggables, :through => :owned_set_taggings
+  has_many :owned_set_taggings, dependent: :destroy
+  has_many :set_taggables, through: :owned_set_taggings
 
-  validates_presence_of :title, :message => ts("^Please enter a title for your tag set.")
-  validates_uniqueness_of :title, :case_sensitive => false, :message => ts('^Sorry, that name is already taken. Try again, please!')
+  validates_presence_of :title, message: ts("^Please enter a title for your tag set.")
+  validates_uniqueness_of :title, case_sensitive: false, message: ts('^Sorry, that name is already taken. Try again, please!')
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
   validates_format_of :title,
-    :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => '^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
+    with: /\A[^,*<>^{}=`\\%]+\z/,
+    message: '^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_length_of :description,
-    :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    allow_blank: true,
+    maximum: ArchiveConfig.SUMMARY_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
 
   validates_numericality_of :fandom_nomination_limit, :character_nomination_limit, :relationship_nomination_limit, :freeform_nomination_limit,
-    :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,
-    :message => ts('must be an integer between 0 and 20.')
+    only_integer: true, less_than_or_equal_to: 20, greater_than_or_equal_to: 0,
+    message: ts('must be an integer between 0 and 20.')
 
 
   after_update :cleanup_outdated_associations
   def cleanup_outdated_associations
-    tag_ids = SetTagging.where(:tag_set_id => self.tag_set.id).collect(&:tag_id)
-    TagSetAssociation.where(:owned_tag_set_id => self.id).where("tag_id NOT IN (?) OR parent_tag_id NOT IN (?)", tag_ids, tag_ids).delete_all
+    tag_ids = SetTagging.where(tag_set_id: self.tag_set.id).collect(&:tag_id)
+    TagSetAssociation.where(owned_tag_set_id: self.id).where("tag_id NOT IN (?) OR parent_tag_id NOT IN (?)", tag_ids, tag_ids).delete_all
   end
 
   validate :no_midstream_nomination_changes
@@ -75,18 +75,18 @@ class OwnedTagSet < ActiveRecord::Base
     return false unless self.tag_set.save && self.save
 
     # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
-    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(:approved => true, :rejected => false)
+    TagNomination.for_tag_set(self).where(type: "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(approved: true, rejected: false)
     true
   end
 
   def remove_tagnames(tag_type, tagnames_to_remove)
     self.tag_set.tagnames_to_remove = tagnames_to_remove.join(',')
     return false unless self.save
-    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).update_all(:rejected => true, :approved => false)
+    TagNomination.for_tag_set(self).where(type: "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).update_all(rejected: true, approved: false)
 
     if tag_type == "fandom"
       # reject children of rejected fandom
-      TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).each do |rejected_fandom_nom|
+      TagNomination.for_tag_set(self).where(type: "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).each do |rejected_fandom_nom|
         rejected_fandom_nom.reject_children
       end
     end
@@ -145,11 +145,11 @@ class OwnedTagSet < ActiveRecord::Base
   end
   
   def add_owner(pseud)
-    tag_set_ownerships.build({:pseud => pseud, :owner => true})
+    tag_set_ownerships.build({pseud: pseud, owner: true})
   end
   
   def add_moderator(pseud)    
-    tag_set_ownerships.build({:pseud => pseud, :owner => false}) 
+    tag_set_ownerships.build({pseud: pseud, owner: false}) 
   end
   
   def owner_changes=(pseud_list)
@@ -189,30 +189,30 @@ class OwnedTagSet < ActiveRecord::Base
   end
 
   def already_nominated?(tagname)
-    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname)
+    TagNomination.joins(tag_set_nomination: :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(tagname: tagname)
   end
   
   def already_rejected?(tagname)
-    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname, :rejected => true)
+    TagNomination.joins(tag_set_nomination: :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(tagname: tagname, rejected: true)
   end
 
   def already_approved?(tagname)
-    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname, :approved => true)
+    TagNomination.joins(tag_set_nomination: :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(tagname: tagname, approved: true)
   end
 
   def clear_nominations!
-    TagSetNomination.where(:owned_tag_set_id => self.id).delete_all
+    TagSetNomination.where(owned_tag_set_id: self.id).delete_all
   end
 
 
   ##### MANAGING ASSOCIATIONS
   
   def associations_to_remove=(assoc_ids)
-    TagSetAssociation.for_tag_set(self).where(:id => assoc_ids).delete_all
+    TagSetAssociation.for_tag_set(self).where(id: assoc_ids).delete_all
   end
   
   def load_batch_associations!(batch_associations, options = {})
-    options.reverse_merge!({:do_relationships => false})
+    options.reverse_merge!({do_relationships: false})
     association_lines = batch_associations.split("\n")
     fandom_tagnames_to_add = []
     child_tagnames_to_add = []
@@ -223,7 +223,7 @@ class OwnedTagSet < ActiveRecord::Base
     association_lines.each do |line|
       children_names = line.split(',')
       parent_name = children_names.shift.strip
-      parent_tag_id = Fandom.where(:name => parent_name).value_of(:id).first
+      parent_tag_id = Fandom.where(name: parent_name).value_of(:id).first
       unless parent_tag_id
         failed << line
         next
@@ -231,12 +231,12 @@ class OwnedTagSet < ActiveRecord::Base
       failed_children = []
       added_parent = false
       children_names.map {|c| c.strip}.each_with_index do |child_name|
-        child_tag_id = (options[:do_relationships] ? Relationship : Character).where(:name => child_name).value_of(:id).first
+        child_tag_id = (options[:do_relationships] ? Relationship : Character).where(name: child_name).value_of(:id).first
         unless child_tag_id
           failed_children << child_name
           next
         end
-        assoc = tag_set_associations.build(:tag_id => child_tag_id, :parent_tag_id => parent_tag_id)
+        assoc = tag_set_associations.build(tag_id: child_tag_id, parent_tag_id: parent_tag_id)
         unless assoc.valid?
           failed_children << child_name
           next

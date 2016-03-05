@@ -8,17 +8,17 @@ class ActiveSupport::TestCase
   # initialize a challenge with a bunch of potential matches
   def challenge_setup(num_signups)
     # set up several signups with potential matches
-    settings = create_potential_match_settings(:num_required_prompts => 1, :num_required_fandoms => 1)
-    @collection = create_collection(:challenge => create_gift_exchange(:potential_match_settings => settings))
+    settings = create_potential_match_settings(num_required_prompts: 1, num_required_fandoms: 1)
+    @collection = create_collection(challenge: create_gift_exchange(potential_match_settings: settings))
     @fandoms = []
     @signups = []
     1.upto(num_signups) do |index|
       # each signup will have another fandom tag added in, so we get
       # a variety of potential match quality
-      @fandoms << create_fandom(:canonical => true)
-      @signups << create_challenge_signup(:collection => @collection,
-                                          :requests => [create_request(:collection => @collection, :tag_set => create_tag_set(:tags => @fandoms))],
-                                          :offers => [create_offer(:collection => @collection, :tag_set => create_tag_set(:tags => @fandoms))]
+      @fandoms << create_fandom(canonical: true)
+      @signups << create_challenge_signup(collection: @collection,
+                                          requests: [create_request(collection: @collection, tag_set: create_tag_set(tags: @fandoms))],
+                                          offers: [create_offer(collection: @collection, tag_set: create_tag_set(tags: @fandoms))]
                                           )
     end
   end

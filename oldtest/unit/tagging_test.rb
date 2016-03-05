@@ -7,7 +7,7 @@ class TaggingTest < ActiveSupport::TestCase
     setup do
       @work = Work.first || create_work
       @tag = create_freeform
-      @mytagging = Tagging.create(:tagger => Freeform.find(@tag.id), :taggable => Work.first)
+      @mytagging = Tagging.create(tagger: Freeform.find(@tag.id), taggable: Work.first)
     end
     should_belong_to :tagger, :taggable
     should_validate_presence_of :tagger, :taggable

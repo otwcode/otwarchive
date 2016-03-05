@@ -51,9 +51,9 @@ module CommentMethods
     # Returns comment itself if unthreaded
     def full_set 
       if self.threaded_left
-        Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?) AND thread = (?)", 
+        Comment.find(:all, conditions: ["threaded_left BETWEEN (?) and (?) AND thread = (?)", 
                             self.threaded_left, self.threaded_right, self.thread],
-                            :include => :pseud, :order => "threaded_left")
+                            include: :pseud, order: "threaded_left")
       else
         return [self]
       end
@@ -62,14 +62,14 @@ module CommentMethods
     # Returns all sub-comments
     def all_children
       self.children_count > 0 ? Comment.find(:all, 
-                                             :conditions => ["threaded_left > (?) and threaded_right < (?) and thread = (?)", 
+                                             conditions: ["threaded_left > (?) and threaded_right < (?) and thread = (?)", 
                                              self.threaded_left, self.threaded_right, self.thread],
-                                             :order => "threaded_left", :include => :pseud) : []
+                                             order: "threaded_left", include: :pseud) : []
     end
 
     # Returns a full comment thread
     def full_thread
-      Comment.find(:all, :conditions => ["thread = (?)", self.thread], :order => "threaded_left")
+      Comment.find(:all, conditions: ["thread = (?)", self.thread], order: "threaded_left")
     end
             
 

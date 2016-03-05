@@ -9,8 +9,8 @@ end
 
 ### Set up dates correctly ###
 Then /^I set up the challenge dates$/ do
-  fill_in("Sign-up opens:", :with => Date.yesterday)
-  fill_in("Sign-up closes:", :with => Date.tomorrow)
+  fill_in("Sign-up opens:", with: Date.yesterday)
+  fill_in("Sign-up closes:", with: Date.tomorrow)
 end
 
 ### Clear out old data

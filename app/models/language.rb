@@ -15,15 +15,15 @@ class Language < ActiveRecord::Base
   end
   
   def self.default
-    self.find_or_create_by_short_and_name(:short => ArchiveConfig.DEFAULT_LANGUAGE_SHORT, :name => ArchiveConfig.DEFAULT_LANGUAGE_NAME)
+    self.find_or_create_by_short_and_name(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT, name: ArchiveConfig.DEFAULT_LANGUAGE_NAME)
   end
   
   def work_count
-    self.works.count(:conditions => {:posted => true})
+    self.works.count(conditions: {posted: true})
   end
   
   def fandom_count
-    Fandom.count(:joins => :works, :conditions => {:works => {:id => self.works.posted.collect(&:id)}}, :distinct => true, :select => 'tags.id')
+    Fandom.count(joins: :works, conditions: {works: {id: self.works.posted.collect(&:id)}}, distinct: true, select: 'tags.id')
   end
   
 end

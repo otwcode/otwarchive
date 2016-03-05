@@ -1,12 +1,12 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
-  before_filter :load_owner, :only => [ :index ]
-  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
-  before_filter :users_only, :only => [:new, :create, :edit, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
-  before_filter :check_visibility, :only => [ :show ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :confirm_delete ]
+  before_filter :load_owner, only: [ :index ]
+  before_filter :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_filter :users_only, only: [:new, :create, :edit, :update]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
+  before_filter :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ] 
+  before_filter :check_visibility, only: [ :show ]
+  before_filter :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
   
 
   # get the parent
@@ -48,7 +48,7 @@ class BookmarksController < ApplicationController
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       if params[:bookmark_search].present?
         options = params[:bookmark_search].dup
@@ -72,7 +72,7 @@ class BookmarksController < ApplicationController
           @facets = @bookmarks.facets
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", :expires_in => 10.minutes) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v1", expires_in: 10.minutes) do
           search = BookmarkSearch.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results
           @bookmarks = search.search_results.to_a
@@ -99,7 +99,7 @@ class BookmarksController < ApplicationController
       format.js { 
         @button_name = ts("Create")
         @action = :create
-        render :action => "bookmark_form_dynamic" 
+        render action: "bookmark_form_dynamic" 
       }
     end
   end
@@ -112,7 +112,7 @@ class BookmarksController < ApplicationController
       format.js { 
         @button_name = ts("Update")
         @action = :update
-        render :action => "bookmark_form_dynamic" 
+        render action: "bookmark_form_dynamic" 
       }
     end    
   end
@@ -133,7 +133,7 @@ class BookmarksController < ApplicationController
       end
     end
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render :action => "new" and return
+    render action: "new" and return
   end
 
   # PUT /bookmarks/1
@@ -170,11 +170,11 @@ class BookmarksController < ApplicationController
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
-                          :collections => new_collections.collect(&:title).join(", "))
+                          collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
       flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
-                                      :moderated => unapproved_collections.collect(&:title).join(", "))
+                                      moderated: unapproved_collections.collect(&:title).join(", "))
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
@@ -210,11 +210,11 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.visible(order: "created_at DESC").offset(1).limit(4)
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
-        redirect_to url_for({:action => :index, id_symbol => @bookmarkable})
+        redirect_to url_for({action: :index, id_symbol => @bookmarkable})
       end
     end
   end

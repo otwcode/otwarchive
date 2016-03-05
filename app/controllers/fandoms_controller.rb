@@ -23,7 +23,7 @@ class FandomsController < ApplicationController
         raise ActiveRecord::RecordNotFound, "Couldn't find media category named '#{params[:medium_id]}'"
       end
     else
-      redirect_to media_path(:notice => "Please choose a media category to start browsing fandoms.")
+      redirect_to media_path(notice: "Please choose a media category to start browsing fandoms.")
       return
     end
     @fandoms_by_letter = @fandoms.group_by {|f| f.sortable_name[0].upcase}
@@ -32,7 +32,7 @@ class FandomsController < ApplicationController
   def show
     @fandom = Fandom.find_by_name(params[:id])
     if @fandom.nil?
-      flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
+      flash[:error] = ts("Could not find fandom named %{fandom_name}", fandom_name: params[:id])
       redirect_to media_path and return
     end
     @characters = @fandom.characters.canonical.by_name
@@ -57,6 +57,6 @@ class FandomsController < ApplicationController
                       where(conditions).
                       order(params[:sort] == 'count' ? "count DESC" : "sortable_name ASC").
                       with_count.
-                      paginate(:page => params[:page], :per_page => 250)  
+                      paginate(page: params[:page], per_page: 250)  
   end
 end

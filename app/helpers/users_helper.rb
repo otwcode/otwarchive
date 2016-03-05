@@ -9,8 +9,8 @@ module UsersHelper
   def print_works(pseud)
     result = ""
 	  conditions = logged_in? ? "posted = 1" : "posted = 1 AND restricted = 0 OR restricted IS NULL"
-	  pseud.works.find(:all, :order => "works.revised_at DESC", :conditions => conditions).each do |work|
-      result += (render :partial => 'works/work_blurb', :locals => {:work => work})
+	  pseud.works.find(:all, order: "works.revised_at DESC", conditions: conditions).each do |work|
+      result += (render partial: 'works/work_blurb', locals: {work: work})
     end
     result
   end
@@ -50,9 +50,9 @@ module UsersHelper
     alt_text = pseud.try(:icon_alt_text) || nil
 
     if path
-      link_to image_tag(icon, :alt => alt_text, :class => "icon"), path
+      link_to image_tag(icon, alt: alt_text, class: "icon"), path
     else
-      image_tag(icon, :class => "icon")
+      image_tag(icon, class: "icon")
     end
   end
   
@@ -66,12 +66,12 @@ module UsersHelper
   def print_bookmarks_link(user, pseud=nil)
     return print_pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
     total = BookmarkSearch.count_for_pseuds(user.pseuds)
-	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	  span_if_current ts("Bookmarks (%{bookmark_number})", bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 	
   def print_pseud_bookmarks_link(pseud)
     total = BookmarkSearch.count_for_pseuds([pseud])
-	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	  span_if_current ts("Bookmarks (%{bookmark_number})", bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
   
   # Prints link to works page with user-appropriate number of works
@@ -79,12 +79,12 @@ module UsersHelper
   def print_works_link(user, pseud=nil)
     return print_pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
     total = WorkSearch.user_count(user)
-	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
+	  span_if_current ts("Works (%{works_number})", works_number: total.to_s), user_works_path(@user)
   end
   
   def print_pseud_works_link(pseud)
     total = WorkSearch.pseud_count(pseud)
-	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	  span_if_current ts("Works (%{works_number})", works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 
   # Prints link to series page with user-appropriate number of series
@@ -95,7 +95,7 @@ module UsersHelper
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
     end
-	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
+	  span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_series_index_path(@user)
   end
   
   def print_pseud_series_link(pseud)
@@ -104,16 +104,16 @@ module UsersHelper
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
     end
-	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+	  span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_pseud_series_index_path(@user, pseud)
   end
   
   def print_gifts_link(user)
     if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.count(:id, :distinct => true)
+      gift_number = user.gift_works.visible_to_all.count(:id, distinct: true)
     else
-      gift_number = user.gift_works.visible_to_registered_user.count(:id, :distinct => true)
+      gift_number = user.gift_works.visible_to_registered_user.count(:id, distinct: true)
     end
-    span_if_current ts("Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
+    span_if_current ts("Gifts (%{gift_number})", gift_number: gift_number.to_s), user_gifts_path(user)
   end
 
   def authored_items(pseud, work_counts={}, rec_counts={})
@@ -124,14 +124,14 @@ module UsersHelper
       items += ", "
     end
     if visible_recs > 0
-      items += (visible_recs == 1) ? link_to(visible_recs.to_s + " rec", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true)) : link_to(visible_recs.to_s + " recs", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true))
+      items += (visible_recs == 1) ? link_to(visible_recs.to_s + " rec", user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true)) : link_to(visible_recs.to_s + " recs", user_pseud_bookmarks_path(pseud.user, pseud, recs_only: true))
     end
     return items.html_safe
   end
   
 #  def print_pseud_drafts_link(pseud)
 #    total = pseud.unposted_works.size
-#    link_to_unless_current t('my_drafts', :default =>"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+#    link_to_unless_current t('my_drafts', default:"Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
 #  end
   
   def authors_header(collection, what = "People")
@@ -155,25 +155,25 @@ module UsersHelper
 
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
-      t('users_helper.log_validated', :default => 'Account Validated')
+      t('users_helper.log_validated', default: 'Account Validated')
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('users_helper.log_role_added', :default => 'Role Added: ')
+      t('users_helper.log_role_added', default: 'Role Added: ')
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('users_helper.log_role_removed', :default => 'Role Removed: ')
+      t('users_helper.log_role_removed', default: 'Role Removed: ')
     elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('users_helper.log_suspended', :default => 'Suspended until ')
+      t('users_helper.log_suspended', default: 'Suspended until ')
     elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('users_helper.log_lift_suspension', :default => 'Suspension Lifted')
+      t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
     elsif action == ArchiveConfig.ACTION_BAN
-      t('users_helper.log_ban', :default => 'Suspended Permanently')
+      t('users_helper.log_ban', default: 'Suspended Permanently')
     elsif action == ArchiveConfig.ACTION_WARN
-      t('users_helper.log_warn', :default => 'Warned')
+      t('users_helper.log_warn', default: 'Warned')
     elsif action == ArchiveConfig.ACTION_RENAME
-      t('users_helper.log_rename', :default => 'Username Changed')
+      t('users_helper.log_rename', default: 'Username Changed')
 		elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
-      t('users_helper.log_password_change', :default => 'Password Changed')
+      t('users_helper.log_password_change', default: 'Password Changed')
 		elsif action == ArchiveConfig.ACTION_NEW_EMAIL
-      t('users_helper.log_email_change', :default => 'Email Changed')
+      t('users_helper.log_email_change', default: 'Email Changed')
     end
   end
   
