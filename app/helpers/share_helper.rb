@@ -19,14 +19,14 @@ module ShareHelper
   
   # get work information for share code
   def get_embed_link_meta(work)
-    tag_groups=work.tag_groups
+    tag_groups = work.tag_groups
     chapters_text = ts("Chapters: ") + work.chapter_total_display + tag("br")
     fandom_text = add_label_for_embed(ts("Fandom: "), tag_groups["Fandom"].map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe, tag("br"))
     rating_text = add_label_for_embed(ts("Rating: "), tag_groups["Rating"].map {|rating| rating.name}.join(', '), tag("br"))
     warning_text = add_label_for_embed(ts("Warnings: "), tag_groups["Warning"].map {|warning| warning_display_name(warning.name)}.join(', '), tag("br"))
     relationship_text = add_label_for_embed(ts("Relationships: "), tag_groups["Relationship"].map {|rel| rel.name}.join(', '), tag("br"))
     char_text = add_label_for_embed(ts("Characters: "), tag_groups["Character"].map {|char| char.name}.join(', '), tag("br"))
-    tags_text = add_label_for_embed(ts("Additional Tags: "), tag_groups["Freeform"]..map {|freeform| freeform.name}.join(', '), tag("br"))
+    tags_text = add_label_for_embed(ts("Additional Tags: "), tag_groups["Freeform"].map {|freeform| freeform.name}.join(', '), tag("br"))
     if work.series.count != 0
       series_text = add_label_for_embed(ts("Series: "), series_list_for_feeds(work), tag("br"))
     end
@@ -85,9 +85,8 @@ module ShareHelper
     if work.unrevealed?
       ts("Mystery Work")
     else
-      tag_groups=work.tag_groups
       names = work.anonymous? ? ts("Anonymous") : work.pseuds.map(&:name).join(', ')
-      fandoms = tag_groups["Fandom"].size > 2 ? ts("Multifandom") : tag_groups["Fandom"].string
+      fandoms = work.fandoms.size > 2 ? ts("Multifandom") : work.fandoms.string
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
   end

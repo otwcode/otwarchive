@@ -206,8 +206,9 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
+    @tag_groups = @work.tag_groups
     @page_title = @work.unrevealed? ? ts("Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+      get_page_title(@tag_groups["Fandom"].size > 3 ? ts("Multifandom") : @tag_groups["Fandom"][0].name,
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
 

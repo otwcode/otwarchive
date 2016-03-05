@@ -793,10 +793,17 @@ class Work < ActiveRecord::Base
   def tag_groups
     Rails.cache.fetch(self.tag_groups_key) do
       if self.placeholder_tags
-        self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+        result = self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
       else
-        self.tags.group_by { |t| t.type.to_s }
+        result = self.tags.group_by { |t| t.type.to_s }
       end
+      result["Fandom"] ||= []
+      result["Rating"] ||= []
+      result["Warning"] ||= []
+      result["Relationship"] ||= []
+      result["Character"] ||= []
+      result["Freeform"] ||= []
+      result
     end
   end
 
