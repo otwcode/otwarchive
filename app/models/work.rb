@@ -201,8 +201,7 @@ class Work < ActiveRecord::Base
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
     end
-
-    self.expire_work_tag_groups
+    Work.expire_work_tag_groups_id(self.id)
   end
 
   def self.expire_work_tag_groups_id(id)
