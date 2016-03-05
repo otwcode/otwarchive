@@ -96,11 +96,12 @@
 
     <dt>
       <%= f.label :accent_color, ts('Accent color') %>
+      <%= link_to_help('skins-wizard-accent-color') %>
     </dt>
     <dd>
       <%= f.text_field :accent_color, "aria-describedby" => "accent-color-field-notes" %>
       <p class="footnote" id="accent-color-field-notes">
-        <%= ts("Name or hex code. Default: <code>#fff</code>".html_safe) %>
+        <%= ts("Name or hex code. Default: <code>#ddd</code>".html_safe) %>
       </p>
     </dd>
   </dl>
