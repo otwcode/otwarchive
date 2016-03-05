@@ -7,7 +7,7 @@ class TagSetTest < ActiveSupport::TestCase
   
   context "a new TagSet" do
     setup do
-      @tag = create_tag(:canonical => true)
+      @tag = create_tag(canonical: true)
       @tagset = TagSet.new
       @tagset.tags << @tag
       @tagset.save
@@ -31,10 +31,10 @@ class TagSetTest < ActiveSupport::TestCase
     @tagset3 = TagSet.new
 
     # set up some canonical tags
-    @freeform_tag = create_freeform(:canonical => true)
-    @char_tag = create_character(:canonical => true)
-    @fandom_tag1 = create_fandom(:canonical => true)
-    @fandom_tag2 = create_fandom(:canonical => true)
+    @freeform_tag = create_freeform(canonical: true)
+    @char_tag = create_character(canonical: true)
+    @fandom_tag1 = create_fandom(canonical: true)
+    @fandom_tag2 = create_fandom(canonical: true)
     
     # set up the tagsets
     @tagset1.tags << @fandom_tag1
@@ -94,7 +94,7 @@ class TagSetTest < ActiveSupport::TestCase
     @tagset = TagSet.new
     @taglist = []
     %w(fandom character relationship rating warning category freeform).each do |type| 
-      eval("#{type}_tag = create_#{type}(:canonical => true)")
+      eval("#{type}_tag = create_#{type}(canonical: true)")
       eval("@taglist << #{type}_tag")
       eval("@tagset.#{type}_tagnames = #{type}_tag.name")
       assert @tagset.valid?

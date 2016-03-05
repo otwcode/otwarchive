@@ -4,10 +4,10 @@ class MetaTaggingTest < ActiveSupport::TestCase
 
   context "a meta tagging" do
     setup do
-      @meta_tag = create_freeform(:canonical => true)
-      @sub_tag = create_freeform(:canonical => true)
+      @meta_tag = create_freeform(canonical: true)
+      @sub_tag = create_freeform(canonical: true)
       @sub_tag.meta_tags << @meta_tag
-      @character = create_character(:canonical => true)
+      @character = create_character(canonical: true)
     end
     should_belong_to :meta_tag, :sub_tag
     should_validate_presence_of :meta_tag, :sub_tag
@@ -24,7 +24,7 @@ class MetaTaggingTest < ActiveSupport::TestCase
     end
     context "whose sub tag is used on a work" do
       setup do
-        @work = create_work(:freeform_string => @sub_tag.name)
+        @work = create_work(freeform_string: @sub_tag.name)
       end
       should "link the meta tag to the work as a filter" do
         assert_contains @work.filters, @meta_tag
@@ -40,7 +40,7 @@ class MetaTaggingTest < ActiveSupport::TestCase
     end
     context "whose meta tag has meta tags" do
       setup do
-        @sub_sub_tag = create_freeform(:canonical => true)
+        @sub_sub_tag = create_freeform(canonical: true)
         @sub_sub_tag.meta_tags << @sub_tag
       end
       should "inherit parent meta taggings" do

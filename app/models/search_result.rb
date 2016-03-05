@@ -13,7 +13,7 @@ class SearchResult
   def items
     if @items.nil?
       ids = tire_response.results.map { |item| item['id'] }
-      items = klass.where(:id => ids).group_by(&:id)
+      items = klass.where(id: ids).group_by(&:id)
       @items = ids.map{ |id| items[id.to_i] }.flatten.compact
     end
     @items

@@ -7,7 +7,7 @@ When /^I add the series "([^\"]*)"$/ do |series_title|
   if Series.find_by_title(series_title)
     step %{I select "#{series_title}" from "work_series_attributes_id"}
   else
-    fill_in("work_series_attributes_title", :with => series_title)
+    fill_in("work_series_attributes_title", with: series_title)
   end
 end
 
@@ -24,7 +24,7 @@ When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?
     step "I set up the draft \"#{work_title}\""
   end
   if pseud
-    select(pseud, :from => "work_author_attributes_ids_")
+    select(pseud, from: "work_author_attributes_ids_")
   end
   step %{I add the series "#{series_title}"}
   click_button("Post Without Preview")
@@ -50,7 +50,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
   count.to_i.times do |i|
     step "I edit the work \"#{work_title}\""
     check("series-options-show")
-    fill_in("work_series_attributes_title", :with => series_title + i.to_s)
+    fill_in("work_series_attributes_title", with: series_title + i.to_s)
     click_button("Post Without Preview")
   end
 end

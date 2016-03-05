@@ -51,7 +51,7 @@ class TagsControllerTest < ActionController::TestCase
       setup do
         @name = random_phrase[1...ArchiveConfig.TAG_MAX]
         @type = "Freeform"
-        put :create, :tag => {"name" => @name, "type" => @type, :canonical => false}
+        put :create, tag: {"name" => @name, "type" => @type, canonical: false}
       end
       should_redirect_to("edit tag path") { edit_tag_path(Tag.find_by_name(@name))}
       should_set_the_flash_to /successfully created/
@@ -64,7 +64,7 @@ class TagsControllerTest < ActionController::TestCase
     context "on POST with :create with error" do
       # TODO restricted to tag_wrangler
       setup do
-        put :create, :tag => {"name" => "", :canonical => false}
+        put :create, tag: {"name" => "", canonical: false}
       end
       should_render_template "new"
       should_set_the_flash_to /Please provide a category/

@@ -12,7 +12,7 @@ class CollectionParticipantTest < ActiveSupport::TestCase
     
     context "who is not a member" do      
       setup do
-        @participant = create_collection_participant(:participant_role => CollectionParticipant::NONE)
+        @participant = create_collection_participant(participant_role: CollectionParticipant::NONE)
       end
       should "not be recognized as a member, moderator, or owner" do
         assert @participant.is_none?

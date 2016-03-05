@@ -26,7 +26,7 @@ class StatCounter < ActiveRecord::Base
     work_ids = REDIS_GENERAL.smembers(WORKS_TO_UPDATE_KEY).map{|id| id.to_i}
     found_works = []
 
-    StatCounter.find_each(:conditions => ["work_id IN (?)", work_ids]) do |stat_counter|
+    StatCounter.find_each(conditions: ["work_id IN (?)", work_ids]) do |stat_counter|
       redis_hits = get_stat(:hit_count, stat_counter.work_id)
       if redis_hits > stat_counter.hit_count
         stat_counter.update_attribute(:hit_count, redis_hits)
@@ -40,7 +40,7 @@ class StatCounter < ActiveRecord::Base
     
     # Create hit counters for works that don't have them yet
     (work_ids - found_works).each do |work_id|
-      stat_counter = StatCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
+      stat_counter = StatCounter.create(work_id: work_id, hit_count: get_stat(:hit_count, work_id))
       REDIS_GENERAL.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
     
@@ -67,7 +67,7 @@ class StatCounter < ActiveRecord::Base
     stats = get_work_statistic_from_logs(:download_count, start_date)
     stats.each_pair do |work_id, new_count|
       # add the count to the hit counter
-      hc = StatCounter.find_or_initialize_by_work_id(:work_id => work_id)
+      hc = StatCounter.find_or_initialize_by_work_id(work_id: work_id)
       hc.download_count += new_count || 0
       hc.save
       # update redis to current value

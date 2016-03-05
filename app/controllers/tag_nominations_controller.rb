@@ -7,7 +7,7 @@ class TagNominationsController < ApplicationController
       if @tag_nomination && @tag_nomination.owned_tag_set.user_is_moderator?(current_user) && @tag_nomination.update_attributes(params[:tag_nomination])
         format.json {head :ok}
       else
-        format.json { render :json => [ts("That didn't work.")], :status => :unprocessable_entity}
+        format.json { render json: [ts("That didn't work.")], status: :unprocessable_entity}
       end
     end    
   end

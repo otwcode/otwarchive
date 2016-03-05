@@ -1,15 +1,15 @@
 class AdminSetting < ActiveRecord::Base
 
-  belongs_to :last_updated, :class_name => 'Admin', :foreign_key => :last_updated_by
+  belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by
-  validates :invite_from_queue_number, :numericality => { greater_than_or_equal_to: 1,
-    :allow_nil => false, :message => "must be greater than 0. To <strong>disable</strong> invites, uncheck the appropriate setting." }
+  validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
+    allow_nil: false, message: "must be greater than 0. To <strong>disable</strong> invites, uncheck the appropriate setting." }
 
   before_save :update_invite_date
   before_update :check_filter_status
   after_save :expire_cached_settings
   
-  belongs_to :default_skin, :class_name => 'Skin'
+  belongs_to :default_skin, class_name: 'Skin'
 
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED

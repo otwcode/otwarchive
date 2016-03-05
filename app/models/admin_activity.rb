@@ -4,7 +4,7 @@ class AdminActivity < ActiveRecord::Base
 
   validates_presence_of :admin_id
 
-  delegate :login, :to => :admin, :prefix => true
+  delegate :login, to: :admin, prefix: true
 
   def self.log_action(admin, target, options={})
     self.create do |activity|

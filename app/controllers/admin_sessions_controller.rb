@@ -14,7 +14,7 @@ class AdminSessionsController < ApplicationController
     else  
       flash[:error] = "Authentication failed."
       # redirect instead of render because otherwise you get hints as to whether it was the name or password which failed
-      redirect_to :action => 'new'
+      redirect_to action: 'new'
     end
   end
   

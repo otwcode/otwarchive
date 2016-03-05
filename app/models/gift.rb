@@ -6,14 +6,14 @@ class Gift < ActiveRecord::Base
   has_one :user, through: :pseud
 
   validates_length_of :recipient_name,
-    :maximum => NAME_LENGTH_MAX,
-    :too_long => ts("must be less than %{max} characters long.", :max => NAME_LENGTH_MAX),
-    :allow_blank => true
+    maximum: NAME_LENGTH_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: NAME_LENGTH_MAX),
+    allow_blank: true
 
   validates_format_of :recipient_name, 
-    :message => ts("must contain at least one letter or number."),
-    :with => /[a-zA-Z0-9]/,
-    :allow_blank => true
+    message: ts("must contain at least one letter or number."),
+    with: /[a-zA-Z0-9]/,
+    allow_blank: true
 
   validate :has_name_or_pseud
   def has_name_or_pseud
@@ -45,24 +45,24 @@ class Gift < ActiveRecord::Base
   
   scope :for_name_or_byline, lambda {|name| where("recipient_name = ? OR pseud_id = ?", 
                                                   name, 
-                                                  Pseud.parse_byline(name, :assume_matching_login => true).first)}
+                                                  Pseud.parse_byline(name, assume_matching_login: true).first)}
   
   scope :in_collection, lambda {|collection|
     select("DISTINCT gifts.*").
-    joins({:work => :collection_items}).
+    joins({work: :collection_items}).
     where("collection_items.collection_id = ?", collection.id)
   }
   
-  scope :name_only, :select => :recipient_name
+  scope :name_only, select: :recipient_name
   
-  scope :include_pseuds, includes(:work => [:pseuds])
+  scope :include_pseuds, includes(work: [:pseuds])
 
   scope :not_rejected, where(rejected: false)
 
   scope :are_rejected, where(rejected: true)
 
   def recipient=(new_recipient_name)
-    self.pseud = Pseud.parse_byline(new_recipient_name, :assume_matching_login => true).first
+    self.pseud = Pseud.parse_byline(new_recipient_name, assume_matching_login: true).first
     self.recipient_name = pseud ? nil : new_recipient_name
   end
 

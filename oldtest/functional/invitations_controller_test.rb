@@ -13,7 +13,7 @@ class InvitationsControllerTest < ActionController::TestCase
   context "when logged in" do
     setup do
       @user = new_user
-      @user.save(:validate => false)
+      @user.save(validate: false)
       @user.update_attribute(:invitation_limit, 0)
       @request.session[:user] = @user
       get "user_invitations_path(@user)"

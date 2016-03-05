@@ -1,6 +1,6 @@
 class RelatedWork < ActiveRecord::Base
   belongs_to :work
-  belongs_to :parent, :polymorphic => true
+  belongs_to :parent, polymorphic: true
   
   scope :posted, 
     joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").

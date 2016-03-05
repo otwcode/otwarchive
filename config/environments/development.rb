@@ -6,7 +6,7 @@ Otwarchive::Application.configure do
   # since you don't have to restart the webserver when you make code changes.
   config.cache_classes = false
   config.cache_store = :dalli_store, '127.0.0.1:11211',
-                          { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
+                          { namespace:  'ao3-v1', expires_in:  0, compress: true , pool_size: 10 }
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true

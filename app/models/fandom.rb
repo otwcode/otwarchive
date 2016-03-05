@@ -4,16 +4,16 @@ class Fandom < Tag
   index_name Tag.index_name
   
   has_many :wrangling_assignments
-  has_many :wranglers, :through => :wrangling_assignments, :source => :user
+  has_many :wranglers, through: :wrangling_assignments, source: :user
   
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :check_media
-  has_many :medias, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :conditions => "type = 'Media'"
-  has_many :characters, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Character'"
-  has_many :relationships, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Relationship'"
-  has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
+  has_many :parents, through: :common_taggings, source: :filterable, source_type: 'Tag', after_remove: :check_media
+  has_many :medias, through: :common_taggings, source: :filterable, source_type: 'Tag', conditions: "type = 'Media'"
+  has_many :characters, through: :child_taggings, source: :common_tag, conditions: "type = 'Character'"
+  has_many :relationships, through: :child_taggings, source: :common_tag, conditions: "type = 'Relationship'"
+  has_many :freeforms, through: :child_taggings, source: :common_tag, conditions: "type = 'Freeform'"
     
 
-  scope :by_media, lambda {|media| where(:media_id => media.id)}
+  scope :by_media, lambda {|media| where(media_id: media.id)}
 
   def self.unwrangled
     joins(:common_taggings).

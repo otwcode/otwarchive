@@ -1,28 +1,28 @@
 class Series < ActiveRecord::Base
   include Bookmarkable
 
-  has_many :serial_works, :dependent => :destroy
-  has_many :works, :through => :serial_works
-  has_many :work_tags, :through => :works, :uniq => true, :source => :tags
-  has_many :work_pseuds, :through => :works, :uniq => true, :source => :pseuds
+  has_many :serial_works, dependent: :destroy
+  has_many :works, through: :serial_works
+  has_many :work_tags, through: :works, uniq: true, source: :tags
+  has_many :work_pseuds, through: :works, uniq: true, source: :pseuds
 
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
-  has_many :creatorships, :as => :creation
-  has_many :pseuds, :through => :creatorships
-  has_many :users, :through => :pseuds, :uniq => true
+  has_many :creatorships, as: :creation
+  has_many :pseuds, through: :creatorships
+  has_many :users, through: :pseuds, uniq: true
 
-  has_many :subscriptions, :as => :subscribable, :dependent => :destroy
+  has_many :subscriptions, as: :subscribable, dependent: :destroy
    
   validates_presence_of :title
   validates_length_of :title, 
-    :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN, 
+    too_short: ts("must be at least %{min} letters long.", min: ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
-    :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX, 
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
     
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -30,14 +30,14 @@ class Series < ActiveRecord::Base
   end
 
   validates_length_of :summary, 
-    :allow_blank => true, 
-    :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    allow_blank: true, 
+    maximum: ArchiveConfig.SUMMARY_MAX, 
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
-    :allow_blank => true, 
-    :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    allow_blank: true, 
+    maximum: ArchiveConfig.NOTES_MAX, 
+    too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
     
   after_save :adjust_restricted
 
@@ -47,8 +47,8 @@ class Series < ActiveRecord::Base
   attr_protected :summary_sanitizer_version
   attr_protected :notes_sanitizer_version
   
-  scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'series.updated_at DESC'}
-  scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'series.updated_at DESC'}
+  scope :visible_to_registered_user, {conditions: {hidden_by_admin: false}, order: 'series.updated_at DESC'}
+  scope :visible_to_all, {conditions: {hidden_by_admin: false, restricted: false}, order: 'series.updated_at DESC'}
   
   scope :exclude_anonymous, 
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
@@ -125,9 +125,9 @@ class Series < ActiveRecord::Base
   # if the series includes an unrestricted work, restricted should be false
   # if the series includes no unrestricted works, restricted should be true
   def adjust_restricted
-    unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
-      self.restricted = !(self.works.where(:restricted => false).count > 0)
-      self.save(:validate => false)
+    unless self.restricted? == !(self.works.where(restricted: false).count > 0)
+      self.restricted = !(self.works.where(restricted: false).count > 0)
+      self.save(validate: false)
     end
   end
 	
@@ -157,7 +157,7 @@ class Series < ActiveRecord::Base
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline], :keep_ambiguous => true)
+      results = Pseud.parse_bylines(attributes[:byline], keep_ambiguous: true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]

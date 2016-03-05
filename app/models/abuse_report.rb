@@ -1,9 +1,9 @@
 class AbuseReport < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :url
-  validates :email, :email_veracity => {:allow_blank => true}
+  validates :email, email_veracity: {allow_blank: true}
   attr_accessor :cc_me
-  validates :email, :presence => {:message => ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, :if => "email_copy?"
+  validates :email, presence: {message: ts("cannot be blank if requesting an emailed copy of the Abuse Report")}, if: "email_copy?"
   validate :work_is_not_over_reported
 
   scope :by_date, order("created_at DESC")
@@ -29,7 +29,7 @@ class AbuseReport < ActiveRecord::Base
   end
 
   app_url_regex = Regexp.new('^https?:\/\/(www\.)?' + ArchiveConfig.APP_HOST, true)
-  validates_format_of :url, :with => app_url_regex, :message => ts('does not appear to be on this site.')
+  validates_format_of :url, with: app_url_regex, message: ts('does not appear to be on this site.')
 
   # Category names for form
   CATEGORIES = [

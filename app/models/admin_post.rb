@@ -4,28 +4,28 @@ class AdminPost < ActiveRecord::Base
 
   acts_as_commentable
   belongs_to :language
-  belongs_to :translated_post, :class_name => 'AdminPost'
-  has_many :translations, :class_name => 'AdminPost', :foreign_key => 'translated_post_id'
+  belongs_to :translated_post, class_name: 'AdminPost'
+  has_many :translations, class_name: 'AdminPost', foreign_key: 'translated_post_id'
   has_many :admin_post_taggings
-  has_many :tags, :through => :admin_post_taggings, :source => :admin_post_tag
+  has_many :tags, through: :admin_post_taggings, source: :admin_post_tag
 
   attr_protected :content_sanitizer_version
   
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    minimum: ArchiveConfig.TITLE_MIN,
+    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    maximum: ArchiveConfig.TITLE_MAX,
+    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
   
   validates_presence_of :content
-  validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN, 
-    :too_short => ts("must be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN)
+  validates_length_of :content, minimum: ArchiveConfig.CONTENT_MIN, 
+    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN)
 
-  validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
-    :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+  validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX, 
+    too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
 
   validate :translated_post_must_exist
 
@@ -55,7 +55,7 @@ class AdminPost < ActiveRecord::Base
   
   def tag_list=(list)
     self.tags = list.split(",").uniq.collect { |t| 
-      AdminPostTag.fetch(:name => t.strip, :language_id => self.language_id, :post => self)
+      AdminPostTag.fetch(name: t.strip, language_id: self.language_id, post: self)
       }.compact
   end
 

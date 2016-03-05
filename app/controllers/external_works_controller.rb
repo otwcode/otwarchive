@@ -1,7 +1,7 @@
 class ExternalWorksController < ApplicationController
-  before_filter :admin_only, :only => [:edit, :update, :compare, :merge]  
-  before_filter :users_only, :only => [:new]
-  before_filter :check_user_status, :only => [:new]
+  before_filter :admin_only, only: [:edit, :update, :compare, :merge]  
+  before_filter :users_only, only: [:new]
+  before_filter :check_user_status, only: [:new]
   
   def new
     @bookmarkable = ExternalWork.new
@@ -12,7 +12,7 @@ class ExternalWorksController < ApplicationController
   def fetch
    if params[:external_work_url]
      url = ExternalWork.new.reformat_url(params[:external_work_url])
-     @external_work = ExternalWork.where(:url => url).first
+     @external_work = ExternalWork.where(url: url).first
    end
    respond_to do |format|
     format.js
@@ -21,9 +21,9 @@ class ExternalWorksController < ApplicationController
   
   def index
     if params[:show] == 'duplicates'
-      @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(:page => params[:page])      
+      @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(page: params[:page])      
     else
-      @external_works = ExternalWork.order("created_at DESC").paginate(:page => params[:page])
+      @external_works = ExternalWork.order("created_at DESC").paginate(page: params[:page])
     end
   end
   
@@ -40,10 +40,10 @@ class ExternalWorksController < ApplicationController
     @external_work = ExternalWork.find(params[:id])
     @external_work.attributes = params[:work]
     if @external_work.update_attributes(params[:external_work])
-      flash[:notice] = t('successfully_updated', :default => 'External work was successfully updated.')
+      flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')
       redirect_to(@external_work)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
   
@@ -62,7 +62,7 @@ class ExternalWorksController < ApplicationController
       else
         flash[:error] = "Sorry, the system was unable to complete the merge."
       end
-      redirect_to compare_external_works_path(:external_work_url => @external_work.url)
+      redirect_to compare_external_works_path(external_work_url: @external_work.url)
     else
       redirect_to compare_external_works_path
     end

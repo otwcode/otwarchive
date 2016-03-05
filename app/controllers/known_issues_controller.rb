@@ -1,6 +1,6 @@
 class KnownIssuesController < ApplicationController
 
-  before_filter :admin_only, :except => [:index]
+  before_filter :admin_only, except: [:index]
 
   # GET /known_issues
   def index
@@ -30,7 +30,7 @@ class KnownIssuesController < ApplicationController
       flash[:notice] = 'Known issue was successfully created.'
       redirect_to(@known_issue)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -42,7 +42,7 @@ class KnownIssuesController < ApplicationController
       flash[:notice] = 'Known issue was successfully updated.'
       redirect_to(@known_issue)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

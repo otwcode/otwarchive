@@ -8,7 +8,7 @@ class FilterTaggingTest < ActiveSupport::TestCase
   context "a filter tagging" do
     setup do
       @work = Work.first || create_work
-      @fandom = create_fandom(:canonical => true)
+      @fandom = create_fandom(canonical: true)
       @fandom2 = create_fandom
     end
     should "be created when a work is tagged with a canonical tag" do

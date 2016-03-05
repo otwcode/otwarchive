@@ -15,7 +15,7 @@ class RelationshipTest < ActiveSupport::TestCase
       end
       context "which gets a character added" do
         setup do
-          @character = create_character(:canonical => true)
+          @character = create_character(canonical: true)
           @relationship.add_association(@character)
         end
         should "have the character as a parent" do
@@ -31,7 +31,7 @@ class RelationshipTest < ActiveSupport::TestCase
         end
         context "which gets a second character added" do
           setup do
-            @character2 = create_character(:canonical => true)
+            @character2 = create_character(canonical: true)
             @relationship.add_association(@character2)
           end
           should "have both characters as a parents" do

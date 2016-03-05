@@ -15,12 +15,12 @@ class PotentialMatchSettings < ActiveRecord::Base
      num_required_ratings num_required_warnings)
 
   REQUIRED_TAG_ATTRIBUTES.each do |tag_limit_field|
-      validates_inclusion_of tag_limit_field, :in => REQUIRED_MATCH_OPTIONS.collect {|entry| entry[1]},
-        :message => "%{value} is not a valid match setting"
+      validates_inclusion_of tag_limit_field, in: REQUIRED_MATCH_OPTIONS.collect {|entry| entry[1]},
+        message: "%{value} is not a valid match setting"
   end
 
   # must have at least one matching request
-  validates_inclusion_of :num_required_prompts, :in => REQUIRED_MATCH_OPTIONS.collect {|entry| entry[1]}.delete_if {|elem| elem == 0}, :message => "%{value} is not a valid match setting"
+  validates_inclusion_of :num_required_prompts, in: REQUIRED_MATCH_OPTIONS.collect {|entry| entry[1]}.delete_if {|elem| elem == 0}, message: "%{value} is not a valid match setting"
 
   # are all settings 0
   def no_match_required?

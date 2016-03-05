@@ -2,8 +2,8 @@ class PseudsController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_ownership, only: [:create, :edit, :destroy, :new, :update]
+  before_filter :check_user_status, only: [:new, :create, :edit, :update]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
@@ -65,9 +65,9 @@ class PseudsController < ApplicationController
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     
     if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id, 
-                                                       :subscribable_type => 'User').first || 
-                      current_user.subscriptions.build(:subscribable => @user)
+      @subscription = current_user.subscriptions.where(subscribable_id: @user.id, 
+                                                       subscribable_type: 'User').first || 
+                      current_user.subscriptions.build(subscribable: @user)
     end
   end
 
@@ -86,7 +86,7 @@ class PseudsController < ApplicationController
   # POST /pseuds.xml
   def create
     @pseud = Pseud.new(params[:pseud])
-    if @user.pseuds.where(:name => @pseud.name).blank?
+    if @user.pseuds.where(name: @pseud.name).blank?
       @pseud.user_id = @user.id
       old_default = @user.default_pseud
       if @pseud.save
@@ -97,12 +97,12 @@ class PseudsController < ApplicationController
         end
         redirect_to([@user, @pseud])
       else
-        render :action => "new"
+        render action: "new"
       end
     else
       # user tried to add pseud he already has
       flash[:error] = ts('You already have a pseud with that name.')
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -120,7 +120,7 @@ class PseudsController < ApplicationController
       flash[:notice] = ts('Pseud was successfully updated.')
      redirect_to([@user, @pseud])
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

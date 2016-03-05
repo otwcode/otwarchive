@@ -27,10 +27,10 @@ class FeedSweeper < ActionController::Caching::Sweeper
 
     work.filters.each do |tag|
       # expire the atom feed page for the tags on the work and the corresponding filter tags
-      expire_page :controller => 'tags',
-                  :action => 'feed',
-                  :id => tag.id,
-                  :format => 'atom'
+      expire_page controller: 'tags',
+                  action: 'feed',
+                  id: tag.id,
+                  format: 'atom'
     end
   end
 

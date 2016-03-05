@@ -53,17 +53,17 @@ end
 
 When /^I fill in gift exchange challenge options$/ do
   current_date = DateTime.current
-  fill_in("Sign-up opens", :with => "#{current_date.months_ago(2)}")
-    fill_in("Sign-up closes", :with => "#{current_date.years_since(1)}")
-    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
-    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+  fill_in("Sign-up opens", with: "#{current_date.months_ago(2)}")
+    fill_in("Sign-up closes", with: "#{current_date.years_since(1)}")
+    select("(GMT-05:00) Eastern Time (US & Canada)", from: "gift_exchange_time_zone")
+    fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", with: "2")
+    select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
 When /^I fill in single-fandom gift exchange challenge options$/ do
@@ -154,14 +154,14 @@ end
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SGA love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SGA love")
     click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
   step %{I start signing up for "#{title}"}
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
-    fill_in("challenge_signup_requests_attributes_0_title", :with => "SG1 love")
+    fill_in("challenge_signup_requests_attributes_0_title", with: "SG1 love")
     click_button "Submit"
 end
 
@@ -209,7 +209,7 @@ When /^I assign a recipient to herself$/ do
   id = first_recip_field['id']
   if id.match(/assignments_(\d+)_request/)
     num = $1
-    fill_in "challenge_assignments_#{num}_offer_signup_pseud", :with => recip
+    fill_in "challenge_assignments_#{num}_offer_signup_pseud", with: recip
   end
 end
 
@@ -225,7 +225,7 @@ end
 When /^I assign a pinch recipient$/ do
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
   pseud = Pseud.find_by_name(name)
-  request_pseud = ChallengeSignup.where(:pseud_id => pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  request_pseud = ChallengeSignup.where(pseud_id: pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
   step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
 end
 

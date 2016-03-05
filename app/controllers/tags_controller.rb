@@ -1,9 +1,9 @@
 class TagsController < ApplicationController
   before_filter :load_collection
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search, :feed ]
-  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search, :feed ]
-  before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
-  before_filter :load_tag_and_subtags, :only => [:show]
+  before_filter :check_user_status, except: [ :show, :index, :show_hidden, :search, :feed ]
+  before_filter :check_permission_to_wrangle, except: [ :show, :index, :show_hidden, :search, :feed ]
+  before_filter :load_tag, only: [:edit, :update, :wrangle, :mass_update]
+  before_filter :load_tag_and_subtags, only: [:show]
 
   caches_page :feed
 
@@ -49,7 +49,7 @@ class TagsController < ApplicationController
       if @query[:name].present?
         @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
       end
-      options.merge!(:page => params[:page] || 1)
+      options.merge!(page: params[:page] || 1)
       @tags = TagSearch.search(options)
     end
   end
@@ -68,13 +68,13 @@ class TagsController < ApplicationController
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
       if logged_in? #current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
+        @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
       elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
+        @works = @tag.works.visible_to_owner.paginate(page: params[:page])
       else
-        @works = @tag.works.visible_to_all.paginate(:page => params[:page])
+        @works = @tag.works.visible_to_all.paginate(page: params[:page])
       end
-      @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
+      @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
@@ -106,7 +106,7 @@ class TagsController < ApplicationController
         @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
       end
     else
-      redirect_to tag_works_path(:tag_id => @tag.to_param) and return
+      redirect_to tag_works_path(tag_id: @tag.to_param) and return
     end
 
     respond_to do |format|
@@ -165,8 +165,8 @@ class TagsController < ApplicationController
       @tag = model.find_or_create_by_name(params[:tag][:name]) if model.is_a? Class
     else
       flash[:error] = ts("Please provide a category.")
-      @tag = Tag.new(:name => params[:tag][:name])
-      render :action => "new" and return
+      @tag = Tag.new(name: params[:tag][:name])
+      render action: "new" and return
     end
     if @tag && @tag.valid?
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
@@ -176,9 +176,9 @@ class TagsController < ApplicationController
         flash[:notice] = ts("Tag was successfully created.")
       end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
-      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
+      redirect_to url_for(controller: "tags", action: "edit", id: @tag)
     else
-      render :action => "new" and return
+      render action: "new" and return
     end
   end
 
@@ -200,9 +200,9 @@ class TagsController < ApplicationController
     @counts['External Works'] = @tag.visible_external_works_count
     @counts['Taggings Count'] = @tag.taggings_count
 
-    @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
+    @parents = @tag.parents.find(:all, order: :name).group_by {|tag| tag[:type]}
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
-    @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
+    @children = @tag.children.find(:all, order: :name).group_by {|tag| tag[:type]}
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
 
@@ -275,11 +275,11 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       if %w(unfilterable canonical synonymous unwrangleable).include?(params[:status])
-        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).order(sort).send(params[:status]).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else
-        @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).find(:all, order: sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
     end
   end

@@ -8,7 +8,7 @@ class WorksUpdateControllerTest < ActionController::TestCase
     setup do
       @work = create_work
       @work.add_default_tags
-      put :update, :locale => 'en', :id => @work.id
+      put :update, locale: 'en', id: @work.id
     end
     should_redirect_to("the work's path") {work_path(@work)}
     should_set_the_flash_to /have permission/
@@ -30,9 +30,9 @@ class WorksUpdateControllerTest < ActionController::TestCase
     context "when working with someone else's work" do
       setup do
         new_user = create_user
-        @work = create_work(:authors => [new_user.default_pseud])
+        @work = create_work(authors: [new_user.default_pseud])
         @work.add_default_tags
-        put :update, :locale => 'en', :id => @work.id
+        put :update, locale: 'en', id: @work.id
       end
       should_redirect_to("the work's path") {work_path(@work)}
       should_set_the_flash_to /have permission/
@@ -40,9 +40,9 @@ class WorksUpdateControllerTest < ActionController::TestCase
 
     context "when working with your own work" do
       setup do
-        @work = create_work(:authors => [@user.default_pseud])
+        @work = create_work(authors: [@user.default_pseud])
         @work.add_default_tags
-        put :update, :locale => 'en', :id => @work.id, :work => {:title => "new title"}
+        put :update, locale: 'en', id: @work.id, work: {title: "new title"}
       end
       should_redirect_to("the work's path") {work_path(@work)}
       should "update title" do
@@ -53,14 +53,14 @@ class WorksUpdateControllerTest < ActionController::TestCase
     context "when editing your own work in a collection" do
       setup do
         @collection = create_collection
-        @work = create_work(:authors => [@user.default_pseud])
+        @work = create_work(authors: [@user.default_pseud])
         @work.add_default_tags
         @work.add_to_collection(@collection)
         @work.save
-        put :update, :locale => 'en', :id => @work.id, :preview_button => "Preview", :work => {"chapter_attributes"=>@chapter_attribs, 
+        put :update, locale: 'en', id: @work.id, preview_button: "Preview", work: {"chapter_attributes"=>@chapter_attribs, 
                 "author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
                 "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", 
-                :collection_names => @collection.name}
+                collection_names: @collection.name}
       end
       should_respond_with :success
       should_render_template :preview

@@ -6,7 +6,7 @@ class KudosController < ApplicationController
 
   def index
     @work = Work.find(params[:work_id])
-    @kudos = @work.kudos.includes(:pseud => :user).with_pseud
+    @kudos = @work.kudos.includes(pseud: :user).with_pseud
     @guest_kudos_count = @work.kudos.by_guest.count
   end
 
@@ -28,7 +28,7 @@ class KudosController < ApplicationController
 
         format.js do
           @commentable = @kudo.commentable
-          @kudos = @commentable.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+          @kudos = @commentable.kudos.with_pseud.includes(pseud: :user).order("created_at DESC")
 
           render :create, status: :created
         end

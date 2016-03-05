@@ -1,8 +1,8 @@
 class CollectionItemsController < ApplicationController
   before_filter :load_collection
-  before_filter :load_item_and_collection, :only => [:destroy]
-  before_filter :load_collectible_item, :only => [ :new, :create ]
-  before_filter :allowed_to_destroy, :only => [:destroy]
+  before_filter :load_item_and_collection, only: [:destroy]
+  before_filter :load_collectible_item, only: [ :new, :create ]
+  before_filter :allowed_to_destroy, only: [:destroy]
 
   cache_sweeper :collection_sweeper
 
@@ -70,7 +70,7 @@ class CollectionItemsController < ApplicationController
     #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     # end
 
-    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE          
+    @collection_items = @collection_items.order(sort).paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE          
   end
 
   def load_collectible_item
@@ -103,13 +103,13 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if !collection
-        errors << ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
+        errors << ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", name: collection_name)
       elsif @item.collections.include?(collection)
-        errors << ts("This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
+        errors << ts("This item has already been submitted to %{collection_title}.", collection_title: collection.title)
       elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-        errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
+        errors << ts("%{collection_title} is closed to new submissions.", collection_title: collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
-        errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
+        errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", collection_title: collection.title)
       elsif @item.add_to_collection(collection) && @item.save
         if @item.approved_collections.include?(collection)
           new_collections << collection
@@ -117,7 +117,7 @@ class CollectionItemsController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
+        errors << ts("Something went wrong trying to add collection %{name}, sorry!", name: collection_name)
       end
     end
 
@@ -128,11 +128,11 @@ class CollectionItemsController < ApplicationController
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
-                            :collections => new_collections.collect(&:title).join(", "))
+                            collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
       flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
-        :moderated => unapproved_collections.collect(&:title).join(", "))
+        moderated: unapproved_collections.collect(&:title).join(", "))
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
@@ -143,7 +143,7 @@ class CollectionItemsController < ApplicationController
   
   def update_multiple
     # whoops, not working because it freezes the hash
-    # not_allowed = CollectionItem.where(:id => params[:collection_items].keys)
+    # not_allowed = CollectionItem.where(id: params[:collection_items].keys)
     # if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
     #   # TODO should rewrite this as query
     #   not_allowed = not_allowed.reject {|item| @user.is_author_of?(item)}
@@ -159,7 +159,7 @@ class CollectionItemsController < ApplicationController
       flash[:notice] = ts("Collection status updated!")
       redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
     else
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -167,7 +167,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
+    flash[:notice] = ts("Item completely removed from collection %{title}.", title: @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

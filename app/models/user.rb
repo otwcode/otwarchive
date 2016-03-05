@@ -17,12 +17,12 @@ class User < ActiveRecord::Base
     end
     # Use our own validations for login
     config.validate_login_field = false
-    config.validates_length_of_password_field_options = {:on => :update,
-                                                         :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                         :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update,
-                                                                      :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                                      :if => :has_no_credentials?}
+    config.validates_length_of_password_field_options = {on: :update,
+                                                         minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                         if: :has_no_credentials?}
+    config.validates_length_of_password_confirmation_field_options = {on: :update,
+                                                                      minimum: ArchiveConfig.PASSWORD_LENGTH_MIN,
+                                                                      if: :has_no_credentials?}
   end
 
   def has_no_credentials?
@@ -33,19 +33,19 @@ class User < ActiveRecord::Base
   acts_as_authorized_user
   acts_as_authorizable
   has_many :roles_users
-  has_many :roles, :through => :roles_users
+  has_many :roles, through: :roles_users
 
   ### BETA INVITATIONS ###
-  has_many :invitations, :as => :creator
-  has_one :invitation, :as => :invitee
-  has_many :user_invite_requests, :dependent => :destroy
+  has_many :invitations, as: :creator
+  has_one :invitation, as: :invitee
+  has_many :user_invite_requests, dependent: :destroy
 
   attr_accessor :invitation_token
   attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
 
-  has_many :external_authors, :dependent => :destroy
-  has_many :external_creatorships, :foreign_key => 'archivist_id'
+  has_many :external_authors, dependent: :destroy
+  has_many :external_creatorships, foreign_key: 'archivist_id'
 
   has_many :fannish_next_of_kins, foreign_key: 'kin_id', dependent: :destroy
   has_one :fannish_next_of_kin, dependent: :destroy
@@ -55,47 +55,47 @@ class User < ActiveRecord::Base
   # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
   before_destroy :remove_pseud_from_kudos
 
-  has_many :pseuds, :dependent => :destroy
+  has_many :pseuds, dependent: :destroy
   validates_associated :pseuds
 
-  has_one :profile, :dependent => :destroy
+  has_one :profile, dependent: :destroy
   validates_associated :profile
 
-  has_one :preference, :dependent => :destroy
+  has_one :preference, dependent: :destroy
   validates_associated :preference
 
-  has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
-  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
+  has_many :skins, foreign_key: 'author_id', dependent: :nullify
+  has_many :work_skins, foreign_key: 'author_id', dependent: :nullify
 
   before_create :create_default_associateds
 
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
 
-  has_many :collection_participants, :through => :pseuds
-  has_many :collections, :through => :collection_participants
-  has_many :invited_collections, :through => :collection_participants, :source => :collection,
-      :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
-  has_many :participated_collections, :through => :collection_participants, :source => :collection,
-      :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]]
-  has_many :maintained_collections, :through => :collection_participants, :source => :collection,
-      :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
-  has_many :owned_collections, :through => :collection_participants, :source => :collection,
-          :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
+  has_many :collection_participants, through: :pseuds
+  has_many :collections, through: :collection_participants
+  has_many :invited_collections, through: :collection_participants, source: :collection,
+      conditions: ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
+  has_many :participated_collections, through: :collection_participants, source: :collection,
+      conditions: ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]]
+  has_many :maintained_collections, through: :collection_participants, source: :collection,
+      conditions: ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
+  has_many :owned_collections, through: :collection_participants, source: :collection,
+          conditions: ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
 
-  has_many :challenge_signups, :through => :pseuds
-  has_many :offer_assignments, :through => :pseuds
-  has_many :pinch_hit_assignments, :through => :pseuds
-  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id', :inverse_of => :claiming_user
+  has_many :challenge_signups, through: :pseuds
+  has_many :offer_assignments, through: :pseuds
+  has_many :pinch_hit_assignments, through: :pseuds
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'claiming_user_id', inverse_of: :claiming_user
   has_many :gifts, through: :pseuds, conditions: { rejected: false }
   has_many :gift_works, through: :pseuds, uniq: true
   has_many :rejected_gifts, class_name: "Gift", through: :pseuds, conditions: { rejected: true }
   has_many :rejected_gift_works, through: :pseuds, uniq: true
-  has_many :readings, :dependent => :destroy
-  has_many :bookmarks, :through => :pseuds
-  has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
-  has_many :comments, :through => :pseuds
-  has_many :kudos, :through => :pseuds
+  has_many :readings, dependent: :destroy
+  has_many :bookmarks, through: :pseuds
+  has_many :bookmark_collection_items, through: :bookmarks, source: :collection_items
+  has_many :comments, through: :pseuds
+  has_many :kudos, through: :pseuds
   
   # Nested associations through creatorships got weird after 3.0.x
   
@@ -154,29 +154,29 @@ class User < ActiveRecord::Base
     filters.where("filter_taggings.inherited = false")
   end
 
-  has_many :bookmark_tags, :through => :bookmarks, :source => :tags
+  has_many :bookmark_tags, through: :bookmarks, source: :tags
 
-  has_many :subscriptions, :dependent => :destroy
+  has_many :subscriptions, dependent: :destroy
   has_many :followings,
-            :class_name => 'Subscription',
-            :as => :subscribable,
-            :dependent => :destroy
+            class_name: 'Subscription',
+            as: :subscribable,
+            dependent: :destroy
   has_many :subscribed_users,
-            :through => :subscriptions,
-            :source => :subscribable,
-            :source_type => 'User'
+            through: :subscriptions,
+            source: :subscribable,
+            source_type: 'User'
   has_many :subscribers,
-            :through => :followings,
-            :source => :user
+            through: :followings,
+            source: :user
 
-  has_many :wrangling_assignments, :dependent => :destroy
-  has_many :fandoms, :through => :wrangling_assignments
-  has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler
+  has_many :wrangling_assignments, dependent: :destroy
+  has_many :fandoms, through: :wrangling_assignments
+  has_many :wrangled_tags, class_name: 'Tag', as: :last_wrangler
 
-  has_many :inbox_comments, :dependent => :destroy
-  has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
+  has_many :inbox_comments, dependent: :destroy
+  has_many :feedback_comments, through: :inbox_comments, conditions: {is_deleted: false, approved: true}, order: 'created_at DESC'
 
-  has_many :log_items, :dependent => :destroy
+  has_many :log_items, dependent: :destroy
   validates_associated :log_items
 
   after_update :expire_caches
@@ -203,35 +203,35 @@ class User < ActiveRecord::Base
     unread_inbox_comments.with_feedback_comment.count
   end
 
-  scope :alphabetical, :order => :login
-  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
-  scope :valid, :conditions => {:banned => false, :suspended => false}
-  scope :out_of_invites, :conditions => {:out_of_invites => true}
+  scope :alphabetical, order: :login
+  scope :starting_with, lambda {|letter| {conditions: ['SUBSTR(login,1,1) = ?', letter]}}
+  scope :valid, conditions: {banned: false, suspended: false}
+  scope :out_of_invites, conditions: {out_of_invites: true}
 
   ## used in app/views/users/new.html.erb
   validates_length_of :login, 
-    :within => ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-    :too_short => ts("is too short (minimum is %{min_login} characters)", 
-      :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_login} characters)", 
-      :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
+    within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
+    too_short: ts("is too short (minimum is %{min_login} characters)", 
+      min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
+    too_long: ts("is too long (maximum is %{max_login} characters)", 
+      max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
 
   # allow nil so can save existing users
   validates_length_of :password, 
-    :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
-    :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", 
-      :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", 
-      :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
+    within: ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
+    allow_nil: true,
+    too_short: ts("is too short (minimum is %{min_pwd} characters)", 
+      min_pwd: ArchiveConfig.PASSWORD_LENGTH_MIN),
+    too_long: ts("is too long (maximum is %{max_pwd} characters)", 
+      max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
-    :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
-    :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
+    message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
+    with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   # done by authlogic
   validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
-  validates :email, :email_veracity => true
+  validates :email, email_veracity: true
 
   # Virtual attribute for age check and terms of service
   attr_accessor :age_over_13
@@ -239,14 +239,14 @@ class User < ActiveRecord::Base
   attr_accessible :age_over_13, :terms_of_service
 
   validates_acceptance_of :terms_of_service,
-                         :allow_nil => false,
-                         :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
-                         :if => :first_save?
+                         allow_nil: false,
+                         message: ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
+                         if: :first_save?
 
   validates_acceptance_of  :age_over_13,
-                          :allow_nil => false,
-                          :message => ts('Sorry, you have to be over 13!'),
-                          :if => :first_save?
+                          allow_nil: false,
+                          message: ts('Sorry, you have to be over 13!'),
+                          if: :first_save?
 
   def to_param
     login
@@ -272,7 +272,7 @@ class User < ActiveRecord::Base
     if query.present?
       users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email = ?", "%#{query}%", query)
     end
-    users.paginate(:page => options[:page] || 1)
+    users.paginate(page: options[:page] || 1)
   end
 
   ### AUTHENTICATION AND PASSWORDS
@@ -301,7 +301,7 @@ class User < ActiveRecord::Base
   end
 
   def create_default_associateds
-    self.pseuds << Pseud.new(:name => self.login, :is_default => true)
+    self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
     self.preference = Preference.new
   end
@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
 
   # Retrieve the current default pseud
   def default_pseud
-    self.pseuds.where(:is_default => true).first
+    self.pseuds.where(is_default: true).first
   end
 
   # Checks authorship of any sort of object
@@ -358,7 +358,7 @@ class User < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_work_count
-    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.count(:id, :distinct => true)
+    Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.count(:id, distinct: true)
   end
 
   # Gets the user account for authored objects if orphaning is enabled
@@ -373,7 +373,7 @@ class User < ActiveRecord::Base
       success = set_roles(attributes[:roles])
       if success && attributes[:email]
         self.email = attributes[:email]
-        success = self.save(:validate => false)
+        success = self.save(validate: false)
       end
       success
     end
@@ -436,7 +436,7 @@ class User < ActiveRecord::Base
 
   # Creates log item tracking changes to user
   def create_log_item(options = {})
-    options.reverse_merge! :note => 'System Generated', :user_id => self.id
+    options.reverse_merge! note: 'System Generated', user_id: self.id
     LogItem.create(options)
   end
 
@@ -467,7 +467,7 @@ class User < ActiveRecord::Base
   # Returns array of works where the user is the sole author
   def sole_authored_works
     @sole_authored_works = []
-    works.find(:all, :conditions => 'posted = 1').each do |w|
+    works.find(:all, conditions: 'posted = 1').each do |w|
       if self.is_sole_author_of?(w)
         @sole_authored_works << w
       end
@@ -478,7 +478,7 @@ class User < ActiveRecord::Base
   # Returns array of the user's co-authored works
   def coauthored_works
     @coauthored_works = []
-    works.find(:all, :conditions => 'posted = 1').each do |w|
+    works.find(:all, conditions: 'posted = 1').each do |w|
       unless self.is_sole_author_of?(w)
         @coauthored_works << w
       end
@@ -538,6 +538,6 @@ class User < ActiveRecord::Base
   end
 
    def log_change_if_login_was_edited
-     create_log_item( options = {:action => ArchiveConfig.ACTION_RENAME, :note => "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
+     create_log_item( options = {action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
    end
 end

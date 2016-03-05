@@ -1,5 +1,5 @@
 class LocalesController < ApplicationController
-  before_filter :check_permission, :only => [:new, :create, :update, :edit]
+  before_filter :check_permission, only: [:new, :create, :update, :edit]
 
   def check_permission
     logged_in_as_admin? || permit?("translation_admin") || access_denied
@@ -13,7 +13,7 @@ class LocalesController < ApplicationController
   end
   
   def index
-    @locales = Locale.all(:order => :iso)
+    @locales = Locale.all(order: :iso)
   end
     
   def show
@@ -46,10 +46,10 @@ class LocalesController < ApplicationController
   def create   
     @locale = Locale.new(params[:locale])
     if @locale.save
-      flash[:notice] = t('successfully_added', :default => 'Locale was successfully added.')
+      flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
       redirect_to locales_path
     else
-      render :action => "new"
+      render action: "new"
     end      
   end 
 end

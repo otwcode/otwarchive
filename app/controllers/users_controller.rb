@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_filter :check_account_creation_status, :only => [:new, :create]
-  skip_before_filter :store_location, :only => [:end_first_login]
+  before_filter :check_user_status, only: [:edit, :update]
+  before_filter :load_user, except: [:activate, :create, :delete_confirmation, :index, :new]
+  before_filter :check_ownership, except: [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
+  before_filter :check_account_creation_status, only: [:new, :create]
+  skip_before_filter :store_location, only: [:end_first_login]
 
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotUnique do |exception|
     # ensure we actually have a duplicate user situation
     if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
-      @user && User.count(:conditions => {:login => @user.login}) > 0 &&
+      @user && User.count(conditions: {login: @user.login}) > 0 &&
       # and that we can find the original, valid user record
       (@user = User.find_by_login(@user.login))
         notify_and_show_confirmation_screen
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
   def index
     flash.keep
-    redirect_to :controller => :people, :action => :index
+    redirect_to controller: :people, action: :index
   end
 
   # GET /users/1
@@ -68,9 +68,9 @@ class UsersController < ApplicationController
     @bookmarks = visible[:bookmarks].order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
     if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id,
-                                                       :subscribable_type => 'User').first ||
-                      current_user.subscriptions.build(:subscribable => @user)
+      @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
+                                                       subscribable_type: 'User').first ||
+                      current_user.subscriptions.build(subscribable: @user)
     end
   end
 
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = ts("Your password has been changed")
-      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
+      @user.create_log_item( options = {action: ArchiveConfig.ACTION_PASSWORD_RESET})
 
       redirect_to user_profile_path(@user) and return
     else
@@ -117,7 +117,7 @@ class UsersController < ApplicationController
     end
 
     @new_login = params[:new_login]
-    session = UserSession.new(:login => @user.login, :password => params[:password])
+    session = UserSession.new(login: @user.login, password: params[:password])
 
     unless session.valid?
       flash[:error] = ts("Your password was incorrect")
@@ -158,7 +158,7 @@ class UsersController < ApplicationController
       if @user.save
         notify_and_show_confirmation_screen
       else
-        render :action => "new"
+        render action: "new"
       end
     end
   end
@@ -168,7 +168,7 @@ class UsersController < ApplicationController
     UserMailer.signup_notification(@user.id).deliver!
 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
+                        activation_url: activate_path(@user.activation_code)).html_safe if Rails.env.development?
 
     render "confirmation"
   end
@@ -242,7 +242,7 @@ class UsersController < ApplicationController
       if @new_email == @confirm_email && @user.save
         flash[:notice] = ts("Your email has been successfully updated")
         UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+        @user.create_log_item( options = {action: ArchiveConfig.ACTION_NEW_EMAIL})
       else
         flash[:error] = ts("Email addresses don't match! Please retype and try again")
       end
@@ -255,7 +255,7 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @hide_dashboard = true
-    @works = @user.works.find(:all, :conditions => {:posted => true})
+    @works = @user.works.find(:all, conditions: {posted: true})
     @sole_owned_collections = @user.collections.delete_if {|collection| (collection.all_owners - @user.pseuds).size > 0}
 
     if @works.empty? && @sole_owned_collections.empty?
@@ -321,7 +321,7 @@ class UsersController < ApplicationController
         ts("You must enter your old password"))
     end
 
-    session = UserSession.new(:login => @user.login, :password => params[:password_check])
+    session = UserSession.new(login: @user.login, password: params[:password_check])
 
     if session.valid?
       true
@@ -454,7 +454,7 @@ class UsersController < ApplicationController
       end
     end
 
-    @works = @user.works.find(:all, :conditions => {:posted => true})
+    @works = @user.works.find(:all, conditions: {posted: true})
 
     if @works.blank?
       if @user.unposted_works

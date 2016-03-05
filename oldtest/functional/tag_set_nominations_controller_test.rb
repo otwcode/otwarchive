@@ -18,30 +18,30 @@ class TagSetNominationsControllerTest < ActionController::TestCase
 
   test "should create tag_set_nomination" do
     assert_difference('TagSetNomination.count') do
-      post :create, :tag_set_nomination => @tag_set_nomination.attributes
+      post :create, tag_set_nomination: @tag_set_nomination.attributes
     end
 
     assert_redirected_to tag_set_nomination_path(assigns(:tag_set_nomination))
   end
 
   test "should show tag_set_nomination" do
-    get :show, :id => @tag_set_nomination.to_param
+    get :show, id: @tag_set_nomination.to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @tag_set_nomination.to_param
+    get :edit, id: @tag_set_nomination.to_param
     assert_response :success
   end
 
   test "should update tag_set_nomination" do
-    put :update, :id => @tag_set_nomination.to_param, :tag_set_nomination => @tag_set_nomination.attributes
+    put :update, id: @tag_set_nomination.to_param, tag_set_nomination: @tag_set_nomination.attributes
     assert_redirected_to tag_set_nomination_path(assigns(:tag_set_nomination))
   end
 
   test "should destroy tag_set_nomination" do
     assert_difference('TagSetNomination.count', -1) do
-      delete :destroy, :id => @tag_set_nomination.to_param
+      delete :destroy, id: @tag_set_nomination.to_param
     end
 
     assert_redirected_to tag_set_nominations_path

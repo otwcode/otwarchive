@@ -34,10 +34,10 @@ module NavigationHelpers
       path_to_pickle $1, $2
 
     when /^#{capture_model}(?:'s)? #{capture_model}'s (.+?) page$/  # eg. the forum's post's comments page
-      path_to_pickle $1, $2, :extra => $3                           #  or the forum's post's edit page
+      path_to_pickle $1, $2, extra: $3                           #  or the forum's post's edit page
 
     when /^#{capture_model}(?:'s)? (.+?) page$/                     # eg. the forum's posts page
-      path_to_pickle $1, :extra => $2                               #  or the forum's edit page
+      path_to_pickle $1, extra: $2                               #  or the forum's edit page
 
     # Add more mappings here.
 
@@ -84,9 +84,9 @@ module NavigationHelpers
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
-      new_work_path(:import => 'true')
+      new_work_path(import: 'true')
     when /the work-skins page/
-      skins_path(:skin_type => "WorkSkin")
+      skins_path(skin_type: "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? user url$/i

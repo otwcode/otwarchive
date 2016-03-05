@@ -8,14 +8,14 @@ class BookmarkTest < ActiveSupport::TestCase
     should_belong_to :bookmarkable
     should_belong_to :pseud
     should_have_many :taggings
-    should_have_many :tags, :through => :taggings
-    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
+    should_have_many :tags, through: :taggings
+    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), long_message: /must be less/
     should_have_scope :public
 
   end
   context "A public bookmark on a posted work" do
     setup do
-      @bookmark = create_bookmark(:private => false)
+      @bookmark = create_bookmark(private: false)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
@@ -106,7 +106,7 @@ class BookmarkTest < ActiveSupport::TestCase
 
   context "A private bookmark on a posted work" do
     setup do
-      @bookmark = create_bookmark(:private => true)
+      @bookmark = create_bookmark(private: true)
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
     should "not be visible by default" do
@@ -125,7 +125,7 @@ class BookmarkTest < ActiveSupport::TestCase
   
   context "A bookmark hidden by an admin on a posted work" do
     setup do
-      @bookmark = create_bookmark(:private => false, :hidden_by_admin => true)
+      @bookmark = create_bookmark(private: false, hidden_by_admin: true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end

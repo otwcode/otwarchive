@@ -160,7 +160,7 @@ Then /^the fandom-specific tag autocomplete fields should list only fandom-speci
 end
 
 Then /^the external url autocomplete field should list the urls of existing external works$/ do
-  fill_in("URL", :with => "zoo")
+  fill_in("URL", with: "zoo")
   step %{I should see "zooey-glass.dreamwidth.org" in the autocomplete}
   step %{I should not see "parenthetical.livejournal.com" in the autocomplete}
 end
@@ -168,20 +168,20 @@ end
 
 Given /^a set of users for testing autocomplete$/ do
   %w(myname coauthor giftee).each do |username|
-    user = FactoryGirl.create(:user, {:login => username, :password => DEFAULT_PASSWORD})
+    user = FactoryGirl.create(:user, {login: username, password: DEFAULT_PASSWORD})
     user.activate
   end
 end
 
 Then /^the coauthor autocomplete field should list matching users$/ do
   check("Add co-authors?")
-  fill_in("pseud_byline", :with => "coa")
+  fill_in("pseud_byline", with: "coa")
   step %{I should see "coauthor" in the autocomplete}
   step %{I should not see "giftee" in the autocomplete}
 end
 
 Then /^the gift recipient autocomplete field should list matching users$/ do
-  fill_in("work_recipients", :with => "gif")
+  fill_in("work_recipients", with: "gif")
   step %{I should see "giftee" in the autocomplete}
   step %{I should not see "coauthor" in the autocomplete}
 end
@@ -193,7 +193,7 @@ Given /^a set of collections for testing autocomplete$/ do
 end
 
 Then /^the collection item autocomplete field should list matching collections$/ do
-  fill_in("work_collection_names", :with => "gre")
+  fill_in("work_collection_names", with: "gre")
   step %{I should see "great" in the autocomplete}
   step %{I should see "really great" in the autocomplete}
   step %{I should not see "awesome" in the autocomplete}
@@ -208,8 +208,8 @@ When /^I edit the gift exchange for testing autocomplete$/ do
 end
 
 When /^I submit values in the tag autocomplete fields$/ do
-  fill_in("Fandoms", :with => "Supernatural, Smallville")
-  fill_in("Characters", :with => "Clark Kent, Lex Luthor, Dean Winchester")
+  fill_in("Fandoms", with: "Supernatural, Smallville")
+  fill_in("Characters", with: "Clark Kent, Lex Luthor, Dean Winchester")
   step %{I submit}
 end
 

@@ -10,7 +10,7 @@ class PasswordsControllerTest < ActionController::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     before = user.crypted_password
-    post :create, :locale => 'en', :login => user.login
+    post :create, locale: 'en', login: user.login
     after = User.find(user.id).crypted_password
 
     assert_not_equal after, before
@@ -20,7 +20,7 @@ class PasswordsControllerTest < ActionController::TestCase
     assert_response :success
   end
   def test_create_password_reset_fail
-    post :create, :locale => 'en', :login => "no such user"
+    post :create, locale: 'en', login: "no such user"
     assert flash.has_key?(:login)
     assert_template "new"
     assert_response :success
@@ -30,7 +30,7 @@ class PasswordsControllerTest < ActionController::TestCase
   # Test index  GET  /:locale/passwords  (named path: passwords)
   # Test new  GET  /:locale/passwords/new  (named path: new_password)
   def test_new_password_path
-    get :new, :locale => 'en'
+    get :new, locale: 'en'
     assert_response :success
   end
   # Test show  GET  /:locale/passwords/:id  (named path: password)

@@ -75,7 +75,7 @@ class StatHash
     stat = @stats[key] || (@stats[key] = Stat.new(key))
     stat.add(time)
   end
-  def print(args={:sort_by=>'key',:ascending=>true,:limit=>nil})
+  def print(args={sort_by:'key',ascending:true,limit:nil})
     values = @stats.values
     order = (args[:ascending] || args[:ascending].nil?) ? 1 : -1
     values.sort! {|a,b| 
@@ -188,22 +188,22 @@ class Rawk
       i = i + 1
       puts "\nTop #{@sorted_limit} by Count (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"count",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"count",limit:@sorted_limit,ascending:false)
       puts "\nTop #{@sorted_limit} by Sum of Time (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"sum",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"sum",limit:@sorted_limit,ascending:false)
       puts "\nTop #{@sorted_limit} Greatest Max (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"max",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"max",limit:@sorted_limit,ascending:false)
       puts "\nTop #{@sorted_limit} Greatest Min (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"min",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"min",limit:@sorted_limit,ascending:false)
       puts "\nTop #{@sorted_limit} Greatest Median (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"median",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"median",limit:@sorted_limit,ascending:false)
       puts "\nTop #{@sorted_limit} Greatest Standard Deviation (#{string})"
       puts HEADER
-      stat_hash.print(:sort_by=>"standard_deviation",:limit=>@sorted_limit,:ascending=>false)
+      stat_hash.print(sort_by:"standard_deviation",limit:@sorted_limit,ascending:false)
     end
   end
 end

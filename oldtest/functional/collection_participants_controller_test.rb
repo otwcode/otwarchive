@@ -9,7 +9,7 @@ class CollectionParticipantsControllerTest < ActionController::TestCase
     end
     context "when trying to join while not logged in" do
       setup do
-        get :join, :collection_id => @collection.name
+        get :join, collection_id: @collection.name
       end
       should_redirect_to("login page") {new_session_path}
       should_set_the_flash_to /Please log in/
@@ -21,7 +21,7 @@ class CollectionParticipantsControllerTest < ActionController::TestCase
       end
       context "and joining an unmoderated collection" do
         setup do
-          get :join, :collection_id => @collection.name
+          get :join, collection_id: @collection.name
         end
         should_set_the_flash_to /You have applied/
         should "add the user as a non-posting participant" do

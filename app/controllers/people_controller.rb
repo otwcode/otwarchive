@@ -3,7 +3,7 @@ class PeopleController < ApplicationController
   before_filter :load_collection
   
   def do_search
-    options = { :query => params[:query], :page => params[:page] || 1 }
+    options = { query: params[:query], page: params[:page] || 1 }
     if @collection
       options[:collection_id] = @collection.id
     end

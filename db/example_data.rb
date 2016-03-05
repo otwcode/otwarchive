@@ -40,8 +40,8 @@ module FixtureReplacement
 
   attributes_for :challenge_assignment do |a|
     a.collection = create_collection
-    a.offer_signup = create_challenge_signup(:collection => a.collection)
-    a.request_signup = create_challenge_signup(:collection => a.collection)
+    a.offer_signup = create_challenge_signup(collection: a.collection)
+    a.request_signup = create_challenge_signup(collection: a.collection)
   end
 
   attributes_for :challenge_signup do |a|
@@ -52,8 +52,8 @@ module FixtureReplacement
   # to create (save) a new chapter you have to have a work first
   # FIXME: authors are only added by default for the first chapter
   # chapter1=new_chapter
-  # w=create_work(:chapters => [chapter1])
-  # chapter2 = create_chapter(:work => work, :authors = work.pseuds)
+  # w=create_work(chapters: [chapter1])
+  # chapter2 = create_chapter(work: work, :authors = work.pseuds)
   attributes_for :chapter do |a|
     a.content = random_chapter
     a.published_at = Date.today  
@@ -62,8 +62,8 @@ module FixtureReplacement
   attributes_for :collection do |a|
     pseud = create_pseud
     
-    a.collection_participants_attributes = [{:pseud => pseud, :participant_role => CollectionParticipant::OWNER}]
-    a.collection_preference_attributes = {:closed => false, :moderated => false}
+    a.collection_participants_attributes = [{pseud: pseud, participant_role: CollectionParticipant::OWNER}]
+    a.collection_preference_attributes = {closed: false, moderated: false}
     a.name = String.random
     a.title = random_phrase
   end
@@ -158,8 +158,8 @@ module FixtureReplacement
   
   attributes_for :potential_match do |a|
     a.collection = create_collection
-    a.request_signup = create_challenge_signup(:collection => a.collection)
-    a.offer_signup = create_challenge_signup(:collection => a.collection)
+    a.request_signup = create_challenge_signup(collection: a.collection)
+    a.offer_signup = create_challenge_signup(collection: a.collection)
   end
   
   attributes_for :potential_match_settings do |a|
@@ -214,7 +214,7 @@ module FixtureReplacement
   end
   
   attributes_for :tag_set do |a|
-    a.tags = [create_tag(:canonical => true)]
+    a.tags = [create_tag(canonical: true)]
   end
 
   attributes_for :tag do |a|
@@ -285,7 +285,7 @@ module FixtureReplacement
 
     a.title = random_phrase
     a.authors = [user.default_pseud]
-    a.chapters = [new_chapter(:authors => [user.default_pseud])]
+    a.chapters = [new_chapter(authors: [user.default_pseud])]
     a.revised_at = DateTime.now
     a.fandom_string = random_tag_name
     a.warning_string = random_tag_name

@@ -1,6 +1,6 @@
 class AdminPostsController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :admin_only, except: [:index, :show]
 
   # GET /admin_posts
   def index
@@ -12,8 +12,8 @@ class AdminPostsController < ApplicationController
     end
     @admin_posts ||= AdminPost
     if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
-      @admin_posts = @admin_posts.where(:language_id => @language.id)
-      @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
+      @admin_posts = @admin_posts.where(language_id: @language.id)
+      @tags = AdminPostTag.where(language_id: @language.id).order(:name)
     else
       @admin_posts = @admin_posts.non_translated
       @tags = AdminPostTag.order(:name)
@@ -61,7 +61,7 @@ class AdminPostsController < ApplicationController
       flash[:notice] = ts("Admin Post was successfully created.")
       redirect_to(@admin_post)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -73,7 +73,7 @@ class AdminPostsController < ApplicationController
       flash[:notice] = ts("Admin Post was successfully updated.")
       redirect_to(@admin_post)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

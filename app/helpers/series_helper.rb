@@ -9,7 +9,7 @@ module SeriesHelper
   def series_data_for_work(work)
     series = work.series.select{|s| s.visible?(current_user)}
     series.map do |serial|
-      serial_works = serial.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
+      serial_works = serial.serial_works.find(:all, include: :work, conditions: ['works.posted = ?', true], order: :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
       visible_position = serial_works.index(work) || serial_works.length     
       unless !visible_position
         previous_link = (visible_position > 0) ? link_to("&laquo; ".html_safe, serial_works[visible_position - 1]) : "".html_safe
@@ -21,7 +21,7 @@ module SeriesHelper
   end
   
   def work_series_description(work, series)
-    serial = SerialWork.where(:work_id => work.id, :series_id => series.id).first
+    serial = SerialWork.where(work_id: work.id, series_id: series.id).first
     ("Part <strong>#{serial.position}</strong> of " + link_to(series.title, series)).html_safe 
   end
 

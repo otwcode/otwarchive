@@ -1,27 +1,27 @@
 class TagSetNomination < ActiveRecord::Base
   belongs_to :pseud
-  belongs_to :owned_tag_set, :inverse_of => :tag_set_nominations
+  belongs_to :owned_tag_set, inverse_of: :tag_set_nominations
   
-  has_many :tag_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
-  has_many :fandom_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
-  has_many :character_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
-  has_many :relationship_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
-  has_many :freeform_nominations, :dependent => :destroy, :inverse_of => :tag_set_nomination
+  has_many :tag_nominations, dependent: :destroy, inverse_of: :tag_set_nomination
+  has_many :fandom_nominations, dependent: :destroy, inverse_of: :tag_set_nomination
+  has_many :character_nominations, dependent: :destroy, inverse_of: :tag_set_nomination
+  has_many :relationship_nominations, dependent: :destroy, inverse_of: :tag_set_nomination
+  has_many :freeform_nominations, dependent: :destroy, inverse_of: :tag_set_nomination
 
   accepts_nested_attributes_for :fandom_nominations, :character_nominations, :relationship_nominations, :freeform_nominations, {
-    :allow_destroy => true,
-    :reject_if => proc { |attrs| attrs[:tagname].blank? && attrs[:id].blank? }
+    allow_destroy: true,
+    reject_if: proc { |attrs| attrs[:tagname].blank? && attrs[:id].blank? }
   }
   
   validates_presence_of :owned_tag_set_id
   validates_presence_of :pseud_id
 
-  validates_uniqueness_of :owned_tag_set_id, :scope => [:pseud_id], :message => ts("You have already submitted nominations for that tag set. Try editing them instead.")
+  validates_uniqueness_of :owned_tag_set_id, scope: [:pseud_id], message: ts("You have already submitted nominations for that tag set. Try editing them instead.")
   
   validate :can_nominate
   def can_nominate
     unless owned_tag_set.nominated
-      errors.add(:base, ts("%{title} is not currently accepting nominations.", :title => owned_tag_set.title))
+      errors.add(:base, ts("%{title} is not currently accepting nominations.", title: owned_tag_set.title))
     end
   end
   
@@ -31,11 +31,11 @@ class TagSetNomination < ActiveRecord::Base
       limit = self.owned_tag_set.send("#{tag_type}_nomination_limit")
       if count_by_fandom?(tag_type)
         if self.fandom_nominations.any? {|fandom_nom| fandom_nom.send("#{tag_type}_nominations").try(:count) > limit}
-          errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags per fandom.", :limit => limit))
+          errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags per fandom.", limit: limit))
         end
       else
         count = self.send("#{tag_type}_nominations").count
-        errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags", :limit => limit)) if count > limit
+        errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags", limit: limit)) if count > limit
       end
     end 
   end
@@ -52,7 +52,7 @@ class TagSetNomination < ActiveRecord::Base
     end
     tagnames = noms.map(&:tagname).reject {|t| t.blank?}
     duplicates = tagnames.group_by {|tagname| tagname}.select {|k,v| v.size > 1}.keys
-    errors.add(:base, ts("You seem to be trying to nominate %{duplicates} more than once.", :duplicates => duplicates.join(', '))) unless duplicates.empty?
+    errors.add(:base, ts("You seem to be trying to nominate %{duplicates} more than once.", duplicates: duplicates.join(', '))) unless duplicates.empty?
   end
 
   # Have NONE of the nominations been reviewed?
@@ -77,12 +77,12 @@ class TagSetNomination < ActiveRecord::Base
   
   def self.owned_by(user = User.current_user)
     select("DISTINCT tag_set_nominations.*").
-    joins(:pseud => :user).
+    joins(pseud: :user).
     where("users.id = ?", user.id)
   end
 
   def self.for_tag_set(tag_set)
-    where(:owned_tag_set_id => tag_set.id)
+    where(owned_tag_set_id: tag_set.id)
   end
 
   def nominated_tags(tag_type = "fandom", index = -1)

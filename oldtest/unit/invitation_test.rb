@@ -3,7 +3,7 @@ require 'test_helper'
 class InvitationTest < ActiveSupport::TestCase
   context "an invitation" do
     setup do
-      @invitation = create_invitation(:invitee_email => random_email)
+      @invitation = create_invitation(invitee_email: random_email)
     end
     should "have a generated token after it's created" do
       assert @invitation.token
@@ -11,7 +11,7 @@ class InvitationTest < ActiveSupport::TestCase
     
     context "after use" do
       setup do
-        @user = create_user(:invitation_token => @invitation.token)
+        @user = create_user(invitation_token: @invitation.token)
         @invitation.reload
       end
       should "be used up" do
@@ -23,7 +23,7 @@ class InvitationTest < ActiveSupport::TestCase
   context "an invitation created for an existing user" do
     should "not be valid" do      
       @user = create_user
-      @invitation = new_invitation(:invitee_email => @user.email)
+      @invitation = new_invitation(invitee_email: @user.email)
       assert !@invitation.valid?
       assert @invitation.errors.on("invitee_email")
     end

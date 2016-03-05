@@ -8,12 +8,12 @@ class WorkTest < ActiveSupport::TestCase
     end
     should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
     should_validate_presence_of :title
-    should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
-    should_ensure_length_in_range :notes, 0..ArchiveConfig.NOTES_MAX, :long_message => /must be less/
-    should_ensure_length_in_range :summary, 0..ArchiveConfig.SUMMARY_MAX, :long_message => /must be less/
+    should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, short_message: /must be at least/, long_message: /must be less/
+    should_ensure_length_in_range :notes, 0..ArchiveConfig.NOTES_MAX, long_message: /must be less/
+    should_ensure_length_in_range :summary, 0..ArchiveConfig.SUMMARY_MAX, long_message: /must be less/
     should_belong_to :language
     should "have an author" do
-      work = new_work(:authors => [])
+      work = new_work(authors: [])
       assert !work.save
       assert_contains work.errors.on(:base), /must have at least one author/
       author = create_user
@@ -72,7 +72,7 @@ class WorkTest < ActiveSupport::TestCase
     context "with a comment on a chapter" do
       setup do
         @work = create_work
-        @comment = create_comment(:commentable => @work.chapters.first)
+        @comment = create_comment(commentable: @work.chapters.first)
       end
       should "find that comment" do
         assert_contains(@work.find_all_comments, @comment)
@@ -84,10 +84,10 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       @untagged_work = create_work
       @tagged_work = create_work
-      @tag = create_freeform(:canonical => true)
+      @tag = create_freeform(canonical: true)
       @tagged_work.freeform_string = @tag.name
       @tagged_work.save
-      @tag2 = create_freeform(:canonical => true)
+      @tag2 = create_freeform(canonical: true)
       @two_tagged = create_work
       @two_tagged.freeform_string = @tag.name + ", " + @tag2.name
       @two_tagged.save
@@ -104,8 +104,8 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       user1 = create_user
       user2 = create_user
-      @work1 = create_work(:authors => [user1.default_pseud])
-      @work2 = create_work(:authors => [user2.default_pseud])
+      @work1 = create_work(authors: [user1.default_pseud])
+      @work2 = create_work(authors: [user2.default_pseud])
       @work1.add_default_tags
       @work2.add_default_tags
     end
@@ -118,7 +118,7 @@ class WorkTest < ActiveSupport::TestCase
     end
     context "with a common tag" do
       setup do
-        @tag = create_freeform(:canonical => true)
+        @tag = create_freeform(canonical: true)
         @work1.freeform_string = @tag.name
         @work1.save
         @work2.freeform_string = @tag.name
@@ -148,7 +148,7 @@ class WorkTest < ActiveSupport::TestCase
       title = 9
 
       10.times do
-        @works << create_work(:title => (title.to_s + title.to_s + title.to_s))
+        @works << create_work(title: (title.to_s + title.to_s + title.to_s))
         title = title - 1
       end
 
@@ -161,19 +161,19 @@ class WorkTest < ActiveSupport::TestCase
 
     should "be returned in reverse order by title" do
       # find with options no longer used
-      #@ordered_works = Work.find_with_options({:sort_column => 'title', :sort_direction => 'ASC'})
+      #@ordered_works = Work.find_with_options({sort_column: 'title', sort_direction: 'ASC'})
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
 
     should "be returned in same order by date created" do
-      #@ordered_works = Work.find_with_options({:sort_column => 'date', :sort_direction => 'ASC'})
+      #@ordered_works = Work.find_with_options({sort_column: 'date', sort_direction: 'ASC'})
       assert @ordered_works[0] = @works[0]
       assert @ordered_works[9] = @works[9]
     end
 
     should "be returned in the right order when retrived with with_all_tag_ids" do
-      #@ordered_works = Work.find_with_options({:sort_column => 'title', :sort_direction => 'ASC', :selected_tags => [@tag.id]})
+      #@ordered_works = Work.find_with_options({sort_column: 'title', sort_direction: 'ASC', selected_tags: [@tag.id]})
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
@@ -184,8 +184,8 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       @work = create_work
       @work.add_default_tags
-      @relationship = create_relationship(:canonical => true)
-      @character = create_character(:canonical => true)
+      @relationship = create_relationship(canonical: true)
+      @character = create_character(canonical: true)
       @work.relationship_string=@relationship.name
       @work.character_string=@character.name
       @work.reload
@@ -203,7 +203,7 @@ class WorkTest < ActiveSupport::TestCase
     end
     context "where the character is wrangled but not to the relationship" do
       setup do
-        @new_relationship = create_relationship(:canonical => true)
+        @new_relationship = create_relationship(canonical: true)
         @character.add_association(@new_relationship)
       end
       should "have both in cast list" do
@@ -212,7 +212,7 @@ class WorkTest < ActiveSupport::TestCase
     end
     context "where the character is wrangled but to the relationship's merger" do
       setup do
-        @new_relationship = create_relationship(:canonical => true)
+        @new_relationship = create_relationship(canonical: true)
         @relationship.update_attribute(:merger_id, @new_relationship.id)
         @character.add_association(@new_relationship)
         @work.reload
@@ -244,8 +244,8 @@ class WorkTest < ActiveSupport::TestCase
   context "a work with one chapter" do
     setup do
       @time1 = random_past_time
-      @chapter1 = new_chapter(:posted => true, :published_at => @time1)
-      @work = create_work(:chapters => [@chapter1], :posted => true)
+      @chapter1 = new_chapter(posted: true, published_at: @time1)
+      @work = create_work(chapters: [@chapter1], posted: true)
       @work.set_revised_at(@time1)
     end
     should "have the same revised_at date as the chapter date" do
@@ -257,7 +257,7 @@ class WorkTest < ActiveSupport::TestCase
     context "if a second chapter is added" do
       setup do
         @time2 = @time1 + (1..3).to_a.rand.months
-        @chapter2 = new_chapter(:posted => true, :published_at => @time2)
+        @chapter2 = new_chapter(posted: true, published_at: @time2)
         @work.chapters << @chapter2
         @work.set_revised_at(@time2)
       end
@@ -270,7 +270,7 @@ class WorkTest < ActiveSupport::TestCase
       context "if a third chapter with today as its published_at date is added" do
         setup do
           @time3 = Time.now
-          @chapter3 = new_chapter(:posted => true, :published_at => @time3)
+          @chapter3 = new_chapter(posted: true, published_at: @time3)
           @work.chapters << @chapter3
           @work.set_revised_at(@time3)
         end
@@ -286,9 +286,9 @@ class WorkTest < ActiveSupport::TestCase
   def test_number_of_chapters
     work = create_work
     assert 1, work.number_of_chapters
-    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
+    chapter2 = create_chapter(work: work, authors: work.pseuds)
     assert 2, work.number_of_chapters
-    chapter3 = create_chapter(:work => work, :authors => work.pseuds)
+    chapter3 = create_chapter(work: work, authors: work.pseuds)
     assert 3, chapter3.position
     assert 3, work.number_of_chapters
     chapter2.destroy
@@ -296,7 +296,7 @@ class WorkTest < ActiveSupport::TestCase
     assert 2, chapter3.position
   end
   def test_chaptered
-    work = create_work(:expected_number_of_chapters => 1)
+    work = create_work(expected_number_of_chapters: 1)
     assert !work.chaptered?
     work.expected_number_of_chapters = nil
     assert work.chaptered?
@@ -321,7 +321,7 @@ class WorkTest < ActiveSupport::TestCase
     assert !work.is_complete
     assert_equal 2, work.expected_number_of_chapters
     # author creates the second chapter
-    create_chapter(:work => work, :authors => work.pseuds, :position => 2)
+    create_chapter(work: work, authors: work.pseuds, position: 2)
     work.reload
     assert work.is_complete
     assert !work.is_wip
@@ -332,7 +332,7 @@ class WorkTest < ActiveSupport::TestCase
     assert_equal nil, work.expected_number_of_chapters
   end
   def test_wip_length
-    work = create_work(:expected_number_of_chapters => 1)
+    work = create_work(expected_number_of_chapters: 1)
     assert_equal 1, work.wip_length
     work.expected_number_of_chapters = nil
     assert_equal "?", work.wip_length
@@ -341,7 +341,7 @@ class WorkTest < ActiveSupport::TestCase
   def test_no_leading_spaces_in_title
     title = "should have no leading space"
     title_with_space = ' ' + title
-    work = create_work(:title => title_with_space)
+    work = create_work(title: title_with_space)
     assert_equal title, work.title
     assert work.valid?
 

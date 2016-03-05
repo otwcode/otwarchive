@@ -6,7 +6,7 @@ class FandomTest < ActiveSupport::TestCase
     setup do
       Fandom.create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME)
       @myfandom = create_fandom
-      @media = create_media(:canonical => true)
+      @media = create_media(canonical: true)
       @myfandom.add_association(@media)
       @myfandom.reload
     end
@@ -22,7 +22,7 @@ class FandomTest < ActiveSupport::TestCase
     end
     context "with an added media" do
       setup do
-        @media2 = create_media(:canonical => true)
+        @media2 = create_media(canonical: true)
         @myfandom.add_association(@media2)
       end
       should "have both medias" do
@@ -49,7 +49,7 @@ class FandomTest < ActiveSupport::TestCase
     end
     context "which is canonical" do
       setup do
-        @myfandom.update_attributes(:canonical => true)
+        @myfandom.update_attributes(canonical: true)
       end
       context "with a freeform" do
         setup do

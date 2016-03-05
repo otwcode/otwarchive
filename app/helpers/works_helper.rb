@@ -105,7 +105,7 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(:controller => 'chapters', :action => 'show')
+    if current_page?(controller: 'chapters', action: 'show')
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
@@ -117,7 +117,7 @@ module WorksHelper
   end
 
   def get_related_works_url
-    current_page?(:controller => 'chapters', :action => 'show') ?
+    current_page?(controller: 'chapters', action: 'show') ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end
