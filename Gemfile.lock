@@ -147,7 +147,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.3)
     kgio (2.8.0)
-    launchy (2.3.0)
+    launchy (2.4.3)
       addressable (~> 2.3)
     lograge (0.3.5)
       actionpack (>= 3)
@@ -394,7 +394,7 @@ DEPENDENCIES
   database_cleaner
   delorean
   elasticsearch
-  email_spec
+  email_spec (~> 1.5.0)
   escape_utils
   factory_girl
   faker
