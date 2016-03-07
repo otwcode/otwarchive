@@ -123,7 +123,7 @@ group :test do
   gem 'webmock', '~> 1.8.8'
   # Code coverage
   gem 'simplecov', :require => false
-  gem 'email_spec', '~> 1.5.0'
+  gem 'email_spec', '~> 1.6.0'
 end
 
 group :test, :development do

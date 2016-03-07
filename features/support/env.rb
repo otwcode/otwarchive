@@ -5,6 +5,8 @@
 # files.
 
 require 'cucumber/rails'
+require 'email_spec'
+require 'email_spec/cucumber'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
