@@ -107,6 +107,7 @@ gem 'kgio'
 
 
 group :test do
+  gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
