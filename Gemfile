@@ -117,7 +117,7 @@ group :test do
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker'
+  gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
   gem "vcr", "~> 2.5.0"
   gem 'webmock', '~> 1.8.8'
