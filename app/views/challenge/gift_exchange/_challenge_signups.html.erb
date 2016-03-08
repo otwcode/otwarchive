@@ -2,16 +2,16 @@
   <% if @query %>
     <%= search_header @challenge_signups, nil, "Signup" %>
   <% else %>
-    <%= ts("Sign-ups for %{collection}", :collection => @collection.title) %>
+    <%= ts("Sign-ups for %{collection}", collection: @collection.title) %>
   <% end %>
 </h2>
 
 <ul class="navigation actions" role="menu">
   <li class="search" role="search">
-      <%= form_tag collection_signups_path(@collection), :class => "simple search", :method => :get do |form| %>
+    <%= form_tag collection_signups_path(@collection), class: "simple search", method: :get do |form| %>
       <fieldset>
-              <%= text_field_tag "query", @query, :title => "search" %>
-        <%= submit_tag "Search By Pseud" %>
+        <%= text_field_tag "query", @query, title: "search" %>
+        <%= submit_tag ts("Search By Pseud") %>
       </fieldset>
     <% end %>
   </li>

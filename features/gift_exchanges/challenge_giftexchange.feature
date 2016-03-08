@@ -114,17 +114,17 @@ Feature: Gift Exchange Challenge
     Then I should not see "Sign-ups" within "#dashboard"
   
   Scenario: Mod can view signups
-    Given the gift exchange "Awesome Gift Exchange" is ready for signups
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-    When I am logged in as "mod1"
-      And I go to "Awesome Gift Exchange" collection's page
-      And I follow "Sign-ups"
-    Then I should see "myname4" within "#main"
-      And I should see "myname3" within "#main"
-      And I should see "myname2" within "#main"
-      And I should see "myname1" within "#main"
-      And I should see "Something else weird"
-      And I should see "Alternate Universe - Historical"
+  Given the gift exchange "Awesome Gift Exchange" is ready for signups
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  When I am logged in as "mod1"
+    And I go to "Awesome Gift Exchange" collection's page
+    And I follow "Sign-ups"
+  Then I should see "myname4" within "#main"
+    And I should see "myname3" within "#main"
+    And I should see "myname2" within "#main"
+    And I should see "myname1" within "#main"
+    And I should see "Something else weird"
+    And I should see "Alternate Universe - Historical"
     
   Scenario: Mod can search signups by pseud
   Given the gift exchange "Awesome Gift Exchange" is ready for signups
