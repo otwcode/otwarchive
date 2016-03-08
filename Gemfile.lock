@@ -52,7 +52,7 @@ GEM
       jquery-rails
       rails (~> 3.1)
     builder (3.0.4)
-    bullet (4.14.10)
+    bullet (5.0.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
     capistrano (2.15.4)
@@ -382,7 +382,7 @@ DEPENDENCIES
   aws-sdk
   bcrypt
   best_in_place
-  bullet
+  bullet (~> 5.0.0)
   bundler
   capistrano-gitflow_version (>= 0.0.3)
   capybara
