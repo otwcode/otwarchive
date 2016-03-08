@@ -112,7 +112,7 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl', '~> 4.5.0'
-  gem 'capybara'
+  gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner'
   gem 'cucumber', '~> 2.3.2'
   gem 'cucumber-rails', require: false
