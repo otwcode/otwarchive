@@ -89,7 +89,7 @@ class ChallengeSignupsController < ApplicationController
               @query = params[:query]
               @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
             end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)          
+            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)          
           elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else
