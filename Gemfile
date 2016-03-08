@@ -110,7 +110,7 @@ group :test do
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl'
+  gem 'factory_girl', '~> 4.5.0'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'cucumber-rails', require: false
