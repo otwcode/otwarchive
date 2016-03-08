@@ -115,7 +115,7 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner'
   gem 'cucumber', '~> 2.3.2'
-  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
