@@ -127,7 +127,7 @@ group :test do
 end
 
 group :test, :development do
-  gem 'pry'
+  gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
 end
 
