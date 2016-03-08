@@ -121,8 +121,8 @@ group :test do
   gem 'delorean'
   gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
-  gem "vcr", "~> 2.5.0"
-  gem 'webmock', '~> 1.8.8'
+  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem 'webmock', '~> 1.24.2'
   # Code coverage
   gem 'simplecov', '~> 0.11.2',:require => false
   gem 'email_spec', '~> 1.6.0'

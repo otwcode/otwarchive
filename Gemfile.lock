@@ -135,6 +135,7 @@ GEM
       activemodel (>= 3.1.0, < 4.0.0)
       activerecord (>= 3.1.0, < 4.0.0)
     google_visualr (2.1.7)
+    hashdiff (0.3.0)
     hashr (0.0.22)
     highline (1.6.19)
     hike (1.2.3)
@@ -354,12 +355,13 @@ GEM
     uuidtools (2.1.4)
     valium (0.5.0)
       activerecord (>= 3.0.2)
-    vcr (2.5.0)
+    vcr (3.0.1)
     vegas (0.1.11)
       rack (>= 1.0.0)
-    webmock (1.8.11)
-      addressable (>= 2.2.7)
-      crack (>= 0.1.7)
+    webmock (1.24.2)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     webrobots (0.1.2)
     whenever (0.6.8)
       aaronh-chronic (>= 0.3.9)
@@ -443,8 +445,8 @@ DEPENDENCIES
   unicorn
   unidecoder
   valium
-  vcr (~> 2.5.0)
-  webmock (~> 1.8.8)
+  vcr (~> 3.0, >= 3.0.1)
+  webmock (~> 1.24.2)
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
