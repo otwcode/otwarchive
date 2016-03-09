@@ -113,7 +113,7 @@ group :test do
   gem 'shoulda'
   gem 'factory_girl', '~> 4.5.0'
   gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '~> 1.3.0'
+  gem 'database_cleaner', '~> 1.4.1'
   gem 'cucumber', '~> 2.3.2'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
