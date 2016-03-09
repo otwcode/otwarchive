@@ -102,7 +102,7 @@ GEM
       railties (>= 3, < 5)
     cucumber-wire (0.0.1)
     dalli (2.7.5)
-    database_cleaner (1.1.1)
+    database_cleaner (1.2.0)
     delorean (2.1.0)
       chronic
     diff-lcs (1.2.5)
@@ -396,7 +396,7 @@ DEPENDENCIES
   cucumber (~> 2.3.2)
   cucumber-rails (~> 1.4.3)
   dalli
-  database_cleaner (~> 1.1.1)
+  database_cleaner (~> 1.2.0)
   delorean
   elasticsearch
   email_spec (~> 1.6.0)
