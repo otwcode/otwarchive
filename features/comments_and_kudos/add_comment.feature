@@ -14,7 +14,8 @@ Scenario: Comment links from downloads and static pages
 
 Scenario: When logged in I can comment on a work
 
-  Given I have no works or comments
+  Given I have loaded the fixtures
+    And I have no works or comments
   When I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
   When I am logged in as "commenter"
@@ -32,7 +33,8 @@ Scenario: When logged in I can comment on a work
 
 Scenario: Comment editing
 
-  When I am logged in as "author"
+  When I have loaded the fixtures
+    And I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
   When I am logged in as "commenter"
     And I post the comment "Mistaken comment" on the work "The One Where Neal is Awesome"
@@ -46,7 +48,8 @@ Scenario: Comment editing
 
 Scenario: Comment threading, comment editing
 
-  When I am logged in as "author"
+  When I have loaded the fixtures
+    And I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
   When I am logged in as "commenter"
     And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
@@ -101,7 +104,8 @@ Scenario: Comment threading, comment editing
 
   Scenario: Try to post an invalid comment
 
-    When I am logged in as "author"
+    When  I have loaded the fixtures
+      And I am logged in as "author"
       And I post the work "Generic Work"
     When I am logged in as "commenter"
       And I view the work "Generic Work"
@@ -126,7 +130,8 @@ Scenario: Comment threading, comment editing
       
 Scenario: Don't receive comment notifications of your own comments by default
 
-  When I am logged in as "author"
+  When I have loaded the fixtures
+    And I am logged in as "author"
     And I post the work "Generic Work"
   When I am logged in as "commenter"
     And I post the comment "Something" on the work "Generic Work"

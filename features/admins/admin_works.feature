@@ -31,7 +31,8 @@ Feature: Admin Actions for Works and Bookmarks
       And 0 emails should be delivered
 
   Scenario: Can delete works
-    Given I am logged in as "regular_user"
+    Given  I have loaded the fixtures
+      And I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as an admin
       And I view the work "ToS Violation"
@@ -138,6 +139,7 @@ Feature: Admin Actions for Works and Bookmarks
       And the following admin exists
         | login       | password |
         | Zooey       | secret   |
+      And I have loaded the fixtures
 
     # set up a work with a genuine comment
 

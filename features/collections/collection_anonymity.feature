@@ -23,7 +23,8 @@ Feature: Collection
     Then the work "Old Snippet" should be hidden from me
   
   Scenario: The moderator can reveal all the works in a hidden collection
-    Given I have the hidden collection "Hidden Treasury"
+    Given I have loaded the fixtures
+      And I have the hidden collection "Hidden Treasury"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And all emails have been delivered
@@ -133,7 +134,8 @@ Feature: Collection
       And I should not see "first_user"
 
   Scenario: The moderator can reveal all the authors in an anonymous collection
-    Given I have the anonymous collection "Anonymous Hugs"
+    Given I have loaded the fixtures
+      And I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And all emails have been delivered      
@@ -154,7 +156,8 @@ Feature: Collection
       And "third_user" should not be emailed
 
   Scenario: The moderator can reveal a single author in an anonymous collection
-    Given I have the anonymous collection "Anonymous Hugs"
+    Given I have loaded the fixtures
+      And I have the anonymous collection "Anonymous Hugs"
       And "second_user" subscribes to author "first_user"
       And the user "third_user" exists and is activated
       And I am logged in as "first_user"
