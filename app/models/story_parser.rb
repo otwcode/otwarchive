@@ -272,6 +272,7 @@ class StoryParser
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
       work.revised_at = work.chapters.last.published_at
+      work.backdate = (work.revised_at.to_date < Date.today)
 
       # set authors for the works
       pseuds = []
