@@ -25,8 +25,7 @@ Feature: Admin Actions for notifications
 
   # admin sends out notice to all users
 
-  When I have loaded the fixtures
-    And I am logged in as an admin
+  When I am logged in as an admin
     And I go to the admin-notices page
     And I fill in "Subject" with "Hey, we did stuff"
     And I fill in "Message" with "And it was awesome"

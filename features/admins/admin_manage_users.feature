@@ -243,8 +243,7 @@ Feature: Admin Actions to manage users
   Then I should see "You must include notes in order to perform this action."
 
   Scenario: A spammer can be permabanned and all their creations destroyed
-  Given I have loaded the fixtures
-    And I have a work "Not Spam"
+  Given I have a work "Not Spam"
     And I am logged in as "Spamster"
     And I post the work "Loads of Spam"
     And I post the work "Even More Spam"

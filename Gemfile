@@ -113,7 +113,7 @@ group :test do
   gem 'shoulda'
   gem 'factory_girl', '~> 4.5.0'
   gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '~> 1.5.1'
+  gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
@@ -125,7 +125,7 @@ group :test do
   gem 'webmock', '~> 1.24.2'
   # Code coverage
   gem 'simplecov', '~> 0.11.2',:require => false
-  gem 'email_spec', '~> 1.6.0'
+  gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
