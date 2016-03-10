@@ -35,7 +35,9 @@ Feature: Admin Actions to Post News
       And I fill in "Comment" with "Thank you very much!" within ".odd"
       And I press "Comment" within ".odd"
     Then I should see "Comment created"
-    # TODO: comments should be able to belong to an admin officially, otherwise someone can spoof being an admin by using the admin name and email
+    # Someone can spoof being an admin by using the admin name and a different email, but their icon will not match
+    # We want to improve this so that the name is linked and the spoof is more obvious
+    When "Issue AO3-3685" is fixed
     # notification to the admin list for admin post
       And 1 email should be delivered to "admin@example.org"
     # reply to the user
@@ -63,8 +65,29 @@ Feature: Admin Actions to Post News
     Then 1 email should be delivered to "testadmin@example.org"
     # notification to the admin list for admin post
       And 1 email should be delivered to "admin@example.org"
-  
-  # TODO: this is something the user does, not the admin, and should be in another test?
+
+  Scenario: Evil user can impersonate admin in comments
+  # However, they can't use an icon, so the admin's icon is the guarantee that they're real
+  # also their username will be plain text and not a link
+
+    Given I have posted an admin post
+    When I am logged out as an admin
+      And I am logged in as "happyuser"
+      And I go to the admin-posts page
+    When I follow "Comment"
+      And I fill in "Comment" with "Excellent, my dear!"
+      And I press "Comment"
+    When I am logged out
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I fill in "Comment" with "Behold, ye mighty, and despair!"
+      And I fill in "Name" with "admin"
+      And I fill in "Email" with "admin@example.com"
+      And I press "Comment"
+    Then I should see "Comment created!"
+      And I should see "admin"
+      And I should see "Behold, ye mighty, and despair!"
+
   Scenario: User views RSS of admin posts
 
     Given I have posted an admin post

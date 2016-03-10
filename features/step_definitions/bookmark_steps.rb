@@ -53,6 +53,12 @@ When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
     click_button("Add")
 end
 
+When /^I rec the current work$/ do
+  click_link("Bookmark")
+  check("bookmark_rec")
+  click_button("Create")
+end
+
 Then /^the bookmark on "([^\"]*)" should have tag "([^\"]*)"$$/ do |title, tag|
   work = Work.find_by_title(title)
   bookmark = work.bookmarks.first

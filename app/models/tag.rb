@@ -154,6 +154,17 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  after_save :queue_flush_work_cache
+  def queue_flush_work_cache
+    async(:flush_work_cache)
+  end
+
+  def flush_work_cache
+    self.work_ids.each do |work|
+      Work.expire_work_tag_groups_id(work)
+    end
+  end
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?
@@ -493,7 +504,7 @@ class Tag < ActiveRecord::Base
   def self.find_by_name(string)
     return unless string.is_a? String
     string = string.gsub('*s*', '/').gsub('*a*', '&').gsub('*d*', '.').gsub('*q*', '?').gsub('*h*', '#')
-    self.where('name = ?', string).first
+    self.where('tags.name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them

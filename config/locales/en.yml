@@ -30,6 +30,19 @@ en:
         sent_by: 
           html: "Sent by <b>%{sent_by}</b>."
           text: "Sent by %{sent_by}."
+    kudos:
+      guest: a guest
+      guests: guests
+      you_have: "[%{app_name}] You've got kudos!"
+      html:
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+      text:
+        left_kudos:
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
+
   user_mailer:
     invite_increase_notification:
       subject: "[%{app_name}] New Invitations"
@@ -43,3 +56,8 @@ en:
           friend at %{invitation_page}.
           Cheers, 
           %{archive_name}
+    abuse_report:
+      subject: "[%{app_name}] Your Abuse Report"
+      para1: "The following abuse report has been sent to the Abuse team:"
+      url_para: "URL of the page the abuse is on:"
+      description_para: "Description of the abuse:"

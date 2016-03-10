@@ -248,9 +248,14 @@
       kudos_on: Kudos on
       you_have: "[%{app_name}] You've got kudos!"
       html:
-        left_kudos: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+        left_kudos:
+          one: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
+          other: "%{givers_list} left kudos on <i>%{commentable_link}</i>."
       text:
-        left_kudos: "%{givers_list} left kudos on %{commentable_link}."
+        left_kudos:
+          one: "%{givers_list} left kudos on %{commentable_link}."
+          other: "%{givers_list} left kudos on %{commentable_link}."
+
   user_mailer:
     invite_increase_notification:
       html: |-
@@ -261,3 +266,8 @@
       txt: "Hi %{login}\nWe just wanted to let you know that you have %{total} new
         invitation(s),\nwhich can be used to create new accounts at the archive. You
         can invite a\nfriend at %{invitation_page}.\nCheers, \n%{archive_name}"
+    abuse_report:
+      subject: "[%{app_name}] Your Abuse Report"
+      para1: "The following abuse report has been sent to the Abuse team:"
+      url_para: "URL of the page the abuse is on:"
+      description_para: "Description of the abuse:"
