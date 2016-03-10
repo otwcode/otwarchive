@@ -131,6 +131,7 @@ end
 group :test, :development do
   gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
+  gem 'bundler-audit'
 end
 
 group :test, :development, :staging  do
