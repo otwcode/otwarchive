@@ -1,4 +1,4 @@
-﻿@works
+@works
 Feature: Inspirations, remixes and translations
   In order to reflect the connections between some fanworks
   As a fan author, part of a fan community
