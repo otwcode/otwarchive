@@ -272,7 +272,9 @@ class StoryParser
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
       work.revised_at = work.chapters.last.published_at
-      work.backdate = (work.revised_at.to_date < Date.today)
+      if work.revised_at && work.revised_at.to_date < Date.today
+        work.backdate = true
+      end
 
       # set authors for the works
       pseuds = []
@@ -999,7 +1001,7 @@ class StoryParser
           # probably seconds since the epoch
           date = Time.at($1.to_i)
         end
-        date ||= DateTime.parse(date_string)
+        date ||= Date.parse(date_string)
         return '' if date > Date.today
         return date
       rescue ArgumentError, TypeError

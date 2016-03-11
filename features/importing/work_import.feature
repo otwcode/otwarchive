@@ -64,7 +64,7 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
-  Scenario: Importing a new multichapter work with backdating
+  Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic tags
     And the following activated user exists
       | login          | password    |
@@ -80,9 +80,11 @@ Feature: Import Works
     And I choose "import_multiple_chapters"
     When I press "Import"
       Then I should see "Preview"
-    When I press "Post Without Preview"
-      # Then I should see "Completed:2000-01-22"
+    When I press "Post"
+      Then I should see "Published:2000-01-10"
+      Then I should see "Completed:2000-01-22"
     When I follow "Chapter Index"
+      Then I should see "1. Chapter 1 (2000-01-10)"
       Then I should see "2. Importing Test Part 2 (2000-01-22)"
 
 #  Scenario: Import works for others and have them automatically notified
