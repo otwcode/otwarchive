@@ -126,7 +126,7 @@ module ApplicationHelper
   end
 
   def pseud_link(pseud)
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
+    link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :rel => "author")
   end
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
