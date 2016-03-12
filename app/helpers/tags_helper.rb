@@ -76,7 +76,7 @@ module TagsHelper
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
   end
 
   def link_to_edit_tag(tag, options = {})
@@ -89,7 +89,7 @@ module TagsHelper
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_works_path(@collection, tag) : tag_works_path(tag), link_text, options)
   end
 
   # the label on checkboxes to remove tag associations
