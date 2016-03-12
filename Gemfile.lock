@@ -442,6 +442,7 @@ DEPENDENCIES
   resque (>= 1.25.2)
   resque-scheduler (>= 4.1.0)
   resque_mailer (>= 2.2.7)
+  rest-client (~> 1.8.0)
   rollout
   rpm_contrib
   rspec (~> 3.4)
