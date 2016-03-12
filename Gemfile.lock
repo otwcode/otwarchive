@@ -110,7 +110,7 @@ GEM
       chronic
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.25)
+    domain_name (0.5.20160309)
       unf (>= 0.0.5, < 1.0.0)
     elasticsearch (1.0.15)
       elasticsearch-api (= 1.0.15)
@@ -354,8 +354,8 @@ GEM
     tzinfo (0.3.46)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.1)
-    unf_ext (0.0.7.1-x86-mingw32)
+    unf_ext (0.0.7.2)
+    unf_ext (0.0.7.2-x86-mingw32)
     unicode (0.4.4.2)
     unicode (0.4.4.2-x86-mingw32)
     unicorn (4.6.3)
@@ -442,7 +442,6 @@ DEPENDENCIES
   resque (>= 1.25.2)
   resque-scheduler (>= 4.1.0)
   resque_mailer (>= 2.2.7)
-  rest-client (~> 1.8.0)
   rollout
   rpm_contrib
   rspec (~> 3.4)
