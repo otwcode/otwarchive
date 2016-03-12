@@ -210,14 +210,16 @@ class WorksController < ApplicationController
     if @work.unrevealed?
       @page_title = ts("Mystery Work")
     else
+      page_title_inner = ""
+      page_creator = ""
+      if @work.anonymous?
+        page_creator = ts("Anonymous")
+      else
+        page_creator = @work.pseuds.sort.collect(&:byline).join(', ')
+      end
       if @tag_groups["Fandom"].size > 3 
         page_title_inner = ts("Multifandom")
       else
-        if @work.anonymous?
-          page_creator = ts("Anonymous")
-        else
-          page_creator = @work.pseuds.sort.collect(&:byline).join(', ')
-        end
         page_title_inner = @tag_groups["Fandom"][0].name
       end
       @page_title = get_page_title(page_title_inner, page_creator, @work.title)
