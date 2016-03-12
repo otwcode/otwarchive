@@ -193,48 +193,62 @@ Feature: creating and editing skins
   When I follow "Write Custom CSS"
     Then I should see "CSS"
 
-  Scenario: Users should be able to create a skin using the wizard
-  Given basic skins
-    And I am logged in as "skinner"
-  When I am on skin's new page
-  When I follow "Use Wizard"
+  Scenario: Users should be able to create and use a wizard skin to adjust work margins, and they should be able to edit the skin while they are using it
+  Given I am logged in as "skinner"
+  When I am on the new wizard skin page
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
-    And I fill in "skin_margin" with "text"
+    And I fill in "Work margin width" with "text"
     And I submit
   Then I should see a save error message
     And I should see "Margin is not a number"
-  When I fill in "skin_margin" with "5"
+  When I fill in "Work margin width" with "5"
     And I submit
   Then I should see "Skin was successfully created"
-    And I should see "Margin:5"
-  When I follow "Edit"
-    And I follow "Use Wizard"
-    And I fill in "skin_margin" with "4.5"
-    And I fill in "skin_font" with "Garamond"
-    And I fill in "skin_background_color" with "#ccccff"
-    And I fill in "skin_foreground_color" with "red"
-    And I fill in "skin_base_em" with "120"
-    And I fill in "skin_paragraph_margin" with "5"
-    And I submit
-    # TODO: Think about whether rounding to 4 is actually the right behaviour or not
-  Then I should see an update confirmation message
-    And I should see "4"
-    And I should not see "4.5"
+    And I should see "Work margin width: 5%"
   When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
   When I select "Wide margins" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "#workskin {margin: auto 4%; padding: 0.5em 4% 0;}" within "style"
-    And I should see "background: #ccccff;" within "style"
-    And I should see "color: red;" within "style"
-    And I should see "font-family: Garamond;" within "style"
-    And I should see "font-size: 120%;" within "style"
-    And I should see "line-height:1.125;" within "style"
-    And I should see ".userstuff p {margin-bottom: 5.0em;}" within "style"
+    And I should see "margin: auto 5%; max-width: 100%" within "style"
+  When I edit the skin "Wide margins" with the wizard
+    And I fill in "Work margin width" with "4.5"
+    And I submit
+  # TODO: Think about whether rounding to 4 is actually the right behaviour or not
+  Then I should see an update confirmation message
+    And I should see "Work margin width: 4%"
+    And I should not see "Work margin width: 4.5%"
+    And I should see "margin: auto 4%;" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
+
+  Scenario: Users should be able to create and use a wizard skin with multiple wizard settings
+  Given I am logged in as "skinner"
+  When I am on the new wizard skin page
+    And I fill in "Title" with "Many changes"
+    And I fill in "Description" with "Layout skin"
+    And I fill in "Font" with "'Times New Roman', Garamond, serif"
+    And I fill in "Background color" with "#ccccff"
+    And I fill in "Text color" with "red"
+    And I fill in "Percent of browser font size" with "120"
+    And I fill in "Vertical gap between paragraphs" with "5"
+    And I submit
+  Then I should see "Skin was successfully created"
+    And I should see "Font: 'Times New Roman', Garamond, serif"
+    And I should see "Background color: #ccccff"
+    And I should see "Text color: red"
+    And I should see "Percent of browser font size: 120%"
+    And I should see "Vertical gap between paragraphs: 5.0em"
+  When I press "Use"
+  Then I should see "Your preferences were successfully updated."
+    And I should see "background: #ccccff;" within "style"
+    And I should see "color: red;" within "style"
+    And I should see "font-family: 'Times New Roman', Garamond, serif;" within "style"
+    And I should see "font-size: 120%;" within "style"
+    And I should see "margin: 5.0em auto;" within "style"
+  When I am on skinner's preferences page
+  Then "Many changes" should be selected within "preference_skin_id"
 
   Scenario: Users should be able to create and use a work skin
   Given I am logged in as "skinner"
@@ -272,15 +286,18 @@ Feature: creating and editing skins
     And I log out
   Then I should be on the login page
 
-  Scenario: Change the header color
+  Scenario: Users should be able to adjust their wizard skin by adding custom CSS
   Given I am logged in as "skinner"
-  When I create a skin to change the header color
-  Then I should see a different header color
+    And I create and use a skin to make the header pink
+  When I edit my pink header skin to have a purple logo
+  Then I should see an update confirmation message
+    And I should see a pink header
+    And I should see a purple logo
 
   Scenario: Change the accent color
   Given I am logged in as "skinner"
-  When I create a skin to change the accent color
-  Then I should see a different accent color on the dashboard and work meta
+  When I create and use a skin to change the accent color
+  Then I should see a different accent color
 
   Scenario: Create a complex replacement skin
   Given I have loaded site skins
