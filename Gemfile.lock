@@ -334,7 +334,7 @@ GEM
     stringex (2.0.3)
     thor (0.19.1)
     tilt (1.4.1)
-    timeliness (0.3.7)
+    timeliness (0.3.8)
     tire (0.6.0)
       activemodel (>= 3.0)
       activesupport
