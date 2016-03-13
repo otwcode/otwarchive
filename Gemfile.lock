@@ -203,7 +203,7 @@ GEM
     nokogiri (1.6.7.2-x86-mingw32)
       mini_portile2 (~> 2.0.0.rc2)
     ntlm-http (0.1.1)
-    paperclip (4.3.2)
+    paperclip (4.3.6)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       cocaine (~> 0.5.5)
