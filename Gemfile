@@ -15,8 +15,6 @@ gem 'mysql2', '0.3.10'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 
-gem 'strong_parameters'
-
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
 gem 'redis', ">=3.2.2"
