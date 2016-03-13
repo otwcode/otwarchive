@@ -364,7 +364,7 @@ GEM
       raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.9.0)
-    uuidtools (2.1.4)
+    uuidtools (2.1.5)
     valium (0.5.0)
       activerecord (>= 3.0.2)
     vcr (3.0.1)
