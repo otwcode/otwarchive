@@ -1,7 +1,8 @@
 class WranglingGuideline < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   acts_as_list
 
-  attr_protected :content_sanitizer_version
+  #attr_protected :content_sanitizer_version
 
   validates_presence_of :content, :title
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
