@@ -207,10 +207,23 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     @tag_groups = @work.tag_groups
-    @page_title = @work.unrevealed? ? ts("Mystery Work") :
-      get_page_title(@tag_groups["Fandom"].size > 3 ? ts("Multifandom") : @tag_groups["Fandom"][0].name,
-        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
-        @work.title)
+    if @work.unrevealed?
+      @page_title = ts("Mystery Work")
+    else
+      page_title_inner = ""
+      page_creator = ""
+      if @work.anonymous?
+        page_creator = ts("Anonymous")
+      else
+        page_creator = @work.pseuds.sort.collect(&:byline).join(', ')
+      end
+      if @tag_groups["Fandom"].size > 3 
+        page_title_inner = ts("Multifandom")
+      else
+        page_title_inner = @tag_groups["Fandom"][0].name
+      end
+      @page_title = get_page_title(page_title_inner, page_creator, @work.title)
+    end
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
