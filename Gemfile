@@ -4,7 +4,7 @@ ruby '2.0.0'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22.1'
+gem 'rails', '3.2.22.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -17,8 +17,8 @@ gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
-gem 'redis', ">=3.0"
-gem 'redis-namespace'
+gem 'redis', ">=3.2.2"
+gem 'redis-namespace', ">=1.5.2"
 
 # Here are all our application-specific gems
 
@@ -39,10 +39,10 @@ gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
-gem 'rest-client', :require => 'rest_client'
-gem 'resque', '>=1.14.0'
-gem 'resque_mailer'
-gem 'resque-scheduler', :require => 'resque_scheduler'
+gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
+gem 'resque', '>=1.25.2'
+gem 'resque_mailer', '>=2.2.7'
+gem 'resque-scheduler', '>=4.1.0'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'elasticsearch'
@@ -107,32 +107,35 @@ gem 'kgio'
 
 
 group :test do
-  gem 'rspec-rails'
+  gem 'rspec', '~> 3.4'
+  gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl'
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'cucumber-rails', require: false
+  gem 'factory_girl', '~> 4.5.0'
+  gem 'capybara', '~> 2.6.2'
+  gem 'database_cleaner', '1.2.0'
+  gem 'cucumber', '~> 2.3.2'
+  gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker'
+  gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
-  gem "vcr", "~> 2.5.0"
-  gem 'webmock', '~> 1.8.8'
+  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', :require => false
-  gem 'email_spec'
+  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
-  gem 'pry'
+  gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
+  gem 'bundler-audit'
 end
 
 group :test, :development, :staging  do
-  gem 'bullet'
+  gem 'bullet', '~> 5.0.0'
 end
 
 # Deploy with Capistrano

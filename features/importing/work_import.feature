@@ -63,6 +63,32 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "2010-01-11"
 
+  Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
+    Given basic tags
+    And the following activated user exists
+      | login          | password    |
+      | cosomeone      | something   |
+    And I am logged in as "cosomeone" with password "something"
+    And I set my time zone to "UTC"
+    When I go to the import page
+    And I fill in "urls" with
+         """
+         http://rebecca2525.dreamwidth.org/3506.html
+         http://rebecca2525.dreamwidth.org/4024.html
+         """
+    And I choose "import_multiple_chapters"
+    When I press "Import"
+      Then I should see "Preview"
+    When I press "Post"
+      Then I should see "Published:2000-01-10"
+      Then I should see "Completed:2000-01-22"
+    When I follow "Chapter Index"
+      Then I should see "1. Chapter 1 (2000-01-10)"
+      Then I should see "2. Importing Test Part 2 (2000-01-22)"
+
+#  Scenario: Import works for others and have them automatically notified
+
+  @work_import_special_characters_auto_utf
   Scenario: Import a work with special characters (UTF-8, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/utf8_specified.html"
     Then I should see "Preview"
