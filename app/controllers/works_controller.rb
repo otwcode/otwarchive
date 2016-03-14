@@ -215,7 +215,7 @@ class WorksController < ApplicationController
       if @work.anonymous?
         page_creator = ts("Anonymous")
       else
-        page_creator = @work.pseuds.sort.collect(&:byline).join(', ')
+        page_creator = @work.pseuds.collect(&:byline).sort.join(', ')
       end
       if @tag_groups["Fandom"].size > 3 
         page_title_inner = ts("Multifandom")
