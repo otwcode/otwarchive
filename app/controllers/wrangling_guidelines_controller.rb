@@ -29,7 +29,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # POST /wrangling_guidelines
   def create
-    @wrangling_guideline = WranglingGuideline.new(params[:wrangling_guideline])
+    @wrangling_guideline = WranglingGuideline.new(wrangling_guidelines_params)
 
     if @wrangling_guideline.save
       flash[:notice] = ts('Wrangling Guideline was successfully created.')
@@ -43,7 +43,7 @@ class WranglingGuidelinesController < ApplicationController
   def update
     @wrangling_guideline = WranglingGuideline.find(params[:id])
 
-    if @wrangling_guideline.update_attributes(params[:wrangling_guideline])
+    if @wrangling_guideline.update_attributes(wrangling_guidelines_params)
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
       redirect_to(@wrangling_guideline)
     else
@@ -71,5 +71,14 @@ class WranglingGuidelinesController < ApplicationController
     @wrangling_guideline.destroy
 
     redirect_to(wrangling_guidelines_url)
+  end
+
+   private
+  def wrangling_guidelines_params
+    if logged_in_as_admin?
+      params.require(:wrangling_guideline).permit!
+    else
+      params.require(:wrangling_guideline)
+    end
   end
 end
