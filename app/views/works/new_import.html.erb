@@ -64,7 +64,7 @@
         </ul>
       </dd>
       <% if current_user.archivist %>
-        <dt><%= label_tag "Archiving for others" %></dt>
+        <dt><%= label_tag ts("Archiving for others") %></dt>
         <dd>
           <fieldset>
             <dl>
@@ -111,12 +111,12 @@
   <%= render :partial => 'work_form_tags', locals: { include_blank: true, import: true } %>
 
   <fieldset>
-      <legend><%= label_tag :notes, ts("Notes") %></legend>
+    <legend><%= label_tag :notes, ts("Notes") %></legend>
     <dl>
       <dt><%= label_tag :notes, ts("Notes at the beginning") %></dt>
       <dd>
-      <%= text_area_tag :notes, nil, class: "observe_textlength" %>
-      <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
+        <%= text_area_tag :notes, nil, class: "observe_textlength" %>
+        <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
       </dd>
     </dl>
   </fieldset>
