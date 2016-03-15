@@ -34,7 +34,7 @@ hide_freeform?(@work)) %>
     </dd>
   </dl>
   <h1><%= @work.title.html_safe %></h1>
-  <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public') %></div>
+  <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
   <% unless @work.summary.blank? %>
     <p><%= ts('Summary') %></p>
     <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
