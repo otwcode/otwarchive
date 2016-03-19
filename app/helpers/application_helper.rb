@@ -94,7 +94,7 @@ module ApplicationHelper
       end
       return anon_byline
     end
-    non_anonymous_byline(creation,options[:only_path])
+    non_anonymous_byline(creation, (options[:full_path] ? false : options[:only_path]))
   end
 
   def non_anonymous_byline(creation, url_path = nil)

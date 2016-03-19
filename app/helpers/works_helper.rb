@@ -134,7 +134,7 @@ module WorksHelper
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = "<p>by #{byline(work, visibility: 'public')}</p>"
+    text = "<p>by #{byline(work, { visibility: 'public', full_path: true})}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
@@ -152,7 +152,7 @@ module WorksHelper
         else
           type.pluralize
         end
-        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t) }.join(', ')}</li>"
+        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t,{full_path: true}) }.join(', ')}</li>"
       end
     end
     text << "</ul>"
