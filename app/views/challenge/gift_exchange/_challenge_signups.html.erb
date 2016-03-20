@@ -6,7 +6,7 @@
   <% end %>
 </h2>
 
-<ul class="navigation actions" role="menu">
+<ul class="navigation actions">
   <li class="search" role="search">
     <%= form_tag collection_signups_path(@collection), class: "simple search", method: :get do |form| %>
       <fieldset>
@@ -34,7 +34,7 @@
       </dt>
       <dd>
         <%= render "challenge_signups/signup_controls", challenge_signup: signup, subnav: false %>
-        <ul class="actions" role="menu">
+        <ul class="actions">
           <li>
             <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", class: "requests_#{signup.id}_open" %>
             <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", class: "requests_#{signup.id}_close" %>
