@@ -26,8 +26,13 @@
       <li id="wizard-link">
         <%= span_if_current ts('Use Wizard'), action_name == 'new' ? new_skin_path(wizard: true) : edit_skin_path(wizard: true), params[:wizard] %>
       </li>
-
     <% end %>
+
+    <% if action_name == 'new' || action_name === 'edit' %>
+      <li><%= my_site_skins_link %></li>
+      <li><%= my_work_skins_link %></li>
+    <% end %>
+
   <% end %>
 </ul>
 <!--/subnav-->
