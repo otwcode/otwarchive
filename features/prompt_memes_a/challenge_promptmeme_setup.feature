@@ -228,7 +228,6 @@ Feature: Prompt Meme Challenge
   # TODO: We need to check the display for fandomless memes
   Then I should not see "Fandom 1"
 
-  
   Scenario: Claim a prompt and view claims on main page and user page
   
   Given I have Battle 12 prompt meme fully set up
@@ -272,7 +271,6 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge sign-up was deleted."
     And I should see "Prompts (0)"
 
-  
   Scenario: Sign up with both prompts anon
   
   Given I have Battle 12 prompt meme fully set up
@@ -382,7 +380,6 @@ Feature: Prompt Meme Challenge
   When I edit the first prompt
   Then I should not see "Edit Prompt"
 
-
   Scenario: User can't delete prompt if they don't have enough
 
   Given I have Battle 12 prompt meme fully set up
@@ -411,82 +408,7 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made."
     And I should see "by Anonymous"
     And I should not see "myname" within "#main"
-  
-  Scenario: Fulfilling a claim ticks the right boxes automatically
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I start to fulfill my claim
-  Then the "Battle 12" checkbox should be checked
-    And the "Battle 12" checkbox should not be disabled
-  
-  Scenario: User can fulfill a claim
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  Then my claim should be fulfilled
-  
-  Scenario: User can fulfill a claim to their own prompt
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-    And I sign up for Battle 12 with combination B
-    And I claim a prompt from "Battle 12"
-    And I fulfill my claim
-  Then my claim should be fulfilled
-  
-  Scenario: Fulfilled claim shows correctly on my claims
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I am on my user page
-    And I follow "Claims"
-		And I follow "Fulfilled Claims"
-  Then I should see "Fulfilled Story"
-   # TODO: should I? It's not there at all
-    And I should not see "Not yet posted"
-  
-  Scenario: Claims count should be correct, shows fulfilled claims as well
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I am on my user page
-  # Then show me the sidebar # TODO: it has Claims (0) but why?
-  Then I should see "Claims (0)"
-  When I follow "Claims"
-    And I follow "Fulfilled Claims"
-  Then I should see "Fulfilled Story"
-  
-  Scenario: Claim shows as fulfilled to another user
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I am logged in as "myname1"
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts ("
-  Then I should see "Fulfilled By"
-    And I should see "Mystery Work"
 
-    
   Scenario: Prompts are counted up correctly
   
   Given I have Battle 12 prompt meme fully set up
@@ -515,45 +437,7 @@ Feature: Prompt Meme Challenge
   Then I should not see "Unposted Claims"
   # TODO: they got really hidden, since ordinary user can't get to that page at all
   # Then claims are hidden
-  
-  Scenario: Fulfilled claims are shown to mod
- # TODO: We need to figure out if we want to hide claims from mods in 100% anonymous prompt memes
-#  Given I have Battle 12 prompt meme fully set up
-#  Given everyone has signed up for Battle 12
-#  When I am logged in as "myname4"
-#  When I claim a prompt from "Battle 12"
-#  When I close signups for "Battle 12"
-#  When I am logged in as "myname4"
-#  When I fulfill my claim
-#  When mod fulfills claim
-#  When I am on "Battle 12" collection's page
-#  When I follow "Prompts"
-#    And I follow "Show Claims"
-#  Then I should not see "Claimed by: myname4"
-#    And I should not see "Claimed by: mod1"
-#    And I should not see "Claimed by: (Anonymous)"
-#  When I follow "Show Filled"
-#  Then I should see "Claimed by: myname4"
-#    And I should see "Claimed by: mod1"
-#    And I should not see "Claimed by: (Anonymous)"
-  
-  Scenario: Fulfilled claims are hidden from user
-  
-  Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
-  When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  When mod fulfills claim
-  When I am logged in as "myname4"
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-  Then I should not see "myname4" within "h5"
-    And I should not see "mod1" within "h5"
-    And I should see "Fulfilled Story by Anonymous" within "div.work h4"
-  
+
   Scenario: User cannot see unposted claims to delete
   
   Given I have Battle 12 prompt meme fully set up
@@ -617,46 +501,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Delete"
   When I follow "Delete"
   Then I should see "The claim was deleted."
-  
-  Scenario: Sign-up can be deleted after response has been posted
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I am logged in as "myname1"
-    And I delete my signup for the prompt meme "Battle 12"
-  Then I should see "Challenge sign-up was deleted."
-  # work fulfilling is still fine
-  When I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-    And I should not see "Stargate Atlantis"
-    # work is still fine as another user
-  When I am logged in as "myname4"
-    And I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-    And I should see "Stargate Atlantis"
-  
-  Scenario: Prompt can be removed after response has been posted and still show properly on the work which fulfilled it
 
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I am logged in as "myname1"
-    And I delete my signup for the prompt meme "Battle 12"
-  When I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-    And I should not see "Stargate Atlantis"
-  When I am logged in as "myname4"
-    And I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-    And I should see "Stargate Atlantis"
-  
   Scenario: User can't claim the same prompt twice
   
   Given I have Battle 12 prompt meme fully set up
@@ -667,51 +512,3 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
     # TODO: Refactor this test once we have a new Capybara version so that we look for .exact(Claim)
   Then I should see "Drop Claim"
-  
-  Scenario: User can fulfill the same claim twice
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-  When I fulfill my claim
-  When I fulfill my claim again
-  Then I should see "Work was successfully posted"
-    And I should see "Second Story"
-    And I should see "In response to a prompt by Anonymous"
-    And I should see "Collections: Battle 12"
-  
-  Scenario: User edits existing work to fulfill claim
-  
-  Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-    And I post the work "Existing Story"
-    And I should not see "Battle 12"
-    And I edit the work "Existing Story"
-    And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post Without Preview"
-  Then I should see "Battle 12"
-  Then I should see "Existing Story"
-    And I should see "This work is part of an ongoing challenge"
-  When I reveal works for "Battle 12"
-  When I view the work "Existing Story"
-    And I should not see "This work is part of an ongoing challenge"
-    
-  Scenario: User edits existing work in another collection to fulfill claim
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I have a collection "Othercoll"
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-    And I post the work "Existing Story" in the collection "Othercoll"
-    And I edit the work "Existing Story"
-    And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post Without Preview"
-  Then I should see "Battle 12"
-    And I should see "Othercoll"

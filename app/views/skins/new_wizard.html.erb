@@ -18,7 +18,7 @@
 
 <h3 class="landmark heading"><%= ts('Site Skin Wizard') %></h3>
 
-<%= form_for @skin do |f| %>
+<%= form_for @skin, html: { class: "wizard skin verbose post" } do |f| %>
   <%= render 'wizard_form', :f => f %>
 <% end %>
 <!--/content-->

@@ -1,9 +1,9 @@
 <% content_for :message do %>
-The following abuse report has been sent to the Abuse team:
+<%= t 'user_mailer.abuse_report.para1' %>
   
-URL of the page the abuse is on: <%= @url %>
+<%= t 'user_mailer.abuse_report.url_para' %> <%= @url %>
   
-Description of the abuse:
+<%= t 'user_mailer.abuse_report.description_para' %>
 <%= text_divider %>
 
 <%= to_plain_text(@comment) %><% end %>

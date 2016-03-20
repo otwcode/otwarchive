@@ -34,6 +34,16 @@ When /^I make "([^\"]*)" an Open Doors committee member$/ do |name|
   @user.roles = [@role]
 end
 
+When /^I start to import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|
+  step(%{I go to the import page})
+  step(%{I check "Import for others ONLY with permission"})
+  step(%{I fill in "urls" with "#{url}"})
+  if external_author_name.present?
+    step(%{I fill in "external_author_name" with "#{external_author_name}"})
+    step(%{I fill in "external_author_email" with "#{external_author_email}"})
+  end
+end
+
 When /^I import the work "([^\"]*)"(?: by "([^\"]*)" with email "([^\"]*)")?$/ do |url, external_author_name, external_author_email|
   step(%{I go to the import page})
   step(%{I check "Import for others ONLY with permission"})
