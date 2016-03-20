@@ -71,7 +71,6 @@
     </div>
   <% end %>
 
-  <%= render "skin_actions", skin: @skin %>
   <% unless @skin.css.blank? && @skin.filename.blank? %>
     <div class="css module">
       <h3 class="heading"><abbr title="cascading style sheets">CSS</abbr></h3>
@@ -90,6 +89,6 @@
     </div>
   <% end %>
 
-  <%= render :partial => 'skin_navigation', :locals => {:skin => @skin} %>
+  <%= render "skin_actions", skin: @skin %>
 
 </div>
