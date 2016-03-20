@@ -1,3 +1,4 @@
+<!--descriptions-->
 <h2 class="heading">
   <% if @query %>
     <%= search_header @challenge_signups, nil, "Signup" %>
@@ -5,7 +6,9 @@
     <%= ts("Sign-ups for %{collection}", collection: @collection.title) %>
   <% end %>
 </h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <ul class="navigation actions">
   <li class="search" role="search">
     <%= form_tag collection_signups_path(@collection), class: "simple search", method: :get do |form| %>
@@ -20,7 +23,9 @@
     <%= link_to_help "csv-download" %>
   </li>
 </ul>
+<!--/subnav-->
 
+<!--main content-->
 <% if @challenge_signups.empty? %>
   <p><%= ts("No sign-ups yet!")%></p>
 <% else %>
@@ -56,4 +61,5 @@
 
   <%= will_paginate(@challenge_signups) %>
 <% end %>
+<!--/content-->
 
