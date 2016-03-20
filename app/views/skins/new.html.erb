@@ -16,7 +16,7 @@
 </p>
 <h3 class="landmark heading"><%= ts('Create New Skin') %></h3>
 
-<%= form_for @skin, :html => {:multipart => true, :class => "skin verbose post"} do |f| %>
-  <%= render 'form', :f => f %>
+<%= form_for @skin, html: { multipart: true, class: "skin verbose post" } do |f| %>
+  <%= render 'form', f: f %>
 <% end %>
 <!--/content-->
