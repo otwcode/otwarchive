@@ -3,14 +3,12 @@
 <!--subnav-->
 <h3 class="landmark heading"><%= ts('Navigation') %></h3>
 <ul class="navigation actions" role="navigation">
-  <% if session[:site_skin] %>
-    <li><%= link_to revert_default, unset_skins_path %></li>
-  <% end %>
-  <% if logged_in? %>
-    <% if (current_user.preference.skin_id != Skin.default.id) && session[:site_skin].blank? %>
-      <li><%= render "revert_skin_form" %></li>
-    <% end %>
 
+  <% if session[:site_skin] || (logged_in? && current_user.preference.skin_id != Skin.default.id) %>
+    <li><%= render "revert_skin_form" %></li>
+  <% end %>
+
+  <% if logged_in? %>
     <% # Show Create Work or Site Skin link only on index %>
     <% unless controller.action_name == 'new' || controller.action_name == 'edit' || controller.action_name == 'show' %>
       <li>
