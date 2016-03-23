@@ -177,5 +177,15 @@ module WorksHelper
     work.challenge_claims.present?
   end
 
+  def chapter_total_display_with_link(work)
+    posted_chapters_count = work.number_of_posted_chapters
+    if posted_chapters_count > 1
+      link_to(posted_chapters_count.to_s,
+              work_chapter_path(work, work.last_posted_chapter.id)) +
+      '/' + work.wip_length.to_s
+    else
+      work.chapter_total_display
+    end
+  end
 
 end
