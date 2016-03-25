@@ -77,7 +77,7 @@ module TagsHelper
 
   def link_to_tag_with_text(tag, link_text, options = {})
     if options[:full_path] 
-      link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_path(tag), link_text, options)
+      link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
     else
       link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
     end
