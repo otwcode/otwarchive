@@ -90,7 +90,7 @@ module ApplicationHelper
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [".html_safe + non_anonymous_byline(creation,options[:only_path]) + "]".html_safe
+        anon_byline += " [".html_safe + non_anonymous_byline(creation, options[:only_path]) + "]".html_safe
       end
       return anon_byline
     end
@@ -291,8 +291,8 @@ module ApplicationHelper
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
   def expand_contract_all(target="index")
-    expand_all = content_tag(:a, ts("Expand All"), href:"#", class: "expand_all", "target_class" => target, role: "button")
-    contract_all = content_tag(:a, ts("Contract All"), href:"#", class: "contract_all", "target_class" => target, role: "button")
+    expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
+    contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
     content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")
   end
 
