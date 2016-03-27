@@ -279,14 +279,14 @@ Then (/^I should not see a translated admin post$/) do
   step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
 end
 
-Then /^the work "([^\"]*)" should be hidden/ do |work|
+Then /^the work "([^\"]*)" should be hidden$/ do |work|
   w = Work.find_by_title(work)
   user = w.pseuds.first.user.login
   step %{logged out users should not see the hidden work "#{work}" by "#{user}"}
   step %{logged in users should not see the hidden work "#{work}" by "#{user}"}
 end
 
-Then /^the work "([^\"]*)" should not be hidden/ do |work|
+Then /^the work "([^\"]*)" should not be hidden$/ do |work|
   w = Work.find_by_title(work)
   user = w.pseuds.first.user.login
   step %{logged out users should see the unhidden work "#{work}" by "#{user}"}
