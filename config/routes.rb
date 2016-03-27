@@ -139,13 +139,16 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
-    resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
         get :hide
       end
     end
     resources :users, :controller => 'admin_users' do
+      member do
+        get :confirm_delete_user_creations
+        post :destroy_user_creations
+      end
       collection do
         get :notify
         post :send_notification
@@ -305,6 +308,10 @@ Otwarchive::Application.routes.draw do
         put :approve
         put :reject
       end
+      collection do
+        get :unreviewed
+        put :review_all
+      end
     end
     resources :kudos, :only => [:index]
     resources :links, :controller => "work_links", :only => [:index]
@@ -341,7 +348,12 @@ Otwarchive::Application.routes.draw do
 
   #### COLLECTIONS ####
 
-  resources :gifts
+  resources :gifts, only: [:index]  do
+    member do
+      post :toggle_rejected
+    end
+  end
+
   resources :prompts
   resources :collections do
     collection do
@@ -459,6 +471,7 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :reject
+      put :review
     end
     collection do
       get :hide_comments

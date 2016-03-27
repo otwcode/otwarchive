@@ -41,6 +41,9 @@ class Admin::AdminUsersController < ApplicationController
       end
     else
       @admin_note = params[:admin_note]
+      # default note for spammers
+      @admin_note = (@admin_note.blank? ? "Banned for spam" : @admin_note) if params[:admin_action] == 'spamban'
+      
       @user = User.find_by_login(params[:user_login])
       submitted_kin_user = User.find_by_login(params[:next_of_kin_name])
 
@@ -117,7 +120,7 @@ class Admin::AdminUsersController < ApplicationController
         end
 
         # create ban
-        if params[:admin_action] == 'ban'
+        if params[:admin_action] == 'ban' || params[:admin_action] == 'spamban'
           @user.banned = true
           @user.create_log_item(action: ArchiveConfig.ACTION_BAN, note: @admin_note, admin_id: current_admin.id)
           success_message << ts('User has been permanently suspended.')
@@ -144,10 +147,42 @@ class Admin::AdminUsersController < ApplicationController
 
         @user.save
         flash[:notice] = success_message
-        redirect_to request.referer || root_path
+        if params[:admin_action] == 'spamban'
+          redirect_to confirm_delete_user_creations_admin_user_path(@user)
+        else
+          redirect_to request.referer || root_path
+        end
 
       end
     end
+  end
+  
+  before_filter :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]  
+  def user_is_banned
+    @user = User.find_by_login(params[:id])
+    unless @user && @user.banned?
+      flash[:error] = ts("That user is not banned!")
+      redirect_to admin_users_path and return
+    end
+  end
+  
+  def confirm_delete_user_creations
+    @works = @user.works.paginate(page: params[:works_page])
+    @comments = @user.comments.paginate(page: params[:comments_page])
+    @bookmarks = @user.bookmarks
+    @collections = @user.collections
+    @series = @user.series
+  end
+
+  def destroy_user_creations
+    creations = @user.works + @user.bookmarks + @user.collections + @user.comments
+    creations.each do |creation|
+      AdminActivity.log_action(current_admin, creation, action: 'destroy spam', summary: creation.inspect)
+      creation.mark_as_spam! if creation.respond_to?(:mark_as_spam!)
+      creation.destroy
+    end
+    flash[:notice] = ts("All creations by user %{login} have been deleted.", login: @user.login)
+    redirect_to(admin_users_path)
   end
 
   # DELETE admin/users/1

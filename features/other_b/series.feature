@@ -4,6 +4,7 @@ Feature: Create and Edit Series
   As a reader
   The index needs to load properly, even for authors with more than ArchiveConfig.ITEMS_PER_PAGE series
 
+  @disable_caching
   Scenario: Three ways to add a work to a series
     Given the following activated user exists
       | login         | password   |
@@ -92,7 +93,8 @@ Feature: Create and Edit Series
       And I should see "Part 3 of the Ponies series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "div#series"
       And I should see "Part 3 of the Ponies series" within "div#series"
-    
+
+  @disable_caching
   Scenario: Three ways to add a work to a series: a user with more than one pseud
     Given the following activated user exists
       | login         | password   |
@@ -183,6 +185,7 @@ Feature: Create and Edit Series
       And I should see "Part 1 of the Black Beauty series" within "div#series"
       And I should see "Part 3 of the Ponies series" within "div#series"
 
+  @disable_caching
   Scenario: Rename a series
     Given I am logged in as a random user
     When I add the work "WALL-E" to series "Robots"

@@ -1,28 +1,4 @@
-<!-- expects local "skin" and is cached one level up -->
+<% # expects local "skin" and is cached one level up %>
 <style type="text/css">
-  <% unless skin.is_a?(WorkSkin) %>
-    <% if skin.margin %>
-      #chapters {margin: auto <%= skin.margin %>% 2.5em; padding: 0.5em <%= skin.margin %>% 0;}
-    <% end %>
-  
-    <% if skin.background_color || skin.foreground_color || skin.font || skin.base_em %>
-      <% bgcolor = skin.background_color ? skin.background_color : "#FFFEF9" %>
-      body	{
-        background: <%= bgcolor %>;
-        color: <%= skin.foreground_color ? skin.foreground_color : "#222" %>;
-        font: <%= skin.base_em ? skin.base_em : "100" %>%/1.125 <%= skin.font ? skin.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;
-      }
-    <% end %>
-    <% if skin.paragraph_margin %>
-      #main .userstuff p {margin-bottom: <%= skin.paragraph_margin %>em;}
-    <% end %>
-    <% if skin.headercolor %>
-      #header {background-image: none; background-color: <%= skin.headercolor %>;}
-    <% end %>
-    <% if skin.accent_color %>
-      #dashboard ul, #main dl.meta {background-color: <%= skin.accent_color %>;}
-    <% end %>
-  <% end %>
-
   <%=raw skin.css %>
 </style>  

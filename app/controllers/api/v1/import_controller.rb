@@ -61,6 +61,7 @@ class Api::V1::ImportController < Api::V1::BaseController
     work_status, work_messages = work_errors(external_work)
     work_url = ""
     original_url = []
+    work = nil
     if work_status == :ok
       urls = external_work[:chapter_urls]
       original_url = urls.first
@@ -69,15 +70,31 @@ class Api::V1::ImportController < Api::V1::BaseController
       begin
         work = storyparser.download_and_parse_chapters_into_story(urls, options)
         work.save
-        @works << work
-        @some_success = true
-        work_status = :created
-        work_url = work_url(work)
-        work_messages << "Successfully created work \"" + work.title + "\"."
+        if work.persisted? && work.chapters.all? { |c| c.errors.empty? }
+          @works << work
+          @some_success = true
+          work_status = :created
+          work_url = work_url(work)
+          work_messages << "Successfully created work \"" + work.title + "\"."
+        else
+          @some_errors = true
+          work_status = :unprocessable_entity
+          work_messages << work.errors.messages.values.flatten if work
+
+          # Extract work chapter errors and append the chapter number to them for readability
+          if work.chapters
+            chapter_errors = work.chapters.map(&:errors).each_with_index
+            chapter_messages = chapter_errors.map do |e, i|
+              e.messages.values.flatten.map { |s| s.prepend("Chapter #{i + 1} ") }
+            end
+            work_messages << chapter_messages.flatten
+          end
+        end
       rescue => exception
         @some_errors = true
         work_status = :unprocessable_entity
-        work_messages << exception.message
+        work_messages << exception.message.to_json
+        work_messages << work.errors if work
       end
     end
 
@@ -85,7 +102,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       status: work_status,
       url: work_url,
       original_url: original_url,
-      messages: work_messages
+      messages: work_messages.flatten
     }
   end
 
@@ -144,8 +161,9 @@ class Api::V1::ImportController < Api::V1::BaseController
       do_not_set_current_author: true,
       post_without_preview: params[:post_without_preview].blank? ? true : params[:post_without_preview],
       restricted: params[:restricted],
-      override_tags: params[:override_tags],
+      override_tags: params[:override_tags].blank? ? true : params[:override_tags],
       collection_names: params[:collection_names],
+      title: params[:title],
       fandom: params[:fandoms],
       warning: params[:warnings],
       character: params[:characters],
@@ -154,6 +172,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       category: params[:categories],
       freeform: params[:additional_tags],
       summary: params[:summary],
+      notes: params[:notes],
       encoding: params[:encoding],
       external_author_name: params[:external_author_name],
       external_author_email: params[:external_author_email],

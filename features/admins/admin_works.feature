@@ -157,7 +157,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Successfully logged in"
     When I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
-    Then I should not see "Mark as spam"
+    Then I should not see "Spam" within "#feedback"
 
     # now mark a comment as spam
     When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
@@ -165,26 +165,29 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (2)"
     Then I should see "rolex"
-      And I should see "Spam"
-    When I follow "Spam"
+      And I should see "Spam" within "#feedback"
+    When I follow "Spam" within "#feedback"
+    # Can see link to unmark
     Then I should see "Not Spam"
-    When I follow "Hide Comments"
-    # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
-    # Then I should see "Comments (1)"
-
-    # comment should no longer be there
-    When I follow "Comments"
-    Then I should see "rolex"
-      And I should see "Not Spam"
+      # Admin can still see spam comment
+      And I should see "Hide Comments (2)"
+      And I should see "rolex"
+      # proper content should still be there
+      And I should see "I loved this!"
     When I am logged out as an admin
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
+      # user can't see spam comment, but can see that it exists
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
     Then I should not see "rolex"
+      And I should see "I loved this!"
+    # author can still see that spam comment exists, but can't see content of it
     When I am logged in as "author" with password "password"
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
-      Then I should not see "rolex"
-      
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
+    Then I should not see "rolex"
+      And I should see "I loved this!"
       
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
@@ -197,7 +200,6 @@ Feature: Admin Actions for Works and Bookmarks
     And the work "Spammity Spam" should be marked as spam
     And the work "Spammity Spam" should be hidden
     
-  
   Scenario: can mark a spam work as not-spam
   Given the spam work "Spammity Spam"
     And I am logged in as an admin
