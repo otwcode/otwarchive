@@ -35,7 +35,7 @@ before_script:
 notifications:
   email:
     recipients:
-      - otw-coders@transformativeworks.org
+      - otw-coders-extra@transformativeworks.org
     on_success: change
     on_failure: always
   irc:
