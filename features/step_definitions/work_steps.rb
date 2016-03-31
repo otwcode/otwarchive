@@ -33,10 +33,11 @@ end
 #
 # If you add to this regexp, you probably want to update all the 
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to|with) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|
+When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to|with) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, rating, collection, recipient|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
+  select(rating.blank? ? DEFAULT_RATING : rating, from: "Rating")
   check(category.blank? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
   fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform))
@@ -48,7 +49,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with f
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |title, fandom, freeform, category, collection, recipient|  
+When /^I post (?:a|the)?(?: (\d+) chapter) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |number_of_chapters, title, fandom, freeform, category, rating, collection, recipient|  
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -56,8 +57,18 @@ When /^I post (?:a|the) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with free
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" in collection "#{collection}" as a gift to "#{recipient}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}"}
     click_button("Post Without Preview")
+  end
+  # Now add the chapters
+  if number_of_chapters.to_i > 1
+    work = Work.find_by_title(title)
+    visit work_url(work)
+    (number_of_chapters.to_i - 1).times do |i|
+      step %{I follow "Add Chapter"}
+      fill_in("content", with: "Yet another chapter.")
+      click_button("Post Without Preview")
+    end
   end
   Work.tire.index.refresh
 end
@@ -467,6 +478,12 @@ When /^I mark the work "([^\"]*)" for later$/ do |work|
   Reading.update_or_create_in_database
 end
 
+When /^I follow the recent chapter link for the work "([^\"]*)"$/ do |work|
+  work = Work.find_by_title(work)
+  work_id = work.id.to_s
+  find("#work_#{work_id} dd.chapters a").click
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -499,4 +516,9 @@ end
 
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
+end
+
+Then /^I should find myself on Chapter ([\d]+) of the work$/ do |chapter_number|
+  step "I should see \"Chapter #{chapter_number}\" within \"div#chapters\""
+  step "I should see \"Entire Work\""
 end

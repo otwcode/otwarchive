@@ -81,3 +81,15 @@ When /^I set my time zone to "([^"]*)"$/ do |time_zone|
   user.preference.time_zone = time_zone
   user.preference.save
 end
+
+When /^I set my preferences to show adult content without warning$/ do
+  user = User.current_user
+  user.preference.adult = true
+  user.preference.save
+end
+
+When /^I set my preferences to warn before showing adult content$/ do
+  user = User.current_user
+  user.preference.adult = false
+  user.preference.save
+end
