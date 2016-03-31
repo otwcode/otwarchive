@@ -49,7 +49,7 @@ When /^I set up (?:a|the) draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with f
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the)?(?: (\d+) chapter) work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |number_of_chapters, title, fandom, freeform, category, rating, collection, recipient|  
+When /^I post (?:a|the) (?:(\d+) chapter )?work "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^\"]*)")?(?: as a gift (?:for|to) "([^\"]*)")?$/ do |number_of_chapters, title, fandom, freeform, category, rating, collection, recipient|  
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by_title(title)
   if work
@@ -61,7 +61,7 @@ When /^I post (?:a|the)?(?: (\d+) chapter) work "([^\"]*)"(?: with fandom "([^\"
     click_button("Post Without Preview")
   end
   # Now add the chapters
-  if number_of_chapters.to_i > 1
+  if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by_title(title)
     visit work_url(work)
     (number_of_chapters.to_i - 1).times do |i|
