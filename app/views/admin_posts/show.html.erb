@@ -5,54 +5,69 @@
     <div class="icon"></div>
     <!--/descriptions-->
     <!--subnav-->
-    <ul class="navigation actions" role="navigation">
-      <% if @previous_admin_post %>
-        <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+    <div class="navigation actions module">
+      <% if logged_in_as_admin? %>
+        <h4 class="landmark heading"><%= ts("Admin Actions") %></h4>
+        <ul class="management actions" role="navigation">
+          <li><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></li>
+          <li><%= link_to t('admin.admin_nav.delete', default: 'Delete Post'), @admin_post, confirm: 'Are you sure you want to delete this news post?', method: :delete %></li>
+        </ul>
       <% end %>
-      <% if @next_admin_post %>
-        <li><%= link_to("Next Post", @next_admin_post) %></li>
-      <% end %>
-      <li><%= link_to_rss admin_posts_path(:rss) %></li>
-    </ul>
+      <h4 class="landmark heading"><%= ts("News Post Navigation") %></h4>
+      <ul class="actions" role="navigation">
+        <% if @previous_admin_post %>
+          <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+        <% end %>
+        <% if @next_admin_post %>
+          <li><%= link_to("Next Post", @next_admin_post) %></li>
+        <% end %>
+        <li><%= link_to_rss admin_posts_path(:rss) %></li>
+      </ul>
+    </div>
     <!--/subnav-->
   </div>
-<!--main content-->
-<div role="article" class="group">
-  <div class="header">
-    <h3 class="heading">
-      <%= @admin_post.title.html_safe %>
-    </h3>
-      <h4 class="heading">
-        Published: <%= @admin_post.created_at %>
-        <% if logged_in_as_admin? %>
-            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), class: 'action' %>
-            <%= link_to t('admin.admin_nav.delete', default: 'Delete Post'), @admin_post, confirm: 'Are you sure you want to delete this news post?', method: :delete, class: 'action' %>
+  <!--main content-->
+  <div role="article" class="news group">
+    <div class="header">
+      <h3 class="heading"><%= @admin_post.title.html_safe %></h3>
+    </div>
+    <h4 class="landmark heading"><%= ts("Post Header") %></h4>
+    <div class="wrapper">
+      <dl class="meta">
+        <dt class="published"><%= ts("Published:") %></dt>
+        <dd class="published"><%= @admin_post.created_at %></dd>
+        <% if @admin_post.translated_post %>
+          <dt class="original translations"><%= ts("Original:") %></dt>
+          <dd class="original translations"><%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></dd>
+        <% elsif !@admin_post.translations.empty? %>
+          <dt class="translations"><%= ts("Translations:") %></dt>
+          <dd class="translations">
+            <ul class="languages commas">
+              <% for admin_post in @admin_post.translations %>
+                <li><%= link_to admin_post.language.name, admin_post %></li>
+              <% end %>
+            </ul>
+          </dd>
         <% end %>
-      </h4>
-    <% if @admin_post.translated_post %>
-      <h4 class="heading">Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
-    <% elsif !@admin_post.translations.empty? %>
-      <h4 class="heading">Translations:</h4>
-      <ul class="commas">
-        <% for admin_post in @admin_post.translations %>
-          <li><%= link_to admin_post.language.name, admin_post %></li>
-      <% end %>
-    <% end %>
-  </div>
-  <div class="userstuff">
+        <% if @admin_post.tags.length > 0 %>
+          <dt class="tags"><%= ts("Tags:") %></dt>
+          <dd class="tags">
+            <ul class="tags commas">
+              <% for tag in @admin_post.tags %>
+                <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
+              <% end %>
+            </ul>
+          </dd>
+        <% end %>
+      </dl>
+    </div>
+    <div class="userstuff">
       <%=raw sanitize_field(@admin_post, :content) %>
+    </div>
   </div>
-  <% if @admin_post.tags.length > 0 %>
-  <ul class="tags">
-    <% for tag in @admin_post.tags %>
-      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
-    <% end %>
-  </ul>
-  <% end %>
-</div>
-<!--/content-->
+  <!--/content-->
 
-<!-- BEGIN comment section -->
-<%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>
-<!-- END comment section -->
+  <!-- BEGIN comment section -->
+  <%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>
+  <!-- END comment section -->
 </div>
