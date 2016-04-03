@@ -366,6 +366,13 @@ Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
   click_button("Add To Blacklist")
 end
 
+Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
+  visit admin_blacklisted_emails_url
+  u = User.find_by_login(user)
+  fill_in("Email", with: u.email)
+  click_button("Add To Blacklist")
+end
+
 Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
   visit admin_blacklisted_emails_url
   fill_in("Find email", with: email)
