@@ -48,3 +48,13 @@ Scenario: Variants of blacklisted email addresses should not be usable
     And I should not be able to comment with the address "foobar+baz@gmail.com"
     And I should not be able to comment with the address "foo.bar@gmail.com"
     And I should be able to comment with the address "whee@gmail.com"
+
+Scenario: Blacklisting a user's email should not affect their ability to post comments
+  Given the user "author" exists and is activated
+    And I am logged in as an admin
+    And I have blacklisted the address for user "author"
+  When I am logged in as "author"
+    And I post the work "New Work"
+    And I post a comment "here's a great comment"
+  Then I should see "Comment created!"
+  
