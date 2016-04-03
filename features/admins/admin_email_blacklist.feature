@@ -9,11 +9,10 @@ Scenario: Add email address to blacklist
   Then I should see "Blacklist"
   When I follow "Blacklist"
   Then I should see "Find blacklisted email addresses"
-    And I should see "Add To Blacklist"
     And I should see "Add email address to blacklist for guest comments"
     And I should see "Email"
   When I fill in "Email" with "foo@bar.com"
-    And I press "Add"
+    And I press "Add To Blacklist"
   Then I should see "Email address foo@bar.com added to blacklist"
     And the address "foo@bar.com" should be in the blacklist
 
@@ -21,7 +20,8 @@ Scenario: Remove email address from blacklist
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
   When I follow "Blacklist"
-    And I fill in "Search for email" with "bar"
+    And I fill in "Find email" with "bar"
+    And I press "Find"
   Then I should see "foo@bar.com"
   When I follow "Remove"
   Then I should see "Email address foo@bar.com removed from blacklist"
@@ -31,15 +31,20 @@ Scenario: Blacklisted email addresses should not be usable in guest comments
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
     And I am logged in as "author"
-    And I have posted the work "New Work"
-  When I am logged out
-    And I view the work "New Work"
-    And I fill in "Name" with "Someone"
-    And I fill in "Email" with "foo@bar.com"
-    And I fill in "Comment" with "I loved this!"
-    And I press "Comment"
-  Then I should see "The owner of this email address has asked not to receive email from us. That means it can't be used in guest comments. Please check the address to make sure it's yours to use"
+    And I post the work "New Work"
+  When I post the comment "I loved this" on the work "New Work" as a guest with email "foo@bar.com"
+  Then I should see "has been blocked at the owner's request"
     And I should not see "Comments (1)"
   When I fill in "Email" with "someone@bar.com"
     And I press "Comment"
   Then I should see "Comments (1)"
+
+Scenario: Variants of blacklisted email addresses should not be usable
+  Given I am logged in as an admin
+  When I have blacklisted the address "foo.bar+gloop@googlemail.com"
+  Then the address "foobar@gmail.com" should be in the blacklist
+  When I am logged out
+  Then I should not be able to comment with the address "foobar@gmail.com"
+    And I should not be able to comment with the address "foobar+baz@gmail.com"
+    And I should not be able to comment with the address "foo.bar@gmail.com"
+    And I should be able to comment with the address "whee@gmail.com"
