@@ -1,17 +1,17 @@
 default_settings = {
-  :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-  :account_creation_enabled => true,
-  :creation_requires_invite => true,
-  :request_invite_enabled => true,
-  :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  account_creation_enabled: true,
+  creation_requires_invite: true,
+  request_invite_enabled: true,
+  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
 }
 
 def update_settings(settings)
   admin_settings = AdminSetting.first_or_create
   admin_settings.update_attributes(settings)
-  admin_settings.save(:validate => false)
+  admin_settings.save(validate: false)
 end
 
 ### GIVEN
@@ -19,7 +19,7 @@ end
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
     settings = AdminSetting.new(default_settings)
-    settings.save(:validate => false)
+    settings.save(validate: false)
   end
 end
 
@@ -42,11 +42,11 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
-    admin = FactoryGirl.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
+    admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
   visit admin_login_path
-  fill_in "Admin user name", :with => "testadmin"
-  fill_in "Admin password", :with => "testadmin"
+  fill_in "Admin user name", with: "testadmin"
+  fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
   step("I should see \"Successfully logged in\"")
 end
@@ -172,8 +172,8 @@ end
 
 When /^I make an admin post$/ do
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Default Admin Post")
-  fill_in("content", :with => "Content of the admin post.")
+  fill_in("admin_post_title", with: "Default Admin Post")
+  fill_in("content", with: "Content of the admin post.")
   click_button("Post")
 end
 
@@ -187,10 +187,10 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("Question*", :with => "Number #{n} Question.")
-  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("Category name*", :with => "Number #{n} FAQ")
-  fill_in("Anchor name*", :with => "Number#{n}anchor")
+  fill_in("Question*", with: "Number #{n} Question.")
+  fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", with: "Number #{n} FAQ")
+  fill_in("Anchor name*", with: "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -203,8 +203,8 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
   n ||= 1
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Amazing News #{n}")
-  fill_in("content", :with => "This is the content for the #{n} Admin Post")
+  fill_in("admin_post_title", with: "Amazing News #{n}")
+  fill_in("content", with: "This is the content for the #{n} Admin Post")
   click_button("Post")
 end
 
@@ -254,10 +254,10 @@ end
 
 When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
-  fill_in("content", :with => "Deutsch Woerter")
+  fill_in("admin_post_title", with: "Deutsch Ankuendigung")
+  fill_in("content", with: "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-  fill_in("admin_post_translated_post_id", :with => AdminPost.find_by_title("Default Admin Post").id)
+  fill_in("admin_post_translated_post_id", with: AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
