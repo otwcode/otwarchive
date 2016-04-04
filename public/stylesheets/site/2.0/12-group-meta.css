@@ -73,12 +73,12 @@ dl.meta {
 .news .meta dt, .news .meta dd, .news .meta ul {
   display: inline;
   float: none;
-  line-height: 2;
 }
 
 .news .meta dd:after {
   content: " ";
   display: block;
+  margin-bottom: 0.643em;
 }
 
 /* TODO the post new work form needs its classes changed so these overrides are no longer needed */
