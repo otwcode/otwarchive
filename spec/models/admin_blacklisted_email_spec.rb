@@ -23,7 +23,9 @@ describe AdminBlacklistedEmail, :ready do
   end
     
   context "blacklisted emails" do
-    let(:existing_email) {create(:admin_blacklisted_email, email: "foobar@gmail.com")}    
+    before(:each) do
+      @existing_email = FactoryGirl.create(:admin_blacklisted_email, email: "foobar@gmail.com")
+    end
     
     it "match themselves" do
       expect(AdminBlacklistedEmail.is_blacklisted?("foobar@gmail.com"))
