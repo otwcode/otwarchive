@@ -16,8 +16,8 @@
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for admin_post in admin_post.translations %>
-            <li><%= link_to admin_post.language.name, admin_post %></li>
+          <% for translation in admin_post.translations %>
+            <li><%= link_to translation.language.name, translation %></li>
           <% end %>
         </ul>
       </dd>
