@@ -18,28 +18,8 @@
   <!--main content-->
   <% @admin_posts.each do |admin_post| %>
 
-  <div class="module group" role="article">
-    <div class="header">
-      <h3 class="heading">
-        <%= link_to admin_post.title.html_safe, admin_post %>
-      </h3>
-      <h4 class="heading">
-        <%= ts('Published:') %> <span class="datetime"><%= admin_post.created_at %></span> 
-        <% if logged_in_as_admin? %>
-          <span class="actions"><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post) %></span>
-        <% end %>
-      </h4>
-    </div>
-    <div class="userstuff">
-      <%=raw sanitize_field(admin_post, :content) %>
-    </div>
-    <% if admin_post.tags.length > 0 %>
-      <ul class="tags">
-        <% for tag in admin_post.tags %>
-          <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
-        <% end %>
-      </ul>
-    <% end %>
+  <div class="news module group" role="article">
+    <%= render "admin_post", admin_post: admin_post %>
     <!-- BEGIN comment section -->
     <h3 class="landmark heading"><%= ts("Comment") %></h3>
     <ul class="actions" role="navigation">
