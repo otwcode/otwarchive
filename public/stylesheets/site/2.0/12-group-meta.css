@@ -73,6 +73,7 @@ dl.meta {
 .news .meta dt, .news .meta dd, .news .meta ul {
   display: inline;
   float: none;
+  margin-left: 0; /* to avoid problems in narrow width */
 }
 
 .news .meta dd:after {
