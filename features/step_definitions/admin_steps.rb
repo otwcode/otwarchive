@@ -264,9 +264,9 @@ end
 Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
-  step(%{I should not see "Deutsch" within "dd.translations"})
-  step(%{I follow "Default Admin Post"})
   step(%{I should see "Translations: Deutsch"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should see "Deutsch" within "dd.translations"})
   step(%{I follow "Deutsch"})
   step(%{I should see "Deutsch Woerter"})
 end
