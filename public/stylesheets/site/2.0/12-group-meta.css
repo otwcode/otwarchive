@@ -78,7 +78,7 @@ dl.meta {
 .news .meta dd:after {
   content: " ";
   display: block;
-  margin-bottom: 0.643em;
+  height: 0.643em;
 }
 
 /* TODO the post new work form needs its classes changed so these overrides are no longer needed */
