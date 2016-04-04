@@ -27,7 +27,7 @@
       <dd class="tags">
         <ul class="tags commas">
           <% for tag in admin_post.tags %>
-            <li><%= link_to tag.name, admin_posts_path(:tag => tag.id), :class => "tag" %></li>
+            <li><%= link_to tag.name, admin_posts_path(tag: tag.id), class: "tag" %></li>
           <% end %>
         </ul>
       </dd>
