@@ -8,8 +8,8 @@ Scenario: Add email address to blacklist
   Given I am logged in as an admin
   Then I should see "Blacklist"
   When I follow "Blacklist"
-  Then I should see "Find blacklisted email addresses"
-    And I should see "Add email address to blacklist for guest comments"
+  Then I should see "Find blacklisted emails"
+    And I should see "Add email address to blacklist"
     And I should see "Email"
   When I fill in "Email" with "foo@bar.com"
     And I press "Add To Blacklist"
@@ -20,7 +20,7 @@ Scenario: Remove email address from blacklist
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
   When I follow "Blacklist"
-    And I fill in "Find email" with "bar"
+    And I fill in "Find Email" with "bar"
     And I press "Find"
   Then I should see "foo@bar.com"
   When I follow "Remove"

@@ -44,7 +44,7 @@
         <ul class="index group">
           <% @admin_blacklisted_emails.each do |blacklisted_email| %>
           <li>
-            <%= link_to "X", blacklisted_email, class: "actions", method: :delete %>
+            [<%= link_to "Remove", blacklisted_email, class: "actions", method: :delete %>]
             <%= blacklisted_email.email %>
           </li>
           <% end %>

@@ -356,14 +356,14 @@ end
 
 Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Find email", with: email)
+  fill_in("Find Email", with: email)
   click_button("Find")
   assert page.should have_content(email)
 end
 
 Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Find email", with: email)
+  fill_in("Find Email", with: email)
   click_button("Find")
   step %{I should see "0 emails found"}
 end
