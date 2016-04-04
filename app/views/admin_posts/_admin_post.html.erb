@@ -16,7 +16,8 @@
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for admin_post in admin_post.translations %>
+          <% # admin_post_translations = admin_post.translations.map(&:language).sort_by(&:name) %>
+          <% for admin_post in admin_post.translations.sort_by { |translation| translation.language.short } %>
             <li><%= link_to admin_post.language.name, admin_post %></li>
           <% end %>
         </ul>
