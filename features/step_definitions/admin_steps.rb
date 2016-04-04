@@ -264,10 +264,10 @@ end
 Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
-    step(%{I should not see "Deutsch Ankuendigung"})
+  step(%{I should not see "Deutsch" within "dd.translations"})
   step(%{I follow "Default Admin Post"})
-  step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
-  step(%{I follow "Deutsch Ankuendigung"})
+  step(%{I should see "Translations: Deutsch"})
+  step(%{I follow "Deutsch"})
   step(%{I should see "Deutsch Woerter"})
 end
 
@@ -276,7 +276,7 @@ Then (/^I should not see a translated admin post$/) do
   step(%{I should see "Default Admin Post"})
   step(%{I should see "Deutsch Ankuendigung"})
   step(%{I follow "Default Admin Post"})
-  step(%{I should not see "Translations: Deutsch Deutsch Ankuendigung"})
+  step(%{I should not see "Translations: Deutsch"})
 end
 
 Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|

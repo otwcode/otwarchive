@@ -135,7 +135,7 @@ Feature: Admin Actions to Post News
       And I press "Post"
     Then I should see "Admin Post was successfully created."
       And I should see "toaster" within "div.admin.home"
-      And I should see "futurama" within ".tags"
+      And I should see "futurama" within "dd.tags"
 
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
     Given I am logged in as an admin
