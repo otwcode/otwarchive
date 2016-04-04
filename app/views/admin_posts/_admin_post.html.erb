@@ -16,13 +16,13 @@
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for admin_post in admin_post.translations.sort_by { |translation| translation.language.short } %>
-            <li><%= link_to admin_post.language.name, admin_post %></li>
+          <% for translation in admin_post.translations %>
+            <li><%= link_to translation.language.name, admin_post %></li>
           <% end %>
         </ul>
       </dd>
     <% end %>
-    <% if admin_post.tags.length > 0 %>
+    <% if admin_post.tags.present? %>
       <dt class="tags"><%= ts("Tags:") %></dt>
       <dd class="tags">
         <ul class="tags commas">

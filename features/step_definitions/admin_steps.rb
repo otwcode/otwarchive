@@ -161,6 +161,15 @@ Given /^I have posted an admin post without paragraphs$/ do
   step("I am logged out as an admin")
 end
 
+Given /^I have posted an admin post with tags$/ do
+  step("I am logged in as an admin")
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Default Admin Post")
+  fill_in("content", with: "Content of the admin post.")
+  fill_in("admin_post_tag_list", with: "quotes, futurama")
+  click_button("Post")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -269,6 +278,16 @@ Then (/^I should see a translated admin post$/) do
   step(%{I should see "Deutsch" within "dd.translations"})
   step(%{I follow "Deutsch"})
   step(%{I should see "Deutsch Woerter"})
+end
+
+Then (/^I should see a translated admin post with tags$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Tags: quotes futurama"})
+  step(%{I should see "Translations: Deutsch"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should see "Deutsch" within "dd.translations"})
+  step(%{I should see "futurama" within "dd.tags"})
 end
 
 Then (/^I should not see a translated admin post$/) do
