@@ -1,0 +1,57 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t('admin.admin_email_blacklist.index.page_heading', default: "Manage Email Blacklist") %></h2>
+  
+  <p> <%= ts("Blacklisted email addresses cannot be used in guest comments. They will not affect users who share the same email address or prevent invitations from being sent or used by those email addresses. All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is blacklisted).") %></p>
+  <!--/descriptions-->
+
+  <!--main content-->
+  <h3 class="heading"><%= ts("Add email address to blacklist")%></h3>
+  
+  <%= form_for(@admin_blacklisted_email) do |f| %>
+    <%= error_messages_for @admin_blacklisted_email %>
+    <fieldset>
+      <p>
+        <%= f.label :email, ts("Email") %>
+        <%= f.text_field :email %>
+        <span class="submit actions">
+          <%= f.submit ts("Add To Blacklist") %>
+        </span>
+      </p>
+    </fieldset>
+  <% end %>
+  
+  <h3 class="heading"><%= ts("Find blacklisted emails")%></h3>
+    
+  <!-- search form -->
+  <%= form_tag url_for(controller: "admin/blacklisted_emails", action: "index"), method: :get, class: "search", role: "search" do %>
+    <fieldset>
+      <p>
+        <%= label_tag "query", ts("Find Email") %>
+        <%= text_field_tag "query", params[:query] %>
+        <span class="submit actions">
+          <%= submit_tag t('admin.admin_blacklisted_emails.index.form.submit', default: "Find") %>
+        </span>
+      </p>
+    </fieldset>
+  <% end %>
+
+  <!-- list of search results -->
+  <div id="search results">
+    <% if @admin_blacklisted_emails %>
+      <h3 class="heading"><%= ts("#{pluralize(@admin_blacklisted_emails.count, 'email')} found") %></h3>
+      <% if @admin_blacklisted_emails.count > 0 %>
+        <ul class="index group">
+          <% @admin_blacklisted_emails.each do |blacklisted_email| %>
+          <li>
+            [<%= link_to "Remove", blacklisted_email, class: "actions", method: :delete %>]
+            <%= blacklisted_email.email %>
+          </li>
+          <% end %>
+        </ul>
+        <%= will_paginate @admin_blacklisted_emails %>
+      <% end %>
+    <% end %>
+  </div>
+  <!--/content-->
+</div>

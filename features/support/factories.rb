@@ -30,6 +30,10 @@ FactoryGirl.define do
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
   end
 
+  factory :admin_blacklisted_email do |f|
+    f.sequence(:email) {|n| "foo#{n}@ao3.org"}
+  end
+
   factory :admin_post do |f|
     f.sequence(:title) { |n| "Amazing News #{n}"}
     f.sequence(:content) {|n| "This is the content for the #{n} Admin Post"}
