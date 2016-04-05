@@ -1,17 +1,22 @@
 <% content_for :message do %>
   <p>
-    Hi!
+    Hi <%= @username.present? ? @username + "!" : "!" %>
   </p>
 
   <p>
-    We're working hard to reply to everyone, and we'll respond to you as soon as we can. Your communication is greatly
-    valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the
-    information you submitted through the Technical Support and Feedback form:
+    We're working hard to reply to everyone, and we'll respond to you as soon as
+    we can. Your communication is greatly valued, and it will be reviewed and
+    answered by our volunteer Support team. In the meantime, here is a copy of
+    the information you submitted through the Technical Support and Feedback
+    form:
   </p>
   
   <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
 
-  <p>If you have additional questions or information, do not hesitate to send in another ticket.</p>
+  <p>
+    If you have additional questions or information, do not hesitate to send in
+    another ticket.
+  </p>
 
   <p>
     Regards,<br/>

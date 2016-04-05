@@ -372,6 +372,10 @@ class UserMailer < BulletproofMailer::Base
     return unless feedback.email
     @summary = feedback.summary
     @comment = feedback.comment
+    @username = if feedback.username.present?
+                  feedback.username
+                end
+    @language = feedback.language
     mail(
       to: feedback.email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"

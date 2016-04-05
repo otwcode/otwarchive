@@ -1,9 +1,17 @@
 <% content_for :message do %>
-Here's some user feedback on the archive!  
-<% unless ArchiveConfig.REVISION.blank? %>
-
-Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
-<% end %>
+Here's some user feedback on the archive!
+  <% if @username.blank? %>
+    Username: Anonymous user
+  <% else %>
+    Username: <%= raw @username %>
+  <% end %>
+  <% unless @email.blank? %>
+    Email address: <%= raw @email %>
+  <% end %>
+    Language: <%= @language %>
+  <% unless ArchiveConfig.REVISION.blank? %>
+      Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
+  <% end %>
 
 Feedback: 
 <%= text_divider %>

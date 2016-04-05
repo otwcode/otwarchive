@@ -40,10 +40,17 @@ class AdminMailer < ActionMailer::Base
     feedback = Feedback.find(feedback_id)
     @summary = feedback.summary
     @comment = feedback.comment
+    @username = if feedback.username.present?
+                  feedback.username
+                end
+    @email = if feedback.email.present?
+               feedback.email
+             end
+    @language = feedback.language
     mail(
       from: feedback.email.blank? ? ArchiveConfig.RETURN_ADDRESS : feedback.email,
       to: ArchiveConfig.FEEDBACK_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - " + feedback.summary,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end
 
