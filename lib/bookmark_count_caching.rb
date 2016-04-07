@@ -1,15 +1,15 @@
-module WorkBookmarkCountCaching
-  def key_for_bookmark_counting_public
-    "/v1/bookmark_count_public/#{self.id}"
+module BookmarkCountCaching
+  def key_for_public_bookmarks_count
+    "/v1/public_bookmarks_count/#{self.id}"
   end
 
-  def work_bookmarks_public_count
-    Rails.cache.fetch(self.key_for_bookmark_counting_public) do
+  def public_bookmarks_count
+    Rails.cache.fetch(self.key_for_public_bookmarks_count) do
       self.bookmarks.is_public.count
     end
   end
 
-  def invalidate_work_bookmark_count
-    Rails.cache.delete(self.key_for_bookmark_counting_public)
+  def invalidate_public_bookmarks_count
+    Rails.cache.delete(self.key_for_public_bookmarks_count)
   end
 end

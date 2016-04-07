@@ -91,7 +91,7 @@ class Bookmark < ActiveRecord::Base
 
   def invalidate_bookmark_count
     if self.bookmarkable_type == 'Work'
-      Work.find(self.bookmarkable_id).invalidate_work_bookmark_count
+      Work.find(self.bookmarkable_id).invalidate_public_bookmarks_count
     end
   end
 
