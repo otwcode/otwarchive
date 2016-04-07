@@ -234,21 +234,19 @@ module TagsHelper
 
     categories.each do |category|
       if tags = tag_groups[category]
-        unless tags.empty?
-          class_name = category.downcase.pluralize
-          if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
-            open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
-            close_tags = "</strong></li>"
-            tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
-          elsif class_name == "warnings"
-            open_tags = "<li class='#{class_name}'><strong>"
-            close_tags = "</strong></li>"
-            link_array = tags.collect{|tag| link_to_tag_works(tag)}
-            tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
-          else
-            link_array = tags.collect{|tag| link_to_tag_works(tag)}
-            tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
-          end
+        class_name = category.downcase.pluralize
+        if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
+          open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
+        elsif class_name == "warnings"
+          open_tags = "<li class='#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
+          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
+        else
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
+          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
         end
       end
     end
