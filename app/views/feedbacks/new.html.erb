@@ -17,7 +17,7 @@
 <!--main content-->
 <h3 class="heading"><%= ts("We love to hear from our users! Tell us about your experience - good, bad, or broken - using our site!") %></h3>
 
-<p><%= ts("We're still in our beta phase of development, so there are ") %><a href="https://otwarchive.atlassian.net/projects/AO3/issues"><%= ts("lots of bugs to be fixed") %></a><%= ts(" and ") %><a href="https://trello.com/board/feature-requests/4f0cd935f97f91cf29246288"><%= ts("new features to be considered") %></a><%= ts(". For live updates on Archive performance, please check out our Twitter feed: ") %><a href="http://twitter.com/ao3_status">@AO3_status</a><%= ts(". Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for authors should be left on their works. If you have technical issues with this page, please use ") %><a href="http://www.transformativeworks.org/contact_us/contact-archive-support/"><%= ts("the back-up form.") %></a></p>
+<p><%= ts('We\'re still in our beta phase of development, so there are <a href="https://otwarchive.atlassian.net/projects/AO3/issues">lots of bugs to be fixed</a> and <a href="https://trello.com/board/feature-requests/4f0cd935f97f91cf29246288">new features to be considered</a>. For live updates on Archive performance, please check out our Twitter feed: <a href="http://twitter.com/ao3_status">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href="http://www.transformativeworks.org/contact_us/contact-archive-support/">the back-up form</a>.').html_safe %></p>
 
 <p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> You can just write your question or feedback in one of the listed languages and we'll sort it out! Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
 
@@ -30,10 +30,8 @@
     <dl>
       <dt><%= f.label :username, ts("Your name (optional)") %></dt>
       <dd>
-        <%= f.text_field :username, size: 60 %>
+        <%= f.text_field :username %>
       </dd>
-    </dl>
-    <dl>
       <dt><%= f.label :email, ts("Your email (optional)") %></dt>
       <dd>
         <%= f.text_field :email, size: 60, "aria-describedby" => "email-field-description" %>
@@ -45,10 +43,10 @@
     <legend><%= ts('Describe Your Feedback') %></legend>
     <dl>
       <dt class="required">
-        <%= f.label :language, ts("Select Language (required)")%>
+        <%= f.label :language, ts("Select language (required)") %>
       </dt>
       <dd>
-        <%= f.collection_select(:language, @support_languages, :id, :name, prompt: " ") %>
+        <%= f.collection_select(:language, Language.all(order: :short), :id, :name, prompt: " ") %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary (required)") %>

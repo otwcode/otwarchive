@@ -372,9 +372,7 @@ class UserMailer < BulletproofMailer::Base
     return unless feedback.email
     @summary = feedback.summary
     @comment = feedback.comment
-    @username = if feedback.username.present?
-                  feedback.username
-                end
+    @username = feedback.username if feedback.username.present?
     @language = feedback.language
     mail(
       to: feedback.email,

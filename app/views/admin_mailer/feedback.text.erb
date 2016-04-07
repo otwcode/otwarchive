@@ -1,10 +1,6 @@
 <% content_for :message do %>
-Here's some user feedback on the archive!
-  <% if @username.blank? %>
-    Username: Anonymous user
-  <% else %>
-    Username: <%= raw @username %>
-  <% end %>
+Here's some user feedback on the Archive!
+  Username: <%= @username.present? ? (raw @username) : "Anonymous user" %>
   <% unless @email.blank? %>
     Email address: <%= raw @email %>
   <% end %>

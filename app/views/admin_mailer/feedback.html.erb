@@ -1,17 +1,11 @@
 <% content_for :message do %>
 
   <p><%= style_bold("Here's some user feedback on the Archive!") %></p>
-  <% if @username.blank? %>
-    <p>Username: Anonymous user</p>
-    <% else %>
-    <p>Username: <%= raw @username %></p>
-  <% end %>
+  <p>Username: <%= @username.present? ? (raw @username) : "Anonymous user" %></p>
   <% unless @email.blank? %>
     <p>Email address: <%= raw @email %></p>
   <% end %>
-  <p>
-    Language: <%= @language %>
-  </p>
+  <p>Language: <%= @language %></p>
   <% unless ArchiveConfig.REVISION.blank? %>
     <p>
       Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
