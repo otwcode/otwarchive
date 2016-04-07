@@ -35,6 +35,12 @@ Then /^I should see the reply to comment form$/ do
   step %{I should see "Comment as" within ".odd"}
 end
 
+Then /^I should see Last Edited in the right timezone$/ do
+  zone = Time.current.in_time_zone(Time.zone).zone
+  step %{I should see "#{zone}" within ".comment .posted"}
+  step %{I should see "Last Edited"}
+end
+
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
