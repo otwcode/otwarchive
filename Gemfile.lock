@@ -133,6 +133,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastimage (1.8.1)
       addressable (~> 2.3, >= 2.3.5)
+    ffi (1.9.10-x86-mingw32)
     gherkin (3.2.0)
     globalize (3.1.0)
       activemodel (>= 3.1.0, < 4.0.0)
@@ -192,6 +193,7 @@ GEM
     net-ssh (2.6.7)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
+    netrc (0.11.0)
     newrelic-redis (2.0.2)
       newrelic_rpm (~> 3.11)
       redis (< 4.0)
@@ -267,8 +269,15 @@ GEM
       rufus-scheduler (~> 2.0)
     resque_mailer (2.2.4)
       actionmailer (>= 3.0)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    rest-client (1.8.0-x86-mingw32)
+      ffi (~> 1.9)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rollout (2.0.0)
       redis
     rpm_contrib (2.1.11)
@@ -433,7 +442,7 @@ DEPENDENCIES
   resque (>= 1.14.0)
   resque-scheduler
   resque_mailer
-  rest-client
+  rest-client (~> 1.8.0)
   rollout
   rpm_contrib
   rspec (~> 3.4)
