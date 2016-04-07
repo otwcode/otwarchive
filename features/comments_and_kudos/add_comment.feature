@@ -143,3 +143,23 @@ Scenario: Set preference and receive comment notifications of your own comments
   Then "author" should be emailed
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
+
+Scenario: Add a bookmark from a comment
+  Given I am logged in as "author"
+    And I post the work "Generic Work"
+  When I view the work "Generic Work"
+  Then I should not see a "Comment And Bookmark" button
+  When I am logged out
+    And I view the work "Generic Work"
+  Then I should not see a "Comment And Bookmark" button  
+  When I am logged in as "commenter"
+    And I set up the comment "excellent story" on the work "Generic Work"
+    And I press "Comment And Bookmark"
+  Then I should see "Comment created"
+    And I should see "save a bookmark"
+    And I should see "excellent story"
+  When I press "Create"
+  Then I should see "Bookmark was successfully created"
+  When I view the work "Generic Work"
+  Then I should not see a "Comment And Bookmark" button
+  
