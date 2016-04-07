@@ -13,6 +13,11 @@ module BookmarksHelper
     end
   end  
   
+  def bookmark_exists?(bookmarkable)
+    return false unless logged_in?
+    Bookmark.where(:bookmarkable_id => bookmarkable.id, :bookmarkable_type => bookmarkable.class.name.to_s, :pseud_id => current_user.pseuds.collect(&:id)).exists?
+  end
+  
   # returns just a url to the new bookmark form
   def get_new_bookmark_path(bookmarkable)
     return case bookmarkable.class.to_s

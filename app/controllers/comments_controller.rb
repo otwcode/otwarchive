@@ -234,6 +234,12 @@ class CommentsController < ApplicationController
             format.html do
               if request.referer.match(/inbox/)
                 redirect_to user_inbox_path(current_user, :filters => params[:filters], :page => params[:page])
+              elsif params[:comment_and_bookmark_button]
+                # we're going to go to the new bookmark form instead
+                flash[:notice] = ts('Comment created!')
+                @bookmarkable = @comment.ultimate_parent
+                @bookmark = Bookmark.new(notes: params[:comment][:content])
+                render 'bookmarks/new', layout: "application" and return
               elsif request.referer.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
