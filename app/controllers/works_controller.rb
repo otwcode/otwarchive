@@ -206,24 +206,10 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @tag_groups = @work.tag_groups
-    if @work.unrevealed?
-      @page_title = ts("Mystery Work")
-    else
-      page_title_inner = ""
-      page_creator = ""
-      if @work.anonymous?
-        page_creator = ts("Anonymous")
-      else
-        page_creator = @work.pseuds.collect(&:byline).sort.join(', ')
-      end
-      if @tag_groups["Fandom"].size > 3 
-        page_title_inner = ts("Multifandom")
-      else
-        page_title_inner = @tag_groups["Fandom"][0].name
-      end
-      @page_title = get_page_title(page_title_inner, page_creator, @work.title)
-    end
+    @page_title = @work.unrevealed? ? ts("Mystery Work") :
+      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
+        @work.title)
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
@@ -476,8 +462,7 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit_tags
     elsif params[:save_button]
-      Work.expire_work_tag_groups_id(@work.id)
-      flash[:notice] = ts('Tags were successfully updated.')
+        flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else
       saved = true
