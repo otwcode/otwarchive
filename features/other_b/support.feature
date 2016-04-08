@@ -6,8 +6,9 @@ Feature: Filing a support request
   Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
+  And basic languages
   When I follow "Support and Feedback"
-  When I select "English" from "feedback_language"
+  When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And all emails have been delivered
@@ -20,7 +21,7 @@ Feature: Filing a support request
     And I fill in "Brief summary" with "you suck"
     And I fill in "Your comment" with "blah blah blah"
     And I fill in "Your email (optional)" with ""
-    And I select "English" from "feedback_language"
+    And I select "Deutsch" from "feedback_language"
     And all emails have been delivered
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
@@ -30,8 +31,9 @@ Feature: Filing a support request
   Scenario: Not logged in, with email
   
   When I am on the home page
+    And basic languages
     And I follow "Support and Feedback"
-  When I select "English" from "feedback_language"
+  When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your comment" with "Men have their old boys' network, but we have the OTW. You guys rock!"
     And I fill in "Your email (optional)" with "test@archiveofourown.org"
@@ -43,8 +45,9 @@ Feature: Filing a support request
   Scenario: Not logged in, without email
   
   When I am on the home page
+    And basic languages
   When I follow "Support and Feedback"
-    And I select "English" from "feedback_language"
+    And I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "you suck"
     And I fill in "Your comment" with "blah blah blah"
     And I fill in "Your email (optional)" with ""
