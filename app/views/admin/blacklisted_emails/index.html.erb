@@ -30,7 +30,7 @@
         <%= label_tag "query", ts("Find Email") %>
         <%= text_field_tag "query", params[:query] %>
         <span class="submit actions">
-          <%= submit_tag t('admin.admin_blacklisted_emails.index.form.submit', default: "Find") %>
+          <%= submit_tag ts("Find") %>
         </span>
       </p>
     </fieldset>
@@ -39,7 +39,7 @@
   <!-- list of search results -->
   <div id="search results">
     <% if @admin_blacklisted_emails %>
-      <h3 class="heading"><%= ts("#{pluralize(@admin_blacklisted_emails.count, 'email')} found") %></h3>
+      <h3 class="heading"><%= t('admin.blacklist.emails_found', emails_count: @admin_blacklisted_emails.count) %></h3>
       <% if @admin_blacklisted_emails.count > 0 %>
         <ul class="index group">
           <% @admin_blacklisted_emails.each do |blacklisted_email| %>

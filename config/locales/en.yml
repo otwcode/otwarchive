@@ -1,6 +1,10 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 en:
+  admin:
+    blacklist:
+      emails_found: "%{emails_count} emails found"
+  
   mailer:
     general: 
       footer: 
@@ -52,3 +56,11 @@ en:
       para1: "The following abuse report has been sent to the Abuse team:"
       url_para: "URL of the page the abuse is on:"
       description_para: "Description of the abuse:"
+
+  validators:
+    email:
+      blacklist: "has been blocked at the owner's request. That means it can't be used in guest comments. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
+      veracity:
+        allow_blank: "does not seem to be a valid address. Please use a different address or leave blank."
+        no_blank: "does not seem to be a valid address."  
+        
