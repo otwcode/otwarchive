@@ -15,11 +15,11 @@ class AdminBlacklistedEmail < ActiveRecord::Base
   def self.canonical_email(email_to_clean)
     canonical_email = email_to_clean.downcase
     canonical_email.strip!
-    canonical_email.sub!('@googlemail.','@gmail.')
+    canonical_email.sub!('@googlemail.com','@gmail.com')
 
     # strip periods from gmail addresses
     if (matchdata = canonical_email.match(/(.+)\@gmail\.com/))
-      canonical_email = matchdata[1].sub('.', '') + "@gmail.com"
+      canonical_email = matchdata[1].gsub('.', '') + "@gmail.com"
     end
 
     # strip out anything after a +
