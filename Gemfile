@@ -69,8 +69,6 @@ gem 'jquery-rails', '>= 0.2.6'
 
 gem 'valium'
 
-gem 'best_in_place'
-
 gem 'timeliness'
 
 gem 'rpm_contrib'

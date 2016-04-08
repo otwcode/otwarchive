@@ -48,9 +48,6 @@ GEM
       uuidtools (~> 2.1)
     bcrypt (3.1.10)
     bcrypt (3.1.10-x86-mingw32)
-    best_in_place (3.1.0)
-      actionpack (>= 3.2)
-      railties (>= 3.2)
     builder (3.0.4)
     bullet (4.14.10)
       activesupport (>= 3.0.0)
@@ -379,7 +376,6 @@ DEPENDENCIES
   authlogic
   aws-sdk
   bcrypt
-  best_in_place
   bullet
   bundler
   capistrano-gitflow_version (>= 0.0.3)
@@ -445,4 +441,4 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
