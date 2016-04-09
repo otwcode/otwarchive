@@ -146,8 +146,10 @@ Given /^the chaptered work with comments setup$/ do
 end
 
 Given /^the work "([^\"]*)"$/ do |work|
-  step %{I have a work "#{work}"}
-  step %{I am logged out}
+  unless Work.where(title: work).exists?
+    step %{I have a work "#{work}"}
+    step %{I am logged out}
+  end
 end
 
 ### WHEN
