@@ -20,8 +20,8 @@ Scenario: Remove email address from blacklist
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
   When I follow "Blacklist"
-    And I fill in "Find Email" with "bar"
-    And I press "Find"
+    And I fill in "Email to find" with "bar"
+    And I press "Search Blacklist"
   Then I should see "foo@bar.com"
   When I follow "Remove"
   Then I should see "Email address foo@bar.com removed from blacklist"
