@@ -5,7 +5,9 @@
 "en-US":
   admin:
     blacklist:
-      emails_found: "%{emails_count} emails found"
+      emails_found: 
+        one: "one email found"
+        other: "%{count} emails found"
   
   date:
     formats:

@@ -22,7 +22,8 @@ Scenario: Remove email address from blacklist
   When I follow "Blacklist"
     And I fill in "Find Email" with "bar"
     And I press "Find"
-  Then I should see "foo@bar.com"
+  Then I should see "email found"
+    And I should see "foo@bar.com"
   When I follow "Remove"
   Then I should see "Email address foo@bar.com removed from blacklist"
     And the address "foo@bar.com" should not be in the blacklist
