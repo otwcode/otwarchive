@@ -369,21 +369,21 @@ end
 Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
   visit admin_blacklisted_emails_url
   u = User.find_by_login(user)
-  fill_in("Email", with: u.email)
+  fill_in("admin_blacklisted_email_email", with: u.email)
   click_button("Add To Blacklist")
 end
 
 Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Find Email", with: email)
-  click_button("Find")
+  fill_in("Email to find", with: email)
+  click_button("Search Blacklist")
   assert page.should have_content(email)
 end
 
 Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Find Email", with: email)
-  click_button("Find")
+  fill_in("Email to find", with: email)
+  click_button("Search Blacklist")
   step %{I should see "0 emails found"}
 end
 
