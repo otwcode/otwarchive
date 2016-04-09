@@ -67,8 +67,6 @@ gem "escape_utils"
 
 gem 'valium'
 
-gem 'best_in_place'
-
 gem 'timeliness'
 
 gem 'rpm_contrib'
