@@ -13,7 +13,6 @@ FactoryGirl.define do
     end
   end
 
-
   factory :pseud do |f|
     f.sequence(:name) { |n| "test pseud #{n}" }
     f.association :user
@@ -45,7 +44,6 @@ FactoryGirl.define do
 
   factory :archive_faq do |f|
     f.sequence(:title) { |n| "The #{n} FAQ" }
-
     after(:build) do |question|
       FactoryGirl.build(:question)
     end
@@ -61,7 +59,9 @@ FactoryGirl.define do
     f.sequence(:content) { |n| "This is the #{n} Wrangling Guideline."}
   end
 
+  # tags
   factory :tag do |f|
+    f.sequence(:id) { |n| n }
     f.canonical true
     f.sequence(:name) { |n| "The #{n} Tag" }
   end
@@ -90,6 +90,7 @@ FactoryGirl.define do
     f.sequence(:name) { |n| "Freeform #{n}" }
   end
 
+  # works
   factory :chapter do |f|
     f.content "Awesome content!"
     f.association :work
