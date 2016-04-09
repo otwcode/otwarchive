@@ -21,7 +21,7 @@ class Admin::BlacklistedEmailsController < ApplicationController
       flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} added to blacklist.")
       redirect_to admin_blacklisted_emails_url
     else
-      render action: "new"
+      render action: "index"
     end
   end
 
