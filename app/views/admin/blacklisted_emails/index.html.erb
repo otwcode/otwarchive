@@ -39,7 +39,7 @@
   <!-- list of search results -->
   <% if @admin_blacklisted_emails %>
     <div class="results module">
-      <h3 class="heading"><%= t('admin.blacklist.emails_found', emails_count: @admin_blacklisted_emails.count) %></h3>
+      <h3 class="heading"><%= t('admin.blacklist.emails_found', count: @admin_blacklisted_emails.count) %></h3>
       <% if @admin_blacklisted_emails.count > 0 %>
         <ol class="emails index group">
           <% @admin_blacklisted_emails.each do |blacklisted_email| %>
