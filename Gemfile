@@ -39,7 +39,7 @@ gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
-gem 'rest-client', :require => 'rest_client'
+gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler', :require => 'resque_scheduler'
