@@ -20,8 +20,8 @@ Scenario: Remove email address from blacklist
   Given I am logged in as an admin
     And I have blacklisted the address "foo@bar.com"
   When I follow "Blacklist"
-    And I fill in "Find Email" with "bar"
-    And I press "Find"
+    And I fill in "Email to find" with "bar"
+    And I press "Search Blacklist"
   Then I should see "email found"
     And I should see "foo@bar.com"
   When I follow "Remove"
@@ -58,4 +58,3 @@ Scenario: Blacklisting a user's email should not affect their ability to post co
     And I post the work "New Work"
     And I post a comment "here's a great comment"
   Then I should see "Comment created!"
-  

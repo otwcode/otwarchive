@@ -558,6 +558,10 @@ form.simple span.actions {
   float: none;
 }
 
+.simple input[type="submit"] {
+  margin: 0;
+}
+
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 
 .toggled form dd, .dynamic form dd {
