@@ -40,7 +40,7 @@ class AdminMailer < ActionMailer::Base
     feedback = Feedback.find(feedback_id)
     @summary = feedback.summary
     @comment = feedback.comment
-    @username = feedback.user if feedback.username.present?
+    @username = feedback.username if feedback.username.present?
     @email = if feedback.email.present?
                feedback.email
              end
