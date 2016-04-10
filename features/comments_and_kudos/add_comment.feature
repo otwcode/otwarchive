@@ -146,20 +146,33 @@ Scenario: Set preference and receive comment notifications of your own comments
 
 Scenario: Add a bookmark from a comment
   Given I am logged in as "author"
-    And I post the work "Generic Work"
+    And I post the chaptered work "Generic Work"
+  # author doesn't see
   When I view the work "Generic Work"
   Then I should not see a "Comment And Bookmark" button
+  # guests don't see
   When I am logged out
     And I view the work "Generic Work"
-  Then I should not see a "Comment And Bookmark" button  
+  Then I should not see a "Comment And Bookmark" button
+  # admins don't see
+  When I am logged in as an admin
+    And I view the work "Generic Work"
+  Then I should not see a "Comment And Bookmark" button
+  # logged in user sees
   When I am logged in as "commenter"
-    And I set up the comment "excellent story" on the work "Generic Work"
+    And I view the work "Generic Work"
+  Then I should see a "Comment And Bookmark" button
+  When I follow "Next Chapter"
+  Then I should see a "Comment And Bookmark" button
+  When I set up the comment "excellent story" on the work "Generic Work"
     And I press "Comment And Bookmark"
   Then I should see "Comment created"
     And I should see "save a bookmark"
     And I should see "excellent story"
   When I press "Create"
   Then I should see "Bookmark was successfully created"
+  # user with existing bookmark doesn't see
   When I view the work "Generic Work"
   Then I should not see a "Comment And Bookmark" button
+  
   

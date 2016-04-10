@@ -114,8 +114,10 @@
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
               
       <p class="submit actions">
-        <% if commentable.is_a?(Work) && logged_in? && !current_user.is_author_of?(@work) && !bookmark_exists?(commentable) %>
-          <%= f.submit ts("Comment And Bookmark"), id: "comment_and_bookmark_submit_for_#{commentable.id}", disable_with: ts("Please wait..."), name: 'comment_and_bookmark_button' %>
+        <% if commentable.is_a?(Work) || commentable.is_a?(Chapter) %>
+           <% if logged_in? && !current_user.is_author_of?(@work) && !bookmark_exists?(@work) %>
+            <%= f.submit ts("Comment And Bookmark"), id: "comment_and_bookmark_submit_for_#{commentable.id}", disable_with: ts("Please wait..."), name: 'comment_and_bookmark_button' %>
+          <% end %>
         <% end %>
         <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", disable_with: ts("Please wait...") %>
         <% if controller.controller_name == 'inbox' %>
