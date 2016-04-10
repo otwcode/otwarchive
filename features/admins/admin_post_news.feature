@@ -135,7 +135,15 @@ Feature: Admin Actions to Post News
       And I press "Post"
     Then I should see "Admin Post was successfully created."
       And I should see "toaster" within "div.admin.home"
-      And I should see "futurama" within ".tags"
+      And I should see "futurama" within "dd.tags"
+
+  Scenario: Admin posts should show both translations and tags
+    Given I have posted an admin post with tags
+      And basic languages
+      And I am logged in as an admin
+    When I make a translation of an admin post
+      And I am logged in as "ordinaryuser"
+    Then I should see a translated admin post with tags
 
   Scenario: If an admin post has characters like & and < and > in the title, the escaped version will not show on the various admin post pages
     Given I am logged in as an admin
