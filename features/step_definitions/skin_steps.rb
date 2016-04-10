@@ -178,7 +178,7 @@ end
 Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin$/) do |arg1|
   skin = Skin.find_by_title(arg1)
   orig_skin_key = skin_cache_value(skin)
-  parent_id = SkinParent.where(child_skin: skin.id).last.parent_skin_id
+  parent_id = SkinParent.where(child_skin_id: skin.id).last.parent_skin_id
   parent = Skin.find(parent_id)
   parent.save!
   assert orig_skin_key != skin_cache_value(skin), "Cache key #{orig_skin_key} matches #{skin_cache_value(skin)}"
