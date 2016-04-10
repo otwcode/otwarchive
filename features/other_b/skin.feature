@@ -429,3 +429,38 @@ Feature: creating and editing skins
     And I should see "only screen and (max-width: 42em), only screen and (max-width: 62em)"
   When I press "Use"
   Then the page should have a skin with the media query "only screen and (max-width: 42em), only screen and (max-width: 62em)"
+
+  Scenario: User should be able to access their site and work skins from an individual skin's show page
+  Given I am logged in as "skinner"
+    And I create the skin "my skin"
+  When I view the skin "my skin"
+  Then I should see "My Site Skins"
+    And I should see "My Work Skins"
+
+  Scenario: User should be able to revert to the default skin from an individual skin's show page
+  Given basic skins
+    And I am logged in as "skinner"
+    And I create the skin "my skin"
+  When I view the skin "my skin"
+  Then I should not see a "Revert to Default Skin" button
+  When I press "Use"
+    And I view the skin "my skin"
+  Then I should see a "Revert to Default Skin" button
+    And I should see "My Work Skins"
+
+  Scenario: User should be able to access their site and work skins from an individual skin's edit page
+  Given I am logged in as "skinner"
+    And I create the skin "my skin"
+  When I edit the skin "my skin"
+  Then I should see "My Site Skins"
+    And I should see "My Work Skins"
+
+  Scenario: User should be able to revert to the default skin from an individual skin's edit page
+  Given basic skins
+    And I am logged in as "skinner"
+    And I create the skin "my skin"
+  When I edit the skin "my skin"
+  Then I should not see a "Revert to Default Skin" button
+  When I change my skin to "my skin"
+    And I edit the skin "my skin"
+  Then I should see a "Revert to Default Skin" button

@@ -133,6 +133,11 @@ When /^I edit my pink header skin to have a purple logo$/ do
   click_button("Update")
 end
 
+When /^I view the skin "([^\"]*)"$/ do |skin|
+  skin = Skin.find_by_title!(skin)
+  visit skin_url(skin)
+end
+
 ### THEN
 
 Then /^I should see a pink header$/ do
