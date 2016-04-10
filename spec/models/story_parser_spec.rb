@@ -25,7 +25,7 @@ describe StoryParser do
   WebMock.stub_request(:any, /foo1/).
     to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
   WebMock.stub_request(:any, /foo2/).
-    to_return(status: 200, body: "Date: 2001-01-22 12:29\nstubbed response", headers: {})
+    to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
   describe "get_source_if_known:" do
 
@@ -142,6 +142,16 @@ describe StoryParser do
     end
   end
 
+  describe "#download_and_parse_chapters_into_story" do
+    it "should set the work revision date to the date of the last chapter" do
+      user = create(:user)
+      urls = %w(http://foo1 http://foo2)
+      work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
+      work.save
+      expect(work.revised_at).to eq(Date.new(2001, 1, 22).strftime('%FT%T%:z'))
+    end
+  end
+
   describe "#parse_common" do
     it "should convert relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
@@ -161,16 +171,6 @@ describe StoryParser do
         results = @sp.parse_common(story_in, location)
         expect(results[:chapter_attributes][:content]).to include(story_out)
       end
-    end
-  end
-
-  describe "#download_and_parse_chapters_into_story" do
-    it "should import times as well as dates" do
-      user = create(:user)
-      urls = [ "http://foo1", "http://foo2" ]
-      work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
-      work.save
-      expect(work.revised_at.strftime('%FT%T%:z')).to eq(DateTime.new(2001, 1, 22, 7, 29, 0, '-5').strftime('%FT%T%:z'))
     end
   end
 end

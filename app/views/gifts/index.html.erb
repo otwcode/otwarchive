@@ -11,6 +11,7 @@
 
 <!--subnavigation, sorting and actions-->
 <% if @user && @user == current_user %>
+  <h3 class="landmark heading"><%= ts("Navigation") %></h3>
   <ul class="navigation actions" role="navigation">
     <li>
       <%= span_if_current ts("Accepted Gifts"), user_gifts_path(@user), !(params[:refused]) %>
@@ -29,6 +30,7 @@
 <% end %>
 
 <!--main content-->
+<h3 class="heading landmark"><%= ts("List of Gifts") %></h3>
 <ul class="gift work index group">
   <% for work in @works %>
     <%= render 'gifts/gift_blurb', work: work, gift: work %>
