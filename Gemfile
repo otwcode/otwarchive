@@ -111,7 +111,6 @@ group :test do
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl', '~> 4.5.0'
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
@@ -131,7 +130,7 @@ end
 group :test, :development do
   gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
-  gem 'factory_girl'
+  gem 'factory_girl', '~> 4.5.0'
 end
 
 group :development do
