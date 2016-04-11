@@ -469,6 +469,12 @@ When /^I mark the work "([^\"]*)" for later$/ do |work|
   Reading.update_or_create_in_database
 end
 
+
+When(/^I visit the work "([^"]*)"$/) do |title|
+  work = Work.find_by_title!(title)
+  visit work_url(work)
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
@@ -501,4 +507,12 @@ end
 
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
+end
+
+Then /^I remmeber the url$/ do
+  @remmeber = current_url
+end
+
+Then(/^I am at the page I remmebered$/) do
+  assert @remmeber == current_url
 end

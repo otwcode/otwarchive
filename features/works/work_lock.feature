@@ -30,6 +30,9 @@ Scenario: Posting locked work
       And I press "Search"
     Then I should see "1 Found"
       And I should see "fandomer" within "#main"
+    When I visit the work "Awesomeness"
+    Then I remmeber the url
+    
       
     # doesn't show when logged out
     When I am logged out
@@ -42,7 +45,10 @@ Scenario: Posting locked work
       And I press "Search"
     Then I should see "No results found"
       And I should not see "fandomer"
-    
+    When I visit the work "Awesomeness"
+      And I am login in to the current page using "fandomer" as the username and  "password" as the password
+    Then I am at the page I remmebered
+
     # shows again if you log in as another user
     When I am logged in as "testuser" with password "password"
       And I am on fandomer's works page

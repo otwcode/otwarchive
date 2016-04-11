@@ -226,6 +226,7 @@ Then /^I should be logged out$/ do
   assert !UserSession.find
 end
 
+
 def get_work_name(age, classname, name)
   klass = classname.classify.constantize
   owner = (classname == "user") ? klass.find_by_login(name) : klass.find_by_name(name)
@@ -268,3 +269,10 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your user name has been successfully updated."})
 end
  
+When(/^I am login in to the current page using "([^"]*)" as the username and  "([^"]*)" as the password$/) do |username, password|
+  fill_in "User name", :with => username
+  fill_in "Password", :with => password
+  click_button "Log In"
+  assert UserSession.find
+end
+
