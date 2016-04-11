@@ -1,14 +1,16 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('Edit Work Tags for %{title}', :title => @work.title).html_safe %></h2>
+<h2 class="heading">
+  <%= ts('Edit Work Tags for %{title}', title: @work.title).html_safe %>
+</h2>
 
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
-  <!--main content-->	
-<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, :url => { :action => "update_tags" }) do |f| %> 
+<!--main content-->	
+<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update_tags" }) do |f| %> 
   <p class="required notice">* <%= ts('Required information') %></p>
-				
-  <%= render :partial => 'work_form_tags', :locals => {:include_blank => false} %>
+
+  <%= render 'work_form_tags', include_blank: false %>
 
   <% if logged_in_as_admin? %>
     <fieldset role="article">
@@ -24,11 +26,11 @@
     <legend><%= ts('Post Work') %></legend>
     <ul class="actions">
       <% unless @work.posted? %>
-        <li><%= submit_tag ts('Save Without Posting'), :name => 'save_button' %></li>
+        <li><%= submit_tag ts('Save Without Posting'), name: 'save_button' %></li>
       <% end %>
-      <li><%= submit_tag ts('Preview'), :name => 'preview_button' %></li>
-      <li><%= submit_tag ts('Post Without Preview'), :name => 'update_button' %></li>
-      <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
+      <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
+      <li><%= submit_tag ts('Post Without Preview'), name: 'update_button' %></li>
+      <li><%= submit_tag ts('Cancel'), name: 'cancel_button' %></li>
     </ul> 
   </fieldset>
 <% end %>
