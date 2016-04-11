@@ -116,7 +116,13 @@
               <dt><%= p.label :author %></dt>
               <dd><%= p.text_field :author, value: work_parent_value(:author) %></dd>
 
-              <%= render 'work_form_associations_language', f: f %>
+              <dt>
+                <%= p.label :language_id, ts('Language') %>
+                <%= link_to_help "languages-help" %>
+              </dt>
+              <dd>
+                <%= p.collection_select(:language_id, Language.all(order: :short), :id, :name, prompt: " ") %>
+              </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
@@ -233,16 +239,7 @@
           </fieldset>
         </dd>
 
-        <dt class="language">
-          <%= f.label :language_id, ts('Choose a language') %>
-          <%= link_to_help "languages-help" %>
-        </dt>
-        <dd class="language">
-          <select id="work_language_id" name="work[language_id]">
-            <%= options_from_collection_for_select(Language.all(order: :short), :id, :name,
-                  @work.language_id || Language.default.id) %>
-          </select>
-        </dd>
+        <%= render 'work_form_associations_language', f: f %>
 
         <dt class="skin">
           <%= f.label :work_skin_id, ts('Select Work Skin') %>
