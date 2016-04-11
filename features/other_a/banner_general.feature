@@ -90,3 +90,22 @@ Scenario: Admin can delete a banner and it will no longer be shown to users
   Then I should see "Banner successfully deleted."
     And a logged-in user should not see a banner
     And a logged-out user should not see a banner
+
+Scenario: Admin should not have option to make minor updates on a new banner
+  Given there are no banners
+    And I am logged in as an admin
+  When I am on the new_admin_banner page
+  Then I should not see "This is a minor update (Do not turn the banner back on for users who have dismissed it)"
+
+Scenario: Admin can make minor changes to the text of an active banner without turning it back on for users who have already dismissed it
+  Given there are no banners
+    And an admin creates an active banner
+    And I am logged in as "banner_tester_3" with password "nobanners"
+    And I set my preferences to turn off the banner showing on every page
+    And an admin makes a minor edit to the active banner
+  When I am logged in as "banner_tester_3" with password "nobanners"
+  Then I should not see "This is some banner text!"
+  When I am logged in as "banner_tester_4"
+  Then I should see "This is some banner text!"
+  
+  

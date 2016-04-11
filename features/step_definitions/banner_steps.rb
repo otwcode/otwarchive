@@ -44,6 +44,16 @@ When /^an admin edits the active banner$/ do
   step %{I should see "Setting banner back on for all users. This may take some time."}
 end
 
+When /^an admin makes a minor edit to the active banner$/ do
+  step %{I am logged in as an admin}
+  visit(admin_banners_path)
+  step %{I follow "Edit"}
+  fill_in("admin_banner_content", with: "This is some banner text!")
+  check("admin_banner_minor_edit")
+  click_button("Update Banner")
+  step %{I should see "Updating banner for users who have not already dismissed it. This may take some time."}
+end
+
 When /^an admin creates a different active banner$/ do
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
