@@ -4,7 +4,7 @@ class Admin::BannersController < ApplicationController
 
   # GET /admin/banners
   def index   
-    @admin_banners = AdminBanner.order("id DESC").paginate(:page => params[:page])
+    @admin_banners = AdminBanner.order("id DESC").paginate(page: params[:page])
   end
 
   # GET /admin/banners/1
