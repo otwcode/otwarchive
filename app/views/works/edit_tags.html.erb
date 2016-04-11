@@ -4,13 +4,21 @@
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
-<div id="work-form" class="edit work post">
-<%= form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| %> 
-<p class="required notice"><%= ts('* Required information') %></p>
+  <!--main content-->	
+<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, :url => { :action => "update_tags" }) do |f| %> 
+  <p class="required notice">* <%= ts('Required information') %></p>
+				
+  <%= render :partial => 'work_form_tags', :locals => {:include_blank => false} %>
 
-<!--main content-->					
-<%= render :partial => 'work_form_tags', :locals => {:include_blank => false} %>
-<!--/content--> 
+  <% if logged_in_as_admin? %>
+    <fieldset role="article">
+      <legend><%= ts('Associations') %></legend>
+      <h3 class="landmark heading"><%= ts('Associations') %></h3>
+      <dl>
+        <%= render 'work_form_associations_language', f: f %>
+      </dl>
+    </fieldset>
+  <% end %>
 
   <fieldset>
     <legend><%= ts('Post Work') %></legend>
@@ -23,5 +31,5 @@
       <li><%= submit_tag ts('Cancel'), :name => 'cancel_button' %></li>
     </ul> 
   </fieldset>
-<% end %> <!-- end of form_for -->
-</div>
+<% end %>
+<!--/content--> 

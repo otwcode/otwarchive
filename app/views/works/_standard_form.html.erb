@@ -116,13 +116,7 @@
               <dt><%= p.label :author %></dt>
               <dd><%= p.text_field :author, value: work_parent_value(:author) %></dd>
 
-              <dt>
-                <%= p.label :language_id, ts('Language') %>
-                <%= link_to_help "languages-help" %>
-              </dt>
-              <dd>
-                <%= p.collection_select(:language_id, Language.all(order: :short), :id, :name, prompt: " ") %>
-              </dd>
+              <%= render 'work_form_associations_language', f: f %>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
