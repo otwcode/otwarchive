@@ -12,29 +12,33 @@ def valid_headers
 end
 
 # Values in API fake content
-content_fields =
+def content_fields
   {
     title: "Foo Title", summary: "Foo summary", fandoms: "Foo Fandom", warnings: "Underage",
     characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
     categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com", notes: "This is a <i>content note</i>."
   }
+end
 
-api_fields =
+def api_fields
   {
     title: "Bar Title", summary: "Bar summary", fandoms: "Bar Fandom", warnings: "Rape/Non-Con",
     characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
     categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
     external_author_email: "bar@foo.com", notes: "This is an <i>API note</i>."
   }
+end
 
 # Let the test get at external sites, but stub out anything containing "foo" or "bar"
 def mock_external
+  fields = content_fields
+
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
     to_return(status: 200,
               body:
-                "Title: #{content_fields[:title]}
+                "Title: #{fields[:title]}
 Summary:  #{content_fields[:summary]}
 Fandom:  #{content_fields[:fandoms]}
 Rating: #{content_fields[:rating]}
@@ -98,7 +102,7 @@ describe "API ImportController" do
       @user = create(:user)
     end
 
-    it "should return 201 Created when all stories are created" do
+    it "should return 200 OK when all stories are created" do
       post "/api/v1/import",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
@@ -106,10 +110,10 @@ describe "API ImportController" do
                        chapter_urls: ["http://foo"] }]
            }.to_json,
            valid_headers
-      assert_equal 201, response.status
+      assert_equal 200, response.status
     end
 
-    it "should return 422 Unprocessable Entity when no stories are created" do
+    it "should return 200 OK with an error message when no stories are created" do
       post "/api/v1/import",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
@@ -117,10 +121,10 @@ describe "API ImportController" do
                        chapter_urls: ["http://bar"] }]
            }.to_json,
            valid_headers
-      assert_equal 422, response.status
+      assert_equal 200, response.status
     end
 
-    it "should return 207 Multi-Status when only some stories are created" do
+    it "should return 200 OK with an error message when only some stories are created" do
       post "/api/v1/import",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
@@ -131,7 +135,7 @@ describe "API ImportController" do
                        chapter_urls: ["http://foo"] }]
            }.to_json,
            valid_headers
-      assert_equal 207, response.status
+      assert_equal 200, response.status
     end
 
     it "should return 400 Bad Request if no works are specified" do
@@ -150,26 +154,27 @@ describe "API ImportController" do
            }.to_json,
            valid_headers
       parsed_body = JSON.parse(response.body)
-      expect(parsed_body["works"].first["messages"].first).to start_with("\"We couldn't")
+      expect(parsed_body["works"].first["messages"].first).to start_with("We couldn't")
     end
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
+        fields = api_fields
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
-               works: [{ title: api_fields[:title],
-                         summary: api_fields[:summary],
-                         fandoms: api_fields[:fandoms],
-                         warnings: api_fields[:warnings],
-                         characters: api_fields[:characters],
-                         rating: api_fields[:rating],
-                         relationships: api_fields[:relationships],
-                         categories: api_fields[:categories],
-                         additional_tags: api_fields[:freeform],
-                         external_author_name: api_fields[:external_author_name],
-                         external_author_email: api_fields[:external_author_email],
-                         notes: api_fields[:notes],
+               works: [{ title: fields[:title],
+                         summary: fields[:summary],
+                         fandoms: fields[:fandoms],
+                         warnings: fields[:warnings],
+                         characters: fields[:characters],
+                         rating: fields[:rating],
+                         relationships: fields[:relationships],
+                         categories: fields[:categories],
+                         additional_tags: fields[:freeform],
+                         external_author_name: fields[:external_author_name],
+                         external_author_email: fields[:external_author_email],
+                         notes: fields[:notes],
                          chapter_urls: ["http://foo"] }]
              }.to_json,
              valid_headers
@@ -181,6 +186,7 @@ describe "API ImportController" do
       after(:all) do
         @work.destroy
       end
+
 
       it "API should override content for Title" do
         expect(@work.title).to eq(api_fields[:title])
