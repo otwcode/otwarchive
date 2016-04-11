@@ -97,6 +97,14 @@ Scenario: Admin should not have option to make minor updates on a new banner
   When I am on the new_admin_banner page
   Then I should not see "This is a minor update (Do not turn the banner back on for users who have dismissed it)"
 
+Scenario: Admin should not have option to make minor updates on banner that is not active
+  Given there are no banners
+    And an admin creates a banner
+  When I am logged in as an admin
+    And I am on the admin_banners page
+    And I follow "Edit"
+  Then I should not see "This is a minor update (Do not turn the banner back on for users who have dismissed it)"
+
 Scenario: Admin can make minor changes to the text of an active banner without turning it back on for users who have already dismissed it
   Given there are no banners
     And an admin creates an active banner

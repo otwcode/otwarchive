@@ -8,7 +8,7 @@ end
 
 ### WHEN
 
-When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
+When /^an admin creates an?( active)?(?: "([^\"]*)")? banner$/ do |active, banner_type|
   step %{I am logged in as an admin}
   visit(new_admin_banner_path)
   fill_in("admin_banner_content", with: "This is some banner text")
@@ -21,9 +21,9 @@ When /^an admin creates an active(?: "([^\"]*)")? banner$/ do |banner_type|
       choose("admin_banner_banner_type_")
     end
   end
-  check("admin_banner_active")
+  check("admin_banner_active") unless active.blank?
   click_button("Create Banner")
-  step %{I should see "Setting banner back on for all users. This may take some time."}
+  step %{I should see "Setting banner back on for all users. This may take some time."} unless active.blank?
 end
 
 When /^an admin deactivates the banner$/ do
@@ -39,7 +39,7 @@ When /^an admin edits the active banner$/ do
   step %{I am logged in as an admin}
   visit(admin_banners_path)
   step %{I follow "Edit"}
-  fill_in("admin_banner_content", :with => "This is some edited banner text")
+  fill_in("admin_banner_content", with: "This is some edited banner text")
   click_button("Update Banner")
   step %{I should see "Setting banner back on for all users. This may take some time."}
 end
