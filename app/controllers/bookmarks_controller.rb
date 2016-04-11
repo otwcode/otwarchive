@@ -64,7 +64,7 @@ class BookmarksController < ApplicationController
 
       if @owner.present?
         if @admin_settings.disable_filtering?
-          @bookmarks = Bookmark.list_without_filters(@owner, options)
+          @bookmarks = Bookmark.includes(:bookmarkable, :pseud, :tags, :collections).list_without_filters(@owner, options)
         else
           @search = BookmarkSearch.new(options.merge(faceted: true, bookmarks_parent: @owner))
           results = @search.search_results
@@ -78,7 +78,7 @@ class BookmarksController < ApplicationController
           @bookmarks = search.search_results.to_a
         end
       else
-        @bookmarks = Bookmark.latest.to_a
+        @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
       end
     end
   end

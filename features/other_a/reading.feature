@@ -11,13 +11,28 @@ Feature: Reading count
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
     Then I should see "History" within "div#dashboard"
-
-  Scenario: disable reading history
-    also issue 1691
-      Add a view count to reading items
-      Counts will show on the reading history page.
+    
+  Scenario: Read a work several times, counts show on reading history
       increment the count whenever you reread a story
       also updates the date
+    Given I am logged in as "writer"
+      And I post the work "some work"
+      And I am logged out
+    When I am logged in as "fandomer"
+      And fandomer first read "some work" on "2010-05-25"
+    When I go to fandomer's reading page
+    Then I should see "some work"
+      And I should see "Viewed once"
+      And I should see "Last viewed: 25 May 2010"
+    When I am on writer's works page
+      And I follow "some work"
+    When the reading rake task is run
+      And I go to fandomer's reading page
+    Then I should see "Viewed 2 times"
+      And I should see "Last viewed: less than 1 minute ago"
+
+  Scenario: disable reading history
+    then re-enable and check counts update again
 
     Given I am logged in as "writer"
       And I post the work "some work"

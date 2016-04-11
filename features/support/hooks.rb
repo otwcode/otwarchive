@@ -12,4 +12,6 @@ Before do
 
   Pseud.tire.index.delete
   Pseud.create_elasticsearch_index
+
+  Rails.cache.clear
 end

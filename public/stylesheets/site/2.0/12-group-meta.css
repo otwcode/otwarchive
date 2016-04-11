@@ -54,13 +54,35 @@ dl.meta {
   margin: 0;
 }
 
-/*CONTEXTS */
+/* CONTEXTS */
 
 .dashboard .meta .clear {
   clear: none;
   clear: right;
 }
 
+.news .wrapper {
+    box-shadow: none;
+}
+
+.news dl.meta {
+  border: none;
+  padding: 0;
+}
+
+.news .meta dt, .news .meta dd, .news .meta ul {
+  display: inline;
+  float: none;
+  margin-left: 0;
+}
+
+.news .meta dd:after {
+  content: " ";
+  display: block;
+  height: 0.643em;
+}
+
+/* TODO the post new work form needs its classes changed so these overrides are no longer needed */
 .post .meta dd ul li {
   display: block;
 }

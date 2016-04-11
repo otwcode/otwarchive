@@ -1,9 +1,8 @@
-/* MEDIA: only screen and (max-width: 640px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
-linearise content, suppress large images, suppress custom fonts and other large downloads */
+/* MEDIA: only screen and (max-width: 42em), handheld ENDMEDIA */
 
 #outer {
   background: #fff;
-  font-size: 14px;
+  font-size: 0.875em;
   position: relative;
 }
 
@@ -74,51 +73,28 @@ body .narrow-shown {
 }
 
 /* 04 region dashboard */
-/* SKIN: Dash Line */
-/* DESCRIPTION: Horizontal dash inline */
 
-#dashboard {
-  clear: both;
-  float: none;
-  max-width: 100%;
-  margin: 1%;
-  padding: 0;
-  width: auto;
-}
-
-#dashboard .navigation, #dashboard .navigation li, #dashboard a, #dashboard .current {
-  text-align: left;
-  display: inline;
-  border: none;
-}
-
-#dashboard ul {
-  padding: 0;
-}
-
-#dashboard .landmark {
-  clear: none;
-  float: left;
+#dashboard, #dashboard.own {
+  border-bottom-width: 7px;
+  border-top-width: 7px;
+  padding: 0.25em 0;
 }
 
 /* 05 region main */
 
-#main {
+#main, #main.dashboard {
   position: static;
 }
 
-#main, #main.dashboard {
-  float: none;
-  margin: auto;
-  width: auto;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
-#main.dashboard .index, form.filters, .works-index .index, .collections-index .index, .bookmarks-index .index, #inner form dd, #inner form dt {
+/* once we remove the meta class from the work form, we can remove the form .meta selectors here */
+.filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  float: none;
+}
+
+.dashboard .index {
   float: none;
 }
 
@@ -147,6 +123,12 @@ body .narrow-shown {
   display: block;
 }
 
+/* 11 group: listbox */
+
+.listbox .index {
+  width: auto;
+}
+
 /* 15 group: comments */
 
 .thread .thread {
@@ -173,8 +155,15 @@ body .narrow-shown {
 
 /* 16 zone: system */
 
-.splash div.module, .logged-in .splash .module {
-  width: 98%;
+.splash {
+  padding: 0;
+}
+
+.splash div.module, .logged-in .splash div.module {
+  clear: both;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
 }
 
 .splash .intro {
@@ -184,14 +173,6 @@ body .narrow-shown {
 .splash .intro h2 {
   font-size: 1.5em;
     word-break: normal;
-}
-
-/* 17 zone: home */
-
-#inbox-form {
-  clear: both;
-  float: none;
-  width: auto;
 }
 
 /* 18 zone: search browse */
@@ -245,6 +226,12 @@ form.filters dl {
 
 .filtering #leave_filters:focus {
   outline: none;
+}
+
+/* 21 userstuff */
+
+#workskin {
+  margin: auto;
 }
 
 /* 22 system: messages */
