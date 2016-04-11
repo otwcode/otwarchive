@@ -39,15 +39,15 @@ def mock_external
     to_return(status: 200,
               body:
                 "Title: #{fields[:title]}
-Summary:  #{content_fields[:summary]}
-Fandom:  #{content_fields[:fandoms]}
-Rating: #{content_fields[:rating]}
-Warnings:  #{content_fields[:warnings]}
-Characters:  #{content_fields[:characters]}
-Pairings:  #{content_fields[:relationships]}
-Category:  #{content_fields[:categories]}
-Tags:  #{content_fields[:freeform]}
-Author's notes:  #{content_fields[:notes]}
+Summary:  #{fields[:summary]}
+Fandom:  #{fields[:fandoms]}
+Rating: #{fields[:rating]}
+Warnings:  #{fields[:warnings]}
+Characters:  #{fields[:characters]}
+Pairings:  #{fields[:relationships]}
+Category:  #{fields[:categories]}
+Tags:  #{fields[:freeform]}
+Author's notes:  #{fields[:notes]}
 
 stubbed response", headers: {})
 
