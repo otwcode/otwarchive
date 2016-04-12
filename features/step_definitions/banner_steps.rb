@@ -140,12 +140,16 @@ Then /^I should see the first login popup$/ do
     step %{I should see "To log in, locate and fill in the log in link"}
 end
 
-Then /^I should see the admin banner with minor edits$/ do
+Then /^I should see the banner with minor edits$/ do
   step %{I should see "This is some banner text!"}
 end
 
-Then /^I should not see the admin banner with minor edits$/ do
+Then /^I should not see the banner with minor edits$/ do
   step %{I should not see "This is some banner text!"}
+end
+
+Then /^the page should have the different banner$/ do
+  step %{I should see "This is new banner text"}
 end
 
 Then /^the page should not have a banner$/ do

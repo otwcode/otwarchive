@@ -8,7 +8,7 @@ Scenario: Banner is blank until admin sets it
 
 Scenario: Admin can set a banner
   Given there are no banners
-    And an admin creates an active banner
+  When an admin creates an active banner
   Then a logged-in user should see the banner
     And a logged-out user should see the banner
 
@@ -21,7 +21,7 @@ Scenario: Admin can set an alert banner
 
 Scenario: Admin can set an event banner
   Given there are no banners
-    And an admin creates an active "event" banner
+  When an admin creates an active "event" banner
   Then a logged-in user should see the "event" banner
     And a logged-out user should see the "event" banner
 
@@ -74,11 +74,11 @@ Scenario: User can turn off banner in preferences, but will still see a banner w
     And I am logged in as "banner_tester_2"
   When I set my preferences to turn off the banner showing on every page
     And I go to my user page
-  Then I should not see "This is some banner text"
+  Then the page should not have a banner
   When an admin deactivates the banner
     And an admin creates a different active banner
   When I am logged in as "banner_tester_2"
-  Then I should see "This is new banner text"
+  Then the page should have the different banner
   
 Scenario: Admin can delete a banner and it will no longer be shown to users
   Given there are no banners
@@ -108,15 +108,15 @@ Scenario: Admin should not have option to make minor updates on banner that is n
 Scenario: Admin can make minor changes to the text of an active banner without turning it back on for users who have already dismissed it
   Given there are no banners
     And an admin creates an active banner
-    And I am logged in as "banner_tester_3" with password "nobanners"
+    And I am logged in as "banner_tester_3"
     And I set my preferences to turn off the banner showing on every page
     And an admin makes a minor edit to the active banner
-  When I am logged in as "banner_tester_3" with password "nobanners"
-  Then I should not see the admin banner with minor edits
+  When I am logged in as "banner_tester_3"
+  Then I should not see the banner with minor edits
     And the page should not have a banner
   When I am logged out
-  Then I should see the admin banner with minor edits
+  Then I should see the banner with minor edits
   When I am logged in as "banner_tester_4"
-  Then I should see the admin banner with minor edits
+  Then I should see the banner with minor edits
   
   
