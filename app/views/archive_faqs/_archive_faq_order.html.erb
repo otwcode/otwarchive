@@ -17,7 +17,7 @@
   <%= javascript_tag do %>
      $j("#sortable_archive_faq_list").sortable({
             delay: 300,
-            update: function(event, ui) {
+            update: function(event, ui) {\
                 $j(".archive_faq-position-list").each(function(index, li){
                     var faqId = $j(li).attr("id").replace("archive_faq_","");
                     $j("#position-for-"+faqId).html(index+1);

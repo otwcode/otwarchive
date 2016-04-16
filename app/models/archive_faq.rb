@@ -2,7 +2,7 @@ class ArchiveFaq < ActiveRecord::Base
   acts_as_list
   translates :title
 
-  has_many :questions, :dependent => :destroy
+  has_many :questions, :dependent => :destroy, :order => :position
   accepts_nested_attributes_for :questions, allow_destroy: true
 
   validates :slug, presence: true, uniqueness: true
@@ -35,6 +35,11 @@ class ArchiveFaq < ActiveRecord::Base
         AdminMailer.edited_faq(self.id, User.current_user.login).deliver
       end
     end
+  end
+
+  # Change the positions of the questions in the archive_faq
+  def reorder(positions)
+    SortableList.new(self.questions.in_order).reorder_list(positions)
   end
 
   def to_param

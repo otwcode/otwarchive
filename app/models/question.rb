@@ -18,6 +18,9 @@ class Question < ActiveRecord::Base
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX,
                       :too_long => ts("cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
+  scope :in_order, {:order => :position}
+
+  # Change the positions of the questions in the
   def self.reorder(positions)
     SortableList.new(self.find(:all, :order => 'position ASC')).reorder_list(positions)
   end
