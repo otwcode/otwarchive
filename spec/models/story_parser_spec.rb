@@ -126,13 +126,13 @@ describe StoryParser do
     it "should recognise previously imported www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_with_www)
 
-      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
       @work = FactoryGirl.create(:work, imported_from_url: location_no_www)
 
-      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception
+      expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should not perform a partial match on work import locations" do
@@ -148,7 +148,9 @@ describe StoryParser do
       urls = %w(http://foo1 http://foo2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
       work.save
-      expect(work.revised_at).to eq(Date.new(2001, 1, 22).strftime('%FT%T%:z'))
+      actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')
+      expected_date = DateTime.new(2001, 1, 22).in_time_zone.strftime('%FT%T%:z')
+      expect(actual_date).to eq(expected_date)
     end
   end
 
