@@ -66,6 +66,32 @@ When /^I fill in gift exchange challenge options$/ do
     select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
+When /^I fill in single-fandom gift exchange challenge options$/ do
+  current_date = DateTime.current
+  fill_in("Sign-up opens", with: current_date.months_ago(2).to_s)
+  fill_in("Sign-up closes", with: current_date.years_since(1).to_s)
+  select("(GMT-05:00) Eastern Time (US & Canada)", from: "gift_exchange_time_zone")
+  fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", with: "1")
+  fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", with: "1")
+  fill_in("gift_exchange_request_restriction_attributes_character_num_required", with: "1")
+  fill_in("gift_exchange_request_restriction_attributes_character_num_allowed", with: "3")
+  fill_in("gift_exchange_request_restriction_attributes_relationship_num_allowed", with: "3")
+  fill_in("gift_exchange_request_restriction_attributes_rating_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_category_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_warning_num_allowed", with: "5")
+  fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", with: "2")
+  fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", with: "1")
+  fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "1")
+  fill_in("gift_exchange_offer_restriction_attributes_character_num_allowed", with: "3")
+  fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", with: "2")
+  select("1", from: "gift_exchange_potential_match_settings_attributes_num_required_characters")
+  check("gift_exchange_offer_restriction_attributes_allow_any_rating")
+  check("gift_exchange_offer_restriction_attributes_allow_any_category")
+  check("gift_exchange_offer_restriction_attributes_allow_any_warning")
+  check("gift_exchange_offer_restriction_attributes_character_restrict_to_fandom")
+  check("gift_exchange_offer_restriction_attributes_relationship_restrict_to_fandom")
+end
+
 Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
   step %{I should see a create confirmation message}
   step %{"#{title}" collection exists}
@@ -252,6 +278,24 @@ When /^I fulfill my assignment$/ do
   step %{I should see "Work was successfully posted"}
 end
 
+When /^an assignment has been fulfilled in a gift exchange$/ do
+  step %{I am logged in as "mod1"}
+  step %{I have created the gift exchange "Awesome Gift Exchange"}
+  step %{I open signups for "Awesome Gift Exchange"}
+  step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
+  step %{I have generated matches for "Awesome Gift Exchange"}
+  step %{I have sent assignments for "Awesome Gift Exchange"}
+  step %{I am logged in as "myname1"}
+  step %{I fulfill my assignment}
+end
+
+# we're not testing the process of rejection here, just that
+# it doesn't affect the completion status of the challenge assignment
+When /^I refuse my gift story "(.*?)"/ do |work|
+  w = Work.find_by_title(work)
+  w.gifts.first.toggle!(:rejected)
+end
+
 ### WHEN we need the author attribute to be set
 When /^I fulfill my assignment and the author is "([^\"]*)"$/ do |new_user|
   step %{I start to fulfill my assignment}
@@ -261,13 +305,9 @@ When /^I fulfill my assignment and the author is "([^\"]*)"$/ do |new_user|
   step %{I should see "Work was successfully posted"}
 end
 
-
-
 When /^I have set up matching for "([^\"]*)" with no required matching$/ do |challengename|
   step %{I am logged in as "mod1"}
   step %{I have created the gift exchange "Awesome Gift Exchange"}
   step %{I open signups for "Awesome Gift Exchange"}
   step %{everyone has signed up for the gift exchange "Awesome Gift Exchange"}
 end
-
-

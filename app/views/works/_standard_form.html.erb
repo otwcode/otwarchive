@@ -86,7 +86,7 @@
         <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient" title="<%= ts('gift to') %>">
-        <%= f.text_field :recipients, autocomplete_options("pseud") %>
+        <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
       </dd>
 
       <!-- Inspiration / remix -->
@@ -286,8 +286,16 @@
         <%= f.check_box :anon_commenting_disabled %>
       </dt>
       <dd class="anonymous comments">
-        <%= f.label :anon_commenting_disabled, ts('Anonymous commenting disabled') %>
-        <%= link_to_help "anonymous-commenting" %>
+        <%= f.label :anon_commenting_disabled, ts("Disable anonymous commenting") %>
+        <%= link_to_help "comments-anonymous" %>
+      </dd>
+
+      <dt class="moderated comments">
+        <%= f.check_box :moderated_commenting_enabled %>
+      </dt>
+      <dd class="moderated comments">
+        <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
+        <%= link_to_help "comments-moderated" %>
       </dd>
     </dl>
   </fieldset>

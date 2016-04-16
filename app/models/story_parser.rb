@@ -240,7 +240,7 @@ class StoryParser
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
 
-  #protected
+  protected
 
 
     # download an entire story from an archive type where we know how to parse multi-chaptered works
@@ -267,8 +267,14 @@ class StoryParser
 
     def set_work_attributes(work, location="", options = {})
       raise Error, "Work could not be downloaded" if work.nil?
+
+      @options = options
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
+      work.revised_at = work.chapters.last.published_at
+      if work.revised_at && work.revised_at.to_date < Date.today
+        work.backdate = true
+      end
 
       # set authors for the works
       pseuds = []
@@ -305,16 +311,19 @@ class StoryParser
       # lock to registered users if specified or importing for others
       work.restricted = options[:restricted] || options[:importing_for_others] || false
 
-      # set default values for required tags for any works that don't have them
-      work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
-      work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
-      work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
-      work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
-      work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
-      work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
-      work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
+      # set default values for required tags
+      work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
+      work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+      work.warning_strings = meta_or_default(work.warning_strings, options[:warning], ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
+      work.category_string = meta_or_default(work.category_string, options[:category], [])
+      work.character_string = meta_or_default(work.character_string, options[:character], [])
+      work.relationship_string = meta_or_default(work.relationship_string, options[:relationship], [])
+      work.freeform_string = meta_or_default(work.freeform_string, options[:freeform], [])
 
-      work.summary = options[:summary] if !options[:summary].blank?
+      # set default value for title
+      work.title = meta_or_default(work.title, options[:title], "Untitled Imported Work")
+      work.summary = meta_or_default(work.summary, options[:summary], '')
+      work.notes = meta_or_default(work.notes, options[:notes], '')
 
       # set collection name if present
       work.collection_names = get_collection_names(options[:collection_names]) if !options[:collection_names].blank?
@@ -322,8 +331,6 @@ class StoryParser
       # set default language (English)
       work.language_id = options[:language_id] || Language.default.id
 
-      # set default value for title
-      work.title = "Untitled Imported Work" if work.title.blank?
 
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
@@ -339,7 +346,7 @@ class StoryParser
       return work
     end
 
-    def parse_author_from_lj(location)
+  def parse_author_from_lj(location)
       if location.match( /^(http:\/\/)?([^\.]*).(livejournal.com|dreamwidth.org|insanejournal.com|journalfen.net)/)
         email = name = ""
         lj_name = $2
@@ -528,9 +535,12 @@ class StoryParser
     # form results) and returns the final sanitized hash.
     #
     def parse_common(story, location = nil, encoding = nil)
-      work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
+      work_params = { title: "UPLOADED WORK", chapter_attributes: { content: "" } }
 
-      @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
+      # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
+      # preserve line breaks in plain text documents
+      # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
+      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
 
       # Try to convert all relative links to absolute
       base = @doc.at_css('base') ? @doc.css('base')[0]['href'] : location.split('?').first
@@ -546,6 +556,7 @@ class StoryParser
         end
       end
 
+      # Extract metadata
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
         params = eval("parse_story_from_#{source.downcase}(story)")
         work_params.merge!(params)
@@ -553,17 +564,19 @@ class StoryParser
         work_params.merge!(parse_story_from_unknown(story))
       end
 
-      return shift_chapter_attributes(sanitize_params(work_params))
+      shift_chapter_attributes(sanitize_params(work_params))
     end
 
     # our fallback: parse a story from an unknown source, so we have no special
     # rules.
     def parse_story_from_unknown(story)
-      work_params = {:chapter_attributes => {}}
+      work_params = { chapter_attributes: {} }
+
       storyhead = @doc.css("head").inner_html if @doc.css("head")
+
       # Story content - Look for progressively less specific containers or grab everything
       element = @doc.at_css('.chapter-content') || @doc.at_css('body') || @doc.at_css('html') || @doc
-      storytext = element.inner_html
+      storytext = element ? element.inner_html : story
 
       meta = {}
       meta.merge!(scan_text_for_meta(storyhead)) unless storyhead.blank?
@@ -1026,5 +1039,18 @@ class StoryParser
         end
       end
       cnames
+    end
+
+    # determine which value to use for a metadata field
+    def meta_or_default(work_field, field, default = nil)
+      if @options[:override_tags] || work_field.blank?
+        if field.blank?
+          work_field.blank? ? default : work_field
+        else
+          field
+        end
+      else
+        work_field
+      end
     end
 end

@@ -33,15 +33,7 @@ class InboxComment < ActiveRecord::Base
 
   # Get only the comments with a feedback_comment that exists
   def self.with_feedback_comment
-    # Get an array of the ids of inbox comments that have existing feedback_comments
-    inbox_comments_with_feedback_comment = []
-    find_each do |inbox_comment|
-      unless inbox_comment.feedback_comment.nil? ||
-             inbox_comment.feedback_comment.is_deleted?
-        inbox_comments_with_feedback_comment << inbox_comment
-      end
-    end
-    # Get the ActiveRecord Relation objects based on that array
-    where(id: inbox_comments_with_feedback_comment)
+    joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id").
+    where("comments.id IS NOT NULL AND comments.is_deleted = 0")
   end
 end

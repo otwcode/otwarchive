@@ -54,11 +54,10 @@ class HomeController < ApplicationController
 
   # home page itself
   def index
-    @user_count = User.count
-    @work_count = Work.posted.count
-    @fandom_count = Fandom.canonical.count
-
     @homepage = Homepage.new(@current_user)
+    unless @homepage.logged_in?
+      @user_count, @work_count, @fandom_count = @homepage.rounded_counts
+    end
 
     @hide_dashboard = true
     render action: 'index', layout: 'application'

@@ -3,29 +3,24 @@ Feature: Tag wrangling
 
   Scenario: Admin can create a tag wrangler using the interface
 
-    Given the following admin exists
-      | login       |
-      | Zooey       |
-      And the following activated user exists
-      | login       |
-      | dizmo       |
-      And I have loaded the "roles" fixture
+    Given I have loaded the "roles" fixture
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as an admin
       And I fill in "query" with "dizmo"
       And I press "Find"
-    Then I should see "dizmo" within "#admin_users_table"
-    
+    Then I should see "dizmo" within "#admin_users_table"    
     # admin making user tag wrangler
     When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
-    
     # accessing wrangling pages
     When I am logged in as "dizmo"
       And I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
+    # no access otherwise
+    When I log out
+    Then I should see "Sorry, you don't have permission"
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
         Make a new fandom canonical and wrangle it to a medium.

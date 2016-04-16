@@ -408,7 +408,7 @@ class UserMailer < BulletproofMailer::Base
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your Abuse Report"
+      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
     )
   end
 

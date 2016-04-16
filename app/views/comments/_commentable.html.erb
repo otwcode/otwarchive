@@ -88,7 +88,7 @@
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
-      <% @comments = commentable.comments.paginate(:page => params[:page]) %>
+      <% @comments = commentable.comments.reviewed.page(params[:page]) %>
       <%= will_paginate @comments %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->

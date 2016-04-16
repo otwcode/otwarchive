@@ -31,8 +31,10 @@ class KudoMailer < ActionMailer::Base
         if !names.nil? && names.size > 0
           kudo_givers = names
           kudo_givers << guest_kudos(guest_count) unless guest_count == 0
+          @kudos_count = names.size + guest_count
         else
           kudo_givers << guest_kudos(guest_count).capitalize unless guest_count == 0
+          @kudos_count = guest_count
         end
         next if kudo_givers.empty?
 

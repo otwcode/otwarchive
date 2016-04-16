@@ -21,6 +21,9 @@ $j(document).ready(function() {
     // make Share buttons on works and own bookmarks visible
     $j('.actions').children('.share').removeClass('hidden');
 
+    // make Approve buttons on inbox items visible
+    $j('#inbox-form, .messages').find('.unreviewed').find('.review').find('a').removeClass('hidden');
+
     prepareDeleteLinks();
     thermometer();
     $j('body').addClass('javascript');
@@ -386,7 +389,18 @@ function setupAccordion() {
     if (expander.attr('href') == '#') {
       e.preventDefault();
     }
-    expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+    // We need to treat the pseud menu differently so it will be properly responsive
+    // The other accordions need to be converted to a similar system
+    // Otherwise we run into bugs if one @media uses inline display and another uses block
+    if (expander.attr('title') == 'Pseud Switcher') {
+      if (expander.hasClass('expanded')) {
+        expander.toggleClass("expanded").toggleClass("collapsed").next().removeAttr('style');
+      } else {
+        expander.toggleClass("expanded").toggleClass("collapsed").next().hide();
+      }
+    } else {
+      expander.toggleClass("expanded").toggleClass("collapsed").next().toggle();
+    }
   });
 }
 
