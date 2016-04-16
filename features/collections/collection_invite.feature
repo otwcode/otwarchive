@@ -47,7 +47,7 @@ When I go to "scotts collection" collection's page
   And I follow "Manage Items"
   And I follow "Invited"
   And I should see "Murder in Milan"
-  And I should see "Works listed here have already been approved for this collection. Once a work's owner has approved inclusion in this collection, the work will be moved to 'Approved'."
+  And I should see "Works listed here have been invited to this this collection. Once a work's owner has approved inclusion in this collection, the work will be moved to 'Approved'."
 When I am logged in as "Scott" with password "password"
   And I accept the invitation for my work in the collection "scotts collection"
   And I press "Submit"
