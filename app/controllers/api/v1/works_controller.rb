@@ -204,7 +204,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       do_not_set_current_author: true,
       post_without_preview: params[:post_without_preview].blank? ? true : params[:post_without_preview],
       restricted: params[:restricted],
-      override_tags: params[:override_tags],
+      override_tags: params[:override_tags].blank? ? true : params[:override_tags],
       collection_names: params[:collection_names],
       title: params[:title],
       fandom: params[:fandoms],

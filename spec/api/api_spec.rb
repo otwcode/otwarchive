@@ -32,22 +32,20 @@ end
 
 # Let the test get at external sites, but stub out anything containing "foo" or "bar"
 def mock_external
-  fields = content_fields
-
   WebMock.allow_net_connect!
   WebMock.stub_request(:any, /foo/).
     to_return(status: 200,
               body:
-                "Title: #{fields[:title]}
-Summary:  #{fields[:summary]}
-Fandom:  #{fields[:fandoms]}
-Rating: #{fields[:rating]}
-Warnings:  #{fields[:warnings]}
-Characters:  #{fields[:characters]}
-Pairings:  #{fields[:relationships]}
-Category:  #{fields[:categories]}
-Tags:  #{fields[:freeform]}
-Author's notes:  #{fields[:notes]}
+                "Title: #{content_fields[:title]}
+Summary:  #{content_fields[:summary]}
+Fandom:  #{content_fields[:fandoms]}
+Rating: #{content_fields[:rating]}
+Warnings:  #{content_fields[:warnings]}
+Characters:  #{content_fields[:characters]}
+Pairings:  #{content_fields[:relationships]}
+Category:  #{content_fields[:categories]}
+Tags:  #{content_fields[:freeform]}
+Author's notes:  #{content_fields[:notes]}
 
 stubbed response", headers: {})
 
@@ -66,7 +64,7 @@ stubbed response", headers: {})
 end
 
 describe "API Authorization" do
-  end_points = ["api/v1/import", "api/v1/works/import", "api/v1/bookmarks/import"]
+  end_points = %w(api/v1/import api/v1/works/import api/v1/bookmarks/import)
 
   describe "API POST with invalid request" do
     it "should return 401 Unauthorized if no token is supplied" do
@@ -87,7 +85,7 @@ describe "API Authorization" do
   end
 end
 
-describe "API ImportController" do
+describe "API WorksController - Create" do
   mock_external
 
   # Override is_archivist so all users are archivists from this point on
@@ -159,22 +157,21 @@ describe "API ImportController" do
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
-        fields = api_fields
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
-               works: [{ title: fields[:title],
-                         summary: fields[:summary],
-                         fandoms: fields[:fandoms],
-                         warnings: fields[:warnings],
-                         characters: fields[:characters],
-                         rating: fields[:rating],
-                         relationships: fields[:relationships],
-                         categories: fields[:categories],
-                         additional_tags: fields[:freeform],
-                         external_author_name: fields[:external_author_name],
-                         external_author_email: fields[:external_author_email],
-                         notes: fields[:notes],
+               works: [{ title: api_fields[:title],
+                         summary: api_fields[:summary],
+                         fandoms: api_fields[:fandoms],
+                         warnings: api_fields[:warnings],
+                         characters: api_fields[:characters],
+                         rating: api_fields[:rating],
+                         relationships: api_fields[:relationships],
+                         categories: api_fields[:categories],
+                         additional_tags: api_fields[:freeform],
+                         external_author_name: api_fields[:external_author_name],
+                         external_author_email: api_fields[:external_author_email],
+                         notes: api_fields[:notes],
                          chapter_urls: ["http://foo"] }]
              }.to_json,
              valid_headers
@@ -417,7 +414,6 @@ describe "API BookmarksController" do
     end
 
     it "should return 400 Bad Request if no bookmarks are specified" do
-      user = create(:user)
       post "/api/v1/import",
            { archivist: @user.login }.to_json,
            valid_headers
@@ -428,7 +424,7 @@ describe "API BookmarksController" do
   WebMock.allow_net_connect!
 end
 
-describe "API WorksController" do
+describe "API WorksController - Find Works" do
   before do
     @work = FactoryGirl.create(:work, posted: true, imported_from_url: "foo")
   end
