@@ -1,92 +1,9 @@
 require 'spec_helper'
-require 'webmock'
+require 'api/api_helper'
 
-# set up a valid token and some headers
-def valid_headers
-  api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
-  {
-    "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials(api.access_token),
-    "HTTP_ACCEPT" => "application/json",
-    "CONTENT_TYPE" => "application/json"
-  }
-end
-
-# Values in API fake content
-def content_fields
-  {
-    title: "Foo Title", summary: "Foo summary", fandoms: "Foo Fandom", warnings: "Underage",
-    characters: "foo 1, foo 2", rating: "Explicit", relationships: "foo 1/foo 2",
-    categories: "F/F", freeform: "foo tag 1, foo tag 2", external_author_name: "bar",
-    external_author_email: "bar@foo.com", notes: "This is a <i>content note</i>."
-  }
-end
-
-def api_fields
-  {
-    title: "Bar Title", summary: "Bar summary", fandoms: "Bar Fandom", warnings: "Rape/Non-Con",
-    characters: "bar 1, bar 2", rating: "General", relationships: "bar 1/bar 2",
-    categories: "M/M", freeform: "bar tag 1, bar tag 2", external_author_name: "bar",
-    external_author_email: "bar@foo.com", notes: "This is an <i>API note</i>."
-  }
-end
-
-# Let the test get at external sites, but stub out anything containing "foo" or "bar"
-def mock_external
-  WebMock.allow_net_connect!
-  WebMock.stub_request(:any, /foo/).
-    to_return(status: 200,
-              body:
-                "Title: #{content_fields[:title]}
-Summary:  #{content_fields[:summary]}
-Fandom:  #{content_fields[:fandoms]}
-Rating: #{content_fields[:rating]}
-Warnings:  #{content_fields[:warnings]}
-Characters:  #{content_fields[:characters]}
-Pairings:  #{content_fields[:relationships]}
-Category:  #{content_fields[:categories]}
-Tags:  #{content_fields[:freeform]}
-Author's notes:  #{content_fields[:notes]}
-
-stubbed response", headers: {})
-
-  WebMock.stub_request(:any, /no-metadata/).
-    to_return(status: 200,
-              body: "stubbed response",
-              headers: {})
-
-  WebMock.stub_request(:any, /no-content/).
-    to_return(status: 200,
-              body: "",
-              headers: {})
-
-  WebMock.stub_request(:any, /bar/).
-    to_return(status: 404, headers: {})
-end
-
-describe "API Authorization" do
-  end_points = %w(api/v1/import api/v1/works/import api/v1/bookmarks/import)
-
-  describe "API POST with invalid request" do
-    it "should return 401 Unauthorized if no token is supplied" do
-      end_points.each do |url|
-        post url
-        assert_equal 401, response.status
-      end
-    end
-
-    it "should return 403 Forbidden if the specified user isn't an archivist" do
-      end_points.each do |url|
-        post url,
-             { archivist: "mr_nobody" }.to_json,
-             valid_headers
-        assert_equal 403, response.status
-      end
-    end
-  end
-end
+include ApiHelper
 
 describe "API WorksController - Create" do
-  mock_external
 
   # Override is_archivist so all users are archivists from this point on
   class User < ActiveRecord::Base
@@ -97,6 +14,7 @@ describe "API WorksController - Create" do
 
   describe "API import with a valid archivist" do
     before do
+      mock_external
       @user = create(:user)
     end
 
@@ -326,98 +244,6 @@ describe "API WorksController - Create" do
       it "Author pseud" do
         expect(@work.external_author_names.first.name).to eq(api_fields[:external_author_name])
       end
-    end
-  end
-
-  WebMock.allow_net_connect!
-end
-
-describe "API BookmarksController" do
-  mock_external
-
-  # Override is_archivist so all users are archivists from this point on
-  class User < ActiveRecord::Base
-    def is_archivist?
-      true
-    end
-  end
-
-  external_work = {
-    url: "http://foo.com",
-    author: "Thing",
-    title: "Title Thing",
-    summary: "<p>blah blah blah</p>",
-    fandom_string: "Testing",
-    rating_string: "General Audiences",
-    category_string: ["M/M"],
-    relationship_string: "Starsky/Hutch",
-    character_string: "Starsky,hutch"
-  }
-
-  bookmark = { pseud_id: "30805",
-               external: external_work,
-               notes: "<p>Notes</p>",
-               tag_string: "youpi",
-               collection_names: "",
-               private: "0",
-               rec: "0" }
-
-  describe "API import with a valid archivist" do
-    before do
-      @user = create(:user)
-    end
-
-    it "should return 200 OK when all bookmarks are created" do
-      post "/api/v1/bookmarks/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark ]
-           }.to_json,
-           valid_headers
-      assert_equal 200, response.status
-    end
-
-    it "should return 200 OK when no bookmarks are created" do
-      post "/api/v1/bookmarks/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark ]
-           }.to_json,
-           valid_headers
-      assert_equal 200, response.status
-    end
-
-    it "should return 200 OK when only some bookmarks are created" do
-      post "/api/v1/bookmarks/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark, bookmark ]
-           }.to_json,
-           valid_headers
-      assert_equal 200, response.status
-    end
-
-    it "should create bookmarks associated with the archivist" do
-      pseud_id = @user.default_pseud.id
-      post "/api/v1/bookmarks/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark, bookmark ]
-           }.to_json,
-           valid_headers
-      bookmarks = Bookmark.find_all_by_pseud_id(pseud_id)
-      assert_equal bookmarks.count, 2
-    end
-
-    it "should return 400 Bad Request if an invalid URL is specified" do
-      post "/api/v1/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark.merge!( { external: external_work.merge!( { url: "http://bar.com" })}) ] }.to_json,
-           valid_headers
-      assert_equal 400, response.status
-    end
-
-    it "should return 400 Bad Request if no bookmarks are specified" do
-      post "/api/v1/import",
-           { archivist: @user.login }.to_json,
-           valid_headers
-      assert_equal 400, response.status
     end
   end
 
