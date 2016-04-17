@@ -1,6 +1,10 @@
 PhraseApp::InContextEditor.configure do |config|
   # Enable or disable the In-Context-Editor in general
-  config.enabled = true
+  if ENV['AO3_PHRASE_APP'] == 'true' || ArchiveConfig.PHRASEAPP_ENABLE == 'true' then
+    config.enabled = true 
+  else 
+    config.enabled = false 
+  end
 
   # Fetch your project id after creating your first project
   # in Translation Center.
@@ -11,7 +15,7 @@ PhraseApp::InContextEditor.configure do |config|
   # You can create and manage access tokens in your profile settings
   # in Translation Center or via the Authorizations API
   # (http://docs.phraseapp.com/api/v2/authorizations/).
-  config.access_token = "fred"
+  config.access_token = ArchiveConfig.PHRASEAPP_TOKEN
 
   # Configure an array of key names that should not be handled
   # by the In-Context-Editor.
