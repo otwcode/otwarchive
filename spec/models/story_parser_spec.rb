@@ -20,13 +20,6 @@ describe StoryParser do
     @sp = StoryParser.new
   end
 
-  # Let the test get at external sites, but stub out anything containing "foo1" and "foo2"
-  WebMock.allow_net_connect!
-  WebMock.stub_request(:any, /foo1/).
-    to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
-  WebMock.stub_request(:any, /foo2/).
-    to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
-
   describe "get_source_if_known:" do
 
     describe "the SOURCE_FFNET pattern" do
@@ -143,9 +136,17 @@ describe StoryParser do
   end
 
   describe "#download_and_parse_chapters_into_story" do
+
     it "should set the work revision date to the date of the last chapter" do
+      # Let the test get at external sites, but stub out anything containing "url1" and "url2"
+      WebMock.allow_net_connect!
+      WebMock.stub_request(:any, /url1/).
+        to_return(status: 200, body: "Date: 2001-01-10 13:45\nstubbed response", headers: {})
+      WebMock.stub_request(:any, /url2/).
+        to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
+
       user = create(:user)
-      urls = %w(http://foo1 http://foo2)
+      urls = %w(http://url1 http://url2)
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [user.default_pseud], do_not_set_current_author: false })
       work.save
       actual_date = work.revised_at.in_time_zone.strftime('%FT%T%:z')

@@ -37,6 +37,10 @@ describe "API BookmarksController" do
       @user = create(:user)
     end
 
+    after do
+      WebMock.reset!
+    end
+
     it "should return 200 OK when all bookmarks are created" do
       post "/api/v1/bookmarks/import",
            { archivist: @user.login,

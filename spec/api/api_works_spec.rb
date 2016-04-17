@@ -18,6 +18,10 @@ describe "API WorksController - Create" do
       @user = create(:user)
     end
 
+    after do
+      WebMock.reset!
+    end
+
     it "should return 200 OK when all stories are created" do
       post "/api/v1/import",
            { archivist: @user.login,
@@ -75,6 +79,7 @@ describe "API WorksController - Create" do
 
     describe "Provided API metadata should be used if present" do
       before(:all) do
+        mock_external
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
@@ -100,6 +105,7 @@ describe "API WorksController - Create" do
 
       after(:all) do
         @work.destroy
+        WebMock.reset!
       end
 
 
@@ -140,6 +146,7 @@ describe "API WorksController - Create" do
 
     describe "Metadata should be extracted from content if no API metadata is supplied" do
       before(:all) do
+        mock_external
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
@@ -155,6 +162,7 @@ describe "API WorksController - Create" do
 
       after(:all) do
         @work.destroy
+        WebMock.reset!
       end
 
       it "detected content metadata should be used for Title" do
@@ -194,6 +202,7 @@ describe "API WorksController - Create" do
 
     describe "Imports should use fallback values or nil if no metadata is supplied" do
       before(:all) do
+        mock_external
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
@@ -209,6 +218,7 @@ describe "API WorksController - Create" do
 
       after(:all) do
         @work.destroy
+        WebMock.reset!
       end
 
       it "Title should be 'Untitled Imported Work'" do
@@ -246,8 +256,6 @@ describe "API WorksController - Create" do
       end
     end
   end
-
-  WebMock.allow_net_connect!
 end
 
 describe "API WorksController - Find Works" do

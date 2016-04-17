@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'webmock'
+require 'webmock/rspec'
 
 module ApiHelper
 
@@ -32,7 +32,7 @@ module ApiHelper
     }
   end
 
-  # Let the test get at external sites, but stub out anything containing "foo" or "bar"
+  # Let the test get at external sites, but stub out anything containing certain keywords
   def mock_external
     WebMock.allow_net_connect!
     WebMock.stub_request(:any, /foo/).
