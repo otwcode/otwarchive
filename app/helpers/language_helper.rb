@@ -15,10 +15,7 @@ module LanguageHelper
     questions = []
     all_questions.each do |question|
       question.translations.each do |translation|
-        Rails.logger.debug "SNIFFLEZ9: #{translation.inspect}"
         if translation.is_translated == "1"
-          Rails.logger.debug "TRANZ: #{translation.inspect}"
-          Rails.logger.debug "QZ: #{question.inspect}"
           questions << question
         end
       end

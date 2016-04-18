@@ -26,10 +26,7 @@ class ArchiveFaqsController < ApplicationController
       @archive_faq = ArchiveFaq.find_by_slug(params[:id])
       @archive_faq.questions.each do |question|
         question.translations.each do |translation|
-          Rails.logger.debug "SNIFFLEZ: #{translation.inspect}"
           if translation.is_translated == "1"
-            Rails.logger.debug "ORANGET #{translation.inspect}"
-            Rails.logger.debug "ORANGENN #{question.inspect}"
             @questions << question
           end
         end
