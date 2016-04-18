@@ -18,7 +18,23 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1
   def show
-    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+    @questions = []
+    if params[:language_id] == "en"
+      @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+      @questions = @archive_faq.questions
+    else
+      @archive_faq = ArchiveFaq.find_by_slug(params[:id])
+      @archive_faq.questions.each do |question|
+        question.translations.each do |translation|
+          Rails.logger.debug "SNIFFLEZ: #{translation.inspect}"
+          if translation.is_translated == "1"
+            Rails.logger.debug "ORANGET #{translation.inspect}"
+            Rails.logger.debug "ORANGENN #{question.inspect}"
+            @questions << question
+          end
+        end
+      end
+    end
     @page_subtitle = @archive_faq.title + ts(" FAQ")
 
     respond_to do |format|
@@ -119,8 +135,10 @@ class ArchiveFaqsController < ApplicationController
     if params[:language_id] && session[:language_id] != params[:language_id]
       session[:language_id] = params[:language_id]
     end
-    if current_user.present? && $rollout.active?(:set_locale_preference, current_user)
-      @i18n_locale = session[:language_id] || Locale.find(current_user.preference.preferred_locale).iso
+    if current_user.present? && $rollout.active?(:set_locale_preference,
+                                                 current_user)
+      @i18n_locale = session[:language_id] || Locale.find(current_user.
+        preference.preferred_locale).iso
     else
       @i18n_locale = session[:language_id] || I18n.default_locale
     end
@@ -128,7 +146,8 @@ class ArchiveFaqsController < ApplicationController
 
   def require_language_id
     if params[:language_id].blank?
-      redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
+      redirect_to url_for(request.query_parameters.merge(language_id:
+                                                         @i18n_locale.to_s))
     end
   end
 

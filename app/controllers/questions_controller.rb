@@ -7,16 +7,17 @@ class QuestionsController < ApplicationController
     @questions = @archive_faq.questions.order('position')
   end
 
-  # fetch work these chapters belong to from db
+  # fetch archive_faq these questions belong to from db
   def load_archive_faq
     @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
     unless @archive_faq.present?
-      flash[:error] = ts("Sorry, we couldn't find the ArchiveFaq you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the ArchiveFaq you were
+        looking for.")
       redirect_to root_path and return
     end
   end
 
-  # Update the position number of Questions within a FAQ
+  # Update the position number of questions within a archive_faq
   def update_positions
     if params[:questions]
       @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
