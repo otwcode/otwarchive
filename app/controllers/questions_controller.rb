@@ -11,8 +11,8 @@ class QuestionsController < ApplicationController
   def load_archive_faq
     @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
     unless @archive_faq.present?
-      flash[:error] = ts("Sorry, we couldn't find the ArchiveFaq you were
-        looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the FAQ you were looking for."
+                         )
       redirect_to root_path and return
     end
   end
@@ -28,7 +28,7 @@ class QuestionsController < ApplicationController
         Question.update(id, :position => position + 1)
         (@questions ||= []) << Question.find(id)
       end
-      flash[:notice] = ts("Question order has been successfully updated.2")
+      flash[:notice] = ts("Question order has been successfully updated.")
     end
     respond_to do |format|
       format.html { redirect_to(@archive_faq) and return }
