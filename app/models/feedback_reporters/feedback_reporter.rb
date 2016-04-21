@@ -2,9 +2,10 @@ class FeedbackReporter
   include HtmlCleaner
 
   attr_accessor :title, 
-    :description, 
-    :category, 
-    :email
+    :description,
+    :email,
+    :language,
+    :username
 
   def initialize(attrs={})
     attrs.each_pair do |key, val|
@@ -21,16 +22,8 @@ class FeedbackReporter
   end
 
   def send_report!
-    HTTParty.post("#{ArchiveConfig.BUGS_SITE}/projects/#{project_id}/bugs",
-      headers: { 
-        "Content-Type" => "application/xml", 
-        "Accept" => "application/xml" 
-      },
-      basic_auth: {
-        username: ArchiveConfig.BUGS_USER,
-        password: ArchiveConfig.BUGS_PASSWORD
-      },
-      body: xml
+    HTTParty.post("#{ArchiveConfig.BUGS_SITE}",
+      body: "&xml=#{xml}"
     )
   end
 
