@@ -127,6 +127,9 @@ GEM
     escape_utils (0.3.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
+    factory_girl_rails (4.6.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     faker (1.6.3)
       i18n (~> 0.5)
     faraday (0.9.2)
@@ -415,6 +418,7 @@ DEPENDENCIES
   email_spec (= 1.6.0)
   escape_utils
   factory_girl (~> 4.5.0)
+  factory_girl_rails
   faker (~> 1.6.3)
   fastimage
   gherkin
