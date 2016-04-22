@@ -5,6 +5,7 @@ class FeedbackReporter
     :description,
     :email,
     :language,
+    :category,
     :username
 
   def initialize(attrs={})
