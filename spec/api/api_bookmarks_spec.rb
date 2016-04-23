@@ -11,20 +11,16 @@ describe "API BookmarksController" do
     end
   end
 
-  external_work = {
-    url: "http://foo.com",
-    author: "Thing",
-    title: "Title Thing",
-    summary: "<p>blah blah blah</p>",
-    fandom_string: "Testing",
-    rating_string: "General Audiences",
-    category_string: ["M/M"],
-    relationship_string: "Starsky/Hutch",
-    character_string: "Starsky,hutch"
-  }
-
   bookmark = { pseud_id: "30805",
-               external: external_work,
+               url: "http://foo.com",
+               author: "Thing",
+               title: "Title Thing",
+               summary: "<p>blah blah blah</p>",
+               fandom_string: "Testing",
+               rating_string: "General Audiences",
+               category_string: ["M/M"],
+               relationship_string: "Starsky/Hutch",
+               character_string: "Starsky,hutch",
                notes: "<p>Notes</p>",
                tag_string: "youpi",
                collection_names: "",
@@ -82,7 +78,7 @@ describe "API BookmarksController" do
     it "should return 400 Bad Request if an invalid URL is specified" do
       post "/api/v1/import",
            { archivist: @user.login,
-             bookmarks: [ bookmark.merge!( { external: external_work.merge!( { url: "http://bar.com" })}) ] }.to_json,
+             bookmarks: [ bookmark.merge!( { external: external_work.merge!( { url: "" })}) ] }.to_json,
            valid_headers
       assert_equal 400, response.status
     end
