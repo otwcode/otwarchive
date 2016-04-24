@@ -73,6 +73,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
       status: bookmark_status,
       archive_url: bookmark_url,
       original_url: original_url,
+      original_ref: params[:original_ref],
       messages: bookmark_messages
     }
   end

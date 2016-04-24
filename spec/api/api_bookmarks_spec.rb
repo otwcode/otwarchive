@@ -11,7 +11,8 @@ describe "API BookmarksController" do
     end
   end
 
-  bookmark = { pseud_id: "30805",
+  bookmark = {
+               original_ref: "123",
                url: "http://foo.com",
                author: "Thing",
                title: "Title Thing",
@@ -27,7 +28,7 @@ describe "API BookmarksController" do
                private: "0",
                rec: "0" }
 
-  describe "API import with a valid archivist" do
+  describe "Valid API bookmark import" do
     before do
       mock_external
       @user = create(:user)
@@ -75,10 +76,46 @@ describe "API BookmarksController" do
       assert_equal bookmarks.count, 2
     end
 
+    it "should pass back any original references unchanged" do
+      post "/api/v1/bookmarks/import",
+           { archivist: @user.login,
+             bookmarks: [ bookmark ]
+           }.to_json,
+           valid_headers
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal "123", bookmark_response[:original_ref], "Original reference should be passed back unchanged"
+      assert_equal "http://foo.com", bookmark_response[:original_url], "Original URL should be passed back unchanged"
+    end
+
+    it "should respond with the URL of the created bookmark" do
+      pseud_id = @user.default_pseud.id
+      post "/api/v1/bookmarks/import",
+           { archivist: @user.login,
+             bookmarks: [ bookmark ]
+           }.to_json,
+           valid_headers
+      first_bookmark = Bookmark.find_all_by_pseud_id(pseud_id).first
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:archive_url], bookmark_url(first_bookmark)
+    end
+
+    WebMock.allow_net_connect!
+  end
+
+  describe "Invalid API bookmark import" do
+      before do
+        mock_external
+        @user = create(:user)
+      end
+
+      after do
+        WebMock.reset!
+      end
+
     it "should return 400 Bad Request if an invalid URL is specified" do
       post "/api/v1/import",
            { archivist: @user.login,
-             bookmarks: [ bookmark.merge!( { external: external_work.merge!( { url: "" })}) ] }.to_json,
+             bookmarks: [ bookmark.merge!( { url: "" } ) ] }.to_json,
            valid_headers
       assert_equal 400, response.status
     end
