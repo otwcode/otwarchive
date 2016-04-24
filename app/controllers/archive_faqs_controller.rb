@@ -19,11 +19,10 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs/1
   def show
     @questions = []
+    @archive_faq = ArchiveFaq.find_by_slug(params[:id])
     if params[:language_id] == "en"
-      @archive_faq = ArchiveFaq.find_by_slug(params[:id])
       @questions = @archive_faq.questions
     else
-      @archive_faq = ArchiveFaq.find_by_slug(params[:id])
       @archive_faq.questions.each do |question|
         question.translations.each do |translation|
           if translation.is_translated == "1"

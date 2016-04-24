@@ -43,8 +43,8 @@
         <%= form.text_field :screencast %>
       </dd>
       <% if Globalize.locale.to_s != "en" %>
-        <dt><%= form.label :is_translated, ts("Question translated") %></dt>
-        <dd><%= form.check_box :is_translated %></dd>
+        <dt><%= form.check_box :is_translated %></dt>
+        <dd><%= form.label :is_translated, ts("Question translated") %></dd>
       <% end %>
     </dl>
     <% if Globalize.locale.to_s == "en" %>

@@ -2,8 +2,8 @@
 
   <h4 class="heading"><%= ts("Reorder questions") %></h4>
 
-  <p id="drag" class="showme"><%= ts("Drag questions to change their order.") %><p>
-  <noscript><p><%= ts("Enter new question numbers.") %><p></noscript>
+  <p id="drag" class="showme"><%= ts("Drag questions to change their order.") %></p>
+  <noscript><p><%= ts("Enter new question numbers.") %></p></noscript>
   <%= form_tag url_for(:action => 'update_positions') do %>
     <ul id="sortable_question_list" class="sortable">
       <% for question in @questions %>
