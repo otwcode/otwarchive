@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-
   before_filter :load_archive_faq, :except => [:index, :update_positions]
 
   # GET /archive_faq/:archive_faq_id/questions/manage
@@ -12,8 +11,8 @@ class QuestionsController < ApplicationController
     @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
     unless @archive_faq.present?
       flash[:error] = ts("Sorry, we couldn't find the FAQ you were looking for."
-                         )
-      redirect_to root_path and return
+                        )
+      redirect_to root_path && return
     end
   end
 
@@ -31,7 +30,7 @@ class QuestionsController < ApplicationController
       flash[:notice] = ts("Question order has been successfully updated.")
     end
     respond_to do |format|
-      format.html { redirect_to(@archive_faq) and return }
+      format.html { redirect_to(@archive_faq) && return }
       format.js { render :nothing => true }
     end
   end
