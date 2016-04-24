@@ -12,7 +12,7 @@ class QuestionsController < ApplicationController
     unless @archive_faq.present?
       flash[:error] = ts("Sorry, we couldn't find the FAQ you were looking for."
                         )
-      redirect_to root_path && return
+      redirect_to root_path and return
     end
   end
 
@@ -24,14 +24,14 @@ class QuestionsController < ApplicationController
       flash[:notice] = ts("Question order has been successfully updated.")
     elsif params[:question]
       params[:question].each_with_index do |id, position|
-        Question.update(id, :position => position + 1)
+        Question.update(id, position: position + 1)
         (@questions ||= []) << Question.find(id)
       end
       flash[:notice] = ts("Question order has been successfully updated.")
     end
     respond_to do |format|
-      format.html { redirect_to(@archive_faq) && return }
-      format.js { render :nothing => true }
+      format.html { redirect_to(@archive_faq) and return }
+      format.js { render nothing: true }
     end
   end
 end

@@ -1,6 +1,6 @@
 class ArchiveFaqsController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :admin_only, except: [:index, :show]
   before_filter :set_locale
   before_filter :require_language_id
   around_filter :with_locale
@@ -43,10 +43,10 @@ class ArchiveFaqsController < ApplicationController
     notice = ""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
     if num_to_build < @archive_faq.questions.count
-      notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", :num => @archive_faq.questions.count)
+      notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)
       num_to_build = @archive_faq.questions.count
     elsif params["num_questions"]
-      notice += ts("Set up %{num} questions. ", :num => num_to_build)
+      notice += ts("Set up %{num} questions. ", num: num_to_build)
     end
     num_existing = @archive_faq.questions.count
     num_existing.upto(num_to_build-1) do
@@ -88,7 +88,7 @@ class ArchiveFaqsController < ApplicationController
           AdminMailer.created_faq(@archive_faq.id, current_admin.login).deliver
         end
       else
-        render :action => "new"
+        render action: "new"
       end
   end
 
@@ -99,7 +99,7 @@ class ArchiveFaqsController < ApplicationController
         flash[:notice] = 'ArchiveFaq was successfully updated.'
         redirect_to(@archive_faq)
       else
-        render :action => "edit"
+        render action: "edit"
       end
   end
 
@@ -110,13 +110,13 @@ class ArchiveFaqsController < ApplicationController
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
-        ArchiveFaq.update(id, :position => position + 1)
+        ArchiveFaq.update(id, position: position + 1)
         (@archive_faqs ||= []) << ArchiveFaq.find(id)
       end
     end
     respond_to do |format|
       format.html { redirect_to(archive_faqs_path) }
-      format.js { render :nothing => true }
+      format.js { render nothing: true }
     end
   end
 
