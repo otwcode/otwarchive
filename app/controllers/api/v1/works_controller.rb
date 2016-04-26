@@ -100,6 +100,7 @@ class Api::V1::WorksController < Api::V1::BaseController
     {
       status: work_status,
       url: work_url,
+      original_id: external_work[:id],
       original_url: original_url,
       messages: work_messages
     }
@@ -133,15 +134,24 @@ class Api::V1::WorksController < Api::V1::BaseController
   # Check if existing URL exists
   def process_batch_url(original_urls)
     results = []
-    original_urls.each do |original_url|
-      work_result = work_url_from_external(original_url)
+    original_urls.each do |original|
+      original_id = ""
+      if original.class == String
+        original_url = original
+      else
+        original_id = original[:id]
+        original_url = original[:url]
+      end
+      work_result = work_url_from_external(original_id, original_url)
       if work_result[:work].nil?
         results << { status: :not_found,
+                     original_id: original_id,
                      original_url: original_url,
                      error: work_result[:error] }
       else
         work = work_result[:work]
         results << { status: :ok,
+                     original_id: original_id,
                      original_url: original_url,
                      work_url: work_url(work),
                      created: work.created_at }
@@ -150,7 +160,7 @@ class Api::V1::WorksController < Api::V1::BaseController
     results
   end
 
-  def work_url_from_external(original_url)
+  def work_url_from_external(original_id, original_url)
     work = nil
     error = ""
     if original_url.blank?
@@ -162,6 +172,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       end
     end
     {
+      original_id: original_id,
       original_url: original_url,
       work: work,
       error: error
@@ -178,6 +189,7 @@ class Api::V1::WorksController < Api::V1::BaseController
       collection_names: "",
       works: [
         {
+          id: "123",
           title: "Example",
           external_author_name: "Example",
           external_author_email: "example@gmail.com",

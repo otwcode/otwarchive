@@ -22,7 +22,7 @@ describe "API WorksController - Create" do
       WebMock.reset!
     end
 
-    it "should return 200 OK when all stories are created" do
+    it "should support the deprecated /import end-point" do
       post "/api/v1/import",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
@@ -33,8 +33,19 @@ describe "API WorksController - Create" do
       assert_equal 200, response.status
     end
 
+    it "should return 200 OK when all stories are created" do
+      post "/api/v1/works",
+           { archivist: @user.login,
+             works: [{ external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://foo"] }]
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+    end
+
     it "should return 200 OK with an error message when no stories are created" do
-      post "/api/v1/import",
+      post "/api/v1/works",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
                        external_author_email: "bar@foo.com",
@@ -45,7 +56,7 @@ describe "API WorksController - Create" do
     end
 
     it "should return 200 OK with an error message when only some stories are created" do
-      post "/api/v1/import",
+      post "/api/v1/works",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
                        external_author_email: "bar@foo.com",
@@ -58,23 +69,36 @@ describe "API WorksController - Create" do
       assert_equal 200, response.status
     end
 
+    it "should return the original id" do
+      post "/api/v1/works",
+           { archivist: @user.login,
+             works: [{ id: "123",
+                       external_author_name: "bar",
+                       external_author_email: "bar@foo.com",
+                       chapter_urls: ["http://foo"] }]
+           }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body[:works].first[:original_id]).to eq("123")
+    end
+
     it "should return 400 Bad Request if no works are specified" do
-      post "/api/v1/import",
+      post "/api/v1/works",
            { archivist: @user.login }.to_json,
            valid_headers
       assert_equal 400, response.status
     end
 
     it "should return a helpful message if the external work contains no text" do
-      post "/api/v1/import",
+      post "/api/v1/works",
            { archivist: @user.login,
              works: [{ external_author_name: "bar",
                        external_author_email: "bar@foo.com",
                        chapter_urls: ["http://no-content"] }]
            }.to_json,
            valid_headers
-      parsed_body = JSON.parse(response.body)
-      expect(parsed_body["works"].first["messages"].first).to start_with("We couldn't")
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body[:works].first[:messages].first).to start_with("We couldn't")
     end
 
     describe "Provided API metadata should be used if present" do
@@ -83,7 +107,8 @@ describe "API WorksController - Create" do
         user = create(:user)
         post "/api/v1/import",
              { archivist: user.login,
-               works: [{ title: api_fields[:title],
+               works: [{ id: "123",
+                         title: api_fields[:title],
                          summary: api_fields[:summary],
                          fandoms: api_fields[:fandoms],
                          warnings: api_fields[:warnings],
@@ -99,8 +124,8 @@ describe "API WorksController - Create" do
              }.to_json,
              valid_headers
 
-        parsed_body = JSON.parse(response.body)
-        @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+        parsed_body = JSON.parse(response.body, symbolize_names: true)
+        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -156,8 +181,8 @@ describe "API WorksController - Create" do
              }.to_json,
              valid_headers
 
-        parsed_body = JSON.parse(response.body)
-        @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+        parsed_body = JSON.parse(response.body, symbolize_names: true)
+        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -212,8 +237,8 @@ describe "API WorksController - Create" do
              }.to_json,
              valid_headers
 
-        parsed_body = JSON.parse(response.body)
-        @work = Work.find_by_url(parsed_body["works"].first["original_url"])
+        parsed_body = JSON.parse(response.body, symbolize_names: true)
+        @work = Work.find_by_url(parsed_body[:works].first[:original_url])
       end
 
       after(:all) do
@@ -275,30 +300,42 @@ describe "API WorksController - Find Works" do
       post "/api/v1/works/urls",
            { original_urls: %w(foo) }.to_json,
            valid_headers
-      parsed_body = JSON.parse(response.body)
-      expect(parsed_body.first["status"]).to eq "ok"
-      expect(parsed_body.first["work_url"]).to eq work_url(@work)
-      expect(parsed_body.first["created"]).to eq @work.created_at.as_json
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:status]).to eq "ok"
+      expect(parsed_body.first[:work_url]).to eq work_url(@work)
+      expect(parsed_body.first[:created]).to eq @work.created_at.as_json
+    end
+
+    it "should return the original reference if one was provided" do
+      post "/api/v1/works/urls",
+           { original_urls: [
+              { id: "123", url: "foo" }
+           ] }.to_json,
+           valid_headers
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:status]).to eq "ok"
+      expect(parsed_body.first[:original_id]).to eq "123"
+      expect(parsed_body.first[:original_url]).to eq "foo"
     end
 
     it "should return an error for a work that wasn't imported" do
       post "/api/v1/works/urls",
            { original_urls: %w(bar) }.to_json,
            valid_headers
-      parsed_body = JSON.parse(response.body)
-      expect(parsed_body.first["status"]).to eq("not_found")
-      expect(parsed_body.first).to include("error")
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:status]).to eq("not_found")
+      expect(parsed_body.first).to include(:error)
     end
 
     it "should only do an exact match on the original url" do
       post "/api/v1/works/urls",
            { original_urls: %w(fo food) }.to_json,
            valid_headers
-      parsed_body = JSON.parse(response.body)
-      expect(parsed_body.first["status"]).to eq("not_found")
-      expect(parsed_body.first).to include("error")
-      expect(parsed_body.second["status"]).to eq("not_found")
-      expect(parsed_body.second).to include("error")
+      parsed_body = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_body.first[:status]).to eq("not_found")
+      expect(parsed_body.first).to include(:error)
+      expect(parsed_body.second[:status]).to eq("not_found")
+      expect(parsed_body.second).to include(:error)
     end
   end
 end

@@ -12,7 +12,7 @@ describe "API BookmarksController" do
   end
 
   bookmark = {
-               original_ref: "123",
+               id: "123",
                url: "http://foo.com",
                author: "Thing",
                title: "Title Thing",
@@ -83,7 +83,7 @@ describe "API BookmarksController" do
            }.to_json,
            valid_headers
       bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
-      assert_equal "123", bookmark_response[:original_ref], "Original reference should be passed back unchanged"
+      assert_equal "123", bookmark_response[:original_id], "Original reference should be passed back unchanged"
       assert_equal "http://foo.com", bookmark_response[:original_url], "Original URL should be passed back unchanged"
     end
 
