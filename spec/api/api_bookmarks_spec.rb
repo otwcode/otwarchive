@@ -103,19 +103,20 @@ describe "API BookmarksController" do
   end
 
   describe "Invalid API bookmark import" do
-      before do
-        mock_external
-        @user = create(:user)
-      end
+    before do
+      mock_external
+      @user = create(:user)
+    end
 
-      after do
-        WebMock.reset!
-      end
+    after do
+      WebMock.reset!
+    end
 
     it "should return 400 Bad Request if an invalid URL is specified" do
       post "/api/v1/import",
            { archivist: @user.login,
-             bookmarks: [ bookmark.merge!( { url: "" } ) ] }.to_json,
+             bookmarks: [ bookmark.merge!(url: "") ]
+           }.to_json,
            valid_headers
       assert_equal 400, response.status
     end

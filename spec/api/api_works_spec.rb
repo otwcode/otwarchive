@@ -133,7 +133,6 @@ describe "API WorksController - Create" do
         WebMock.reset!
       end
 
-
       it "API should override content for Title" do
         expect(@work.title).to eq(api_fields[:title])
       end
@@ -308,9 +307,7 @@ describe "API WorksController - Find Works" do
 
     it "should return the original reference if one was provided" do
       post "/api/v1/works/urls",
-           { original_urls: [
-              { id: "123", url: "foo" }
-           ] }.to_json,
+           { original_urls: [{ id: "123", url: "foo" }] }.to_json,
            valid_headers
       parsed_body = JSON.parse(response.body, symbolize_names: true)
       expect(parsed_body.first[:status]).to eq "ok"
