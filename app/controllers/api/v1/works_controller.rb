@@ -179,34 +179,6 @@ class Api::V1::WorksController < Api::V1::BaseController
     }
   end
 
-  # Document shape of incoming request
-  def creation_request(params)
-    {
-      type: 1,
-      archivist: "testy",
-      send_claim_emails: false,
-      post_without_preview: false,
-      collection_names: "",
-      works: [
-        {
-          id: "123",
-          title: "Example",
-          external_author_name: "Example",
-          external_author_email: "example@gmail.com",
-          fandoms: "Buffy The Vampire Slayer",
-          warnings: "",
-          characters: "Faith",
-          rating: "Mature",
-          relationships: "Faith/Wesley",
-          categories: "M/M",
-          additional_tags: "Het",
-          summary: "<p>Summary</p>",
-          chapter_urls: [ "http://chapter_url" ]
-        }
-      ]
-    }
-  end
-
   # Create options map for StoryParser
   def options(archivist, params)
     {
