@@ -99,7 +99,7 @@ class ChaptersController < ApplicationController
   end
 
   def draft_flash_message(work)
-    flash[:notice] = work.posted ? ts("This is a draft chapter in a posted work. It will be kept unless the work is deleted.") : ts("This is a draft chapter in an unposted work. The work will be <strong>automatically deleted</strong> on #{view_context.time_in_zone(work.created_at + 1.month)}.").html_safe
+    flash[:notice] = work.posted ? ts("This is a draft chapter in a posted work. It will be kept unless the work is deleted.") : ts("This is a draft chapter in an unposted work. The work will be <strong>automatically deleted</strong> on #{view_context.date_in_zone(work.created_at + 1.month)}.").html_safe
   end
 
   # POST /work/:work_id/chapters
