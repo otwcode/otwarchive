@@ -11,8 +11,7 @@ describe "API BookmarksController" do
     end
   end
 
-  bookmark = {
-               id: "123",
+  bookmark = { id: "123",
                url: "http://foo.com",
                author: "Thing",
                title: "Title Thing",

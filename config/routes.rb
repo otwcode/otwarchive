@@ -460,7 +460,7 @@ Otwarchive::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :bookmarks, only: [:create], defaults: { format: :json}
+      resources :bookmarks, only: [:create], defaults: { format: :json }
       resources :works, only: [:create], defaults: { format: :json }
       match 'bookmarks/import', to: 'bookmarks#create', via: :post
       match 'import', to: 'works#create', via: :post

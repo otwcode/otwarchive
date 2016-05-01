@@ -114,8 +114,8 @@ class Api::V1::WorksController < Api::V1::BaseController
     if urls.nil?
       errors << "This work doesn't contain chapter_urls. Works can only be imported from publicly-accessible URLs."
     elsif urls.length >= ArchiveConfig.IMPORT_MAX_CHAPTERS
-      errors << "This work contains too many chapter URLs. A maximum of #{ ArchiveConfig.IMPORT_MAX_CHAPTERS }" +
-        "chapters can be imported per work."
+      errors << "This work contains too many chapter URLs. A maximum of #{ArchiveConfig.IMPORT_MAX_CHAPTERS}" \
+                "chapters can be imported per work."
     end
     status = :ok if errors.empty?
     [status, errors]
@@ -123,7 +123,7 @@ class Api::V1::WorksController < Api::V1::BaseController
 
   # send invitations to external authors for a given set of works
   def send_external_invites(works, archivist)
-    external_authors = works.collect(&:external_authors).flatten.uniq
+    external_authors = works.map(&:external_authors).flatten.uniq
     unless external_authors.empty?
       external_authors.each do |external_author|
         external_author.find_or_invite(archivist)

@@ -136,7 +136,6 @@ describe StoryParser do
   end
 
   describe "#download_and_parse_chapters_into_story" do
-
     it "should set the work revision date to the date of the last chapter" do
       # Let the test get at external sites, but stub out anything containing "url1" and "url2"
       WebMock.allow_net_connect!

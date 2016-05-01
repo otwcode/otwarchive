@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'webmock/rspec'
 
 module ApiHelper
-
   # set up a valid token and some headers
   def valid_headers
     api = ApiKey.first_or_create!(name: "Test", access_token: "testabc")
