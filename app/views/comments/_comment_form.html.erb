@@ -3,7 +3,7 @@
   <% commentable = @commentable %>
 <% end %>
 <div class="post comment" id="comment_form_for_<%= commentable.id %>">
-  <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
+  <%= form_for value_for_comment_form(commentable, comment), remote: !comment.new_record?, html: {id: "comment_for_#{commentable.id}"} do |f| %>
     <fieldset>
       <legend><%= ts("Post Comment") %></legend>
 
@@ -40,7 +40,7 @@
         <% end %>
 
         <% if current_user.pseuds.count > 1 %>
-          <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %>
+          <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected: (comment.pseud ? comment.pseud.id.to_s  current_user.default_pseud.id.to_s)}, id: "comment_pseud_id_for_#{commentable.id}", title: ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>
               <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
                 <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
@@ -52,7 +52,7 @@
           </h4>
         <% else %>
           <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
-            <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}", :id => "comment_pseud_id_for_#{commentable.id}" %>
+            <%= f.hidden_field :pseud_id, value: "#{current_user.default_pseud.id}", id: "comment_pseud_id_for_#{commentable.id}" %>
             <% if controller.controller_name == "inbox" %>
               <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
                 <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
@@ -66,8 +66,8 @@
 
       <% elsif logged_in_as_admin? %>
         <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_admin.login %></span>
-          <%= f.hidden_field :name, :value => "#{current_admin.login}", :id => "comment_name_for_#{commentable.id}" %>
-          <%= f.hidden_field :email, :value => "#{current_admin.email}", :id => "comment_email_for_#{commentable.id}" %>
+          <%= f.hidden_field :name, value: "#{current_admin.login}", id: "comment_name_for_#{commentable.id}" %>
+          <%= f.hidden_field :email, value: "#{current_admin.email}", id: "comment_email_for_#{commentable.id}" %>
         </h4>
         <p class="footnote">(<%= allowed_html_instructions %>)</p>
 
@@ -77,13 +77,13 @@
           <dd class="instructions comment_form"><%=ts("All fields are required. Your email address will not be published.") %></dd>
           <dt><%= f.label "name_for_#{commentable.id}", ts("Name: ") %></dt>
           <dd>
-            <%= f.text_field :name, :id => "comment_name_for_#{commentable.id}" %>
-            <%= live_validation_for_field("comment_name_for_#{commentable.id}", :failureMessage => ts('Please enter your name.')) %>
+            <%= f.text_field :name, id: "comment_name_for_#{commentable.id}" %>
+            <%= live_validation_for_field("comment_name_for_#{commentable.id}", failureMessage: ts('Please enter your name.')) %>
           </dd>
           <dt><%= f.label "email_for_#{commentable.id}", ts("Email: ") %></dt>
           <dd>
-            <%= f.text_field :email, :id => "comment_email_for_#{commentable.id}" %>
-            <%= live_validation_for_field("comment_email_for_#{commentable.id}", :failureMessage => ts('Please enter your email address.')) %>
+            <%= f.text_field :email, id: "comment_email_for_#{commentable.id}" %>
+            <%= live_validation_for_field("comment_email_for_#{commentable.id}", failureMessage: ts('Please enter your email address.')) %>
           </dd>
         </dl>
 
@@ -104,14 +104,14 @@
       <p>
         <% content_id = "comment_content_for_#{commentable.id}" %>
         <label for="<%= content_id %>" class="landmark"><%= ts("Comment") %></label>
-        <%= f.text_area :content, :id => content_id, :class => "comment_form observe_textlength", :title => ts("Enter Comment") %>
+        <%= f.text_area :content, id: content_id, class: "comment_form observe_textlength", title: ts("Enter Comment") %>
         <input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
       </p>
       <%= generate_countdown_html("comment_content_for_#{commentable.id}", ArchiveConfig.COMMENT_MAX) %>
       <%= live_validation_for_field("comment_content_for_#{commentable.id}",
-              :failureMessage => ts('Brevity is the soul of wit, but we need your comment to have text in it.'),
-              :maximum_length => ArchiveConfig.COMMENT_MAX,
-              :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
+              failureMessage: ts('Brevity is the soul of wit, but we need your comment to have text in it.'),
+              maximum_length: ArchiveConfig.COMMENT_MAX,
+              tooLongMessage: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)) %>
               
       <ul class="submit actions">
         <% if commentable.is_a?(Work) || commentable.is_a?(Chapter) %>
