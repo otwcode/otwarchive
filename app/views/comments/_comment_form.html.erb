@@ -113,19 +113,29 @@
               :maximum_length => ArchiveConfig.COMMENT_MAX,
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
               
-      <p class="submit actions">
+      <ul class="submit actions">
         <% if commentable.is_a?(Work) || commentable.is_a?(Chapter) %>
            <% if logged_in? && !current_user.is_author_of?(@work) && !bookmark_exists?(@work) %>
-            <%= f.submit ts("Comment And Bookmark"), id: "comment_and_bookmark_submit_for_#{commentable.id}", disable_with: ts("Please wait..."), name: 'comment_and_bookmark_button' %>
+            <li class="modifier">
+              <label for="also_bookmark_for_<%= commentable.id %>"><%= ts("Also Bookmark?") %>
+                <%= check_box_tag "also_bookmark", "1", nil, id: "also_bookmark_for_#{commentable.id}" %>
+              </label>
+            </li>
           <% end %>
         <% end %>
-        <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", disable_with: ts("Please wait...") %>
+        <li>
+          <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", disable_with: ts("Please wait...") %>
+        </li>
         <% if controller.controller_name == 'inbox' %>
-          <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
+          <li>
+            <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
+          </li>
         <% elsif commentable.class.name == "Comment" || !comment.new_record? %>
-          <%= cancel_comment_button(comment, commentable) %>
+          <li>
+            <%= cancel_comment_button(comment, commentable) %>
+          </li>
         <% end %>
-      </p>
+      </ul>
     </fieldset>
   <% end %>
 </div>

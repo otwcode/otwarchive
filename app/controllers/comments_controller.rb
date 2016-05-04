@@ -234,7 +234,7 @@ class CommentsController < ApplicationController
             format.html do
               if request.referer.match(/inbox/)
                 redirect_to user_inbox_path(current_user, :filters => params[:filters], :page => params[:page])
-              elsif params[:comment_and_bookmark_button]
+              elsif params[:also_bookmark]
                 # we're going to go to the new bookmark form instead
                 flash[:notice] = ts('Comment created!')
                 @bookmarkable = @comment.ultimate_parent
