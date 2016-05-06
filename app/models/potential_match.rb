@@ -98,7 +98,7 @@ public
       required_types = settings.required_types.map {|t| t.classify}
 
       # treat each signup as a request signup first
-      collection.signups.find_each do |signup|
+      collection.signups.each do |signup|
         break if PotentialMatch.canceled?(collection)
         REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
@@ -241,8 +241,9 @@ public
       end
     end
     rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
-    number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
     return -1 if rank.nil? # something's wrong
+
+    number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
     # we want a percentage: multiply by 100 first so we can keep this an integer calculation
     return (rank * 100) / number_of_bylines 
   end
