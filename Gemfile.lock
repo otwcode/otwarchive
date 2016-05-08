@@ -475,8 +475,5 @@ DEPENDENCIES
   whiny_validation
   will_paginate (>= 3.0.2)
 
-RUBY VERSION
-   ruby 2.2.5p319
-
 BUNDLED WITH
    1.12.3
