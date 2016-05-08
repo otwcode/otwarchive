@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
-
+ruby '2.2.5'
 gem 'bundler'
 
 gem 'rails', '3.2.22.2'
@@ -11,7 +10,7 @@ gem 'rails', '3.2.22.2'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '0.3.10'
+gem 'mysql2', '0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
 
@@ -63,7 +62,7 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils"
+gem "escape_utils", "1.2.1"
 
 gem 'valium'
 
@@ -103,8 +102,7 @@ gem 'newrelic-redis'
 #   Use update memcached client with kinder, gentler I/O for Ruby
 gem 'connection_pool'
 gem 'dalli'
-gem 'kgio'
-
+gem 'kgio', '2.10.0'
 
 group :test do
   gem 'rspec', '~> 3.4'
@@ -131,6 +129,8 @@ group :test, :development do
   gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
+  gem 'test-unit', '~> 3.0'
+  gem 'minitest'
 end
 
 group :development do
