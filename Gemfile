@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.9'
 
 gem 'bundler'
 
@@ -63,7 +63,7 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils"
+gem "escape_utils", "1.2.1"
 
 gem 'valium'
 

@@ -124,7 +124,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.2)
     erubis (2.7.0)
-    escape_utils (0.3.2)
+    escape_utils (1.2.1)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.6.0)
@@ -416,7 +416,7 @@ DEPENDENCIES
   delorean
   elasticsearch
   email_spec (= 1.6.0)
-  escape_utils
+  escape_utils (= 1.2.1)
   factory_girl (~> 4.5.0)
   factory_girl_rails
   faker (~> 1.6.3)
@@ -468,5 +468,8 @@ DEPENDENCIES
   whiny_validation
   will_paginate (>= 3.0.2)
 
+RUBY VERSION
+   ruby 2.1.9p490
+
 BUNDLED WITH
-   1.11.2
+   1.12.3
