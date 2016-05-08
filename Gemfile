@@ -110,7 +110,7 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '1.2.0'
+  gem 'database_cleaner', '1.5.3'
   gem 'cucumber', '~> 2.3.2'
   gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
