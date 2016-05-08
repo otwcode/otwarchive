@@ -19,6 +19,9 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/works"
 rvm:
   - "2.0.0"
+  - "2.1.9"
+  - "2.2.5"
+  - "2.3.1"
 services:
   - elasticsearch
   - redis-server
