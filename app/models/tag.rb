@@ -354,7 +354,7 @@ class Tag < ActiveRecord::Base
 
   # Class methods
 
-  def self.tag_key_for_feeds(id)
+  def self.tag_feeds_key(id)
     "/v1/rss_data_tags/#{id}"
   end
 

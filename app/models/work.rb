@@ -188,11 +188,11 @@ class Work < ActiveRecord::Base
   after_save :expire_caches
 
   def self.rss_work_summary_key(id)
-    "/v1/rss_data_tags/#{id}/summary"
+    "/v1/rss_data_work/#{id}/summary"
   end
 
   def self.rss_work_byline_key(id)
-    "/v1/rss_data_tags/#{id}/byline"
+    "/v1/rss_data_work/#{id}/byline"
   end
 
   def expire_caches
@@ -210,7 +210,7 @@ class Work < ActiveRecord::Base
 
     self.filters.each do |tag|
       tag.update_works_index_timestamp!
-      Rails.cache.delete(Tag.tag_key_for_feeds(tag.id))
+      Rails.cache.delete(Tag.tag_feeds_key(tag.id))
     end
   end
 
