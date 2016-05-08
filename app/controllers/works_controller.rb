@@ -313,7 +313,7 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
-      
+
       @work.set_revised_at_by_chapter(@chapter)
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
 
@@ -322,7 +322,7 @@ class WorksController < ApplicationController
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
 
         if params[:preview_button] || params[:cancel_coauthor_button]
-          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}', :deletion_date => view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts('Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}.', deletion_date: view_context.date_in_zone(@work.created_at + 1.month)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else

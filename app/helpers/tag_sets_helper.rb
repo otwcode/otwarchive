@@ -1,11 +1,13 @@
+# These methods return information about the given TagSetNomination or the
+# tags in a a TagSet
 module TagSetsHelper
-  
+
   def nomination_notes(limit)
     message = ""
     if limit[:fandom] > 0 
       if limit[:character] > 0
         if limit[:relationship] > 0
-          message = ts("You can nominate up to %{f} fandoms and up to %{c} characters and %{r} relationships for each one.", 
+          message = ts("You can nominate up to %{f} fandoms and up to %{c} characters and %{r} relationships for each one.",
             :f => limit[:fandom], :c => limit[:character], :r => limit[:relationship])
         else
           message = ts("You can nominate up to %{f} fandoms and up to %{c} characters for each one.", :f => limit[:fandom], :c => limit[:character])
@@ -36,11 +38,6 @@ module TagSetsHelper
     end
     
     message
-  end
-  
-  
-  def noncanonical_info_class(form)
-    ((form.object.new_record? || form.object.canonical) ? ' hideme' : '')
   end
 
   def nomination_status(nomination=nil)

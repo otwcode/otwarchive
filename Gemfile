@@ -17,8 +17,8 @@ gem 'transaction_retry'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
-gem 'redis', ">=3.2.2"
-gem 'redis-namespace', ">=1.5.2"
+gem 'redis', ">=3.0"
+gem 'redis-namespace'
 
 # Here are all our application-specific gems
 
@@ -40,9 +40,9 @@ gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
-gem 'resque', '>=1.25.2'
-gem 'resque_mailer', '>=2.2.7'
-gem 'resque-scheduler', '>=4.1.0'
+gem 'resque', '>=1.14.0'
+gem 'resque_mailer'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'tire'
 gem 'elasticsearch'
@@ -111,7 +111,6 @@ group :test do
   gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl', '~> 4.5.0'
   gem 'capybara', '~> 2.6.2'
   gem 'database_cleaner', '1.2.0'
   gem 'cucumber', '~> 2.3.2'
@@ -131,6 +130,11 @@ end
 group :test, :development do
   gem 'pry', '~> 0.10.3'
   gem 'whiny_validation'
+  gem 'factory_girl', '~> 4.5.0'
+end
+
+group :development do
+  gem 'factory_girl_rails'
   gem 'bundler-audit'
 end
 

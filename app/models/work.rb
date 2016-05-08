@@ -222,7 +222,7 @@ class Work < ActiveRecord::Base
   end
 
   def self.tag_groups_key_id(id)
-    "/v1/work_tag_groups/#{id}"
+    "/v2/work_tag_groups/#{id}"
   end
 
   def tag_groups_key

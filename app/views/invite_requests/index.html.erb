@@ -2,9 +2,9 @@
 <h2 class="heading"><%= ts("Request an Invitation") %></h2>
 
 <p><%= ts("To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently
-  %{count} people on the waiting list.", :count => InviteRequest.count) %>
+  %{count} people on the waiting list.", count: InviteRequest.count) %>
   <% if AdminSetting.invite_from_queue_enabled? %>
-    <%= ts("We are sending out %{invites} invitations per day.", :invites => AdminSetting.invite_from_queue_number) %>
+    <%= ts("We are sending out %{invites} invitations per day.", invites: AdminSetting.invite_from_queue_number) %>
   <% end %></p>
 <!--/descriptions-->
 
@@ -12,8 +12,7 @@
 <% if @admin_settings.invite_from_queue_enabled? %>
   <h3 class="heading"><%= ts("Add yourself to the list") %></h3>
 
-  <!--BACK END, please move this class "simple" into the form and lose this div-->
-  <%= form_for(@invite_request, :html => {:class => "simple"}) do |f| %>
+  <%= form_for(@invite_request, html: {class: "simple"}) do |f| %>
     <%= error_messages_for @invite_request %>
     <fieldset>
       <p>
@@ -29,7 +28,7 @@
 
 <h3 class="heading"><%= ts("Wondering how long you'll have to wait?") %></h3>
 
-<%= form_tag url_for(:action => :show), {:remote => true, :method => :get, :class => "simple"} do %>
+<%= form_tag url_for(action: :show), {remote: true, method: :get, class: "simple"} do %>
 <fieldset>
   <p>
     <%= label_tag :email %>
