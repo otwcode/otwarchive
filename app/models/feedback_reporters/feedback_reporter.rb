@@ -1,5 +1,6 @@
 class FeedbackReporter
   include HtmlCleaner
+  require 'url_formatter'
 
   attr_accessor :title, 
     :description,
@@ -23,8 +24,11 @@ class FeedbackReporter
   end
 
   def send_report!
+    # We're sending the XML data via a URL to our Support ticket service. The URL needs to be Percent-encoded so that
+    # everything shows up correctly on the other end. (https://en.wikipedia.org/wiki/Percent-encoding)
+    encoded_xml = CGI.escape(xml.to_str)
     HTTParty.post("#{ArchiveConfig.BUGS_SITE}",
-      body: "&xml=#{xml}"
+      body: "&xml=#{encoded_xml}"
     )
   end
 
