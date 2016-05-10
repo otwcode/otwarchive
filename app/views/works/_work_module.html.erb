@@ -19,7 +19,7 @@
       <% end %>
       <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
       <%= ts('by') %>
-
+        
       <!-- do not cache -->
       <%= byline(work, visibility: "public") %>
 
@@ -48,7 +48,7 @@
   </div>
 
   <% if !work.posted? %>
-   <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{date}.', date: date_in_zone(work.created_at + 1.month)).html_safe %></p>
+   <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{time}', time: time_in_zone(work.created_at + 1.month)).html_safe %></p>
   <% end %>
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts("Tags") %></h6>
