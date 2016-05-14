@@ -131,13 +131,6 @@ When /^I check all the collection settings checkboxes$/ do
   check("collection_collection_preference_attributes_email_notify")
 end
 
-When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
-  the_collection = Collection.find_by_title(collection)
-  collection_item_id = the_collection.collection_items.first.id
-  visit user_collection_items_path(User.current_user)
-  step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
-end
-
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|
