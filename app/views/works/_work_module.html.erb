@@ -109,7 +109,7 @@
           (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
             work_path(work, :anchor => "comments")) %></dd>
   <% end %>
-  <% if (bookmark_count = work.bookmarks.is_public.count) > 0 %>
+  <% if (bookmark_count = work.public_bookmarks_count) > 0 %>
     <dt class="bookmarks"><%= ts('Bookmarks') %>:</dt>
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
   <% end %>
