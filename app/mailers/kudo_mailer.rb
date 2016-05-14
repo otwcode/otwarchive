@@ -51,6 +51,6 @@ class KudoMailer < ActionMailer::Base
   end
 
   def guest_kudos(guest_count)
-     "#{t('mailer.kudos.guest', :count => guest_count.to_i)}"
+     "#{t('mailer.kudos.guest', count: guest_count.to_i)}"
   end
 end
