@@ -172,6 +172,7 @@ class Api::V1::ImportController < Api::V1::BaseController
       category: params[:categories],
       freeform: params[:additional_tags],
       summary: params[:summary],
+      notes: params[:notes],
       encoding: params[:encoding],
       external_author_name: params[:external_author_name],
       external_author_email: params[:external_author_email],

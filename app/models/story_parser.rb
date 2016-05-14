@@ -272,6 +272,9 @@ class StoryParser
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
       work.revised_at = work.chapters.last.published_at
+      if work.revised_at && work.revised_at.to_date < Date.today
+        work.backdate = true
+      end
 
       # set authors for the works
       pseuds = []
@@ -320,6 +323,7 @@ class StoryParser
       # set default value for title
       work.title = meta_or_default(work.title, options[:title], "Untitled Imported Work")
       work.summary = meta_or_default(work.summary, options[:summary], '')
+      work.notes = meta_or_default(work.notes, options[:notes], '')
 
       # set collection name if present
       work.collection_names = get_collection_names(options[:collection_names]) if !options[:collection_names].blank?

@@ -2,6 +2,7 @@ require 'fileutils'
 include HtmlCleaner
 include CssCleaner
 include SkinCacheHelper
+include SkinWizard
 
 class Skin < ActiveRecord::Base
 
@@ -128,6 +129,17 @@ class Skin < ActiveRecord::Base
   scope :unapproved_skins, where(:public => true, :official => false, :rejected => false)
   scope :rejected_skins, where(:public => true, :official => false, :rejected => true)
   scope :site_skins, where(:type => nil)
+  scope :wizard_site_skins, where("type IS NULL AND (
+      margin IS NOT NULL OR
+      background_color IS NOT NULL OR
+      foreground_color IS NOT NULL OR
+      font IS NOT NULL OR
+      base_em IS NOT NULL OR
+      paragraph_margin IS NOT NULL OR
+      headercolor IS NOT NULL OR
+      accent_color IS NOT NULL
+    )
+  ")
 
   def self.cached
     where(:cached => true)
@@ -183,6 +195,10 @@ class Skin < ActiveRecord::Base
     else
       ArchiveConfig.APP_SHORT_NAME
     end
+  end
+
+  def wizard_settings?
+    margin.present? || font.present? || background_color.present? || foreground_color.present? || base_em.present? || paragraph_margin.present? || headercolor.present? || accent_color.present?
   end
 
   # create the minimal number of files we can, containing all the css for this entire skin
@@ -304,37 +320,25 @@ class Skin < ActiveRecord::Base
     end
   end
 
+  # This builds the stylesheet, so the order is important
   def get_wizard_settings
     style = ""
-    if self.margin.present?
-      style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
-    end
 
-    if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
-      style += "body, #main	{
-        #{self.background_color.present? ? "background: #{self.background_color};" : ''}
-        #{self.foreground_color.present? ? "color: #{self.foreground_color};" : ''}"
-      if self.base_em.present?
-        style += "font-size: #{self.base_em}%; line-height:1.125;"
-      end
-      if self.font.present?
-        style += "\nfont-family: #{font};"
-      end
-      style += "}\n"
-    end
+    style += font_size_styles(base_em) if base_em.present?
 
-    if self.paragraph_margin.present?
-      style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n"
-    end
+    style += font_styles(font) if font.present?
 
-    if self.headercolor.present?
-      style += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color:transparent;}\n"
-      style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none;}\n"
-    end
+    style += background_color_styles(background_color) if background_color.present?
 
-    if self.accent_color.present?
-      style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n"
-    end
+    style += paragraph_margin_styles(paragraph_margin) if paragraph_margin.present?
+
+    style += foreground_color_styles(foreground_color) if foreground_color.present?
+
+    style += header_styles(headercolor) if headercolor.present?
+
+    style += accent_color_styles(accent_color) if accent_color.present?
+
+    style += work_margin_styles(margin) if margin.present?
 
     style
   end
@@ -354,10 +358,13 @@ class Skin < ActiveRecord::Base
       if roles_to_include.include?(get_role)
         if self.filename.present?
           block += get_ie_comment(stylesheet_link(self.filename, get_media))
-        elsif self.css.present?
-          block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
-        elsif (wizard_block = get_wizard_settings).present?
-          block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+        else
+          if (wizard_block = get_wizard_settings).present?
+            block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
+          end
+          if self.css.present?
+            block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
+          end
         end
       end
     end
