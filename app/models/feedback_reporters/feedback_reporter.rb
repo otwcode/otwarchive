@@ -32,6 +32,20 @@ class FeedbackReporter
     )
   end
 
+  def send_abuse_report!
+    HTTParty.post("#{ArchiveConfig.ABUSE_REPORTS_SITE}/projects/#{project_id}/bugs",
+      headers: {
+        "Content-Type" => "application/xml",
+        "Accept" => "application/xml"
+      },
+      basic_auth: {
+        username: ArchiveConfig.ABUSE_REPORTS_USER,
+        password: ArchiveConfig.ABUSE_REPORTS_PASSWORD
+      },
+      body: xml
+    )
+  end
+
   def xml
     view = ActionView::Base.new(Rails.root.join("app", "views"))
     view.assign({report: self})
