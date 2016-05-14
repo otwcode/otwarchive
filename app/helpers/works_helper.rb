@@ -16,7 +16,7 @@ module WorksHelper
       list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
     end
 
-    if (bookmark_count = work.public_bookmarks_count) > 0
+    if (bookmark_count = work.bookmarks.is_public.count) > 0
       list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
     list.concat([[ts('Hits:'), 'hits', work.hits]]) if show_hit_count?(work)
