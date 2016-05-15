@@ -31,7 +31,7 @@ module Api
           errors << "No items to import were provided."
         elsif import_items.size >= ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST
           errors << "This request contains too many items to import. A maximum of #{ ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST }" +
-            "items can be imported in one go by an archivist."
+            "items can be imported at one time by an archivist."
         end
         status = :ok if errors.empty?
         [status, errors]

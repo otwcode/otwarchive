@@ -31,9 +31,9 @@ class Api::V1::BookmarksController < Api::V1::BaseController
   # Set messages based on success and error flags
   def response_message(messages)
     if @some_success && @some_errors
-      messages << "At least one bookmark was not created. Please check the bookmark array for further information."
+      messages << "At least one bookmark was not created. Please check the individual bookmark results for further information."
     elsif !@some_success && @some_errors
-      messages << "None of the bookmarks were created. Please check the bookmark array for further information."
+      messages << "None of the bookmarks were created. Please check the individual bookmark results for further information."
     else
       messages << "All bookmarks were successfully created."
     end
