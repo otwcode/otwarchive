@@ -408,7 +408,6 @@ class DevmodeController < ApplicationController
       :authors => authors,
       :summary => summary,
       :fandoms => fandoms,
-      :ratings => ratings,
       :characters => characters,
       :relationships => relationships,
       :warnings => warnings,
