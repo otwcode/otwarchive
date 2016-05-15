@@ -55,7 +55,7 @@ class AbuseReport < ActiveRecord::Base
   end
 
   def send_report
-    #return unless %w(staging production).include?(Rails.env)
+    return unless %w(staging production).include?(Rails.env)
     reporter = AbuseReporter.new(
       title: url,
       description: comment,
