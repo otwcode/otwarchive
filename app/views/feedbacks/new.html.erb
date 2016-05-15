@@ -46,7 +46,7 @@
         <%= f.label :language, ts("Select language (required)") %>
       </dt>
       <dd>
-        <%= f.collection_select(:language, @support_languages, :id, :name, { selected: Language.default }) %>
+        <%= f.collection_select(:language, @support_languages, :id, :name, { :selected => Language.default.id }) %>
       </dd>
       <dt class="required">
         <%= f.label :summary, ts("Brief summary (required)") %>
