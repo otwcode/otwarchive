@@ -19,8 +19,6 @@
 
 <p><%= ts('We\'re still in our beta phase of development, so there are lots of bugs to be fixed and new features to be considered. For live updates on Archive performance, please check out our Twitter feed: <a href="http://twitter.com/ao3_status">@AO3_status</a>. Please use this form to let us know about your experience while using the site - good and bad! This form is for questions about the Archive and the OTW. Questions for creators should be left on their works. If you have technical issues with this page, please use <a href="http://www.transformativeworks.org/contact_us/contact-archive-support/">the back-up form</a>.').html_safe %></p>
 
-<p><%= ts("<strong>We can answer Support inquiries in %{list}.</strong> You can just write your question or feedback in one of the listed languages and we'll sort it out! Please allow for up to one week delay for responses in any language other than English and español.", list: @support_languages.map(&:name).to_sentence).html_safe %></p>
-
 <%= form_for(@feedback, html: { class: "post feedback" }) do |f| %>
   <fieldset>
     <legend><%= ts("Contact Information") %></legend>
