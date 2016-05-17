@@ -40,7 +40,7 @@
         <% end %>
 
         <% if current_user.pseuds.count > 1 %>
-          <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected: (comment.pseud ? comment.pseud.id.to_s  current_user.default_pseud.id.to_s)}, id: "comment_pseud_id_for_#{commentable.id}", title: ts("Choose Name") %>
+          <h4 class="heading"><%= ts("Comment as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {selected: (comment.pseud ? comment.pseud.id.to_s :  current_user.default_pseud.id.to_s)}, id: "comment_pseud_id_for_#{commentable.id}", title: ts("Choose Name") %>
             <% if controller.controller_name == "inbox" %>
               <% if commentable.ultimate_parent.is_a?(Work) && commentable.pseud.present? && commentable.pseud.user.is_author_of?(commentable.ultimate_parent) && commentable.ultimate_parent.anonymous? %>
                 <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
