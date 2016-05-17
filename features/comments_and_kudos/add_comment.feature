@@ -149,23 +149,23 @@ Scenario: Add a bookmark from a comment
     And I post the chaptered work "Generic Work"
   # author doesn't see
   When I view the work "Generic Work"
-  Then I should not see "Also Bookmark?"
+  Then I should not see "Also bookmark"
   # guests don't see
   When I am logged out
     And I view the work "Generic Work"
-  Then I should not see "Also Bookmark?"
+  Then I should not see "Also bookmark"
   # admins don't see
   When I am logged in as an admin
     And I view the work "Generic Work"
-  Then I should not see "Also Bookmark?"
+  Then I should not see "Also bookmark"
   # logged in user sees
   When I am logged in as "commenter"
     And I view the work "Generic Work"
-  Then I should see "Also Bookmark?"
+  Then I should see "Also bookmark"
   When I follow "Next Chapter"
-  Then I should see "Also Bookmark?"
+  Then I should see "Also bookmark"
   When I set up the comment "excellent story" on the work "Generic Work"
-    And I check "Also Bookmark?"
+    And I check "Also bookmark"
     And I press "Comment"
   Then I should see "Comment created"
     And I should see "save a bookmark"
@@ -174,6 +174,6 @@ Scenario: Add a bookmark from a comment
   Then I should see "Bookmark was successfully created"
   # user with existing bookmark doesn't see
   When I view the work "Generic Work"
-  Then I should not see "Also Bookmark?"
+  Then I should not see "Also bookmark"
   
   
