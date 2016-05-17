@@ -117,7 +117,7 @@
         <% if commentable.is_a?(Work) || commentable.is_a?(Chapter) %>
            <% if logged_in? && !current_user.is_author_of?(@work) && !bookmark_exists?(@work) %>
             <li class="modifier">
-              <label for="also_bookmark_for_<%= commentable.id %>"><%= ts("Also Bookmark?") %>
+              <label for="also_bookmark_for_<%= commentable.id %>"><%= ts("Also bookmark") %>
                 <%= check_box_tag "also_bookmark", "1", nil, id: "also_bookmark_for_#{commentable.id}" %>
               </label>
             </li>

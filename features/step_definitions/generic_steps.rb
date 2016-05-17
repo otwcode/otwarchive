@@ -177,7 +177,11 @@ When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ 
 end
 
 When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el['id'] && el['id'].match(/#{id_string}/)}[(index.to_i-1)]['id'], with: value)
+  fields = page.all("input[type='text']").select do |el| 
+    el['id'] && el['id'].match(/#{id_string}/)
+  end
+  field_to_fill = fields[(index.to_i-1)]['id']
+  fill_in(field_to_fill, with: value)
 end
 
 
