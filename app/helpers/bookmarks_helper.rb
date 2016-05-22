@@ -13,7 +13,7 @@ module BookmarksHelper
     end
   end  
   
-  def bookmark_exists?(bookmarkable)
+  def current_user_bookmark_exists?(bookmarkable)
     return false unless logged_in? && bookmarkable
     Bookmark.where(:bookmarkable_id => bookmarkable.id, :bookmarkable_type => bookmarkable.class.name.to_s, :pseud_id => current_user.pseuds.collect(&:id)).exists?
   end
