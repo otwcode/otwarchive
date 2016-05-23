@@ -7,7 +7,7 @@
   <p>To approve or reject this request, please visit your <%= style_link("Collection Items page", user_collection_items_url(@user)) %>.</p>
 
   <p>If in future you would prefer to automatically approve requests to add your
-    works to collections, please edit your <%= style_link("Preferences", "#{root_url}#{@user.default_pseud.name}/preferences") %>
+    works to collections, please edit your <%= style_link("Preferences", "#{root_url}users/#{@user.default_pseud.name}/preferences") %>
     and tick the box next to: <%= style_quote("\"Automatically agree to your work being collected by others in the Archive.\"") %>
   </p>
 
