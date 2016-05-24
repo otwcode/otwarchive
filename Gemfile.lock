@@ -104,6 +104,7 @@ GEM
       nokogiri (~> 1.5)
       railties (>= 3, < 5)
     cucumber-wire (0.0.1)
+    curb (0.9.3)
     dalli (2.7.5)
     database_cleaner (1.2.0)
     delorean (2.1.0)
@@ -411,6 +412,7 @@ DEPENDENCIES
   css_parser
   cucumber (~> 2.3.2)
   cucumber-rails (~> 1.4.3)
+  curb
   dalli
   database_cleaner (= 1.2.0)
   delorean

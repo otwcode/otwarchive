@@ -85,6 +85,9 @@ gem 'globalize', '~> 3.1.0'
 # Add a clean notifier that shows we are on dev or test
 gem "rack-dev-mark"
 
+# ilib curl rather than net/httpL
+gem 'curb'
+
 #Phrase-app
 gem 'phraseapp-in-context-editor-ruby'
 
