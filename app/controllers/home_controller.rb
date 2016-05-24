@@ -60,9 +60,9 @@ class HomeController < ApplicationController
     end
 
     # Set the user as active
-     if @current_user
-       @current_user.update_active
-     end
+    if @current_user
+      @current_user.update_active
+    end
 
     @hide_dashboard = true
     render action: 'index', layout: 'application'
