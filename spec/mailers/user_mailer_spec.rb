@@ -86,16 +86,16 @@ describe UserMailer do
 
     # before(:all) doesn't get cleaned up by database cleaner
     after(:all) do
-      @author.destroy
-      @archivist.destroy
-      @external_author.destroy
-      @external_author_name.destroy
+      @author.destroy if @author
+      @archivist.destroy if @archivist
+      @external_author.destroy if @external_author
+      @external_author_name.destroy if @external_author_name
 
-      @invitation.destroy
-      @fandom1.destroy
+      @invitation.destroy if @invitation
+      @fandom1.destroy if @fandom1
 
-      @work.destroy
-      @work2.destroy
+      @work.destroy if @work
+      @work2.destroy if @work2
     end
 
     let(:email) { UserMailer.invitation_to_claim(@invitation.id, @archivist.login).deliver }

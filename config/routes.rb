@@ -132,6 +132,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
+    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -139,7 +140,6 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
-    resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
         get :hide

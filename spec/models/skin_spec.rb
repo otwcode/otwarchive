@@ -141,6 +141,12 @@ describe Skin do
       end
     end
 
+    it "should require a title" do
+      @skin.title = ""
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:title]).not_to be_empty
+    end
+
     it "should have a unique title" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "Test Skin")

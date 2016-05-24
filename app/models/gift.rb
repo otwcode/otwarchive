@@ -22,14 +22,16 @@ class Gift < ActiveRecord::Base
     end
   end
 
-  validates_uniqueness_of :pseud_id, scope: [:work_id], message: ts("You can't give a gift to the same person twice.")
+  validates_uniqueness_of :pseud_id,
+    scope: :work_id,
+    message: ts("You can't give a gift to the same person twice.")
 
   # Don't allow giving the same gift to the same user more than once
   validate :has_not_given_to_user
   def has_not_given_to_user
     if self.pseud && self.work
-      other_pseuds = Gift.where(work_id: self.work_id).value_of(:pseud_id)
-      if Pseud.where(id: other_pseuds).value_of(:user_id).include?(self.pseud.user.id)
+      other_pseuds = Gift.where(work_id: self.work_id).value_of(:pseud_id) - [self.pseud_id]
+      if Pseud.where(id: other_pseuds, user_id: self.pseud.user_id).exists?
         errors.add(:base, ts("You seem to already have given this work to that user."))
       end
     end
