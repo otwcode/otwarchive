@@ -15,9 +15,7 @@ class KudosController < ApplicationController
       @check_ownership_of = @user
       check_ownership
       # collext a list of pseuds the user may have left kudos under
-      @kudos = Rails.cache.fetch(Kudo.kudo_user_cache(params[:user_id])) {
-        Work.where(id: Kudo.where(pseud_id: Pseud.where(user_id: @user.id).value_of(:id)).value_of(:commentable_id))
-      }
+      @kudos = Rails.cache.fetch(Kudo.kudo_user_cache(params[:user_id])) { Work.where(id: Kudo.where(pseud_id: Pseud.where(user_id: @user.id).value_of(:id)).value_of(:commentable_id)) }
       @kudos.page(params[:page])
     end
   end
