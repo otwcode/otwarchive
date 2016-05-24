@@ -65,7 +65,7 @@ class Kudo < ActiveRecord::Base
   end
 
   def self.kudo_user_cache(id)
-    Rails.cache.fetch(Kudo.kudos_user_cache_key((id), :raw => true) { rand(1..1000) }
+    "/v1/kudos_user_cache_data/#{id}/v#{Rails.cache.fetch(Kudo.kudos_user_cache_key(id), :raw => true) { rand(1..1000) }}"
   end
  
   def expire_kudo_user_cache
