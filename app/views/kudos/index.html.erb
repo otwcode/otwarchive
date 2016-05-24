@@ -27,7 +27,7 @@
 <h2 class="heading"><%= ts('Kudos History') %></h2>
 <!--/descriptions-->
 <!--main content-->
-<% if logged_in? && @kudos.present? %>
+<% if @kudos.present? %>
   <ol class="reading work index group">
     <% @kudos.each do |kudo| %>
       <%= render 'kudos_blurb', :work => kudo %>
