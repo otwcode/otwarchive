@@ -95,20 +95,14 @@
                             <p><%= yield(:footer_note) %></p>
                           <% end %>
 
-                          <p>
-                            If you've received this message in error, please <a href="<%= root_url %>support" style="color:#ffffff; text-decoration:underline">contact Support</a>.
-                          </p>
-
-                          <p>
-                            The Archive of Our Own is a fan-run and fan-supported archive that relies on <a href="<%= donate_url %>" style="color:#ffffff; text-decoration:underline">your donations</a>.
-                          </p>
+                          <%= t 'mailer.general.footer.general.html', support_url: root_url + "support", donate_url: donate_url %>
 
                           <% if content_for?(:sent_at) %>
-                            <p>Sent at: <%= yield(:sent_at) %>.</p>
+                            <p><%= t 'mailer.general.footer.sent_at', sent_at: :sent_at %></p>
                           <% end %>
 
                           <% if content_for?(:sent_by) %>
-                            <p>Sent by: <b><%= yield(:sent_by) %></b>.</p>
+                            <p><%= t 'mailer.general.footer.sent_by.html', sent_by: :sent_by %></p>
                           <% end %>
 <!-- /footer -->
 

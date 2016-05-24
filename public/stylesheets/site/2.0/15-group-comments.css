@@ -82,4 +82,23 @@ fieldset.comments, .comment .userstuff {
   margin: 1.286em 0.643em 0.25em;
 }
 
+/* mods */
+
+.abbreviated .icon {
+  height: 75px;
+  width: 75px;
+}
+
+.abbreviated .icon .anonymous {
+  background: url("/images/imageset.png") no-repeat 0px -450px;
+}
+
+.abbreviated .icon .visitor {
+  background: url("/images/imageset.png") no-repeat 0px -375px;
+}
+
+.abbreviated h4.byline {
+  padding-left: 83px;
+}
+
 /*END== */

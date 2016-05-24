@@ -6,23 +6,23 @@
         <%= link_to ts("Hi, %{current_user}!", :current_user => current_user.login, key: 'header'), user_path(current_user) %>
         <ul class="menu" role="menu">
           <li><%= span_if_current ts('My Dashboard', key: 'header'), user_path(current_user) %></li>
-          <% if @current_user.subscriptions.count > 0 %>
+          <% if @current_user_subscriptions_count > 0 %>
             <li><%= span_if_current ts('My Subscriptions', key: 'header'), user_subscriptions_path(current_user) %></li>
           <% end %>
-          <% if @current_user.visible_work_count > 0 %>
-            <li><%= span_if_current ts("My Works (%{works_number})", key: 'header', :works_number => @current_user.visible_work_count), user_works_path(@current_user) %></li>
+          <% if @current_user_visible_work_count > 0 %>
+            <li><%= span_if_current ts("My Works", key: 'header'), user_works_path(@current_user) %></li>
           <% end %>
-          <% if @current_user.bookmarks.count > 0 %>
-            <li><%= span_if_current ts("My Bookmarks (%{bookmark_number})", key: 'header', :bookmark_number => @current_user.bookmarks.count), user_bookmarks_path(current_user) %></li>
+          <% if @current_user_bookmarks_count > 0 %>
+            <li><%= span_if_current ts("My Bookmarks", key: 'header'), user_bookmarks_path(current_user) %></li>
           <% end %>
-          <% if @current_user.owned_collections.count > 0 %>
-            <li><%= span_if_current ts("My Collections (%{coll_number})", key: 'header', :coll_number => @current_user.owned_collections.count), user_collections_path(current_user) %></li>
+          <% if @current_user_owned_collections_count > 0 %>
+            <li><%= span_if_current ts("My Collections", key: 'header'), user_collections_path(current_user) %></li>
           <% end %>
-          <% if @current_user.challenge_signups.count > 0 %>
-            <li><%= span_if_current ts("My Sign-ups (%{signup_number})", key: 'header', :signup_number => @current_user.challenge_signups.count), user_signups_path(current_user) %></li>
+          <% if @current_user_challenge_signups_count > 0 %>
+            <li><%= span_if_current ts("My Sign-ups", key: 'header'), user_signups_path(current_user) %></li>
           <% end %>
-          <% if (@current_user.offer_assignments.undefaulted.count || @current_user.pinch_hit_assignments.undefaulted.count) > 0 %>
-            <li><%= span_if_current ts("My Assignments (%{assignment_number})", key: 'header', :assignment_number => (@current_user.offer_assignments.undefaulted.count + @current_user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(current_user) %></li>
+          <% if @current_user_offer_assignments > 0 %>
+            <li><%= span_if_current ts("My Assignments", key: 'header'), user_assignments_path(current_user) %></li>
           <% end %>
           <% if @current_user.preference.try(:history_enabled?) %>
             <li><%= span_if_current ts('My History', key: 'header'), user_readings_path(current_user) %></li>
@@ -41,7 +41,7 @@
       	<ul class="menu" role="menu">
           <li><%= link_to ts('New Work', key: 'header'), new_work_path %></li>
           <li><%= link_to ts('Import Work', key: 'header'), new_work_path(:import => "true") %></li>
-          <% if @current_user.unposted_works.size > 0 %>
+          <% if @current_user_unposted_works_size > 0 %>
             <li><%= span_if_current ts('From Draft', key: 'header'), drafts_user_works_path(@current_user) %></li>
           <% end %>
       	</ul>

@@ -1,77 +1,77 @@
---- 
-http_interactions: 
-- request: 
+---
+http_interactions:
+- request:
     method: head
     uri: http://google.com/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      accept: 
-      - "*/*"
-      user-agent: 
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
       - Ruby
-  response: 
-    status: 
+  response:
+    status:
       code: 301
       message: Moved Permanently
-    headers: 
-      location: 
+    headers:
+      Location:
       - http://www.google.com/
-      content-type: 
+      Content-Type:
       - text/html; charset=UTF-8
-      date: 
-      - Sun, 13 Oct 2013 20:34:57 GMT
-      expires: 
-      - Tue, 12 Nov 2013 20:34:57 GMT
-      cache-control: 
+      Date:
+      - Wed, 13 May 2015 04:58:19 GMT
+      Expires:
+      - Fri, 12 Jun 2015 04:58:19 GMT
+      Cache-Control:
       - public, max-age=2592000
-      server: 
+      Server:
       - gws
-      content-length: 
-      - "219"
-      x-xss-protection: 
+      Content-Length:
+      - '219'
+      X-Xss-Protection:
       - 1; mode=block
-      x-frame-options: 
+      X-Frame-Options:
       - SAMEORIGIN
-      alternate-protocol: 
-      - 80:quic
-    body: 
+      Alternate-Protocol:
+      - 80:quic,p=1
+    body:
       encoding: US-ASCII
-      string: ""
-    http_version: "1.1"
-  recorded_at: Sun, 13 Oct 2013 20:34:51 GMT
-- request: 
+      string: ''
+    http_version: 
+  recorded_at: Wed, 13 May 2015 04:58:19 GMT
+- request:
     method: head
     uri: http://testarchive.transformativeworks.org/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      accept: 
-      - "*/*"
-      user-agent: 
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
       - Ruby
-  response: 
-    status: 
+  response:
+    status:
       code: 302
       message: Moved Temporarily
-    headers: 
-      server: 
-      - nginx/1.4.1
-      date: 
-      - Sun, 13 Oct 2013 20:35:02 GMT
-      content-type: 
+    headers:
+      Server:
+      - nginx/1.6.2
+      Date:
+      - Wed, 13 May 2015 04:58:20 GMT
+      Content-Type:
       - text/html
-      content-length: 
-      - "160"
-      connection: 
+      Content-Length:
+      - '160'
+      Connection:
       - keep-alive
-      location: 
+      Location:
       - http://test.archiveofourown.org/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    http_version: "1.1"
-  recorded_at: Sun, 13 Oct 2013 20:34:56 GMT
+      string: ''
+    http_version: 
+  recorded_at: Wed, 13 May 2015 04:58:20 GMT
 recorded_with: VCR 2.5.0

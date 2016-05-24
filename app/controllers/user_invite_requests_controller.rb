@@ -11,6 +11,7 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests/new
   # GET /user_invite_requests/new.xml
   def new
+    @page_title = ts('New User Invitation Request')
     if AdminSetting.request_invite_enabled?
       if logged_in?
         @user = current_user

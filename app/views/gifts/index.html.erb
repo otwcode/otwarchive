@@ -1,13 +1,27 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <%= ts("Gifts for %{recipient}", :recipient => @user ? @user.login : h(@recipient_name)) %>
-  <%= @collection ? ts("in %{collection}", :collection => h(@collection.title)) : "" %>
+  <% if @user && @user == current_user && params[:refused] %>
+    <%= ts("Refused Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
+  <% else %>
+    <%= ts("Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
+  <% end %>
+  <%= @collection ? ts("in %{collection}", collection: h(@collection.title)) : "" %>
 </h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
-<% unless @user %>
-  <%= render :partial => 'gifts/gift_search' %>
+<% if @user && @user == current_user %>
+  <h3 class="landmark heading"><%= ts("Navigation") %></h3>
+  <ul class="navigation actions" role="navigation">
+    <li>
+      <%= span_if_current ts("Accepted Gifts"), user_gifts_path(@user), !(params[:refused]) %>
+    </li>
+    <li>
+      <%= span_if_current ts("Refused Gifts"), user_gifts_path(@user, refused: true) %>
+    </li>
+  </ul>
+<% elsif !@user %>
+  <%= render 'gifts/gift_search' %>
 <% end %>
 <!--subnav-->
 
@@ -16,9 +30,10 @@
 <% end %>
 
 <!--main content-->
+<h3 class="heading landmark"><%= ts("List of Gifts") %></h3>
 <ul class="gift work index group">
   <% for work in @works %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+    <%= render 'gifts/gift_blurb', work: work, gift: work %>
   <% end %>
 </ul>
 <!--/content-->

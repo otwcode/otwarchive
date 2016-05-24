@@ -43,7 +43,7 @@
         </dt>
         <dd>
           <select id="admin_post_language_id" name="admin_post[language_id]">
-            <%= options_from_collection_for_select(Language.default_order, :id, :name, @admin_post.language_id || Language.default.id) %>
+            <%= options_from_collection_for_select(@news_languages, :id, :name, @admin_post.language_id || Language.default.id) %>
           </select>
         </dd>
         <dt>

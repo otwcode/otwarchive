@@ -1,9 +1,9 @@
 <%= form_for @search, 
   url: collected_user_works_path(@user), 
   html: { 
-    :method => :get, 
-    :class => 'filters', 
-    :id => 'work_filters'
+    method: :get, 
+    class: 'narrow-hidden filters', 
+    id: 'works-in-collections-filters'
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
@@ -42,5 +42,11 @@
       <%= hidden_field_tag("user_id", @user.login) if @user %>
     </div>
   <% end %>
+  <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
+  <p class="narrow-shown hidden">
+    <a href="#main" id="leave_filters" class="close">
+      <%= ts("Top of Work Index") %>
+    </a>
+  </p>
 <% end %>
 

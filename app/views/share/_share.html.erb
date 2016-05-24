@@ -18,7 +18,7 @@
       
     <% # Tumblr share %>
     <li>
-      <a href="http://www.tumblr.com/share/link?url=<%=u shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>&name=<%=u shareable.is_a?(Bookmark) ? get_tumblr_embed_link_title(bookmark.bookmarkable) : get_tumblr_embed_link_title(@work) %>&description=<%=u shareable.is_a?(Bookmark) ? get_tumblr_bookmark_embed_link(bookmark) : get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('http://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
+      <a href="http://www.tumblr.com/share/link?url=<%=u shareable.is_a?(Bookmark) ? work_url(bookmark.bookmarkable) : work_url(@work) %>&name=<%=u shareable.is_a?(Bookmark) ? get_tumblr_embed_link_title(bookmark.bookmarkable) : get_tumblr_embed_link_title(@work) %>&description=<%=u shareable.is_a?(Bookmark) ? get_tumblr_bookmark_embed_link(bookmark) : get_embed_link_meta(@work) %>" title="<%= ts('Share on Tumblr') %>" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('//platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; border-bottom: none;" target="_blank">
         <%= ts('Share on Tumblr') %>
       </a>
     </li>

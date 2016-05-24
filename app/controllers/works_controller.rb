@@ -112,9 +112,16 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
 
+    if logged_in? && @tag
+      @favorite_tag = @current_user.favorite_tags.
+                      where(tag_id: @tag.id).first ||
+                      FavoriteTag.
+                      new(tag_id: @tag.id, user_id: @current_user.id)
+    end
+
     if @owner.present?
       if @admin_settings.disable_filtering?
-        @works = Work.list_without_filters(@owner, options)
+        @works = Work.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).list_without_filters(@owner, options)
       else
         @search = WorkSearch.new(options.merge(faceted: true, works_parent: @owner))
 
@@ -141,10 +148,10 @@ class WorksController < ApplicationController
       end
     elsif use_caching?
       @works = Rails.cache.fetch("works/index/latest/v1", :expires_in => 10.minutes) do
-        Work.latest.to_a
+        Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
       end
     else
-      @works = Work.latest.to_a
+      @works = Work.latest.includes(:tags, :external_creatorships, :series, :language, :approved_collections, pseuds: [:user]).to_a
     end
   end
 
@@ -199,10 +206,24 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @page_title = @work.unrevealed? ? ts("Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
-        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
-        @work.title)
+    @tag_groups = @work.tag_groups
+    if @work.unrevealed?
+      @page_title = ts("Mystery Work")
+    else
+      page_title_inner = ""
+      page_creator = ""
+      if @work.anonymous?
+        page_creator = ts("Anonymous")
+      else
+        page_creator = @work.pseuds.collect(&:byline).sort.join(', ')
+      end
+      if @tag_groups["Fandom"].size > 3 
+        page_title_inner = ts("Multifandom")
+      else
+        page_title_inner = @tag_groups["Fandom"][0].name
+      end
+      @page_title = get_page_title(page_title_inner, page_creator, @work.title)
+    end
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
@@ -455,7 +476,8 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :edit_tags
     elsif params[:save_button]
-        flash[:notice] = ts('Tags were successfully updated.')
+      Work.expire_work_tag_groups_id(@work.id)
+      flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
     else
       saved = true
@@ -738,6 +760,14 @@ public
     @errors = []
     # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
     work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
+
+    # manually allow switching of anon/moderated comments
+    if work_params[:anon_commenting_disabled] == "allow_anon"
+      work_params[:anon_commenting_disabled] = "0"
+    end
+    if work_params[:moderated_commenting_enabled] == "not_moderated"
+      work_params[:moderated_commenting_enabled] = "0"
+    end
 
     @works.each do |work|
       # now we can just update each work independently, woo!
@@ -1024,6 +1054,7 @@ public
       relationship: params[:work][:relationship_string],
       category: params[:work][:category_string],
       freeform: params[:work][:freeform_string],
+      notes: params[:notes],
       encoding: params[:encoding],
       external_author_name: params[:external_author_name],
       external_author_email: params[:external_author_email],

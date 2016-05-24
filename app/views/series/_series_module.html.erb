@@ -7,15 +7,19 @@
     <%= ts('by') %>
     <%= byline(series) %>
     <% if series.restricted %>
-      <%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+      <%= image_tag("lockblue.png", size: "15x15", alt: ts("(Restricted)"),
+                                    title: ts("Restricted")) %>
     <% end %>
     <% if series.hidden_by_admin %>
-      <%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
+      <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
+                                   title: ts("Hidden by Administrator")) %>
     <% end %>
-	</h4>
-  <h5 class="heading">
+  </h4>
+  <h5 class="fandoms heading">
     <span class="landmark"><%= ts('Fandom') %>:</span>
-    <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
+    <%= series.work_tags.select{ |tag| tag.type == "Fandom" }.
+                         sort.collect{ |tag| link_to_tag_works(tag) }.
+                         join(', ').html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
   <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
@@ -29,7 +33,9 @@
 <!--summary-->
 <% unless series.summary.blank? %>
   <h6 class="landmark heading"><%= ts("Summary") %></h6>
-  <blockquote class="userstuff summary"><%=raw strip_images(sanitize_field(series, :summary)) %></blockquote>
+  <blockquote class="userstuff summary">
+    <%=raw strip_images(sanitize_field(series, :summary)) %>
+  </blockquote>
 <% end %>
 <!--stats-->
 <dl class="stats">
@@ -38,7 +44,7 @@
   <dt><%= ts('Works:') %></dt> 
   <dd><%= series.visible_work_count %></dd>
   <% if (bookmark_count = series.bookmarks.is_public.count) > 0 %>
-  	<dt><%= ts('Bookmarks:') %></dt>
+    <dt><%= ts('Bookmarks:') %></dt>
     <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) %></dd>
   <% end %>
 </dl>

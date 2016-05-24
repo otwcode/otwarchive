@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   before_filter :check_user_status, :only => [:edit, :update]
   before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]  
+  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
   before_filter :check_account_creation_status, :only => [:new, :create]
   skip_before_filter :store_location, :only => [:end_first_login]
 
@@ -92,10 +92,8 @@ class UsersController < ApplicationController
   def edit
   end
 
-  def change_password
-    return unless params[:password]
-
-    unless @user.recently_reset? || reauthenticate
+  def changed_password
+    unless params[:password] && (@user.recently_reset? || reauthenticate)
       render :change_password and return
     end
 
@@ -113,15 +111,17 @@ class UsersController < ApplicationController
     end
   end
 
-  def change_username
-    return unless params[:new_login].present?
+  def changed_username
+    unless params[:new_login].present?
+      render :change_username and return
+    end
 
     @new_login = params[:new_login]
     session = UserSession.new(:login => @user.login, :password => params[:password])
 
     unless session.valid?
       flash[:error] = ts("Your password was incorrect")
-      return
+      render :change_username and return
     end
 
     @user.login = @new_login
@@ -131,6 +131,7 @@ class UsersController < ApplicationController
       redirect_to @user
     else
       @user.reload
+      render :change_username
     end
   end
 
@@ -231,7 +232,7 @@ class UsersController < ApplicationController
     end
   end
   
-  def change_email
+  def changed_email
     if !params[:new_email].blank? && reauthenticate
       @old_email = @user.email
       @user.email = params[:new_email]

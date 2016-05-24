@@ -2,6 +2,9 @@ class Reading < ActiveRecord::Base
   belongs_to :user
   belongs_to :work
 
+  after_save :expire_cached_home_marked_for_later, if: :toread_changed?
+  after_destroy :expire_cached_home_marked_for_later, if: :toread?
+
   # called from show in work controller
   def self.update_or_create(work, user)
     if user && user.preference.try(:history_enabled) && !user.is_author_of?(work)
@@ -18,8 +21,12 @@ class Reading < ActiveRecord::Base
 
   # called from rake
   def self.update_or_create_in_database
-    REDIS_GENERAL.smembers("Reading:new").reverse.each do |reading_json|
-      Reading.reading_object(reading_json)
+    REDIS_GENERAL.smembers("Reading:new").reverse.each_slice(ArchiveConfig.READING_BATCHSIZE || 1000) do |batch|
+      Reading.transaction do
+        batch.each do |reading_json|
+          Reading.reading_object(reading_json)
+        end
+      end
     end
   end
 
@@ -44,5 +51,13 @@ class Reading < ActiveRecord::Base
     reading.save
     REDIS_GENERAL.srem("Reading:new", reading_json)
     return reading
+  end
+
+  private
+
+  def expire_cached_home_marked_for_later
+    unless Rails.env.development?
+      Rails.cache.delete("home/index/#{user_id}/home_marked_for_later")
+    end
   end
 end

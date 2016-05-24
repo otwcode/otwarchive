@@ -33,7 +33,7 @@ module Otwarchive
     # I18n validation deprecation warning fix
     #
 
-    I18n.config.enforce_available_locales = true
+    I18n.config.enforce_available_locales = false
     I18n.config.available_locales = [:en, :ar, :ca, 'zh-CN', :cs, :nl, :fi, :fr, :de, :he, :hu, :id, 
       :it, :ja, :ko, :lt, :pl, 'pt-BR', :ru, :es, :sv, :tr]
 
@@ -75,6 +75,8 @@ module Otwarchive
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
 
+    # Bring the log under control
+    config.lograge.enabled = true
+
   end
 end
-

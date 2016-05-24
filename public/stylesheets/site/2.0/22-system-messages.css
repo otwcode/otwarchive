@@ -22,7 +22,7 @@ System messages use the following colours:
   font-family: monospace;
 }
 
-.flash, div.error {
+div.error {
   margin: 0.643em auto;
   padding: 0.25em 0.375em;
     border-radius: 0.25em;

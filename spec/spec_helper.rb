@@ -1,10 +1,5 @@
 ENV["RAILS_ENV"] ||= 'test'
 
-# Coverals needs to work here too
-require 'coveralls'
-Coveralls.wear_merged!('rails')
-SimpleCov.merge_timeout 3600
-
 require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path('../../features/support/factories.rb', __FILE__)
 require 'rspec/rails'
@@ -12,49 +7,10 @@ require 'factory_girl'
 require 'database_cleaner'
 require 'email_spec'
 
-
-
-# SimpleCov integration
-
-require 'simplecov'
-require 'coveralls'
-
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start 'rails' do
-  add_filter '/features/'
-  add_filter '/spec/'
-  add_filter '/config/'
-  add_filter '/vendor/'
-
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Views', 'app/views'
-
-end
-
-
 DatabaseCleaner.start
 
 DatabaseCleaner.clean
 
-
-# SimpleCov integration
-
-require 'simplecov'
-
-SimpleCov.start 'rails' do
-  add_filter '/features/'
-  add_filter '/spec/'
-  add_filter '/config/'
-  add_filter '/vendor/'
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Views', 'app/views'
-end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -72,6 +28,7 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
+  #config.raise_errors_for_deprecations!
   config.include FactoryGirl::Syntax::Methods
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
@@ -87,8 +44,6 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.include Capybara::DSL
 
@@ -117,6 +72,17 @@ RSpec.configure do |config|
   INVALID_URLS = ['no_scheme.com', 'ftp://ftp.address.com','http://www.b@d!35.com','https://www.b@d!35.com','http://b@d!35.com','https://www.b@d!35.com']
   VALID_URLS = ['http://rocksalt-recs.livejournal.com/196316.html','https://rocksalt-recs.livejournal.com/196316.html']
   INACTIVE_URLS = ['https://www.iaminactive.com','http://www.iaminactive.com','https://iaminactive.com','http://iaminactive.com']
+
+  # rspec-rails 3 will no longer automatically infer an example group's spec type
+  # from the file location. You can explicitly opt-in to the feature using this
+  # config option.
+  # To explicitly tag specs without using automatic inference, set the `:type`
+  # metadata manually:
+  #
+  #     describe ThingsController, :type => :controller do
+  #       # Equivalent to being in spec/controllers
+  #     end
+  config.infer_spec_type_from_file_location!
 end
 
 def get_message_part (mail, content_type)
@@ -125,7 +91,7 @@ end
 
 shared_examples_for "multipart email" do
   it "generates a multipart message (plain text and html)" do
-    email.body.parts.length.should eq(2)
-    email.body.parts.collect(&:content_type).should == ["text/plain; charset=UTF-8", "text/html; charset=UTF-8"]
+    expect(email.body.parts.length).to eq(2)
+    expect(email.body.parts.collect(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
 end

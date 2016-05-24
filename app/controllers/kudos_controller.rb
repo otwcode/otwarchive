@@ -36,15 +36,18 @@ class KudosController < ApplicationController
     else
       respond_to do |format|
         format.html do
+          error_message = "We couldn't save your kudos, sorry!"
+          commentable = @kudo.commentable
           if @kudo.dup?
-            msg = "You have already left kudos here. :)"
-          elsif @kudo.creator_of_work?
-            msg = "You can't leave kudos on your own work."
-          else
-            msg = "We couldn't save your kudos, sorry!"
+            error_message = 'You have already left kudos here. :)'
           end
-          flash[:comment_error] = ts(msg)
-
+          if @kudo.creator_of_work?
+            error_message = "You can't leave kudos on your own work."
+          end
+          if !current_user.present? && commentable.restricted?
+            error_message = "You can't leave guest kudos on a restricted work."
+          end
+          flash[:comment_error] = ts(error_message)
           redirect_to request.referer and return
         end
 

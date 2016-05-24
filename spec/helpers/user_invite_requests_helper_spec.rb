@@ -15,10 +15,10 @@ describe UserInviteRequestsHelper do
 
     context "users requesting an invitations" do
       it "should show '0' if no previous invitation request" do
-        helper.link_to_previous_invite_requests(@invitation_request3).should eq "0"
+        expect(helper.link_to_previous_invite_requests(@invitation_request3)).to eq "0"
       end
       it "should link to all previous invitation requests" do
-        helper.link_to_previous_invite_requests(@invitation_request2).should eq "<a href=\"/admin/invitations/find?user_name=#{@user.login}\">1</a>"
+        expect(helper.link_to_previous_invite_requests(@invitation_request2)).to eq "<a href=\"/admin/invitations/find?user_name=#{@user.login}\">1</a>"
       end
     end
   end

@@ -26,7 +26,7 @@ end
 Given /^account creation is enabled$/ do
   steps %Q{
     Given the following admin settings are configured:
-    | account_creation_enabled | 0 |
+    | account_creation_enabled | 1 |
   }
 end
 
@@ -94,12 +94,6 @@ When /^I use an already used invitation to sign up$/ do
   visit signup_path(invite.token)
 end
 
-When /^I try to invite a friend from the homepage$/ do
-  step %{I am logged in as "user1"}
-  step %{I go to the homepage}
-  step %{I follow "Invite a Friend"}
-end
-
 When /^I try to invite a friend from my user page$/ do
   step %{I am logged in as "user1"}
   step %{I go to my user page}
@@ -108,7 +102,7 @@ end
 
 When /^I request some invites$/ do
   step %{I try to invite a friend from my user page}
-  step %{I follow "Request more"}
+  step %{I follow "Request invitations"}
   step %{I fill in "user_invite_request_quantity" with "3"}
   step %{I fill in "user_invite_request_reason" with "I want them for a friend"}
   step %{I press "Send Request"}
@@ -130,4 +124,11 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   visit(invite_requests_path)
   fill_in("email", :with => "#{email}")
   click_button("Look me up")
+end
+
+### Then
+
+Then /^I should see how long I have to activate my account$/ do
+  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  step %{I should see "You must verify your account within #{days_to_activate} days"}
 end

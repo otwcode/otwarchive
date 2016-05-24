@@ -28,7 +28,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_URL'] ,
+  config.cache_store = :dalli_store, YAML.load_file("#{Rails.root}/config/local.yml")['MEMCACHED_SERVERS'],
                           {  :namespace =>  'ao3-v1', :expires_in => 0,  :compress => true , :pool_size => 5 }
 
   # Disable Rails's static asset server
@@ -63,5 +63,14 @@ Otwarchive::Application.configure do
 #      :sender_address => ArchiveConfig.RETURN_ADDRESS,
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.add_footer = false
+    Bullet.console = true
+    Bullet.rails_logger = true
+    Bullet.counter_cache_enable = false
+  end
 
 end

@@ -4,410 +4,244 @@ Feature: Collection
   As a humble user
   I want to create a collection with anonymity and hidden-until-reveal works
 
-  Scenario: Create a hidden collection, add new and existing works to it, reveal works
-
-  Given basic tags
-    And I am logged in as "first_user"
-    And I am logged in as "second_user"
-    And I go to first_user's user page
-    And I press "Subscribe"
-  When I go to the collections page
-  Then I should see "Collections in the "
-    And I should not see "Hidden Treasury"
-  When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
-    And I check "This collection is unrevealed"
-    And I submit
-  Then I should see "Collection was successfully created"
-
-  # Adding existing work to the collection without preview
-  When I am logged in as "first_user"
-    And I post the work "Old Snippet"
-    And I edit the work "Old Snippet"
-    And I fill in "Post to Collections / Challenges" with "hidden_treasury"
-    And I press "Post Without Preview"
-    And all search indexes are updated
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Collections: Hidden Treasury"
-    And I should see "Old Snippet"
-    
-  # Post to collection without preview
-  # Also check that subscription notices don't go out
-  Given all emails have been delivered
-  When I follow "Hidden Treasury"
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "New Snippet"
-    And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I press "Post Without Preview"
-  Then I should see "New Snippet"
-    And I should see "Work was successfully posted"
-    And I should see "first_user" within ".byline"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Collections: Hidden Treasury"
-    And 0 emails should be delivered
+  Scenario: Works in a hidden collection should be visible to the mod and author but not other users
+    Given I have the hidden collection "Hidden Treasury"
+    When I am logged in as "first_user"
+      And I set up the draft "Old Snippet" in collection "Hidden Treasury"
+      And I press "Preview"    
+    Then I should see "Collections: Hidden Treasury"
+      And I should see "Draft was successfully created."
+    When I press "Post"
+    Then the work "Old Snippet" should be visible to me
+      And I should see "part of an ongoing challenge"
+    When I am logged in as "moderator"
+    Then the work "Old Snippet" should be visible to me
+      And I should see "part of an ongoing challenge"
+    When I am logged in as "second_user"
+    Then the work "Old Snippet" should be hidden from me
+    When I am logged out
+    Then the work "Old Snippet" should be hidden from me
   
-  # Post to collection with preview
-  When I follow "Hidden Treasury"
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "Another Snippet"
-    And I fill in "content" with "This is another new snippet written for this hidden challenge"
-    And I press "Preview"
-  Then I should see "Collections: Hidden Treasury"
-    And I should see "Draft was successfully created."
-    And I should see "first_user" within ".byline"
-  When I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "first_user" within ".byline"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Collections: Hidden Treasury"
-    And 0 emails should be delivered
+  Scenario: The moderator can reveal all the works in a hidden collection
+    Given I have the hidden collection "Hidden Treasury"
+      And "second_user" subscribes to author "first_user"
+      And the user "third_user" exists and is activated
+      And all emails have been delivered
+    When I am logged in as "first_user"
+      And I post the work "New Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
+      And subscription notifications are sent
+    Then 0 emails should be delivered
+    When I reveal works for "Hidden Treasury"
+    Then "third_user" should be emailed
+      # not anonymous
+      And the email to "third_user" should contain "first_user"
+    When subscription notifications are sent
+      And "AO3-4367: author subscribers not notified when works revealed" is fixed
+    #Then "second_user" should be emailed
+    #  And the email to "second_user" should contain "first_user"
+    When I am logged out
+    Then the work "New Snippet" should be visible to me
+    When I view the collection "Hidden Treasury"
+    Then I should see "New Snippet"
+      And I should not see "Mystery Work"
+    When I am logged in as "second_user"
+    Then the work "New Snippet" should be visible to me
+    When I view the collection "Hidden Treasury"
+    Then I should see "New Snippet"
+      And I should not see "Mystery Work"
       
-  When I follow "Hidden Treasury"
-  Then I should see "New Snippet by first_user"
-    And I should see "Old Snippet by first_user"
-    And I should see "Another Snippet by first_user"
+  Scenario: The moderator can reveal a single work in a hidden collection
+    Given I have the hidden collection "Hidden Treasury"
+      And "second_user" subscribes to author "first_user"
+      And the user "third_user" exists and is activated
+      And the user "fourth_user" exists and is activated
+      And all emails have been delivered
+    When I am logged in as "first_user"
+      And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
+      And I post the work "Second Snippet" to the collection "Hidden Treasury" as a gift for "fourth_user"
+      And subscription notifications are sent
+    Then 0 emails should be delivered
+    When I am logged in as "moderator"
+      And I view the approved collection items page for "Hidden Treasury"
+      # items listed in date order so checking the second will reveal the older work
+      And I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
+      And I submit
+    Then "fourth_user" should not be emailed
+    When "AO3-2240: gift notifications not sent for individual reveals" is fixed
+    # Then "third_user" should be emailed
+    #   And the email to "third_user" should contain "first_user"
+    When subscription notifications are sent
+      And "AO3-4367: author subscribers not notified when works revealed" is fixed
+    # Then "second_user" should be emailed
+    #   And 1 emails should be delivered
+    #   And the email to "second_user" should contain "first_user"
+    #   And the email to "second_user" should contain "First Snippet"
+    #   And the email to "second_user" should not contain "Second Snippet"
+    When I am logged out
+    Then the work "First Snippet" should be visible to me
+      And the work "Second Snippet" should be hidden from me
+    When I view the collection "Hidden Treasury"
+    Then I should see "First Snippet"
     
-  # bookmark a hidden work
-  When I follow "Another Snippet"
-    And I follow "Bookmark"
-    And I fill in "bookmark_notes" with "I liked this story"
-    And I press "Create"
-  Then I should see "Bookmark was successfully created"
-  
-  # make it part of a series where the rest aren't secret
-  When I post the work "Part b"
-    And I edit the work "Part b"
-    And I check "series-options-show"
-    And I fill in "work_series_attributes_title" with "New series"
-    And I press "Post Without Preview"
-        
-  When I log out
-    And I go to "Hidden Treasury" collection's page
-  Then I should see "Mystery Work"
-    And I should see "Part of Hidden Treasury"
-  When I go to the bookmarks page
-  Then I should see "List of Bookmarks"
-    And I should see "Mystery Work"
-    And I should not see "Another Snippet"
-  
-  When I am logged in as "second_user"
-    And I go to the collections page
-    And I follow "Hidden Treasury"
-  Then I should see "Mystery Work"
-    And I should see "Part of Hidden Treasury"
-    And I should not see "Old Snippet"
-    And I should not see "Another Snippet"
-    And I should not see "New Snippet"
-    And I should not see "first_user"
-  
-  # Reveal the collection
-  When I follow "Settings"
-    And I uncheck "This collection is unrevealed"
-    And I press "Update"
-  Then I should see "Collection was successfully updated"  
-  # Works should no longer be hidden on the collection dashboard
-    And I should not see "Mystery Work"
-    And I should see "New Snippet by first_user"
-    And I should see "Old Snippet by first_user"
-    And I should see "Another Snippet by first_user"
+  Scenario: Bookmarks for hidden works should not reveal the work to others
+    Given I have the hidden collection "Hidden Treasury"
+      And I am logged in as "first_user"
+      And I post the work "Hiding Work" to the collection "Hidden Treasury"
+    When I am logged in as "moderator"
+      And I bookmark the work "Hiding Work"
+    When I am logged out
+      And I go to the bookmarks page
+    Then I should see "List of Bookmarks"
+      And I should see "Mystery Work"
+      And I should not see "Hiding Work"
+    When I reveal works for "Hidden Treasury"
+      And I am logged out
+      And I go to the bookmarks page
+    Then I should not see "Mystery Work"
+      And I should see "Hiding Work"
     
-  # Works should no longer say that they'll be revealed soon
-  When I view the work "New Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is a new snippet written for this hidden challenge"
-  When I view the work "Old Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "That could be an amusing crossover"
-  When I view the work "Another Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is another new snippet written for this hidden challenge"
-    
-  # visitor should see all these works too
-  When I log out
-    And I view the work "New Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is a new snippet written for this hidden challenge"
-  When I view the work "Old Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "That could be an amusing crossover"
-  When I view the work "Another Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is another new snippet written for this hidden challenge"
+  Scenario: The authors in an anonymous collection should only be visible to themselves and admins
+    Given I have the anonymous collection "Anonymous Hugs"
+      And I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs"
+      And all search indexes are updated
+    When I view the work "Old Snippet"
+    Then the author of "Old Snippet" should be visible to me on the work page
+    When I am logged out
+    Then the author of "Old Snippet" should be hidden from me
+    When I am logged in as "second_user"
+    Then the author of "Old Snippet" should be hidden from me
+    When I am logged in as an admin
+    Then the author of "Old Snippet" should be visible to me on the work page
+    # special case for moderator: can't see name on the work (to avoid unwanted spoilers)
+    # but can see names + titles on in the collection items management area
+    When I am logged in as "moderator"
+    Then the author of "Old Snippet" should be hidden from me
+    When I view the approved collection items page for "Anonymous Hugs"
+    Then I should see "Old Snippet"
+      And I should see "first_user"
   
-  # A third logged in user, not the author and not the owner, should see them too
-  When I am logged in as "third_user"
-    And I view the work "New Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is a new snippet written for this hidden challenge"
-  When I view the work "Old Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "That could be an amusing crossover"
-  When I view the work "Another Snippet"
-  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-    And I should see "This is another new snippet written for this hidden challenge"
-  
-  # bookmark should now be revealed
-  When I go to the bookmarks page
-  Then I should see "List of Bookmarks"
-    And I should not see "Mystery Work"
-    And I should see "Another Snippet"
-  
-  Scenario: Create an anonymous collection, add new and existing works to it, reveal authors
-  
-  Given basic tags
-    And I am logged in as "second_user"
-  When I go to the collections page
-    And I follow "New Collection"
-    And I fill in "Display Title" with "Anonymous Hugs"
-    And I fill in "Collection Name" with "anonyhugs"
-    And I check "This collection is anonymous"
-    And I submit
-  Then I should see "Collection was successfully created"
+  Scenario: Bookmarks should not reveal the authors of anonymous works
+    Given I have the anonymous collection "Anonymous Hugs"
+      And I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs"
+      And all search indexes are updated
+    When I am logged in as "second_user"
+      And I bookmark the work "Old Snippet"
+      And I go to the bookmarks page
+    Then I should see "Old Snippet by Anonymous"
+      And I should not see "first_user"
 
-  # Adding existing work to the collection without preview
-  When I am logged in as "first_user"
-    And I post the work "Old Snippet"
-    And I edit the work "Old Snippet"
-    And I fill in "Post to Collections / Challenges" with "anonyhugs"
-    And I press "Post Without Preview"
-    And all search indexes are updated
-  Then I should see "Old Snippet"
-    And I should see "Collections: Anonymous Hugs"
-  When I log out
-    And I go to "Anonymous Hugs" collection's page
-  Then I should not see "first_user"
-    And I should see "by Anonymous"
-    
-  # Post to collection without preview
-  When I am logged in as "first_user"
-    And I go to "Anonymous Hugs" collection's page
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "New Snippet"
-    And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I press "Post Without Preview"
-  Then I should see "New Snippet"
-    And I should see "Work was successfully posted"
-  When I log out
-    And I go to "Anonymous Hugs" collection's page
-  Then I should not see "first_user"
-    And I should see "by Anonymous"
-  
-  # Post to collection with preview
-  When I am logged in as "first_user"
-    And I go to "Anonymous Hugs" collection's page
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "Another Snippet"
-    And I fill in "content" with "This is another new snippet written for this hidden challenge"
-    And I press "Preview"
-  Then I should see "Collections: Anonymous Hugs"
-    And I should see "Draft was successfully created."
-    And I should see "Anonymous" within ".byline"
-  When I press "Post"
-  Then I should see "Work was successfully posted"
-  When I log out
-    And I go to "Anonymous Hugs" collection's page
-  Then I should not see "first_user"
-    And I should see "New Snippet by Anonymous"
-    And I should see "Old Snippet by Anonymous"
-    And I should see "Another Snippet by Anonymous"
-    
-  # bookmark an anonymous work
-  When I am logged in as "second_user"
-    And I go to "Anonymous Hugs" collection's page
-    And I follow "Another Snippet"
-    And I follow "Bookmark"
-    And I fill in "bookmark_notes" with "I liked this story"
-    And I press "Create"
-  Then I should see "Bookmark was successfully created"
-  
-  # make it part of a series where the rest aren't secret
-  When I am logged in as "first_user"
-    And I post the work "Part b"
-    And I edit the work "Part b"
-    And I check "series-options-show"
-    And I fill in "work_series_attributes_title" with "New series"
-    And I press "Post Without Preview"
-    And I edit the work "Another Snippet"
-    And I check "series-options-show"
-    And I select "New series" from "work_series_attributes_id"
-    And I press "Post Without Preview"
-  Then I should see "Part 2 of the New series series"
-        
-  When I log out
-    And I go to "Anonymous Hugs" collection's page
-  Then I should see "New Snippet by Anonymous"
-    And I should see "Old Snippet by Anonymous"
-    And I should see "Another Snippet by Anonymous"
-  When I go to the bookmarks page
-  Then I should see "List of Bookmarks"
-    And I should see "Another Snippet by Anonymous"
-  
-  When I am logged in as "second_user"
-    And I go to the collections page
-    And I follow "Anonymous Hugs"
-  Then I should see "New Snippet by Anonymous"
-    And I should see "Old Snippet by Anonymous"
-    And I should see "Another Snippet by Anonymous"
-    
-  # check the series
-  When I follow "Another Snippet"
-    And I follow "New series"
-    And "Issue 1253" is fixed
-  Then I should see "Anonymous"
-    # And I should not see "first_user"
-  
-  # Reveal the authors
-  When I go to "Anonymous Hugs" collection's page
-    And I follow "Settings"
-    And I uncheck "This collection is anonymous"
-    And I press "Update"
-  Then I should see "Collection was successfully updated"  
-  # Authors should no longer be hidden on the collection dashboard
-    And I should not see "New Snippet by Anonymous"
-    And I should see "New Snippet by first_user"
-    And I should see "Old Snippet by first_user"
-    And I should see "Another Snippet by first_user"
-    
-  # Works should have their authors in the view too
-  When I view the work "New Snippet"
-  Then I should see "first_user" within ".byline"
-  When I view the work "Old Snippet"
-  Then I should see "first_user" within ".byline"
-  When I view the work "Another Snippet"
-  Then I should see "first_user" within ".byline"
-    
-  # visitor should see all these works too
-  When I log out
-    And I view the work "New Snippet"
-  Then I should see "first_user" within ".byline"
-  When I view the work "Old Snippet"
-  Then I should see "first_user" within ".byline"
-  When I view the work "Another Snippet"
-  Then I should see "first_user" within ".byline"
-  
-  # bookmark should now be revealed
-  When I go to the bookmarks page
-  Then I should see "List of Bookmarks"
-    And I should see "Another Snippet by first_user"
-    And I should not see "Another Snippet by Anonymous"
-  
-  # Scenario: TODO Create a hidden and anonymous collection, add new and existing works to it, reveal works, then reveal authors
-  # Isn't this partially covered by challenge_yuletide? Probably better to expand that.
-  
-  Scenario: Create a hidden collection, reveal works gradually by day, like purimgifts
-  
-  Given the following activated users exist
-    | login          | password    |
-    | first_user        | something   |
-    | second_user        | something   |
-    | third_user        | something   |
-    And basic tags
-    And I am logged in as "second_user"
-    And I go to first_user's user page
-    And I press "Subscribe"
-  When I go to the collections page
-  Then I should see "Collections in the "
-    And I should not see "Hidden Treasury"
-  When I follow "New Collection"
-    And I fill in "Display Title" with "Hidden Treasury"
-    And I fill in "Collection Name" with "hidden_treasury"
-    And I check "This collection is unrevealed"
-    And I submit
-  Then I should see "Collection was successfully created"
-  
-  # post to collection for day 1
-  When I log out
-    And I am logged in as "first_user"
-  Given all emails have been delivered
-  When I go to "Hidden Treasury" collection's page
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "New Snippet"
-    And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I fill in "Additional Tags" with "Purim Day 1"
-    And I press "Post Without Preview"
-  Then I should see "New Snippet"
-    And I should see "Work was successfully posted"
-    And I should see "first_user" within ".byline"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Purim Day 1"
-    And I should see "Collections: Hidden Treasury"
-    And 0 emails should be delivered
-    
-  # post to collection for day 2
-  When I follow "Hidden Treasury"
-    And I follow "Post to Collection"
-    And I check "No Archive Warnings Apply"
-    And I fill in "Fandoms" with "No Fandom"
-    And I fill in "Work Title" with "New Snippet 2"
-    And I fill in "content" with "This is a new snippet written for this hidden challenge"
-    And I fill in "Additional Tags" with "Purim Day 2"
-    And I press "Post Without Preview"
-  Then I should see "New Snippet"
-    And I should see "Work was successfully posted"
-    And I should see "first_user" within ".byline"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should see "Purim Day 2"
-    And I should see "Collections: Hidden Treasury"
-    And 0 emails should be delivered
-    
-  # fics are both hidden
-  When I log out
-    And I am logged in as "third_user"
-  When I view the work "New Snippet"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should not see "Purim Day 1"
-  When I view the work "New Snippet 2"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-    And I should not see "Purim Day 2"
-    
-  # mod views fics
-  When I am logged in as "second_user"
-    And I go to "Hidden Treasury" collection's page
-    And I follow "Manage Items"
-    And I follow "Approved"
-  Then I should see "Items in Hidden Treasury"
-    And I should see "first_user"
-    And I should see "New Snippet"
-  # Works are in reverse date order, so unchecking the second checkbox will reveal work 1
-  When I uncheck the 2nd checkbox with id matching "collection_items_\d+_unrevealed"
-    And I submit
-  # Issue 2243: emails don't get sent for individual reveals
-  When "Issue 2243" is fixed
-    #Then 1 email should be delivered
-    
-  # first fic now visible, second still not
-    When I log out
-      And I am logged in as "third_user"
-    When I view the work "New Snippet"
-    Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-      And I should see "Purim Day 1"
-    When I view the work "New Snippet 2"
-    Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
-      And I should not see "Purim Day 2"
+  Scenario: The moderator can reveal all the authors in an anonymous collection
+    Given I have the anonymous collection "Anonymous Hugs"
+      And "second_user" subscribes to author "first_user"
+      And the user "third_user" exists and is activated
+      And all emails have been delivered      
+    When I am logged in as "first_user"
+      And I post the work "Old Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+    Then "third_user" should be emailed
+      And the email to "third_user" should not contain "first_user"
+      And the email to "third_user" should contain "Anonymous"
+    When subscription notifications are sent
+    Then "second_user" should not be emailed
+    When all emails have been delivered
+      And I am logged in as "moderator"
+      And I reveal authors for "Anonymous Hugs"
+    Then the author of "Old Snippet" should be publicly visible
+    When subscription notifications are sent
+    Then "second_user" should be emailed
+      And the email to "second_user" should contain "first_user"
+      And "third_user" should not be emailed
 
-  Scenario: Create an anon collection, add chaptered work. Add co-author to one chapter, should still be anonymous
-    Given I have an anonymous collection "Various Penguins" with name "Various_Penguins"
-      And I am logged in as "Amos"
+  Scenario: The moderator can reveal a single author in an anonymous collection
+    Given I have the anonymous collection "Anonymous Hugs"
+      And "second_user" subscribes to author "first_user"
+      And the user "third_user" exists and is activated
+      And I am logged in as "first_user"
+      And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+      And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "fourth_user"
+    When subscription notifications are sent
+    Then "second_user" should not be emailed
+    When I am logged in as "moderator"
+      And I view the approved collection items page for "Anonymous Hugs"
+      # items listed in date order so checking the second will reveal the older work
+      And I uncheck the 2nd checkbox with id matching "collection_items_\d+_anonymous"
+      And I submit
+    Then the author of "First Snippet" should be publicly visible
+    When subscription notifications are sent
+    Then "second_user" should be emailed
+      And the email to "second_user" should contain "first_user"
+      And the email to "second_user" should contain "First Snippet"
+      And the email to "second_user" should not contain "Second Snippet"
+    When I am logged out
+    Then the author of "First Snippet" should be publicly visible
+      And the author of "Second Snippet" should be hidden from me
+
+  Scenario: Works should not be visible in series if unrevealed
+    Given I have the hidden collection "Hidden Treasury"
+      And I am logged in as "first_user"
+      And I post the work "Before"
+      And I add the work "Before" to series "New series"
+      And I post the work "Hiding Work" to the collection "Hidden Treasury"
+      And I add the work "Hiding Work" to series "New series"
+      And I post the work "After"
+      And I add the work "After" to series "New series"
+    When "AO3-1250: series anonymity issues" is fixed
+    ### even the author should not see the work listed within the series
+    # Then the work "Hiding Work" should be part of the "New series" series in the database
+    #   And the work "Hiding Work" should not be visible on the "New series" series page
+    #   And the series "New series" should not be visible on the "Hiding Work" work page
+    #   And the neighbors of "Hiding Work" in the "New series" series should link over it
+    When I am logged out
+    Then the work "Hiding Work" should be part of the "New series" series in the database
+      And the work "Hiding Work" should not be visible on the "New series" series page
+      And the series "New series" should not be visible on the "Hiding Work" work page
+    When "AO3-1250: series anonymity issues" is fixed
+    #  And I should not see "Mystery Work"
+    #  And the neighbors of "Hiding Work" in the "New series" series should link over it
+    When I reveal works for "Hidden Treasury"
+      And I am logged out
+    Then the work "Hiding Work" should be visible on the "New series" series page
+      And the series "New series" should be visible on the "Hiding Work" work page
+      And the neighbors of "Hiding Work" in the "New series" series should link to it
+    
+  Scenario: Works should not be visible in series if anonymous
+    Given I have the anonymous collection "Anon Treasury"
+      And I am logged in as "first_user"
+      And I post the work "Before"
+      And I add the work "Before" to series "New series"
+      And I post the work "Anon Work" to the collection "Anon Treasury"
+      And I add the work "Anon Work" to series "New series"
+      And I post the work "After"
+      And I add the work "After" to series "New series"
+    Then the work "Anon Work" should be part of the "New series" series in the database
+    When "AO3-1250: series anonymity fixes" is fixed
+      # even the author should not see the work in the series
+      # And the work "Anon Work" should not be visible on the "New series" series page
+      # And the series "New series" should not be visible on the "Anon Work" work page
+      # And the neighbors of "Anon Work" in the "New series" series should link over it
+    When I am logged out
+    Then the work "Anon Work" should be part of the "New series" series in the database
+    When "AO3-1250: series anonymity fixes" is fixed
+      # And the work "Anon Work" should not be visible on the "New series" series page
+      # And the series "New series" should not be visible on the "Anon Work" work page
+      # And the neighbors of "Anon Work" in the "New series" series should link over it
+    When I reveal authors for "Anon Treasury"
+      And I am logged out
+    Then the work "Anon Work" should be visible on the "New series" series page
+      And the series "New series" should be visible on the "Anon Work" work page
+      And the neighbors of "Anon Work" in the "New series" series should link to it
+
+  Scenario: Adding a co-author to (one chapter of) an anonymous work should still keep it anonymous
+    Given I have the anonymous collection "Various Penguins"
       And I am logged in as "Jessica"
       And I post the chaptered work "Cone of Silence"
-    When I add my work to the collection
-    Then I should see "Added"
-      And I edit the work "Cone of Silence"
+      And I add the work "Cone of Silence" to the collection "Various Penguins"
+    When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
-      And I check "Add co-authors?"
-      And I fill in "pseud_byline" with "Amos"
+      And I add the co-author "Amos"
       And I press "Post Without Preview"
-      And I follow "Entire Work"
-    Then I should not see "Jessica" within "div.preface"
-      And I should not see "Amos" within "div.preface"
+    Then the author of "Cone of Silence" should be visible to me on the work page
+    When I am logged out
+    Then the author of "Cone of Silence" should be hidden from me
+  

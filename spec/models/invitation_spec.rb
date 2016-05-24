@@ -9,8 +9,8 @@ describe Invitation, :ready do
       let(:user) {build(:user)}
       let(:invite) {build(:invitation, invitee_email: user.email)}
       it "is created with an invitation token" do
-        invite.save.should be_true
-        invite.token.should_not be_nil
+        expect(invite.save).to be_truthy
+        expect(invite.token).not_to be_nil
       end
 
     end
@@ -20,8 +20,8 @@ describe Invitation, :ready do
       let(:user) {build(:user)}
       let(:invite) {build(:invitation, invitee_email: user.email)}
       it "is created with an invitation token" do
-        invite.save.should be_true
-        invite.token.should_not be_nil
+        expect(invite.save).to be_truthy
+        expect(invite.token).not_to be_nil
       end
 
     end
@@ -34,8 +34,8 @@ describe Invitation, :ready do
 
       let(:invite_for_existing) {build(:invitation, invitee_email: @user.email)}
       it "cannot be created" do
-        invite_for_existing.save.should be_false
-        invite_for_existing.recipient_is_not_registered.should be_false
+        expect(invite_for_existing.save).to be_falsey
+        expect(invite_for_existing.recipient_is_not_registered).to be_falsey
       end
     end
 
@@ -44,8 +44,8 @@ describe Invitation, :ready do
       BAD_EMAILS.each do |email|
         let(:bad_email) {build(:invitation, invitee_email: email)}
         it "cannot be created if the email does not pass veracity check" do
-          bad_email.save.should be_false
-          bad_email.errors[:invitee_email].should include("does not seem to be a valid address. Please use a different address or leave blank.")
+          expect(bad_email.save).to be_falsey
+          expect(bad_email.errors[:invitee_email]).to include("does not seem to be a valid address. Please use a different address or leave blank.")
         end
       end
     end
@@ -59,8 +59,8 @@ describe Invitation, :ready do
       let(:user) {create(:user)}
       let(:invite_for_existing) {build(:invitation, invitee_email: user.email)}
       it "cannot be created" do
-        invite_for_existing.save.should be_false
-        invite_for_existing.recipient_is_not_registered.should be_false
+        expect(invite_for_existing.save).to be_falsey
+        expect(invite_for_existing.recipient_is_not_registered).to be_falsey
       end
     end
 
@@ -69,8 +69,8 @@ describe Invitation, :ready do
       BAD_EMAILS.each do |email|
         let(:bad_email) {build(:invitation, invitee_email: email)}
         it "cannot be created if the email does not pass veracity check" do
-          bad_email.save.should be_false
-          bad_email.errors[:invitee_email].should include("does not seem to be a valid address. Please use a different address or leave blank.")
+          expect(bad_email.save).to be_falsey
+          expect(bad_email.errors[:invitee_email]).to include("does not seem to be a valid address. Please use a different address or leave blank.")
         end
       end
     end

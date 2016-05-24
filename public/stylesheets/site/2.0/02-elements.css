@@ -39,7 +39,7 @@ a:hover {
   color: #999;
 }
 
-a:active, a:focus {
+a:active, a:focus, button:focus {
   outline: 1px dotted;
 }
 
@@ -67,7 +67,6 @@ h2 {
   line-height: 1;
   margin: 0.429em 0;
   display: inline;
-    text-shadow: -1px -1px 2px #fff;
 }
 
 /*24px skipped: font-size: 1.714em; line-height: 1; margin: 0.429em 0*/

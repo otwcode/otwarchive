@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-
+  audited
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user
@@ -47,6 +47,11 @@ class User < ActiveRecord::Base
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
 
+  has_many :fannish_next_of_kins, foreign_key: 'kin_id', dependent: :destroy
+  has_one :fannish_next_of_kin, dependent: :destroy
+
+  has_many :favorite_tags, dependent: :destroy
+
   # MUST be before the pseuds association, or the 'dependent' destroys the pseuds before they can be removed from kudos
   before_destroy :remove_pseud_from_kudos
 
@@ -82,9 +87,10 @@ class User < ActiveRecord::Base
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id', :inverse_of => :claiming_user
-  has_many :gifts, :through => :pseuds
-  has_many :gift_works, :through => :pseuds, :uniq => true
-
+  has_many :gifts, through: :pseuds, conditions: { rejected: false }
+  has_many :gift_works, through: :pseuds, uniq: true
+  has_many :rejected_gifts, class_name: "Gift", through: :pseuds, conditions: { rejected: true }
+  has_many :rejected_gift_works, through: :pseuds, uniq: true
   has_many :readings, :dependent => :destroy
   has_many :bookmarks, :through => :pseuds
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
@@ -173,6 +179,14 @@ class User < ActiveRecord::Base
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
 
+  after_update :expire_caches
+
+  def expire_caches
+    if login_changed?
+      self.works.each{ |work| work.touch }
+    end
+  end
+
   def remove_pseud_from_kudos
     ids = self.pseuds.collect(&:id).join(',')
     # NB: updates the kudos to remove the pseud, but the cache will not expire, and there's also issue 2198
@@ -180,13 +194,13 @@ class User < ActiveRecord::Base
   end
 
   def read_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => true})
+    inbox_comments.where(read: true)
   end
   def unread_inbox_comments
-    inbox_comments.find(:all, :conditions => {:read => false})
+    inbox_comments.where(read: false)
   end
   def unread_inbox_comments_count
-    inbox_comments.count(:all, :conditions => {:read => false})
+    unread_inbox_comments.with_feedback_comment.count
   end
 
   scope :alphabetical, :order => :login

@@ -242,7 +242,7 @@ Feature: Create Works
     When I fill in "work_collection_names" with ""
       And I fill in "pseud_byline" with "badcoauthor"
       And I press "Preview"
-    Then I should see "badcoauthor has been banned"
+    Then I should see "badcoauthor is currently banned"
     When I fill in "pseud_byline" with "coauthor"
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
@@ -321,7 +321,8 @@ Feature: Create Works
       And I should not see "This is a preview"
 
   Scenario: RTE and HTML buttons are separate
-  Given I am logged in as "newbie"
+  Given the default ratings exist
+    And I am logged in as "newbie"
   When I go to the new work page
   Then I should see "Post New Work"
     And I should see "Rich Text" within ".rtf-html-switch"

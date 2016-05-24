@@ -4,6 +4,10 @@ class HomeController < ApplicationController
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
   skip_before_filter :store_location, :only => [:first_login_help]
   
+  # unicorn_test
+  def unicorn_test
+  end
+
   # terms of service
   def tos
     render :action => "tos", :layout => "application"
@@ -50,14 +54,14 @@ class HomeController < ApplicationController
 
   # home page itself
   def index
-    @user_count = User.count
-    @work_count = Work.posted.count
-    @fandom_count = Fandom.canonical.count
-    @admin_posts = AdminPost.non_translated.find(:all, :order => "created_at DESC", :limit => 3)
-    @admin_post_show_more = AdminPost.count > 3
-    render :action => "index", :layout => "home"
-  end
+    @homepage = Homepage.new(@current_user)
+    unless @homepage.logged_in?
+      @user_count, @work_count, @fandom_count = @homepage.rounded_counts
+    end
 
+    @hide_dashboard = true
+    render action: 'index', layout: 'application'
+  end
 
   # Generate links to all the pages on the site
   def site_pages    
@@ -130,7 +134,7 @@ protected
       when "nomination"
         TagSetNomination.for_tag_set(OwnedTagSet.find(@last_id)).owned_by(user).first
       when "setting"
-        AdminSetting.first
+        Rails.cache.fetch("admin_settings") { AdminSetting.first }
       when "assignment", "claim", "signup"
         klass = "challenge_#{classname}".classify.constantize
         query = classname == "assignment" ? klass.by_offering_user(user) :
