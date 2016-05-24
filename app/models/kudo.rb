@@ -73,5 +73,4 @@ class Kudo < ActiveRecord::Base
       Rails.cache.increment(Kudo.kudos_user_cache_key(User.current_user.id))
     end
   end
-
 end

@@ -8,7 +8,8 @@ class KudosController < ApplicationController
     if params[:work_id]
       @work = Work.find(params[:work_id])
       @kudos = @work.kudos.includes(pseud: :user).with_pseud
-      return @guest_kudos_count = @work.kudos.by_guest.count
+      @guest_kudos_count = @work.kudos.by_guest.count
+      return
     end
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
