@@ -62,7 +62,7 @@ en:
 <p>If you have questions, please %{support}.</p>\n\
 <p>Attached is a copy of your work for your reference.</p>"
         entire_yourself: "<p>Dear %{user},</p>\n\
-<p>Your work <i>%{title}</i> was deleted at the request of yourself.</p>\n\
+<p>Your work <i>%{title}</i> was deleted at your request.</p>\n\
 <p>If you have questions, please %{support}.</p>\n\
 <p>Attached is a copy of your work for your reference.</p>"
       text:
@@ -77,7 +77,7 @@ en:
         entire_yourself: |-
                         Dear %{user},
                         
-                        Your work %{title}  was deleted at the request your request.
+                        Your work %{title}  was deleted at your request.
 
                         If you have questions, please contact support.
 
