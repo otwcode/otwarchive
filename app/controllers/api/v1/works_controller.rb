@@ -46,7 +46,7 @@ class Api::V1::WorksController < Api::V1::BaseController
     if original_url.blank?
       error = "Please provide the original URL for the work."
     else
-      work = Work.find_by_url(original_url)
+      work = Work.where(imported_from_url: original_url).first
       if !work
         error = "No work has been imported from \"" + original_url + "\"."
       end

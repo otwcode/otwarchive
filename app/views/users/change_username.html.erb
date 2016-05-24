@@ -11,22 +11,25 @@
 
 <!--main content-->
 
-<%= form_tag change_username_user_path(@user) do %>  
+<%= form_tag changed_username_user_path(@user) do %>  
   <dl>
-    <dt><%= ts("Current User Name") %></dt>
+    <dt><%= ts("Current user name") %></dt>
     <dd><span class="important"><%= @user.login %></span></dd>
-    <dt><%= label_tag :new_login, ts("New User Name") %></dt>
+    <dt><%= label_tag :new_login, ts("New user name") %></dt>
     <dd>
-      <%= text_field_tag :new_login, @new_login, :autocomplete => 'off' %>
-      <p class="footnote">
+      <%= text_field_tag :new_login, @new_login, autocomplete: 'off', "aria-describedby" => "new-login-field-description" %>
+      <p class="footnote" id="new-login-field-description">
         <%= ts("%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)",
-               :minimum => ArchiveConfig.LOGIN_LENGTH_MIN, :maximum => ArchiveConfig.LOGIN_LENGTH_MAX) %>
+               minimum: ArchiveConfig.LOGIN_LENGTH_MIN,
+               maximum: ArchiveConfig.LOGIN_LENGTH_MAX) %>
       </p>
     </dd>
     <dt><%= label_tag :password, ts("Password") %></dt>
     <dd><%= password_field_tag :password %></dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
-    <dd class="submit actions"><%= submit_tag ts("Change User Name"), :confirm => ts("Are you sure you want to change your user name?") %></dd>
+    <dd class="submit actions">
+      <%= submit_tag ts("Change User Name"), confirm: ts("Are you sure you want to change your user name?") %>
+    </dd>
   </dl>
 <% end %>
 <% if @wrong_password %>
@@ -37,7 +40,7 @@
   <%= form_tag passwords_path do %>
     <%= hidden_field_tag 'login', @user.login %>
     <p class="footnote">
-      <%= submit_tag ts('Reset My Password', :class => 'submit') %>
+      <%= submit_tag ts('Reset My Password') %>
     </p>
   <% end %>
 <% end %>

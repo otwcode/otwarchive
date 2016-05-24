@@ -22,7 +22,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
 
 .listbox > .heading, .listbox .heading a:visited {
   margin: 0;
-  color: #222;
+  color: #2a2a2a;
   padding: 0.25em;
 }
 

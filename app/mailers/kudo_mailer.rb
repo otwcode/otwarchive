@@ -31,17 +31,19 @@ class KudoMailer < ActionMailer::Base
         if !names.nil? && names.size > 0
           kudo_givers = names
           kudo_givers << guest_kudos(guest_count) unless guest_count == 0
+          @kudos_count = names.size + guest_count
         else
           kudo_givers << guest_kudos(guest_count).capitalize unless guest_count == 0
+          @kudos_count = guest_count
         end
         next if kudo_givers.empty?
 
         @commentables << commentable
-        @kudo_givers[commentable_info] = kudo_givers.to_sentence
+        @kudo_givers[commentable_info] = kudo_givers
       end
       mail(
         to: user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{t 'mailer.kudos.youhave'}"
+        subject: t('mailer.kudos.you_have', app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
     ensure

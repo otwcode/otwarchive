@@ -1,47 +1,54 @@
---- 
-http_interactions: 
-- request: 
+---
+http_interactions:
+- request:
     method: head
     uri: http://www.google.com/
-    body: 
+    body:
       encoding: US-ASCII
-      string: ""
-    headers: 
-      Accept: 
-      - "*/*"
-      User-Agent: 
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
       - Ruby
-  response: 
-    status: 
+  response:
+    status:
       code: 200
       message: OK
-    headers: 
-      Date: 
-      - Tue, 30 Sep 2014 02:52:31 GMT
-      Expires: 
-      - "-1"
-      Cache-Control: 
+    headers:
+      Date:
+      - Wed, 13 May 2015 04:58:27 GMT
+      Expires:
+      - '-1'
+      Cache-Control:
       - private, max-age=0
-      Content-Type: 
+      Content-Type:
       - text/html; charset=ISO-8859-1
-      Set-Cookie: 
-      - NID=67=Dz9Vm84lf0XKaajPWOxG7l5-TE2r16DhHP395C0cSX1_SkK1IkfnOLOCTLzlUPEzHiMcmxX-Ts8FYl576GY62WX_KfoZFWvJrsAivOeN29eY5n8qP1WWF1858m9Y8_vs; expires=Wed, 01-Apr-2015 02:52:31 GMT; path=/; domain=.google.com; HttpOnly
-      - PREF=ID=182dbf607335ee09:FF=0:TM=1412045551:LM=1412045551:S=EEtgFfAK42EQItUG; expires=Thu, 29-Sep-2016 02:52:31 GMT; path=/; domain=.google.com
-      P3p: 
-      - CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657 for more info."
-      Server: 
+      Set-Cookie:
+      - NID=67=cgBkAtVa1rmyLu1tTp8t2VW6g2YsThIMOvSo5YuSzCw_nNR9CNUQMJG4RXp-KLpqkGeGMsU6UoNCD-GJ7d_i5hKjCVJPZrMRuZhYmOaw9vXcFZJCagM7mwKWhw8spJyjXEAUM_w4yud7ekxiZGeyO-JwVkVT;
+        expires=Thu, 12-Nov-2015 04:58:27 GMT; path=/; domain=.google.com; HttpOnly
+      - PREF=ID=9bfc35cbd6ca8c2a:FF=0:TM=1431493107:LM=1431493107:S=6g45h0GfD6_8MV4R;
+        expires=Fri, 12-May-2017 04:58:27 GMT; path=/; domain=.google.com
+      P3p:
+      - CP="This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657
+        for more info."
+      Server:
       - gws
-      X-Xss-Protection: 
+      X-Xss-Protection:
       - 1; mode=block
-      X-Frame-Options: 
+      X-Frame-Options:
       - SAMEORIGIN
-      Alternate-Protocol: 
-      - 80:quic,p=0.01
-      Transfer-Encoding: 
+      Alternate-Protocol:
+      - 80:quic,p=1
+      Transfer-Encoding:
       - chunked
-    body: 
+      Accept-Ranges:
+      - none
+      Vary:
+      - Accept-Encoding
+    body:
       encoding: US-ASCII
-      string: ""
+      string: ''
     http_version: 
-  recorded_at: Tue, 30 Sep 2014 02:52:31 GMT
+  recorded_at: Wed, 13 May 2015 04:58:27 GMT
 recorded_with: VCR 2.5.0

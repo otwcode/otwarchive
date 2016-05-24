@@ -72,13 +72,14 @@ describe Skin do
           color:rgba(254,254,254,1)
         }",
 
-      "should allow through gradients, scale, skew, translate, rotate" =>
+      "should allow through gradients, clip, scale, skew, translate, rotate" =>
         "#main ul.sorting {
         background:-moz-linear-gradient(bottom, rgba(120,120,120,1) 5%, rgba(94,94,94,1) 50%, rgba(108,108,108,1) 55%, rgba(137,137,137,1) 100%) ;
         }
         ul.sorting  a:hover {
         background:-webkit-linear-gradient(bottom, rgba(71,71,71,1) 5%, rgba(59,59,59,1) 50%, rgba(74,74,74,1) 55%, rgba(91,91,91,1) 100%) !important;
         }
+        #main .clip {clip: rect(1em, 2em, 3em, 4em);}
         #main li.blurb:nth-child(2n), #main.works-show .meta, .thread .thread li.comment:nth-child(3n+1) {-moz-transform: rotate(-0.5deg);}
         #main .foo {-moz-transform:rotate(120deg); -moz-transform:skewx(25deg) translatex(150px);}
         #menu {
@@ -87,7 +88,9 @@ describe Skin do
                     	-webkit-border-radius:2px;
                     	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
                     	-webkit-transform: scale(2.1) rotate(-90deg)
-        }",
+        }
+        #main .rotatevert {transform: rotatey(180deg);}
+        .rotatehoriz {transform: rotatex(50deg)}",
 
         "should allow multiple valid values for a single property" =>
         "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
@@ -136,6 +139,12 @@ describe Skin do
         expect(@skin.save).not_to be_truthy
         expect(@skin.errors[:base]).not_to be_empty
       end
+    end
+
+    it "should require a title" do
+      @skin.title = ""
+      expect(@skin.save).not_to be_truthy
+      expect(@skin.errors[:title]).not_to be_empty
     end
 
     it "should have a unique title" do

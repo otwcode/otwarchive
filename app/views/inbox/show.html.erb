@@ -16,7 +16,7 @@
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form' do %>
+  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form', class: 'inbox manage' do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 
@@ -37,7 +37,7 @@
           <% feedback_comment = inbox_comment.feedback_comment %>
 
           <!-- START of single comment -->
-          <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article">
+          <li class="<% if feedback_comment.unreviewed? %>unreviewed <% end %><%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article" id="feedback_comment_<%= feedback_comment.id %>">
 
             <%= render 'inbox_comment_contents', feedback_comment: feedback_comment %>
 
@@ -47,14 +47,23 @@
               <% unless inbox_comment.read? %>
                 <li><span class="unread"><%= ts("Unread") %></span></li>
               <% end %>
-              <li>
-                <% if inbox_comment.replied_to? %>
-                  <span class="replied" title="<%= ts("replied to") %>"><%= ts("&#10004;").html_safe %></span>
-                <% end %>
+              <% if inbox_comment.replied_to? %>
+                <li>
+                  <span class="replied" title="<%= ts("replied to") %>">
+                    <%= ts("&#10004;").html_safe %>
+                  </span>
+                </li>
+              <% end %>
+              <% if feedback_comment.unreviewed? %>
+                <li class="approve review" id="review_comment_link_<%= feedback_comment.id %>">
+                  <%= render 'inbox/approve_button', feedback_comment: feedback_comment, approved_from: "inbox" %>
+                </li>
+              <% else %>
+                <li>
+                  <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
+                </li>
+              <% end %>
 
-                <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
-
-              </li>
               <li class="action">
                 <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>
               </li>
