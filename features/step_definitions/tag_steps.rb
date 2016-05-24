@@ -124,6 +124,17 @@ Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   end
 end
 
+Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
+  tag = Fandom.find_or_create_by_name(tagname)
+  step %{I am logged out}
+  n_comments ||= 3
+  n_comments.to_i.times do |i|
+    step %{I am logged in as a tag wrangler}
+    step %{I post the comment "Comment number #{i}" on the period-containing tag "#{tagname}"}
+    step %{I am logged out}
+  end
+end
+
 Given /^the unsorted tags setup$/ do
   30.times do |i|
     UnsortedTag.find_or_create_by_name("unsorted tag #{i}")
@@ -166,6 +177,16 @@ end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
   step "I set up the comment \"#{comment_text}\" on the tag \"#{tag}\""
+  click_button("Comment")
+end
+
+When /^I post the comment "([^"]*)" on the period-containing tag "([^"]*)"$/ do |comment_text, tag|
+  step "I am on the search tags page"
+  fill_in("tag_search", with: tag)
+  click_button "Search tags"
+  click_link(tag)
+  click_link(" comment")
+  fill_in("Comment", with: comment_text)
   click_button("Comment")
 end
 

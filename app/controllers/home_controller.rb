@@ -54,17 +54,15 @@ class HomeController < ApplicationController
 
   # home page itself
   def index
-    unless logged_in?
-      @user_count = User.count
-      @work_count = Work.posted.count
-      @fandom_count = Fandom.canonical.count
+    @homepage = Homepage.new(@current_user)
+    unless @homepage.logged_in?
+      @user_count, @work_count, @fandom_count = @homepage.rounded_counts
     end
 
     # Set the user as active
-    if @current_user
-      @current_user.update_active
-    end
-    @homepage = Homepage.new(@current_user)
+     if @current_user
+       @current_user.update_active
+     end
 
     @hide_dashboard = true
     render action: 'index', layout: 'application'

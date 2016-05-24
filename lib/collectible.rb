@@ -16,6 +16,10 @@ module Collectible
         :through => :collection_items, 
         :source => :collection,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :rejected_collections,
+        :through => :collection_items,
+        :source => :collection,
+        :conditions => ['collection_items.user_approval_status = ? ', CollectionItem::REJECTED]
     end
   end
 
