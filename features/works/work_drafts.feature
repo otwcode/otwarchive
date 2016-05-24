@@ -19,9 +19,7 @@ Feature: Work Drafts
     And I fill in "Work Title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."  
     And I press "Preview"
-  Then I should see a sentence starting with "Draft was successfully created. It will be automatically deleted on" with a date
-    And I should see Set timezone
-    And I should not see a sentence starting with "Draft was successfully created. It will be automatically deleted on" with a time
+  Then I should see "Draft was successfully created. It will be automatically deleted on"
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
@@ -44,9 +42,7 @@ Feature: Work Drafts
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"
     And I press "Preview"
-  Then I should see a sentence starting with "This is a draft chapter in an unposted work. The work will be automatically deleted on" with a date
-    And I should see Set timezone
-    And I should not see a sentence starting with "This is a draft chapter in an unposted work. The work will be automatically deleted on" with a time
+  Then I should see "This is a draft chapter in an unposted work. The work will be automatically deleted on"
 
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
