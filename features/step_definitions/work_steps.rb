@@ -502,14 +502,3 @@ end
 Then /^the work "([^\"]*)" should be deleted$/ do |work|
   assert !Work.where(title: work).exists?
 end
-
-Then /^I should see Set timezone$/ do
-  step "I should see \"(set timezone)\""
-end
-
-Then /^I should( not)? see a sentence starting with "([^\"]*)" with a (date|time)$/ do |negate, phrase, time_type|
-  regex =  time_type == 'date' ?
-    /#{Regexp.quote(phrase)}.*([A-Z][a-z]{2} \d{2}\ ?){2}\d{2}[^.]*\./ :
-    /#{Regexp.quote(phrase)}.*\d{2}:\d{2}(P|A)M[^.]*\./
-  negate ? (page.should have_no_content(regex)) : (page.should have_content(regex))
-end
