@@ -2,6 +2,8 @@ class Kudo < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :commentable, :polymorphic => true
 
+  after_save :expire_kudo_user_cache
+
   validate :cannot_be_author
   validate :guest_cannot_kudos_restricted_work
 
@@ -57,4 +59,19 @@ class Kudo < ActiveRecord::Base
   def creator_of_work?
     errors.values.to_s.match /your own work/
   end
+
+  def self.kudos_user_cache_key(id)
+    "/v1/kudos_user_cache_key/#{id}"
+  end
+
+  def self.kudo_user_cache(id)
+    Rails.cache.fetch(Kudo.kudos_user_cache_key((id), :raw => true) { rand(1..1000) }
+  end
+ 
+  def expire_kudo_user_cache
+    if User.current_user 
+      Rails.cache.increment(Kudo.kudos_user_cache_key(User.current_user.id))
+    end
+  end
+
 end
