@@ -7,9 +7,7 @@ class WorkObserver < ActiveRecord::Observer
       orphan_account = User.orphan_account
       unless users.blank?
         for user in users
-          if user == orphan_account
-            next
-          end
+          next if user == orphan_account
           # Check to see if this work is being deleted by an Admin
           if User.current_user.is_a?(Admin)
             # this has to use the synchronous version because the work is going to be destroyed
