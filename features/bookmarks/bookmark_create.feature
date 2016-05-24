@@ -320,7 +320,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
-    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+    And I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
     And I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"
