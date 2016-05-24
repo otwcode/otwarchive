@@ -155,7 +155,6 @@ Feature: Delete Works
       And I go to giftee's user page
     Then I should see "Gifts (1)"
     When I delete the work "All Something Breaks Loose"
-    Then I debug works
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"
