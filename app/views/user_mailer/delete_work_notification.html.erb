@@ -1,9 +1,13 @@
 <% content_for :message do %>
-  <p><%= t 'user_mailer.delete_work_notification.hello', user: @user.default_pseud.byline %></p>
-
-  <p><%= t('user_mailer.delete_work_notification.html.part1', title: style_bold(@work.title.html_safe), deleted_by: (@work.pseuds.count > 1 && @user != User.current_user) ? (t('user_mailer.delete_work_notification.request_of', pseud: style_pseud_link(User.current_user.default_pseud))).html_safe : t('user_mailer.delete_work_notification.your_request') ).html_safe %></p>
-  
-  <p><%= t('user_mailer.delete_work_notification.html.support', support: support_link(t 'user_mailer.delete_work_notification.support')).html_safe %></p>
-  
-  <p><%= t('user_mailer.delete_work_notification.bye') %></p>
+  <%= (@work.pseuds.count > 1 && @user != User.current_user) ? 
+      t('user_mailer.delete_work_notification.html.entire_other',
+        user:  @user.default_pseud.byline,
+        title: style_bold(@work.title.html_safe),
+        psued: style_pseud_link(User.current_user.default_pseud),
+        support: support_link(t 'user_mailer.delete_work_notification.support') ).html_safe :
+      t('user_mailer.delete_work_notification.html.entire_yourself',
+        user:  @user.default_pseud.byline,
+        title: style_bold(@work.title.html_safe),
+        support: support_link(t 'user_mailer.delete_work_notification.support') ).html_safe
+  %>
 <% end %>

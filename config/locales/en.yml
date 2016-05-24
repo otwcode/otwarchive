@@ -55,17 +55,33 @@ en:
           %{archive_name}
     delete_work_notification:
       subject: "[%{app_name}] Your work has been deleted"
-      hello: "Dear %{user},"
-      request_of: "the request of %{pseud}."
-      your_request: "your request."
       support: "contact Support"
-      bye: "Attached is a copy of your work for your reference."
       html:
-        part1: "Your work <i>%{title}</i> was deleted at %{deleted_by}"
-        support: "If you have questions, please %{support}"
+        entire_other: "<p>Dear %{user},</p>\n\
+<p>Your work <i>%{title}</i> was deleted at the request of %{pseud}.</p>\n\
+<p>If you have questions, please %{support}.</p>\n\
+<p>Attached is a copy of your work for your reference.</p>"
+        entire_yourself: "<p>Dear %{user},</p>\n\
+<p>Your work <i>%{title}</i> was deleted at the request of yourself.</p>\n\
+<p>If you have questions, please %{support}.</p>\n\
+<p>Attached is a copy of your work for your reference.</p>"
       text:
-        part1: "Your work %{title} was deleted at %{deleted_by}"
-        support: "If you have questions, please %{support}"
+        entire_other: |-
+                     Dear %{user},
+                      
+                     Your work %{title}  was deleted at the request of %{pseud}.
+
+                     If you have questions, please contact support.
+
+                     Attached is a copy of your work for your reference.
+        entire_yourself: |-
+                        Dear %{user},
+                        
+                        Your work %{title}  was deleted at the request your request.
+
+                        If you have questions, please contact support.
+
+                        Attached is a copy of your work for your reference.
     abuse_report:
       subject: "[%{app_name}] Your Abuse Report"
       para1: "The following abuse report has been sent to the Abuse team:"
