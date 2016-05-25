@@ -105,16 +105,14 @@ Feature: Reading count
     And I view the work "Testy"
   Then I should see "Mark for Later"
   When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "This work was added to your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
-  Then I should see "Mark as Read"
-  When I follow "Mark as Read"
-  Then I should see "This work was removed from your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "Remove mark for Later"
+  When I follow "Remove mark for Later"
+  Then I should see "This work was removed from your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
     And I should not see "(Marked for Later.)"
@@ -162,8 +160,7 @@ Feature: Reading count
   When I view the work "multichapter work"
     And I follow "Next Chapter"
   When I follow "Mark for Later"
-  Then I should see "This work was added to your Marked for Later list. It may take a while for changes to show up."
-  When the reading rake task is run
+  Then I should see "This work was added to your Marked for Later list."
     And I go to fandomer's reading page
   Then I should see "multichapter work"
   When "intermittent failure" is fixed
