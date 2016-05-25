@@ -3,7 +3,7 @@
       t('user_mailer.delete_work_notification.html.entire_other',
         user:  @user.default_pseud.byline,
         title: style_bold(@work.title.html_safe),
-        psued: style_pseud_link(User.current_user.default_pseud),
+        pseud: style_pseud_link(User.current_user.default_pseud),
         support: support_link(t 'user_mailer.delete_work_notification.support') ).html_safe :
       t('user_mailer.delete_work_notification.html.entire_yourself',
         user:  @user.default_pseud.byline,
