@@ -1,2 +1,11 @@
 <% content_for :message do %>
+  <%= (@work.pseuds.count > 1 && @user != User.current_user) ?
+      t('user_mailer.delete_work_notification.text.entire_other',
+        user:  @user.default_pseud.byline,
+        title: @work.title,
+        pseud: User.current_user.default_pseud ).html_safe :
+      t('user_mailer.delete_work_notification.text.entire_yourself',
+        user:  @user.default_pseud.byline,
+        title: @work.title ).html_safe
+  %>
 <% end %>
