@@ -48,7 +48,8 @@ Feature: Leave kudos
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "myname3 and myname2 as well as 1 guest left kudos on this work!"
-    When I am logged in as "myname1" # This tests that you can't easily leave kudos twice
+    # This tests that you can't easily leave kudos twice
+    When I am logged in as "myname1"
       And I view the work "Awesome Story"
       Then I should not see "Kudos ♥"
     When I am logged in as "myname2"
