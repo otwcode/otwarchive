@@ -25,6 +25,17 @@
 <% if @kudos %>
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts('Kudos History') %></h2>
+  <div class="search"><form accept-charset="UTF-8" class="search" id="kudos_search" method="get">
+  <fieldset>
+    <legend>Search in Kudos</legend>
+    <p>
+      <label class="landmark" for="kudos_search">Search in Kudos:</label>
+      <input value="<%= params[:search].blank? ? '' : params[:search] %>" class="text" id="kudos_search" name="search" type="text" />
+      <input class="button" type="submit" value="Title Search In Kudos" />
+    </p>
+  </fieldset>
+</form>
+</div>
 <!--/descriptions-->
 <!--main content-->
 <% if @kudos.present? %>
