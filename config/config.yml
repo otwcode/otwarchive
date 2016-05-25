@@ -101,6 +101,8 @@ PROMPT_TAGS_MAX: 20
 
 # max number of potential matches to generate
 POTENTIAL_MATCHES_MAX: 50
+# max percentage of participants to match
+POTENTIAL_MATCHES_PERCENT: 10
 
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10

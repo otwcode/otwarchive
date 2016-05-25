@@ -35,8 +35,12 @@ protected
 public
 
   def self.clear!(collection)
-    # destroy all potential matches in this collection
-    PotentialMatch.destroy_all(["collection_id = ?", collection.id])
+    # rapidly delete all potential prompt matches and potential matches in this collection WITHOUT CALLBACKS
+    pmids = collection.potential_matches.value_of(:id)
+    # trash all the potential PROMPT matches first since we are NOT USING CALLBACKS
+    PotentialPromptMatch.where("potential_match_id IN (?)", pmids).delete_all
+    # now take out the potential matches
+    PotentialMatch.where("id IN (?)", pmids).delete_all
   end
 
   def self.set_up_generating(collection)
@@ -112,6 +116,7 @@ public
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
+    max_matches = [(collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT), ArchiveConfig.POTENTIAL_MATCHES_MAX].min
 
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
@@ -131,7 +136,7 @@ public
       end
 
       # Stop looking if we've hit the max
-      break if potential_match_count == ArchiveConfig.POTENTIAL_MATCHES_MAX
+      break if potential_match_count == max_matches
     end
   end
 
