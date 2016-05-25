@@ -11,12 +11,18 @@ Feature: Leave kudos
     | myname3        | myname3@foo.com |
     And I am logged in as "myname1"
     And I post the work "Awesome Story"
+    And I post the work "Boring Story"
+    And I post the work "Interesting Story"
     And I log out
 
   Scenario: post kudos
 
     Given I am logged in as "myname2"
       And all emails have been delivered
+      And I view the work "Interesting Story"
+    Then I should not see "left kudos on this work"
+    When I press "Kudos ♥"
+    Then I should see "myname2 left kudos on this work!"
       And I view the work "Awesome Story"
     Then I should not see "left kudos on this work"
     # Note: this step cannot be put into the steps file because of the heart character
@@ -56,6 +62,11 @@ Feature: Leave kudos
       And I go to myname2's user page
       And I follow "Kudos History"
     Then I should see "Awesome Story"
+    Then I should see "Interesting Story"
+      And I fill in "kudos_search" with "Awesome"
+      And I press "Title Search In Kudos"
+    Then I should see "Awesome Story"
+    Then I should not see "Interesting Story"
 
   Scenario: kudos on a multi-chapter work
     Given I am logged in as "myname1"
