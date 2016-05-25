@@ -788,8 +788,8 @@ public
   # marks a work to read later
   def marktoread
     @work = Work.find(params[:id])
-    Reading.mark_to_read_later(@work, current_user,true)
-    read_later_path = user_readings_path(current_user, :show => 'to-read')
+    Reading.mark_to_read_later(@work, current_user, true)
+    read_later_path = user_readings_path(current_user, show: 'to-read')
     if @work.marked_for_later?(current_user)
       flash[:notice] = ts("This work was <strong>added</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
     end
@@ -798,8 +798,8 @@ public
 
   def removemarktoread
     @work = Work.find(params[:id])
-    Reading.mark_to_read_later(@work, current_user,false)
-    read_later_path = user_readings_path(current_user, :show => 'to-read')
+    Reading.mark_to_read_later(@work, current_user, false)
+    read_later_path = user_readings_path(current_user, show: 'to-read')
     unless @work.marked_for_later?(current_user)
       flash[:notice] = ts("This work was <strong>removed</strong> from your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
     end
