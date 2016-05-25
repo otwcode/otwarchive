@@ -279,6 +279,7 @@ Otwarchive::Application.routes.draw do
       get :search
     end
     member do
+      get :feed
       get :preview
       post :post
       put :post_draft

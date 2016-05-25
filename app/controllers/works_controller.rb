@@ -5,11 +5,11 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :load_owner, :only => [ :index ]
-  before_filter :users_only, :except => [ :index, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
-  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
+  before_filter :users_only, :except => [ :index, :feed, :show, :navigate, :search, :collected, :edit_tags, :update_tags ]
+  before_filter :check_user_status, :except => [ :index, :feed, :show, :navigate, :search, :collected ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  before_filter :check_ownership, :except => [ :index, :feed, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
   before_filter :log_admin_activity, :only => [ :update_tags ]
@@ -23,6 +23,8 @@ class WorksController < ApplicationController
 
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
+
+  caches_page :feed
 
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
@@ -200,6 +202,16 @@ class WorksController < ApplicationController
       @works = @pseud.unposted_works.paginate(:page => params[:page])
     else
       @works = @user.unposted_works.paginate(:page => params[:page])
+    end
+  end
+
+  def feed
+    if !@work.posted || @work.restricted
+      raise ActiveRecord::RecordNotFound, "Couldn't find work with id '#{@work.id}'"
+    end
+
+    respond_to do |format|
+      format.atom
     end
   end
 

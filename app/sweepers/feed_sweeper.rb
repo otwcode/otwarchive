@@ -18,6 +18,7 @@ class FeedSweeper < ActionController::Caching::Sweeper
 
   # When a chapter or work is created, updated or destroyed, expire:
   # - the cached feed page for each of its canonical tags
+  # - the cached feed page for the work itself
   # - the works index caches for its canonical tags, pseuds, users and collections
   def expire_caches(record)
     work = record
@@ -32,6 +33,10 @@ class FeedSweeper < ActionController::Caching::Sweeper
                   :id => tag.id,
                   :format => 'atom'
     end
+    expire_page controller: 'works',
+                action: 'feed',
+                id: work.id,
+                format: 'atom'
   end
 
 end

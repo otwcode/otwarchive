@@ -99,6 +99,11 @@
       <%= render 'subscriptions/form', :subscription => @subscription %>
     </li>
   <% end %>
+
+  <% if @work.posted && !@work.restricted %>
+  <li><%= link_to_rss feed_work_path(:id => @work.id, :format => :atom) %></li>
+  <% end %>
+
   <% if @work.posted? %>
     <li class="download" aria-haspopup="true">
       <a href="#"><%= ts("Download") %></a>

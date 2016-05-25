@@ -3,6 +3,26 @@ require 'spec_helper'
 describe WorksController do
   include LoginMacros
 
+  describe "feed" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @fandom = FactoryGirl.create(:fandom, name: "Stargate")
+      @work = FactoryGirl.create(:work, posted: true,
+                                        fandom_string: @fandom.name,
+                                        title: "Stargate and the Methods of Security")
+      @pseud = FactoryGirl.create(:pseud, user_id: @user.id)
+      @chapter = FactoryGirl.create(:chapter, work_id: @work.id,
+                                              title: "Stargate and the Methods of Security",
+                                              summary: "Sam explains the decontamination procedures; Teal'c ends up in a sticky situation.",
+                                              published_at: Date.today)
+    end
+
+    it "should return the work" do
+      get :feed, id: @work.id, formats: ['atom']
+      expect(assigns(:work)).to eq(@work)
+    end
+  end
+
   describe "index" do
     before do
       @fandom = FactoryGirl.create(:fandom)

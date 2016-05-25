@@ -675,6 +675,12 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def posted_chapters
+    chapters = self.chapters.order('published_at DESC', 'position DESC')
+    chapters = chapters.where(posted: true)
+    chapters.select('published_at as created_at, updated_at, id, work_id, title, position, summary, content')
+  end
+
   def chapters_in_order(include_content = true)
     # in order
     chapters = self.chapters.order('position ASC')
