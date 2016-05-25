@@ -14,12 +14,12 @@ class Reading < ActiveRecord::Base
   end
 
   # called from reading controller
-  def self.mark_to_read_later(work, user)
+  def self.mark_to_read_later(work, user, toread)
     reading = Reading.find_or_initialize_by_work_id_and_user_id(work.id, user.id)
     reading.major_version_read = work.major_version
     reading.minor_version_read = work.minor_version
     reading.last_viewed = Time.now
-    reading.toread = true
+    reading.toread = toread
     reading.save
   end
 

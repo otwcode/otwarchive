@@ -9,7 +9,7 @@ class WorksController < ApplicationController
   before_filter :check_user_status, :except => [ :index, :show, :navigate, :search, :collected ]
   before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected ]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :drafts, :collected ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :marktoread, :removemarktoread, :drafts, :collected ]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_filter :check_ownership_or_admin, :only => [ :edit_tags, :update_tags ]
   before_filter :log_admin_activity, :only => [ :update_tags ]
@@ -785,13 +785,23 @@ public
     end
   end
 
-  # marks a work to read later, or unmarks it if the work is already marked
+  # marks a work to read later
   def marktoread
     @work = Work.find(params[:id])
-    Reading.mark_to_read_later(@work, current_user)
+    Reading.mark_to_read_later(@work, current_user,true)
     read_later_path = user_readings_path(current_user, :show => 'to-read')
     if @work.marked_for_later?(current_user)
       flash[:notice] = ts("This work was <strong>added</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
+    end
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
+
+  def removemarktoread
+    @work = Work.find(params[:id])
+    Reading.mark_to_read_later(@work, current_user,false)
+    read_later_path = user_readings_path(current_user, :show => 'to-read')
+    unless @work.marked_for_later?(current_user)
+      flash[:notice] = ts("This work was <strong>removed</strong> to your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
     end
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
