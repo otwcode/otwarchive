@@ -43,7 +43,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
   # Returns a hash
   def import_bookmark(archivist, params)
     bookmark_request = external_bookmark(archivist, params)
-    bookmark_status, bookmark_messages = bookmark_errors(bookmark_request)
+    bookmark_status, bookmark_messages = bookmark_errors(archivist, bookmark_request)
     bookmark_url = ""
     original_url = ""
     @some_errors = true
@@ -79,7 +79,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
   end
 
   # Handling for requests that are incomplete
-  def bookmark_errors(bookmark_request)
+  def bookmark_errors(archivist, bookmark_request)
     status = :bad_request
     errors = []
 
@@ -87,6 +87,17 @@ class Api::V1::BookmarksController < Api::V1::BaseController
     if url.nil?
       errors << "This bookmark does not contain a URL to an external site."
     end
+
+    archivist_bookmarks = Bookmark.find_all_by_pseud_id(archivist.default_pseud.id)
+
+    unless archivist_bookmarks.empty?
+      archivist_bookmarks.each do |bookmark|
+        if bookmark.bookmarkable_type == "ExternalWork" && ExternalWork.find(bookmark.bookmarkable_id).url == url
+          errors << "There is already a bookmark for this archivist and the URL #{url}"
+        end
+      end
+    end
+
 
     status = :ok if errors.empty?
     [status, errors]

@@ -55,7 +55,7 @@ describe "API BookmarksController" do
       assert_equal 200, response.status
     end
 
-    it "should create bookmarks associated with the archivist" do
+    it "should not create duplicate bookmarks for the same archivist and external URL" do
       pseud_id = @user.default_pseud.id
       post "/api/v1/bookmarks/import",
            { archivist: @user.login,
@@ -63,7 +63,7 @@ describe "API BookmarksController" do
            }.to_json,
            valid_headers
       bookmarks = Bookmark.find_all_by_pseud_id(pseud_id)
-      assert_equal bookmarks.count, 2
+      assert_equal bookmarks.count, 1
     end
 
     it "should pass back any original references unchanged" do
