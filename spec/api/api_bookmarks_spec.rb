@@ -55,15 +55,6 @@ describe "API BookmarksController" do
       assert_equal 200, response.status
     end
 
-    it "should return 200 OK when only some bookmarks are created" do
-      post "/api/v1/bookmarks/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark, bookmark ]
-           }.to_json,
-           valid_headers
-      assert_equal 200, response.status
-    end
-
     it "should create bookmarks associated with the archivist" do
       pseud_id = @user.default_pseud.id
       post "/api/v1/bookmarks/import",
