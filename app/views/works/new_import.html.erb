@@ -1,16 +1,18 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
+<% import = true %>
+
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Fanfiction.net does not allow imports from their site.") %>
+    <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
   </p>
   <p>
     <%= ts("If you have trouble importing from another site, ") %> 
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
   </p>
-  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/9" %><%= ts(" useful.") %></p>
+  <p><%= ts("You might find the ") %><%= link_to ts("Import FAQ"), archive_faqs_path + "/importing-and-mass-editing" %><%= ts(" useful.") %></p>
 </div>
 
 <!--/descriptions-->
@@ -24,43 +26,50 @@
   <% end %>
   <li id="form-link">
      <%= link_to( ts("Post New Work Instead?"),
-       {:url => {:controller => :works, :action => :new, :import => false}},
-       :href => url_for(:controller => :works, :action => :new, :import => false)) %>
+       { url: { controller: :works, action: :new, import: false } },
+       :href => url_for(:controller => :works, :action => :new, :import => nil)) %>
   </li>
 </ul>
 <!--/subnav-->
 
 <!-- This partial renders a form for importing a work from an existing URL -->
-  
-<%= form_tag url_for(:controller => :works, :action => :import), :class => "import work post" do %>
+
+<%= form_tag url_for(:controller => :works, :action => :import), :class => "import work verbose post" do %>
   <fieldset>
     <legend><%= ts("Works URLs") %></legend>
     <dl>
       <dt class="required"><%= label_tag "urls", ts("URLs") + "*" %></dt>
-      <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
-  	    <p class="footnote"><%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong></p>
+      <dd class="required"><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", rows: 20, cols: 90, "aria-describedby" => "url-field-description" %>
+        <p class="footnote" id="url-field-description">
+          <%= ts("URLs for existing work(s) or for the chapters of a single work; ") %><strong><%= ts("one URL per line.") %></strong>
+        </p>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
       <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
       <dt><%= ts("Import as") %></dt>
       <dd>
         <ul>
-      	  <li>
-      	    <%= radio_button_tag "import_multiple", "works", true %>
-            <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
+          <li>
+            <%= radio_button_tag "import_multiple", "works", true %>
+            <%= label_tag "import_multiple_works",
+                          ts("Works (limit of %{max})",
+                             max: current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
           </li>
           <li>
             <%= radio_button_tag "import_multiple", "chapters" %>
-            <%= label_tag "import_multiple_chapters", ts("Chapters in a single work (limit of %{max})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
+            <%= label_tag "import_multiple_chapters",
+                          ts("Chapters in a single work (limit of %{max})",
+                             max: ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
           </li>
         </ul>
       </dd>
       <% if current_user.archivist %>
-        <dt><%= check_box_tag "importing_for_others" %></dt>
+        <dt><%= label_tag ts("Archiving for others") %></dt>
         <dd>
-          <%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %>
           <fieldset>
             <dl>
+              <dt><%= check_box_tag "importing_for_others" %></dt>
+              <dd><%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %></dd>
               <dt class="required"><%= label_tag "external_author_name", ts("Author Name") + "*" %></dt>
               <dd><%= text_field_tag_original "external_author_name" %></dd>
               <dt class="required"><%= label_tag "external_author_email", ts("Author Email Address") + "*" %></dt>
@@ -73,9 +82,9 @@
           </fieldset>
         </dd>
       <% end %>
-    
+
       <dt><%= ts("Preferences") %></dt>
-	    <dd>
+      <dd>
         <ul>
           <li>
             <%= check_box_tag "post_without_preview" %>
@@ -89,21 +98,33 @@
             <%= check_box_tag "restricted" %>
             <%= label_tag "restricted", ts("Lock all imports to registered users only.") %>
           </li>
-          <li>
-            <%= check_box_tag "override_tags" %>
-            <%= label_tag "override_tags", ts("Set the following tags on all works, overriding whatever the importer finds.") %>
-          </li>
         </ul>
+      </dd>
+      <dt><%= ts("Override tags and notes") %></dt>
+      <dd>
+        <%= check_box_tag "override_tags" %>
+        <%= label_tag "override_tags", ts("Set the following tags and/or notes on all works, overriding whatever the importer finds in the content.") %>
       </dd>
     </dl>
   </fieldset>
 
-  <%= render :partial => 'work_form_tags', :locals => {:include_blank => true} %>
+  <%= render :partial => 'work_form_tags', locals: { include_blank: true, import: true } %>
+
+  <fieldset>
+    <legend><%= label_tag :notes, ts("Notes") %></legend>
+    <dl>
+      <dt><%= label_tag :notes, ts("Notes at the beginning") %></dt>
+      <dd>
+        <%= text_area_tag :notes, nil, class: "observe_textlength" %>
+        <%= generate_countdown_html(".notes", ArchiveConfig.NOTES_MAX) %>
+      </dd>
+    </dl>
+  </fieldset>
 
   <fieldset>
     <legend><%= ts("Submit") %></legend>
     <p class="submit actions">
-    <%= submit_tag ts("Import") %>
+      <%= submit_tag ts("Import") %>
     </p>
   </fieldset>
 

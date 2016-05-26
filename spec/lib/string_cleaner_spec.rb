@@ -11,19 +11,19 @@ describe Foo do
 
   describe "#remove_articles_from_string" do
     it "should remove 'the '" do
-      foo.remove_articles_from_string("The Hobbit").should == "Hobbit"
+      expect(foo.remove_articles_from_string("The Hobbit")).to eq("Hobbit")
     end
 
     it "should remove 'a '" do
-      foo.remove_articles_from_string("A Song of Ice And Fire").should == "Song of Ice And Fire"
+      expect(foo.remove_articles_from_string("A Song of Ice And Fire")).to eq("Song of Ice And Fire")
     end
 
     it "should remove 'an '" do
-      foo.remove_articles_from_string("An Opportunity").should == "Opportunity"
+      expect(foo.remove_articles_from_string("An Opportunity")).to eq("Opportunity")
     end
 
     it "should not remove 'the' if followed by other characters" do
-      foo.remove_articles_from_string("There Will Be Blood").should == "There Will Be Blood"
+      expect(foo.remove_articles_from_string("There Will Be Blood")).to eq("There Will Be Blood")
     end
 
   end

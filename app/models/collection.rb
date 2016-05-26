@@ -186,7 +186,7 @@ class Collection < ActiveRecord::Base
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
     table = challenge_type.tableize
-    unmoderated.not_closed.where(:challenge_type => challenge_type).
+    not_closed.where(:challenge_type => challenge_type).
       joins("INNER JOIN #{table} on #{table}.id = challenge_id").where("#{table}.signup_open = 1").
       where("#{table}.signups_close_at > ?", Time.now).order(:signups_close_at)
   end

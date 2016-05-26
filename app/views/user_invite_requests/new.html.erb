@@ -1,8 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Request more invites") %></h2>
+<h2 class="heading"><%= ts("Request Invitations") %></h2>
 <p>
-  <%= ts("We don't normally grant more than 3 invitations at a time for personal use, and the maximum you can request through this form is %{max}.", :max => ArchiveConfig.MAX_USER_INVITE_REQUEST.to_s) %>
-  <%= link_to ts('Contact Support if you need more for a challenge.'), new_feedback_report_path %>
+  <%= ts("We don't normally grant more than 3 invitations at a time for personal use, and the maximum you can request through this form is %{max}. Requests are manually reviewed and may take several days to be approved. Please ", :max => ArchiveConfig.MAX_USER_INVITE_REQUEST.to_s) %>
+  <%= link_to ts('contact Support'), new_feedback_report_path %> <%= ts("if you need more than 10 invitations for a challenge, or if your challenge or collection is opening soon.") %>
 </p>
 <!--/descriptions-->
 
@@ -14,7 +14,7 @@
 <%= form_for(@user_invite_request) do |f| %>
   <%= error_messages_for @user_invite_request %>
   <dl>
-    <dt class="required"><%= f.label ts("How many invites would you like? (max %{max})", :max => ArchiveConfig.MAX_USER_INVITE_REQUEST.to_s) %></dt>
+    <dt class="required"><%= f.label ts("How many invitations would you like? (max %{max})", :max => ArchiveConfig.MAX_USER_INVITE_REQUEST.to_s) %></dt>
     <dd><%= f.text_field :quantity, :size => '2', :class => 'number' %></dd>
     <dt class="required"><%= f.label ts("Please specify why you'd like them:") %></dt>
     <dd><%= f.text_area :reason, :size => '50x5' %></dd>

@@ -16,7 +16,7 @@
   <!--main content-->
   <div class="module">
   <% if @unsent_invitations.blank? %>
-    <p>Sorry, you have no unsent invitations right now. <%= link_to "Request more", new_user_invite_request_path %></p>  
+    <p>Sorry, you have no unsent invitations right now. <%= link_to ts('Request invitations'), new_user_invite_request_path %></p>  
   <% else %>
     <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
     <%= form_tag url_for(:controller => 'invitations', :action => 'invite_friend', :user_id => @user) do %>
@@ -35,7 +35,7 @@
           </ul>
         </dd>
       </dl>
-      <p class="submit actions"><%= submit_tag t('.submit_invite', :default => 'Send invite')  %></p>
+      <p class="submit actions"><%= submit_tag t('.submit_invite', :default => 'Send Invitation')  %></p>
     <% end %>
   <% end %>
   </div>

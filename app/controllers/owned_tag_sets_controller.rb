@@ -185,7 +185,7 @@ class OwnedTagSetsController < ApplicationController
   
   def do_batch_load
     if params[:batch_associations]
-      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationship] ? true : false))
+      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationships] ? true : false))
       if failed.empty?
         flash[:notice] = ts("Tags and associations loaded!")
         redirect_to tag_set_path(@tag_set) and return      

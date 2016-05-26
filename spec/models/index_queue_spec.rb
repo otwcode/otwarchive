@@ -9,35 +9,35 @@ describe IndexQueue do
   end
 
   it "should build correct keys" do
-    IndexQueue.get_key('StatCounter', :stats).should == "index:stat_counter:stats"
+    expect(IndexQueue.get_key('StatCounter', :stats)).to eq("index:stat_counter:stats")
   end
 
   it "should enqueue objects" do
     work = Work.new
     work.id = 34
     IndexQueue.enqueue(work, :background)
-    IndexQueue.new("index:work:background").ids.should == ['34']
+    expect(IndexQueue.new("index:work:background").ids).to eq(['34'])
   end
 
   it "should enqueue ids" do
     IndexQueue.enqueue_id('Bookmark', 12, :background)
-    IndexQueue.new("index:bookmark:background").ids.should == ['12']
+    expect(IndexQueue.new("index:bookmark:background").ids).to eq(['12'])
   end
 
   it "should have ids added to it" do
     iq = IndexQueue.new("index:work:main")
     iq.add_id(1)
     iq.add_id(2)
-    iq.ids.should == ['1', '2']
+    expect(iq.ids).to eq(['1', '2'])
   end
 
   it "should create subqueues when run" do
     iq = IndexQueue.new("index:work:main")
     iq.add_id(1)
-    IndexSubqueue.should_receive(:create_and_enqueue)
+    expect(IndexSubqueue).to receive(:create_and_enqueue)
     iq.run
 
-    IndexQueue::REDIS.exists("index:work:main").should be_false
+    expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
   end
 
 end

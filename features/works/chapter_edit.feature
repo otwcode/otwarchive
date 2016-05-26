@@ -35,9 +35,9 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "chapter_wip_length" with "100"
     And I fill in "content" with "original chapter two"
-    And "Issue 3306" is fixed
+    And "AO3-3300" is fixed
     # All the commented out bits in the following examples need to be changed
-    # back once Issue 3306 has bee fixed.
+    # back once AO3-3300 has bee fixed.
     #And I press "Preview"
   #Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
   #When I press "Post"
@@ -118,7 +118,7 @@ Feature: Edit chapters
     And I should see "Chapter 4"
     And I should see "last chapter" within "#chapter-4"
     And I should not see "original chapter two"
-  When I follow "View chapter by chapter"
+  When I follow "Chapter by Chapter"
     And I follow "Chapter Index"
   Then I should see "Chapter Index for New Epic Work by epicauthor"
     And I should see "Chapter 1"

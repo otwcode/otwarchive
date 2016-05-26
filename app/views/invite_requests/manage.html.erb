@@ -1,36 +1,35 @@
 <div class="admin">
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Manage the Invite Queue") %></h2>
+  <h2 class="heading"><%= ts('Manage the Invitation Queue') %></h2>
 <!--/descriptions-->
-
 
 <!--main content-->
   <%= form_tag reorder_invite_requests_url do %>
     <p><%= submit_tag ts('Reorder Queue') %></p>
   <% end %>
 
-<table summary="<%= ts('Lists each request/email and its current place in the queue. You can also delete each request.') %>">
-  <caption><%= ts('Manage the Invite Queue') %></caption>
-  <thead>
-	  <tr>
-	    <th scope="col"><%= ts('Queue Position') %></th>
-	    <th scope="col"><%= ts('Email Address') %></th>
-	    <th scope="col"><%= ts('Action') %></th>
-	  </tr>
-	</thead>
-	<tbody>
-    <% for request in @invite_requests %>
+  <table summary="<%= ts('Lists each request/email and its current place in the queue. You can also delete each request.') %>">
+    <caption><%= ts('Manage the Invitation Queue') %></caption>
+    <thead>
       <tr>
-        <td><%= request.position %></td>
-        <td><%= request.email %></td>
-        <td><%= link_to ts('Delete'), request, :confirm => ts('Are you sure?'), :method => :delete %></td>
+        <th scope="col"><%= ts('Queue Position') %></th>
+        <th scope="col"><%= ts('Email Address') %></th>
+        <th scope="col"><%= ts('Action') %></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @invite_requests.each do |request| %>
+        <tr>
+          <td><%= request.position %></td>
+          <td><%= request.email %></td>
+          <td><%= link_to ts('Delete'), invite_request_path(request, page: params[:page]), confirm: ts('Are you sure?'), method: :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <!--/content-->
 
 <!--subnav-->
-<%= will_paginate @invite_requests %>
+  <%= will_paginate @invite_requests %>
 <!--/subnav-->
 </div>

@@ -5,17 +5,15 @@
 <!-- /end descriptions-->
 
 <!--Subnavigation, sorting and actions.-->
-<% if (@collection && @collection.gift_exchange?) || @tag || @user %>
+<% if @collection || @tag || @user %>
   <div class="navigation actions module">
-
-    <h3 class="landmark heading"><%= ts("Navigation, Sorting and Actions") %></h3>
+    <h3 class="landmark heading"><%= ts("Navigation and Actions") %></h3>
     <!--gift search subnav-->
     <% if @collection && @collection.gift_exchange? %>
-      <%= render :partial => 'gifts/gift_search' %>
+      <%= render 'gifts/gift_search' %>
     <% end %>
-
     <!--user role subnav-->
-    <% if @tag || @user %>
+    <% if @tag || @user || @collection %>
       <ul class="user navigation actions" role="navigation">
         <% if @user %>
           <% if @user == current_user %>
@@ -24,16 +22,22 @@
           <li><%= span_if_current ts('Works in Collections'), collected_user_works_path(@user) %></li>
           <li><%= span_if_current ts('Works'), user_works_path(@user) %></li>
         <% end %>
-        <% if @tag %>
+        <% if @tag && !@collection %>
           <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
           <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
         <% end %>
-        <% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+        <% if @facets.present? %>
+          <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+          <li class="narrow-shown hidden"><a href="#work-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+        <% end %>
+        <% if @tag && logged_in? && !@collection %>
+          <li><%= render 'favorite_tags/form', current_user: @current_user, favorite_tag: @favorite_tag %></li>
+        <% end %>
+        <% if @tag && !@collection && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
           <li><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></li>
         <% end %>
       </ul>
     <% end %>
-  
   </div>
 <% end %>
 <!---/subnav-->
@@ -50,21 +54,19 @@
 <h3 class="landmark heading"><%= ts("Listing Works") %></h3>
 <ol class="work index group">
   <% for work in @works %>
-    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+    <% if work %><%= render 'work_blurb', work: work %><% end %>
   <% end %>
 </ol>
-  
+
 <!--/content-->
 
 <!--filters subnav-->
 <% if @facets.present? %>
-  <%= render :partial => 'filters' %>
+  <%= render 'filters' %>
 <% end %>
 <!---/subnav-->
 
 <% if @works.respond_to?(:total_pages) %>
   <%= will_paginate @works %>
 <% end %>
-
-
 

@@ -63,28 +63,31 @@
       <%= f.check_box :hide_freeform %>
       <%= f.label :hide_freeform, ts('Hide additional tags (you can still choose to show them).')  %>
     </li>
-
     <li>
       <%= f.check_box :disable_work_skins %>
       <%= f.label :disable_work_skins, ts('Hide work skins (you can still choose to show them).')  %> <%= link_to_help 'skins-basics' %>
     </li>
   </ul>
+</fieldset>
+<fieldset>
+  <dl>
+    <dt><%= f.label :skin_id, ts('Your site skin') %> <%= link_to_help 'skins-basics' %></dt>
+    <dd>
+      <span class="actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
+    </dd>
 
-  <fieldset>
-    <dl>
-      <dt><%= f.label :skin_id, ts('Your site skin')%> <%= link_to_help 'skins-basics' %>:</dt>
-      <dd>
-        <span class="actions"><%= link_to ts('Public Site Skins'), skins_path %></span>
-        <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
-      </dd>
+    <dt><%= f.label :time_zone, ts('Your time zone') %></dt>
+    <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
+    
+    <% if Rails.env.test? || Rails.env.development? || $rollout.active?(:set_locale_preference, @user) %>
+      <dt><%= f.label :preferred_locale, ts('Your locale') %> <%= link_to_help 'locale-preferences' %></dt>
+      <dd><%= f.select :preferred_locale, @available_locales.collect{|locale| [locale.name, locale.id]}, :default => @preference.preferred_locale %></dd>
+    <% end %>
 
-      <dt><%= f.label :time_zone, ts('Your time zone: ')%></dt>
-      <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-      
-      <dt><%= f.label :work_title_format, ts('Browser page title format')  %> <%= link_to_help 'work_title_format' %>:</dt>
-      <dd><%= f.text_field :work_title_format %></dd>
-    </dl>
-  </fieldset>
+    <dt><%= f.label :work_title_format, ts('Browser page title format') %> <%= link_to_help 'work_title_format' %></dt>
+    <dd><%= f.text_field :work_title_format %></dd>
+  </dl>
 </fieldset>
 
 <fieldset>
@@ -144,7 +147,7 @@
   <ul>
   	<li>
   	  <%= f.check_box :automatically_approve_collections %>
-  	  <%= f.label :pref, ts('Automatically agree to your work being collected by others in the archive.') %>
+  	  <%= f.label :automatically_approve_collections, ts("Automatically agree to your work being collected by others in the Archive.") %>
   	</li>
 
   	<li>

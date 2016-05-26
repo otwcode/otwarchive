@@ -13,7 +13,6 @@ Feature: Delete pseud.
   And I am logged in as "testuser" with password "testuser"
     And I am on testuser's pseuds page
   When I follow "delete_tester_pseud"
-  Then show me the page
   Then I should see "Delete these bookmarks"
   When I choose "Delete these bookmarks"
     And I press "Submit"

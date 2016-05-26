@@ -5,7 +5,8 @@ Otwarchive::Application.configure do
   # every request.  This slows down response time but is perfect for development
   # since you don't have to restart the webserver when you make code changes.
   config.cache_classes = false
-  config.cache_store = :memory_store
+  config.cache_store = :dalli_store, '127.0.0.1:11211',
+                          { :namespace =>  'ao3-v1', :expires_in =>  0, :compress => true , :pool_size => 10 }
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
@@ -29,4 +30,14 @@ Otwarchive::Application.configure do
   # Make it clear we are on Dev
   config.rack_dev_mark.enable = true
   config.rack_dev_mark.theme = [:title, Rack::DevMark::Theme::GithubForkRibbon.new(position: 'left', color: 'green' , fixed: 'true' )]
+
+  # Enable Bullet gem to monitor application performance
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.add_footer = false
+    Bullet.rails_logger = true
+    Bullet.counter_cache_enable = false
+  end
 end

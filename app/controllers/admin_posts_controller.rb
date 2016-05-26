@@ -19,6 +19,7 @@ class AdminPostsController < ApplicationController
       @tags = AdminPostTag.order(:name)
     end
     @admin_posts = @admin_posts.order('created_at DESC').page(params[:page])
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1
@@ -44,13 +45,13 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
-    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
+    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
   end
 
   # POST /admin_posts

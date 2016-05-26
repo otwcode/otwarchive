@@ -1,11 +1,12 @@
-<% cache("#{work.cache_key}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-<h3 class="landmark heading">Work Header</h3>
+<% cache("/v1/#{work.cache_key}-#{Work.work_blurb_tag_cache(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
 
   <dl class="work meta group" role="complementary">
-    <% Tag::VISIBLE.each do |type| %>
-      <% tags = work.tag_groups[type] %>
+    <% tag_group = work.tag_groups
+       Tag::VISIBLE.each do |type| %>
+      <% tags = tag_group[type] %>
         <% unless tags.blank? %>
           <dt class="<%= type.downcase %> tags">
             <% if type == "Warning" %>
@@ -56,11 +57,41 @@
       </dd>
     <% end %>
 
-    <dt class="stats"><%= ts("Stats") %>:</dt>
+    <dt class="stats"><%= ts("Stats:") %></dt>
     <dd class="stats">
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
-    </dd>
+      </dd>
+      <% if logged_in_as_admin? %>
+        <dt class="ip">
+          <%= ts('IP Address:') %>
+        </dt>
+        <dd class="ip">
+          <% if @work.ip_address.nil? %>
+             <%= ts('No address recorded') %>
+          <% else %>
+             <%= @work.ip_address %>
+          <% end %>
+        </dd>
+        <dt class="akismet">
+          <%= ts('Akismet Reported As Spam:') %>
+        </dt>
+        <dd class="akismet">
+          <% if !@work.spam_checked? %>
+             <%= ts('No result recorded') %>
+          <% else %>
+             <%= @work.spam? %>
+          <% end %>
+        </dd>
+        <% if @work.gifts.are_rejected.exists? %>
+          <dt class="gift">
+            <%= ts('Refused As Gift:') %>
+          </dt>
+          <dd class="gift">
+            <%= @work.gifts.are_rejected.map { |g| g.recipient }.join(", ") %>
+          </dd>
+        <% end %>
+      <% end %>
   </dl>
 </div>

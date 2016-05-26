@@ -2,11 +2,11 @@
   <%= render "works/work_header_navigation" %>
 <% end %>
 
-<%= render :partial => 'works/meta', :locals => {:work => @work} %>
+<%= render "works/meta", work: @work %>
 
 <% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
   <% cache("#{@work.work_skin.id}-#{@work.work_skin.updated_at}-work-skin") do %>
-    <%= render "skins/skin_style_block", :skin => @work.work_skin %>
+    <%= render "skins/skin_style_block", skin: @work.work_skin %>
   <% end %><!-- end cache for work skin -->
 <% end %>
 
@@ -14,12 +14,20 @@
 <div id="workskin">
   <div class="preface group">
     <h2 class="title heading">
-      <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-      <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <% if @work.restricted %>
+        <%= image_tag("lockblue.png", size: "15x15",
+                                     alt: ts("(Restricted)"),
+                                     title: ts("Restricted")) %>
+      <% end %>
+      <% if @work.hidden_by_admin %>
+        <%= image_tag("lockred.png", size: "15x15",
+                                     alt: ts("(Hidden by Admin)"),
+                                     title: ts("Hidden by Administrator")) %>
+      <% end %>
       <%= @work.title.html_safe %>
     </h2>
     <h3 class="byline heading">
-      <%= byline(@work) %>
+      <%= byline(@work).html_safe %>
     </h3>
 
     <% if @chapter == @work.first_chapter %>
@@ -28,7 +36,9 @@
         <div class="summary module" role="complementary">
           <h3 class="heading"><%= ts("Summary:") %></h3>
           <% unless @work.summary.blank? %>
-            <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
+            <blockquote class="userstuff">
+              <%=raw sanitize_field(@work, :summary) %>
+            </blockquote>
           <% end %>
         </div>
       <% end %>
@@ -41,4 +51,3 @@
   </div>
 
   <% # NOTE: the div id="workskin" is DELIBERATELY not closed in this file! %>
-  

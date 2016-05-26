@@ -52,6 +52,9 @@ class GiftExchange < ActiveRecord::Base
 
   #FIXME hack because time zones are being html encoded. couldn't figure out why.
   before_save :fix_time_zone
+
+  #  When Challenges are deleted, there are two references left behind that need to be reset to nil
+  before_destroy :clear_challenge_references
   
   after_save :copy_tag_set_from_offer_to_request
   def copy_tag_set_from_offer_to_request

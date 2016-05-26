@@ -1,17 +1,17 @@
 default_settings = {
-  :invite_from_queue_enabled => ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
-  :invite_from_queue_number => ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
-  :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
-  :account_creation_enabled => true,
-  :creation_requires_invite => true,
-  :request_invite_enabled => true,
-  :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  invite_from_queue_enabled: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
+  invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
+  invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
+  account_creation_enabled: true,
+  creation_requires_invite: true,
+  request_invite_enabled: true,
+  days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
 }
 
 def update_settings(settings)
   admin_settings = AdminSetting.first_or_create
   admin_settings.update_attributes(settings)
-  admin_settings.save(:validate => false)
+  admin_settings.save(validate: false)
 end
 
 ### GIVEN
@@ -19,7 +19,7 @@ end
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
     settings = AdminSetting.new(default_settings)
-    settings.save(:validate => false)
+    settings.save(validate: false)
   end
 end
 
@@ -42,11 +42,11 @@ Given /^I am logged in as an admin$/ do
   step("I am logged out")
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
-    admin = FactoryGirl.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
+    admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
   visit admin_login_path
-  fill_in "Admin user name", :with => "testadmin"
-  fill_in "Admin password", :with => "testadmin"
+  fill_in "Admin user name", with: "testadmin"
+  fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
   step("I should see \"Successfully logged in\"")
 end
@@ -58,7 +58,12 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  Language.find_or_create_by_short_and_name("DE", "Deutsch")
+  german = Language.find_or_create_by_short_and_name_and_support_available("DE", "Deutsch", true)
+  de = Locale.new
+  de.iso = 'de'
+  de.name = 'Deutsch'
+  de.language_id = german.id
+  de.save!
 end
 
 Given /^advanced languages$/ do
@@ -116,6 +121,55 @@ Given /^I have posted an admin post$/ do
     step("I am logged out as an admin")
 end
 
+Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
+  step %{the user "#{kin}" exists and is activated}
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  fill_in("Fannish next of kin's username", with: "#{kin}")
+  fill_in("Fannish next of kin's email", with: "testing@foo.com")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is suspended$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_suspend")
+  fill_in("suspend_days", with: 30)
+  fill_in("Notes", with: "Why they are suspended")
+  click_button("Update")
+end
+
+Given /^the user "([^\"]*)" is banned$/ do |user|
+  step %{the user "#{user}" exists and is activated}
+  step %{I am logged in as an admin}
+  step %{I go to the abuse administration page for "#{user}"}
+  choose("admin_action_ban")
+  fill_in("Notes", with: "Why they are banned")
+  click_button("Update")
+end
+
+Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
+  u = User.find_by_login(user)
+  assert u.banned?
+end
+
+Given /^I have posted an admin post without paragraphs$/ do
+  step("I am logged in as an admin")
+  step("I make an admin post without paragraphs")
+  step("I am logged out as an admin")
+end
+
+Given /^I have posted an admin post with tags$/ do
+  step("I am logged in as an admin")
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Default Admin Post")
+  fill_in("content", with: "Content of the admin post.")
+  fill_in("admin_post_tag_list", with: "quotes, futurama")
+  click_button("Post")
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
@@ -127,18 +181,25 @@ end
 
 When /^I make an admin post$/ do
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Default Admin Post")
-  fill_in("content", :with => "Content of the admin post.")
+  fill_in("admin_post_title", with: "Default Admin Post")
+  fill_in("content", with: "Content of the admin post.")
+  click_button("Post")
+end
+
+When /^I make an admin post without paragraphs$/ do
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
+  fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
   click_button("Post")
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
   n ||= 1
   visit new_archive_faq_path
-  fill_in("Question*", :with => "Number #{n} Question.")
-  fill_in("Answer*", :with => "Number #{n} posted FAQ, this is.")
-  fill_in("Category name*", :with => "Number #{n} FAQ")
-  fill_in("Anchor name*", :with => "Number#{n}anchor")
+  fill_in("Question*", with: "Number #{n} Question.")
+  fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
+  fill_in("Category name*", with: "Number #{n} FAQ")
+  fill_in("Anchor name*", with: "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -151,8 +212,8 @@ end
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? Admin Post$/ do |n|
   n ||= 1
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Amazing News #{n}")
-  fill_in("content", :with => "This is the content for the #{n} Admin Post")
+  fill_in("admin_post_title", with: "Amazing News #{n}")
+  fill_in("content", with: "This is the content for the #{n} Admin Post")
   click_button("Post")
 end
 
@@ -202,19 +263,140 @@ end
 
 When (/^I make a translation of an admin post$/) do
   visit new_admin_post_path
-  fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
-  fill_in("content", :with => "Deutsch Woerter")
+  fill_in("admin_post_title", with: "Deutsch Ankuendigung")
+  fill_in("content", with: "Deutsch Woerter")
   step(%{I select "Deutsch" from "Choose a language"})
-    step(%{I select "Default Admin Post" from "Is this a translation of another post?"})
+  fill_in("admin_post_translated_post_id", with: AdminPost.find_by_title("Default Admin Post").id)
   click_button("Post")
 end
 
 Then (/^I should see a translated admin post$/) do
   step(%{I go to the admin-posts page})
   step(%{I should see "Default Admin Post"})
-    step(%{I should not see "Deutsch Ankuendigung"})
+  step(%{I should see "Translations: Deutsch"})
   step(%{I follow "Default Admin Post"})
-  step(%{I should see "Translations: Deutsch Deutsch Ankuendigung"})
-  step(%{I follow "Deutsch Ankuendigung"})
+  step(%{I should see "Deutsch" within "dd.translations"})
+  step(%{I follow "Deutsch"})
   step(%{I should see "Deutsch Woerter"})
+end
+
+Then (/^I should see a translated admin post with tags$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Tags: quotes futurama"})
+  step(%{I should see "Translations: Deutsch"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should see "Deutsch" within "dd.translations"})
+  step(%{I should see "futurama" within "dd.tags"})
+end
+
+Then (/^I should not see a translated admin post$/) do
+  step(%{I go to the admin-posts page})
+  step(%{I should see "Default Admin Post"})
+  step(%{I should see "Deutsch Ankuendigung"})
+  step(%{I follow "Default Admin Post"})
+  step(%{I should not see "Translations: Deutsch"})
+end
+
+Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should not see the hidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "Sorry, you don't have permission to access the page you were trying to reach."})
+end
+
+Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+  step(%{I am logged in as "#{user}"})
+  step(%{I am on my works page})
+  step(%{I should not see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see the image "title" text "Hidden by Administrator"})
+end
+
+Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged out})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am logged in as a random user})
+  step(%{I should see the unhidden work "#{work}" by "#{user}"})
+end
+
+Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+  step(%{I am on #{user}'s works page})
+  step(%{I should see "#{work}"})
+  step(%{I view the work "#{work}"})
+  step(%{I should see "#{work}"})
+end
+
+Then(/^the work "(.*?)" should not be deleted$/) do |work|
+  w = Work.find_by_title(work)
+  assert w && w.posted?
+end
+
+Then(/^there should be no bookmarks on the work "(.*?)"$/) do |work|
+  w = Work.find_by_title(work)
+  assert w.bookmarks.count == 0
+end
+
+Then(/^there should be no comments on the work "(.*?)"$/) do |work|
+  w = Work.find_by_title(work)
+  assert w.comments.count == 0
+end
+
+When(/^the user "(.*?)" is unbanned in the background/) do |user|
+  u = User.find_by_login(user)
+  u.update_attribute(:banned, false)
+end
+
+Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
+  visit admin_blacklisted_emails_url
+  fill_in("Email", with: email)
+  click_button("Add To Blacklist")
+end
+
+Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
+  visit admin_blacklisted_emails_url
+  u = User.find_by_login(user)
+  fill_in("admin_blacklisted_email_email", with: u.email)
+  click_button("Add To Blacklist")
+end
+
+Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
+  visit admin_blacklisted_emails_url
+  fill_in("Email to find", with: email)
+  click_button("Search Blacklist")
+  assert page.should have_content(email)
+end
+
+Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
+  visit admin_blacklisted_emails_url
+  fill_in("Email to find", with: email)
+  click_button("Search Blacklist")
+  step %{I should see "0 emails found"}
+end
+
+Then(/^I should not be able to comment with the address "([^"]*)"$/) do |email|
+  step %{the work "New Work"}
+  step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
+  step %{I should see "has been blocked at the owner's request"}
+  step %{I should not see "Comment created!"}
+end
+
+Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
+  step %{the work "New Work"}
+  step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}
+  step %{I should not see "has been blocked at the owner's request"}
+  step %{I should see "Comment created!"}
 end

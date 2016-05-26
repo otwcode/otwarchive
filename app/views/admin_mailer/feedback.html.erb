@@ -1,15 +1,21 @@
 <% content_for :message do %>
 
-  <p><%= style_bold("Here's some user feedback on the archive!") %></p>
-  
+  <p><%= style_bold("Here's some user feedback on the Archive!") %></p>
+  <p>Username: <%= @username.present? ? (raw @username) : "Anonymous user" %></p>
+  <% unless @email.blank? %>
+    <p>Email address: <%= raw @email %></p>
+  <% end %>
+  <p>Language: <%= @language %></p>
   <% unless ArchiveConfig.REVISION.blank? %>
     <p>
       Archive revision: (rev. <%= ArchiveConfig.REVISION %>)
     </p>
   <% end %>
 
-  Feedback:  
-  <%= style_quote("<b>" + (raw @summary) + "</b>" + (raw @comment)) %>
+
+  Feedback:
+  <p><b><%= (raw @summary) %></b></p>
+  <p><%= (raw @comment) %></p>
 
 <% end %>
 

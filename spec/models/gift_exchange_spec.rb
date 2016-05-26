@@ -10,7 +10,7 @@ describe GiftExchange do
     end
 
     it "should save" do
-      @challenge.save.should be_true
+      expect(@challenge.save).to be_truthy
     end
 
   end

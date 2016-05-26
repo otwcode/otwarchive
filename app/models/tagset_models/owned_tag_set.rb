@@ -44,7 +44,7 @@ class OwnedTagSet < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :title,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => '^The title of a tag set can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    :message => '^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %'
 
   validates_length_of :description,
     :allow_blank => true,

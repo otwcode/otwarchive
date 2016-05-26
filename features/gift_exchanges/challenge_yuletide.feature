@@ -2,6 +2,8 @@
 Feature: Collection
   I want to test Yuletide, because it has several specific settings that are different from an ordinary gift exchange
 
+  # TODO: Add nominations and tag sets to this test, or somewhere
+
   # uncomment this and the other 'javascript' lines below when testing on local
   # in order to test javascript-based features
   #@javascript
@@ -33,8 +35,8 @@ Feature: Collection
   Then I should see "Collections in the "
     And I should not see "Yuletide"
   When I follow "New Collection"
-    And I fill in "Display Title" with "Yuletide"
-    And I fill in "Collection Name" with "yule2011"
+    And I fill in "Display title" with "Yuletide"
+    And I fill in "Collection name" with "yule2011"
     And I fill in "Introduction" with "Welcome to the exchange"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a gift exchange-y thing</dd></dl>"
     And I fill in "Rules" with "Be even nicer to people"

@@ -7,48 +7,41 @@ http_interactions:
       encoding: US-ASCII
       string: ""
     headers: 
-      accept: 
+      Accept: 
       - "*/*"
-      user-agent: 
+      User-Agent: 
       - Ruby
   response: 
     status: 
       code: 200
       message: OK
     headers: 
-      server: 
-      - Apache/2.2.14 (Ubuntu) mod_apreq2-20051231/2.6.0 mod_perl/2.0.4 Perl/v5.10.1
-      set-cookie: 
-      - ljuniq=tTOvUIjbXiUvuks%3A1371670778; domain=.dreamwidth.org; path=/; expires=Sun, 18-Aug-2013 19:39:38 GMT
-      vary: 
+      Server: 
+      - Apache/2.2.22 (Ubuntu)
+      Set-Cookie: 
+      - ljuniq=HvBxDydVJarFF27%3A1412042666; domain=.dreamwidth.org; path=/; expires=Sat, 29-Nov-2014 02:04:26 GMT
+      Vary: 
       - Accept-Encoding
-      content-type: 
+      Content-Type: 
       - text/html; charset=utf-8
-      content-length: 
-      - "92250"
-      accept-ranges: 
+      Content-Length: 
+      - "89898"
+      Accept-Ranges: 
       - bytes
-      date: 
-      - Wed, 19 Jun 2013 19:39:38 GMT
-      x-varnish: 
-      - "675998395"
-      age: 
-      - "0"
-      via: 
-      - 1.1 varnish
-      connection: 
+      Date: 
+      - Tue, 30 Sep 2014 02:04:26 GMT
+      Connection: 
       - keep-alive
     body: 
       encoding: ASCII-8BIT
-      string: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
+      string: "\n\
+        <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
         <html xmlns=\"http://www.w3.org/1999/xhtml\">\n\
         <head>\n\
         <link rel=\"home\" title=\"Home\" href=\"http://www.dreamwidth.org/\" />\n\
         <link rel=\"contents\" title=\"Site Map\" href=\"http://www.dreamwidth.org/site/\" />\n\
-        <link rel=\"help\" title=\"Technical Support\" href=\"http://www.dreamwidth.org/support/\" />\n\n\
-        <style>\n    #Comments q { padding-left: 2.5em; font-style: italic; }\n\
-        </style>\n\
-        <title>Recent Entries</title>\n\n            <script type=\"text/javascript\">\n                var Site;\n                if (!Site)\n                    Site = {};\n\n                var site_p = {\"media_embed_enabled\": 1,\n\
+        <link rel=\"help\" title=\"Technical Support\" href=\"http://www.dreamwidth.org/support/\" /><style>\n    #Comments q { padding-left: 2.5em; font-style: italic; }\n\
+        </style><title>Recent Entries</title>\n\n            <script type=\"text/javascript\">\n                var Site;\n                if (!Site)\n                    Site = {};\n\n                var site_p = {\"media_embed_enabled\": 1,\n\
         \"inbox_update_poll\": 1,\n\
         \"ctx_popup_userhead\": 1,\n\
         \"iconprefix\": \"http://www.dreamwidth.org/userpic\",\n\
@@ -61,10 +54,10 @@ http_interactions:
         \"currentJournal\": \"cesy\",\n\
         \"user_domain\": \"dreamwidth.org\",\n\
         \"siteroot\": \"http://www.dreamwidth.org\",\n\
-        \"currentJournalBase\": \"http://cesy.dreamwidth.org\"};\n                var site_k = [\"media_embed_enabled\", \"inbox_update_poll\", \"ctx_popup_userhead\", \"iconprefix\", \"ctx_popup_icons\", \"has_remote\", \"statprefix\", \"ctx_popup\", \"imgprefix\", \"esn_async\", \"currentJournal\", \"user_domain\", \"siteroot\", \"currentJournalBase\"];\n                for (var i = 0; site_k.length > i; i++) {\n                    Site[site_k[i]] = site_p[site_k[i]];\n                }\n           </script>\n        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??jquery/jquery-1.8.3.js,dw/dw-core.js,jquery/jquery.ui.core.js,jquery/jquery.ui.widget.js,jquery/jquery.ui.tooltip.js,jquery.ajaxtip.js,jquery/jquery.ui.position.js,jquery.hoverIntent.js,jquery.contextualhover.js?v=1366689680\"></script>\n\
-        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??jquery.esn.js,jquery.cuttag-ajax.js,jquery/jquery.ui.button.js,jquery/jquery.ui.dialog.js,jquery.poll.js,jquery.mediaplaceholder.js?v=1370721540\"></script>\n\
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.dreamwidth.org/stc/??lj_base.css,esn.css,jquery/jquery.ui.core.css,jquery/jquery.ui.tooltip.css,jquery/jquery.ui.theme.smoothness.css,jquery.contextualhover.css,lj_base-app.css,base-colors-light.css,lynx/lynx.css?v=1370663384\" />\n\
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.dreamwidth.org/stc/??jquery/jquery.ui.button.css,jquery/jquery.ui.dialog.css,siteviews/layout.css,siteviews/lynx.css?v=1357620683\" />\n\n\
+        \"currentJournalBase\": \"http://cesy.dreamwidth.org\"};\n                var site_k = [\"media_embed_enabled\", \"inbox_update_poll\", \"ctx_popup_userhead\", \"iconprefix\", \"ctx_popup_icons\", \"has_remote\", \"statprefix\", \"ctx_popup\", \"imgprefix\", \"esn_async\", \"currentJournal\", \"user_domain\", \"siteroot\", \"currentJournalBase\"];\n                for (var i = 0; site_k.length > i; i++) {\n                    Site[site_k[i]] = site_p[site_k[i]];\n                }\n           </script>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.dreamwidth.org/stc/??lj_base.css,esn.css,jquery/jquery.ui.core.css,jquery/jquery.ui.tooltip.css,jquery/jquery.ui.theme.smoothness.css,jquery.contextualhover.css,lj_base-app.css,base-colors-light.css,lynx/lynx.css?v=1407730288\" />\n\
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.dreamwidth.org/stc/??jquery/jquery.ui.button.css,jquery/jquery.ui.dialog.css,siteviews/layout.css,siteviews/lynx.css?v=1357620683\" />\n\
+        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??jquery/jquery-1.8.3.js,dw/dw-core.js,jquery/jquery.ui.core.js,jquery/jquery.ui.widget.js,jquery/jquery.ui.tooltip.js,jquery.ajaxtip.js,jquery/jquery.ui.position.js,jquery.hoverIntent.js,jquery.contextualhover.js?v=1374904319\"></script>\n\
+        <script type=\"text/javascript\" src=\"http://www.dreamwidth.org/js/??jquery.esn.js,jquery.cuttag-ajax.js,jquery/jquery.ui.button.js,jquery/jquery.ui.dialog.js,jquery.poll.js,jquery.mediaplaceholder.js?v=1370721540\"></script>\n\n\
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n\
         <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS: all entries\" href=\"http://cesy.dreamwidth.org/data/rss\" />\n\
         <link rel=\"alternate\" type=\"application/atom+xml\" title=\"Atom: all entries\" href=\"http://cesy.dreamwidth.org/data/atom\" />\n\
@@ -73,14 +66,15 @@ http_interactions:
         <meta http-equiv=\"X-XRDS-Location\" content=\"http://cesy.dreamwidth.org/data/yadis\" />\n\
         <link rel=\"meta\" type=\"application/rdf+xml\" title=\"FOAF\" href=\"http://cesy.dreamwidth.org/data/foaf\" />\n\
         <link rel=\"help\" href=\"http://www.dreamwidth.org/support/faq\" />\n\
+        <link rel=\"apple-touch-icon\" href=\"http://www.dreamwidth.org/apple-touch-icon.png\" />\n\
         <link rel=\"group friends made\" title=\"Dreamwidth friends\" href=\"http://cesy.dreamwidth.org/read\" />\n\
         <meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n\
         <meta name=\"googlebot\" content=\"noindex, nofollow, noarchive, nosnippet\" />\n\n  <script type='text/javascript'>\n  expanded = 'Collapse';\n  collapsed = 'Expand';\n  collapseAll = 'Collapse All Cut Tags';\n  expandAll = 'Expand All Cut Tags';\n  </script>\n    <link rel=\"prev\" href=\"http://cesy.dreamwidth.org/?skip=20\" />\n\
         <script type=\"text/javascript\">\n  var _gaq = _gaq || [];\n  _gaq.push(['_setAccount', 'UA-8638231-1']);\n  _gaq.push(['_trackPageview']);</script>\n\n\
         </head>\n\n\
         <body >\n\n\
-        <div role=\"main\">\n\n    <div id=\"entries\" class=\"hfeed\">\n        <div class=\"inner\">\n            \n    <div class=\"navigation topnav \">\n        <div class=\"inner\">\n    <ul><li class=\"page-back\"><a href=\"http://cesy.dreamwidth.org/?skip=20\">Previous 20</a></li>\n\
-        </ul>\n        </div><!-- navigation>inner -->\n    </div><!-- navigation -->\n    <div class=\"sticky-entry-wrapper entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"sticky-entry-wrapper-154770\">\n\
+        <div role=\"main\" id=\"content\">\n    <div class=\"row\">\n        <div class=\"columns large-12\">\n        <h1></h1>\n        </div>\n    </div>\n\n\n    <div class=\"row\"><div class=\"large-12 columns\">\n    <div id=\"entries\" class=\"hfeed\">\n        <div class=\"inner\">\n            \n    <div class=\"navigation topnav\">\n        <div class=\"inner\">\n    <ul><li class=\"page-back\"><a href=\"http://cesy.dreamwidth.org/?skip=20\">Previous 20</a></li>\n\
+        </ul>\n        </div><!-- navigation>inner -->\n    </div><!-- navigation -->\n    <div class=\"sticky-entry-wrapper entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic  has-subject\" id=\"sticky-entry-wrapper-154770\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"sticky-entry entry\" id=\"sticky-entry-154770\">\n\
         <div class=\"inner\">\n\
@@ -88,7 +82,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2009/\">2009</a>-<a href=\"/2009/05/\">05</a>-<a href=\"/2009/05/28/\">28</a></span> <span class=\"time\">19:22</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2009/\">2009</a>-<a href=\"/2009/05/\">05</a>-<a href=\"/2009/05/28/\">28</a></span> <span class=\"time\">07:22 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -122,7 +116,372 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-523902\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-655982\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-655982\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2014/\">2014</a>-<a href=\"/2014/08/\">08</a>-<a href=\"/2014/08/06/\">06</a></span> <span class=\"time\">05:56 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=655982\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=655982\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/travel\">travel</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Holiday planning\" href=\"http://cesy.dreamwidth.org/655982.html\">Holiday planning</a></h3><div class=\"entry-content\">I am going to Vienna and Budapest in early September. Does anyone want to meet up while I'm there, or do you have any tips for visitors? Andrew's been to both before, but it'll be my first time there. We're flying to Vienna, getting the train to Budapest, then flying home from there, with a couple of days in each.<br /><br />(Prague was brilliant, by the way, as were Brussels and Rome. This is the year of doing lots of European city breaks, having split up a week of vacation into long weekends.)</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=655982\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=655982\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/655982.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/655982.html?format=light#comments\">14 comments</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/655982.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-632506\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-632506\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2014/\">2014</a>-<a href=\"/2014/05/\">05</a>-<a href=\"/2014/05/16/\">16</a></span> <span class=\"time\">04:22 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=632506\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=632506\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/fun+with+sad\">fun with sad</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"SAD Association\" href=\"http://cesy.dreamwidth.org/632506.html\">SAD Association</a></h3><div class=\"entry-content\">Last weekend I went to the AGM of the SAD Association, a charity offering support for people with Seasonal Affective Disorder. They're based in the UK but support people globally. They've gone through a big revamp in the last year, moving from a paper-based organisation run by post to an online distribution. There's still more to do, but I'd encourage you to get involved if you're affected. Their website is <a href=\"http://sada.org.uk/\">sada.org.uk</a>, membership is only \xC2\xA310 for concessions, and you get access to a load of scientific articles on SAD as well as the community. I've had good tips from them on light box brands, and it was a lovely group of people to chat to.</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=632506\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=632506\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/632506.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/632506.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-619244\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-619244\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2014/\">2014</a>-<a href=\"/2014/04/\">04</a>-<a href=\"/2014/04/06/\">06</a></span> <span class=\"time\">02:58 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=619244\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=619244\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        </div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Today this cartoon is appropriate\" href=\"http://cesy.dreamwidth.org/619244.html\">Today this cartoon is appropriate</a></h3><div class=\"entry-content\"><a href=\"http://hyperboleandahalf.blogspot.co.uk/2010/06/this-is-why-ill-never-be-adult.html\">Hyperbole and a Half: Trophy of Adulthood</a><br /><br />I have definitely achieved my trophy today. And yesterday. And the day before, too. In fact, I'm doing pretty well this week overall.</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=619244\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=619244\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/619244.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/619244.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-599111\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-599111\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2014/\">2014</a>-<a href=\"/2014/02/\">02</a>-<a href=\"/2014/02/15/\">15</a></span> <span class=\"time\">12:32 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=599111\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=599111\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/butterfly+defiance:+squee:+monthly\">butterfly defiance: squee: monthly</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"January\" href=\"http://cesy.dreamwidth.org/599111.html\">January</a></h3><div class=\"entry-content\">And now for good things that happened last month, this time presented without comment:<br /><br /><span class=\"cuttag_container\"><span style=\"display: none;\" id=\"span-cuttag_cesy_599111_1\" class=\"cuttag\"></span><b>(&nbsp;<a href=\"http://cesy.dreamwidth.org/599111.html?format=light#cutid1\">Read more...</a>&nbsp;)</b><div style=\"display: none;\" id=\"div-cuttag_cesy_599111_1\" aria-live=\"assertive\"></div></span><br /><br />Feel free to ask me about any that aren't self-explanatory.</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=599111\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=599111\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/599111.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/599111.html?format=light#comments\">9 comments</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/599111.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-575857\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-575857\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/11/\">11</a>-<a href=\"/2013/11/23/\">23</a></span> <span class=\"time\">12:45 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=575857\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=575857\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Signal-boost\" href=\"http://cesy.dreamwidth.org/575857.html\">Signal-boost</a></h3><div class=\"entry-content\"><span lj:user='enigel' style='white-space: nowrap;' class='ljuser'><a href='http://enigel.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://enigel.dreamwidth.org/'><b>enigel</b></a></span> is going to the Day of the Doctor screening at the Hackney Picturehouse in London - would anyone like to meet up before the screening? Contact her for more details.</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=575857\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=575857\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/575857.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/575857.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-560846\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-560846\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/10/\">10</a>-<a href=\"/2013/10/01/\">01</a></span> <span class=\"time\">09:59 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=560846\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=560846\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/butterfly+defiance:+squee:+monthly\">butterfly defiance: squee: monthly</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"I haven't done a monthly post since May\" href=\"http://cesy.dreamwidth.org/560846.html\">I haven't done a monthly post since May</a></h3><div class=\"entry-content\">So here's a bumper edition of all the good stuff I haven't yet mentioned. I may have to split it into a few posts. This includes stuff that happened, things I achieved, and things that made me happy (including delicious food and pretty clothes).<br /><br />June:<br /><span class=\"cuttag_container\"><span style=\"display: none;\" id=\"span-cuttag_cesy_560846_1\" class=\"cuttag\"></span><b>(&nbsp;<a href=\"http://cesy.dreamwidth.org/560846.html?format=light#cutid1\">Read more...</a>&nbsp;)</b><div style=\"display: none;\" id=\"div-cuttag_cesy_560846_1\" aria-live=\"assertive\"></div></span></div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=560846\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=560846\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/560846.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/560846.html?format=light#comments\">1 comment</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/560846.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-550273\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-550273\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/08/\">08</a>-<a href=\"/2013/08/28/\">28</a></span> <span class=\"time\">07:20 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=550273\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=550273\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/news\">news</a>,</li>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/tech\">tech</a>,</li>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/tech:+growstuff\">tech: growstuff</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Growstuff\" href=\"http://cesy.dreamwidth.org/550273.html\">Growstuff</a></h3><div class=\"entry-content\">Generally I have been busy both with work and with various fun things since I came back from camping. <span lj:user='holli' style='white-space: nowrap;' class='ljuser'><a href='http://holli.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://holli.dreamwidth.org/'><b>holli</b></a></span> came to visit, we saw the Reduced Shakespeare Company and the musical Once, then my aunt came over from LA and we had a family party, then I spent the bank holiday at Osterley Park with <span lj:user='enigel' style='white-space: nowrap;' class='ljuser'><a href='http://enigel.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://enigel.dreamwidth.org/'><b>enigel</b></a></span> and had people from church over for lunch. Work is fairly busy but going well and it's satisfying to achieve stuff.<br /><br />I've been volunteering for <a href=\"http://www.growstuff.org\">Growstuff</a> for a while, though I haven't had time to do much lately. It's run by <span lj:user='skud' style='white-space: nowrap;' class='ljuser'><a href='http://skud.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://skud.dreamwidth.org/'><b>skud</b></a></span>, and it's a website for food gardeners. Even if you're not very good at gardening yet, it's fun to track what you're doing and share tips, and they're adding new features all the time. It's open source, open data, and encouraging to newbie developers.</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=550273\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=550273\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/550273.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/550273.html?format=light#comments\">3 comments</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/550273.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-542389\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-542389\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/08/\">08</a>-<a href=\"/2013/08/07/\">07</a></span> <span class=\"time\">03:34 pm</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=542389\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=542389\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Holli's visit\" href=\"http://cesy.dreamwidth.org/542389.html\">Holli's visit</a></h3><div class=\"entry-content\"><span lj:user='holli' style='white-space: nowrap;' class='ljuser'><a href='http://holli.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://holli.dreamwidth.org/'><b>holli</b></a></span> is visiting the UK and will be in London this coming weekend. We are doing dinner on Friday night, someplace central. Would anyone like to join us?</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=542389\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=542389\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/542389.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/542389.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-533087\">\n\
+        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
+        <div class=\"entry\" id=\"entry-533087\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"header\">\n\
+        <div class=\"inner\">\n\
+        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
+        <div class=\"poster-info\">\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/07/\">07</a>-<a href=\"/2013/07/01/\">01</a></span> <span class=\"time\">09:40 am</span></span></div>\n\
+        </div>\n\
+        <div class=\"action-box\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=533087\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=533087\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"currents\">\n\
+        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
+        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
+        </ul></div></div>\n\
+        <div>\n\
+        <div class=\"contents usercontent\">\n\
+        <div class=\"inner\">\n\
+        <h3 class=\"entry-title\"><a title=\"Party 7th July\" href=\"http://cesy.dreamwidth.org/533087.html\">Party 7th July</a></h3><div class=\"entry-content\">7th July, that's this coming Sunday, I'm hosting another party at my place, 1pm-5pm. See <a href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">this tag for previous examples</a>. Entertainment may consist of any of the following, depending on who comes and which you'd like to do:<br />* Talking about fanfic, reading or writing<br />* Programming for open source projects, or talking about doing so<br />* Knitting, crochet and other crafts<br />* Eating lots of cakes and other sweet things<br />* Snacking on fruit and vegetables<br />* Watching cat videos on Youtube<br />* Listening to comedy songs<br />* Watching sci-fi TV<br />* Discussing books we've read<br />* Moaning about politics and the state of the world<br />* Showing each other pretty pictures on Tumblr<br />* Wandering out into the park next door if the weather is good<br /><br />I will provide drinks and some food, including chocolatey things, savoury snacks and fruit/veg snacks. I will also have frozen pizza available if people want a meal. Feel free to bring more food to share. Feel free to bring laptops and/or craft projects.<br /><br />My flat is on the first floor and there is no lift, so it's not wheelchair-accessible. If you have other accessibility needs, I am happy to provide more details. I don't have any pets.<br /><br />New people are very welcome - please just let me know your Dreamwidth username or which of my friends you know. I can PM you my address and directions if you haven't been before - it's near Clapham Junction.<br /><br /><span lj:user='enigel' style='white-space: nowrap;' class='ljuser'><a href='http://enigel.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://enigel.dreamwidth.org/'><b>enigel</b></a></span> and lmm are coming - anyone else?</div></div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"footer\">\n\
+        <div class=\"inner\">\n\
+        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=533087\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
+        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=533087\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
+        </ul><ul class=\"entry-interaction-links text-links\">\n\
+        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/533087.html?format=light\">Link</a></li>\n\
+        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/533087.html?format=light#comments\">3 comments</a></li>\n\
+        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/533087.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
+        </ul></div>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
+        </div>\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-523902\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-523902\">\n\
         <div class=\"inner\">\n\
@@ -130,7 +489,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/29/\">29</a></span> <span class=\"time\">18:45</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/29/\">29</a></span> <span class=\"time\">06:45 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -163,7 +522,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-519825\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-519825\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-519825\">\n\
         <div class=\"inner\">\n\
@@ -171,7 +530,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/22/\">22</a></span> <span class=\"time\">19:32</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/22/\">22</a></span> <span class=\"time\">07:32 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -208,7 +567,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-516153\">\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-516153\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-516153\">\n\
         <div class=\"inner\">\n\
@@ -216,7 +575,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/24945/14869\" title=\"cesy: Fangirl (*draws fangirly hearts*)\" alt=\"cesy: *draws fangirly hearts* (Fangirl)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/06/\">06</a></span> <span class=\"time\">19:26</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/05/\">05</a>-<a href=\"/2013/05/06/\">06</a></span> <span class=\"time\">07:26 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -249,7 +608,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-514235\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-514235\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-514235\">\n\
         <div class=\"inner\">\n\
@@ -257,7 +616,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/30/\">30</a></span> <span class=\"time\">15:27</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/30/\">30</a></span> <span class=\"time\">03:27 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -290,7 +649,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-509735\">\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-509735\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-509735\">\n\
         <div class=\"inner\">\n\
@@ -298,7 +657,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/17/\">17</a></span> <span class=\"time\">18:57</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/17/\">17</a></span> <span class=\"time\">06:57 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -331,7 +690,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-509439\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-509439\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-509439\">\n\
         <div class=\"inner\">\n\
@@ -339,7 +698,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/16/\">16</a></span> <span class=\"time\">17:20</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/16/\">16</a></span> <span class=\"time\">05:20 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -373,7 +732,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-505807\">\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-505807\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-505807\">\n\
         <div class=\"inner\">\n\
@@ -381,7 +740,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/09/\">09</a></span> <span class=\"time\">11:00</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/09/\">09</a></span> <span class=\"time\">11:00 am</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -414,7 +773,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-505454\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-505454\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-505454\">\n\
         <div class=\"inner\">\n\
@@ -422,7 +781,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/04/\">04</a></span> <span class=\"time\">08:26</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/04/\">04</a>-<a href=\"/2013/04/04/\">04</a></span> <span class=\"time\">08:26 am</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -459,7 +818,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-504988\">\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-504988\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-504988\">\n\
         <div class=\"inner\">\n\
@@ -467,7 +826,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/31/\">31</a></span> <span class=\"time\">08:28</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/31/\">31</a></span> <span class=\"time\">08:28 am</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -500,7 +859,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-503611\">\n\
+        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-503611\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-503611\">\n\
         <div class=\"inner\">\n\
@@ -508,7 +867,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/15/\">15</a></span> <span class=\"time\">15:01</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/15/\">15</a></span> <span class=\"time\">03:01 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -541,7 +900,7 @@ http_interactions:
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
         </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-502671\">\n\
+        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-502671\">\n\
         <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
         <div class=\"entry\" id=\"entry-502671\">\n\
         <div class=\"inner\">\n\
@@ -549,7 +908,7 @@ http_interactions:
         <div class=\"inner\">\n\
         <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
         <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/05/\">05</a></span> <span class=\"time\">15:58</span></span></div>\n\
+        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/03/\">03</a>-<a href=\"/2013/03/05/\">05</a></span> <span class=\"time\">03:58 pm</span></span></div>\n\
         </div>\n\
         <div class=\"action-box\">\n\
         <div class=\"inner\">\n\
@@ -581,392 +940,16 @@ http_interactions:
         </div>\n\
         </div>\n\
         <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-498371\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-498371\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/02/\">02</a>-<a href=\"/2013/02/15/\">15</a></span> <span class=\"time\">15:47</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=498371\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=498371\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/psa\">psa</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Since I'm posting more fic these days\" href=\"http://cesy.dreamwidth.org/498371.html\">Since I'm posting more fic these days</a></h3><div class=\"entry-content\">I'm setting up a hockey filter. Who wants in? And while I'm at it, I'll update my other filters.<br /><br /><div id='poll-12849-container' class='poll-container'><div class='poll-title'><b><a href='http://www.dreamwidth.org/poll/?id=12849'>Poll #12849</a></b></div><div class='poll-status'>Open to: <strong>All</strong>, detailed results viewable to: <strong>Just the Poll Creator</strong>, participants: 76</div><div class='poll-inquiry'><p>What filters would you like to be on?</p><div style='margin: 10px 0 10px 40px' class='poll-response'><p>Hockey<br /><span style='white-space: nowrap'><img src=\"http://www.dreamwidth.org/img/poll/leftbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><img src='http://www.dreamwidth.org/img/poll/mainbar.gif' style='vertical-align:middle' height='14' width='179' alt='' /><img src=\"http://www.dreamwidth.org/img/poll/rightbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><b>29</b> (38.2%) </span></p><p>Bandom<br /><span style='white-space: nowrap'><img src=\"http://www.dreamwidth.org/img/poll/leftbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><img src='http://www.dreamwidth.org/img/poll/mainbar.gif' style='vertical-align:middle' height='14' width='135' alt='' /><img src=\"http://www.dreamwidth.org/img/poll/rightbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><b>21</b> (27.6%) </span></p><p>Writing blather<br /><span style='white-space: nowrap'><img src=\"http://www.dreamwidth.org/img/poll/leftbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><img src='http://www.dreamwidth.org/img/poll/mainbar.gif' style='vertical-align:middle' height='14' width='400' alt='' /><img src=\"http://www.dreamwidth.org/img/poll/rightbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><b>69</b> (90.8%) </span></p><p>Stargate<br /><span style='white-space: nowrap'><img src=\"http://www.dreamwidth.org/img/poll/leftbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><img src='http://www.dreamwidth.org/img/poll/mainbar.gif' style='vertical-align:middle' height='14' width='311' alt='' /><img src=\"http://www.dreamwidth.org/img/poll/rightbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><b>53</b> (69.7%) </span></p><p>Conventions<br /><span style='white-space: nowrap'><img src=\"http://www.dreamwidth.org/img/poll/leftbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><img src='http://www.dreamwidth.org/img/poll/mainbar.gif' style='vertical-align:middle' height='14' width='355' alt='' /><img src=\"http://www.dreamwidth.org/img/poll/rightbar.gif\" width=\"7\" height=\"14\" alt=\"\" title=\"\" border='0' style=\"vertical-align:middle\" /><b>61</b> (80.3%) </span></p></div></div></div></div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=498371\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=498371\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/498371.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/498371.html?format=light#comments\">7 comments</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/498371.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-494904\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-494904\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2013/\">2013</a>-<a href=\"/2013/01/\">01</a>-<a href=\"/2013/01/18/\">18</a></span> <span class=\"time\">09:20</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=494904\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=494904\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Meetup\" href=\"http://cesy.dreamwidth.org/494904.html\">Meetup</a></h3><div class=\"entry-content\">Tomorrow, my place, 2pm-6pm. We'll have <span lj:user='enigel' style='white-space: nowrap;' class='ljuser'><a href='http://enigel.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://enigel.dreamwidth.org/'><b>enigel</b></a></span>, <span lj:user='aella_irene' style='white-space: nowrap;' class='ljuser'><a href='http://aella-irene.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://aella-irene.dreamwidth.org/'><b>aella_irene</b></a></span>, <span lj:user='swaldman' style='white-space: nowrap;' class='ljuser'><a href='http://swaldman.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://swaldman.dreamwidth.org/'><b>swaldman</b></a></span>, and possibly <span lj:user='almadsfeika' style='white-space: nowrap;' class='ljuser'><a href='http://almadsfeika.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://almadsfeika.dreamwidth.org/'><b>almadsfeika</b></a></span> and a friend of mine from uni.<br /><br />All welcome; there will probably be some tech chat and some fannish chat. People tend to bring laptops and/or handicrafts, I will have a load of snacks, both sweet and savoury, and you're welcome to bring extra. Let me know if it's your first time and I'll PM you the address.</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=494904\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=494904\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/494904.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/494904.html?format=light#comments\">1 comment</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/494904.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-494284\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-494284\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/12/\">12</a>-<a href=\"/2012/12/05/\">05</a></span> <span class=\"time\">18:45</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=494284\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=494284\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Next gathering\" href=\"http://cesy.dreamwidth.org/494284.html\">Next gathering</a></h3><div class=\"entry-content\">19th January, my place, sometime in the afternoon - who's planning on coming?<br /><br />All welcome, there will probably be some tech chat and some fannish chat, depending on who comes along. People tend to bring laptops and/or handicrafts, I will have a load of snacks, both healthy and unhealthy, and you're welcome to bring extra. Let me know if it's your first time and I'll PM you the address.</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=494284\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=494284\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/494284.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/494284.html?format=light#comments\">7 comments</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/494284.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-492822\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-492822\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/10/\">10</a>-<a href=\"/2012/10/31/\">31</a></span> <span class=\"time\">16:34</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=492822\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=492822\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Gathering\" href=\"http://cesy.dreamwidth.org/492822.html\">Gathering</a></h3><div class=\"entry-content\">Reminder: party at mine, 3rd November i.e. this Saturday, the usual deal - let me know if you're up for it.</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=492822\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=492822\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/492822.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/492822.html?format=light#comments\">3 comments</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/492822.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-491064\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-491064\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/10/\">10</a>-<a href=\"/2012/10/11/\">11</a></span> <span class=\"time\">18:34</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=491064\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=491064\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/writing\">writing</a>,</li>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/writing:+avengers\">writing: avengers</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"New fic\" href=\"http://cesy.dreamwidth.org/491064.html\">New fic</a></h3><div class=\"entry-content\"><a href=\"http://archiveofourown.org/works/534560\"><strong>Pepper's email</strong></a> (324 words) by <a href=\"http://archiveofourown.org/users/Cesy/profile\"><img alt=\"favicon\" border=\"0\" src=\"http://archiveofourown.org/favicon.ico\" /></a><a href=\"http://archiveofourown.org/users/Cesy\"><strong>Cesy</strong></a><br />Chapters: 1/1<br />Fandom: <a href=\"http://archiveofourown.org/tags/iron%20man%20movies\">Iron Man (Movies)</a>, <a href=\"http://archiveofourown.org/tags/The%20Avengers%20(2012)\">The Avengers (2012)</a><br />Rating: General Audiences<br />Warning: No Archive Warnings Apply<br />Characters: Pepper Potts, Tony Stark<br />Summary: <p>When \"write what you know\" means office politics, this is the result. With thanks to Stultiloquentia for a key line, and Vik and Staranise for beta and cheerleading.</p></div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=491064\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=491064\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/491064.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/491064.html?format=light#comments\">1 comment</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/491064.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-490108\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-490108\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/09/\">09</a>-<a href=\"/2012/09/23/\">23</a></span> <span class=\"time\">19:50</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=490108\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=490108\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Geek party\" href=\"http://cesy.dreamwidth.org/490108.html\">Geek party</a></h3><div class=\"entry-content\">I'm thinking of hosting another geek/fannish gathering on 3rd November. How many people are likely to be around then?</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=490108\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=490108\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/490108.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/490108.html?format=light#comments\">5 comments</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/490108.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-487939\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-487939\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/5174/14869\" title=\"cesy: (Default) (&quot;Cesy&quot; - An old-fashioned quill and ink)\" alt=\"cesy: &quot;Cesy&quot; - An old-fashioned quill and ink (Default)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/08/\">08</a>-<a href=\"/2012/08/15/\">15</a></span> <span class=\"time\">18:16</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487939\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487939\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/con:+london+meetups\">con: london meetups</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Meetups\" href=\"http://cesy.dreamwidth.org/487939.html\">Meetups</a></h3><div class=\"entry-content\">Firstly, Saturday 25th in the morning/early afternoon with special guest <span lj:user='marina' style='white-space: nowrap;' class='ljuser'><a href='http://marina.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://marina.dreamwidth.org/'><b>marina</b></a></span>. Turn up any time after 10am - I'm an early riser. I have an OTW meeting at 3pm, but you're welcome to stay around during that.<br /><br />Secondly, Saturday 8th Sept in the afternoon with special guest <span lj:user='skud' style='white-space: nowrap;' class='ljuser'><a href='http://skud.dreamwidth.org/profile'><img src='http://www.dreamwidth.org/img/silk/identity/user.png' alt='[personal profile] ' width='17' height='17' style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a><a href='http://skud.dreamwidth.org/'><b>skud</b></a></span>. Turn up any time from 2pm - I have another OTW meeting later on but will multi-task. I'm happy to organise dinner for a group if you want to stay later in the evening, just let me know.<br /><br />I will get some sort of food/snacks in both cases, so a vague idea of numbers would be helpful. PM me if you don't yet have my address. Feel free to bring laptops/hard drives, vids to share, Youtube links, discussion topics, geeky ideas, Github issues to hack on, knitting, etc. Introverts are welcome to turn up and hide in a corner ignoring the chatter if you want.</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487939\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487939\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/487939.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/487939.html?format=light#comments\">9 comments</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/487939.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-even security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-487765\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-487765\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/303155/14869\" title=\"cesy: No life (Sam Carter saying &quot;It&#39;s not that I can&#39;t get a life, it&#39;s just that this is much more interesting&quot;)\" alt=\"cesy: Sam Carter saying &quot;It&#39;s not that I can&#39;t get a life, it&#39;s just that this is much more interesting&quot; (No life)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/08/\">08</a>-<a href=\"/2012/08/04/\">04</a></span> <span class=\"time\">08:43</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487765\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487765\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/quotes\">quotes</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"Quote of the Day\" href=\"http://cesy.dreamwidth.org/487765.html\">Quote of the Day</a></h3><div class=\"entry-content\">This just had to be shared, for the computer geeks on my list:<br /><br />Simeon: What was special about the funeral of Henry VIII's VIth wife?<br />Dan: As it was his wife vi, when they wanted to bury the coffin they had to enter insert mode.<br /><br />*still sniggering*</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487765\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487765\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/487765.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-readlink\"><a href=\"http://cesy.dreamwidth.org/487765.html?format=light#comments\">1 comment</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/487765.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\
-        <div class=\"entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-cesy journal-cesy has-userpic has-subject\" id=\"entry-wrapper-487610\">\n\
-        <div class=\"separator separator-before\"><div class=\"inner\"></div></div>\n\
-        <div class=\"entry\" id=\"entry-487610\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"header\">\n\
-        <div class=\"inner\">\n\
-        <div class=\"userpic\"><a href=\"http://cesy.dreamwidth.org/icons\"><img src=\"http://www.dreamwidth.org/userpic/861718/14869\" title=\"cesy: Work - rat race (The trouble with the rat race is that even if you win, you&#39;re still a rat)\" alt=\"cesy: The trouble with the rat race is that even if you win, you&#39;re still a rat (Work - rat race)\"  height=\"100\" width=\"100\" /></a></div>\n\
-        <div class=\"poster-info\">\n\
-        <span class=\"poster entry-poster empty\"></span><span class=\"datetime\"><span class=\"date\"><a href=\"/2012/\">2012</a>-<a href=\"/2012/07/\">07</a>-<a href=\"/2012/07/29/\">29</a></span> <span class=\"time\">10:22</span></span></div>\n\
-        </div>\n\
-        <div class=\"action-box\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487610\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487610\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"currents\">\n\
-        <div class=\"tag\"><span class=\"tag-text\">Entry tags:</span><ul>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/decreasing+worldsuck\">decreasing worldsuck</a>,</li>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/equality\">equality</a>,</li>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/faith\">faith</a>,</li>\n\
-        <li><a rel=\"tag\" href=\"http://cesy.dreamwidth.org/tag/reviews\">reviews</a></li>\n\
-        </ul></div></div>\n\
-        <div>\n\
-        <div class=\"contents usercontent\">\n\
-        <div class=\"inner\">\n\
-        <h3 class=\"entry-title\"><a title=\"The Spirit Level\" href=\"http://cesy.dreamwidth.org/487610.html\">The Spirit Level</a></h3><div class=\"entry-content\">I have just finished reading The Spirit Level, a great book about politics and equality. I'd recommend it to anyone interested in reducing social problems in rich democracies, though it's not an easy read.<br /><br />It has a ton of statistics to start with, and backs up the arguments with data throughout. I'm out of practice with that kind of semi-academic writing, but I managed. The parts that really interested me were the implications - if inequality (of income, opportunity, access to public services, etc.) is at the root of so much community breakdown and social problems, we have a huge opportunity to improve everything at once.<br /><br />It has a kind of evidence-driven approach to policy that will have a broad appeal - on both left-wing and right-wing sides of the political spectrum, because the ideas can work in either kind of government provided they have enough popular support. But the conclusions of that evidence are also ones that many people will want to support for moral reasons - it shows how treating people equally is better for everyone, and how community-building helps everyone.<br /><br />There's a ton more detail at <a href=\"http://www.equalitytrust.org.uk/\">the Equality Trust website</a>, if you can't get hold of the book itself.</div></div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"footer\">\n\
-        <div class=\"inner\">\n\
-        <ul class=\"entry-management-links icon-links\"><li class=\"link mem_add first-item\"><a href=\"http://www.dreamwidth.org/tools/memadd?journal=cesy&amp;itemid=487610\" ><img border='0' width=\"16\" height=\"16\" alt=\"Add Memory\" title=\"Add Memory\" src=\"http://www.dreamwidth.org/img/silk/entry/memories_add.png\"  /></a></li>\n\
-        <li class=\"link tell_friend\"><a href=\"http://www.dreamwidth.org/tools/tellafriend?journal=cesy&amp;itemid=487610\" ><img border='0' width=\"16\" height=\"16\" alt=\"Share This Entry\" title=\"Share This Entry\" src=\"http://www.dreamwidth.org/img/silk/entry/tellafriend.png\"  /></a></li>\n\
-        </ul><ul class=\"entry-interaction-links text-links\">\n\
-        <li class=\"entry-permalink first-item\"><a href=\"http://cesy.dreamwidth.org/487610.html?format=light\">Link</a></li>\n\
-        <li class=\"entry-replylink\"><a href=\"http://cesy.dreamwidth.org/487610.html?mode=reply&amp;format=light\">Post a new comment</a></li>\n\
-        </ul></div>\n\
-        </div>\n\
-        </div>\n\
-        </div>\n\
-        <div class=\"separator separator-after\"><div class=\"inner\"></div></div>\n\
-        </div>\n\n    <div class=\"navigation bottomnav \">\n        <div class=\"inner\">\n    <ul><li class=\"page-back\"><a href=\"http://cesy.dreamwidth.org/?skip=20\">Previous 20</a></li>\n\
-        </ul>\n        </div><!-- navigation>inner -->\n    </div><!-- navigation -->\n    \n        </div><!-- entries>inner-->\n    </div><!-- entries -->\n    \n\
+        </div>\n\n    <div class=\"navigation bottomnav\">\n        <div class=\"inner\">\n    <ul><li class=\"page-back\"><a href=\"http://cesy.dreamwidth.org/?skip=20\">Previous 20</a></li>\n\
+        </ul>\n        </div><!-- navigation>inner -->\n    </div><!-- navigation -->\n    \n        </div><!-- entries>inner-->\n    </div><!-- entries -->\n        </div></div>\n\
         </div>\n\n\
         <hr />\n\
-        <div role=\"navigation\"><p>[ <a href='http://www.dreamwidth.org/'>Home</a> | <a href='http://www.dreamwidth.org/update'>Post Entry</a> |\n\
-        <a href='http://www.dreamwidth.org/login'>Log in</a> | \n\
-        <a href='http://www.dreamwidth.org/tools/search'>Search</a> | \n\
-        <a href='http://www.dreamwidth.org/manage/settings/'>Browse Options</a> | \n\
-        <a href='http://www.dreamwidth.org/site/'>Site Map</a> ]</p></div>\n\
-        <div id='statistics' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script type=\"text/javascript\">\n  (function() {\n    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n  })();\n\n\
+        <div class=\"row\"><div class=\"large-12 columns\">\n    <div role=\"navigation\"><p>[ <a href='http://www.dreamwidth.org/'>Home</a> | <a href='http://www.dreamwidth.org/update'>Post Entry</a> |\n    <a href='http://www.dreamwidth.org/login'>Log in</a> | \n    <a href='http://www.dreamwidth.org/tools/search'>Search</a> | \n    <a href='http://www.dreamwidth.org/manage/settings/'>Browse Options</a> | \n    <a href='http://www.dreamwidth.org/site/'>Site Map</a> ]</p></div>\n    <div id='statistics' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script type=\"text/javascript\">\n  (function() {\n    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n  })();\n\n\
         </script>\n\
         </div>\n\
+        </div></div>\n\
         </body>\n\
         </html>"
-    http_version: "1.1"
-  recorded_at: Wed, 19 Jun 2013 19:39:39 GMT
+    http_version: 
+  recorded_at: Tue, 30 Sep 2014 02:04:27 GMT
 recorded_with: VCR 2.5.0

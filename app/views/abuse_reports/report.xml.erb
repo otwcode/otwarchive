@@ -1,0 +1,20 @@
+<bug>
+  <% if @report.description.present? %>
+    <description><%= cdata_section(@report.description.html_safe) %></description>
+  <% end %>
+  <project-id><%= @report.project_id %></project-id>
+  <% if @report.title.present? %>
+    <title><%= cdata_section(@report.title.html_safe) %></title>
+  <% end %>
+  <% if @report.category.present? %>
+    <category-id type='integer'><%= cdata_section(@report.category) %></category-id>
+  <% end %>
+  <% if @report.email.blank? %>
+    <custom-1397>1</custom-1397>
+  <% else %>
+    <custom-1409><%= cdata_section(@report.email) %></custom-1409>
+  <% end %>
+  <% if @report.ip_address.present? %>
+    <custom-1408><%= cdata_section(@report.ip_address) %></custom-1408>
+  <% end %>
+</bug>

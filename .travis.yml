@@ -1,4 +1,5 @@
 language: ruby
+sudo: required
 env:
   - TEST_GROUP="./script/check_syntax"
   - TEST_GROUP="rspec spec"
@@ -12,33 +13,33 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/other_b"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_a"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_b"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_c"
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
 rvm:
-  - "1.9.3"
+  - "2.0.0"
 services:
   - elasticsearch
   - redis-server
   - memcached
 script:
-  - bundle exec rake db:create:all --trace
-  - bundle exec rake db:schema:load --trace
+  - rm -f structure.sql
+  - RAILS_ENV=test bundle exec rake db:create:all --trace
+  - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec $TEST_GROUP
+  - travis_retry bundle exec $TEST_GROUP
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
-after_script:
-  - bundle exec rake coveralls:push
 notifications:
   email:
     recipients:
-      - otw-coders@transformativeworks.org
+      - otw-coders-extra@transformativeworks.org
     on_success: change
     on_failure: always
   irc:
    channels:
      - "irc.freenode.org#otw-dev"
    on_success: change
-   on_failure: always
+   on_failure: change

@@ -31,7 +31,11 @@ class UserSessionsController < ApplicationController
               # we sent out a generated password and they're using it
               # log them in
               @current_user = UserSession.create(user, params[:remember_me]).record
-              # and tell them to change their password
+              # flash a notice telling user to change password, and redirect them
+              # to the correct form
+              flash[:notice] = ts('You used a temporary password to log in.
+                                   Please change it now as it will expire in a
+                                   week.')
               redirect_to change_password_user_path(@current_user) and return
             else
               message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
@@ -41,13 +45,13 @@ class UserSessionsController < ApplicationController
            
               message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
             else
-              message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+              message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
             end
           else
             message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
           end
         else
-          message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+          message = ts("The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help.".html_safe)
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
