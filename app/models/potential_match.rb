@@ -118,8 +118,10 @@ public
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
-    max_matches = [(collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT), 
-                    ArchiveConfig.POTENTIAL_MATCHES_MAX].min
+    max_matches = [
+      (collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT),
+      ArchiveConfig.POTENTIAL_MATCHES_MAX
+    ].min
 
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
@@ -254,7 +256,7 @@ public
     else
       number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
       # we want a percentage: multiply by 100 first so we can keep this an integer calculation
-      return (rank * 100) / number_of_bylines 
+      return (rank * 100) / number_of_bylines
     end
   end
 
