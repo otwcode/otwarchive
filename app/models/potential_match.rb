@@ -122,6 +122,7 @@ public
       (collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT),
       ArchiveConfig.POTENTIAL_MATCHES_MAX
     ].min
+    max_matches = [max_matches, ArchiveConfig.POTENTIAL_MATCHES_MIN].max
 
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
