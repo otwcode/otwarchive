@@ -35,9 +35,11 @@ protected
 public
 
   def self.clear!(collection)
-    # rapidly delete all potential prompt matches and potential matches in this collection WITHOUT CALLBACKS
+    # rapidly delete all potential prompt matches and potential matches 
+    # WITHOUT CALLBACKS
     pmids = collection.potential_matches.value_of(:id)
-    # trash all the potential PROMPT matches first since we are NOT USING CALLBACKS
+    # trash all the potential PROMPT matches first 
+    # since we are NOT USING CALLBACKS
     PotentialPromptMatch.where("potential_match_id IN (?)", pmids).delete_all
     # now take out the potential matches
     PotentialMatch.where("id IN (?)", pmids).delete_all
@@ -102,7 +104,7 @@ public
       required_types = settings.required_types.map {|t| t.classify}
 
       # treat each signup as a request signup first
-      collection.signups.each do |signup|
+      collection.signups.find_each do |signup|
         break if PotentialMatch.canceled?(collection)
         REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
@@ -116,7 +118,8 @@ public
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
-    max_matches = [(collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT), ArchiveConfig.POTENTIAL_MATCHES_MAX].min
+    max_matches = [(collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT), 
+                    ArchiveConfig.POTENTIAL_MATCHES_MAX].min
 
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
@@ -246,11 +249,13 @@ public
       end
     end
     rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
-    return -1 if rank.nil? # something's wrong
-
-    number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
-    # we want a percentage: multiply by 100 first so we can keep this an integer calculation
-    return (rank * 100) / number_of_bylines 
+    if rank.nil?
+      return -1
+    else
+      number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+      # we want a percentage: multiply by 100 first so we can keep this an integer calculation
+      return (rank * 100) / number_of_bylines 
+    end
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
