@@ -21,7 +21,7 @@ class UserInviteRequestsController < ApplicationController
         redirect_to login_path
      end
     else
-      flash[:error] = ts("Sorry, additional invitations are unavailable. Please <a href=\"#{invite_requests_path}\">use the queue</a>! If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_path}\">contact Support</a>. If you are the maintainer of an at-risk archive, please contact <a href=\"http://opendoors.transformativeworks.org/contact-open-doors/\">Open Doors</a>".html_safe)
+      flash[:error] = ts("Sorry, additional invitations are unavailable. Please <a href=\"#{invite_requests_path}\">use the queue</a>! If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_path}\">contact Support</a>. If you are the maintainer of an at-risk archive, please <a href=\"http://opendoors.transformativeworks.org/contact-open-doors/\">contact Open Doors</a>.".html_safe)
       redirect_to root_path
     end
   end
