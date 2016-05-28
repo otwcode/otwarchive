@@ -14,7 +14,7 @@
 <%= form_tag changed_username_user_path(@user) do %>  
   <dl>
     <dt><%= ts("Current user name") %></dt>
-    <dd><span class="important"><%= @user.login %></span></dd>
+    <dd><p class="important informational"><%= @user.login %></p></dd>
     <dt><%= label_tag :new_login, ts("New user name") %></dt>
     <dd>
       <%= text_field_tag :new_login, @new_login, autocomplete: 'off', "aria-describedby" => "new-login-field-description" %>
