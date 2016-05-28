@@ -7,6 +7,8 @@ module Collectible
       accepts_nested_attributes_for :collection_items, :allow_destroy => true
       has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :user_approved_collection_items, :class_name => "CollectionItem", :as => :item,
+        :conditions => ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]
 
       has_many :collections, 
         :through => :collection_items, 
@@ -16,6 +18,10 @@ module Collectible
         :through => :collection_items, 
         :source => :collection,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+      has_many :user_approved_collections, 
+        :through => :collection_items, 
+        :source => :collection,
+        :conditions => ['collection_items.user_approval_status = ?', CollectionItem::APPROVED]        
       has_many :rejected_collections,
         :through => :collection_items,
         :source => :collection,
@@ -88,10 +94,11 @@ module Collectible
   #### UNREVEALED/ANONYMOUS
 
   # Set the anonymous/unrevealed status of the collectible based on its collections
+  # Only include collections approved by the user
   def set_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.collections.select {|c| c.anonymous? }.empty? 
-      self.in_unrevealed_collection = !self.collections.select{|c| c.unrevealed? }.empty?
+      self.in_anon_collection = !self.user_approved_collections.select {|c| c.anonymous? }.empty? 
+      self.in_unrevealed_collection = !self.user_approved_collections.select{|c| c.unrevealed? }.empty?
     end
     return true
   end
@@ -99,10 +106,11 @@ module Collectible
   # TODO: need a better, DRY, long-term fix
   # Collection items can be revealed independently of a collection, so we don't want
   # to check the collection status when those are updated
+  # Only include collections approved by the user
   def update_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.collection_items.select {|c| c.anonymous? }.empty?
-      self.in_unrevealed_collection = !self.collection_items.select{|c| c.unrevealed? }.empty?
+      self.in_anon_collection = !self.user_approved_collection_items.select {|c| c.anonymous? }.empty?
+      self.in_unrevealed_collection = !self.user_approved_collection_items.select{|c| c.unrevealed? }.empty?
     end
     return true
   end
