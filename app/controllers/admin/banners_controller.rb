@@ -4,7 +4,7 @@ class Admin::BannersController < ApplicationController
 
   # GET /admin/banners
   def index   
-    @admin_banners = AdminBanner.order("id DESC").paginate(page: params[:page])
+    @admin_banners = AdminBanner.order("id DESC").paginate(:page => params[:page])
   end
 
   # GET /admin/banners/1
@@ -43,12 +43,7 @@ class Admin::BannersController < ApplicationController
   def update
     @admin_banner = AdminBanner.find(params[:id])
 
-    if !@admin_banner.update_attributes(params[:admin_banner])
-      render action: 'edit'
-    elsif params[:admin_banner_minor_edit]
-      flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')
-      redirect_to @admin_banner      
-    else
+    if @admin_banner.update_attributes(params[:admin_banner])
       if @admin_banner.active?
         AdminBanner.banner_on
         flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
@@ -56,6 +51,8 @@ class Admin::BannersController < ApplicationController
         flash[:notice] = ts('Banner successfully updated.')
       end
       redirect_to @admin_banner
+    else
+      render action: 'edit'
     end
   end
   
