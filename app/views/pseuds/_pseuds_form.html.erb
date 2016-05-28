@@ -3,7 +3,8 @@
   <dt><%= f.label :name, ts("Name") %></dt>
   <dd>
     <% if @pseud.name && @user.login == @pseud.name %>
-      <strong class="warning"><%= @pseud.name %></strong> (<%= ts("cannot change your fallback pseud") %>)
+      <p class="important informational"><%= @pseud.name %></p>
+      <p class="footnote"><%= ts("You cannot change the pseud that matches your user name. However, you can <a href=\"#{change_username_user_path(@user)}\">change your user name</a> instead.".html_safe) %></p>
     <% else %>
       <%= f.text_field :name, :class => "observe_textlength" %>
     <% end %>
