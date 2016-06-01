@@ -94,11 +94,18 @@ module Collectible
   #### UNREVEALED/ANONYMOUS
 
   # Set the anonymous/unrevealed status of the collectible based on its collections
-  # Only include collections approved by the user
+  # We can't check for user approval because the collection item doesn't exist
+  # and don't need to because this only gets called when the work is a new record and 
+  # therefore being created by its author
   def set_anon_unrevealed
     if self.respond_to?(:in_anon_collection) && self.respond_to?(:in_unrevealed_collection)
-      self.in_anon_collection = !self.user_approved_collections.select(&:anonymous?).empty? 
-      self.in_unrevealed_collection = !self.user_approved_collections.select(&:unrevealed?).empty?
+      # if we have collection items saved here then the collectible is not a new object
+      if self.collection_items.empty?
+        self.in_anon_collection = !self.collections.select(&:anonymous?).empty? 
+        self.in_unrevealed_collection = !self.collections.select(&:unrevealed?).empty?
+      else
+        update_anon_unrevealed
+      end
     end
     return true
   end

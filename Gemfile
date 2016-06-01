@@ -128,7 +128,7 @@ group :test do
 end
 
 group :test, :development do
-  gem 'pry', '~> 0.10.3'
+  gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
 end
