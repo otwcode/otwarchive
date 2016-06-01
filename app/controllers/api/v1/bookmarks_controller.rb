@@ -3,20 +3,20 @@ class Api::V1::BookmarksController < Api::V1::BaseController
 
   def create
     archivist = User.find_by_login(params[:archivist])
-    external_bookmarks = params[:bookmarks]
+    bookmarks = params[:bookmarks]
     bookmarks_responses = []
     @bookmarks = []
 
     # check for top-level errors (not an archivist, no bookmarks...)
-    status, messages = batch_errors(archivist, external_bookmarks)
+    status, messages = batch_errors(archivist, bookmarks)
 
     if status == :ok
       # Flag error and successes
       @some_errors = @some_success = false
 
       # Process the works, updating the flags
-      external_bookmarks.each do |external_bookmark|
-        bookmarks_responses << import_bookmark(archivist, external_bookmark)
+      bookmarks.each do |bookmark|
+        bookmarks_responses << import_bookmark(archivist, bookmark)
       end
 
       # set final response code and message depending on the flags
@@ -97,7 +97,6 @@ class Api::V1::BookmarksController < Api::V1::BaseController
         end
       end
     end
-
 
     status = :ok if errors.empty?
     [status, errors]
