@@ -58,6 +58,7 @@ GEM
     bundler-audit (0.5.0)
       bundler (~> 1.2)
       thor (~> 0.18)
+    byebug (9.0.5)
     capistrano (2.15.4)
       highline
       net-scp (>= 1.0.0)
@@ -228,6 +229,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     rack (1.4.7)
     rack-cache (1.6.1)
       rack (>= 0.4)
@@ -439,7 +443,7 @@ DEPENDENCIES
   permit_yo
   phraseapp-in-context-editor-ruby
   pickle
-  pry (~> 0.10.3)
+  pry-byebug
   rack-dev-mark
   rails (= 3.2.22.2)
   redis (>= 3.0)
