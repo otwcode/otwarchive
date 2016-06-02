@@ -155,12 +155,10 @@ class UsersController < ApplicationController
 
       @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
 
-      @user.transaction do
-        if @user.save
-          notify_and_show_confirmation_screen
-        else
-          render :action => "new"
-        end
+      if @user.save
+        notify_and_show_confirmation_screen
+      else
+        render :action => "new"
       end
     end
   end
