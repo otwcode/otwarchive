@@ -4,7 +4,7 @@
 
 Feature: Download a work
   @wip
-  Scenario: Download an ordinary work
+  Scenario: Download an ordinary work in MOBI
   
   Given basic tags
     And I am logged in as "myname"
@@ -19,6 +19,19 @@ Feature: Download a work
   When I follow "MOBI"
     Then I should see "Tittle with doubble letters"
     Then I should see the text with tags "Tittle with doubble letters"
+
+  Scenario: Download an ordinary work in other formats
+
+  Given basic tags
+    And I am logged in as "myname"
+  When I go to the new work page
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with "Tittle with doubble letters"
+    And I fill in "content" with "some random stuff"
+    And I check "No Archive Warnings Apply"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
   When I go to the work page with title Tittle with doubble letters
   When I follow "PDF"
   When I go to the work page with title Tittle with doubble letters
