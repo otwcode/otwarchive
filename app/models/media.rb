@@ -12,8 +12,11 @@ class Media < Tag
   
   # The media tag for unwrangled fandoms
   def self.uncategorized
+    if Rails.env == "test"
+     return self.find_or_create_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
+    end
     Rails.cache.fetch("/MEDIA_UNCATEGORIZED_TAG/v1", expires_in: 1.day) do
-      Tag.find(ArchiveConfig.MEDIA_UNCATEGORIZED_ID || (Rails.env == "test" ? self.find_or_create_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME).id : 9971))
+      Tag.find(ArchiveConfig.MEDIA_UNCATEGORIZED_ID || 9971)
     end 
   end
 
