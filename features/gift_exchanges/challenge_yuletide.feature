@@ -2,7 +2,8 @@
 Feature: Collection
   I want to test Yuletide, because it has several specific settings that are different from an ordinary gift exchange
 
-  # TODO: Add nominations and tag sets to this test, or somewhere
+  # Basic tag set testing is covered in challenge_giftexchange_tagsets.feature.
+  # Advanced stuff and nominations are covered in tags_and_wrangling/tag_set.feature.
 
   # uncomment this and the other 'javascript' lines below when testing on local
   # in order to test javascript-based features
