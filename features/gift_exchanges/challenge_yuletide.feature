@@ -518,7 +518,7 @@ Feature: Collection
     And I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
-  # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
+  # Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
   When I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
