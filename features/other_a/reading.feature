@@ -110,8 +110,8 @@ Feature: Reading count
   Then I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
-  Then I should see "Remove mark for Later"
-  When I follow "Remove mark for Later"
+  Then I should see "Mark as Read"
+  When I follow "Mark as Read"
   Then I should see "This work was removed from your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
