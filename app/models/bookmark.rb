@@ -91,7 +91,7 @@ class Bookmark < ActiveRecord::Base
 
   def invalidate_bookmark_count
     work = Work.where(:id => self.bookmarkable_id)
-    if work.present?  && self.bookmarkable_type == 'Work' 
+    if work.present? && self.bookmarkable_type == 'Work' 
       work.first.invalidate_public_bookmarks_count
     end
   end
