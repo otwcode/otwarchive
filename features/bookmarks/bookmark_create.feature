@@ -106,17 +106,16 @@ Scenario: Create a bookmark
       
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
-      | login           | password   |
-      | first_bookmark_user   | password   |
-      | another_bookmark_user   | password   |
+      | login           |
+      | first_bookmark_user   |
+      | another_bookmark_user |
       And a fandom exists with name: "Stargate SG-1", canonical: true
       And I am logged in as "first_bookmark_user"
       And I post the locked work "Secret Masterpiece"
       And I post the locked work "Mystery"
       And I post the work "Public Masterpiece"
       And I post the work "Publicky"
-    When I log out
-      And I am logged in as "another_bookmark_user"
+    When I am logged in as "another_bookmark_user"
       And I view the work "Secret Masterpiece"
       And I follow "Bookmark"
       And I check "bookmark_rec"
@@ -147,13 +146,10 @@ Scenario: Create a bookmark
       And I should see "Publicky"
     When I go to another_bookmark_user's bookmarks page
     Then I should not see "Secret Masterpiece"
-      And I am logged out
     When I am logged in as "first_bookmark_user"
       And I go to another_bookmark_user's bookmarks page
-    # This step always fails. I don't know why, and I don't much care at this point. Sidebar correctly shows that
-    # there are two bookmarks, but the main page says that there are zero (0).     - SS
-    # TODO: Someone should figure out why this doesn't work. Bookmark issue
-    #Then I should see "Secret Masterpiece"
+    Then I should see "Bookmarks (4)"
+      And I should see "Secret Masterpiece"
 
 Scenario: extra commas in bookmark form (Issue 2284)
 
@@ -324,7 +320,7 @@ Scenario: Adding bookmarks to closed collections (Issue 3083)
     And I follow "Add To Collection"
     And I fill in "collection_names" with "rescue_911"
     And I press "Add"
-    And I should see "We couldn't add your submission to the following collections: Rescue 911 is closed to new submissions."
+    And I should see "We couldn't add your submission to the following collection(s): Rescue 911 is closed to new submissions."
     # Now, as a regular user try to add that existing bookmark to a closed collection from the 'Edit' page of a bookmark
     And I follow "Edit"
     And I fill in "bookmark_collection_names" with "rescue_911"

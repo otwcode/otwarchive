@@ -63,7 +63,7 @@ class AbuseReport < ActiveRecord::Base
       category: category,
       ip_address: ip_address
     )
-    reporter.send_report!
+    reporter.send_abuse_report!
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")

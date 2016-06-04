@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
   has_many :users, :through => :inbox_comments
 
   validates_presence_of :name, :unless => :pseud_id
-  validates :email, :email_veracity => {:on => :create, :unless => :pseud_id}
+  validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
 
   validates_presence_of :content
   validates_length_of :content,

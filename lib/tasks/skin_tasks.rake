@@ -167,5 +167,5 @@ namespace :skins do
     default_id = Skin.default.id
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
-  
+
 end

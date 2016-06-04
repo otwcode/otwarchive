@@ -19,6 +19,18 @@ describe AbuseReport do
     end
   end
 
+  context "comment with weird characters" do
+    it "is valid with slash and dot" do
+      expect(build(:abuse_report, comment: "/.")).to be_valid
+    end
+    it "is valid in other languages" do
+      expect(build(:abuse_report, comment: "café")).to be_valid
+    end
+    it "is valid in other alphabets" do
+      expect(build(:abuse_report, comment: "γεια")).to be_valid
+    end
+  end
+
   context "invalid emails" do
 
     BAD_EMAILS.each do |email|

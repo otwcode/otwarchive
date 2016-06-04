@@ -2,6 +2,7 @@
 
 class Chapter < ActiveRecord::Base
   include HtmlCleaner
+  include WorkChapterCountCaching
   
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
@@ -77,11 +78,17 @@ class Chapter < ActiveRecord::Base
     end
   end
   
-  before_destroy :fix_positions_after_destroy
+  before_destroy :fix_positions_after_destroy, :invalidate_chapter_count
   def fix_positions_after_destroy
     if work && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each{|c| c.update_attribute(:position, c.position + 1)}
+    end
+  end
+
+  def invalidate_chapter_count
+    if work
+      invalidate_work_chapter_count(work)
     end
   end
 

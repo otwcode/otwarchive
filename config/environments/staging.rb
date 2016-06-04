@@ -68,6 +68,7 @@ Otwarchive::Application.configure do
     Bullet.enable = true
     Bullet.bullet_logger = true
     Bullet.add_footer = false
+    Bullet.console = true
     Bullet.rails_logger = true
     Bullet.counter_cache_enable = false
   end

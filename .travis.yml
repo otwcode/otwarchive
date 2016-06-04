@@ -13,11 +13,12 @@ env:
   - TEST_GROUP="cucumber -f progress -r features features/other_b"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_a"
   - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_b"
+  - TEST_GROUP="cucumber -f progress -r features features/prompt_memes_c"
   - TEST_GROUP="cucumber -f progress -r features features/tags_and_wrangling"
   - TEST_GROUP="cucumber -f progress -r features features/users"
   - TEST_GROUP="cucumber -f progress -r features features/works"
 rvm:
-  - "2.0.0"
+  - "2.1.9"
 services:
   - elasticsearch
   - redis-server
@@ -27,14 +28,14 @@ script:
   - RAILS_ENV=test bundle exec rake db:create:all --trace
   - RAILS_ENV=test bundle exec rake db:schema:load --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec $TEST_GROUP
+  - travis_retry bundle exec $TEST_GROUP
 before_script:
   - bash script/travis_configure.sh
   - bash script/travis_elasticsearch_upgrade.sh
 notifications:
   email:
     recipients:
-      - otw-coders@transformativeworks.org
+      - otw-coders-extra@transformativeworks.org
     on_success: change
     on_failure: always
   irc:

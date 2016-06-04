@@ -4,7 +4,17 @@ class CollectionsController < ApplicationController
   before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy, :confirm_delete]
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy, :confirm_delete]
   before_filter :check_user_status, only: [:new, :create, :edit, :update, :destroy]
+  before_filter :validate_challenge_type
   cache_sweeper :collection_sweeper
+
+  # Lazy fix to prevent passing unsafe values to eval via challenge_type
+  # In both CollectionsController#create and CollectionsController#update there are a vulnerable usages of eval
+  # For now just make sure the values passed to it are safe
+  def validate_challenge_type
+    if params[:challenge_type] and not ["", "GiftExchange", "PromptMeme"].include?(params[:challenge_type])
+      return render :status => :bad_request, :text => "invalid challenge_type"
+    end
+  end
 
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
@@ -60,11 +70,11 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
       visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
       # visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'bookmarks.created_at DESC')
       visible_bookmarks = Bookmark.in_collection(@collection).visible(:order => 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
@@ -100,6 +110,7 @@ class CollectionsController < ApplicationController
       flash[:notice] = ts('Collection was successfully created.')
       unless params[:challenge_type].blank?
         # This is a challenge collection
+        # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
         redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
       else
         redirect_to(@collection)
@@ -124,10 +135,12 @@ class CollectionsController < ApplicationController
             flash[:error] = ts("Note: if you want to change the type of challenge, first please delete the existing challenge on the challenge page.")
           else
             # editing existing challenge
+            # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
             redirect_to eval("edit_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
           end
         else
           # adding a new challenge
+          # TODO: remove unsafe usage of eval, this is vulnerable and a security risk
           redirect_to eval("new_collection_#{params[:challenge_type].demodulize.tableize.singularize}_path(@collection)") and return
         end
       end
