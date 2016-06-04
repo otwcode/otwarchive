@@ -388,6 +388,10 @@ Scenario: Delete bookmarks of a work and a series
     And I check "bookmark_private"
     And I press "Update"
   Then I should see "Bookmark was successfully updated"
+  When I follow "Delete"
+    And I press "Yes, Delete Bookmark"
+  Then I should see "Bookmark was successfully deleted."
+
 
 Scenario: Bookmark External Work link should be available to logged in users, but not logged out users
   Given a fandom exists with name: "Testing BEW Button", canonical: true
