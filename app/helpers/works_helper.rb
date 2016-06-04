@@ -97,15 +97,11 @@ module WorksHelper
   end
 
   def markasread_link(work)
-    link_to ts("Mark as Read"), marktoread_work_path(work)
+    link_to ts("Mark as Read"), removemarktoread_work_path(work)
   end
 
   def marktoread_link(work)
     link_to ts("Mark for Later"), marktoread_work_path(work)
-  end
-
-  def removemarktoread_link(work)
-    link_to ts("Remove mark for Later"), removemarktoread_work_path(work)
   end
 
   def get_endnotes_link

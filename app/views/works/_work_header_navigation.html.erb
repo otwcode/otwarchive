@@ -54,7 +54,7 @@
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
      <li class="mark"> 
       <% if marked_for_later?(@work) %>
-        <%= removemarktoread_link(@work) %>
+        <%= markasread_link(@work) %>
       <% else %>
         <%= marktoread_link(@work) %>
       <% end %>
