@@ -188,7 +188,7 @@ class CollectionItem < ActiveRecord::Base
         notify_of_reveal
       end
     end
-    if anonymous_changed?
+    unless self.anonymous? && self.unrevealed?
       notify_of_author_reveal
     end
   end
