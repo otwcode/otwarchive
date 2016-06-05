@@ -102,20 +102,72 @@ describe "API BookmarksController" do
       WebMock.reset!
     end
 
-    it "should return 400 Bad Request if an invalid URL is specified" do
-      post "/api/v1/import",
-           { archivist: @user.login,
-             bookmarks: [ bookmark.merge!(url: "") ]
-           }.to_json,
+
+    it "should return 400 Bad Request if no bookmarks are specified" do
+      post "/api/v1/bookmarks",
+           { archivist: @user.login }.to_json,
            valid_headers
       assert_equal 400, response.status
     end
 
-    it "should return 400 Bad Request if no bookmarks are specified" do
-      post "/api/v1/import",
-           { archivist: @user.login }.to_json,
+    it "should return an error mess if no URL is specified" do
+      post "/api/v1/bookmarks",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.except(:url) ]
+           }.to_json,
            valid_headers
-      assert_equal 400, response.status
+      assert_equal 200, response.status
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:messages].first,
+                   "This bookmark does not contain a URL to an external site. Please specify a valid, non-AO3 URL."
+    end
+
+    it "should return an error message if the URL is on AO3" do
+      work = create(:work)
+      post "/api/v1/bookmarks",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.merge(url: work_url(work)) ]
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:messages].first,
+                   "Url could not be reached. If the URL is correct and the site is currently down, please try again later."
+    end
+
+    it "should return an error message if there is no fandom" do
+      post "/api/v1/bookmarks",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.merge(fandom_string: "") ]
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:messages].first,
+                   "This bookmark does not contain a fandom. Please specify a fandom."
+    end
+
+    it "should return an error message if there is no title" do
+      post "/api/v1/bookmarks",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.merge(title: "") ]
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:messages].first, "Title can't be blank"
+    end
+
+    it "should return an error message if there is no author" do
+      post "/api/v1/bookmarks",
+           { archivist: @user.login,
+             bookmarks: [ bookmark.merge(author: "") ]
+           }.to_json,
+           valid_headers
+      assert_equal 200, response.status
+      bookmark_response = JSON.parse(response.body, symbolize_names: true)[:bookmarks].first
+      assert_equal bookmark_response[:messages].first,
+                   "This bookmark does not contain an external author name. Please specify an author."
     end
   end
 

@@ -42,7 +42,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
 
   # Returns a hash
   def import_bookmark(archivist, params)
-    bookmark_request = external_bookmark(archivist, params)
+    bookmark_request = bookmark_request(archivist, params)
     bookmark_status, bookmark_messages = bookmark_errors(archivist, bookmark_request)
     bookmark_url = ""
     original_url = ""
@@ -74,7 +74,7 @@ class Api::V1::BookmarksController < Api::V1::BaseController
       archive_url: bookmark_url,
       original_id: params[:id],
       original_url: original_url,
-      messages: bookmark_messages
+      messages: bookmark_messages.flatten
     }
   end
 
@@ -83,9 +83,24 @@ class Api::V1::BookmarksController < Api::V1::BaseController
     status = :bad_request
     errors = []
 
-    url = bookmark_request[:external][:url]
+    # Perform basic validation which the ExternalWork model doesn't do or returns strange messages for
+    # (title is validated correctly in the model and so isn't checked here)
+    external_work = bookmark_request[:external]
+    url = external_work[:url]
+    author = external_work[:author]
+    fandom = external_work[:fandom_string]
+
     if url.nil?
-      errors << "This bookmark does not contain a URL to an external site."
+      # Unreachable and AO3 URLs are handled in the ExternalWork model
+      errors << "This bookmark does not contain a URL to an external site. Please specify a valid, non-AO3 URL."
+    end
+
+    if author.nil? || author == ""
+      errors << "This bookmark does not contain an external author name. Please specify an author."
+    end
+
+    if fandom.nil? || fandom == ""
+      errors << "This bookmark does not contain a fandom. Please specify a fandom."
     end
 
     archivist_bookmarks = Bookmark.find_all_by_pseud_id(archivist.default_pseud.id)
@@ -102,8 +117,8 @@ class Api::V1::BookmarksController < Api::V1::BaseController
     [status, errors]
   end
 
-  # Map Json request to Bookmark request
-  def external_bookmark(archivist, params)
+  # Map Json request to Bookmark request for external work
+  def bookmark_request(archivist, params)
     {
       pseud_id: archivist.default_pseud.id,
       external: {
