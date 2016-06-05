@@ -63,3 +63,22 @@ Feature: Collectible items email
       And I fill in "bookmark_collection_names" with "dont_bookmark_me_bro"
       And I press "Create"
     Then 1 email should be delivered
+
+   Scenario: Unrevealed collection when revealed sends email
+    Given I am logged in as "first_user"
+      And "second_user" subscribes to author "first_user"
+      And the user "third_user" exists and is activated
+      And the user "fourth_user" exists and is activated
+      And all emails have been delivered
+     When I have the hidden collection "unrevealed collection"
+      And I am logged in as "first_user"
+      And I set up the draft "Old Snippet" in collection "unrevealed collection"
+      And I press "Preview"    
+    Then I should see "Collections: unrevealed collection"
+     And I should see "Draft was successfully created."
+    When I press "Post"
+    Then the work "Old Snippet" should be visible to me
+     And I should see "part of an ongoing challenge"
+    When I reveal works for "unrevealed collection"
+     And all email have been delivered 
+    Then 1 email should be delivered
