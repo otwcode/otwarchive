@@ -45,7 +45,6 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Hoban Washburne/Zoe Washburne"
   Then I should see "Hoban Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Zoe Washburne" within "div#parent_Character_associations_to_remove_checkboxes"
-    And I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
