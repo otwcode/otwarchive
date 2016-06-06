@@ -101,6 +101,22 @@ Feature: Collectible items email
      When subscription notifications are sent
      Then 1 email should be delivered
 
-
-
-
+   Scenario: Unrevealed Anonymous collection when Deanonymised before revealing
+    Given I am logged in as "first_user"
+      And "second_user" subscribes to author "first_user"
+    Given all emails have been delivered
+     When I have the hidden anonymous collection "unrevealed anonymous collection2"
+      And I am logged in as "first_user"
+      And I set up the draft "Old Snippet" in collection "unrevealed anonymous collection2"
+      And I press "Preview"
+     Then I should see "Collections: unrevealed anonymous collection2"
+      And I should see "Draft was successfully created."
+     When I press "Post"
+     Then the work "Old Snippet" should be visible to me
+      And I should see "part of an ongoing challenge"
+     When I reveal authors for "unrevealed anonymous collection2"
+     When subscription notifications are sent
+     Then 0 email should be delivered
+     When I reveal works for "unrevealed anonymous collection2"
+     When subscription notifications are sent
+     Then 1 email should be delivered
