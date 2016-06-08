@@ -286,8 +286,8 @@ Otwarchive::Application.routes.draw do
       get :edit_tags
       get :preview_tags
       put :update_tags
-      get :marktoread
-      get :removemarktoread
+      get :mark_for_later
+      get :mark_as_read
       get :confirm_delete
     end
     resources :bookmarks
