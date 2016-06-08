@@ -7,7 +7,9 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = {}
     [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
+      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
+        klass.unwrangled.in_use.count
+      end
     end
     unless params[:show].blank?
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
