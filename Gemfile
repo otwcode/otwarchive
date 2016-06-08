@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 ruby '2.1.9'
 
->>>>>>> 303dc1d8e363e6914b5ca6fc66962798005de125
 gem 'bundler'
 
 gem 'rails', '3.2.22.2'
