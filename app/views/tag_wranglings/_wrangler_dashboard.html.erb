@@ -33,7 +33,7 @@
         <li><%= span_if_current ts("Characters by fandom (%{count})", count: @counts[:characters]), tag_wranglings_path(show: "characters") %></li>
         <li><%= span_if_current ts("Relationships by fandom (%{count})", count: @counts[:relationships]), tag_wranglings_path(show: "relationships") %></li>
         <li><%= span_if_current ts("Freeforms by fandom (%{count})", count: @counts[:freeforms]), tag_wranglings_path(show: "freeforms") %></li>
-        <li><%= span_if_current(ts("Unsorted Tags (%{count})", count: Rails.cache.fetch("/wrangler/counts/sidebar/unsorted_tags", race_condition_ttl: 10, expires_in: 1.hour) do UnsortedTag.count end ), unsorted_tags_path) %></li>
+        <li><%= span_if_current(ts("Unsorted Tags (%{count})", count: @counts[:UnsortedTag]), unsorted_tags_path) %></li>
       <% end %>
     </ul>
   <% end %>
