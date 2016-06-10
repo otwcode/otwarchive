@@ -10,7 +10,7 @@ VCR.configure do |c|
   # Cassettes are now deleted and re-recorded after 30 days. This will ensure
   # that LJ/DW/DA don't update their HTML and break our story parser without us
   # knowing about it.
-  c.default_cassette_options = { :record => :none, :re_record_interval => 30.days }
+  c.default_cassette_options = { :record => :none, :re_record_interval => 1.year }
   #use this for setup...
   #c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 30.days }
 end
