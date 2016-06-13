@@ -32,12 +32,12 @@
   <fieldset>
     <legend><%= ts('Post Work') %></legend>
     <p class="submit cancel edit actions">
-    <% if @work.posted? %>
-      <%= submit_tag ts('Update'), name: 'update_button' %>
-    <% else %>
-      <%= submit_tag ts('Post'), name: 'post_button' %>
-      <%= submit_tag ts('Save Without Posting'), name: 'save_button' %>
-    <% end %>
+      <% if @work.posted? %>
+        <%= submit_tag ts('Update'), name: 'update_button' %>
+      <% else %>
+        <%= submit_tag ts('Post'), name: 'post_button' %>
+        <%= submit_tag ts('Save Without Posting'), name: 'save_button' %>
+      <% end %>
       <%= submit_tag ts('Edit'), name: 'edit_button' %>
       <%= submit_tag ts('Cancel'), name: 'cancel_button' %>
     </p>
