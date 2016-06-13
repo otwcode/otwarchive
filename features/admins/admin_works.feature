@@ -70,7 +70,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as an admin
       And I view the work "Changes"
-      And I follow "Edit Tags"
+      And I follow "Edit Tags and Language"
     When I select "Mature" from "Rating"
       And I uncheck "No Archive Warnings Apply"
       And I check "Choose Not To Use Archive Warnings"
@@ -196,7 +196,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "Wrong Language"
     When I am logged in as an admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags"
+      And I follow "Edit Tags and Language"
     When I select "Deutsch" from "Choose a language"
       And I press "Post Without Preview"
     Then I should see "Deutsch"
@@ -209,7 +209,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "Wrong Language"
     When I am logged in as an admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags"
+      And I follow "Edit Tags and Language"
     When I select "Deutsch" from "Choose a language"
       And I press "Preview"
       And I press "Update"
