@@ -6,7 +6,7 @@
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
-<!--main content-->	
+<!--main content-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update_tags" }) do |f| %> 
   <p class="required notice">* <%= ts('Required information') %></p>
 
