@@ -19,7 +19,9 @@
   <%= form.hidden_field :relationship_string, :value => "#{@work.relationship_string}" %>
   <%= form.hidden_field :character_string, :value => "#{@work.character_string}" %>
   <%= form.hidden_field :freeform_string, :value => "#{@work.freeform_string}" %>
-  <%= form.hidden_field :language_id, :value => "#{@work.language.id}" %>
+  <% if logged_in_as_admin? %>
+    <%= form.hidden_field :language_id, :value => "#{@work.language.id}" %>
+  <% end %>
 
   <fieldset>
     <legend><%= ts('Post Work') %></legend>
