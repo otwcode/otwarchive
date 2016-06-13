@@ -1,12 +1,18 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Preview Tags") %></h2>
+<h2 class="heading">
+  <% if logged_in_as_admin? %>
+    <%= ts("Preview Tags and Language") %>
+  <% else %>
+    <%= ts("Preview Tags") %>
+  <% end %>
+</h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
 <!--main content-->
 <div id="previewpane">
   <div class="draft work">
-    <%= render 'works/meta' work: @work %>
+    <%= render 'works/meta', work: @work %>
   </div>
 </div>
 <!--/content-->
