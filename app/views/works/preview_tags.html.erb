@@ -19,6 +19,7 @@
   <%= form.hidden_field :relationship_string, :value => "#{@work.relationship_string}" %>
   <%= form.hidden_field :character_string, :value => "#{@work.character_string}" %>
   <%= form.hidden_field :freeform_string, :value => "#{@work.freeform_string}" %>
+  <%= form.hidden_field :language_id, :value => "#{@work.language.id}" %>
 
   <fieldset>
     <legend><%= ts('Post Work') %></legend>

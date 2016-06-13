@@ -189,7 +189,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should not see "rolex"
       And I should see "I loved this!"
 
-  Scenario: Admin can edit language on works
+  Scenario: Admin can edit language on works when posting without previewing
     Given basic tags
       And basic languages
       And I am logged in as "regular_user"
@@ -201,3 +201,17 @@ Feature: Admin Actions for Works and Bookmarks
       And I press "Post Without Preview"
     Then I should see "Deutsch"
       And I should not see "English"
+
+  Scenario: Admin can edit language on works when previewing first
+    Given basic tags
+      And basic languages
+      And I am logged in as "regular_user"
+      And I post the work "Wrong Language"
+    When I am logged in as an admin
+      And I view the work "Wrong Language"
+      And I follow "Edit Tags"
+    When I select "Deutsch" from "Choose a language"
+      And I press "Preview"
+      And I press "Update"
+    Then I should see "Deutsch"
+      And I should not see "English"  
