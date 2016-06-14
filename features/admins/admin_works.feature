@@ -197,6 +197,7 @@ Feature: Admin Actions for Works and Bookmarks
     When I am logged in as an admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
+    Then I should see "Edit Work Tags and Language for "
     When I select "Deutsch" from "Choose a language"
       And I press "Post Without Preview"
     Then I should see "Deutsch"
@@ -212,6 +213,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I follow "Edit Tags and Language"
     When I select "Deutsch" from "Choose a language"
       And I press "Preview"
-      And I press "Update"
+    Then I should see "Preview Tags and Language"
+    When I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"  
