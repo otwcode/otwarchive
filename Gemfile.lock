@@ -58,6 +58,7 @@ GEM
     bundler-audit (0.5.0)
       bundler (~> 1.2)
       thor (~> 0.18)
+    byebug (9.0.5)
     capistrano (2.15.4)
       highline
       net-scp (>= 1.0.0)
@@ -110,7 +111,7 @@ GEM
       chronic
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.20160309)
+    domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     elasticsearch (1.0.15)
       elasticsearch-api (= 1.0.15)
@@ -124,9 +125,12 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.2)
     erubis (2.7.0)
-    escape_utils (0.3.2)
+    escape_utils (1.2.1)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
+    factory_girl_rails (4.6.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     faker (1.6.3)
       i18n (~> 0.5)
     faraday (0.9.2)
@@ -183,7 +187,8 @@ GEM
     multi_test (0.1.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.10)
+    mysql2 (0.3.20)
+    mysql2 (0.3.20-x86-mingw32)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     net-scp (1.1.1)
@@ -211,10 +216,11 @@ GEM
       mimemagic (= 0.3.0)
     permit_yo (2.1.4)
       activesupport (~> 3.0)
-    phrase (0.4.33)
-      i18n
-      json
-      rainbow
+    phraseapp-in-context-editor-ruby (1.0.4)
+      i18n (~> 0.7)
+      json (~> 1.8)
+      phraseapp-ruby (~> 1.2)
+    phraseapp-ruby (1.2.4)
     pickle (0.5.1)
       cucumber (>= 0.8)
       rake
@@ -223,6 +229,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     rack (1.4.7)
     rack-cache (1.6.1)
       rack (>= 0.4)
@@ -249,26 +258,24 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rainbow (2.0.0)
     raindrops (0.11.0)
     rake (10.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
-    redis (3.2.2)
-    redis-namespace (1.5.2)
-      redis (~> 3.0, >= 3.0.4)
-    resque (1.25.2)
+    redis (3.0.4)
+    redis-namespace (1.3.0)
+      redis (~> 3.0.0)
+    resque (1.24.1)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
-      redis-namespace (~> 1.3)
+      redis-namespace (~> 1.2)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
-    resque-scheduler (4.1.0)
-      mono_logger (~> 1.0)
-      redis (~> 3.0)
-      resque (~> 1.25)
-      rufus-scheduler (~> 3.0)
-    resque_mailer (2.2.7)
+    resque-scheduler (2.2.0)
+      redis (>= 3.0.0)
+      resque (>= 1.20.0, < 1.25)
+      rufus-scheduler (~> 2.0)
+    resque_mailer (2.2.4)
       actionmailer (>= 3.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -304,7 +311,8 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    rufus-scheduler (3.2.0)
+    rufus-scheduler (2.0.24)
+      tzinfo (>= 0.3.22)
     rvm-capistrano (1.3.3)
       capistrano (>= 2.0.0)
     safe_yaml (1.0.4)
@@ -354,8 +362,8 @@ GEM
     tzinfo (0.3.46)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.2)
-    unf_ext (0.0.7.2-x86-mingw32)
+    unf_ext (0.0.7.1)
+    unf_ext (0.0.7.1-x86-mingw32)
     unicode (0.4.4.2)
     unicode (0.4.4.2-x86-mingw32)
     unicorn (4.6.3)
@@ -413,8 +421,9 @@ DEPENDENCIES
   delorean
   elasticsearch
   email_spec (= 1.6.0)
-  escape_utils
+  escape_utils (= 1.2.1)
   factory_girl (~> 4.5.0)
+  factory_girl_rails
   faker (~> 1.6.3)
   fastimage
   gherkin
@@ -426,22 +435,22 @@ DEPENDENCIES
   launchy
   lograge
   mechanize
-  mysql2 (= 0.3.10)
+  mysql2 (~> 0.3.20)
   newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.6.6.2)
   paperclip
   permit_yo
-  phrase
+  phraseapp-in-context-editor-ruby
   pickle
-  pry (~> 0.10.3)
+  pry-byebug
   rack-dev-mark
   rails (= 3.2.22.2)
-  redis (>= 3.2.2)
-  redis-namespace (>= 1.5.2)
-  resque (>= 1.25.2)
-  resque-scheduler (>= 4.1.0)
-  resque_mailer (>= 2.2.7)
+  redis (>= 3.0)
+  redis-namespace
+  resque (>= 1.14.0)
+  resque-scheduler
+  resque_mailer
   rest-client (~> 1.8.0)
   rollout
   rpm_contrib
@@ -464,5 +473,8 @@ DEPENDENCIES
   whiny_validation
   will_paginate (>= 3.0.2)
 
+RUBY VERSION
+   ruby 2.1.9p490
+
 BUNDLED WITH
-   1.11.2
+   1.12.3

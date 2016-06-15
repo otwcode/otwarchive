@@ -21,8 +21,12 @@ class Reading < ActiveRecord::Base
 
   # called from rake
   def self.update_or_create_in_database
-    REDIS_GENERAL.smembers("Reading:new").reverse.each do |reading_json|
-      Reading.reading_object(reading_json)
+    REDIS_GENERAL.smembers("Reading:new").reverse.each_slice(ArchiveConfig.READING_BATCHSIZE || 1000) do |batch|
+      Reading.transaction do
+        batch.each do |reading_json|
+          Reading.reading_object(reading_json)
+        end
+      end
     end
   end
 

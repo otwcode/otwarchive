@@ -54,7 +54,7 @@
       </li>
     <% end %>
     <% if @work.present? %>
-      <li><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
+      <li><%= link_to ts("Edit Tags and Language"), edit_tags_work_path(@work) %></li>
     <% end %>
     <% if item.class == ExternalWork %>
       <li><%= link_to ts("Edit External Work"), edit_external_work_path(item) %></li>
