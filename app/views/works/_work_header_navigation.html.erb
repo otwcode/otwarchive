@@ -54,7 +54,7 @@
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
      <li class="mark"> 
       <% if marked_for_later?(@work) %>
-        <%= markasread_link(@work) %>
+        <%= mark_as_read_link(@work) %>
       <% else %>
         <%= mark_for_later_link(@work) %>
       <% end %>

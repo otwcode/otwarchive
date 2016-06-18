@@ -96,7 +96,7 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def markasread_link(work)
+  def mark_as_read_link(work)
     link_to ts("Mark as Read"), mark_as_read_work_path(work)
   end
 
