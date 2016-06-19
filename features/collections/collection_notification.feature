@@ -114,6 +114,8 @@ Feature: Collectible items email
      When I press "Post"
      Then the work "Old Snippet" should be visible to me
       And I should see "part of an ongoing challenge"
+      And all emails have been delivered
+     Then 0 email should be delivered
      When I reveal authors for "unrevealed anonymous collection2"
      When subscription notifications are sent
      Then 0 email should be delivered
