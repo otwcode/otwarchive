@@ -86,6 +86,16 @@ class Bookmark < ActiveRecord::Base
   # Use the current user to determine what works are visible
   scope :visible, visible_to_user(User.current_user)
 
+  before_destroy :invalidate_bookmark_count
+  after_save :invalidate_bookmark_count
+
+  def invalidate_bookmark_count
+    work = Work.where(:id => self.bookmarkable_id)
+    if work.present? && self.bookmarkable_type == 'Work' 
+      work.first.invalidate_public_bookmarks_count
+    end
+  end
+
   def visible?(current_user=User.current_user)
     return true if current_user == self.pseud.user
     unless current_user == :false || !current_user
