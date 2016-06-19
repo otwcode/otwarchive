@@ -188,7 +188,7 @@ class CollectionItem < ActiveRecord::Base
         notify_of_reveal
       end
     end
-    if !self.anonymous? &&  !self.unrevealed?
+    if !self.anonymous? && !self.unrevealed?
       notify_of_author_reveal
     end
   end
@@ -318,7 +318,7 @@ class CollectionItem < ActiveRecord::Base
   # When the authors of anonymous works are revealed, notify users
   # subscribed to those authors
   def notify_of_author_reveal
-    if (!self.anonymous? && self.posted? && !self.unrevealed? ) 
+    if !self.anonymous? && self.posted? && !self.unrevealed? 
       if item_type == "Work"
         subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
                                   item.pseuds.map{|p| p.user_id}]).
