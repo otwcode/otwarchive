@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
   end
   
-  factory :potential_match do |f|
+  factory :potential_match do 
     after(:build) do |potential_match|
       potential_match.collection_id = FactoryGirl.create(:collection, challenge: GiftExchange.new).id unless potential_match.collection_id
       potential_match.offer_signup_id = FactoryGirl.create(:challenge_signup, collection_id: potential_match.collection_id)

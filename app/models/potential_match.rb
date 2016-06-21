@@ -3,10 +3,10 @@ class PotentialMatch < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
-  CACHE_PROGRESS_KEY = "potential_match_status_for_"
-  CACHE_SIGNUP_KEY = "potential_match_signups_for_"
-  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
-  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_"
+  CACHE_PROGRESS_KEY = "potential_match_status_for_".freeze
+  CACHE_SIGNUP_KEY = "potential_match_signups_for_".freeze
+  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_".freeze
+  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_".freeze
 
   belongs_to :collection
   belongs_to :offer_signup, class_name: "ChallengeSignup"
