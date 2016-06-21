@@ -4,7 +4,7 @@ class PotentialMatch < ActiveRecord::Base
   ALL = -1
 
   CACHE_PROGRESS_KEY = "potential_match_status_for_"
-  CACHE_BYLINE_KEY = "potential_match_bylines_for_"
+  CACHE_SIGNUP_KEY = "potential_match_signups_for_"
   CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
   CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_"
 
@@ -20,8 +20,8 @@ protected
     CACHE_PROGRESS_KEY + "#{collection.id}"
   end
 
-  def self.byline_key(collection)
-    CACHE_BYLINE_KEY + "#{collection.id}"
+  def self.signup_key(collection)
+    CACHE_SIGNUP_KEY + "#{collection.id}"
   end
 
   def self.interrupt_key(collection)
@@ -46,7 +46,7 @@ public
   end
 
   def self.set_up_generating(collection)
-    REDIS_GENERAL.set progress_key(collection), collection.signups.first.pseud.byline
+    REDIS_GENERAL.set progress_key(collection), collection.signups.first.id
   end
 
   def self.cancel_generation(collection)
@@ -104,9 +104,14 @@ public
       required_types = settings.required_types.map {|t| t.classify}
 
       # treat each signup as a request signup first
-      collection.signups.find_each do |signup|
+      # because find_each doesn't give us a consistent order, but we don't necessarily
+      # want to load all the signups into memory with each, we get the ids first and 
+      # load each signup as needed
+      signup_ids = collection.signups.value_of(:id)
+      signup_ids.each do |signup_id|
         break if PotentialMatch.canceled?(collection)
-        REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
+        signup = ChallengeSignup.find(signup_id)
+        REDIS_GENERAL.set progress_key(collection), signup.id
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
       end
 
@@ -214,7 +219,7 @@ public
   # Finish off the potential match generation
   def self.finish_generation(collection)
     REDIS_GENERAL.del progress_key(collection)
-    REDIS_GENERAL.del byline_key(collection)
+    REDIS_GENERAL.del signup_key(collection)
     if PotentialMatch.canceled?(collection)
       REDIS_GENERAL.del interrupt_key(collection)
       # eventually we'll want to be able to pick up where we left off,
@@ -237,25 +242,28 @@ public
   end
 
   def self.position(collection)
-    REDIS_GENERAL.get progress_key(collection)
+    signup_id = REDIS_GENERAL.get progress_key(collection)
+    ChallengeSignup.find(signup_id).pseud.byline
   end
 
   def self.progress(collection)
     # the index of our current signup person in the full index of signup participants
-    current_byline = REDIS_GENERAL.get(progress_key(collection))
-    collection_byline_key = byline_key(collection)
-    unless REDIS_GENERAL.exists(collection_byline_key)
+    current_id = REDIS_GENERAL.get(progress_key(collection))
+    collection_signup_key = signup_key(collection)
+    unless REDIS_GENERAL.exists(collection_signup_key)
       score = 0
-      collection.signups.pseud_only.each do |pseud|
-        REDIS_GENERAL.zadd collection_byline_key, score, pseud.byline
+      # we have to get the signups in the same order as they are processed 
+      # for this to work
+      collection.signups.value_of(:id).each do |signup_id|
+        REDIS_GENERAL.zadd collection_signup_key, score, signup_id
         score += 1
       end
     end
-    rank = REDIS_GENERAL.zrank(collection_byline_key, current_byline)
+    rank = REDIS_GENERAL.zrank(collection_signup_key, current_id)
     if rank.nil?
       return -1
     else
-      number_of_bylines = REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+      number_of_bylines = REDIS_GENERAL.zcount(collection_signup_key, 0, "+inf")
       # we want a percentage: multiply by 100 first so we can keep this an integer calculation
       return (rank * 100) / number_of_bylines
     end
