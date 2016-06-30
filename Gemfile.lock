@@ -23,6 +23,9 @@ GEM
       activesupport (= 3.2.22.2)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql-reconnect (0.4.0)
+      activerecord
+      mysql2
     activeresource (3.2.22.2)
       activemodel (= 3.2.22.2)
       activesupport (= 3.2.22.2)
@@ -398,6 +401,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  activerecord-mysql-reconnect
   acts_as_list
   addressable
   akismetor
