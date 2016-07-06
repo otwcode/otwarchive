@@ -80,12 +80,8 @@ form.filters {
   padding: 0;
 }
 
-.filters dt a {
-  border: none;
-}
-
-.filters dt a:hover {
-  color: #111;
+.filters dt {
+  padding: 0;
 }
 
 .filters dd {
