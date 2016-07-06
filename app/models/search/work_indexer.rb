@@ -15,7 +15,6 @@ class WorkIndexer < Indexer
           creators: {
             type: 'string',
             analyzer: 'simple',
-            index_name: 'creator'
           },
           tag: {
             type: 'string',
@@ -35,7 +34,6 @@ class WorkIndexer < Indexer
           },
           work_types: {
             type: 'string',
-            index_name: 'work_type',
             index: 'not_analyzed',
           },
           posted: { type: 'boolean' },
