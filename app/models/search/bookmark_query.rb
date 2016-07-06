@@ -28,7 +28,7 @@ class BookmarkQuery < Query
       visibility_filters +
       bookmark_filters +
       bookmarkable_filters
-    ).compact
+    ).flatten.compact
   end
 
   def queries
@@ -166,11 +166,15 @@ class BookmarkQuery < Query
   end
 
   def filter_id_filter
-    parent_terms_filter(:filter_ids, filter_ids, execution: 'and') if filter_ids.present?
+   if filter_ids.present?
+      filter_ids.map{ |filter_id| parent_term_filter(:filter_ids, filter_id) }
+    end
   end
 
   def tags_filter
-    terms_filter(:tag_ids, options[:tag_ids], execution: 'and') if options[:tag_ids].present?
+    if options[:tag_ids].present?
+      options[:tag_ids].map{ |tag_id| term_filter(:tag_ids, tag_id) }
+    end
   end
 
   def collections_filter

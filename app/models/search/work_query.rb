@@ -22,7 +22,7 @@ class WorkQuery < Query
       collection_filters +
       tag_filters +
       range_filters
-    ).compact
+    ).flatten.compact
   end
 
   def exclusion_filters
@@ -157,7 +157,9 @@ class WorkQuery < Query
   end
 
   def filter_id_filter
-    terms_filter(:filter_ids, filter_ids, execution: 'and') if filter_ids.present?
+    if filter_ids.present?
+      filter_ids.map{ |filter_id| term_filter(:filter_ids, filter_id) }
+    end
   end
 
   def tag_exclusion_filter
