@@ -264,6 +264,10 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   margin-right: 0.25em;
 }
 
+#header #search input[type="text"] {
+    border-radius: 1em;
+}
+
 #header #search input:focus {
   color: #2a2a2a;
   outline: 1px dotted;

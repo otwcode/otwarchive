@@ -2,75 +2,107 @@
   url: (@collection ? collection_works_path(@collection) : works_path), 
   html: { 
     method: :get, 
-    class: 'narrow-hidden filters', 
-    id: 'work-filters'
+    class: "narrow-hidden filters", 
+    id: "work-filters"
   } do |f| %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
-  <%= field_set_tag ts('Filter results:') do %>
-    <dl class="filters" role="menu">
-      <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
-      <dt>
-        <%= f.label :sort_column, ts("Sort by") %>
+  <%= field_set_tag ts("Filter results:") do %>
+
+    <%= f.submit ts("Sort and Filter") %>
+
+    <dl role="menu">
+      <dt class="sort">
+        <%= ts("Sort by") %>
       </dt>
-      <dd>
-        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
-      </dd>
-      <dt><%= ts("Top 10 Tags") %><%= link_to_help "filters-tags-help" %></dt>
-      <dd>
-        <dl>
-          <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
-            <dt>
-              <noscript><%= tag_type_label(tag_type) %></noscript>
-              <a class="tag_category_<%= tag_type %>_open hidden" href="#">
-                <%= image_tag 'arrow-right.gif', :alt => "" %>
-                <%= tag_type_label(tag_type) %>
-              </a>
-              <a class="tag_category_<%= tag_type %>_close hidden" href="#">
-                <%= image_tag 'arrow-down.gif', :alt => "" %>
-                <%= tag_type_label(tag_type) %>
-              </a>
-            </dt>
-            <dd id="tag_category_<%= tag_type %>" class="tags toggled">
-              <ul>              
-                <% @facets[tag_type].each do |tag| %>
-                  <li>
-                    <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
-                      <%= radio_button_tag "work_search[#{tag_type}_ids][]", 
-                        tag.id, 
-                        @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
-                    <% else %>
-                      <%= check_box_tag "work_search[#{tag_type}_ids][]", 
-                        tag.id,
-                        @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
-                        :id => "work_search_#{tag_type}_ids_#{tag.id}" %>
-                    <% end %>
-                    <%= label_tag "work_search_#{tag_type}_ids_#{tag.id}", 
-                      "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
-                  </li>
-                <% end %>
-              </ul>
-            </dd>
+      <dd class="expandable sort">
+        <ul>
+          <% @search.sort_options.each do |sort_option| %>
+            <li>
+              <%= radio_button_tag "work_search[sort_column]", 
+                                  sort_option.second, 
+                                  @search.send("sort_column").include?(sort_option.second), 
+                                  id: "work_search_sort_column_#{sort_option.second}" %>
+              <%= label_tag "work_search_sort_column_#{sort_option.second}", 
+                            "#{sort_option.first.to_s.titleize}" %>
+            </li>
           <% end %>
-        </dl>
+        </ul>
       </dd>
-      <dt class="autocomplete"><%= f.label 'other_tag_names', ts("Other Tags") %><%= link_to_help "filters-tags-help" %></dt>
-      <dd class="autocomplete">
+
+      <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
+        <dt class="<%= tag_type.pluralize %> tags">
+          <%= tag_type_label(tag_type) %>
+          <% # link_to_help "filters-tags-help" %>
+        </dt>
+        <dd id="tag_category_<%= tag_type %>_filter_options" class="expandable <%= tag_type.pluralize %> tags">
+          <dl>
+            <% # Make one list for including and one for excluding, each with unique ids %>
+            <% %w(include exclude).each do |filter_action| %>
+              <dt class="<%= filter_action %>">
+                <% # For accessibility, include tag type (e.g. Rating) as landmark text %>
+                <%= ts("%{filter_action} <span class=\"landmark\">%{tag_type}</span>",
+                    filter_action: filter_action.titleize,
+                    tag_type: tag_type_label(tag_type)
+                    ).html_safe %>
+              </dt>
+              <dd id="<%= filter_action %>_tag_category_<%= tag_type %>" class="expandable <%= filter_action %>">
+                <ul>
+                  <% @facets[tag_type].each do |tag| %>
+                    <li>
+                      <% if (tag_type == "rating") && @facets[tag_type].length > 1 %>
+                        <%= radio_button_tag "#{filter_action}_work_search[#{tag_type}_ids][]", 
+                          tag.id, 
+                          @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                          id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
+                      <% else %>
+                        <%= check_box_tag "#{filter_action}_work_search[#{tag_type}_ids][]", 
+                          tag.id,
+                          @search.send("#{tag_type}_ids").present? && @search.send("#{tag_type}_ids").include?(tag.id.to_s), 
+                          id: "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}" %>
+                      <% end %>
+                      <%= label_tag "#{filter_action}_work_search_#{tag_type}_ids_#{tag.id}", 
+                        "#{label_for_filter(tag_type, {name: tag.name, count: tag.count})}" %>
+                    </li>
+                  <% end %>
+                </ul>
+              </dd>
+            <% end %>
+          </dl>
+        </dd>
+      <% end %>
+
+      <dt class="include autocomplete">
+        <%= f.label 'other_tag_names', ts("Include other tags") %>
+        <%= link_to_help "filters-tags-help" %>
+      </dt>
+      <dd class="include autocomplete">
         <%= f.text_field 'other_tag_names', autocomplete_options("tag") %>
       </dd>
-      <dt><%= f.label :query, ts("Search within results") %><%= link_to_help "work-search-text-help" %></dt>
-      <dd><%= f.text_field :query %></dd>
-      <dt><%= ts("Language") %></dt>
-      <dd><%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %></dd>
+
+      <dt class="search">
+        <%= f.label :query, ts("Search within results") %>
+        <%= link_to_help "work-search-text-help" %>
+      </dt>
+      <dd class="search">
+        <%= f.text_field :query %>
+      </dd>
+
+      <dt>
+        <%= f.label :language_id, ts("Language") %>
+      </dt>
+      <dd>
+        <%= f.collection_select(:language_id, Language.default_order, :id, :name, include_blank: true) %>
+      </dd>
+
       <dt><%= ts("Status") %></dt>
       <dd>
         <%= f.check_box :complete %>
         <%= f.label :complete, ts("Complete only") %>
       </dd>
-      <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= f.submit ts('Sort and Filter') %></dd>
     </dl>
+
+    <%= f.submit ts('Sort and Filter') %>
+
     <div>
       <%= hidden_field_tag("collection_id", @collection.id) if @collection %>
       <%= hidden_field_tag("tag_id", @tag.to_param) if @tag %>
@@ -78,11 +110,14 @@
       <%= hidden_field_tag("pseud_id", @pseud.name) if @pseud %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>
     </div>
+
   <% end %>
+
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">
     <a href="#main" id="leave_filters" class="close">
       <%= ts("Top of Work Index") %>
     </a>
   </p>
+
 <% end %>

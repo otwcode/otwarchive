@@ -20,12 +20,6 @@ Arguably filter and search could be styled in interactions but I've put them her
 
 /* INTERACTION: SEARCH */
 
-.search input[type="text"] {
-  border-top-color: #999;
-  padding: 0.15em 0.25em;
-    border-radius: 1em;
-}
-
 .search p, li.search form p {
   position: relative;
 }
@@ -65,21 +59,25 @@ form.filters {
   float: right;
 }
 
-.filters .tags {
-  display: block;
-}
+/*.filters fieldset {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+    box-shadow: none;
+}*/
 
-.filters dt.autocomplete {
-  margin-top: 1.286em;
-}
-
-form.filters dl {
+.filters dl {
   margin-top: 0.375em;
   padding: 0;
 }
 
 .filters dt, .filters select {
   min-width: 0;
+}
+
+.filters dt {
+  padding: 0;
 }
 
 .filters dt a {
@@ -90,11 +88,11 @@ form.filters dl {
   color: #111;
 }
 
-.filters dt a:focus img {
-  outline: none;
+.filters dd {
+  margin: 0;
 }
 
-.filters dd, .filters dt, .filters .submit input {
+.filters dd, .filters dt, .filters input[type="submit"], .filters .expander {
   width: 100%;
 }
 
@@ -102,8 +100,18 @@ form.filters dl {
   padding-left: 0;
 }
 
-.filters .submit {
+.filters button {
+  background: none transparent;
+  border: none;
+  outline: none;
+  padding: 0.25em 0;
+  text-align: left;
+    border-radius: 0;
+}
+
+.filters input[type="submit"] {
   text-align: center;
+  margin: 1em 0;
   padding-right: 0;
 }
 
@@ -113,12 +121,64 @@ form.filters dl {
   white-space: normal;
 }
 
-form.filters dl dl {
+.filters input[type="radio"] + label, .filters input[type="checkbox"] + label {
+  padding-left: 0;
+}
+
+.filters dl dl {
   margin: 0;
   padding: 0;
   border: 0;
   background: none;
   box-shadow: none;
+}
+
+.filters dt.autocomplete {
+  margin-top: 1.286em;
+}
+
+.filters dt.tags button {
+  font-weight: 700;
+}
+
+.filters dd.tags {
+  font-size: 0.8571em;
+}
+
+.filters .tags dt {
+  border-bottom-color: #eee;
+}
+
+.filters .tags .collapsed, .filters .tags .expandable {
+  border-bottom: 1px solid #eee;
+}
+
+.filters .tags .expanded {
+  border-bottom: none;
+}
+
+/* .filters dt.tags {
+  margin-top: 1.286em;
+}
+
+/*.filters .tags button:hover, .filters .tags button:focus {
+  background: #e0e0e0;
+}
+
+.filters dt.expanded {
+  border-bottom: none;
+}
+
+.filters dd.expandable {
+  border-bottom: 1px solid #f3efec;
+}*/
+
+.filters .warnings {
+  font-weight: 500;
+}
+
+.filters .collapsed:after, .filters .expanded:after { 
+  content: none;
 }
 
 /*END== */
