@@ -59,8 +59,10 @@ gem 'paperclip'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
-gem 'authlogic'
-gem 'bcrypt'
+# Gems for authentication
+gem 'devise', '~> 3.0'   # Lock on version 3 until we update to Rails 4
+gem 'devise-encryptable' # To handle authlogic legacy crypto
+gem 'devise-async'       # To mails through queues
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
