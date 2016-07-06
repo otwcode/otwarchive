@@ -1,8 +1,20 @@
 // Expands a group of filters options if one of that type is selected
 $j(document).ready(function() {
+  setUpFilterExpanders();
   showFilters();
   setupNarrowScreenFilters();
 });
+
+function setUpFilterExpanders() {
+  var filter_option = $j('dt.sort, dt.tags, .tags dt');
+  
+  filter_option.each(function() {
+    var option_name = $j(this).text();
+    var option_list_id = $j(this).next().attr("id");
+    
+    $j(this).wrapInner('<button type="button" class="expander" aria-expanded="false" aria-controls="' + option_list_id + '"></button>');
+  });
+}
 
 function showFilters() {
   var filters = $j('dd.tags');
@@ -18,10 +30,10 @@ function showFilters() {
         $j(filter).show();
         $j(open_toggles).hide();
         $j(close_toggles).show();
-      } //is checked
-    }); //tags each
-  }); //filters each 
-} //showfilters
+      }
+    });
+  });
+}
 
 function setupNarrowScreenFilters() {
   var filters = $j('form.filters');
