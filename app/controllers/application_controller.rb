@@ -7,12 +7,6 @@ class ApplicationController < ActionController::Base
   include HtmlCleaner
   before_filter :sanitize_params
 
-  # Authlogic login helpers
-  helper_method :current_user
-  helper_method :current_admin
-  helper_method :logged_in?
-  helper_method :logged_in_as_admin?
-
   # Title helpers
   helper_method :process_title
 

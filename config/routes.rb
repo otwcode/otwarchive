@@ -1,4 +1,31 @@
 Otwarchive::Application.routes.draw do
+  devise_for :admins, controllers: {
+    sessions: 'admin/sessions'
+  }
+
+  devise_for :users, controllers: {
+    sessions: 'user/sessions'
+  }
+
+  # PATHS TO CHECK
+
+  resources :admin_sessions, only: [:new, :create, :destroy]
+
+  match '/admin/login' => 'admin_sessions#new'
+  match '/admin/logout' => 'admin_sessions#destroy'
+
+  resources :passwords, only: [:new, :create]
+
+  #### SESSIONS ####
+
+  resources :user_sessions, only: [:new, :create, :destroy] do
+    collection do
+      get :passwd_small
+      get :passwd
+    end
+  end
+  match 'login' => 'user_sessions#new'
+  match 'logout' => 'user_sessions#destroy'
 
   #### ERRORS ####
 
@@ -6,7 +33,6 @@ Otwarchive::Application.routes.draw do
   match '/404', to: 'errors#404'
   match '/422', to: 'errors#422'
   match '/500', to: 'errors#500'
-
 
   #### DOWNLOADS ####
 
@@ -120,11 +146,6 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
-
   namespace :admin do
     resources :activities, only: [:index, :show]
     resources :banners do
@@ -176,12 +197,12 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :passwords, only: [:new, :create]
-
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
       get :browse
+
+      # CHECK BEFORE DEPLOYING DEVISE
       get :change_email
       post :changed_email
       get :change_password
@@ -253,11 +274,14 @@ Otwarchive::Application.routes.draw do
       end
       resources :serial_works
     end
+
+    # CHECK BEFORE DEPLOYING DEVISE
     resources :signups, controller: "challenge_signups", only: [:index]
     resources :skins, only: [:index]
     resources :stats, only: [:index]
     resources :subscriptions, only: [:index, :create, :destroy]
     resources :tag_sets, controller: "owned_tag_sets", only: [:index]
+
     resources :works do
       collection do
         get :drafts
@@ -269,7 +293,6 @@ Otwarchive::Application.routes.draw do
       end
     end
   end
-
 
   #### WORKS ####
 
@@ -444,19 +467,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  match 'login' => 'user_sessions#new'
-  match 'logout' => 'user_sessions#destroy'
-
-
   #### API ####
 
   namespace :api do
@@ -468,7 +478,6 @@ Otwarchive::Application.routes.draw do
       match 'works/urls', to: 'works#batch_urls', via: :post
     end
   end
-
 
   #### MISC ####
 
@@ -548,7 +557,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-
   match 'search' => 'works#search'
   match 'support' => 'feedbacks#create', as: 'feedbacks', via: [:post]
   match 'support' => 'feedbacks#new', as: 'new_feedback_report', via: [:get]
@@ -573,7 +581,7 @@ Otwarchive::Application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
-  root to: "home#index"
+  root to: 'home#index'
 
   # See how all your routes lay out with "rake routes"
 
