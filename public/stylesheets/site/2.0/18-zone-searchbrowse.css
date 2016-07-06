@@ -117,10 +117,6 @@ form.filters {
   white-space: normal;
 }
 
-.filters input[type="radio"] + label, .filters input[type="checkbox"] + label {
-  padding-left: 0;
-}
-
 .filters dl dl {
   margin: 0;
   padding: 0;
