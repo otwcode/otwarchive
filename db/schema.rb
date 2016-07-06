@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150901132832) do
+ActiveRecord::Schema.define(:version => 201604030319571) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.string  "banner_type"
     t.boolean "active",                                 :default => false, :null => false
   end
+
+  create_table "admin_blacklisted_emails", :force => true do |t|
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "admin_blacklisted_emails", ["email"], :name => "index_admin_blacklisted_emails_on_email", :unique => true
 
   create_table "admin_post_taggings", :force => true do |t|
     t.integer  "admin_post_tag_id"
@@ -102,10 +110,14 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "login"
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.string   "persistence_token", :null => false
+    t.string   "encrypted_password"
+    t.string   "password_salt"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
   end
+
+  add_index "admins", ["reset_password_token"], :name => "index_admins_on_reset_password_token", :unique => true
 
   create_table "api_keys", :force => true do |t|
     t.string   "name",                            :null => false
@@ -490,6 +502,8 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.boolean  "approved",                               :default => false, :null => false
     t.string   "ip_address"
+    t.string   "username"
+    t.string   "language"
   end
 
   create_table "filter_counts", :force => true do |t|
@@ -554,6 +568,7 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "pseud_id"
+    t.boolean  "rejected",       :default => false, :null => false
   end
 
   add_index "gifts", ["pseud_id"], :name => "index_gifts_on_pseud_id"
@@ -626,8 +641,9 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
   add_index "kudos", ["pseud_id"], :name => "index_kudos_on_pseud_id"
 
   create_table "languages", :force => true do |t|
-    t.string "short", :limit => 4
-    t.string "name"
+    t.string  "short",             :limit => 4
+    t.string  "name"
+    t.boolean "support_available",              :default => false, :null => false
   end
 
   add_index "languages", ["short"], :name => "index_languages_on_short"
@@ -1237,24 +1253,36 @@ ActiveRecord::Schema.define(:version => 20150901132832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
-    t.string   "activation_code"
+    t.string   "confirmation_token"
     t.string   "login"
-    t.datetime "activated_at"
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.boolean  "recently_reset",     :default => false, :null => false
-    t.boolean  "suspended",          :default => false, :null => false
-    t.boolean  "banned",             :default => false, :null => false
+    t.datetime "confirmed_at"
+    t.string   "encrypted_password"
+    t.string   "password_salt"
+    t.boolean  "recently_reset",         :default => false, :null => false
+    t.boolean  "suspended",              :default => false, :null => false
+    t.boolean  "banned",                 :default => false, :null => false
     t.integer  "invitation_id"
     t.datetime "suspended_until"
-    t.boolean  "out_of_invites",     :default => true,  :null => false
-    t.string   "persistence_token",                     :null => false
-    t.integer  "failed_login_count"
+    t.boolean  "out_of_invites",         :default => true,  :null => false
+    t.integer  "failed_attempts"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0,     :null => false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.datetime "locked_at"
   end
 
-  add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
+  add_index "users", ["confirmation_token"], :name => "index_users_on_activation_code"
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "work_links", :force => true do |t|
     t.integer  "work_id"
