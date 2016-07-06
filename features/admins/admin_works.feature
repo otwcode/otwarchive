@@ -70,7 +70,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as an admin
       And I view the work "Changes"
-      And I follow "Edit Tags"
+      And I follow "Edit Tags and Language"
     When I select "Mature" from "Rating"
       And I uncheck "No Archive Warnings Apply"
       And I check "Choose Not To Use Archive Warnings"
@@ -93,7 +93,7 @@ Feature: Admin Actions for Works and Bookmarks
       And I should see "Mature"
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
-  
+
   Scenario: Can edit external works
     Given basic tags
       And I am logged in as "regular_user"
@@ -157,7 +157,7 @@ Feature: Admin Actions for Works and Bookmarks
     Then I should see "Successfully logged in"
     When I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
-    Then I should not see "Mark as spam"
+    Then I should not see "Spam" within "#feedback"
 
     # now mark a comment as spam
     When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
@@ -165,22 +165,55 @@ Feature: Admin Actions for Works and Bookmarks
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (2)"
     Then I should see "rolex"
-      And I should see "Spam"
-    When I follow "Spam"
+      And I should see "Spam" within "#feedback"
+    When I follow "Spam" within "#feedback"
+    # Can see link to unmark
     Then I should see "Not Spam"
-    When I follow "Hide Comments"
-    # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
-    # Then I should see "Comments (1)"
-
-    # comment should no longer be there
-    When I follow "Comments"
-    Then I should see "rolex"
-      And I should see "Not Spam"
+      # Admin can still see spam comment
+      And I should see "Hide Comments (2)"
+      And I should see "rolex"
+      # proper content should still be there
+      And I should see "I loved this!"
     When I am logged out as an admin
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
+      # user can't see spam comment, but can see that it exists
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
     Then I should not see "rolex"
+      And I should see "I loved this!"
+    # author can still see that spam comment exists, but can't see content of it
     When I am logged in as "author" with password "password"
       And I view the work "The One Where Neal is Awesome"
-      And I follow "Comments"
-      Then I should not see "rolex"
+    Then I should see "Comments (2)"
+    When I follow "Comments (2)"
+    Then I should not see "rolex"
+      And I should see "I loved this!"
+
+  Scenario: Admin can edit language on works when posting without previewing
+    Given basic tags
+      And basic languages
+      And I am logged in as "regular_user"
+      And I post the work "Wrong Language"
+    When I am logged in as an admin
+      And I view the work "Wrong Language"
+      And I follow "Edit Tags and Language"
+    Then I should see "Edit Work Tags and Language for "
+    When I select "Deutsch" from "Choose a language"
+      And I press "Post Without Preview"
+    Then I should see "Deutsch"
+      And I should not see "English"
+
+  Scenario: Admin can edit language on works when previewing first
+    Given basic tags
+      And basic languages
+      And I am logged in as "regular_user"
+      And I post the work "Wrong Language"
+    When I am logged in as an admin
+      And I view the work "Wrong Language"
+      And I follow "Edit Tags and Language"
+    When I select "Deutsch" from "Choose a language"
+      And I press "Preview"
+    Then I should see "Preview Tags and Language"
+    When I press "Update"
+    Then I should see "Deutsch"
+      And I should not see "English"  

@@ -16,7 +16,7 @@
 
   <%= will_paginate @inbox_comments %>
 
-  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form' do %>
+  <%= form_tag user_inbox_path(@user, page: params[:page], filters: params[:filters]), method: :put, id: 'inbox-form', class: 'inbox manage' do %>
     <fieldset class="actions">
       <legend><%= ts("Mass Edit Options") %></legend>
 

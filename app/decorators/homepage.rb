@@ -3,6 +3,19 @@ class Homepage
     @user = user
   end
 
+  def rounded_counts
+    @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
+      estimate_number(User.count)
+    end
+    @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
+      estimate_number(Work.posted.count)
+    end
+    @fandom_count = Rails.cache.fetch("/v1/home/counts/fandom", expires_in: 40.minutes) do
+      estimate_number(Fandom.canonical.count)
+    end
+    return @user_count, @work_count, @fandom_count
+  end
+
   def logged_in?
     @user.present?
   end
@@ -49,4 +62,11 @@ class Homepage
     return unless logged_in?
     @inbox_comments ||= @user.inbox_comments.with_feedback_comment.for_homepage
   end
+
+  def estimate_number(number)
+    digits = [(Math.log10([number, 1].max).to_i - 3), 0].max
+    divide = 10**digits
+    divide * (number / divide).to_i
+  end
+ 
 end
