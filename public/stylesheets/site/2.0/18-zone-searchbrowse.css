@@ -59,16 +59,12 @@ form.filters {
   float: right;
 }
 
-/*.filters fieldset {
-  background: none;
-  border: none;
-  margin: 0;
-  padding: 0;
-    box-shadow: none;
-}*/
+.filters h4 {
+  display: inline;
+  font-weight: 700;
+}
 
-.filters dl {
-  margin-top: 0.375em;
+.filters dl, .filters dt {
   padding: 0;
 }
 
@@ -76,19 +72,16 @@ form.filters {
   min-width: 0;
 }
 
-.filters dt {
-  padding: 0;
+.filters fieldset > dl > dt {
+  margin-top: 1.929em;
 }
 
-.filters dt {
-  padding: 0;
-}
-
-.filters dd {
+.filters dt.sort, .filters dd, .filters .more dd.search {
   margin: 0;
+  padding: 0;
 }
 
-.filters dd, .filters dt, .filters input[type="submit"], .filters .expander {
+.filters dt, .filters dd, .filters input[type="submit"], .filters .expander {
   width: 100%;
 }
 
@@ -108,6 +101,7 @@ form.filters {
 .filters input[type="submit"] {
   text-align: center;
   margin: 1em 0;
+  padding-left: 0;
   padding-right: 0;
 }
 
@@ -122,50 +116,38 @@ form.filters {
   padding: 0;
   border: 0;
   background: none;
-  box-shadow: none;
+    box-shadow: none;
+}
+
+.filters dt.search, .filters dt.autocomplete {
+  border-bottom: none;
 }
 
 .filters dt.autocomplete {
-  margin-top: 1.286em;
+  padding: 0.25em 0;
 }
 
-.filters dt.tags button {
-  font-weight: 700;
+.filters .more dt {
+  margin-top: 0.643em;
 }
 
-.filters dd.tags {
-  font-size: 0.8571em;
+.filters dd.sort, .filters .more dd {
+  margin-top: 0.375em;
 }
 
-.filters .tags dt {
-  border-bottom-color: #eee;
+.filters .expander {
+  background: url("/images/arrow-right.gif") left center no-repeat;
+  color: #2a2a2a;
+  padding-left: 14px;
+  min-height: 1.786em; /* default button height plus 0.25 vertical padding */
+    box-sizing: border-box;
 }
 
-.filters .tags .collapsed, .filters .tags .expandable {
-  border-bottom: 1px solid #eee;
+.filters .expanded .expander {
+  background-image: url("/images/arrow-down.gif");
 }
 
-.filters .tags .expanded {
-  border-bottom: none;
-}
-
-/* .filters dt.tags {
-  margin-top: 1.286em;
-}
-
-/*.filters .tags button:hover, .filters .tags button:focus {
-  background: #e0e0e0;
-}
-
-.filters dt.expanded {
-  border-bottom: none;
-}
-
-.filters dd.expandable {
-  border-bottom: 1px solid #f3efec;
-}*/
-
-.filters .warnings {
+.filters .warning {
   font-weight: 500;
 }
 

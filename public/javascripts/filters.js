@@ -6,7 +6,7 @@ $j(document).ready(function() {
 });
 
 function setUpFilterExpanders() {
-  var filter_option = $j('dt.sort, dt.tags, .tags dt');
+  var filter_option = $j('dt.tags, .tags dt');
   
   filter_option.each(function() {
     var option_name = $j(this).text();
