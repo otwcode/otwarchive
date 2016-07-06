@@ -14,19 +14,8 @@
       <dt class="sort">
         <%= ts("Sort by") %>
       </dt>
-      <dd class="expandable sort">
-        <ul>
-          <% @search.sort_options.each do |sort_option| %>
-            <li>
-              <%= radio_button_tag "work_search[sort_column]", 
-                                  sort_option.second, 
-                                  @search.send("sort_column").include?(sort_option.second), 
-                                  id: "work_search_sort_column_#{sort_option.second}" %>
-              <%= label_tag "work_search_sort_column_#{sort_option.second}", 
-                            "#{sort_option.first.to_s.titleize}" %>
-            </li>
-          <% end %>
-        </ul>
+      <dd class="sort">
+        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
 
       <% %w(rating warning category fandom character relationship freeform).each do |tag_type| %>
