@@ -1,29 +1,16 @@
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me
   audited
   include WorksOwner
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-
-  # Authlogic gem
-  acts_as_authentic do |config|
-    config.transition_from_restful_authentication = true
-    if (ArchiveConfig.BCRYPT  || "true") == "true" then
-      config.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::Sha1]
-    else
-      config.crypto_provider = Authlogic::CryptoProviders::Sha512
-      config.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha1]
-    end
-    # Use our own validations for login
-    config.validate_login_field = false
-    config.validates_length_of_password_field_options = {:on => :update,
-                                                         :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                         :if => :has_no_credentials?}
-    config.validates_length_of_password_confirmation_field_options = {:on => :update,
-                                                                      :minimum => ArchiveConfig.PASSWORD_LENGTH_MIN,
-                                                                      :if => :has_no_credentials?}
-  end
 
   def has_no_credentials?
     self.crypted_password.blank?
@@ -228,7 +215,7 @@ class User < ActiveRecord::Base
   validates_format_of :login,
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  # done by authlogic
+
   validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
   validates :email, :email_veracity => true
