@@ -2,7 +2,7 @@ class TagSetAssociationsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
   before_filter :load_tag_set
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :moderators_only
 
   def load_tag_set

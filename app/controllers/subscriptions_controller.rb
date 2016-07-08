@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
 
   skip_before_filter :store_location, :only => [:create, :destroy]
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_user
   before_filter :check_ownership
 

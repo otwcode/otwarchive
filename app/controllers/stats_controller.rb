@@ -1,6 +1,6 @@
 class StatsController < ApplicationController
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_user
   before_filter :check_ownership
 

@@ -1,6 +1,6 @@
 class PotentialMatchesController < ApplicationController
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_collection
   before_filter :collection_maintainers_only
   before_filter :load_challenge

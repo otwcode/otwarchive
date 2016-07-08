@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-
   skip_before_filter :store_location, :only => [:first_login_help]
   
   # unicorn_test
