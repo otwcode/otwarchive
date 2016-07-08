@@ -113,10 +113,8 @@ class WorksController < ApplicationController
     @page_subtitle = index_page_title
 
     if user_signed_in? && @tag
-      @favorite_tag = @current_user.favorite_tags.
-                      where(tag_id: @tag.id).first ||
-                      FavoriteTag.
-                      new(tag_id: @tag.id, user_id: @current_user.id)
+      @favorite_tag = current_user.favorite_tags.where(tag_id: @tag.id).first ||
+                      FavoriteTag.new(tag_id: @tag.id, user_id: current_user.id)
     end
 
     if @owner.present?

@@ -10,7 +10,7 @@
             <li><%= span_if_current ts('My Subscriptions', key: 'header'), user_subscriptions_path(current_user) %></li>
           <% end %>
           <% if @current_user_visible_work_count > 0 %>
-            <li><%= span_if_current ts("My Works", key: 'header'), user_works_path(@current_user) %></li>
+            <li><%= span_if_current ts("My Works", key: 'header'), user_works_path(current_user) %></li>
           <% end %>
           <% if @current_user_bookmarks_count > 0 %>
             <li><%= span_if_current ts("My Bookmarks", key: 'header'), user_bookmarks_path(current_user) %></li>
@@ -24,7 +24,7 @@
           <% if @current_user_offer_assignments > 0 %>
             <li><%= span_if_current ts("My Assignments", key: 'header'), user_assignments_path(current_user) %></li>
           <% end %>
-          <% if @current_user.preference.try(:history_enabled?) %>
+          <% if current_user.preference.try(:history_enabled?) %>
             <li><%= span_if_current ts('My History', key: 'header'), user_readings_path(current_user) %></li>
           <% end %>
           <li><%= span_if_current ts('My Preferences', key: 'header'), user_preferences_path(current_user) %></li>
@@ -42,7 +42,7 @@
           <li><%= link_to ts('New Work', key: 'header'), new_work_path %></li>
           <li><%= link_to ts('Import Work', key: 'header'), new_work_path(:import => "true") %></li>
           <% if @current_user_unposted_works_size > 0 %>
-            <li><%= span_if_current ts('From Draft', key: 'header'), drafts_user_works_path(@current_user) %></li>
+            <li><%= span_if_current ts('From Draft', key: 'header'), drafts_user_works_path(current_user) %></li>
           <% end %>
       	</ul>
       </li>
