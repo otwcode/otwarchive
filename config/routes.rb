@@ -1,31 +1,22 @@
 Otwarchive::Application.routes.draw do
-  devise_for :admins, controllers: {
-    sessions: 'admin/sessions'
-  }
+  devise_scope :user do
+    get '/login'  => 'user/sessions#new'
+    get '/logout' => 'user/session#destroy'
+  end
 
-  devise_for :users, controllers: {
-    sessions: 'user/sessions'
-  }
+  devise_for :user,
+             controllers: { sessions: 'user/sessions' }
+
+  devise_for :admin,
+             controllers: { sessions: 'admin/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
 
   # PATHS TO CHECK
 
-  resources :admin_sessions, only: [:new, :create, :destroy]
-
-  match '/admin/login' => 'admin_sessions#new'
-  match '/admin/logout' => 'admin_sessions#destroy'
-
   resources :passwords, only: [:new, :create]
-
-  #### SESSIONS ####
-
-  resources :user_sessions, only: [:new, :create, :destroy] do
-    collection do
-      get :passwd_small
-      get :passwd
-    end
-  end
-  match 'login' => 'user_sessions#new'
-  match 'logout' => 'user_sessions#destroy'
 
   #### ERRORS ####
 
