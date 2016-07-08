@@ -8,7 +8,7 @@ http_interactions:
       string: ''
     headers:
       Accept:
-      - ! '*/*'
+      - "*/*"
       User-Agent:
       - Ruby
   response:
@@ -17,9 +17,9 @@ http_interactions:
       message: OK
     headers:
       Server:
-      - nginx/1.2.1
+      - nginx/1.6.2
       Date:
-      - Tue, 19 May 2015 06:57:58 GMT
+      - Thu, 09 Jun 2016 21:04:29 GMT
       Content-Type:
       - text/html
       Content-Length:
@@ -28,11 +28,13 @@ http_interactions:
       - Fri, 15 Mar 2013 17:30:28 GMT
       Connection:
       - keep-alive
+      Etag:
+      - '"51435ab4-18e0"'
       Accept-Ranges:
       - bytes
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 19 May 2015 06:57:58 GMT
-recorded_with: VCR 2.5.0
+  recorded_at: Thu, 09 Jun 2016 21:04:29 GMT
+recorded_with: VCR 3.0.1

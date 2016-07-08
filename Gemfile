@@ -14,6 +14,8 @@ gem 'rails', '3.2.22.2'
 gem 'mysql2', '~> 0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
+#https://github.com/winebarrel/activerecord-mysql-reconnect
+gem 'activerecord-mysql-reconnect'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)

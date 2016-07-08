@@ -57,3 +57,10 @@ Feature: Edit tags on a work
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
     And I follow "Edit Tags"
   Then I should see "I am <strong>er Than Yesterday & Other Lies"
+
+  Scenario: Unlike admins, regular users do not see the language option on the Edit Tags page
+  Given I am logged in as "regularuser"
+    And I post the work "Some Work"
+  When I view the work "Some Work"
+    And I follow "Edit Tags"
+  Then I should not see "Choose a language"
