@@ -44,14 +44,14 @@
     <% end %>
 
 
-    <% if logged_in? && @work %>
+    <% if user_signed_in? && @work %>
       <li>
         <% @bookmark ||= bookmark_if_exists(commentable) %>
         <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
       </li>
     <% end %>
 
-    <% if logged_in? && @work && marked_for_later?(@work) %>
+    <% if user_signed_in? && @work && marked_for_later?(@work) %>
       <li>
         <%= markasread_link(@work) %>
       </li>
@@ -72,7 +72,7 @@
     <%= render "kudos/kudos", :kudos => @kudos, :guest_kudos_count => @work.guest_kudos_count, :commentable => @work %>
   <% end %>
 
-  <% if !logged_in? && (commentable.is_a?(Work) && commentable.anon_commenting_disabled || commentable.is_a?(Chapter) && commentable.work.anon_commenting_disabled) %>
+  <% if !user_signed_in? && (commentable.is_a?(Work) && commentable.anon_commenting_disabled || commentable.is_a?(Chapter) && commentable.work.anon_commenting_disabled) %>
     <p class="notice">
       <%= ts("Sorry, this work doesn't allow non-Archive users to comment. You can however still leave Kudos!") %>
     </p>
@@ -96,7 +96,7 @@
     <% end %>
   </div>
 
-  <% if logged_in? && @work %>
+  <% if user_signed_in? && @work %>
     <% if is_author_of?(@work) || is_maintainer? %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>

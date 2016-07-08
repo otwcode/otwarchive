@@ -110,7 +110,7 @@ module CommentsHelper
   #### HELPERS FOR REPLYING TO COMMENTS #####
   
   def no_anon_reply(comment)
-    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !logged_in?
+    comment.ultimate_parent.is_a?(Work) && comment.ultimate_parent.anon_commenting_disabled && !user_signed_in?
   end
   
   def add_cancel_comment_reply_link(comment)
@@ -308,7 +308,7 @@ module CommentsHelper
 
   # if parent commentable is a work, determine if current user created it
   def current_user_is_work_creator(commentable)
-    if logged_in?
+    if user_signed_in?
       parent = find_parent(commentable)
       parent.is_a?(Work) && current_user.is_author_of?(parent)
     end
@@ -316,7 +316,7 @@ module CommentsHelper
 
   # if parent commentable is an anonymous work, determine if current user created it
   def current_user_is_anonymous_creator(commentable)
-    if logged_in?
+    if user_signed_in?
       parent = find_parent(commentable)
       parent.respond_to?(:work) && parent.anonymous? && current_user.is_author_of?(parent)
     end

@@ -21,7 +21,7 @@
 		  <li>The Archive of Our Own is a project of the <a href="http://transformativeworks.org"><acronym title="Organization for Transformative Works">OTW</acronym></a></li>
 	  </ul>
 	
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <h3 class="heading">Access your account</h3>
 	    <ul>
 		   <li><%= link_to t('.my_home', :default => "My Home"), user_path(current_user) %></li>

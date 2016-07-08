@@ -32,7 +32,7 @@
         </p>
       <% end %>
 
-      <% if logged_in? %>
+      <% if user_signed_in? %>
         <% if current_user_is_anonymous_creator(commentable) %>
           <p class="notice">
            <%= ts("While this work is anonymous, comments you post will also be listed anonymously.") %>

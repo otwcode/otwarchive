@@ -5,7 +5,7 @@ module CollectionsHelper
     if item.class == Chapter
       item = item.work
     end
-    if logged_in?
+    if user_signed_in?
       if item.class == Work
         link_to ts("Add To Collection"), new_work_collection_item_path(item), :remote => true
       elsif item.class == Bookmark

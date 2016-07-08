@@ -60,13 +60,13 @@
 
   <% end %><!-- end cache -->
 
-  <% if collection.user_is_owner?(current_user) || (collection.challenge && collection.challenge.signup_open && logged_in?) || (collection.moderated? && logged_in?) %>
+  <% if collection.user_is_owner?(current_user) || (collection.challenge && collection.challenge.signup_open && user_signed_in?) || (collection.moderated? && user_signed_in?) %>
     <h6 class="landmark heading"><%= ts("User Actions") %></h6>
     <ul class="actions" role="menu">
       <% if collection.user_is_owner?(current_user) %>
         <li><%= link_to ts("Edit"), edit_collection_path(collection) %></li>
       <% end %>
-      <% if collection.challenge && collection.challenge.signup_open && logged_in? %>
+      <% if collection.challenge && collection.challenge.signup_open && user_signed_in? %>
         <%= render "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :collection => collection %>
       <% end %>
       <% if !collection.user_is_owner?(current_user) && collection.moderated? && !(collection.challenge && collection.challenge.signup_open) %>

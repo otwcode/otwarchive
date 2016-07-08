@@ -26,7 +26,7 @@
     image_tag('/images/ao3_logos/logo_42.png', :alt => "#{ArchiveConfig.ALT_LOGO}", :class => "logo"), root_path) %> 
   </h1>
 
-  <% if logged_in? || logged_in_as_admin? %>
+  <% if user_signed_in? || logged_in_as_admin? %>
     <%= render 'user_sessions/greeting' %>
   <% else %>
     <div id="login" class="dropdown">

@@ -112,7 +112,7 @@ class WorksController < ApplicationController
     options[:show_restricted] = current_user.present? || logged_in_as_admin?
     @page_subtitle = index_page_title
 
-    if logged_in? && @tag
+    if user_signed_in? && @tag
       @favorite_tag = @current_user.favorite_tags.
                       where(tag_id: @tag.id).first ||
                       FavoriteTag.
@@ -234,7 +234,7 @@ class WorksController < ApplicationController
 
     # Users must explicitly okay viewing of entire work
     if @work.chaptered?
-      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+      if @work.number_of_posted_chapters > 1 && params[:view_full_work] || (user_signed_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
         flash.keep

@@ -67,7 +67,7 @@ class TagsController < ApplicationController
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? #current_user.is_a?User
+      if user_signed_in? #current_user.is_a?User
         @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
       elsif logged_in_as_admin?
         @works = @tag.works.visible_to_owner.paginate(:page => params[:page])

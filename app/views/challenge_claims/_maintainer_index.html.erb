@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
   <% end %>
   <li><%= ts("Sort By") %></li>

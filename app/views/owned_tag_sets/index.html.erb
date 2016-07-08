@@ -24,7 +24,7 @@
         </fieldset>
       <% end %>
     </li>
-    <% if logged_in? %>
+    <% if user_signed_in? %>
   	  <li><%= link_to ts('New Tag Set'), new_tag_set_path %></li>
   	  <li><%= link_to ts('Tags'), tags_path %></li>
     <% end %>

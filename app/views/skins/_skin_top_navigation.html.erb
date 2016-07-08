@@ -7,7 +7,7 @@
   <% if session[:site_skin] %>
     <li><%= link_to revert_default, unset_skins_path %></li>
   <% end %>
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <% if (current_user.preference.skin_id != Skin.default.id) && session[:site_skin].blank? %>
       <li>
         <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => 'put') do |f| %>
