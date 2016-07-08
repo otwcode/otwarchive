@@ -89,11 +89,11 @@ class ApplicationController < ActionController::Base
   end
 
   def collection_maintainers_only
-    logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
+    user_signed_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
   end
 
   def collection_owners_only
-    logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
+    user_signed_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end
 
   @over_anon_threshold = true if @over_anon_threshold.nil?
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
     end
 
     @page_title = ""
-    if logged_in? && !current_user.preference.try(:work_title_format).blank?
+    if user_signed_in? && !current_user.preference.try(:work_title_format).blank?
       @page_title = current_user.preference.work_title_format
       @page_title.gsub!(/FANDOM/, fandom)
       @page_title.gsub!(/AUTHOR/, author)
@@ -349,7 +349,7 @@ class ApplicationController < ActionController::Base
 
   # Filter method - requires user to have opendoors privs
   def opendoors_only
-    (logged_in? && permit?('opendoors')) || access_denied
+    (user_signed_in? && permit?('opendoors')) || access_denied
   end
 
   # Redirect as appropriate when an access request fails.

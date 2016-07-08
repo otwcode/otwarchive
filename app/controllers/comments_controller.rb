@@ -50,7 +50,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it's restricted
   def check_if_restricted
     parent = find_parent
-    if parent.respond_to?(:restricted) && parent.restricted? && ! (logged_in? || logged_in_as_admin?)
+    if parent.respond_to?(:restricted) && parent.restricted? && ! (user_signed_in? || logged_in_as_admin?)
       redirect_to login_path(:restricted_commenting => true) and return
     end
   end
@@ -58,7 +58,7 @@ class CommentsController < ApplicationController
   # Check to see if the ultimate_parent is a Work, and if so, if it allows anon comments
   def check_anonymous_comment_preference
     parent = find_parent
-    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !logged_in?
+    if parent.respond_to?(:anon_commenting_disabled) && parent.anon_commenting_disabled && !user_signed_in?
       flash[:error] = ts("Sorry, this work doesn't allow non-Archive users to comment.")
       redirect_to work_path(parent)
     end
@@ -67,7 +67,7 @@ class CommentsController < ApplicationController
   def check_unreviewed
     if @commentable && @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
       flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
-      if logged_in?
+      if user_signed_in?
         redirect_to root_path and return
       else
         redirect_to login_path and return
@@ -79,7 +79,7 @@ class CommentsController < ApplicationController
     parent = find_parent
     unless logged_in_as_admin? || current_user_owns?(parent)
       flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
-      if logged_in?
+      if user_signed_in?
         redirect_to root_path and return
       else
         redirect_to login_path and return
@@ -92,7 +92,7 @@ class CommentsController < ApplicationController
       parent = find_parent
       unless logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
         flash[:error] = ts("Sorry, that comment is currently in moderation.")
-        if logged_in?
+        if user_signed_in?
           redirect_to root_path and return
         else
           redirect_to login_path and return

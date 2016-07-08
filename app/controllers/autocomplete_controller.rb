@@ -186,7 +186,7 @@ class AutocompleteController < ApplicationController
     if params[:term].present?
       search_param = '%' + params[:term] + '%'
       query = Skin.site_skins.where("title LIKE ?", search_param).limit(15).sort_by_recent
-      if logged_in?
+      if user_signed_in?
         query = query.approved_or_owned_by(current_user)
       else
         query = query.approved_skins

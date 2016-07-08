@@ -1,11 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @commentable.nil? %>
   <!-- the most recent comments -->
-  <% cache(logged_in? ? 'latest_comments' : 'latest_comments_public') do %>
+  <% cache(user_signed_in? ? 'latest_comments' : 'latest_comments_public') do %>
     <h2 class="heading"><%= t('.viewing_last', :default => "Viewing %{count} recent comments", :count => @comments.length) %></h2>
     <ol class="comment index group">
       <% for comment in @comments %>
-        <% if comment.approved or logged_in? %>
+        <% if comment.approved or user_signed_in? %>
           <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} %>
         <% end %>
       <% end %>

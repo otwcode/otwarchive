@@ -24,11 +24,11 @@
 <h3 class="landmark heading"><%= ts("Navigation") %></h3>
 <ul class="navigation actions" role="navigation">
   <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
+  <% unless user_signed_in? && @user && @user == current_user %>
     <li><%= span_if_current ts("Collections"), collections_path %></li>
     <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
   <% end %>
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <% # Logged in user on own collections index gets links for user Collections and Manage Collected Works %>
     <% if @user && @user == current_user %>
       <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>

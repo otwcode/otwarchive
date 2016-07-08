@@ -36,7 +36,7 @@
   <!--/content-->
   
   <!--subnav-->
-  <% if logged_in? && current_user == @user %>
+  <% if user_signed_in? && current_user == @user %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
   <ul class="navigation actions" role="navigation">
     <li><%= link_to ts("Edit My Works"), show_multiple_user_works_path(@user) %></li>

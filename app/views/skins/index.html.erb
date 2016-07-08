@@ -19,7 +19,7 @@
 <% if @skins.empty? %>
   <p>
     <%= work_skin ? ts('No work skins here yet!') : ts('No site skins here yet!') %>
-    <% if logged_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => work_skin ? 'WorkSkin' : 'Skin') %><% end %>
+    <% if user_signed_in? %><%= link_to ts('Why not try making one?'), new_skin_path(:skin_type => work_skin ? 'WorkSkin' : 'Skin') %><% end %>
   </p>
 <% else %>
   <ul class="skin picture index group">

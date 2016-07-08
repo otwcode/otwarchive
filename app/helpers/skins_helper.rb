@@ -19,10 +19,10 @@ module SkinsHelper
     if params[:site_skin]
       @site_skin = Skin.approved_or_owned_by.usable.where(:id => params[:site_skin]).first
     end
-    if (logged_in? || logged_in_as_admin?) && session[:site_skin]
+    if (user_signed_in? || logged_in_as_admin?) && session[:site_skin]
       @site_skin ||= Skin.approved_or_owned_by.usable.where(:id => session[:site_skin]).first
     end
-    if logged_in? && current_user.preference
+    if user_signed_in? && current_user.preference
       @site_skin ||= current_user.preference.skin
     end
     @site_skin ||= AdminSetting.default_skin

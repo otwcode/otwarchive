@@ -30,7 +30,7 @@
           <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
           <li class="narrow-shown hidden"><a href="#work-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
         <% end %>
-        <% if @tag && logged_in? && !@collection %>
+        <% if @tag && user_signed_in? && !@collection %>
           <li><%= render 'favorite_tags/form', current_user: @current_user, favorite_tag: @favorite_tag %></li>
         <% end %>
         <% if @tag && !@collection && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>

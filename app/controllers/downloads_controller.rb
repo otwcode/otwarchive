@@ -212,7 +212,7 @@ protected
   end
 
   def guest_downloading_off
-    if !logged_in? && @admin_settings.guest_downloading_off?
+    if !user_signed_in? && @admin_settings.guest_downloading_off?
       redirect_to login_path(:high_load => true)
     end
   end

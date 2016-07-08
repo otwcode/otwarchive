@@ -10,7 +10,7 @@ class MediaController < ApplicationController
       if medium == uncategorized
         @fandom_listing[medium] = medium.children.in_use.by_type('Fandom').find(:all, :order => 'created_at DESC', :limit => 5)
       else
-        @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ?
+        @fandom_listing[medium] = (user_signed_in? || logged_in_as_admin?) ?
           # was losing the select trying to do this through the parents association
           Fandom.unhidden_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}}) :
           Fandom.public_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}})

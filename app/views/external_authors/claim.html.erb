@@ -21,7 +21,7 @@
 <div class="claim module">
   <h3 id="claim"><%= ts("Claim All Works") %></h3>
 
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <p class="message">
       <%= ts("Claim your works with your logged-in account. If you would like to claim
       these works under a different account (or create a new account to claim them with), log out and reload this
@@ -47,7 +47,7 @@
     <%= render "works/work_blurb", :work => work %>
   <% end %>
 </ul>
-<% if logged_in? %>
+<% if user_signed_in? %>
   <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %></p>
 <% else %>
   <p class="actions"><%= button_to ts("Sign me up and give me my works! Yay!"), new_user_path(:invitation_token => @invitation.token) %></p>
@@ -107,7 +107,7 @@
 <h3><%= ts("Wait, wait, go over this again?") %></h3>
 <ul class="notes">
   <li><%= ts("If you do nothing, the work(s) will remain attached to the archivist account.") %></li>
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <li><%= ts("You can claim your works.") %></li>
   <% else %>
     <li><%= ts("You can create an account and claim your works (if you already have an account, log in to claim them)") %></li>

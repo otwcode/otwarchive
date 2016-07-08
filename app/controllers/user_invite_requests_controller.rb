@@ -13,7 +13,7 @@ class UserInviteRequestsController < ApplicationController
   def new
     @page_title = ts('New User Invitation Request')
     if AdminSetting.request_invite_enabled?
-      if logged_in?
+      if user_signed_in?
         @user = current_user
         @user_invite_request = @user.user_invite_requests.build
       else
@@ -29,7 +29,7 @@ class UserInviteRequestsController < ApplicationController
   # POST /user_invite_requests.xml
   def create
     if AdminSetting.request_invite_enabled?
-      if logged_in?
+      if user_signed_in?
         @user = current_user
         @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
       else

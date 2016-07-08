@@ -60,7 +60,7 @@
     </p>
   <% end %>   
 
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
   <% end %>
   

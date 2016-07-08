@@ -1,4 +1,4 @@
-<% if logged_in? %>
+<% if user_signed_in? %>
   <ul class="navigation actions" role="navigation">
     <% if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first %>
       <li><%= span_if_current ts("My Nominations"), tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>

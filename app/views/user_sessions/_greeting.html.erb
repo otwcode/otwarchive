@@ -1,5 +1,5 @@
 <div id="greeting">
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <h3 class="landmark heading"><%= ts('User Navigation', key: 'header') %></h3>
     <ul class="user navigation actions" role="navigation">
       <li class="dropdown">

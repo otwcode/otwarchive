@@ -41,7 +41,7 @@ class ChaptersController < ApplicationController
       redirect_to work_path(@work) and return
     end
     @chapters = @work.chapters_in_order(false)
-    if !logged_in? || !current_user.is_author_of?(@work)
+    if !user_signed_in? || !current_user.is_author_of?(@work)
       @chapters = @chapters.select(&:posted)
     end
     if !@chapters.include?(@chapter)
