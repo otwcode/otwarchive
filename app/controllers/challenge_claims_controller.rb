@@ -1,6 +1,6 @@
 class ChallengeClaimsController < ApplicationController
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_collection, :except => [:index]
   before_filter :collection_owners_only, :except => [:index, :show, :create, :destroy]
   before_filter :load_claim_from_id, :only => [:show, :destroy]

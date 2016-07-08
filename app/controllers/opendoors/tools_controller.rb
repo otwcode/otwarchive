@@ -1,6 +1,6 @@
 class Opendoors::ToolsController < ApplicationController
   
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :opendoors_only
   
   def index

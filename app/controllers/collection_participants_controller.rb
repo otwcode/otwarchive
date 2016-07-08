@@ -5,7 +5,7 @@ class CollectionParticipantsController < ApplicationController
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :has_other_owners, :only => [:update, :destroy]
   before_filter :collection_maintainers_only, :only => [:index, :add, :update]
-  before_filter :users_only, :only => [:join]
+  before_filter :authenticate_user!, :only => [:join]
 
   cache_sweeper :collection_sweeper
 

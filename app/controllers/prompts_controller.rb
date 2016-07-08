@@ -1,6 +1,6 @@
 class PromptsController < ApplicationController
 
-  before_filter :users_only
+  before_filter :authenticate_user!
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]

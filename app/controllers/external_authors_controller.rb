@@ -3,7 +3,7 @@ class ExternalAuthorsController < ApplicationController
   before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
   before_filter :check_user_status, :only => [:new, :create, :edit]
   before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
-  before_filter :users_only, :only => [:complete_claim]
+  before_filter :authenticate_user!, :only => [:complete_claim]
 
   def load_user
     @user = User.find_by_login(params[:user_id])

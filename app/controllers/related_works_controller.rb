@@ -1,6 +1,6 @@
 class RelatedWorksController < ApplicationController
 
-  before_filter :users_only, :except => [:index]
+  before_filter :authenticate_user!, :except => [:index]
   before_filter :get_instance_variables, :except => [:index]
 
   def index

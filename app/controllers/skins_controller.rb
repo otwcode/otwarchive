@@ -1,6 +1,6 @@
 class SkinsController < ApplicationController
 
-  before_filter :users_only, :only => [:new, :create, :destroy]
+  before_filter :authenticate_user!, :only => [:new, :create, :destroy]
   before_filter :load_skin, :except => [:index, :new, :create, :unset]
   before_filter :check_title, :only => [:create, :update]
   before_filter :check_ownership_or_admin, :only => [:edit, :update]

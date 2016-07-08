@@ -1,6 +1,6 @@
 class ExternalWorksController < ApplicationController
   before_filter :admin_only, :only => [:edit, :update, :compare, :merge]  
-  before_filter :users_only, :only => [:new]
+  before_filter :authenticate_user!, :only => [:new]
   before_filter :check_user_status, :only => [:new]
   
   def new

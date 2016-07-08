@@ -1,6 +1,6 @@
 class OrphansController < ApplicationController
   # You must be logged in to orphan works - relies on current_user data 
-  before_filter :users_only, :except => [:index, :about]
+  before_filter :authenticate_user!, :except => [:index, :about]
   
   before_filter :load_orphans, :except => [:index, :about]
   
