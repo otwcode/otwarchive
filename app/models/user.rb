@@ -1,16 +1,17 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+  include WorksOwner
+
+  devise :database_authenticatable, :async, :registerable, :recoverable,
+         :rememberable, :trackable, :validatable, :confirmable, :lockable,
+         :timeoutable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-  audited
-  include WorksOwner
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
+
+  audited
 
   def has_no_credentials?
     self.crypted_password.blank?
