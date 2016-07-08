@@ -4,7 +4,7 @@ class FeedbacksController < ApplicationController
 
   def new
     @feedback = Feedback.new
-    if logged_in_as_admin?
+    if admin_signed_in?
       @feedback.email = current_admin.email
     elsif is_registered_user?
       @feedback.email = current_user.email

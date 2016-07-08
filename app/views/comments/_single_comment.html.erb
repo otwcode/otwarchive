@@ -11,7 +11,7 @@
       <p>
         <%= ts("(Previous comment deleted.)") %>
       </p>
-    <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
+    <% elsif single_comment.hidden_by_admin? && !admin_signed_in? %>
       <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
     <% else %>
       <% cache(single_comment, :expires_in => 1.week ) do %>

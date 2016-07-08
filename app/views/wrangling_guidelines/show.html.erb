@@ -8,7 +8,7 @@
 
 <!--main content-->
 <div class="admin" role="article">
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <div class="header">
       <h3 class="heading">
         Updated: <%=h @wrangling_guideline.updated_at %> | <%= link_to ts('Edit'), edit_wrangling_guideline_path(@wrangling_guideline) %>

@@ -52,7 +52,7 @@
   <% # recent bookmarks will be loaded up here if requested %>
   <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
 
-  <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
+  <% if admin_signed_in? && bookmarkable.class == ExternalWork %>
     <%= render 'admin/admin_options', :item => bookmarkable %>
   <% end %>
 

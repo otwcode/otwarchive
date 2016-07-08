@@ -61,7 +61,7 @@ class TagsController < ApplicationController
   #       to the works controller)
   def show
     @page_subtitle = @tag.name
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(Banned) && !admin_signed_in?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
@@ -69,7 +69,7 @@ class TagsController < ApplicationController
     if !@tag.canonical && !@tag.merger
       if user_signed_in? #current_user.is_a?User
         @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
-      elsif logged_in_as_admin?
+      elsif admin_signed_in?
         @works = @tag.works.visible_to_owner.paginate(:page => params[:page])
       else
         @works = @tag.works.visible_to_all.paginate(:page => params[:page])
@@ -185,7 +185,7 @@ class TagsController < ApplicationController
   def edit
     @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
 
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
+    if @tag.is_a?(Banned) && !admin_signed_in?
       flash[:error] = ts("Please log in as admin")
 
       redirect_to tag_wranglings_path and return

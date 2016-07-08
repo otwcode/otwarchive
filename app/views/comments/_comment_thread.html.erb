@@ -1,7 +1,7 @@
 <!-- START thread -->
 <ol class="thread">
   <% for comment in comments %>
-    <% if comment.approved? || logged_in_as_admin? %>
+    <% if comment.approved? || admin_signed_in? %>
     
       <%= render 'comments/single_comment', single_comment: comment %>
       <% child_comments = comment.comments.reviewed %>

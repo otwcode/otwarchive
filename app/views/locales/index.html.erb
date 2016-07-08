@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<% if logged_in_as_admin? || permit?("translation_admin") %>
+<% if admin_signed_in? || permit?("translation_admin") %>
   <%= render 'navigation' %>
   <!--main content-->
   <table summary="<%= t('.locale_table_summary', :default => 'Lists supported locales, along with details of how they are used and options to modify them.') %>">

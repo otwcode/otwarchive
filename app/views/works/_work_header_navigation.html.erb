@@ -68,7 +68,7 @@
   </li>
 
   <% # for author or admin, review comments if moderating them %>
-  <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
+  <% if (admin_signed_in? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
     <li class="comments" id="review_comments">
       <%= link_to ts("Unreviewed Comments") + " (" + @work.find_all_comments.unreviewed_only.count.to_s + ")" , unreviewed_work_comments_path(@work) %>
     </li>
