@@ -1,7 +1,7 @@
 # Base admin model
 class Admin < ActiveRecord::Base
   devise :database_authenticatable, :async, :registerable, :recoverable,
-         :rememberable, :validatable
+         :rememberable, :validatable, :encryptable
 
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
