@@ -68,7 +68,7 @@
   </div>
 <% end %>
 
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
 <!-- BEGIN admin options -->
   <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>

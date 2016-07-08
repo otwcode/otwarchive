@@ -1,7 +1,7 @@
 <h2 class="heading">External Works</h2>
 
 <!--navigation-->
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
 <p class="navigation actions"><%= link_to "Show duplicates (#{ExternalWork.duplicate.count})", url_for(:show => 'duplicates') %></p>
 <% end %>
  <%= will_paginate @external_works %>

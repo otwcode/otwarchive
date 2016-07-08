@@ -19,7 +19,7 @@ module SkinsHelper
     if params[:site_skin]
       @site_skin = Skin.approved_or_owned_by.usable.where(:id => params[:site_skin]).first
     end
-    if (user_signed_in? || logged_in_as_admin?) && session[:site_skin]
+    if (user_signed_in? || admin_signed_in?) && session[:site_skin]
       @site_skin ||= Skin.approved_or_owned_by.usable.where(:id => session[:site_skin]).first
     end
     if user_signed_in? && current_user.preference
@@ -31,7 +31,7 @@ module SkinsHelper
   def get_skin_cache(skin)
     return "" unless skin
     roles = []
-    if logged_in_as_admin?
+    if admin_signed_in?
       roles << "admin"
     end
     skin_cache_key = "site_skin_#{skin.id}_#{skin.updated_at}" 

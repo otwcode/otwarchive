@@ -31,7 +31,7 @@
       <% end %>
       <% unless bookmark.approved_collections.empty? && !is_author_of?(bookmark) %>
         <ul class="meta commas">
-          <% if is_author_of?(bookmark) || logged_in_as_admin? %>
+          <% if is_author_of?(bookmark) || admin_signed_in? %>
             <% bookmark.collections.each do |coll| %>
               <li><%= link_to coll.title, collection_path(coll) %></li>
             <% end %>
@@ -57,7 +57,7 @@
   <!--navigation and actions-->
   <% if is_author_of?(bookmark) %>
     <%= render 'bookmarks/bookmark_owner_navigation', :bookmark => bookmark %>
-  <% elsif logged_in_as_admin? %>
+  <% elsif admin_signed_in? %>
     <%= render 'admin/admin_options', :item => bookmark %>
   <% end %>
 </div>

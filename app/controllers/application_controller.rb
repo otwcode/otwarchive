@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
     Rails.logger.debug "Added anchor #{params[:anchor]}"
-    return true if session[:adult] || logged_in_as_admin?
+    return true if session[:adult] || admin_signed_in?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
@@ -195,7 +195,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_ownership_or_admin
-     return true if logged_in_as_admin?
+     return true if admin_signed_in?
      access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
@@ -205,12 +205,12 @@ class ApplicationController < ActionController::Base
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
       redirect_to login_path(:restricted => true)
     elsif @check_visibility_of.is_a? Skin
-      access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
+      access_denied unless admin_signed_in? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
       is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) ||
                   (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
-      can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
+      can_view_hidden = admin_signed_in? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)
     end
   end

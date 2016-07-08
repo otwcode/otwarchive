@@ -1,7 +1,7 @@
 <h2 class="heading"><%= @language.name %></h2>
 
 <!--subnav-->
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
   <p class="navigation actions" role="navigation">
     <%= link_to ts('Edit Language'), edit_language_path(@language) %>
   </p>

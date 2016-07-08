@@ -49,7 +49,7 @@
       <li><%= link_to ts('Log Out', key: 'header'), logout_path %></li>
     </ul>
 
-    <% elsif logged_in_as_admin? %>
+    <% elsif admin_signed_in? %>
       <ul class="user navigation actions" role="navigation">
         <li><span class="current"><%= ts('Admin', key: 'header') %></span></li>
         <li><%= link_to ts('Log Out', key: 'header'), admin_logout_path %></li>

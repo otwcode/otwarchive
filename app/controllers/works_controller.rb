@@ -76,7 +76,7 @@ class WorksController < ApplicationController
     @languages = Language.default_order
     options = params[:work_search] || {}
     options.merge!(page: params[:page]) if params[:page].present?
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
     @search = WorkSearch.new(options)
     @page_subtitle = ts("Search Works")
 
@@ -109,7 +109,7 @@ class WorksController < ApplicationController
     end
 
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
     @page_subtitle = index_page_title
 
     if user_signed_in? && @tag
@@ -163,7 +163,7 @@ class WorksController < ApplicationController
     end
 
     options.merge!(page: params[:page])
-    options[:show_restricted] = current_user.present? || logged_in_as_admin?
+    options[:show_restricted] = current_user.present? || admin_signed_in?
 
     @user = User.find_by_login(params[:user_id])
 
@@ -1004,7 +1004,7 @@ public
   end
 
   def log_admin_activity
-    if logged_in_as_admin?
+    if admin_signed_in?
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'

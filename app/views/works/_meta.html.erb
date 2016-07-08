@@ -63,7 +63,7 @@
 
       <%= work_meta_list(@work, @chapter) %>
       </dd>
-      <% if logged_in_as_admin? %>
+      <% if admin_signed_in? %>
         <dt class="ip">
           <%= ts('IP Address:') %>
         </dt>

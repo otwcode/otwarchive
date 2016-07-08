@@ -46,7 +46,7 @@
     <dd><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
   </dl>
 
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <%= render "admin/admin_options", item: external_work %>
   <% end %>
 

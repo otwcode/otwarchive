@@ -1,4 +1,4 @@
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
   <%= render "admin_index" %>
 <% else %>
   <%= render "faq_index" %>

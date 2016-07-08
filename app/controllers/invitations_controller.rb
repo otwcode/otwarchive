@@ -6,7 +6,7 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by_login(params[:user_id])
-    access_denied unless logged_in_as_admin? || @user.present? && @user == current_user
+    access_denied unless admin_signed_in? || @user.present? && @user == current_user
   end
 
   def index
@@ -56,7 +56,7 @@ class InvitationsController < ApplicationController
     @invitation.attributes = params[:invitation]
     if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
       flash[:notice] = 'Invitation was successfully sent.'
-      if logged_in_as_admin?
+      if admin_signed_in?
         redirect_to find_admin_invitations_url(:token => @invitation.token)
       else
         redirect_to([@user, @invitation])        

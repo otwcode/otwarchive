@@ -17,17 +17,17 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in_as_admin? %>
+<% if admin_signed_in? %>
   <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 <% end %>
 <!--/subnav-->
 
 <!-- BEGIN revealed -->
-<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
+<% if !@work.unrevealed? || admin_signed_in? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work -->
 <!--work description, metadata, notes and messages-->
   <%= render :partial => 'works/work_header' %>
-  <% if logged_in_as_admin? %>
+  <% if admin_signed_in? %>
     <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
   <% end %>
 <!--/descriptions-->

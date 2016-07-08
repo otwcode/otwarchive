@@ -2,7 +2,7 @@
 <div id="footer" role="contentinfo" class="region">
 	<h3 class="landmark heading"><%= ts('Footer', key: 'footer') %></h3>
   <ul class="navigation actions" role="navigation">
-    <% unless !(user_signed_in? || logged_in_as_admin?) %>
+    <% unless !(user_signed_in? || admin_signed_in?) %>
       <% cache(skin_cache_footer_key) do %>
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
