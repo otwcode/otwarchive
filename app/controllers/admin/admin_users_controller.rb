@@ -1,6 +1,6 @@
 class Admin::AdminUsersController < ApplicationController
 
-  before_filter :admin_only
+  before_filter :authenticate_admin!
 
   def index
     @roles = Role.assignable.uniq

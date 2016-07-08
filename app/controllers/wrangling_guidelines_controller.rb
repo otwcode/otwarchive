@@ -1,6 +1,6 @@
 class WranglingGuidelinesController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :authenticate_admin!, :except => [:index, :show]
 
   # GET /wrangling_guidelines
   def index

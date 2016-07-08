@@ -1,6 +1,6 @@
 class ArchiveFaqsController < ApplicationController
 
-  before_filter :admin_only, :except => [:index, :show]
+  before_filter :authenticate_admin!, :except => [:index, :show]
   before_filter :set_locale
   before_filter :require_language_id
   around_filter :with_locale

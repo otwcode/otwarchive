@@ -1,5 +1,5 @@
 class AdminsController < ApplicationController
-  before_filter :admin_only
+  before_filter :authenticate_admin!
   
   # GET /admins
   # GET /admins.xml

@@ -1,6 +1,6 @@
 class KnownIssuesController < ApplicationController
 
-  before_filter :admin_only, :except => [:index]
+  before_filter :authenticate_admin!, :except => [:index]
 
   # GET /known_issues
   def index
