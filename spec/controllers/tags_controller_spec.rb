@@ -5,7 +5,7 @@ describe TagsController do
 
   before do
     fake_login
-    @current_user.roles << Role.new(name: 'tag_wrangler')
+    current_user.roles << Role.new(name: 'tag_wrangler')
   end
 
   describe "wrangle" do
