@@ -16,11 +16,8 @@ class PasswordsController < ApplicationController
       render :action => "new"
     else
       @user.reset_user_password
-      @user_session = UserSession.find
-      if @user_session
-        @user_session.destroy
-      end
-      flash[:notice] = t('check_email', :default => 'Check your email for your generated password.')
+      sign_out current_user if user_signed_in?
+      flash[:notice] = t('check_email', default: 'Check your email for your generated password.')
       redirect_to login_path
     end
   end
