@@ -1,5 +1,5 @@
 class InviteRequestsController < ApplicationController
-  before_filter :admin_only, only: [:manage, :reorder, :destroy]
+  before_filter :authenticate_admin!, only: [:manage, :reorder, :destroy]
 
   # GET /invite_requests
   def index
