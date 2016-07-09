@@ -265,27 +265,7 @@ class User < ActiveRecord::Base
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
-    !activated_at.nil?
-  end
-
-  def generate_password(length=8)
-    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
-    password = ''
-    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
-    password
-  end
-
-  # use update_all to force the update even if the user is invalid
-  def reset_user_password
-    temp_password = generate_password(20)
-    User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
-    # send synchronously to prevent getting caught in backed-up mail queue
-    UserMailer.reset_password(self.id, temp_password).deliver! 
-  end
-
-  def activate
-    return false if self.active?
-    self.update_attribute(:activated_at, Time.now.utc)
+    !confirmed_at.nil?
   end
 
   def create_default_associateds

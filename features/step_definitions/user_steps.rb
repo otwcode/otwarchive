@@ -9,21 +9,18 @@ Given /^I have no users$/ do
 end
 
 Given /I have an orphan account/ do
-  user = FactoryGirl.create(:user, :login => 'orphan_account')
-  user.activate
+  user = FactoryGirl.create(:user, :active, login: 'orphan_account')
 end
 
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
-    user.activate
+    user = FactoryGirl.create(:user, :active, hash)
   end
 end
 
 Given /the following activated tag wranglers? exists?/ do |table|
   table.hashes.each do |hash|
-    user = FactoryGirl.create(:user, hash)
-    user.activate
+    user = FactoryGirl.create(:user, :active, hash)
     user.tag_wrangler = '1'
   end
 end
@@ -31,8 +28,7 @@ end
 Given /^the user "([^\"]*)" exists and is activated$/ do |login|
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => "#{DEFAULT_PASSWORD}"})
-    user.activate
+    user = FactoryGirl.create(:user, :active, login: login, password: DEFAULT_PASSWORD )
   end
 end
 
@@ -47,19 +43,18 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   step("I am logged out")
   user = User.find_by_login(login)
   if user.blank?
-    user = FactoryGirl.create(:user, {:login => login, :password => password})
-    user.activate
+    user = FactoryGirl.create(:user, :active, login: login, password: password)
   else
     user.password = password
     user.password_confirmation = password
-    user.save
+    user.save!
   end
   visit login_path
-  fill_in "User name", :with => login
-  fill_in "Password", :with => password
+  fill_in "User name", with: login
+  fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  step('I should see "Successfully logged in."')
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
@@ -73,38 +68,32 @@ end
 Given /^I am logged in as a random user$/ do
   step("I am logged out")
   name = "testuser#{User.count + 1}"
-  user = FactoryGirl.create(:user, :login => name, :password => DEFAULT_PASSWORD)
-  user.activate
+  user = FactoryGirl.create(:user, :active, login: name, password: DEFAULT_PASSWORD)
   visit login_path
-  fill_in "User name", :with => name
-  fill_in "Password", :with => DEFAULT_PASSWORD
+  fill_in "User name", with: name
+  fill_in "Password", with: DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log In"
-  assert UserSession.find
+  step('I should see "Successfully logged in."')
 end
 
 Given /^I am logged in as a banned user$/ do
   step("I am logged out")
-  user = FactoryGirl.create(:user, {:login => "banned", :password => DEFAULT_PASSWORD})
-  user.activate
+  user = FactoryGirl.create(:user, :active, login: 'banned', password: DEFAULT_PASSWORD)
   user.banned = true
   user.save
   visit login_path
-  fill_in "User name", :with => "banned"
-  fill_in "Password", :with => DEFAULT_PASSWORD
+  fill_in "User name", with: 'banned'
+  fill_in "Password", with: DEFAULT_PASSWORD
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  step('I should see "Successfully logged in."')
 end
 
 Given /^user "([^\"]*)" is banned$/ do |login|
   user = User.where(login: login).first
   if user.nil?
-    user = FactoryGirl.create(
-      :user,
-      { login: login, password: DEFAULT_PASSWORD }
-    )
-    user.activate
+    user = FactoryGirl.create(:user, :active, login: login, password: DEFAULT_PASSWORD)
   end
   user.banned = true
   user.save
@@ -112,9 +101,8 @@ end
 
 Given /^I am logged out$/ do
   visit logout_path
-  assert !UserSession.find
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
+  assert page.has_link?('Log In')
 end
 
 Given /^I log out$/ do
@@ -230,7 +218,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  assert !UserSession.find
+  step('I should see "Successfully logged out."')
 end
 
 def get_work_name(age, classname, name)

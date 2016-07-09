@@ -7,6 +7,10 @@ FactoryGirl.define do
     f.password_confirmation { |u| u.password }
     f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
 
+    trait :active do
+      confirmed_at { Date.today }
+    end
+
     factory :duplicate_user do
       login nil
       email nil
