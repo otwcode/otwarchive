@@ -44,16 +44,16 @@ Given /^I am logged in as an admin$/ do
   if admin.blank?
     admin = FactoryGirl.create(:admin, login: "testadmin", password: "testadmin", email: "testadmin@example.org")
   end
-  visit admin_login_path
+  visit new_admin_session_path
   fill_in "Admin user name", with: "testadmin"
   fill_in "Admin password", with: "testadmin"
   click_button "Log in as admin"
-  step("I should see \"Successfully logged in\"")
+  step('I should see "Successfully logged in"')
 end
 
 Given /^I am logged out as an admin$/ do
-  visit admin_logout_path
-  assert !AdminSession.find
+  visit destroy_admin_session_path
+  assert assert page.has_link?('Log In')
 end
 
 Given /^basic languages$/ do
