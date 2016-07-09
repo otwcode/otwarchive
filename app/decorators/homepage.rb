@@ -27,7 +27,8 @@ class Homepage
   end
 
   def favorite_tags
-    return unless user_signed_in?
+    return unless signed_in?
+
     if Rails.env.development?
       @favorite_tags ||= @user.favorite_tags.to_a.sort_by { |favorite_tag| favorite_tag.tag.sortable_name.downcase }
     else
@@ -38,7 +39,8 @@ class Homepage
   end
 
   def readings
-    return unless user_signed_in? && @user.preference.try(:history_enabled?)
+    return unless signed_in? && @user.preference.try(:history_enabled?)
+
     if Rails.env.development?
       @readings ||= @user.readings.order("RAND()").
           limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE).
@@ -55,7 +57,8 @@ class Homepage
   end
 
   def inbox_comments
-    return unless user_signed_in?
+    return unless signed_in?
+
     @inbox_comments ||= @user.inbox_comments.with_feedback_comment.for_homepage
   end
 
@@ -64,5 +67,10 @@ class Homepage
     divide = 10**digits
     divide * (number / divide).to_i
   end
- 
+
+  private
+
+  def signed_in?
+    !@user.nil?
+  end 
 end
