@@ -23,6 +23,9 @@ GEM
       activesupport (= 3.2.22.2)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql-reconnect (0.4.0)
+      activerecord
+      mysql2
     activeresource (3.2.22.2)
       activemodel (= 3.2.22.2)
       activesupport (= 3.2.22.2)
@@ -58,6 +61,7 @@ GEM
     bundler-audit (0.5.0)
       bundler (~> 1.2)
       thor (~> 0.18)
+    byebug (9.0.5)
     capistrano (2.15.4)
       highline
       net-scp (>= 1.0.0)
@@ -124,7 +128,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.2)
     erubis (2.7.0)
-    escape_utils (0.3.2)
+    escape_utils (1.2.1)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.6.0)
@@ -186,7 +190,8 @@ GEM
     multi_test (0.1.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.10)
+    mysql2 (0.3.20)
+    mysql2 (0.3.20-x86-mingw32)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     net-scp (1.1.1)
@@ -214,10 +219,11 @@ GEM
       mimemagic (= 0.3.0)
     permit_yo (2.1.4)
       activesupport (~> 3.0)
-    phrase (0.4.33)
-      i18n
-      json
-      rainbow
+    phraseapp-in-context-editor-ruby (1.0.4)
+      i18n (~> 0.7)
+      json (~> 1.8)
+      phraseapp-ruby (~> 1.2)
+    phraseapp-ruby (1.2.4)
     pickle (0.5.1)
       cucumber (>= 0.8)
       rake
@@ -226,6 +232,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     rack (1.4.7)
     rack-cache (1.6.1)
       rack (>= 0.4)
@@ -252,7 +261,6 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rainbow (2.0.0)
     raindrops (0.11.0)
     rake (10.5.0)
     rdoc (3.12.2)
@@ -393,6 +401,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  activerecord-mysql-reconnect
   acts_as_list
   addressable
   akismetor
@@ -416,7 +425,7 @@ DEPENDENCIES
   delorean
   elasticsearch
   email_spec (= 1.6.0)
-  escape_utils
+  escape_utils (= 1.2.1)
   factory_girl (~> 4.5.0)
   factory_girl_rails
   faker (~> 1.6.3)
@@ -430,15 +439,15 @@ DEPENDENCIES
   launchy
   lograge
   mechanize
-  mysql2 (= 0.3.10)
+  mysql2 (~> 0.3.20)
   newrelic-redis
   newrelic_rpm
   nokogiri (>= 1.6.6.2)
   paperclip
   permit_yo
-  phrase
+  phraseapp-in-context-editor-ruby
   pickle
-  pry (~> 0.10.3)
+  pry-byebug
   rack-dev-mark
   rails (= 3.2.22.2)
   redis (>= 3.0)
@@ -468,5 +477,8 @@ DEPENDENCIES
   whiny_validation
   will_paginate (>= 3.0.2)
 
+RUBY VERSION
+   ruby 2.1.9p490
+
 BUNDLED WITH
-   1.11.2
+   1.12.3
