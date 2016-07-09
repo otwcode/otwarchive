@@ -31,9 +31,9 @@ class UsersController < ApplicationController
   end
 
   def check_account_creation_status
-    if is_registered_user?
-      flash[:error] = ts("You are already logged in!")
-      redirect_to root_path and return
+    if admin_signed_in? || user_signed_in?
+      flash[:error] = ts('You are already logged in!')
+      redirect_to root_path && return
     end
 
     token = params[:invitation_token]

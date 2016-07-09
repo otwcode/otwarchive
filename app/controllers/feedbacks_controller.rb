@@ -6,7 +6,7 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new
     if admin_signed_in?
       @feedback.email = current_admin.email
-    elsif is_registered_user?
+    elsif user_signed_in?
       @feedback.email = current_user.email
       @feedback.username = current_user.login
     end
