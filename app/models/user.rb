@@ -13,10 +13,6 @@ class User < ActiveRecord::Base
 
   audited
 
-  def has_no_credentials?
-    self.crypted_password.blank?
-  end
-
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
@@ -203,15 +199,6 @@ class User < ActiveRecord::Base
       :min_login => ArchiveConfig.LOGIN_LENGTH_MIN),
     :too_long => ts("is too long (maximum is %{max_login} characters)", 
       :max_login => ArchiveConfig.LOGIN_LENGTH_MAX)
-
-  # allow nil so can save existing users
-  validates_length_of :password, 
-    :within => ArchiveConfig.PASSWORD_LENGTH_MIN..ArchiveConfig.PASSWORD_LENGTH_MAX,
-    :allow_nil => true,
-    :too_short => ts("is too short (minimum is %{min_pwd} characters)", 
-      :min_pwd => ArchiveConfig.PASSWORD_LENGTH_MIN),
-    :too_long => ts("is too long (maximum is %{max_pwd} characters)", 
-      :max_pwd => ArchiveConfig.PASSWORD_LENGTH_MAX)
 
   validates_format_of :login,
     :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
