@@ -1,11 +1,15 @@
 Otwarchive::Application.routes.draw do
   devise_scope :user do
     get '/login'  => 'user/sessions#new'
-    get '/logout' => 'user/session#destroy'
+    get '/logout' => 'user/sessions#destroy'
   end
 
   devise_for :user,
-             controllers: { sessions: 'user/sessions' }
+             controllers: { sessions: 'user/sessions' },
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout'
+             }
 
   devise_for :admin,
              controllers: { sessions: 'admin/sessions' },

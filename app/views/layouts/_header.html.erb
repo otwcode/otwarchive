@@ -27,13 +27,13 @@
   </h1>
 
   <% if user_signed_in? || admin_signed_in? %>
-    <%= render 'user_sessions/greeting' %>
+    <%= render 'user/sessions/greeting' %>
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In', key: 'header'), {:controller => :user_sessions, :action => 'new'} %>
+        <%= link_to ts('Log In', key: 'header'), login_path %>
       </p>
-      <%= render 'user_sessions/login' %>
+      <%= render 'user/sessions/form_small' %>
     </div>
   <% end %>
 

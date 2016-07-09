@@ -269,21 +269,27 @@ class ApplicationController < ActionController::Base
 
   # Overwrite default Devise redirect after sign in
   def after_sign_in_path_for(resource)
-    redirect_back_or_default resource
+    back_or_default_path(resource)
   end
 
-  # Redirect to the URI stored by the most recent store_location call or
-  # to the passed default.
+  # Redirect to the URI stored by #redirect_back_or_default
   def redirect_back_or_default(default = root_path)
+    redirect_to back_or_default_path(default) && return
+  end
+
+  # Return the URI stored by the most recent store_location call or
+  # to the passed default.
+  def back_or_default_path(default = root_path)
     back = session.delete(:return_to)
+
     if back
       Rails.logger.debug "Returning to #{back}"
       session[:return_to] = 'redirected'
-      redirect_to back
-    else
-      Rails.logger.debug "Returning to default (#{default})"
-      redirect_to default
+      return back
     end
+
+    Rails.logger.debug "Returning to default (#{default})"
+    default
   end
 
   # Force user logout if logging as admin

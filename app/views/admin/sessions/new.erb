@@ -1,0 +1,11 @@
+<h2 class="heading"><%= ts('Log in as Admin') %></h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <dl>
+    <dt><%= f.label :login, ts('Admin user name') %></dt>
+    <dd><%= f.text_field :login %></dd>
+    <dt><%= f.label :password, ts('Admin password') %></dt>
+    <dd><%= f.password_field :password %></dd>
+  </dl>
+  <p class="submit actions"><%= f.submit ts('Log in as admin') %></p>
+<% end %>
