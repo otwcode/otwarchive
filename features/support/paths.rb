@@ -171,6 +171,8 @@ module NavigationHelpers
       notify_admin_users_path
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
+    when /^the admin_login page$/i
+      new_admin_session_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the Wrangling Guidelines reorder page$/i
