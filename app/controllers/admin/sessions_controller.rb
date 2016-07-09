@@ -5,9 +5,4 @@ class Admin
     before_filter :user_logout_required, except: :destroy
     skip_before_filter :store_location
   end
-
-  # Overwrite default Devise redirect after sign in
-  def after_sign_in_path_for(_resource)
-    admin_users_path
-  end
 end
