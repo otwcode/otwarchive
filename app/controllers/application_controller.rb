@@ -269,6 +269,7 @@ class ApplicationController < ActionController::Base
 
   # Overwrite default Devise redirect after sign in
   def after_sign_in_path_for(resource)
+    return admin_users_path if resource.is_a?(Admin)
     back_or_default_path(resource)
   end
 
