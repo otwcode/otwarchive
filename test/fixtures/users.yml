@@ -236,7 +236,7 @@ user_00030:
   suspended: false
   suspended_until: 
   login: Lizifer
-  out_of_invites true
+  out_of_invites: true
   email: elmiller00@gmail.com
   banned: false
 user_00031:
@@ -310,7 +310,7 @@ user_00021:
   recently_reset: false
   encrypted_password: b44dbd78a27659a26ae2abb7ffa63251d21acffd
   updated_at: 2009-12-12 21:07:09 Z
-  confirmation_token:9dd48a83a9b178c5f24abc7e30eb5adc014f6944
+  confirmation_token: 9dd48a83a9b178c5f24abc7e30eb5adc014f6944
   invitation_id: 
   id: 21
   suspended: false
