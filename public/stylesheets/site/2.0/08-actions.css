@@ -25,7 +25,6 @@ ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
   vertical-align: middle;
   display: inline-block;
   padding: 0.25em 0.75em;
-  margin-bottom:7px !important;
   white-space: nowrap;
   overflow: visible;
   position: relative;
@@ -97,6 +96,10 @@ ol.pagination, div.pagination, ol.year {
 
 .actions label.disabled {
   background: #ccc;
+}
+
+.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+  margin: 0.375em auto;
 }
 
 .delete a, span.delete {
