@@ -86,6 +86,18 @@ body .narrow-shown {
   position: static;
 }
 
+#main.errors {
+  background-position: center;
+}
+
+#main.errors p {
+  margin-right: 0;
+}
+
+#main.errors p:last-child { 
+  margin-bottom: 500px;
+}
+
 /* once we remove the meta class from the work form, we can remove the form .meta selectors here */
 .filtered .index, form.filters, form dd, form dt, form .meta dd, form .meta dt, form.inbox {
   width: 100%;
