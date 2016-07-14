@@ -90,7 +90,7 @@ body .narrow-shown {
   background-position: center;
 }
 
-#main.errors p {
+#main.errors p, #main.errors .heading {
   margin-right: 0;
 }
 
