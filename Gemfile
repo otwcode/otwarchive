@@ -1,19 +1,21 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.9'
 
 gem 'bundler'
 
-gem 'rails', '3.2.22'
+gem 'rails', '3.2.22.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # Database
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2', '0.3.10'
+gem 'mysql2', '~> 0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
+#https://github.com/winebarrel/activerecord-mysql-reconnect
+gem 'activerecord-mysql-reconnect'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -39,7 +41,7 @@ gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.6.6.2'
 gem 'mechanize'
 gem 'sanitize'
-gem 'rest-client', :require => 'rest_client'
+gem 'rest-client', '~> 1.8.0', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
 gem 'resque-scheduler', :require => 'resque_scheduler'
@@ -63,9 +65,7 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils"
-
-gem 'jquery-rails', '>= 0.2.6'
+gem "escape_utils", "1.2.1"
 
 gem 'valium'
 
@@ -88,7 +88,7 @@ gem 'globalize', '~> 3.1.0'
 gem "rack-dev-mark"
 
 #Phrase-app
-gem 'phrase'
+gem 'phraseapp-in-context-editor-ruby'
 
 # For URL mangling
 gem 'addressable'
@@ -109,32 +109,39 @@ gem 'kgio'
 
 
 group :test do
-  gem 'rspec-rails'
+  gem 'rspec', '~> 3.4'
+  gem 'rspec-rails', '~> 3.4.2'
   gem 'pickle'
   gem 'shoulda'
-  gem 'factory_girl'
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'cucumber-rails', require: false
+  gem 'capybara', '~> 2.6.2'
+  gem 'database_cleaner', '1.2.0'
+  gem 'cucumber', '~> 2.3.2'
+  gem 'cucumber-rails', '~> 1.4.3', require: false
   gem 'gherkin' 
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
-  gem 'faker'
+  gem 'faker', '~> 1.6.3'
   # Record and replay data from external URLs
-  gem "vcr", "~> 2.5.0"
-  gem 'webmock', '~> 1.8.8'
+  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem 'webmock', '~> 1.24.2'
   # Code coverage
-  gem 'simplecov', :require => false
-  gem 'email_spec'
+  gem 'simplecov', '~> 0.11.2',:require => false
+  gem 'email_spec', '1.6.0'
 end
 
 group :test, :development do
-  gem 'pry'
+  gem 'pry-byebug'
   gem 'whiny_validation'
+  gem 'factory_girl', '~> 4.5.0'
+end
+
+group :development do
+  gem 'factory_girl_rails'
+  gem 'bundler-audit'
 end
 
 group :test, :development, :staging  do
-  gem 'bullet'
+  gem 'bullet', '~> 5.0.0'
 end
 
 # Deploy with Capistrano

@@ -453,6 +453,54 @@ namespace :After do
     end
   end
 
+  desc "Generate custom CSS so people using an old wizard skin don't lose it"
+  task(:generate_css_for_old_wizard_skins => :environment) do
+    Skin.wizard_site_skins.each do |skin|
+      old_css = skin.css.present? ? skin.css : ""
+
+      wizard_css = ""
+
+      if skin.margin.present?
+        wizard_css += "#workskin {margin: auto #{skin.margin}%; padding: 0.5em #{skin.margin}% 0;} "
+      end
+
+      if skin.background_color.present? || skin.foreground_color.present? || skin.font.present? || skin.base_em.present?
+        wizard_css += "body, #main { 
+          #{skin.background_color.present? ? "background: #{skin.background_color}; " : ''}
+          #{skin.foreground_color.present? ? "color: #{skin.foreground_color}; " : ''} "
+        if skin.base_em.present?
+          wizard_css += "font-size: #{skin.base_em}%; line-height: 1.125; "
+        end
+        if skin.font.present?
+          wizard_css += "font-family: #{skin.font}; "
+        end
+        wizard_css += "} "
+      end
+
+      if skin.paragraph_margin.present?
+        wizard_css += ".userstuff p {margin-bottom: #{skin.paragraph_margin}em;} "
+      end
+
+      if skin.headercolor.present?
+        wizard_css += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color: transparent;} "
+        wizard_css += "#header, #header ul.main, #footer {background: #{skin.headercolor}; border-color: #{skin.headercolor}; box-shadow: none;} "
+      end
+
+      if skin.accent_color.present?
+        wizard_css += "#header .icon, #dashboard ul, #main dl.meta {background: #{skin.accent_color}; border-color: #{skin.accent_color};} "
+      end
+
+      wizard_css += "#workskin {margin: auto #{skin.margin}%; padding: 0.5em #{skin.margin}% 0;} " if skin.margin.present?
+
+      # clear out the wizard settings, prepend the wizard css to the user's custom css, and save
+      unless wizard_css.blank?
+        skin.margin, skin.background_color, skin.foreground_color, skin.font, skin.base_em, skin.paragraph_margin, skin.headercolor, skin.accent_color = nil
+        skin.css = wizard_css + old_css
+        skin.save
+      end
+    end
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################

@@ -41,3 +41,10 @@ role_00001:
   authorizable_type: 
   id: 1
   authorizable_id: 
+role_00007:
+  name: opendoors
+  created_at: 2008-11-09 03:26:02 Z
+  updated_at: 2008-11-09 03:26:02 Z
+  authorizable_type:
+  id: 7
+  authorizable_id:

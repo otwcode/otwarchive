@@ -59,6 +59,7 @@ Feature: Tag wrangling
       Then I should see "Work was successfully posted."
     
     # mass wrangling
+    When I flush the wrangling sidebar caches
     When I follow "Tag Wrangling" within "#header"
     Then I should see "Wrangling Home"
       And I should see "Wrangling Tools"
