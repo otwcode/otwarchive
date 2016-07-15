@@ -139,7 +139,6 @@ group :test, :development do
 end
 
 group :development do
-  gem 'letter_opener' # Open sent emails on browser
   gem 'factory_girl_rails'
   gem 'bundler-audit'
 end

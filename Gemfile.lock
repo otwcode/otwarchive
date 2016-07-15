@@ -458,7 +458,6 @@ DEPENDENCIES
   httparty
   kgio (= 2.10.0)
   launchy
-  letter_opener
   lograge
   mechanize
   minitest
