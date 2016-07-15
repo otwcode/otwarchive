@@ -173,8 +173,6 @@ GEM
     kgio (2.8.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    letter_opener (1.4.1)
-      launchy (~> 2.2)
     lograge (0.3.5)
       actionpack (>= 3)
       activesupport (>= 3)
@@ -454,7 +452,6 @@ DEPENDENCIES
   httparty
   kgio
   launchy
-  letter_opener
   lograge
   mechanize
   mysql2 (~> 0.3.20)
