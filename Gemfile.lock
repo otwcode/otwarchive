@@ -47,6 +47,7 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt (3.1.11)
+    bcrypt (3.1.11-x86-mingw32)
     best_in_place (2.1.0)
       jquery-rails
       rails (~> 3.1)
@@ -457,6 +458,7 @@ DEPENDENCIES
   httparty
   kgio (= 2.10.0)
   launchy
+  letter_opener
   lograge
   mechanize
   minitest
