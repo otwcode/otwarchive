@@ -46,7 +46,7 @@ module NavigationHelpers
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
-      new_user_path
+      new_user_registration_path
     when /^invite requests page$/i
       invite_requests_path
     when /my pseuds page/
