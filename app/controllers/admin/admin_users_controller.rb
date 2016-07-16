@@ -242,7 +242,7 @@ class Admin::AdminUsersController < ApplicationController
   def activate
     @user = User.find_by_login(params[:id])
     @user.activate
-    if @user.active?
+    if @user.confirmed?
       @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE, :note => 'Manually Activated', :admin_id => current_admin.id})
       flash[:notice] = t('activated', :default => "User Account Activated")
       redirect_to :action => :show

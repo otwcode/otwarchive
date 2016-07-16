@@ -6,10 +6,10 @@
   <!--subnav-->
   <ul class="navigation actions" role="navigation">
     <li>
-      <%= button_to t('admin.admin_users.show.subnav.send_activation', default: "Send Activation Email"), {:action => 'send_activation', :id => @user}, disabled: @user.active? %>
+      <%= button_to t('admin.admin_users.show.subnav.send_activation', default: "Send Activation Email"), {:action => 'send_activation', :id => @user}, disabled: @user.confirmed? %>
     </li>
     <li>
-      <%= button_to t('admin.admin_users.show.subnav.activate_user', default: "Activate User Account"), {:action => 'activate', :id => @user}, disabled: @user.active? %>
+      <%= button_to t('admin.admin_users.show.subnav.activate_user', default: "Activate User Account"), {:action => 'activate', :id => @user}, disabled: @user.confirmed? %>
     </li>
     <li>
       <%= link_to t('admin.admin_users.show.subnav.manage_user', default: "Manage User Roles"), {:action => "index", :query => @user.login, :role => '0'} %>
