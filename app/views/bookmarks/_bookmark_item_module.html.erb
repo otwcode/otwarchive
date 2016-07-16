@@ -1,8 +1,5 @@
 <% # expects "bookmarkable" %>
-<% if bookmarkable.blank? %>
-  <% # We need this for collection items %>
-  <p class="message"><%= ts("This has been deleted, sorry!") %></p>
-<% elsif bookmarkable.is_a?(ExternalWork) %>
+<% if bookmarkable.is_a?(ExternalWork) %>
   <%= render 'external_works/work_module', external_work: bookmarkable, bookmarkable: bookmarkable %>
 <% elsif bookmarkable.is_a?(Series) %>
   <%= render 'series/series_module', series: bookmarkable %>

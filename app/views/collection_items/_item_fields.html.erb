@@ -57,7 +57,11 @@
         <% elsif collection_item.item_type == 'Bookmark' %>
           <% bookmark = collection_item.item %>
           <% bookmarkable = bookmark.bookmarkable %>
-          <%= render 'bookmarks/bookmark_item_module', bookmarkable: bookmarkable %>
+          <% if bookmarkable.blank? %>
+            <p class="message"><%= ts("This has been deleted, sorry!") %></p>
+          <% else %>
+            <%= render 'bookmarks/bookmark_item_module', bookmarkable: bookmarkable %>
+          <% end %>
           <%= render 'bookmarks/bookmark_user_module', bookmark: bookmark %>
         <% end %>
       </blockquote>
