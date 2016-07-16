@@ -1353,7 +1353,6 @@ CREATE TABLE `users` (
   `confirmed_at` datetime DEFAULT NULL,
   `encrypted_password` varchar(255) DEFAULT NULL,
   `password_salt` varchar(255) DEFAULT NULL,
-  `recently_reset` tinyint(1) NOT NULL DEFAULT '0',
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `banned` tinyint(1) NOT NULL DEFAULT '0',
   `invitation_id` int(11) DEFAULT NULL,
@@ -1372,9 +1371,9 @@ CREATE TABLE `users` (
   `unconfirmed_email` varchar(255) DEFAULT NULL,
   `locked_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_users_on_confirmation_token` (`confirmation_token`),
   UNIQUE KEY `index_users_on_login` (`login`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
-  UNIQUE KEY `index_users_on_confirmation_token` (`confirmation_token`),
   KEY `index_users_on_activation_code` (`confirmation_token`),
   KEY `index_users_on_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

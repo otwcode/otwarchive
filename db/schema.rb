@@ -1258,7 +1258,6 @@ ActiveRecord::Schema.define(:version => 201604030319571) do
     t.datetime "confirmed_at"
     t.string   "encrypted_password"
     t.string   "password_salt"
-    t.boolean  "recently_reset",         :default => false, :null => false
     t.boolean  "suspended",              :default => false, :null => false
     t.boolean  "banned",                 :default => false, :null => false
     t.integer  "invitation_id"
