@@ -41,7 +41,7 @@
 
       <p class="datetime"><%= collection_item.item_date.to_date %></p>
       <div class="icon">
-        <%= image_tag(collection_item.collection.icon.url(:standard), :size => "100x100", :alt => collection_item.collection.icon_alt_text, :class => "icon") %>
+        <%= image_tag(collection_item.collection.icon.url(:standard), size: "100x100", alt: collection_item.collection.icon_alt_text, class: "icon") %>
       </div> 
   </div>
 
@@ -50,17 +50,17 @@
     <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
     <blockquote id="<%= id %>" class="<% if collection_item.item_type == 'Bookmark' %>bookmark <% else %>work <% end %> blurb toggled">
       <% if collection_item.item_type == 'Work' %>
-        <%= render "works/work_module", :work => collection_item.item, :is_unrevealed => false %>
-      <% elsif collection_item.item_type == 'Bookmark' %>     
+        <%= render "works/work_module", work: collection_item.item, is_unrevealed: false %>
+      <% elsif collection_item.item_type == 'Bookmark' %>
         <% bookmark = collection_item.item %>
         <% bookmarkable = bookmark.bookmarkable %>
-        <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
-        <%= render 'bookmarks/bookmark_user_module', :bookmark => bookmark %>
+        <%= render 'bookmarks/bookmark_item_module', bookmarkable: bookmarkable %>
+        <%= render 'bookmarks/bookmark_user_module', bookmark: bookmark %>
       <% end %>
     </blockquote>
   <% end %>
 
   <!--actions-->
-  <%= render 'collection_item_controls', :collection_item => collection_item, :form => form %>
+  <%= render 'collection_item_controls', collection_item: collection_item, form: form %>
 </li>
 <% end %>
