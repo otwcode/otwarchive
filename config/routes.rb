@@ -2,13 +2,21 @@ Otwarchive::Application.routes.draw do
   devise_scope :user do
     get '/login'  => 'user/sessions#new'
     get '/logout' => 'user/sessions#destroy'
+    get '/logout' => 'user/sessions#destroy'
+
+    get '/user/register/confirm' => 'user/registrations#confirm'
+    get '/user/register/:invitation_token' => 'user/registrations#new'
   end
 
   devise_for :user,
-             controllers: { sessions: 'user/sessions' },
+             controllers: {
+               sessions: 'user/sessions',
+               registrations: 'user/registrations'
+             },
              path_names: {
                sign_in: 'login',
-               sign_out: 'logout'
+               sign_out: 'logout',
+               sign_up: 'register'
              }
 
   devise_for :admin,
@@ -21,6 +29,8 @@ Otwarchive::Application.routes.draw do
   # PATHS TO CHECK
 
   resources :passwords, only: [:new, :create]
+  match 'delete_confirmation' => 'users#delete_confirmation'
+  match 'activate/:id' => 'users#activate', as: 'activate'
 
   #### ERRORS ####
 
@@ -58,7 +68,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  match 'signup/:invitation_token' => 'users#new', as: 'signup'
   match 'claim/:invitation_token' => 'external_authors#claim', as: 'claim'
   match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', as: 'complete_claim'
 
@@ -105,9 +114,9 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, controller: 'owned_tag_sets' do
     resources :nominations, controller: 'tag_set_nominations' do
       collection do
-        put  :update_multiple
+        put :update_multiple
         delete :destroy_multiple
-        get  :confirm_destroy_multiple
+        get :confirm_destroy_multiple
       end
       member do
         get :confirm_delete
@@ -563,8 +572,6 @@ Otwarchive::Application.routes.draw do
   match 'site_map' => 'home#site_map'
   match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
-  match 'delete_confirmation' => 'users#delete_confirmation'
-  match 'activate/:id' => 'users#activate', as: 'activate'
   match 'devmode' => 'devmode#index'
   match 'donate' => 'home#donate'
   match 'lost_cookie' => 'home#lost_cookie'

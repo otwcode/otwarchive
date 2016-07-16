@@ -5,8 +5,13 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :confirmable, :lockable,
          :timeoutable, :encryptable
 
+  # Virtual fields for form validation
+  attr_accessor :invitation_token, :age_over_13, :terms_of_service
+
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :login, :email, :password, :password_confirmation,
+                  :remember_me, :invitation_token, :age_over_13,
+                  :terms_of_service
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
@@ -24,8 +29,6 @@ class User < ActiveRecord::Base
   has_one :invitation, :as => :invitee
   has_many :user_invite_requests, :dependent => :destroy
 
-  attr_accessor :invitation_token
-  attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
 
   has_many :external_authors, :dependent => :destroy
@@ -209,9 +212,6 @@ class User < ActiveRecord::Base
   validates :email, :email_veracity => true
 
   # Virtual attribute for age check and terms of service
-  attr_accessor :age_over_13
-  attr_accessor :terms_of_service
-  attr_accessible :age_over_13, :terms_of_service
 
   validates_acceptance_of :terms_of_service,
                          :allow_nil => false,
@@ -226,7 +226,6 @@ class User < ActiveRecord::Base
   def to_param
     login
   end
-
 
   def self.for_claims(claims_ids)    
     joins(:request_claims).
@@ -426,20 +425,21 @@ class User < ActiveRecord::Base
 
   ### BETA INVITATIONS ###
 
-  #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
+  # If a new user has an invitation_token (meaning they were invited), the
+  # method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
-    unless self.invitation_token.blank?
-      invitation = Invitation.find_by_token(self.invitation_token)
-      if invitation
-        self.update_attribute(:invitation_id, invitation.id)
-        invitation.mark_as_redeemed(self)
-      end
-    end
+    return if invitation_token.blank?
+
+    invitation = Invitation.find_by_token(invitation_token)
+    return unless invitation
+
+    update_attribute(:invitation_id, invitation.id)
+    invitation.mark_as_redeemed(self)
   end
 
   # Existing users should be removed from the invitations queue
   def remove_from_queue
-    invite_request = InviteRequest.find_by_email(self.email)
+    invite_request = InviteRequest.find_by_email(email)
     invite_request.destroy if invite_request
   end
 

@@ -210,19 +210,6 @@ class UserMailer < BulletproofMailer::Base
     )
   end
 
-  # Asks a user to validate and activate their new account
-  def signup_notification(user_id)
-    @user = User.find(user_id)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Confirmation"
-      )
-    end
-    ensure
-      I18n.locale = I18n.default_locale
-  end
-
   # Sends a temporary password to the user
   def reset_password(user_id, activation_code)
     @user = User.find(user_id)

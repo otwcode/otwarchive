@@ -1,54 +1,22 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
-  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]
-  before_filter :check_account_creation_status, :only => [:new, :create]
-  skip_before_filter :store_location, :only => [:end_first_login]
+  before_filter :check_user_status, only: [:edit, :update]
+  before_filter :load_user, except: [:activate, :delete_confirmation, :index]
+  before_filter :check_ownership, except: [
+    :activate, :browse, :delete_confirmation, :index, :show
+  ]
 
-
-  # This is meant to rescue from race conditions that sometimes occur on user creation
-  # The unique index on login (database level) prevents the duplicate user from being created,
-  # but ideally we can still send the user the activation code and show them the confirmation page
-  rescue_from ActiveRecord::RecordNotUnique do |exception|
-    # ensure we actually have a duplicate user situation
-    if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
-      @user && User.count(:conditions => {:login => @user.login}) > 0 &&
-      # and that we can find the original, valid user record
-      (@user = User.find_by_login(@user.login))
-        notify_and_show_confirmation_screen
-    else
-      # re-raise the exception and make it catchable by Rails and Airbrake
-      # (see http://www.simonecarletti.com/blog/2009/11/re-raise-a-ruby-exception-in-a-rails-rescue_from-statement/)
-      rescue_action_without_handler(exception)
-    end
-  end
+  skip_before_filter :store_location, only: [:end_first_login]
 
   def load_user
     @user = User.find_by_login(params[:id])
     @check_ownership_of = @user
   end
 
-  def check_account_creation_status
-    if admin_signed_in? || user_signed_in?
-      flash[:error] = ts('You are already logged in!')
-      redirect_to root_path && return
-    end
-
-    token = params[:invitation_token]
-
-    if !@admin_settings.account_creation_enabled?
-      flash[:error] = ts("Account creation is suspended at the moment. Please check back with us later.")
-      redirect_to root_path and return
-    else
-      check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
-    end
-  end
-
   def index
     flash.keep
-    redirect_to :controller => :people, :action => :index
+    redirect_to controller: :people, action: :index
   end
 
   # GET /users/1
@@ -72,20 +40,6 @@ class UsersController < ApplicationController
                                                        :subscribable_type => 'User').first ||
                       current_user.subscriptions.build(:subscribable => @user)
     end
-  end
-
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @user = User.new
-
-    if params[:invitation_token]
-      @invitation = Invitation.find_by_token(params[:invitation_token])
-      @user.invitation_token = @invitation.token
-      @user.email = @invitation.invitee_email
-    end
-
-    @hide_dashboard = true
   end
 
   # GET /users/1/edit
@@ -133,46 +87,6 @@ class UsersController < ApplicationController
       @user.reload
       render :change_username
     end
-  end
-
-  # POST /users
-  # POST /users.xml
-  def create
-    @hide_dashboard = true
-
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      @user = User.new
-      @user.login = params[:user][:login]
-      @user.email = params[:user][:email]
-      @user.invitation_token = params[:invitation_token]
-      @user.age_over_13 = params[:user][:age_over_13]
-      @user.terms_of_service = params[:user][:terms_of_service]
-
-      @user.password = params[:user][:password] if params[:user][:password]
-      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
-
-      @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-
-      @user.transaction do
-        if @user.save
-          notify_and_show_confirmation_screen
-        else
-          render :action => "new"
-        end
-      end
-    end
-  end
-
-  def notify_and_show_confirmation_screen
-    # deliver synchronously to avoid getting caught in backed-up mail queue
-    UserMailer.signup_notification(@user.id).deliver!
-
-    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                        :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
-
-    render "confirmation"
   end
 
   def activate
@@ -341,30 +255,6 @@ class UsersController < ApplicationController
     false
   end
 
-  def check_account_creation_invite(token)
-    unless token.blank?
-      invitation = Invitation.find_by_token(token)
-
-      if !invitation
-        flash[:error] = ts("There was an error with your invitation token, please contact support")
-        redirect_to new_feedback_report_path
-      elsif invitation.redeemed_at && invitation.invitee
-        flash[:error] = ts("This invitation has already been used to create an account, sorry!")
-        redirect_to root_path
-      end
-
-      return
-    end
-
-    if !@admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts("Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.")
-      redirect_to root_path
-    else
-      flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
-      redirect_to invite_requests_path
-    end
-  end
-
   def visible_items(current_user)
     # NOTE: When current_user is nil, we use .visible_to_all, otherwise we use
     #       .visible_to_registered_user.
@@ -400,7 +290,6 @@ class UsersController < ApplicationController
 
       return
     end
-
 
     if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
       # Orphans co-authored works.
