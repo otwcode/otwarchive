@@ -1,11 +1,15 @@
+<% if collection_item.item_type == "Bookmark" && collection_item.item.present? && collection_item.item.bookmarkable.present? %>
+  <% item_name = ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title) %>
+<% elsif collection_item.item_type == "Bookmark" %>
+  <% item_name = ts("Bookmark of deleted item") %>
+<% elsif collection_item.item_type == "Work" && collection_item.item.posted? %>
+  <% item_name = collection_item.item.title %>
+<% else %>
+  <% item_name = collection_item.item.title + " " + ts("Draft") %>
+<% end %>
+
 <li class="collection item picture blurb group">
   <div class="header module">
-  <% bookmark_item_name = collection_item.item_type == "Bookmark" && collection_item.item.bookmarkable.present? ?
-                          ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title) :
-                          ts("Bookmark of deleted item") %>
-  <% item_name = collection_item.item_type == "Bookmark" ? bookmark_item_name : 
-                 (collection_item.item.title + " " + (!collection_item.item.posted? ? ts("(draft)") : "")) %>
-
   <%= fields_for("collection_items[]", collection_item) do |form| %>
     <!--title-->
     <h4 class="heading" id="collection_item_<%= collection_item.id %>">
@@ -14,32 +18,31 @@
       <%= link_to(item_name, collection_item.item) %>
     </h4>
 
-    <% unless @user %>
-      <% # mod version %>
-      <h5 class="heading">
+    <h5 class="heading">
+      <% if @user %>
+        <% # user version %>
+        <%= ts("in") %> <span class="collection"><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></span>
+        <% if collection_item.collection.user_is_posting_participant?(@user) %>
+          <%= ts("(Member)") %>
+        <% end %>
+      <% else %>
+        <% # mod version %>
         <% collection_item.item_creator_pseuds.each do |pseud| %>
           <%= pseud.byline %>
-            <% if collection_item.collection.user_is_posting_participant?(pseud.user) %>
-              <%= ts("(Member)")%>
-            <% end %>
+          <% if collection_item.collection.user_is_posting_participant?(pseud.user) %>
+            <%= ts("(Member)")%>
           <% end %>
+        <% end %>
         <% # TODO: Make recipients and bylines links, separate recipients with space (currently "snow,astolat") %>
         <% unless collection_item.recipients.blank? %>
           <span class="recipients"><%= ts("for") %> <span class="user"><%= collection_item.recipients %></span></span>
         <% end %>
-      </h5>
-
-      <% else %>
-        <% # user version %>
-        <h5 class="heading">
-          <%= ts("in") %> <span class="collection"><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></span>
-          <% if collection_item.collection.user_is_posting_participant?(@user) %>
-            <%= ts("(Member)") %>
-          <% end %>
-        </h5>
       <% end %>
+    </h5>
 
+    <% if collection_item.item %>
       <p class="datetime"><%= collection_item.item_date.to_date %></p>
+    <% end %>
       <div class="icon">
         <%= image_tag(collection_item.collection.icon.url(:standard), size: "100x100", alt: collection_item.collection.icon_alt_text, class: "icon") %>
       </div> 
