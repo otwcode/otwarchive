@@ -249,11 +249,6 @@ class User < ActiveRecord::Base
     users.paginate(:page => options[:page] || 1)
   end
 
-  ### AUTHENTICATION AND PASSWORDS
-  def active?
-    !confirmed_at.nil?
-  end
-
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :is_default => true)
     self.profile = Profile.new

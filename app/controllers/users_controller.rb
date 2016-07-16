@@ -106,7 +106,7 @@ class UsersController < ApplicationController
       return
     end
 
-    if @user.active?
+    if @user.confirmed?
       flash.now[:error] = ts("Your account has already been activated.")
       redirect_to @user
 
