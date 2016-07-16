@@ -1,4 +1,6 @@
 class User::ConfirmationsController < Devise::ConfirmationsController
+  skip_before_filter :store_location
+
   # GET /resource/confirmation/new
   # def new
   #   super
