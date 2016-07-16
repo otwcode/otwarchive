@@ -1,10 +1,10 @@
 <dl>
   <dt>
-    <%= f.label :login, ts("User name") %>
+    <%= f.label :login, ts('User name') %>
   </dt>
   <dd>
     <%= f.text_field :login, "aria-describedby" => "login-field-description" %>
-    <%= live_validation_for_field('user_login', 
+    <%= live_validation_for_field('user_login',
         maximum_length: ArchiveConfig.LOGIN_LENGTH_MAX,
         minimum_length: ArchiveConfig.LOGIN_LENGTH_MIN,
         failureMessage: ts("You need a user name! (At least %{minimum} letters long, please.)",
@@ -16,7 +16,7 @@
     </p>
   </dd>
   <dt>
-    <%= f.label :password, ts("Password") %>
+    <%= f.label :password, ts('Password') %>
   </dt>
   <dd>
     <%= f.password_field :password, "aria-describedby" => "password-field-description" %>
