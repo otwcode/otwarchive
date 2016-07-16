@@ -15,6 +15,7 @@ class MoveUsersToDevise < ActiveRecord::Migration
 
     # Remove old authlogic field
     remove_column :users, :persistence_token
+    remove_column :users, :recently_reset
 
     # Fields for Recoverable module
     add_column :users, :reset_password_token, :string, limit: 255
@@ -56,6 +57,7 @@ class MoveUsersToDevise < ActiveRecord::Migration
 
     # Recreate deleted column
     add_column :users, :persistence_token, :string
+    add_column :users, :recently_reset, :boolean
 
     # Remove Devise columns
     remove_column :users, :reset_password_token

@@ -47,13 +47,12 @@ class UsersController < ApplicationController
   end
 
   def changed_password
-    unless params[:password] && (@user.recently_reset? || reauthenticate)
+    unless params[:password] && reauthenticate
       render :change_password and return
     end
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.recently_reset = false
 
     if @user.save
       flash[:notice] = ts("Your password has been changed")
