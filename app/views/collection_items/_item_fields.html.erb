@@ -9,9 +9,9 @@
   <%= fields_for("collection_items[]", collection_item) do |form| %>
     <!--title-->
     <h4 class="heading" id="collection_item_<%= collection_item.id %>">
-      <%= error_messages_for collection_item %>    
+      <%= error_messages_for collection_item %>
       <%= form.hidden_field :collection_id %>
-      <%= link_to(item_name, collection_item.item) %>   
+      <%= link_to(item_name, collection_item.item) %>
     </h4>
 
     <% unless @user %>
@@ -44,7 +44,7 @@
         <%= image_tag(collection_item.collection.icon.url(:standard), :size => "100x100", :alt => collection_item.collection.icon_alt_text, :class => "icon") %>
       </div> 
   </div>
-   
+
   <% if collection_item.item %>
     <% # An item can be in multiple collections. Including the collection name in the id prevents multiple items from having the same id. %>
     <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
@@ -54,12 +54,12 @@
       <% elsif collection_item.item_type == 'Bookmark' %>     
         <% bookmark = collection_item.item %>
         <% bookmarkable = bookmark.bookmarkable %>
-			  <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
-		    <%= render 'bookmarks/bookmark_user_module', :bookmark => bookmark %>
+        <%= render 'bookmarks/bookmark_item_module', :bookmarkable => bookmarkable %>
+        <%= render 'bookmarks/bookmark_user_module', :bookmark => bookmark %>
       <% end %>
     </blockquote>
   <% end %>
-  
+
   <!--actions-->
   <%= render 'collection_item_controls', :collection_item => collection_item, :form => form %>
 </li>
