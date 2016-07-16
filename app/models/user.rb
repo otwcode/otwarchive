@@ -209,19 +209,20 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :login, case_sensitive: false, message: ts('has already been taken')
 
-  validates :email, :email_veracity => true
+  validates :email, email_veracity: true
+
+  validates :password, confirmation: true
 
   # Virtual attribute for age check and terms of service
-
   validates_acceptance_of :terms_of_service,
-                         :allow_nil => false,
-                         :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
-                         :if => :first_save?
+                          allow_nil: false,
+                          message: ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
+                          if: :new_record?
 
-  validates_acceptance_of  :age_over_13,
-                          :allow_nil => false,
-                          :message => ts('Sorry, you have to be over 13!'),
-                          :if => :first_save?
+  validates_acceptance_of :age_over_13,
+                          allow_nil: false,
+                          message: ts('Sorry, you have to be over 13!'),
+                          if: :new_record?
 
   def to_param
     login
@@ -254,13 +255,6 @@ class User < ActiveRecord::Base
     self.profile = Profile.new
     self.preference = Preference.new
   end
-
-  protected
-    def first_save?
-      self.new_record?
-    end
-
-  public
 
   # Returns an array (of pseuds) of this user's co-authors
   def coauthors
@@ -317,15 +311,11 @@ class User < ActiveRecord::Base
 
   # Allow admins to set roles and change email
   def admin_update(attributes)
-    if User.current_user.is_a?(Admin)
-      success = true
-      success = set_roles(attributes[:roles])
-      if success && attributes[:email]
-        self.email = attributes[:email]
-        success = self.save(:validate => false)
-      end
-      success
-    end
+    return unless set_roles(attributes[:roles]) && attributes[:email]
+
+    skip_reconfirmation! # Won't trigger Devise email reconfirmation
+    self.email = attributes[:email]
+    save(validate: false)
   end
 
   private
