@@ -117,15 +117,7 @@ Feature: Admin Actions to Post News
     Then I should not see a translated admin post
 
   Scenario: Log in as an admin and create an admin post with tags
-    Given I have no users
-      And the following admin exists
-      | login      | password |
-      | Elz        | secret   |
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Elz"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
+    Given I am logged in as an admin
     When I follow "Admin Posts"
       And I follow "Post AO3 News"
       Then I should see "New AO3 News Post"
