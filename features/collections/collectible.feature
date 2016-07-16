@@ -112,3 +112,27 @@ Feature: Collectible items
     Then I should see "Bookmarks (0)"
       And I should not see "Tundra penguins"
 
+  Scenario: Bookmarkers and collection owners should be able to see bookmarks of deleted works when managing collection items
+    Given I have a collection "Various Penguins"
+      And I am logged in as a random user
+      And I have a bookmark of a deleted work
+    When I add my bookmark to the collection "Various_Penguins"
+    Then I should see "Added"
+    When I go to my collection items page
+      And I follow "Approved"
+    Then I should see "Bookmark of deleted item"
+      And I should see "This has been deleted, sorry!"
+    When I am logged in as the owner of "Various Penguins"
+      And I view the approved collection items page for "Various Penguins"
+    Then I should see "Bookmark of deleted item"
+      And I should see "This has been deleted, sorry!"
+
+  Scenario: Owners of moderated collections should be able to see bookmarks of deleted works on the collection's Awaiting Approval page
+    Given I have a moderated collection "Various Penguins"
+      And I am logged in as a random user
+      And I have a bookmark of a deleted work
+    When I add my bookmark to the collection "Various_Penguins"
+    When I am logged in as the owner of "Various Penguins"
+      And I view the awaiting approval collection items page for "Various Penguins"
+    Then I should see "Bookmark of deleted item"
+      And I should see "This has been deleted, sorry!"
