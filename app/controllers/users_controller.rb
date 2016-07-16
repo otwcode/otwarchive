@@ -48,20 +48,23 @@ class UsersController < ApplicationController
 
   def changed_password
     unless params[:password] && reauthenticate
-      render :change_password and return
+      render :change_password
+      return
     end
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
 
     if @user.save
-      flash[:notice] = ts("Your password has been changed")
-      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
+      sign_in(@user, bypass: true)
+      flash[:notice] = ts('Your password has been changed')
+      @user.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
 
-      redirect_to user_profile_path(@user) and return
-    else
-      render :change_password and return
+      redirect_to user_profile_path(@user)
+      return
     end
+
+    render :change_password
   end
 
   def changed_username
@@ -230,21 +233,19 @@ class UsersController < ApplicationController
   private
 
   def reauthenticate
-    if params[:password_check].blank?
-      return wrong_password!(params[:new_email],
-        ts("You must enter your password"),
-        ts("You must enter your old password"))
-    end
+    return wrong_password!(
+      params[:new_email],
+      ts('You must enter your password'),
+      ts('You must enter your old password')
+    ) if params[:password_check].blank?
 
-    session = UserSession.new(:login => @user.login, :password => params[:password_check])
+    return wrong_password!(
+      params[:new_email],
+      ts('Your password was incorrect'),
+      ts('Your old password was incorrect')
+    ) unless @user.valid_password?(params[:password_check])
 
-    if session.valid?
-      true
-    else
-      wrong_password!(params[:new_email],
-        ts("Your password was incorrect"),
-        ts("Your old password was incorrect"))
-    end
+    true
   end
 
   def wrong_password!(condition, if_true, if_false)
