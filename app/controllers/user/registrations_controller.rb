@@ -96,12 +96,14 @@ class User
     def can_create_account?
       if admin_signed_in? || user_signed_in?
         flash[:error] = ts('You are already logged in!')
-        redirect_to root_path && return
+        redirect_to root_path
+        return false
       end
 
       unless @admin_settings.account_creation_enabled?
         flash[:error] = ts('Account creation is suspended at the moment. Please check back with us later.')
-        redirect_to root_path && return
+        redirect_to root_path
+        return false
       end
 
       return true unless @admin_settings.creation_requires_invite?
@@ -129,6 +131,7 @@ class User
       if @admin_settings.invite_from_queue_enabled?
         flash[:error] = ts("To create an account, you'll need an invitation. One option is to add your name to the automatic queue below.")
         redirect_to invite_requests_path
+        return false
       end
 
       flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
