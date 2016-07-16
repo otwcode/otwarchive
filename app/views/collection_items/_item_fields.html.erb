@@ -1,8 +1,10 @@
 <li class="collection item picture blurb group">
   <div class="header module">
-  <% item_name = collection_item.item_type == "Bookmark" ? 
-            ts("Bookmark for %{title}", :title => collection_item.item.bookmarkable.title) : 
-            (collection_item.item.title + (!collection_item.item.posted? ? ts("(draft)") : "")) %>
+  <% bookmark_item_name = collection_item.item_type == "Bookmark" && collection_item.item.bookmarkable.present? ?
+                          ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title) :
+                          ts("Bookmark of deleted item") %>
+  <% item_name = collection_item.item_type == "Bookmark" ? bookmark_item_name : 
+                 (collection_item.item.title + " " + (!collection_item.item.posted? ? ts("(draft)") : "")) %>
 
   <%= fields_for("collection_items[]", collection_item) do |form| %>
     <!--title-->
