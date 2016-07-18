@@ -273,6 +273,11 @@ class ApplicationController < ActionController::Base
     back_or_default_path(resource)
   end
 
+  # Overwrite default Devise redirect after sign out
+  def after_sign_out_path_for(_scope)
+    back_or_default_path
+  end
+
   # Redirect to the URI stored by #redirect_back_or_default
   def redirect_back_or_default(default = root_path)
     redirect_to back_or_default_path(default) && return
@@ -281,16 +286,15 @@ class ApplicationController < ActionController::Base
   # Return the URI stored by the most recent store_location call or
   # to the passed default.
   def back_or_default_path(default = root_path)
-    back = session.delete(:return_to)
-
-    if back
+    Rails.logger.debug("Old return data: #{session[:return_to]}")
+    if session[:return_to]
+      back = session.delete(:return_to)
       Rails.logger.debug "Returning to #{back}"
-      session[:return_to] = 'redirected'
-      return back
+      back
+    else
+      Rails.logger.debug "Returning to default (#{default})"
+      default
     end
-
-    Rails.logger.debug "Returning to default (#{default})"
-    default
   end
 
   # Force user logout if logging as admin
@@ -311,13 +315,8 @@ class ApplicationController < ActionController::Base
 
   # Check and store what pages the app can redirect to
   def store_location
-    if session[:return_to] == 'redirected'
-      Rails.logger.debug 'Return to back would cause infinite loop'
-      session.delete(:return_to)
-    else
-      session[:return_to] = request.fullpath
-      Rails.logger.debug "Return to: #{session[:return_to]}"
-    end
+    session[:return_to] = request.fullpath
+    Rails.logger.debug "Return to: #{session[:return_to]}"
   end
 
   # Store the current user as a class variable in the User class,
