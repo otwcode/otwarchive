@@ -88,13 +88,13 @@ module CollectionsHelper
 
   def collection_item_display_title(collection_item)
     if collection_item.item_type == "Bookmark" && collection_item.item.present? && collection_item.item.bookmarkable.present?
-      item_name = ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title)
+      ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title)
     elsif collection_item.item_type == "Bookmark"
-      item_name = ts("Bookmark of deleted item")
+      ts("Bookmark of deleted item")
     elsif collection_item.item_type == "Work" && collection_item.item.posted?
-      item_name = collection_item.item.title
+      collection_item.item.title
     else
-      item_name = ts("%{title} (Draft)", title: collection_item.item.title)
+      ts("%{title} (Draft)", title: collection_item.item.title)
     end
   end
 end
