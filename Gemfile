@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.9'
 
 gem 'bundler'
 
@@ -14,6 +14,8 @@ gem 'rails', '3.2.22.2'
 gem 'mysql2', '~> 0.3.20'
 #https://github.com/qertoip/transaction_retry
 gem 'transaction_retry'
+#https://github.com/winebarrel/activerecord-mysql-reconnect
+gem 'activerecord-mysql-reconnect'
 
 # Version of redis-rb gem
 # We are currently running Redis 2.6.4 (12/6/2012)
@@ -63,7 +65,7 @@ gem 'permit_yo'
 
 # fix for annoying UTF-8 error messages as per this:
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-gem "escape_utils"
+gem "escape_utils", "1.2.1"
 
 gem 'valium'
 
@@ -128,7 +130,7 @@ group :test do
 end
 
 group :test, :development do
-  gem 'pry', '~> 0.10.3'
+  gem 'pry-byebug'
   gem 'whiny_validation'
   gem 'factory_girl', '~> 4.5.0'
 end

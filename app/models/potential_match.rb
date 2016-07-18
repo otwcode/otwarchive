@@ -3,16 +3,16 @@ class PotentialMatch < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
-  CACHE_PROGRESS_KEY = "potential_match_status_for_"
-  CACHE_BYLINE_KEY = "potential_match_bylines_for_"
-  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
-  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_"
+  CACHE_PROGRESS_KEY = "potential_match_status_for_".freeze
+  CACHE_SIGNUP_KEY = "potential_match_signups_for_".freeze
+  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_".freeze
+  CACHE_INVALID_SIGNUP_KEY = "potential_match_invalid_signup_for_".freeze
 
   belongs_to :collection
-  belongs_to :offer_signup, :class_name => "ChallengeSignup"
-  belongs_to :request_signup, :class_name => "ChallengeSignup"
+  belongs_to :offer_signup, class_name: "ChallengeSignup"
+  belongs_to :request_signup, class_name: "ChallengeSignup"
 
-  has_many :potential_prompt_matches, :dependent => :destroy
+  has_many :potential_prompt_matches, dependent: :destroy
 
 protected
 
@@ -20,8 +20,8 @@ protected
     CACHE_PROGRESS_KEY + "#{collection.id}"
   end
 
-  def self.byline_key(collection)
-    CACHE_BYLINE_KEY + "#{collection.id}"
+  def self.signup_key(collection)
+    CACHE_SIGNUP_KEY + "#{collection.id}"
   end
 
   def self.interrupt_key(collection)
@@ -35,12 +35,18 @@ protected
 public
 
   def self.clear!(collection)
-    # destroy all potential matches in this collection
-    PotentialMatch.destroy_all(["collection_id = ?", collection.id])
+    # rapidly delete all potential prompt matches and potential matches
+    # WITHOUT CALLBACKS
+    pmids = collection.potential_matches.value_of(:id)
+    # trash all the potential PROMPT matches first
+    # since we are NOT USING CALLBACKS
+    PotentialPromptMatch.where("potential_match_id IN (?)", pmids).delete_all
+    # now take out the potential matches
+    PotentialMatch.where("id IN (?)", pmids).delete_all
   end
 
   def self.set_up_generating(collection)
-    REDIS_GENERAL.set progress_key(collection), collection.signups.first.pseud.byline
+    REDIS_GENERAL.set progress_key(collection), collection.signups.first.id
   end
 
   def self.cancel_generation(collection)
@@ -92,15 +98,20 @@ public
       settings = collection.challenge.potential_match_settings
 
       # start by collecting the ids of all the tag sets of the offers/requests in this collection
-      collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+      collection_tag_sets = Prompt.where(collection_id: collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
 
       # the topmost tags required for matching
       required_types = settings.required_types.map {|t| t.classify}
 
       # treat each signup as a request signup first
-      collection.signups.find_each do |signup|
+      # because find_each doesn't give us a consistent order, but we don't necessarily
+      # want to load all the signups into memory with each, we get the ids first and 
+      # load each signup as needed
+      signup_ids = collection.signups.value_of(:id)
+      signup_ids.each do |signup_id|
         break if PotentialMatch.canceled?(collection)
-        REDIS_GENERAL.set progress_key(collection), signup.pseud.byline
+        signup = ChallengeSignup.find(signup_id)
+        REDIS_GENERAL.set progress_key(collection), signup.id
         PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types)
       end
 
@@ -112,6 +123,11 @@ public
   # Generate potential matches for a signup in the general process
   def self.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type = "request")
     potential_match_count = 0
+    max_matches = [
+      (collection.signups.count / ArchiveConfig.POTENTIAL_MATCHES_PERCENT),
+      ArchiveConfig.POTENTIAL_MATCHES_MAX
+    ].min
+    max_matches = [max_matches, ArchiveConfig.POTENTIAL_MATCHES_MIN].max
 
     # only check the signups that have any overlap
     match_signup_ids = PotentialMatch.matching_signup_ids(collection, signup, collection_tag_sets, required_types, prompt_type)
@@ -131,7 +147,7 @@ public
       end
 
       # Stop looking if we've hit the max
-      break if potential_match_count == ArchiveConfig.POTENTIAL_MATCHES_MAX
+      break if potential_match_count == max_matches
     end
   end
 
@@ -153,14 +169,14 @@ public
     signup_tagsets = signup.send(prompt_type.pluralize).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
 
     # get the ids of all the tags of the required types in the signup's tagsets
-    signup_tags = SetTagging.where(:tag_set_id => signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
+    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).value_of(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
       return PotentialMatch.random_signup_ids(collection)
     else
       # now find all the tagsets in the collection that share the original signup's tags
-      match_tagsets = SetTagging.where(:tag_id => signup_tags, :tag_set_id => collection_tag_sets).value_of(:tag_set_id).uniq
+      match_tagsets = SetTagging.where(tag_id: signup_tags, tag_set_id: collection_tag_sets).value_of(:tag_set_id).uniq
 
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
@@ -187,7 +203,7 @@ public
 
     # Get all the data
     settings = collection.challenge.potential_match_settings
-    collection_tag_sets = Prompt.where(:collection_id => collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
+    collection_tag_sets = Prompt.where(collection_id: collection.id).value_of(:tag_set_id, :optional_tag_set_id).flatten.compact
     required_types = settings.required_types.map {|t| t.classify}
 
     # clear the existing potential matches for this signup in each direction
@@ -203,7 +219,7 @@ public
   # Finish off the potential match generation
   def self.finish_generation(collection)
     REDIS_GENERAL.del progress_key(collection)
-    REDIS_GENERAL.del byline_key(collection)
+    REDIS_GENERAL.del signup_key(collection)
     if PotentialMatch.canceled?(collection)
       REDIS_GENERAL.del interrupt_key(collection)
       # eventually we'll want to be able to pick up where we left off,
@@ -226,21 +242,31 @@ public
   end
 
   def self.position(collection)
-    REDIS_GENERAL.get progress_key(collection)
+    signup_id = REDIS_GENERAL.get progress_key(collection)
+    ChallengeSignup.find(signup_id).pseud.byline
   end
 
   def self.progress(collection)
     # the index of our current signup person in the full index of signup participants
-    current_byline = REDIS_GENERAL.get(progress_key(collection))
-    collection_byline_key = byline_key(collection)
-    unless REDIS_GENERAL.exists(collection_byline_key)
+    current_id = REDIS_GENERAL.get(progress_key(collection))
+    collection_signup_key = signup_key(collection)
+    unless REDIS_GENERAL.exists(collection_signup_key)
       score = 0
-      collection.signups.pseud_only.find_each do |pseud|
-        REDIS_GENERAL.zadd collection_byline_key, score, pseud.byline
+      # we have to get the signups in the same order as they are processed 
+      # for this to work
+      collection.signups.value_of(:id).each do |signup_id|
+        REDIS_GENERAL.zadd collection_signup_key, score, signup_id
         score += 1
       end
     end
-    progress = (REDIS_GENERAL.zrank(collection_byline_key, current_byline)  * 100)/REDIS_GENERAL.zcount(collection_byline_key, 0, "+inf")
+    rank = REDIS_GENERAL.zrank(collection_signup_key, current_id)
+    if rank.nil?
+      return -1
+    else
+      number_of_bylines = REDIS_GENERAL.zcount(collection_signup_key, 0, "+inf")
+      # we want a percentage: multiply by 100 first so we can keep this an integer calculation
+      return (rank * 100) / number_of_bylines
+    end
   end
 
   # sorting routine -- this gets used to rank the relative goodness of potential matches
