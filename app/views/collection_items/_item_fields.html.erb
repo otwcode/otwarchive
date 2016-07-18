@@ -1,13 +1,3 @@
-<% if collection_item.item_type == "Bookmark" && collection_item.item.present? && collection_item.item.bookmarkable.present? %>
-  <% item_name = ts("Bookmark for %{title}", title: collection_item.item.bookmarkable.title) %>
-<% elsif collection_item.item_type == "Bookmark" %>
-  <% item_name = ts("Bookmark of deleted item") %>
-<% elsif collection_item.item_type == "Work" && collection_item.item.posted? %>
-  <% item_name = collection_item.item.title %>
-<% else %>
-  <% item_name = collection_item.item.title + " " + ts("Draft") %>
-<% end %>
-
 <li class="collection item picture blurb group">
   <%= fields_for("collection_items[]", collection_item) do |form| %>
     <div class="header module">
@@ -15,7 +5,7 @@
       <h4 class="heading" id="collection_item_<%= collection_item.id %>">
         <%= error_messages_for collection_item %>
         <%= form.hidden_field :collection_id %>
-        <%= link_to(item_name, collection_item.item) %>
+        <%= link_to collection_item_display_title(collection_item), collection_item.item %>
       </h4>
 
       <h5 class="heading">
