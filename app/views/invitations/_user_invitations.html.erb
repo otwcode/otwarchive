@@ -20,9 +20,9 @@
           <td>
             <% unless invitation.redeemed_at %>
             <% if invitation.external_author %>
-              <%= link_to ts("copy and use"), claim_path(:invitation_token => invitation.token) %>
+              <%= link_to ts("copy and use"), claim_path(invitation_token: invitation.token) %>
             <% else %>
-              <%= link_to ts("copy and use"), signup_path(:invitation_token => invitation.token) %><% end %>
+              <%= link_to ts("copy and use"), new_user_registration(invitation_token: invitation.token) %><% end %>
             <% end %>
           </td>
           <% if admin_signed_in? && invitation.redeemed_at.blank? %>

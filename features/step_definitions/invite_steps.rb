@@ -78,7 +78,7 @@ end
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
-  visit signup_path(invite.token)
+  visit new_user_registration_path(invite.token)
 end
 
 When /^I use an already used invitation to sign up$/ do
@@ -91,7 +91,7 @@ When /^I use an already used invitation to sign up$/ do
   invite.redeemed_at = Time.now
   invite.mark_as_redeemed(user)
   invite.save
-  visit signup_path(invite.token)
+  visit new_user_registration_path(invite.token)
 end
 
 When /^I try to invite a friend from my user page$/ do
