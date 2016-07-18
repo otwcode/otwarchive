@@ -73,7 +73,7 @@ class ExternalAuthorsController < ApplicationController
     @external_author = @invitation.external_author
     unless @external_author
       flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
-      redirect_to signup_path(@invitation.token) and return
+      redirect_to new_user_registration(@invitation.token) and return
     end
   end
 

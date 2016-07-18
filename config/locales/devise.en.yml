@@ -12,10 +12,14 @@ en:
       invalid: "The password or user name you entered doesn't match our records. Please try again or follow the 'Forgot password?' link below.  If you still can't log in, please visit <a href=\"http://archiveofourown.org/admin_posts/1277\">Problems When Logging In</a> for help."
       locked: "Your account has been locked for 5 minutes due to too many failed login attempts."
       last_attempt: "You have one more attempt before your account is locked."
-      not_found_in_database: "Invalid %{authentication_keys} or password."
       timeout: "Your session expired. Please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
       unconfirmed: "You'll need to activate your account before you can log in. Please check your email or contact support."
+      admin:
+        not_found_in_database: "Authentication failed"
+        unauthenticated: "Sorry, you don't have permission"
+      user:
+        not_found_in_database: "The password or user name you entered doesn't match our records."
+        unauthenticated: "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
