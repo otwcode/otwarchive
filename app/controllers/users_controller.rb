@@ -69,21 +69,22 @@ class UsersController < ApplicationController
 
   def changed_username
     unless params[:new_login].present?
-      render :change_username and return
+      render :change_username
+      return
     end
 
     @new_login = params[:new_login]
-    session = UserSession.new(:login => @user.login, :password => params[:password])
 
-    unless session.valid?
-      flash[:error] = ts("Your password was incorrect")
-      render :change_username and return
+    unless @user.valid_password?(params[:password])
+      flash[:error] = ts('Your password was incorrect')
+      render :change_username
+      return
     end
 
     @user.login = @new_login
 
     if @user.save
-      flash[:notice] = ts("Your user name has been successfully updated.")
+      flash[:notice] = ts('Your user name has been successfully updated.')
       redirect_to @user
     else
       @user.reload
