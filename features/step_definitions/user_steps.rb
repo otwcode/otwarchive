@@ -156,10 +156,10 @@ When /^I create the pseud "([^\"]*)"$/ do |newpseud|
 end
 
 When /^I fill in the sign up form with valid data$/ do
-  step(%{I fill in "user_login" with "#{NEW_USER}"})
-  step(%{I fill in "user_email" with "test@archiveofourown.org"})
-  step(%{I fill in "user_password" with "password1"})
-  step(%{I fill in "user_password_confirmation" with "password1"})
+  step(%{I fill in "user_login" with "#{NEW_USER}" on "#user_registration_form"})
+  step(%{I fill in "user_email" with "test@archiveofourown.org" on "#user_registration_form"})
+  step(%{I fill in "user_password" with "password1" on "#user_registration_form"})
+  step(%{I fill in "user_password_confirmation" with "password1" on "#user_registration_form"})
   step(%{I check "user_age_over_13"})
   step(%{I check "user_terms_of_service"})
 end
