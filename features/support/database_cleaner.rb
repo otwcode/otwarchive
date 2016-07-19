@@ -20,7 +20,9 @@ end
 # Here we force the truncation strategy, when we need to test things that
 # happens on after_commit hooks (like Devise emails)
 Before('@no-transaction') do
-  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.strategy = :truncation, {
+    except: %w(admin_settings languages locales schema_migrations)
+  }
   DatabaseCleaner.start
 end
 
