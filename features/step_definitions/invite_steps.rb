@@ -129,6 +129,6 @@ end
 ### Then
 
 Then /^I should see how long I have to activate my account$/ do
-  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? AdminSetting.first.days_to_purge_unactivated : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
   step %{I should see "You must verify your account within #{days_to_activate} days"}
 end

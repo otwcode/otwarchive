@@ -5,6 +5,8 @@ class TagsController < ApplicationController
   before_filter :load_tag, :only => [:edit, :update, :wrangle, :mass_update]
   before_filter :load_tag_and_subtags, :only => [:show]
 
+  skip_after_filter :store_location, :except => [ :show, :index, :show_hidden, :search, :feed ]
+
   caches_page :feed
 
   cache_sweeper :tag_sweeper

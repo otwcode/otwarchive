@@ -16,7 +16,7 @@ en:
       unconfirmed: "You'll need to activate your account before you can log in. Please check your email or contact support."
       admin:
         not_found_in_database: "Authentication failed"
-        unauthenticated: "Sorry, you don't have permission"
+        unauthenticated: "I'm sorry, only an admin can look at that area."
       user:
         not_found_in_database: "The password or user name you entered doesn't match our records."
         unauthenticated: "Sorry, you don't have permission to access the page you were trying to reach. Please log in."

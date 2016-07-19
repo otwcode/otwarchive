@@ -211,7 +211,7 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  step('I should see "Successfully logged out."')
+  page.has_link?('Log In') || step('I should see "Successfully logged out."')
 end
 
 def get_work_name(age, classname, name)
