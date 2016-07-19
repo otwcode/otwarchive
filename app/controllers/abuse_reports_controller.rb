@@ -23,7 +23,7 @@ class AbuseReportsController < ApplicationController
       flash[:notice] = ts('Your abuse report was sent to the Abuse team.')
       redirect_to ''
     else
-      render action: 'new'
+      render action: :new
     end
   end
 

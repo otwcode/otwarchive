@@ -1,6 +1,9 @@
 class HomeController < ApplicationController
-  skip_before_filter :store_location, :only => [:first_login_help]
-  
+  before_filter :authenticate_user!, only: :site_pages
+  before_filter :check_permission_to_wrangle, only: :site_pages
+
+  skip_after_filter :store_location, only: :first_login_help
+
   # unicorn_test
   def unicorn_test
   end

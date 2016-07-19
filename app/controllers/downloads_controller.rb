@@ -1,10 +1,10 @@
 class DownloadsController < ApplicationController
-
   include XhtmlSplitter
 
-  skip_before_filter :store_location, :only => :show
-  before_filter :guest_downloading_off, :only => :show
-  before_filter :check_visibility, :only => :show
+  before_filter :guest_downloading_off, only: :show
+  before_filter :check_visibility, only: :show
+
+  skip_after_filter :store_location, only: :show
 
   # once a format has been created, we want nginx to be able to serve
   # it directly, without going through rails again (until the work changes).

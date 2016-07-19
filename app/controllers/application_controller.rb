@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
   before_filter :sanitize_params
   before_filter :set_current_user
   before_filter :clear_flash_cookie
-  before_filter :store_location
 
+  after_filter :store_location
   after_filter :check_for_flash
 
   protect_from_forgery

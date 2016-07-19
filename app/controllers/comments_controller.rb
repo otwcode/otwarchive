@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  skip_before_filter :store_location, :except => [:show, :index, :new]
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update,
                                               :show_comments, :hide_comments, :add_comment,
                                               :cancel_comment, :add_comment_reply,
@@ -18,6 +17,8 @@ class CommentsController < ApplicationController
   before_filter :check_unreviewed, :only => [:add_comment_reply]
   before_filter :check_permission_to_review, :only => [:unreviewed]
   before_filter :check_permission_to_access_single_unreviewed, only: [:show]
+
+  skip_after_filter :store_location, except: [:show, :index, :new]
 
   cache_sweeper :comment_sweeper
 
