@@ -25,6 +25,6 @@ Before('@no-transaction') do
 end
 
 After('@no-transaction') do
-  DatabaseCleaner.strategy = :transaction
   DatabaseCleaner.clean
+  DatabaseCleaner.strategy = :transaction
 end

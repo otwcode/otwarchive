@@ -278,9 +278,10 @@ class ApplicationController < ActionController::Base
     back_or_default_path
   end
 
-  # Redirect to the URI stored by #redirect_back_or_default
+  # Redirect to the URI stored by #back_or_default_path
   def redirect_back_or_default(default = root_path)
-    redirect_to back_or_default_path(default) && return
+    redirect_to back_or_default_path(default)
+    return
   end
 
   # Return the URI stored by the most recent store_location call or
@@ -343,16 +344,6 @@ class ApplicationController < ActionController::Base
     }.split(',').map(&:to_i)
   end
 
-  # Filter access by admin status
-  def admin_only
-    admin_signed_in? || admin_only_access_denied
-  end
-
-  # Filter access to logged in users
-  def users_only
-    user_signed_in? || access_denied
-  end
-
   # Filter method - requires user to have opendoors privs
   def opendoors_only
     (user_signed_in? && permit?('opendoors')) || access_denied
@@ -378,12 +369,6 @@ class ApplicationController < ActionController::Base
     end
 
     redirect_to destination
-  end
-
-  def admin_only_access_denied
-    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
-    redirect_to root_path
-    false
   end
 
   def not_allowed(fallback = nil)
