@@ -12,7 +12,7 @@ The Archive of Our Own (AO3) is a free, noncommercial archive built by and for f
 Also, we have a lot of spiffy features for finding the fanworks you want, and for posting and sharing your work with others. There are lots more coming soon! Your feedback now during our beta can help us build an even better archive. \o/
 
 If you'd like to join us, please sign up at the following address:
-<%= signup_url(:invitation_token => @invitation.token) %>
+<%= new_user_registration_url(invitation_token: @invitation.token) %>
 
 For more information, please check out our FAQ at <%= archive_faqs_url %>.
 <% end %>
