@@ -125,7 +125,9 @@ protected
     @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
 
     # render template
-    html = render_to_string(:template => "downloads/show.html", :layout => 'barebones.html')
+    html = render_to_string template: 'downloads/show',
+                            formats: :html,
+                            layout: 'barebones.html'
 
     # write to file
     File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
