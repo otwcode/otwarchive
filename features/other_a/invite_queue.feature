@@ -1,4 +1,5 @@
 @admin
+@no-transaction
 Feature: Invite queue management
 
   Background:
