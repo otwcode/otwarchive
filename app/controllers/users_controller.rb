@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     :activate, :browse, :delete_confirmation, :index, :show
   ]
 
-  skip_before_filter :store_location, only: [:end_first_login]
+  skip_after_filter :store_location, only: :end_first_login
 
   def load_user
     @user = User.find_by_login(params[:id])

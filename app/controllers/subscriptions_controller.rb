@@ -1,10 +1,9 @@
 class SubscriptionsController < ApplicationController
-
-  skip_before_filter :store_location, :only => [:create, :destroy]
-
   before_filter :authenticate_user!
   before_filter :load_user
   before_filter :check_ownership
+
+  skip_after_filter :store_location, only: [:create, :destroy]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
