@@ -2,7 +2,7 @@
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { id: 'user_registration_form' }) do |f| %>
   <%= devise_error_messages! %>
-  <%= hidden_field_tag :invitation_token %>
+  <%= hidden_field_tag :invitation_token, @invitation.try(:token) %>
 
   <fieldset>
     <legend><%= ts('User Details') %></legend>

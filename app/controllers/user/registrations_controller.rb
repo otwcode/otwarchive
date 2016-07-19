@@ -12,11 +12,11 @@ class User
       @hide_dashboard = true
 
       super do |user|
-        invitation = Invitation.find_by_token(params[:invitation_token])
+        @invitation = Invitation.find_by_token(params[:invitation_token])
 
-        if invitation
-          user.invitation_token = invitation.token
-          user.email = invitation.invitee_email
+        if @invitation
+          user.invitation_token = @invitation.token
+          user.email = @invitation.invitee_email
         end
       end
     end
