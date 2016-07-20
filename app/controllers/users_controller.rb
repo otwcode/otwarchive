@@ -2,10 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, only: [:edit, :update]
-  before_filter :load_user, except: [:activate, :delete_confirmation, :index]
-  before_filter :check_ownership, except: [
-    :activate, :browse, :delete_confirmation, :index, :show
-  ]
+  before_filter :load_user, except: [:activate, :index]
+  before_filter :check_ownership, except: [:activate, :browse, :index, :show]
 
   skip_after_filter :store_location, only: :end_first_login
 
@@ -170,35 +168,6 @@ class UsersController < ApplicationController
     render :change_email
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.xml
-  def destroy
-    @hide_dashboard = true
-    @works = @user.works.find(:all, :conditions => {:posted => true})
-    @sole_owned_collections = @user.collections.delete_if {|collection| (collection.all_owners - @user.pseuds).size > 0}
-
-    if @works.empty? && @sole_owned_collections.empty?
-      if @user.unposted_works
-        @user.wipeout_unposted_works
-      end
-
-      @user.destroy
-      flash[:notice] = ts('You have successfully deleted your account.')
-
-      redirect_to(delete_confirmation_path)
-    elsif params[:coauthor].blank? && params[:sole_author].blank?
-      @sole_authored_works = @user.sole_authored_works
-      @coauthored_works = @user.coauthored_works
-
-      render 'delete_preview' and return
-    elsif params[:coauthor] || params[:sole_author]
-      destroy_author
-    end
-  end
-
-  def delete_confirmation
-  end
-
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
 
@@ -281,87 +250,5 @@ class UsersController < ApplicationController
       series: visible_series,
       bookmarks: visible_bookmarks
     }
-  end
-
-  def destroy_author
-    @sole_authored_works = @user.sole_authored_works
-    @coauthored_works = @user.coauthored_works
-
-    if params[:cancel_button]
-      flash[:notice] = ts("Account deletion canceled.")
-      redirect_to user_profile_path(@user)
-
-      return
-    end
-
-    if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
-      # Orphans co-authored works.
-
-      pseuds = @user.pseuds
-      works = @coauthored_works
-
-      # We change the pseud to the default orphan pseud if use_default is true.
-      use_default = params[:use_default] == "true" || params[:coauthor] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-
-    elsif params[:coauthor] == 'remove'
-      # Removes user as an author from co-authored works
-
-      @coauthored_works.each do |w|
-        pseuds_with_author_removed = w.pseuds - @user.pseuds
-        w.pseuds = pseuds_with_author_removed
-
-        w.save
-
-        w.chapters.each do |c|
-          c.pseuds = c.pseuds - @user.pseuds
-
-          if c.pseuds.empty?
-            c.pseuds = w.pseuds
-          end
-          c.save
-        end
-      end
-    end
-
-    if params[:sole_author] == 'keep_pseud' || params[:sole_author] == 'orphan_pseud'
-      # Orphans works where user is the sole author.
-
-      pseuds = @user.pseuds
-      works = @sole_authored_works
-
-      # We change the pseud to default orphan pseud if use_default is true.
-      use_default = params[:use_default] == "true" || params[:sole_author] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
-    elsif params[:sole_author] == 'delete'
-      # Deletes works where user is sole author
-      @sole_authored_works.each do |s|
-        s.destroy
-      end
-
-      # Deletes collections where user is sole author
-      @sole_owned_collections.each do |c|
-        c.destroy
-      end
-    end
-
-    @works = @user.works.find(:all, :conditions => {:posted => true})
-
-    if @works.blank?
-      if @user.unposted_works
-        @user.wipeout_unposted_works
-      end
-
-      @user.destroy
-
-      flash[:notice] = ts('You have successfully deleted your account.')
-      redirect_to(delete_confirmation_path)
-    else
-      flash[:error] = ts("Sorry, something went wrong! Please try again.")
-      redirect_to(@user)
-    end
   end
 end
