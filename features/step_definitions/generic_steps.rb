@@ -237,3 +237,7 @@ end
 When /^I want to search for exactly one term$/ do
   Capybara.exact = true
 end
+
+When /^I clear cookies$/ do
+  Capybara.reset_sessions!
+end

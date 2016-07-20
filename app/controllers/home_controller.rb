@@ -49,7 +49,7 @@ class HomeController < ApplicationController
   end
 
   def first_login_help
-    render action: 'first_login_help', layout: 'false'
+    render action: 'first_login_help', layout: false
   end
 
   # home page itself

@@ -47,7 +47,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   fill_in "Password", with: password
   check "Remember Me"
   click_button "Log In"
-  step('I should see "Successfully logged in."')
+  page.has_text?("Hi, #{login}!") || step('I should see "Successfully logged in."')
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
@@ -67,7 +67,7 @@ Given /^I am logged in as a random user$/ do
   fill_in "Password", with: DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log In"
-  step('I should see "Successfully logged in."')
+  page.has_text?("Hi, #{name}!") || step('I should see "Successfully logged in."')
 end
 
 Given /^I am logged in as a banned user$/ do

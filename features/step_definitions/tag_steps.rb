@@ -100,13 +100,13 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   end
   tw.tag_wrangler = '1'
   visit logout_path
-  assert !UserSession.find
+  assert page.has_link?('Log In')
   visit login_path
   fill_in "User name", :with => user
   fill_in "Password", :with => password
   check "Remember Me"
   click_button "Log In"
-  assert UserSession.find
+  page.has_text?("Hi, #{user}!")
   fandom = Fandom.find_or_create_by_name_and_canonical(fandomname, true)
   visit tag_wranglers_url
   fill_in "tag_fandom_string", :with => fandomname
