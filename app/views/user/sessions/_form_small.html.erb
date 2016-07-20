@@ -15,7 +15,7 @@
   <% end %>
 
   <ul class="footnote actions">
-    <li><%= link_to ts('Forgot password?'), new_password_path(:user) %></li>
+    <li><%= link_to ts('Forgot password?'), new_user_password_path %></li>
     <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
       <li><%= link_to ts('Create an Account'), new_user_path %></li>
     <% elsif @admin_settings.invite_from_queue_enabled? %>

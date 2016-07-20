@@ -10,11 +10,13 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_tag passwords_path do %>
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <%= devise_error_messages! %>
   <p>
-    <%= label_tag 'reset_password_for', ts("Email address <strong>or</strong> user name:".html_safe) %>
-    <%= text_field_tag 'reset_password_for', '' %> 
-    <%= submit_tag ts('Reset Password') %>
+    <%= f.label :reset_password_for, ts("Email address <strong>or</strong> user name:".html_safe) %>
+    <%= f.text_field :reset_password_for, autofocus: true %>
+
+    <%= f.submit ts('Reset Password') %>
   </p>
 <% end %>
 <!--/content-->
