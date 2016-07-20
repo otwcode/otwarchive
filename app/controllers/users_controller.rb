@@ -233,14 +233,15 @@ class UsersController < ApplicationController
 
   private
 
+  # Check user password of logged in user for extra security
   def reauthenticate
-    return wrong_password!(
+    return wrong_password_message(
       params[:new_email],
       ts('You must enter your password'),
       ts('You must enter your old password')
     ) if params[:password_check].blank?
 
-    return wrong_password!(
+    return wrong_password_message(
       params[:new_email],
       ts('Your password was incorrect'),
       ts('Your old password was incorrect')
@@ -249,7 +250,8 @@ class UsersController < ApplicationController
     true
   end
 
-  def wrong_password!(condition, if_true, if_false)
+  # Define flash message when reauthentication fails
+  def wrong_password_message(condition, if_true, if_false)
     flash.now[:error] = condition ? if_true : if_false
     @wrong_password = true
 

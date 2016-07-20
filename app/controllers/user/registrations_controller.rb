@@ -27,7 +27,7 @@ class User
 
       super do |user|
         if user.persisted? && Rails.env.development?
-          flash[:notice] = ts(
+          flash.now[:notice] = ts(
             "During testing you can activate via <a href='%{url}'>your activation url</a>.",
             url: confirmation_url(user, confirmation_token: user.confirmation_token)
           ).html_safe
@@ -59,10 +59,6 @@ class User
     #   super
     # end
 
-    # Redirect here if user is not confirmed
-    def confirm
-    end
-
     protected
 
     # If you have extra params to permit, append them to the sanitizer.
@@ -83,9 +79,9 @@ class User
     # end
 
     # The path used after sign up for inactive accounts.
-    def after_inactive_sign_up_path_for(_resource)
-      user_register_confirm_path
-    end
+    # def after_inactive_sign_up_path_for(_resource)
+    #   user_register_confirm_path
+    # end
 
     # Hide user dashboard on new user registration
     def hide_dashboard
