@@ -11,7 +11,8 @@ Otwarchive::Application.routes.draw do
   devise_for :user,
              controllers: {
                sessions: 'user/sessions',
-               registrations: 'user/registrations'
+               registrations: 'user/registrations',
+               passwords: 'user/passwords'
              },
              path_names: {
                sign_in: 'login',

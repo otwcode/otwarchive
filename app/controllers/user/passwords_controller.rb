@@ -1,32 +1,45 @@
-class User::PasswordsController < Devise::PasswordsController
-  # GET /resource/password/new
-  # def new
-  #   super
-  # end
+# User namespace and class.
+# Class methods related to password reset are stored here
+class User
+  # Handle Devise password recovery
+  class PasswordsController < Devise::PasswordsController
+    before_filter :configure_reset_params, only: [:create]
 
-  # POST /resource/password
-  # def create
-  #   super
-  # end
+    skip_after_filter :store_location
 
-  # GET /resource/password/edit?reset_password_token=abcdef
-  # def edit
-  #   super
-  # end
+    layout 'session'
 
-  # PUT /resource/password
-  # def update
-  #   super
-  # end
+    def after_resetting_password_path_for(resource)
+      super(resource)
+    end
 
-  # protected
+    private
 
-  # def after_resetting_password_path_for(resource)
-  #   super(resource)
-  # end
+    def configure_reset_params
+      devise_parameter_sanitizer.for(:user) do |u|
+        u.permit(:reset_password_for)
+      end
+    end
+  end
 
-  # The path used after sending reset password instructions
-  # def after_sending_reset_password_instructions_path_for(resource_name)
-  #   super(resource_name)
-  # end
+  # Overwrite Devise reset password method so we can
+  # search for both user login or email.
+  def self.send_reset_password_instructions(attributes = {})
+    reset = attributes[:reset_password_for]
+    key = reset.include?('@') ? :email : :login
+    attributes[key] = reset
+
+    # The "trick" here is to define a key and force Devise to search our user
+    # based on that key, that could be either :login or :email
+    recoverable = find_or_initialize_with_errors([key], attributes)
+    recoverable.send_reset_password_instructions if recoverable.persisted?
+
+    # No matter what Devise return us, we define a default error message
+    unless recoverable.errors.empty?
+      recoverable.errors.clear
+      recoverable.errors.add(:base, :not_found, message: ts("We couldn't find an account with that email address or username. Please try again?"))
+    end
+
+    recoverable
+  end
 end

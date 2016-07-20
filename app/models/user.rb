@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
          :timeoutable, :encryptable
 
   # Virtual fields for form validation
-  attr_accessor :invitation_token, :age_over_13, :terms_of_service
+  attr_accessor :invitation_token, :age_over_13, :terms_of_service,
+                :reset_password_for
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :login, :email, :password, :password_confirmation,
