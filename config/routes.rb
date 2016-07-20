@@ -8,11 +8,7 @@ Otwarchive::Application.routes.draw do
   end
 
   devise_for :user,
-             controllers: {
-               sessions: 'user/sessions',
-               registrations: 'user/registrations',
-               passwords: 'user/passwords'
-             },
+             module: 'user',
              path_names: {
                sign_in: 'login',
                sign_out: 'logout',
@@ -20,16 +16,13 @@ Otwarchive::Application.routes.draw do
              }
 
   devise_for :admin,
-             controllers: { sessions: 'admin/sessions' },
+             module: 'admin',
+             only: :sessions,
              path_names: {
                sign_in: 'login',
                sign_out: 'logout'
              }
 
-  # PATHS TO CHECK
-
-  resources :passwords, only: [:new, :create]
-  match 'delete_confirmation' => 'users#delete_confirmation'
   match 'activate/:id' => 'users#activate', as: 'activate'
 
   #### ERRORS ####

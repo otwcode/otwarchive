@@ -1,16 +1,13 @@
 class User
   # Handle user devise registration
   class RegistrationsController < Devise::RegistrationsController
-    before_filter :configure_sign_up_params, only: [:create]
-    before_filter :hide_dashboard,
-                  :can_create_account?,
-                  only: [:new, :create]
-    # before_filter :configure_account_update_params, only: [:update]
+    before_filter :configure_sign_up_params, only: :create
+    before_filter :hide_dashboard, only: [:new, :create, :destroy]
+    before_filter :can_create_account?, only: [:new, :create]
 
-    # GET /resource/sign_up
+    skip_after_filter :store_location, except: :new
+
     def new
-      @hide_dashboard = true
-
       super do |user|
         @invitation = Invitation.find_by_token(params[:invitation_token])
 
@@ -21,10 +18,7 @@ class User
       end
     end
 
-    # POST /resource
     def create
-      @hide_dashboard = true
-
       super do |user|
         if user.persisted? && Rails.env.development?
           flash.now[:notice] = ts(
@@ -35,29 +29,27 @@ class User
       end
     end
 
-    # GET /resource/edit
-    # def edit
-    #   super
-    # end
+    def destroy
+      works = @user.works.find(:all, conditions: { posted: true })
+      @sole_owned_collections = @user.collections.select do |collection|
+        (collection.all_owners - @user.pseuds).empty?
+      end
 
-    # PUT /resource
-    # def update
-    #   super
-    # end
+      if works.empty? && @sole_owned_collections.empty?
+        @user.wipeout_unposted_works if @user.unposted_works
+        @user.destroy
 
-    # DELETE /resource
-    # def destroy
-    #   super
-    # end
+        sign_out(:user)
+      elsif params[:coauthor].blank? && params[:sole_author].blank?
+        @sole_authored_works = @user.sole_authored_works
+        @coauthored_works = @user.coauthored_works
 
-    # GET /resource/cancel
-    # Forces the session data which is usually expired after sign
-    # in to be expired now. This is useful if the user wants to
-    # cancel oauth signing in/up in the middle of the process,
-    # removing all OAuth session data.
-    # def cancel
-    #   super
-    # end
+        render 'delete_preview'
+        return
+      elsif params[:coauthor] || params[:sole_author]
+        destroy_author
+      end
+    end
 
     protected
 
@@ -68,22 +60,7 @@ class User
       end
     end
 
-    # If you have extra params to permit, append them to the sanitizer.
-    # def configure_account_update_params
-    #   devise_parameter_sanitizer.for(:account_update) << :attribute
-    # end
-
-    # The path used after sign up.
-    # def after_sign_up_path_for(resource)
-    #   super(resource)
-    # end
-
-    # The path used after sign up for inactive accounts.
-    # def after_inactive_sign_up_path_for(_resource)
-    #   user_register_confirm_path
-    # end
-
-    # Hide user dashboard on new user registration
+    # Hide user dashboard on user creation or destroy
     def hide_dashboard
       @hide_dashboard = true
     end
@@ -132,6 +109,68 @@ class User
 
       flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
       redirect_to root_path
+    end
+
+    # Destroy user after checking what to do with it's works
+    def destroy_author
+      @sole_authored_works = @user.sole_authored_works
+      @coauthored_works = @user.coauthored_works
+
+      if params[:cancel_button]
+        flash[:notice] = ts('Account deletion canceled.')
+        redirect_to user_profile_path(@user)
+        return
+      end
+
+      if %w(keep_pseud orphan_pseud).include? params[:coauthor]
+        pseuds = @user.pseuds
+        works = @coauthored_works
+
+        # We change the pseud to the default orphan pseud if use_default is true
+        use_default = params[:use_default] == 'true' ||
+                      params[:coauthor] == 'orphan_pseud'
+
+        Creatorship.orphan(pseuds, works, use_default)
+      elsif params[:coauthor] == 'remove'
+        # Removes user as an author from co-authored works
+        @coauthored_works.each do |w|
+          w.pseuds = w.pseuds - @user.pseuds
+          w.save
+          w.chapters.each do |c|
+            c.pseuds = c.pseuds - @user.pseuds
+            c.pseuds = w.pseuds if c.pseuds.empty?
+            c.save
+          end
+        end
+      end
+
+      if %w(keep_pseud orphan_pseud).include? params[:sole_author]
+        # We change the pseud to default orphan pseud if use_default is true.
+        use_default = params[:use_default] == 'true' ||
+                      params[:sole_author] == 'orphan_pseud'
+
+        Creatorship.orphan(@user.pseuds, @sole_authored_works, use_default)
+        Collection.orphan(@user.pseuds, @sole_owned_collections, use_default)
+      elsif params[:sole_author] == 'delete'
+        # Deletes works where user is sole author
+        @sole_authored_works.each(&:destroy)
+
+        # Deletes collections where user is sole author
+        @sole_owned_collections.each(&:destroy)
+      end
+
+      works = @user.works.find(:all, conditions: { posted: true })
+
+      if works.blank?
+        @user.wipeout_unposted_works if @user.unposted_works
+        @user.destroy
+
+        sign_out(:user)
+      else
+        flash[:error] = ts('Sorry, something went wrong! Please try again.')
+        redirect_to(@user)
+        return
+      end
     end
   end
 end
